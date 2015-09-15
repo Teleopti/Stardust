@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			builder.InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsConnection().InitialCatalog;
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("NewOne");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString(appConn);

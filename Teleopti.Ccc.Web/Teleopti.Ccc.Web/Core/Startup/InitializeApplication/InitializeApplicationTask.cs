@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public Task Execute(IAppBuilder application)
 		{
 			var passwordPolicyPath = System.IO.Path.Combine(_physicalApplicationPath.Get(), _settings.ConfigurationFilesPath());
-			using (_tenantUnitOfWork.Start())
+			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				_initializeApplication.Start(new WebState(), new LoadPasswordPolicyService(passwordPolicyPath), ConfigurationManager.AppSettings.ToDictionary(), false);
 				//remove when tenants are handled correctly in RTA

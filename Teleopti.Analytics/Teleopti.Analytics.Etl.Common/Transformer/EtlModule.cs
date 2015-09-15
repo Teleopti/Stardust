@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			public IEnumerable<LogonInfo> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 			{
-				using (_tenantUnitOfWork.Start())
+				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				{
 					var ret = new List<LogonInfo>();
 					foreach (var batch in personGuids.Batch(200))

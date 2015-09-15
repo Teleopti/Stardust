@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldFindTenantByName()
 		{
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var name = RandomName.Make();
 				var tenant = new Tenant(name);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldReturnNullWhenNotFound()
 		{
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var actual = Target.Find(RandomName.Make());
 

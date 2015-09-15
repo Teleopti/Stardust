@@ -161,7 +161,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 
-			using (_tenantUnitOfWork.Start())
+			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenants = _loadAllTenants.Tenants();
 				

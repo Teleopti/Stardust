@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			var changeModel = new ChangePasswordModel { Id = 65656565 };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var changeResult = Target.ChangePassword(changeModel).Content;
 				changeResult.Success.Should().Be.False();
@@ -33,19 +33,19 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				id = result.Id;
 			}
 			var changeModel = new ChangePasswordModel {Id = id,OldPassword = "wrongPassword"};
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var changeResult = Target.ChangePassword(changeModel).Content;
 				changeResult.Success.Should().Be.False();
@@ -59,19 +59,19 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				id = result.Id;
 			}
 			var changeModel = new ChangePasswordModel { Id = id, OldPassword = "passadej", NewPassword = "myNewPassword", ConfirmNewPassword = "myNewPasword"};
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var changeResult = Target.ChangePassword(changeModel).Content;
 				changeResult.Success.Should().Be.False();
@@ -85,26 +85,26 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				id = result.Id;
 			}
 			var changeModel = new ChangePasswordModel { Id = id, OldPassword = "passadej", NewPassword = "myNewPassword", ConfirmNewPassword = "myNewPassword" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var changeResult = Target.ChangePassword(changeModel).Content;
 				changeResult.Success.Should().Be.True();
 				changeResult.Message.Should().Be.EqualTo("Successfully changed password.");
 			}
 			model.Password = "myNewPassword";
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.True();

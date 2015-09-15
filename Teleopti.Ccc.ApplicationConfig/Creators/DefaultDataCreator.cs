@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		{
 			if (_tenantUnitOfWorkManager == null)
 				return;
-			using (_tenantUnitOfWorkManager.Start())
+			using (_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
 				var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
 				var tenant = tenantSession.Get<Tenant>(1);

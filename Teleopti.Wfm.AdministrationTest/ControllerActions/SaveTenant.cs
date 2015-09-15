@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
 				CurrentTenantSession.CurrentSession().Save(tenant);
@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
 				CurrentTenantSession.CurrentSession().Save(tenant);
@@ -52,14 +52,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfCommandTimeoutIsZero()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
 				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var model = new UpdateTenantModel
 				{
@@ -81,14 +81,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldUpdateExistingTenant()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
 				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var model = new UpdateTenantModel
 				{
@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				};
 				Target.Save(model);
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Southwind");

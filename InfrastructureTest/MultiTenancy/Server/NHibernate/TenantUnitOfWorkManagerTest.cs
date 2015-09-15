@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		public void InstansationOfSessionShouldBeLazy()
 		{
 			target.HasCurrentSession().Should().Be.False();
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			target.HasCurrentSession().Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldGetSession()
 		{
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			target.CurrentSession()
 				.Should().Not.Be.Null();
 		}
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void ShouldReuseSession()
 		{
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			target.CurrentSession()
 				.Should().Be.SameInstanceAs(target.CurrentSession());
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CancelShouldRollbackTransaction()
 		{
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CancelAndDisposeCurrent();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CommitShouldCommitTransaction()
 		{
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CommitAndDisposeCurrent();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CommitOnAlreadyRolledbackShouldKeepItRolledback()
 		{
-			target.Start();
+			target.EnsureUnitOfWorkIsStarted();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CancelAndDisposeCurrent();
@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		public void ShouldWorkWithNestedUnitOfWorks()
 		{
 			target.HasCurrentSession().Should().Be.False();
-			using (target.Start())
+			using (target.EnsureUnitOfWorkIsStarted())
 			{
 				target.HasCurrentSession().Should().Be.True();
-				using (target.Start())
+				using (target.EnsureUnitOfWorkIsStarted())
 				{
 					target.HasCurrentSession().Should().Be.True();
 				}
@@ -108,10 +108,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void NestedUnitOfWorksShouldShareSession()
 		{
-			using (target.Start())
+			using (target.EnsureUnitOfWorkIsStarted())
 			{
 				var session = target.CurrentSession();
-				using (target.Start())
+				using (target.EnsureUnitOfWorkIsStarted())
 				{
 					target.CurrentSession()
 						.Should().Be.SameInstanceAs(session);

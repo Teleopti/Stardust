@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 					try
 					{
-						using (_tenantUnitOfWork.Start())
+						using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 						{
 							_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 						}

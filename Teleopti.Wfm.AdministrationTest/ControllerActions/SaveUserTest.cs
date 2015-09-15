@@ -21,20 +21,20 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var user = new TenantAdminUser {AccessToken = "dummy",Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst"};
 				CurrentTenantSession.CurrentSession().Save(user);
 				id = user.Id;
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loaded = Target.GetOneUser(id);
 				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");
 				Target.SaveUser(new UpdateUserModel {Email = "olle@teleopti.com", Id = id, Name = "Olle"});
 			}
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loaded = Target.GetOneUser(id);
 				loaded.Content.Email.Should().Be.EqualTo("olle@teleopti.com");
@@ -47,13 +47,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
 				CurrentTenantSession.CurrentSession().Save(user);
 				id = user.Id;
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loaded = Target.GetOneUser(id);
 				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");
@@ -70,13 +70,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			int id;
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
 				CurrentTenantSession.CurrentSession().Save(user);
 				id = user.Id;
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loaded = Target.GetOneUser(id);
 				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");

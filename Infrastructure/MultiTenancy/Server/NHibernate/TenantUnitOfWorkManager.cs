@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			return CurrentSessionContext.HasBind(_sessionFactory);
 		}
 
-		public IDisposable Start()
+		public IDisposable EnsureUnitOfWorkIsStarted()
 		{
 			if (HasCurrentSession())
 				return new GenericDisposable(() => {});

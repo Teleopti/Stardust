@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				Tenant = "tenant",
 			});
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				Tenants.Tenants().Single(x => x.Name == "tenant").RtaKey.Should().Not.Be.Null();
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					Tenant = "tenant"
 				});
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				Tenants.Tenants().Single(x => x.Name == "tenant").RtaKey.Should().Not.Be.Null();
 		}
 
@@ -87,7 +87,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				FirstUser = "seconduser"
 			});
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var key1 = Tenants.Tenants().Single(x => x.Name == "tenant1").RtaKey;
 				var key2 = Tenants.Tenants().Single(x => x.Name == "tenant2").RtaKey;

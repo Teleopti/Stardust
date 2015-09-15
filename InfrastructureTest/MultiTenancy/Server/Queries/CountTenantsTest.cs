@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldCountTenants([Values(1, 3, 7)] int expected)
 		{
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				LoadAll.Tenants().ForEach(Delete.Delete);
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				expected.Times(() => Persist.Persist(new Tenant(RandomName.Make())));
 

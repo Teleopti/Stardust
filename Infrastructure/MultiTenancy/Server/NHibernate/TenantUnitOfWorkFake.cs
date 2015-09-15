@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 	{
 		private Exception _exceptionToThrow;
 
-		public IDisposable Start()
+		public IDisposable EnsureUnitOfWorkIsStarted()
 		{
 			return new GenericDisposable(null);
 		}

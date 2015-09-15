@@ -19,13 +19,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel {GrantType = "password",Password = "passadej", UserName = "olle@teleopti.com"};
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.False();
@@ -38,13 +38,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "password", UserName = "ola@teleopti.com" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.False();
@@ -57,13 +57,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel {ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.True();

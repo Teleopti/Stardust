@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			var tenant = new Tenant("Tenn");
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				CurrentTenantSession.CurrentSession().Save(tenant);
 				var personInfo = new PersonInfo(tenant, Guid.NewGuid());
@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			var tenant = new Tenant("Tenn");
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				CurrentTenantSession.CurrentSession().Save(tenant);
 				var personInfo = new PersonInfo(tenant, Guid.NewGuid());

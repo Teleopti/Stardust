@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				_lazy = new Lazy<IDataSourceForTenant>(() =>
 				{
-					using (tenantUnitOfWork.Start())
+					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 					{
 						initializeApplication.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceExists(dsConf.Name,

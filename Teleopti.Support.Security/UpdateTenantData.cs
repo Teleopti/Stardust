@@ -24,7 +24,7 @@ namespace Teleopti.Support.Security
 		public void UpdateTenantConnectionStrings(string appDbConnectionString, string analyticsDbConnectionString)
 		{
 			log.Debug("Updating tenant connection strings...");
-			using (_tenantUnitOfWorkManager.Start())
+			using (_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
 				var allTenants = new LoadAllTenants(_tenantUnitOfWorkManager).Tenants();
 				var numberOfTenants = allTenants.Count();

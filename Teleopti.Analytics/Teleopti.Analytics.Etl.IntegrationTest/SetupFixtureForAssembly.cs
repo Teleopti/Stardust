@@ -41,7 +41,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					},
 					tenantAction =>
 					{
-						using (tenantUnitOfWorkManager.Start())
+						using (tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 						{
 							tenantAction(tenantUnitOfWorkManager);
 						}

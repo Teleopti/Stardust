@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_tenantUnitOfWork.Start();
+			_tenantUnitOfWork.EnsureUnitOfWorkIsStarted();
 
 			var hasNoTenantAuthenticationAttribute =
 				invocation.Method.GetCustomAttributes(typeof (NoTenantAuthenticationAttribute), false).Any();

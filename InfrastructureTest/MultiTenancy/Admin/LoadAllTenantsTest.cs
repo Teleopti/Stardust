@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 		public void Setup()
 		{
 			tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			tenantUnitOfWorkManager.Start();
+			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 		}
 
 		[TearDown]

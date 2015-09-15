@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void TenantUnitOfWorkAction(Action<ICurrentTenantSession> action)
 		{
 			var tenantUowManager = tenantUnitOfWorkManager();
-			using (tenantUowManager.Start())
+			using (tenantUowManager.EnsureUnitOfWorkIsStarted())
 			{
 				action.Invoke(tenantUowManager);
 			}

@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
-         using (TenantUnitOfWork.Start())
+         using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Teleopti WFM");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
@@ -46,19 +46,19 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Teleopti WFM");
 				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				LoadAllTenants.Tenants().Count().Should().Be.EqualTo(2);
 			}
 			Target.DeleteTenant("Teleopti WFM").Content.Success.Should().Be.True();
-			using (TenantUnitOfWork.Start())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				LoadAllTenants.Tenants().Count().Should().Be.EqualTo(1);
 			}

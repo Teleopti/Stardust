@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 	    private class fakeTenantUnitOfWork : ITenantUnitOfWork
 	    {
-		    public IDisposable Start()
+		    public IDisposable EnsureUnitOfWorkIsStarted()
 		    {
 			    throw new NotImplementedException();
 		    }

@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Administration.Core
 				.List<PersonInfo>();
 
 			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(importConnectionString);
-			tenantUowManager.Start();
+			tenantUowManager.EnsureUnitOfWorkIsStarted();
 			var importUsers = new LoadAllPersonInfos(tenantUowManager).PersonInfos().ToList();
 			tenantUowManager.CancelAndDisposeCurrent();
 			var conflicting = new HashSet<ImportUserModel>();

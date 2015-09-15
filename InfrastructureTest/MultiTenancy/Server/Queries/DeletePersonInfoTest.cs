@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void Setup()
 		{
 			_uow = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			_uow.Start();
+			_uow.EnsureUnitOfWorkIsStarted();
 		}
 
 		[TearDown]
