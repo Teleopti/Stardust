@@ -730,7 +730,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
 		{
-			updateURLToLandingPage();
+			//updateURLToLandingPage();
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
 			ModuleSelected(e.SelectedItem);
 		}
@@ -837,24 +837,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			
 		}
 
-		private void updateURLToLandingPage()
-		{
-			if (!webView1.Url.Contains("http://www.teleopti.com/"))
-			{
-				if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
-				{
-					_webViewLoaded = false;
-					if (!canAccessInternet)
-					{
-						goToLocalPage();
-					}
-					else
-					{
-						goToPublicPage(true);
-					}
-				}
-			}
-		}
+		//private void updateURLToLandingPage()
+		//{
+		//	if (!webView1.Url.Contains("http://www.teleopti.com/"))
+		//	{
+		//		if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+		//		{
+		//			_webViewLoaded = false;
+		//			if (!canAccessInternet)
+		//			{
+		//				goToLocalPage();
+		//			}
+		//			else
+		//			{
+		//				goToPublicPage(true);
+		//			}
+		//		}
+		//	}
+		//}
 
 		private void openOptionsDialog()
 		{
