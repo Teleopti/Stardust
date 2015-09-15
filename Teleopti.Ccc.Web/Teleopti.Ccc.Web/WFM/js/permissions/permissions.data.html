@@ -52,10 +52,10 @@
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 
     <ul class="wfm-list" >
-        <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0, active: node.selected}" ng-click="toggleOrganizationSelection(this)">
+        <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0}" ng-click="toggleOrganizationSelection(this)">
             {{node.Name}}<!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
             
-			<span><i class="mdi mdi-check"></i></span>
+			<span ng-if="node.selected"><b class="mdi mdi-check list-mark"></b></span>
         </li>
     </ul>
 
