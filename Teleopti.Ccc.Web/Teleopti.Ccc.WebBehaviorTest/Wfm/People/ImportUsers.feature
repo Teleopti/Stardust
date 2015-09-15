@@ -11,6 +11,7 @@ Feature: ImportUsers
 	 | Access to everyone | true        |
 	 | Access to people   | true        |
 
+@ignore
 Scenario: can open action panel
 	When I view people
 	And I open the action panel
