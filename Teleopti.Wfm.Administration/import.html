@@ -55,7 +55,7 @@
 				<div>
 					<input class="form-control" type="password" ng-model="importVm.Password" ng-blur="importVm.CheckAppLogin()" placeholder="Password">
 				</div>
-				<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppLoginMessage}}</label>
+				<label ng-class="(importVm.AppLoginOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppLoginMessage}}</label>
 
 
 			</fieldset>
