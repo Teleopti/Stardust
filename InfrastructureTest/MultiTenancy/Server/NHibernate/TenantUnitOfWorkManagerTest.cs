@@ -89,6 +89,35 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 				target.CurrentSession());
 		}
 
+		[Test]
+		public void ShouldWorkWithNestedUnitOfWorks()
+		{
+			target.HasCurrentSession().Should().Be.False();
+			using (target.Start())
+			{
+				target.HasCurrentSession().Should().Be.True();
+				using (target.Start())
+				{
+					target.HasCurrentSession().Should().Be.True();
+				}
+				target.HasCurrentSession().Should().Be.True();
+			}
+			target.HasCurrentSession().Should().Be.False();
+		}
+
+		[Test]
+		public void NestedUnitOfWorksShouldShareSession()
+		{
+			using (target.Start())
+			{
+				var session = target.CurrentSession();
+				using (target.Start())
+				{
+					target.CurrentSession()
+						.Should().Be.SameInstanceAs(session);
+				}
+			}
+		}
 
 		private TenantUnitOfWorkManager target;
 

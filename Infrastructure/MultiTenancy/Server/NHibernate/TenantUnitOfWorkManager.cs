@@ -68,6 +68,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 		public IDisposable Start()
 		{
+			if (HasCurrentSession())
+				return new GenericDisposable(() => {});
+
 			var session = _sessionFactory.OpenSession();
 			session.BeginTransaction();
 			CurrentSessionContext.Bind(session);
