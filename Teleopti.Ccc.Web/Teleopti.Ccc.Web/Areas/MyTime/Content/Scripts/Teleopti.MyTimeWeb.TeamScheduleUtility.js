@@ -391,17 +391,33 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		var selectedTeams = [];
 
 		if (self.selectedTeam() != null) {
-
 			if (self.selectedTeam() == -1) {
-				var availableTeams = self.availableTeams();
-				availableTeams = availableTeams.slice(1);
-				selectedTeams =(self.showGroupings()) ?
-					availableTeams.reduce(function (v, e) { return v.concat(e.children); }, []).map(function (e) { return e.id; })
-					: availableTeams.map(function (v) { return v.id; });
+				if (self.showGroupings()) {
+					var businessHierarchyGroup = undefined;
+					var allGroups = self.availableTeams();
+					for (var i = 0; i < allGroups.length; i++) {
+						var group = allGroups[i];
+						// Only get teams from business hierarchy
+						if (group.PageId === "6ce00b41-0722-4b36-91dd-0a3b63c545cf") {
+							businessHierarchyGroup = group;
+							break;
+						}
+					}
+
+					if (businessHierarchyGroup != undefined) {
+						selectedTeams = businessHierarchyGroup.children.map(function(e) {
+							return e.id;
+						});
+					};
+				} else {
+					var availableTeams = self.availableTeams().slice(1);
+					selectedTeams = availableTeams.map(function(v) {
+						return v.id;
+					});
+				}
 			} else {
 				selectedTeams = [self.selectedTeam()];
 			}
-
 		}
 
 		return {
@@ -413,7 +429,6 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 			searchNameText: self.searchNameText()
 		};
 	});
-		
 
 	self.isLocked = ko.observable(false);
 
@@ -474,7 +489,6 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		$.each(self.filterStartTimeList(), function (index, item) { item.isChecked(value); });
 		self.activateFilterMixinChangeHandler();
 		if (changeHandler) changeHandler();
-
 	});
 
 	self.setAllEndTimeFilter = ko.observable(false);
@@ -528,7 +542,6 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 		return true;
 	};
-
 
 	self.selectedTeam.subscribe(function () {
 		if (changeHandler != null && !changeHandlerSuspended) {
@@ -723,8 +736,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 		});
 	};
 
-	self.loadSchedule = function(date, filter, paging, beforeSend, success, error, complete) {
-						
+	self.loadSchedule = function (date, filter, paging, beforeSend, success, error, complete) {
 		if (filter.selectedTeams.length === 0) return;
 
 		ajax.Ajax({
