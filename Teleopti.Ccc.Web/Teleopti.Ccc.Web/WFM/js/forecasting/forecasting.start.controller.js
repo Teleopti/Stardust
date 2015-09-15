@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
-		function ($scope, $state, forecasting, $http, $stateParams) {
+		'$scope', '$state', 'Forecasting', '$http', '$filter',
+		function ($scope, $state, forecasting, $http, $filter) {
 			$scope.isForecastRunning = false;
 			forecasting.status.get().$promise.then(function(result) {
 				$scope.isForecastRunning = result.IsRunning;
@@ -20,6 +20,8 @@ angular.module('wfm.forecasting')
 						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
 					});
 				});
+
+				$filter('orderBy')($scope.workloads, 'Name');
 			});
 
 			$scope.modalInfo = {
