@@ -8,7 +8,6 @@ Background:
 	| Field | Value |
 	| Name  | Agent |
 
-@Ignore
 Scenario: Log on to newly added scenario
 	Given There is a tenant called 'NewTenant'
 	And I have user credential with

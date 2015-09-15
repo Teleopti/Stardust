@@ -294,6 +294,7 @@
     <Compile Include="MultiTenancy\Server\ICurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantByName.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindTenantByNameFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindLogonInfo.cs" />
