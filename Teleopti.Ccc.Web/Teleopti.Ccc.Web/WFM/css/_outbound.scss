@@ -3,13 +3,36 @@
 .outbound {
 	.outbound-gantt-chart {
 		margin: 70px 0;
-	
+		
+		.gantt-resizer {
+			opacity: 0;
+		}
 
+		.gantt-side {
+			border-right: solid 1px #99d6ff;
+		}
 		.gantt-side-background, .gantt-body-background, .gantt-row {
 			pointer-events: none;
 			.gantt-task-content {
 				pointer-events: auto;
 			}
+		}
+
+		.gantt-column-header {
+			border-right: dotted 1px ;
+
+			&.gantt-column-header-last {
+				border-right-style: none;
+			}
+
+			&.gantt-column-header-odd {				
+				border-bottom: solid 2px #f488c8;
+			}
+
+			&.gantt-column-header-even {
+				border-bottom: solid 2px #99d6ff;
+			}
+
 		}
 
 		.gantt-body-columns {

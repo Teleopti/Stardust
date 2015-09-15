@@ -1,14 +1,14 @@
-﻿<div class="outbound-gantt-chart"
+﻿<div class="spacer material-depth-1 outbound-gantt-chart"
 	 gantt
 	 data="ganttData"
 	 options="ganttOptions"
 	 headers-formats="headerFormats"
 	 template-url="html/outbound/angular-gantt-custom.tpl.html"
 	 ng-if=" initialized">
-	
+
 	<gantt-tooltips content="tooltipContent"></gantt-tooltips>
-		<gantt-resize-sensor enabled="true">
-			<gantt-table></gantt-table>
-			
-</gantt-resize-sensor>
+	
+		<gantt-table></gantt-table>
+
+	
 </div>

@@ -74,8 +74,8 @@
 			 gantt-horizontal-scroll-receiver></div>
 	</script>
 	<script type="text/ng-template" id="template/ganttColumnHeader.tmpl.html">
-		<div class="gantt-column-header" ng-class="{'gantt-column-header-last': $last, 'gantt-column-header-first': $first}">
-		<gantt-column-header-content label-content="{{::column.label}}" label-unit="{{::column.unit}}"></gantt-column-header-content> 
+		<div class="gantt-column-header" ng-class="{'gantt-column-header-last': $last, 'gantt-column-header-first': $first, 'gantt-column-header-odd': $index % 2 == 1, 'gantt-column-header-even': $index % 2 == 0}">
+			<gantt-column-header-content label-content="{{::column.label}}" label-unit="{{::column.unit}}"></gantt-column-header-content>
 		</div>		
 	</script>
 	<!-- Body background template -->

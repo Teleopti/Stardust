@@ -159,7 +159,7 @@
 		}
 
 		$scope.showDateSelectionHint = function(campaign) {
-			return !campaign.selectedDates || campaign.selectedDates.length == 0 && (campaign.manualPlanswitch || campaign.backlogSwitch);
+			return !campaign.isLoadingData && (!campaign.selectedDates || campaign.selectedDates.length == 0 && (campaign.manualPlanswitch || campaign.backlogSwitch));
 		}
 		
 		$scope.switchManualPlan = function (campaign) {
@@ -205,10 +205,7 @@
 			if (c3.restoreFix) c3.restoreFix();
 		});
 
-
-		
-
-        function displayLoading(campaign) {
+		function displayLoading(campaign) {
             return !angular.isDefined(campaign.graphData);
         }
 
