@@ -717,5 +717,37 @@ activity-picker {
 			left:48%;
 		}
 	}
+
+	.loading-gantt-section{
+	    position:absolute;
+		top:12%;
+		left:0;
+		height:50%;
+		width:100%;
+		background-color:rgba(0,0,0,0.1);
+		z-index:1000;
+
+		md-progress-circular {
+		position:absolute;
+		top:40%;
+		left:48%;
+		}
+	}
+
+	.loading-list-with-gantt{
+		position:absolute;
+		top:360px;
+		left:0;
+		height:100%;
+		width:100%;
+		background-color:rgba(0,0,0,0.1);
+		z-index:1000;
+
+		md-progress-circular {
+		position:absolute;
+		top:40%;
+		left:48%;
+		}
+	}
 }
 

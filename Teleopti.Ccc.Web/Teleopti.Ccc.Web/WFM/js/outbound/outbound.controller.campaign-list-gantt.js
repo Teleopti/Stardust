@@ -7,17 +7,21 @@
 
 	function campaignListGanttCtrl($scope, OutboundToggles, outboundService) {
 
-		$scope.initialized = false;
+		$scope.isGanttEnabled = false;
+		$scope.isLoadFinished = false;
+
 		$scope.$watch(function() {
 			return OutboundToggles.ready;
 		}, function(value) {
 			if (value) {
-				if (OutboundToggles.isGanttEnabled()) init();
+				if (OutboundToggles.isGanttEnabled()) {
+					$scope.isGanttEnabled = true;
+					init();
+				}
 			}
 		});
 
 		function init() {
-			$scope.initialized = true;
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
 		}
@@ -76,6 +80,7 @@
 					ganttArr[ind].tasks[0].campaignName = ele.Name;
 				});
 				$scope.ganttData = ganttArr;
+				$scope.isLoadFinished = true;
 			});
 		}
 
