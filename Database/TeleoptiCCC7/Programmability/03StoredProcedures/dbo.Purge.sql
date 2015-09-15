@@ -25,6 +25,8 @@ set @start = getdate()
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
 set @BatchSize = 14 --Used to control number of days to delete in one go.
 
+create table #Deleted (Id uniqueidentifier)
+
 /*
 exec Purge
 */
@@ -53,33 +55,34 @@ select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting 
 update person set IsDeleted = 1
 where isnull(TerminalDate,'20591231') < @KeepUntil
 
-delete top (100) SchedulePeriodShiftCategoryLimitation
+insert into #Deleted
+select top(20) p.Id
+from Person p
+where p.IsDeleted = 1
+and exists (select 1 from PersonPeriod pp where pp.Parent = p.Id)
+
+delete SchedulePeriodShiftCategoryLimitation
 from SchedulePeriodShiftCategoryLimitation scl
 inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
-inner join Person p on sp.Parent = p.Id
-where p.IsDeleted = 1
+inner join #Deleted p on sp.Parent = p.Id
 
-delete top (100) SchedulePeriod
+delete SchedulePeriod
 from SchedulePeriod sp
-inner join Person p on sp.Parent = p.Id
-where p.IsDeleted = 1
+inner join #Deleted p on sp.Parent = p.Id
 
-delete top (100) ExternalLogOnCollection
+delete ExternalLogOnCollection
 from ExternalLogOnCollection ex
 inner join PersonPeriod pp on ex.PersonPeriod = pp.Id
-inner join Person p on pp.Parent = p.Id
-where p.IsDeleted = 1
+inner join #Deleted p on pp.Parent = p.Id
 
-delete top (100) PersonSkill
+delete PersonSkill
 from PersonSkill ps
 inner join PersonPeriod pp on ps.Parent = pp.Id
-inner join Person p on pp.Parent = p.Id
-where p.IsDeleted = 1
+inner join #Deleted p on pp.Parent = p.Id
 
-delete top (100) PersonPeriod
+delete PersonPeriod
 from PersonPeriod pp
-inner join Person p on pp.Parent = p.Id
-where p.IsDeleted = 1
+inner join #Deleted p on pp.Parent = p.Id
 
 delete top (100) Auditing.Revision
 from Auditing.Revision r
