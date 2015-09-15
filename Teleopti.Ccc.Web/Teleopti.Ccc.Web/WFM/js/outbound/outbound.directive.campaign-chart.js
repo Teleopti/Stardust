@@ -255,12 +255,14 @@
 						valueFormat = config.tooltip_format_value || defaultValueFormat,
 						text, i, title, value, name, bgcolor;
 					for (i = d.length - 1 ; i >= 0; i--) {
-						if (!(d[i] && (d[i].value))) { continue; }
+						
 
 						if (!text) {
 							title = titleFormat ? titleFormat(d[i].x) : d[i].x;
 							text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
 						}
+
+						if (!(d[i] && (d[i].value))) { continue; }
 
 						name = nameFormat(d[i].name);
 						value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
