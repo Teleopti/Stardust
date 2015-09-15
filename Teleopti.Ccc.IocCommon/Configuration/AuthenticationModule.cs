@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
@@ -62,6 +63,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.ExternallyOwned();
 
 			builder.RegisterType<DataSourceForTenant>().As<IDataSourceForTenant>().SingleInstance();
+			//by default, don't load tenats on demand. Will be changed client-by-client in the future
+			builder.RegisterType<FindTenantByNameWithEnsuredTransactionFake>().As<IFindTenantByNameWithEnsuredTransaction>().SingleInstance();
 			
 			builder.Register(c =>
 			{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -11,14 +11,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	{
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly ISetLicenseActivator _setLicenseActivator;
-		private readonly IFindTenantByName _findTenantByName;
+		private readonly IFindTenantByNameWithEnsuredTransaction _findTenantByNameWithEnsuredTransaction;
 		private readonly IDictionary<string, IDataSource> _registeredDataSources;
 
-		public DataSourceForTenant(IDataSourcesFactory dataSourcesFactory, ISetLicenseActivator setLicenseActivator, IFindTenantByName findTenantByName)
+		public DataSourceForTenant(IDataSourcesFactory dataSourcesFactory, 
+														ISetLicenseActivator setLicenseActivator, 
+														IFindTenantByNameWithEnsuredTransaction findTenantByNameWithEnsuredTransaction)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_setLicenseActivator = setLicenseActivator;
-			_findTenantByName = findTenantByName;
+			_findTenantByNameWithEnsuredTransaction = findTenantByNameWithEnsuredTransaction;
 			_registeredDataSources = new Dictionary<string, IDataSource>();
 		}
 
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			var foundTenant = findTenant(tenantName);
 			if (foundTenant != null)
 				return foundTenant;
-			var notYetParsedTenant = _findTenantByName.Find(tenantName);
+			var notYetParsedTenant = _findTenantByNameWithEnsuredTransaction.Find(tenantName);
 			if (notYetParsedTenant != null)
 			{
 				MakeSureDataSourceExists(notYetParsedTenant.Name,

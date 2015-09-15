@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var applicationConnectionString = RandomName.Make();
 			var dataSource = new FakeDataSource();
 			dataSourcesFactory.Expect(x => x.Create(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf)).Return(dataSource);
-			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), new FindTenantByNameFake());
+			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), new FindTenantByNameWithEnsuredTransactionFake());
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
 			target.MakeSureDataSourceExists(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null, null, new FindTenantByNameFake());
+			var target = new DataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
 			target.Tenant("something else").Should().Be.Null();
 		}
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void NoDataSourceTenant()
 		{
-			var target = new DataSourceForTenant(null, null, new FindTenantByNameFake());
+			var target = new DataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
 			target.Tenant("something").Should().Be.Null();
 		}
 
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var existingTenant = new Tenant(RandomName.Make());
 			var createdDataSource = new FakeDataSource();
 
-			var findTenantByName = new FindTenantByNameFake();
+			var findTenantByName = new FindTenantByNameWithEnsuredTransactionFake();
 			findTenantByName.Has(existingTenant);
 			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
 			dataSourcesFactory.Expect(

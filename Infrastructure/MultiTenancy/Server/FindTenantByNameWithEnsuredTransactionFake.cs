@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class FindTenantByNameFake : IFindTenantByName
+	public class FindTenantByNameWithEnsuredTransactionFake : IFindTenantByNameWithEnsuredTransaction
 	{
 		private readonly IDictionary<string, Tenant> tenants = new Dictionary<string, Tenant>();
 

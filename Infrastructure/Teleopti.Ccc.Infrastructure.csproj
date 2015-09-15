@@ -275,6 +275,9 @@
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\DataSourceForTenant.cs" />
     <Compile Include="MultiTenancy\Server\DataSourceConfiguration.cs" />
+    <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransaction.cs" />
+    <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransactionFake.cs" />
+    <Compile Include="MultiTenancy\Server\IFindTenantByNameWithEnsuredTransaction.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
@@ -294,7 +297,6 @@
     <Compile Include="MultiTenancy\Server\ICurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantByName.cs" />
-    <Compile Include="MultiTenancy\Server\Queries\FindTenantByNameFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindLogonInfo.cs" />
