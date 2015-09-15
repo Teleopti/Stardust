@@ -724,7 +724,7 @@ activity-picker {
 		left:0;
 		height:120px;
 		width:100%;
-		background-color:rgba(0,0,0,0.1);
+		background-color:rgba(0,0,0,0.5);
 		z-index:1000;
 
 		md-progress-circular {
@@ -736,11 +736,11 @@ activity-picker {
 
 	.loading-list-with-gantt{
 		position:absolute;
-		top:360px;
+		top:0;
 		left:0;
 		height:100%;
 		width:100%;
-		background-color:rgba(0,0,0,0.1);
+		background-color:rgba(0,0,0,0.5);
 		z-index:1000;
 
 		md-progress-circular {
