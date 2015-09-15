@@ -16,27 +16,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
-		private readonly IGetImportUsers _getImportUsers;
-		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly Import _import;
-		private readonly TenantUpgrader _tenantUpgrader;
-		private readonly bool isAzure = true ; //!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+		private readonly bool isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
-		public ImportController(
-			IDatabaseHelperWrapper databaseHelperWrapper, 
-			ITenantExists tenantExists,
-			IGetImportUsers getImportUsers, 
-			ICheckDatabaseVersions checkDatabaseVersions, 
-			Import import ,
-			TenantUpgrader tenantUpgrader
-         )
+		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
-			_getImportUsers = getImportUsers;
-			_checkDatabaseVersions = checkDatabaseVersions;
 			_import = import;
-			_tenantUpgrader = tenantUpgrader;
 		}
 
 		[HttpPost]
@@ -68,17 +55,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 					return Json(new ImportTenantResultModel { Success = false, Message = result.Message });
 				aggConnectionstring = aggBuilder.ConnectionString;
 			}
-			var conflicts = _getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant);
 
-			var importResult = _import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, aggConnectionstring, conflicts);
+			var importResult = _import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, aggConnectionstring, model.AdminUser, model.AdminPassword);
 			if (!importResult.Success)
 				return Json(new ImportTenantResultModel { Success = false, Message = importResult.Message });
-
-			var versions = _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
-			if (!versions.AppVersionOk)
-			{
-				_tenantUpgrader.Upgrade(importResult.Tenant, model.AdminUser, model.AdminPassword, true);
-			}
 
 			return Json(new ImportTenantResultModel { Success = false, Message = importResult.Message });
 		}
@@ -116,14 +96,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return isNewTenantName(tenant);
 		}
 
-		[HttpPost]
-		[TenantUnitOfWork]
-		[Route("api/Import/Conflicts")]
-		public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
-		{
-			var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
-			return Json(_getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant));
-		}
+		//[HttpPost]
+		//[TenantUnitOfWork]
+		//[Route("api/Import/Conflicts")]
+		//public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
+		//{
+		//	var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
+		//	return Json(_getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant));
+		//}
 
 		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)
 		{

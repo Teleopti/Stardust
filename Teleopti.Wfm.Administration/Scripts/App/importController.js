@@ -43,7 +43,7 @@
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
-					vm.CheckUsers();
+					//vm.CheckUsers();
 
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -116,7 +116,7 @@
 					vm.AppDbCheckMessage = data.Message;
 					if (vm.AppDbOk) {
 						vm.CheckVersions();
-						vm.CheckUsers();
+						//vm.CheckUsers();
 					}
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -178,27 +178,27 @@
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
 		}
-		vm.CheckUsers = function () {
-			if (vm.AppDbOk == false) {
-				vm.Conflicts = null;
-				return;
-			}
-			$http.post('./api/Import/Conflicts', {
-				Server: vm.Server,
-				UserName: vm.UserName,
-				Password: vm.Password,
-				AppDatabase: vm.AppDatabase,
-				Tenant: vm.Tenant
-			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
-					vm.Conflicts = data.ConflictingUserModels;
-					vm.NumberOfConflicting = data.NumberOfConflicting;
-					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
+		//vm.CheckUsers = function () {
+		//	if (vm.AppDbOk == false) {
+		//		vm.Conflicts = null;
+		//		return;
+		//	}
+		//	$http.post('./api/Import/Conflicts', {
+		//		Server: vm.Server,
+		//		UserName: vm.UserName,
+		//		Password: vm.Password,
+		//		AppDatabase: vm.AppDatabase,
+		//		Tenant: vm.Tenant
+		//	}, tokenHeaderService.getHeaders())
+		//		.success(function (data) {
+		//			vm.Conflicts = data.ConflictingUserModels;
+		//			vm.NumberOfConflicting = data.NumberOfConflicting;
+		//			vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
 
-				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-				});
-		}
+		//		}).error(function (xhr, ajaxOptions, thrownError) {
+		//			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		//		});
+		//}
 
 		vm.startImport = function () {
 			if (vm.AppVersionOk != true && vm.SqlUserOk != true) {

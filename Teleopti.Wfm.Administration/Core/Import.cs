@@ -11,15 +11,21 @@ namespace Teleopti.Wfm.Administration.Core
 	public class Import
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
+		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
+		private readonly IGetImportUsers _getImportUsers;
 		private readonly PersistTenant _persistTenant;
+		private readonly TenantUpgrader _tenantUpgrader;
 
-		public Import(ICurrentTenantSession currentTenantSession, PersistTenant persistTenant)
+		public Import(ICurrentTenantSession currentTenantSession, ICheckDatabaseVersions checkDatabaseVersions, IGetImportUsers getImportUsers, PersistTenant persistTenant, TenantUpgrader tenantUpgrader)
 		{
 			_currentTenantSession = currentTenantSession;
+			_checkDatabaseVersions = checkDatabaseVersions;
+			_getImportUsers = getImportUsers;
 			_persistTenant = persistTenant;
+			_tenantUpgrader = tenantUpgrader;
 		}
 
-		public ImportTenantResultModel Execute(string tenant, string connStringApp, string connStringAnal, string aggConnectionstring, ConflictModel conflictModel)
+		public ImportTenantResultModel Execute(string tenant, string connStringApp, string connStringAnal, string aggConnectionstring, string adminUser, string adminPassword)
 		{
 			var newTenant = new Tenant(tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(connStringApp);
@@ -27,14 +33,21 @@ namespace Teleopti.Wfm.Administration.Core
 			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionstring);
 			_persistTenant.Persist(newTenant);
 
-			saveToDb(conflictModel.NotConflicting, newTenant);
-			saveToDb(conflictModel.ConflictingUserModels, newTenant);
+			var versions = _checkDatabaseVersions.GetVersions(connStringApp);
+			if (!versions.AppVersionOk)
+			{
+				_tenantUpgrader.Upgrade(newTenant, adminUser, adminPassword, true);
+			}
+
+			var conflicts = _getImportUsers.GetConflictionUsers(connStringApp, newTenant.Name);
+			saveToDb(conflicts.NotConflicting, newTenant);
+			saveToDb(conflicts.ConflictingUserModels, newTenant);
 			
 			return new ImportTenantResultModel
 			{
 				Success = true,
 				Tenant = newTenant,
-				Message = string.Format("Succesfully imported a new Tenant with {0} user.", conflictModel.NumberOfConflicting + conflictModel.NumberOfNotConflicting)
+				Message = string.Format("Succesfully imported a new Tenant with {0} user.", conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting)
 			};
 		}
 

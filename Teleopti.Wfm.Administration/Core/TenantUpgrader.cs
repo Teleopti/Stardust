@@ -8,7 +8,7 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class TenantUpgrader
 	{
-		private readonly bool isAzure = true; //  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 		private readonly DatabaseUpgrader _databaseUpgrader;
 		private readonly UpgradeRunner _upgradeRunner;
 

@@ -1,14 +1,14 @@
 ﻿<div ng-controller="importController as importVm" style="margin-left: 50px">
 	<div class="row">
 		<div class="col-md-12">
-			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png"/></a>
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
 			<h2>Import existing</h2>
 			<p>
-				When you have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
-				The Application database must be at the same version as the Tenant database.
+				When you have databases (one Application and one Analytics) that you want to include in the multi tenant administration you can import it here.
+				If the databases version are older they will be upgraded.
 			</p>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div>
 				<div class="importCaption">Tenant name</div>
 				<input class="form-control" type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
@@ -17,92 +17,106 @@
 			<label ng-class="(importVm.TenantOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.TenantMessage}}</label>
 
 			<p></p>
+		</div>
+		<div class="col-md-4">
 
-
-				<div title="{{importVm.SqlUserOkMessage}}">
-					<fieldset>
-						<legend ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Administration database credentials</legend>
-						<div>
-							<div class="importCaption">Sql Server</div>
-							<div>
-								<input class="form-control" type="text" ng-model="importVm.Server" ng-blur="importVm.CheckImportAdmin()" placeholder="Sql Server">
-							</div>
-							<div class="importCaption">SQL User Name (that have permissions to upgrade databases on the server)</div>
-							<div>
-								<input class=" form-control" type="text" ng-model="importVm.CreateDbUser" ng-blur="importVm.CheckImportAdmin()" placeholder="SQL User Name">
-							</div>
-							<div>
-								<div class="importCaption">SQL Password</div>
-								<input class="form-control" type="password" ng-model="importVm.CreateDbPassword" ng-blur="importVm.CheckImportAdmin()" placeholder="SQL Password">
-								<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.SqlUserOkMessage}}</label>
-							</div>
-						</div>
-					</fieldset>
-				</div>
-			<br/>
+			<div title="{{importVm.SqlUserOkMessage}}">
 				<fieldset>
-					<legend>Application Login and Databases</legend>
-					<div class="importCaption">User / Login</div>
+					<legend ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Administration database credentials</legend>
 					<div>
-						<input class=" form-control" type="text" ng-model="importVm.UserName" ng-blur="importVm.CheckAppLogin()" placeholder="User">
+						<div class="importCaption">Sql Server</div>
+						<div>
+							<input class="form-control" type="text" ng-model="importVm.Server" ng-blur="importVm.CheckImportAdmin()" placeholder="Sql Server">
+						</div>
+						<div class="importCaption">SQL User Name (that have permissions to upgrade databases on the server)</div>
+						<div>
+							<input class=" form-control" type="text" ng-model="importVm.CreateDbUser" ng-blur="importVm.CheckImportAdmin()" placeholder="SQL User Name">
+						</div>
+						<div>
+							<div class="importCaption">SQL Password</div>
+							<input class="form-control" type="password" ng-model="importVm.CreateDbPassword" ng-blur="importVm.CheckImportAdmin()" placeholder="SQL Password">
+							<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.SqlUserOkMessage}}</label>
+						</div>
 					</div>
-
-					<div class="importCaption">Password</div>
-					<div>
-						<input class="form-control" type="password" ng-model="importVm.Password" ng-blur="importVm.CheckAppLogin()" placeholder="Password">
-					</div>
-					<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppLoginMessage}}</label>
-					<div class="importCaption">Application database</div>
-					<div>
-						<input class="form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Application database">
-						<label ng-class="(importVm.AppDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppDbCheckMessage}}</label>
-					</div>
-
-					<div>
-						<div class="importCaption">Analytics database</div>
-						<input class="form-control" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Analytics database">
-						<label ng-class="(importVm.AnalDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AnalDbCheckMessage}}</label>
-					</div>
-					<div>
-						<div class="importCaption">Aggregation database (optional)</div>
-						<input class="form-control" type="text" ng-model="importVm.AggDatabase" ng-blur="importVm.CheckAggDb()" placeholder="Aggregation database">
-						<label ng-class="(importVm.AggDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AggDbCheckMessage}}</label>
-					</div>
-
-
 				</fieldset>
-				<!--<div ng-show="importVm.AppVersionOk != true">-->
-					<div>
-						<h3>Upgrade information</h3>
-						<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
-						<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
-						<label >If the imported database's version is lower it will be upgraded.</label><br />
-					</div>
+			</div>
+		</div>
+		<br />
+		<div class="col-md-4">
 
-
-				<!--</div>  -->
-				<br />
-				<p>
-					<button class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
-				</p>
-				<div ng-class="(importVm.Success==true) ? 'dataIsOk' : 'dataIsNotOk'">
-					{{importVm.Message}}
+			<fieldset>
+				<legend>Application Login</legend>
+				<div class="importCaption">User / Login</div>
+				<div>
+					<input class=" form-control" type="text" ng-model="importVm.UserName" ng-blur="importVm.CheckAppLogin()" placeholder="User">
 				</div>
-			</div>
-			<div class="col-md-6">
-				<h3>Conflicting users {{importVm.NumberOfConflicting}}</h3>
-				({{importVm.NumberOfNotConflicting}} are not conflicting)
-				<label style="color:goldenrod" ng-show="importVm.NumberOfConflicting > 0">
-					These users are confliction and will get new Logons. The Tenant name will be added as a prefix to the name.
-				</label>
-				<table ng-show="importVm.NumberOfConflicting > 0">
-					<tr><th>New application logon</th><th>New identity</th></tr>
-					<tr ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
-						<td>{{user.AppLogon}}</td>
-						<td>{{user.Identity}}</td>
-					</tr>
-				</table>
 
+				<div class="importCaption">Password</div>
+				<div>
+					<input class="form-control" type="password" ng-model="importVm.Password" ng-blur="importVm.CheckAppLogin()" placeholder="Password">
+				</div>
+				<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppLoginMessage}}</label>
+
+
+			</fieldset>
+			<br />
+		</div>
+		<div class="col-md-4">
+			<fieldset>
+				<legend>Databases</legend>
+				<div class="importCaption">Application database</div>
+				<div>
+					<input class="form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Application database">
+					<label ng-class="(importVm.AppDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppDbCheckMessage}}</label>
+				</div>
+
+				<div>
+					<div class="importCaption">Analytics database</div>
+					<input class="form-control" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Analytics database">
+					<label ng-class="(importVm.AnalDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AnalDbCheckMessage}}</label>
+				</div>
+				<div>
+					<div class="importCaption">Aggregation database (optional)</div>
+					<input class="form-control" type="text" ng-model="importVm.AggDatabase" ng-blur="importVm.CheckAggDb()" placeholder="Aggregation database">
+					<label ng-class="(importVm.AggDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AggDbCheckMessage}}</label>
+				</div>
+
+
+			</fieldset>
+		</div>
+		<div class="col-md-12">
+			<!--<div ng-show="importVm.AppVersionOk != true">-->
+			<div>
+				<h3>Upgrade information</h3>
+				<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
+				<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
+				<label>If the imported database's version is lower it will be upgraded.</label><br />
 			</div>
-		</div>	
+
+
+			<!--</div>  -->
+			<br />
+			<p>
+				<button class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
+			</p>
+			<div ng-class="(importVm.Success==true) ? 'dataIsOk' : 'dataIsNotOk'">
+				{{importVm.Message}}
+			</div>
+		</div>
+		<!--<div class="col-md-6">
+			<h3>Conflicting users {{importVm.NumberOfConflicting}}</h3>
+			({{importVm.NumberOfNotConflicting}} are not conflicting)
+			<label style="color:goldenrod" ng-show="importVm.NumberOfConflicting > 0">
+				These users are confliction and will get new Logons. The Tenant name will be added as a prefix to the name.
+			</label>
+			<table ng-show="importVm.NumberOfConflicting > 0">
+				<tr><th>New application logon</th><th>New identity</th></tr>
+				<tr ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
+					<td>{{user.AppLogon}}</td>
+					<td>{{user.Identity}}</td>
+				</tr>
+			</table>
+
+		</div>-->
+	</div>
 </div>
