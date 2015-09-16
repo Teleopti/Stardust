@@ -56,7 +56,7 @@ Background:
 	| Scheduled activity end time   | 2030-01-03 03:30 |
 	And I have a shift with
 	| Field                         | Value            |
-	| Shift category                | Day            |
+	| Shift category                | Day              |
 	| Activity                      | Phone            |
 	| StartTime                     | 2030-01-03 15:00 |
 	| EndTime                       | 2030-01-03 23:00 |
@@ -118,7 +118,6 @@ Scenario: Do not alert agent without permission for ASM
 	And the time is '2030-01-01 10:58:00'
 	Then I should not see any notify
 
-@ignore
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 10:57:59'
@@ -127,8 +126,7 @@ Scenario: Automatical close pop up notify message
 	And the time is '2030-01-01 10:58:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
-	When the time is '2030-01-01 10:58:30'
-	Then I should not see pop up notify message
+	Then I should not see pop up notify message within one minute
 
 Scenario: Do not show pop up notify message to agent without permission for ASM
 	Given I have the role 'No access to ASM'

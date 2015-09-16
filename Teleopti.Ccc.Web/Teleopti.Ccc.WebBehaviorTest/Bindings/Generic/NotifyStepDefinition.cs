@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -28,10 +29,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
 		}
 
+		[Then(@"I should not see pop up notify message within one minute")]
+		public void ThenIShouldNotSeePopUpNotifyMessageWithinOneMinute()
+		{
+			Browser.TimeoutScope(new TimeSpan(0, 1, 0));
+			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
+		}
+
 		[Then(@"I should not see pop up notify message")]
 		public void ThenIShouldNotSeePopUpNotifyMessage()
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery("#notifyLogger", "#noty_bottom_layout_container:visible");
+			Browser.TimeoutScope(new TimeSpan(0, 1, 0));
+			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
 		}
 	}
 }
