@@ -55,6 +55,11 @@ namespace Teleopti.Ccc.TestCommon
 			RegisteredDataSources.ForEach(actionOnTenant);
 		}
 
+		public void RemoveDataSource(string tenantName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IApplicationData Current()
 		{
 			return this;

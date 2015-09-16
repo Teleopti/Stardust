@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				DataSource = new FakeDataSource(),
 				Person = new Person()
 			});
-			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null);
+			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null, null);
 
 			target.BusinessUnits();
 
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var businessUnitViewModels = new[] {new BusinessUnitViewModel()};
 			var businessUnitViewModelFactory = MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>();
 			businessUnitViewModelFactory.Stub(x => x.BusinessUnits(authenticationResult.DataSource, authenticationResult.Person)).Return(businessUnitViewModels);
-			var target = new AuthenticationApiController(businessUnitViewModelFactory, identityLogon, null, null);
+			var target = new AuthenticationApiController(businessUnitViewModelFactory, identityLogon, null, null, null);
 
 			var result = target.BusinessUnits();
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, null, null);
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, null, null, null);
 
 			var result = target.BusinessUnits();
 
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(result);
 			var log = MockRepository.GenerateMock<ILogLogonAttempt>();
-			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, log, MockRepository.GenerateMock<IWebLogOn>());
+			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, log, MockRepository.GenerateMock<IWebLogOn>(), null);
 			identityLogon.Stub(x => x.LogonIdentityUser()).Return(result);
 			log.Expect(x => x.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful));
 			target.Logon(Guid.NewGuid());
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 					TenantPassword = tenantPassword
 				});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
-			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon);
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null);
 
 			target.Logon(businessUnitId);
 
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null);
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null, null);
 
 			var result = target.Logon(Guid.NewGuid());
 
@@ -137,8 +138,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldReturnLicenseErrorIfAuthenticationUnsuccessfulLoggingOn()
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Throw(new LicenseMissingException());
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, null, null);
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult {Successful = true, DataSource = new FakeDataSource(), Person = PersonFactory.CreatePersonWithGuid(RandomName.Make(), RandomName.Make())});
+			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
+			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, MockRepository.GenerateStub<IDataSourceForTenant>());
 
 			var result = target.Logon(Guid.NewGuid());
 
@@ -146,6 +149,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiProductActivationKeyException);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.TeleoptiProductActivationKeyException);
+		}
+
+		[Test]
+		public void ShouldReturnDataSourceIfLicenseIsInvalidSoItIsReReadIfLicenseIsAdded()
+		{
+			var tenantName = RandomName.Make();
+			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = true, DataSource = new FakeDataSource(tenantName), Person = PersonFactory.CreatePersonWithGuid(RandomName.Make(), RandomName.Make()) });
+			var dataSourceForTenant = MockRepository.GenerateMock<IDataSourceForTenant>();
+			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
+			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, dataSourceForTenant);
+
+			target.Logon(Guid.NewGuid());
+
+			dataSourceForTenant.AssertWasCalled(x => x.RemoveDataSource(tenantName));
 		}
 
 		[Test]
@@ -165,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword)).Throw(new PermissionException());
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon);
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null);
 
 			var result = target.Logon(businessUnitId);
 

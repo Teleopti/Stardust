@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			throw new NotImplementedException();
 		}
 
+		public void RemoveDataSource(string tenantName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SetDataSource(IDataSource dataSource)
 		{
 			_dataSource = dataSource;

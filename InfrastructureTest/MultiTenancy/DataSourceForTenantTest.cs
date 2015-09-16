@@ -74,6 +74,27 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		}
 
 		[Test]
+		public void CanRemoveTenant()
+		{
+			var dsName = Guid.NewGuid().ToString();
+			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var target = new DataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
+			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
+			target.RemoveDataSource(dsName);
+			target.Tenant(dsName).Should().Be.Null();
+		}
+
+		[Test]
+		public void RemovingNonExistingTenantShouldNotThrow()
+		{
+			var target = new DataSourceForTenant(null, null, null);
+			Assert.DoesNotThrow(() =>
+			{
+				target.RemoveDataSource(RandomName.Make());
+			});
+		}
+
+		[Test]
 		public void DoActionOnAllTenants()
 		{
 			var ds1 = MockRepository.GenerateMock<IDataSource>();

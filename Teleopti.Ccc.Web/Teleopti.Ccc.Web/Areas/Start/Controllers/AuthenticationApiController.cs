@@ -8,6 +8,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -18,16 +19,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IIdentityLogon _identityLogon;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 		private readonly IWebLogOn _webLogon;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 
 		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory, 
 																					IIdentityLogon identityLogon,
 																					ILogLogonAttempt logLogonAttempt,
-																					IWebLogOn webLogon)
+																					IWebLogOn webLogon,
+																					IDataSourceForTenant dataSourceForTenant)
 		{
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
 			_identityLogon = identityLogon;
 			_logLogonAttempt = logLogonAttempt;
 			_webLogon = webLogon;
+			_dataSourceForTenant = dataSourceForTenant;
 		}
 
 		[HttpGet]
@@ -47,12 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[NoTenantAuthentication]
 		public virtual JsonResult Logon(Guid businessUnitId)
 		{
+			var result = _identityLogon.LogonIdentityUser();
+			_logLogonAttempt.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful);
+			if (!result.Successful)
+				return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 			try
 			{
-				var result = _identityLogon.LogonIdentityUser();
-				_logLogonAttempt.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful);
-				if (!result.Successful)
-					return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value, result.TenantPassword);
 			}
 			catch (PermissionException)
@@ -61,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 			catch (InvalidLicenseException)
 			{
+				_dataSourceForTenant.RemoveDataSource(result.DataSource.DataSourceName);
 				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);

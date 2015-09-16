@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			return _registeredDataSources.TryGetValue(tenantName, out found) ? found : null;
 		}
 
-		private readonly object addDataSourceLocker = new object();
+		private readonly object dataSourceListLocker = new object();
 		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
 			if (findTenant(tenantName) != null)
 				return;
-			lock (addDataSourceLocker)
+			lock (dataSourceListLocker)
 			{
 				if (findTenant(tenantName) != null)
 					return;
@@ -59,6 +59,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				var newDataSource = _dataSourcesFactory.Create(tenantName, applicationConnectionString, analyticsConnectionString, applicationNhibConfiguration);
 				_setLicenseActivator.Execute(newDataSource);
 				_registeredDataSources[tenantName] = newDataSource;
+			}
+		}
+
+		public void RemoveDataSource(string tenantName)
+		{
+			lock (dataSourceListLocker)
+			{
+				_registeredDataSources.Remove(tenantName);
 			}
 		}
 
