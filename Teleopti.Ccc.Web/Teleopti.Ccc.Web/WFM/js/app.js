@@ -133,7 +133,7 @@ wfm.config([
 			controller: 'RtaAgentsCtrl'
 		});
 
-		$translateProvider.useSanitizeValueStrategy('sanitize');
+		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
 	}
