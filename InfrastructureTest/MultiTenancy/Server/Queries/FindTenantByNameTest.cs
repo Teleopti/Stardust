@@ -39,5 +39,25 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				actual.Should().Be.Null();
 			}
 		}
+
+		[Test]
+		public void ShouldEagerlyLoadNHibConfigSoItCouldBeReadAfterUowIsDisposed()
+		{
+			var key = RandomName.Make();
+			Tenant loaded;
+			var name = RandomName.Make();
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var tenant = new Tenant(name);
+				tenant.DataSourceConfiguration.SetNHibernateConfig(key, RandomName.Make());
+				Persist.Persist(tenant);
+			}
+			using(TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				loaded = Target.Find(name);
+			}
+			loaded.DataSourceConfiguration.ApplicationNHibernateConfig[key]
+				.Should().Not.Be.Null();
+		}
 	}
 }

@@ -46,16 +46,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				_lazy = new Lazy<IDataSourceForTenant>(() =>
 				{
+					initializeApplication.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+
+					//////////TODO: Remove this code when bus no longer has to "loop" tenants/datasources later (DataSourceForTenant.DoOnAllTenants_AvoidUsingThis)/////
 					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 					{
-						initializeApplication.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+
 						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceExists(dsConf.Name,
 							dsConf.DataSourceConfiguration.ApplicationConnectionString,
 							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig));
 
-						Logger.Info("Initialized application");
 					}
+					//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+					Logger.Info("Initialized application");
 					return dataSourceForTenant();
 				});
 			}

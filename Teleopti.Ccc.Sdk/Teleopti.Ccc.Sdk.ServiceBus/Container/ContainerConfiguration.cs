@@ -4,7 +4,9 @@ using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -69,6 +71,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
 			build.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
+			build.RegisterType<FindTenantByNameWithEnsuredTransaction>().As<IFindTenantByNameWithEnsuredTransaction>().SingleInstance();
+			build.RegisterType<FindTenantByName>().As<IFindTenantByName>().SingleInstance();
 
 			build.Update(_container);
 		}
