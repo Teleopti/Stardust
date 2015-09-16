@@ -106,22 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         /// <summary>
-        /// Verifies the scenario cannot be null.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyScenarioCannotBeNull()
-        {
-            mocks.ReplayAll();
-            target = new StatisticHelper(_factory, _unitOfWork);
-            target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, new List<IValidatedVolumeDay>());
-        }
-
-        /// <summary>
         /// Verifies the existing validated volume days cannot be null.
         /// </summary>
         /// <remarks>
