@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 {
@@ -64,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		public void WhenIDeleteFromCampaignList(string campaignName)
 		{
 			Browser.Interactions.HoverOver(".campaign-list li", campaignName);
-			Browser.Interactions.HoverOver(".campaign-list li .delete-campaign-toggle", "");			
+			Browser.Interactions.HoverOver(".campaign-list li .delete-campaign-toggle");
 			Browser.Interactions.Click(".campaign-list .delete-campaign-toggle");
 			Browser.Interactions.ClickContaining(".modal-box a", "AGREE");
 		}
