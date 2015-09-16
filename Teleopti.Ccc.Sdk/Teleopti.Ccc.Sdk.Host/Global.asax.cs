@@ -82,15 +82,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
+			var initializeApplication = new InitializeApplication(messageBroker);
+			initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 
-			//TODO: temp hack - sometime in the future -> no tenant db dep here!
-			//currently needs to be loaded due to payroll stuff. don't really know why...
+			//////TODO: Remove this when payroll stuff are fixed! Only here because of payrolls...//////
+			// webconfig key "Tenancy" can also be removed. And registration of LoadAllTenants in SDK... Should only go to tenant server/web when logging in
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
 				var loadAllTenants = new LoadAllTenants(tenantUnitOfWorkManager);
-        var initializeApplication = new InitializeApplication(messageBroker);
-				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 				loadAllTenants.Tenants().ForEach(dsConf =>
 				{
 					container.Resolve<IDataSourceForTenant>().MakeSureDataSourceExists(dsConf.Name,
@@ -98,9 +98,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
 				});
-
 			}
 			tenantUnitOfWorkManager.Dispose();
+			////////////////////////////////////////////////////////////////////////////////////////////
+
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
 
 			Logger.Info("Initialized application");
