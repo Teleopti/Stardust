@@ -62,6 +62,8 @@ namespace Teleopti.Ccc.Win.Main
 			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings);
 		}
 
+		public string AuthenticationBridge { get; set; }
+
 		private void updatePanel(Control userControl)
 		{
 			pnlContent.Controls.Clear();

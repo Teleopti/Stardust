@@ -24,15 +24,13 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private readonly IToggleManager _toggleManager;
-		private readonly ILoginWebView _webView;
 		public const string UserAgent = "WIN";
 
 
 		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
 			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IToggleManager toggleManager, ILoginWebView webView)
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_view = view;
 			_model = model;
@@ -43,8 +41,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
-			_toggleManager = toggleManager;
-			_webView = webView;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -52,15 +48,9 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool Start(string authenticationBridge)
 		{
-			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				return _webView.StartLogon(authenticationBridge);
-			}
-			else
-			{
-				CurrentStep = LoginStep.SelectLogonType;
-				return _view.StartLogon(_messageBroker);	
-			}
+			CurrentStep = LoginStep.SelectLogonType;
+			_view.AuthenticationBridge = authenticationBridge;
+			return _view.StartLogon(_messageBroker);
 			
 		}
 

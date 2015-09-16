@@ -2,16 +2,17 @@
 using System.Windows.Forms;
 using EO.WebBrowser;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Win.Main
 {
-	public partial class LoginWebView : MetroForm, ILoginWebView
+	public partial class LoginWebView : MetroForm, ILogonView
 	{
 		private readonly LogonModel _model;
-		public ILogonPresenter Presenter { get; set; }
 
 		public LoginWebView(LogonModel model)
 		{
@@ -20,10 +21,26 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
 
-		public bool StartLogon(string authenticationBridge)
+		public void Warning(string warning)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Warning(string warning, string caption)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Error(string error)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ILogonPresenter Presenter { get; set; }
+		public bool StartLogon(IMessageBrokerComposite messageBroker)
 		{
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
-			webView1.Url = authenticationBridge + "/hrd";
+			webView1.Url = AuthenticationBridge + "/hrd";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
@@ -36,40 +53,58 @@ namespace Teleopti.Ccc.Win.Main
 			//	var businessUnit = new BusinessUnitRepository(uow).Load(Guid.Parse(e.Arguments[0].ToString()));
 			//	_model.SelectedBu = businessUnit;
 			//}
-			
+
 			Close();
 			Dispose();
 			Presenter.IdLogin();
 		}
 
-
-		public void Warning(string warning)
+		public void ShowStep(bool showBackButton)
 		{
-			Warning(warning, Resources.LogOn);
+			throw new NotImplementedException();
 		}
 
-		public void Warning(string warning, string caption)
+		public void ClearForm(string labelText)
 		{
-			ShowInTaskbar = true;
-			MessageDialogs.ShowWarning(this, warning, caption);
-			ShowInTaskbar = false;
-
-			DialogResult = DialogResult.None;
+			throw new NotImplementedException();
 		}
 
-		public void Error(string error)
+		public void Exit(DialogResult result)
 		{
-			showApplyProductActivationKeyDialogAndExit(error);
+			throw new NotImplementedException();
 		}
 
-		private void showApplyProductActivationKeyDialogAndExit(string explanation)
+		public void ShowErrorMessage(string message, string caption)
 		{
-			//What should be done here
-
-			//var applyProductActivationKey = new ApplyProductActivationKey(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
-			//applyProductActivationKey.ShowDialog(this);
-			//Application.Exit();
+			throw new NotImplementedException();
 		}
+
+		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void HandleKeyPress(Message msg, Keys keyData, bool b)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ButtonLogOnOkClick(object sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void BtnBackClick(object sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string AuthenticationBridge { get; set; }
 	}
 
 	

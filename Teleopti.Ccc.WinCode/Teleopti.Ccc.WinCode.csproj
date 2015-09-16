@@ -472,7 +472,6 @@
     <Compile Include="Intraday\Poller.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
-    <Compile Include="Main\ILoginWebView.cs" />
     <Compile Include="Main\ILogonPresenter.cs" />
     <Compile Include="Main\ILogonView.cs" />
     <Compile Include="Main\LicenseStatusLoader.cs" />

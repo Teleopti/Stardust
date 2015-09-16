@@ -5,13 +5,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
@@ -32,8 +29,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private ISharedSettingsQuerier _sharedSettingsQuerier;
 		private IAuthenticationQuerier _authenticationQuerier;
 		private IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private IToggleManager _toggleManager;
-		private ILoginWebView _webViewLogin;
 
 		[SetUp]
 		public void Setup()
@@ -46,10 +41,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_availableBusinessUnitsProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
-			_webViewLogin = MockRepository.GenerateMock<ILoginWebView>();
-			_toggleManager = new FakeToggleManager();
 			_target = new LogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), _availableBusinessUnitsProvider, _toggleManager, _webViewLogin);
+				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), _availableBusinessUnitsProvider);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -231,14 +224,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.Initialize();
 			_target.CurrentStep.Should().Be(LoginStep.Login);
 			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
-		}
-
-		[Test]
-		public void ShouldCallStarWebtLogonOnViewAtStartUpIfToggleIsOn()
-		{
-			_toggleManager = new FakeToggleManager(Toggles.WfmPermission_ReplaceOldPermission_34671);
-			_webViewLogin.Stub(x => x.StartLogon("raptor")).Return(true);
-			_target.Start("raptor");
 		}
 	}
 }

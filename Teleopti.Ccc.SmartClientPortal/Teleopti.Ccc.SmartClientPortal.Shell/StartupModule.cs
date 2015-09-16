@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
@@ -47,17 +48,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonMatrix>().As<ILogonMatrix>();
 
-			builder.RegisterType<LogonView>()
+			
+			if (_configuration.Toggle(Toggles.WfmPermission_ReplaceOldPermission_34671))
+			{
+				builder.RegisterType<LoginWebView>()
+					.As<ILicenseFeedback>()
+					.As<ILogonView>()
+					.OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<LogonView>()
 					 .As<ILicenseFeedback>()
 					 .As<ILogonView>()
 					 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
 					 .SingleInstance();
-
-			builder.RegisterType<LoginWebView>()
-					 .As<ILicenseFeedback>()
-					 .As<ILoginWebView>()
-					 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
-					 .SingleInstance();
+			}
+			
 		}
 	}
 }
