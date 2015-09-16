@@ -40,6 +40,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		{
 			DataMaker.Data().Apply(table.CreateInstance<SeatConfigurable>());
 		}
+
+		[Given(@"there is a seat booking for me")]
+		public void GivenThereIsASeatBookingForMe(Table table)
+		{
+			DataMaker.Data().Apply(table.CreateInstance<SeatBookingConfigurable>());
+		}
+
 		
 		[Then(@"I should see planning period available for seat planning from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeeAPlanningPeriodAvailableForSeatPlanning(DateTime fromDate, DateTime toDate)

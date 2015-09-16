@@ -224,6 +224,7 @@
     <Compile Include="TestData\Setups\Configurable\OutboundCampaignConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PlanningPeriodConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SeatBookingConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SeatConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SeatMapLocationConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SeatPlanConfigurable.cs" />
