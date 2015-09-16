@@ -91,11 +91,11 @@
 }
 
 .blip {
-  background: #CCC7C7;
+  background: transparent;
+  outline: gray solid 1px;
   text-align: center;
   height:auto;
   width:auto;
-
   cursor: pointer;
   margin:1px;
 }
@@ -124,28 +124,54 @@
 }
 
 .understaffed{
-  background: #ffcc00!important;
+  background: #FC0!important;
 }
 .critUnderstaffed{
-  background: #e24426!important;
+  background: #EE8F7D!important;
 
 }
 .overstaffed{
-  background: #0099FF!important;
+  background: #99D6FF!important;
 
 }
 .weekend{
-  box-shadow: 0px -7px 0px 0px rgba(255, 153, 51, 0.82);
+outline: #FFC285 solid 1px;
+
 }
 .weekstart{
-  outline: 1px dotted white;
+  background: black!important;
 }
 
 .legends{
   padding-bottom: 10px;
   .legend{
     width: 10px;
-    height: 10px;
+    height: 7px;
+    margin-left:10px;
+    display: inline-block;
 
   }
+}
+.overview{
+  border-collapse: separate;
+  padding: 5px;
+  width: 100%;
+  empty-cells: show;
+
+
+
+  td{
+  width:10px;
+     }
+}
+th{
+  visibility: hidden;
+  width:10px;
+}
+.skillname{
+  width:auto!important;
+  border-bottom: 1px gray solid!important;
+}
+th:nth-child(2n){
+  visibility: visible!important;
 }

@@ -8,36 +8,62 @@
     <div class="wfm-accordion-content" ng-cloak ng-show="!accordionToggle1">
         <div class="wfm-grid">
             <div layout-wrap>
-                <div class="legends" layout ="row">
-                    <div flex><p>Critical understaff:</p><div class="legend critUnderstaffed"></div>
+                <div class="legends" layout ="column">
+
+                    <div flex>Critical Understaffing:<div class="legend critUnderstaffed"></div>
                     </div>
-                     <div flex><p>Understaff:</p><div class="legend understaffed"></div>
+                     <div flex>Understaffing:<div class="legend understaffed"></div>
                      </div>
-                     <div flex><p>Overstaff:</p><div class="legend overstaffed"></div>
+                     <div flex>Overstaffing:<div class="legend overstaffed"></div>
                      </div>
-                     <div flex><p>Weekend:</p><div class="legend weekend"></div>
-                     </div>
-                     <div flex><p>All is fine:</p><div class="legend blip"></div>
+                     <div flex>Weekend:<div class="legend weekend"></div>
                      </div>
 
+
+
                 </div>
-                <div  ng-repeat="node in dayBoxes" ng-class="{gridWeekend: box.status ==='weekend',gridNotice: box.status ==='error'}">
-                    <div layout-gt-sm="row" layout="column" class="floop">
-                        <div flex="20">{{node.SkillName}}</div>
-                        <div class="dayNode" flex>
-                            <div class="blip" flex ng-repeat="subnode in node.SkillDetails" ng-class="{weekend: subnode.weekend,weekstart: subnode.weekstart,understaffed:subnode.ColorId==1,critUnderstaffed:subnode.ColorId==2,overstaffed:subnode.ColorId==3}">
-                                <div class="floater-box">
-                                    <p>{{subnode.Date.Date}}</p>
-                                    <p>Rel diff:{{subnode.RelativeDifference}}</p>
-                                </div>
+
+                <table class="overview">
+                    <tr>
+                        <th></th>
+                        <!-- If it*s first day we display
+                          if it's a monday we display with a colspan of 5 except if it's the last one (maybe it's less than 5)
+                          -->
+                        <th class="datehead" colspan="getdaysuntilnextmonday(dates[0])">
+                            {{dates[0].day}}/{{dates[0].month}}
+                        </th>
+                        <th class="datehead" ng-repeat="datenode in dates ">
+                            {{datenode.day}}/{{datenode.month}}
+                        </th>
+                    </tr>
+                    <tr ng-repeat="(index, subnode) in dayNodes">
+
+                        <td class="skillname">{{ subnode.SkillName }}</td>
+                        <td class="blip" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend,understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">
+                            <div class="floater-box">
+                            <p>{{node.Date.Date}}</p>
+                            <p>Rel diff:{{node.RelativeDifference}}</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                </table>
+                <!--<div  ng-repeat="(node, subnode) in dayBoxes" ng-class="{gridWeekend: box.status ==='weekend',gridNotice: box.status ==='error'}">-->
+                    <!--<div layout-gt-sm="row" layout="column" class="floop">-->
+                        <!--<div flex="20">{{subnode.SkillName}}</div>-->
+                        <!--<div class="dayNode" flex>-->
+                            <!--<div class="blip" flex ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend,understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">-->
+                                <!--<div class="floater-box">-->
+                                    <!--<p>{{node.Date.Date}}</p>-->
+                                    <!--<p>Rel diff:{{node.RelativeDifference}}</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
-    </div>
+
     <div class="wfm-accordion-head" ng-click="accordionToggle2 = !accordionToggle2;">{{issues.length}} issues were found during scheduling<i ng-class="{'toggle-icon-open':accordionToggle2}" class="mdi mdi-chevron-right"></i></div>
     <div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle2">
 	    <div ng-if="hasIssues" class="resourceplanner-report material-depth-2"></div>
