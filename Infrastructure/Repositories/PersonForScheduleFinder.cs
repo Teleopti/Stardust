@@ -36,17 +36,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList , string name)
+		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> groupIdList , string name)
 		{
-			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
-				"exec ReadModel.LoadPersonForScheduleSearch @scheduleDate=:scheduleDate, @teamIdList=:teamIdList,@businessUnitId=:businessUnitId, @name=:name ")
-													  .SetDateOnly("scheduleDate", shiftTradeDate)
-													  .SetString("teamIdList", string.Join(",", teamIdList))
-													  .SetString("name", name)
-													  .SetGuid("businessUnitId", getBusinessUnitId())
-													  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
-													  .SetReadOnly(true)
-													  .List<IAuthorizeOrganisationDetail>();
+			const string sql = "exec ReadModel.LoadPersonForScheduleSearch @scheduleDate=:scheduleDate, "
+							   + "@groupIdList=:groupIdList, @businessUnitId=:businessUnitId, @name=:name ";
+			return ((NHibernateUnitOfWork) _unitOfWork.Current()).Session.CreateSQLQuery(sql)
+				.SetDateOnly("scheduleDate", shiftTradeDate)
+				.SetString("groupIdList", string.Join(",", groupIdList))
+				.SetString("name", name)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonSelectorShiftTrade)))
+				.SetReadOnly(true)
+				.List<IAuthorizeOrganisationDetail>();
 		}
 	}
 

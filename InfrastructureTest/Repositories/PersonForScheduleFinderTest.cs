@@ -17,12 +17,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-
 	[TestFixture]
 	[Category("LongRunning")]
 	class PersonForScheduleFinderTest : DatabaseTest
 	{
-
 		private PersonForScheduleFinder target;
 
 		private ISite site;
@@ -84,7 +82,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.ToArray().Length.Should().Be.EqualTo(3);
 		}
 
-
 		[Test]
 		public void ShouldFilterPersonByNameSegment()
 		{
@@ -139,9 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz");
 			result.ToArray().Length.Should().Be.EqualTo(1);
-
 		}
-
 
 		[Test]
 		public void ShouldGetPersonForDayAndGroup()
@@ -194,8 +189,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.ToArray().Length.Should().Be.EqualTo(1);
 		}
 
-
-
 		private IPersonContract createPersonContract(IContract contract, IBusinessUnit otherBusinessUnit = null)
 		{
 			var pContract = PersonContractFactory.CreatePersonContract(contract);
@@ -219,13 +212,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
-
 		private void PersistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)
 		{
 			var populateReadModelQuery = string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] 
                 ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
-			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','11610FE4-0130-4568-97DE-9B5E015B2564')",
-				personId, teamId, siteId, getBusinessUnitId(), groupId);
+			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','{5}')",
+				personId, teamId, siteId, getBusinessUnitId(), groupId, Guid.NewGuid());
 
 			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
 		}
