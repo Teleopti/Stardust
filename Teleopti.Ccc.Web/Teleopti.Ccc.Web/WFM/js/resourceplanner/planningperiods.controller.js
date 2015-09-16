@@ -10,6 +10,9 @@
 
 	        $scope.isScheduleRunning = false;
 	        $scope.scheduleClicked = false;
+	        $scope.disableSchedule = function() {
+	            return $scope.isScheduleRunning || $scope.scheduleClicked;
+	        };
 
 	        function updateRunningStatus() {
 	            PlanningPeriodSvrc.status.get().$promise.then(function(result) {
