@@ -7,40 +7,36 @@
 	position: relative;	
 
 	.seatmap-view-header{
-		height: 40px;
+		height: 41px;
 		position:relative;
 		margin:-10px -10px 0px -10px;
 		z-index:2;
-	}
 
-	.wfm-btn{
-		height:100%;
-		margin:0px;
-		border-radius:0px;
-		text-transform:none;
-	}
+		.wfm-btn{
+			height:100%;
+			margin:0px;
+			border-radius:0px;
+			text-transform:none;
+		}
 
-	.wfm-btn-invis-primary{
-		color:#0099FF;
-	}
+		.return-button:hover{
+			background:#0099ff!important;
+			color:#ffffff!important;
+		}
 
-	.wfm-btn:hover{
-		background:#0099FF;
-		color:#ffffff;
-	}
+		.wfm-btn-invis-primary:hover{
+			background:#0099ff;
+			color:#ffffff!important;
+		}
 
-	.wfm-btn-invis-default:hover{
-		background:#FDFEFF;
-		color:#0099FF;
-	}
+		.wfm-fab{
+			transition-duration:0s;
+		}
 
-	.wfm-fab{
-		transition-duration:0s;
-	}
-
-	.button-active{
-		background:#0099FF;
-		color:#ffffff;
+		.button-active{
+			background:#0099FF!important;
+			color:#ffffff!important;
+		}
 	}
 }
 
@@ -182,7 +178,7 @@ seatmap-editor{
 	top:23px;
 }
 
-@media(min-width:1240px){
+@media(min-width:1280px){
 	.top-adjust{
 		top:-20px;
 	}
@@ -203,7 +199,7 @@ seatmap-editor{
 	z-index: 2;
 }
 
- .mfb-menu-group{
+.mfb-menu-group{
 	top: -45px; 
 	right: 0px; 
 	z-index: 2;
@@ -232,16 +228,41 @@ seatmap-editor{
 
 .seatmap-occupancy-detail {
 	display: block;
-	min-height: 120px;
+	min-height:120px;
+	max-height:200px;
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
 	padding-top:1px;
 	margin-left:-10px;
 	margin-right:-10px;
-}
+	margin-bottom:-13px;
 
-.seatmap-occupancy-detail span{
-	max-width:100%;
+	.bottom-header{
+		position:relative;
+		background:#ffffff;
+		border-top:1px solid #e1e2e3;
+		
+		.wfm-btn{
+			margin:2px;
+			padding: 3px 12px;
+			text-transform: none;
+		}
+
+		.pull-right{
+			height:100%;
+			margin-top:-3px;
+		}
+	}
+	
+	.wfm-list{
+		max-height:166px;
+		overflow-y:auto;
+	}
+
+	span{
+		max-width:100%;
+	}
+	
 }
 
 .seatmap-seatbooking-previousday{
