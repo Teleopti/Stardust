@@ -4,7 +4,7 @@ Feature: Permissions
 	I want to work on permissions
 
 
-Scenario: create a role
+Scenario: Create a role
 	Given I have a role with
 		| Field                                 | Value             |
 		| Name                                  | Resource Planner  |
@@ -14,7 +14,7 @@ Scenario: create a role
 	Then I should see a role 'roleA' in the list
 
 
-Scenario: add a function to a role
+Scenario: Add a function to a role
 	Given I have a role with
 		| Field                                 | Value             |
 		| Name                                  | Resource Planner  |

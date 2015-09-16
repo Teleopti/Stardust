@@ -24,7 +24,7 @@ Scenario: schedule the next planning period
 	Then I should see '0'
 
 @OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
-Scenario: update the next planning period
+Scenario: Update the next planning period
 	Given the time is '2014-04-10' 
 	And I am swedish
 	And I have a role with
@@ -57,8 +57,7 @@ Scenario: update the next planning period
 	And I update planning period to two week 
 	Then I should see updated period from '2014-04-13'to '2014-04-26'
 
-@ignore
-Scenario: create the next planning period
+Scenario: Create the next planning period
 	Given the time is '2014-04-10'
 	And I am swedish
 	And I have a role with
