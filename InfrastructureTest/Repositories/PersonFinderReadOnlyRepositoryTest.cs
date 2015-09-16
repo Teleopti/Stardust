@@ -106,51 +106,63 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var buid = CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault();
 		    Session.CreateSQLQuery(
 				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName','" + buid + "');")
+			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName',:businessUnitId);")
+				.SetGuid("businessUnitId",buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','LastName','" + buid + "');")
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','LastName',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','Organization','" + buid + "');")
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','Organization',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','Role','" + buid + "');")
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','Role',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','Skill','" + buid + "');")
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','Skill',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','EmploymentNumber','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','EmploymentNumber',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','FirstName','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','FirstName',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','LastName','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','LastName',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','Organization','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','Organization',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','Role','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','Role',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 			Session.CreateSQLQuery(
 				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill','" + buid + "');")
+				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId);")
+				.SetGuid("businessUnitId", buid)
 				.ExecuteUpdate();
 
 	    }

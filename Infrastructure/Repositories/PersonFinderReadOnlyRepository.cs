@@ -61,10 +61,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return searchString;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-			MessageId = "System.String.Format(System.String,System.Object[])"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-			 "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
 		{
 			personFinderSearchCriteria.TotalRows = 0;
@@ -178,25 +174,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-			MessageId = "System.String.Format(System.String,System.Object)")]
 		public void UpdateFindPerson(ICollection<Guid> ids)
 		{
-			string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+			string inputIds = String.Join(",", (from p in ids select p.ToString()));
 			var uow = _currentUnitOfWork.Current();
 
-			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-				string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
+			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
+				.SetString("inputIds", inputIds)
+				.ExecuteUpdate();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-			MessageId = "System.String.Format(System.String,System.Object)")]
 		public void UpdateFindPersonData(ICollection<Guid> ids)
 		{
-			string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+			string inputIds = String.Join(",", (from p in ids select p.ToString()));
 			var uow = _currentUnitOfWork.Current();
-			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-				string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
+			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPersonData] :inputIds")
+				.SetString("inputIds", inputIds)
+				.ExecuteUpdate();
 		}
 	}
 	 public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria

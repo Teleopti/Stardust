@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldOnlyReturnActivePersonPeriodExternalLogOn()
 		{
-			var query = string.Format("EXEC [dbo].[rta_load_external_logon] '{0}'", DateTime.UtcNow.Date);
+			const string query = "EXEC [dbo].[rta_load_external_logon] :date";
 			var person = new Person();
 			var team = TeamFactory.CreateTeam("_", "_");
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var contract = new Contract("_");
 			var contractSchedule = new ContractSchedule("_");
 			var partTimePercentage = new PartTimePercentage("_");
-			var personPeriod = new PersonPeriod(new DateOnly(DateTime.UtcNow.AddDays(-14)),
+			var personPeriod = new PersonPeriod(DateOnly.Today.AddDays(-14),
 				new PersonContract(contract, partTimePercentage, contractSchedule), team);
-			var personPeriod2 = new PersonPeriod(new DateOnly(DateTime.UtcNow),
+			var personPeriod2 = new PersonPeriod(DateOnly.Today,
 				new PersonContract(contract, partTimePercentage, contractSchedule), team);
 			var externalLogOn = new ExternalLogOn(1, 1, "_", "_", true);
 			personPeriod.AddExternalLogOn(externalLogOn);
@@ -43,7 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(person);
 			UnitOfWork.PersistAll();
 
-			Session.CreateSQLQuery(query).List().Count
+			Session.CreateSQLQuery(query)
+				.SetDateTime("date",DateTime.Today)
+				.List().Count
 				.Should().Be.EqualTo(1);
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

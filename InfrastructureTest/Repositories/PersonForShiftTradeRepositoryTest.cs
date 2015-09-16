@@ -68,16 +68,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 
-			const string sql
+			const string populateReadModelQuery
 				= @"INSERT INTO [ReadModel].[GroupingReadOnly] ([PersonId],[FirstName],[LastName],[StartDate],[TeamId],"
-				+ "[SiteId],[BusinessUnitId],[GroupId],[PageId]) VALUES ('{0}','{1}','{2}','2012-02-02 00:00:00' ,'{3}','{4}','{5}','{6}','{7}')";
-			var populateReadModelQuery = string.Format(sql, person1.Id.Value, person1.Name.FirstName, person1.Name.LastName,
-				team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), Guid.Parse(businessUnitId.ToString()),
-				team.Id.GetValueOrDefault(), Guid.NewGuid());
+				+ "[SiteId],[BusinessUnitId],[GroupId],[PageId]) VALUES (:personId,:firstName,:lastName,:startDate,:teamId,:siteId,:businessUnitId,:groupId,:pageId)";
+			
+			Session.CreateSQLQuery(populateReadModelQuery)
+				.SetGuid("personId",person1.Id.GetValueOrDefault())
+				.SetString("firstName",person1.Name.FirstName)
+				.SetString("lastName",person1.Name.LastName)
+				.SetDateTime("startDate", new DateTime(2012,02,02))
+				.SetGuid("teamId",team.Id.GetValueOrDefault())
+				.SetGuid("siteId",site.Id.GetValueOrDefault())
+				.SetGuid("businessUnitId", businessUnitId)
+				.SetGuid("groupId", team.Id.GetValueOrDefault())
+				.SetGuid("pageId", Guid.NewGuid())
+				.ExecuteUpdate();
 
-			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
-
-			return new PersonRepository(UnitOfWork).Get(person1.Id.Value);
+			return new PersonRepository(UnitOfWork).Get(person1.Id.GetValueOrDefault());
 		}
 	}
 }

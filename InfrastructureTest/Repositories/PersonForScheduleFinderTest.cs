@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
 
-			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
-			PersistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
-			PersistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
 			result.ToArray().Length.Should().Be.EqualTo(3);
@@ -124,9 +124,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
-			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
-			PersistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
-			PersistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			persistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> {team.Id.Value}, "roger");
 			result.ToArray().Length.Should().Be.EqualTo(1);
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var groupId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
 
-			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), groupId);
+			persistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), groupId);
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "");
 			result.ToArray().Length.Should().Be.EqualTo(1);
@@ -206,20 +206,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			
-			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
-			
-			return Guid.Parse(businessUnitId.ToString());
+			return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 		}
 
-		private void PersistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)
+		private void persistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)
 		{
-			var populateReadModelQuery = string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] 
+			const string populateReadModelQuery = @"INSERT INTO [ReadModel].[GroupingReadOnly] 
                 ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
-			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','{5}')",
-				personId, teamId, siteId, getBusinessUnitId(), groupId, Guid.NewGuid());
+			 VALUES (:personId,:startDate,:teamId,:siteId,:businessUnitId,:groupId,:pageId)";
 
-			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
+			Session.CreateSQLQuery(populateReadModelQuery)
+				.SetGuid("personId", personId)
+				.SetDateTime("startDate", new DateTime(2012, 02, 02))
+				.SetGuid("teamId", teamId)
+				.SetGuid("siteId", siteId)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetGuid("groupId", groupId)
+				.SetGuid("pageId", Guid.NewGuid())
+				.ExecuteUpdate();
 		}
 	}
 }
