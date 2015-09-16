@@ -14,14 +14,14 @@ angular.module('wfm.forecasting')
 
 			$scope.workloads = [];
 			forecasting.skills.query().$promise.then(function(result) {
-				$scope.skills = result;
-				angular.forEach($scope.skills, function(skill) {
+				var skills = result;
+				var workloads = [];
+				angular.forEach(skills, function (skill) {
 					angular.forEach(skill.Workloads, function(workload) {
-						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
+						workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
 					});
 				});
-
-				$filter('orderBy')($scope.workloads, 'Name');
+				$scope.workloads = $filter('orderBy')(workloads, 'Name');
 			});
 
 			$scope.modalInfo = {
