@@ -562,14 +562,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveAnywhereTeamScheduleHub()
 		{
-			requestContainer.Resolve<GroupScheduleHub>()
+			requestContainer.Resolve<GroupScheduleController>()
 				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldResolveAnywherePersonScheduleHub()
 		{
-			requestContainer.Resolve<PersonScheduleHub>()
+			requestContainer.Resolve<PersonScheduleController>()
 				.Should().Not.Be.Null();
 		}
 

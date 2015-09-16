@@ -1,42 +1,36 @@
 define([
 				'jquery',
 				'messagebroker',
-				'signalrhubs.started',
 				'helpers',
-				'errorview'
 ], function (
 			$,
 			messagebroker,
-			started,
-			helpers,
-			errorview
+			helpers
 	) {
 
-	// why is signalr eating my exceptions?
-	var logException = function (func) {
-		try {
-			func();
-		} catch (e) {
-			errorview.display(e);
-			throw e;
-		}
-	};
-	
-	var personScheduleHub = $.connection.personScheduleHub;
-	personScheduleHub.client.exceptionHandler = errorview.display;
 	var personScheduleSubscription = null;
-	var incomingPersonSchedule = null;
-	personScheduleHub.client.incomingPersonSchedule = function (data) {
-		if (incomingPersonSchedule != null)
-			logException(function () { incomingPersonSchedule(data); });
-	};
 
 	var unsubscribePersonSchedule = function () {
 		if (!personScheduleSubscription)
 			return;
-		incomingPersonSchedule = null;
 		messagebroker.unsubscribe(personScheduleSubscription);
 		personScheduleSubscription = null;
+	};
+
+	var loadPersonSchedules = function (buid, date, personId, callback) {
+		$.ajax({
+			url: 'PersonSchedule/Get',
+			headers: { 'X-Business-Unit-Filter': buid },
+			cache: false,
+			dataType: 'json',
+			data: {
+				personId: personId,
+				date: date
+			},
+			success: function (data, textStatus, jqXHR) {
+				callback(data);
+			}
+		});
 	};
 
 	var isMatchingDates = function (date, notificationStartDate, notificationEndDate) {
@@ -52,10 +46,8 @@ define([
 	return {
 		subscribePersonSchedule: function (buId, personId, date, callback) {
 			unsubscribePersonSchedule();
-			incomingPersonSchedule = callback;
-			started.done(function () {
-				personScheduleHub.connection.qs = { "BusinessUnitId": buId };
-				personScheduleHub.server.personSchedule(personId, date);
+			messagebroker.started.done(function () {
+				loadPersonSchedules(buId, date, personId, callback);
 
 				personScheduleSubscription = messagebroker.subscribe({
 					businessUnitId: buId,
@@ -64,7 +56,7 @@ define([
 					domainType: 'IPersonScheduleDayReadModel',
 					callback: function (notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							personScheduleHub.server.personSchedule(personId, date);
+							loadPersonSchedules(buId, date, personId, callback);
 						}
 					}
 				});

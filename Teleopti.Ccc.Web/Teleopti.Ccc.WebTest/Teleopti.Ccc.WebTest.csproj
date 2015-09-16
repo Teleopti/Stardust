@@ -404,7 +404,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\PersonScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TestHubBuilder.cs" />
@@ -415,7 +414,6 @@
     <Compile Include="Areas\SSO\Contollers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\GroupScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />

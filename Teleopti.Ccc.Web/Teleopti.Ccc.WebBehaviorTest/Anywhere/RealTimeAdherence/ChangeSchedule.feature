@@ -39,7 +39,6 @@ Scenario: Should be able to change schedule from agent state overview
 	Then I should see schedule for 'Pierre Baldi'
 	And I should see schedule menu
 
-@ignore
 Scenario: Should be able to change schedule for multiple business units
 	Given the time is '2014-09-09 12:30:00'
 	And I have a role with
@@ -90,7 +89,7 @@ Scenario: Should be able to change schedule for multiple business units
 	When I view schedules for 'Red' on '2014-09-09'
 	And I choose business unit 'Business Unit 1'
 	And I click person name 'Pierre Baldi'
-	And I click 'add activity' in schedule menu
+	And I choose to 'add activity' from schedule menu
 	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Lunch |

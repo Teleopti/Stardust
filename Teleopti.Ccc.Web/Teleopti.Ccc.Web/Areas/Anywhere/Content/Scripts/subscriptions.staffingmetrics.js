@@ -1,8 +1,7 @@
 define([
 				'jquery',
 				'messagebroker',
-				'helpers',
-				'errorview'
+				'helpers'
 ], function (
 			$,
 			messagebroker,

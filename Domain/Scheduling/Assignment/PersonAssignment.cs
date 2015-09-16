@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			AddEvent(new ScheduleChangedEvent
 				{
+					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
 					ScenarioId = Scenario.Id.GetValueOrDefault(),
 					StartDateTime = Period.StartDateTime,
 					EndDateTime = Period.EndDateTime,

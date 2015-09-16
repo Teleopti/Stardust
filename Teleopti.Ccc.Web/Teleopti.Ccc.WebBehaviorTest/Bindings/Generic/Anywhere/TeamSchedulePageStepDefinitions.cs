@@ -103,17 +103,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				if (!string.IsNullOrEmpty(scheduleShiftInfo.TextColor))
 				{
 					Browser.Interactions.AssertExistsUsingJQuery(
-                        string.Format(selector + " .label[style*='background-color: {0}'][style*='color: {1}']:contains('{2}')",
-						              colorNameToCss(scheduleShiftInfo.Color),
-						              colorNameToCss(scheduleShiftInfo.TextColor),
-						              scheduleShiftInfo.Name)
+						string.Format(selector + " .label[style*='background-color: {0}'][style*='color: {1}']:contains('{2}')",
+									  colorNameToCss(scheduleShiftInfo.Color),
+									  colorNameToCss(scheduleShiftInfo.TextColor),
+									  scheduleShiftInfo.Name)
 						);
 				}
 				else
 				{
 					Browser.Interactions.AssertExistsUsingJQuery(selector + " .label[style*='background-color: " +
-					                                             colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
-					                                             scheduleShiftInfo.Name + "')");
+																 colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
+																 scheduleShiftInfo.Name + "')");
 				}
 			}
 		}
@@ -220,16 +220,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (layer.StartTime != null)
 			{
 				selector = string.Format(".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
-				                         personName,
-				                         layer.StartTime,
-				                         layer.LengthMinutes(),
-				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+										 personName,
+										 layer.StartTime,
+										 layer.LengthMinutes(),
+										 PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
 			}
 			else
 			{
 				selector = string.Format(".person:contains('{0}') .shift .layer[style*='background-color: {1}']",
-				                         personName,
-				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+										 personName,
+										 PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
 			}
 			if (layer.Description != null)
 			{
@@ -372,13 +372,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see staffing metrics for skill '(.*)'")]
 		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
 		{
-            Browser.Interactions.AssertFirstContains("#skill-selector button", name);
+			Browser.Interactions.AssertFirstContains("#skill-selector button", name);
 		}
 
 		[Then(@"I should see staffing metrics for skill '(.*)' with")]
 		public void ThenIShouldSeeStaffingMetricsForSkillWith(string name, Table table)
 		{
-            Browser.Interactions.AssertFirstContains("#skill-selector button", name);
+			Browser.Interactions.AssertFirstContains("#skill-selector button", name);
 
 			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
 

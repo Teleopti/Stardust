@@ -1,42 +1,36 @@
 define([
 				'jquery',
 				'messagebroker',
-				'signalrhubs.started',
-				'helpers',
-				'errorview'
+				'helpers'
 ], function (
 			$,
 			messagebroker,
-			started,
-			helpers,
-			errorview
+			helpers
 	) {
-
-	// why is signalr eating my exceptions?
-	var logException = function (func) {
-		try {
-			func();
-		} catch (e) {
-			errorview.display(e);
-			throw e;
-		}
-	};
 	
-	var groupScheduleHub = $.connection.groupScheduleHub;
-	groupScheduleHub.client.exceptionHandler = errorview.display;
-	var incomingGroupSchedule = null;
 	var groupScheduleSubscription = null;
-	groupScheduleHub.client.incomingGroupSchedule = function (data) {
-		if (incomingGroupSchedule != null)
-			logException(function () { incomingGroupSchedule(data); });
-	};
-	
+
 	var unsubscribeGroupSchedule = function () {
 		if (!groupScheduleSubscription)
 			return;
-		incomingGroupSchedule = null;
 		messagebroker.unsubscribe(groupScheduleSubscription);
 		groupScheduleSubscription = null;
+	};
+
+	var loadGroupSchedules = function (buid, date, groupId, callback) {
+		$.ajax({
+			url: 'GroupSchedule/Get',
+			headers: { 'X-Business-Unit-Filter': buid },
+			cache: false,
+			dataType: 'json',
+			data: {
+				groupId: groupId,
+				date: date
+			},
+			success: function (data, textStatus, jqXHR) {
+				callback(data);
+			}
+		});
 	};
 
 	var isMatchingDates = function (date, notificationStartDate, notificationEndDate) {
@@ -54,11 +48,8 @@ define([
 	return {
 		subscribeGroupSchedule: function (buId, groupId, date, peopleCheckCallback, callback) {
 			unsubscribeGroupSchedule();
-			incomingGroupSchedule = callback;
-			started.done(function () {
-				groupScheduleHub.connection.qs = { "BusinessUnitId": buId };
-				groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
-
+			messagebroker.started.done(function () {
+				loadGroupSchedules(buId, date, groupId, callback);
 				groupScheduleSubscription = messagebroker.subscribe({
 					businessUnitId: buId,
 					domainType: 'IPersonScheduleDayReadModel',
@@ -69,7 +60,7 @@ define([
 									currentThrottleTimeout = setTimeout(function () {
 										clearTimeout(currentThrottleTimeout);
 										currentThrottleTimeout = undefined;
-										groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
+										loadGroupSchedules(buId, date, groupId, callback);
 									}, 500);
 								}
 							}

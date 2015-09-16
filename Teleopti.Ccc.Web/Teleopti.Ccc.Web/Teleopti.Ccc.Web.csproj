@@ -385,6 +385,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GetTeamAdherence.cs" />
@@ -846,7 +847,7 @@
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleHub.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMapper.cs" />
@@ -885,7 +886,6 @@
     <Compile Include="Areas\Start\Models\Authentication\IpAddressResolver.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonController.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleHub.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
