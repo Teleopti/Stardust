@@ -3,7 +3,7 @@
 angular
 	.module('peopleService', ['ngResource'])
 	.service('People', [
-		'$resource', function($resource) {
+		'$resource','$http', function($resource, $http) {
 			this.search = $resource('../api/Search/People/Keyword', {
 				keyword: "@searchKey",
 				pageSize: "@pageSize",
@@ -65,5 +65,93 @@ angular
 					isArray: true
 				}
 			});
+
+			this.uploadUserFromFile = function (file) {
+				var config = overload({
+					url: '../api/People/UploadPeople',
+					method: 'POST',
+					responseType: 'arraybuffer',
+					file: file, 
+					headers: {
+						'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					}
+				});
+				return $http(config);
+
+			};
+
+			function overload(config) {
+				function addFieldToFormData(formData, val, key) {
+					if (val !== undefined) {
+						if (angular.isDate(val)) {
+							val = val.toISOString();
+						}
+						if (angular.isString(val)) {
+							formData.append(key, val);
+						} else if (config.sendFieldsAs === 'form') {
+							if (angular.isObject(val)) {
+								for (var k in val) {
+									if (val.hasOwnProperty(k)) {
+										addFieldToFormData(formData, val[k], key + '[' + k + ']');
+									}
+								}
+							} else {
+								formData.append(key, val);
+							}
+						} else {
+							val = angular.isString(val) ? val : JSON.stringify(val);
+							if (config.sendFieldsAs === 'json-blob') {
+								formData.append(key, new Blob([val], { type: 'application/json' }));
+							} else {
+								formData.append(key, val);
+							}
+						}
+					}
+				}
+
+				config.headers = config.headers || {};
+				config.headers['Content-Type'] = undefined;
+				config.transformRequest = config.transformRequest ?
+				  (angular.isArray(config.transformRequest) ?
+					config.transformRequest : [config.transformRequest]) : [];
+				config.transformRequest.push(function (data) {
+					var formData = new FormData();
+					var allFields = {};
+					var key;
+					for (key in config.fields) {
+						if (config.fields.hasOwnProperty(key)) {
+							allFields[key] = config.fields[key];
+						}
+					}
+					if (data) allFields.data = data;
+					for (key in allFields) {
+						if (allFields.hasOwnProperty(key)) {
+							var val = allFields[key];
+							if (config.formDataAppender) {
+								config.formDataAppender(formData, key, val);
+							} else {
+								addFieldToFormData(formData, val, key);
+							}
+						}
+					}
+
+					if (config.file != null) {
+						var fileFormName = config.fileFormDataName || 'file';
+
+						if (angular.isArray(config.file)) {
+							var isFileFormNameString = angular.isString(fileFormName);
+							for (var i = 0; i < config.file.length; i++) {
+								formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i],
+								  (config.fileName && config.fileName[i]) || config.file[i].name);
+							}
+						} else {
+							formData.append(fileFormName, config.file, config.fileName || config.file.name);
+						}
+					}
+					return formData;
+				});
+
+				return config;
+			};
 		}
 	]);

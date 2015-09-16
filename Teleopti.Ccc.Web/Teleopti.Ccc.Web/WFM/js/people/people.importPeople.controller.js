@@ -6,7 +6,7 @@
 			'$translate','Upload', 'uiGridExporterConstants', '$timeout', 'People', PeopleImportController
 		]);
 
-	function PeopleImportController($translate,Upload, uiGridExporterConstants, $timeout, peopleSvc) {
+	function PeopleImportController($translate, Upload, uiGridExporterConstants, $timeout, peopleSvc) {
 		var vm = this;
 
 		vm.files = [];
@@ -113,10 +113,24 @@
 			if (files && files.length) {
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
-					vm.gridForImportApi.importer.importFile(file);
+					peopleSvc.uploadUserFromFile(file).success(function (data) {
+						var blob = new Blob([data], {
+							type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+						});
+						if (blob.size != 0) {
+							saveAs(blob, 'dataWithError' + '.xlsx');
+						}
+
+					}).error(function () {
+						//Some error log
+					});
+
 				}
 			}
 		};
+
+		
+
 
 		vm.export = function() {
 			if (vm.isSuccessful && vm.hasDataWithError) {

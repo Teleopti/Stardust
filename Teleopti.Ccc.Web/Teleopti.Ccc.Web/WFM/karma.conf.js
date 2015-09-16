@@ -43,6 +43,7 @@ module.exports = function(config) {
 		'vendor/fabricjs/fabricjs_viewport.js',
 		'vendor/ng-mfb/mfb.directive.js',
 		'vendor/csv-js/csv.js',
+		'vendor/file-saver/FileSaver.min.js',
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 		'vendor/d3/d3.min.js',
 		'vendor/c3/c3.min.js',

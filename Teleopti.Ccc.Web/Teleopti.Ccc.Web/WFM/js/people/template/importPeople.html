@@ -8,7 +8,8 @@
 				<div class="wfm-block">
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
 						 ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="true"
-						 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
+						 accept="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" ngf-accept="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" ngf-drop-available="dropAvailable">
+						<!--accept="'.xls'" ngf-accept="'.xls'" ngf-drop-available="dropAvailable">-->
 						{{'DragAndDropCsvFilesHereOrClickToUpload'|translate}}
 					</div>
 					<div class="import-file-template">
@@ -45,6 +46,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<a ng-href="{{vm.getFileHref(FileId)}}" target="_blank" class="btn btn-default">&nbsp;Excel File</a>
 				<aside>
 					<a ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
 				</aside>

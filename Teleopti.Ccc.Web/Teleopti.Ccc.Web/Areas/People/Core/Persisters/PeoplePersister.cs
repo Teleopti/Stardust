@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			_userValidator = userValidator;
 		}
 
-		public dynamic Persist(IEnumerable<RawUser> users)
+		public IEnumerable<RawUser> Persist(IEnumerable<RawUser> users)
 		{
 			var invalidUsers = new List<RawUser>();
 			foreach (var user in users)
@@ -99,12 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				invalidUsers.Add(user);
 			}
 
-			return new
-			{
-				InvalidUsers = invalidUsers,
-				SuccessfulCount = users.Count() - invalidUsers.Count,
-				InvalidCount = invalidUsers.Count
-			};
+			return invalidUsers;
 		}
 	}
 }

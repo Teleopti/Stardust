@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public interface IPeoplePersister
 	{
-		dynamic Persist(IEnumerable<RawUser> users);
+		IEnumerable<RawUser> Persist(IEnumerable<RawUser> users);
 	}
 }
