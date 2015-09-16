@@ -691,6 +691,7 @@ activity-picker {
 
 	.loading-whole-page{
 		position:absolute;
+		margin-top: -10px;
 		top:0;
 		left:0;
 		z-index:1000;
@@ -736,6 +737,7 @@ activity-picker {
 
 	.loading-list-with-gantt{
 		position:absolute;
+		margin-top: -10px;
 		top:0;
 		left:0;
 		height:100%;
