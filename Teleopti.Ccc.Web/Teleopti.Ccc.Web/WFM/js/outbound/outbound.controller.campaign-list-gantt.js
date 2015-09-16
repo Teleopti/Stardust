@@ -3,9 +3,12 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', 'OutboundToggles', 'outboundService', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', ['$scope', 'OutboundToggles', 'outboundService', '$mdDialog', '$document', campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, OutboundToggles, outboundService) {
+	function campaignSheetCtrl($scope, $mdDialog) {		
+	}
+
+	function campaignListGanttCtrl($scope, OutboundToggles, outboundService, $mdDialog, $document) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -37,6 +40,22 @@
 			}
 		};
 
+		$scope.campaignClicked = function (ev, c) {		
+			$mdDialog.show({
+				controller: [campaignSheetCtrl],
+					templateUrl: 'html/outbound/campaign-sheet.tpl.html',
+					parent: angular.element(document.querySelector('#popupContainer')),
+					targetEvent: ev,
+					clickOutsideToClose: true
+				})
+				.then(function(answer) {
+					$scope.status = 'You said the information was "' + answer + '".';
+				}, function() {
+					$scope.status = 'You cancelled the dialog.';
+				});
+
+
+		};
 
 
 		$scope.timespans = [

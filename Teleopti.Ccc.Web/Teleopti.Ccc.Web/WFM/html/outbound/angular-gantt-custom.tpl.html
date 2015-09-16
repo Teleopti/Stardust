@@ -131,7 +131,7 @@
 	</script>
 	<!-- Task content template -->
 	<script type="text/ng-template" id="template/ganttTaskContent.tmpl.html">
-		<div class="gantt-task-content" unselectable="on"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
+		<div class="gantt-task-content" unselectable="on" ng-click="scope.campaignClicked($event, task.model)"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
 	</script>
 
 	<!-- Row background template -->

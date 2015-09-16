@@ -1,6 +1,11 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+
+	.wfm-card-list-container {
+		max-height: none;
+	}	
+
 	.outbound-gantt-chart {
 		margin: 70px 0;
 		
@@ -32,7 +37,6 @@
 			&.gantt-column-header-even {
 				border-bottom: solid 2px #99d6ff;
 			}
-
 		}
 
 		.gantt-body-columns {

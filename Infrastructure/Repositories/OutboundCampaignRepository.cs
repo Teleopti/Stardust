@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Conjunction()
 					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
 					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime)))
-				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
+				.AddOrder(Order.Asc("Name"))
 				.List<IOutboundCampaign>();
 		}
 	}

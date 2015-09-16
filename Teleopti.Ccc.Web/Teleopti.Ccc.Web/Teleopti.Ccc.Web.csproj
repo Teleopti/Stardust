@@ -1189,6 +1189,7 @@
   <ItemGroup>
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\html\outbound\angular-gantt-custom.tpl.html" />
+    <Content Include="WFM\html\outbound\campaign-sheet.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-list-gantt.html" />
     <Content Include="WFM\html\outbound\outbound-overview.html" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
