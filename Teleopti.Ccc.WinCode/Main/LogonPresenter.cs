@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		}
 
 		// ReSharper disable once UnusedMember.Local
-		private bool idLogin()
+		public bool IdLogin()
 		{
 			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgent);
 

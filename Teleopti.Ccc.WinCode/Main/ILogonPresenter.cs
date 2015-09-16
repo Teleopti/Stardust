@@ -7,5 +7,6 @@
 		void Initialize();
 		bool Start(string raptorServer);
 		LoginStep CurrentStep { get; set; }
+		bool IdLogin();
 	}
 }

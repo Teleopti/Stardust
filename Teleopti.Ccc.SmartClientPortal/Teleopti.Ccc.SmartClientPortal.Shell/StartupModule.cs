@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LoginWebView>()
 					 .As<ILicenseFeedback>()
 					 .As<ILoginWebView>()
+					 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
 					 .SingleInstance();
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using EO.WebBrowser;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
@@ -9,8 +10,12 @@ namespace Teleopti.Ccc.Win.Main
 {
 	public partial class LoginWebView : MetroForm, ILoginWebView
 	{
-		public LoginWebView()
+		private readonly LogonModel _model;
+		public ILogonPresenter Presenter { get; set; }
+
+		public LoginWebView(LogonModel model)
 		{
+			_model = model;
 			InitializeComponent();
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
@@ -18,7 +23,6 @@ namespace Teleopti.Ccc.Win.Main
 		public bool StartLogon(string authenticationBridge)
 		{
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
-			//webView1.Url = raptorServer + "hrd";
 			webView1.Url = authenticationBridge + "/hrd";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
@@ -26,10 +30,16 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
-			var businessUnitId = e.Arguments[0];
-			var personId = e.Arguments[1];
+			_model.PersonId = Guid.Parse(e.Arguments[1].ToString());
+			//using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			//{
+			//	var businessUnit = new BusinessUnitRepository(uow).Load(Guid.Parse(e.Arguments[0].ToString()));
+			//	_model.SelectedBu = businessUnit;
+			//}
+			
 			Close();
 			Dispose();
+			Presenter.IdLogin();
 		}
 
 
