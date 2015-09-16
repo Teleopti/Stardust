@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
@@ -44,16 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				? _personalAvailableDataProvider.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
 					_now.LocalDateOnly())
 				: _siteRepository.LoadAll();
-			if (sites.IsNullOrEmpty())
-			{
-				return Json(new SiteViewModel
-				{
-					Id = "",
-					Name = "",
-					NumberOfAgents = 0
-				}, JsonRequestBehavior.AllowGet);
-			}
-			var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
+
+			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
+			if (sites.Any())
+				numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
 
 			return Json(sites.Select(site =>
 				new SiteViewModel

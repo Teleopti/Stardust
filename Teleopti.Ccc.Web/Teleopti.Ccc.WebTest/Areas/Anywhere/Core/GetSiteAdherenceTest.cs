@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		}
 
 		[Test]
-		public void ShouldReturnNullIfNotSiteAvailable()
+		public void ShouldReturnEmtpyIfNotSiteAvailable()
 		{
 			var now = new Now();
 			var availableSitesProvider = MockRepository.GenerateMock<IPersonalAvailableDataProvider>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 
 			var result = target.ReadAdherenceForAllPermittedSites();
 
-			result.Should().Be.Null();
+			result.Should().Be.Empty();
 		}
 	}
 }

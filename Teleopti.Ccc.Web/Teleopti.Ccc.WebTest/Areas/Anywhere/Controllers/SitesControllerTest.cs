@@ -112,15 +112,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnAnEmptySiteWhenNoDataInBu()
+		public void ShouldReturnEmptyWhenNoDataInBu()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			siteRepository.Stub(x => x.LoadAll()).Return(new ISite[] { });
 			var target = new SitesController(siteRepository, null, null, null, null,null);
 
-			var result = target.Index().Data as SiteViewModel;
-			result.Id.Should().Be("");
-			result.Name.Should().Be("");
-			result.NumberOfAgents.Should().Be(0);
+			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+
+			result.Should().Be.Empty();
 		}
 
 		[Test]

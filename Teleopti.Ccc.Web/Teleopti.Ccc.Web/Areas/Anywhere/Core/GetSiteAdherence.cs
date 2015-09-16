@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var permittedSites = _availableSitesProvider.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
 				_now.LocalDateOnly());
-			if (permittedSites.IsEmpty()) return null;
+			if (permittedSites.IsEmpty()) return Enumerable.Empty<SiteOutOfAdherence>();
 			return	_siteOutOfAdherenceReadModelPersister.Read(permittedSites.Select(x => x.Id.Value).ToArray())
 				.Select(x => new SiteOutOfAdherence { Id = x.SiteId.ToString(), OutOfAdherence = x.Count });
 		}
