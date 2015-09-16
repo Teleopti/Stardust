@@ -59,8 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
 					if (shiftExchangeOffer != null)
 					{
-						var localStart = TimeZoneHelper.ConvertFromUtc(shiftExchangeOffer.Period.StartDateTime, _userTimeZone.TimeZone());
-						var localEnd = TimeZoneHelper.ConvertFromUtc(shiftExchangeOffer.Period.EndDateTime, _userTimeZone.TimeZone());
+						var timeZone = _userTimeZone.TimeZone();
+						var localStart = TimeZoneHelper.ConvertFromUtc(shiftExchangeOffer.Period.StartDateTime, timeZone);
+						var localEnd = TimeZoneHelper.ConvertFromUtc(shiftExchangeOffer.Period.EndDateTime, timeZone);
 						return !localStart.Date.Equals(localEnd.Date);
 					}
 					return false;

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
@@ -736,8 +736,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private ShiftExchangeOffer createShiftExchangeOffer(DateTimePeriod period)
 		{
 			var scheduleDayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
-			var shiftExchagneCriteria = new ShiftExchangeCriteria(new DateOnly(period.StartDateTime.Year, period.StartDateTime.Month, period.StartDateTime.Day-1), scheduleDayFilterCriteria);
-			var currentShift = ScheduleDayFactory.Create(new DateOnly(period.StartDateTime.Year, period.StartDateTime.Month, period.StartDateTime.Day-2));
+			var periodStartDate = new DateOnly(period.StartDateTime);
+			var shiftExchagneCriteria = new ShiftExchangeCriteria(periodStartDate.AddDays(-1), scheduleDayFilterCriteria);
+			var currentShift = ScheduleDayFactory.Create(periodStartDate.AddDays(-2));
 			return new ShiftExchangeOffer(currentShift, shiftExchagneCriteria, ShiftExchangeOfferStatus.Pending);
 		}
 	}
