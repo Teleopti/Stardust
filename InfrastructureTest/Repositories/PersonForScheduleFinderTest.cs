@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[Category("LongRunning")]
 	class PersonForScheduleFinderTest : DatabaseTest
 	{
+
 		private PersonForScheduleFinder target;
 
 		private ISite site;
@@ -138,7 +139,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz");
 			result.ToArray().Length.Should().Be.EqualTo(1);
+
 		}
+
 
 		[Test]
 		public void ShouldGetPersonForDayAndGroup()
@@ -167,6 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
 			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
 
+
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
 			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
@@ -190,6 +194,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.ToArray().Length.Should().Be.EqualTo(1);
 		}
 
+
+
 		private IPersonContract createPersonContract(IContract contract, IBusinessUnit otherBusinessUnit = null)
 		{
 			var pContract = PersonContractFactory.CreatePersonContract(contract);
@@ -206,18 +212,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		private Guid getBusinessUnitId()
-		{			
+		{
+			
 			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+			
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
+
 		private void PersistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)
 		{
-			var populateReadModelQuery
-				= string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] "
-								+ "([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId]) "
-								+ "VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','6CE00B41-0722-4B36-91DD-0A3B63C545CF')",
-					personId, teamId, siteId, getBusinessUnitId(), groupId);
+			var populateReadModelQuery = string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] 
+                ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
+			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','11610FE4-0130-4568-97DE-9B5E015B2564')",
+				personId, teamId, siteId, getBusinessUnitId(), groupId);
 
 			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
 		}
