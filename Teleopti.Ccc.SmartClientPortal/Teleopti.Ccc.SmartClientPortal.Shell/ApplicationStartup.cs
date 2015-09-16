@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Configuration;
+using Autofac;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         public bool LogOn()
         {
-            return _logonPresenter.Start();
+			  string authenticationBridge = ConfigurationManager.AppSettings.Get("AuthenticationBridge");
+			  return _logonPresenter.Start(authenticationBridge);
         }
     }
 }

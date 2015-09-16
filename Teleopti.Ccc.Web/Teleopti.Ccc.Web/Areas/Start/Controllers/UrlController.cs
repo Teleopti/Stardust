@@ -1,8 +1,13 @@
 using System;
+using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
+using DotNetOpenAuth.OpenId;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
@@ -30,5 +35,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
             return Json(new { Url = url, Signature = Convert.ToBase64String(result) }, JsonRequestBehavior.AllowGet);
         }
+		 
+		 [HttpGet]
+	    public JsonResult AuthenticationDetails()
+	    {
+			 var loggedOnPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
+			 return Json(new { PersonId = loggedOnPerson.Id }, JsonRequestBehavior.AllowGet);
+	    }
     }
 }

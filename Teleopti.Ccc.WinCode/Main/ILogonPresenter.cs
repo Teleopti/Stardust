@@ -5,7 +5,7 @@
 		void OkbuttonClicked();
 		void BackButtonClicked();
 		void Initialize();
-		bool Start();
+		bool Start(string raptorServer);
 		LoginStep CurrentStep { get; set; }
 	}
 }

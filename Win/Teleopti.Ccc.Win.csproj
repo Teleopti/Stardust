@@ -106,6 +106,10 @@
       <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EO.WebBrowser, Version=3.0.100.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\packages\EO.WebBrowser.3.0.100\lib\EO.WebBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
@@ -769,6 +773,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="Main\LoginWebView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\LoginWebView.Designer.cs">
+      <DependentUpon>LoginWebView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\PreLogonScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2820,6 +2830,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LoginWebView.resx">
+      <DependentUpon>LoginWebView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonScreens\SelectBuScreen.resx">
       <DependentUpon>SelectBuScreen.cs</DependentUpon>

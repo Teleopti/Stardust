@@ -6,9 +6,13 @@ using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -47,5 +51,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
 			return currentHttpContext;
         }
+
+	    [Test]
+	    public void ShouldReturnPersonId()
+	    {
+		    IPerson person = new Person();
+		    Guid? personId = Guid.NewGuid();
+		    person.SetId(personId);
+			 const string url = "http://my.url.com";
+			 const string applicationPath = "/TeleoptiCCC/Web/";
+		    System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+					 new TeleoptiIdentity("test", null, null, null), person );
+			 var target = new UrlController(CurrentHttpContext(url, applicationPath));
+		    target.AuthenticationDetails().Should().Be.Equals(personId);
+	    }
     }
 }
