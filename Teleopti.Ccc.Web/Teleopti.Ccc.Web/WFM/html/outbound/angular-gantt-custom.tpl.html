@@ -22,7 +22,8 @@
 	<gantt-scrollable>
 		<gantt-body>
 			<gantt-body-background>
-				<gantt-row-background ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id"></gantt-row-background>
+				<gantt-row-background ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">					
+				</gantt-row-background>
 			</gantt-body-background>
 			<gantt-body-foreground>
 				<div class="gantt-current-date-line" ng-show="currentDate === 'line' && gantt.currentDateManager.position >= 0 && gantt.currentDateManager.position <= gantt.width" ng-style="{'left': gantt.currentDateManager.position + 'px' }"></div>
@@ -30,15 +31,16 @@
 			<gantt-body-columns>
 				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date.format('MM-DD')}}" data-delay='0'>
 					<gantt-time-frame ng-repeat="timeFrame in column.visibleTimeFrames"></gantt-time-frame>
-
 				</gantt-column>
 			</gantt-body-columns>
 			<div ng-if="gantt.columnsManager.visibleColumns == 0" style="background-color: #808080"></div>
 			<gantt-body-rows>
-				<gantt-timespan ng-repeat="timespan in gantt.timespansManager.timespans track by timespan.model.id"></gantt-timespan>
-				<gantt-row ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">
-					<gantt-task ng-repeat="task in row.visibleTasks track by task.model.id">
+				<gantt-timespan ng-repeat="timespan in gantt.timespansManager.timespans track by timespan.model.id" ></gantt-timespan>
+				<gantt-row ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">				
+					<gantt-task ng-if="!row.model.expansion" ng-repeat="task in row.visibleTasks track by task.model.id">
 					</gantt-task>
+					<div class="gantt-row-expansion" ng-if="row.model.expansion">
+					</div>
 				</gantt-row>
 			</gantt-body-rows>
 		</gantt-body>
@@ -125,13 +127,13 @@
 	</script>
 	<script type="text/ng-template" id="template/ganttTaskForeground.tmpl.html">
 		<div class="gantt-task-foreground">
-			<div ng-if="task.truncatedRight" class="gantt-task-truncated-right">&gt;</div>
-			<div ng-if="task.truncatedLeft" class="gantt-task-truncated-left">&lt;</div>
+			<div ng-if="task.truncatedRight" class="gantt-task-truncated-right"><i class="mdi mdi-chevron-right"></i></div>
+			<div ng-if="task.truncatedLeft" class="gantt-task-truncated-left"><i class="mdi mdi-chevron-left"></i></div>
 		</div>
 	</script>
 	<!-- Task content template -->
 	<script type="text/ng-template" id="template/ganttTaskContent.tmpl.html">
-		<div class="gantt-task-content" unselectable="on" ng-click="scope.campaignClicked($event, task.model)"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
+		<div class="gantt-task-content" unselectable="on" ng-click="scope.campaignClicked($event, row.model, task.model)"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
 	</script>
 
 	<!-- Row background template -->
@@ -142,7 +144,8 @@
 			 ng-class-even="'gantt-row-even'"
 			 ng-style="{'height': row.model.height}">
 			<div class="gantt-row-background"
-				 ng-style="{'background-color': row.model.color}">
+				 ng-style="{'background-color': row.model.color}"
+				 ng-class="{'gantt-row-expanded' : row.model.expanded }">		
 			</div>
 		</div>
 	</script>
@@ -170,8 +173,15 @@
 						 ng-class="row.model.classes"
 						 ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id"
 						 ng-style="{'height': row.model.height}">
-						<div gantt-row-label class="gantt-row-label gantt-row-background"
-							 ng-style="{'background-color': row.model.color}">
+												
+						<div gantt-row-label class="gantt-row-label gantt-row-background"							
+							 ng-style="{'background-color': row.model.color}"
+							 ng-class="{'gnatt-row-expanded' : row.model.expanded}"
+							 ng-if="!row.model.expansion"
+							 >
+						</div>
+						<div class="gantt-row-background gantt-row-expansion" ng-if="row.model.expansion">
+							<md-button ng-click="row.model.collapse($event, $index)" aria-label="Back"><i class="mdi mdi-rewind mdi-rotate-90"></i></md-button>
 						</div>
 					</div>
 				</div>

@@ -39,25 +39,33 @@
 				+ '</div>';
 			}
 		};
+		
+		function readIndex(c) {			
+			var i = 0;
+			for (i; i < $scope.ganttData.length; i++) {
+				if ($scope.ganttData[i].id == c.id)
+					return i;
+			}
+			return -1;
+		}
 
-		$scope.campaignClicked = function (ev, c) {		
-			$mdDialog.show({
-				controller: [campaignSheetCtrl],
-					templateUrl: 'html/outbound/campaign-sheet.tpl.html',
-					parent: angular.element(document.querySelector('#popupContainer')),
-					targetEvent: ev,
-					clickOutsideToClose: true
-				})
-				.then(function(answer) {
-					$scope.status = 'You said the information was "' + answer + '".';
-				}, function() {
-					$scope.status = 'You cancelled the dialog.';
-				});
-
-
+		$scope.campaignClicked = function (ev, c) {
+			if (c.expanded) return;
+			c.expanded = true;
+			var newDataRow = {				
+				id: c.id + '_expanded',
+				height: '550px',
+				expansion: true,
+				collapse: function collapseExpansion(ev, index) {
+					c.expanded = false;
+					$scope.ganttData.splice(index, 1);
+				}
+			};
+			var index = readIndex(c);
+			if (index >= 0)
+				$scope.ganttData.splice(index + 1, 0, newDataRow);			
 		};
-
-
+		 
 		$scope.timespans = [
 			{
 				name: "today", // Name shown on top of each timespan.
@@ -103,7 +111,7 @@
 					'enabled': true,
 					'dateFormat': 'YYYY-MM-DD'					
 					}
-					ganttArr[ind].tasks[0].campaignName = ele.Name;
+					ganttArr[ind].tasks[0].campaignName = ele.Name;					
 				});
 				$scope.ganttData = ganttArr;
 				$scope.isLoadFinished = true;
