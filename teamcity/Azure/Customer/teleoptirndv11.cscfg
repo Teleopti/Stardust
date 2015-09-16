@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="TeleoptiCCC" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*">
+	<Role name="TeleoptiCCC">
+		<Instances count="1" />
+		<ConfigurationSettings>      
+			<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=teleopticcc7; AccountKey=IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
+			<Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+			<Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="RnD" />
+			<Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIICLQYJKoZIhvcNAQcDoIICHjCCAhoCAQAxggHeMIIB2gIBADCBwTCBtDELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIECFiTe76nTwwDQYJKoZIhvcNAQEBBQAEggEAV7Efc/PndxonPV/miOCtNKmu2orzB619XbgqP26PWMto2hP4r6XGsQzp1MjT9QMyi/HhLUmyk99lp6xHD4CKsQAZiHGMiUvzr2IGTbDQFWhvG5Rgw7TfcByNgYxAO5KoVp+lnDDw/MKkMgb6w62JJxXNsfbogAGFLHuBsQooyiBzvSx/oUUgV2eDXqmhgkOvdAz453aVQdm2uWkp8QkcJhIr1JtpfgwLfHhIOmVDf7RFf+ft3iIDxuqEOJGg9/L92Q7L504z4+MnwTJTw94virJyZYcLchCJ5cab4SkTSAl0FwJM57UrUbovKrrsqFNNbK9hVtNfqt+dgFyvJ0kFZzAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECNtxwTo20tksgBAGVyMw4CEFfXuPeOywUthq" />
+			<Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2016-12-31T23:59:59.0000000+01:00" />
+			<Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+			<Setting name="TeleoptiDriveMap.BlobPath" value="http://teleopticcc7.blob.core.windows.net/" />
+			<Setting name="TeleoptiDriveMap.AccountName" value="" />
+			<Setting name="TeleoptiDriveMap.AccountKey" value="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
+			<Setting name="TeleoptiDriveMap.ContainerName" value="teleopticcc/Payroll" />
+			<Setting name="TeleoptiDriveMap.DataSourceName" value="teleoptirndv11" />
+			<Setting name="TeleoptiSetting.VmSize" value="Medium" />
+		</ConfigurationSettings>
+		<Certificates>
+			<Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1" />
+			<Certificate name="fakedress.teleopticloud.com" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1"/>
+		</Certificates>
+	</Role>
+</ServiceConfiguration>
