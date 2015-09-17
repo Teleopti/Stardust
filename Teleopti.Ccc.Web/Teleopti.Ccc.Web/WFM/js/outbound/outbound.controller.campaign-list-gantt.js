@@ -117,9 +117,7 @@
 				headers: ['month', 'week'],
 				fromDate: startDate ? startDate : visualizationPeriod.StartDate.Date,
 				toDate: endDate ? endDate : visualizationPeriod.EndDate.Date,
-				headersFormats: {
-					month: 'MMMM'
-				}
+				
 			};
 		}
 
