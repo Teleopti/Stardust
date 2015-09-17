@@ -200,7 +200,7 @@
 			 ng-style="{top: taskRect.top + 'px', marginTop: -elementHeight - 8 + 'px'}">
 			<div><strong>{{ task.model.campaignName }}</strong></div>
 			<div class="gantt-task-info-content">				
-				{{ task.model.from | amDateFormat: 'LL'}} - {{ task.model.to | amDateFormat: 'LL'}}											
+				{{ task.model.from | amDateFormat: 'LL'}} - {{ task.model.to | decreaseOneDay |  amDateFormat: 'LL' }}											
 			</div>
 		</div>
 	</script>

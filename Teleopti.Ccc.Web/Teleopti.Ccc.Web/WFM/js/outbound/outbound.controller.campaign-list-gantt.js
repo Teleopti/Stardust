@@ -3,9 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', 'miscService', campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService) {
+	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -71,11 +71,6 @@
 			}
 		];
 
-		//$scope.tooltipContent = '<div><div><strong>{{task.model.campaignName}}</strong></div>' +
-		//	'<small>' +
-		//	'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +
-		//	'</small></div>';
-
 		function setGanttOptions(startDate, endDate) {
 			var visualizationPeriod = outboundService.getVisualizationPeriod();
 			return {
@@ -98,19 +93,20 @@
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
 				if (data) data.forEach(function (ele, ind) {
+					var fromDate = miscService.getDateFromServer(ele.StartDate.Date);
+					var toDate = miscService.getDateFromServer(ele.EndDate.Date);
+					toDate.setDate(toDate.getDate() + 1);
 					ganttArr[ind] = {};
 					ganttArr[ind].name = ele.Name;
 					ganttArr[ind].id = ele.Id;
 					ganttArr[ind].tasks = [];
 					ganttArr[ind].tasks[0] = {};
-					ganttArr[ind].tasks[0].from = ele.StartDate.Date;
-					ganttArr[ind].tasks[0].to = ele.EndDate.Date;
+					ganttArr[ind].tasks[0].from = fromDate;
+					ganttArr[ind].tasks[0].to = toDate;
 					ganttArr[ind].tasks[0].id = ele.Id;
 					ganttArr[ind].tasks[0].color = '#09F';
 					ganttArr[ind].tasks[0].tooltips = {
-					'enabled': true,
-					'dateFormat': 'YYYY-MM-DD',
-						'test': 'hello'
+					'enabled': true
 					}
 					ganttArr[ind].tasks[0].campaignName = ele.Name;					
 				});
@@ -118,8 +114,6 @@
 				$scope.isLoadFinished = true;
 			});
 		}
-
-
 	}
 
 })();

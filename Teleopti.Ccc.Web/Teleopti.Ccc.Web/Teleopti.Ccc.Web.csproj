@@ -2058,6 +2058,7 @@
     <Content Include="WFM\js\outbound\outbound.controller.campaign-production-plan.js" />
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />
+    <Content Include="WFM\js\outbound\outbound.service.misc.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

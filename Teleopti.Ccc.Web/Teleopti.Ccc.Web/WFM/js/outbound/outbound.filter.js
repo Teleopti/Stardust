@@ -5,7 +5,8 @@
 	angular.module('wfm.outbound')
 		.filter('showWeekdays', ['$translate', showWeekdays])
 		.filter('showPhase', [showPhase])
-		.filter('showTimespan', showTimespan);
+		.filter('showTimespan', showTimespan)
+		.filter('decreaseOneDay', decreaseOneDay);
 
 	function showPhase() {
 		return function(statusCode) {
@@ -44,5 +45,12 @@
 		}
 	}
 
+	function decreaseOneDay() {
+		
+		return function (date) {
+			var dateToBeHandle = moment(date);
+			return dateToBeHandle.subtract(1, 'day');
+		}
+	}
 
 })();
