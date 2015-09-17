@@ -41,13 +41,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
 	{
-		private readonly ICurrentDataSource _currentDataSource;
-
 		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
 		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
 		public readonly FakeTenants Tenants;
 		private readonly FakeApplicationData _applicationData;
+		public readonly FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModelPersister;
+		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
+		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
+		public readonly FakeAdherencePercentageReadModelPersister AdherencePercentageReadModelPersister;
 
 		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
@@ -70,14 +72,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
 			FakeTenants tenants,
 			FakeApplicationData applicationData,
-			ICurrentDataSource currentDataSource)
+			FakeTeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister,
+			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
+			FakeAdherenceDetailsReadModelPersister adherenceDetailsReadModelPersister,
+			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister
+			)
 		{
 			AgentStateReadModelReader = agentStateReadModelReader;
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
 			Tenants = tenants;
 			_applicationData = applicationData;
-			_currentDataSource = currentDataSource;
+			TeamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
+			SiteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
+			AdherenceDetailsReadModelPersister = adherenceDetailsReadModelPersister;
+			AdherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 			WithBusinessUnit(Guid.NewGuid());
 			WithDefaultsFromState(new ExternalUserStateForTest());
 		}

@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	public class IndividualModelsTest
 	{
 		public FakeRtaDatabase Database;
-		public IStateStreamSynchronizer Target;
 		public FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModel;
 		public FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModel;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldInitializeModelsWithoutData()
@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);
 			SiteOutOfAdherenceReadModel.Get(siteId).Count.Should().Be(1);

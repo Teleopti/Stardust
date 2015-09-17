@@ -19,60 +19,63 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class RtaTestAttribute : IoCTestAttribute
 	{
+		public RtaTenants Tenants;
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			registerFakePublisher(system, configuration, new FakeEventPublisher());
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			registerFakeDatabase(system, configuration, null);
 
 			system.UseTestDouble(new FakeReadModelUnitOfWorkAspect()).For<IReadModelUnitOfWorkAspect>();
 			system.UseTestDouble(new FakeAllBusinessUnitsUnitOfWorkAspect()).For<IAllBusinessUnitsUnitOfWorkAspect>();
 			system.UseTestDouble(new FakeDistributedLockAcquirer()).For<IDistributedLockAcquirer>();
 
-			system.UseTestDouble(new FakeTeamOutOfAdherenceReadModelPersister()).For<ITeamOutOfAdherenceReadModelPersister>();
-			system.UseTestDouble(new FakeSiteOutOfAdherenceReadModelPersister()).For<ISiteOutOfAdherenceReadModelPersister>();
-			system.UseTestDouble(new FakeAdherenceDetailsReadModelPersister()).For<IAdherenceDetailsReadModelPersister>();
-			system.UseTestDouble(new FakeAdherencePercentageReadModelPersister()).For<IAdherencePercentageReadModelPersister>();
-
 			system.AddService(this);
 		}
 
-		public void SimulateRestartWith(MutableNow now, FakeRtaDatabase database, FakeEventPublisher publisher)
+		public void SimulateRestartWith(MutableNow now, FakeRtaDatabase database)
 		{
 			Reset((b, c) =>
 			{
 				registerFakeDatabase(b, c, database);
-				registerFakePublisher(b, c, publisher);
 				b.UseTestDouble(now).For<INow>();
 			});
 		}
 
-		private static void registerFakeDatabase(ISystem builder, IIocConfiguration configuration, FakeRtaDatabase database)
+		private static void registerFakeDatabase(ISystem system, IIocConfiguration configuration, FakeRtaDatabase database)
 		{
 			if (database != null)
 			{
-				builder.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter>();
-				builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
-				builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
-				builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
-				builder.UseTestDouble(database.Tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
+				system.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter>();
+
+				system.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
+				system.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
+				system.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
+				system.UseTestDouble(database.Tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
+
+				system.UseTestDouble(database.TeamOutOfAdherenceReadModelPersister).For<ITeamOutOfAdherenceReadModelPersister>();
+				system.UseTestDouble(database.SiteOutOfAdherenceReadModelPersister).For<ISiteOutOfAdherenceReadModelPersister>();
+				system.UseTestDouble(database.AdherenceDetailsReadModelPersister).For<IAdherenceDetailsReadModelPersister>();
+				system.UseTestDouble(database.AdherencePercentageReadModelPersister).For<IAdherencePercentageReadModelPersister>();
 			}
 			else
 			{
-				builder.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter>();
-				builder.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
-				builder.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
-				builder.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
-				builder.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
+				system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter>();
+
+				system.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
+				system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
+				system.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
+				system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
+
+				system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
+				system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
+				system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
+				system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
 			}
 		}
-
-		private static void registerFakePublisher(ISystem builder, IIocConfiguration configuration, FakeEventPublisher publisher)
-		{
-			builder.UseTestDouble(publisher).For<IEventPublisher>();
-		}
-
+		
 	}
 }

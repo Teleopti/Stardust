@@ -51,22 +51,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 			
-			_config.Cache().This<AlarmMappingLoader>(b => b
+			_config.Cache().This<AlarmMappingLoader>((c, b) => b
 				.CacheMethod(x => x.Load())
+				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
-			_config.Cache().This<StateMappingLoader>(b => b
+			_config.Cache().This<StateMappingLoader>((c, b) => b
 				.CacheMethod(x => x.Load())
+				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByClassProxy<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects().SingleInstance();
 			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
 
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 
-			_config.Cache().This<IDatabaseLoader>(b => b
+			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())
 				.CacheMethod(x => x.PersonOrganizationData())
+				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();

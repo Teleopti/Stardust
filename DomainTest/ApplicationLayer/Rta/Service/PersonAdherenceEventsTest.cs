@@ -73,14 +73,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "statecode1"
 			});
-			context.SimulateRestartWith(now, database, publisher);
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
+			context.SimulateRestartWith(now, database);
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode2"
 			});
 
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(0);
 		}
 	}
 }

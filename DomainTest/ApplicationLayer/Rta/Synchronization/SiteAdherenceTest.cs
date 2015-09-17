@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	public class SiteAdherenceTest
 	{
 		public FakeRtaDatabase Database;
-		public IStateStreamSynchronizer Target;
 		public FakeSiteOutOfAdherenceReadModelPersister Model;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldInitializeSiteAdherence()
@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(siteId).Count.Should().Be(1);
 		}
@@ -66,8 +67,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user", 
 				StateCode = "break"
 			});
-			
-			Target.Initialize();
+
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(existingSite).Count.Should().Be(3);
 			Model.Get(stateSite).Should().Be.Null();

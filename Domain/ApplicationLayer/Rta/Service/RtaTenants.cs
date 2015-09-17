@@ -22,6 +22,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_initialized.ForEach(action);
 		}
-		
+
+		public void Forget()
+		{
+			_initialized.Clear();
+        }
 	}
 }

@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	public class TeamAdherenceTest
 	{
 		public FakeRtaDatabase Database;
-		public IStateStreamSynchronizer Target;
 		public FakeTeamOutOfAdherenceReadModelPersister Model;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldInitializeTeamAdherence()
@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B2", StateCode = "phone"});
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B3", StateCode = "phone"});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(teamIdA).Count.Should().Be(2);
 			Model.Get(teamIdB).Count.Should().Be(1);
@@ -94,7 +95,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(existingTeam).Count.Should().Be(3);
 			Model.Get(stateTeam).Should().Be.Null();

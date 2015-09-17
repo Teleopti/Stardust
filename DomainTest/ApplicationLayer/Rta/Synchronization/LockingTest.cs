@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
-		public IStateStreamSynchronizer Target;
 		public IDistributedLockAcquirer DistributedLock;
 		public NonConcurrenctSafeHandler Handler;
+		public RtaTestAttribute Context;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "state"
 			});
 
-			var initialize = Execute.OnAnotherThread(() => Target.Initialize());
+			Context.SimulateRestartWith(Now, Database);
+			var initialize = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
 			Handler.InHandler.WaitOne(TimeSpan.FromSeconds(1));
 			var systemTask = Task.Factory.StartNew(() =>
 			{
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		}
 
 		public class NonConcurrenctSafeHandler :
-			IHandleEvent<PersonStateChangedEvent>, 
+			IHandleEvent<PersonStateChangedEvent>,
 			IInitializeble
 		{
 			public ManualResetEvent InHandler = new ManualResetEvent(false);

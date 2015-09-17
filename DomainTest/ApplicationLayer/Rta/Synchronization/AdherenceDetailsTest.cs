@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	public class AdherenceDetailsTest
 	{
 		public FakeRtaDatabase Database;
-		public IStateStreamSynchronizer Target;
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldInitializeAdherenceDetails()
@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "phone"
 			});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Activities.Single().StartTime
 				.Should().Be("2015-01-08 11:00".Utc());
@@ -69,7 +70,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				Model = null
 			});
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Should().Be.Null();
 		}

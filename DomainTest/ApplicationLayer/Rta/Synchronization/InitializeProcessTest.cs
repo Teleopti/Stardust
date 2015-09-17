@@ -20,14 +20,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	public class InitializeProcessTest
 	{
 		public FakeRtaDatabase Database;
-		public IStateStreamSynchronizer Target;
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
 		public FakeMessageSender MessageSender;
 		public FakeEventPublisher EventPublisher;
 		public ICurrentEventPublisher CurrentEventPublisher;
-
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldNotSendAnyMessages()
@@ -42,7 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			MessageSender.AllNotifications.Clear();
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 
 			MessageSender.AllNotifications.Should().Have.Count.EqualTo(0);
 		}
@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			EventPublisher.Clear();
 
-			Target.Initialize();
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
 			Rta.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
@@ -72,46 +73,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 
 			EventPublisher.PublishedEvents.Should().Have.Count.GreaterThan(0);
 		}
-
-		[Test]
-		public async void ShouldPublishEventsWhileInitializing()
-		{
-			var personId = Guid.NewGuid();
-			Database.WithUser("user", personId);
-			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "user",
-				StateCode = "state"
-			});
-			EventPublisher.Clear();
-
-			var initialize = Task.Factory.StartNew(() =>
-			{
-				200.Times(i =>
-				{
-					Persister.Clear();
-					Target.Initialize();
-				});
-			});
-			var systemTask = Task.Factory.StartNew(() =>
-			{
-				100000.Times(i =>
-				{
-					CurrentEventPublisher.Current().Publish(new TestEvent());
-				});
-			});
-			await Task.WhenAll(initialize, systemTask);
-
-			EventPublisher.PublishedEvents.OfType<TestEvent>().Should().Have.Count.EqualTo(100000);
-		}
-
-		
-
-		public class TestEvent : IEvent
-		{
-		}
-
-
 	}
 }
