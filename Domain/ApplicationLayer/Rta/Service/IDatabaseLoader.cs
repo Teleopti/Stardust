@@ -10,8 +10,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
 		IDictionary<Guid, PersonOrganizationData> PersonOrganizationData();
 		IEnumerable<ScheduleLayer> GetCurrentSchedule(Guid personId);
-
-		string TenantNameByKey(string rtaKey);
-		bool AuthenticateKey(string rtaKey);
 	}
 }

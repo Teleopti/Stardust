@@ -2,16 +2,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class TenantAuthenticator : IAuthenticator
 	{
-		private readonly IDatabaseLoader _databaseLoader;
+		private readonly ITenantLoader _tenantLoader;
 
-		public TenantAuthenticator(IDatabaseLoader databaseLoader)
+		public TenantAuthenticator(ITenantLoader tenantLoader)
 		{
-			_databaseLoader = databaseLoader;
+			_tenantLoader = tenantLoader;
 		}
 
 		public bool Authenticate(string authenticationKey)
 		{
-			return _databaseLoader.AuthenticateKey(authenticationKey);
+			return _tenantLoader.AuthenticateKey(authenticationKey);
 		}
 	}
 }

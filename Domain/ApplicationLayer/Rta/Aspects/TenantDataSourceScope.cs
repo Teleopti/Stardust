@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 	public class TenantDataSourceScope : IRtaDataSourceScope
 	{
 		private readonly IDataSourceScope _dataSource;
-		private readonly IDatabaseLoader _databaseLoader;
+		private readonly ITenantLoader _tenantLoader;
 
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public TenantDataSourceScope(IDataSourceScope dataSource, IDatabaseLoader databaseLoader)
+		public TenantDataSourceScope(IDataSourceScope dataSource, ITenantLoader tenantLoader)
 		{
 			_dataSource = dataSource;
-			_databaseLoader = databaseLoader;
+			_tenantLoader = tenantLoader;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			string tenant;
 			var key = tryGet(() => input.AuthenticationKey);
 			if (key != null)
-				tenant = _databaseLoader.TenantNameByKey(AuthenticationKeyEncodingFixer.Fix(key));
+				tenant = _tenantLoader.TenantNameByKey(AuthenticationKeyEncodingFixer.Fix(key));
 			else
 				tenant = tryGet(() => input.Tenant);
 			_scope = _dataSource.OnThisThreadUse(tenant);
