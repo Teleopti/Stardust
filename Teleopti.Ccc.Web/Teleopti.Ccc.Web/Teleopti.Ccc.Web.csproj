@@ -1197,6 +1197,7 @@
     <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\js\outbound\angular-gantt.ext.js" />
+    <Content Include="WFM\js\outbound\outbound.directive.scroll-fix.js" />
     <Content Include="WFM\js\rta\rta-agents.html" />
     <Content Include="WFM\js\rta\rta-sites.html" />
     <Content Include="WFM\js\rta\rta-teams.html" />
