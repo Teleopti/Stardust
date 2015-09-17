@@ -9,6 +9,17 @@
 		height: 34px;
 		border: 1px solid #ccc;
 	}
+
+	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
+	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-remove,
+	.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
+	.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid.ng-hide-remove {
+		-moz-transition: none !important;
+		-webkit-transition: none !important;
+		-o-transition: color 0 ease-in !important;
+		-ms-transition: none !important;
+		transition: none !important;
+	}
 </style>
 <div>
 	<div class="row people-cart" style="position: relative">
@@ -93,8 +104,9 @@
 			<ul>
 				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == 1 || vm.gridApi.pagination.getTotalPages() == 0}">
 					<a href="" ng-click="vm.gridApi.pagination.previousPage()">
-						<i class="mdi mdi-chevron-double-left"></i>
-						{{'RepViewerPreviousPage'| translate}}
+						<i class="mdi mdi-chevron-left">
+							<md-tooltip>{{'RepViewerPreviousPage'| translate}}</md-tooltip>
+						</i>
 					</a>
 				</li>
 
@@ -106,8 +118,9 @@
 
 				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == vm.gridApi.pagination.getTotalPages() || vm.gridApi.pagination.getTotalPages() == 0}">
 					<a href="" ng-click="vm.gridApi.pagination.nextPage()">
-						{{'RepViewerNextPage'| translate}}
-						<i class="mdi mdi-chevron-double-right"></i>
+						<i class="mdi mdi-chevron-right">
+							<md-tooltip>{{'RepViewerNextPage'| translate}}</md-tooltip>
+						</i>
 					</a>
 				</li>
 			</ul>
