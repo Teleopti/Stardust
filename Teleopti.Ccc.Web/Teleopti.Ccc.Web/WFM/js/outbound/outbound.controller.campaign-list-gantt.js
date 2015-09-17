@@ -3,9 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', 'miscService', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', 'miscService', 'outboundTranslationService', campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService) {
+	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -36,7 +36,17 @@
 				+ '</div>';
 			}			
 		};
-		
+
+		$scope.tableHeaders = {
+			'model.name': ''
+		}
+
+		outboundTranslationService.translatePromise('Name').then(function(v) {
+			$scope.tableHeaders = {
+				'model.name': v
+			}
+		});
+
 		function readIndex(c) {			
 			var i = 0;
 			for (i; i < $scope.ganttData.length; i++) {
