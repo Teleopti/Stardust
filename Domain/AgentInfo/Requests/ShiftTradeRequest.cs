@@ -462,8 +462,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get
             {
-                return _shiftTradeSwapDetails.First().PersonFrom;
-               
+	            return _shiftTradeSwapDetails.Any()
+		            ? _shiftTradeSwapDetails.First().PersonFrom
+		            : null;
             }
         }
 
@@ -471,7 +472,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get
             {
-                return _shiftTradeSwapDetails.First().PersonTo;
+	            return _shiftTradeSwapDetails.Any()
+		            ? _shiftTradeSwapDetails.First().PersonTo
+		            : null;
             }
         }
         #endregion //PersonfromTo
