@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Autofac;
 using Syncfusion.Windows.Forms.Tools;
@@ -10,144 +12,152 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Grouping
 {
-    public partial class FindPersonsView : BaseUserControl, IFindPersonsView
-    {
-        private FindPersonsPresenter _presenter;
-        private SelectedNodesCollection _selectedNodes;
-        private readonly ErrorProvider _errorProvider = new ErrorProvider();
+	public partial class FindPersonsView : BaseUserControl, IFindPersonsView
+	{
+		private FindPersonsPresenter _presenter;
+		private SelectedNodesCollection _selectedNodes;
+		private readonly ErrorProvider _errorProvider = new ErrorProvider();
 
-        public FindPersonsView()
-        {
-            InitializeComponent();
+		public FindPersonsView()
+		{
+			InitializeComponent();
 
-            if (!DesignMode)
-            {
-                SetTexts();
-            }
-        }
+			if (!DesignMode)
+			{
+				SetTexts();
+			}
+		}
 
-        public void Initialize(FindPersonsModel model, IApplicationFunction applicationFunction, IComponentContext container)
-        {
-            dateTimePickerAdvFrom.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
-            dateTimePickerAdvTo.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
+		public void Initialize(FindPersonsModel model, IApplicationFunction applicationFunction, IComponentContext container)
+		{
+			dateTimePickerAdvFrom.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			dateTimePickerAdvTo.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 
-            dateTimePickerAdvFrom.ValueChanged -= dateTimePickerAdvFromValueChanged;
-            dateTimePickerAdvTo.ValueChanged -= dateTimePickerAdvToValueChanged;
+			dateTimePickerAdvFrom.ValueChanged -= dateTimePickerAdvFromValueChanged;
+			dateTimePickerAdvTo.ValueChanged -= dateTimePickerAdvToValueChanged;
 
-				_presenter = new FindPersonsPresenter(this, model, applicationFunction, container);
-            _presenter.Initialize();
+			_presenter = new FindPersonsPresenter(this, model, applicationFunction, container);
+			_presenter.Initialize();
 
-            dateTimePickerAdvFrom.ValueChanged += dateTimePickerAdvFromValueChanged;
-            dateTimePickerAdvTo.ValueChanged += dateTimePickerAdvToValueChanged;
+			dateTimePickerAdvFrom.ValueChanged += dateTimePickerAdvFromValueChanged;
+			dateTimePickerAdvTo.ValueChanged += dateTimePickerAdvToValueChanged;
 
-            dateTimePickerAdvFrom.ForeColor = Color.Black;
-            dateTimePickerAdvTo.ForeColor = Color.Black;
+			dateTimePickerAdvFrom.ForeColor = Color.Black;
+			dateTimePickerAdvTo.ForeColor = Color.Black;
 
-            _errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
-        }
+			_errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+		}
 
-        public DateTime FromDate
-        {
-            get { return dateTimePickerAdvFrom.Value; }
-            set { dateTimePickerAdvFrom.Value = value; }
-        }
+		public DateTime FromDate
+		{
+			get { return dateTimePickerAdvFrom.Value; }
+			set { dateTimePickerAdvFrom.Value = value; }
+		}
 
-        public DateTime ToDate
-        {
-            get { return dateTimePickerAdvTo.Value; }
-            set { dateTimePickerAdvTo.Value = value; }
-        }
+		public DateTime ToDate
+		{
+			get { return dateTimePickerAdvTo.Value; }
+			set { dateTimePickerAdvTo.Value = value; }
+		}
 
-        public string FindText
-        {
-            get { return textBoxExtFind.Text; }
-            set { textBoxExtFind.Text = value; }
-        }
+		public string FindText
+		{
+			get { return textBoxExtFind.Text; }
+			set { textBoxExtFind.Text = value; }
+		}
 
-        public TreeNodeAdvCollection Result
-        {
-            get { return treeViewAdvResult.Nodes; }
-        }
+		public TreeNodeAdvCollection Result
+		{
+			get { return treeViewAdvResult.Nodes; }
+		}
 
-        public SelectedNodesCollection CutNodes
-        {
-            get; private set;
-        }
+		public SelectedNodesCollection CutNodes
+		{
+			get; private set;
+		}
 
-        public bool TextBoxFindEnabled
-        { 
-            get { return textBoxExtFind.Enabled; }
-            set { textBoxExtFind.Enabled = value; }
-        }
+		public bool TextBoxFindEnabled
+		{
+			get { return textBoxExtFind.Enabled; }
+			set { textBoxExtFind.Enabled = value; }
+		}
 
-        private void textBoxExtFindTextChanged(object sender, EventArgs e)
-        {
-            _presenter.RefreshResult();
-        }
+		private void textBoxExtFindTextChanged(object sender, EventArgs e)
+		{
+			_presenter.RefreshResult();
+		}
 
-        private void treeViewAdvPreviewTreeItemDrag(object sender, ItemDragEventArgs e)
-        {
-             var nodes = e.Item as TreeNodeAdv[];
+		private void treeViewAdvPreviewTreeItemDrag(object sender, ItemDragEventArgs e)
+		{
+			var nodes = e.Item as TreeNodeAdv[];
 
-             if (nodes == null || nodes.Length < 1) return;
-      
-             var node = nodes[0];
-             treeViewAdvResult.DoDragDrop(node, DragDropEffects.Move);
-        }
+			if (nodes == null || nodes.Length < 1) return;
 
-         private void dateTimePickerAdvFromValueChanged(object sender, EventArgs e)
-         {
-             _presenter.FromDateChanged();
-         }
+			var node = nodes[0];
+			treeViewAdvResult.ShowDragNodeCue = true;
+			treeViewAdvResult.DoDragDrop(node, DragDropEffects.Move);
+		}
 
-         private void dateTimePickerAdvToValueChanged(object sender, EventArgs e)
-         {
-             _presenter.ToDateChanged();
-         }
+		public void TryStopDragMode()
+		{
+			//bug #34898 workaround for bug in syncfusion that does not know that drag is stopped
+			treeViewAdvResult.ShowDragNodeCue = false;
+		}
 
-        private void contextMenuStripTreeActionsOpening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            _selectedNodes = treeViewAdvResult.SelectedNodes;
-        }
+		private void dateTimePickerAdvFromValueChanged(object sender, EventArgs e)
+		{
+			_presenter.FromDateChanged();
+		}
 
-        private void toolStripMenuItemCutClick(object sender, EventArgs e)
-        {
-            CutNodes = _selectedNodes;
-        }
+		private void dateTimePickerAdvToValueChanged(object sender, EventArgs e)
+		{
+			_presenter.ToDateChanged();
+		}
 
-        public void ClearNodes()
-        {
-            CutNodes = null;
-        }
+		private void contextMenuStripTreeActionsOpening(object sender, CancelEventArgs e)
+		{
+			_selectedNodes = treeViewAdvResult.SelectedNodes;
+		}
 
-        private void treeViewAdvResultKeyDown(object sender, KeyEventArgs e)
-        {
-             if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
-             {
-                 _selectedNodes = treeViewAdvResult.SelectedNodes;
-                 CutNodes = _selectedNodes;
-             }
+		private void toolStripMenuItemCutClick(object sender, EventArgs e)
+		{
+			CutNodes = _selectedNodes;
+		}
 
-             base.OnKeyDown(e);
-        }
+		public void ClearNodes()
+		{
+			CutNodes = null;
+		}
 
-        public void SetErrorOnEndDate(string errorValue)
-        {
-            _errorProvider.SetError(dateTimePickerAdvTo, errorValue);
-            _errorProvider.SetIconPadding(dateTimePickerAdvTo, -35);
-        }
+		private void treeViewAdvResultKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
+			{
+				_selectedNodes = treeViewAdvResult.SelectedNodes;
+				CutNodes = _selectedNodes;
+			}
 
-        public void SetErrorOnStartDate(string errorValue)
-        {
-            _errorProvider.SetError(dateTimePickerAdvFrom, errorValue);
-            _errorProvider.SetIconPadding(dateTimePickerAdvFrom, -35);
-        }
+			OnKeyDown(e);
+		}
 
-        public void ClearDateErrors()
-        {
-            _errorProvider.SetError(dateTimePickerAdvTo, string.Empty);
-            _errorProvider.SetError(dateTimePickerAdvFrom, string.Empty);
-        }
-    }
+		public void SetErrorOnEndDate(string errorValue)
+		{
+			_errorProvider.SetError(dateTimePickerAdvTo, errorValue);
+			_errorProvider.SetIconPadding(dateTimePickerAdvTo, -35);
+		}
+
+		public void SetErrorOnStartDate(string errorValue)
+		{
+			_errorProvider.SetError(dateTimePickerAdvFrom, errorValue);
+			_errorProvider.SetIconPadding(dateTimePickerAdvFrom, -35);
+		}
+
+		public void ClearDateErrors()
+		{
+			_errorProvider.SetError(dateTimePickerAdvTo, string.Empty);
+			_errorProvider.SetError(dateTimePickerAdvFrom, string.Empty);
+		}
+
+	}
 }
 

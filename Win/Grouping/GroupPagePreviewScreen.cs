@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Win.Grouping
 								}
 						}
 					}
-
+					findPersonsView1.TryStopDragMode();
 					//treeView.SelectedNode = sourceNode;
 				}
 			}
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			}
 			catch (OptimisticLockException)
 			{
-				ViewBase.ShowInformationMessage(this,string.Concat(
+				ViewBase.ShowInformationMessage(this, string.Concat(
 					UserTexts.Resources.SomeoneElseHaveChanged, ". ",
 					UserTexts.Resources.YourChangesWillBeDiscarded, Environment.NewLine,
 					UserTexts.Resources.PleaseTryAgainLater),
@@ -449,8 +449,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		private static bool isPersonNode(TreeNodeAdv node)
 		{
 			if (node.Tag != null &&
-				string.Compare(GroupingConstants.NodeTypePerson, node.Tag.ToString(), StringComparison.OrdinalIgnoreCase) ==
-				0)
+				 string.Compare(GroupingConstants.NodeTypePerson, node.Tag.ToString(), StringComparison.OrdinalIgnoreCase) == 0)
 				return true;
 
 			return false;
@@ -982,9 +981,9 @@ namespace Teleopti.Ccc.Win.Grouping
 			{
 				base.OnGiveFeedback(gfbevent);
 			}
-// ReSharper disable EmptyGeneralCatchClause
+			// ReSharper disable EmptyGeneralCatchClause
 			catch
-// ReSharper restore EmptyGeneralCatchClause
+			// ReSharper restore EmptyGeneralCatchClause
 			{
 				//eat the f***ing exception, should be safe here
 			}
