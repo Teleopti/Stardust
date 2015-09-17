@@ -13,7 +13,7 @@
 				scaleImage: scaleImage,
 				setSelectionMode: setSelectionMode,
 				getFirstObjectOfTypeFromCanvasObject: getFirstObjectOfTypeFromCanvasObject,
-				getFirstSeatObject: getFirstSeatObject,
+				getSeatObject: getSeatObject,
 				getLocations: getLocations,
 				getSeats: getSeats,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
@@ -232,15 +232,13 @@
 				return seats;
 			};
 
-			function getFirstSeatObject(canvas) {
+			function getSeatObject(canvas, seatIndex) {
 				var seatObjects = getObjectsByType(canvas, 'seat');
 				if (seatObjects.length > 0) {
-					return seatObjects[0];
-
+					return seatObjects[seatIndex];
 				}
 				return null;
 			};
-
 
 			function getHighestSeatPriority(canvas) {
 

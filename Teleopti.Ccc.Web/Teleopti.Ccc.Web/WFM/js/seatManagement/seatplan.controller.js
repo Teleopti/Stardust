@@ -51,8 +51,8 @@
 			});
 		};
 
-
-		vm.loadMonthDetails = function (dateMoment) {
+		vm.loadMonthDetails = function (date) {
+			var dateMoment = moment(date);
 
 			vm.currentMonth = dateMoment.month();
 
@@ -111,7 +111,7 @@
 			}
 			var dateMoment = moment(date);
 			if (dateMoment.month() != vm.currentMonth) {
-				vm.loadMonthDetails(dateMoment);
+				vm.loadMonthDetails(date);
 			}
 		};
 

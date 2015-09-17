@@ -1,16 +1,11 @@
 ﻿<div class="bottom-header">
-	{{'Selected' | translate}}&nbsp;{{vm.numberOfSelectedSeats}}&nbsp;
-	{{'seats' | translate}}
-
-	<button class="wfm-btn wfm-btn-invis-default pull-right">Empty</button>
-	<button class="wfm-btn wfm-btn-invis-primary pull-right">Add</button>
+	Seat: {{vm.occupancyDetail[0].SeatName}}
 </div>
 
 <ul class="wfm-list">
 	<li class="active" ng-repeat="detail in vm.occupancyDetail">
 
 		<span class="list-item-container" ng-if="!detail.IsEmpty" ng-class="vm.getSeatBookingDetailClass(detail)">
-			Seat: {{vm.occupancyDetail[0].SeatName}}&nbsp;&nbsp;
 			{{vm.getDisplayTime(detail)}}
 			&nbsp;&nbsp;{{detail.FirstName}}
 			&nbsp;{{detail.LastName}}
