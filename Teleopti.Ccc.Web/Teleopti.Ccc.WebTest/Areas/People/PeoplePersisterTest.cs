@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					WindowsUser = "teleopti\\janm"
 				}
 			};
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("empty password", errorData.First().ErrorMessage);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					WindowsUser = "teleopti\\janm"
 				}
 			};
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jenny", errorData.First().Firstname);
 			Assert.AreEqual("no application user id", errorData.First().ErrorMessage);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("no logon account", errorData.First().ErrorMessage);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(3, errorData.Count());
 
 			var firstInvalidPerson = errorData.First();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
 			Assert.AreEqual("empty password; both firstname and lastname are empty", errorData.First().ErrorMessage);
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			roleRepo.Add(new ApplicationRole {DescriptionText = "Agent"});
 
 			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakePersonRepository(),new FakeLoggedOnUser(), new TenantUnitOfWorkFake(), new UserValidator(roleRepo) );
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
 			Assert.AreEqual("role sss0, sss1 not exist", errorData.First().ErrorMessage);
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("too long application user id", errorData.First().ErrorMessage);
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
 			target = new PeoplePersister(personInfoPersister,personInfoMapper, fakePersonRepository, new FakeLoggedOnUser(), new TenantUnitOfWorkFake(), new UserValidator(fakeApplicationRoleRepository));
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
 			target = new PeoplePersister(personInfoPersister,personInfoMapper, fakePersonRepository, new FakeLoggedOnUser(), new TenantUnitOfWorkFake(),new UserValidator(fakeApplicationRoleRepository));
-			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
