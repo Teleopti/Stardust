@@ -8,17 +8,19 @@
 			<div ng-show="$parent.gantt.options.value('allowSideResizing')" class="gantt-resizer-display"></div>
 		</div>
 	</gantt-side>
-	<gantt-scrollable-header>
-		<gantt-header gantt-element-height-listener="$parent.ganttHeaderHeight">
-			<gantt-header-columns>
-				<div ng-repeat="header in gantt.columnsManager.visibleHeaders track by $index">
-					<div class="gantt-header-row" ng-class="{'gantt-header-row-last': $last, 'gantt-header-row-first': $first}">
-						<gantt-column-header ng-repeat="column in header"></gantt-column-header>
+	<div style="height: 60px;">
+		<gantt-scrollable-header scrollfix="+10">
+			<gantt-header gantt-element-height-listener="$parent.ganttHeaderHeight">
+				<gantt-header-columns>
+					<div ng-repeat="header in gantt.columnsManager.visibleHeaders track by $index">
+						<div class="gantt-header-row" ng-class="{'gantt-header-row-last': $last, 'gantt-header-row-first': $first}">
+							<gantt-column-header ng-repeat="column in header"></gantt-column-header>
+						</div>
 					</div>
-				</div>
-			</gantt-header-columns>
-		</gantt-header>
-	</gantt-scrollable-header>
+				</gantt-header-columns>
+			</gantt-header>
+		</gantt-scrollable-header>
+	</div>
 	<gantt-scrollable>
 		<gantt-body>
 			<gantt-body-background>

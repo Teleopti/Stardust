@@ -5,7 +5,13 @@
 	.wfm-card-list-container {
 		max-height: none;
 	}	
-
+	.scrollfix{
+	    position:fixed;
+		top:62px;
+		z-index:1000;
+		display:inline-block;
+		background-color:#fff;
+	}
 	.mdi-rotate-90 {
 		transform: rotateZ(90deg);
 	}
