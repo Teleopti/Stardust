@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (messages.Any())
 			{
 				var retries = 0;
-				while (retries < 1)
+				while (retries < 2)
 				{
 					try
 					{

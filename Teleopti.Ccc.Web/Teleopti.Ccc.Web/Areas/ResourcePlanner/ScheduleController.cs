@@ -131,14 +131,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return
 				schedules.Count(
 					x =>
-						(x.Value.CalculatedTargetTimeHolder(periodToCheck).HasValue) &&
-						(x.Value.CalculatedContractTimeHolder == x.Value.CalculatedTargetTimeHolder(periodToCheck)));
+					{
+						var calculatedTargetTime = x.Value.CalculatedTargetTimeHolder(periodToCheck);
+						return calculatedTargetTime.HasValue && x.Value.CalculatedContractTimeHolder == calculatedTargetTime;
+					});
 		}
 
 		private bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			return scheduleRange.CalculatedTargetTimeHolder(periodToCheck).HasValue &&
-				   (scheduleRange.CalculatedTargetTimeHolder(periodToCheck).Value == scheduleRange.CalculatedContractTimeHolder);
+			var targetTime = scheduleRange.CalculatedTargetTimeHolder(periodToCheck);
+			return targetTime.HasValue &&
+				   (targetTime.Value == scheduleRange.CalculatedContractTimeHolder);
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
@@ -206,8 +209,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return allSchedules;
 		}
 
-		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period,
-			IEnumerable<IPerson> allPeople)
+		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, IEnumerable<IPerson> allPeople)
 		{
 			var provider = _personSkillProvider();
 			var dayCollection = period.DayCollection();

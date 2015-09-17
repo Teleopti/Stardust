@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
@@ -322,27 +323,28 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyDeletedProperty()
         {
-            Assert.IsFalse(((WorkflowControlSet)_target).IsDeleted);
+	        var deletableTarget = ((IDeleteTag)_target);
+	        Assert.IsFalse(deletableTarget.IsDeleted);
 
-            ((WorkflowControlSet)_target).SetDeleted();
+			deletableTarget.SetDeleted();
 
-            Assert.IsTrue(((WorkflowControlSet)_target).IsDeleted);
+			Assert.IsTrue(deletableTarget.IsDeleted);
         }
 
         [Test]
         public void VerifyAddSkillToMatchList()
         {
-            var _skill = SkillFactory.CreateSkill("test skill");
-            _target.AddSkillToMatchList(_skill);
+            var skill = SkillFactory.CreateSkill("test skill");
+            _target.AddSkillToMatchList(skill);
             Assert.IsNotNull(_target.MustMatchSkills);
         }
 
         [Test]
         public void VerifyRemoveSkillFromMatchList()
         {
-            var _skill = SkillFactory.CreateSkill("test skill");
-            _target.AddSkillToMatchList(_skill);
-            _target.RemoveSkillFromMatchList(_skill);
+            var skill = SkillFactory.CreateSkill("test skill");
+            _target.AddSkillToMatchList(skill);
+            _target.RemoveSkillFromMatchList(skill);
             Assert.IsEmpty(_target.MustMatchSkills);
 
         }

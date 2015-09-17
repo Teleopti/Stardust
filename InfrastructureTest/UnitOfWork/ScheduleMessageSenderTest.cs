@@ -185,20 +185,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			Assert.AreEqual(2, publisher.Calls);
 		}
 
-		[Test, ExpectedException(typeof(SqlException))]
-		public void ShouldThrowSqlExceptionIfRetryFailed()
-		{
-			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
-			var person = PersonFactory.CreatePerson();
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
-			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
-			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
-			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
-
-			target.Execute(new[] { rootChangeInfo });
-		}
-
 		private class eventPopulatingPublisherProbe : IEventPopulatingPublisher
 		{
 			public ScheduleChangedEvent PublishedEvent;
@@ -207,7 +193,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				PublishedEvent = (ScheduleChangedEvent) events.Single();
 			}
-
 		}
 
 		private class eventPopulatingPublisherTrowingSqlExeption : IEventPopulatingPublisher
@@ -220,7 +205,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
 				throw sqlException;
 			}
-
 		}
 	}
 }
