@@ -1,9 +1,8 @@
 ﻿'use strict';
 describe('Roles', function() {
-	var $q,
-		$rootScope,
-		$httpBackend,
-		Roles;
+    var $q,
+        $rootScope,
+        $httpBackend;
 	var mockPermissionsService = {
 		roles: {
 			post: function () {
@@ -87,12 +86,12 @@ describe('Roles', function() {
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, {Language: 'en', DateFormat: 'en'});
 		$httpBackend.expectGET("html/forecasting/forecasting.html").respond(200);
+		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
 
 		}));
 
 	it('should create a role', function(done) {
 		inject(function(Roles) {
-			//create a role with a name
 			var roleName = 'role';
 			var scope = $rootScope.$new();
 			Roles.createRole(roleName);

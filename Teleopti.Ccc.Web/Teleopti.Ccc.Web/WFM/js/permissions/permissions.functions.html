@@ -34,7 +34,7 @@
 		</div>
 	</form>	
 	
-		<!--<div class="wfm-switch">
+		<div class="wfm-switch">
 			<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" ng-click="toggleAllNode(allToggleElement)" id="switchAll" />
 			<label for="switchAll">
 				
@@ -42,15 +42,16 @@
 				<span class="wfm-switch-toggle"></span>
 			</label>
 
-		</div>-->
+		</div>
 	
 </div>
 
 <div class="tree permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-			<li ng-repeat="node in functionsDisplayed | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle | orderBy:'LocalizedFunctionDescription' " ui-tree-node ng-include="'nodes_renderer.html'">
- 
+		    <li ng-repeat="node in functionsDisplayed | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle | orderBy:'LocalizedFunctionDescription' "
+		        ng-if="!isAllNode(node)" 
+                ui-tree-node ng-include="'nodes_renderer.html'">
 			</li>
 		</ol>
 	</div>

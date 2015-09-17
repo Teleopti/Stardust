@@ -109,6 +109,10 @@
 				});
 			};
 
+		    $scope.isAllNode = function(node) {
+		        return node.FunctionCode === 'All';
+		    };
+
 			var increaseParentNumberOfSelectedNodes = function(node) {
 				if (node.$parentNodeScope) node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
 			};

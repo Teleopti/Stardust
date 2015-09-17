@@ -1,6 +1,5 @@
 ﻿(function() {
 	'use strict';
-
 	var permissionsModule = angular.module('wfm.permissions');
 	permissionsModule.service('RolesFunctionsService', [
 		'$q', 'PermissionsService', '$filter', function($q, PermissionsService, $filter) {
@@ -11,7 +10,7 @@
 			rolesFunctionsService.allFunctions = false; //fixme find a common name
 
 			PermissionsService.applicationFunctions.query().$promise.then(function(result) {
-				parseFunctions(result, [], rolesFunctionsService.nmbFunctionsTotal);
+				rolesFunctionsService.parseFunctions(result, [], rolesFunctionsService.nmbFunctionsTotal, false);
 				rolesFunctionsService.functionsDisplayed = result;
 			});
 
@@ -43,30 +42,25 @@
 					var permsFunc = result.AvailableFunctions;
 
 					rolesFunctionsService.allFunctions = ($filter('filter')(permsFunc, { FunctionCode: 'All' }, true)).length !== 0;
-					permsFunc.forEach(function (element) {
-						if (element.FunctionCode === 'All') {
-							var i = permsFunc.indexOf(element);
-							permsFunc.splice(i, 1);
-						}
-					});
-
-					parseFunctions(rolesFunctionsService.functionsDisplayed, permsFunc);
+				
+					rolesFunctionsService.parseFunctions(rolesFunctionsService.functionsDisplayed, permsFunc, {}, rolesFunctionsService.allFunctions);
 					deferred.resolve();
 				});
 				return deferred.promise;
 			};
 
-			var parseFunctions = function (functionTab, selectedFunctions, parentNode) {
+			rolesFunctionsService.parseFunctions = function (functionTab, selectedFunctions, parentNode, allSelected) {
+
 				var selectedChildren = 0;
 				functionTab.forEach(function (item) {
 					var availableFunctions = $filter('filter')(selectedFunctions, { Id: item.FunctionId });
 					item.selected = false;
-					if (availableFunctions.length !== 0) {
+					if (availableFunctions.length !== 0 || allSelected) {
 						item.selected = true;
 						selectedChildren++;
 					}
 					if (item.ChildFunctions.length !== 0) {
-						parseFunctions(item.ChildFunctions, selectedFunctions, item);
+					    rolesFunctionsService.parseFunctions(item.ChildFunctions, selectedFunctions, item, allSelected);
 					}
 				});
 			if (parentNode) {
@@ -74,11 +68,11 @@
 				}
 			};
 
-				rolesFunctionsService.selectAllFunctions = function (selectedRole) {
-				var functions = [];
+			rolesFunctionsService.selectAllFunctions = function (selectedRole) {
+			    var functions = [];
 
-				helperSelectAllFunctions(rolesFunctionsService.functionsDisplayed,functions);
-				PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: functions });
+			    helperSelectAllFunctions(rolesFunctionsService.functionsDisplayed,functions);
+			    PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: functions });
 			};
 
 			rolesFunctionsService.unselectAllFunctions = function (selectedRole) {
@@ -115,5 +109,4 @@
 			return rolesFunctionsService;
 		}
 	]);
-
 })();
