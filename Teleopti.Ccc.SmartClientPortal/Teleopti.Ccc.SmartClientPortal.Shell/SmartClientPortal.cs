@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPress += Form_KeyPress;
 			webView1.LoadCompleted += webView1_LoadComplete;
 			wfmWebView.LoadCompleted += wfmWebView_LoadCompleted;
+			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -293,7 +294,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				wfmWebControl.Visible = false;
 				string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
-				wfmWebView.Url = string.Format("{0}WFM/#{1}", raptorServer, _permissionModule);
+				wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", raptorServer, _permissionModule));
 
 			}
 			
@@ -847,8 +848,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void wfmWebView_LoadCompleted(object sender, NavigationTaskEventArgs e)
 		{
 				JSObject window = wfmWebView.GetDOMWindow();
-				var iAmCalledFromFatClient = (JSFunction)webView1.EvalScript("iAmCalledFromFatClient");
+				var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
 				iAmCalledFromFatClient.Invoke(window, new object[] { });
+		}
+
+		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		{
+			//do we need this?
+			//var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage, homeCommand);
+
+			e.Menu.Items.Clear();
 		}
 
 	}

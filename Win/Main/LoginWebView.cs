@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Win.Main
@@ -40,23 +41,22 @@ namespace Teleopti.Ccc.Win.Main
 		public bool StartLogon(IMessageBrokerComposite messageBroker)
 		{
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
-			webView1.Url = AuthenticationBridge + "/hrd";
+			//webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
+			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
 
+		//private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
+		//{
+		//	_model.AuthenticationType = AuthenticationTypeOption.Application;
+		//}
+
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
 			_model.PersonId = Guid.Parse(e.Arguments[1].ToString());
-			//using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			//{
-			//	var businessUnit = new BusinessUnitRepository(uow).Load(Guid.Parse(e.Arguments[0].ToString()));
-			//	_model.SelectedBu = businessUnit;
-			//}
 
-			Close();
-			Dispose();
-			Presenter.IdLogin();
+			Presenter.IdLogin(Guid.Parse(e.Arguments[0].ToString()));
 		}
 
 		public void ShowStep(bool showBackButton)
@@ -66,12 +66,14 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void ClearForm(string labelText)
 		{
-			throw new NotImplementedException();
+			Refresh();
 		}
 
 		public void Exit(DialogResult result)
 		{
-			throw new NotImplementedException();
+			DialogResult = result;
+			Close();
+			Dispose();
 		}
 
 		public void ShowErrorMessage(string message, string caption)
@@ -101,10 +103,10 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			throw new NotImplementedException();
+			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings);
 		}
 
-		public string AuthenticationBridge { get; set; }
+		public string ServerUrl { get; set; }
 	}
 
 	

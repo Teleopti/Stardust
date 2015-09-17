@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -46,10 +48,10 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public LoginStep CurrentStep { get; set; }
 
-		public bool Start(string authenticationBridge)
+		public bool Start(string serverUrl)
 		{
 			CurrentStep = LoginStep.SelectLogonType;
-			_view.AuthenticationBridge = authenticationBridge;
+			_view.ServerUrl = serverUrl;
 			return _view.StartLogon(_messageBroker);
 			
 		}
@@ -175,6 +177,11 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
+			if (!StateHolderReader.IsInitialized)
+			{
+				var settings = _sharedSettingsQuerier.GetSharedSettings();
+				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
+			}
 			var authenticationResult = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel{UserName = _model.UserName, Password = _model.Password}, UserAgent);
 				
 			if (authenticationResult.Success)
@@ -205,14 +212,26 @@ namespace Teleopti.Ccc.WinCode.Main
 		}
 
 		// ReSharper disable once UnusedMember.Local
-		public bool IdLogin()
+		public bool IdLogin(Guid businessunitId)
 		{
 			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgent);
-
+			if (!StateHolderReader.IsInitialized)
+			{
+				var settings = _sharedSettingsQuerier.GetSharedSettings();
+				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
+			}
 			if (authenticationResult.Success)
 			{
 				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
 				WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
+				using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+				{
+				var businessUnit = new BusinessUnitRepository(uow).Load(businessunitId);
+				_model.SelectedBu = businessUnit;
+				
+				}
+				initApplication();
+				
 				return true;
 			}
 			_model.Warning = authenticationResult.FailReason;

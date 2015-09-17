@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         public bool LogOn()
         {
-			  string authenticationBridge = ConfigurationManager.AppSettings.Get("AuthenticationBridge");
-			  return _logonPresenter.Start(authenticationBridge);
+			  string serverUrl = ConfigurationManager.AppSettings.Get("TenantServer");
+			  return _logonPresenter.Start(serverUrl);
         }
     }
 }

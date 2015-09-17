@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Main
 			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings);
 		}
 
-		public string AuthenticationBridge { get; set; }
+		public string ServerUrl { get; set; }
 
 		private void updatePanel(Control userControl)
 		{

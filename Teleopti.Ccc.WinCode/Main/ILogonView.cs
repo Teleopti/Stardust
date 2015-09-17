@@ -20,6 +20,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ButtonLogOnOkClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
 		void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings);
-		string AuthenticationBridge { get; set; }
+		string ServerUrl { get; set; }
 	}
 }

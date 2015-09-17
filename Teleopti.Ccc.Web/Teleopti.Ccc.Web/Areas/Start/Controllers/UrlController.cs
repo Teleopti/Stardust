@@ -3,26 +3,31 @@ using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
+
 using DotNetOpenAuth.OpenId;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
     public class UrlController : Controller
     {
         private readonly ICurrentHttpContext _currentHttpContext;
+		  private readonly IAuthenticationModule _authenticationModule;
 
-        public UrlController(ICurrentHttpContext currentHttpContext)
+        public UrlController(ICurrentHttpContext currentHttpContext, IAuthenticationModule authenticationModule)
         {
-            _currentHttpContext = currentHttpContext;
+	        _currentHttpContext = currentHttpContext;
+	        _authenticationModule = authenticationModule;
         }
 
-        public ActionResult Index()
+	    public ActionResult Index()
         {
             var myRSA = new RSACryptoServiceProvider();
             myRSA.FromXmlString(
@@ -35,6 +40,24 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
             return Json(new { Url = url, Signature = Convert.ToBase64String(result) }, JsonRequestBehavior.AllowGet);
         }
+
+		  public ActionResult RedirectToWebLogin()
+		  {
+			  string issuer = _authenticationModule.Issuer(_currentHttpContext.Current()).ToString();
+
+			  var signIn = new SignInRequestMessage(new Uri(issuer), _authenticationModule.Realm)
+			  {
+				  Context = "ru=" + "/",
+				  HomeRealm = "urn:"
+			  };
+
+			  var url = signIn.WriteQueryString();
+			  var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+			  var redirectUrl = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration")
+				  ? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
+				  : url;
+			  return Redirect(redirectUrl);
+		  }
 		 
 		 [HttpGet]
 	    public JsonResult AuthenticationDetails()

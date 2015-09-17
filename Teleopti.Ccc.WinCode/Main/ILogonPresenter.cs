@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WinCode.Main
+﻿using System;
+
+namespace Teleopti.Ccc.WinCode.Main
 {
 	public interface ILogonPresenter
 	{
@@ -7,6 +9,6 @@
 		void Initialize();
 		bool Start(string raptorServer);
 		LoginStep CurrentStep { get; set; }
-		bool IdLogin();
+		bool IdLogin(Guid parse);
 	}
 }

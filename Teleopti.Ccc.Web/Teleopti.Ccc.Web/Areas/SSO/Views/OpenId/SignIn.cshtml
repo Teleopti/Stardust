@@ -11,6 +11,11 @@
 	<script type="text/javascript">
 		var authentication;
 		$(function () {
+			//isTeleoptiProvider is used to tell the fat client that the teleopti browser is used as a provider.
+			//this is used to enable the profile menu in the fat client only if its a Teleopti provider
+			if (typeof isTeleoptiProvider !== 'undefined') {
+				isTeleoptiProvider();
+			}
 			if (typeof (Teleopti) === 'undefined') {
 				Teleopti = {};
 
