@@ -10,7 +10,8 @@
         this.translate = translate;
         this.applyTranslation = applyTranslation;
         this.translateWeekdays = translateWeekdays;
-           
+	    this.translatePromise = $translate;   
+
         function loadDictionary(key, dictionary) {
             var keys = angular.isArray(key) ? key : [key];
             var translations = key.map(function(x) { return $translate(x); });
