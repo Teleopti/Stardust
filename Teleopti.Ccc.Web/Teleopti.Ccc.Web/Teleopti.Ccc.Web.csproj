@@ -1187,6 +1187,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\html\outbound\angular-gantt-custom.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-sheet.tpl.html" />
