@@ -179,7 +179,6 @@
 			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-
 		function selectSeat(seatIndex) {
 			if (vm.showOccupancy) {
 				var seat = canvasUtils.getSeatObject(canvas,seatIndex);
