@@ -3,9 +3,17 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', 'miscService', 'outboundTranslationService', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', [
+			'$scope',
+			'$filter',
+			'OutboundToggles',
+			'outboundService',
+			'miscService',
+			'outboundTranslationService',
+			'outboundChartService',
+			campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService) {
+	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -59,10 +67,12 @@
 		$scope.campaignClicked = function (ev, c) {
 			if (c.expanded) return;
 			c.expanded = true;
+			var campaign = { Id: c.id, isLoadingData: true };
 			var newDataRow = {				
 				id: c.id + '_expanded',
-				height: '550px',
+				height: '650px',
 				expansion: true,
+				campaign: campaign,				
 				collapse: function collapseExpansion(ev, index) {
 					c.expanded = false;
 					$scope.ganttData.splice(index, 1);
@@ -70,8 +80,25 @@
 			};
 			var index = readIndex(c);
 			if (index >= 0)
-				$scope.ganttData.splice(index + 1, 0, newDataRow);			
+				$scope.ganttData.splice(index + 1, 0, newDataRow);
+
+			getGraphData(campaign, $scope);
 		};
+
+		function getGraphData(campaign, scope) {		
+			outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
+				angular.extend(campaign, _campaign);
+				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
+					campaign.graphData = data;
+					campaign.rawManualPlan = manualPlan;
+					campaign.isManualBacklog = backlog;
+					campaign.translations = translations;
+					campaign.closedDays = closedDays;
+					campaign.isLoadingData = false;
+					scope.$broadcast('campaign.chart.refresh', campaign);
+				});
+			});
+		}
 		 
 		function getAllWeekends() {
 			var visualizationPeriod = outboundService.getVisualizationPeriod();

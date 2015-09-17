@@ -25,7 +25,7 @@
 			height: 100%;
 			pointer-events: auto;
 			border: solid 1px;
-			border-top: none;			
+			border-top: none;							
 		}
 		.gantt-task-background {
 			height: 60%;
@@ -113,6 +113,15 @@
 			}
 		}
 
+		.campaign-chart-wrapper {	
+			position: relative;
+			padding-top: 35px;
+
+			.chart-extra-info {
+				top: 35px;
+			}
+		}
+
 	}
 	gantt-column-header-content {
 		width: 100%;
@@ -124,6 +133,7 @@
 		}
 	}
 
+	
 
 	.chart {
 		-webkit-touch-callout: none;
@@ -769,7 +779,7 @@ activity-picker {
 	.loading-whole-section
 	{
 		position:relative;
-		height:100px;
+		height:100%;
 		width:100%;
 
 		md-progress-circular {
