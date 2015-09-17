@@ -3726,7 +3726,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			Cursor = Cursors.WaitCursor;
 
-			_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+			if(_personAbsenceAccountPersistValidationBusinessRuleResponses != null)_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
 			IEnumerable<PersistConflict> foundConflicts = null;
 			try
@@ -3754,7 +3754,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				personAccountPersister.Persist(_schedulerState.Schedules.ModifiedPersonAccounts);
 
 				//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
-				if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+				if (_personAbsenceAccountPersistValidationBusinessRuleResponses != null &&_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
 				{
 					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 				}
@@ -3776,7 +3776,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			finally
 			{
-				_undoRedo.Clear();
+				if(_undoRedo != null)_undoRedo.Clear();
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
