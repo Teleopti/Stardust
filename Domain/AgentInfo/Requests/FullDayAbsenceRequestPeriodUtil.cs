@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -15,13 +12,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var fullDayTimeSpanStart = new TimeSpan(0, 0, 0);
 			var fullDayTimeSpanEnd = new TimeSpan(23, 59, 0);
+			var personTimeZone = person.PermissionInformation.DefaultTimeZone();
 			var absencePeriodUserTime =
 				new DateTimePeriod(
 					DateTime.SpecifyKind(
-						TimeZoneHelper.ConvertFromUtc(period.StartDateTime, person.PermissionInformation.DefaultTimeZone()),
+						TimeZoneHelper.ConvertFromUtc(period.StartDateTime, personTimeZone),
 						DateTimeKind.Utc),
 					DateTime.SpecifyKind(
-						TimeZoneHelper.ConvertFromUtc(period.EndDateTime, person.PermissionInformation.DefaultTimeZone()),
+						TimeZoneHelper.ConvertFromUtc(period.EndDateTime, personTimeZone),
 						DateTimeKind.Utc));
 
 			bool isFullDayAbsenceRequest = (absencePeriodUserTime.StartDateTime.TimeOfDay == fullDayTimeSpanStart &&
@@ -36,38 +34,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var settingStartTime = fullDayAbsenceRequestStartTimeSetting.TimeSpanValue;
 				var settingEndTime = fullDayAbsenceRequestEndTimeSetting.TimeSpanValue;
 
-				var startDate = new DateTime(absencePeriodUserTime.StartDateTime.Year,
-												absencePeriodUserTime.StartDateTime.Month,
-												absencePeriodUserTime.StartDateTime.Day,
-												settingStartTime.Hours, settingStartTime.Minutes, settingStartTime.Seconds);
-				var endDate = new DateTime(absencePeriodUserTime.EndDateTime.Year,
-											absencePeriodUserTime.EndDateTime.Month,
-											absencePeriodUserTime.EndDateTime.Day,
-											settingEndTime.Hours, settingEndTime.Minutes, settingEndTime.Seconds);
+				var startDate = absencePeriodUserTime.StartDateTime.Date.Add(settingStartTime);
+				var endDate = absencePeriodUserTime.EndDateTime.Date.Add(settingEndTime);
 
 				if (dayScheduleForAbsenceReqStart.IsScheduled() && dayScheduleForAbsenceReqStart.PersonAssignment() != null && !dayScheduleForAbsenceReqStart.HasDayOff())
 				{
 					var dayScheduleStartTimeForAbsenceReqStart =
 						dayScheduleForAbsenceReqStart.PersonAssignment()
-							.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
+							.Period.StartDateTimeLocal(personTimeZone);
                     startDate = dayScheduleStartTimeForAbsenceReqStart;
 				}
 
 				if (dayScheduleForAbsenceReqEnd.IsScheduled() && dayScheduleForAbsenceReqEnd.PersonAssignment() != null && !dayScheduleForAbsenceReqEnd.HasDayOff())
 				{
 					var dayScheduleEndTimeForAbsenceReqEnd = dayScheduleForAbsenceReqEnd.PersonAssignment()
-						.Period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
+						.Period.EndDateTimeLocal(personTimeZone);
                     endDate = dayScheduleEndTimeForAbsenceReqEnd;
 				}
 
 				period =
-					new DateTimePeriod(
-						DateTime.SpecifyKind(
-							TimeZoneHelper.ConvertToUtc(startDate, person.PermissionInformation.DefaultTimeZone()),
-							DateTimeKind.Utc),
-						DateTime.SpecifyKind(
-							TimeZoneHelper.ConvertToUtc(endDate, person.PermissionInformation.DefaultTimeZone()),
-							DateTimeKind.Utc));
+					new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startDate, personTimeZone),
+						TimeZoneHelper.ConvertToUtc(endDate, personTimeZone));
 			}
 			return period;
 		}
