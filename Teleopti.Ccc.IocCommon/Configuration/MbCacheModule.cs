@@ -2,7 +2,6 @@
 using MbCache.Configuration;
 using MbCache.Core;
 using MbCache.ProxyImpl.LinFu;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
