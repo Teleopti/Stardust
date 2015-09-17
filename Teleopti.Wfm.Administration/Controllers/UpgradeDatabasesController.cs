@@ -44,7 +44,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false);
 			return Json(new TenantResultModel {Success = true, Message = "Upgraded databases for tenant " + tenant.Name});
 		}
-   }
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("UpgradeAllTenants")]
+		public virtual JsonResult<TenantResultModel> UpgradeAllTenants(UpgradeTenantModel model)
+		{
+			var tenants = _loadAllTenants.Tenants().ToList();
+			foreach (var tenant in tenants)
+			{
+				_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false);
+			}
+			
+			return Json(new TenantResultModel { Success = true, Message = string.Format("Upgraded databases for {0} tenant(s).", tenants.Count()) });
+		}
+	}
 
 	public class UpgradeTenantModel
 	{

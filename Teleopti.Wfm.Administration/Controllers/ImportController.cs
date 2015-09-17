@@ -57,10 +57,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var importResult = _import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, aggConnectionstring, model.AdminUser, model.AdminPassword);
-			if (!importResult.Success)
-				return Json(new ImportTenantResultModel { Success = false, Message = importResult.Message });
-
-			return Json(new ImportTenantResultModel { Success = false, Message = importResult.Message });
+		
+			return Json(new ImportTenantResultModel { Success = importResult.Success, Message = importResult.Message });
+			
 		}
 
 		[HttpPost]
