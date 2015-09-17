@@ -27,14 +27,14 @@
 		}
 		
 		$scope.headerFormats = {
-			month: 'MMMM YYYY',
+			month: 'MMMM',
 			week: function (column) {				
 				return '<div class="week-days-header">'
 				+ '<div class="week-start-day">' + column.date.format('D') + '</div>'
 				+ '<div></div>'
 				+ '<div class="week-end-day">'  + '</div>'
 				+ '</div>';
-			}
+			}			
 		};
 		
 		function readIndex(c) {			
@@ -63,13 +63,53 @@
 				$scope.ganttData.splice(index + 1, 0, newDataRow);			
 		};
 		 
+		function getAllWeekends() {
+			var visualizationPeriod = outboundService.getVisualizationPeriod();
+			var startDate = moment(visualizationPeriod.StartDate.Date);
+			var endDate = moment(visualizationPeriod.EndDate.Date);
+
+			var weekends = [];
+			var weekend = [];
+
+			var isFirstDay = true;
+			while (startDate <= endDate) {				
+				if (startDate.day() == 0 || startDate.day() == 6) {
+					if (isFirstDay) weekend.push(startDate.clone().add(-1, 'day'));
+					else weekend.push(startDate.clone());
+					if (weekend.length == 2) {
+						weekends.push(weekend);
+						weekend = [];
+					}					
+				}					
+				startDate.add(1, 'day');
+				isFirstDay = false;
+			}
+			if (weekend.length > 0) {
+				weekends.push([weekend[0], weekend[0]]);
+			}
+
+			return weekends.map(function(we) {
+				return [we[0].format('YYYY-MM-DD'), we[1].add(1, 'day').format('YYYY-MM-DD')];
+			});
+		}
+
 		$scope.timespans = [
 			{
-				name: "today", // Name shown on top of each timespan.
-				from: moment().format('YYYY-MM-DD'), // Date can be a String, Timestamp, Date object or moment object.
-				to: moment().add(1, 'day').format('YYYY-MM-DD') // Date can be a String, Timestamp, Date object or moment object.
+				name: "today", 
+				from: moment().format('YYYY-MM-DD'), 
+				to: moment().add(1, 'day').format('YYYY-MM-DD'),
+				classes: ['gantt-timespan-today']
 			}
 		];
+
+		var weekends = getAllWeekends();
+		angular.forEach(weekends, function(we) {
+			$scope.timespans.push({
+				from: we[0],
+				to: we[1]
+			});
+		});
+
 
 		function setGanttOptions(startDate, endDate) {
 			var visualizationPeriod = outboundService.getVisualizationPeriod();

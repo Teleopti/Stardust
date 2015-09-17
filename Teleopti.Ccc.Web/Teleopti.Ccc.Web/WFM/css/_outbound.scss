@@ -29,8 +29,11 @@
 		}
 		.gantt-task-background {
 			height: 60%;
-			top: 55%;
+			top: 60%;
 			transform: translateY(-50%);
+		}
+		.gantt-foreground-col {
+			border-right: solid 1px lightgray;
 		}
 		.gantt-body {
 			.gantt-row-background.gantt-row-expanded {
@@ -75,6 +78,13 @@
 			.gantt-task-content {
 				pointer-events: auto;
 			}
+		}
+		.gantt-row-even > .gantt-row-background {
+			background-color: white;
+		}
+
+		.gantt-timespan-today {
+			background-color: #99d6ff;
 		}
 
 		.gantt-header-row {
