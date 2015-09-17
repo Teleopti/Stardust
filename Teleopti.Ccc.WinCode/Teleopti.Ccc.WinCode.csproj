@@ -704,8 +704,6 @@
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
-    <Compile Include="Common\Time\ITimeDurationPickerView.cs" />
-    <Compile Include="Common\Time\TimeSpanDataBoundItem.cs" />
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />
     <Compile Include="Common\TransparentMeetingControlModel.cs" />
     <Compile Include="Common\TransparentMeetingControlPresenter.cs" />
@@ -777,8 +775,6 @@
     <Compile Include="Common\OvertimeLayerViewModel.cs" />
     <Compile Include="Common\Rows\RowManagerScheduler.cs" />
     <Compile Include="Common\Time\DateTimeViewModel.cs" />
-    <Compile Include="Common\Time\IntervalCollection.cs" />
-    <Compile Include="Common\Time\IntervalViewModel.cs" />
     <Compile Include="Common\Time\ITimeZoomItemViewModel.cs" />
     <Compile Include="Common\Time\ITimeZoomViewModel.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModel.cs" />
