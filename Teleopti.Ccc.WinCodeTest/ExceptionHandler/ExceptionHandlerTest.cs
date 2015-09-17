@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -66,11 +68,23 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         [Test, RequiresSTA]//, Ignore("Clipboard should be injected")]
         public void CanCopyToClipboard()
         {
-            string expectedString = _model.CompleteStackAndAssemblyText();
+            var completeStackTrace = _model.CompleteStackAndAssemblyText();
+			completeStackTrace.Should().Contain("Timestamp: ");
+			var expectedWithTimeStampRemoved = removeTimeStamp(completeStackTrace);
+
             Clipboard.Clear();
             _target.CopyToClipboard();
-            StringAssert.AreEqualIgnoringCase(expectedString, Clipboard.GetDataObject().GetData(DataFormats.Text).ToString());
+	        var clipboardStackTrace = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
+			var expectedClipboardStackTraceWithTimeStampRemoved = removeTimeStamp(clipboardStackTrace);
+
+			StringAssert.AreEqualIgnoringCase(expectedWithTimeStampRemoved, expectedClipboardStackTraceWithTimeStampRemoved);
         }
+
+	    private string removeTimeStamp(string text)
+	    {
+		    var lines = Regex.Split(text, "\r\n|\r\n").Skip(1);
+		    return string.Join(Environment.NewLine, lines.ToArray());
+	    }
 
         [Test]
         public void CanPopEmail()
