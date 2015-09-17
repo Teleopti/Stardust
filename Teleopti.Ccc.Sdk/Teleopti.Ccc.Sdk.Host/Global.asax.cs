@@ -5,7 +5,6 @@ using System.Web;
 using System.Xml.Linq;
 using Autofac;
 using Autofac.Integration.Wcf;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.IocCommon;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -26,7 +24,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -38,7 +36,6 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
@@ -146,32 +143,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		private static void registerDataSourcesFactory(ContainerBuilder builder)
 		{
-			builder.Register(c =>
-			{
-				var busSender = new ServiceBusSender();
-				var populator = EventContextPopulator.Make();
-				var businessUnit = CurrentBusinessUnit.Instance;
-				var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
-				var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
-				var senders = new List<IMessageSender>
-			{
-				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-				new MeetingMessageSender(eventPublisher),
-				new GroupPageChangedMessageSender(messageSender),
-				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-				new PersonChangedMessageSender(eventPublisher, businessUnit),
-				new PersonPeriodChangedMessageSender(messageSender)
-			};
-				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				{
-					senders.Add(
-						new AggregatedScheduleChangeMessageSender(c.Resolve<Interfaces.MessageBroker.Client.IMessageSender>(),
-							CurrentDataSource.Make(), businessUnit, c.Resolve<IJsonSerializer>(),
-							c.Resolve<ICurrentInitiatorIdentifier>()));
-				}
-				return new CurrentMessageSenders(senders);
-			}).As<ICurrentMessageSenders>().SingleInstance();
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentMessageSenders>().SingleInstance();
 
 			builder.Register(c => new DataSourcesFactory(
 				new EnversConfiguration(),

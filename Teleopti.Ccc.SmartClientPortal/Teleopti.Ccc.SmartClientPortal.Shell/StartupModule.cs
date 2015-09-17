@@ -1,13 +1,11 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonMatrix>().As<ILogonMatrix>();
 
-			
 			if (_configuration.Toggle(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
 				builder.RegisterType<LoginWebView>()
@@ -65,7 +62,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
 					 .SingleInstance();
 			}
-			
+
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentMessageSenders>().SingleInstance();
 		}
 	}
 }

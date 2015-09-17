@@ -185,6 +185,7 @@
     <Compile Include="AgentBadge\IRunningEtlJobChecker.cs" />
     <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
+    <Compile Include="InternalServiceBusSender.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NewAbsenceReportConsumer.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
-    <Compile Include="FileConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />

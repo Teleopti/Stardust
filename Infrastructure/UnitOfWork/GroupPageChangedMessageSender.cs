@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
-		                                                        	{
-		                                                        		typeof (IGroupPage)
-		                                                        	};
+		{
+			typeof (IGroupPage)
+		};
 
 		public GroupPageChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
 		{
@@ -25,20 +25,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			var affectedInterfaces = from r in modifiedRoots
-			                         from i in r.Root.GetType().GetInterfaces()
-			                         select i;
-	        if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
+			var allRoots = modifiedRoots.ToList();
+
+			var affectedInterfaces = from r in allRoots
+				from i in r.Root.GetType().GetInterfaces()
+				select i;
+			if (!affectedInterfaces.Any(t => _triggerInterfaces.Contains(t))) return;
+
+			//get the group page ids
+			var groupPage = allRoots.Select(r => r.Root).OfType<IGroupPage>();
+			foreach (var groupPageList in groupPage.Batch(25))
 			{
-                //get the group page ids
-				var groupPage = modifiedRoots.Select(r => r.Root).OfType<IGroupPage>();
-				foreach (var groupPageList in groupPage.Batch(25))
-				{
-					var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
-					var message = new GroupPageChangedMessage();
-					message.SetGroupPageIdCollection(idsAsString);
-					_serviceBusSender.Send(message, false);
-				}
+				var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
+				var message = new GroupPageChangedMessage();
+				message.SetGroupPageIdCollection(idsAsString);
+				_serviceBusSender.Send(message, false);
 			}
 		}
 	}

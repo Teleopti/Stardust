@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Rhino.ServiceBus;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -9,32 +7,8 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Infrastructure.ServiceBus
 {
-	public class InternalServiceBusSender : IServiceBusSender
-	{
-		private readonly Func<IServiceBus> _serviceBus;
-
-		public InternalServiceBusSender(Func<IServiceBus> serviceBus)
-		{
-			_serviceBus = serviceBus;
-		}
-
-		public void Dispose()
-		{
-		}
-
-		public void Send(bool throwOnNoBus, params object[] message)
-		{
-			_serviceBus().Send(message);
-		}
-
-		public bool EnsureBus()
-		{
-			return true;
-		}
-	}
-
 	public class MessageSenderCreator
 	{
 		private readonly IServiceBusSender _serviceBusSender;
@@ -43,10 +17,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly IJsonSerializer _serializer;
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 
-		public MessageSenderCreator(IServiceBusSender serviceBusSender, 
-			IToggleManager toggleManager, 
+		public MessageSenderCreator(IServiceBusSender serviceBusSender,
+			IToggleManager toggleManager,
 			Interfaces.MessageBroker.Client.IMessageSender messageSender,
-			IJsonSerializer serializer, 
+			IJsonSerializer serializer,
 			ICurrentInitiatorIdentifier initiatorIdentifier)
 		{
 			_serviceBusSender = serviceBusSender;
