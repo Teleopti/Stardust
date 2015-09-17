@@ -79,6 +79,20 @@
 				});
 		};
 
+		vm.updateCalendarStatusOnly = function() {
+			vm.isLoadingCalendar = true;
+			var seatPlansParams = {
+				startDate: vm.getPreviousMonthStart(vm.selectedDate),
+				endDate: vm.getNextMonthEnd(vm.selectedDate)
+			};
+
+			seatPlanService.seatPlans.query(seatPlansParams)
+				.$promise.then(function(data) {
+					vm.seatPlanDateStatuses = data;
+					vm.isLoadingCalendar = false;
+				});
+		};
+
 		vm.loadPlanningPeriods = function (dateMoment) {
 			vm.isLoadingPlanningPeriods = true;
 

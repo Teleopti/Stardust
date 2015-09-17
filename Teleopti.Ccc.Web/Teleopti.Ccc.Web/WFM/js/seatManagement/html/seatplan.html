@@ -7,18 +7,17 @@
 
 	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
-		<div class="col-sm-12 seatplan-calendar">
+		<div class="col-sm-12 seatplan-calendar" ng-init="seatplan.updateCalendarStatusOnly()"
+			 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
 			<div class="calendar-progress" ng-show="seatplan.isLoadingCalendar">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<datepicker ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened"
-						ng-hide="seatplan.isLoadingCalendar" ng-model="seatplan.selectedDate"
+			<datepicker ng-hide="seatplan.isLoadingCalendar" ng-model="seatplan.selectedDate"
 						on-change-of-month="seatplan.onChangeOfMonth(date)"
 						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
-						custom-class="seatplan.getDayClass(date,mode)"
-						>
+						custom-class="seatplan.getDayClass(date,mode)">
 			</datepicker>
 		</div>
 
