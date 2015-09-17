@@ -1192,6 +1192,7 @@
     <Content Include="WFM\html\outbound\campaign-sheet.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-list-gantt.html" />
     <Content Include="WFM\html\outbound\outbound-overview.html" />
+    <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\html\forecasting\forecasting-advanced.html" />

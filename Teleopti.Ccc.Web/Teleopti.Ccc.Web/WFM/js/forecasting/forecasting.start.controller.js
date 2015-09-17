@@ -122,6 +122,13 @@ angular.module('wfm.forecasting')
 				}
 			};
 
+			if (c3.applyFixForForecast) c3.applyFixForForecast(function() {
+				$scope.$digest();
+			});
+			$scope.$on('$destroy', function () {
+				if (c3.restoreFixForForecast) c3.restoreFixForForecast();
+			});
+
 			var forecastWorkload = function (workload, finallyCallback) {
 				workload.ShowProgress = true;
 				workload.IsSuccess = false;
