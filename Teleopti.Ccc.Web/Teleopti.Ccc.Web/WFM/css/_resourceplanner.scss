@@ -2,7 +2,7 @@
 	vertical-align: text-top;
 }
 .resourceplanner-report{
-	height: 75%; 
+	height: 75%;
 	.ui-grid-viewport{
 		overflow: auto!important;
 	}
@@ -14,10 +14,10 @@
 	justify-content:space-around;
 	list-style: none;
 	padding-left: 0!important;
-	
+
 	li{
 	margin:5px;
-	padding: 10px; 
+	padding: 10px;
 	height:10em;
 	background-color:steelblue!important;
 		display: inline-block;
@@ -29,7 +29,7 @@
 
 }
 	.card-group {
-		display: inline-block; 
+		display: inline-block;
 		width: 100%;
 		transition: 1s all ease-in-out;
 	}
@@ -160,18 +160,19 @@ outline: #FFC285 solid 1px;
 
 
 
-  td{
-  width:10px;
-     }
+	td{
+	width:10px;
+	 }
+	 th{
+	   visibility: hidden;
+	   width:10px;
+	 }
+	 th:nth-child(2n){
+	   visibility: visible!important;
+	 }
 }
-th{
-  visibility: hidden;
-  width:10px;
-}
+
 .skillname{
   width:auto!important;
   border-bottom: 1px gray solid!important;
-}
-th:nth-child(2n){
-  visibility: visible!important;
 }
