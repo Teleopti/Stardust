@@ -1,14 +1,17 @@
+using System;
 using Autofac;
+using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 {
 	[IoCTest]
 	[TestFixture]
@@ -18,9 +21,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		public CachedServiceImpl CachedService;
 		public FakeApplicationData ApplicationData;
 		public IDataSourceScope DataSource;
+		public IMbCacheFactory Cache;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.UseTestDouble<NoCurrentIdentity>().For<ICurrentIdentity>();
 			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
 			system.AddModule(new TestModule(configuration));
 		}
@@ -40,8 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 				builder.CacheByClassProxy<CachedServiceImpl>().SingleInstance();
 				_configuration.Cache().This<CachedServiceImpl>(
-					b => b
+					(c, b) => b
 						.CacheMethod(x => x.GetDataSourceName())
+						.CacheKey(c.Resolve<CachePerDataSource>())
 					);
 			}
 
@@ -108,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			CachedService.CalledCount.Should().Be(1);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCachePerDataSource()
 		{
 			IDataSource datasource1 = new FakeDataSource("1");
@@ -121,6 +127,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			using (DataSource.OnThisThreadUse(datasource2))
 				Service.GetDataSourceName().Should().Be("2");
 
+		}
+
+		[Test]
+		public void ShouldThrowIfNoCurrentDataSource()
+		{
+			Assert.Throws<NullReferenceException>(() => Service.GetDataSourceName());
+		}
+
+		[Test]
+		public void ShouldInvalidateForAllDataSources()
+		{
+			IDataSource datasource1 = new FakeDataSource("1");
+			ApplicationData.RegisteredDataSources = new[] { datasource1 };
+
+			using (DataSource.OnThisThreadUse(datasource1))
+				Service.GetDataSourceName().Should().Be("1");
+			Cache.Invalidate<CachedServiceImpl>();
+			using (DataSource.OnThisThreadUse(datasource1))
+				Service.GetDataSourceName().Should().Be("1");
+
+			CachedService.CalledCount.Should().Be(2);
 		}
 	}
 }

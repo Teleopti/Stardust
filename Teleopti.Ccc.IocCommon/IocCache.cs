@@ -9,29 +9,37 @@ namespace Teleopti.Ccc.IocCommon
 {
 	public class IocCache
 	{
-		private class cacheRegistration
-		{
-			public Action<CacheBuilder> BuilderAction;
-		}
+		private readonly List<Action<IComponentContext, CacheBuilder>> _builderActions = new List<Action<IComponentContext, CacheBuilder>>();
 
-		private readonly List<cacheRegistration> _cacheRegistrations = new List<cacheRegistration>();
-
-		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods, string cacheKeyForType=null) where T : class
+		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods) where T : class
 		{
-			_cacheRegistrations.Add(new cacheRegistration
+			_builderActions.Add((c, b) =>
 			{
-				BuilderAction = b =>
-				{
-					cachedMethods.Invoke(b.For<T>(cacheKeyForType)).As<T>();
-				}
+				cachedMethods.Invoke(b.For<T>()).As<T>();
 			});
 		}
 
-		public void Build(CacheBuilder builder)
+		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods, string cacheKeyForType) where T : class
 		{
-			_cacheRegistrations.ForEach(c =>
+			_builderActions.Add((c, b) =>
 			{
-				c.BuilderAction.Invoke(builder);
+				cachedMethods.Invoke(b.For<T>(cacheKeyForType)).As<T>();
+			});
+		}
+
+		public void This<T>(Func<IComponentContext, IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods) where T : class
+		{
+			_builderActions.Add((c, b) =>
+			{
+				cachedMethods.Invoke(c, b.For<T>()).As<T>();
+			});
+		}
+
+		public void Build(IComponentContext componentContext, CacheBuilder builder)
+		{
+			_builderActions.ForEach(a =>
+			{
+				a.Invoke(componentContext, builder);
 			});
 		}
 	}

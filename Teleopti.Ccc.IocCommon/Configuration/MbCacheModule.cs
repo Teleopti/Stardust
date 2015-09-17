@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<CachePerDataSource>().SingleInstance();
 			builder.RegisterType<TeleoptiCacheKey>().SingleInstance();
 			builder.RegisterType<LinFuProxyFactory>().SingleInstance();
 			builder.Register(c =>
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var cacheBuilder = new CacheBuilder(c.Resolve<LinFuProxyFactory>())
 					.SetCacheKey(c.Resolve<TeleoptiCacheKey>())
 					;
-				_configuration.Cache().Build(cacheBuilder);
+				_configuration.Cache().Build(c, cacheBuilder);
 				return cacheBuilder;
 			}).SingleInstance();
 

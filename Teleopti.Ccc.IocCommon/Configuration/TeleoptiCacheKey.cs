@@ -1,9 +1,25 @@
 using System.Globalization;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
+	public class CachePerDataSource : TeleoptiCacheKey
+	{
+		private readonly ICurrentDataSource _dataSource;
+
+		public CachePerDataSource(ICurrentDataSource dataSource)
+		{
+			_dataSource = dataSource;
+		}
+
+		protected override string Scope()
+		{
+			return _dataSource.Current().DataSourceName;
+		}
+	}
+
 	public class TeleoptiCacheKey : ToStringCacheKey
 	{
 		protected override string ParameterValue(object parameter)
