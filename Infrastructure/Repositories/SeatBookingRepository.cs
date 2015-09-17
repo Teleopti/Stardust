@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return getSeatBookingsInterceptingDay(date)
 				.Where (booking => booking.Seat.Id == seatId)
 				.OrderBy (booking => booking.BelongsToDate)
+				.ThenBy(booking => booking.StartDateTime)
 				.ToList();
 		}
 
@@ -217,5 +218,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return reportCriteria.Teams.IsNullOrEmpty() ? null : string.Join(",", reportCriteria.Teams.Select(team => team.Id));
 		}
+
 	}
 }

@@ -17,6 +17,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Rhino.Mocks;
+using SharpTestsEx;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -375,6 +376,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(38, viewModel.RecordCount); //38 as criteria stops on the 19th October
 			Assert.IsTrue(viewModel.SeatBookings.First().BelongsToDate == new DateOnly(2015, 10, 3));
 
+		}
+
+		[Test]
+		public void ShouldLoadSeatBookingsForSeatIntersectingDayInOrder()
+		{
+			var dateOnly = new DateOnly(2015, 10, 1);
+			var person = createPerson(dateOnly);
+			var person2 = createPerson(dateOnly);
+			var seat = createSeatMapLocationAndSeatInDb();
+			
+
+			var morningBooking = new SeatBooking(person, dateOnly,
+					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 8, 0, 0),
+					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 12, 0, 0));
+
+			var afternoonBooking = new SeatBooking(person2, dateOnly,
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 13, 0, 0),
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 17, 0, 0));
+
+			morningBooking.Book(seat);
+			afternoonBooking.Book(seat);
+
+			PersistAndRemoveFromUnitOfWork(afternoonBooking);
+			PersistAndRemoveFromUnitOfWork(morningBooking);
+			updatePersonScheduleDayFromBooking(afternoonBooking);
+			updatePersonScheduleDayFromBooking(morningBooking);
+
+
+			var repo = new SeatBookingRepository(UnitOfWork);
+
+			var viewModel = repo.LoadSeatBookingsForSeatIntersectingDay(dateOnly, seat.Id.GetValueOrDefault());
+			viewModel.Count().Should().Be(2);
+			viewModel.First().StartDateTime.Hour.Should().Be(8);
+			viewModel.Second().StartDateTime.Hour.Should().Be(13);
 		}
 
 		private IPerson createPerson(DateOnly startDate, Team team = null)
