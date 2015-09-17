@@ -67,8 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					catch (SqlException)
 					{ }
 				}
-
-				_eventPopulatingPublisher.Publish(messages.ToArray());
 			}
 		}
 
