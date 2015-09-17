@@ -73,7 +73,7 @@ angular
 					responseType: 'arraybuffer',
 					file: file, 
 					headers: {
-						'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+						'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/json'
 					}
 				});
 				return $http(config);

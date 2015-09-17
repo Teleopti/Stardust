@@ -19,91 +19,12 @@
 		vm.isSuccessful = false;
 		vm.isFailed = false;
 		vm.hasParsingError = false;
-		var columnHeaders = ['Firstname',
-							'Lastname',
-							'WindowsUser',
-							'ApplicationUserId',
-							'Password',
-							'Role'];
-
-		vm.gridOptionForImport = {
-			exporterCsvFilename: 'invalidUsers.csv',
-			exporterOlderExcelCompatibility: true,
-			enableSorting: false,
-			disableColumnMenu: true,
-			disableHiding: true,
-			columnDefs: [
-				{ displayName: 'Firstname', field: 'Firstname', disableHiding: true },
-				{ displayName: 'Lastname', field: 'Lastname' },
-				{ displayName: 'WindowsUser', field: 'WindowsUser' },
-				{ displayName: 'ApplicationUserId', field: 'ApplicationUserId' },
-				{ displayName: 'Password', field: 'Password' },
-				{ displayName: 'Role', field: 'Role' },
-				{ displayName: 'ErrorMessage', field: 'ErrorMessage' }
-			],
-			onRegisterApi: function(gridApi) {
-				vm.gridForImportApi = gridApi;
-			},
-			importerProcessHeaders: function (grid, headerRow) {
-				var headers = [];
-
-				headerRow.forEach(function (value) {
-					if(columnHeaders.indexOf(value.toString()) != -1){
-						headers.push(value.toString());
-					} else {
-						headers.push(null);
-					}
-				});
-				return headers;
-			},
-			data: 'vm.dataWithError'
-		};
-
-
-		
-		vm.gridOptionForImport.importerDataAddCallback = function (grid, newObjects) {
-			vm.rawUsersData = newObjects;
-			if (vm.rawUsersData.length > 0) {
-				var rawUser = vm.rawUsersData[0];
-				var columnNotExist = [];
-				angular.forEach(columnHeaders, function(col) {
-					if (!rawUser.hasOwnProperty(col)) {
-						vm.hasParsingError = true;
-						columnNotExist.push(col);
-					}
-				});
-				if (vm.hasParsingError) {
-
-					vm.errorMsg = "Following columns are required:" + columnNotExist.join(',');
-				}
-			}
-			if (!vm.hasParsingError) {
-				var data = { Users: vm.rawUsersData }
-				peopleSvc.importUsers.post(data)
-					.$promise.then(function(result) {
-							vm.isSuccessful = true;
-							vm.dataWithError = result.InvalidUsers;
-							vm.hasDataWithError = vm.dataWithError.length > 0;
-							vm.successfulCount = result.SuccessfulCount;
-							vm.invalidCount = result.InvalidCount;
-							if (vm.hasDataWithError) {
-								$timeout(function() {
-									vm.gridForImportApi.core.handleWindowResize();
-									vm.export();
-								});
-							}
-
-						},
-						function(error) {
-							vm.isFailed = true;
-							vm.errorMsg = error.data.Message;
-						});
-			}
-		};
-
+		vm.isProcessing = false;
+		vm.errorMsg = '';
 		vm.toggleImportPeople = function() {
 			vm.parentVm.toggleImportPeople();
 		};
+		vm.hasInvalidData = false;
 
 		vm.upload = function (files) {
 			vm.isSuccessful = false;
@@ -113,32 +34,43 @@
 			if (files && files.length) {
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
-					peopleSvc.uploadUserFromFile(file).success(function (data) {
-						var blob = new Blob([data], {
+					vm.isProcessing = true;
+					peopleSvc.uploadUserFromFile(file).then(function (response) {
+						vm.isProcessing = false;
+						vm.isSuccessful = true;
+
+						var blob = new Blob([response.data], {
 							type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 						});
 						if (blob.size != 0) {
-							saveAs(blob, 'dataWithError' + '.xlsx');
+							vm.hasInvalidData = true;
+							saveAs(blob, 'invalidUsers' + '.xlsx');
 						}
 
-					}).error(function () {
+					}, function (response) {
+						vm.isProcessing = false;
+						vm.isFailed = true;
 						//Some error log
+						arrayBuffer2String(response.data,
+								function (string) {
+									$timeout(function() {
+										vm.errorMsg = string; 
+									});
+								}
+							);
 					});
 
 				}
 			}
 		};
-
-		
-
-
-		vm.export = function() {
-			if (vm.isSuccessful && vm.hasDataWithError) {
-				vm.gridForImportApi.exporter.csvExport(uiGridExporterConstants.ALL, uiGridExporterConstants.ALL);
+		function arrayBuffer2String(buf, callback) {
+			var bb = new Blob([buf]);
+			var f = new FileReader();
+			f.onloadend = function (e) {
+				callback(e.target.result);
 			}
-
-
-		};
+			f.readAsText(bb);
+		}
 	};
 
 }());

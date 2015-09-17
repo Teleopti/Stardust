@@ -8,8 +8,7 @@
 				<div class="wfm-block">
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
 						 ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="true"
-						 accept="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" ngf-accept="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" ngf-drop-available="dropAvailable">
-						<!--accept="'.xls'" ngf-accept="'.xls'" ngf-drop-available="dropAvailable">-->
+						 ngf-accept="'.xls,.xlsx'" ngf-drop-available="dropAvailable">
 						{{'DragAndDropCsvFilesHereOrClickToUpload'|translate}}
 					</div>
 					<div class="import-file-template">
@@ -22,20 +21,22 @@
 							<li ng-repeat="f in vm.files">{{f.name}}</li>
 						</ul>
 					</div>
-					<div ng-show="vm.rejFiles.length > 0">
-						{{'RejectedFiles'|translate}}
-						<ul>
-							<li ng-repeat="f in vm.rejFiles">
-								{{f.name}} - size: {{f.size}}B
-							</li>
-						</ul>
+					<div ng-show="vm.rejFiles.length > 0" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i> 
+						The selected file can not be accepted. Please check the file type.
+						<div>
+							{{'RejectedFiles'|translate}}
+							<ul>
+								<li ng-repeat="f in vm.rejFiles">
+									{{f.name}} - size: {{f.size}}B
+								</li>
+							</ul>
+						</div>
+						
 					</div>
+					
+					<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
 					<div ng-show="vm.isSuccessful">
-						<pre>{{vm.successfulCount}} {{'wasSuccessful'|translate}}, {{vm.invalidCount}} {{'wasNotSuccessful'|translate}}.</pre>
-
-						<button class="wfm-btn wfm-btn-default export-error-data" ng-show="vm.hasDataWithError" ng-click="vm.export()">{{'Export'|translate}}</button>
-
-						<div ng-show="vm.hasDataWithError" ui-grid="vm.gridOptionForImport" ui-grid-importer ui-grid-resize-columns ui-grid-exporter class="grid"></div>
+						<pre>File is imported successfully! <span ng-show="!vm.hasInvalidData">All users have been imported successfully!</span><span ng-show="vm.hasInvalidData">Please find the downloaded excel sheet to check the invalid users.</span></pre>
 					</div>
 					<div ng-show="vm.isFailed">
 						<pre>{{'ImportError'|translate}}! {{vm.errorMsg}}</pre>
@@ -46,7 +47,6 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<a ng-href="{{vm.getFileHref(FileId)}}" target="_blank" class="btn btn-default">&nbsp;Excel File</a>
 				<aside>
 					<a ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
 				</aside>

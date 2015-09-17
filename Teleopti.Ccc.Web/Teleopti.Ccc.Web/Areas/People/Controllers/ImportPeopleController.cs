@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
-using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
-using Teleopti.Ccc.Web.Areas.People.Core.Providers;
-using Teleopti.Interfaces.Domain;
-using System.Data;
-using DataSet = System.Data.DataSet;
+
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
 	public class ImportPeopleController : ApiController
@@ -33,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_peoplePersister = peoplePersister;
 		}
 
-		[System.Web.Http.Route("api/People/UploadPeople"), System.Web.Http.HttpPost]
+		[Route("api/People/UploadPeople"), HttpPost]
 		public async Task<HttpResponseMessage> Post()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
@@ -51,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			const int colIndexPassword = 4;
 			const int colIndexRole = 5;
 			var userList = new List<RawUser>();
-			MemoryStream ms = new MemoryStream();
+			var ms = new MemoryStream();
 
 			foreach (var file in provider.Contents)
 			{
@@ -64,20 +56,46 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				for (var sheetIndex = 0; sheetIndex < workbook.NumberOfSheets; sheetIndex++)
 				{
 					var sheet = workbook.GetSheetAt(sheetIndex);
-					Console.WriteLine("Name of sheet [{0}]: {1}", sheetIndex, sheet.SheetName);
 
 					var rowIndex = 1;
 					var rowEnumerator = sheet.GetRowEnumerator();
 					while (rowEnumerator.MoveNext())
 					{
+						var row = (IRow)rowEnumerator.Current;
 						if (rowIndex == 1)
 						{
-							Console.WriteLine("First row will been skipped as column header");
+							//check colomn header
+							var firstNameCol = getCellValue(row, colIndexFirstname);
+							var lastNameCol = getCellValue(row, colIndexLastname);
+							var windowsUserCol = getCellValue(row, colIndexWindowsUser);
+							var applicationUserCol = getCellValue(row, colIndexApplicationUserId);
+							var passwordCol = getCellValue(row, colIndexPassword);
+							var rolCol = getCellValue(row, colIndexRole);
+							var missingCol = new StringBuilder();
+							var isFirstnameColMissing = isColumnExist(firstNameCol, "Firstname", missingCol);
+							var isLastnameColMissing = isColumnExist(lastNameCol, "Lastname", missingCol);
+							var isWindowsUserColMissing = isColumnExist(windowsUserCol, "WindowsUser", missingCol);
+							var isApplicationUserColMissing = isColumnExist(applicationUserCol, "ApplicationUserId", missingCol);
+							var isPasswordColMissing = isColumnExist(passwordCol, "Password", missingCol);
+							var isRoleColMissing = isColumnExist(rolCol, "Role", missingCol);
+							var isMissingCol = isFirstnameColMissing || isLastnameColMissing || isWindowsUserColMissing ||
+											   isApplicationUserColMissing || isPasswordColMissing || isRoleColMissing;
+
+							if (isMissingCol)
+							{
+								var errorMsg = "Missing column:" + missingCol.ToString().Substring(0, missingCol.ToString().Length - 2);
+								var response = Request.CreateResponse(HttpStatusCode.InternalServerError);
+								response.Headers.Clear();
+								response.Content = new StringContent(errorMsg);
+								response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+								return response;
+							}
 							rowIndex++;
 							continue;
 						}
 
-						var row = (IRow)rowEnumerator.Current;
+						
 						var user = new RawUser
 						{
 							Firstname = getCellValue(row, colIndexFirstname),
@@ -101,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				InvalidCount = invalidUsers.Count
 			};
 			var returnedFile = new XSSFWorkbook();
-			if (result.InvalidCount > 0)
+			if (invalidUsers.Count > 0)
 			{
 				returnedFile.CreateSheet("invalidUsers");
 				var sheet = returnedFile.GetSheet("invalidUsers");
@@ -121,13 +139,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 					}
 					else
 					{
-						row.CreateCell(0).SetCellValue(result.InvalidUsers[i-1].Firstname);
-						row.CreateCell(1).SetCellValue(result.InvalidUsers[i-1].Lastname);
-						row.CreateCell(2).SetCellValue(result.InvalidUsers[i-1].WindowsUser);
-						row.CreateCell(3).SetCellValue(result.InvalidUsers[i-1].ApplicationUserId);
-						row.CreateCell(4).SetCellValue(result.InvalidUsers[i-1].Password);
-						row.CreateCell(5).SetCellValue(result.InvalidUsers[i-1].Role);
-						row.CreateCell(6).SetCellValue(result.InvalidUsers[i-1].ErrorMessage);
+						row.CreateCell(0).SetCellValue(invalidUsers[i - 1].Firstname);
+						row.CreateCell(1).SetCellValue(invalidUsers[i - 1].Lastname);
+						row.CreateCell(2).SetCellValue(invalidUsers[i - 1].WindowsUser);
+						row.CreateCell(3).SetCellValue(invalidUsers[i - 1].ApplicationUserId);
+						row.CreateCell(4).SetCellValue(invalidUsers[i - 1].Password);
+						row.CreateCell(5).SetCellValue(invalidUsers[i - 1].Role);
+						row.CreateCell(6).SetCellValue(invalidUsers[i - 1].ErrorMessage);
 					}
 				}
 				returnedFile.Write(ms);
@@ -140,6 +158,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 
 			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		private static bool isColumnExist(string colHeader, string colName, StringBuilder missingColMsg)
+		{
+			if (colHeader != colName)
+			{
+				var colText = colName + ", ";
+				missingColMsg.Append(colText);
+				return true;
+			}
+			return false;
 		}
 
 		[TenantUnitOfWork]
@@ -156,10 +185,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 	}
 
-	public class InputFile
-	{
-		public HttpPostedFileBase File { get; set; }
-	}
 	public class RawUserData
 	{
 		public IList<RawUser> Users { get; set; }
