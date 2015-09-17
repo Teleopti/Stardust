@@ -4,6 +4,7 @@
 			'outboundServiceModule',
 			'ngAnimate',
 			'pascalprecht.translate',
+			'angularMoment',
 			'wfm.cardList',
 			'wfm.daterangepicker',
 			'toggleService',

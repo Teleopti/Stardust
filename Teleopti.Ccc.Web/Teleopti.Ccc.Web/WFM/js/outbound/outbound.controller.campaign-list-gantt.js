@@ -3,12 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', 'OutboundToggles', 'outboundService', '$mdDialog', '$document', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', ['$scope', '$filter', 'OutboundToggles', 'outboundService', campaignListGanttCtrl]);
 
-	function campaignSheetCtrl($scope, $mdDialog) {		
-	}
-
-	function campaignListGanttCtrl($scope, OutboundToggles, outboundService, $mdDialog, $document) {
+	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -74,18 +71,21 @@
 			}
 		];
 
-		$scope.tooltipContent = '<div><div><strong>{{task.model.campaignName}}</strong></div>' +
-			'<small>' +
-			'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +
-			'</small></div>';
-		
+		//$scope.tooltipContent = '<div><div><strong>{{task.model.campaignName}}</strong></div>' +
+		//	'<small>' +
+		//	'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +
+		//	'</small></div>';
+
 		function setGanttOptions(startDate, endDate) {
 			var visualizationPeriod = outboundService.getVisualizationPeriod();
 			return {
 				headers: ['month', 'week'],
 				fromDate: startDate ? startDate : visualizationPeriod.StartDate.Date,
-				toDate: endDate ? endDate : visualizationPeriod.EndDate.Date
-			}
+				toDate: endDate ? endDate : visualizationPeriod.EndDate.Date,
+				headersFormats: {
+					month: 'MMMM'
+				}
+			};
 		}
 
 		function getGanttVisualization(startDate,endDate) {
@@ -109,7 +109,8 @@
 					ganttArr[ind].tasks[0].color = '#09F';
 					ganttArr[ind].tasks[0].tooltips = {
 					'enabled': true,
-					'dateFormat': 'YYYY-MM-DD'					
+					'dateFormat': 'YYYY-MM-DD',
+						'test': 'hello'
 					}
 					ganttArr[ind].tasks[0].campaignName = ele.Name;					
 				});

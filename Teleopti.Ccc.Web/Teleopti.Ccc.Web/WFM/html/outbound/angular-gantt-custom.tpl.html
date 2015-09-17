@@ -31,7 +31,7 @@
 				<div class="gantt-current-date-line" ng-show="currentDate === 'line' && gantt.currentDateManager.position >= 0 && gantt.currentDateManager.position <= gantt.width" ng-style="{'left': gantt.currentDateManager.position + 'px' }"></div>
 			</gantt-body-foreground>
 			<gantt-body-columns>
-				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date.format('MM-DD')}}" data-delay='0'>
+				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date | amDateFormat : 'LL'}}" data-delay='0'>
 					<gantt-time-frame ng-repeat="timeFrame in column.visibleTimeFrames"></gantt-time-frame>
 				</gantt-column>
 			</gantt-body-columns>
@@ -187,6 +187,20 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+	</script>
+
+	<!-- Tooltips template -->
+	<script type="text/ng-template" id="plugins/tooltips/tooltip.tmpl.html">
+		<div ng-cloak
+			 class="gantt-task-info"
+			 ng-show="displayed"
+			 ng-class="isRightAligned ? 'gantt-task-infoArrowR' : 'gantt-task-infoArrow'"
+			 ng-style="{top: taskRect.top + 'px', marginTop: -elementHeight - 8 + 'px'}">
+			<div><strong>{{ task.model.campaignName }}</strong></div>
+			<div class="gantt-task-info-content">				
+				{{ task.model.from | amDateFormat: 'LL'}} - {{ task.model.to | amDateFormat: 'LL'}}											
 			</div>
 		</div>
 	</script>
