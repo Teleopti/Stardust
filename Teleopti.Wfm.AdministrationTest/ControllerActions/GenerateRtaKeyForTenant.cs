@@ -46,28 +46,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				Tenants.Tenants().Single(x => x.Name == "tenant").RtaKey.Should().Not.Be.Null();
 		}
-
-		[Test, Ignore("till I fix the databases")]
-		public void ShouldGenerateRtaKeyWhenImporting()
-		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
-			
-			Import.ImportExisting(
-				new ImportDatabaseModel
-				{
-					Server = TestPolutionCleaner.TestTenantConnection().DataSource,
-					UserName = "dbcreatorperson",
-					Password = "password",
-					AppDatabase = TestPolutionCleaner.TestTenantConnection().InitialCatalog,
-					AnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
-					Tenant = "tenant"
-				});
-
-			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-				Tenants.Tenants().Single(x => x.Name == "tenant").RtaKey.Should().Not.Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldGenerateRtaKeyWith10RandomCharacters()
 		{

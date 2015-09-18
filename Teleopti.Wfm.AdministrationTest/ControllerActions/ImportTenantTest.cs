@@ -111,6 +111,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				LoadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals("NewFineTenant")).Should().Not.Be.EqualTo(null);
+				LoadAllTenants.Tenants().Single(x => x.Name == "NewFineTenant").RtaKey.Should().Not.Be.Null();
 			}
 		}
 	}
