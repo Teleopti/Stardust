@@ -168,10 +168,12 @@
 		</div>
 	</script>
 	<!-- Side background template -->
-	<script type="text/ng-template" id="template/ganttSideBackground.tmpl.html">
+    <script type="text/ng-template" id="template/ganttSideBackground.tmpl.html">
 		<div class="gantt-side-background">
-			<div class="gantt-side-background-header" ng-style="{height: $parent.ganttHeaderHeight + 'px'}">
-				<div ng-show="$parent.ganttHeaderHeight" class="gantt-header-row gantt-side-header-row"></div>
+			<div style="height:60px">
+				<div class="gantt-side-background-header" ng-style="{height: $parent.ganttHeaderHeight + 'px'}">
+					<div ng-show="$parent.ganttHeaderHeight" class="gantt-header-row gantt-side-header-row"></div>
+				</div>
 			</div>
 			<div class="gantt-side-background-body" ng-style="getMaxHeightCss()">
 				<div gantt-vertical-scroll-receiver>

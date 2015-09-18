@@ -6,12 +6,31 @@
 		max-height: none;
 	}	
 	.scrollfix{
-	    position:fixed;
-		top:62px;
-		z-index:1000;
-		display:inline-block;
-		background-color:#fff;
+	    .gantt-scrollable-header{
+			position:fixed;
+			top:62px;
+			z-index:1000;
+			display:inline-block;
+			background-color:#fff;
+		}
+		.gantt-table-header{
+		    position:fixed;
+			top:62px;
+			z-index:1000;
+			display:inline-block;
+			width:96px;
+		}
+		.gantt-side-background-header{
+		    position:fixed;
+			top:62px;
+			z-index:1000;
+			display:inline-block;
+			background-color:#fff;
+			width:96px;
+			height:60px;
+		}
 	}
+	 
 	.mdi-rotate-90 {
 		transform: rotateZ(90deg);
 	}
