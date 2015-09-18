@@ -41,16 +41,16 @@ namespace Teleopti.Ccc.Win.Main
 		public bool StartLogon(IMessageBrokerComposite messageBroker)
 		{
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
-			//webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
+			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
 
-		//private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
-		//{
-		//	_model.AuthenticationType = AuthenticationTypeOption.Application;
-		//}
+		private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
+		{
+			_model.AuthenticationType = AuthenticationTypeOption.Application;
+		}
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
