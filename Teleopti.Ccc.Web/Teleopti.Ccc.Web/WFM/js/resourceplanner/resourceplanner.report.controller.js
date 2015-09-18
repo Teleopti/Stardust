@@ -45,12 +45,15 @@
                 }(CDayOff);
                 var parseDate = function(){
                     $scope.dates = [];
-                    scheduleResult[0].SkillDetails.forEach(function(subnode){
-                        var day = new Date(subnode.Date.Date).getDate();
-                        var month = new Date(subnode.Date.Date).getMonth();
-                        var year = new Date(subnode.Date.Date).getFullYear();
-                        $scope.dates.push({day:day,month:month+1,year:year})
-                    })
+					if (scheduleResult.length > 0) {
+						scheduleResult[0].SkillDetails.forEach(function(subnode){
+							var day = new Date(subnode.Date.Date).getDate();
+							var month = new Date(subnode.Date.Date).getMonth();
+							var year = new Date(subnode.Date.Date).getFullYear();
+							$scope.dates.push({day:day,month:month+1,year:year})
+						})
+					}
+
                 }();
 			}
 		]);
