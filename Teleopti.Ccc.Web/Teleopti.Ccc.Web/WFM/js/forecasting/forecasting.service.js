@@ -10,5 +10,12 @@ angular.module('wfm.forecasting')
 			this.status = $resource('../api/Status/Forecasting', {}, {
 				get: { method: 'GET', params: {}, isArray: false }
 			});
+
+			this.scenarios = $resource('../api/Forecasting/Scenarios', {}, {
+				get: { method: 'GET', params: {}, isArray: false }
+			});
+
+			this.scenarioList = this.scenarios.query();
+
 		}
 	]);

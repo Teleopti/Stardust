@@ -13,16 +13,30 @@ angular.module('wfm.forecasting')
 			$scope.period = { startDate: startDate, endDate: endDate };
 
 			$scope.workloads = [];
-			forecasting.skills.query().$promise.then(function(result) {
-				var skills = result;
-				var workloads = [];
-				angular.forEach(skills, function (skill) {
-					angular.forEach(skill.Workloads, function(workload) {
-						workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
+
+			var getSkills = function(defaultScenario) {
+				var skillsPromise = forecasting.skills.query().$promise;
+				skillsPromise.then(function(result) {
+					var skills = result;
+					var workloads = [];
+					angular.forEach(skills, function(skill) {
+						angular.forEach(skill.Workloads, function(workload) {
+							workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id, Scenario: defaultScenario });
+						});
 					});
+					$scope.workloads = $filter('orderBy')(workloads, 'Name');
 				});
-				$scope.workloads = $filter('orderBy')(workloads, 'Name');
+			};
+
+			$scope.scenarios = [];
+			var scenariosPromise = forecasting.scenarioList.$promise;
+			scenariosPromise.then(function (result) {
+				$scope.scenarios = result;
+				getSkills(result[0]);
 			});
+			$scope.changeScenario = function(workload) {
+				$scope.getForecastResult(workload);
+			};
 
 			$scope.modalForecastingInfo = {
 				forecastForAll: false,
@@ -65,7 +79,7 @@ angular.module('wfm.forecasting')
 				$scope.resultChartData = [];
 				var resultStartDate = moment().utc().add(1, 'days');
 				var resultEndDate = moment(resultStartDate).add(6, 'months');
-				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id })).
+				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id, ScenarioId: workload.Scenario.Id })).
 					success(function(data, status, headers, config) {
 						angular.forEach(data.Days, function(day) {
 							day.date = new Date(Date.parse(day.date));

@@ -38,6 +38,12 @@
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
 					<div ng-show="workload.forecastResultLoaded" class="wfm-block">
+						<div class="row">
+							<div class="col-lg-3">
+								<select ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios" >
+								</select>
+							</div>
+						</div>
 						<div id="{{workload.ChartId}}"></div>
 					</div>
 					<div class="modal-footer">

@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
 			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
-			var currentScenario = MockRepository.GenerateMock<ICurrentScenario>();
 			var scenario = new Scenario("s1");
-			currentScenario.Stub(x => x.Current()).Return(scenario);
 			var futurePeriod = new DateOnlyPeriod(2014, 3, 1, 2014, 3, 1);
 			var skillDays = new List<ISkillDay>();
 			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, scenario)).Return(skillDays);
@@ -39,8 +37,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			workloadDay1.Tasks = 8.1d;
 
 			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod)).Return(new[] { workloadDay1 });
-			var target = new ForecastResultViewModelFactory(workloadRepository, skillDayRepository, currentScenario, futureData);
-			var result = target.Create(workload.Id.Value, futurePeriod);
+			var target = new ForecastResultViewModelFactory(workloadRepository, skillDayRepository, futureData);
+			var result = target.Create(workload.Id.Value, futurePeriod, scenario);
 			dynamic firstDay = result.Days.First();
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);

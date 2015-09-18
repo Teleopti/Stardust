@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,8 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IActionThrottler _actionThrottler;
+		private readonly IScenarioRepository _scenarioRepository;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastResultViewModelFactory = forecastResultViewModelFactory;
 			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_actionThrottler = actionThrottler;
+			_scenarioRepository = scenarioRepository;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -46,6 +49,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					Name = skill.Name,
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy { Id = x.Id.Value, Name = x.Name }).ToArray()
 				});
+		}
+
+		[UnitOfWork, Route("api/Forecasting/Scenarios"), HttpGet]
+		public virtual IEnumerable<ScenarioViewModel> Scenarios()
+		{
+			var scenarios = _scenarioRepository.FindAllSorted();
+			return scenarios.Select(x => new ScenarioViewModel
+			{
+				Id = x.Id.GetValueOrDefault(),
+				Name = x.Description.Name
+			});
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
@@ -63,7 +77,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
 		public virtual Task<WorkloadForecastResultViewModel> ForecastResult(ForecastResultInput input)
 		{
-			return Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd))));
+			return
+				Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId,
+					new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)),
+					_scenarioRepository.Get(input.ScenarioId)));
 		}
 
 		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
@@ -109,6 +126,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
+	}
+
+	public class ScenarioViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
 	}
 
 	public class ForecastResultViewModel
