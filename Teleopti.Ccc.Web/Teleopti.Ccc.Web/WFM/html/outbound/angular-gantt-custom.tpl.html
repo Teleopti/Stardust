@@ -47,7 +47,8 @@
 						</div>
 						<div class="campaign-chart-wrapper" ng-if="!row.model.campaign.isLoadingData">
 							<campaign-chart campaign="row.model.campaign" dictionary="row.model.campaign.translations" exclude-closed="row.model.campaign.manualPlanswitch"></campaign-chart>
-						</div>
+							<campaign-commands-pane campaign="row.model.campaign"></campaign-commands-pane>
+						</div>						
 					</div>
 				</gantt-row>
 			</gantt-body-rows>

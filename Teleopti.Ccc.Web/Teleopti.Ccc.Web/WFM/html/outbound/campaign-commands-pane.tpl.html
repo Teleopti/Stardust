@@ -1,0 +1,72 @@
+﻿<div class="relative clearfix nowrap text-right">
+	<div class="manual-input-container" ng-show="manualPlanSwitch">
+		<label for="ManualPlanInput" translate>ManualPlan</label>
+		<input id="ManualPlanInput"
+			   type="text"
+			   ng-model="manualPlanInput" 
+			   range-validate range-min="0" integer-only="false" />
+		<div class="manual-input-btns">
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
+					ng-click="addManualPlan()"
+					ng-disabled="validManualProductionPlan()"
+					ng-class="{'wfm-btn-invis-disabled': validManualProductionPlan()}"
+					translate>
+				Save
+			</button>
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0"
+					ng-click="removeManualPlan()"
+					translate>
+				Reset
+			</button>
+		</div>
+	</div>
+	<div class="manual-input-container" ng-show="manualBacklogSwitch">
+		<label for="ActualBacklogInput" translate>AddBacklog</label>
+		<input id="ActualBacklogInput"
+			   type="text"
+			   ng-model="manualBacklogInput" 
+			   range-validate range-min="0" integer-only="false" />
+		<div class="manual-input-btns">
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
+					ng-click="addManualBacklog()"
+					ng-disabled="validManualBacklog()"
+					ng-class="{'wfm-btn-invis-disabled': validManualBacklog()}"
+					translate>
+				Save
+			</button>
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0"
+					ng-click="removeManualBacklog()"
+					translate>
+				Reset
+			</button>
+		</div>
+	</div>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+			ng-click="manualPlanSwitch = !manualPlanSwitch"
+			ng-class="{'selected-ope-btn': manualPlanSwitch }"
+			translate>
+		ManualPlan
+	</button>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+			ng-click="manualBacklogSwitch = !manualBacklogSwitch"
+			ng-class="{'selected-ope-btn': manualBacklogSwitch}"
+			translate>
+		AddBacklog
+	</button>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+			ng-click="replan()"
+			translate>
+		Replan
+	</button>	
+	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+			ng-click="gotoEditCampaign()"
+			translate>
+		Edit
+	</button>
+</div>
+<div class="error-msg-container  alert-warning notice-spacer m-t-10"
+	 ng-show="showDateSelectionHint()">
+	<i class='mdi mdi-alert'></i> 
+	<span translate>SelectDateInChart</span>
+</div>
+
