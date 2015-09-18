@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
@@ -11,14 +12,17 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private readonly IClearEvents _clearEvents;
 
 		public CurrentUnitOfWorkScheduleRangePersister(IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 			IScheduleRangeConflictCollector scheduleRangeConflictCollector,
-			IScheduleDifferenceSaver scheduleDifferenceSaver)
+			IScheduleDifferenceSaver scheduleDifferenceSaver,
+			IClearEvents clearEvents)
 		{
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
+			_clearEvents = clearEvents;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
@@ -31,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
 			if (conflicts.IsEmpty())
 			{
+				_clearEvents.Execute(diff.Select(d => d.CurrentItem));
 				_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 			}
 			return conflicts;

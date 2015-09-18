@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class NoUnitOfWorkModifyNoConflictTest : ScheduleRangeConflictTest
+	public class CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 1);
 
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
-			Action fakeSavedToDb = myScheduleRange.TakeSnapshot;
-			fakeSavedToDb();
+			myScheduleRange.TakeSnapshot();
+			myScheduleRange.ScheduledDay(date).PersonAssignment().PopAllEvents().Should().Be.Empty();
 		}
 
 		protected override IScheduleRangeConflictCollector ConflictCollector()

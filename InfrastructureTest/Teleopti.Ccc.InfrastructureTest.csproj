@@ -225,6 +225,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
+    <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />

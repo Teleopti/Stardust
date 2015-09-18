@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
+			builder.RegisterType<ClearEvents>().As<IClearEvents>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>();
 			builder.RegisterType<DayOffBusinessRuleValidation>();
 		}
