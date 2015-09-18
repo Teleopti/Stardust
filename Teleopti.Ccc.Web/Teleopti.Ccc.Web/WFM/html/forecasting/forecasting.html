@@ -26,8 +26,14 @@
 					</div>
 				</card-header>
 				<card-body>
+					<span>This is your existing forecast. To be able to add a campaign select some day(s) in the chart. 
+						<i class=" mdi mdi-block-helper pull-right" ng-if="workload.forecastResultLoaded" ng-click="clearChartSelection()">
+							<md-tooltip>
+								Clear chart selection
+							</md-tooltip>
+						</i>
+					</span>
 					
-
 					<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
@@ -36,22 +42,23 @@
 					</div>
 					<div class="modal-footer">
 						<aside>
-						<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Statistics' | translate }}
-							<md-tooltip>
-								View more numbers
-							</md-tooltip>
-						</a>
-						<a class="wfm-btn wfm-btn-invis-default" ng-click="displayModal(workload)">
-							Forecast
-							<md-tooltip>
-								Forecast this workload
-							</md-tooltip>
-						</a>
-						</aside>
-					</div>
-					<div class="pull-right">
-						<aside>
-							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Add campaign' | translate }}</a>
+							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Statistics' | translate }}
+								<md-tooltip>
+									View more numbers
+								</md-tooltip>
+							</a>
+							<a class="wfm-btn wfm-btn-invis-default" ng-click="displayForecastingModal(workload)">
+								Forecast
+								<md-tooltip>
+									Forecast this workload
+								</md-tooltip>
+							</a>
+							<a class="wfm-btn" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign(), 'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
+								Add campaign
+								<md-tooltip>
+									Select days in chart before adding
+								</md-tooltip>
+							</a>
 						</aside>
 					</div>
 				</card-body>
@@ -73,7 +80,7 @@
 						<h4>Forecast all</h4>
 					</div>
 					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForOneWorkload">
-						<h4>Forecast workload: {{modalInfo.selectedWorkload.Name}}</h4>
+						<h4>Forecast workload: {{modalForecastingInfo.selectedWorkload.Name}}</h4>
 					</div>
 					<div class="wfm-block forecast-period">
 						<div class="wfm-datepicker-wrap">
@@ -101,4 +108,6 @@
 		</div>
 	</div>
 </div>
+
+
 

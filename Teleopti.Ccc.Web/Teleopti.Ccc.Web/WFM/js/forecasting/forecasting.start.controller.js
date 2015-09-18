@@ -44,13 +44,20 @@ angular.module('wfm.forecasting')
 				$scope.modalForecastingLaunch = false;
 			};
 
-			//$scope.modalCampaignInfo = {
-			//	addCampaign: false
-			//};
-			//$scope.modalCampaignLaunch = false;
-			//$scope.displayCampaignModal = function(workload) {
+			$scope.addCampaignDisabled = true;
+			$scope.modalCampaignInfo = {
+				addCampaign: false
+			};
+			$scope.modalCampaignLaunch = false;
+			$scope.displayCampaignModal = function() {
+				$scope.modalCampaignInfo.addCampaign = true;
+				$scope.modalCampaignLaunch = true;
+			};
+			$scope.cancelCampaignModal = function () {
+				$scope.modalCampaignLaunch = false;
+			};
 
-			//};
+			$scope.chart = undefined;
 
 			$scope.getForecastResult = function (workload) {
 				workload.forecastResultLoaded = false;
@@ -59,18 +66,17 @@ angular.module('wfm.forecasting')
 				var resultStartDate = moment().utc().add(1, 'days');
 				var resultEndDate = moment(resultStartDate).add(6, 'months');
 				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id })).
-					success(function (data, status, headers, config) {
-						angular.forEach(data.Days, function (day) {
+					success(function(data, status, headers, config) {
+						angular.forEach(data.Days, function(day) {
 							day.date = new Date(Date.parse(day.date));
 						});
 						workload.resultChartData = data.Days;
 						workload.forecastResultLoaded = true;
-						var chart = c3.generate({
+						$scope.chart = c3.generate({
 							bindto: "#" + workload.ChartId,
 							data: {
 								json:
-									workload.resultChartData
-								,
+									workload.resultChartData,
 								keys: {
 									// x: 'name', // it's possible to specify 'x' when category axis
 									x: 'date',
@@ -83,7 +89,8 @@ angular.module('wfm.forecasting')
 								selection: {
 									enabled: true,
 									grouped: true,
-									isselectable: function (chartPoint) {
+									draggable: true,
+									isselectable: function(chartPoint) {
 										if (chartPoint.id === 'vacw' || chartPoint.id === 'vaht')
 											return false;
 										return true;
@@ -92,7 +99,10 @@ angular.module('wfm.forecasting')
 								names: {
 									vc: 'Calls <',
 									vaht: 'Talk time >',
-									vacw: 'ACW >',
+									vacw: 'ACW >'
+								},
+								onclick: function() {
+									$scope.$digest();
 								}
 							},
 							axis: {
@@ -110,8 +120,6 @@ angular.module('wfm.forecasting')
 								show: true
 							}
 						});
-						console.log(chart);
-
 					}).
 					error(function (data, status, headers, config) {
 						$scope.error = { message: "Failed to get forecast result." };
@@ -128,6 +136,16 @@ angular.module('wfm.forecasting')
 				dataX: {
 					 id: "date"
 				}
+			};
+
+			$scope.disableAddCampaign = function () {
+				if ($scope.chart && $scope.chart.selected())
+					return $scope.chart.selected().length == 0;
+				return true;
+			};
+
+			$scope.clearChartSelection = function() {
+				$scope.chart.unselect(['vc']);
 			};
 
 			if (c3.applyFixForForecast) c3.applyFixForForecast(function() {
