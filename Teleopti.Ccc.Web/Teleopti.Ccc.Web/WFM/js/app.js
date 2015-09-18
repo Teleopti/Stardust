@@ -120,15 +120,15 @@ wfm.config([
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('rta-sites', {
-			url: '/rta/sites:id',
+			url: '/rta/sites',
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl'
 		}).state('rta-teams', {
-			url: '/rta/teams',
+			url: '/rta/sites/:siteId', 
 			templateUrl: 'js/rta/rta-teams.html',
-			controller: 'RtaCtrl'
+			controller: 'RtaTeamsCtrl',
 		}).state('rta-agents', {
-			url: '/rta/agents',
+			url: '/rta/agents/:siteId/:teamId',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
 		});

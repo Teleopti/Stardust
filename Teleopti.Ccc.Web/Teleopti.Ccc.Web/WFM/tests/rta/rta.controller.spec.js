@@ -184,4 +184,49 @@ describe('RtaCtrl', function () {
 	    expect(scope.sites[0].OutOfAdherence).toEqual(5);
         
 	}));
+
+	it('Should get all the sites', inject(function ($controller){
+
+		var scope = $rootScope.$new();
+
+		var rtaSvrc = {
+			getSites: {
+				query: function () {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve([
+                        {
+                        	"Id": "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                        	"Name": "London",
+                        	"NumberOfAgents": 46
+                        }
+					]);
+					return { $promise: queryDeferred.promise };
+				}
+			},
+			getAdherenceForAllSites: {
+				query: function () {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve([]);
+					return { $promise: queryDeferred.promise };
+				}
+			}
+		};
+
+
+		var orginaztionService = {
+
+			organization: [{ siteName: 'London', siteId: 4 }, { siteName: 'Paris', siteId: 5 }],
+
+			getSites: function (id) {
+				return orginaztionService.organization;
+			}
+		};
+
+		$controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: orginaztionService });
+		
+		expect(scope.sites).not.toBe(null);
+		expect(scope.sites.length).toBe(2);
+
+	}));
+
 });

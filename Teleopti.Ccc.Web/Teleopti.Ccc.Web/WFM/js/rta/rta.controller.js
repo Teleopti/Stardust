@@ -2,7 +2,17 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter','$stateParams', '$interval', 'RtaService', function ($scope, $filter, $stateParams, $interval, RtaService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', function ($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService) {
+
+				var siteId =  $stateParams.siteId;
+				
+				$scope.sites = RtaOrganizationService.getSites();
+				
+				$scope.siteName = $stateParams.siteName;
+
+				$scope.onSiteSelect = function (site) {
+					$state.go('rta-teams', {siteId: site.Id});
+				};
 
 			    var displayAdherence = function (data) { // FIXME get adherence from the server with this first call
 			        data.forEach(function (site) {  

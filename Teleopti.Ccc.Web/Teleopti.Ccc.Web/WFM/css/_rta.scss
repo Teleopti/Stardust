@@ -1,14 +1,18 @@
-﻿.sites{
+﻿.rta-list-item{
 	padding:2%;
 	margin-top:10px;
 
 	&:hover{
 	transition: background 0.5s linear 0s;
-	background-color:#C2E085;
+	//background-color:$gray012!important;
 	}
 }
 
 .rta-stats{
 	display: flex;
 	justify-content: space-between;
+}
+
+.rta-nav-link {
+	cursor: pointer; 
 }

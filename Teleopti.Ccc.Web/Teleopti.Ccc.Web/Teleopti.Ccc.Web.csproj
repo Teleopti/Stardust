@@ -1218,11 +1218,14 @@
     <Content Include="WFM\js\rta\rta.agents.controller.js" />
     <Content Include="WFM\js\rta\rta.agents.service.js" />
     <Content Include="WFM\js\rta\rta.service.js" />
+    <Content Include="WFM\js\rta\rta.teams.controller.js" />
     <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
     <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapoccupancy.spec.js" />
     <Content Include="WFM\vendor\file-saver\FileSaver.min.js" />
+    <Content Include="WFM\tests\rta\rta.teams.controller.spec.js" />
+    <Content Include="WFM\tests\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />

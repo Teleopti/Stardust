@@ -1,20 +1,16 @@
-﻿<h1>Real time adherence</h1>
-<div class="row">
+﻿<div class="row">
 	<div class="col-lg-12">
-
-		<button class="wfm-btn wfm-btn-primary">Open selected</button>
-		<div class="sites">
-		<div class="wfm-block material-depth-1" ng-repeat="site in sites" ng-click="navigate()">
-			<h2>{{site.Name}}</h2>
-			<md-progress-linear md-mode="buffer" value="45" md-buffer-value="100"></md-progress-linear>
-			</br>
-			<div class="rta-stats">
-			<div>
-			Out of adherence:
-			<strong>{{site.OutOfAdherence}}</strong>
+		<h1>Sites</h1>
+			<div class="wfm-block material-depth-1 rta-list-item" ng-repeat="site in sites" ng-click="onSiteSelect(site)">
+				<h2>{{site.Name}}</h2>
+				<md-progress-linear md-mode="buffer" value="45" md-buffer-value="100"></md-progress-linear>
+				</br>
+				<div class="rta-stats">
+					<div>
+						Out of adherence:
+						<strong>{{site.OutOfAdherence}}</strong>
+					</div>
+				</div>
 			</div>
-			</div>
-		</div>
-		</div>
 	</div>
 </div>
