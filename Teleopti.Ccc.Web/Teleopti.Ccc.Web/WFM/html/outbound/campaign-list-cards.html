@@ -1,4 +1,4 @@
-﻿<div style="position: relative">
+﻿<div style="position: relative" ng-if="!isGanttEnabled">
 	<div ng-class="{'loading-whole-page': !isGanttEnabled, 'loading-list-with-gantt': isGanttEnabled}" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
 	<div class="opration-area">
