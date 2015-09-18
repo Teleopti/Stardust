@@ -21,7 +21,7 @@
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
-		vm.seatIndex = 0;
+		vm.previousSelectedSeatIndex = 0;
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -157,7 +157,7 @@
 				
 				seats.forEach(function(currentSeat,seatIndex) {
 					if (currentSeat.Id == seat.id)
-						vm.seatIndex = seatIndex;
+						vm.previousSelectedSeatIndex = seatIndex;
 				});
 				
 				canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
@@ -200,7 +200,9 @@
 				vm.breadcrumbs = data.BreadcrumbInfo;
 			}
 
-			selectSeat(vm.seatIndex);
+			selectSeat(vm.previousSelectedSeatIndex);
+			vm.previousSelectedSeatIndex = 0;
+
 
 			resetZoom();
 			vm.isLoading = false;
