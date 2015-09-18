@@ -7,7 +7,7 @@
 			var roles = {};
 
 			roles.selectedRole = {};
-			roles.list = PermissionsService.roles.get();
+			roles.list = PermissionsService.roles.get(); //fixme is it needed?
 
 			roles.refresh = function() {
 				roles.list = PermissionsService.roles.get();
