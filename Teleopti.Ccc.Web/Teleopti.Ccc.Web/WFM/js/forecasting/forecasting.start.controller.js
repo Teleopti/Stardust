@@ -14,14 +14,14 @@ angular.module('wfm.forecasting')
 
 			$scope.workloads = [];
 
-			var getSkills = function(defaultScenario) {
+			var getSkills = function() {
 				var skillsPromise = forecasting.skills.query().$promise;
 				skillsPromise.then(function(result) {
 					var skills = result;
 					var workloads = [];
 					angular.forEach(skills, function(skill) {
 						angular.forEach(skill.Workloads, function(workload) {
-							workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id, Scenario: defaultScenario });
+							workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id, Scenario: $scope.modalForecastingInfo.selectedScenario });
 						});
 					});
 					$scope.workloads = $filter('orderBy')(workloads, 'Name');
@@ -32,7 +32,8 @@ angular.module('wfm.forecasting')
 			var scenariosPromise = forecasting.scenarioList.$promise;
 			scenariosPromise.then(function (result) {
 				$scope.scenarios = result;
-				getSkills(result[0]);
+				$scope.modalForecastingInfo.selectedScenario = result[0];
+				getSkills();
 			});
 			$scope.changeScenario = function(workload) {
 				$scope.getForecastResult(workload);
@@ -48,7 +49,7 @@ angular.module('wfm.forecasting')
 					$scope.modalForecastingInfo.forecastForAll = false;
 					$scope.modalForecastingInfo.forecastForOneWorkload = true;
 					$scope.modalForecastingInfo.selectedWorkload = workload;
-					$scope.modalInfo.selectedScenario = workload.Scenario;
+					$scope.modalForecastingInfo.selectedScenario = workload.Scenario;
 				} else {
 					$scope.modalForecastingInfo.forecastForAll = true;
 					$scope.modalForecastingInfo.forecastForOneWorkload = false;
@@ -180,7 +181,7 @@ angular.module('wfm.forecasting')
 				} else {
 					workloadToSend.ForecastMethodId = -1;
 				}
-				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend] })).
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend], ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id })).
 					success(function (data, status, headers, config) {
 						if (data.Success) {
 							workload.IsSuccess = true;
@@ -198,6 +199,7 @@ angular.module('wfm.forecasting')
 					})
 					.finally(function () {
 						workload.ShowProgress = false;
+						workload.Scenario = $scope.modalForecastingInfo.selectedScenario;
 						if (workload.forecastResultLoaded) {
 							$scope.getForecastResult(workload);
 						}
