@@ -162,8 +162,12 @@
 			return !(angular.isDefined(campaign.backlogInput) && campaign.backlogInput != null && campaign.backlogInput >= 0 && campaign.selectedDates && campaign.selectedDates.length > 0);
 		}
 
-		$scope.showDateSelectionHint = function(campaign) {
-			return !campaign.isLoadingData && (!campaign.selectedDates || campaign.selectedDates.length == 0 && (campaign.manualPlanswitch || campaign.backlogSwitch));
+		$scope.showDateSelectionHint = function (campaign) {
+			if (campaign.isLoadingData) return false;
+			if (campaign.selectedDates && campaign.selectedDates.length > 0) return false;
+			if (campaign.manualPlanswitch) return !!campaign.manualPlanInput;
+			if (campaign.backlogSwitch) return !!campaign.backlogInput;
+			return false;						
 		}
 		
 		$scope.switchManualPlan = function (campaign) {
