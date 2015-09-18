@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return Ok();
 		}
 
-		[HttpGet, Route("api/Outbound/Campaign/Statistics"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaign/Statistics"), UnitOfWork]
 		public virtual CampaignStatistics GetStatistics()
 		{
 			return _campaignListProvider.GetCampaignStatistics(null);

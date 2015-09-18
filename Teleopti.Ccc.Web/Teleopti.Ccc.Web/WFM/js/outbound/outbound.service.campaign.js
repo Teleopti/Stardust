@@ -14,7 +14,7 @@
 		var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
 		var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
 		var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
-		var getFilteredPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns'
+		var getFilteredPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 
 		var self = this;
@@ -55,7 +55,7 @@
 		}
 
 		this.getCampaignStatistics = function(filter, successCb, errorCb) {
-			$http.get(getCampaignStatisticsUrl).success(function(data) {
+			$http.post(getCampaignStatisticsUrl).success(function(data) {
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
