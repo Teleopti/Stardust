@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -17,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public static class ExternalUserStateInputModelExtensions
 	{
-		public static void FixAuthenticationKey(this ExternalUserStateInputModel input)
+		public static void MakeLegacyAuthenticationKeySafe(this ExternalUserStateInputModel input)
 		{
-			input.AuthenticationKey = AuthenticationKeyEncodingFixer.Fix(input.AuthenticationKey);
+			input.AuthenticationKey = ConfiguredKeyAuthenticator.MakeLegacyKeySafe(input.AuthenticationKey);
 		}
 
 		public static Guid ParsedPlatformTypeId(this ExternalUserStateInputModel input)
@@ -28,13 +29,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 	}
 
-	public static class AuthenticationKeyEncodingFixer
-	{
-		public static string Fix(string authenticationKey)
-		{
-			return authenticationKey.Remove(2, 1) == Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2)
-				? Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey
-				: authenticationKey;
-		}
-	}
 }

@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ConfiguredKeyAuthenticator : IAuthenticator
 	{
 		public static string LegacyAuthenticationKey = "!#¤atAbgT%";
+		public static string SafeLegacyAuthenticationKey = "!#?atAbgT%";
 
 		private readonly string _authenticationKey;
 
@@ -18,6 +19,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool Authenticate(string authenticationKey)
 		{
 			return authenticationKey == _authenticationKey;
+		}
+
+		public static string MakeLegacyKeySafe(string authenticationKey)
+		{
+			if (authenticationKey.StartsWith("!#") && authenticationKey.EndsWith("tAbgT%"))
+				return SafeLegacyAuthenticationKey;
+			return authenticationKey;
 		}
 	}
 }
