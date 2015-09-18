@@ -31,7 +31,7 @@
 		}
 
 		this.load = function(successCb) {
-			$http.get(getCampaignLoadUrl).success(function(data) {
+			$http.post(getCampaignLoadUrl).success(function(data) {
 				if (successCb != null) successCb(data);
 			});
 		}

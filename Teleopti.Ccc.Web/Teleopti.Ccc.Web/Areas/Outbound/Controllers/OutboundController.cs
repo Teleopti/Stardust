@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _campaignListProvider.GetCampaignStatistics(period);
 		}		
 		
-		[HttpGet, Route("api/Outbound/Campaign/Load"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaign/Load"), UnitOfWork]
 		public virtual bool LoadData()
 		{
 			_campaignListProvider.LoadData(null);
