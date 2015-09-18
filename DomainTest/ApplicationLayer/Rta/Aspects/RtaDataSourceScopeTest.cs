@@ -145,11 +145,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		{
 			IDataSource expected = new FakeDataSource("tenant");
 			ApplicationData.RegisteredDataSources = new[] {expected};
-			Tenants.Has(new Tenant("tenant") {RtaKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.InternalEncodingFixedLegacyAuthenticationKey});
+			Tenants.Has(new Tenant("tenant") {RtaKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey});
 
 			TheService.Does(new Input
 			{
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.InputLegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			});
 
 			TheService.RanWithDataSource.Should().Be(expected);

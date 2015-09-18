@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public static class ExternalUserStateInputModelExtensions
 	{
-		public static void MakeLegacyAuthenticationKeySafe(this ExternalUserStateInputModel input)
+		public static void MakeLegacyKeyEncodingSafe(this ExternalUserStateInputModel input)
 		{
-			input.AuthenticationKey = ConfiguredKeyAuthenticator.MakeLegacyKeySafe(input.AuthenticationKey);
+			input.AuthenticationKey = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(input.AuthenticationKey);
 		}
 
 		public static Guid ParsedPlatformTypeId(this ExternalUserStateInputModel input)

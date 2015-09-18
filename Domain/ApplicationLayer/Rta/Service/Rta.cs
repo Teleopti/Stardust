@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						   "Incoming message: MessageId: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
 						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot, messageId);
 
-			input.MakeLegacyAuthenticationKeySafe();
+			input.MakeLegacyKeyEncodingSafe();
 			if (!_authenticator.Authenticate(input.AuthenticationKey))
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 

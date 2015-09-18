@@ -327,6 +327,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public void Has(Tenant tenant)
 		{
+			// this is done for real in db scripts when the default tenant is added
+			tenant.RtaKey = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(tenant.RtaKey);
 			_data.Add(tenant);
 		}
 

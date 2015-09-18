@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			string tenant;
 			var key = tryGet(() => input.AuthenticationKey);
 			if (key != null)
-				tenant = _tenantLoader.TenantNameByKey(ConfiguredKeyAuthenticator.MakeLegacyKeySafe(key));
+				tenant = _tenantLoader.TenantNameByKey(ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(key));
 			else
 				tenant = tryGet(() => input.Tenant);
 			_scope = _dataSource.OnThisThreadUse(tenant);
