@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,8 +31,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>().SingleInstance();
 			builder.Register(c => c.Resolve<ICurrentDataSource>().Current()).As<IDataSource>().ExternallyOwned();
 
-			builder.RegisterType<CurrentMessageSenders>()
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
 				.As<ICurrentMessageSenders>()
+				.SingleInstance();
+
+			builder.RegisterType<CurrentMessageSenders>()
 				.As<IMessageSendersScope>()
 				.SingleInstance();
 
