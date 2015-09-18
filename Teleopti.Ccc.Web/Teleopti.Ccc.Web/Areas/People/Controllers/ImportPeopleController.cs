@@ -10,6 +10,7 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
@@ -44,13 +45,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			const int colIndexRole = 5;
 			var userList = new List<RawUser>();
 			var ms = new MemoryStream();
+			var isXlsx = false;
 
 			foreach (var file in provider.Contents)
 			{
 				var fileName = file.Headers.ContentDisposition.FileName.Trim('\"');
 				var dataStream = await file.ReadAsStreamAsync();
-
-				var workbook = (fileName.EndsWith("xlsx"))
+				isXlsx = fileName.EndsWith("xlsx");
+				var workbook = isXlsx
 					? (IWorkbook)new XSSFWorkbook(dataStream)
 					: new HSSFWorkbook(dataStream);
 				for (var sheetIndex = 0; sheetIndex < workbook.NumberOfSheets; sheetIndex++)
@@ -64,14 +66,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 						var row = (IRow)rowEnumerator.Current;
 						if (rowIndex == 1)
 						{
-							//check colomn header
+							//check column header
 							var firstNameCol = getCellValue(row, colIndexFirstname);
 							var lastNameCol = getCellValue(row, colIndexLastname);
 							var windowsUserCol = getCellValue(row, colIndexWindowsUser);
 							var applicationUserCol = getCellValue(row, colIndexApplicationUserId);
 							var passwordCol = getCellValue(row, colIndexPassword);
 							var rolCol = getCellValue(row, colIndexRole);
-							var missingCol = new StringBuilder();
+							var missingCol = new StringBuilder("");
 							var isFirstnameColMissing = isColumnExist(firstNameCol, "Firstname", missingCol);
 							var isLastnameColMissing = isColumnExist(lastNameCol, "Lastname", missingCol);
 							var isWindowsUserColMissing = isColumnExist(windowsUserCol, "WindowsUser", missingCol);
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 							if (isMissingCol)
 							{
-								var errorMsg = "Missing column:" + missingCol.ToString().Substring(0, missingCol.ToString().Length - 2);
+								var errorMsg =string.Format(UserTexts.Resources.MissingColumnX,  missingCol.ToString().Substring(0, missingCol.ToString().Length - 2));
 								var response = Request.CreateResponse(HttpStatusCode.InternalServerError);
 								response.Headers.Clear();
 								response.Content = new StringContent(errorMsg);
@@ -113,18 +115,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 			}
 			var invalidUsers = InternalPersist(userList).ToList();
-			var result =new
-			{
-				InvalidUsers = invalidUsers,
-				InvalidCount = invalidUsers.Count
-			};
-			var returnedFile = new XSSFWorkbook();
+			
 			if (invalidUsers.Count > 0)
 			{
+				var returnedFile = isXlsx
+					? (IWorkbook)new XSSFWorkbook()
+					: new HSSFWorkbook();
 				returnedFile.CreateSheet("invalidUsers");
 				var sheet = returnedFile.GetSheet("invalidUsers");
 
-				for (var i = 0; i < result.InvalidCount + 1; i++)
+				for (var i = 0; i < invalidUsers.Count + 1; i++)
 				{
 					var row = sheet.CreateRow(i);
 					if (i == 0)
@@ -152,7 +152,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				var response = Request.CreateResponse(HttpStatusCode.OK);
 				response.Headers.Clear();
 				response.Content = new ByteArrayContent(ms.ToArray());
-				response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+				var contentType = isXlsx ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" :
+				"application/vnd.ms-excel";
+				response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
 				return response;
 			}

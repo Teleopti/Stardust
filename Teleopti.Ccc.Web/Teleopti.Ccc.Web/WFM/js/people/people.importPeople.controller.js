@@ -38,13 +38,14 @@
 					peopleSvc.uploadUserFromFile(file).then(function (response) {
 						vm.isProcessing = false;
 						vm.isSuccessful = true;
-
+						var isXlsx = response.headers()['content-type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 						var blob = new Blob([response.data], {
-							type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+							type: response.headers()['content-type']
 						});
 						if (blob.size != 0) {
 							vm.hasInvalidData = true;
-							saveAs(blob, 'invalidUsers' + '.xlsx');
+							var extension = isXlsx ? '.xlsx' : '.xls';
+							saveAs(blob, 'invalidUsers' + extension);
 						}
 
 					}, function (response) {

@@ -13362,8 +13362,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Underscheduled</value>
     <comment>Scheduled hours is lower than forecasted hours.</comment>
   </data>
-  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
-    <value>Drag and Drop .csv files here or click to upload</value>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Drag and Drop .xls or .xlsx files here or click to upload</value>
     <comment>Hint to tell user to upload file</comment>
   </data>
   <data name="ImportUsers" xml:space="preserve">
@@ -13473,5 +13473,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="SelectDateInChart" xml:space="preserve">
     <value>Please select dates in the chart.</value>
     <comment>Hint to display to ask the user to select dates from the campaign chart (outbound)</comment>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Missing column: {0}.</value>
+    <comment>error message for file validation in importing user in People module</comment>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>The selected file can not be accepted. Please check the file type.</value>
+    <comment>warning to tell user selected file is not accepted in web People.</comment>
   </data>
 </root>

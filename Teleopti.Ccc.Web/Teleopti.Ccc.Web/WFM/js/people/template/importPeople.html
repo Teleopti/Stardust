@@ -9,11 +9,11 @@
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
 						 ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="true"
 						 ngf-accept="'.xls,.xlsx'" ngf-drop-available="dropAvailable">
-						{{'DragAndDropCsvFilesHereOrClickToUpload'|translate}}
+						{{'DragAndDropExcelFilesHereOrClickToUpload'|translate}}
 					</div>
 					<div class="import-file-template">
 						{{'ReferToFileTemplate'|translate}}
-						<a href="js/people/fileTemplates/Users.csv">&nbsp;{{'here'|translate}}</a>
+						<a href="js/people/fileTemplates/Users.xls">&nbsp;{{'here'|translate}}</a>
 					</div>
 					<div ng-show="vm.files.length > 0">
 						{{'ImportFileNameColon'|translate}}
@@ -22,7 +22,7 @@
 						</ul>
 					</div>
 					<div ng-show="vm.rejFiles.length > 0" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i> 
-						The selected file can not be accepted. Please check the file type.
+						{{'TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType'|translate}}
 						<div>
 							{{'RejectedFiles'|translate}}
 							<ul>
@@ -36,14 +36,11 @@
 					
 					<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
 					<div ng-show="vm.isSuccessful">
-						<pre>File is imported successfully! <span ng-show="!vm.hasInvalidData">All users have been imported successfully!</span><span ng-show="vm.hasInvalidData">Please find the downloaded excel sheet to check the invalid users.</span></pre>
+						<div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>All users have been imported successfully!</div>
+						<div ng-show="vm.hasInvalidData" class="alert-info notice-spacer"><i class='mdi mdi-information'></i>Please find the downloaded excel sheet to check the invalid users.</div>
 					</div>
-					<div ng-show="vm.isFailed">
-						<pre>{{'ImportError'|translate}}! {{vm.errorMsg}}</pre>
-					</div>
-					<div ng-show="vm.hasParsingError">
-						<pre>{{vm.errorMsg}}</pre>
-					</div>
+
+					<div ng-show="vm.isFailed" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{'ImportError'|translate}}! {{vm.errorMsg}}</div>
 				</div>
 			</div>
 			<div class="modal-footer">
