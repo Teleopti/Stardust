@@ -65,24 +65,28 @@
 		}
 
 		$scope.campaignClicked = function (ev, c) {
-			if (c.expanded) return;
-			c.expanded = true;
-			var campaign = { Id: c.id, isLoadingData: true };
-			var newDataRow = {				
-				id: c.id + '_expanded',
-				height: '650px',
-				expansion: true,
-				campaign: campaign,				
-				collapse: function collapseExpansion(ev, index) {
-					c.expanded = false;
-					$scope.ganttData.splice(index, 1);
-				}
-			};
-			var index = readIndex(c);
-			if (index >= 0)
-				$scope.ganttData.splice(index + 1, 0, newDataRow);
+			if (c.expanded) {
+				c.expanded = false;
+				$scope.ganttData.splice(readIndex(c) + 1, 1);
 
-			getGraphData(campaign, $scope);
+			} else {
+				c.expanded = true;
+				var campaign = { Id: c.id, isLoadingData: true };
+				var newDataRow = {
+					id: c.id + '_expanded',
+					height: '600px',
+					expansion: true,
+					campaign: campaign,
+					collapse: function collapseExpansion(ev, index) {
+						c.expanded = false;
+						$scope.ganttData.splice(index, 1);
+					}
+				};
+				var index = readIndex(c);
+				if (index >= 0)
+					$scope.ganttData.splice(index + 1, 0, newDataRow);
+				getGraphData(campaign, $scope);
+			}
 		};
 
 		function getGraphData(campaign, scope) {		
@@ -99,37 +103,7 @@
 				});
 			});
 		}
-		 
-		function getAllWeekends() {
-			var visualizationPeriod = outboundService.getVisualizationPeriod();
-			var startDate = moment(visualizationPeriod.StartDate.Date);
-			var endDate = moment(visualizationPeriod.EndDate.Date);
-
-			var weekends = [];
-			var weekend = [];
-
-			var isFirstDay = true;
-			while (startDate <= endDate) {				
-				if (startDate.day() == 0 || startDate.day() == 6) {
-					if (isFirstDay) weekend.push(startDate.clone().add(-1, 'day'));
-					else weekend.push(startDate.clone());
-					if (weekend.length == 2) {
-						weekends.push(weekend);
-						weekend = [];
-					}					
-				}					
-				startDate.add(1, 'day');
-				isFirstDay = false;
-			}
-			if (weekend.length > 0) {
-				weekends.push([weekend[0], weekend[0]]);
-			}
-
-			return weekends.map(function(we) {
-				return [we[0].format('YYYY-MM-DD'), we[1].add(1, 'day').format('YYYY-MM-DD')];
-			});
-		}
-
+		
 		$scope.timespans = [
 			{
 				name: "today", 
@@ -139,30 +113,31 @@
 			}
 		];
 
-		var weekends = getAllWeekends();
+		var defaultPeriod = outboundService.getDefaultPeriod();
+		var weekends = miscService.getAllWeekendsInPeriod(defaultPeriod);
+	
 		angular.forEach(weekends, function(we) {
 			$scope.timespans.push({
-				from: we[0],
-				to: we[1]
+				from: (we[0].isSame(defaultPeriod[0])) ? we[0].clone().subtract(1, 'day').format('YYYY-MM-DD') : we[0].clone().format('YYYY-MM-DD'),
+				to: we[1].clone().add(1, 'day').format('YYYY-MM-DD')
 			});
 		});
 
 
 		function setGanttOptions(startDate, endDate) {
-			var visualizationPeriod = outboundService.getVisualizationPeriod();
+			var defaultPeriod = outboundService.getDefaultPeriod();
 			return {
 				headers: ['month', 'week'],
-				fromDate: startDate ? startDate : visualizationPeriod.StartDate.Date,
-				toDate: endDate ? endDate : visualizationPeriod.EndDate.Date,
-				
+				fromDate: startDate ? startDate : defaultPeriod[0],
+				toDate: endDate ? endDate : defaultPeriod[1]				
 			};
 		}
 
 		function getGanttVisualization(startDate,endDate) {
-			var visualizationPeriod = outboundService.getVisualizationPeriod();
+			var defaultPeriod = outboundService.getDefaultPeriod();
 			var ganttPeriod = {
-				StartDate: { Date: startDate ? startDate : visualizationPeriod.StartDate.Date },
-				EndDate: { Date: endDate ? endDate : visualizationPeriod.EndDate.Date }
+				StartDate: { Date: startDate ? startDate : defaultPeriod[0] },
+				EndDate: { Date: endDate ? endDate : defaultPeriod[1] }
 			};
 			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {

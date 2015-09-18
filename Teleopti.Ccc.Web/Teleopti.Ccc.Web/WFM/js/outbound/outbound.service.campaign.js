@@ -26,6 +26,10 @@
 			}
 		}
 
+		self.getDefaultPeriod = function() {
+			return [moment().subtract(1, "months").date(1), moment().add(2, "months").date(1).subtract(1, 'days')];
+		}
+
 		this.load = function(successCb) {
 			$http.get(getCampaignLoadUrl).success(function(data) {
 				if (successCb != null) successCb(data);

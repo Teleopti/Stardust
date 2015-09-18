@@ -17,5 +17,33 @@
 		this.sendDateToServer = function(date) {
 			return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
 		};
+
+		this.getAllWeekendsInPeriod = function (period) {
+			var periodStart = period[0],
+				periodEnd = period[1];
+
+			var weekends = [];
+			if (periodStart.day() == 0) {				
+				weekends.push([
+					periodStart.clone(),
+					periodStart.clone()
+				]);
+			}
+
+			var iterator = periodStart.clone().add(6 - periodStart.day(), 'day');
+			while (iterator <= periodEnd) {
+				var weekendStart = iterator.clone(),
+					weekendEnd = iterator.clone().add(1, 'day');
+
+				weekends.push([
+					weekendStart,
+					(weekendEnd > periodEnd)? periodEnd: weekendEnd
+				]);
+
+				iterator.add(7, 'day');
+			}
+			return weekends;
+		};
+
 	}
 })();
