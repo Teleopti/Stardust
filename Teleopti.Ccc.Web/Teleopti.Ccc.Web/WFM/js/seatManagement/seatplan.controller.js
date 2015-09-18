@@ -79,20 +79,6 @@
 				});
 		};
 
-		vm.updateCalendarStatusOnly = function() {
-			vm.isLoadingCalendar = true;
-			var seatPlansParams = {
-				startDate: vm.getPreviousMonthStart(vm.selectedDate),
-				endDate: vm.getNextMonthEnd(vm.selectedDate)
-			};
-
-			seatPlanService.seatPlans.query(seatPlansParams)
-				.$promise.then(function(data) {
-					vm.seatPlanDateStatuses = data;
-					vm.isLoadingCalendar = false;
-				});
-		};
-
 		vm.loadPlanningPeriods = function (dateMoment) {
 			vm.isLoadingPlanningPeriods = true;
 
@@ -134,16 +120,23 @@
 		};
 
 		vm.onSeatPlanComplete = function () {
-
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
-		vm.showReport = function (period, teams, locations) {
+		vm.showReport = function (period,teams, locations) {
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
 			vm.reportSelectedTeams = teams;
 			vm.reportSelectedLocations = locations;
 		};
+
+		vm.showSeatmap = function () {
+			vm.isSeatMapBookingViewOpened = !vm.isSeatMapBookingViewOpened;
+			if (!vm.isSeatMapBookingViewOpened) {
+				vm.loadMonthDetails(moment(vm.selectedDate));
+			}
+		};
+
 
 		vm.getSelectedMonthName = function () {
 			return moment(vm.selectedDate).format("MMMM");

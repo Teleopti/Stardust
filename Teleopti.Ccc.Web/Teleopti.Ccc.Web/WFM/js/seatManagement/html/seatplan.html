@@ -3,12 +3,11 @@
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" selected-locations="seatplan.reportSelectedLocations"></seat-plan-report>
 
-	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.isSeatMapBookingViewOpened = !seatplan.isSeatMapBookingViewOpened" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
+	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
 	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
-		<div class="col-sm-12 seatplan-calendar" ng-init="seatplan.updateCalendarStatusOnly()"
-			 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+		<div class="col-sm-12 seatplan-calendar">
 
 			<div class="calendar-progress" ng-show="seatplan.isLoadingCalendar">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -22,7 +21,8 @@
 		</div>
 
 		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
-			<button class="wfm-fab info  material-depth-1 pull-right" ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
+			<button class="wfm-fab info  material-depth-1 pull-right"
+					ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 			</button>
@@ -31,7 +31,7 @@
 			<p>{{seatplan.getToDayInfo()}}</p>
 			
 			<button class="wfm-btn wfm-btn-invis-primary"
-					ng-click="seatplan.isSeatMapBookingViewOpened =!seatplan.isSeatMapBookingViewOpened"
+					ng-click="seatplan.showSeatmap()"
 					ng-if="seatplan.showOccupancyView">
 				{{'ViewSeatBookings' | translate}}
 			</button>
@@ -56,7 +56,8 @@
 
 					</card-header>
 					<card-body>
-						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()" on-seat-plan-start="seatplan.onSeatPlanStart()" show-report="seatplan.showReport"></seat-plan-init>
+						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()" 
+										on-seat-plan-start="seatplan.onSeatPlanStart()" show-report="seatplan.showReport"></seat-plan-init>
 					</card-body>
 				</wfm-card>
 			</wfm-card-list>
