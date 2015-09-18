@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 

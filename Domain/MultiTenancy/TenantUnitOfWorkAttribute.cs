@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
+namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public class TenantUnitOfWorkAttribute : AspectAttribute
 	{

@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 	public class TenantDataSourceScope : IRtaDataSourceScope
 	{
 		private readonly IDataSourceScope _dataSource;
-		private readonly ITenantLoader _tenantLoader;
+		private readonly TenantLoader _tenantLoader;
 
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public TenantDataSourceScope(IDataSourceScope dataSource, ITenantLoader tenantLoader)
+		public TenantDataSourceScope(IDataSourceScope dataSource, TenantLoader tenantLoader)
 		{
 			_dataSource = dataSource;
 			_tenantLoader = tenantLoader;

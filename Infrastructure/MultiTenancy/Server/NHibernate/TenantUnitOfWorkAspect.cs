@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {

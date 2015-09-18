@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common

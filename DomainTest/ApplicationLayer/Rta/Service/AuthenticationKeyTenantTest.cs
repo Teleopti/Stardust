@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+				.WithTenant(Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey
 			});
 
 			Database.PersistedAgentState.Should().Not.Be.Null();
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptLegacyAuthenticationKeyIf2Tenants()
 		{
-			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 			Database.WithTenant("key");
 			var state = new ExternalUserStateForTest
 			{
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey
 			};
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+				.WithTenant(Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			});
 
 			Database.PersistedAgentState.Should().Not.Be.Null();
@@ -93,13 +93,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
 		{
-			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 			Database.WithTenant("key");
 
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "user",
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			};
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public void InvalidateAll()
 		{
 			_cacheFactory.Invalidate<IDatabaseLoader>();
+			_cacheFactory.Invalidate<TenantLoader>();
 			InvalidateState();
 		}
 

@@ -16,11 +16,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
-		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
 
-		public static string LegacyAuthenticationKey = "!#¤atAbgT%";
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
@@ -66,9 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_personResolver = new PersonResolver(databaseLoader);
 
 			Log.Info("The real time adherence service is now started");
-			_authenticationKey = configReader.AppConfig("AuthenticationKey");
-			if (string.IsNullOrEmpty(_authenticationKey))
-				_authenticationKey = LegacyAuthenticationKey;
 		}
 
 		[RtaDataSourceScope]

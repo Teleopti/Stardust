@@ -2,7 +2,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class TenantLoader : ITenantLoader
+	public class TenantLoader
 	{
 		private readonly IFindTenantNameByRtaKey _tenantNameByRtaKey;
 		private readonly ICountTenants _countTenants;
@@ -15,14 +15,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_countTenants = countTenants;
 		}
 
-		public string TenantNameByKey(string rtaKey)
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual string TenantNameByKey(string rtaKey)
 		{
 			return _tenantNameByRtaKey.Find(rtaKey);
 		}
 
-		public bool AuthenticateKey(string rtaKey)
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual bool AuthenticateKey(string rtaKey)
 		{
-			if (_countTenants.Count() > 1 && rtaKey == Rta.LegacyAuthenticationKey)
+			if (_countTenants.Count() > 1 && rtaKey == ConfiguredKeyAuthenticator.LegacyAuthenticationKey)
 				throw new LegacyAuthenticationKeyException(
 					"Using the default authentication key with more than one tenant is not allowed");
 			return _tenantNameByRtaKey.Find(rtaKey) != null;

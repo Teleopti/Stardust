@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public static string Fix(string authenticationKey)
 		{
-			return authenticationKey.Remove(2, 1) == Service.Rta.LegacyAuthenticationKey.Remove(2, 2)
-				? Service.Rta.LegacyAuthenticationKey
+			return authenticationKey.Remove(2, 1) == Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2)
+				? Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey
 				: authenticationKey;
 		}
 	}

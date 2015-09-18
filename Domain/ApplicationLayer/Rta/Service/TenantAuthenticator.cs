@@ -2,9 +2,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class TenantAuthenticator : IAuthenticator
 	{
-		private readonly ITenantLoader _tenantLoader;
+		private readonly TenantLoader _tenantLoader;
 
-		public TenantAuthenticator(ITenantLoader tenantLoader)
+		public TenantAuthenticator(TenantLoader tenantLoader)
 		{
 			_tenantLoader = tenantLoader;
 		}

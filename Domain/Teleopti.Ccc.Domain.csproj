@@ -233,7 +233,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ITenantLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ConfiguredKeyAuthenticator.cs" />
@@ -620,6 +619,9 @@
     <Compile Include="Config\IConfigReader.cs" />
     <Compile Include="MultiTenancy\ICountTenants.cs" />
     <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
+    <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
+    <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
+    <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Outbound\CampaignRuleChecker.cs" />

@@ -307,9 +307,7 @@
     <Compile Include="MultiTenancy\Server\ITenantAuthentication.cs" />
     <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\LogonInfo.cs" />
-    <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantNhibernateExceptionConverter.cs" />
-    <Compile Include="MultiTenancy\Server\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindTenantByName.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IIdUserQuery.cs" />
@@ -330,7 +328,6 @@
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAspect.cs" />
-    <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\PersonInfo.cs" />
