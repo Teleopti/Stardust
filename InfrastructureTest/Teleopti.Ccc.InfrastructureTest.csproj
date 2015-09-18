@@ -228,6 +228,7 @@
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
+    <Compile Include="ServiceBus\MessageSenderCreatorTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
