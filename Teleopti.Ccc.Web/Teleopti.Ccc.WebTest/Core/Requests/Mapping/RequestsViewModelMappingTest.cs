@@ -697,6 +697,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.IsReferred, Is.True);
 		}
 
+		[Test]
+		public void ShouldHandleEmptyShiftSwapDetail()
+		{
+			var shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>();
+			var shifTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetails);
+			var personRequest = new PersonRequest(PersonFactory.CreatePerson(), shifTradeRequest);
+			var shiftTradeRequestModel = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.IsNullOrEmpty(shiftTradeRequestModel.From);
+			Assert.IsNullOrEmpty(shiftTradeRequestModel.To);
+		}
+
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);
