@@ -33,7 +33,13 @@ ELSE
 --Flush and re-load only PersonIds in string
 BEGIN
 	INSERT INTO #ids SELECT * FROM SplitStringString(@persons) 
-	DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
+	DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids);
+	
+	--We found one case where duplicates where present. Let's remove them first.
+	WITH cte as(
+	  SELECT Person,ROW_NUMBER() OVER (PARTITION BY Person ORDER BY Person) RN
+	  FROM   #ids)
+	DELETE FROM cte WHERE RN>1
 END 
 
     declare @mainId uniqueidentifier
