@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.Config;
-using static System.String;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public ConfiguredKeyAuthenticator(IConfigReader configReader)
 		{
 			_authenticationKey = configReader.AppConfig("AuthenticationKey");
-			if (IsNullOrEmpty(_authenticationKey))
+			if (string.IsNullOrEmpty(_authenticationKey))
 				_authenticationKey = LegacyAuthenticationKey;
 		}
 
