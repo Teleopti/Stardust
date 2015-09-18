@@ -1,10 +1,12 @@
 ﻿@charset "UTF-8";
 
 .outbound {
-
 	.wfm-card-list-container {
 		max-height: none;
 	}	
+	.z-index-2000{
+	    z-index:2000;
+	}
 	.scrollfix{
 	    .gantt-scrollable-header{
 			position:fixed;
@@ -23,10 +25,10 @@
 		.gantt-side-background-header{
 		    position:fixed;
 			top:62px;
-			z-index:1000;
+			z-index:900;
 			display:inline-block;
 			background-color:#fff;
-			width:96px;
+			width:30%;
 			height:60px;
 		}
 	}
