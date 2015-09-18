@@ -11,15 +11,13 @@ namespace Teleopti.Wfm.Administration.Core
 	public class Import
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
-		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IGetImportUsers _getImportUsers;
 		private readonly PersistTenant _persistTenant;
 		private readonly TenantUpgrader _tenantUpgrader;
 
-		public Import(ICurrentTenantSession currentTenantSession, ICheckDatabaseVersions checkDatabaseVersions, IGetImportUsers getImportUsers, PersistTenant persistTenant, TenantUpgrader tenantUpgrader)
+		public Import(ICurrentTenantSession currentTenantSession, IGetImportUsers getImportUsers, PersistTenant persistTenant, TenantUpgrader tenantUpgrader)
 		{
 			_currentTenantSession = currentTenantSession;
-			_checkDatabaseVersions = checkDatabaseVersions;
 			_getImportUsers = getImportUsers;
 			_persistTenant = persistTenant;
 			_tenantUpgrader = tenantUpgrader;
@@ -33,11 +31,8 @@ namespace Teleopti.Wfm.Administration.Core
 			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionstring);
 			_persistTenant.Persist(newTenant);
 
-			var versions = _checkDatabaseVersions.GetVersions(connStringApp);
-			if (!versions.AppVersionOk)
-			{
-				_tenantUpgrader.Upgrade(newTenant, adminUser, adminPassword, true);
-			}
+			//run upgrade every time because it can be other changes (sp, views in analytics for example)
+			_tenantUpgrader.Upgrade(newTenant, adminUser, adminPassword, true);
 
 			var conflicts = _getImportUsers.GetConflictionUsers(connStringApp, newTenant.Name);
 			saveToDb(conflicts.NotConflicting, newTenant);

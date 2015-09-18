@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Administration.Core
 			foreach (var importUser in importUsers)
 			{
 				var checkedImport = checkConflict(mainUsers, importUser, userPrefix);
-				if(checkedImport == null)
+				if (checkedImport == null)
 					continue;
 				var importUserModel = new ImportUserModel
 				{
@@ -71,16 +71,17 @@ namespace Teleopti.Wfm.Administration.Core
 			var logonName = toImport.ApplicationLogonInfo.LogonName;
 			var identity = toImport.Identity;
 			var id = toImport.Id;
+			PersonInfo conflictId = allOldOnes.FirstOrDefault(x => x.Id.Equals(id));
+			if (conflictId != null)
+				return null;
+			if (string.IsNullOrEmpty(toImport.Identity) && string.IsNullOrEmpty(toImport.ApplicationLogonInfo.LogonName))
+				return null;
 
 			bool conflicting = false;
 			if (logonName != null)
 			{
-				PersonInfo conflictId = allOldOnes.FirstOrDefault(x => x.Id.Equals(id));
-				if (conflictId != null)
-					return null;
-
 				PersonInfo conflictLogonName = allOldOnes.FirstOrDefault(
-					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName,StringComparison.OrdinalIgnoreCase));
+					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName, StringComparison.OrdinalIgnoreCase));
 				if (conflictLogonName != null)
 				{
 					conflicting = true;
@@ -101,7 +102,6 @@ namespace Teleopti.Wfm.Administration.Core
 
 						} while (conflictLogonName != null);
 					}
-
 				}
 			}
 
@@ -126,7 +126,6 @@ namespace Teleopti.Wfm.Administration.Core
 
 						} while (conflictIdentity != null);
 					}
-
 				}
 			}
 

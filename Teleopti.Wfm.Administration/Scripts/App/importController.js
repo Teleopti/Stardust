@@ -7,7 +7,7 @@
 
 	function importController($http, tokenHeaderService) {
 		var vm = this;
-
+		$("#loading").hide();
 		vm.Tenant = "";
 		vm.Server = "";
 		vm.UserName = "";
@@ -27,8 +27,10 @@
 		vm.AggDbCheckMessage = "Input Aggregation database (this is optional)";
 
 		vm.HeadVersion = null;
-		vm.ImportAppVersion = null;
-		vm.AppVersionOk = true;
+		vm.ImportAppVersion = 0;
+		vm.AppVersionOk = false;
+		vm.ToEarly = true;
+		vm.ToEarlyVersionMessage = '';
 
 		vm.CreateDbUser = '';
 		vm.CreateDbPassword = '';
@@ -164,6 +166,7 @@
 		}
 
 		vm.CheckVersions = function () {
+			vm.ToEarlyVersionMessage = '';
 			$http.post('./api/UpgradeDatabases/GetVersions', {
 				Server: vm.Server,
 				UserName: vm.UserName,
@@ -174,6 +177,11 @@
 					vm.HeadVersion = data.HeadVersion;
 					vm.ImportAppVersion = data.ImportAppVersion;
 					vm.AppVersionOk = data.AppVersionOk;
+					vm.ToEarly = !(data.ImportAppVersion > 360);
+					if (vm.ToEarly) {
+						vm.ToEarlyVersionMessage = 'This is a version that is too early to import this way!';
+					}
+					
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -205,6 +213,9 @@
 				alert("When importing an older version you must provide a valid account to upgrade the databases.");
 				return;
 			}
+			// hide button
+			vm.ToEarly = true;
+			$("#loading").show();
 			$http.post('./api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
 				Server: vm.Server,
@@ -219,11 +230,13 @@
 				.success(function (data) {
 					vm.Success = data.Success;
 					vm.Message = data.Message;
+					$("#loading").hide();
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					$("#loading").hide();
 				});
 		};
 	}

@@ -90,14 +90,18 @@
 				<h3>Upgrade information</h3>
 				<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
 				<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
-				<label>If the imported database's version is lower it will be upgraded.</label><br />
+				<label>If the imported database's version is lower it will be upgraded.</label><br/>
+				<label ng-class="dataIsNotOk">{{importVm.ToEarlyVersionMessage}}</label>
 			</div>
 
 
 			<!--</div>  -->
 			<br />
 			<p>
-				<button class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
+				<button ng-show="importVm.ToEarly == false" class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
+				<div id="loading" style="padding-left: 25px; float: left">
+					<img src="Content/images/ajax-loader.gif" />
+				</div>
 			</p>
 			<div ng-class="(importVm.Success==true) ? 'dataIsOk' : 'dataIsNotOk'">
 				{{importVm.Message}}

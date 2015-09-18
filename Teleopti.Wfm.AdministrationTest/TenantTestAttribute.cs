@@ -80,6 +80,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'dbcreator'",
 						"dbcreatorperson");
+					cmd.ExecuteNonQuery();
 
 					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'securityadmin'",
 						"dbcreatorperson");

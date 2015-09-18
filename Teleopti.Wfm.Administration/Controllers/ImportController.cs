@@ -18,13 +18,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
 		private readonly Import _import;
+		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly bool isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
-		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import)
+		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import, ICheckDatabaseVersions checkDatabaseVersions)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
 			_import = import;
+			_checkDatabaseVersions = checkDatabaseVersions;
 		}
 
 		[HttpPost]
@@ -44,6 +46,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var result = _databaseHelperWrapper.Exists(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			if(!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message});
+
+			var version = _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
+			if(!(version.ImportAppVersion > 360))
+				return Json(new ImportTenantResultModel { Success = false, Message = "This is a version that is too early to import this way!" });
+
 			result = _databaseHelperWrapper.Exists(analBuilder.ConnectionString, DatabaseType.TeleoptiAnalytics);
 			if (!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message });

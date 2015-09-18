@@ -414,7 +414,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		public bool IsCorrectDb()
 		{
-			string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[Tenant].[PersonInfo]') ";
+			string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Activity]') ";
 			if (DatabaseType.Equals(DatabaseType.TeleoptiAnalytics))
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') ";
 			if (DatabaseType.Equals(DatabaseType.TeleoptiCCCAgg))
