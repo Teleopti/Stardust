@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -56,19 +57,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var dataSource = new FakeDataSource {Application = uowFactory};
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
+			var dataSource = new FakeDataSource{Application = uowFactory, DataSourceName = RandomName.Make()};
+			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
+			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 				
-			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true, 
 				PersonId = personId,
-				DataSourceConfiguration = createFakeConfig()
+				DataSourceConfiguration = createFakeConfig(),
+				Tenant = dataSource.DataSourceName
 			});
 			result.Success.Should().Be.True();
 			result.Person.Should().Be.SameInstanceAs(person);
@@ -79,15 +81,16 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
-			var dataSource = new FakeDataSource();
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
+			var dataSource = new FakeDataSource {DataSourceName = RandomName.Make()};
+			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
+			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 
-			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUnauthorizedUserDoesntMatter);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
-				DataSourceConfiguration = createFakeConfig()
+				DataSourceConfiguration = createFakeConfig(),
+				Tenant = dataSource.DataSourceName
 			});
 			result.Success.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
@@ -99,17 +102,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
-			var dataSource = new FakeDataSource();
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
+			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
+			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
+			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var tenantPassword = RandomName.Make();
 
-			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUnauthorizedUserDoesntMatter);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				DataSourceConfiguration = createFakeConfig(),
-				TenantPassword = tenantPassword
+				TenantPassword = tenantPassword,
+				Tenant = dataSource.DataSourceName
 			});
 			result.Success.Should().Be.True();
 			result.TenantPassword.Should().Be.EqualTo(tenantPassword);
@@ -120,20 +124,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var dataSource = new FakeDataSource { Application = uowFactory };
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
+			var dataSource = new FakeDataSource { Application = uowFactory, DataSourceName = RandomName.Make()};
+			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
+			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today.AddDays(-1), new PersonAccountUpdaterDummy());
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
-			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				PersonId = personId,
-				DataSourceConfiguration = createFakeConfig()
+				DataSourceConfiguration = createFakeConfig(),
+				Tenant = dataSource.DataSourceName
 			});
 			shouldBeUnsuccesful(result);
 			result.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
@@ -144,20 +149,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var dataSource = new FakeDataSource { Application = uowFactory };
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
+			var dataSource = new FakeDataSource { Application = uowFactory, DataSourceName = RandomName.Make() };
+			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
+			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today, new PersonAccountUpdaterDummy());
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
-			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				PersonId = personId,
-				DataSourceConfiguration = createFakeConfig()
+				DataSourceConfiguration = createFakeConfig(),
+				Tenant = dataSource.DataSourceName
 			});
 			result.Success.Should().Be.True();
 		}
