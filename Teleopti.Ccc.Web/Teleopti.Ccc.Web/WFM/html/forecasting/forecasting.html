@@ -108,6 +108,43 @@
 		</div>
 	</div>
 </div>
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-if="modalCampaignLaunch">
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Campaign
+				</div>
+				<div class="modal-inner-content">
+					<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign">
+						<h4>Add campaign</h4>
+					</div>
+					<div class="wfm-block forecast-period" ng-if="modalCampaignInfo.addCampaign">
+						<table class="wfm-table wfm-table-multi" style="width: 700px;">
+							<thead><tr><th></th><th>Forecasted</th><th>With campaign</th></tr></thead>
+							<tbody>
+								<tr><td>Calls (20 days)</td><td>150</td><td>300</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<span>
+						<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign">Calls
+							<md-slider flex md-discrete min="0" max="1000" aria-label="slider"></md-slider>
+						</div>
+					</span>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'Forecast' | translate }}</a>
+
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 
 

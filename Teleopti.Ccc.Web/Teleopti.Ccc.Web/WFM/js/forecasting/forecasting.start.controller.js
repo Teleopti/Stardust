@@ -205,10 +205,10 @@ angular.module('wfm.forecasting')
 				if ($scope.disableDoForecast()) {
 					return;
 				}
-				$scope.modalLaunch = false;
+				$scope.modalForecastingLaunch = false;
 				$scope.isForecastRunning = true;
-				if ($scope.modalInfo.forecastForOneWorkload) {
-					forecastWorkload($scope.modalInfo.selectedWorkload, function () {
+				if ($scope.modalForecastingInfo.forecastForOneWorkload) {
+					forecastWorkload($scope.modalForecastingInfo.selectedWorkload, function () {
 						$scope.isForecastRunning = false;
 					});
 				} else {
