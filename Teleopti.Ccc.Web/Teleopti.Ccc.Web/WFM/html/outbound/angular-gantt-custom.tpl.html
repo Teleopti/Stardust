@@ -200,7 +200,7 @@
 	</script>
 
 	<!-- Tooltips template -->
-	<script type="text/ng-template" id="plugins/tooltips/tooltip.tmpl.html">
+    <script type="text/ng-template" id="plugins/tooltips/tooltip.tmpl.html">
 		<div ng-cloak
 			 class="gantt-task-info"
 			 ng-show="displayed"
@@ -209,6 +209,33 @@
 			<div><strong>{{ task.model.campaignName }}</strong></div>
 			<div class="gantt-task-info-content">				
 				{{ task.model.from | amDateFormat: 'LL'}} - {{ task.model.to | decreaseOneDay |  amDateFormat: 'LL' }}											
+			</div>
+		</div>
+	</script>
+	<!-- sideContentTable template -->
+	<script type="text/ng-template" id="plugins/table/sideContentTable.tmpl.html">
+		<div class="gantt-side-content-table">
+			<div class="gantt-table-column {{getClass()}}" ng-repeat="column in pluginScope.columns" ng-controller="TableColumnController">
+				<div style="height:60px;">
+					<div class="gantt-table-header" ng-style="{height: ganttHeaderHeight + 'px'}">
+						<div ng-show="ganttHeaderHeight" class="gantt-row-label-header gantt-row-label gantt-table-row gantt-table-header-row">
+							<span class="gantt-label-text" gantt-bind-compile-html="getHeaderContent()" />
+						</div>
+					</div>
+				</div>
+				<div class="gantt-table-content" ng-style="getMaxHeightCss()">
+					<div gantt-vertical-scroll-receiver>
+						<div class="gantt-table-row" ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id" ng-controller="TableColumnRowController">
+							<div gantt-row-label class="gantt-row-label gantt-row-height" ng-class="row.model.classes" ng-style="{'height': row.model.height}">
+								<div class="gantt-valign-container">
+									<div class="gantt-valign-content">
+										<span class="gantt-label-text" gantt-bind-compile-html="getRowContent()"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</script>
