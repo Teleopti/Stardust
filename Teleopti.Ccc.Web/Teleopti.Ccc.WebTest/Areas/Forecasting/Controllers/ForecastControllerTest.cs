@@ -49,9 +49,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldForecast()
 		{
-			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, new BasicActionThrottler(), null);
-			var result = target.Forecast(new ForecastInput());
+			var forecastCreator = MockRepository.GenerateMock<IForecastCreator>();
+
+			var scenarioId = Guid.NewGuid();
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = new DateTime(2014, 4, 1),
+				ForecastEnd = new DateTime(2014, 4, 29),
+				Workloads = new ForecastWorkloadInput[] {},
+				ScenarioId = scenarioId
+			};
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			var scenario = new Scenario("test1");
+			scenario.SetId(scenarioId);
+			scenarioRepository.Stub(x => x.Get(forecastInput.ScenarioId)).Return(scenario);
+			var target = new ForecastController(forecastCreator, null, null, null, null, new BasicActionThrottler(), scenarioRepository);
+			var result = target.Forecast(forecastInput);
 			result.Result.Success.Should().Be.True();
+			forecastCreator.AssertWasCalled(x => x.CreateForecastForWorkloads(new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd)), forecastInput.Workloads, scenario));
 		}
 
 		[Test]

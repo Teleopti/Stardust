@@ -22,8 +22,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 		public ICollection<ISkillDay> FindRange(DateOnlyPeriod futurePeriod, ISkill skill)
 		{
 			var currentScenario = _currentScenario.Current();
-			var skillDays = _skillDayRepository.FindRange(futurePeriod, skill, currentScenario);
-			_fillEmptySkillDays.GetAllSkillDays(futurePeriod, skillDays, skill, currentScenario, _skillDayRepository.AddRange);
+			return FindRange(futurePeriod, skill, currentScenario);
+		}
+
+		public ICollection<ISkillDay> FindRange(DateOnlyPeriod futurePeriod, ISkill skill, IScenario scenario)
+		{
+			var skillDays = _skillDayRepository.FindRange(futurePeriod, skill, scenario);
+			_fillEmptySkillDays.GetAllSkillDays(futurePeriod, skillDays, skill, scenario, _skillDayRepository.AddRange);
 			return skillDays;
 		}
 	}

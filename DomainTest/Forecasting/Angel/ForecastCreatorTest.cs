@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Repositories;
@@ -41,9 +42,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
 				}
 			};
-			target.CreateForecastForWorkloads(futurePeriod, forecastWorkloadInputs);
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod));
+			var scenario = new Scenario("test1");
+			target.CreateForecastForWorkloads(futurePeriod, forecastWorkloadInputs, scenario);
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod, scenario));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod, scenario));
 		}
 	}
 }

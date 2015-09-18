@@ -48,6 +48,7 @@ angular.module('wfm.forecasting')
 					$scope.modalForecastingInfo.forecastForAll = false;
 					$scope.modalForecastingInfo.forecastForOneWorkload = true;
 					$scope.modalForecastingInfo.selectedWorkload = workload;
+					$scope.modalInfo.selectedScenario = workload.Scenario;
 				} else {
 					$scope.modalForecastingInfo.forecastForAll = true;
 					$scope.modalForecastingInfo.forecastForOneWorkload = false;

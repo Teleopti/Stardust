@@ -88,6 +88,11 @@
 					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForOneWorkload">
 						<h4>Forecast workload: {{modalForecastingInfo.selectedWorkload.Name}}</h4>
 					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							Save to scenario: <select ng-model="modalInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
+						</div>
+					</div>
 					<div class="wfm-block forecast-period">
 						<div class="wfm-datepicker-wrap">
 							<div class="sub-header">
