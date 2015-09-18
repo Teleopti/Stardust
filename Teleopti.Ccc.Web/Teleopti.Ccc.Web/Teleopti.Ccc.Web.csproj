@@ -456,7 +456,6 @@
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationFake.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdLogonModel.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCache.cs" />

@@ -9,7 +9,10 @@ using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -23,6 +26,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.AddModule(new TenantServerModule(configuration));
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();

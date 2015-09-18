@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class TenantAuthenticationFake : ITenantAuthentication
 	{
