@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool Authenticate(string authenticationKey)
 		{
-			return _tenantLoader.AuthenticateKey(authenticationKey);
+			return _tenantLoader.Authenticate(authenticationKey);
 		}
 	}
 }

@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			_config.Cache().This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))
-				.CacheMethod(x => x.AuthenticateKey(null))
+				.CacheMethod(x => x.Authenticate(null))
 				);
 			builder.CacheByClassProxy<TenantLoader>().ApplyAspects().SingleInstance();
 

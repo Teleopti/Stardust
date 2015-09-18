@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual bool AuthenticateKey(string rtaKey)
+		public virtual bool Authenticate(string rtaKey)
 		{
-			if (_countTenants.Count() > 1 && rtaKey == ConfiguredKeyAuthenticator.LegacyAuthenticationKey)
+			if (_countTenants.Count() > 1 && rtaKey == ConfiguredKeyAuthenticator.InternalEncodingFixedLegacyAuthenticationKey)
 				throw new LegacyAuthenticationKeyException(
 					"Using the default authentication key with more than one tenant is not allowed");
 			return _tenantNameByRtaKey.Find(rtaKey) != null;

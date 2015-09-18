@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public ExternalUserStateForTest()
 		{
-			AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey;
+			AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.InputLegacyAuthenticationKey;
 			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			UserCode = "8808";
