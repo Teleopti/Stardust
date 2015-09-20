@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public OptimizationController Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public MutableNow Now;
-		public FakePersonRepository PersonRepository;
+		public FakeFixedStaffLoader FixedStaffLoader;
 		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeClassicDaysOffOptimizationCommand OptimizationCommand;
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent);
+			FixedStaffLoader.SetPeople(agent);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent);
+			FixedStaffLoader.SetPeople(agent);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);

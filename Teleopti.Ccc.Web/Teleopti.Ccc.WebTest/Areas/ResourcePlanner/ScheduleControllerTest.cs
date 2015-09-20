@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	{
 		public ScheduleController Target;
 		public IScheduleCommand ScheduleCommand;
-		public FakePersonRepository PersonRepository;
+		public FakeFixedStaffLoader FixedStaffLoader;
 		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeScheduleDataReadScheduleRepository ScheduleDataReadScheduleRepository;
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent);
+			FixedStaffLoader.SetPeople(agent);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate.AddDays(3));
 			agent1.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent1);
+			FixedStaffLoader.SetPeople(agent1);
 			
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate);
 			agent1.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent1);
+			FixedStaffLoader.SetPeople(agent1);
 			ScheduleDataReadScheduleRepository.InitRangeValues(8, 7, TimeSpan.Zero, TimeSpan.Zero); 
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate, ContractFactory.CreateContract("hourly"),PartTimePercentageFactory.CreatePartTimePercentage("hourly"));
 			ScheduleDataReadScheduleRepository.InitRangeValues(8, 8, TimeSpan.FromHours(8), TimeSpan.FromHours(8)); 
 			agent1.SetId(Guid.NewGuid());
-			PersonRepository.Add(agent1);
+			FixedStaffLoader.SetPeople(agent1);
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =

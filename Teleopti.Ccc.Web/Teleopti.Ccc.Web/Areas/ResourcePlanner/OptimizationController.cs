@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
     {
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
-		private readonly FixedStaffLoader _fixedStaffLoader;
+		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly IActionThrottler _actionThrottler;
 		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public OptimizationController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			FixedStaffLoader fixedStaffLoader, IActionThrottler actionThrottler, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
+			IFixedStaffLoader fixedStaffLoader, IActionThrottler actionThrottler, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository)
 		{

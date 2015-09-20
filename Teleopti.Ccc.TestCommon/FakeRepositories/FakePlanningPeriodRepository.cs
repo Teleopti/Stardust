@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -13,8 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePlanningPeriodRepository : IPlanningPeriodRepository
 	{
 		private readonly INow _now;
-		private IList<IPlanningPeriod> _planningPeriods; 
-		//private IPlanningPeriod _planinngPeriod;
+		private readonly IList<IPlanningPeriod> _planningPeriods;
 		private IPlanningPeriodSuggestions _planningPeriodSuggestions;
 
 		public FakePlanningPeriodRepository(INow now)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,18 +17,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly INextPlanningPeriodProvider _nextPlanningPeriodProvider;
 		private readonly IMissingForecastProvider _missingForecastProvider;
 		private readonly IPlanningPeriodRepository _planningPeriodRespository;
+		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly INow _now;
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
-			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, INow now)
+			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, IFixedStaffLoader fixedStaffLoader, INow now)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_missingForecastProvider = missingForecastProvider;
 			_planningPeriodRespository = planningPeriodRespository;
+			_fixedStaffLoader = fixedStaffLoader;
 			_now = now;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod"), Authorize]
 		public virtual IHttpActionResult GetAllPlanningPeriods()
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange"), Authorize]
 		public virtual IHttpActionResult GetAllPlanningPeriods(DateTime startDate, DateTime endDate)
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}"), Authorize]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return _missingForecastProvider.GetMissingForecast(planningPeriodRange);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions"), Authorize]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							}));
 		}
 
-		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}")]
+		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}"), Authorize]
 		public virtual IHttpActionResult ChangeRange(Guid id, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -90,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod"), Authorize]
 		public virtual IHttpActionResult GetNextPlanningPeriod()
 		{
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
@@ -149,6 +152,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
+		}
+
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/publish"), Authorize]
+		public virtual IHttpActionResult Publish(Guid planningPeriodId)
+		{
+			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);
+			planningPeriod.Publish(_fixedStaffLoader.Load(planningPeriod.Range).FixedStaffPeople.ToArray());
+			return Ok();
 		}
 	}
 }

@@ -43,5 +43,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			throw new NotImplementedException();
 		}
+
+		public void Publish(params IPerson[] people)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

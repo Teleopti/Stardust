@@ -9,11 +9,13 @@ namespace Teleopti.Interfaces
 		IPlanningPeriod NextPlanningPeriod();
 		PlanningPeriodState State { get; }
 		void Scheduled();
+		void Publish(params IPerson[] people);
 	}
 
 	public enum PlanningPeriodState
 	{
 		New,
-		Scheduled
+		Scheduled,
+		Published
 	}
 }

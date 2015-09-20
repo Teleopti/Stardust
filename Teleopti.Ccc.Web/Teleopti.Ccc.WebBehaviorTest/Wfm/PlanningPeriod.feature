@@ -11,6 +11,7 @@ Scenario: show the next planning period
 		| Access to resource planner            | True              |
 	When I view Resource planner
 	Then I should see planning period from '2014-05-01'to '2014-05-31'
+
 @Ignore
 Scenario: schedule the next planning period
 	Given the time is '2014-04-10'
@@ -22,6 +23,19 @@ Scenario: schedule the next planning period
 	And I open planning period
 	And  I click schedule
 	Then I should see '0'
+
+@Ignore
+Scenario: Publish the schedules for next planning period
+	Given the time is '2014-04-10'
+	And I have a role with
+		| Field									| Value            |
+        | Name									| Resource Planner |
+		| Access to resource planner			| True             | 
+	When I view Resource planner
+	And I open planning period
+	And  I click schedule
+	And I click publish
+	Then I should see the planning period as published in the summary
 
 @OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
 Scenario: Update the next planning period

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
@@ -47,6 +48,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
 		{
 			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
+		}
+
+		public virtual void Publish(params IPerson[] people)
+		{
+			var workflowControlSets = people.Select(p => p.WorkflowControlSet).Where(w => w != null).Distinct();
+			foreach (var workflowControlSet in workflowControlSets)
+			{
+				workflowControlSet.SchedulePublishedToDate = _range.EndDate.Date;
+			}
+			_state = PlanningPeriodState.Published;
 		}
 
 		public virtual IPlanningPeriod NextPlanningPeriod()

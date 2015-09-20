@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			
 			
-			builder.RegisterType<FixedStaffLoader>();
+			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>();
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();

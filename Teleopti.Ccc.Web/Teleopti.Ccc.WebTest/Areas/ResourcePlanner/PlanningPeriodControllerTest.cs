@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public MutableNow Now;
 		public FakeMissingForecastProvider MissingForecastProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakeFixedStaffLoader FixedStaffLoader;
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodIfNoPeriodExists()
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldOnlyGetFuturePlanningPeriodSuggestions()
 		{
-			changeNowTo(new DateTime(2015, 05, 22));
+			Now.Is(new DateTime(2015, 05, 22));
 			PlanningPeriodRepository.CustomData(
 				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
 				new PlanningPeriodSuggestions(Now, suggestions()));
@@ -104,9 +106,24 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldPublishSchedules()
+		{
+			Now.Is(new DateTime(2015, 4, 1));
+			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())),
+				new PlanningPeriodSuggestions(Now, suggestions()));
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
+			FixedStaffLoader.SetPeople(person);
+
+			var result = (OkResult)Target.Publish(Guid.NewGuid());
+			result.Should().Not.Be.Null();
+
+			person.WorkflowControlSet.SchedulePublishedToDate.Value.Should().Be.GreaterThan(Now.UtcDateTime());
+		}
+
+		[Test]
 		public void ShouldGetSortedPlanningPeriodSuggestions()
 		{
-			changeNowTo(new DateTime(2015, 4, 1));
+			Now.Is(new DateTime(2015, 4, 1));
 			PlanningPeriodRepository.CustomData(null, new PlanningPeriodSuggestions(Now, suggestions()));
 			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>) Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
 			result.Content.First().StartDate.Should().Be.EqualTo(new DateTime(2015, 04, 27));
@@ -147,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnNextPlanningPeriod()
 		{
-			changeNowTo(new DateTime(2015, 05, 23));
+			Now.Is(new DateTime(2015, 05, 23));
 			PlanningPeriodRepository.Add( new PlanningPeriod(new PlanningPeriodSuggestions(Now,new List<AggregatedSchedulePeriod>())));
 
 			Target.Request = new HttpRequestMessage();
@@ -158,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnIndicationIfNextPlanningPeriodExists()
 		{
-			changeNowTo(new DateTime(2015, 05, 23));
+			Now.Is(new DateTime(2015, 05, 23));
 			var currentPlanningPeriodId = Guid.NewGuid();
 			var nextPlanningPeriodId = Guid.NewGuid();
 
@@ -192,11 +209,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Now.Is(new DateTime(2015, 4, 1));
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.State.Should().Be("New");
-		}
-
-		private void changeNowTo(DateTime dateTime)
-		{
-			Now.Is( dateTime);
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()

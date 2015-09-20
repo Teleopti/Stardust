@@ -137,6 +137,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
+    <Compile Include="AgentInfo\FixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />

@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Mapping;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	public class FixedStaffLoader
+	public class FixedStaffLoader : IFixedStaffLoader
 	{
 		private readonly IPersonRepository _personRepository;
 

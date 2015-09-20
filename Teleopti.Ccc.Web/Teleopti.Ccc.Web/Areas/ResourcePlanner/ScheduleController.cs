@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class ScheduleController : ApiController
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
-		private readonly FixedStaffLoader _fixedStaffLoader;
+		private readonly IFixedStaffLoader _fixedStaffLoader;
 		private readonly IActionThrottler _actionThrottler;
 		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
 		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			FixedStaffLoader fixedStaffLoader, IActionThrottler actionThrottler, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
+			IFixedStaffLoader fixedStaffLoader, IActionThrottler actionThrottler, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter,

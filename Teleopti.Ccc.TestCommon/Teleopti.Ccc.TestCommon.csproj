@@ -175,6 +175,7 @@
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeExistingForecastRepository.cs" />
+    <Compile Include="FakeRepositories\FakeFixedStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />

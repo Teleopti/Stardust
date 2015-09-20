@@ -560,7 +560,6 @@
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
-    <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
     <Compile Include="Areas\Global\IActionThrottler.cs" />
     <Compile Include="Areas\ResourcePlanner\IScheduleControllerPrerequisites.cs" />
