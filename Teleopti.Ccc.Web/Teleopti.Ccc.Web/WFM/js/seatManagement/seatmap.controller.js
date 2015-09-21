@@ -77,6 +77,9 @@
 		vm.resize = resize;
 
 		vm.handleBreadcrumbClick = function (id) {
+
+			if (vm.isInEditMode) return;
+
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
