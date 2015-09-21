@@ -22,6 +22,7 @@
 //----------------------------------------------------------------------------------------
 
 using System.Windows.Forms;
+using EO.WebBrowser;
 using Syncfusion.Windows.Forms.Tools;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -66,6 +67,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this._statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
+			this.wfmWebControl = new EO.WebBrowser.WinForm.WebControl();
+			this.wfmWebView = new EO.WebBrowser.WebView();
 			this.webControl1 = new EO.WebBrowser.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
 			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
@@ -86,8 +89,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.outlookBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBar();
-			this.wfmWebControl = new EO.WebBrowser.WinForm.WebControl();
-			this.wfmWebView = new EO.WebBrowser.WebView();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelSpring.Margin = new System.Windows.Forms.Padding(5, 3, 0, 2);
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(753, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(754, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
 			this.toolStripStatusLabelSpring.Text = "xx";
 			this.toolStripStatusLabelSpring.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelCurrentDatabase.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelCurrentDatabase.Name = "toolStripStatusLabelCurrentDatabase";
 			this.SetShortcut(this.toolStripStatusLabelCurrentDatabase, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(129, 19);
+			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(128, 19);
 			this.toolStripStatusLabelCurrentDatabase.Text = "XXConnectedToColon";
 			this.toolStripStatusLabelCurrentDatabase.Visible = false;
 			// 
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLicense.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelLicense.Name = "toolStripStatusLabelLicense";
 			this.SetShortcut(this.toolStripStatusLabelLicense, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(117, 19);
+			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(116, 19);
 			this.toolStripStatusLabelLicense.Text = "XXLicensedToColon";
 			// 
 			// toolStripStatusLabelRoger65
@@ -224,6 +225,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 637);
 			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
+			// wfmWebControl
+			// 
+			this.wfmWebControl.BackColor = System.Drawing.Color.White;
+			this.wfmWebControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.wfmWebControl.Location = new System.Drawing.Point(0, 0);
+			this.wfmWebControl.Name = "wfmWebControl";
+			this.wfmWebControl.Size = new System.Drawing.Size(669, 637);
+			this.wfmWebControl.TabIndex = 1;
+			this.wfmWebControl.TabStop = false;
+			this.wfmWebControl.Text = "webControl2";
+			this.wfmWebControl.Visible = false;
+			this.wfmWebControl.WebView = this.wfmWebView;
+			// 
 			// webControl1
 			// 
 			this.webControl1.BackColor = System.Drawing.Color.White;
@@ -239,11 +253,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// webView1
 			// 
-			this.webView1.AllowDropLoad = true;
 			this.webView1.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webView1_BeforeContextMenu);
 			this.webView1.Command += new EO.WebBrowser.CommandHandler(this.webView1_Command);
 			this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1NewWindow);
-			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedHandler(this.webView1LoadFailed);
+			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.webView1LoadFailed);
 			// 
 			// gridWorkspace
 			// 
@@ -399,7 +412,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-62, 116);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-84, 116);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -435,7 +448,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-62, 178);
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-84, 178);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(120, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;
@@ -511,23 +524,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.Size = new System.Drawing.Size(1024, 40);
 			this.outlookBar1.TabIndex = 7;
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
-			// 
-			// wfmWebControl
-			// 
-			this.wfmWebControl.BackColor = System.Drawing.Color.White;
-			this.wfmWebControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.wfmWebControl.Location = new System.Drawing.Point(0, 0);
-			this.wfmWebControl.Name = "wfmWebControl";
-			this.wfmWebControl.Size = new System.Drawing.Size(669, 637);
-			this.wfmWebControl.TabIndex = 1;
-			this.wfmWebControl.TabStop = false;
-			this.wfmWebControl.Text = "webControl2";
-			this.wfmWebControl.Visible = false;
-			this.wfmWebControl.WebView = this.wfmWebView;
-			// 
-			// wfmWebView
-			// 
-			this.wfmWebView.AllowDropLoad = true;
 			// 
 			// SmartClientShellForm
 			// 

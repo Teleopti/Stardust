@@ -68,12 +68,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static void Main()
 		{
 			EO.WebBrowser.Runtime.AddLicense(
-												"cqvm8fbNn6/c9gQU7qe0psPZr1uXs8+4iVmXpLHnrprj8AAivUaBpLHLn3Xm" +
-												"9vUQ8YLl6gDL45rr6c7NtWiqs8PbsG2ZpAcQ8azg8//ooWuZpMDpjEOXpLHL" +
-												"u6zg6/8M867p6c8j9ZDYtdLy1LDLs+DktYHGtPgUwZ/uwc7nrqzg6/8M867p" +
-												"6c+4iXWm8PoO5Kfq6c+4iXXj7fQQ7azcwp61n1mXpM0X6Jzc8gQQyJ21usPd" +
-												"tG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/nrqXg5/YZ8p7c" +
-												"wp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu807/u5w==");
+												"r6a3wN2vaqumsR70m7z8ARTxnurFBeihb6a3wN2vaq2msSHkq+rtABm8W6mm" +
+	 "sdq9RoGkscufdert+Bngrez29unlgd7aCeO2rdvbyf73adru6vjmbM/Vzui7" +
+	 "aOrt+Bngrez29umMQ7Oz/RTinuX39umMQ3Xj7fQQ7azcwp61n1mXpM0X6Jzc" +
+	 "8gQQyJ21usPdtG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/n" +
+	 "rqXg5/YZ8p7cwp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu8" +
+	 "07/u56vm8fbNn6/c9gQU7qe0psLgrWmZpMDpjEOXpLHLu2jY8P0a9neEjrHL" +
+	 "n1mz8wMP5KvA8vcan53Y+PbooW8=");
 
 			XmlConfigurator.Configure();
 

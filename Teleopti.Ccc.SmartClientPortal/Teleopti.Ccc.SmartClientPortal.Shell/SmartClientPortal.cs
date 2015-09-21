@@ -84,9 +84,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.LoadCompleted += webView1_LoadComplete;
-			wfmWebView.LoadCompleted += wfmWebView_LoadCompleted;
+			webView1.LoadCompleted += WebView1_LoadCompleted; ;
+			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
+		}
+
+		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
+		{
+			JSObject window = wfmWebView.GetDOMWindow();
+			var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
+			iAmCalledFromFatClient.Invoke(window, new object[] { });
+		}
+
+		private void WebView1_LoadCompleted(object sender, LoadCompletedEventArgs e)
+		{
+			_webViewLoaded = true;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -159,12 +171,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			
 			
 		}
-
-		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
-		{
-			_webViewLoaded = true;
-		}
-
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this,false);
@@ -673,12 +679,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			
 		}
-		
-		void webView1LoadFailed(object sender, LoadFailedEventArgs e)
+
+		private void webView1LoadFailed(object sender, LoadFailedEventArgs e)
 		{
-				canAccessInternet = false;
-				webControl1.Visible = false;
-				//we can't goto static page in this event, for some reason
+			canAccessInternet = false;
+			webControl1.Visible = false;
+			//we can't goto static page in this event, for some reason
 		}
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
@@ -845,13 +851,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			webControl1.Visible = hidePermissions;
 		}
 
-		private void wfmWebView_LoadCompleted(object sender, NavigationTaskEventArgs e)
-		{
-				JSObject window = wfmWebView.GetDOMWindow();
-				var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
-				iAmCalledFromFatClient.Invoke(window, new object[] { });
-		}
-
 		private void wfmWebView_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
 			//do we need this?
@@ -860,5 +859,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			e.Menu.Items.Clear();
 		}
 
+		
 	}
 }

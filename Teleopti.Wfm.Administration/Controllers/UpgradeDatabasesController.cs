@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("UpgradeAllTenants")]
-		public virtual JsonResult<TenantResultModel> UpgradeAllTenants(UpgradeTenantModel model)
+		public virtual JsonResult<TenantResultModel> UpgradeAllTenants([FromBody]UpgradeTenantModel model)
 		{
 			var tenants = _loadAllTenants.Tenants().ToList();
 			foreach (var tenant in tenants)

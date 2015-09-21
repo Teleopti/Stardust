@@ -101,9 +101,17 @@
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EO.WebBrowser, Version=3.0.100.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\EO.WebBrowser.3.0.100\lib\EO.WebBrowser.dll</HintPath>
+    <Reference Include="EO.Base, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.Base.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EO.WebBrowser, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.WebBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EO.WebEngine, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.WebEngine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

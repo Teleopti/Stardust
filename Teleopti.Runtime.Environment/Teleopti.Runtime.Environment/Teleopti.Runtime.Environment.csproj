@@ -43,9 +43,17 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EO.WebBrowser, Version=3.0.91.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\EO.WebBrowser.3.0.100\lib\EO.WebBrowser.dll</HintPath>
+    <Reference Include="EO.Base, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.Base.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EO.WebBrowser, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.WebBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EO.WebEngine, Version=15.2.61.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.15.2.61.0\lib\EO.WebEngine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.7\lib\net20\Newtonsoft.Json.dll</HintPath>
