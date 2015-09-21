@@ -68,11 +68,41 @@ angular.module('wfm.forecasting')
 			$scope.displayCampaignModal = function() {
 				$scope.modalCampaignInfo.addCampaign = true;
 				$scope.modalCampaignLaunch = true;
+				$scope.getCampaignDays();
 			};
+			
+			var campaignDays = [];
+			$scope.sumOfCallsForSelectedDays = 0;
+			$scope.sumOfCallsForSelectedDaysWithCampaign = 0;
+
+			$scope.getCampaignDays = function() {
+				angular.forEach($scope.chart.selected(), function (value) {
+					campaignDays.push({
+						date: value.x,
+						calls: value.value,
+						campaignPercentage: 1
+					});
+					$scope.sumOfCallsForSelectedDays += value.value;
+				});
+				$scope.sumOfCallsForSelectedDaysWithCampaign = $scope.sumOfCallsForSelectedDays;
+			};
+		
 			$scope.cancelCampaignModal = function () {
 				$scope.modalCampaignLaunch = false;
 			};
 
+			$scope.selectedDayCount = function () {
+				if ($scope.chart && $scope.chart.selected())
+					return $scope.chart.selected().length;
+				return '';
+			};
+
+			$scope.selectedDayCountParenthesis = function () {
+				if ($scope.selectedDayCount() > 0)
+					return '(' + $scope.chart.selected().length + ')';
+				return '';
+			};
+ 
 			$scope.chart = undefined;
 
 			$scope.getForecastResult = function (workload) {

@@ -60,7 +60,7 @@
 								</md-tooltip>
 							</a>
 							<a class="wfm-btn" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign(), 'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
-								Add campaign
+								Add campaign {{selectedDayCountParenthesis()}}
 								<md-tooltip>
 									Select days in chart before adding
 								</md-tooltip>
@@ -128,19 +128,19 @@
 				</div>
 				<div class="modal-inner-content">
 					<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign">
-						<h4>Add campaign</h4>
+						<p>Add campaign for the selected <b>{{selectedDayCount()}}</b> day(s)</p>
 					</div>
-					<div class="wfm-block forecast-period" ng-if="modalCampaignInfo.addCampaign">
-						<table class="wfm-table wfm-table-multi" style="width: 700px;">
+					<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign" style="width: 80%; margin: auto">
+						<table class="wfm-table wfm-table-multi forecast-period">
 							<thead><tr><th></th><th>Forecasted</th><th>With campaign</th></tr></thead>
 							<tbody>
-								<tr><td>Calls (20 days)</td><td>150</td><td>300</td></tr>
+								<tr><td>Calls</td><td>{{sumOfCallsForSelectedDays}}</td><td>{{sumOfCallsForSelectedDaysWithCampaign}}</td></tr>
 							</tbody>
 						</table>
 					</div>
 					<span>
-						<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign">Calls
-							<md-slider flex md-discrete min="0" max="1000" aria-label="slider"></md-slider>
+						<div class="wfm-block" ng-if="modalCampaignInfo.addCampaign" style="width: 80%; margin: auto">
+							<md-slider flex md-discrete min="0" max="500" aria-label="slider"></md-slider>
 						</div>
 					</span>
 				</div>
