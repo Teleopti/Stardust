@@ -6,17 +6,12 @@
           function ($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService) {
 
           	var siteId = $stateParams.siteId;
-          	
-          	if (siteId) {
-          		$scope.teams = RtaOrganizationService.getTeams($stateParams.siteId);
-          	} else {
-          		$scope.sites = RtaOrganizationService.getSites();
-          	}
-         
+          
+          	$scope.teams = RtaOrganizationService.getTeams(siteId);
           	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
 
           	$scope.onTeamSelect = function (team) {
-          		$state.go('rta-agents', { siteName: $scope.siteName, siteId: siteId, teamName: team.teamName, teamId: team.teamId});
+          		$state.go('rta-agents', { siteId: siteId, teamId: team.teamId});
           	};
 
           	$scope.goBack = function () {

@@ -7,8 +7,6 @@
 				var siteId =  $stateParams.siteId;
 				
 				$scope.sites = RtaOrganizationService.getSites();
-				
-				$scope.siteName = $stateParams.siteName;
 
 				$scope.onSiteSelect = function (site) {
 					$state.go('rta-teams', {siteId: site.Id});

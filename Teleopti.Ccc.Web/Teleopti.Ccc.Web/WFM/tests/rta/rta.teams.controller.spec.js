@@ -46,7 +46,8 @@ describe('RtaTeamsCtrl', function () {
 
 		var orginaztionService = {
 
-			organization:  [{ siteName: 'London', siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c', teams: [{ teamName: 'Preferences', teamId: 42 }, { teamName: 'NoPreferences', teamId: 43 }] }, { siteName: 'Paris', siteId: '6a21c802-7a34-4917-8dfd-9b5e015ab461', teams: [{ teamName: 'Agile', teamId: 40 }] }],
+			organization:  [{ siteName: 'London', siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c', teams: [{ teamName: 'Preferences', teamId: 42 }, { teamName: 'NoPreferences', teamId: 43 }] }, 
+				{ siteName: 'Paris', siteId: '6a21c802-7a34-4917-8dfd-9b5e015ab461', teams: [{ teamName: 'Agile', teamId: 40 }] }],
 
 			getSites: function (id) {
 				return orginaztionService.organization;
@@ -54,14 +55,16 @@ describe('RtaTeamsCtrl', function () {
 
 			getTeams: function(siteId){
 				return orginaztionService.organization.teams;
+			},
+			getSiteName: function (siteIdParam) {
+				return '';
 			}
+
 		};
 
 		$controller('RtaTeamsCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: orginaztionService });
 
 		expect(scope.teams).not.toBe(null);
-		expect(scope.sites[1].teams.length).toBe(1);
-		
 	}));
 
 });

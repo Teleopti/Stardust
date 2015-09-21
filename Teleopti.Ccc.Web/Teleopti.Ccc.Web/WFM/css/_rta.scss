@@ -1,10 +1,11 @@
 ﻿.rta-list-item{
 	padding:2%;
 	margin-top:10px;
+	cursor: pointer; 
 
 	&:hover{
 	transition: background 0.5s linear 0s;
-	//background-color:$gray012!important;
+	background-color:rgba(0,0,0,.06)!important;
 	}
 }
 

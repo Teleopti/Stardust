@@ -14,7 +14,7 @@ describe('RtaOrganizationService', function () {
 		})
 	});
 
-	fit('should get the team name from the team id', function () {
+	it('should get the team name from the team id', function () {
 		inject(function (RtaOrganizationService) {
 
 			var teamId = 42;
