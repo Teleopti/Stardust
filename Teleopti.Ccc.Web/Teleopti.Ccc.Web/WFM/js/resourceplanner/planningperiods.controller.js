@@ -59,7 +59,7 @@
 	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
 
 	                    $scope.schedulingPerformed = true;
-							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result });
+							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result, planningperiod:planningPeriod });
 	                }, handleScheduleOrOptimizeError);
 	            }, handleScheduleOrOptimizeError);
 	        };

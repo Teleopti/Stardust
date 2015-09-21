@@ -65,15 +65,6 @@
 	}
 
   @media (max-width: 600px) {
-    .floop {
-      height:75px;
-      padding-top:20px;
-    }
-
-    .floop > .dayNode{
-      padding-top: 20px;
-    }
-
     .legends{
       display:block;
     }
@@ -90,14 +81,16 @@
   justify-content: space-around;
 }
 
-.blip {
-  background: transparent;
-  outline: gray solid 1px;
-  text-align: center;
-  height:auto;
-  width:auto;
-  cursor: pointer;
-  margin:1px;
+.resourceplanner-box {
+	background: 0 0;
+    /* outline: gray solid 1px; */
+    text-align: center;
+    height: auto;
+    width: auto;
+    cursor: pointer;
+    margin: 1px;
+    height: 10px;
+    margin: 2px;
 }
 
 .floater-box{
@@ -112,10 +105,14 @@
   transition: 0.2s all ease-in-out;
 }
 
-.blip:hover > .floater-box{
+.resourceplanner-box:hover > .floater-box{
   visibility: visible;
   color: white;
   opacity: 1;
+}
+
+.resourceplanner-box:hover{
+	outline:1px rgba(0,0,0,0.6) dashed ;
 }
 
 .dayNode{
@@ -135,7 +132,7 @@
 
 }
 .weekend{
-outline: #FFC285 solid 1px;
+	background-color: rgba(255, 165, 0, 0.37);
 
 }
 .weekstart{
@@ -152,13 +149,17 @@ outline: #FFC285 solid 1px;
 
   }
 }
+
+.grid-scroll-wrap{
+	width:100%;
+	overflow:auto;
+}
+
 .overview{
   border-collapse: separate;
   padding: 5px;
   width: 100%;
   empty-cells: show;
-
-
 
 	td{
 	width:10px;
@@ -173,6 +174,8 @@ outline: #FFC285 solid 1px;
 }
 
 .skillname{
-  width:auto!important;
-  border-bottom: 1px gray solid!important;
+	max-width: 20em!important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

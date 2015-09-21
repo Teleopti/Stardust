@@ -1,6 +1,6 @@
 ﻿
 	<div>
-		<h4>Scheduling result</h4>
+		<h4>Scheduling result</h4> {{planningPeriod.StartDate}} - {{planningPeriod.EndDate}}
 		<p>{{scheduledAgents}} agents were successfully scheduled</p>
 		<p ng-if="hasIssues"></p>
 	</div>
@@ -22,15 +22,10 @@
 
 
                 </div>
+				<div class="grid-scroll-wrap">
                 <table ng-hide="dates.lenght > 0" class="overview">
                     <tr>
                         <th></th>
-                        <!-- If it*s first day we display
-                          if it's a monday we display with a colspan of 5 except if it's the last one (maybe it's less than 5)
-                          -->
-                        <!--<th class="datehead" colspan="getdaysuntilnextmonday(dates[0])">-->
-                            <!--{{dates[0].day}}/{{dates[0].month}}-->
-                        <!--</th>-->
                         <th class="datehead" ng-repeat="datenode in dates ">
                             {{datenode.day}}/{{datenode.month}}
                         </th>
@@ -38,27 +33,18 @@
                     <tr ng-repeat="(index, subnode) in dayNodes">
 
                         <td class="skillname">{{ subnode.SkillName }}</td>
-                        <td class="blip" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend,understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">
+                        <td ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}"  >
+							<div class="resourceplanner-box"
+							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">
                             <div class="floater-box">
-                            <p>{{node.Date.Date}}</p>
-                            <p>Rel diff:{{node.RelativeDifference}}</p>
+	                            <p>{{node.Date.Date}}</p>
+	                            <p>Rel diff:{{node.RelativeDifference}}</p>
                             </div>
+						</div>
                         </td>
                     </tr>
                 </table>
-                <!--<div  ng-repeat="(node, subnode) in dayBoxes" ng-class="{gridWeekend: box.status ==='weekend',gridNotice: box.status ==='error'}">-->
-                    <!--<div layout-gt-sm="row" layout="column" class="floop">-->
-                        <!--<div flex="20">{{subnode.SkillName}}</div>-->
-                        <!--<div class="dayNode" flex>-->
-                            <!--<div class="blip" flex ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend,understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">-->
-                                <!--<div class="floater-box">-->
-                                    <!--<p>{{node.Date.Date}}</p>-->
-                                    <!--<p>Rel diff:{{node.RelativeDifference}}</p>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+			</div>
             </div>
         </div>
     </div>

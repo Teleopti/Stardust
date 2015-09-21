@@ -39,7 +39,7 @@ var wfm = angular.module('wfm', [
 
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
-		$urlRouterProvider.otherwise("forecasting");		
+		$urlRouterProvider.otherwise("forecasting");
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html',
@@ -69,7 +69,7 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
-			params: { result: {},interResult: [] },
+			params: { result: {},interResult: [],planningperiod:{} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
@@ -81,7 +81,7 @@ wfm.config([
 			templateUrl: 'html/outbound/outbound.html',
 			controller: 'OutboundDefaultCtrl'
 		}).state('outbound.summary', {
-			url: '/summary',			
+			url: '/summary',
 			views: {
 				'': {
 					templateUrl: 'html/outbound/outbound-overview.html'
@@ -93,8 +93,8 @@ wfm.config([
 				'gantt@outbound.summary': {
 					templateUrl: 'html/outbound/campaign-list-gantt.html',
 					controller: 'CampaignListGanttCtrl'
-				}			
-			}			
+				}
+			}
 		}).state('outbound.create', {
 			url: '/create',
 			templateUrl: 'html/outbound/campaign-create.html',
