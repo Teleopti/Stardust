@@ -1,37 +1,49 @@
 ﻿.wfm-date-range-picker-wrap {
-	.wrong-sign {
-		display: none; 
-		color: #ee8f7d ;
-	}
-	.right-sign {
-		display: none;
-		color: #c2e085;
-	}
-	.error-msg-container {
-		display: none;
-		margin-top: 10px;
-	}
-	.ng-valid {		
-		.right-sign {
-			display: block; 
-		}
-	}
-	
-	.ng-invalid {
-		&.ng-invalid-order ~ .error-msg-container.ng-invalid-order {
-			display: block;
-		}
-		&.ng-invalid-empty ~ .error-msg-container.ng-invalid-empty {
-			display: block;
-		}
-		.wrong-sign {
-			display: block; 
-		}		
-	}	
-	.wfm-datepicker-wrap td.in-date-range button {
-		background-color: #c2e085;
-	}
-	.error-msg-container {
-		display: none;
-	}
-}
+  .wrong-sign {
+    display: none; 
+    color: #ee8f7d ;
+  }
+  .right-sign {
+    display: none;
+    color: #c2e085;
+  }
+  .error-msg-container {
+    display: none;
+    margin-top: 10px;
+  }
+  .ng-valid {		
+    .right-sign {
+      display: block; 
+    }
+  }
+  .ng-invalid {
+    &.ng-invalid-order ~ .error-msg-container.ng-invalid-order {
+      display: block;
+    }
+    &.ng-invalid-empty ~ .error-msg-container.ng-invalid-empty {
+      display: block;
+    }
+    .wrong-sign {
+      display: block; 
+    }		
+  }	
+  .wfm-datepicker-wrap td.in-date-range button {
+    background-color: #c2e085;
+  }
+  .error-msg-container {
+    display: none;
+  }
+  .wfm-date-picker-wrap {
+    display: inline-block;
+  }
+  .datepickerfix{
+    position:absolute;
+    top:8px;
+    right:10px;
+    height:18px;
+    width:18px;
+  }
+  .sub-header {
+    position: relative;    
+  }
+}  

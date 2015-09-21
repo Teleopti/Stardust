@@ -37,7 +37,8 @@
         }
 
         function reset() {
-            $scope.campaign = angular.copy(originalCampaign);
+        	$scope.campaign = angular.copy(originalCampaign);
+	        $scope.campaign.spanningPeriodErrors = [];
             setPristineForms();
         }
 
