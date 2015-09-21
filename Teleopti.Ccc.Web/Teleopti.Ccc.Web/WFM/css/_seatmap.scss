@@ -4,12 +4,15 @@
 	padding: 0;
 	height: 100%;
 	z-index: 0;
-	position: relative;	
+	position: absolute;	
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
 
 	.seatmap-view-header{
 		height: 41px;
 		position:relative;
-		margin:-10px -10px 0px -10px;
 		z-index:2;
 
 		.wfm-btn{
@@ -58,7 +61,6 @@
 	top:40px;
 	left:0;
 	right:0;
-	margin:0px -10px 0px -10px;
 	z-index:1;
 	
 	div{
@@ -86,11 +88,10 @@
 
 .location-breadcrumb-edit-mode{
 	position:relative;
-	top:-10px;
+	top:0px;
 
 	.breadcrumb-inverse{
 		font-size : 95%;
-	
 	}
 }
 
@@ -157,16 +158,19 @@ a.mfb-component__button--main {
 .seatmap-canvas {
 	position: absolute;
 	top:41px;
+	left:0;
+	right:0;
+	bottom:0;
 }
 
 .seatmap-canvas-edit-mode{
-	top:34px;
+	top:44px;
 }
 
 .seatmap-canvas .wfm-block{
 	width: 100%; 
 	margin: 0; 
-	padding: 0;
+	padding:0 10px 0 10px;
 }
 
 seatmap-editor{
@@ -183,7 +187,7 @@ seatmap-editor{
 	top:23px;
 }
 
-@media(min-width:1280px){
+@media(min-width:1475px){
 	.top-adjust{
 		top:-20px;
 	}
@@ -237,10 +241,6 @@ seatmap-editor{
 	max-height:200px;
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
-	padding-top:1px;
-	margin-left:-10px;
-	margin-right:-10px;
-	margin-bottom:-13px;
 
 	.bottom-header{
 		position:relative;

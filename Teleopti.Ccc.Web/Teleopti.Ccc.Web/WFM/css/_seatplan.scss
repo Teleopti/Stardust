@@ -2,6 +2,10 @@
 	height:100%;
 }
 
+#seatplan>.row{
+	margin-top:10px;
+}
+
 .seatplan-calendar{
 	width: 320px;
 	padding-bottom: 15px;
@@ -66,10 +70,13 @@
 
 .seatplan-report{
 	padding: 0px;
-	margin: -10px;
 	height:100%;
 	z-index:0;
-	position:relative;
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
 
 	.seatplan-report-header{
 		height: 40px;
@@ -193,9 +200,12 @@
 		padding-left:10px;
 		padding-right:10px;
 		overflow:auto;
-		height:98%;
 		width:100%;
 		position:absolute;
+		top:40px;
+		right:0;
+		bottom:0;
+		left:0;
 
 		h2{
 			margin-bottom:0px !important;
@@ -276,7 +286,7 @@
 	}
 
 	.seatplan-paging-container{
-		height:60px;
+		height:80px;
 		margin-right:-10px;
 	}
 

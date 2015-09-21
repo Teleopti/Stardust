@@ -65,17 +65,17 @@ label {
  * growl-item styles
  */
 .growl-wrapper {
-	position: fixed;
-	bottom: 5px;
+	position: absolute;
+	bottom: 0px;
 	z-index: 99999;
-	right: 16%;
-	left: 16%;
+	right: 0;
+	left: 0;
 }
 
 .growl-container > .growl-item {
 	padding: 10px;
 	padding-right: 35px;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
 	cursor: pointer;
 	vertical-align: middle;
 	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
@@ -114,10 +114,10 @@ label {
 }
 
 .nav-item{
-	-webkit-transition:0.2s all ease-in-out;
-	-moz-transition:0.2s all ease-in-out;
-	-o-transition:0.2s all ease-in-out;
-	transition:0.2s all ease-in-out;
+	-webkit-transition:2000s all ease-in-out;
+	-moz-transition:2000s all ease-in-out;
+	-o-transition:2000s all ease-in-out;
+	transition:2000s all ease-in-out;
 }
 
 .nav-item-active > div{

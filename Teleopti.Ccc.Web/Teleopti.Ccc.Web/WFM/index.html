@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="vendor/c3/c3.min.css" />
 	<link rel="stylesheet" href="vendor/ng-mfb/mfb.css">
 	<link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt.css" />
-	<link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-plugins.css"/>
+	<link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-plugins.css" />
 	<link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-table-plugin.css" />
 	<link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css" />
 
@@ -94,15 +94,10 @@
 				</label>
 			</div>
 		</div>
-		<div id="materialcontainer" class="container content material-depth-1 material-block" ui-view></div>
-		<!--move this to a smart place -->
-		<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-12">
-						<div growl></div>
-					</div>
-				</div>
+		<div id="materialcontainer" class="container content material-depth-1 material-block" style="position: relative;">
+			<div ui-view></div>
+			<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper">
+				<div growl></div>
 			</div>
 		</div>
 
@@ -114,9 +109,30 @@
 				</label>
 			</div>
 		</div>
-		<div id="rightsidenav" class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" >
+		<div id="rightsidenav" class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}">
 			<span ng-include="'html/right-sidenav.html'"></span>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		$(function () {
+			$('#materialcontainer').scroll(function () {
+				var uiHeight = $('[ui-view]').height();
+				var containerHeight = $('#materialcontainer').height();
+				var scrollTop = $('#materialcontainer').scrollTop();
+
+				if (uiHeight > containerHeight) {
+					$('#notice').css({ bottom: -scrollTop });
+				} else {
+					$('#notice').css({ bottom: 0 });
+				}
+			});
+
+			$(window).resize(function () {
+				//setTimeout(adjustNotice(), 900);
+				$('#materialcontainer').scrollTop(0);
+			});
+		});
+	</script>
 </body>
 </html>

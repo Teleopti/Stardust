@@ -41,7 +41,7 @@
 
 			function doResize(canvas) {
 				var viewPortHeight = $(document)[0].documentElement.clientHeight;
-				var width = $('[ui-view]')[0].clientWidth - 20;
+				var width = $('[ui-view]')[0].clientWidth - 0;
 				var heightReduction = 130; // no reliable element to base this off
 
 				canvas.setHeight((viewPortHeight - heightReduction));
@@ -393,7 +393,7 @@
 
 				return timeZoneAdjustment;
 			};
-			
+
 			function getSeatBookingTimeDisplay(booking) {
 				return moment(booking.StartDateTime).format('LT') + " - " + moment(booking.EndDateTime).format('LT') + getTimeZoneAdjustmentDisplay(booking);
 			};
