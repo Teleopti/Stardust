@@ -42,7 +42,7 @@
 					<gantt-task ng-if="!row.model.expansion" ng-repeat="task in row.visibleTasks track by task.model.id">
 					</gantt-task>
 					<div class="gantt-row-expansion" ng-if="row.model.expansion">
-						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData">
+						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
 							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 						</div>
 						<div class="campaign-chart-wrapper" ng-if="!row.model.isLoadingData">

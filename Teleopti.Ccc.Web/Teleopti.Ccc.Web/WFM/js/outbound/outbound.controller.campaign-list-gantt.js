@@ -83,15 +83,17 @@
 					collapse: function collapseExpansion(ev, index) {
 						c.expanded = false;
 						$scope.ganttData.splice(index, 1);
-					},
-					callbacks : {
-						addManualPlan: getCommandCallback(campaign, $scope),
-						removeManualPlan: getCommandCallback(campaign, $scope),
-						addManualBacklog: getCommandCallback(campaign, $scope),
-						removeManualBacklog: getCommandCallback(campaign, $scope),
-						replan: getCommandCallback(campaign, $scope)
-					}
+					}					
 				};
+
+				newDataRow.callbacks = {
+					addManualPlan: getCommandCallback(campaign, newDataRow, $scope),
+					removeManualPlan: getCommandCallback(campaign, newDataRow, $scope),
+					addManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
+					removeManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
+					replan: getCommandCallback(campaign, newDataRow, $scope)
+
+				}
 			
 				var index = readIndex(c);
 				if (index >= 0)
@@ -103,10 +105,12 @@
 			}
 		};
 
-		function getCommandCallback(campaign, scope) {			
-			return function(resp, done) {
+		function getCommandCallback(campaign, dataRow, scope) {			
+			return function (resp, done) {
+				dataRow.isRefreshingData = true;
 				getGraphData(campaign, function () {
 					scope.$broadcast('campaign.chart.refresh', campaign);
+					dataRow.isRefreshingData = false;
 					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
 					if (done) done();
 				});							
