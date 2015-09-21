@@ -1,6 +1,6 @@
 ﻿
 	<div>
-		<h4>Scheduling result</h4> {{planningPeriod.StartDate}} - {{planningPeriod.EndDate}}
+		<h4>Scheduling result</h4> {{planningPeriod.StartDate |  amDateFormat:"L"}} - {{planningPeriod.EndDate |  amDateFormat:"L"}}
 		<p>{{scheduledAgents}} agents were successfully scheduled</p>
 		<p ng-if="hasIssues"></p>
 	</div>

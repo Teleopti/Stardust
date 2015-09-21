@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope','$state', '$stateParams', function ($scope,$state, $stateParams) {
+			'$scope','$filter','$state', '$stateParams', function ($scope,$filter,$state, $stateParams) {
 			$scope.issues = $stateParams.result.BusinessRulesValidationResults;
 			$scope.hasIssues = $scope.issues.length > 0;
 			$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount;
