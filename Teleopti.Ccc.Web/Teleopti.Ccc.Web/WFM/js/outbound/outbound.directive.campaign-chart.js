@@ -77,6 +77,9 @@
 			function loadGraph() {
 				if (!$scope.graph) return;
 
+				$scope.campaign.selectedDates = [];
+				$scope.campaign.selectedDatesClosed = [];
+
 				var yMax = _calculateYMax();
 
 				if (yMax >= $scope.campaign.formerOptionYMax || yMax <= $scope.campaign.formerOptionYMax * 0.8) {

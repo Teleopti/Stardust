@@ -100,7 +100,7 @@
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
 				getGraphData(campaign, function () {
 					newDataRow.isLoadingData = false;
-					$scope.$broadcast('campaign.chart.refresh', campaign);
+					
 				});
 			}
 		};
@@ -110,6 +110,7 @@
 				dataRow.isRefreshingData = true;
 				getGraphData(campaign, function () {
 					scope.$broadcast('campaign.chart.refresh', campaign);
+					$scope.$broadcast('campaign.chart.clear.selection', campaign);
 					dataRow.isRefreshingData = false;
 					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
 					if (done) done();

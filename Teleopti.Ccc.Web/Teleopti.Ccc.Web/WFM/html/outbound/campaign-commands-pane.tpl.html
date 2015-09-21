@@ -8,8 +8,8 @@
 		<div class="manual-input-btns">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
 					ng-click="addManualPlan()"
-					ng-disabled="validManualProductionPlan()"
-					ng-class="{'wfm-btn-invis-disabled': validManualProductionPlan()}"
+					ng-disabled="!validManualProductionPlan()"
+					ng-class="{'wfm-btn-invis-disabled': !validManualProductionPlan()}"
 					translate>
 				Save
 			</button>
@@ -29,8 +29,8 @@
 		<div class="manual-input-btns">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
 					ng-click="addManualBacklog()"
-					ng-disabled="validManualBacklog()"
-					ng-class="{'wfm-btn-invis-disabled': validManualBacklog()}"
+					ng-disabled="!validManualBacklog()"
+					ng-class="{'wfm-btn-invis-disabled': !validManualBacklog()}"
 					translate>
 				Save
 			</button>

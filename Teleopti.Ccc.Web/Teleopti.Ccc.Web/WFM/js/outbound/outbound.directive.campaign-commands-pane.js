@@ -59,6 +59,7 @@
 
 			function callbackDone() {
 				$scope.manualPlanInput = null;
+				$scope.manualBacklogInput = null;				
 				$scope.isLoading = true;
 			}
 
@@ -68,7 +69,7 @@
 					campaignId: $scope.campaign.Id,
 					selectedDates: unclosedDays(),
 					manualPlanInput: $scope.manualPlanInput
-				}, function (response) {
+				}, function (response) {				
 					if (angular.isDefined($scope.callbacks.addManualPlan)) {
 						$scope.callbacks.addManualPlan(response, callbackDone);
 					} else {
@@ -82,7 +83,7 @@
 				outboundChartService.removeManualPlan({
 					campaignId: $scope.campaign.Id,
 					selectedDates: $scope.selectedDates
-				}, function (response) {
+				}, function (response) {				
 					if (angular.isDefined($scope.callbacks.removeManualPlan)) {
 						$scope.callbacks.removeManualPlan(response, callbackDone);
 					} else {
@@ -132,18 +133,20 @@
 			}
 
 
-			function validManualProductionPlan() {
-				
+			function validManualProductionPlan() {			
+				return $scope.manualPlanInput && $scope.manualPlanInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
 			}
 
-			function validManualBacklog() {
-				
-
+			function validManualBacklog() {				
+				return $scope.manualBacklogInput && $scope.manualBacklogInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
 			}
 
 			function showDateSelectionHint() {
-				
-
+				if ($scope.isLoading) return false;
+				if ($scope.selectedDates && $scope.selectedDates.length > 0) return false;
+				if ($scope.manualPlanSwitch) return  $scope.manualPlanInput != null;
+				if ($scope.manualBacklogSwitch) return  $scope.manualBacklogInput != null;
+				return false;
 			}
 
 		}

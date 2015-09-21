@@ -75,18 +75,13 @@
 				border-right: none;
 			}			
 
-			.gantt-row-background {
-				border-right: solid 1px;
+			.gantt-row-background {			
 				&.gantt-row-expansion {
 					border-right: none;
 				}
 			}
 		}
-
-		.gantt-side-background-header {
-			border-right: solid 1px;
-		}
-				
+						
 		.gantt-resizer {
 			opacity: 0;
 		}
