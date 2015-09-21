@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -32,15 +32,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				FeatureToggle = "http://notinuse"
 			};
 			builder.RegisterModule(new CommonModule(new IocConfiguration(args, new FalseToggleManager())));
+			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<TeamOrSiteChangedMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<PersonChangedMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), UserConfigurable.DefaultTenantName);
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(),
+				UserConfigurable.DefaultTenantName);
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
-			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData,
+				DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 
