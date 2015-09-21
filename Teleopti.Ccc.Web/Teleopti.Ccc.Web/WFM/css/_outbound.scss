@@ -38,7 +38,22 @@
 	}
 	.outbound-gantt-chart {
 		margin: 70px 0;
-		
+		.gantt-schedule-loader{
+		    position:absolute;
+			top:30px;
+			left:0;
+			width:100%;
+			z-index:999;
+			margin-top:-5px;
+		}
+		.campaign-late div{
+		    background-color:rgba(244,67,54,0.6) !important;
+		    box-shadow:inset 0 2px 5px 0 #f43649;
+		}
+		.campaign-early div{
+		    background-color:rgba(255, 127, 14,0.6) !important;
+		    box-shadow:inset 0 2px 5px 0 #ff570e;
+		}
 		.gantt-body .gantt-row-expansion {
 			background-color: white;
 			opacity: 1;

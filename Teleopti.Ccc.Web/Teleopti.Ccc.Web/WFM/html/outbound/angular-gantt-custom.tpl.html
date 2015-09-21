@@ -45,6 +45,10 @@
 						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
 							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 						</div>
+						<div class="clearfix m-b-10 text-center">
+							<p class="campaign-message m-r-5" ng-class="{orangefix: row.model.isOverStaffing}" ng-repeat="info in row.model.campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
+						</div>
 						<div class="campaign-chart-wrapper" ng-if="!row.model.isLoadingData">
 							<campaign-chart campaign="row.model.campaign" dictionary="row.model.campaign.translations" exclude-closed="row.model.campaign.manualPlanswitch"></campaign-chart>
 							<campaign-commands-pane campaign="row.model.campaign" selected-dates="row.model.campaign.selectedDates" selected-dates-closed="row.model.campaign.selectedDatesClosed" is-loading="row.model.isRefreshingData" callbacks="row.model.callbacks"></campaign-commands-pane>
@@ -181,7 +185,7 @@
 					<div class="gantt-row gantt-row-height "
 						 ng-class-odd="'gantt-row-odd'"
 						 ng-class-even="'gantt-row-even'"
-						 ng-class="row.model.classes"
+						 ng-class="row.model.headerClasses"
 						 ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id"
 						 ng-style="{'height': row.model.height}">
 												

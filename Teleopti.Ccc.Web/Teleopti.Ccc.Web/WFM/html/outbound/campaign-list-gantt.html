@@ -1,7 +1,8 @@
 ﻿<div ng-if="isGanttEnabled">
 	<div class="loading-gantt-section" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
-	<div class="spacer material-depth-1 outbound-gantt-chart"
+
+	<div class="spacer material-depth-1 outbound-gantt-chart relative"
 		 gantt
 		 data="ganttData"
 		 options="ganttOptions"
@@ -9,7 +10,8 @@
 		 headers-formats="headerFormats"
 		 template-url="html/outbound/angular-gantt-custom.tpl.html"
 		 scrollfix="+10">
+		<div ng-show="!isLoadingSchedule" class="gantt-schedule-loader"><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>
 		<gantt-tooltips></gantt-tooltips>
-		<gantt-table headers="tableHeaders"></gantt-table>
+		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
 	</div>
 </div>

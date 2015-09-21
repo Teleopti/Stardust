@@ -66,6 +66,7 @@
 		}
 
 		$scope.campaignClicked = function (ev, c) {
+			if (!$scope.isLoadingSchedule) return;
 			if (c.expanded) {
 				c.expanded = false;
 				$scope.ganttData.splice(readIndex(c) + 1, 1);
@@ -85,7 +86,6 @@
 						$scope.ganttData.splice(index, 1);
 					}					
 				};
-
 				newDataRow.callbacks = {
 					addManualPlan: getCommandCallback(campaign, newDataRow, $scope),
 					removeManualPlan: getCommandCallback(campaign, newDataRow, $scope),
@@ -94,16 +94,26 @@
 					replan: getCommandCallback(campaign, newDataRow, $scope)
 
 				}
+				
 			
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
 				getGraphData(campaign, function () {
 					newDataRow.isLoadingData = false;
-					
+					newDataRow.campaign = campaign;
+					newDataRow.isOverStaffing = isOverStaffing(campaign);
 				});
 			}
 		};
+		function isOverStaffing(campaign) {
+						if (!campaign.WarningInfo) return false;
+						var d = campaign.WarningInfo;
+						var result = d.filter(function (e) {
+								return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
+						}).length > 0;
+						return result;
+					};
 
 		function getCommandCallback(campaign, dataRow, scope) {			
 			return function (resp, done) {
@@ -162,13 +172,21 @@
 			};
 		}
 
+		$scope.isLoadingSchedule = false;
 		function getGanttVisualization(startDate,endDate) {
 			var defaultPeriod = outboundService.getDefaultPeriod();
 			var ganttPeriod = {
 				StartDate: { Date: startDate ? startDate : defaultPeriod[0] },
 				EndDate: { Date: endDate ? endDate : defaultPeriod[1] }
 			};
-			
+
+			outboundService.load(function handleSuccess(isload) {
+				outboundService.listFilteredCampaignsWithinPeriod(0, function success(data) {
+					updateGanttChart(data);
+					$scope.ganttStatistics = data;
+					$scope.isLoadingSchedule = true;
+				});
+			});
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
 				if (data) data.forEach(function (ele, ind) {
@@ -183,7 +201,7 @@
 					ganttArr[ind].tasks[0].from = fromDate;
 					ganttArr[ind].tasks[0].to = toDate;
 					ganttArr[ind].tasks[0].id = ele.Id;
-					ganttArr[ind].tasks[0].color = '#09F';
+					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.5)';
 					ganttArr[ind].tasks[0].tooltips = {
 					'enabled': true
 					}
@@ -192,6 +210,23 @@
 				$scope.ganttData = ganttArr;
 				$scope.isLoadFinished = true;
 			});
+		}
+
+		function updateGanttChart(data) {
+			$scope.ganttData.forEach(function (ele1, ind1) {
+				data.forEach(function(ele2, ind2) {
+					if (ele1.id == ele2.Id) {
+						ele1.tasks[0].color = ele2.Status == 2 ? '#c2e085' : '#09F';
+						ele2.WarningInfo.forEach(function (ele) {
+							if (ele.TypeOfRule == 'OutboundUnderSLARule') ele1.headerClasses = 'campaign-late';
+							if (ele.TypeOfRule == 'OutboundOverstaffRule') ele1.headerClasses = 'campaign-early';
+							
+						});
+
+					}
+				});
+			});
+
 		}
 	}
 
