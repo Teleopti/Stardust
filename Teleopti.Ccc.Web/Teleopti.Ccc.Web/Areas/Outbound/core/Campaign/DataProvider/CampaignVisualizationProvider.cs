@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (campaign == null) return visualizationVM;
 
 			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
-			TimeSpan backlogPreviousDay = TimeSpan.Zero;
+			TimeSpan? backlogPreviousDay = null;
 
 			foreach (var date in campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).DayCollection())
 			{
@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 				visualizationVM.Dates.Add(date);
 				
-				if (backlogHours == TimeSpan.Zero)
+				if (backlogPreviousDay.HasValue && backlogHours == TimeSpan.Zero)
 				{
 					overstaffHours = (scheduledHours > TimeSpan.Zero)
-						? scheduledHours - backlogPreviousDay
-						: plannedHours - backlogPreviousDay;
+						? scheduledHours - backlogPreviousDay.Value
+						: plannedHours - backlogPreviousDay.Value;
 				}
 													
 				visualizationVM.PlannedPersonHours.Add(convertTimespanToDouble(plannedHours));
