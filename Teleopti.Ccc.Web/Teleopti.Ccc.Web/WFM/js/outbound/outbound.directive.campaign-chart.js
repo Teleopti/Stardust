@@ -101,7 +101,9 @@
 					data: _setChartOption_data(),
 					axis: _setChartOption_axis(),
 					grid: _setChartOption_verticalLines(),
-					tooltip: { contents: _setChartOption_tooltip() }
+					tooltip: { contents: _setChartOption_tooltip() },
+					transition: { duration: null}
+					
 				};
 				return c3.generate(chartOptions);
 			}
@@ -291,7 +293,7 @@
 
 			scope.$on('campaign.chart.refresh', function(_s, data) {
 				if (scope.campaign.Id == data.Id) {
-					scope.$evalAsync(ctrl.loadGraph());
+					scope.$evalAsync(ctrl.loadGraph);
 				}
 			});
 
