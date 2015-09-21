@@ -27,6 +27,12 @@ Background:
 	| Schedule published to date | 2040-06-24         |
 	And there is a workflow control set with
 	| Field                                 | Value                            |
+	| Name                                  | Published schedule to 2012-08-27 |
+	| Schedule published to date            | 2012-08-27                       |
+	| Preference period is closed           | true                             |
+	| Student availability period is closed | true                             |
+	And there is a workflow control set with
+	| Field                                 | Value                            |
 	| Name                                  | Published schedule to 2012-08-28 |
 	| Schedule published to date            | 2012-08-28                       |
 	| Preference period is closed           | true                             |
@@ -81,6 +87,7 @@ Scenario: View night shift
 	
 Scenario: Do not show unpublished schedule
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule to 2012-08-27'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 8:00  |

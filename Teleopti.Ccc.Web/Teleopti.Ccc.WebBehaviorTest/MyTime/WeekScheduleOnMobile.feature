@@ -28,6 +28,8 @@ Background:
 	| Field                      | Value                               |
 	| Name                       | Published schedule until 2014-04-30 |
 	| Schedule published to date | 2014-04-30                          |
+	| Preference period is closed           | true                     |
+	| Student availability period is closed | true                     |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2014-04-14 |
@@ -146,7 +148,6 @@ Scenario: View when you are in absence on day off
    | Name  | Illness    |
    | Date  | 2014-04-15 |
 
-@ignore
 Scenario: Do not show unpublished schedule
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule until 2014-04-30'

@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		  [Then(@"I should not see a shift on date '(.*)'")]
 		  public void ThenIShouldNotSeeAnyShiftForDay(DateTime date)
 		  {
-			  Browser.Interactions.AssertNotExists(".weekview-mobile",
-													string.Format("'[data-mytime-date='{0}']' .shift", date.ToString("yyyy-MM-dd")));
+			  Browser.Interactions.AssertNoContains(".weekview-mobile", string.Format("div[data-mytime-date='{0}'] .shift" ,date.ToString("yyyy-MM-dd" )), "09:00 - 18:00");
 		  }
 
 		  [Then(@"I should not see dayoff on date '(.*)'")]
