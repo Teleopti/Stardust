@@ -62,29 +62,52 @@ angular.module('wfm.forecasting')
 
 			$scope.addCampaignDisabled = true;
 			$scope.modalCampaignInfo = {
-				addCampaign: false
 			};
+
+			var calculateCampaignCalls = function() {
+				return ($scope.sumOfCallsForSelectedDays * $scope.modalCampaignInfo.campaignPercentage / 100).toFixed(1);
+			};
+
 			$scope.modalCampaignLaunch = false;
 			$scope.displayCampaignModal = function() {
-				$scope.modalCampaignInfo.addCampaign = true;
 				$scope.modalCampaignLaunch = true;
 				$scope.getCampaignDays();
+				$scope.modalCampaignInfo.campaignPercentage = 100;
+				$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 			};
 			
 			var campaignDays = [];
 			$scope.sumOfCallsForSelectedDays = 0;
-			$scope.sumOfCallsForSelectedDaysWithCampaign = 0;
 
-			$scope.getCampaignDays = function() {
+			$scope.campaignPercentageConst = {
+				max: 500,
+				min: 0
+			};
+
+			$scope.campaignPercentageChanged = function (campaignForm) {
+				if (campaignForm) {
+					if (campaignForm.campaignPercentageInput.$valid) {
+						// do nothing
+					} else if (campaignForm.campaignPercentageInput.$error.max) {
+						$scope.modalCampaignInfo.campaignPercentage = $scope.campaignPercentageConst.max;
+					} else if (campaignForm.campaignPercentageInput.$error.min) {
+						$scope.modalCampaignInfo.campaignPercentage = $scope.campaignPercentageConst.min;
+					}
+					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
+				}
+			};
+
+			$scope.getCampaignDays = function () {
+				var tempsum = 0;
 				angular.forEach($scope.chart.selected(), function (value) {
 					campaignDays.push({
 						date: value.x,
 						calls: value.value,
 						campaignPercentage: 1
 					});
-					$scope.sumOfCallsForSelectedDays += value.value;
+					tempsum += value.value;
 				});
-				$scope.sumOfCallsForSelectedDaysWithCampaign = $scope.sumOfCallsForSelectedDays;
+				$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
 			};
 		
 			$scope.cancelCampaignModal = function () {
