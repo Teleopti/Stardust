@@ -11,9 +11,10 @@
 			'miscService',
 			'outboundTranslationService',
 			'outboundChartService',
+			'outboundNotificationService',
 			campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService) {
+	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -71,25 +72,48 @@
 
 			} else {
 				c.expanded = true;
-				var campaign = { Id: c.id, isLoadingData: true };
+				var campaign = { Id: c.id };
 				var newDataRow = {
 					id: c.id + '_expanded',
 					height: '600px',
 					expansion: true,
 					campaign: campaign,
+					isLoadingData: true,
+					isRefreshingData: false,
 					collapse: function collapseExpansion(ev, index) {
 						c.expanded = false;
 						$scope.ganttData.splice(index, 1);
+					},
+					callbacks : {
+						addManualPlan: getCommandCallback(campaign, $scope),
+						removeManualPlan: getCommandCallback(campaign, $scope),
+						addManualBacklog: getCommandCallback(campaign, $scope),
+						removeManualBacklog: getCommandCallback(campaign, $scope),
+						replan: getCommandCallback(campaign, $scope)
 					}
 				};
+			
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
-				getGraphData(campaign, $scope);
+				getGraphData(campaign, function () {
+					newDataRow.isLoadingData = false;
+					$scope.$broadcast('campaign.chart.refresh', campaign);
+				});
 			}
 		};
 
-		function getGraphData(campaign, scope) {		
+		function getCommandCallback(campaign, scope) {			
+			return function(resp, done) {
+				getGraphData(campaign, function () {
+					scope.$broadcast('campaign.chart.refresh', campaign);
+					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
+					if (done) done();
+				});							
+			}			
+		}
+
+		function getGraphData(campaign, done) {		
 			outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
 				angular.extend(campaign, _campaign);
 				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
@@ -98,8 +122,8 @@
 					campaign.isManualBacklog = backlog;
 					campaign.translations = translations;
 					campaign.closedDays = closedDays;
-					campaign.isLoadingData = false;
-					scope.$broadcast('campaign.chart.refresh', campaign);
+
+					if (done) done();					
 				});
 			});
 		}

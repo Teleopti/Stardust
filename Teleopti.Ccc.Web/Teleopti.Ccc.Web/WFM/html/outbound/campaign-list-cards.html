@@ -57,9 +57,9 @@
 								<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeBacklog(campaign)" translate>Reset</button>
 							</div>
 						</div>
-						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ManualPlan</button>
-						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="replan(campaign)" translate>Replan</button>
+						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ManualPlan</button>						
 						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="switchBacklog(campaign);" ng-class="{'selected-ope-btn': campaign.backlogSwitch}" translate>AddBacklog</button>
+						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="replan(campaign)" translate>Replan</button>
 						<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0" ng-click="show(campaign)" translate>Edit</button>
 					</div>
 					<div class="error-msg-container  alert-warning notice-spacer m-t-10" ng-show="showDateSelectionHint(campaign)"><i class='mdi mdi-alert'></i> <span translate>SelectDateInChart</span></div>

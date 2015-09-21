@@ -281,26 +281,26 @@ describe('OutboundSummaryCtrl', function () {
 		this.makeGraph = function () { return { graph: 'c3' } };
 
 		this.updateBacklog = function (campaign, cb) {
-			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId]);
+			if (angular.isDefined(campaignViss[campaign.campaignId])) {
+				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 
 		this.updateManualPlan = function (campaign, cb) {			
-			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId]);							
+			if (angular.isDefined(campaignViss[campaign.campaignId])) {
+				cb(campaignViss[campaign.campaignId]);							
 			}			
 		};
 
 		this.removeManualPlan = function (campaign, cb) {
-			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId]);
+			if (angular.isDefined(campaignViss[campaign.campaignId])) {
+				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 
 		this.removeActualBacklog = function (campaign, cb) {
-			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId]);
+			if (angular.isDefined(campaignViss[campaign.campaignId])) {
+				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 	}

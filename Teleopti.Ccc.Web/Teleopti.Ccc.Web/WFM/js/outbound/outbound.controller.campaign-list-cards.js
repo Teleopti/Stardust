@@ -64,18 +64,12 @@
 		}
     	
 
-    	$scope.removeManualPlan = function(campaign) {
-			var dates = [];
-			campaign.selectedDates.forEach(function(date, index) {
-				dates[index] = { Date: date };
-			});
-			var removeManualPlan = {
-				CampaignId: campaign.Id,
-				Dates: dates
-			};
-
+    	$scope.removeManualPlan = function(campaign) {			
 			campaign.isLoadingData = true;
-			outboundChartService.removeManualPlan(removeManualPlan, function() {
+			outboundChartService.removeManualPlan({
+				campaignId: campaign.Id,
+				selectedDates: campaign.selectedDates
+			}, function() {
 				refreshGraphData(campaign, $scope);
 				refreshCampaignStatistics($scope);
 				outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
@@ -84,18 +78,12 @@
 			campaign.manualPlanInput = null;
     	}
 
-    	$scope.removeBacklog = function (campaign) {
-    		var dates = [];
-    		campaign.selectedDates.forEach(function (date, index) {
-    			dates[index] = { Date: date };
-    		});
-    		var removeActualBacklog = {
-    			CampaignId: campaign.Id,
-    			Dates: dates
-    		};
-
+    	$scope.removeBacklog = function (campaign) {    	
     		campaign.isLoadingData = true;
-    		outboundChartService.removeActualBacklog(removeActualBacklog, function () {
+    		outboundChartService.removeActualBacklog({
+    			campaignId: campaign.Id,
+				selectedDates: campaign.selectedDates
+		    }, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
     			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
@@ -104,17 +92,13 @@
     		campaign.backlogInput = null;
     	}
 
-    	$scope.addBacklog = function (campaign) {
-    		campaign.backlog.CampaignId = campaign.Id;
-    		campaign.backlog.ActualBacklog = [];
-    		campaign.selectedDates.forEach(function (date, index) {
-    			campaign.backlog.ActualBacklog[index] = {
-    				Date: { Date: date },
-    				Time: campaign.backlogInput
-    			}
-    		});
+    	$scope.addBacklog = function (campaign) {    	
     		campaign.isLoadingData = true;
-    		outboundChartService.updateBacklog(campaign.backlog, function () {
+		    outboundChartService.updateBacklog({
+			    campaignId: campaign.Id,
+			    selectedDates: campaign.selectedDates,
+			    manualBacklogInput: campaign.backlogInput
+			}, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
     			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
@@ -122,20 +106,20 @@
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.backlogInput = null;
     	}
+
+		function excludeClosedDays(days, closedDays) {
+			return days.filter(function(d) {
+				return closedDays.indexOf(d) < 0;
+			});
+		}
 
 		$scope.addManualPlan = function (campaign) {
-    		campaign.manualPlan.CampaignId = campaign.Id;
-    		campaign.manualPlan.ManualProductionPlan = [];
-			campaign.selectedDates.filter(function (d) {			
-    			return campaign.selectedDatesClosed.indexOf(d) < 0;
-		    }).forEach(function (date, index) {
-    			campaign.manualPlan.ManualProductionPlan[index] = {
-    				Date: {Date: date},
-    				Time: campaign.manualPlanInput
-    			}
-    		});
     		campaign.isLoadingData = true;
-    		outboundChartService.updateManualPlan(campaign.manualPlan, function () {
+    		outboundChartService.updateManualPlan({
+    			campaignId: campaign.Id,
+    			selectedDates: excludeClosedDays(campaign.selectedDates, campaign.selectedDatesClosed),
+				manualPlanInput: campaign.manualPlanInput
+		    }, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
     			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);

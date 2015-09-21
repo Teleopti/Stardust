@@ -42,12 +42,12 @@
 					<gantt-task ng-if="!row.model.expansion" ng-repeat="task in row.visibleTasks track by task.model.id">
 					</gantt-task>
 					<div class="gantt-row-expansion" ng-if="row.model.expansion">
-						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.campaign.isLoadingData">
+						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData">
 							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 						</div>
-						<div class="campaign-chart-wrapper" ng-if="!row.model.campaign.isLoadingData">
+						<div class="campaign-chart-wrapper" ng-if="!row.model.isLoadingData">
 							<campaign-chart campaign="row.model.campaign" dictionary="row.model.campaign.translations" exclude-closed="row.model.campaign.manualPlanswitch"></campaign-chart>
-							<campaign-commands-pane campaign="row.model.campaign"></campaign-commands-pane>
+							<campaign-commands-pane campaign="row.model.campaign" selected-dates="row.model.campaign.selectedDates" selected-dates-closed="row.model.campaign.selectedDatesClosed" is-loading="row.model.isRefreshingData" callbacks="row.model.callbacks"></campaign-commands-pane>
 						</div>						
 					</div>
 				</gantt-row>

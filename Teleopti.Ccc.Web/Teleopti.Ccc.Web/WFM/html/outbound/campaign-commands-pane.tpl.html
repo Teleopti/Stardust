@@ -3,7 +3,7 @@
 		<label for="ManualPlanInput" translate>ManualPlan</label>
 		<input id="ManualPlanInput"
 			   type="text"
-			   ng-model="manualPlanInput" 
+			   ng-model="manualPlanInput"
 			   range-validate range-min="0" integer-only="false" />
 		<div class="manual-input-btns">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
@@ -42,13 +42,13 @@
 		</div>
 	</div>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
-			ng-click="manualPlanSwitch = !manualPlanSwitch"
+			ng-click="toggleManualPlan()"
 			ng-class="{'selected-ope-btn': manualPlanSwitch }"
 			translate>
 		ManualPlan
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
-			ng-click="manualBacklogSwitch = !manualBacklogSwitch"
+			ng-click="toggleManualBacklog()"
 			ng-class="{'selected-ope-btn': manualBacklogSwitch}"
 			translate>
 		AddBacklog
