@@ -18,11 +18,9 @@
 					EndDate: moment.utc(vm.end).toDate()
 				};
 			} else {
-
 				var startDate = moment.utc().add(1, 'months').startOf('month').toDate();
 				var endDate = moment.utc().add(2, 'months').startOf('month').toDate();
 				vm.period = { StartDate: startDate, EndDate: endDate };
-
 			}
 		};
 
@@ -30,7 +28,6 @@
 
 		vm.addSeatPlan = function () {
 
-			vm.onSeatPlanStart();
 			vm.processingSeatPlan = true;
 
 			var addSeatPlanCommand = {
@@ -45,11 +42,14 @@
 				vm.processingSeatPlan = false;
 			}
 			else {
+
+				vm.onSeatPlanStart();
 				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
 					onSuccessAddSeatPlan(seatPlanTranslatorFactory.TranslatedStrings["SeatPlanSubmittedOK"]);
 					vm.processingSeatPlan = false;
 					vm.onSeatPlanComplete();
 				});
+
 			}
 		};
 
@@ -94,6 +94,5 @@
 	};
 
 	angular.module('wfm.seatPlan').directive('seatPlanInit', directive);
-
 
 }());
