@@ -49,6 +49,24 @@ notice.controller('NoticeCtrl', [
 				disableCountDown: true
 			});
 
-		}
+		};
+
+		$(function () {
+			$('#materialcontainer').scroll(function () {
+				var uiHeight = $('[ui-view]').height();
+				var containerHeight = $('#materialcontainer').height();
+				var scrollTop = $('#materialcontainer').scrollTop();
+
+				if (uiHeight > containerHeight) {
+					$('#notice').css({ bottom: -scrollTop });
+				} else {
+					$('#notice').css({ bottom: 0 });
+				}
+			});
+
+			$(window).resize(function () {
+				$('#materialcontainer').scrollTop(0);
+			});
+		});
 	}
 ]);

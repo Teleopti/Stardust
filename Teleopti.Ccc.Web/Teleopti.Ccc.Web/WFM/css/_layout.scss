@@ -68,8 +68,8 @@ label {
 	position: absolute;
 	bottom: 0px;
 	z-index: 99999;
-	right: 0;
-	left: 0;
+	right: 10px;
+	left: 10px;
 }
 
 .growl-container > .growl-item {
@@ -114,10 +114,10 @@ label {
 }
 
 .nav-item{
-	-webkit-transition:2000s all ease-in-out;
-	-moz-transition:2000s all ease-in-out;
-	-o-transition:2000s all ease-in-out;
-	transition:2000s all ease-in-out;
+	-webkit-transition:0.2s all ease-in-out;
+	-moz-transition:0.2s all ease-in-out;
+	-o-transition:0.2s all ease-in-out;
+	transition:0.2s all ease-in-out;
 }
 
 .nav-item-active > div{
