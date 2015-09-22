@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					{
 						persistPerson(person);
 					}
-					catch (Exception ex)
+					catch (Exception)
 					{
 						isUserValid = false;
 						// TODO: What error should be handled?
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
 							removePerson(person);
 						}
-						catch (Exception e)
+						catch (Exception)
 						{
 							isUserValid = false;
 							errorMsgBuilder.AppendFormat("Failed to create new person with ApplicationUserId {0} for unknown reason. ", user.ApplicationUserId);
