@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				break;
 			}
 			var userList = parseWorkBook(workbook);
-			////
+
 			var invalidUsers = _peoplePersister.Persist(userList);
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 			response.Headers.Clear();

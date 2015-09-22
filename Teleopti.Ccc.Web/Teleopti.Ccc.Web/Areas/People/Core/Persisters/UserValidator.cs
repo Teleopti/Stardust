@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -71,14 +72,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 			if (!string.IsNullOrEmpty(user.Role))
 			{
-				var roles = user.Role.Split(',').Select(x => x.Trim()).ToList();
+				var roles = parse(user.Role).ToList();
 				var invalidRolesBuilder = new StringBuilder();
 				var hasInvalidRole = false;
 
 				foreach (var role in roles.Where(role => !availableRoles.ContainsKey(role.ToUpper())))
 				{
 					hasInvalidRole = true;
-					var roleNotExist = role + ", ";
+					var roleNotExist = (role.Contains(",") ? string.Format("\"{0}\"", role) : role) + ", ";
 					invalidRolesBuilder.Append(roleNotExist);
 				}
 
@@ -97,7 +98,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			}
 			return isUserValid;
 		}
+		private IEnumerable<string> parse(string roles)
+		{
 
+			const string splitPattern = "[^,\"]+|\"[^\"]*\"";
+			var matches = Regex.Matches(roles, splitPattern);
+			var result =
+				(from object match in matches select match.ToString().Replace("\"", "").Trim())
+				.Where(x => !string.IsNullOrEmpty(x));
+
+			return new HashSet<string>(result);
+		}
 		public string ErrorMessage
 		{
 			get { return errorMsgBuilder.ToString(); }

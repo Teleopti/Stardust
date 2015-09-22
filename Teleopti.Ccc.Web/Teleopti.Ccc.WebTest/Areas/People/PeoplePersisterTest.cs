@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					ApplicationUserId = "app1",
 					Lastname = "",
 					Password = "psss",
-					Role = "agent,sss0, sss1",
+					Role = "agent,sss0, \"test,sss1\"",
 					WindowsUser = "teleopti\\logon1"
 				}
 			};
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
-			Assert.AreEqual("role sss0, sss1 not exist", errorData.First().ErrorMessage);
+			Assert.AreEqual("role sss0, \"test,sss1\" not exist", errorData.First().ErrorMessage);
 		}
 
 		[Test]
