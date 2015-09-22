@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}			
 		
 		[HttpPost, Route("api/Outbound/Period/Campaigns"), UnitOfWork]
-		public virtual List<CampaignSummaryViewModel> GetCamapigns([FromBody]PeriodSummaryInfo info)
+		public virtual IEnumerable<PeriodCampaignSummaryViewModel> GetCamapigns([FromBody]GanttPeriod peroid)
 		{
-			return _campaignSummaryViewModelFactory.GetCampaignSummaryList(info.Status, info.Period);
+			return _campaignListProvider.GetPeriodCampaignsSummary(peroid);
 		}		
 		
 		[HttpPost, Route("api/Outbound/Gantt/Campaigns"), UnitOfWork]

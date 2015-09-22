@@ -330,6 +330,68 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.OnGoingWarning.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldGetAllCampaignsSummaryWithinPeriod()
+		{
+			setCampaigns();
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+
+			result.Count().Should().Be.EqualTo(4);
+		}		
+		
+		[Test]
+		public void ShouldGetCampaignId()
+		{
+			_outboundCampaignRepository.Add(doneCampaign);
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+
+			result.ToList()[0].Id.Should().Be.EqualTo(doneCampaign.Id);
+		}		
+		
+		[Test]
+		public void ShouldGetCampaignName()
+		{
+			_outboundCampaignRepository.Add(doneCampaign);
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+
+			result.ToList()[0].Name.Should().Be.EqualTo(doneCampaign.Name);
+		}		
+		
+		[Test]
+		public void ShouldGetCampaignStartDate()
+		{
+			_outboundCampaignRepository.Add(doneCampaign);
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+
+			result.ToList()[0].StartDate.Should().Be.EqualTo(doneCampaign.SpanningPeriod.ToDateOnlyPeriod(doneCampaign.Skill.TimeZone).StartDate);
+		}		
+		
+		[Test]
+		public void ShouldGetCampaignEndDate()
+		{
+			_outboundCampaignRepository.Add(doneCampaign);
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+
+			result.ToList()[0].EndDate.Should().Be.EqualTo(doneCampaign.SpanningPeriod.ToDateOnlyPeriod(doneCampaign.Skill.TimeZone).EndDate);
+		}
+
+		[Test]
+		public void ShouldGetScheduledInfo()
+		{
+			setCampaigns();
+
+			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() { StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14) });
+
+			result.ToList()[0].IsScheduled.Should().Be.False();
+			result.ToList()[1].IsScheduled.Should().Be.False();
+			result.ToList()[2].IsScheduled.Should().Be.True();
+			result.ToList()[3].IsScheduled.Should().Be.False();
+		}
 
 		public IOutboundCampaign GetTestCampaign(int index)
 		{

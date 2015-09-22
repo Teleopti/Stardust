@@ -5,69 +5,79 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 {
-    [Flags]
-    public enum CampaignStatus
-    {
-        None = 0,
-        Planned = 1,
-        Scheduled = 2,
-        Ongoing = 4,
-        Done = 8        
-    }
+	[Flags]
+	public enum CampaignStatus
+	{
+		None = 0,
+		Planned = 1,
+		Scheduled = 2,
+		Ongoing = 4,
+		Done = 8
+	}
 
-    public class CampaignSummary
-    {
-        public Guid? Id;
-        public string Name;
-        public DateOnly StartDate;
-        public DateOnly EndDate;
-        public CampaignStatus Status;
-        public IEnumerable<OutboundRuleResponse> WarningInfo;
-    }
+	public class CampaignSummary
+	{
+		public Guid? Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+		public CampaignStatus Status;
+		public IEnumerable<OutboundRuleResponse> WarningInfo;
+	}
 
-    public class OutboundWarningViewModel
-    {
-        public string TypeOfRule { get; set; }
-        public int? Threshold { get; set; }
-        public ThresholdType ThresholdType { get; set; }
-        public int? TargetValue { get; set; }
-        public DateOnly Date { get; set; }
+	public class OutboundWarningViewModel
+	{
+		public string TypeOfRule { get; set; }
+		public int? Threshold { get; set; }
+		public ThresholdType ThresholdType { get; set; }
+		public int? TargetValue { get; set; }
+		public DateOnly Date { get; set; }
 
-        public OutboundWarningViewModel(OutboundRuleResponse response)
-        {
-            TypeOfRule = response.TypeOfRule.Name;
-            Threshold = response.Threshold;
-            ThresholdType = response.ThresholdType;
-            TargetValue = response.TargetValue;
-            Date = new DateOnly(response.Date);
-        }
-    }
+		public OutboundWarningViewModel(OutboundRuleResponse response)
+		{
+			TypeOfRule = response.TypeOfRule.Name;
+			Threshold = response.Threshold;
+			ThresholdType = response.ThresholdType;
+			TargetValue = response.TargetValue;
+			Date = new DateOnly(response.Date);
+		}
+	}
 
-    public class CampaignSummaryViewModel
-    {
-        public Guid? Id;
-        public string Name;
-        public DateOnly StartDate;
-        public DateOnly EndDate;
-        public CampaignStatus Status;
-        public IEnumerable<OutboundWarningViewModel> WarningInfo;
+	public class CampaignSummaryViewModel
+	{
+		public Guid? Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+		public CampaignStatus Status;
+		public IEnumerable<OutboundWarningViewModel> WarningInfo;
 
-        public CampaignSummaryViewModel(CampaignSummary campaign)
-        {
-            Id = campaign.Id;
-            Name = campaign.Name;
-            StartDate = campaign.StartDate;
-            EndDate = campaign.EndDate;
-            Status = campaign.Status;
-            WarningInfo = campaign.WarningInfo.Select(w => new OutboundWarningViewModel(w));
-        }
-    }
+		public CampaignSummaryViewModel(CampaignSummary campaign)
+		{
+			Id = campaign.Id;
+			Name = campaign.Name;
+			StartDate = campaign.StartDate;
+			EndDate = campaign.EndDate;
+			Status = campaign.Status;
+			WarningInfo = campaign.WarningInfo.Select(w => new OutboundWarningViewModel(w));
+		}
+	}
+
+	public class PeriodCampaignSummaryViewModel
+	{
+		public Guid? Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+		public bool IsScheduled;
+		public IEnumerable<OutboundWarningViewModel> WarningInfo;
+	}
 
 	public class CampaignViewModel
 	{
 		public Guid? Id;
 		public string Name;
-		public ActivityViewModel Activity;  
+		public ActivityViewModel Activity;
 		public int CallListLen;
 		public int TargetRate;
 		public int ConnectRate;
@@ -97,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IList<double> PlannedPersonHours;
 		public IList<double> BacklogPersonHours;
 		public IList<double> ScheduledPersonHours;
-		public IList<double> OverstaffPersonHours; 
+		public IList<double> OverstaffPersonHours;
 		public IList<bool> IsManualPlanned;
 		public IList<bool> IsCloseDays;
 		public IList<bool> IsActualBacklog;

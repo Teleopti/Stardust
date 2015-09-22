@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		IEnumerable<CampaignSummary> ListPlannedCampaign(GanttPeriod peroid);
 		IEnumerable<CampaignSummary> ListOngoingCampaign(GanttPeriod peroid);
 		IEnumerable<CampaignSummary> ListDoneCampaign(GanttPeriod peroid);
+		IEnumerable<PeriodCampaignSummaryViewModel> GetPeriodCampaignsSummary(GanttPeriod period);
 
 		CampaignStatistics GetCampaignStatistics(GanttPeriod peroid);
 		void LoadData(GanttPeriod peroid);

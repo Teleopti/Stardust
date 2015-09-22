@@ -161,13 +161,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		[Test]
 		public void ShouldGetCampainSummaryListWithPeriod()
 		{
-			var info = new PeriodSummaryInfo() {Status = CampaignStatus.Done, Period = new GanttPeriod()};
-			var factory = MockRepository.GenerateMock<ICampaignSummaryViewModelFactory>();
+			var period = new GanttPeriod();
+			var listProvider = MockRepository.GenerateMock<ICampaignListProvider>();
 
-			var target = new OutboundController(null, null, null, null, factory, null, null);
-			target.GetCamapigns(info);
+			var target = new OutboundController(null, null, null, null, null, null, listProvider);
+			target.GetCamapigns(period);
 
-			factory.AssertWasCalled(x => x.GetCampaignSummaryList(info.Status, info.Period));
+			listProvider.AssertWasCalled(x => x.GetPeriodCampaignsSummary(period));
 		}
 
 		[Test]

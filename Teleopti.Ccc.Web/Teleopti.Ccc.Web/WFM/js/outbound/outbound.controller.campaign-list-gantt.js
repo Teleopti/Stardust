@@ -34,7 +34,7 @@
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
-				outboundService.listFilteredCampaignsWithinPeriod(0, function success(data) {
+				outboundService.listCampaignsWithinPeriod(function success(data) {
 					updateAllCampaignGanttDisplay(data);
 					$scope.ganttStatistics = data;
 					$scope.isLoadingSchedule = true;
@@ -218,7 +218,8 @@
 
 		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
 			row.classes = null;
-			row.tasks[0].color = campaignSummary.HasSchedule ? '#C2E085' : '#66C2FF';
+			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
+
 			campaignSummary.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'OutboundUnderSLARule') {
 					row.classes = 'campaign-late';
@@ -227,7 +228,6 @@
 					row.classes = 'campaign-early';
 				}
 			});
-			
 		}		
 
 		function updateAllCampaignGanttDisplay(campaignSummaryList) {

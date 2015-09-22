@@ -14,7 +14,7 @@
 		var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
 		var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
 		var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
-		var getFilteredPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
+		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 
 		var self = this;
@@ -97,12 +97,9 @@
 				});
 		};
 
-		this.listFilteredCampaignsWithinPeriod = function(filter, successCb, errorCb) {
+		this.listCampaignsWithinPeriod = function(successCb, errorCb) {
 			var period = self.getVisualizationPeriod();
-			$http.post(getFilteredPeriodCampaignsUrl, {
-					Status: filter,
-					Period: period
-				}).success(function(data) {
+			$http.post(getPeriodCampaignsUrl, period).success(function (data) {
 					if (successCb != null)
 						successCb(data);
 				}).
