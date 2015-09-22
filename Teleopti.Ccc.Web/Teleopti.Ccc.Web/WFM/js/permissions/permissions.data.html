@@ -34,7 +34,7 @@
 		</form>
 
     <div class="data-auth">
-        
+
         <label translate>AddGlobalAuthorizationLabel</label>
 		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
             <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
@@ -51,11 +51,10 @@
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 
-    <ul class="wfm-list" >
+    <ul class="wfm-list apply-list" >
         <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0}" ng-click="toggleOrganizationSelection(this)">
-            {{node.Name}}<!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
-            
-			<span ng-if="node.selected"><b class="mdi mdi-check list-mark"></b></span>
+            <span ng-if="node.selected"><b class="mdi mdi-check list-mark"></b></span>
+            <div class="apply-list-text">{{node.Name}}<!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected--></div>
         </li>
     </ul>
 
