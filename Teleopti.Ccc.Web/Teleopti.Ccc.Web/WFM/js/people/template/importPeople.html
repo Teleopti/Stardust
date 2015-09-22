@@ -36,7 +36,7 @@
 					
 					<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
 					<div ng-show="vm.isSuccessful">
-						<div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>All users have been imported successfully!</div>
+						<div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>{{'SuccessfullyImportedCountColon'|translate}} {{vm.successCount}}.</div>
 						<div ng-show="vm.hasInvalidData" >
 							<div ng-show="vm.successCount > 0" class="alert-success notice-spacer">
 								<i class='mdi mdi-thumb-up'></i>{{'SuccessfullyImportedCountColon'|translate}} {{vm.successCount}}.

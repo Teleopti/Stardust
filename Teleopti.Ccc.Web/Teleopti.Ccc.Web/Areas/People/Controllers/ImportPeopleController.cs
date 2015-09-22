@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				{
 					Firstname = "John",
 					Lastname = "Smith",
-					WindowsUser = "",
-					ApplicationUserId = "js",
+					WindowsUser = "john.smith@teleopti.com",
+					ApplicationUserId = "john.smith@teleopti.com",
 					Password = "password",
 					Role = "agent, \"London, Team Leader\""
 				}
