@@ -41,34 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			public IDataSource RanWithDataSource;
 
 			[RtaDataSourceScope]
-			public virtual void Does(Input input)
+			public virtual void Does(object input)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
-
-			[RtaDataSourceScope]
-			public virtual void Does(IEnumerable<Input> inputs)
-			{
-				RanWithDataSource = _dataSource.Current();
-			}
-
-			[RtaDataSourceScope]
-			public virtual void Does(GenericInput<object> input)
-			{
-				RanWithDataSource = _dataSource.Current();
-			}
-
-			[RtaDataSourceScope]
-			public virtual void Does(InputWithTenant inputs)
-			{
-				RanWithDataSource = _dataSource.Current();
-			}
-
-			[RtaDataSourceScope]
-			public virtual void Does(string tenant)
-			{
-				RanWithDataSource = _dataSource.Current();
-			}
+			
 		}
 
 		public class Input
