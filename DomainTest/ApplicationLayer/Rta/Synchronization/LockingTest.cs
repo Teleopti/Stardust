@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			Context.SimulateRestartWith(Now, Database);
-			var initialize = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
-			Handler.InHandler.WaitOne(TimeSpan.FromSeconds(1));
+			Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
+			Handler.EnteredHandler.WaitOne(TimeSpan.FromSeconds(1));
 			var systemTask = Task.Factory.StartNew(() =>
 			{
 				using (DistributedLock.LockForTypeOf(Handler))
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				}
 			});
 			var systemTaskRanWhileInitializing = systemTask.Wait(TimeSpan.FromMilliseconds(100));
-			initialize.Abort();
+			Handler.ExitHandler.Set();
 
 			systemTaskRanWhileInitializing.Should().Be.False();
 		}
@@ -66,12 +66,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			IHandleEvent<PersonStateChangedEvent>,
 			IInitializeble
 		{
-			public ManualResetEvent InHandler = new ManualResetEvent(false);
+			public ManualResetEvent EnteredHandler = new ManualResetEvent(false);
+			public ManualResetEvent ExitHandler = new ManualResetEvent(false);
 
 			public void Handle(PersonStateChangedEvent @event)
 			{
-				InHandler.Set();
-				new ManualResetEvent(false).WaitOne();
+				EnteredHandler.Set();
+				ExitHandler.WaitOne();
 			}
 
 			public bool Initialized()
