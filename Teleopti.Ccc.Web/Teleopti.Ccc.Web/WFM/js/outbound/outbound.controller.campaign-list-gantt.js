@@ -33,6 +33,13 @@
 		function init() {
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
+			outboundService.loadWithinPeriod(function handleSuccess(isload) {
+				outboundService.listFilteredCampaignsWithinPeriod(0, function success(data) {
+					updateGanttChart(data);
+					$scope.ganttStatistics = data;
+					$scope.isLoadingSchedule = true;
+				});
+			});
 		}
 		
 		$scope.headerFormats = {
@@ -105,14 +112,15 @@
 				});
 			}
 		};
+
 		function isOverStaffing(campaign) {
-						if (!campaign.WarningInfo) return false;
-						var d = campaign.WarningInfo;
-						var result = d.filter(function (e) {
-								return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
-						}).length > 0;
-						return result;
-					};
+			if (!campaign.WarningInfo) return false;
+			var d = campaign.WarningInfo;
+			var result = d.filter(function(e) {
+				return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
+			}).length > 0;
+			return result;
+		}
 
 		function getCommandCallback(campaign, dataRow, scope) {			
 			return function (resp, done) {
@@ -179,13 +187,7 @@
 				EndDate: { Date: endDate ? endDate : defaultPeriod[1] }
 			};
 
-			outboundService.load(function handleSuccess(isload) {
-				outboundService.listFilteredCampaignsWithinPeriod(0, function success(data) {
-					updateGanttChart(data);
-					$scope.ganttStatistics = data;
-					$scope.isLoadingSchedule = true;
-				});
-			});
+			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
 				if (data) data.forEach(function (ele, ind) {
@@ -214,6 +216,7 @@
 
 		function updateGanttChart(data) {
 			$scope.ganttData.forEach(function (ele1, ind1) {
+				ele1.classes = [];
 				data.forEach(function(ele2, ind2) {
 					if (ele1.id == ele2.Id) {
 						ele1.tasks[0].color = ele2.Status == 2 ? '#c2e085' : '#09F';
@@ -224,14 +227,11 @@
 													
 							if (ele.TypeOfRule == 'OutboundOverstaffRule') {							
 								ele1.classes.push('campaign-early');
-							}
-							
+							}							
 						});
-
 					}
 				});
 			});
-
 		}
 	}
 

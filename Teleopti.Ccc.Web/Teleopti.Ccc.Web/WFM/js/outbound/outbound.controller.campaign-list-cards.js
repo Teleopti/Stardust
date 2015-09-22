@@ -27,10 +27,13 @@
 		}, function (value) {
 			if (value) {
 				$scope.isGanttEnabled = OutboundToggles.isGanttEnabled();
-				scheduleLoader = $scope.isGanttEnabled ? outboundService.loadWithinPeriod : outboundService.load;
-				getCampaignStatistics = $scope.isGanttEnabled ? outboundService.getCampaignStatisticsWithinPeriod : outboundService.getCampaignStatistics;
-				listFilteredCampaigns = $scope.isGanttEnabled ? outboundService.listFilteredCampaignsWithinPeriod : outboundService.listFilteredCampaigns;
-				init();
+
+				if (!$scope.isGanttEnabled) {
+					scheduleLoader = $scope.isGanttEnabled ? outboundService.loadWithinPeriod : outboundService.load;
+					getCampaignStatistics = $scope.isGanttEnabled ? outboundService.getCampaignStatisticsWithinPeriod : outboundService.getCampaignStatistics;
+					listFilteredCampaigns = $scope.isGanttEnabled ? outboundService.listFilteredCampaignsWithinPeriod : outboundService.listFilteredCampaigns;
+					init();
+				}			
 			}
 		});
 
