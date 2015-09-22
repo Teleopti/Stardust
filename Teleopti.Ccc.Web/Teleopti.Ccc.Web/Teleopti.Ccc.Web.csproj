@@ -1223,7 +1223,6 @@
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
     <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapoccupancy.spec.js" />
-    <Content Include="WFM\vendor\file-saver\FileSaver.min.js" />
     <Content Include="WFM\tests\rta\rta.teams.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
@@ -2173,7 +2172,6 @@
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Core\Aop\Aspects\" />
-    <Folder Include="WFM\js\people\fileTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartialOriginal.cshtml" />
