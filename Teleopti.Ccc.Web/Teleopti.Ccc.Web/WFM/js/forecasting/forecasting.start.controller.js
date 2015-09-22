@@ -82,8 +82,8 @@ angular.module('wfm.forecasting')
 			$scope.sumOfCallsForSelectedDays = 0;
 
 			$scope.campaignPercentageConst = {
-				max: 500,
-				min: 0
+				max: 1000,
+				min: -100
 			};
 
 			$scope.campaignPercentageChanged = function (campaignForm) {
