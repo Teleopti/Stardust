@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -24,11 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
 		private readonly IUserValidator _userValidator;
-		private readonly IUnitOfWorkFactory _uowFactory;
 
 		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IApplicationRoleRepository roleRepository,
-			IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator,
-			IUnitOfWorkFactory uowFactory)
+			IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator)
 		{
 			_personInfoPersister = personInfoPersister;
 			_mapper = mapper;
@@ -36,25 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			_personRepository = personRepository;
 			_currentLoggedOnUser = currentLoggedOnUser;
 			_userValidator = userValidator;
-			_uowFactory = uowFactory;
 		}
 
 		public IList<RawUser> Persist(IEnumerable<RawUser> users)
 		{
 			var invalidUsers = new List<RawUser>();
 
-			var availableRoles = new Dictionary<string, IApplicationRole>();
-			using (var uow = _uowFactory.CreateAndOpenUnitOfWork())
-			{
-				var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
-				allRoles.ForEach(r =>
-				{
-					if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
-					{
-						availableRoles.Add(r.DescriptionText.ToUpper(), r);
-					}
-				});
-			}
+			var availableRoles = getAllRoles();
 
 			foreach (var user in users)
 			{
@@ -69,16 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 							new Name(user.Firstname.IsNullOrEmpty() ? " " : user.Firstname,
 								user.Lastname.IsNullOrEmpty() ? " " : user.Lastname)
 					};
-					person.PermissionInformation.SetDefaultTimeZone(
-									_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-					_userValidator.ValidRoles.ForEach(r => person.PermissionInformation.AddApplicationRole(r));
 
 					try
 					{
-						using (var uow = _uowFactory.CreateAndOpenUnitOfWork())
-						{
-							_personRepository.Add(person);
-						}
+						persistPerson(person);
 					}
 					catch (Exception ex)
 					{
@@ -105,25 +86,25 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
-							_personRepository.Remove(person);
+							removePerson(person);
 						}
 						catch (DuplicateIdentityException)
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
-							_personRepository.Remove(person);
+							removePerson(person);
 						}
 						catch (DuplicateApplicationLogonNameException)
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
-							_personRepository.Remove(person);
+							removePerson(person);
 						}
 						catch (Exception e)
 						{
 							isUserValid = false;
 							errorMsgBuilder.AppendFormat("Failed to create new person with ApplicationUserId {0} for unknown reason.", user.ApplicationUserId);
-							_personRepository.Remove(person);
+							removePerson(person);
 						}
 					}
 				}
@@ -137,6 +118,36 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			}
 
 			return invalidUsers;
+		}
+
+		[UnitOfWork]
+		protected virtual IDictionary<string, IApplicationRole> getAllRoles()
+		{
+			var availableRoles = new Dictionary<string, IApplicationRole>();
+			var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
+			allRoles.ForEach(r =>
+			{
+				if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
+				{
+					availableRoles.Add(r.DescriptionText.ToUpper(), r);
+				}
+			});
+			return availableRoles;
+		}
+
+		[UnitOfWork]
+		protected virtual void persistPerson(IPerson person)
+		{
+			person.PermissionInformation.SetDefaultTimeZone(
+								_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			_userValidator.ValidRoles.ForEach(r => person.PermissionInformation.AddApplicationRole(r));
+			_personRepository.Add(person);
+		}
+
+		[UnitOfWork]
+		protected virtual void removePerson(IPerson person)
+		{
+			_personRepository.Remove(person);
 		}
 
 		[TenantUnitOfWork]

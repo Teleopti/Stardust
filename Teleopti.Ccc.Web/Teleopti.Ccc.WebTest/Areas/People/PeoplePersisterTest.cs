@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 	[TestFixture]
 	public class PeoplePersisterTest
 	{
-		private PeoplePersister target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakeApplicationRoleRepository(), new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator(), new FakeUnitOfWorkFactory());
+		private PeoplePersister target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakeApplicationRoleRepository(), new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
 
 
 		[Test]
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var roleRepo = new FakeApplicationRoleRepository();
 			roleRepo.Add(new ApplicationRole {DescriptionText = "Agent"});
 
-			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), roleRepo, new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator(), new FakeUnitOfWorkFactory());
+			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), roleRepo, new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
-			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator(), new FakeUnitOfWorkFactory());
+			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
-			target = new PeoplePersister(personInfoPersister,personInfoMapper,fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator(), new FakeUnitOfWorkFactory());
+			target = new PeoplePersister(personInfoPersister,personInfoMapper,fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			validRoles = new List<IApplicationRole>();
 		}
 
-		public bool Validate(RawUser user, Dictionary<string, IApplicationRole> availableRoles)
+		public bool Validate(RawUser user, IDictionary<string, IApplicationRole> availableRoles)
 		{
 			errorMsgBuilder.Clear();
 			validRoles.Clear();
