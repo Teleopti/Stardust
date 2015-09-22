@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -36,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_previousStateInfoLoader = previousStateInfoLoader;
 		}
 
+		// tenant in key? customer installs have unique person ids...?
 		private readonly Dictionary<Guid, currentPeriod> _currentPeriodInfo = new Dictionary<Guid, currentPeriod>();
 
 		public void CheckForActivityChanges()
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					var previousActivity = ScheduleInfo.PreviousActivity(schedule, now);
 					if (previousActivity != null)
-						current.EndTime = previousActivity.EndDateTime;
+						current.StartTime = previousActivity.EndDateTime;
 					var nextActivity = ScheduleInfo.NextActivity(schedule, now);
 					if (nextActivity != null)
 						current.EndTime = nextActivity.StartDateTime;
