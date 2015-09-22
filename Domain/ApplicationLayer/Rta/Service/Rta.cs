@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -24,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaProcessor _processor;
 		private readonly IAuthenticator _authenticator;
 		private readonly RtaInitializor _initializor;
+		private readonly ActivityChangeProcessor _activityChangeProcessor;
 		private readonly INow _now;
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ICacheInvalidator cacheInvalidator,
 			IStateMapper stateMapper,
 			INow now, 
-			IConfigReader configReader,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator,
-			RtaInitializor initializor
+			RtaInitializor initializor,
+			ActivityChangeProcessor activityChangeProcessor
 			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_processor = processor;
 			_authenticator = authenticator;
 			_initializor = initializor;
+			_activityChangeProcessor = activityChangeProcessor;
 			_now = now;
 			_databaseLoader = databaseLoader;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -221,8 +222,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					});
 			}
 
-			
-
 			return 1;
 		}
 
@@ -240,7 +239,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					PersonId = input.PersonId
 				});
 		}
-		
+
+		[RtaDataSourceScope]
+		public virtual void CheckForActivityChanges()
+		{
+			_activityChangeProcessor.CheckForActivityChanges();
+		}
+
 		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)
 		{
 			_processor.Process(
@@ -255,6 +260,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_previousStateInfoLoader
 					));
 		}
-		
+
 	}
 }

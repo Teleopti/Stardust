@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private ScheduleLayer activityForTime(DateTime time)
 		{
-			return _scheduleLayers.Value.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
+			return ActivityForTime(_scheduleLayers.Value, time);
 		}
 
 		private ScheduleLayer nextAdjecentActivityToCurrent()
@@ -154,6 +154,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				where ended || starting
 				select l
 				).FirstOrDefault();
+		}
+
+
+		public static ScheduleLayer ActivityForTime(IEnumerable<ScheduleLayer> schedule, DateTime time)
+		{
+			return schedule.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
+		}
+
+		public static ScheduleLayer PreviousActivity(IEnumerable<ScheduleLayer> schedule, DateTime time)
+		{
+			return schedule.LastOrDefault(l => l.EndDateTime <= time);
+		}
+
+		public static ScheduleLayer NextActivity(IEnumerable<ScheduleLayer> schedule, DateTime time)
+		{
+			return schedule.FirstOrDefault(l => l.StartDateTime > time);
 		}
 
 	}

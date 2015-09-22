@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				AuthenticationKey = "key"
 			});
 
-			Database.PersistedAgentState.Should().Not.Be.Null();
+			Database.StoredState.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Assert.Throws(typeof(InvalidAuthenticationKeyException), () => Target.SaveState(state));
 
-			Database.PersistedAgentState.Should().Be.Null();
+			Database.StoredState.Should().Be.Null();
 		}
 
 		[Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey
 			});
 
-			Database.PersistedAgentState.Should().Not.Be.Null();
+			Database.StoredState.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
 
-			Database.PersistedAgentState.Should().Be.Null();
+			Database.StoredState.Should().Be.Null();
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			});
 
-			Database.PersistedAgentState.Should().Not.Be.Null();
+			Database.StoredState.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			};
 
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
-			Database.PersistedAgentState.Should().Be.Null();
+			Database.StoredState.Should().Be.Null();
 		}
 	}
 }

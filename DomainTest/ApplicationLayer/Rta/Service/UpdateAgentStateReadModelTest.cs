@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.SaveState(state);
 
-			Database.PersistedAgentState.StateCode.Should().Be(state.StateCode);
+			Database.StoredState.StateCode.Should().Be(state.StateCode);
 		}
 
 		[Test]
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
 			Target.SaveState(state);
 
-			Database.PersistedAgentState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
+			Database.StoredState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			state.IsLoggedOn = false;
 			Target.SaveState(state);
 
-			Database.PersistedAgentState.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutStateCode);
+			Database.StoredState.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutStateCode);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChange(personId, businessUnitId);
 
-			Database.PersistedAgentState.PersonId.Should().Be(personId);
+			Database.StoredState.PersonId.Should().Be(personId);
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChange(personId, businessUnitId);
 
-			Database.PersistedAgentState.NextStart.Should().Be(null);
+			Database.PersistedReadModel.NextStart.Should().Be(null);
 		}
 
 		[Test]
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "user"
 			});
 
-			Database.PersistedAgentState.TeamId.Should().Be(teamId);
+			Database.PersistedReadModel.TeamId.Should().Be(teamId);
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "user"
 			});
 
-			Database.PersistedAgentState.SiteId.Should().Be(siteId);
+			Database.PersistedReadModel.SiteId.Should().Be(siteId);
 		}
 
 	}

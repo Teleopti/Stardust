@@ -91,9 +91,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			WithDefaultsFromState(new ExternalUserStateForTest());
 		}
 
-		public AgentStateReadModel PersistedAgentState { get; set; }
+		public StoredStateInfo StoredState;
+		public AgentStateReadModel PersistedReadModel;
+		public StoredStateInfo StoredStateFor(Guid personId)
+		{
+			return new StoredStateInfo(personId, AgentStateReadModelReader.GetCurrentActualAgentState(personId));
+		}
 
-		
 		public IRtaState AddedStateCode
 		{
 			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.SingleOrDefault(); }
@@ -312,7 +316,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
 			AgentStateReadModelReader.Has(model);
-			PersistedAgentState = model;
+			PersistedReadModel = model;
+			StoredState = new StoredStateInfo(model.PersonId, model);
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
