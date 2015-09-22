@@ -43,6 +43,12 @@
 							type: response.headers()['content-type']
 						});
 						if (blob.size != 0) {
+							var processResult = response.headers()['message'].split(",");
+							console.log("processResult", processResult);
+							vm.successCount = processResult[0].trim();
+							vm.failedCount = processResult[1].trim();
+							console.log("succ ", vm.successCount);
+							console.log("fail ", vm.failedCount);
 							vm.hasInvalidData = true;
 							var extension = isXlsx ? '.xlsx' : '.xls';
 							saveAs(blob, 'invalidUsers' + extension);

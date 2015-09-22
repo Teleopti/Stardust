@@ -37,7 +37,15 @@
 					<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
 					<div ng-show="vm.isSuccessful">
 						<div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>All users have been imported successfully!</div>
-						<div ng-show="vm.hasInvalidData" class="alert-info notice-spacer"><i class='mdi mdi-information'></i>Please find the downloaded excel sheet to check the invalid users.</div>
+						<div ng-show="vm.hasInvalidData" >
+							<div ng-show="vm.successCount > 0" class="alert-success notice-spacer">
+								<i class='mdi mdi-thumb-up'></i>Successfully Imported Count: {{vm.successCount}}
+							</div>
+							<div class="alert-warning notice-spacer">
+								<i class='mdi mdi-information'></i>Failed imported count: {{vm.failedCount}}. Please find the downloaded excel sheet to check the error.
+							</div>
+							
+						</div>
 					</div>
 
 					<div ng-show="vm.isFailed" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{'ImportError'|translate}}! {{vm.errorMsg}}</div>

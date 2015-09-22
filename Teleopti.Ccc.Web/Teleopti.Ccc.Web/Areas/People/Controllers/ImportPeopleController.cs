@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
-		public async Task<HttpResponseMessage> Post()
+		public HttpResponseMessage Post()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
 			{
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 
 			var provider = new MultipartMemoryStreamProvider();
-			await Request.Content.ReadAsMultipartAsync(provider);
+			var result = Request.Content.ReadAsMultipartAsync(provider).Result;
 
 			const int colIndexFirstname = 0;
 			const int colIndexLastname = 1;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			foreach (var file in provider.Contents)
 			{
 				var fileName = file.Headers.ContentDisposition.FileName.Trim('\"');
-				var dataStream = await file.ReadAsStreamAsync();
+				var dataStream = file.ReadAsStreamAsync().Result;
 				isXlsx = fileName.EndsWith("xlsx");
 				var workbook = isXlsx
 					? (IWorkbook)new XSSFWorkbook(dataStream)
@@ -115,7 +116,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				}
 
 			}
-			var invalidUsers = InternalPersist(userList).ToList();
+			IList<RawUser> invalidUsers;
+			try
+			{
+				invalidUsers = InternalPersist(userList).ToList();
+			}
+			catch (Exception)
+			{
+				
+				throw;
+			}
+			
 			
 			if (invalidUsers.Count > 0)
 			{
@@ -152,6 +163,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				returnedFile.Write(ms);
 				var response = Request.CreateResponse(HttpStatusCode.OK);
 				response.Headers.Clear();
+				var successCount = userList.Count - invalidUsers.Count;
+				var failedCount = invalidUsers.Count;
+				response.Headers.Add("Message", new[]{successCount.ToString(), failedCount.ToString()});
 				response.Content = new ByteArrayContent(ms.ToArray());
 				var contentType = isXlsx ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" :
 				"application/vnd.ms-excel";
@@ -174,12 +188,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return false;
 		}
 
-		[TenantUnitOfWork]
 		[UnitOfWork]
 		protected virtual IEnumerable<RawUser> InternalPersist(IEnumerable<RawUser> users)
 		{
-			return _peoplePersister.Persist(users);
-		} 
+			var result = _peoplePersister.Persist(users);
+			return result;
+		}
+
 		private string getCellValue(IRow row, int columnIndex)
 		{
 			var obj = row.GetCell(columnIndex);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
@@ -23,20 +24,18 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IUserValidator _userValidator;
 
-		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, ITenantUnitOfWork tenantUnitOfWork, IUserValidator userValidator)
+		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator)
 		{
 			_personInfoPersister = personInfoPersister;
 			_mapper = mapper;
 			_personRepository = personRepository;
 			_currentLoggedOnUser = currentLoggedOnUser;
-			_tenantUnitOfWork = tenantUnitOfWork;
 			_userValidator = userValidator;
 		}
 
-		public IEnumerable<RawUser> Persist(IEnumerable<RawUser> users)
+		public IList<RawUser> Persist(IEnumerable<RawUser> users)
 		{
 			var invalidUsers = new List<RawUser>();
 			foreach (var user in users)
@@ -66,10 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 					try
 					{
-						using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-						{
-							_personInfoPersister.Persist(_mapper.Map(tenantUserData));
-						}
+						persistTenatData(tenantUserData);
 					}
 					catch (PasswordStrengthException)
 					{
@@ -89,6 +85,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 						errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
 						_personRepository.Remove(person);
 					}
+					catch (Exception e)
+					{
+						//unknown erro
+					}
 				}
 
 				if (isUserValid) continue;
@@ -100,6 +100,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			}
 
 			return invalidUsers;
+		}
+
+		[TenantUnitOfWork]
+		protected virtual void persistTenatData(PersonInfoModel tenantUserData)
+		{
+			_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 		}
 	}
 }

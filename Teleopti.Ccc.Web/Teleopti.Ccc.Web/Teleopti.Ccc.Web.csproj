@@ -2078,6 +2078,7 @@
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
+    <Content Include="WFM\js\people\fileTemplates\users.xls" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
