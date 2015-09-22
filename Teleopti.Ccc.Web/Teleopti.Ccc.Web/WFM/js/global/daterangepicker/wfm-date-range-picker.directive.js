@@ -48,6 +48,7 @@
 			}
 
 			function isInvalid(symbol) {
+				if (!$scope.errors) $scope.errors = [];
 				if (symbol) {
 					return $scope.errors.indexOf(symbol) >= 0;
 				} else {
@@ -56,6 +57,7 @@
 			}
 
 			function checkValidity() {
+				if (!$scope.errors) $scope.errors = [];
 				var errors = [];
 				if (!$scope.startDate || !$scope.endDate) {
 					errors.push('empty');
