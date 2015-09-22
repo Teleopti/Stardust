@@ -3,8 +3,8 @@
 
 (function () {
 
-	angular.module('ui.bootstrap.datepicker').config(function($provide) {
-		$provide.decorator('datepickerDirective', function($delegate) {
+	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
+		$provide.decorator('datepickerDirective', ['$delegate', '$timeout', function ($delegate, $timeout) {
 			var directive = $delegate[0];
 			var link = directive.link;
 
@@ -14,26 +14,30 @@
 				optional: true
 			};
 
-			directive.compile = function() {
-				return function(scope, element, attrs, ctrl) {
+			directive.compile = function () {
+				return function (scope, element, attrs, ctrl) {
+
 					// set start of week based on locale.
 					ctrl[0].startingDay = moment.localeData()._week.dow;
-
 					link.apply(this, arguments);
-					scope.$watch(function() {
+
+					scope.$watch(function () {
 						return ctrl[0].activeDate.getTime();
-					}, function() {
+					}, function () {
 						if (scope.onChangeOfMonth != undefined) {
-							scope.onChangeOfMonth({ date: ctrl[0].activeDate });
+							$timeout(function() {
+								 scope.onChangeOfMonth({ date: ctrl[0].activeDate });
+							});
+
 						}
 					});
 				}
 			};
 
 			return $delegate;
-		});
+		}]);
 	})
-	.run(['$templateCache', function($templateCache) {
+	.run(['$templateCache', function ($templateCache) {
 		// Apply customized style to datepicker popup
 		$templateCache.put("template/datepicker/popup.html",
 			"<ul class=\"dropdown-menu\" ng-if=\"isOpen\" style=\"display: block\" ng-style=\"{top: position.top+'px', left: position.left+'px'}\" ng-keydown=\"keydown($event)\" ng-click=\"$event.stopPropagation()\">\n" +
@@ -71,6 +75,6 @@
 			"  </tbody>\n" +
 			"</table>\n" +
 			"");
-		}]);
+	}]);
 }());
 

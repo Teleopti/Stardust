@@ -5,9 +5,10 @@
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout) {
 
 		var vm = this;
 		vm.isInEditMode = false;
@@ -220,7 +221,10 @@
 
 			resetOnLoad(data);
 
-			$scope.$apply();
+			$timeout(function() {
+				$scope.$apply();
+			});
+			
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {
