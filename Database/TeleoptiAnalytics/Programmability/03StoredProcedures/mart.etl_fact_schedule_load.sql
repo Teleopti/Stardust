@@ -62,6 +62,7 @@ INNER JOIN mart.dim_scenario ds
 	ON ds.scenario_id = fs.scenario_id
 	AND ds.business_unit_id = @business_unit_id
 WHERE shift_startdate_local_id between @start_date_id AND @end_date_id  --Will be "Hash Match JOIN" => 6940 reads
+OPTION(RECOMPILE)
 --using "Nested Loop JOIN" => 2300 reads
 --AND EXISTS (SELECT * FROM mart.dim_scenario ds WHERE fs.business_unit_id = ds.business_unit_id and ds.business_unit_id = @business_unit_id)
 
@@ -109,5 +110,5 @@ INSERT INTO mart.fact_schedule
 
 SELECT * FROM Stage.v_stg_Schedule_load
 WHERE shift_startdate_local_id between @start_date_id AND @end_date_id
-
+OPTION(RECOMPILE)
 GO
