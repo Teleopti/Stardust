@@ -141,6 +141,7 @@
 		<![CDATA[    
 	select count(p.Id) from Person p WITH (NOLOCK)
       where (p.TerminalDate is null or p.TerminalDate>=:currentDate)
+        and p.IsDeleted = 0
         and exists(select pp.Id from PersonPeriod pp WITH (NOLOCK) where pp.Parent=p.Id and pp.StartDate<:currentDate)
                         and exists(select pa.Id, s.Id, bu.Id from PersonAssignment pa WITH (NOLOCK)
                                     inner join dbo.Scenario s on pa.Scenario=s.Id 

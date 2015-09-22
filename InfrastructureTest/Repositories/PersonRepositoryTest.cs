@@ -1396,6 +1396,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
 		}
 
+		[Test]
+		public void ShouldNotCountDeletedAsActiveAgents()
+		{
+			SetupPersonsInOrganizationWithContract();
+			var resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			scenario.DefaultScenario = true;
+			var act = new Activity("df");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Scheduled");
+			PersistAndRemoveFromUnitOfWork(shiftCategory);
+			PersistAndRemoveFromUnitOfWork(scenario);
+			PersistAndRemoveFromUnitOfWork(act);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act, resTemp[0], new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory, scenario);
+			PersistAndRemoveFromUnitOfWork(ass);
+
+			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
+			PersistAndRemoveFromUnitOfWork(buTemp);
+
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
+			Assert.AreEqual(2, target.NumberOfActiveAgents());
+
+			var person = ass.Person;
+			((Person)person).SetDeleted();
+			PersistAndRemoveFromUnitOfWork(person);
+
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void verifyNumberOfActiveAgents()
 		{
