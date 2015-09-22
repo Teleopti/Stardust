@@ -114,6 +114,7 @@
 			pointer-events: none;
 			.gantt-task-content {
 				pointer-events: auto;
+				cursor:pointer;
 			}
 		}
 		.gantt-row-even > .gantt-row-background {

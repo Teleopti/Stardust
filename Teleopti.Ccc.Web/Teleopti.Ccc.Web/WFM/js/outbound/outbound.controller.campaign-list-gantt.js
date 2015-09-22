@@ -31,13 +31,14 @@
 		});
 
 		function init() {
+			$scope.isLoadingSchedule = true;
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
 				outboundService.listCampaignsWithinPeriod(function success(data) {
 					updateAllCampaignGanttDisplay(data);
 					$scope.ganttStatistics = data;
-					$scope.isLoadingSchedule = true;
+					$scope.isLoadingSchedule = false;
 				});
 			});
 		}
@@ -73,7 +74,7 @@
 		}
 
 		$scope.campaignClicked = function (ev, c) {
-			if (!$scope.isLoadingSchedule) return;
+			if ($scope.isLoadingSchedule) return;
 			if (c.expanded) {
 				c.expanded = false;
 				$scope.ganttData.splice(readIndex(c) + 1, 1);
@@ -181,7 +182,6 @@
 			};
 		}
 
-		$scope.isLoadingSchedule = false;
 		function getGanttVisualization(startDate,endDate) {
 			var defaultPeriod = outboundService.getDefaultPeriod();
 			var ganttPeriod = {
