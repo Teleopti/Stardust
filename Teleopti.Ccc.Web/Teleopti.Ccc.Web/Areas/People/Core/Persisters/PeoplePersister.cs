@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				if (isUserValid) continue;
 
 				var errorMsg = errorMsgBuilder.ToString();
-				errorMsg = errorMsg.Substring(0, errorMsg.Length - 1);
+				errorMsg = errorMsg.Substring(0, errorMsg.Length - 2);
 				user.ErrorMessage = errorMsg;
 				invalidUsers.Add(user);
 			}
