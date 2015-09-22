@@ -9418,6 +9418,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed imported count:.
+        /// </summary>
+        public static string FailedImportedCountColon {
+            get {
+                return ResourceManager.GetString("FailedImportedCountColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed!.
         /// </summary>
         public static string FailedWithExclamation {
@@ -11846,6 +11855,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsufficientStaffingHours {
             get {
                 return ResourceManager.GetString("InsufficientStaffingHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to some internal error happens:{0};.
+        /// </summary>
+        public static string InternalErrorXMsg {
+            get {
+                return ResourceManager.GetString("InternalErrorXMsg", resourceCulture);
             }
         }
         
@@ -19508,6 +19526,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please find the downloaded excel sheet to check the detailed error..
+        /// </summary>
+        public static string PleaseFindTheDownloadedExcelSheetToCheckTheError {
+            get {
+                return ResourceManager.GetString("PleaseFindTheDownloadedExcelSheetToCheckTheError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please refresh the page!.
         /// </summary>
         public static string PleaseRefreshThePageWithExclamation {
@@ -26344,6 +26371,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfullyExportedMeetings {
             get {
                 return ResourceManager.GetString("SuccessfullyExportedMeetings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully imported count:.
+        /// </summary>
+        public static string SuccessfullyImportedCountColon {
+            get {
+                return ResourceManager.GetString("SuccessfullyImportedCountColon", resourceCulture);
             }
         }
         

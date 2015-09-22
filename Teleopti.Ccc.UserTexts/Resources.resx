@@ -13482,4 +13482,20 @@ Reduce the complexity to use these shifts.</value>
     <value>The selected file can not be accepted. Please check the file type.</value>
     <comment>warning to tell user selected file is not accepted in web People.</comment>
   </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Failed imported count:</value>
+    <comment>Failed imported count:</comment>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>some internal error happens:{0};</value>
+    <comment>unknow error in importing user.</comment>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Please find the downloaded excel sheet to check the detailed error.</value>
+    <comment>Please find the downloaded excel sheet to check the detailed error.</comment>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Successfully imported count:</value>
+    <comment>Successfully imported count:</comment>
+  </data>
 </root>
