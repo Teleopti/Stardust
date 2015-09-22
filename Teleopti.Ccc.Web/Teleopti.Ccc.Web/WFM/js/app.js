@@ -74,11 +74,6 @@ wfm.config([
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
 		    url: '/permissions',
-            resolve: {
-                'RolesFunctionsService': function(RolesFunctionsService) {
-                    return RolesFunctionsService.promise;
-                }
-            },
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {

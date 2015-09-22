@@ -32,6 +32,7 @@
 
 					RolesFunctionsService.refreshFunctions(newSelectedRole.Id).then(function () {
 						$scope.allToggleElement.is = RolesFunctionsService.allFunctions;
+						$scope.functionsDisplayed = RolesFunctionsService.functionsDisplayed;
 					});
 				}
 			);
