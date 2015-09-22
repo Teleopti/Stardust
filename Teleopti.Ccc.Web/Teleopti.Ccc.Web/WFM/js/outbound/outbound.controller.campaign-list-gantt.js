@@ -94,8 +94,7 @@
 					replan: getCommandCallback(campaign, newDataRow, $scope)
 
 				}
-				
-			
+							
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
@@ -203,8 +202,9 @@
 					ganttArr[ind].tasks[0].id = ele.Id;
 					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.5)';
 					ganttArr[ind].tasks[0].tooltips = {
-					'enabled': true
-					}
+						'enabled': true
+					};
+					ganttArr[ind].classes = [];
 					ganttArr[ind].tasks[0].campaignName = ele.Name;					
 				});
 				$scope.ganttData = ganttArr;
@@ -218,8 +218,13 @@
 					if (ele1.id == ele2.Id) {
 						ele1.tasks[0].color = ele2.Status == 2 ? '#c2e085' : '#09F';
 						ele2.WarningInfo.forEach(function (ele) {
-							if (ele.TypeOfRule == 'OutboundUnderSLARule') ele1.headerClasses = 'campaign-late';
-							if (ele.TypeOfRule == 'OutboundOverstaffRule') ele1.headerClasses = 'campaign-early';
+							if (ele.TypeOfRule == 'OutboundUnderSLARule') {								
+								ele1.classes.push( 'campaign-late');
+							}
+													
+							if (ele.TypeOfRule == 'OutboundOverstaffRule') {							
+								ele1.classes.push('campaign-early');
+							}
 							
 						});
 
