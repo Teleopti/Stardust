@@ -25,7 +25,14 @@
 			vm.parentVm.toggleImportPeople();
 		};
 		vm.hasInvalidData = false;
-
+		vm.getFileTemplate = function() {
+			peopleSvc.downloadFileTemplate().then(function(response) {
+				var blob = new Blob([response.data], {
+					type: response.headers()['content-type']
+				});
+				saveAs(blob, 'userTemplate.xls');
+			});
+		}
 		vm.upload = function (files) {
 			vm.isSuccessful = false;
 			vm.isFailed = false;
@@ -43,12 +50,10 @@
 							type: response.headers()['content-type']
 						});
 						if (blob.size != 0) {
-							var processResult = response.headers()['message'].split(",");
-							console.log("processResult", processResult);
-							vm.successCount = processResult[0].trim();
-							vm.failedCount = processResult[1].trim();
-							console.log("succ ", vm.successCount);
-							console.log("fail ", vm.failedCount);
+							var processResult = response.headers()['message'].match(/[0-9]+/g);;
+							vm.successCount = processResult[0];
+							vm.failedCount = processResult[1];
+
 							vm.hasInvalidData = true;
 							var extension = isXlsx ? '.xlsx' : '.xls';
 							saveAs(blob, 'invalidUsers' + extension);

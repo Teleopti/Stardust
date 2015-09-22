@@ -9,7 +9,6 @@ using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			response.Headers.Clear();
 			var successCount = userList.Count - invalidUsers.Count;
 			var failedCount = invalidUsers.Count;
-			response.Headers.Add("Message", new[] { successCount.ToString(), failedCount.ToString() });
+			response.Headers.Add("Message",string.Format("success count:{0}, failed count:{1}", successCount, failedCount));
 
 			if (invalidUsers.Count == 0) 
 				return Request.CreateResponse(HttpStatusCode.OK);
@@ -85,9 +84,36 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return response;
 		}
 
-		private static MemoryStream constructReturnedFile(bool isXlsx, IList<RawUser> invalidUsers)
+		[Route("api/People/UserTemplate"), HttpPost]
+		public HttpResponseMessage GetFileTemplate()
 		{
-			const string invalidUserSheetName = "invalidUsers";
+			const bool isXlsx = false;
+			const string contentType = "application/vnd.ms-excel";
+			var users = new List<RawUser>
+			{
+				new RawUser
+				{
+					Firstname = "John",
+					Lastname = "Smith",
+					WindowsUser = "",
+					ApplicationUserId = "js",
+					Password = "password",
+					Role = "agent, \"London, Team Leader\""
+				}
+			};
+			
+			var ms = constructReturnedFile(isXlsx, users, false);
+			var response = Request.CreateResponse(HttpStatusCode.OK);
+			response.Headers.Clear();
+			response.Content = new ByteArrayContent(ms.ToArray());
+			
+			response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+
+			return response;
+		}
+		private static MemoryStream constructReturnedFile(bool isXlsx, IList<RawUser> users, bool isErrorMsgIncluded=true)
+		{
+			const string invalidUserSheetName = "users";
 			var ms = new MemoryStream();
 			var returnedFile = isXlsx
 				? (IWorkbook) new XSSFWorkbook()
@@ -102,11 +128,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			row.CreateCell(colIndexApplicationUserId).SetCellValue("ApplicationUserId");
 			row.CreateCell(colIndexPassword).SetCellValue("Password");
 			row.CreateCell(colIndexRole).SetCellValue("Role");
-			row.CreateCell(colIndexErrorMessage).SetCellValue("ErrorMessage");
-
-			for (var i = 0; i < invalidUsers.Count; i++)
+			if (isErrorMsgIncluded)
 			{
-				var user = invalidUsers[i];
+				row.CreateCell(colIndexErrorMessage).SetCellValue("ErrorMessage");
+			}
+
+			for (var i = 0; i < users.Count; i++)
+			{
+				var user = users[i];
 				row = newsheet.CreateRow(i + 1);
 				row.CreateCell(colIndexFirstname).SetCellValue(user.Firstname);
 				row.CreateCell(colIndexLastname).SetCellValue(user.Lastname);

@@ -80,6 +80,19 @@ angular
 
 			};
 
+			this.downloadFileTemplate = function () {
+				var config = overload({
+					url: '../api/People/UserTemplate',
+					method: 'POST',
+					responseType: 'arraybuffer',
+					headers: {
+						'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					}
+				});
+				return $http(config);
+
+			};
+
 			function overload(config) {
 				function addFieldToFormData(formData, val, key) {
 					if (val !== undefined) {
