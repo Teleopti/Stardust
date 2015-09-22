@@ -1,7 +1,7 @@
 ﻿<div class="row">
     <div class="col-lg-12">
 		<h1>Teams</h1>
-    <span ng-click="goBack()"><a class="rta-nav-link">{{siteName}}</a>\</span>
+    <span ng-click="goBack()"><a class="rta-nav-link">Real Time Adherence</a></span> / <span>{{siteName}}</span>
             <div class="wfm-block material-depth-1 rta-list-item" ng-repeat="team in teams" ng-click="onTeamSelect(team)">
                 <h2>{{team.teamName}}</h2>
                 <md-progress-linear md-mode="buffer" value="45" md-buffer-value="100"></md-progress-linear>

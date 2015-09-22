@@ -6,7 +6,7 @@
           function ($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService) {
 
           	var siteId = $stateParams.siteId;
-          
+
           	$scope.teams = RtaOrganizationService.getTeams(siteId);
           	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
 
@@ -22,7 +22,6 @@
           		data.forEach(function (site) {
           			site.OutOfAdherence = 0;
           		});
-
           		$scope.sites = data;
           		RtaService.getAdherenceForAllSites.query().$promise.then(updateAdherence);
 

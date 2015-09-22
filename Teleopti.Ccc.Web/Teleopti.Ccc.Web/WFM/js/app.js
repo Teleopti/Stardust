@@ -124,11 +124,11 @@ wfm.config([
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl'
 		}).state('rta-teams', {
-			url: '/rta/sites/:siteId', 
+			url: '/rta/site/:siteId', 
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl',
 		}).state('rta-agents', {
-			url: '/rta/agents/:siteId/:teamId',
+			url: '/rta/site/:siteId/team/:teamId',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
 		});

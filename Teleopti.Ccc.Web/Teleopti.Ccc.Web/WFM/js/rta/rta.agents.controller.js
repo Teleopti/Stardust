@@ -2,8 +2,8 @@
    'use strict';
 
     angular.module('wfm.rta').controller('RtaAgentsCtrl', [
-         '$scope', '$state', '$stateParams', 'RtaOrganizationService', 'RtaAgentsService', 'RtaService',
-          function ($scope, $state, $stateParams, RtaOrganizationService, RtaAgentsService, RtaService) {
+         '$scope', '$filter', '$state', '$stateParams', 'RtaOrganizationService', 'RtaAgentsService', 'RtaService',
+          function ($scope, $filter, $state, $stateParams, RtaOrganizationService, RtaAgentsService, RtaService) {
 
           	var teamId = $stateParams.teamId;
           	var siteId = $stateParams.siteId;
@@ -14,10 +14,14 @@
 
           	$scope.gridOptions = {
           		columnDefs: [
-					{ name: 'Agent', field: 'Name', enableColumnMenu: false },
+					{ name: 'Name', field: 'Name', enableColumnMenu: false },
 					{ name: 'Team', field: 'Team', enableColumnMenu: false},
 					{ name: 'State', field: 'State', enableColumnMenu: false },
-					{ name: 'Id', field: 'Id', enableColumnMenu: false }
+					{ name: 'Activity', field: 'Activity', enableColumnMenu: false },
+					{ name: 'Next Activity', field: 'Next Activity', enableColumnMenu: false },
+					{ name: 'Next Activity Start Time', field: 'Next Activity Start Time', enableColumnMenu: false },
+					{ name: 'Alarm', field: 'Alarm', enableColumnMenu: false },
+					{ name: 'Time in Alarm', field: 'Time in Alarm', enableColumnMenu: false }
           		],
           		data: $scope.agents
           	};
@@ -27,7 +31,6 @@
           	};
 
           	$scope.goBack = function () {
-          		console.log('id', siteId);
 				$state.go('rta-teams', { siteId: siteId });
           	};
 
