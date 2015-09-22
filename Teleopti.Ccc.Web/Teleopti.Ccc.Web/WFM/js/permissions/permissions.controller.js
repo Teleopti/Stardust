@@ -106,7 +106,7 @@
 				Roles.refresh().$promise.then(function (result) {
 					$scope.roles = result;
 					
-					if ($stateParams.id != null) {
+					if ($stateParams.id != null) { //FIXME is it needed?
 						for (var i = 0; i < result.length; i++) {
 							if ($stateParams.id == result[i].Id) {
 								$scope.showRole(result[i]);

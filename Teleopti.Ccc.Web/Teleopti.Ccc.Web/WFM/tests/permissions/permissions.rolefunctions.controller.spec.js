@@ -26,8 +26,11 @@ describe('FunctionController', function() {
         selectedRole: {
             BuiltIn: false,
             Id: 1
+        },
+        selectRole: function(role) {
+            mockRoles.selectedRole =role;
         }
-    };
+};
 
     var mockGrowl = {};
 
@@ -43,6 +46,7 @@ describe('FunctionController', function() {
 
     it('should toggle the selected property of node from false to true', inject(function ($controller) {
         var scope = $rootScope.$new();
+       
         $controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
         var node = {
         	$modelValue: { selected: false, Type: 'Team', ChildNodes: [] }, $nodeScope: { $parentNodeScope: null }
@@ -53,4 +57,5 @@ describe('FunctionController', function() {
 		    
         expect(node.$modelValue.selected).toBe(true);
     }));
+
 });  
