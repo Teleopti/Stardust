@@ -35,7 +35,7 @@
 			$scope.ganttOptions = setGanttOptions();
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
 				outboundService.listFilteredCampaignsWithinPeriod(0, function success(data) {
-					updateGanttChart(data);
+					updateAllCampaignGanttDisplay(data);
 					$scope.ganttStatistics = data;
 					$scope.isLoadingSchedule = true;
 				});
@@ -130,6 +130,7 @@
 					$scope.$broadcast('campaign.chart.clear.selection', campaign);
 					dataRow.isRefreshingData = false;
 					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
+					dataRow.isOverStaffing = isOverStaffing(campaign);
 					if (done) done();
 				});							
 			}			
@@ -145,6 +146,7 @@
 					campaign.translations = translations;
 					campaign.closedDays = closedDays;
 
+					updateSingleCampaignGanttDisplay(_campaign);
 					if (done) done();					
 				});
 			});
@@ -202,7 +204,7 @@
 					ganttArr[ind].tasks[0].from = fromDate;
 					ganttArr[ind].tasks[0].to = toDate;
 					ganttArr[ind].tasks[0].id = ele.Id;
-					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.5)';
+					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.6)';
 					ganttArr[ind].tasks[0].tooltips = {
 						'enabled': true
 					};
@@ -214,24 +216,34 @@
 			});
 		}
 
-		function updateGanttChart(data) {
-			$scope.ganttData.forEach(function (ele1, ind1) {
-				ele1.classes = [];
-				data.forEach(function(ele2, ind2) {
-					if (ele1.id == ele2.Id) {
-						ele1.tasks[0].color = ele2.Status == 2 ? '#c2e085' : '#09F';
-						ele2.WarningInfo.forEach(function (ele) {
-							if (ele.TypeOfRule == 'OutboundUnderSLARule') {								
-								ele1.classes.push( 'campaign-late');
-							}
-													
-							if (ele.TypeOfRule == 'OutboundOverstaffRule') {							
-								ele1.classes.push('campaign-early');
-							}							
-						});
-					}
-				});
+		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
+			row.classes = null;
+			row.tasks[0].color = campaignSummary.HasSchedule ? '#C2E085' : '#66C2FF';
+			campaignSummary.WarningInfo.forEach(function (warning) {
+				if (warning.TypeOfRule == 'OutboundUnderSLARule') {
+					row.classes = 'campaign-late';
+				}
+				if (warning.TypeOfRule == 'OutboundOverstaffRule') {
+					row.classes = 'campaign-early';
+				}
 			});
+			
+		}		
+
+		function updateAllCampaignGanttDisplay(campaignSummaryList) {
+			campaignSummaryList.forEach(function(campaignSummary) {
+				updateSingleCampaignGanttDisplay(campaignSummary);
+			});
+		}
+
+		function updateSingleCampaignGanttDisplay(campaignSummary) {
+			for (var i = 0; i < $scope.ganttData.length; i++) {
+				var row = $scope.ganttData[i];
+				if (campaignSummary.Id == row.id) {
+					return updateGanttRowFromCampaignSummary(row, campaignSummary);
+					
+				}				
+			}			
 		}
 	}
 
