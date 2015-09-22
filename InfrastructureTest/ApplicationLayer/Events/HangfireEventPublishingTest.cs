@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
-		public FakeApplicationData ApplicationData;
+		public FakeApplicationDataWithTestDatasource ApplicationData;
 		public IDataSourceScope DataSource;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
+			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData>();
 
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();

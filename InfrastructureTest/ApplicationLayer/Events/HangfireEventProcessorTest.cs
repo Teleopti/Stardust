@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
 		public IHangfireEventProcessor Target;
-		public FakeApplicationData ApplicationData;
+		public FakeApplicationDataWithTestDatasource ApplicationData;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, IDataSourceForTenant>();
+			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData, IDataSourceForTenant>();
 
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();

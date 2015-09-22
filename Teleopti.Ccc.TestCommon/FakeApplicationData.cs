@@ -12,25 +12,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeApplicationData : ICurrentApplicationData, IApplicationData, IDataSourceForTenant
 	{
-		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
 		private IEnumerable<IDataSource> _registeredDataSources = new IDataSource[] { };
 
-		public FakeApplicationData(Func<IDataSourcesFactory> dataSourcesFactory)
+		public virtual IEnumerable<IDataSource> RegisteredDataSources
 		{
-			_dataSourcesFactory = dataSourcesFactory;
-		}
-
-		public IEnumerable<IDataSource> RegisteredDataSources
-		{
-			get
-			{
-				if (!_registeredDataSources.Any())
-				{
-					// we shouldnt create a session factory when in domain test!
-					_registeredDataSources = new[] { _dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null) };
-				}
-				return _registeredDataSources;
-			}
+			get { return _registeredDataSources; }
 			set { _registeredDataSources = value.ToArray(); }
 		}
 
@@ -47,7 +33,10 @@ namespace Teleopti.Ccc.TestCommon
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString,
+		public void MakeSureDataSourceExists(
+			string tenantName, 
+			string applicationConnectionString, 
+			string analyticsConnectionString,
 			IDictionary<string, string> applicationNhibConfiguration)
 		{
 			throw new NotImplementedException();
@@ -67,5 +56,26 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return this;
 		}
+	}
+
+	public class FakeApplicationDataWithTestDatasource : FakeApplicationData
+	{
+		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
+
+		public FakeApplicationDataWithTestDatasource(Func<IDataSourcesFactory> dataSourcesFactory)
+		{
+			_dataSourcesFactory = dataSourcesFactory;
+		}
+
+		public override IEnumerable<IDataSource> RegisteredDataSources
+		{
+			get
+			{
+				if (!base.RegisteredDataSources.Any())
+					base.RegisteredDataSources = new[] { _dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null) };
+				return base.RegisteredDataSources;
+			}
+		}
+		
 	}
 }
