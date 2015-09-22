@@ -24,10 +24,7 @@ $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:52858/
 $(WEB_BROKER_BACKPLANE)|
 $(WEB_DEPLOY)|false
-$(FEATURE_TOGGLE)|http://localhost:52858/
-$(TENANT_SERVER)|http://localhost:52858/
-$(REPORT_SERVER)|http://localhost:52858/
-$(CONFIG_SERVER)|http://localhost:52858/
+$(URL)|http://localhost:52858/
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
