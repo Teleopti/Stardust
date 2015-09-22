@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class ScheduleRangeLowPermissionCheckTest
     {
-        private string function;
-        private MockRepository mocks;
+	    private const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
+    
         private IScheduleParameters parameters;
         private IPerson person;
         private IScenario scenario;
@@ -33,17 +33,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             person = PersonFactory.CreatePerson();
             scenario = new Scenario("sdf");
-            mocks = new MockRepository();
-            principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
-            function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
-            parameters =
-                new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            dic = mocks.StrictMock<IScheduleDictionary>();
+            principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+            parameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			dic = MockRepository.GenerateMock<IScheduleDictionary>();
             target = new ScheduleRange(dic, parameters);
         }
 
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void InitializeCanAddOutsidePermissionScopeAndAnExtractorCanReadThisData()
         {
             extractor extractor = new extractor();
@@ -55,139 +51,116 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var absInside = createPersonAbsence(new DateTimePeriod(paramStart.AddDays(1), paramStart.AddDays(10)));
             absInside.SetId(Guid.NewGuid());
 
-            using (mocks.Record())
-            {
-                var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-                Expect.Call(principalAuthorization.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
-                        .IgnoreArguments()
-                        .Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
-                        .Repeat.AtLeastOnce();
-                Expect.Call(dic.Scenario)
-                        .Return(scenario)
-                        .Repeat.Any();
-                Expect.Call(dic.PermissionsEnabled).Return(false).Repeat.Any();
-            }
-            using (mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    target.AddRange(new List<IPersonAssignment> {assInside, assOutSide});
-                    target.Add(absInside);
-                    target.Add(absOutSide);
-                    target.ExtractAllScheduleData(extractor, new DateTimePeriod(2000, 1, 1, 2000, 12, 31));
+            var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
+            principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+                    .IgnoreArguments()
+                    .Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
+                    .Repeat.AtLeastOnce();
+            dic.Stub(x => x.Scenario).Return(scenario);
+            dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-                    Assert.IsTrue(target.Contains(assInside));
-                    Assert.IsTrue(target.Contains(absInside));
-                    Assert.IsFalse(target.Contains(assOutSide));
-                    Assert.IsFalse(target.Contains(absOutSide));
-                    Assert.AreEqual(2, extractor.PersonAbsences.Count);
-                    Assert.AreEqual(2, extractor.PersonAssignments.Count);
-                }
-            }
+	        using (new CustomAuthorizationContext(principalAuthorization))
+	        {
+		        target.AddRange(new List<IPersonAssignment> {assInside, assOutSide});
+		        target.Add(absInside);
+		        target.Add(absOutSide);
+		        target.ExtractAllScheduleData(extractor, new DateTimePeriod(2000, 1, 1, 2000, 12, 31));
+
+		        Assert.IsTrue(target.Contains(assInside));
+		        Assert.IsTrue(target.Contains(absInside));
+		        Assert.IsFalse(target.Contains(assOutSide));
+		        Assert.IsFalse(target.Contains(absOutSide));
+		        Assert.AreEqual(2, extractor.PersonAbsences.Count);
+		        Assert.AreEqual(2, extractor.PersonAssignments.Count);
+	        }
         }
 
-        [Test]
-        public void VerifyExtractorOnlyReadsDataWithoutPermissionInsidePeriod()
-        {
-            extractor extractor = new extractor();
-            DateTime paramStart = parameters.Period.StartDateTime;
-            IPersonAssignment ass1 = createPersonAssignment(new DateTimePeriod(paramStart.AddDays(20), paramStart.AddDays(22)));
-            IPersonAssignment ass2 = createPersonAssignment(new DateTimePeriod(paramStart.AddDays(16), paramStart.AddDays(17)));
+	    [Test]
+	    public void VerifyExtractorOnlyReadsDataWithoutPermissionInsidePeriod()
+	    {
+		    extractor extractor = new extractor();
+		    DateTime paramStart = parameters.Period.StartDateTime;
+		    IPersonAssignment ass1 = createPersonAssignment(new DateTimePeriod(paramStart.AddDays(20), paramStart.AddDays(22)));
+		    IPersonAssignment ass2 = createPersonAssignment(new DateTimePeriod(paramStart.AddDays(16), paramStart.AddDays(17)));
 
-            using (mocks.Record())
-            {
-                var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-                Expect.Call(principalAuthorization.PermittedPeriods( function, new DateOnlyPeriod(), parameters.Person))
-                        .IgnoreArguments()
-                        .Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
-                        .Repeat.AtLeastOnce();
-                Expect.Call(dic.Scenario)
-                        .Return(scenario)
-                        .Repeat.Any();
-                Expect.Call(dic.PermissionsEnabled).Return(false).Repeat.Any();
-            }
-            using (mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    target.AddRange(new List<IPersonAssignment> {ass1, ass2});
-                    target.ExtractAllScheduleData(extractor,
-                                                  new DateTimePeriod(paramStart.AddDays(18), paramStart.AddDays(22)));
+		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
+			principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+					.IgnoreArguments()
+					.Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
+					.Repeat.AtLeastOnce();
+			dic.Stub(x => x.Scenario).Return(scenario);
+			dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-                    var asses = extractor.PersonAssignments;
-                    Assert.AreEqual(0, extractor.PersonAbsences.Count);
-                    Assert.AreEqual(1, asses.Count);
-                    Assert.AreEqual(new DateTimePeriod(paramStart.AddDays(20), paramStart.AddDays(22)),
-                                    asses.First().Period);
-                }
-            }
-        }
+		    using (new CustomAuthorizationContext(principalAuthorization))
+		    {
+			    target.AddRange(new List<IPersonAssignment> {ass1, ass2});
+			    target.ExtractAllScheduleData(extractor,
+				    new DateTimePeriod(paramStart.AddDays(18), paramStart.AddDays(22)));
 
-        [Test]
-        public void VerifyAddingDataOutsidePeriodAreIgnored()
-        {
-            IPersistableScheduleData inside = mocks.StrictMock<IPersistableScheduleData>();
-            IPersistableScheduleData outside = mocks.StrictMock<IPersistableScheduleData>();
-            using (mocks.Record())
-            {
-                var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-                Expect.Call(principalAuthorization.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
-                        .IgnoreArguments()
-                        .Return(new List<DateOnlyPeriod> { dop })
-                        .Repeat.AtLeastOnce();
+			    var asses = extractor.PersonAssignments;
+			    Assert.AreEqual(0, extractor.PersonAbsences.Count);
+			    Assert.AreEqual(1, asses.Count);
+			    Assert.AreEqual(new DateTimePeriod(paramStart.AddDays(20), paramStart.AddDays(22)),
+				    asses.First().Period);
+		    }
+	    }
 
+	    [Test]
+	    public void VerifyAddingDataOutsidePeriodAreIgnored()
+	    {
+			IPersistableScheduleData inside = MockRepository.GenerateMock<IPersistableScheduleData>();
+			IPersistableScheduleData outside = MockRepository.GenerateMock<IPersistableScheduleData>();
 
-                Expect.Call(inside.BelongsToScenario(scenario)).Return(true);
-                Expect.Call(outside.BelongsToScenario(scenario)).Return(true);
-                Expect.Call(inside.Person).Return(person);
-                Expect.Call(outside.Person).Return(person);
-                Expect.Call(inside.Period).Return(parameters.Period);
-                Expect.Call(outside.Period).Return(new DateTimePeriod(parameters.Period.StartDateTime.AddMinutes(-2), parameters.Period.StartDateTime.AddMinutes(-1)));
+		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
 
-                Expect.Call(inside.BelongsToPeriod(new DateOnlyPeriod()))
-                    .IgnoreArguments() //now a class
-                    .Return(true); //check permission - should be ok
-                Expect.Call(dic.PermissionsEnabled).Return(false).Repeat.Any();
-            }
+		    principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+			    .IgnoreArguments()
+			    .Return(new List<DateOnlyPeriod> {dop})
+			    .Repeat.AtLeastOnce();
 
-            using(mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    target.Add(outside);
-                    target.Add(inside);
-                }
-            }
-            Assert.IsTrue(target.Contains(inside));
-            Assert.IsFalse(target.Contains(outside));
-        }
+		    dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-        [Test]
-        public void VerifySchedulePartGetsFullAccessSetToFalse()
-        {
-            DateOnly paramStartLocal = new DateOnly(parameters.Period.LocalStartDateTime);
+		    inside.Stub(x => x.BelongsToScenario(scenario)).Return(true);
+		    outside.Stub(x => x.BelongsToScenario(scenario)).Return(true);
+		    inside.Stub(x => x.Person).Return(person);
+		    outside.Stub(x => x.Person).Return(person);
+		    inside.Stub(x => x.Period).Return(parameters.Period);
+		    outside.Stub(x => x.Period).Return(new DateTimePeriod(parameters.Period.StartDateTime.AddMinutes(-2),parameters.Period.StartDateTime.AddMinutes(-1)));
 
-            using (mocks.Record())
-            {
-                var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-                Expect.Call(principalAuthorization.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
-                        .IgnoreArguments()
-                        .Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
-                        .Repeat.AtLeastOnce();
-                Expect.Call(dic.Scenario).Return(scenario).Repeat.Any();
-                Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).Return(true);
-            }
-            using (mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(principalAuthorization))
-                {
-                    IScheduleDay part = target.ScheduledDay(paramStartLocal.AddDays(20));
-                    Assert.AreEqual(false, part.FullAccess);
-                }
-            }
-        }
+			inside.Stub(x => x.BelongsToPeriod(new DateOnlyPeriod())).IgnoreArguments().Return(true); //check permission - should be ok
+		    
+		    using (new CustomAuthorizationContext(principalAuthorization))
+		    {
+			    target.Add(outside);
+			    target.Add(inside);
+		    }
 
-        private IPersonAbsence createPersonAbsence(DateTimePeriod period)
+		    Assert.IsTrue(target.Contains(inside));
+		    Assert.IsFalse(target.Contains(outside));
+	    }
+
+	    [Test]
+	    public void VerifySchedulePartGetsFullAccessSetToFalse()
+	    {
+		    var paramStartLocal = new DateOnly(parameters.Period.LocalStartDateTime);
+
+		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
+		    principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+			    .IgnoreArguments()
+			    .Return(new List<DateOnlyPeriod> {new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15))})
+			    .Repeat.AtLeastOnce();
+		    dic.Stub(x => x.Scenario).Return(scenario);
+		    principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+			    .Return(true);
+
+		    using (new CustomAuthorizationContext(principalAuthorization))
+		    {
+			    IScheduleDay part = target.ScheduledDay(paramStartLocal.AddDays(20));
+			    Assert.AreEqual(false, part.FullAccess);
+		    }
+	    }
+
+	    private IPersonAbsence createPersonAbsence(DateTimePeriod period)
         {
             return
                 new PersonAbsence(person, scenario,
@@ -204,9 +177,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                         scenario);
         }
 
-        
         private class extractor : IScheduleExtractor
         {
+			private readonly object ExtractorLock = new object();
+
             public extractor()
             {
                 PersonAssignments = new HashSet<IPersonAssignment>();
@@ -219,12 +193,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             public void AddSchedulePart(IScheduleDay schedulePart)
             {
-	            var ass = schedulePart.PersonAssignment();
-							if (ass != null)
-							{
-								PersonAssignments.Add(ass);
-							}
-                schedulePart.PersonAbsenceCollection().ForEach(PersonAbsences.Add);
+	            lock (ExtractorLock)
+	            {
+		            var ass = schedulePart.PersonAssignment();
+		            if (ass != null)
+		            {
+			            PersonAssignments.Add(ass);
+		            }
+		            schedulePart.PersonAbsenceCollection().ForEach(PersonAbsences.Add);
+	            }
             }
         }
     }
