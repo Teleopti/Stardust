@@ -34,7 +34,6 @@
 		</form>
 
     <div class="data-auth">
-
         <label translate>AddGlobalAuthorizationLabel</label>
 		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
             <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
@@ -44,7 +43,7 @@
 <div class="permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-        <li ng-repeat="node in organization.BusinessUnit | orderBy:'Name' | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+        <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
 		</ol>
 	</div>
 
