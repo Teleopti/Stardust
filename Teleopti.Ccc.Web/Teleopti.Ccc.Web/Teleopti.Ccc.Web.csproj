@@ -434,7 +434,9 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ICampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />

@@ -69,10 +69,12 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.modalCampaignLaunch = false;
-			$scope.displayCampaignModal = function() {
+			$scope.displayCampaignModal = function (workload) {
 				$scope.modalCampaignLaunch = true;
 				$scope.getCampaignDays();
 				$scope.modalCampaignInfo.campaignPercentage = 100;
+				$scope.modalCampaignInfo.selectedWorkload = workload;
+				$scope.modalCampaignInfo.selectedScenario = workload.Scenario;
 				$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 			};
 			
@@ -101,9 +103,7 @@ angular.module('wfm.forecasting')
 				var tempsum = 0;
 				angular.forEach($scope.chart.selected(), function (value) {
 					campaignDays.push({
-						date: value.x,
-						calls: value.value,
-						campaignPercentage: 1
+						date: value.x
 					});
 					tempsum += value.value;
 				});
@@ -215,6 +215,28 @@ angular.module('wfm.forecasting')
 
 			$scope.clearChartSelection = function() {
 				$scope.chart.unselect(['vc']);
+			};
+
+			$scope.applyCampaign = function() {
+				var workload = $scope.modalCampaignInfo.selectedWorkload;
+				$http.post("../api/Forecasting/AddCampaign", JSON.stringify(
+					{
+						Days: campaignDays,
+						WorkloadId: workload.Id,
+						ScenarioId: workload.Scenario.Id,
+						CampaignTasksPercent: $scope.modalCampaignInfo.campaignPercentage
+					})).
+					success(function (data, status, headers, config) {
+						//angular.forEach(data.Days, function (day) {
+						//	day.date = new Date(Date.parse(day.date));
+						//});
+						//workload.resultChartData = data.Days;
+						console.log(data);
+					}).
+					error(function (data, status, headers, config) {
+						$scope.error = { message: "Failed to apply campaign." };
+						console.log(data);
+				});
 			};
 
 			if (c3.applyFixForForecast) c3.applyFixForForecast(function() {

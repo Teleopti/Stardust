@@ -26,8 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IActionThrottler _actionThrottler;
 		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IWorkloadRepository _workloadRepository;
+		private readonly ICampaignPersister _campaignPersister;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -36,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_actionThrottler = actionThrottler;
 			_scenarioRepository = scenarioRepository;
+			_workloadRepository = workloadRepository;
+			_campaignPersister = campaignPersister;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -126,6 +130,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
+
+		[HttpPost, Route("api/Forecasting/AddCampaign"), UnitOfWork]
+		public void AddCampaign(CampaignInput input)
+		{
+			var scenario = _scenarioRepository.Get(input.ScenarioId);
+			var workload = _workloadRepository.Get(input.WorkloadId);
+			_campaignPersister.Persist(scenario, workload, input.Days, input.CampaignTasksPercent);
+		}
 	}
 
 	public class ScenarioViewModel
@@ -138,5 +150,18 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		public bool Success { get; set; }
 		public string Message { get; set; }
+	}
+
+	public class CampaignInput
+	{
+		public CampaignDay[] Days { get; set; }
+		public Guid ScenarioId { get; set; }
+		public Guid WorkloadId { get; set; }
+		public int CampaignTasksPercent { get; set; }
+	}
+
+	public class CampaignDay
+	{
+		public DateOnly Date { get; set; }
 	}
 }

@@ -239,6 +239,7 @@
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Forecasting\Controllers\CampaignPersisterTest.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactoryTest.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactoryTest.cs" />
     <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactoryTest.cs" />

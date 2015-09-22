@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 {
@@ -15,6 +16,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 			builder.RegisterType<IntradayPatternViewModelFactory>()
 				.SingleInstance()
 				.As<IIntradayPatternViewModelFactory>();
+			builder.RegisterType<CampaignPersister>()
+				.SingleInstance()
+				.As<ICampaignPersister>();
 		}
 	}
 }
