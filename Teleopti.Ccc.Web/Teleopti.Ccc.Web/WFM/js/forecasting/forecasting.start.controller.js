@@ -65,14 +65,14 @@ angular.module('wfm.forecasting')
 			};
 
 			var calculateCampaignCalls = function() {
-				return ($scope.sumOfCallsForSelectedDays * $scope.modalCampaignInfo.campaignPercentage / 100).toFixed(1);
+				return ($scope.sumOfCallsForSelectedDays * ($scope.modalCampaignInfo.campaignPercentage + 100) / 100).toFixed(1);
 			};
 
 			$scope.modalCampaignLaunch = false;
 			$scope.displayCampaignModal = function (workload) {
 				$scope.modalCampaignLaunch = true;
 				$scope.getCampaignDays();
-				$scope.modalCampaignInfo.campaignPercentage = 100;
+				$scope.modalCampaignInfo.campaignPercentage = 0;
 				$scope.modalCampaignInfo.selectedWorkload = workload;
 				$scope.modalCampaignInfo.selectedScenario = workload.Scenario;
 				$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();

@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		{
 			var input = new CampaignInput()
 			{
-				Days = new[] {new CampaignDay() {Date = new DateOnly()}},
+				Days = new[] {new CampaignDay() {Date = new DateTime()}},
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				CampaignTasksPercent = 50

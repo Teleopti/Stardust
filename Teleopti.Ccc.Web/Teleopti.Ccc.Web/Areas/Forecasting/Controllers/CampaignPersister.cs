@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			var min = days.Min(x => x.Date);
 			var max = days.Max(x => x.Date);
-			var futurePeriod = new DateOnlyPeriod(min, max);
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(min), new DateOnly(max));
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
 			var workloadDays = _futureData.Fetch(workload, skillDays, futurePeriod);
 			foreach (var workloadDay in workloadDays)

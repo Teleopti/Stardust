@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
 
-		[HttpPost, Route("api/Forecasting/AddCampaign"), UnitOfWork]
-		public void AddCampaign(CampaignInput input)
+		[UnitOfWork, HttpPost, Route("api/Forecasting/AddCampaign")]
+		public virtual void AddCampaign(CampaignInput input)
 		{
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			var workload = _workloadRepository.Get(input.WorkloadId);
@@ -162,6 +162,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 	public class CampaignDay
 	{
-		public DateOnly Date { get; set; }
+		public DateTime Date { get; set; }
 	}
 }
