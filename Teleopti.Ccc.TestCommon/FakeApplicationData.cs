@@ -25,7 +25,10 @@ namespace Teleopti.Ccc.TestCommon
 			get
 			{
 				if (!_registeredDataSources.Any())
-					_registeredDataSources = new[] {_dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
+				{
+					// we shouldnt create a session factory when in domain test!
+					_registeredDataSources = new[] { _dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null) };
+				}
 				return _registeredDataSources;
 			}
 			set { _registeredDataSources = value.ToArray(); }

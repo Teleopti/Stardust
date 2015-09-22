@@ -240,8 +240,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 		}
 
+		[InfoLog]
 		[RtaDataSourceScope]
-		public virtual void CheckForActivityChanges()
+		public virtual void CheckForActivityChanges(string tenant)
 		{
 			_activityChangeProcessor.CheckForActivityChanges();
 		}

@@ -38,16 +38,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			if (dataSourceForTenant == null)
 				return null;
 
-			var configString = new SqlConnectionStringBuilder(configReader.ConnectionString("RtaApplication"));
+			var connectionStringInfo = new SqlConnectionStringBuilder(configReader.ConnectionString("RtaApplication"));
 			IDataSource dataSource = null;
 			dataSourceForTenant().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				var c = new SqlConnectionStringBuilder(tenant.Application.ConnectionString);
-				if (c.DataSource == configString.DataSource &&
-					c.InitialCatalog == configString.InitialCatalog)
-				{
+				if (c.DataSource == connectionStringInfo.DataSource && c.InitialCatalog == connectionStringInfo.InitialCatalog)
 					dataSource = tenant;
-				}
 			});
 
 			return dataSource;

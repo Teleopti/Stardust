@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
+
+			[RtaDataSourceScope]
+			public virtual void Does(string tenant)
+			{
+				RanWithDataSource = _dataSource.Current();
+			}
 		}
 
 		public class Input
@@ -157,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 
 		[Test]
-		public void ShouldSetCurrentDatasourceFromTenant()
+		public void ShouldSetCurrentDatasourceFromTenantProperty()
 		{
 			IDataSource expected = new FakeDataSource("tenant");
 			ApplicationData.RegisteredDataSources = new[] { expected };
@@ -167,5 +173,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 			TheService.RanWithDataSource.Should().Be(expected);
 		}
+
+		[Test]
+		public void ShouldSetCurrentDatasourceFromTenantStringParameter()
+		{
+			IDataSource expected = new FakeDataSource("tenant");
+			ApplicationData.RegisteredDataSources = new[] { expected };
+			Tenants.Has(new Tenant("tenant"));
+
+			TheService.Does("tenant");
+
+			TheService.RanWithDataSource.Should().Be(expected);
+		}
+
 	}
 }

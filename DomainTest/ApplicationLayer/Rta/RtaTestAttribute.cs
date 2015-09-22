@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -24,6 +25,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 		public RtaTenants Tenants;
 
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString(
+				"RtaApplication",
+				new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests)
+				{
+					InitialCatalog = "FakeRtaDatabase",
+					DataSource = "FakeRtaDatasource"
+				}.ToString());
+			return config;
+		}
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new TenantServerModule(configuration));
@@ -31,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			registerFakeDatabase(system, configuration, null);
@@ -58,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				system.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter>();
 
+				system.UseTestDouble(database.ApplicationData).For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
+
 				system.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
 				system.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
 				system.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
@@ -71,6 +86,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			else
 			{
 				system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter>();
+
+				system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
 
 				system.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
 				system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();

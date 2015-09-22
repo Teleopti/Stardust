@@ -25,15 +25,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			var argument = invocation.Arguments.First();
-			var enumerable = argument as IEnumerable;
-			dynamic input = enumerable != null ? enumerable.Cast<dynamic>().First() : argument;
+			var tenant = argument as string;
 
-			string tenant;
-			var key = tryGet(() => input.AuthenticationKey);
-			if (key != null)
-				tenant = _tenantLoader.TenantNameByKey(ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(key));
-			else
-				tenant = tryGet(() => input.Tenant);
+			if (tenant == null)
+			{
+				var enumerable = argument as IEnumerable;
+				dynamic input = enumerable != null ? enumerable.Cast<dynamic>().First() : argument;
+				var key = tryGet(() => input.AuthenticationKey);
+				if (key != null)
+					tenant = _tenantLoader.TenantNameByKey(ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(key));
+				else
+					tenant = tryGet(() => input.Tenant);
+			}
+
 			_scope = _dataSource.OnThisThreadUse(tenant);
 		}
 

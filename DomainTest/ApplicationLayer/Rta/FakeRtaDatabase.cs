@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -41,11 +42,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
 	{
+		private readonly IConfigReader _config;
 		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
 		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
 		public readonly FakeTenants Tenants;
-		private readonly FakeApplicationData _applicationData;
+		public readonly FakeApplicationData ApplicationData;
 		public readonly FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModelPersister;
 		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		public FakeRtaDatabase(
+			IConfigReader config,
 			FakeAgentStateReadModelReader agentStateReadModelReader,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
@@ -78,17 +81,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister
 			)
 		{
+			_config = config;
 			AgentStateReadModelReader = agentStateReadModelReader;
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
 			Tenants = tenants;
-			_applicationData = applicationData;
+			ApplicationData = applicationData;
 			TeamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
 			SiteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
 			AdherenceDetailsReadModelPersister = adherenceDetailsReadModelPersister;
 			AdherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 			WithBusinessUnit(Guid.NewGuid());
 			WithDefaultsFromState(new ExternalUserStateForTest());
+			WithTenant("default", ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
 		}
 
 		public StoredStateInfo StoredState;
@@ -118,13 +123,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public IFakeDataBuilder WithTenant(string name, string key)
 		{
-			_applicationData.RegisteredDataSources =
-				new IDataSource[] {new FakeDataSource(name) }
-					.Union(_applicationData.RegisteredDataSources)
+			var dataSource = new FakeDataSource(name);
+			dataSource.Application = new FakeUnitOfWorkFactory {ConnectionString = _config.ConnectionString("RtaApplication") };
+			ApplicationData.RegisteredDataSources =
+				new IDataSource[] {dataSource }
+					.Union(ApplicationData.RegisteredDataSources)
 					.Randomize()
 					.ToArray();
 			Tenants.Has(new Tenant(name) {RtaKey = key});
 			return this;
+		}
+
+		public string TenantName()
+		{
+			return Tenants.Tenants().Single().Name;
 		}
 
 		public IFakeDataBuilder WithSource(string sourceId)
@@ -324,6 +336,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			return _personOrganizationData;
 		}
+
 	}
 
 	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants
@@ -332,8 +345,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public void Has(Tenant tenant)
 		{
-			// this is done for real in db scripts when the default tenant is added
-			tenant.RtaKey = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(tenant.RtaKey);
+			// making the key safe is done for real in db scripts when the default tenant is added
+			var key = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(tenant.RtaKey);
+			// when a test adds its own tenant with the legacy key, lets not add duplicates
+			if (_data.Any(x => x.RtaKey == key))
+				return;
+			tenant.RtaKey = key;
 			_data.Add(tenant);
 		}
 

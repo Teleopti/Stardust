@@ -12,17 +12,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
-
-	[TestFixture]
-	[Toggle(Toggles.RTA_MultiTenancy_32539)]
-	[Ignore("Doesnt work right now")]
-	public class CheckForActivityChangesMultiTenancyTest : CheckForActivityChangesTest
-	{
-		
-	}
-
 	[TestFixture]
 	[RtaTest]
+	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class CheckForActivityChangesTest
 	{
@@ -43,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-09-21 09:00");
 
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2015-09-21 09:00".Utc());
 		}
@@ -62,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-09-21 09:02");
 
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single(x => x.PersonId == person1).StartTime.Should().Be("2015-09-21 09:00".Utc());
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single(x => x.PersonId == person2).StartTime.Should().Be("2015-09-21 09:02".Utc());
@@ -79,9 +71,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:02");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:00".Utc());
 		}
@@ -99,10 +91,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Publisher.Clear();
 			Now.Is("2015-09-21 11:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2015-09-21 11:00".Utc());
 		}
@@ -119,10 +111,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Publisher.Clear();
 			Now.Is("2015-09-21 11:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single().ShiftEndTime.Should().Be("2015-09-21 11:00".Utc());
 		}
@@ -138,11 +130,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 11:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 11:01");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 11:00".Utc());
 		}
@@ -158,11 +150,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database.ClearSchedule(personId);
 			Cache.InvalidateSchedules(personId);
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
 		}
@@ -180,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database
 				.ClearSchedule(personId)
@@ -188,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, lunch, "2015-09-21 12:00", "2015-09-21 13:00")
 				;
 			Cache.InvalidateSchedules(personId);
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
@@ -206,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database
 				.ClearSchedule(personId)
@@ -214,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, lunch, "2015-09-21 11:00", "2015-09-21 12:00")
 				;
 			Cache.InvalidateSchedules(personId);
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
 		}
@@ -231,14 +223,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-09-21 09:00");
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database
 				.ClearSchedule(personId)
 				.WithSchedule(personId, admin, "2015-09-21 09:00", "2015-09-21 11:00")
 				;
 			Cache.InvalidateSchedules(personId);
-			Target.CheckForActivityChanges();
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ActivityId.Should().Be(admin);
 		}

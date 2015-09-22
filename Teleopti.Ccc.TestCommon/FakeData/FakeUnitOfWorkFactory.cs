@@ -11,10 +11,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public string Name { get; private set; }
-		public long? NumberOfLiveUnitOfWorks { get; private set; }
-		public IAuditSetter AuditSetting { get; private set; }
-		public string ConnectionString { get; private set; }
+		public string Name { get; set; }
+		public long? NumberOfLiveUnitOfWorks { get; set; }
+		public IAuditSetter AuditSetting { get; set; }
+		public string ConnectionString { get; set; }
+
 		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
 			return new FakeUnitOfWork();
