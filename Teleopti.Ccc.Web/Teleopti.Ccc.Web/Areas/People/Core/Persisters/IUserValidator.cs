@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public interface IUserValidator
 	{
-		bool Validate(RawUser user);
+		bool Validate(RawUser user, Dictionary<string, IApplicationRole> availableRoles);
 		string ErrorMessage { get; }
 		IList<IApplicationRole> ValidRoles { get; }
 	}

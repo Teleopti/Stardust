@@ -11,34 +11,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class UserValidator : IUserValidator
 	{
-		private readonly IApplicationRoleRepository _roleRepository;
 		private StringBuilder errorMsgBuilder;
 		private IList<IApplicationRole> validRoles;
 		private const int MaxNameLength = 25;
 		private const int MaxApplicationUserIdLength = 50;
 
-		public UserValidator(IApplicationRoleRepository roleRepository)
+		public UserValidator()
 		{
-			_roleRepository = roleRepository;
 			errorMsgBuilder = new StringBuilder();
 			validRoles = new List<IApplicationRole>();
 		}
 
-		public bool Validate(RawUser user)
+		public bool Validate(RawUser user, Dictionary<string, IApplicationRole> availableRoles)
 		{
 			errorMsgBuilder.Clear();
 			validRoles.Clear();
-
-			var availableRoles = new Dictionary<string, IApplicationRole>();
-			var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
 			var isUserValid = true;
-			allRoles.ForEach(r =>
-			{
-				if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
-				{
-					availableRoles.Add(r.DescriptionText.ToUpper(), r);
-				}
-			});
+
 			if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
 			{
 				errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
