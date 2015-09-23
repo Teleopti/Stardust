@@ -5,7 +5,7 @@
 		public void Persist(PersonInfo personInfo)
 		{
 			LastPersist = personInfo;
-			if (personInfo.ApplicationLogonInfo.LogonName == "existingId")
+			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
 				throw new DuplicateApplicationLogonNameException();
 			}

@@ -13498,4 +13498,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Successfully imported count:</value>
     <comment>Successfully imported count:</comment>
   </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>ApplicationUserId should be a valid email address;</value>
+  </data>
+  <data name="WindowsUserShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>WindowsUser should be a valid email address;</value>
+  </data>
 </root>

@@ -33,18 +33,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "abc",
+					ApplicationUserId = "abc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
-					WindowsUser = "teleopti\\jennym"
+					WindowsUser = ""
 				},
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "abcde",
+					ApplicationUserId = "abcde@teleopti.com",
 					Lastname = "Morgan",
 					Password = "",
-					WindowsUser = "teleopti\\janm"
+					WindowsUser = ""
 				}
 			};
 			var errorData = target.Persist(rawUserData).ToList();
@@ -63,15 +63,15 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					ApplicationUserId = "",
 					Lastname = "Morgan",
 					Password = "password",
-					WindowsUser = "teleopti\\jennym"
+					WindowsUser = "jennym@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "abcde",
+					ApplicationUserId = "abcde@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
-					WindowsUser = "teleopti\\janm"
+					WindowsUser = "janm@teleopti.com"
 				}
 			};
 			var errorData = target.Persist(rawUserData).ToList();
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "abc",
+					ApplicationUserId = "abc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
-					WindowsUser = "teleopti\\jennym"
+					WindowsUser = "jennym@teleopti.com"
 				},
 				new RawUser
 				{
@@ -117,34 +117,34 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Firstname0",
-					ApplicationUserId = "logon0",
+					ApplicationUserId = "logon0@teleopti.com",
 					Lastname = "",
 					Password = "password",
-					WindowsUser = "teleopti\\winlogon0"
+					WindowsUser = "winlogon0@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "",
-					ApplicationUserId = "logon1",
+					ApplicationUserId = "logon1@teleopti.com",
 					Lastname = "",
 					Password = "password",
-					WindowsUser = "teleopti\\winlogon1"
+					WindowsUser = "winlogon1@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "ALooooooooooooongFirstname",
-					ApplicationUserId = "logon2",
+					ApplicationUserId = "logon2@teleopti.com",
 					Lastname = "Lastname2",
 					Password = "password",
-					WindowsUser = "teleopti\\winlogon2"
+					WindowsUser = "winlogon2@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "Firstname3",
-					ApplicationUserId = "logon3",
+					ApplicationUserId = "logon3@teleopti.com",
 					Lastname = "ALoooooooooooooongLastname",
 					Password = "password",
-					WindowsUser = "teleopti\\winlogon3"
+					WindowsUser = "winlogon3@teleopti.com"
 				}
 			};
 
@@ -152,15 +152,15 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			Assert.AreEqual(3, errorData.Count());
 
 			var firstInvalidPerson = errorData.First();
-			Assert.AreEqual("logon1", firstInvalidPerson.ApplicationUserId);
+			Assert.AreEqual("logon1@teleopti.com", firstInvalidPerson.ApplicationUserId);
 			Assert.AreEqual("both firstname and lastname are empty", firstInvalidPerson.ErrorMessage);
 
 			var secondInvalidPerson = errorData.Second();
-			Assert.AreEqual("logon2", secondInvalidPerson.ApplicationUserId);
+			Assert.AreEqual("logon2@teleopti.com", secondInvalidPerson.ApplicationUserId);
 			Assert.AreEqual("too long firstname", secondInvalidPerson.ErrorMessage);
 
 			var thirdInvalidPerson = errorData.Last();
-			Assert.AreEqual("logon3", thirdInvalidPerson.ApplicationUserId);
+			Assert.AreEqual("logon3@teleopti.com", thirdInvalidPerson.ApplicationUserId);
 			Assert.AreEqual("too long lastname", thirdInvalidPerson.ErrorMessage);
 		}
 
@@ -172,24 +172,24 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "abc",
+					ApplicationUserId = "abc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
-					WindowsUser = "teleopti\\logon0"
+					WindowsUser = "logon0@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "",
-					ApplicationUserId = "app1",
+					ApplicationUserId = "app1@teleopti.com",
 					Lastname = "",
 					Password = "",
-					WindowsUser = "teleopti\\logon1"
+					WindowsUser = "logon1@teleopti.com"
 				}
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
+			Assert.AreEqual("logon1@teleopti.com", errorData.First().WindowsUser);
 			Assert.AreEqual("empty password; both firstname and lastname are empty", errorData.First().ErrorMessage);
 		}
 
@@ -201,20 +201,20 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "abc",
+					ApplicationUserId = "abc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
 					Role = "Agent",
-					WindowsUser = "teleopti\\logon0"
+					WindowsUser = "logon0@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "Firstname1",
-					ApplicationUserId = "app1",
+					ApplicationUserId = "app1@teleopti.com",
 					Lastname = "",
 					Password = "psss",
 					Role = "agent,sss0, \"test,sss1\"",
-					WindowsUser = "teleopti\\logon1"
+					WindowsUser = "logon1@teleopti.com"
 				}
 			};
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), roleRepo, new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
+			Assert.AreEqual("logon1@teleopti.com", errorData.First().WindowsUser);
 			Assert.AreEqual("role sss0, \"test,sss1\" not exist", errorData.First().ErrorMessage);
 		}
 
@@ -236,20 +236,20 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "abc",
+					ApplicationUserId = "abc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
 					Role = "",
-					WindowsUser = "teleopti\\jennym"
+					WindowsUser = "jennym@teleopti.com"
 				},
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
+					ApplicationUserId = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc@teleopti.com",
 					Lastname = "Morgan",
 					Password = "psss",
 					Role = "",
-					WindowsUser = "teleopti\\jennym"
+					WindowsUser = "jennym@teleopti.com"
 				}
 			};
 
@@ -260,6 +260,67 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void ValidateDataWhenWindowsUserIdNotValidEmailAddr()
+		{
+			var rawUserData = new List<RawUser>
+			{
+				new RawUser
+				{
+					Firstname = "Jenny",
+					ApplicationUserId = "abc@teleopti.com",
+					Lastname = "Morgan",
+					Password = "password",
+					Role = "",
+					WindowsUser = "jennym@teleopti.com"
+				},
+				new RawUser
+				{
+					Firstname = "Jan",
+					ApplicationUserId = "abca@teleopti.com",
+					Lastname = "Morgan",
+					Password = "psss",
+					Role = "",
+					WindowsUser = "jennym"
+				}
+			};
+
+			var errorData = target.Persist(rawUserData).ToList();
+			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual("Jan", errorData.First().Firstname);
+			Assert.AreEqual("WindowsUser should be a valid email address", errorData.First().ErrorMessage);
+		}
+		[Test]
+		public void ValidateDataWhenApplicationUserIdNotValidEmailAddr()
+		{
+			var rawUserData = new List<RawUser>
+			{
+				new RawUser
+				{
+					Firstname = "Jenny",
+					ApplicationUserId = "abc@teleopti.com",
+					Lastname = "Morgan",
+					Password = "password",
+					Role = "",
+					WindowsUser = "jennym@teleopti.com"
+				},
+				new RawUser
+				{
+					Firstname = "Jan",
+					ApplicationUserId = "abca",
+					Lastname = "Morgan",
+					Password = "psss",
+					Role = "",
+					WindowsUser = "jennym@teleopti.com"
+				}
+			};
+
+			var errorData = target.Persist(rawUserData).ToList();
+			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual("Jan", errorData.First().Firstname);
+			Assert.AreEqual("ApplicationUserId should be a valid email address", errorData.First().ErrorMessage);
+		}
+
+		[Test]
 		public void ValidateDataWhenHavingDuplicatedLogonAccount()
 		{
 			var rawUserData = new List<RawUser>
@@ -267,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "notExistingId",
+					ApplicationUserId = "notExistingId@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
 					Role = "role1",
@@ -276,7 +337,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "existingId",
+					ApplicationUserId = "existingId@teleopti.com",
 					Lastname = "Morgan",
 					Password = "psss",
 					Role = "role2",
@@ -308,7 +369,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jenny",
-					ApplicationUserId = "notExistingId",
+					ApplicationUserId = "notExistingId@teleopti.com",
 					Lastname = "Morgan",
 					Password = "password",
 					Role = "",
@@ -317,7 +378,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "existingId",
+					ApplicationUserId = "existingId@teleopti.com",
 					Lastname = "Morgan",
 					Password = "psss",
 					Role = "",
@@ -357,7 +418,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 	{
 		public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
 		{
-			if (tenantAuthenticationData.ApplicationLogonName == "existingId")
+			if (tenantAuthenticationData.ApplicationLogonName == "existingId@teleopti.com")
 			{
 				return new SavePersonInfoResult
 				{

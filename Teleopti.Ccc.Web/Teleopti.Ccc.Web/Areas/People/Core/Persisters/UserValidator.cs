@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -43,6 +44,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			if (!string.IsNullOrEmpty(user.ApplicationUserId) &&  string.IsNullOrEmpty(user.Password))
 			{
 				errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
+				isUserValid = false;
+			}
+			if (!string.IsNullOrEmpty(user.ApplicationUserId) && !(new EmailAddressAttribute().IsValid(user.ApplicationUserId)))
+			{
+				errorMsgBuilder.Append(Resources.ApplicationUserIdShouldBeAValidEmailAddressErrorMsg + " ");
+				isUserValid = false;
+			}
+			if (!string.IsNullOrEmpty(user.WindowsUser) && !(new EmailAddressAttribute().IsValid(user.WindowsUser)))
+			{
+				errorMsgBuilder.Append(Resources.WindowsUserShouldBeAValidEmailAddressErrorMsg + " ");
 				isUserValid = false;
 			}
 

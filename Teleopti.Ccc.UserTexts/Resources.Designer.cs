@@ -2447,6 +2447,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ApplicationUserId should be a valid email address;.
+        /// </summary>
+        public static string ApplicationUserIdShouldBeAValidEmailAddressErrorMsg {
+            get {
+                return ResourceManager.GetString("ApplicationUserIdShouldBeAValidEmailAddressErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
@@ -29757,6 +29766,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WindowsUserNameIsInvalidErrorMsgSemicolon {
             get {
                 return ResourceManager.GetString("WindowsUserNameIsInvalidErrorMsgSemicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WindowsUser should be a valid email address;.
+        /// </summary>
+        public static string WindowsUserShouldBeAValidEmailAddressErrorMsg {
+            get {
+                return ResourceManager.GetString("WindowsUserShouldBeAValidEmailAddressErrorMsg", resourceCulture);
             }
         }
         
