@@ -16,6 +16,7 @@
 		var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
 		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
+		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
 
 		var self = this;
 
@@ -77,6 +78,17 @@
 
 		this.getCampaignSummary = function(id, successCb, errorCb) {
 			$http.get(getFilteredCampaignsUrl + '/' + id).
+				success(function(data) {
+					if (successCb != null)
+						successCb(data);
+				}).
+				error(function(data) {
+					if (errorCb != null) errorCb(data);
+				});
+		};
+
+		this.getCampaignDetail = function (id, successCb, errorCb) {
+			$http.post(getCampaignDetailUrl, {CampaignId: id}).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);

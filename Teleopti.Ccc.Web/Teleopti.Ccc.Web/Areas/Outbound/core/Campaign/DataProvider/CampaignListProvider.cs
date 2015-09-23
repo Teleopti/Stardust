@@ -91,26 +91,28 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public IEnumerable<PeriodCampaignSummaryViewModel> GetPeriodCampaignsSummary(GanttPeriod period)
 		{
 			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
-			var periodCampaignViewModel = new List<PeriodCampaignSummaryViewModel>();
 
-			foreach (var campaign in campaigns)
+			return campaigns.Select(campaign => GetCampaignSummary((Guid) campaign.Id)).ToList();
+		}
+
+		public PeriodCampaignSummaryViewModel GetCampaignSummary(Guid id)
+		{
+			var campaign = _outboundCampaignRepository.Get(id);
+			if (campaign == null) return null;
+
+			var warningViewModel = _outboundRuleChecker.CheckCampaign(campaign).Select(warning => new OutboundWarningViewModel(warning));
+			var isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
+				date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+
+			return new PeriodCampaignSummaryViewModel()
 			{
-				var warningViewModel = _outboundRuleChecker.CheckCampaign(campaign).Select(warning => new OutboundWarningViewModel(warning));
-				var isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
-					date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
-
-				periodCampaignViewModel.Add(new PeriodCampaignSummaryViewModel()
-				{
-					Id = campaign.Id,
-					Name = campaign.Name,
-					IsScheduled = isScheduled,
-					StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
-					EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
-					WarningInfo = warningViewModel
-				});
-			}
-
-			return periodCampaignViewModel;
+				Id = (Guid)campaign.Id,
+				Name = campaign.Name,
+				IsScheduled = isScheduled,
+				StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
+				EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
+				WarningInfo = warningViewModel
+			};
 		}
 
 		public IEnumerable<CampaignSummary> ListScheduledCampaign(GanttPeriod peroid)

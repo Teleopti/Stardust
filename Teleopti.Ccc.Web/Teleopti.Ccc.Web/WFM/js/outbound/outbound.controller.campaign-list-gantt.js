@@ -138,7 +138,7 @@
 		}
 
 		function getGraphData(campaign, done) {		
-			outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
+			outboundService.getCampaignDetail(campaign.Id, function (_campaign) {
 				angular.extend(campaign, _campaign);
 				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
 					campaign.graphData = data;

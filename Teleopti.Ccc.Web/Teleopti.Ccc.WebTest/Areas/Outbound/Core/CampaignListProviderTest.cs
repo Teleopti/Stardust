@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Outbound.Rules;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -330,67 +333,189 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.OnGoingWarning.Should().Be.EqualTo(1);
 		}
 
+		private IOutboundCampaign createCampaign(string name, DateTimePeriod period)
+		{
+			var campaign = new Domain.Outbound.Campaign()
+			{
+				Name = name,
+				SpanningPeriod = period,
+				Skill = SkillFactory.CreateSkill("mySkill")
+			};
+
+			campaign.SetId(Guid.NewGuid());
+			return campaign;
+		}
+
 		[Test]
 		public void ShouldGetAllCampaignsSummaryWithinPeriod()
 		{
-			setCampaigns();
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() {createCampaign("campaign1", new DateTimePeriod()), createCampaign("campaign2", new DateTimePeriod())};
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).IgnoreArguments();
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+			var _target = new CampaignListProvider(repository, null, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.Count().Should().Be.EqualTo(4);
+			result.Count().Should().Be.EqualTo(2);
 		}		
 		
 		[Test]
 		public void ShouldGetCampaignId()
 		{
-			_outboundCampaignRepository.Add(doneCampaign);
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)))};
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid) campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x=>x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.ToList()[0].Id.Should().Be.EqualTo(doneCampaign.Id);
+			result.ToList()[0].Id.Should().Be.EqualTo(campaigns[0].Id);
 		}		
 		
 		[Test]
 		public void ShouldGetCampaignName()
 		{
-			_outboundCampaignRepository.Add(doneCampaign);
+			var name = "campaignName";
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign(name, new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.ToList()[0].Name.Should().Be.EqualTo(doneCampaign.Name);
+			result.ToList()[0].Name.Should().Be.EqualTo(name);
 		}		
 		
 		[Test]
 		public void ShouldGetCampaignStartDate()
 		{
-			_outboundCampaignRepository.Add(doneCampaign);
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.ToList()[0].StartDate.Should().Be.EqualTo(doneCampaign.SpanningPeriod.ToDateOnlyPeriod(doneCampaign.Skill.TimeZone).StartDate);
+			result.ToList()[0].StartDate.Should().Be.EqualTo(campaigns[0].SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
 		}		
 		
 		[Test]
 		public void ShouldGetCampaignEndDate()
 		{
-			_outboundCampaignRepository.Add(doneCampaign);
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() {StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14)});
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.ToList()[0].EndDate.Should().Be.EqualTo(doneCampaign.SpanningPeriod.ToDateOnlyPeriod(doneCampaign.Skill.TimeZone).EndDate);
+			result.ToList()[0].EndDate.Should().Be.EqualTo(campaigns[0].SpanningPeriod.ToDateOnlyPeriod(campaigns[0].Skill.TimeZone).EndDate);
 		}
 
 		[Test]
-		public void ShouldGetScheduledInfo()
+		public void ShouldGetScheduledInfoTrue()
 		{
-			setCampaigns();
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var result = target.GetPeriodCampaignsSummary(new GanttPeriod() { StartDate = DateOnly.Today.AddDays(-7), EndDate = DateOnly.Today.AddDays(14) });
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
+
+			result.ToList()[0].IsScheduled.Should().Be.True();
+		}		
+		
+		[Test]
+		public void ShouldGetScheduledInfoFalse()
+		{
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.Zero);
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
+
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].IsScheduled.Should().Be.False();
-			result.ToList()[1].IsScheduled.Should().Be.False();
-			result.ToList()[2].IsScheduled.Should().Be.True();
-			result.ToList()[3].IsScheduled.Should().Be.False();
+		}		
+		
+		[Test]
+		public void ShouldGetWarningInfo()
+		{
+			var period = new GanttPeriod();
+			var campaigns = new List<IOutboundCampaign>() { createCampaign("myCampaign", new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc))) };
+			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
+			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
+			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.Zero);
+			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).Return(new List<OutboundRuleResponse>()
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof(OutboundOverstaffRule),
+					Threshold = 20,
+					ThresholdType = ThresholdType.Absolute,
+					TargetValue = 10,
+					Date = DateTime.Today
+				}
+			});
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
+
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var result = _target.GetPeriodCampaignsSummary(period);
+
+			result.ToList()[0].WarningInfo.ToList()[0].TypeOfRule.Should().Be.EqualTo("OutboundOverstaffRule");
+			result.ToList()[0].WarningInfo.ToList()[0].Threshold.Should().Be.EqualTo(20);
+			result.ToList()[0].WarningInfo.ToList()[0].TargetValue.Should().Be.EqualTo(10);
+			result.ToList()[0].WarningInfo.ToList()[0].ThresholdType.Should().Be.EqualTo(ThresholdType.Absolute);
+			result.ToList()[0].WarningInfo.ToList()[0].Date.Should().Be.EqualTo(DateOnly.Today);
 		}
 
 		public IOutboundCampaign GetTestCampaign(int index)
@@ -456,6 +581,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignRepository.Add(plannedCampaign);
 			_outboundCampaignRepository.Add(scheduledCampaign);
 			_outboundCampaignRepository.Add(ongoingCampaign);
+		}
+
+		private DateTimePeriod getUtcPeroid(GanttPeriod period)
+		{
+			var start = new DateTime(period.StartDate.Date.Ticks);
+			start = TimeZoneHelper.ConvertToUtc(start, _userTimeZone.TimeZone());
+			var end = new DateTime(period.EndDate.Year, period.EndDate.Month, period.EndDate.Day, 23, 59, 59);
+			end = TimeZoneHelper.ConvertToUtc(end, _userTimeZone.TimeZone());
+
+			return new DateTimePeriod(start, end);
 		}
 	}
 

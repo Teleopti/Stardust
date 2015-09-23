@@ -63,9 +63,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		}
 	}
 
+	public class SummaryForm
+	{
+		public Guid CampaignId;
+	}
 	public class PeriodCampaignSummaryViewModel
 	{
-		public Guid? Id;
+		public Guid Id;
 		public string Name;
 		public DateOnly StartDate;
 		public DateOnly EndDate;

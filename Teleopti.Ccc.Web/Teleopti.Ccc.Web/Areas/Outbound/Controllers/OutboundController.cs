@@ -164,6 +164,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual CampaignSummaryViewModel GetCampaignById(Guid Id)
 		{
 			return _campaignSummaryViewModelFactory.GetCampaignSummary(Id);
+		}		
+		
+		[HttpPost, Route("api/Outbound/Campaign/Detail"), UnitOfWork]
+		public virtual PeriodCampaignSummaryViewModel GetCampaignSummary([FromBody]SummaryForm form)
+		{
+			return _campaignListProvider.GetCampaignSummary(form.CampaignId);
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Replan/{Id}"), UnitOfWork]
