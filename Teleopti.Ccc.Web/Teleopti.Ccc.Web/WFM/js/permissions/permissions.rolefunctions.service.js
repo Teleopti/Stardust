@@ -88,20 +88,21 @@
 			};
 
 			rolesFunctionsService.unselectAllFunctions = function (selectedRole) {
-
-				rolesFunctionsService.functionsDisplayed.forEach(function (item) {
-					PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: item.FunctionId });
+				var functions = [];
+				helperUnselectAllFunctions(rolesFunctionsService.functionsDisplayed, functions);
+				PermissionsService.deleteAllFunction.query({
+					Id: selectedRole.Id,
+					FunctionId: rolesFunctionsService.functionsDisplayed[0].FunctionId,
+					Functions: functions
 				});
-
-				helperUnselectAllFunctions(rolesFunctionsService.functionsDisplayed);
 			};
 
-			var helperUnselectAllFunctions = function (nodes) {
+			var helperUnselectAllFunctions = function (nodes,functions) {
 				nodes.forEach(function (item) {
-
+					functions.push(item.FunctionId);
 					item.selected = false;
 					if (item.ChildFunctions && item.ChildFunctions.length !== 0) {
-						helperUnselectAllFunctions(item.ChildFunctions);
+						helperUnselectAllFunctions(item.ChildFunctions, functions);
 					}
 				});
 			};

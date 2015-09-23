@@ -49,6 +49,9 @@
                     queryDeferred.resolve(result);
                     return { $promise: queryDeferred.promise };
                 }
+            },
+            deleteAllFunction: {
+				query: function (queryObject){}
             }
         }; 
 
@@ -118,6 +121,33 @@
                 expect(allFunctionsAvailable[1].selected).toBe(true);
                 done();
             });
+        });
+
+        it('should send a formatted request to PermissionsService to unselect all functions for a role in one call', function () {
+        	inject(function (RolesFunctionsService) {
+
+        		var allFunctionsAvailable = [{
+        			FunctionId: "1", FunctionCode: "All", FunctionPath: "All", LocalizedFunctionDescription: "",
+        			ChildFunctions: [{ FunctionId: "2", ChildFunctions: [] }]
+        		},
+                {
+                	FunctionId: "4", FunctionCode: "GG", FunctionPath: "GG", LocalizedFunctionDescription: "",
+                	selected: true,
+                	ChildFunctions: []
+                }
+        		];
+        		
+        		RolesFunctionsService.functionsDisplayed = allFunctionsAvailable;
+
+        		var expectedObject = {Id: 42, FunctionId: "1", Functions:["1","2","4"]};
+
+        		spyOn(mockPermissionsService.deleteAllFunction, 'query')
+
+        		RolesFunctionsService.unselectAllFunctions({ Id: 42 });
+
+        		expect(mockPermissionsService.deleteAllFunction.query).toHaveBeenCalledWith(expectedObject);
+
+        	});
         });
     });
 })();

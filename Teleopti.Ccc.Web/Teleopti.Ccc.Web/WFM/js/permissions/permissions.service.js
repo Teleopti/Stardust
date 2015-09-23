@@ -31,11 +31,15 @@
 			});
 
 			this.postFunction = $resource('../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
-				query: { method: 'POST', params: { Functions: [] }, isArray: true },
+				query: { method: 'POST', params: { Functions: [] }, isArray: true }
 			});
 
 			this.deleteFunction = $resource('../api/Permissions/Roles/:Id/Function/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {
 				query: { method: 'DELETE', params: {}, isArray: false }
+			});
+
+			this.deleteAllFunction = $resource('../api/Permissions/Roles/:Id/DeleteFunction/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {
+				query: { method: 'POST', params: { Functions: [] }, isArray: false }
 			});
 
 			this.deleteAvailableData = $resource('../api/Permissions/Roles/:Id/AvailableData/:Type/:DataId', { Id: "@Id", Type: '@Type', DataId: "@DataId" }, {

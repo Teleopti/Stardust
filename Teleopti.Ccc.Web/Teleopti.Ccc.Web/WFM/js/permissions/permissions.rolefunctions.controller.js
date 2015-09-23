@@ -84,7 +84,6 @@
 					decreaseParentNumberOfSelectedNodes(node);
 					toggleParentNode(node);
 					RolesFunctionsService.selectFunction($scope.functionNodes, $scope.selectedRole);
-					//console.log('Function nodes: ', $scope.functionNodes);
 				}
 			};
 
