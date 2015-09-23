@@ -215,6 +215,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.clearChartSelection = function() {
+				$scope.chart.unzoom();
 				$scope.chart.unselect(['vc']);
 			};
 
