@@ -20,7 +20,7 @@ Scenario: Forecast all
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload1'
 	And there is forecast data for default period for 'TheWorkload2'
-
+@ignore
 Scenario: Forecast one workload
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
