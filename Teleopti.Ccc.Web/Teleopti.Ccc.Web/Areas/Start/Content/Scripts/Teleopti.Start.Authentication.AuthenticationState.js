@@ -195,6 +195,10 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 						}
 						
+						if (typeof fatClientWebLogin !== 'undefined') {
+							authenticationDetailsAjax(authenticationModel.businessUnitId);
+						}
+						
 						window.location.href = data.baseUrl + area;
 					}
 				});
@@ -205,10 +209,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			error: error,
 			errormessage: errormessage
 		});
-
-		if (typeof fatClientWebLogin !== 'undefined') {
-		    authenticationDetailsAjax(authenticationModel.businessUnitId);
-		}
 
 		logonAjax(options);
 	};

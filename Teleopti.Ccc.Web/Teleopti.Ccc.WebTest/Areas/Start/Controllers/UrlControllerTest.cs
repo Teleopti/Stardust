@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Ccc.WebTest.Filters;
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
             var signed = myRSA.SignData(
                 new MemoryStream(Encoding.UTF8.GetBytes(url+applicationPath)), CryptoConfig.MapNameToOID("SHA1"));
 				IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
-            IIdentityLogon identityLogon = new FakeAuthenticator();
-            var urlController = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule, identityLogon);
+	        var urlController = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule);
             var result = urlController.Index();
             Assert.AreEqual(url+applicationPath, ((result as JsonResult).Data as dynamic).Url);
             Assert.AreEqual(Convert.ToBase64String(signed), ((result as JsonResult).Data as dynamic).Signature);
@@ -61,14 +59,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	    {
 		    IPerson person = new Person();
 		    Guid? personId = Guid.NewGuid();
-            IIdentityLogon identityLogon = new FakeAuthenticator();
 		    person.SetId(personId);
 			 const string url = "http://my.url.com";
 			 const string applicationPath = "/TeleoptiCCC/Web/";
 		    System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null), person );
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
-             var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon);
+			 var target = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule);
 		    target.AuthenticationDetails().Should().Be.Equals(personId);
 	    }
     }
