@@ -13482,6 +13482,9 @@ Reduce the complexity to use these shifts.</value>
     <value>The selected file can not be accepted. Please check the file type.</value>
     <comment>warning to tell user selected file is not accepted in web People.</comment>
   </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Seat Bookings</value>
+  </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Failed imported count:</value>
     <comment>Failed imported count:</comment>

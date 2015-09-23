@@ -413,20 +413,29 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.hasNote = ko.observable(day.HasNote);
 		self.seatBookings = ko.observableArray(day.SeatBookings);
-		self.hasSeatBooking = ko.computed(function() {
-			return self.seatBookings().length > 0;
-		});
-		self.seatBookingMessage = ko.computed(function () {
-			//need to html encode due to not bound to "text" in ko
-			//return $('<div/>').text(day.Note.Message).html();
 
-			var message = '';
-			var time = '';
-			self.seatBookings().forEach(function (seat) {
-				time = 'Between ' + Teleopti.MyTimeWeb.Common.FormatTime(seat.StartDateTime) + ' to '
-					+ Teleopti.MyTimeWeb.Common.FormatTime(seat.EndDateTime);
-				message += time +' you have been booked seat '+ seat.LocationPath + '/'+ seat.SeatName;
-			});
+		self.seatBookingIconVisible = ko.computed(function () {
+			return parent.showSeatBookingPermission() && self.seatBookings().length > 0;
+		});
+
+		self.seatBookingMessage = ko.computed(function () {
+			var message = '<div class="seatbooking-tooltip">' +
+								'<span class="tooltip-header">{0}</span><table>'.format(parent.userTexts.seatBookingsTitle);
+			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
+			var messageEnd = '</table></div>';
+
+			if (self.seatBookings() != null ) {
+
+				self.seatBookings().forEach(function (seat) {
+
+					message += bookingText.format(
+						Teleopti.MyTimeWeb.Common.FormatTime(seat.StartDateTime),
+						Teleopti.MyTimeWeb.Common.FormatTime(seat.EndDateTime),
+						seat.LocationPath + '/' + seat.SeatName);
+				});
+
+			}
+			message += messageEnd;
 
 			return message;
 

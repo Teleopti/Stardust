@@ -60,3 +60,20 @@
 .date-input-style {
 	padding: 10px 1px;
 }
+
+.seatbooking-tooltip .tooltip-header {
+	font-size: medium;
+}
+
+.seatbooking-tooltip td {
+	padding: 5px;
+	border: 1px;
+}
+
+.seatbooking-symbol {
+	width: 24px;
+	height: 24px;
+	margin: 10px;
+	background: url(../Images/seat.svg);
+	
+}

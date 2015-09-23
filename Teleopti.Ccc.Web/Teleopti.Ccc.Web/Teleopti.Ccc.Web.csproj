@@ -1199,6 +1199,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />

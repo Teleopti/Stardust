@@ -15,6 +15,8 @@
             	locationColon: '@Resources.LocationColon',
             	descriptionColon: '@Resources.DescriptionColon',
             	chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+            	seatBookingsTitle: '@Resources.SeatBookings',
+            	noSeatBookingsForDate : '@Resources.YouHaveNotBeenAllocatedSeat',
             	fair: '@Resources.Fair',
             	poor: '@Resources.Poor',
             	good: '@Resources.Good'
@@ -142,8 +144,8 @@
 						<i class="glyphicon glyphicon-time floatright" />
 					</div>
 					
-					<div class="seatbooking-symbol pull-right " data-bind="visible: hasSeatBooking, tooltip: { title: seatBookingMessage, html: true }">
-						<i class="glyphicon glyphicon-user" />
+					<div class="seatbooking-symbol pull-right " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
+						<i class="mdi mdi-chair-school" />
 					</div>
 
 					<!-- ko if: hasNote -->
