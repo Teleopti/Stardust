@@ -34,6 +34,12 @@ ECHO RC>"c:\nhib\Toggles.txt"
 
 ECHO %ROOTDIR%\.debug-setup\SikulitestConfigFix.bat >>%logFile%
 
+:: restart iis express
+taskkill /F /IM iisexpress.exe
+timeout 10
+cd "c:\Program Files\IIS Express\"
+start iisexpress /AppPool:Clr4IntegratedAppPool
+
 ::final changes on Teleopti.Ccc.SmartClientPortal.Shell.exe.config
 SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
 SET commonFolder=%ROOTDIR%\.debug-setup\common
