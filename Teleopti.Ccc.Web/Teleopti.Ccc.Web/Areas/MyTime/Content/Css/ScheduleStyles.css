@@ -21,7 +21,6 @@
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 8px;	
-	margin-right: 4px;
 	margin-top: 2px;
 }
 
@@ -71,9 +70,11 @@
 }
 
 .seatbooking-symbol {
-	width: 24px;
-	height: 24px;
-	margin: 10px;
+	width: 14px;
+	height: 14px;
 	background: url(../Images/seat.svg);
-	
+}
+
+.weekview-day-symbol .weekview-day-icon {
+	margin-right: 5px;
 }

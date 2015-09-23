@@ -418,28 +418,39 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return parent.showSeatBookingPermission() && self.seatBookings().length > 0;
 		});
 
+
+		var formatSeatBooking = function(seatBooking) {
+
+			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
+
+			var fullSeatName = seatBooking.LocationPath.indexOf("/") > 0 ?
+				seatBooking.LocationPath + '/' + seatBooking.SeatName :
+				seatBooking.SeatName;
+
+			return bookingText.format(
+					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
+					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
+					fullSeatName
+					);
+		};
+
 		self.seatBookingMessage = ko.computed(function () {
 			var message = '<div class="seatbooking-tooltip">' +
 								'<span class="tooltip-header">{0}</span><table>'.format(parent.userTexts.seatBookingsTitle);
-			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
+			
 			var messageEnd = '</table></div>';
 
 			if (self.seatBookings() != null ) {
-
-				self.seatBookings().forEach(function (seat) {
-
-					message += bookingText.format(
-						Teleopti.MyTimeWeb.Common.FormatTime(seat.StartDateTime),
-						Teleopti.MyTimeWeb.Common.FormatTime(seat.EndDateTime),
-						seat.LocationPath + '/' + seat.SeatName);
+				self.seatBookings().forEach(function (seatBooking) {
+					message += formatSeatBooking(seatBooking);
 				});
-
 			}
 			message += messageEnd;
 
 			return message;
 
 		});
+
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});

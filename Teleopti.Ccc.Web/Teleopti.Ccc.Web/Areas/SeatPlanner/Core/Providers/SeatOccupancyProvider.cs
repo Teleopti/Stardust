@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				SeatId = booking.Seat.Id.GetValueOrDefault(),
 				SeatName = booking.Seat.Name,
 				BookingId = booking.Id.GetValueOrDefault(),
-				LocationPath = location != null ? SeatMapProvider.GetLocationPath(location) : null
+				LocationPath = location != null ? SeatMapProvider.GetLocationPath(location, true) : null
 			};
 		}
 		

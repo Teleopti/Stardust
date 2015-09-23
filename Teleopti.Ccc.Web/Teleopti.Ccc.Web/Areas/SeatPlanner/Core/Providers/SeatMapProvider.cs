@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.POIFS.Properties;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -85,41 +86,51 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			return null;
 		}
-		
-		private static void buildBreadCrumbInformation(LocationViewModel seatMapLocationViewModel, SeatMapLocation seatMapLocation)
+
+		private static void buildBreadCrumbInformation(LocationViewModel seatMapLocationViewModel, SeatMapLocation seatMapLocation, bool hideRootLocation = false)
 		{
 			if (seatMapLocation == null) return;
 
-			seatMapLocationViewModel.BreadcrumbInfo = buildBreadCrumbList(seatMapLocation);
+			seatMapLocationViewModel.BreadcrumbInfo = buildBreadCrumbList(seatMapLocation, hideRootLocation);
 		}
 
-		public static String GetLocationPath (ISeatMapLocation seatMapLocation)
+		public static String GetLocationPath (ISeatMapLocation seatMapLocation, bool hideRootLocation = false)
 		{
-			return String.Join ("/", buildBreadCrumbList (seatMapLocation as SeatMapLocation).Select (breadCrumb => breadCrumb.Name));
+			return String.Join ("/", buildBreadCrumbList (seatMapLocation as SeatMapLocation, hideRootLocation).Select (breadCrumb => breadCrumb.Name));
 		}
 
-		private static IEnumerable<SeatMapLocationBreadcrumbInfo> buildBreadCrumbList (SeatMapLocation seatMapLocation)
+		private static IEnumerable<SeatMapLocationBreadcrumbInfo> buildBreadCrumbList(SeatMapLocation seatMapLocation, bool hideRootLocation)
 		{
-			var breadcrumbList = new List<SeatMapLocationBreadcrumbInfo>()
-			{
-				new SeatMapLocationBreadcrumbInfo()
-				{
-					Id = seatMapLocation.Id.Value,
-					Name = seatMapLocation.Name
-				}
-			};
-
+			var breadcrumbList = new List<SeatMapLocationBreadcrumbInfo>();
 			var parentLocation = seatMapLocation.ParentLocation;
 
+			if (parentLocation == null && hideRootLocation)
+			{
+				return breadcrumbList;
+			}
+
+			breadcrumbList.Add (new SeatMapLocationBreadcrumbInfo()
+			{
+				Id = seatMapLocation.Id.Value,
+				Name = seatMapLocation.Name
+			});
+		
 			while (parentLocation != null)
 			{
-				breadcrumbList.Add (new SeatMapLocationBreadcrumbInfo()
+
+				var suppressRoot = (parentLocation.ParentLocation == null && hideRootLocation);
+
+				if (!suppressRoot)
 				{
-					Id = parentLocation.Id.Value,
-					Name = parentLocation.Name
-				});
+					breadcrumbList.Add(new SeatMapLocationBreadcrumbInfo()
+					{
+						Id = parentLocation.Id.Value,
+						Name = parentLocation.Name
+					});
+				}
 
 				parentLocation = parentLocation.ParentLocation;
+
 			}
 			return Enumerable.Reverse(breadcrumbList);
 		}

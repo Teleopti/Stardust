@@ -130,8 +130,7 @@
 				};
 			});
 		};
-
-
+		
 		function onSeatOccupancyLoaded(occupancyDetails, seat) {
 
 			if (occupancyDetails && occupancyDetails.length) {
