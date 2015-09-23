@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
 			(Math.Round((double) firstDay.vc, 1)).Should().Be.EqualTo(Math.Round(8.1d, 1));
+			(Math.Round((double) firstDay.vtc, 1)).Should().Be.EqualTo(Math.Round(8.1d, 1));
 		}
 	}
 }
