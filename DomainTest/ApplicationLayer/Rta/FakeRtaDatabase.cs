@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -334,7 +336,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
-			return _personOrganizationData;
+			return _personOrganizationData
+				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m)))
+				.ToArray();
 		}
 
 	}

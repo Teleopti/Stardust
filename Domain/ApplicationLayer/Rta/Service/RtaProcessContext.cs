@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person, 
 			INow now,
-			IDatabaseLoader personOrganizationProvider, 
+			IDatabaseLoader databaseLoader, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator, 
 			IPreviousStateInfoLoader previousStateInfoLoader)
 		{
-			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(person.PersonId, out _person))
+			if (!databaseLoader.PersonOrganizationData().TryGetValue(person.PersonId, out _person))
 				return;
 			_person.BusinessUnitId = person.BusinessUnitId;
 			Input = input ?? new ExternalUserStateInputModel();

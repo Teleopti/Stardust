@@ -141,6 +141,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void disposeContainer()
 		{
 			_container.Dispose();
+			_container = null;
 		}
 
 		private void injectMembers()
@@ -172,12 +173,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public void Reset()
 		{
+			disposeContainer();
 			buildContainer((b, c) => { });
 			injectMembers();
 		}
 
 		public void Reset(Action<ISystem, IIocConfiguration> setup)
 		{
+			disposeContainer();
 			buildContainer(setup);
 			injectMembers();
 		}

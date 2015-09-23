@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public ICacheInvalidator Cache;
+		public RtaTestAttribute Context;
 
 		[Test]
 		public void ShouldNoticeActivtyChanging()
@@ -234,6 +235,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database.StoredState.ActivityId.Should().Be(admin);
 		}
-		
+
+		[Test]
+		public void ShouldUpdateWithCorrectAlarm()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var alarm = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 11:00")
+				.WithAlarm("phone", phone, alarm)
+				;
+
+			Now.Is("2015-09-21 09:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Context.SimulateRestartWith(Now, Database);
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.StoredState.AlarmTypeId.Should().Be(alarm);
+		}
 	}
 }

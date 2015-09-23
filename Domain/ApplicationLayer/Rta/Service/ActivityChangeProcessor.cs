@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -42,8 +43,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var now = _now.UtcDateTime();
 
-			_databaseLoader.PersonOrganizationData().Values.ForEach(person =>
+			var persons = from l in _databaseLoader.ExternalLogOns().Values
+				from p in l
+				select p;
+
+			persons.ForEach(p =>
 			{
+				PersonOrganizationData person;
+				if (!_databaseLoader.PersonOrganizationData().TryGetValue(p.PersonId, out person))
+					return;
+				person.BusinessUnitId = p.BusinessUnitId;
+				
 				var schedule = _databaseLoader.GetCurrentSchedule(person.PersonId);
 
 				currentPeriod previous;
