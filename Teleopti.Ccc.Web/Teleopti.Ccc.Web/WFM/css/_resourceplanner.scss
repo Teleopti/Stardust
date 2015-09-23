@@ -142,6 +142,16 @@
 
 .legends{
   padding-bottom: 10px;
+
+	ul{
+		padding-left: 0;
+	}
+
+	li{
+		list-style: none;
+		padding-left: 0;
+	}
+
   .legend{
     width: 10px;
     height: 7px;

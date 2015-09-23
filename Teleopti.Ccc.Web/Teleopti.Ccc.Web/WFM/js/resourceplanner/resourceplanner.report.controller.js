@@ -27,6 +27,18 @@
                 }
                 return nbdays;
             };
+
+
+						var parseRelDif = function() {
+							scheduleResult.forEach(function(node){
+									node.SkillDetails.forEach(function(subnode){
+
+										var parseDif = Math.floor((subnode.RelativeDifference / 1) * 100)
+										subnode.parseDif = parseDif;
+									})
+								})
+						}();
+
                 var CDayOff = {};
                 CDayOff.a = 6;
                 CDayOff.b = 0;

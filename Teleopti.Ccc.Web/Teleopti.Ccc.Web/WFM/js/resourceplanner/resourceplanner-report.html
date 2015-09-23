@@ -1,6 +1,8 @@
 ﻿
 	<div>
-		<h4>Scheduling result</h4> {{planningPeriod.StartDate |  amDateFormat:"L"}} - {{planningPeriod.EndDate |  amDateFormat:"L"}}
+		<button class="wfm-btn wfm-btn-primary pull-right">Publish</button>
+		<h4>Scheduling result</h4>
+		{{planningPeriod.StartDate |  amDateFormat:"L"}} - {{planningPeriod.EndDate |  amDateFormat:"L"}}
 		<p>{{scheduledAgents}} agents were successfully scheduled</p>
 		<p ng-if="hasIssues"></p>
 	</div>
@@ -10,24 +12,21 @@
             <div layout-wrap>
                 <div class="legends" layout ="column">
 
-                    <div flex>Critical Understaffing:<div class="legend critUnderstaffed"></div>
-                    </div>
-                     <div flex>Understaffing:<div class="legend understaffed"></div>
-                     </div>
-                     <div flex>Overstaffing:<div class="legend overstaffed"></div>
-                     </div>
-                     <div flex>Weekend:<div class="legend weekend"></div>
-                     </div>
-
+									<ul>
+                    <li>Critical Understaffing:<div class="legend critUnderstaffed"></div></li>
+                     <li>Understaffing:<div class="legend understaffed"></div></li>
+                     <li>Overstaffing:<div class="legend overstaffed"></div></li>
+                     <li>Weekend:<div class="legend weekend"></div></li>
+									 </ul>
 
 
                 </div>
 				<div class="grid-scroll-wrap">
                 <table ng-hide="dates.lenght > 0" class="overview">
-                    <tr>
+                    <tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">
                         <th></th>
-                        <th class="datehead" ng-repeat="datenode in dates ">
-                            {{datenode.day}}/{{datenode.month}}
+                        <th class="datehead" ng-repeat="datenode in subnode.SkillDetails">
+                            <p>{{datenode.Date.Date  |  amDateFormat:"DD/MM" }}</p>
                         </th>
                     </tr>
                     <tr ng-repeat="(index, subnode) in dayNodes">
@@ -37,8 +36,8 @@
 							<div class="resourceplanner-box"
 							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">
                             <div class="floater-box">
-	                            <p>{{node.Date.Date}}</p>
-	                            <p>Rel diff:{{node.RelativeDifference}}</p>
+	                            <p>{{node.Date.Date |  amDateFormat:"L"}}</p>
+	                            <p>Rel diff: {{node.parseDif}}%</p>
                             </div>
 						</div>
                         </td>
