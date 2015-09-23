@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -155,6 +156,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 						.Should().Not.Be.Null();
 				}
 			});
+		}
+
+		[When(@"I select the first day in the forecast chart")]
+		public void WhenISelectTheFirstDayInTheForecastChart()
+		{
+			Browser.Interactions.Click(".c3-event-rect-0");
+		}
+
+		[When(@"I choose to add a campaign")]
+		public void WhenIChooseToAddACampaign()
+		{
+			Browser.Interactions.Click(".forecast-add-campaign-button");
+		}
+
+		[When(@"I increase the calls by (.*) percent")]
+		public void WhenIIncreaseTheCallsByPercent(int p0)
+		{
+			Browser.Interactions.FillWith(".forecast-campaign-input", "100");
+			var callCount = Browser.Interactions.GetText(".forecast-campaign-calls-count");
+			Browser.Interactions.AssertNoContains(".forecast-campaign-calls-count", ".forecast-campaign-totalcalls-count", callCount);
+		}
+
+		[When(@"I apply the campaign")]
+		public void WhenIApplyTheCampaign()
+		{
+			Browser.Interactions.Click(".forecast-apply-campaign-button");
+		}
+
+		[Then(@"I should see that the total calls for the first day has doubled")]
+		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasDoubled()
+		{
+			Browser.Interactions.HoverOver(".c3-event-rect-0");
+
+			var totalCalls = Browser.Interactions.GetText(".c3-tooltip-name-vtc .value");
+			var calls = Browser.Interactions.GetText(".c3-tooltip-name-vc .value");
+
+			Assert.AreEqual(double.Parse(totalCalls), double.Parse(calls) * 2);
 		}
 
 		[Given(@"I am viewing the forecast chart")]

@@ -60,7 +60,7 @@
 									Forecast this workload
 								</md-tooltip>
 							</a>
-							<a class="wfm-btn" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign(), 'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
+							<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign(), 'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
 								Add campaign {{selectedDayCountParenthesis()}}
 								<md-tooltip>
 									Select days in chart before adding
@@ -135,9 +135,19 @@
 					</div>
 					<div class="wfm-block campaign-position">
 						<table class="wfm-table wfm-table-multi forecast-period">
-							<thead><tr><th></th><th>Forecasted</th><th>With campaign</th></tr></thead>
+							<thead>
+								<tr>
+									<th></th>
+									<th>Forecasted</th>
+									<th>With campaign</th>
+								</tr>
+							</thead>
 							<tbody>
-								<tr><td>Calls</td><td>{{sumOfCallsForSelectedDays}}</td><td>{{sumOfCallsForSelectedDaysWithCampaign}}</td></tr>
+								<tr>
+									<td>Calls</td>
+									<td class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}</td>
+									<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</tdclass>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -157,7 +167,7 @@
 				<div class="modal-footer">
 					<aside>
 						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
-						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="applyCampaign()">{{ 'Apply' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="applyCampaign()">{{ 'Apply' | translate }}</a>
 
 					</aside>
 				</div>
