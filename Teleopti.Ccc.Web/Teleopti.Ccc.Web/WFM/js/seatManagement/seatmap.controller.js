@@ -215,7 +215,7 @@
 		function onLoadSeatMapSuccess(data) {
 
 			if (vm.showOccupancy) {
-				canvasUtils.applyOccupancyColoring(canvas, data.Seats);
+				canvasUtils.showSeatBooking(canvas, data.Seats);
 				canvasUtils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas);
 			}
 

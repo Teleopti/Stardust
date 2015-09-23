@@ -24,7 +24,7 @@
 				scrollZooming: scrollZooming,
 				ungroupObjects: ungroupObjects,
 				zoom: zoom,
-				applyOccupancyColoring: applyOccupancyColoring,
+				showSeatBooking: showSeatBooking,
 				loadSeatDetails: loadSeatDetails,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected
 			};
@@ -341,42 +341,49 @@
 
 			}
 
-			function applyOccupancyColoring(canvas, seatInfo) {
+			function showSeatBooking(canvas, seatInfo) {
 
 				var occupiedSeatObjects = [];
 				var seatDict = getObjectsByTypeDict(canvas, 'seat');
-				var occupancyColourFilter = new fabric.Image.filters.Blend({
-					color: '#C2E085',
-					mode: 'multiply'
-				});
-
+				
 				seatInfo.forEach(function (seat) {
 					if (seat.IsOccupied) {
 						var occupiedSeat = seatDict[seat.Id];
-						occupiedSeat.filters.push(occupancyColourFilter);
 						occupiedSeatObjects.push(occupiedSeat);
 					}
 				});
 
-				applyFiltersToSeats(canvas, occupiedSeatObjects);
-			};
+				var occupiedSeatObjectProcessedCount = 0;
 
-			function applyFiltersToSeats(canvas, occupiedSeatObjects) {
-
-				var i = 0;
-				function onFilterCallBack() {
-					i++;
-					if (i == occupiedSeatObjects.length) {
-						canvas.renderAll.bind(canvas)();
-					}
+				var callbackOnLoadImage = function() {
+					occupiedSeatObjectProcessedCount++;
+					if (occupiedSeatObjectProcessedCount == occupiedSeatObjects.length) {
+						canvas.renderAll();
+					};
 				};
 
-				occupiedSeatObjects.forEach(function (seat) {
-					seat.applyFilters(onFilterCallBack);
+				occupiedSeatObjects.forEach(function(occupiedSeat) {
+					loadSeatBookedImage(canvas, occupiedSeat,  callbackOnLoadImage);
 				});
 
 			};
 
+			function loadSeatBookedImage(canvas, occupiedSeat, callback) {
+				var seatWithBookingUrl = 'js/SeatManagement/Images/seatWithBooking.svg';
+				fabric.loadSVGFromURL(seatWithBookingUrl, function (objects, options) {
+					var groupedSvgObj = fabric.util.groupSVGElements(objects, options);
+					fabric.util.loadImage(seatWithBookingUrl, function (img) {
+						occupiedSeat.setElement(img);
+						occupiedSeat.set({
+							height: groupedSvgObj.height,
+							width: groupedSvgObj.width
+						});
+						callback();
+					});
+				});
+
+			};
+			
 			function getTimeZoneAdjustmentDisplay(booking) {
 
 				var belongsToDateMoment = moment(booking.BelongsToDate.Date);
