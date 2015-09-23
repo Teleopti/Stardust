@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
 	public class ImportPeopleController : ApiController
 	{
+		private const string newExcelFileContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+		private const string oldExcelFileContentType = "application/vnd.ms-excel";
 		private const int colIndexFirstname = 0;
 		private const int colIndexLastname = 1;
 		private const int colIndexWindowsUser = 2;
@@ -41,19 +44,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var provider = new MultipartMemoryStreamProvider();
 			var result = Request.Content.ReadAsMultipartAsync(provider).Result;
 
-			
 			var workbook = parseFiles(provider.Contents.First());
-			var isXlsx = workbook.GetType() == typeof(XSSFWorkbook);
+			var isXlsx = workbook is XSSFWorkbook;
 
 			var sheet = workbook.GetSheetAt(0);
 			var rowEnumerator = sheet.GetRowEnumerator();
+			// Read first row and check if missing any column.
 			while (rowEnumerator.MoveNext())
 			{
-				var row = (IRow)rowEnumerator.Current;
+				var headerRow = (IRow) rowEnumerator.Current;
 				string errorMessage;
-				if (validateColumnHeaders(row, out errorMessage))
+				if (anyColumnMissing(headerRow, out errorMessage))
 				{
-					var errorMsg = string.Format(UserTexts.Resources.MissingColumnX, errorMessage.Trim(new[] {',', ' '}));
+					var errorMsg = string.Format(UserTexts.Resources.MissingColumnX, errorMessage.Trim(',', ' '));
 					var invalidFileResponse = Request.CreateResponse(HttpStatusCode.InternalServerError);
 					invalidFileResponse.Headers.Clear();
 					invalidFileResponse.Content = new StringContent(errorMsg);
@@ -63,23 +66,25 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				}
 				break;
 			}
-			var userList = parseWorkBook(workbook);
 
+			var userList = parseWorkBook(workbook);
 			var invalidUsers = _peoplePersister.Persist(userList);
-			var response = Request.CreateResponse(HttpStatusCode.OK);
-			response.Headers.Clear();
 			var successCount = userList.Count - invalidUsers.Count;
 			var failedCount = invalidUsers.Count;
-			response.Headers.Add("Message",string.Format("success count:{0}, failed count:{1}", successCount, failedCount));
 
-			if (invalidUsers.Count == 0) 
-				return Request.CreateResponse(HttpStatusCode.OK);
+			var response = Request.CreateResponse(HttpStatusCode.OK);
+			response.Headers.Clear();
+			response.Headers.Add("Message", string.Format("success count:{0}, failed count:{1}", successCount, failedCount));
 
-			var ms = constructReturnedFile(isXlsx, invalidUsers);
+			if (invalidUsers.Count == 0)
+			{
+				return response;
+			}
+
+			var ms = constructReturnedFile(isXlsx, invalidUsers, true);
 			response.Content = new ByteArrayContent(ms.ToArray());
-			var contentType = isXlsx ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" :
-				"application/vnd.ms-excel";
-			response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+			response.Content.Headers.ContentType =
+				new MediaTypeHeaderValue(isXlsx ? newExcelFileContentType : oldExcelFileContentType);
 
 			return response;
 		}
@@ -87,9 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[Route("api/People/UserTemplate"), HttpPost]
 		public HttpResponseMessage GetFileTemplate()
 		{
-			const bool isXlsx = false;
-			const string contentType = "application/vnd.ms-excel";
-			var users = new List<RawUser>
+			var demoUser = new List<RawUser>
 			{
 				new RawUser
 				{
@@ -101,19 +104,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 					Role = "agent, \"London, Team Leader\""
 				}
 			};
-			
-			var ms = constructReturnedFile(isXlsx, users, false);
+
+			var ms = constructReturnedFile(false, demoUser);
 			var response = Request.CreateResponse(HttpStatusCode.OK);
 			response.Headers.Clear();
 			response.Content = new ByteArrayContent(ms.ToArray());
-			
-			response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+			response.Content.Headers.ContentType = new MediaTypeHeaderValue(oldExcelFileContentType);
 
 			return response;
 		}
-		private static MemoryStream constructReturnedFile(bool isXlsx, IList<RawUser> users, bool isErrorMsgIncluded=true)
+
+		private static MemoryStream constructReturnedFile(bool isXlsx, IList<RawUser> users, bool includeErrorMessage = false)
 		{
-			const string invalidUserSheetName = "users";
+			const string invalidUserSheetName = "Users";
 			var ms = new MemoryStream();
 			var returnedFile = isXlsx
 				? (IWorkbook) new XSSFWorkbook()
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			row.CreateCell(colIndexApplicationUserId).SetCellValue("ApplicationUserId");
 			row.CreateCell(colIndexPassword).SetCellValue("Password");
 			row.CreateCell(colIndexRole).SetCellValue("Role");
-			if (isErrorMsgIncluded)
+			if (includeErrorMessage)
 			{
 				row.CreateCell(colIndexErrorMessage).SetCellValue("ErrorMessage");
 			}
@@ -143,18 +146,20 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				row.CreateCell(colIndexApplicationUserId).SetCellValue(user.ApplicationUserId);
 				row.CreateCell(colIndexPassword).SetCellValue(user.Password);
 				row.CreateCell(colIndexRole).SetCellValue(user.Role);
-				row.CreateCell(colIndexErrorMessage).SetCellValue(user.ErrorMessage);
+				if (includeErrorMessage)
+				{
+					row.CreateCell(colIndexErrorMessage).SetCellValue(user.ErrorMessage);
+				}
 			}
 			returnedFile.Write(ms);
 			return ms;
 		}
 
-		private static IWorkbook parseFiles(HttpContent file)
+		private static IWorkbook parseFiles(HttpContent content)
 		{
-			var fileName = file.Headers.ContentDisposition.FileName.Trim('\"');
-			var dataStream = file.ReadAsStreamAsync().Result;
-			var isXlsx = fileName.EndsWith("xlsx");
-			return isXlsx
+			var fileName = content.Headers.ContentDisposition.FileName.Trim('\"');
+			var dataStream = content.ReadAsStreamAsync().Result;
+			return fileName.ToLower().EndsWith("xlsx")
 				? (IWorkbook) new XSSFWorkbook(dataStream)
 				: new HSSFWorkbook(dataStream);
 		}
@@ -167,12 +172,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var rowEnumerator = sheet.GetRowEnumerator();
 			while (rowEnumerator.MoveNext())
 			{
-				var row = (IRow) rowEnumerator.Current;
 				if (rowIndex == 1)
 				{
 					rowIndex++;
 					continue;
 				}
+
+				var row = (IRow) rowEnumerator.Current;
 				var user = new RawUser
 				{
 					Firstname = getCellValue(row, colIndexFirstname),
@@ -188,7 +194,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return userList;
 		}
 
-		private static bool validateColumnHeaders(IRow headerRow, out string errorMessage)
+		private static bool anyColumnMissing(IRow headerRow, out string errorMessage)
 		{
 			//check column header
 			var firstNameCol = getCellValue(headerRow, colIndexFirstname);
@@ -199,24 +205,26 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var rolCol = getCellValue(headerRow, colIndexRole);
 
 			var missingCol = new StringBuilder("");
-			var isFirstnameColMissing = isColumnExist(firstNameCol, "Firstname", missingCol);
-			var isLastnameColMissing = isColumnExist(lastNameCol, "Lastname", missingCol);
-			var isWindowsUserColMissing = isColumnExist(windowsUserCol, "WindowsUser", missingCol);
-			var isApplicationUserColMissing = isColumnExist(applicationUserCol, "ApplicationUserId", missingCol);
-			var isPasswordColMissing = isColumnExist(passwordCol, "Password", missingCol);
-			var isRoleColMissing = isColumnExist(rolCol, "Role", missingCol);
+			var isFirstnameColMissing = isColumnMissing(firstNameCol, "Firstname", missingCol);
+			var isLastnameColMissing = isColumnMissing(lastNameCol, "Lastname", missingCol);
+			var isWindowsUserColMissing = isColumnMissing(windowsUserCol, "WindowsUser", missingCol);
+			var isApplicationUserColMissing = isColumnMissing(applicationUserCol, "ApplicationUserId", missingCol);
+			var isPasswordColMissing = isColumnMissing(passwordCol, "Password", missingCol);
+			var isRoleColMissing = isColumnMissing(rolCol, "Role", missingCol);
 			errorMessage = missingCol.ToString();
 
-			return isFirstnameColMissing || isLastnameColMissing || isWindowsUserColMissing ||
-				   isApplicationUserColMissing || isPasswordColMissing || isRoleColMissing;
+			return isFirstnameColMissing || isLastnameColMissing || isWindowsUserColMissing || isApplicationUserColMissing ||
+				   isPasswordColMissing || isRoleColMissing;
 		}
 
-		private static bool isColumnExist(string colHeader, string colName, StringBuilder missingColMsg)
+		private static bool isColumnMissing(string colName, string expectColName, StringBuilder missingColMsg)
 		{
-			if (colHeader == colName) return false;
-			var colText = colName + ", ";
-			missingColMsg.Append(colText);
-			return true;
+			var columnMissing = string.Compare(colName.Trim(), expectColName.Trim(), true, CultureInfo.CurrentCulture) != 0;
+			if (columnMissing)
+			{
+				missingColMsg.AppendFormat("{0}, ", expectColName);
+			}
+			return columnMissing;
 		}
 
 		private static string getCellValue(IRow row, int columnIndex)
@@ -224,12 +232,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var obj = row.GetCell(columnIndex);
 			return obj == null ? string.Empty : obj.ToString();
 		}
-
-	}
-
-	public class RawUserData
-	{
-		public IList<RawUser> Users { get; set; }
 	}
 
 	public class RawUser
