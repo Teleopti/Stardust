@@ -27772,6 +27772,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to too long windows user;.
+        /// </summary>
+        public static string TooLongWindowsUserErrorMsgSemicolon {
+            get {
+                return ResourceManager.GetString("TooLongWindowsUserErrorMsgSemicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
         public static string Tools {
@@ -29775,15 +29784,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WindowsUserNameIsInvalidErrorMsgSemicolon {
             get {
                 return ResourceManager.GetString("WindowsUserNameIsInvalidErrorMsgSemicolon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to WindowsUser should be a valid email address;.
-        /// </summary>
-        public static string WindowsUserShouldBeAValidEmailAddressErrorMsg {
-            get {
-                return ResourceManager.GetString("WindowsUserShouldBeAValidEmailAddressErrorMsg", resourceCulture);
             }
         }
         

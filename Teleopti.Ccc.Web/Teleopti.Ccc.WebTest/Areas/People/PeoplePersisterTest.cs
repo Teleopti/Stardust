@@ -22,8 +22,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 	[TestFixture]
 	public class PeoplePersisterTest
 	{
-		private PeoplePersister target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakeApplicationRoleRepository(), new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
+		private string createLongString(int length, char fillWith = 'A')
+		{
+			return new string(fillWith, length);
+		}
 
+		private PeoplePersister target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(),
+			new FakeApplicationRoleRepository(), new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
 
 		[Test]
 		public void ValidateDataWhenPasswordIsEmpty()
@@ -52,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("empty password", errorData.First().ErrorMessage);
 		}
+
 		[Test]
 		public void ValidateDataWhenApplicationLogonIsEmpty()
 		{
@@ -132,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				},
 				new RawUser
 				{
-					Firstname = "ALooooooooooooongFirstname",
+					Firstname = createLongString(26),
 					ApplicationUserId = "logon2@teleopti.com",
 					Lastname = "Lastname2",
 					Password = "password",
@@ -142,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				{
 					Firstname = "Firstname3",
 					ApplicationUserId = "logon3@teleopti.com",
-					Lastname = "ALoooooooooooooongLastname",
+					Lastname = createLongString(26),
 					Password = "password",
 					WindowsUser = "winlogon3@teleopti.com"
 				}
@@ -231,6 +237,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ValidateDataWhenApplicationUserIdTooLong()
 		{
+			const string emailSuffix = "@teleopti.com";
 			var rawUserData = new List<RawUser>
 			{
 				new RawUser
@@ -245,7 +252,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Jan",
-					ApplicationUserId = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc@teleopti.com",
+					ApplicationUserId = createLongString(51 - emailSuffix.Length) + emailSuffix,
 					Lastname = "Morgan",
 					Password = "psss",
 					Role = "",
@@ -260,7 +267,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
-		public void ValidateDataWhenWindowsUserIdNotValidEmailAddr()
+		public void ValidateDataWhenWindowsUserIdIsTooLong()
 		{
 			var rawUserData = new List<RawUser>
 			{
@@ -271,7 +278,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					Lastname = "Morgan",
 					Password = "password",
 					Role = "",
-					WindowsUser = "jennym@teleopti.com"
+					WindowsUser = createLongString(101)
 				},
 				new RawUser
 				{
@@ -286,9 +293,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("Jan", errorData.First().Firstname);
-			Assert.AreEqual("WindowsUser should be a valid email address", errorData.First().ErrorMessage);
+			Assert.AreEqual("Jenny", errorData.First().Firstname);
+			Assert.AreEqual("too long windows user", errorData.First().ErrorMessage);
 		}
+
 		[Test]
 		public void ValidateDataWhenApplicationUserIdNotValidEmailAddr()
 		{
@@ -353,7 +361,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			person1.SetId(Guid.NewGuid());
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
-			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
+			var fakePersonRepository = new FakePersonRepository(person1, person2);
 			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());
@@ -394,7 +402,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			person1.SetId(Guid.NewGuid());
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
-			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
+			var fakePersonRepository = new FakePersonRepository(person1, person2);
 			target = new PeoplePersister(personInfoPersister,personInfoMapper,fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
 			Assert.AreEqual(1, errorData.Count());

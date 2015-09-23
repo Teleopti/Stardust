@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -13,10 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class UserValidator : IUserValidator
 	{
-		private StringBuilder errorMsgBuilder;
-		private IList<IApplicationRole> validRoles;
-		private const int MaxNameLength = 25;
-		private const int MaxApplicationUserIdLength = 50;
+		private readonly StringBuilder errorMsgBuilder;
+		private readonly IList<IApplicationRole> validRoles;
+		private const int maxNameLength = 25;
+		private const int maxWindowUserLength = 100;
+		private const int maxApplicationUserIdLength = 50;
 
 		public UserValidator()
 		{
@@ -30,30 +29,43 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			validRoles.Clear();
 			var isUserValid = true;
 
-			if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
+			if (string.IsNullOrEmpty(user.ApplicationUserId))
 			{
-				errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
-				isUserValid = false;
+				if (string.IsNullOrEmpty(user.WindowsUser))
+				{
+					errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
+				else if (!string.IsNullOrEmpty(user.Password))
+				{
+					errorMsgBuilder.Append(Resources.NoApplicationLogonAccountErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
 			}
-			else if (string.IsNullOrEmpty(user.ApplicationUserId) && !string.IsNullOrEmpty(user.Password))
+			else
 			{
-				errorMsgBuilder.Append(Resources.NoApplicationLogonAccountErrorMsgSemicolon + " ");
-				isUserValid = false;
+				if (user.ApplicationUserId.Length > maxApplicationUserIdLength)
+				{
+					errorMsgBuilder.Append(Resources.TooLongApplicationUserIdErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
+
+				if (string.IsNullOrEmpty(user.Password))
+				{
+					errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
+
+				if (!(new EmailAddressAttribute().IsValid(user.ApplicationUserId)))
+				{
+					errorMsgBuilder.Append(Resources.ApplicationUserIdShouldBeAValidEmailAddressErrorMsg + " ");
+					isUserValid = false;
+				}
 			}
 
-			if (!string.IsNullOrEmpty(user.ApplicationUserId) &&  string.IsNullOrEmpty(user.Password))
+			if (!string.IsNullOrEmpty(user.WindowsUser) && user.WindowsUser.Length > maxWindowUserLength)
 			{
-				errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
-				isUserValid = false;
-			}
-			if (!string.IsNullOrEmpty(user.ApplicationUserId) && !(new EmailAddressAttribute().IsValid(user.ApplicationUserId)))
-			{
-				errorMsgBuilder.Append(Resources.ApplicationUserIdShouldBeAValidEmailAddressErrorMsg + " ");
-				isUserValid = false;
-			}
-			if (!string.IsNullOrEmpty(user.WindowsUser) && !(new EmailAddressAttribute().IsValid(user.WindowsUser)))
-			{
-				errorMsgBuilder.Append(Resources.WindowsUserShouldBeAValidEmailAddressErrorMsg + " ");
+				errorMsgBuilder.Append(Resources.TooLongWindowsUserErrorMsgSemicolon + " ");
 				isUserValid = false;
 			}
 
@@ -63,27 +75,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				isUserValid = false;
 			}
 
-			if (user.Firstname.Length > MaxNameLength)
+			if (user.Firstname.Length > maxNameLength)
 			{
 				errorMsgBuilder.Append(Resources.TooLongFirstnameErrorMsgSemicolon + " ");
 				isUserValid = false;
 			}
 
-			if (user.Lastname.Length > MaxNameLength)
+			if (user.Lastname.Length > maxNameLength)
 			{
 				errorMsgBuilder.Append(Resources.TooLongLastnameErrorMsgSemicolon + " ");
 				isUserValid = false;
 			}
 
-			if (user.ApplicationUserId.Length > MaxApplicationUserIdLength)
-			{
-				errorMsgBuilder.Append(Resources.TooLongApplicationUserIdErrorMsgSemicolon + " ");
-				isUserValid = false;
-			}
-
 			if (!string.IsNullOrEmpty(user.Role))
 			{
-				var roles = parse(user.Role).ToList();
+				var roles = parseRoleNames(user.Role).ToList();
 				var invalidRolesBuilder = new StringBuilder();
 				var hasInvalidRole = false;
 
@@ -109,9 +115,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			}
 			return isUserValid;
 		}
-		private IEnumerable<string> parse(string roles)
-		{
 
+		private IEnumerable<string> parseRoleNames(string roles)
+		{
 			const string splitPattern = "[^,\"]+|\"[^\"]*\"";
 			var matches = Regex.Matches(roles, splitPattern);
 			var result =
@@ -120,6 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 			return new HashSet<string>(result);
 		}
+
 		public string ErrorMessage
 		{
 			get { return errorMsgBuilder.ToString(); }

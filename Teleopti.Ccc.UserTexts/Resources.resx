@@ -13504,7 +13504,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
     <value>ApplicationUserId should be a valid email address;</value>
   </data>
-  <data name="WindowsUserShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
-    <value>WindowsUser should be a valid email address;</value>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>too long windows user;</value>
   </data>
 </root>
