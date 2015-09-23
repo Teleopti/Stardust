@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				type: 'POST',
 				data: JSON.stringify({ dateList: dates }),
 				success: function (data) {
-					_onSuccessDeletePeriod(dates, data);
+					_onSuccessDeletePeriod(dates);
 				},
 				statusCode404: function () { },
 			});
@@ -91,14 +91,16 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
-	function _onSuccessDeletePeriod(dates, data) {
+	function _onSuccessDeletePeriod(dates) {
 
-		for (var idx in dates) {
-			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[dates[idx]];
-			dayViewModel.ReadPreference({ Color: "" });
-		}
+		dates.forEach(function(date) {
+			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
+			dayViewModel.ClearPreference();
+			dayViewModel.LoadFeedback();
+		});
 
 		periodFeedbackViewModel.LoadFeedback();
+		
 		if (toggleShowNightViolation()) {
 			loadNeighborFeedback();
 			periodFeedbackViewModel.PossibleNightRestViolations();
