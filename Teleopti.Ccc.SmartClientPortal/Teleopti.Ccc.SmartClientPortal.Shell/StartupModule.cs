@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Net.Configuration;
+using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
@@ -24,8 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ApplicationStartup>()
-					 .SingleInstance();
+            builder.RegisterModule(new CommonModule(_configuration));
+            builder.RegisterType<ApplicationStartup>().SingleInstance();
 			builder.RegisterType<EnvironmentWindowsUserProvider>()
 					 .As<IWindowsUserProvider>()
 					 .SingleInstance();
