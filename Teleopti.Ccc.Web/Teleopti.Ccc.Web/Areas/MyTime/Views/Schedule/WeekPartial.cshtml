@@ -141,8 +141,13 @@
 					<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
 						<i class="glyphicon glyphicon-time floatright" />
 					</div>
+					
+					<div class="seatbooking-symbol pull-right " data-bind="visible: hasSeatBooking, tooltip: { title: seatBookingMessage, html: true }">
+						<i class="glyphicon glyphicon-user" />
+					</div>
+
 					<!-- ko if: hasNote -->
-					<div class="pull-right" data-bind="tooltip: { title: noteMessage, html: true }">
+					<div class="pull-right weekview-icon" data-bind="tooltip: { title: noteMessage, html: true }">
 						<i class="glyphicon glyphicon-exclamation-sign"></i>
 					</div>
 					<!-- /ko -->

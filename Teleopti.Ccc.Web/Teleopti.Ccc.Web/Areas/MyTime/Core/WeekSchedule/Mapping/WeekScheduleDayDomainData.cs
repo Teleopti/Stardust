@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
@@ -17,5 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public IOvertimeAvailability OvertimeAvailabilityYesterday { get; set; }
 		public string ProbabilityClass { get; set; }
 		public string ProbabilityText { get; set; }
+		public IList<OccupancyViewModel> SeatBookingInformation { get; set; }
 	}
 }

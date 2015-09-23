@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		private FakeSeatMapRepository _seatMapLocationRepository;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
+		private ILoggedOnUser _loggedOnUser;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
@@ -26,6 +28,10 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
+			_person = PersonFactory.CreatePersonWithId();
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(_person);
 
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
@@ -41,17 +47,17 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var seat = location.AddSeat("Seat", 1);
 			var seat2 = location.AddSeat("Seat", 1);
 			_seatMapLocationRepository.Add(location);
-
-			var person = PersonFactory.CreatePersonWithId();
-
+			
 			var bookingDate = new DateOnly(2015, 8, 7);
-			var booking = SeatManagementProviderTestUtils.CreateSeatBooking(person,
+			var booking = SeatManagementProviderTestUtils.CreateSeatBooking(
+				_person,
 				bookingDate,
 				new DateTime(2015, 8, 7, 8, 0, 0),
 				new DateTime(2015, 8, 7, 18, 0, 0));
 
 
-			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(person,
+			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(
+				_person,
 				bookingDate,
 				new DateTime(2015, 8, 7, 8, 0, 0),
 				new DateTime(2015, 8, 7, 18, 0, 0));
@@ -62,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(booking);
 			_seatBookingRepository.Add(bookingSeat2);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone, _loggedOnUser);
 			var occupancyInformation = seatOccupancyProvider.Get (seat.Id.Value, bookingDate);
 			var occupancyInfo = occupancyInformation.Single();
 
@@ -72,6 +78,55 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			occupancyInfo.SeatId.Should().Be.EqualTo (seat.Id);
 			occupancyInfo.BookingId.Should().Be.EqualTo (booking.Id);
 			
+		}
+
+		[Test]
+		public void ShouldGetOccupancyInformationForCurrentUser()
+		{
+			var location = new SeatMapLocation() { Name = "Location" };
+			location.SetId(Guid.NewGuid());
+
+			var seat = location.AddSeat("Seat", 1);
+			var seat2 = location.AddSeat("Seat", 1);
+			_seatMapLocationRepository.Add(location);
+
+			var person2 = PersonFactory.CreatePersonWithId();
+
+			var bookingDateStart = new DateOnly(2015, 8, 7);
+			var bookingDateEnd= new DateOnly(2015, 8, 8);
+
+			var booking1ForPerson1 = SeatManagementProviderTestUtils.CreateSeatBooking(
+				_person,
+				bookingDateStart,
+				new DateTime(2015, 8, 7, 8, 0, 0),
+				new DateTime(2015, 8, 7, 18, 0, 0));
+			
+			var booking2ForPerson1 = SeatManagementProviderTestUtils.CreateSeatBooking(
+				_person,
+				bookingDateStart,
+				new DateTime(2015, 8, 8, 8, 0, 0),
+				new DateTime(2015, 8, 8, 18, 0, 0));
+
+
+			var bookingForPerson2 = SeatManagementProviderTestUtils.CreateSeatBooking(
+				person2,
+				bookingDateStart,
+				new DateTime(2015, 8, 7, 8, 0, 0),
+				new DateTime(2015, 8, 7, 18, 0, 0));
+
+			booking1ForPerson1.Book(seat);
+			booking2ForPerson1.Book (seat);
+			bookingForPerson2.Book(seat2);
+
+			_seatBookingRepository.Add(booking1ForPerson1);
+			_seatBookingRepository.Add(booking2ForPerson1);
+			_seatBookingRepository.Add(bookingForPerson2);
+			
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone, _loggedOnUser);
+			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForCurrentUser (new DateOnlyPeriod(bookingDateStart, bookingDateEnd));
+			Assert.IsTrue (occupancyInformation.Count == 2);
+			occupancyInformation[0].PersonId.Should().Be (_person.Id);
+			occupancyInformation[1].PersonId.Should().Be(_person.Id);
 		}
 
 	}

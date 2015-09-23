@@ -96,6 +96,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
+		self.showSeatBookingPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -313,6 +314,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
+			self.showSeatBookingPermission(data.ShowSeatBookingPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
@@ -391,6 +393,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			//need to html encode due to not bound to "text" in ko
 			return $('<div/>').text(day.Note.Message).html();
 		});
+		
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
 		self.probabilityClass = ko.observable(day.ProbabilityClass);
@@ -409,7 +412,25 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.hasNote = ko.observable(day.HasNote);
+		self.seatBookings = ko.observableArray(day.SeatBookings);
+		self.hasSeatBooking = ko.computed(function() {
+			return self.seatBookings().length > 0;
+		});
+		self.seatBookingMessage = ko.computed(function () {
+			//need to html encode due to not bound to "text" in ko
+			//return $('<div/>').text(day.Note.Message).html();
 
+			var message = '';
+			var time = '';
+			self.seatBookings().forEach(function (seat) {
+				time = 'Between ' + Teleopti.MyTimeWeb.Common.FormatTime(seat.StartDateTime) + ' to '
+					+ Teleopti.MyTimeWeb.Common.FormatTime(seat.EndDateTime);
+				message += time +' you have been booked seat '+ seat.LocationPath + '/'+ seat.SeatName;
+			});
+
+			return message;
+
+		});
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});

@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					ShiftTradeBulletinBoardPermission = s.ShiftTradeBulletinBoardPermission,
 					PersonAccountPermission = s.PersonAccountPermission
 				}))
+				.ForMember(d => d.ShowSeatBookingPermission, o => o.ResolveUsing(s => s.ShowSeatBookingPermission))
 				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _culture().GetCulture().DateTimeFormat.ShortDatePattern))
 				;
 
@@ -137,6 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => _headerViewModelFactory.Invoke().CreateModel(s.ScheduleDay)))
 				.ForMember(d => d.Note, o => o.MapFrom(s => s.ScheduleDay.PublicNoteCollection()))
+				.ForMember (d => d.SeatBookings, o => o.MapFrom (s => s.SeatBookingInformation))
 				.ForMember(d => d.Summary, c => c.ResolveUsing(
 					s =>
 					{

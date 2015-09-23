@@ -4,6 +4,7 @@ using System.Globalization;
 using NodaTime;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 {
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
+		public bool ShowSeatBookingPermission { get; set; }
 	}
 
     public class RequestPermission
@@ -79,6 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 		public string ProbabilityClass { get; set; }
 		public string ProbabilityText { get; set; }
+		public IList<OccupancyViewModel> SeatBookings { get; set; }
 	}
 
 	public class OvertimeAvailabilityViewModel

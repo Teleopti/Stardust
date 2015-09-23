@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public Guid BookingId { get; set; }
 		public string SeatName { get; set; }
 		public DateOnly BelongsToDate { get; set; }
+		public string LocationPath { get; set; }
 	}
 }

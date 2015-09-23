@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IPersonRequestProvider _personRequestProvider;
+		private readonly ISeatOccupancyProvider _seatBookingProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
@@ -27,12 +29,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IUserCulture _culture;
 
 		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
-			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, 
+			IPersonRequestProvider personRequestProvider, 
+			ISeatOccupancyProvider seatBookingProvider,
+			IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, 
 			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, IToggleManager toggleManager, IUserCulture culture)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_personRequestProvider = personRequestProvider;
+			_seatBookingProvider = seatBookingProvider;
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
 			_now = now;
@@ -56,6 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay).ToList();
 									var personRequests = _personRequestProvider.RetrieveRequests(week);
 									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
+									var seatBookings = _seatBookingProvider.GetSeatBookingsForCurrentUser (week);
 																																				
 									var earliest =
 										scheduleDays.Min(
@@ -170,6 +176,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Date == day).Availability
 												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).CssClass
 												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).Text
+												let seatBookingInformation = seatBookings == null ? null : seatBookings.Where(seatBooking => seatBooking.BelongsToDate == day).ToArray()
 												
 												select new WeekScheduleDayDomainData
 														{
@@ -183,7 +190,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															MinMaxTime = MinMaxTime,
 															Availability = availabilityForDay,
 															ProbabilityClass = probabilityClass,
-															ProbabilityText = probabilityText
+															ProbabilityText = probabilityText,
+															SeatBookingInformation = seatBookingInformation
 														}
 											   ).ToArray();
 
@@ -214,6 +222,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var personalAccountPermission =
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
+									var showSeatBookingPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.SeatPlanner) &&
+										_toggleManager.IsEnabled(Toggles.Wfm_SeatPlan_ShowSeatBookingInMyTime_34799);
+
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
@@ -230,6 +243,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												ShiftExchangePermission = shiftExchangePermission,
 												ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,
 												PersonAccountPermission = personalAccountPermission,
+												ShowSeatBookingPermission = showSeatBookingPermission,
 												IsCurrentWeek = isCurrentWeek,
 											};
 								});
