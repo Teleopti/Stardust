@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -11,22 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class UserValidator : IUserValidator
 	{
-		private readonly StringBuilder errorMsgBuilder;
-		private readonly IList<IApplicationRole> validRoles;
 		private const int maxNameLength = 25;
 		private const int maxWindowUserLength = 100;
 		private const int maxApplicationUserIdLength = 50;
 
-		public UserValidator()
+		public bool Validate(RawUser user, IDictionary<string, IApplicationRole> availableRoles, StringBuilder errorMsgBuilder)
 		{
-			errorMsgBuilder = new StringBuilder();
-			validRoles = new List<IApplicationRole>();
-		}
-
-		public bool Validate(RawUser user, IDictionary<string, IApplicationRole> availableRoles)
-		{
-			errorMsgBuilder.Clear();
-			validRoles.Clear();
 			var isUserValid = true;
 
 			if (string.IsNullOrEmpty(user.ApplicationUserId))
@@ -89,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 			if (!string.IsNullOrEmpty(user.Role))
 			{
-				var roles = parseRoleNames(user.Role).ToList();
+				var roles = StringHelper.SplitStringList(user.Role).ToList();
 				var invalidRolesBuilder = new StringBuilder();
 				var hasInvalidRole = false;
 
@@ -108,33 +98,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					errorMsgBuilder.Append(errorRolesMsg);
 					isUserValid = false;
 				}
-				else if (isUserValid)
-				{
-					roles.ForEach(r => validRoles.Add(availableRoles[r.ToUpper()]));
-				}
 			}
+
 			return isUserValid;
 		}
-
-		private IEnumerable<string> parseRoleNames(string roles)
-		{
-			const string splitPattern = "[^,\"]+|\"[^\"]*\"";
-			var matches = Regex.Matches(roles, splitPattern);
-			var result =
-				(from object match in matches select match.ToString().Replace("\"", "").Trim())
-				.Where(x => !string.IsNullOrEmpty(x));
-
-			return new HashSet<string>(result);
-		}
-
-		public string ErrorMessage
-		{
-			get { return errorMsgBuilder.ToString(); }
-		}
-
-		public IList<IApplicationRole> ValidRoles
-		{
-			get { return validRoles; }
-		} 
 	}
 }

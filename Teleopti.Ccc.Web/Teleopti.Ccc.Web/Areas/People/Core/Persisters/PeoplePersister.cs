@@ -7,14 +7,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
@@ -26,6 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
 		private readonly IUserValidator _userValidator;
+		private IDictionary<string, IApplicationRole> _allRoles;
+		private bool initialized;
 
 		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IApplicationRoleRepository roleRepository,
 			IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, IUserValidator userValidator)
@@ -36,31 +37,31 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			_personRepository = personRepository;
 			_currentLoggedOnUser = currentLoggedOnUser;
 			_userValidator = userValidator;
+
+			initialized = false;
 		}
 
 		public IList<RawUser> Persist(IEnumerable<RawUser> users)
 		{
-			var invalidUsers = new List<RawUser>();
+			if (!initialized)
+			{
+				GetAllRoles();
+				initialized = true;
+			}
 
-			var availableRoles = getAllRoles();
+			var invalidUsers = new List<RawUser>();
 
 			foreach (var user in users)
 			{
-				var isUserValid = _userValidator.Validate(user, availableRoles);
-				var errorMsgBuilder = new StringBuilder(_userValidator.ErrorMessage);
+				var errorMsgBuilder = new StringBuilder();
+				var isUserValid = _userValidator.Validate(user, _allRoles, errorMsgBuilder);
 
 				if (isUserValid)
 				{
-					var person = new Person
-					{
-						Name =
-							new Name(user.Firstname.IsNullOrEmpty() ? " " : user.Firstname,
-								user.Lastname.IsNullOrEmpty() ? " " : user.Lastname)
-					};
-
+					IPerson person = null;
 					try
 					{
-						persistPerson(person);
+						person = PersistPerson(user);
 					}
 					catch (Exception e)
 					{
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 					if (isUserValid)
 					{
-						var tenantUserData = new PersonInfoModel()
+						var tenantUserData = new PersonInfoModel
 						{
 							ApplicationLogonName = user.ApplicationUserId.IsNullOrEmpty() ? null : user.ApplicationUserId,
 							Identity = user.WindowsUser.IsNullOrEmpty() ? null : user.WindowsUser,
@@ -80,78 +81,98 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 						try
 						{
-							persistTenatData(tenantUserData);
+							PersistTenatData(tenantUserData);
 						}
 						catch (PasswordStrengthException)
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
-							removePerson(person);
+							RemovePerson(person);
 						}
 						catch (DuplicateIdentityException)
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
-							removePerson(person);
+							RemovePerson(person);
 						}
 						catch (DuplicateApplicationLogonNameException)
 						{
 							isUserValid = false;
 							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
-							removePerson(person);
+							RemovePerson(person);
 						}
 						catch (Exception e)
 						{
 							isUserValid = false;
 							errorMsgBuilder.AppendFormat((Resources.InternalErrorXMsg + " "), e.Message);
-							removePerson(person);
+							RemovePerson(person);
 						}
 					}
 				}
 
 				if (isUserValid) continue;
 
-				var errorMsg = errorMsgBuilder.ToString();
-				errorMsg = errorMsg.Substring(0, errorMsg.Length - 2);
-				user.ErrorMessage = errorMsg;
+				var errorMessage = errorMsgBuilder.ToString();
+				user.ErrorMessage = errorMessage.Substring(0, errorMessage.Length - 2);
 				invalidUsers.Add(user);
 			}
 
 			return invalidUsers;
 		}
 
-		[UnitOfWork]
-		protected virtual IDictionary<string, IApplicationRole> getAllRoles()
+		private IPerson createPersonFromModel(RawUser rawPerson)
 		{
-			var availableRoles = new Dictionary<string, IApplicationRole>();
-			var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
-			allRoles.ForEach(r =>
+			var person = new Person
 			{
-				if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
+				Name = new Name(rawPerson.Firstname ?? " ", rawPerson.Lastname ?? " ")
+			};
+
+			var timeZone = _currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+
+			if (!string.IsNullOrEmpty(rawPerson.Role))
+			{
+				var roleNames = StringHelper.SplitStringList(rawPerson.Role);
+				foreach (var roleName in roleNames)
 				{
-					availableRoles.Add(r.DescriptionText.ToUpper(), r);
+					person.PermissionInformation.AddApplicationRole(_allRoles[roleName.ToUpper()]);
+				}
+			}
+
+			return person;
+		}
+
+		[UnitOfWork]
+		protected virtual void GetAllRoles()
+		{
+			_allRoles = new Dictionary<string, IApplicationRole>();
+			var roles = _roleRepository.LoadAllApplicationRolesSortedByName();
+			roles.ForEach(r =>
+			{
+				if (!_allRoles.ContainsKey(r.DescriptionText.ToUpper()))
+				{
+					_allRoles.Add(r.DescriptionText.ToUpper(), r);
 				}
 			});
-			return availableRoles;
 		}
 
 		[UnitOfWork]
-		protected virtual void persistPerson(IPerson person)
+		protected virtual IPerson PersistPerson(RawUser user)
 		{
-			person.PermissionInformation.SetDefaultTimeZone(
-								_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			_userValidator.ValidRoles.ForEach(r => person.PermissionInformation.AddApplicationRole(r));
+			var person = createPersonFromModel(user);
 			_personRepository.Add(person);
+
+			return person;
 		}
 
 		[UnitOfWork]
-		protected virtual void removePerson(IPerson person)
+		protected virtual void RemovePerson(IPerson person)
 		{
 			_personRepository.Remove(person);
 		}
 
 		[TenantUnitOfWork]
-		protected virtual void persistTenatData(PersonInfoModel tenantUserData)
+		protected virtual void PersistTenatData(PersonInfoModel tenantUserData)
 		{
 			_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 		}

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("empty password", errorData.First().ErrorMessage);
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				}
 			};
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jenny", errorData.First().Firstname);
 			Assert.AreEqual("no application user id", errorData.First().ErrorMessage);
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("no logon account", errorData.First().ErrorMessage);
 		}
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(3, errorData.Count());
+			Assert.AreEqual(3, errorData.Count);
 
 			var firstInvalidPerson = errorData.First();
 			Assert.AreEqual("logon1@teleopti.com", firstInvalidPerson.ApplicationUserId);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("logon1@teleopti.com", errorData.First().WindowsUser);
 			Assert.AreEqual("empty password; both firstname and lastname are empty", errorData.First().ErrorMessage);
 		}
@@ -227,9 +227,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var roleRepo = new FakeApplicationRoleRepository();
 			roleRepo.Add(new ApplicationRole {DescriptionText = "Agent"});
 
-			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), roleRepo, new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
+			target = new PeoplePersister(new PersistPersonInfoFake(), new PersonInfoMapperFake(), roleRepo,
+				new FakePersonRepository(), new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("logon1@teleopti.com", errorData.First().WindowsUser);
 			Assert.AreEqual("role sss0, \"test,sss1\" not exist", errorData.First().ErrorMessage);
 		}
@@ -261,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("too long application user id", errorData.First().ErrorMessage);
 		}
@@ -292,7 +293,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jenny", errorData.First().Firstname);
 			Assert.AreEqual("too long windows user", errorData.First().ErrorMessage);
 		}
@@ -323,7 +324,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			};
 
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("ApplicationUserId should be a valid email address", errorData.First().ErrorMessage);
 		}
@@ -362,9 +363,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(person1, person2);
-			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
+			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository,
+				fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
 		}
@@ -403,9 +405,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(person1, person2);
-			target = new PeoplePersister(personInfoPersister,personInfoMapper,fakeApplicationRoleRepository, fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
+			target = new PeoplePersister(personInfoPersister, personInfoMapper, fakeApplicationRoleRepository,
+				fakePersonRepository, new FakeLoggedOnUser(), new UserValidator());
 			var errorData = target.Persist(rawUserData).ToList();
-			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual(1, errorData.Count);
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
 		}
@@ -417,7 +420,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		{
 			var personInfo = new PersonInfo(new Tenant("Test"), personInfoModel.PersonId);
 			personInfo.SetIdentity(personInfoModel.Identity);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), personInfoModel.ApplicationLogonName,personInfoModel.Password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), personInfoModel.ApplicationLogonName,
+				personInfoModel.Password);
 			return personInfo;
 		}
 	}
