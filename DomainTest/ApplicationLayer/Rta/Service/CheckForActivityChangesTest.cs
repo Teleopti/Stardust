@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-		public ICacheInvalidator Cache;
 		public RtaTestAttribute Context;
 
 		[Test]
@@ -154,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 			Now.Is("2015-09-21 09:05");
 			Database.ClearSchedule(personId);
-			Cache.InvalidateSchedules(personId);
+			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
@@ -180,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 12:00")
 				.WithSchedule(personId, lunch, "2015-09-21 12:00", "2015-09-21 13:00")
 				;
-			Cache.InvalidateSchedules(personId);
+			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
@@ -206,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, phone, "2015-09-21 08:55", "2015-09-21 11:00")
 				.WithSchedule(personId, lunch, "2015-09-21 11:00", "2015-09-21 12:00")
 				;
-			Cache.InvalidateSchedules(personId);
+			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ReceivedTime.Should().Be("2015-09-21 09:05".Utc());
@@ -230,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.ClearSchedule(personId)
 				.WithSchedule(personId, admin, "2015-09-21 09:00", "2015-09-21 11:00")
 				;
-			Cache.InvalidateSchedules(personId);
+			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.ActivityId.Should().Be(admin);

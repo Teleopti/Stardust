@@ -247,6 +247,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_activityChangeProcessor.CheckForActivityChanges();
 		}
 
+		[InfoLog]
+		[RtaDataSourceScope]
+		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
+		{
+			_cacheInvalidator.InvalidateSchedules(personId);
+		}
+
 		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)
 		{
 			_processor.Process(
