@@ -779,7 +779,6 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
-    <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
     <Compile Include="Areas\Rta\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />

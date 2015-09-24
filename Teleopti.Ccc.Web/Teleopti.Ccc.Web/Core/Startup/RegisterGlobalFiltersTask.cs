@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (ApplicationAuthenticationApiController),
 				typeof (ToggleHandlerController),
 				typeof (StateController),
-				typeof (ActivityChangeController),
 				typeof (MessageBrokerController),
 				typeof (ApplicationController),
 				typeof (AuthenticateController),
