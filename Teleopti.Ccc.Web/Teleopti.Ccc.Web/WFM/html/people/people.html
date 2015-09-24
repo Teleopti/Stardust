@@ -3,7 +3,7 @@
 		padding: 0px 0;
 		margin: 0px 0;
 	}
-
+	
 	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
 	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-remove,
 	.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
@@ -28,7 +28,7 @@
 			</div>
 
 		</div>
-		<div ng-show="selectAllVisible" class="col-md-4">
+		<div ng-if="selectAllVisible" class="col-md-4">
 			<div class="alert-detail notice-spacer" ng-click="selectAllMatch()"><a href="javascript: void(0);">{{'SelectAllMatchedPeople'|translate}}</a>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 				<i class="mdi mdi-account-remove"></i>
 			</button>
 			<nav class="action-panel" mfb-menu position="tr" effect="slidein-spring"
-				 style="position: absolute; top: -1rem;"
+				 style="position: absolute; top: 1rem; margin: 0"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 toggling-method="click" menu-state="closed">

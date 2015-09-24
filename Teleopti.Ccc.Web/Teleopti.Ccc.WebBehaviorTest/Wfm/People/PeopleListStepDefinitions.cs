@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I open the action panel")]
 		public void WhenIOpenTheActionPanel()
 		{
+			Browser.Interactions.AssertExists(".action-panel");
+			Browser.Interactions.Javascript("scroll(0, 250)");
 			Browser.Interactions.Click(".action-panel");
 		}
 
@@ -61,7 +63,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I open the import user command")]
 		public void WhenIOpenTheImportUserCommand()
 		{
-			Browser.Interactions.Click(".action-panel .mdi-file");
+			Browser.Interactions.AssertExists(".action-panel[data-mfb-state=\"open\"]");
+			Browser.Interactions.Javascript("scroll(0, 250)");
+			Browser.Interactions.Click(".importusers");
 		}
 
 		[Then(@"I should see import panel")]
