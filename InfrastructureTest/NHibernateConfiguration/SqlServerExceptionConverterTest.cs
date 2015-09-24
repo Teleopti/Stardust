@@ -4,11 +4,13 @@ using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	public class SqlServerExceptionConverterTest : DatabaseTest
 	{
 		[Test]
-		public void VerifyViolatingUniqueIndex()
+		public void VerifyDuplicateKey()
 		{
 			CleanUpAfterTest();
 			var ok = false;
@@ -43,6 +45,18 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			if (!ok)
 				Assert.Fail("ConstraintViolationException was not thrown!");
 		}
+
+		[Test]
+		public void VerifyViolatingUniqueIndex()
+		{
+			var name = RandomName.Make();
+			var settingData1 = new GlobalSettingData(name);
+			var settingData2 = new GlobalSettingData(name);
+			PersistAndRemoveFromUnitOfWork(settingData1);
+			Assert.Throws<ConstraintViolationException>(() =>
+				PersistAndRemoveFromUnitOfWork(settingData2));
+		}
+		
 
 		[Test]
 		public void GeneralException()
