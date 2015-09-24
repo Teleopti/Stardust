@@ -25,6 +25,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
@@ -48,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
-		private readonly RtaTenants _rtaTenants;
 
 		public TestController(
 			IMutateNow mutateNow, 
@@ -64,9 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ILoadPasswordPolicyService loadPasswordPolicyService, 
 			ISettings settings, 
 			IPhysicalApplicationPath physicalApplicationPath, 
-			IFindPersonInfo findPersonInfo,
-			RtaTenants rtaTenants,
-			IDataSourceScope dataSource)
+			IFindPersonInfo findPersonInfo)
 		{
 			_mutateNow = mutateNow;
 			_cacheInvalidator = cacheInvalidator;
@@ -82,7 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
-			_rtaTenants = rtaTenants;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -93,28 +90,33 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_formsAuthentication.SignOut();
 
 			updateIocNow(null);
+
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.ConfigurationFilesPath());
+
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 
 			cancelHangfireQueue();
 			waitForHangfireQueue();
 
-			var viewModel = new TestMessageViewModel
+			clearAllConnectionPools();
+
+			return View("Message", new TestMessageViewModel
 			{
 				Title = "Setting up for scenario",
 				Message = "Setting up for scenario",
 				ListItems = new[]
 				{
+					"Invalidating browser cookie",
+					"Resetting faked time",
+					"Doing some stuff around password policy",
+					"Cancelling and waiting for hangfire jobs to finish",
+					"Clearing all connection pools",
 					"Restoring Ccc7 database",
-					"Clearing Analytics database",
-					"Removing browser cookie",
-					"Setting default implementation for INow"
+					"Clearing Analytics database"
 				}
-			};
-
-			return View("Message", viewModel);
+			});
 		}
 
 		public void WaitForHangfireQueue()
@@ -122,17 +124,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			waitForHangfireQueue();
 		}
 
-		public EmptyResult ClearConnections()
+		public ViewResult ClearConnections()
 		{
-			SqlConnection.ClearAllPools();
-			var cookies = Request.Cookies.AllKeys.ToList();
-			foreach (var cookieKey in cookies)
+			clearAllConnectionPools();
+
+			return View("Message", new TestMessageViewModel
 			{
-				HttpCookie myCookie = new HttpCookie(cookieKey);
-				myCookie.Expires = DateTime.Now.AddDays(-1d);
-				Response.Cookies.Add(myCookie);
-			}
-			return new EmptyResult();
+				Title = "Clear connections",
+				Message = "Clearing all connection pools"
+			});
 		}
 
 		[TenantUnitOfWork]
@@ -158,12 +158,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
 			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword);
 
-			var viewModel = new TestMessageViewModel
-								{
-									Title = "Quick logon",
-									Message = "Signed in as " + result.Person.Name
-								};
-			return View("Message", viewModel);
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Quick logon",
+				Message = "Signed in as " + result.Person.Name
+			});
 		}
 
 		public EmptyResult ExpireMyCookie()
@@ -177,24 +176,24 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
 			_sessionSpecificDataProvider.MakeCookie("UserName", wrong);
-			var viewModel = new TestMessageViewModel
-								{
-									Title = "Corrup my cookie",
-									Message = "Cookie has been corrupted on your command!"
-								};
-			return View("Message", viewModel);
+
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Corrup my cookie",
+				Message = "Cookie has been corrupted on your command!"
+			});
 		}
 
 		public ViewResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), "tenantpassword");
 			_sessionSpecificDataProvider.StoreInCookie(data);
-			var viewModel = new TestMessageViewModel
-								{
-									Title = "Incorrect datasource in my cookie",
-									Message = "Cookie has an invalid datasource on your command!"
-								};
-			return View("Message", viewModel);
+
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Incorrect datasource in my cookie",
+				Message = "Cookie has an invalid datasource on your command!"
+			});
 		}
 
 		public ViewResult SetCurrentTime(long ticks)
@@ -204,33 +203,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var dateSet = new DateTime(ticks);
 			updateIocNow(dateSet);
 
-			var viewModel = new TestMessageViewModel
+			return View("Message", new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
 				Message = "Time is set to " + dateSet + " in UTC"
-			};
-			ViewBag.SetTime = "hello";
-
-			return View("Message", viewModel);
+			});
 		}
-
-		public ViewResult SetCurrentTime2(string time)
-		{
-			invalidateRtaCache();
-
-			var dateSet = DateTime.Parse(time);
-			updateIocNow(dateSet);
-
-			var viewModel = new TestMessageViewModel
-			{
-				Title = "Time changed on server!",
-				Message = "Time is set to " + dateSet + " in UTC"
-			};
-			ViewBag.SetTime = "hello";
-
-			return View("Message", viewModel);
-		}
-
+		
 		public ViewResult CheckFeature(string featureName)
 		{
 			var result = false;
@@ -241,13 +220,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				result = _toggleManager.IsEnabled(featureToggle);
 			}
 
-			var viewModel = new TestMessageViewModel
+			return View("Message", new TestMessageViewModel
 			{
 				Title = string.Format("Feature {0}", featureName),
 				Message = result.ToString()
-			};
+			});
+		}
 
-			return View("Message", viewModel);
+		private static void clearAllConnectionPools()
+		{
+			SqlConnection.ClearAllPools();
 		}
 
 		private static void cancelHangfireQueue()

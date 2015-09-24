@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
 
+			TestControllerMethods.ClearConnections();
+
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);

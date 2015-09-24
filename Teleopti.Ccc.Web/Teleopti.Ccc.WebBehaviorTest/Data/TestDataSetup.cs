@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			TestControllerMethods.ClearConnections();
 			DataSourceHelper.RestoreCcc7Database(globalData.HashValue);
 		}
 	}
