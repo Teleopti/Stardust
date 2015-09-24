@@ -58,11 +58,71 @@
 
 	it('should draw gantt chart at the beginning', function() {
 		var test = setUpTarget();
-		outboundService.setGanttVisualization({ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-23' } });
+		outboundService.setGanttVisualization({ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
 
 		expect(test.scope.ganttData).not.toBeDefined();
 		test.target.init();
 		expect(test.scope.ganttData[0].id).toEqual(1);
+	});
+
+	it('should update all campaign statistics in gantt chart', function () {
+		var test = setUpTarget();
+		outboundService.setGanttVisualization({ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
+		outboundService.setGanttVisualization({ Id: 2, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
+
+		expect(test.scope.ganttData).not.toBeDefined();
+
+		var toBeUpdated = [
+			{ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' }, IsScheduled: true, WarningInfo: [] },
+			{ Id: 2, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' }, IsScheduled: false, WarningInfo: [] }
+		];
+		test.target.init();
+		test.target.updateAllCampaignGanttDisplay(toBeUpdated);
+
+		expect(test.scope.ganttData[0].color == '#C2E085');
+		expect(test.scope.ganttData[1].color == '#66C2FF');
+	});
+
+	it('should extend the row when click and collapse when click again', function () {
+		var test = setUpTarget();
+		var campaign = { Id: 1, id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } };
+		outboundService.setGanttVisualization(campaign);
+		
+
+		expect(test.scope.ganttData).not.toBeDefined();
+
+		test.target.init();
+		expect(test.scope.ganttData.length).toEqual(1);
+
+		test.scope.isLoadingSchedule = false;
+
+		test.scope.campaignClicked({}, campaign);
+		expect(test.scope.ganttData.length).toEqual(2);
+		test.scope.campaignClicked({}, campaign);
+		expect(test.scope.ganttData.length).toEqual(1);
+	});
+
+	it('should draw c3 chart when click the gantt chart', function () {
+		var test = setUpTarget();
+		var campaign = { Id: 1, id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } };
+		var campaignVisualization = {
+			Dates: [new Date('2015-09-23'), new Date('2015-09-24')],
+			Plans: [3, 3],
+			ManualPlan: [true, false]
+		};
+		outboundService.setGanttVisualization(campaign);
+		outboundService.setCampaignDetail({ Id: 1, WarningInfo: [] });
+		outboundChartService.setCampaignVisualization(1, campaignVisualization);
+
+		expect(test.scope.ganttData).not.toBeDefined();
+
+		test.target.init();
+		expect(test.scope.ganttData.length).toEqual(1);
+
+		test.scope.isLoadingSchedule = false;
+
+		test.scope.campaignClicked({}, campaign);
+		expect(test.scope.ganttData[1].campaign.graphData).toBeDefined();
 	});
 
 
@@ -93,7 +153,26 @@
 		var campaigns = [];
 		var campaignSummaries = [];
 		var PhaseStatistics;
-		var ganttVisualization = [];//{ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-23' } }
+		var ganttVisualization = [];
+		var campaignDetail = {};
+
+		var listCampaign = [];
+
+		this.setCampaignDetail=function(campaignD) {
+			campaignDetail = campaignD;
+		}
+
+		this.getCampaignDetail=function(id, cb) {
+			cb(campaignDetail);
+		}
+
+		this.setListCampaignsWithinPeriod = function (listCampaigns) {
+			listCampaign.push(listCampaigns);
+		}
+
+		this.listCampaignsWithinPeriod=function(cb) {
+			cb(listCampaign);
+		}
 
 		this.setGanttVisualization = function (ganttV) {
 			ganttVisualization.push(ganttV);
