@@ -85,11 +85,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 
 		[Given(@"I use default forecast period and forecast for one workload")]
 		[When(@"I use default forecast period and forecast for one workload")]
+		[Then(@"I use default forecast period and forecast for one workload")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
 			Browser.Interactions.Click(".wfm-card-selected .forecast-workload");
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+			if (!ScenarioContext.Current.ContainsKey("startdate"))
+				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
+			if (!ScenarioContext.Current.ContainsKey("enddate"))
+				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
 			Browser.Interactions.Click(".do-forecast");
 		}
 
@@ -184,13 +187,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-apply-campaign-button");
 		}
 
+		[When(@"I should see that the total calls for the first day has doubled")]
 		[Then(@"I should see that the total calls for the first day has doubled")]
 		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasDoubled()
 		{
 			Browser.Interactions.HoverOver(".c3-event-rect-0");
-
-			var totalCalls = Browser.Interactions.GetText(".c3-tooltip-name-vtc .value");
-			var calls = Browser.Interactions.GetText(".c3-tooltip-name-vc .value");
+			var totalCalls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vtc:visible .value\").text();");
+			var calls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vc:visible .value\").text();");
 
 			Assert.AreEqual(Math.Round(double.Parse(totalCalls), 0), Math.Round(double.Parse(calls) * 2), 0);
 		}

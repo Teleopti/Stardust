@@ -50,11 +50,12 @@ Scenario: Keep campaigns when reforecasting
 	And I select workload 'TheWorkload1'
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
-	And I am viewing the forecast chart
 	When I select the first day in the forecast chart
 	And I choose to add a campaign
-	And I can see that the selected day is part of the campaign
-	And I increase the day volume to 200 percent
+	And I increase the calls by 100 percent
 	And I apply the campaign
-	Then I should see that the forecasted day volume for the first day has doubled
+	Then I should see that the total calls for the first day has doubled
+	And I use default forecast period and forecast for one workload
+	And I should see that the total calls for the first day has doubled
+
 
