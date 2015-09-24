@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
