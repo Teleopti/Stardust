@@ -76,12 +76,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertAnyContains("." + cssClass.Name, text.Text);
 		}
-
-		[Then(@"I should see the '(.*)'")]
-		public void ThenIShouldSeeThe(CssClass cssClass)
-		{
-			Browser.Interactions.AssertExists("." + cssClass.Name);
-		}
-
 	}
 }
