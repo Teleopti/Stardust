@@ -177,7 +177,6 @@
 		};
 
 		vm.init = function () {
-
 			vm.setupTranslatedStrings();
 			vm.setupToggles();
 		};
