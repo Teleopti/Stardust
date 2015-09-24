@@ -87,13 +87,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			webView1.LoadCompleted += WebView1_LoadCompleted; ;
 			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
+			
 		}
 
 		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
 			JSObject window = wfmWebView.GetDOMWindow();
 			var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
+			//do
+			//{
+			//	iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
+			//} while (iAmCalledFromFatClient == null);
+			if (iAmCalledFromFatClient == null)
+			{
+				setWfmWebUrl(_permissionModule);
+				return;
+			}
+			
 			iAmCalledFromFatClient.Invoke(window, new object[] { });
+			
 		}
 
 		private void WebView1_LoadCompleted(object sender, LoadCompletedEventArgs e)
@@ -298,12 +310,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
-				wfmWebControl.Visible = false;
-				string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
-				wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", raptorServer, _permissionModule));
-
+				//wfmWebControl.Visible = false;
+				setWfmWebUrl(_permissionModule);
 			}
 			
+		}
+
+		public void setWfmWebUrl(string module)
+		{
+			string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
+			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", raptorServer, _permissionModule));
 		}
 
 		private void showMem()
@@ -665,7 +681,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				if (webControl1 != null)
 					webControl1.Visible = false;
-				return;
+				if (wfmWebControl != null)
+					wfmWebControl.Visible = false;
+            return;
 			}
 
 			if (webControl1 != null)
@@ -765,6 +783,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXReady");
+			setWfmWebUrl(_permissionModule);
 		}
 
 		private void webView1_Command(object sender, CommandEventArgs e)

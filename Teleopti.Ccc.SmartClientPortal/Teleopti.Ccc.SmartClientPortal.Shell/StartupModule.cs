@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		protected override void Load(ContainerBuilder builder)
 		{
-            builder.RegisterModule(new CommonModule(_configuration));
-            builder.RegisterType<ApplicationStartup>().SingleInstance();
+			//builder.RegisterModule(new CommonModule(_configuration));
+			builder.RegisterType<ApplicationStartup>().SingleInstance();
 			builder.RegisterType<EnvironmentWindowsUserProvider>()
 					 .As<IWindowsUserProvider>()
 					 .SingleInstance();

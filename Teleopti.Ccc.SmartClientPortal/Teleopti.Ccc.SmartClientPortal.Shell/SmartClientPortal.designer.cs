@@ -205,8 +205,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// splitContainer.Panel2
 			// 
 			this.splitContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.splitContainer.Panel2.Controls.Add(this.wfmWebControl);
 			this.splitContainer.Panel2.Controls.Add(this.webControl1);
+			this.splitContainer.Panel2.Controls.Add(this.wfmWebControl);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Size = new System.Drawing.Size(1024, 637);
@@ -235,7 +235,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.wfmWebControl.TabIndex = 1;
 			this.wfmWebControl.TabStop = false;
 			this.wfmWebControl.Text = "webControl2";
-			this.wfmWebControl.Visible = false;
 			this.wfmWebControl.WebView = this.wfmWebView;
 			// 
 			// webControl1
@@ -412,7 +411,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-84, 116);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-172, 116);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -448,7 +447,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-84, 178);
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-172, 178);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(120, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;

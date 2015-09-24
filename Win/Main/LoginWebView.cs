@@ -24,12 +24,16 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void Warning(string warning)
 		{
-			throw new NotImplementedException();
+			Warning(warning, Resources.LogOn);
 		}
 
 		public void Warning(string warning, string caption)
 		{
-			throw new NotImplementedException();
+			ShowInTaskbar = true;
+			MessageDialogs.ShowWarning(this, warning, caption);
+			ShowInTaskbar = false;
+
+			DialogResult = DialogResult.None;
 		}
 
 		public void Error(string error)
@@ -80,12 +84,12 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void ShowErrorMessage(string message, string caption)
 		{
-			throw new NotImplementedException();
+			MessageDialogs.ShowWarning(this, message, caption);
 		}
 
 		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
 		{
-			throw new NotImplementedException();
+			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
 		}
 
 		public void HandleKeyPress(Message msg, Keys keyData, bool b)
