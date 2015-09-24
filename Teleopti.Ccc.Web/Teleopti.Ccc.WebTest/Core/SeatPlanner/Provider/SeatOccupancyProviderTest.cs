@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(booking);
 			_seatBookingRepository.Add(bookingSeat2);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone, _loggedOnUser);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _loggedOnUser);
 			var occupancyInformation = seatOccupancyProvider.Get (seat.Id.Value, bookingDate);
 			var occupancyInfo = occupancyInformation.Single();
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(booking2ForPerson1);
 			_seatBookingRepository.Add(bookingForPerson2);
 			
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone, _loggedOnUser);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _loggedOnUser);
 			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForCurrentUser (new DateOnlyPeriod(bookingDateStart, bookingDateEnd));
 			Assert.IsTrue (occupancyInformation.Count == 2);
 			occupancyInformation[0].PersonId.Should().Be (_person.Id);
