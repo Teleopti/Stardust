@@ -18,6 +18,9 @@
 			this.getSuggestions = $resource('../api/resourceplanner/planningperiod/:id/suggestions', { id: "@id" }, {
 				query: { method: 'GET', params: {}, isArray: true }
 			});
+			this.publishPeriod = $resource('../api/resourceplanner/planningperiod/:id/publish', {id:"@id"},{
+				query: { method: 'POST', params: {}, isArray: false}
+			});
 			//toggle
 			this.isEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', { toggle: "@toggle" }, {
 				query: { method: 'GET', params: {}, isArray: false }

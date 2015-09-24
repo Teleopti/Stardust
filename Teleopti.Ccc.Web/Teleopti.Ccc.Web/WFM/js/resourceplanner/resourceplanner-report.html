@@ -1,6 +1,6 @@
 ﻿
 	<div>
-		<button class="wfm-btn wfm-btn-primary pull-right">Publish</button>
+		<button class="wfm-btn wfm-btn-primary pull-right" ng-class="{'wfm-btn wfm-btn-primary-disabled': publishedClicked}" ng-click="publishSchedule()">Publish</button>
 		<h4>Scheduling result</h4>
 		{{planningPeriod.StartDate |  amDateFormat:"L"}} - {{planningPeriod.EndDate |  amDateFormat:"L"}}
 		<p>{{scheduledAgents}} agents were successfully scheduled</p>
@@ -34,7 +34,7 @@
                         <td class="skillname">{{ subnode.SkillName }}</td>
                         <td ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}"  >
 							<div class="resourceplanner-box"
-							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3}">
+							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
                             <div class="floater-box">
 	                            <p>{{node.Date.Date |  amDateFormat:"L"}}</p>
 	                            <p>Rel diff: {{node.parseDif}}%</p>

@@ -55,5 +55,14 @@ describe('ResourceplannerReportCtrl', function () {
 
         expect(scope.dayNodes[0].SkillDetails[0].weekend).toBe(undefined);
     }));
+	it('should be possible to publish a schudule', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var mockStateParams = {planningperiod:{id:0},result:{BusinessRulesValidationResults:[[]]},interResult:{_skillResultList:[{SkillName:'test',SkillDetails:[{Date:{Date:'2015-11-12'}}]}]}};
+
+		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: mockStateParams });
+
+		scope.publishSchedule()
+		expect(scope.publishedClicked).toBe(true);
+	}));
 
 });
