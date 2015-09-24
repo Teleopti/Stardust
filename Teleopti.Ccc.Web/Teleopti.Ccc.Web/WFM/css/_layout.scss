@@ -11,9 +11,9 @@ ul {
 }
 
 a:focus {
-   outline: none!important; 
-   outline: 0px auto -webkit-focus-ring-color!important; 
-   outline-offset: 0px; 
+   outline: none!important;
+   outline: 0px auto -webkit-focus-ring-color!important;
+   outline-offset: 0px;
 }
 
 .current-nav{
@@ -27,7 +27,7 @@ a:focus {
   left: 0;
   right: 0;
 }
- 
+
 /*override bootstrap*/
 .row {
 	margin-right: 0;
@@ -83,7 +83,7 @@ label {
 
 .growl-item .close {
 	text-shadow: none;
-	opacity: 1; 
+	opacity: 1;
 	margin: 0 5px;
 	font-size: 16px!important;
 }
@@ -128,7 +128,7 @@ label {
 
 .navbar i{
 	  vertical-align: middle;
-} 
+}
 
 .result-icon i{
 	color:white!important;
@@ -146,13 +146,19 @@ md-tooltip {
 		position:relative;
 		margin-left:auto;
 		margin-right:auto;
-		margin-top:-20px;
 		max-height: 50%;
 		z-index:2;
 	}
 
-	.start-content {
-		background: white;
+	.start-links{
+		display: flex;
+		justify-content: space-around;
+		width:100%;
+
+		a{
+			width: 130px;
+			text-align: center;
+		}
 	}
 
 	.start-panel {
@@ -161,53 +167,58 @@ md-tooltip {
 		background: white;
 	}
 
-	.start-intro {
-		color: white;
-		width:75%;
-		margin:0 12%;
-		position:absolute;
-		z-index:1;
+	.start-tutorial{
+		position:relative!important;
+		display: inline-flex;
+		width:100%;
 	}
-	.tutorial-btn{
-		position:relative!important; 
-		float:right;
+
+	.tour-btn{
+		position: absolute;
+		right:0;
+		top:-5px;
 	}
 
 	.social-footer {
 		padding: 5px 0;
-	} 
-	
-	.bubble-wrap {
-		position: relative;
-		top: 0;
-		left: 0;
-		width: 100%;
-		Height: 20vh;
-		background: white;
-		overflow: hidden;
 	}
 
 	.start-spacer-down {
 		margin-bottom: 15px;
+		background:white;
 	}
 
 	.start-blog-btn {
 		margin-top: 3rem;
 	}
 
+	.bubble-wrap {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 10vh;
+			background: white;
+			overflow: hidden;
+
+			@media screen and (min-width:0\0) {
+				background: #66C2FF;
+			}
+		}
+
 	.bubble {
 		height: 60px;
 		width: 60px;
-		background-color: #0099FF;
+		background-color: #66C2FF;
 		top: 15vh;
 		right: 50%;
 		position: absolute;
 		border-radius: 50%;
 		-moz-transform: scale(80);
 		-webkit-transform: scale(80);
-		-moz-transform: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
-		-webkit-animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
-		animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
+		-moz-transform: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
+		-webkit-animation: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
+		animation: bg-in 5s cubic-bezier(0.2, 0.3, 0, 1);
 	}
 
 	@-webkit-keyframes bg-in {

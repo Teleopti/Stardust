@@ -1,27 +1,18 @@
 ﻿<div class ="bubble-wrap">
-
 	<div class="bubble">
 	</div>
-	<div class="wfm-block start-intro">
-		<div class="hidden-sm hidden-xs">
-			<h2>Hello world!</h2>
-			<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-				sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-				magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-				ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
-			</p>
-		</div>
-	</div>
+</div>
+<div class="row">
 
-	<div class="tutorial-btn">
-		<div ng-cloak class="modal-box">
-			<button ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-default">Take tour</button>
+	<div class="start-tutorial">
+		<h3>Customer center</h3>
+		<div ng-cloak class="modal-box tour-btn">
+			<button ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-default pull-right">Take tour</button>
 			<div ng-cloak ng-show="modalLaunch2">
 				<div class="modalbg">
 					<div class="dialog">
 						<div class="wfm-slide-tabs">
-							<md-content style="padding:0!important;">
+							<md-content>
 								<md-tabs md-dynamic-height md-border-bottom>
 									<md-tab label="1. help">
 										<md-content class="md-padding">
@@ -60,14 +51,13 @@
 			</div>
 		</div>
 	</div>
-</div>
 
 <div class="start-wrapper">
 	<div class="start-content">
 		<div layout="row" ng-cloak>
 			<div flex data-ng-controller="FeedCtrl" ng-init="loadFeed($event)">
-				<div class="sub-header">Teleopti blog</div>
-				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 2">
+				<div class="bottom-header">Teleopti blog</div>
+				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 1">
 					<div class="row">
 						<div class="col-md-11">
 							<div class="wfm-block">
@@ -112,113 +102,95 @@
 			</div>
 		</div>
 
+		<h4>Teleopti services</h4>
 		<div layout="row" class="start-spacer-down">
 			<div flex class="start-panel material-depth-1">
-				<div class="sub-header">Learn more</div>
 				<div class="wfm-block">
-					<ul class="wfm-list">
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/faq.aspx" target="_blank">
-							<li>
-								FAQ
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/knowledge_center.aspx" target="_blank">
-							<li>
-								Knowledge center
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/tutorials-elearning.aspx" target="_blank">
-							<li>
-								Video tutorials
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/discussion-forum.aspx" target="_blank">
-							<li>
-								Forum
-							</li>
-						</a>
-					</ul>
+					<h4>Forum</h4>
+					<p>
+						Discuss Teleopti WFM
+					</p>
+					<a href="http://www.teleopti.com/wfm/customers/customer-center/discussion-forum.aspx" class="wfm-btn wfm-btn-invis-default pull-right">view</a>
 				</div>
 			</div>
 			<div flex class="start-panel material-depth-1">
-				<div class="sub-header">WFM Services</div>
 				<div class="wfm-block">
-					<ul class="wfm-list">
-						<a href="https://www.teleopti.com/wfm/teleopti-wfm-solution/consulting-services.aspx" target="_blank">
-							<li>
-								Consulting
-							</li>
-						</a>
-						<a href="https://www.teleopti.com/wfm/customers/customer-training.aspx" target="_blank">
-							<li>
-								Training
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/release_notes.aspx" target="_blank">
-							<li>
-								Release notes
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/wfm_product_documentation.aspx" target="_blank">
-							<li>
-								Product documentation
-							</li>
-						</a>
-					</ul>
+					<h4>Online help</h4>
+					<p>
+						Get some help online
+					</p>
+					<a class="wfm-btn wfm-btn-invis-default pull-right">view</a>
+				</div>
+			</div>
+		</div>
+		<div layout="row" class="start-spacer-down">
+			<div flex class="start-panel material-depth-1">
+				<div class="wfm-block">
+					<h4>FAQ</h4>
+					<p>
+						Find answers to freqently asked questions
+					</p>
+					<a href="http://www.teleopti.com/wfm/customers/customer-center/faq.aspx" class="wfm-btn wfm-btn-invis-default pull-right">view</a>
+				</div>
+			</div>
+			<div flex class="start-panel material-depth-1">
+				<div class="wfm-block">
+					<h4>Video tutorials</h4>
+					<p>
+						Browse tutorials by categories
+					</p>
+					<a href="http://www.teleopti.com/wfm/customers/customer-center/tutorials-elearning.aspx" class="wfm-btn wfm-btn-invis-default pull-right">
+						view
+						<md-tooltip> Watch vid </md-tooltip>
+					</a>
 				</div>
 			</div>
 		</div>
 
-		<div layout="row" class="start-spacer-down" style="justify-content: space-between;">
-			<!--<div flex class="start-panel material-depth-1">
-			<div class="sub-header">Upcoming</div>
-			<div class="wfm-block">lorem ipsum</div>
-		</div>-->
-			<div flex class="start-panel material-depth-1">
-				<div class="sub-header">Feedback</div>
-				<div class="wfm-block">
-					<ul class="wfm-list">
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/service_desk/report_an_incident.aspx" target="_blank">
-							<li>
-								<i class="mdi mdi-bug"> </i>Report a bug
-							</li>
-						</a>
-						<a href="http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx" target="_blank">
-							<li>
-								<i class="mdi mdi-flash"> </i>Give feedback
-							</li>
-						</a>
-						<a href="#" target="_blank">
-							<li>
-								<i class="mdi mdi-star-half"> </i>Rate your experience
-							</li>
-						</a>
-					</ul>
-				</div>
+		<div layout="row" class="start-links start-spacer-down row">
+			<a href="https://www.teleopti.com/wfm/teleopti-wfm-solution/consulting-services.aspx" target="_blank">
+				<i class="mdi mdi-radiobox-marked wfm-fab mini success"></i></br>Consulting service
+			</a>
+
+			<a href="https://www.teleopti.com/wfm/customers/customer-training.aspx" target="_blank">
+					<i class="mdi mdi-school wfm-fab mini success"></i></br>Training
+			</a>
+
+			<a href="http://www.teleopti.com/wfm/knowledge_center.aspx" target="_blank">
+					<i class="mdi mdi-food-apple wfm-fab mini success"></i></br>Knowledge center
+			</a>
+
+			<a href="http://www.teleopti.com/wfm/customers/customer-center/release_notes.aspx" target="_blank">
+					<i class="mdi mdi-file-document wfm-fab mini success"></i></br>Release notes
+			</a>
+
+			<a href="http://www.teleopti.com/wfm/customers/customer-center/wfm_product_documentation.aspx" target="_blank">
+					<i class="mdi mdi-file-document wfm-fab mini success"></i></br>Documentation
+			</a>
+		</div>
+
+
+		<div class="modal-footer">
+			<div class="pull-left">
+				<a href="http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx" target="_blank">
+					<i class="mdi mdi-star-half"></i> Give feedback
+				</a>
+
+				<a href="http://www.teleopti.com/wfm/customers/customer-center/service_desk/report_an_incident.aspx" target="_blank">
+					<i class="mdi mdi-bug"></i> Report a bug
+				</a>
 			</div>
-			<div flex class="start-panel material-depth-1">
-				<div class="sub-header">Follow Teleopti</div>
-				<div class="wfm-block">
-					<ul class="wfm-list">
-						<a href="https://www.linkedin.com/company/teleopti" target="_blank">
-							<li>
-								<i class="mdi mdi-linkedin"> </i>LinkedIn
-							</li>
-						</a>
-						<a href="https://www.facebook.com/Teleopti" target="_blank">
-							<li>
-								<i class="mdi mdi-facebook"> </i>Facebook
-							</li>
-						</a>
-						<a href="https://twitter.com/Teleopti" target="_blank">
-							<li>
-								<i class="mdi mdi-twitter"> </i>Twitter
-							</li>
-						</a>
-					</ul>
-				</div>
-			</div>
+
+			Find Teleopti on:
+			<a href="https://www.linkedin.com/company/teleopti" target="_blank">
+				<i class="mdi mdi-linkedin"> </i> LinkedIn
+			</a>
+			<a href="https://www.facebook.com/Teleopti" target="_blank">
+				<i class="mdi mdi-facebook"> </i>Facebook
+			</a>
+			<a href="https://twitter.com/Teleopti" target="_blank">
+				<i class="mdi mdi-twitter"> </i> Twitter
+			</a>
 		</div>
 	</div>
 </div>
-
