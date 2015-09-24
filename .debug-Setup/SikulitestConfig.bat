@@ -45,5 +45,33 @@ timeout 10
 cd "c:\Program Files\IIS Express\"
 start iisexpress /AppPool:Clr4IntegratedAppPool
 
+::final changes on Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET commonFolder=%ROOTDIR%\.debug-setup\common
+ECHO %configPath% >>%logFile%
+ECHO %commonFolder% >>%logFile%
+
+COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
+
+SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\Domain\FeatureFlags\Toggles.txt
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='TenantServer']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\nhib\SikulitestConfig.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='ConfigServer']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\nhib\SikulitestConfig.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='ShowMem']
+SET attributeName=value
+SET attributeValue=true
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
 ENDLOCAL
 GOTO:EOF
