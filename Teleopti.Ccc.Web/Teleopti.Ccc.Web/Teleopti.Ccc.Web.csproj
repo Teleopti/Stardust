@@ -1203,6 +1203,7 @@
     <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
+    <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />

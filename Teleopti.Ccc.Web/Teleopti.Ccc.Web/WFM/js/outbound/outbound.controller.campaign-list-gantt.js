@@ -245,6 +245,18 @@
 				}				
 			}			
 		}
+		return {
+			init: init,
+			readIndex: readIndex,
+			isOverStaffing: isOverStaffing,
+			getCommandCallback: getCommandCallback,
+			getGraphData: getGraphData,
+			setGanttOptions: setGanttOptions,
+			getGanttVisualization: getGanttVisualization,
+			updateGanttRowFromCampaignSummary: updateGanttRowFromCampaignSummary,
+			updateAllCampaignGanttDisplay: updateAllCampaignGanttDisplay,
+			updateSingleCampaignGanttDisplay: updateSingleCampaignGanttDisplay
+		}
 	}
 
 })();
