@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	{
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
+		private readonly ActivityChangesChecker _activityChangesChecker;
 
-		public HangfireServerStarter(ILifetimeScope lifetimeScope, IConfigReader config)
+		public HangfireServerStarter(ILifetimeScope lifetimeScope, IConfigReader config, ActivityChangesChecker activityChangesChecker)
 		{
 			_lifetimeScope = lifetimeScope;
 			_config = config;
+			_activityChangesChecker = activityChangesChecker;
 		}
 
 		const int setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully = 4;
@@ -56,17 +58,18 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
 
 
-
-			GlobalConfiguration.Configuration.UseSqlServerStorage(
-				_config.ConnectionString("Hangfire"),
-				new SqlServerStorageOptions
-				{
-					PrepareSchemaIfNecessary = false,
-					QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
-					JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
-					CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
-				});
-
+			GlobalConfiguration.Configuration.UseStorage(
+				new SqlStorageWithActivityChangesCheckerComponent(
+					_activityChangesChecker,
+					_config.ConnectionString("Hangfire"),
+					new SqlServerStorageOptions
+					{
+						PrepareSchemaIfNecessary = false,
+						QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
+						JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
+						CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
+					}));
+			
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
 
@@ -93,8 +96,6 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				// for optimization, remove some internal handlers because at this time
 				// the only thing they do is insert into the Hangfire.Counters table
 				// add handlers that does nothing with the same state name
-				// if you have read this far, you might want to check the SqlStorageConfiguration
-				// class aswell
 				// NOT FUTURE PROOF! DANGER DANGER!
 				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == SucceededState.StateName));
 				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == DeletedState.StateName));
@@ -113,6 +114,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 
 			if (dashboard)
 				app.UseHangfireDashboard();
+
 
 		}
 
@@ -135,4 +137,5 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		}
 
 	}
+
 }

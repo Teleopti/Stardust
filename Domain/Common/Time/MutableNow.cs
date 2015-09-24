@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.Domain.Common.Time
 			return _mutatedUtc ?? DateTime.UtcNow;
 		}
 
+		public void Reset()
+		{
+			_mutatedUtc = null;
+		}
+
 		public void Is(DateTime? utc)
 		{
 			_mutatedUtc = utc;

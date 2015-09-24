@@ -4,18 +4,14 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using Hangfire;
 using Hangfire.States;
 using Microsoft.IdentityModel.Claims;
-using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -28,6 +24,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
@@ -36,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;
+		private readonly INow _now;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly ISsoAuthenticator _authenticator;
@@ -49,9 +47,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
+		private readonly ActivityChangesChecker _activityChangesChecker;
 
 		public TestController(
 			IMutateNow mutateNow, 
+			INow now,
 			ICacheInvalidator cacheInvalidator, 
 			ISessionSpecificDataProvider sessionSpecificDataProvider, 
 			ISsoAuthenticator authenticator, 
@@ -64,9 +64,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ILoadPasswordPolicyService loadPasswordPolicyService, 
 			ISettings settings, 
 			IPhysicalApplicationPath physicalApplicationPath, 
-			IFindPersonInfo findPersonInfo)
+			IFindPersonInfo findPersonInfo,
+			ActivityChangesChecker activityChangesChecker)
 		{
 			_mutateNow = mutateNow;
+			_now = now;
 			_cacheInvalidator = cacheInvalidator;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
@@ -80,6 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
+			_activityChangesChecker = activityChangesChecker;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
-			updateIocNow(null);
+			_mutateNow.Reset();
 
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
@@ -200,16 +203,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			invalidateRtaCache();
 
-			var dateSet = new DateTime(ticks);
-			updateIocNow(dateSet);
+			_mutateNow.Is(new DateTime(ticks));
+
+			_activityChangesChecker.WaitForOneExecution();
 
 			return View("Message", new TestMessageViewModel
 			{
 				Title = "Time changed on server!",
-				Message = "Time is set to " + dateSet + " in UTC"
+				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-		
+
 		public ViewResult CheckFeature(string featureName)
 		{
 			var result = false;
@@ -252,16 +256,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Thread.Sleep(20);
 			}
 		}
-
-		private void updateIocNow(DateTime? dateTimeSet)
-		{
-			_mutateNow.Is(dateTimeSet);
-		}
-
+		
 		private void invalidateRtaCache()
 		{
 			if (_cacheInvalidator != null)
 				_cacheInvalidator.InvalidateAll();
 		}
+		
 	}
 }

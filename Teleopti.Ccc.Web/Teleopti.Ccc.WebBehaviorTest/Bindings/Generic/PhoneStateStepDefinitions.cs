@@ -44,22 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					IsSnapshot = false
 				});
 		}
-
-		public static void CheckForActivityChange()
-		{
-			DataMaker.Data().AllPersons().ForEach(p =>
-			{
-				Http.PostJson(
-					"Rta/ActivityChange/CheckFor",
-					new CheckForActivityChangeWebModel
-					{
-						PersonId = p.Person.Id.ToString(),
-						BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString(),
-						Tenant = UserConfigurable.DefaultTenantName
-					});
-			});
-		}
-
+		
 		[Given(@"there is a datasouce with id (.*)")]
 		public void GivenThereIsADatasouceWithId(int datasourceId)
 		{

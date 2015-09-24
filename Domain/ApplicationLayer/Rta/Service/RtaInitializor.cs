@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				_adherenceAggregator.Initialize();
 				_synchronizer.Initialize();
+
 				_tenants.Initialized(_dataSource.CurrentName());
 			}
 		}

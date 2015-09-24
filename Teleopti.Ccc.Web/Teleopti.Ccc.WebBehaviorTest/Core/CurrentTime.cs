@@ -27,8 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			_currentTime = time;
 			TestControllerMethods.SetCurrentTime(Value());
-			if (FeatureContext.Current.FeatureInfo.Title.StartsWith("Real time adherence"))
-				PhoneStateStepDefinitions.CheckForActivityChange();
 			Navigation.Navigation.ReapplyFakeTime();
 		}
 	}

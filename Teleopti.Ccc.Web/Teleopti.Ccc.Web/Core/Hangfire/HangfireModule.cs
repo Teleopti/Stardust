@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<HangfireServerStarter>().As<IHangfireServerStarter>().SingleInstance();
+			builder.RegisterType<ActivityChangesChecker>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
 
