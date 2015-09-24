@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 
 		[Given(@"Forecast has succeeded")]
 		[When(@"Forecast has succeeded")]
+		[Then(@"Forecast has succeeded")]
 		public void WhenForecastHasSucceeded()
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".wfm-card-list md-card:last card-header .mdi-check");
@@ -191,11 +193,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Then(@"I should see that the total calls for the first day has doubled")]
 		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasDoubled()
 		{
-			Browser.Interactions.HoverOver(".c3-event-rect-0");
-			var totalCalls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vtc:visible .value\").text();");
-			var calls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vc:visible .value\").text();");
-
-			Assert.AreEqual(Math.Round(double.Parse(totalCalls), 1), Math.Round(double.Parse(calls) * 2), 1);
+			var totalCalls = Browser.Interactions.Javascript("return angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0];");
+			var calls = Browser.Interactions.Javascript("return angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0];");
+			Assert.AreEqual(Math.Round(double.Parse(calls) * 2, 1), Math.Round(double.Parse(totalCalls), 1));
 		}
 
 		[Given(@"I am viewing the forecast chart")]
