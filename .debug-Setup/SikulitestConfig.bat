@@ -8,7 +8,8 @@ SET AnalyticsDB=%~2
 SET configuration=%3
 SET MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 SET logFile=%ROOTDIR%\.debug-setup\SikuliConfig.log
-
+SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
+SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
 ::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
@@ -21,9 +22,10 @@ ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 
+:: run fix my config to fix config files on web and SmartClientPortal configs
+FixMyConfig %CCC7DB% %AnalyticsDB% %configuration%
+
 ::telling what files to modify
-SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
-SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\SikulitestConfig.json,BuildArtifacts\SikulitestConfig.json>>%buildServerConfigFiles%
