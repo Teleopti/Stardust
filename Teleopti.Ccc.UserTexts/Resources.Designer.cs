@@ -16588,15 +16588,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Report For Current Conditions.
-        /// </summary>
-        public static string NoReportForCurrentConditions {
-            get {
-                return ResourceManager.GetString("NoReportForCurrentConditions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No requests could be found.
         /// </summary>
         public static string NoRequestsFound {

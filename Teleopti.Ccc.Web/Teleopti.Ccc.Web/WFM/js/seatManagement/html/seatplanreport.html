@@ -55,7 +55,8 @@
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
-		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
+		<h2>{{'SeatPlanReport' | translate }}</h2>
+		<h5 ng-if="vm.seatBookings.length == 0 ">{{'NoDataAvailable' | translate}}</h5>
 		<seat-plan-report-table seat-bookings="vm.seatBookings" ng-if="!vm.isLoadingReport"></seat-plan-report-table>
 		<div class="seatplan-paging-container pull-right">
 			<div class="seatplan-report-paging material-depth-1" ng-if="!vm.isLoadingReport && vm.totalPages != 1 && vm.totalPages != 0">
@@ -70,7 +71,8 @@
 	</div>
 
 	<div class="seatplan-report-content" id="seatplan-report-to-print">
-		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
+		<h2>{{'SeatPlanReport' | translate}}</h2>
+		<h5 ng-if="vm.seatBookings.length == 0 ">{{'NoDataAvailable' | translate}}</h5>
 		<seat-plan-report-table seat-bookings="vm.seatBookingsAll"></seat-plan-report-table>
 	</div>
 
