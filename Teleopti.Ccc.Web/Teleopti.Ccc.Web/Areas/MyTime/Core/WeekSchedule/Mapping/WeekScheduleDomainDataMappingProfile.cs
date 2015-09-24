@@ -61,7 +61,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay).ToList();
 									var personRequests = _personRequestProvider.RetrieveRequests(week);
 									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
-									var seatBookings = _seatBookingProvider.GetSeatBookingsForCurrentUser (week);
+
+									var showSeatBookingPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.ViewSeatBooking) &&
+										_toggleManager.IsEnabled(Toggles.Wfm_SeatPlan_ShowSeatBookingInMyTime_34799);
+
+									var seatBookings = showSeatBookingPermission ? _seatBookingProvider.GetSeatBookingsForCurrentUser (week) : null;
 																																				
 									var earliest =
 										scheduleDays.Min(
@@ -222,11 +228,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var personalAccountPermission =
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
-									var showSeatBookingPermission =
-										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.SeatPlanner) &&
-										_toggleManager.IsEnabled(Toggles.Wfm_SeatPlan_ShowSeatBookingInMyTime_34799);
-
+									
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData

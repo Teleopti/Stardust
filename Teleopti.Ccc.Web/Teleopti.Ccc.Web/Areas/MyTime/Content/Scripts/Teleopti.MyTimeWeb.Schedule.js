@@ -423,7 +423,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
-			var fullSeatName = seatBooking.LocationPath.indexOf("/") > 0 ?
+			var fullSeatName = seatBooking.LocationPath != '' ?
 				seatBooking.LocationPath + '/' + seatBooking.SeatName :
 				seatBooking.SeatName;
 
