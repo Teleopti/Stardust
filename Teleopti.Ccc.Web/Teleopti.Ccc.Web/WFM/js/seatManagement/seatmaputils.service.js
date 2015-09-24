@@ -232,12 +232,36 @@
 				return seats;
 			};
 
-			function getSeatObject(canvas, seatIndex) {
+			function getSeatObject(canvas, seatIndex, isFirstSeat) {
+
 				var seatObjects = getObjectsByType(canvas, 'seat');
 				if (seatObjects.length > 0) {
-					return seatObjects[seatIndex];
+
+					if (isFirstSeat) {
+						return seatObjects[getTopLeftSeat(canvas)];
+					}else {
+						return seatObjects[seatIndex];
+					}
 				}
 				return null;
+			};
+
+			function getTopLeftSeat(canvas) {
+
+				var seatObjects = getObjectsByType(canvas, 'seat');
+				var firstSeatPositionX = seatObjects[0].left;
+				var firstSeatPositionY = seatObjects[0].top;
+				var firstSeatIndex = 0;
+				for (var i in seatObjects) {
+					var seat = seatObjects[i];
+					if ((seat.left + seat.top) <= (firstSeatPositionX + firstSeatPositionY)) {
+						firstSeatPositionX = seat.left;
+						firstSeatPositionY = seat.top;
+						firstSeatIndex = i;
+					}
+				}
+
+				return firstSeatIndex;
 			};
 
 			function getHighestSeatPriority(canvas) {
@@ -345,7 +369,7 @@
 
 				var occupiedSeatObjects = [];
 				var seatDict = getObjectsByTypeDict(canvas, 'seat');
-				
+
 				seatInfo.forEach(function (seat) {
 					if (seat.IsOccupied) {
 						var occupiedSeat = seatDict[seat.Id];
@@ -355,15 +379,15 @@
 
 				var occupiedSeatObjectProcessedCount = 0;
 
-				var callbackOnLoadImage = function() {
+				var callbackOnLoadImage = function () {
 					occupiedSeatObjectProcessedCount++;
 					if (occupiedSeatObjectProcessedCount == occupiedSeatObjects.length) {
 						canvas.renderAll();
 					};
 				};
 
-				occupiedSeatObjects.forEach(function(occupiedSeat) {
-					loadSeatBookedImage(canvas, occupiedSeat,  callbackOnLoadImage);
+				occupiedSeatObjects.forEach(function (occupiedSeat) {
+					loadSeatBookedImage(canvas, occupiedSeat, callbackOnLoadImage);
 				});
 
 			};
@@ -383,7 +407,7 @@
 				});
 
 			};
-			
+
 			function getTimeZoneAdjustmentDisplay(booking) {
 
 				var belongsToDateMoment = moment(booking.BelongsToDate.Date);
@@ -451,8 +475,5 @@
 			};
 
 			return utils;
-
 		}]);
-
-
 }());

@@ -23,6 +23,7 @@
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
 		vm.previousSelectedSeatIndex = 0;
+		vm.selectTopLeftSeat = false;
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -45,7 +46,7 @@
 				resize();
 			});
 
-			$scope.$on('sidenav:toggle', function() {
+			$scope.$on('sidenav:toggle', function () {
 				resize();
 			});
 
@@ -53,6 +54,8 @@
 
 			createDocumentListeners();
 			vm.isLoading = true;
+			vm.selectTopLeftSeat = true;
+
 			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
@@ -82,17 +85,20 @@
 			if (vm.isInEditMode) return;
 
 			vm.isLoading = true;
+			vm.selectTopLeftSeat = true;
+
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		vm.refreshSeatMap = function () {
+		vm.refreshSeatMap = function (selectTopLeftSeat) {
+			vm.selectTopLeftSeat = selectTopLeftSeat ? true : false;
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
 		};
 
 		vm.onChangeOfDate = function () {
-			vm.refreshSeatMap();
+			vm.refreshSeatMap(true);
 			vm.isDatePickerOpened = false;
 		};
 
@@ -130,7 +136,7 @@
 				};
 			});
 		};
-		
+
 		function onSeatOccupancyLoaded(occupancyDetails, seat) {
 
 			if (occupancyDetails && occupancyDetails.length) {
@@ -157,12 +163,12 @@
 				selectSeatToViewOccupancy(seat);
 
 				var seats = canvasUtils.getSeats(canvas);
-				
-				seats.forEach(function(currentSeat,seatIndex) {
+
+				seats.forEach(function (currentSeat, seatIndex) {
 					if (currentSeat.Id == seat.id)
 						vm.previousSelectedSeatIndex = seatIndex;
 				});
-				
+
 				canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
 					onSeatOccupancyLoaded(result, seat);
 				});
@@ -182,9 +188,9 @@
 			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		function selectSeat(seatIndex) {
+		function selectSeat(seatIndex, isFirstSeat) {
 			if (vm.showOccupancy) {
-				var seat = canvasUtils.getSeatObject(canvas,seatIndex);
+				var seat = canvasUtils.getSeatObject(canvas, seatIndex, isFirstSeat);
 
 				if (seat != null) {
 					loadOccupancyForSeat(seat);
@@ -203,33 +209,29 @@
 				vm.breadcrumbs = data.BreadcrumbInfo;
 			}
 
-			selectSeat(vm.previousSelectedSeatIndex);
-			vm.previousSelectedSeatIndex = 0;
+			if (vm.showOccupancy) {
+				canvasUtils.showSeatBooking(canvas, data.Seats);
+				canvasUtils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas);
+			}
 
+			selectSeat(vm.previousSelectedSeatIndex, vm.selectTopLeftSeat);
+			vm.previousSelectedSeatIndex = 0;
 
 			resetZoom();
 			vm.isLoading = false;
 		};
 
 		function onLoadSeatMapSuccess(data) {
-
-			if (vm.showOccupancy) {
-				canvasUtils.showSeatBooking(canvas, data.Seats);
-				canvasUtils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas);
-			}
-
 			resetOnLoad(data);
 
-			$timeout(function() {
+			$timeout(function () {
 				$scope.$apply();
 			});
-			
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {
 			resetOnLoad(data);
 		};
-
 	};
 }());
 
