@@ -43,7 +43,7 @@
 <div class="permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-        <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+        <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
 		</ol>
 	</div>
 
@@ -53,12 +53,12 @@
     <ul class="wfm-list apply-list" >
         <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0}" ng-click="toggleOrganizationSelection(this)">
             <span ng-if="node.selected"><b class="mdi mdi-check list-mark"></b></span>
-            <div class="apply-list-text">{{node.Name}}<!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected--></div>
+            <div class="apply-list-text">{{node.Name}}</div>
         </li>
     </ul>
 
     <div ui-tree-nodes="" ng-model="node.ChildNodes" class="padding-reset">
-        <div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index"
+        <div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle"
             ui-tree-node ng-include="'nodes_bu_renderer.html'">
 
         </div>
