@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						Date = dateOnly,
 						RelativeDifference = relativeDifference
 					};
-					detail.ColorId = mapColorId(detail.RelativeDifference, skill);
+
+					detail.ColorId = skillDay != null && skillDay.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
 				}
 			}

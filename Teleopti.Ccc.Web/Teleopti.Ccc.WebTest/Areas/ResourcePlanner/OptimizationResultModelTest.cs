@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
+			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
 			_target.Map(_skillDays, _period);
 			Assert.AreEqual(0, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
+			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
 			_target.Map(_skillDays, _period);
 			Assert.AreEqual(1, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
@@ -119,6 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
+			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
 			_target.Map(_skillDays, _period);
 			Assert.AreEqual(2, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
@@ -136,6 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
+			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
 			_target.Map(_skillDays, _period);
 			Assert.AreEqual(3, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
@@ -160,17 +164,20 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldAddClosedDaysMappedAsWhite()
+		public void ShouldMapColorId4IfSkillDayIsClosed()
 		{
-			_period = new DateOnlyPeriod(new DateOnly(2015, 9, 4), new DateOnly(2015, 9, 6));
-			_skillDay2 = SkillDayFactory.CreateSkillDay(_skill1, new DateOnly(2015, 9, 6)); //leaving one missing date
-			_skillDay2.SkillDayCalculator = new SkillDayCalculator(_skill1, new List<ISkillDay> { _skillDay2 }, new DateOnlyPeriod(new DateOnly(2015, 9, 5), new DateOnly(2015, 9, 5)));
-			_skillDays.Add(_skill1, new List<ISkillDay> { _skillDay1, _skillDay2 });
+			var skillDay = MockRepository.GenerateMock<ISkillDay>();
+			var skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill1, new DateTime(2015, 9, 4, 12, 0, 0, DateTimeKind.Utc), 0, 0);
+			skillStaffPeriod.SetCalculatedResource65(12);
+			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
+			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
+
+			skillDay.Stub(x => x.SkillStaffPeriodCollection)
+				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
+			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(false, false));
 			_target.Map(_skillDays, _period);
-			Assert.AreEqual(_skillDay1.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].Date);
-			Assert.AreEqual(new DateOnly(2015, 9, 5), _target.SkillResultList.ToList()[0].SkillDetails.ToList()[1].Date);
-			Assert.AreEqual(0, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[1].ColorId);
-			Assert.AreEqual(_skillDay2.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[2].Date);
+			Assert.AreEqual(4, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
 		}
 	}
 }
