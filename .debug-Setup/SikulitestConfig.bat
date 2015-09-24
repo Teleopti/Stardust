@@ -27,7 +27,7 @@ ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 
 :: run fix my config to fix config files on web and SmartClientPortal configs
-call %ROOTDIR%\.debug-setup\FixMyConfig %CCC7DB% %AnalyticsDB% %configuration%
+FixMyConfig %CCC7DB% %AnalyticsDB% %configuration%
 
 ::telling what files to modify
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
@@ -41,6 +41,8 @@ ECHO RC>"c:\nhib\Toggles.txt"
 :: write WFM connection strings to tenant database
 ECHO Set WFM path in Tenant table ...
 SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql"
+
+CALL "%ROOTDIR%\.debug-setup\FixMyConfig.bat" "%CCC7DB%" "%AnalyticsDB%"
 
 :: start iis express
 cd "c:\Program Files\IIS Express\"
