@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			var sent = Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();

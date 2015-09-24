@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class RtaTestAttribute : IoCTestAttribute
 	{
-		public RtaTenants Tenants;
-
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();

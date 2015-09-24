@@ -224,20 +224,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			return 1;
 		}
-
+		
 		[InfoLog]
 		[RtaDataSourceScope]
-		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
+		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
 		{
-			_initializor.EnsureTenantInitialized();
-			_cacheInvalidator.InvalidateSchedules(input.PersonId);
-			process(
-				null,
-				new PersonOrganizationData
-				{
-					BusinessUnitId = input.BusinessUnitId,
-					PersonId = input.PersonId
-				});
+			_cacheInvalidator.InvalidateSchedules(personId);
 		}
 
 		[InfoLog]
@@ -245,13 +237,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void CheckForActivityChanges(string tenant)
 		{
 			_activityChangeProcessor.CheckForActivityChanges();
-		}
-
-		[InfoLog]
-		[RtaDataSourceScope]
-		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
-		{
-			_cacheInvalidator.InvalidateSchedules(personId);
 		}
 
 		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)

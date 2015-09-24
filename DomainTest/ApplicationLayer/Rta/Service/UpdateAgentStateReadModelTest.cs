@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource(state.SourceId)
 				.WithUser(state.UserCode, personId, businessUnitId);
 
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.StoredState.PersonId.Should().Be(personId);
 		}
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource(state.SourceId)
 				.WithUser(state.UserCode, personId, businessUnitId);
 
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.PersistedReadModel.NextStart.Should().Be(null);
 		}

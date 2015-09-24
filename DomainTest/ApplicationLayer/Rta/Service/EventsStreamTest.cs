@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class EventsStreamTest
 	{
-		public FakeRtaDatabase database;
+		public FakeRtaDatabase Database;
 		public FakeEventPublisher publisher;
 		public MutableNow now;
 		public Domain.ApplicationLayer.Rta.Service.Rta target;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var brejk = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
@@ -83,9 +83,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			publisher.Clear();
 
 			now.Is("2014-10-20 9:30");
-			database.ClearSchedule(personId);
-			database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
-			target.CheckForActivityChange(personId, businessUnitId);
+			Database.ClearSchedule(personId);
+			Database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
+			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);

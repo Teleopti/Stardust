@@ -56,13 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				
 				var schedule = _databaseLoader.GetCurrentSchedule(person.PersonId);
 
-				currentPeriod previous;
-				_currentPeriodInfo.TryGetValue(person.PersonId, out previous);
-				if (previous == null)
-					previous = new currentPeriod();
-
 				var current = new currentPeriod();
-
 				var currentActivity = ScheduleInfo.ActivityForTime(schedule, now);
 				if (currentActivity != null)
 				{
@@ -80,14 +74,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						current.EndTime = nextActivity.StartDateTime;
 				}
 
-				if (previous.StartTime == current.StartTime &&
-					previous.EndTime == current.EndTime &&
-					previous.ActivityId == current.ActivityId)
-					return;
+				currentPeriod previous;
+				_currentPeriodInfo.TryGetValue(person.PersonId, out previous);
+
+				var doProcess =
+					previous == null ||
+					previous.StartTime != current.StartTime ||
+					previous.EndTime != current.EndTime ||
+					previous.ActivityId != current.ActivityId;
+
+				if (!doProcess) return;
 
 				process(null, person);
 				_currentPeriodInfo[person.PersonId] = current;
-
 			});
 
 		}

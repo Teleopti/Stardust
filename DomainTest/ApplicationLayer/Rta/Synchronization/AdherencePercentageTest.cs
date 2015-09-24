@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Database
 				.WithSchedule(personId, Guid.NewGuid(), "2015-04-10 8:00", "2015-04-10 17:00")
 				.WithUser("user", personId, businessUnitId, null, null);
-			Rta.CheckForActivityChange(personId, businessUnitId);
+			Rta.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Persister.Clear();
 			Now.Is("2015-04-11 8:00");
 
 			Context.SimulateRestartWith(Now, Database);
-			Rta.CheckForActivityChange(personId, businessUnitId);
+			Rta.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Persister.PersistedModels.Should().Be.Empty();
 		}

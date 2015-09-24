@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-02-20 2:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Publisher.PublishedEvents.OfType<PersonShiftStartEvent>()
 				.Single()
@@ -216,9 +216,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-02-20 2:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-02-20 8:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Publisher.PublishedEvents.OfType<PersonShiftEndEvent>()
 				.Single()
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-02-20 2:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>()
 				.Single()
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-02-20 2:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -304,9 +304,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, activityId, "2015-07-06 10:00", "2015-07-06 11:00");
 
 			Now.Is("2015-07-05 10:59");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-07-06 09:01");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			var @event = Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.BelongsToDate.Should().Be("2015-07-05".Date());
 		}

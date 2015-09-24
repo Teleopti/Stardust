@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAlarm("phone", phone, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 			
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAlarm("phone", phone, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>()
 				.Should().Have.Count.EqualTo(0);
@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAlarm("phone", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-08-19 09:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>()
 				.Should().Have.Count.EqualTo(0);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 08:00".Utc());
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 			Now.Is("2015-08-19 08:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 07:55".Utc());
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 			Now.Is("2015-08-19 08:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 07:50".Utc());
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAlarm("phone", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-08-19 08:05");
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -216,11 +216,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 			Publisher.Clear();
 
 			Now.Is("2015-08-19 09:00");
-			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 09:00".Utc());
