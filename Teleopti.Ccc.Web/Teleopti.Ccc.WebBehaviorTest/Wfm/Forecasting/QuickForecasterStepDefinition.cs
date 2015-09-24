@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			var totalCalls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vtc:visible .value\").text();");
 			var calls = Browser.Interactions.Javascript("return $(\".c3-tooltip-name-vc:visible .value\").text();");
 
-			Assert.AreEqual(Math.Round(double.Parse(totalCalls), 0), Math.Round(double.Parse(calls) * 2), 0);
+			Assert.AreEqual(Math.Round(double.Parse(totalCalls), 1), Math.Round(double.Parse(calls) * 2), 1);
 		}
 
 		[Given(@"I am viewing the forecast chart")]
