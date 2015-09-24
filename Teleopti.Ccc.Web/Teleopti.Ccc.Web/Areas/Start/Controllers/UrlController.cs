@@ -9,8 +9,10 @@ using System.Web.Mvc;
 using DotNetOpenAuth.OpenId;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
 
@@ -20,11 +22,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
     {
         private readonly ICurrentHttpContext _currentHttpContext;
 		  private readonly IAuthenticationModule _authenticationModule;
+        private readonly IIdentityLogon _identityLogon;
 
-        public UrlController(ICurrentHttpContext currentHttpContext, IAuthenticationModule authenticationModule)
+        public UrlController(ICurrentHttpContext currentHttpContext, IAuthenticationModule authenticationModule, IIdentityLogon identityLogon)
         {
 	        _currentHttpContext = currentHttpContext;
 	        _authenticationModule = authenticationModule;
+            _identityLogon = identityLogon;
         }
 
 	    public ActionResult Index()
@@ -58,11 +62,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				  : url;
 			  return Redirect(redirectUrl);
 		  }
-		 
-		 [HttpGet]
-	    public JsonResult AuthenticationDetails()
-	    {
-			 var loggedOnPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
+
+          [HttpGet]
+          [TenantUnitOfWork]
+          [NoTenantAuthentication]
+          public virtual JsonResult AuthenticationDetails()
+		 {
+		     var loggedOnPerson = _identityLogon.LogonIdentityUser().Person;
 			 return Json(new { PersonId = loggedOnPerson.Id }, JsonRequestBehavior.AllowGet);
 	    }
     }

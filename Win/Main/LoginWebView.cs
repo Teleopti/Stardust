@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void Error(string error)
 		{
-			throw new NotImplementedException();
+            var applyProductActivationKey = new ApplyProductActivationKey(error, _model.SelectedDataSourceContainer.DataSource.Application);
+            applyProductActivationKey.ShowDialog(this);
+            Application.Exit();
 		}
 
 		public ILogonPresenter Presenter { get; set; }
