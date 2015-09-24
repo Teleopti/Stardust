@@ -157,13 +157,16 @@ wfm.config([
 			return $http.get('../api/Global/User/CurrentUser');
 		};
 
-		function userNotAuthenticatedHandler() {
-			if (window.location.hash) {
-				var d = new Date();
-				d.setTime(d.getTime() + (5 * 60 * 1000));
-				var expires = 'expires=' + d.toUTCString();
-				document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
+		function userNotAuthenticatedHandler(data, state) {
+			if (state === 401) {
+				if (window.location.hash) {
+					var d = new Date();
+					d.setTime(d.getTime() + (5 * 60 * 1000));
+					var expires = 'expires=' + d.toUTCString();
+					document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
+				}
 			}
+			
 			$sessionStorage.$reset();
 			window.location = 'Authentication';
 		};
@@ -185,7 +188,9 @@ wfm.config([
 			if (Date.now() > timeout) { // TODO : extract it in a service
 				event.preventDefault();
 				var context = checkCurrentUser();
-				context.error(userNotAuthenticatedHandler);
+				context.error(function (data, state) {
+					userNotAuthenticatedHandler(data, state);
+				});
 				context.success(function (data) {
 					increaseTimeout();
 					$state.go(next, toParams);
@@ -196,7 +201,9 @@ wfm.config([
 		broadcastEventOnToggle();
 
 		var startContext = checkCurrentUser();
-		startContext.error(userNotAuthenticatedHandler);
+		startContext.error(function (data,state) {
+			userNotAuthenticatedHandler(data, state);
+		});
 		startContext.success(function (data) {
 			$rootScope.isAuthenticated = true;
 			$translate.fallbackLanguage('en');
