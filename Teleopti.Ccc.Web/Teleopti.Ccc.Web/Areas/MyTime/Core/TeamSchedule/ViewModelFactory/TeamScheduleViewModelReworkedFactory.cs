@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			{
 				var personScheduleDays = _scheduleDayReadModelFinder.ForPersons(data.ScheduleDate, personIds, data.Paging,
 					data.TimeFilter, data.TimeSortOrder);
-				var people = _personRep.FindPeople(personIds);
+				var resultPersonId = personScheduleDays.Select(p=>p.PersonId);
+				var people = _personRep.FindPeople(resultPersonId);
 				var schedulesWithPersons = from s in personScheduleDays
 					let person = (from p in people
 						where p.Id.Value == s.PersonId
