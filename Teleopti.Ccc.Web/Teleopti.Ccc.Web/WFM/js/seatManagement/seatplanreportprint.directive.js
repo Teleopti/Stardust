@@ -6,10 +6,10 @@
 		function link(scope, element, attrs) {
 
 			function addContainerOverflowClass(element, styleClass) {
-				element[0].parentElement.parentElement.parentElement.parentElement.parentElement.classList.add(styleClass);
+				element[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.add(styleClass);
 			}
 			function removeContainerOverflowClass(element, styleClass) {
-				element[0].parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove(styleClass);
+				element[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove(styleClass);
 			}
 
 			element.on('click', function () {

@@ -83,26 +83,21 @@
 		position:relative;
 		z-index:1;
 	}
-
+	
 	.wfm-btn{
 		height:100%;
 		margin:0px;
 		border-radius:0px;
 		text-transform:none;
 	}
-
+	
 	.wfm-btn-invis-primary{
 		color:#0099FF;
 	}
 
 	.wfm-btn:hover{
-		background:#0099FF;
-		color:#ffffff;
-	}
-
-	.wfm-btn-invis-default:hover{
-		background:#FDFEFF;
-		color:#0099FF;
+		background:#0099FF!important;
+		color:#ffffff!important;
 	}
 
 	.wfm-fab{
@@ -200,11 +195,11 @@
 		padding-left:10px;
 		padding-right:10px;
 		overflow:auto;
+		height:100%;
 		width:100%;
 		position:absolute;
 		top:40px;
 		right:0;
-		bottom:0;
 		left:0;
 
 		h2{
@@ -286,7 +281,7 @@
 	}
 
 	.seatplan-paging-container{
-		height:80px;
+		height:120px;
 		margin-right:-10px;
 	}
 
@@ -342,6 +337,7 @@
 		}
 	}
 }
+
 
 .container-to-print-report{
 	overflow:visible!important;
