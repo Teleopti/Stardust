@@ -12,6 +12,10 @@ SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Config
 SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
+:: stop iis express
+taskkill /F /IM iisexpress.exe
+timeout 10
+
 ::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
 if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
 
@@ -34,16 +38,13 @@ echo %ROOTDIR%\nhib\SikulitestConfig.json,BuildArtifacts\SikulitestConfig.json>>
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
 ECHO RC>"c:\nhib\Toggles.txt"
 
-:: Run SikulitestConfigFix
-ECHO %ROOTDIR%\.debug-setup\SikulitestConfigFix.bat >>%logFile%
-
 :: write WFM connection strings to tenant database
 ECHO Set WFM path in Tenant table ...
 SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql"
 
-:: restart iis express
-taskkill /F /IM iisexpress.exe
-timeout 10
+CALL "%ROOTDIR%\.debug-setup\FixMyConfig.bat" "%CCC7DB%" "%AnalyticsDB%"
+
+:: start iis express
 cd "c:\Program Files\IIS Express\"
 start iisexpress /AppPool:Clr4IntegratedAppPool
 
