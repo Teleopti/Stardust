@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Infrastructure.Util
 			var matches = Regex.Matches(combinedList, splitPattern);
 
 			var result =
-				(from object match in matches select match.ToString().Replace("\"", "").Trim())
-				.Where(s => !string.IsNullOrEmpty(s));
+				(from object match in matches select match.ToString().Trim('"', ' '))
+					.Where(s => !string.IsNullOrEmpty(s));
 
 			return uniqueResult ? new HashSet<string>(result) : result;
 		}
