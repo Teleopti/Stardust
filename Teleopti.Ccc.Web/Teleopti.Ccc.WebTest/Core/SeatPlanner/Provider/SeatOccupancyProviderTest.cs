@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		private FakeSeatMapRepository _seatMapLocationRepository;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
-		private ILoggedOnUser _loggedOnUser;
 		private IPerson _person;
 
 		[SetUp]
