@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				let statecode = c != null ? c.StateCode : null
 				let platformTypeId = c != null ? c.PlatformTypeId : Guid.Empty
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
-				let alarmType = m.AlarmType ?? new AlarmType()
+				let alarmType = m.AlarmType != null && !alarmIsSoftDeleted(m.AlarmType) ? m.AlarmType : new AlarmType()
 				let alarmTypeId = alarmType.Id.HasValue ? alarmType.Id.Value : Guid.Empty
 				select new AlarmMapping
 				{
@@ -46,12 +47,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					ActivityId = activityId,
 					AlarmTypeId = alarmTypeId,
 					AlarmName = alarmType.Description.Name,
-					Adherence = AdherenceInfo.ConvertAdherence(_appliedAdherence.ForAlarm(m.AlarmType)),
+					Adherence = alarmIsSoftDeleted(m.AlarmType) 
+					? AdherenceState.Neutral 
+					: AdherenceInfo.ConvertAdherence(_appliedAdherence.ForAlarm(m.AlarmType)),
 					StaffingEffect = (int) alarmType.StaffingEffect,
 					DisplayColor = alarmType.DisplayColor.ToArgb(),
 					ThresholdTime = alarmType.ThresholdTime.Ticks
 				}
 				).ToArray();
+		}
+
+		private static bool alarmIsSoftDeleted(IAlarmType alarmType)
+		{
+			return alarmType != null && ((IDeleteTag)alarmType).IsDeleted;
 		}
 
 		private static Guid tryGetBusinessUnitId(IStateGroupActivityAlarm m)

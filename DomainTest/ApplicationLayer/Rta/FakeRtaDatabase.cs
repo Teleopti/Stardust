@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId, bool isDeleted = false);
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId, bool isDeleted = false)
 		{
 			var platformTypeIdGuid = platformTypeId ?? new Guid(_platformTypeId);
 
@@ -223,6 +223,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				alarmType.StaffingEffect = staffingEffect;
 				alarmType.ThresholdTime = threshold;
 				alarmType.Adherence = adherence;
+				if (isDeleted)
+					((IDeleteTag) alarmType).SetDeleted();
 			}
 
 			IRtaStateGroup stateGroup = null;
@@ -562,6 +564,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
 		}
 
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Adherence adherence, bool isDeleted)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, TimeSpan.Zero, adherence, null, isDeleted);
+		}
+		
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, TimeSpan.Zero, null, null);

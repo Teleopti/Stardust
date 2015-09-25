@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher EventPublisher;
-
+		public FakeMessageSender Sender;
+		
 		[Test]
 		public void ShouldMapAlarmWithoutStateGroup()
 		{
@@ -89,5 +90,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldNotReturnMappingWhenAlarmTypeIsDeleted()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-09-25 08:00", "2015-09-25 09:00")
+				.WithAlarm("ready", phone, Adherence.In, true)
+				;
+			Now.Is("2015-09-25 08:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready",
+			});
+
+			Sender.NotificationsOfType<AgentStateReadModel>().Should().Have.Count.EqualTo(0);
+		}
 	}
 }
