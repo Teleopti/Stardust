@@ -459,6 +459,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			//Set some values on the real workload
 			workloadDay.Tasks = 10000;
+			workloadDay.CampaignTasks = new Percent(20);
 			workloadDay.AverageTaskTime = new TimeSpan(0, 0, 100);
 			workloadDay.AverageAfterTaskTime = new TimeSpan(0, 0, 33);
 			workloadDay.ChangeOpenHours(_openHours);
@@ -474,6 +475,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double newSumOfTasks = workloadDay.Tasks;
 
 			Assert.AreEqual((workloadDayTemplate.SortedTaskPeriodList[3].Tasks / sumOfTemplateTasks) * newSumOfTasks, workloadDay.SortedTaskPeriodList[3].Tasks);
+			Assert.AreEqual(workloadDay.CampaignTasks, workloadDay.SortedTaskPeriodList[3].CampaignTasks);
 			Assert.AreEqual(workloadDay.AverageTaskTime, workloadDay.SortedTaskPeriodList[3].AverageTaskTime);
 			Assert.AreEqual(workloadDay.AverageAfterTaskTime, workloadDay.SortedTaskPeriodList[3].AverageAfterTaskTime);
 	    }

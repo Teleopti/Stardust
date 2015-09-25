@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override void DistributeTasks(IEnumerable<ITemplateTaskPeriod> sortedTemplateTaskPeriods)
 		{
+			var originalCampaignTasks = CampaignTasks;
 			var originalTasks = Tasks;
 			var originalAverageTaskTime = AverageTaskTime;
 			var originalAfterTaskTime = AverageAfterTaskTime;
@@ -143,6 +144,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			if (isOpenForIncomingWork())
 			{
+				CampaignTasks = originalCampaignTasks;
 				Tasks = originalTasks;
 				AverageTaskTime = originalAverageTaskTime;
 				AverageAfterTaskTime = originalAfterTaskTime;
