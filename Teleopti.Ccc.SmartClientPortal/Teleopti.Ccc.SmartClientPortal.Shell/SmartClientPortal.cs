@@ -19,6 +19,7 @@ using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -84,10 +85,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.LoadCompleted += WebView1_LoadCompleted; ;
-			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
+			setBusinessUnitInWebView();
+         webView1.LoadCompleted += WebView1_LoadCompleted; 
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 			
+		}
+
+		private void setBusinessUnitInWebView()
+		{
+			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
+			var request = new Request(WebServer + "Start/AuthenticationApi/Logon");
+			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
+			wfmWebView.LoadRequest(request);
+			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 		}
 
 		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
@@ -318,8 +328,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public void setWfmWebUrl(string module)
 		{
-			string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
-			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", raptorServer, _permissionModule));
+			var webServer = WebServer;
+			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", webServer, _permissionModule));
+		}
+
+		private static string WebServer
+		{
+			get
+			{
+				string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
+				return raptorServer;
+			}
 		}
 
 		private void showMem()
