@@ -133,12 +133,14 @@
 			}
 
 
-			function validManualProductionPlan() {			
-				return $scope.manualPlanInput && $scope.manualPlanInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
+			function validManualProductionPlan() {
+				if ($scope.manualPlanInput == null) return false;
+				else return $scope.manualPlanInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
 			}
 
-			function validManualBacklog() {				
-				return $scope.manualBacklogInput && $scope.manualBacklogInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
+			function validManualBacklog() {
+				if ($scope.manualBacklogInput == null) return false;
+				else return $scope.manualBacklogInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
 			}
 
 			function showDateSelectionHint() {
