@@ -55,6 +55,7 @@ Scenario: match all search terms in different fields
 	| last name    | Andeen Smith |
 	| organization | Red        |
 	Then I should see 'Andeen' in people list
+
 @ignore
 Scenario: match entire quoted search term
 	When I view people
