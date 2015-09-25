@@ -1,5 +1,9 @@
 ﻿@charset "UTF-8";
 
+input[type=text],input[type=password],input[type=number]{
+	line-height:1;
+}
+
 .seatmap{
 	padding: 0;
 	z-index: 0;
@@ -41,7 +45,6 @@
 		}
 	}
 }
-
 
 .seatmap-view-datepicker{
 	.wfm-datepicker{
