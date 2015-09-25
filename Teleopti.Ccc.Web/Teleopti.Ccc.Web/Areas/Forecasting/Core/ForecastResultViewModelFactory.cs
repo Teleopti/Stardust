@@ -27,7 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return new WorkloadForecastResultViewModel
 			{
 				WorkloadId = workload.Id.GetValueOrDefault(),
-				Days = futureWorkloadDays.Select(x => new { date = x.CurrentDate.Date, vc = Math.Round((double)x.Tasks, 1), vtc = Math.Round((double)x.TotalTasks, 1), vaht = Math.Round((double)x.AverageTaskTime.TotalSeconds, 1), vacw = Math.Round((double)x.AverageAfterTaskTime.TotalSeconds, 1) }).ToArray<dynamic>()
+				Days = futureWorkloadDays.Select(x => new
+				{
+					date = x.CurrentDate.Date,
+					vc = x.Tasks,
+					vtc = x.TotalTasks,
+					vaht = x.AverageTaskTime.TotalSeconds,
+					vacw = x.AverageAfterTaskTime.TotalSeconds
+				}).ToArray<dynamic>()
 			};
 		}
 	}

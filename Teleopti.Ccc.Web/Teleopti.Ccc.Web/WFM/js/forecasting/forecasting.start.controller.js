@@ -188,6 +188,11 @@ angular.module('wfm.forecasting')
 							},
 							subchart: {
 								show: true
+							},
+							tooltip: {
+								format: {
+									value: d3.format('.1f')
+								}
 							}
 						});
 					}).

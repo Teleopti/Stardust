@@ -55,6 +55,7 @@ Scenario: Keep campaigns when reforecasting
 	And I increase the calls by 100 percent
 	And I apply the campaign
 	Then I use default forecast period and forecast for one workload
+	And forecast result has loaded
 	And I should see that the total calls for the first day has doubled
 
 

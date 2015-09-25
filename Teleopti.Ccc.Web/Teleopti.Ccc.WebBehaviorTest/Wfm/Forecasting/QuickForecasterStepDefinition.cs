@@ -99,6 +99,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".do-forecast");
 		}
 
+		[When(@"forecast result has loaded")]
+		[Then(@"forecast result has loaded")]
+		public void ThenForecastResultHasLoaded()
+		{
+			WhenForecastHasSucceeded();
+			WhenISelectTheFirstDayInTheForecastChart();
+		}
 
 		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()
@@ -196,9 +203,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
-			var totalCalls = Browser.Interactions.Javascript("return angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0];");
-			var calls = Browser.Interactions.Javascript("return angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0];");
-			Assert.AreEqual(Math.Round(double.Parse(calls) * 2, 1), Math.Round(double.Parse(totalCalls), 1));
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "true");
 		}
 
 		[Given(@"I am viewing the forecast chart")]
