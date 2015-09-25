@@ -33,16 +33,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.ClickContaining(".wfm-list li", p0);
 		}
 
-		[When(@"I select a permission called '(.*)'")]
-		public void WhenISelectAPermissionCalled(string p0)
+		[When(@"I select the first permission")]
+		public void WhenISelectTheFirstPermission()
 		{
-			Browser.Interactions.ClickContaining(".ui-tree-handle", p0);
+			Browser.Interactions.Click(".functions-container .angular-ui-tree-handle");
 		}
 
-		[Then(@"I should see '(.*)' selected in the list")]
-		public void ThenIShouldSeeSelectedInTheList(string p0)
+		[Then(@"I should see the first permission selected in the list")]
+		public void ThenIShouldSeeTheFirstPermissionSelectedInTheList()
 		{
-			Browser.Interactions.AssertAnyContains(".ui-tree-handle.selected", p0);
+			Browser.Interactions.AssertExists(".functions-container .angular-ui-tree-handle.selected");
 		}
 
 
