@@ -6,10 +6,6 @@ html, body{
 	background:#f3f3f3!important;
 }
 
-ul {
-	margin-bottom:0!important;
-}
-
 a:focus {
    outline: none!important;
    outline: 0px auto -webkit-focus-ring-color!important;
@@ -28,6 +24,14 @@ a:focus {
   right: 0;
 }
 
+.md-ripple-container{
+	visibility: hidden;
+}
+
+.wfm-list li{
+		min-height:38px;
+}
+
 /*override bootstrap*/
 .row {
 	margin-right: 0;
@@ -36,23 +40,6 @@ a:focus {
 
 .select-toggle {
 	opacity: 0;
-}
-
-.toggle-handle {
-	cursor: pointer;
-}
-
-.wfm-list li i {
-  color: #555555;
-  padding-bottom: 5px;
-}
-
-.wfm-list li{
-	min-height:38px;
-}
-
-label {
-	display: inline !important;
 }
 
 #materialcontainer{
@@ -124,24 +111,10 @@ label {
 	transition:0.2s all ease-in-out;
 }
 
-.nav-item-active > div{
+.nav-item-active, .nav-item-active > div{
 	background-color:#c2e085!important;
 	box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
 	//#036
-}
-
-.navbar i{
-	  vertical-align: middle;
-}
-
-.result-icon i{
-	color:white!important;
-	padding:0px!important;
-	margin:0px!important;
-}
-
-md-tooltip {
-    z-index:999999;
 }
 
 /*start (main)*/

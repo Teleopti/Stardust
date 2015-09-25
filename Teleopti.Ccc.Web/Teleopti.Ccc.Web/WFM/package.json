@@ -33,7 +33,7 @@
 	"filesaver.js": "0.2.0",
     "ngstorage": "0.3.9",
     "angular-sanitize": "1.4.5",
-    "teleopti-styleguide": "https://github.com/Teleopti/styleguide/raw/Release/teleopti-styleguide-0.0.12.tgz"
+    "teleopti-styleguide": "https://github.com/Teleopti/styleguide/raw/Release/teleopti-styleguide-0.0.13.tgz"
   },
   "devDependencies": {
     "grunt": "0.4.5",
