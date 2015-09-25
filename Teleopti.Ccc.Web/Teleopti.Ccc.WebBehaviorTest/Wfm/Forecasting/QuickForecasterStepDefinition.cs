@@ -4,11 +4,13 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
@@ -63,6 +65,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.ClickContaining("card-header span b", workload);
 		}
 
+		[When(@"I choose scenario '(.*)'")]
+		public void WhenIChooseScenario(string scenario)
+		{
+			Browser.Interactions.Click(".wfm-card-selected .scenario-select");
+			Browser.Interactions.ClickContaining(".wfm-card-selected .scenario-select option", scenario);
+		}
+
 		[When(@"I continue with advanced")]
 		public void WhenIContinueWithAdvanced()
 		{
@@ -115,14 +124,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".next-step-advanced");
 		}
 
+		[Then(@"there is forecast data for default period for")]
+		public void ThenThereIsForecastDataForDefaultPeriodFor(Table table)
+		{
+			var forecastData = table.CreateInstance<ForecastData>();
+			checkForecastResult(forecastData.Workload, forecastData.Scenario);
+		}
+
 		[Then(@"there is forecast data for default period for '(.*)'")]
 		public void ThenThereIsForecastDataForDefaultPeriodFor(string workload)
 		{
-			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
+			checkForecastResult(workload, DefaultScenario.Scenario.Description.Name);
+		}
+
+		private static void checkForecastResult(string workload, string scenario)
+		{
+			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
+				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
 			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
 			{
 				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 				var allSkillDays = new SkillDayRepository(uow).LoadAll();
+
+				allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
 
 				foreach (var dateOnly in choosenPeriod.DayCollection())
 				{
@@ -134,14 +158,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			});
 		}
 
-		[Then(@"there is no forecast data for default period for '(.*)'")]
-		public void ThenThereIsNoForecastDataForDefaultPeriodFor(string workload)
+		private static void checkNoForecastResult(string workload, string scenario)
 		{
-			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
+			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"],
+				((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
 			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
 			{
 				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
 				var allSkillDays = new SkillDayRepository(uow).LoadAll();
+
+				allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
 
 				foreach (var dateOnly in choosenPeriod.DayCollection())
 				{
@@ -153,7 +179,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			});
 		}
 
+		[Then(@"there is no forecast data for default period for '(.*)'")]
+		public void ThenThereIsNoForecastDataForDefaultPeriodFor(string workload)
+		{
+			checkNoForecastResult(workload, DefaultScenario.Scenario.Description.Name);
+		}
 
+		[Then(@"there is no forecast data for default period for")]
+		public void ThenThereIsNoForecastDataForDefaultPeriodFor(Table table)
+		{
+			var forecastData = table.CreateInstance<ForecastData>();
+			checkNoForecastResult(forecastData.Workload, forecastData.Scenario);
+		}
 
 		[Then(@"there are SkillDays for default period")]
 		public void ThenThereAreSkillDaysForDefaultPeriod()
@@ -257,5 +294,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "-%");
 		}
+	}
+
+	public class ForecastData
+	{
+		public string Workload { get; set; }
+		public string Scenario { get; set; }
 	}
 }

@@ -56,4 +56,21 @@ Scenario: Keep campaigns when reforecasting
 	And forecast result has loaded
 	And I should see that the total calls for the first day has doubled
 
+Scenario: Save forecast to scenario
+	Given there is a scenario
+	| Field         | Value        |
+	| Name          | Scenario 1   |
+	| Business Unit | BusinessUnit |
+	And there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
+	And there is no forecast data
+	When I am viewing quick forecast page
+	And I select workload 'TheWorkload2'
+	And I choose scenario 'Scenario 1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	Then there is forecast data for default period for
+	| Field    | Value        |
+	| Workload | TheWorkload2 |
+	| Scenario | Scenario 1   |
+
 
