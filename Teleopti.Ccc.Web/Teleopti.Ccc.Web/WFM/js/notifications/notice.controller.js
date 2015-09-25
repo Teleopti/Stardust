@@ -54,6 +54,7 @@ notice.controller('NoticeCtrl', [
 		$(function () {
 			var mainPageContainerElement = $('#materialcontainer');
 			var notificationBarElement = $('#notice');
+
 			mainPageContainerElement.scroll(function () {
 				var uiHeight = $('[ui-view]').height();
 				var containerHeight = mainPageContainerElement.height();
@@ -67,7 +68,9 @@ notice.controller('NoticeCtrl', [
 			});
 
 			$(window).resize(function () {
-				mainPageContainerElement.scrollTop(0);
+				if ($('.growl-container>.growl-item').length > 0) {
+					mainPageContainerElement.scrollTop(0);
+				}
 			});
 		});
 	}
