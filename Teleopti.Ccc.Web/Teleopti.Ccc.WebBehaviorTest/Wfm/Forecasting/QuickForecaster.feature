@@ -21,7 +21,6 @@ Scenario: Forecast all
 	Then there is forecast data for default period for 'TheWorkload1'
 	And there is forecast data for default period for 'TheWorkload2'
 
-@ignore
 Scenario: Forecast one workload
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
@@ -53,6 +52,7 @@ Scenario: Keep campaigns when reforecasting
 	And I increase the calls by 100 percent
 	And I apply the campaign
 	Then I use default forecast period and forecast for one workload
+	And Forecast has succeeded
 	And forecast result has loaded
 	And I should see that the total calls for the first day has doubled
 

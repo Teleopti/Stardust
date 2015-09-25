@@ -54,7 +54,7 @@
 									View more numbers
 								</md-tooltip>
 							</a>
-							<a class="wfm-btn wfm-btn-invis-default forecast-workload" ng-click="displayForecastingModal(workload)">
+							<a class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-disabled': !workload.forecastResultLoaded, 'wfm-btn-invis-default': workload.forecastResultLoaded}" ng-disabled="!workload.forecastResultLoaded">
 								Forecast
 								<md-tooltip>
 									Forecast this workload
