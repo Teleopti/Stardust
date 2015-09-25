@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			dataSourceForTenant().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				var c = new SqlConnectionStringBuilder(tenant.Application.ConnectionString);
-				if (c.DataSource == connectionStringInfo.DataSource && c.InitialCatalog == connectionStringInfo.InitialCatalog)
+				if (c.DataSource.Equals(connectionStringInfo.DataSource, StringComparison.InvariantCultureIgnoreCase)
+					&& c.InitialCatalog.Equals(connectionStringInfo.InitialCatalog, StringComparison.InvariantCultureIgnoreCase))
 					dataSource = tenant;
 			});
 
