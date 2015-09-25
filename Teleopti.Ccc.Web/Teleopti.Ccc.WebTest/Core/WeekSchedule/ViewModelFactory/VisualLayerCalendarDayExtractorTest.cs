@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Principal;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
     public class VisualLayerCalendarDayExtractorTest
     {
         private VisualLayerCalendarDayExtractor _target;
-        private Activity _activity;
+        private IActivity _activity;
         private IPerson _person;
         private TimeZoneInfo _timeZone;
         List<IVisualLayer> _visualLayerCollection;

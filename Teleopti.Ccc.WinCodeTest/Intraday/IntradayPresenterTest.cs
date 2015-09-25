@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -22,7 +21,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 					_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 					_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
-					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
+					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 					_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 					_agentStateReadModelReader = MockRepository.GenerateMock<IAgentStateReadModelReader>();
 					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
@@ -100,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyHandlesDateIfTodayIsIncludedInSelection()
         {
             _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
-			_schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder())).Repeat.AtLeastOnce();
+			_schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper())).Repeat.AtLeastOnce();
 
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																						_scheduleDictionarySaver, _unitOfWorkFactory, 

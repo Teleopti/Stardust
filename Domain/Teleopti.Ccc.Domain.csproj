@@ -647,6 +647,7 @@
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequestAssembler.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersister.cs" />
@@ -1725,6 +1726,7 @@
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\SuperUser.cs" />
     <Compile Include="Specification\All.cs" />
+    <Compile Include="Specification\Not.cs" />
     <Compile Include="Specification\PersonRequestSpecification.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />

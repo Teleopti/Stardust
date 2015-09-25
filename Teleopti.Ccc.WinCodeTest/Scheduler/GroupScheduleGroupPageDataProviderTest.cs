@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
-				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder);
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder, new TimeZoneGuardWrapper());
 			_target = new GroupScheduleGroupPageDataProvider(()=>_stateHolder, _repositoryFactory, _currentUnitOfWorkFactory, _disableDeletedFilter);
 		}
 

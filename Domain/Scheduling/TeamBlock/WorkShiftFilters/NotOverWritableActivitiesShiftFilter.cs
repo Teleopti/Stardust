@@ -12,12 +12,52 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		IList<IShiftProjectionCache> Filter(DateOnly dateToSchedule, IPerson person,
 															IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
 	}
-	
-	public class NotOverWritableActivitiesShiftFilter : INotOverWritableActivitiesShiftFilter
+
+	public interface IScheduleDayForPerson
+	{
+		IScheduleDay ForPerson(IPerson person, DateOnly date);
+	}
+
+	public class ScheduleDayForPerson : IScheduleDayForPerson
+	{
+		private readonly Func<IScheduleRangeForPerson> _scheduleRangeFinder;
+
+		public ScheduleDayForPerson(Func<IScheduleRangeForPerson> scheduleRangeFinder)
+		{
+			_scheduleRangeFinder = scheduleRangeFinder;
+		}
+
+		public IScheduleDay ForPerson(IPerson person, DateOnly date)
+		{
+			return _scheduleRangeFinder().ForPerson(person).ScheduledDay(date);
+		}
+	}
+
+	public class ScheduleRangeForPerson : IScheduleRangeForPerson
 	{
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 
-		public NotOverWritableActivitiesShiftFilter(Func<ISchedulingResultStateHolder> resultStateHolder)
+		public ScheduleRangeForPerson(Func<ISchedulingResultStateHolder> resultStateHolder)
+		{
+			_resultStateHolder = resultStateHolder;
+		}
+
+		public IScheduleRange ForPerson(IPerson person)
+		{
+			return _resultStateHolder().Schedules[person];
+		}
+	}
+
+	public interface IScheduleRangeForPerson
+	{
+		IScheduleRange ForPerson(IPerson person);
+	}
+
+	public class NotOverWritableActivitiesShiftFilter : INotOverWritableActivitiesShiftFilter
+	{
+		private readonly Func<IScheduleDayForPerson> _resultStateHolder;
+
+		public NotOverWritableActivitiesShiftFilter(Func<IScheduleDayForPerson> resultStateHolder)
 		{
 			_resultStateHolder = resultStateHolder;
 		}
@@ -30,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 			
 			if (shiftList.Count == 0) return shiftList;
-			var part = _resultStateHolder().Schedules[person].ScheduledDay(dateToSchedule);
+			var part = _resultStateHolder().ForPerson(person,dateToSchedule);
 
 			var filteredList = new List<IShiftProjectionCache>();
 			var meetings = part.PersonMeetingCollection();

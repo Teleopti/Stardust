@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             MockRepository.GenerateMock<IRepositoryFactory>();
             _scheduleRefresher = MockRepository.GenerateMock<IScheduleRefresher>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new[] { _person }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_unitOfWork)), new SchedulingResultStateHolder());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new[] { _person }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
             
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);

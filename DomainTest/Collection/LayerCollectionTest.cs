@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             DateTimePeriod period3 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 12, 15, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 10, 15, 15, 0, DateTimeKind.Utc));
-            Activity act = ActivityFactory.CreateActivity("hejhej");
+            var act = ActivityFactory.CreateActivity("hejhej");
             target.Add(new ActivityLayer(act, period1));
             target.Add(new ActivityLayer(act, period2));
             target.Add(new ActivityLayer(act, period3));

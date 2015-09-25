@@ -4,9 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
         {
             _mocks = new MockRepository();
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<ICommonStateHolder>(), new CurrentTeleoptiPrincipal());
+			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<ICommonStateHolder>(), new TimeZoneGuardWrapper());
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 	        _personRankCalculator = _mocks.StrictMock<IRankedPersonBasedOnStartDate>();
         }

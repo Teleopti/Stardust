@@ -12,6 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IList<IShiftProjectionCache> FilterForTeamMember(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 
+	public interface IActivityRequiresSkillProjectionFilter
+	{
+		IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList,
+			DateOnly dateToCheck, IWorkShiftFinderResult finderResult);
+	}
+
 	public class WorkShiftFilterService : IWorkShiftFilterService
 	{
 		private readonly IActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
@@ -33,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
 		private readonly IDisallowedShiftProjectionCashesFilter _disallowedShiftProjectionCashesFilter;
+		private readonly IActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 
 		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
@@ -52,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
 			IShiftProjectionCacheManager shiftProjectionCacheManager,
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
-			IDisallowedShiftProjectionCashesFilter disallowedShiftProjectionCashesFilter)
+			IDisallowedShiftProjectionCashesFilter disallowedShiftProjectionCashesFilter,
+			IActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -73,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_ruleSetPersonalSkillsActivityFilter = ruleSetPersonalSkillsActivityFilter;
 			_disallowedShiftProjectionCashesFilter = disallowedShiftProjectionCashesFilter;
+			_activityRequiresSkillProjectionFilter = activityRequiresSkillProjectionFilter;
 		}
 
 		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
@@ -202,6 +211,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 														IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameOpenHours)
 		{
 			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, finderResult);
+			shiftList = _activityRequiresSkillProjectionFilter.Filter(person, shiftList, dateOnly, finderResult);
 			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction,
 																 finderResult);
             if (sameOpenHours)

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_target = new PersonalShiftAndMeetingFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new CurrentTeleoptiPrincipal()));
+			_target = new PersonalShiftAndMeetingFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new TimeZoneGuardWrapper()));
 			_part = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));

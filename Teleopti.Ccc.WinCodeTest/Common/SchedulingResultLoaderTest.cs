@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			    .IgnoreArguments()
 			    .Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
 
-			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder());
+			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 
 			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), MockRepository.GenerateMock<ISkillDayLoadHelper>(), MockRepository.GenerateMock<IResourceOptimizationHelper>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>());
         }

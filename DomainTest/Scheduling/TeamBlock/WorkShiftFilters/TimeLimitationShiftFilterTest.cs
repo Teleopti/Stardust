@@ -4,9 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		private MockRepository _mocks;
 		private DateOnly _dateOnly;
-		private Activity _activity;
+		private IActivity _activity;
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new ValidDateTimePeriodShiftFilter(()=> new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new CurrentTeleoptiPrincipal()));
+			_target = new ValidDateTimePeriodShiftFilter(new TimeZoneGuardWrapper());
 		}
 
 		[Test]

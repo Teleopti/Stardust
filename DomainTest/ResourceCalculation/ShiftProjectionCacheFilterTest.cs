@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 	        _personalShiftAndMeetingFilter = _mocks.StrictMock<IPersonalShiftAndMeetingFilter>();
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(), ()=>new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new CurrentTeleoptiPrincipal()));
+			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(), new TimeZoneGuardWrapper());
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();

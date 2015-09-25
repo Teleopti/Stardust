@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
 	    private readonly INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 	    private readonly ICurrentTeleoptiPrincipal _currentIdentity;
-	    private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+	    private readonly ITimeZoneGuard _timeZoneGuard;
 
-	    public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, ICurrentTeleoptiPrincipal currentIdentity, Func<ISchedulerStateHolder> schedulerStateHolder)
+	    public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, ICurrentTeleoptiPrincipal currentIdentity, ITimeZoneGuard timeZoneGuard)
         {
         	_rules = rules;
 	        _personalShiftAndMeetingFilter = personalShiftAndMeetingFilter;
 	        _notOverWritableActivitiesShiftFilter = notOverWritableActivitiesShiftFilter;
 	        _currentIdentity = currentIdentity;
-	        _schedulerStateHolder = schedulerStateHolder;
+		    _timeZoneGuard = timeZoneGuard;
         }
 
     	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 }
             }
 	        var regional = _currentIdentity.Current().Regional;
-	        var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
+	        var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
 	        finderResult.AddFilterResults(
                 new WorkShiftFilterResult(
                     string.Format(regional.Culture,

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private DateOnly _dateOnly;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private Activity _activity;
+		private IActivity _activity;
 		private ShiftCategory _category;
 
 		[SetUp]

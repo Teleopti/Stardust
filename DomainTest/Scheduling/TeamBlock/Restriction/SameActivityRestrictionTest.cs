@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 	[TestFixture]
 	public class SameActivityRestrictionTest
 	{
-		private Activity _activity;
+		private IActivity _activity;
 		private SameActivityRestriction _target;
 		private MockRepository _mocks;
 		private DateOnly _dateOnly;

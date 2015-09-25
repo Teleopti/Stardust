@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[TestFixture]
 	public class TimeZoneGuardTest
 	{
-		private ITimeZoneGuard _target;
+		private TimeZoneGuard _target;
 
 		[SetUp]
 		public void Setup()

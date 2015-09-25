@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -15,11 +13,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ValidDateTimePeriodShiftFilter(Func<ISchedulerStateHolder> schedulerStateHolder)
+		public ValidDateTimePeriodShiftFilter(ITimeZoneGuard timeZoneGuard)
 		{
-			_schedulerStateHolder = schedulerStateHolder;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 					}
 				}
 			}
-			var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
+			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
 					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,

@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
         private ExportMultisiteSkillToSkillCommandDto _exportMultisiteSkillToSkillCommandDto;
         private IJobResult _jobResult;
-        private Activity _activity;
+        private IActivity _activity;
 
         [SetUp]
         public void Setup()

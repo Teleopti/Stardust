@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
             _target = new MeetingComposerPresenter(_view, _model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
@@ -549,7 +550,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory);
 			_target.TrySave();
@@ -566,7 +567,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
 

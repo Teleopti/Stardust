@@ -1,15 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -23,48 +32,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
 		
 		private IWorkShiftFilterService _target;
-		private MockRepository _mocks;
-		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-		private IShiftLengthDecider _shiftLengthDecider;
 		private ISchedulingOptions _schedulingOptions;
 		private IScheduleMatrixPro _matrix;
 		private IPerson _person;
-		private IWorkShift _workShift1;
-		private IWorkShift _workShift2;
-		private IWorkShift _workShift3;
-		private IShiftCategory _category;
 		private IActivity _activity;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private IActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
-		private IBusinessRulesShiftFilter _businessRulesShiftFilter;
-		private ICommonMainShiftFilter _commonMainShiftFilter;
-		private IContractTimeShiftFilter _contractTimeShiftFilter;
-		private IDisallowedShiftCategoriesShiftFilter _disallowedShiftCategoriesShiftFilter;
-		private IEffectiveRestrictionShiftFilter _effectiveRestrictionShiftFilter;
-		private IMainShiftOptimizeActivitiesSpecificationShiftFilter _mainShiftOptimizeActivitiesSpecificationShiftFilter;
-		private INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
-		private IPersonalShiftsShiftFilter _personalShiftsShiftFilter;
-		private IShiftCategoryRestrictionShiftFilter _shiftCategoryRestrictionShiftFilter;
-		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
-		private ITimeLimitsRestrictionShiftFilter _timeLimitsRestrictionShiftFilter;
-		private IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private WorkShiftFinderResult _finderResult;
 		private ITeamBlockInfo _teamBlockInfo;
 		private Group _group;
 		private List<IScheduleMatrixPro> _matrixList;
-		private ICommonActivityFilter _commonActivityFilter;
-	    private IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessibilityFilter;
-		private IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
-		private ITeamInfo _teamInfo;
-		private IDisallowedShiftProjectionCashesFilter _disallowedShiftProjectionCashesFilter;
+	    private ITeamInfo _teamInfo;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-            _ruleSetAccordingToAccessibilityFilter = _mocks.StrictMock<IRuleSetAccordingToAccessabilityFilter>();
-			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
-			_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
 			_schedulingOptions = new SchedulingOptions
 			{
 				WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime,
@@ -75,45 +55,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				UseStudentAvailability = false
 			};
 
+			_activity = ActivityFactory.CreateActivity("sd");
+			
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), _dateOnly);
 			_matrix = ScheduleMatrixProFactory.Create(new DateOnlyPeriod(_dateOnly, _dateOnly),
 				new SchedulingResultStateHolder {Schedules = new ScheduleDictionaryForTest(new Scenario("Default"), _dateOnly.Date)}, _person,
 				new VirtualSchedulePeriod(_person, _dateOnly, new VirtualSchedulePeriodSplitChecker(_person)));
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
-			_activityRestrictionsShiftFilter = _mocks.StrictMock<IActivityRestrictionsShiftFilter>();
-			_businessRulesShiftFilter = _mocks.StrictMock<IBusinessRulesShiftFilter>();
-			_commonMainShiftFilter = _mocks.StrictMock<ICommonMainShiftFilter>();
-			_contractTimeShiftFilter = _mocks.StrictMock<IContractTimeShiftFilter>();
-			_disallowedShiftCategoriesShiftFilter = _mocks.StrictMock<IDisallowedShiftCategoriesShiftFilter>();
-			_effectiveRestrictionShiftFilter = _mocks.StrictMock<IEffectiveRestrictionShiftFilter>();
-			_mainShiftOptimizeActivitiesSpecificationShiftFilter =
-				_mocks.StrictMock<IMainShiftOptimizeActivitiesSpecificationShiftFilter>();
-			_notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_personalShiftsShiftFilter = _mocks.StrictMock<IPersonalShiftsShiftFilter>();
-			_shiftCategoryRestrictionShiftFilter = _mocks.StrictMock<IShiftCategoryRestrictionShiftFilter>();
-			_shiftProjectionCacheManager = _mocks.StrictMock<IShiftProjectionCacheManager>();
-			_timeLimitsRestrictionShiftFilter = _mocks.StrictMock<ITimeLimitsRestrictionShiftFilter>();
-			_workTimeLimitationShiftFilter = _mocks.StrictMock<IWorkTimeLimitationShiftFilter>();
-			_commonActivityFilter = _mocks.StrictMock<ICommonActivityFilter>();
-			_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
-		    _ruleSetPersonalSkillsActivityFilter = _mocks.StrictMock<IRuleSetPersonalSkillsActivityFilter>();
-			_disallowedShiftProjectionCashesFilter = _mocks.StrictMock<IDisallowedShiftProjectionCashesFilter>();
-			_target = new WorkShiftFilterService(_activityRestrictionsShiftFilter, _businessRulesShiftFilter,
-												 _commonMainShiftFilter, _contractTimeShiftFilter,
-												 _disallowedShiftCategoriesShiftFilter, _effectiveRestrictionShiftFilter,
-												 _mainShiftOptimizeActivitiesSpecificationShiftFilter,
-												 _notOverWritableActivitiesShiftFilter, _personalShiftsShiftFilter,
-												 _shiftCategoryRestrictionShiftFilter,
-												 _timeLimitsRestrictionShiftFilter, _workTimeLimitationShiftFilter,
-                                                 _shiftLengthDecider, 
-												 _workShiftMinMaxCalculator, 
-												 _commonActivityFilter, 
-												 _ruleSetAccordingToAccessibilityFilter,
-												 _shiftProjectionCacheManager,
-												 _ruleSetPersonalSkillsActivityFilter,
-												 _disallowedShiftProjectionCashesFilter
-												 );
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
+			var fakeScheduleDayForPerson = new FakeScheduleDayForPerson(new SchedulePartFactoryForDomain().CreatePart());
+			var stateHolder = new SchedulingResultStateHolder();
+			var validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter(new FakeTimeZoneGuard(_timeZoneInfo));
+			_target = new WorkShiftFilterService(new ActivityRestrictionsShiftFilter(),
+				new BusinessRulesShiftFilter(() => new ScheduleRangeForPerson(()=>stateHolder), validDateTimePeriodShiftFilter,
+					new LongestPeriodForAssignmentCalculator()),
+				new CommonMainShiftFilter(new ScheduleDayEquator(new EditableShiftMapper())),
+				new ContractTimeShiftFilter(
+					() =>
+						new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
+							new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8),TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator())),
+				new DisallowedShiftCategoriesShiftFilter(), new EffectiveRestrictionShiftFilter(),
+				new MainShiftOptimizeActivitiesSpecificationShiftFilter(),
+				new NotOverWritableActivitiesShiftFilter(() => fakeScheduleDayForPerson),
+				new PersonalShiftsShiftFilter(() => fakeScheduleDayForPerson, new PersonalShiftMeetingTimeChecker()),
+				new ShiftCategoryRestrictionShiftFilter(),
+				new TimeLimitsRestrictionShiftFilter(validDateTimePeriodShiftFilter, new LatestStartTimeLimitationShiftFilter(),
+					new EarliestEndTimeLimitationShiftFilter()), new WorkTimeLimitationShiftFilter(),
+				new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator())),
+				new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractorForTest(),
+					new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8))), new WorkShiftWeekMinMaxCalculator()),
+				new CommonActivityFilter(),
+				new RuleSetAccordingToAccessabilityFilter(new TeamBlockRuleSetBagExtractor(),
+					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker(), new GroupPersonSkillAggregator()),
+				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
+					new RuleSetDeletedShiftCategoryChecker(),
+					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
+					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker()),
+				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter());
+			
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>{ _matrixList };
@@ -171,207 +149,141 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldFilterWorkShiftsForRoleModel()
 		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
-		    _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			_schedulingOptions.BlockSameShift = true;
-			var caches = getCashes();
-			var ruleSetList = new List<IWorkShiftRuleSet>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-				      .Return(true);
-				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(ruleSetList);
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(ruleSetList, _teamInfo, _dateOnly)).IgnoreArguments()
-					.Return(ruleSetList);
-
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				filterForRoleModel(caches, effectiveRestriction);
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNotNull(retShift);
-			}
-		}
-
-		[Test, Ignore]
-		public void ShouldFilterWorkShiftsWhenActivitiesRequiresSkillTeamMembersDoesntHave()
-		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+				new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			_schedulingOptions.BlockSameShift = true;
-			var caches = getCashes();
-			var ruleSetList = new List<IWorkShiftRuleSet>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-					  .Return(true);
-				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(ruleSetList);
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(ruleSetList, _teamInfo, _dateOnly)).IgnoreArguments()
-					.Return(ruleSetList);
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory()));
+			
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				filterForRoleModel(caches, effectiveRestriction);
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNotNull(retShift);
-			}
+			var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
+				_finderResult, true);
+			Assert.IsNotNull(retShift);
+		}
+
+		[Test]
+		public void ShouldFilterWorkShiftsAwayWhenActivitiesInMasterActivityRequiresSkillTeamMembersDoesntHave()
+		{
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+				new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			_schedulingOptions.BlockSameShift = true;
+			_activity.RequiresSkill = true;
+
+			var masterActivity = new MasterActivity();
+			masterActivity.UpdateActivityCollection(new List<IActivity>{_activity});
+
+			_person.AddSkill(new PersonSkill(SkillFactory.CreateSkill("Skill with other activity"), new Percent(1)),
+				_person.Period(_dateOnly));
+
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory()));
+
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
+
+			var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
+				_finderResult, true);
+			Assert.IsNull(retShift);
 		}
 
 		[Test]
 		public void ShouldFilterWorkShiftsForRoleModelUsingBlackListIfAllowed()
 		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+				new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			effectiveRestriction.IsPreferenceDay = true;
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			_schedulingOptions.UsePreferences = true;
-			var caches = getCashes();
-			var ruleSetList = new List<IWorkShiftRuleSet>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-					  .Return(true);
-				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(ruleSetList);
 
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(ruleSetList, _teamInfo, _dateOnly)).IgnoreArguments()
-					.Return(ruleSetList);
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory()));
 
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(new List<IShiftProjectionCache>());
-				filterForRoleModel(new List<IShiftProjectionCache>(), effectiveRestriction);
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			workShiftRuleSet.OnlyForRestrictions = true;
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, true, false)).IgnoreArguments().Return(caches);
-				filterForRoleModel(caches, effectiveRestriction);
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNotNull(retShift);
-			}
-		}
-
-		private void filterForRoleModel(IList<IShiftProjectionCache> caches, IEffectiveRestriction effectiveRestriction)
-		{
-			Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestriction)).Return(caches);
-			Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches,
-				_schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
-			Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult))
-				.Return(caches);
-			Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches,
-				_finderResult)).Return(caches);
-			Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction,
-				_finderResult)).Return(caches);
-			Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction,
-				_finderResult))
-				.Return(caches);
-			Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestriction, _finderResult)).Return(caches);
-			Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
-				_schedulingOptions, _finderResult)).Return(caches);
-			Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, caches, _finderResult))
-				.Return(caches);
-			Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
-			Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-				.Return(caches);
+			var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
+				_finderResult, true);
+			Assert.IsNotNull(retShift);
 		}
 
 		[Test]
 		public void ShouldReturnNullIfShiftListIsNull()
 		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
-            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			var caches = getCashes();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-				      .Return(true);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(null);
-				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
-                Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
-                
-                Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
-                      .Return(null);
-                Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
-				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, null,
-				                                            _schedulingOptions, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
-				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-				      .Return(null);
-                Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo,
-					_dateOnly)).IgnoreArguments()
-					.Return(new List<IWorkShiftRuleSet>());
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+				new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new Not<IEditableShift>();
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNull(retShift);
-			}
-		}
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory()));
 
-		[Test]
-		public void ShouldReturnNullFilteredWorkShiftsListIsEmpty()
-		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
-            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			var caches = getCashes();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-				      .Return(true);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(null);
-				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
-                Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
-                
-                Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
-                      .Return(null);
-                Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
-                Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, null,
-                                                            _schedulingOptions, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
-				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-                      .Return(null);
-                Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo,
-					_dateOnly)).IgnoreArguments()
-					.Return(new List<IWorkShiftRuleSet>());
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNull(retShift);
-			}
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
+
+			var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
+				_finderResult, true);
+			Assert.IsNull(retShift);
 		}
 
 		[Test]
 		public void ShouldReturnNullIfEffectiveRestrictionShiftFilterSaysFalse()
 		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+				new EndTimeLimitation(), new WorkTimeLimitation(null,TimeSpan.FromHours(7)), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-				      .Return(false);
-			}
-			using (_mocks.Playback())
-			{
-				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-				Assert.IsNull(retShift);
-			}
+
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory()));
+
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
+
+			var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions,
+				_finderResult, true);
+			Assert.IsNull(retShift);
+		}
+
+		[Test]
+		public void ShouldReturnNoShiftsWhenNotMatchingRequestedShiftCategory()
+		{
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("cat");
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+				new EndTimeLimitation(),
+				new WorkTimeLimitation(), null, null, null,
+				new List<IActivityRestriction>());
+			
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
+			_schedulingOptions.ShiftCategory = shiftCategory;
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), ShiftCategoryFactory.CreateShiftCategory("other")));
+
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
+
+			var result = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+			result.Should().Be.Null();
 		}
 
 		[Test]
@@ -379,78 +291,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("cat");
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-			                                                                      new EndTimeLimitation(),
-			                                                                      new WorkTimeLimitation(), null, null, null,
-			                                                                      new List<IActivityRestriction>());
-			IEffectiveRestriction effectiveRestrictionWithShiftCategory = new EffectiveRestriction(new StartTimeLimitation(),
-			                                                                                       new EndTimeLimitation(),
-			                                                                                       new WorkTimeLimitation(), null,
-			                                                                                       null, null,
-			                                                                                       new List<IActivityRestriction>
-				                                                                                       ())
-				{
-					ShiftCategory =
-						shiftCategory
-				};
+				new EndTimeLimitation(),
+				new WorkTimeLimitation(), null, null, null,
+				new List<IActivityRestriction>());
+
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
 			_schedulingOptions.ShiftCategory = shiftCategory;
-            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			var caches = getCashes();
-			using (_mocks.Record())
-			{
-				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
-					  .Return(true);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestrictionWithShiftCategory)).Return(caches);
-				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
-				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestrictionWithShiftCategory.ShiftCategory, caches, _finderResult)).Return(caches);
-				Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches, _finderResult)).Return(caches);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestrictionWithShiftCategory, _finderResult)).Return(caches);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestrictionWithShiftCategory, _finderResult))
-					  .Return(caches);
-				Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestrictionWithShiftCategory, _finderResult)).Return(caches);
-				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, caches,
-															_schedulingOptions, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
-				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-                      .Return(caches);
-                Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
-				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo, _dateOnly)).IgnoreArguments()
-					.Return(new List<IWorkShiftRuleSet>());
-			}
-			using (_mocks.Playback())
-			{
-				_target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
-			}
-		}
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 
-		private IList<IShiftProjectionCache> getCashes()
-		{
-			var dateOnly = new DateOnly(2009, 2, 2);
-			var tmpList = getWorkShifts();
-			var retList = new List<IShiftProjectionCache>();
-			foreach (IWorkShift shift in tmpList)
-			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnly, _timeZoneInfo);
-				retList.Add(cache);
-			}
-			return retList;
-		}
+			var workShiftRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(_activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 
-		private IEnumerable<IWorkShift> getWorkShifts()
-		{
-			_activity = ActivityFactory.CreateActivity("sd");
-			_category = ShiftCategoryFactory.CreateShiftCategory("dv");
-			_workShift1 = WorkShiftFactory.CreateWorkShift(new TimeSpan(7, 0, 0), new TimeSpan(15, 0, 0),
-														  _activity, _category);
-			_workShift2 = WorkShiftFactory.CreateWorkShift(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0),
-														  _activity, _category);
-			_workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
-																	  _activity, _category);
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(workShiftRuleSet);
+			_person.Period(_dateOnly).RuleSetBag = ruleSetBag;
 
-			return new List<IWorkShift> { _workShift1, _workShift2, _workShift3 };
+			var result = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+			result.Should().Not.Be.Null();
 		}
 	}
 }

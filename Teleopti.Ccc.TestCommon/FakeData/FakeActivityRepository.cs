@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -9,9 +8,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeActivityRepository : IActivityRepository
 	{
-		private IList<IActivity> _activities;
+		private readonly IList<IActivity> _activities;
 		private bool withoutAdd = true;
-		private Activity activity = ActivityFactory.CreateActivity("phone");
+		private readonly IActivity activity = ActivityFactory.CreateActivity("phone");
 
 		public FakeActivityRepository()
 		{

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return schedulerStateHolder ??
 			       (schedulerStateHolder =
 				       new SchedulerStateHolder(componentContext.Resolve<ISchedulingResultStateHolder>(),
-					       componentContext.Resolve<ICommonStateHolder>(), componentContext.Resolve<ICurrentTeleoptiPrincipal>()));
+					       componentContext.Resolve<ICommonStateHolder>(), componentContext.Resolve<ITimeZoneGuard>()));
 		}
     }
 }

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private BusinessRulesShiftFilter _target;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private DateOnly _dateOnly;
+		private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
 		[SetUp]
 		public void Setup()
@@ -29,21 +30,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 
-			_mocks.StrictMock<IScheduleDictionary>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new BusinessRulesShiftFilter(()=>_resultStateHolder, _validDateTimePeriodShiftFilter,
+			_target = new BusinessRulesShiftFilter(()=>new ScheduleRangeForPerson(()=>_resultStateHolder), _validDateTimePeriodShiftFilter,
 			                                       _longestPeriodForAssignmentCalculator);
 		}
 		
 		private IList<IShiftProjectionCache> getCashes()
 		{
-			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var tmpList = getWorkShifts();
 			var retList = new List<IShiftProjectionCache>();
 			foreach (IWorkShift shift in tmpList)
 			{
 				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(_dateOnly, timeZoneInfo);
+				cache.SetDate(_dateOnly, _timeZoneInfo);
 				retList.Add(cache);
 			}
 			return retList;

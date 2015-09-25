@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class ActivityFactory
     {
-        public static Activity CreateActivity(string name,
+        public static IActivity CreateActivity(string name,
                                               Color color)
         {
-            Activity ret = new Activity(name);
-            ((IActivity)ret).SetId(Guid.NewGuid());
+            IActivity ret = new Activity(name);
+            ret.SetId(Guid.NewGuid());
             ret.DisplayColor = color;
             return ret;
         }
 
-        public static Activity CreateActivity(string name)
+        public static IActivity CreateActivity(string name)
         {
             return CreateActivity(name, Color.Green);
         }

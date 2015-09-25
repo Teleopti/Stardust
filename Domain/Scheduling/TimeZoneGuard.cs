@@ -5,10 +5,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface ITimeZoneGuard
 	{
-		TimeZoneInfo TimeZone { get; set; }
+		TimeZoneInfo CurrentTimeZone();
 	}
 
-	public sealed class TimeZoneGuard : ITimeZoneGuard
+	public class TimeZoneGuardWrapper : ITimeZoneGuard
+	{
+		public TimeZoneInfo CurrentTimeZone()
+		{
+			return TimeZoneGuard.Instance.TimeZone;
+		}
+	}
+
+	public sealed class TimeZoneGuard
 	{
 		private static readonly Lazy<TimeZoneGuard> _guard = new Lazy<TimeZoneGuard>(()=>new TimeZoneGuard());
 		

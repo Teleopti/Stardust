@@ -17,11 +17,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class PersonalShiftsShiftFilterTest
 	{
 		private MockRepository _mocks;
-		private ISchedulingResultStateHolder _resultStateHolder;
 		private IPersonalShiftsShiftFilter _target;
 		private IPersonAssignment _personAssignment;
-		private IScheduleRange _scheduleRange;
-		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleDay _part;
 		private IPerson _person;
 		private DateOnly _dateOnly;
@@ -34,17 +31,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
-			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_part = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson("Bill");
-			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new PersonalShiftsShiftFilter(()=>_resultStateHolder, _personalShiftMeetingTimeChecker);
+			_target = new PersonalShiftsShiftFilter(()=>new FakeScheduleDayForPerson(_part), _personalShiftMeetingTimeChecker);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldCoverMeetingAndPersonalShiftsWhenItIsPossible()
 		{
 			var period = new DateTimePeriod(new DateTime(2013, 3, 1, 8, 0, 0, DateTimeKind.Utc),
@@ -76,9 +70,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.PersonalActivities()).Return(new []{new PersonalShiftLayer(new Activity("sdf"), period)}).Repeat.AtLeastOnce();
@@ -119,9 +110,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period).Repeat.AtLeastOnce();
@@ -163,9 +151,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 			}

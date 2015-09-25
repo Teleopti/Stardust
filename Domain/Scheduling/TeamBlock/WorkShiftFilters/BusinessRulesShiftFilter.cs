@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class BusinessRulesShiftFilter : IBusinessRulesShiftFilter
 	{
-		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
+		private readonly Func<IScheduleRangeForPerson> _scheduleRangeForPerson;
 		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 
-		public BusinessRulesShiftFilter(Func<ISchedulingResultStateHolder> resultStateHolder,
+		public BusinessRulesShiftFilter(Func<IScheduleRangeForPerson> scheduleRangeForPerson,
 		                                IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
 		                                ILongestPeriodForAssignmentCalculator longestPeriodForAssignmentCalculator)
 		{
-			_resultStateHolder = resultStateHolder;
+			_scheduleRangeForPerson = scheduleRangeForPerson;
 			_validDateTimePeriodShiftFilter = validDateTimePeriodShiftFilter;
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime, person.PermissionInformation.DefaultTimeZone());
 			DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
 
-			var scheduleRange = _resultStateHolder().Schedules[person];
+			var scheduleRange = _scheduleRangeForPerson().ForPerson(person);
 			var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
 			if (!newRulePeriod.HasValue)
 			{

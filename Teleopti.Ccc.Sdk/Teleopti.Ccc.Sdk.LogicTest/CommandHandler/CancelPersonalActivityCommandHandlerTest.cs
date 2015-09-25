@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private ISaveSchedulePartService _saveSchedulePartService;
 		private CancelPersonalActivityCommandHandler _target;
 		private IPerson _person;
-		private Activity _activity;
+		private IActivity _activity;
 		private IScenario _scenario;
 		private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };

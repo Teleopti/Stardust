@@ -5,6 +5,7 @@ using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -15,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Reporting
                 factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
 
                 ICollection<IPerson> persons = rep.FindPeopleInOrganization(period, false);
-				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneHelper.CurrentSessionTimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)), new SchedulingResultStateHolder());
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneHelper.CurrentSessionTimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
             }
         }
 

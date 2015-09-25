@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         FilteredCollection<ILayer<IActivity>> _collection;
         FakeLayer _fakeLayer;
         MainShiftLayer _mainShiftLayer;
-        Activity _fakeActivity;
+        IActivity _fakeActivity;
         DateTimePeriod _fakePeriod;
 
         [SetUp]
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(2, _collection.Count);
         }
 
-        private class FakeLayer : Layer<Activity>
+        private class FakeLayer : Layer<IActivity>
         {
-            public FakeLayer(Activity act, DateTimePeriod period)
+            public FakeLayer(IActivity act, DateTimePeriod period)
                 : base(act, period)
             {
             }

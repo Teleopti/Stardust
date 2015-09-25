@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// <returns></returns>
 		public static IEditableShift CreateEditorShiftWithThreeActivityLayers()
 		{
-			Activity telephone = ActivityFactory.CreateActivity("Tel");
+			var telephone = ActivityFactory.CreateActivity("Tel");
 			DateTimePeriod period1 =
 				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 								   new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 
-			Activity longDuty = ActivityFactory.CreateActivity("Long duty");
+			var longDuty = ActivityFactory.CreateActivity("Long duty");
 			DateTimePeriod period2 =
 				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 								   new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc));

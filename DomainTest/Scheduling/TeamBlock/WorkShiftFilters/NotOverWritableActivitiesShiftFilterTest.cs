@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,12 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class NotOverWritableActivitiesShiftFilterTest
 	{
 		private MockRepository _mocks;
-		private DateOnly _dateOnly;
-		private ISchedulingResultStateHolder _resultStateHolder;
+		private DateOnly _dateOnly = new DateOnly(2013, 3, 1);
 		private INotOverWritableActivitiesShiftFilter _target;
 		private IPersonAssignment _personAssignment;
-		private IScheduleRange _scheduleRange;
-		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleDay _part;
 		private WorkShiftFinderResult _finderResult;
 		private IPerson _person;
@@ -33,15 +29,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_dateOnly = new DateOnly(2013, 3, 1);
-			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
-			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_part = _mocks.StrictMock<IScheduleDay>();
 			_person = PersonFactory.CreatePerson("Bill");
 			_finderResult = new WorkShiftFinderResult(_person, new DateOnly(2009, 2, 3));
-			_target = new NotOverWritableActivitiesShiftFilter(()=>_resultStateHolder);
+			_target = new NotOverWritableActivitiesShiftFilter(()=> new FakeScheduleDayForPerson(_part));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -59,9 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(_part.PersonAssignment(true)).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
 			Expect.Call(_personAssignment.PersonalActivities()).Return(getPersonalLayers(currentDate)).Repeat.AtLeastOnce();
-			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			_mocks.ReplayAll();
 			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);
 			retShifts.Count.Should().Be.EqualTo(0);
@@ -78,9 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
-			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			Expect.Call(_part.PersonAssignment(true)).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
 			Expect.Call(_personAssignment.PersonalActivities())
@@ -91,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks.VerifyAll();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void VerifyIfMeetingCannotOverrideActivity()
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -112,10 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
 			Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 			Expect.Call(meeting.Period).Return(new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)));
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			Expect.Call(_part.PersonAssignment(true)).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
@@ -124,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks.VerifyAll();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldNotFilterIfNoPersonalShift()
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -132,9 +115,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
-			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			Expect.Call(_part.PersonAssignment(true)).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
 			Expect.Call(_personAssignment.PersonalActivities())
@@ -161,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
-		private static List<IVisualLayer> getLunchLayer(DateTime currentDate, Activity lunch)
+		private static List<IVisualLayer> getLunchLayer(DateTime currentDate, IActivity lunch)
 		{
 			var lunchLayer = new List<IVisualLayer>
                                  {
@@ -181,6 +161,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                                                                                            currentDate.AddHours(13)))
                                      };
 			return personalLayers;
+		}
+	}
+
+	public class FakeScheduleDayForPerson : IScheduleDayForPerson
+	{
+		private readonly IScheduleDay _scheduleDay;
+
+		public FakeScheduleDayForPerson(IScheduleDay scheduleDay)
+		{
+			_scheduleDay = scheduleDay;
+		}
+
+		public IScheduleDay ForPerson(IPerson person, DateOnly date)
+		{
+			return _scheduleDay;
 		}
 	}
 }

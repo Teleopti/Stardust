@@ -2,9 +2,7 @@ using System;
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class LayerTest
     {
-        private Activity fakeActivity;
+        private IActivity fakeActivity;
 
         /// <summary>
         /// Runs before each test

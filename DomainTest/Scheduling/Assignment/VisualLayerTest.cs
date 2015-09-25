@@ -3,7 +3,6 @@ using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     {
         private VisualLayer target;
         private DateTimePeriod period;
-        private Activity activity;
+        private IActivity activity;
         private IVisualLayerFactory layerFactory;
     	private IPerson person;
 

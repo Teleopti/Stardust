@@ -716,7 +716,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
         public void ResetCache()
         {
-            throw new NotImplementedException();
         }
     }
 }

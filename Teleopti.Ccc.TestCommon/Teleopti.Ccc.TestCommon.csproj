@@ -194,6 +194,7 @@
     <Compile Include="FakeSignalRClient.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="FakeTimeZoneGuard.cs" />
     <Compile Include="FakeUserCulture.cs" />
     <Compile Include="FakeUserTimeZone.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
