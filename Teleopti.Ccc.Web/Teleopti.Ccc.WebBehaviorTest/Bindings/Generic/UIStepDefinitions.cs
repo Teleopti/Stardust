@@ -76,5 +76,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertAnyContains("." + cssClass.Name, text.Text);
 		}
+
+		[Then(@"I should see status on '(.*)'")]
+		public void ThenIShouldSeeStatusOn(CssClass cssClass)
+		{
+			Browser.Interactions.AssertExists("." + cssClass.Name);
+		}
+
 	}
 }
