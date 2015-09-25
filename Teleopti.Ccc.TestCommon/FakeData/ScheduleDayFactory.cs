@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public static class ScheduleDayFactory
 	{
 
-		public static IScheduleDay Create (DateOnly dateOnly, IPerson person)
+		public static IScheduleDay Create (DateOnly dateOnly, IPerson person, IScenario scenario = null)
 		{
-			var scenario = new Scenario("d");
+			scenario = scenario ?? new Scenario("d");
 			var period = new DateTimePeriod(1800, 1, 1, 2100, 1, 1);
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>());
 			var parameters = new ScheduleParameters(scenario, person, period);

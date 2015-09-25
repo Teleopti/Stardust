@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public string CurrentWeekEndDate { get; set; }
 		public string CurrentWeekStartDate { get; set; }
-		public bool ShowSeatBookingPermission { get; set; }
 	}
 
     public class RequestPermission

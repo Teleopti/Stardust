@@ -61,13 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay).ToList();
 									var personRequests = _personRequestProvider.RetrieveRequests(week);
 									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
-
-									var showSeatBookingPermission =
-										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.ViewSeatBooking) &&
-										_toggleManager.IsEnabled(Toggles.Wfm_SeatPlan_ShowSeatBookingInMyTime_34799);
-
-									var seatBookings = showSeatBookingPermission ? _seatBookingProvider.GetSeatBookingsForCurrentUser (week) : null;
+									
+									var showSeatBookings = _toggleManager.IsEnabled(Toggles.Wfm_SeatPlan_ShowSeatBookingInMyTime_34799);
+									var seatBookings = showSeatBookings ? _seatBookingProvider.GetSeatBookingsForScheduleDays (scheduleDays) : null;
 																																				
 									var earliest =
 										scheduleDays.Min(
@@ -245,7 +241,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												ShiftExchangePermission = shiftExchangePermission,
 												ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,
 												PersonAccountPermission = personalAccountPermission,
-												ShowSeatBookingPermission = showSeatBookingPermission,
 												IsCurrentWeek = isCurrentWeek,
 											};
 								});

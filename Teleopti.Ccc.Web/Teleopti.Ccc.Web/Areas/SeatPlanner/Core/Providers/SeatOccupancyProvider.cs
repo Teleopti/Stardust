@@ -12,14 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ILoggedOnUser _loggedOnUser;
-
-		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone, ILoggedOnUser loggedOnUser)
+		
+		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
 		{
 			_seatBookingRepository = seatBookingRepository;
 			_locationRepository = locationRepository;
 			_userTimeZone = userTimeZone;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IList<OccupancyViewModel> Get(Guid seatId, DateOnly date)
@@ -28,9 +26,20 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return createViewModelsForBookings(bookings);
 		}
 
-		public IList<OccupancyViewModel> GetSeatBookingsForCurrentUser (DateOnlyPeriod dateOnlyPeriod)
+		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays (List<IScheduleDay> scheduleDays)
 		{
-			return getSeatBookingsForPerson (_loggedOnUser.CurrentUser(), dateOnlyPeriod);
+			var bookings = new List<ISeatBooking>();
+
+			foreach (var day in scheduleDays)
+			{
+				var bookingForPersonOnDate = _seatBookingRepository.LoadSeatBookingForPerson(day.PersonAssignment().Date, day.Person);
+				if (bookingForPersonOnDate != null)
+				{
+					bookings.Add(bookingForPersonOnDate);
+				}
+			}
+
+			return createViewModelsForBookings(bookings);
 		}
 
 		private List<OccupancyViewModel> createViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
@@ -63,10 +72,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone());
 		}
 
-		private List<OccupancyViewModel> getSeatBookingsForPerson (IPerson person, DateOnlyPeriod bookingDatePeriod)
-		{
-			var bookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod (person, bookingDatePeriod);
-			return createViewModelsForBookings (bookings);
-		}
+		
 	}
 }

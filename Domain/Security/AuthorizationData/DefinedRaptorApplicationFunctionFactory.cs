@@ -150,8 +150,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics, "xxQueueMetrics", DefinedRaptorApplicationFunctionForeignIds.MyReportQueueMetrics, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewBadge, "xxViewBadge", DefinedRaptorApplicationFunctionForeignIds.ViewBadge, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, "xxViewBadgeLeaderboard", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboard, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceReport, "xxAbsenceReport", DefinedRaptorApplicationFunctionForeignIds.AbsenceReport, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSeatBooking, "xxViewSeatBookings", DefinedRaptorApplicationFunctionForeignIds.ViewSeatBooking, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceReport, "xxAbsenceReport", DefinedRaptorApplicationFunctionForeignIds.AbsenceReport, null);	
 
 			// Web
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
