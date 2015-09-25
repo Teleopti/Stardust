@@ -1745,15 +1745,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AGREE.
-        /// </summary>
-        public static string AGREE {
-            get {
-                return ResourceManager.GetString("AGREE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bronze badge threshold for AHT must be higher than the silver badge threshold..
         /// </summary>
         public static string AHTBronzeThresholdShouldLessThanSilverThreshold {
@@ -5454,7 +5445,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It will remove this campaign, are you sure about this?.
+        ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
         /// </summary>
         public static string ConfirmRemoveCampaign {
             get {
@@ -7758,15 +7749,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DifferencePercent {
             get {
                 return ResourceManager.GetString("DifferencePercent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DISMISS.
-        /// </summary>
-        public static string DISMISS {
-            get {
-                return ResourceManager.GetString("DISMISS", resourceCulture);
             }
         }
         
@@ -16588,6 +16570,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Report For Current Conditions.
+        /// </summary>
+        public static string NoReportForCurrentConditions {
+            get {
+                return ResourceManager.GetString("NoReportForCurrentConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No requests could be found.
         /// </summary>
         public static string NoRequestsFound {
@@ -17975,15 +17966,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To view existing campaigns and create new campaign.
-        /// </summary>
-        public static string OutboundIntroduction {
-            get {
-                return ResourceManager.GetString("OutboundIntroduction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Early.
         /// </summary>
         public static string OutboundOverstaffRule {
@@ -18097,15 +18079,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OverridePeriod {
             get {
                 return ResourceManager.GetString("OverridePeriod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Overscheduled.
-        /// </summary>
-        public static string Overscheduled {
-            get {
-                return ResourceManager.GetString("Overscheduled", resourceCulture);
             }
         }
         
@@ -28128,15 +28101,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UnderConstruction {
             get {
                 return ResourceManager.GetString("UnderConstruction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Underscheduled.
-        /// </summary>
-        public static string Underscheduled {
-            get {
-                return ResourceManager.GetString("Underscheduled", resourceCulture);
             }
         }
         

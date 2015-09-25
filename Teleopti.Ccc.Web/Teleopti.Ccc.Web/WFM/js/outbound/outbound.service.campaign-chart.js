@@ -17,8 +17,6 @@
            'Backlog',
            'Scheduled',
            'Planned',
-           'Underscheduled',
-           'Overscheduled',
            'Progress',
            'NeededPersonHours',
            'EndDate',

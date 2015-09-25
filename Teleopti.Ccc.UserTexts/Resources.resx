@@ -13058,10 +13058,6 @@ Reduce the complexity to use these shifts.</value>
     <value>having range of</value>
     <comment>a message shown with the suggested planning period like 'having range of 2 Week'</comment>
   </data>
-  <data name="AGREE" xml:space="preserve">
-    <value>AGREE</value>
-    <comment>use in wfm web. button of confirm message box when delete a campaign</comment>
-  </data>
   <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
     <value>Are you sure you want to delete this campaign?</value>
     <comment>use in wfm web outbound, campaign view. text of confirm message box when delete a campaign</comment>
@@ -13094,17 +13090,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Delete Campaign</value>
     <comment>use in wfm web outbound, campaign view. title of confirm message box when delete a campaign</comment>
   </data>
-  <data name="DISMISS" xml:space="preserve">
-    <value>DISMISS</value>
-    <comment>use in wfm web. button of confirm message box when delete a campaign</comment>
-  </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>Outbound Campaigns</value>
     <comment>use in wfm web outbound, campaign list view</comment>
-  </data>
-  <data name="OutboundIntroduction" xml:space="preserve">
-    <value>To view existing campaigns and create new campaign</value>
-    <comment>use in wfm web outbound, campaign view</comment>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Progress</value>
@@ -13354,14 +13342,6 @@ Reduce the complexity to use these shifts.</value>
     <value>Backlog</value>
     <comment>Outbound campaign backlog (remaining work to do)</comment>
   </data>
-  <data name="Overscheduled" xml:space="preserve">
-    <value>Overscheduled</value>
-    <comment>Scheduled hours is higher than the forecasted hours.</comment>
-  </data>
-  <data name="Underscheduled" xml:space="preserve">
-    <value>Underscheduled</value>
-    <comment>Scheduled hours is lower than forecasted hours.</comment>
-  </data>
   <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
     <value>Drag and Drop .xls or .xlsx files here or click to upload</value>
     <comment>Hint to tell user to upload file</comment>
@@ -13452,7 +13432,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Used on the view seat bookings page when a seat has no bookings</comment>
   </data>
   <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>It will remove this campaign, are you sure about this?</value>
+    <value>Are you sure you want to delete this campaign?</value>
     <comment>use in WFM web outbound module, the message of message box when remove a campaign</comment>
   </data>
   <data name="RemoveCampaign" xml:space="preserve">
