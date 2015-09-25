@@ -15,8 +15,13 @@
 				selectedTeams: '=selectedTeams',
 				selectedLocations: '=selectedLocations'
 			},
+			link: linkFunction,
 			restrict: "E",
 			templateUrl: "js/seatManagement/html/seatplanreport.html"
+		};
+
+		function linkFunction() {
+			$('#materialcontainer').scrollTop(0);
 		};
 	};
 
