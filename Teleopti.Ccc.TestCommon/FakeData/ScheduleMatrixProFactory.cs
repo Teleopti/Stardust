@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class ScheduleMatrixProFactory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public static ScheduleMatrixPro Create(DateOnlyPeriod period, IPerson person)
         {
             ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();

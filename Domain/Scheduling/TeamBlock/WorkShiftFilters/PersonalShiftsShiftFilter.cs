@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
@@ -66,29 +65,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		private static TimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
 			var ass = schedulePart.PersonAssignment();
-			if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
+			var meetings = schedulePart.PersonMeetingCollection();
+			if (meetings.Count == 0 && ass==null)
 			{
 				return null;
 			}
 
 			DateTimePeriod? period = null;
 
-			foreach (IPersonMeeting personMeeting in schedulePart.PersonMeetingCollection())
+			foreach (IPersonMeeting personMeeting in meetings)
 			{
-				if (!period.HasValue)
-					period = personMeeting.Period;
-
-				period = period.Value.MaximumPeriod(personMeeting.Period);
+				period = !period.HasValue ? personMeeting.Period : period.Value.MaximumPeriod(personMeeting.Period);
 			}
 
 			if (ass!=null)
 			{
 				foreach (var layer in ass.PersonalActivities())
 				{
-					if (!period.HasValue)
-						period = layer.Period;
-					else
-						period = period.Value.MaximumPeriod(layer.Period);
+					period = !period.HasValue ? layer.Period : period.Value.MaximumPeriod(layer.Period);
 				}
 			}
 

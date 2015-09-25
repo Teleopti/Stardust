@@ -34,10 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 
-			DateTime approximateTime = new DateTime(dateToCheck.Year, dateToCheck.Month, dateToCheck.Day, 12, 0, 0,
-			                                        DateTimeKind.Unspecified);
-			DateTime approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime,
-			                                                 person.PermissionInformation.DefaultTimeZone());
+			var approximateTime = dateToCheck.Date.AddHours(12);
+			var approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime, person.PermissionInformation.DefaultTimeZone());
 			DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
 
 			var scheduleRange = _resultStateHolder().Schedules[person];

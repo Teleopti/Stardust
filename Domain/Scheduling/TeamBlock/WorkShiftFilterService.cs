@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 				person, matrixList, isSameOpenHoursInBlock);
-			shiftList = runFiltersForRoleModel2(shiftList, teamBlockInfo, finderResult);
+			shiftList = runPersonalShiftFilterForEachMember(shiftList, teamBlockInfo, finderResult);
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
 				shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 						person, matrixList, isSameOpenHoursInBlock);
-				shiftList = runFiltersForRoleModel2(shiftList, teamBlockInfo, finderResult);
+				shiftList = runPersonalShiftFilterForEachMember(shiftList, teamBlockInfo, finderResult);
 			}
 
 			if (shiftList == null)
@@ -234,11 +234,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return shiftList;
 		}
 
-		private IList<IShiftProjectionCache> runFiltersForRoleModel2(IList<IShiftProjectionCache> shiftList, ITeamBlockInfo teamBlockInfo, IWorkShiftFinderResult finderResult)
+		private IList<IShiftProjectionCache> runPersonalShiftFilterForEachMember(IList<IShiftProjectionCache> shiftList, ITeamBlockInfo teamBlockInfo, IWorkShiftFinderResult finderResult)
 		{
+			var blockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 			foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
 			{
-				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+				foreach (var dateOnly in blockDays)
 				{
 					shiftList = _personalShiftsShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
 				}

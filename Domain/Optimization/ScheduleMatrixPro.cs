@@ -7,25 +7,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ScheduleMatrixPro : IScheduleMatrixPro
     {
-
-        #region Variables
-
-        private readonly ISchedulingResultStateHolder _stateHolder;
+	    private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly IPerson _person;
         private readonly IVirtualSchedulePeriod _schedulePeriod;
-        private IDictionary<DateOnly, IScheduleDayPro> _effectivePeriodDays;
-        private IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDays;
-        private IDictionary<DateOnly, IScheduleDayPro> _outerWeeksPeriodDays;
-        private IDictionary<DateOnly, IScheduleDayPro> _weekBeforeOuterPeriodDays;
-        private IDictionary<DateOnly, IScheduleDayPro> _weekAfterOuterPeriodDays;
+		private readonly IDictionary<DateOnly, IScheduleDayPro> _effectivePeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+	    private readonly IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+	    private readonly IDictionary<DateOnly, IScheduleDayPro> _outerWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+	    private readonly IDictionary<DateOnly, IScheduleDayPro> _weekBeforeOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+        private readonly IDictionary<DateOnly,IScheduleDayPro> _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IDictionary<DateOnly, IScheduleDayPro> _unLockedDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IScheduleRange _activeScheduleRange;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDayPro"/> class.
         /// </summary>
         /// <param name="stateHolder">The state holder.</param>
@@ -48,11 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_activeScheduleRange = activeScheduleRange;
 			createScheduleDays(periodCreator);
 		}
-        #endregion
 
-        #region Interface
-
-		[Obsolete("Will be removed, do NOT use", true)]
+	    [Obsolete("Will be removed, do NOT use", true)]
         public ISchedulingResultStateHolder SchedulingStateHolder
         {
             get { return _stateHolder; }
@@ -176,22 +166,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _activeScheduleRange; }
         }
 
-    	#endregion
-
-        #region Local
-
-        /// <summary>
+	    /// <summary>
         /// Creates the schedule days.
         /// </summary>
         /// <param name="periodCreator">The period creator.</param>
         private void createScheduleDays(IFullWeekOuterWeekPeriodCreator periodCreator)
         {
-            _effectivePeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-            _fullWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-            _outerWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-            _weekBeforeOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-            _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-
             var outerDays = periodCreator.OuterWeekPeriod().DayCollection();
             var fullWeekPeriod = periodCreator.FullWeekPeriod();
             var effectivePeriod = periodCreator.EffectivePeriod();
@@ -217,8 +197,5 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
             }
         }
-
-        #endregion
-
     }
 }

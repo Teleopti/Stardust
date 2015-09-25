@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IList<IPerson> _lockedMembers = new List<IPerson>();
 		private readonly string _name;
 			 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public TeamInfo(Group group, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
 			_name = group.Name;
