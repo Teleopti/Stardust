@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope','$filter','$state', '$stateParams','PlanningPeriodSvrc','growl', function ($scope,$filter,$state, $stateParams,PlanningPeriodSvrc,growl) {
+			'$scope','$filter','$state', '$stateParams','PlanningPeriodSvrc','ResourcePlannerReportSrvc','growl', function ($scope,$filter,$state, $stateParams,PlanningPeriodSvrc,growl) {
 			$scope.issues = $stateParams.result.BusinessRulesValidationResults;
 			$scope.hasIssues = $scope.issues.length > 0;
 			$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount;
@@ -18,6 +18,7 @@
 				data: $scope.issues
 			};
             $scope.getdaysuntilnextmonday = function (day) {
+				ResourcePlannerReportSrvc.parseWeek();
                 if(day.getDay() === 1) return 7;
                 var dayobj = moment(day);
                 var nbdays = 1;
