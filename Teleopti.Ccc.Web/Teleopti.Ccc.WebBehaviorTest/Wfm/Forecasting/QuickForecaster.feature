@@ -32,7 +32,7 @@ Scenario: Forecast one workload
 	Then there is forecast data for default period for 'TheWorkload2'
 	And there is no forecast data for default period for 'TheWorkload1'
 
-
+@ignore
 Scenario: Add campaign
 	Given I am viewing quick forecast page
 	And I select workload 'TheWorkload1'
