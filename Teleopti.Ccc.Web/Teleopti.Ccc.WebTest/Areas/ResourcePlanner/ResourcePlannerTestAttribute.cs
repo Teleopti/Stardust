@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble<FakeScheduleRange>().For<IScheduleRange>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
 			system.UseTestDouble<FakeScheduleParameters>().For<IScheduleParameters>();
+			system.UseTestDouble(new FakeTimeZoneGuard(TimeZoneInfo.Utc)).For<ITimeZoneGuard>();
 			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
