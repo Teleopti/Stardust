@@ -109,7 +109,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					createOptimizer(matrix, optimizationPreferences.DaysOff, optimizationPreferences,
 						rollbackService, schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate, _scheduleService, localPeriodValueCalculator,
 						rollbackServiceDayOffConflict, matrixOriginalStateContainer, dataExtractorProvider, () => schedulerStateHolder.SchedulingResultState);
-				optimizerContainers.Add(optimizerContainer);
+
+				if(matrix.SchedulePeriod.DaysOff() > 0)
+					optimizerContainers.Add(optimizerContainer);
 			}
 
 			var minutesPerInterval = 15;

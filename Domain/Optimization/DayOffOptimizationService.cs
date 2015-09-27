@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					foreach (IDayOffOptimizerContainer optimizer in successfulContainers.GetRandom(successfulContainers.Count, true))
 					{
 						if (cancel) return;
+
 						bool result = optimizer.Execute();
 						executes++;
 						if (!result)
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 						double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 
-						string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + unSuccessfulContainers.Count + ")" + executes + " ";
+						string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + successfulContainers.Count + ")" + executes + " ";
 						string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
 						string success = result ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
 						string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
