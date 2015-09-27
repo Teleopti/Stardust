@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
