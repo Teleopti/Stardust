@@ -2006,6 +2006,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All people on this page are selected..
+        /// </summary>
+        public static string AllPeopleOnCurrentPageSelected {
+            get {
+                return ResourceManager.GetString("AllPeopleOnCurrentPageSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Teams.
         /// </summary>
         public static string AllPermittedTeamsToMakeShiftTradeWith {
@@ -23375,7 +23384,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select all matched people.
+        ///   Looks up a localized string similar to Click here to select all people on every page..
         /// </summary>
         public static string SelectAllMatchedPeople {
             get {

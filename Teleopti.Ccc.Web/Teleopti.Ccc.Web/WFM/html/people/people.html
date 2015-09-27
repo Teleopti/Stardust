@@ -28,10 +28,7 @@
 			</div>
 
 		</div>
-		<div ng-show="selectAllVisible" class="col-md-4">
-			<div class="alert-detail notice-spacer" ng-click="selectAllMatch()"><a href="javascript: void(0);">{{'SelectAllMatchedPeople'|translate}}</a>
-			</div>
-		</div>
+		
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled)">
 			<button ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-fab wfm-panel-delete material-depth-1" ng-click="clearCart()">
 				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
@@ -49,9 +46,21 @@
 				</span>
 			</nav>
 		</div>
+		
+		
+	</div>
+	
+	
+	<div class="row select-all-dialog" ng-show="selectAllVisible">
+		{{'AllPeopleOnCurrentPageSelected'| translate}}
+		<span class="notice-spacer" ng-click="selectAllMatch()">
+			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
+		</span>
 	</div>
 
+	
 	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+		
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 
 		<div class="pagination pull-right" aria-hidden="false">

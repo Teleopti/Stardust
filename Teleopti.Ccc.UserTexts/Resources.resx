@@ -13378,9 +13378,13 @@ Reduce the complexity to use these shifts.</value>
     <value>Manually Planned</value>
     <comment>Label to indicate whether there are manual production plan for the campaign on the specified date.</comment>
   </data>
+<data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>All people on this page are selected.</value>
+    <comment>Used in People search.  User has selected all people on the current page.</comment>
+  </data>
   <data name="SelectAllMatchedPeople" xml:space="preserve">
-    <value>Select all matched people</value>
-    <comment>Select all matched people in search view</comment>
+    <value>Click here to select all people on every page.</value>
+    <comment>Used in People search.  User has selected all people on the current page. Allows the user to select all people across all pages</comment>
   </data>
   <data name="ProcessFailedErrorColon" xml:space="preserve">
     <value>Process failed! Error:</value>
