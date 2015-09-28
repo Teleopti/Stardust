@@ -99,7 +99,7 @@
 
 		vm.onChangeOfDate = function () {
 			vm.refreshSeatMap(true);
-			vm.isDatePickerOpened = false;
+			vm.isDatePickerOpened = true;
 		};
 
 		function resize() {

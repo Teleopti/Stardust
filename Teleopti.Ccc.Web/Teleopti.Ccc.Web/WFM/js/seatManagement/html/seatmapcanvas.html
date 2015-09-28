@@ -15,22 +15,21 @@
 			<i class="mdi mdi-reply"></i>
 		</button>
 
+		<span ng-click="vm.isDatePickerOpened = false" class="turn-off-datepicker"></span>
 		<div class="seatmap-view-datepicker">
-			<span outside-click="vm.isDatePickerOpened = false">
-				<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isDatePickerOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
-					<i class="mdi mdi-calendar"></i>
-					{{vm.getDisplaySelectedDate()}}
-				</button>
-				<div class="date-picker">
-					<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
-								class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
-					</datepicker>
-				</div>
-			</span>
+			<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isDatePickerOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
+				<i class="mdi mdi-calendar"></i>
+				{{vm.getDisplaySelectedDate()}}
+			</button>
+			<div class="date-picker">
+				<datepicker ng-show="vm.isDatePickerOpened" ng-model="vm.selectedDate"
+							class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
+				</datepicker>
+			</div>
 		</div>
 	</div>
 
-	<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}">
+	<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}" ng-click="vm.isDatePickerOpened = false">
 		<div>
 			<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
 				<span ng-class="{'location-breadcrumb-clickable':!vm.isInEditMode && !$last}"
@@ -41,7 +40,7 @@
 		<md-divider ng-if="!vm.isLoading"></md-divider>
 	</div>
 
-	<div class="seatmap-canvas" ng-class="{'seatmap-canvas-edit-mode':(vm.showEditor)}">
+	<div class="seatmap-canvas" ng-class="{'seatmap-canvas-edit-mode':(vm.showEditor)}" ng-click="vm.isDatePickerOpened = false">
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 

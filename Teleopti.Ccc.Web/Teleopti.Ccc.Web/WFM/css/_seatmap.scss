@@ -43,6 +43,17 @@ input[type=text],input[type=password],input[type=number]{
 			background:#0099FF!important;
 			color:#ffffff!important;
 		}
+
+		.turn-off-datepicker{
+			width: 100%; 
+			height: 40px;
+			z-index:-1;
+			position:absolute;
+			display:inline-block;
+			left:0;
+			top:0;
+			background:transparent;
+		}
 	}
 }
 
