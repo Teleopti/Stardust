@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
                     {
                         try
                         {
-                            clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
+                            clientHandler.SendRtaDataToServer(stateForTest.AuthenticationKey, stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
 					                                  DateTime.UtcNow, sendSettings.PlatformId, stateForTest.DataSourceId,
                                                               stateForTest.BatchIdentifier,
                                                               stateForTest.IsSnapshot);

@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.Rta.TestApplication
             _loggingSvc.InfoFormat("Client created handle to server at address {0}",_serviceUrl);
         }
 
-        public void SendRtaDataToServer(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, int logObjectId, DateTime batchId, bool isSnapshot)
+        public void SendRtaDataToServer(string authenticationKey, string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, int logObjectId, DateTime batchId, bool isSnapshot)
         {
             _loggingSvc.InfoFormat("Sending message to server: LogOn {0}, StateCode {1}, Timestamp {2}", logOn, stateCode, timestamp);
 			try
 			{
-				_dataHandler.ProcessRtaData(logOn, stateCode, timeInState, timestamp, platformTypeId,
+				_dataHandler.ProcessRtaData(authenticationKey, logOn, stateCode, timeInState, timestamp, platformTypeId,
 				                            logObjectId.ToString(CultureInfo.InvariantCulture), batchId,
 				                            isSnapshot);
 			}

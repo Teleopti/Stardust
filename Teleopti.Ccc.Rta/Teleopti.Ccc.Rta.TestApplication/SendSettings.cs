@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 	public class SendSettings
 	{
 		private readonly ILog _loggingSvc = LogManager.GetLogger(ClientHandler.LogName);
+		private readonly string _authenticationKey;
 		private readonly IList<string> _logOnCollection = new List<string>();
 		private readonly IList<string> _stateCodeCollection = new List<string>();
 		private readonly IList<Guid> _personIdForScheduleUpdate = new List<Guid>();
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
 		public SendSettings()
 		{
+			_authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
 			_logOnCollection = new List<string>(ConfigurationManager.AppSettings["LogOn"].Split(','));
 			_stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
 			_endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
@@ -176,13 +178,13 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
 				_sendCount--;
 				yield return
-					new AgentStateForTest(_logOnCollection[selectedLogOn], _stateCodeCollection[stateCodeIndex],
+					new AgentStateForTest(_authenticationKey, _logOnCollection[selectedLogOn], _stateCodeCollection[stateCodeIndex],
 					                      TimeSpan.Zero, _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[personIdIndex],
 					                      _businessUnitId);
 			}
 
 			var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-			yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier,
+			yield return new AgentStateForTest(_authenticationKey, "", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier,
 			                                   _personIdForScheduleUpdate[0], _businessUnitId);
 		}
 
@@ -194,7 +196,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
 
 			_sendCount--;
-			return new AgentStateForTest(_logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
+			return new AgentStateForTest(_authenticationKey, _logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
 			                             TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow,
 			                             _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
 		}
@@ -207,7 +209,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			result.AddRange(
 				_logOnCollection.Select(
 					logOn =>
-					new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false, DateTime.UtcNow, Guid.Empty,
+					new AgentStateForTest(_authenticationKey, logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false, DateTime.UtcNow, Guid.Empty,
 					                      Guid.Empty)));
 			return result;
 		}
