@@ -24,10 +24,6 @@
 					deferred.resolve();
 				});
 
-				PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: functionId }).$promise.then(function (result) {
-					deferred.resolve();
-				});
-
 				return deferred.promise;
 			};
 
