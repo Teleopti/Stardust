@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			foreach (var day in scheduleDays)
 			{
-				var bookingForPersonOnDate = _seatBookingRepository.LoadSeatBookingForPerson(day.PersonAssignment().Date, day.Person);
+				var personAssignment = day.PersonAssignment();
+				if (personAssignment == null) continue;
+
+				var bookingForPersonOnDate = _seatBookingRepository.LoadSeatBookingForPerson(personAssignment.Date, day.Person);
 				if (bookingForPersonOnDate != null)
 				{
 					bookings.Add(bookingForPersonOnDate);
