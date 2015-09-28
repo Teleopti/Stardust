@@ -45,6 +45,9 @@ angular.module('wfm.forecasting')
 			};
 			$scope.modalForecastingLaunch = false;
 			$scope.displayForecastingModal = function (workload) {
+				if ($scope.isForecastRunning) {
+					return;
+				}
 				if (workload) {
 					$scope.modalForecastingInfo.forecastForAll = false;
 					$scope.modalForecastingInfo.forecastForOneWorkload = true;
@@ -60,9 +63,7 @@ angular.module('wfm.forecasting')
 				$scope.modalForecastingLaunch = false;
 			};
 
-			$scope.addCampaignDisabled = true;
-			$scope.modalCampaignInfo = {
-			};
+			$scope.modalCampaignInfo = { };
 
 			var calculateCampaignCalls = function() {
 				return ($scope.sumOfCallsForSelectedDays * ($scope.modalCampaignInfo.campaignPercentage + 100) / 100).toFixed(1);
@@ -70,6 +71,9 @@ angular.module('wfm.forecasting')
 
 			$scope.modalCampaignLaunch = false;
 			$scope.displayCampaignModal = function (workload) {
+				if ($scope.disableAddCampaign()) {
+					return;
+				}
 				$scope.modalCampaignLaunch = true;
 				$scope.getCampaignDays();
 				$scope.modalCampaignInfo.campaignPercentage = 0;
@@ -215,6 +219,9 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disableAddCampaign = function () {
+				if ($scope.isForecastRunning) {
+					return true;
+				}
 				if ($scope.chart && $scope.chart.selected())
 					return $scope.chart.selected().length == 0;
 				return true;
@@ -229,6 +236,7 @@ angular.module('wfm.forecasting')
 				if ($scope.disableApplyCampaign()) {
 					return;
 				}
+				$scope.modalCampaignLaunch = false;
 				$scope.isForecastRunning = true;
 				var workload = $scope.modalCampaignInfo.selectedWorkload;
 				workload.ShowProgress = true;
@@ -258,7 +266,6 @@ angular.module('wfm.forecasting')
 					})
 					.finally(function () {
 						workload.ShowProgress = false;
-						$scope.modalCampaignLaunch = false;
 						$scope.isForecastRunning = false;
 						if (workload.forecastResultLoaded) {
 							$scope.getForecastResult(workload);
@@ -273,7 +280,7 @@ angular.module('wfm.forecasting')
 				if (c3.restoreFixForForecast) c3.restoreFixForForecast();
 			});
 
-			var forecastWorkload = function (workload, finallyCallback) {
+			var forecastWorkload = function (workload, finallyCallback, blockToken, isLastWorkload) {
 				workload.ShowProgress = true;
 				workload.IsSuccess = false;
 				workload.IsFailed = false;
@@ -283,7 +290,16 @@ angular.module('wfm.forecasting')
 				} else {
 					workloadToSend.ForecastMethodId = -1;
 				}
-				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend], ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id })).
+				debugger;
+				$http.post('../api/Forecasting/Forecast', JSON.stringify(
+					{
+						ForecastStart: $scope.period.startDate,
+						ForecastEnd: $scope.period.endDate,
+						Workloads: [workloadToSend],
+						ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
+						BlockToken: blockToken,
+						IsLastWorkload: isLastWorkload
+					})).
 					success(function(data, status, headers, config) {
 						if (data.Success) {
 							workload.IsSuccess = true;
@@ -291,6 +307,7 @@ angular.module('wfm.forecasting')
 							workload.IsFailed = true;
 							workload.Message = data.Message;
 						}
+						blockToken = data.BlockToken;
 					})
 					.error(function(data, status, headers, config) {
 						workload.IsFailed = true;
@@ -298,6 +315,7 @@ angular.module('wfm.forecasting')
 							workload.Message = data.Message;
 						else
 							workload.Message = "Failed";
+						blockToken = data.BlockToken;
 					})
 					.finally(function() {
 						workload.ShowProgress = false;
@@ -305,19 +323,21 @@ angular.module('wfm.forecasting')
 						if (workload.forecastResultLoaded) {
 							$scope.getForecastResult(workload);
 						}
-						finallyCallback();
+						finallyCallback(blockToken);
 					});
 			}
 
-			var forecastAllStartFromIndex = function (index) {
+			var forecastAllStartFromIndex = function (index, blockToken) {
 				var workload = $scope.workloads[index];
 				if (!workload) {
 					$scope.isForecastRunning = false;
 					return;
 				}
-				forecastWorkload(workload, function () {
-					forecastAllStartFromIndex(++index);
-				});
+				var isLastWorkload = $scope.workloads.length === (index + 1);
+				forecastWorkload(workload, function (token) {
+					var newIndex = ++index;
+					forecastAllStartFromIndex(newIndex, token);
+				}, blockToken, isLastWorkload);
 			};
 
 			$scope.doForecast = function () {
@@ -329,7 +349,7 @@ angular.module('wfm.forecasting')
 				if ($scope.modalForecastingInfo.forecastForOneWorkload) {
 					forecastWorkload($scope.modalForecastingInfo.selectedWorkload, function () {
 						$scope.isForecastRunning = false;
-					});
+					}, null, true);
 				} else {
 					forecastAllStartFromIndex(0);
 				}

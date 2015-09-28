@@ -57,7 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastStart = new DateTime(2014, 4, 1),
 				ForecastEnd = new DateTime(2014, 4, 29),
 				Workloads = new ForecastWorkloadInput[] {},
-				ScenarioId = scenarioId
+				ScenarioId = scenarioId,
+				BlockToken = new BlockToken(),
+				IsLastWorkload = false
 			};
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			var scenario = new Scenario("test1");
@@ -66,7 +68,65 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var target = new ForecastController(forecastCreator, null, null, null, null, new BasicActionThrottler(), scenarioRepository, null, null);
 			var result = target.Forecast(forecastInput);
 			result.Result.Success.Should().Be.True();
+			result.Result.BlockToken.Should().Be.EqualTo(forecastInput.BlockToken);
 			forecastCreator.AssertWasCalled(x => x.CreateForecastForWorkloads(new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd)), forecastInput.Workloads, scenario));
+		}
+
+		[Test]
+		public void ShouldFinishToken()
+		{
+			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null);
+
+			var blockToken = new BlockToken();
+			target.Forecast(new ForecastInput
+			{
+				BlockToken = blockToken,
+				IsLastWorkload = true
+			});
+			actionThrottler.AssertWasCalled(x => x.Finish(blockToken));
+		}
+
+		[Test]
+		public void ShouldReturnErrorIfForecastingIsRunning()
+		{
+			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
+			var target = new ForecastController(null, null, null, null, null, actionThrottler, null, null, null);
+
+			actionThrottler.Stub(x => x.IsBlocked(ThrottledAction.Forecasting)).Return(true);
+			var result = target.Forecast(new ForecastInput
+			{
+				IsLastWorkload = false
+			});
+			result.Result.Success.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldUseOldToken()
+		{
+			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null);
+
+			var blockToken = new BlockToken();
+			target.Forecast(new ForecastInput
+			{
+				BlockToken = blockToken,
+				IsLastWorkload = false
+			});
+			actionThrottler.AssertWasCalled(x => x.Resume(blockToken));
+			actionThrottler.AssertWasCalled(x => x.Pause(blockToken, TimeSpan.FromSeconds(20)));
+		}
+
+		[Test]
+		public void ShouldCreateNewToken()
+		{
+			var actionThrottler = MockRepository.GenerateMock<IActionThrottler>();
+			var blockToken = new BlockToken();
+			actionThrottler.Stub(x => x.Block(ThrottledAction.Forecasting)).Return(blockToken);
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, actionThrottler, MockRepository.GenerateMock<IScenarioRepository>(), null, null);
+
+			target.Forecast(new ForecastInput());
+			actionThrottler.AssertWasCalled(x => x.Pause(blockToken, TimeSpan.FromSeconds(20)));
 		}
 
 		[Test]

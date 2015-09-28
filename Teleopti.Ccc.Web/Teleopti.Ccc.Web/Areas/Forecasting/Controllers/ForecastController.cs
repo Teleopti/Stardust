@@ -101,28 +101,47 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				Success = false,
 				Message = "Forecast is running, please try later."
 			});
-			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
+			if (input.BlockToken == null)
 			{
-				return failedTask;
+				if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
+				{
+					return failedTask;
+				}
+				input.BlockToken = _actionThrottler.Block(ThrottledAction.Forecasting);
 			}
-			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
+			else
+			{
+				// need to check if the token is valid first, if valid:
+				_actionThrottler.Resume(input.BlockToken);
+				// if not valid: 
+				// 1. check _actionThrottler.IsBlocked(ThrottledAction.Forecasting)
+				// 1.1 if not blocked, we block it with a new token
+				// 1.2 if blocked, return failedTask
+			}
+
 			try
 			{
 				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads, _scenarioRepository.Get(input.ScenarioId));
 				return Task.FromResult(new ForecastResultViewModel
 				{
-					Success = true
+					Success = true,
+					BlockToken = input.BlockToken
 				});
 			}
 			catch (OptimisticLockException)
 			{
+				_actionThrottler.Finish(input.BlockToken);
 				return failedTask;
 			}
 			finally
 			{
-				_actionThrottler.Finish(token);
+				if (input.IsLastWorkload)
+					_actionThrottler.Finish(input.BlockToken);
+				else
+					_actionThrottler.Pause(input.BlockToken, TimeSpan.FromSeconds(20));
 			}
+
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
@@ -175,6 +194,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		public bool Success { get; set; }
 		public string Message { get; set; }
+		public BlockToken BlockToken { get; set; }
 	}
 
 	public class CampaignInput
