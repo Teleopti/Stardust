@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
             var campaignTasks = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
             var response = new List<OutboundRuleResponse>();
 
-            foreach (var dateOnly in campaignTasks.SpanningPeriod.DayCollection())
+			foreach (var dateOnly in campaignTasks.GetActivePeriod().DayCollection())
             {
                 var callTime = campaignTasks.GetEstimatedOutgoingBacklogOnDate(dateOnly);
                 var overstaffTime = campaignTasks.GetOverstaffTimeOnDate(dateOnly);

@@ -186,7 +186,10 @@ namespace Teleopti.Ccc.Domain.Backlog
 			var planned = TimeSpan.Zero;
 			var totalWorkTime = TotalWorkTime;
 
-			foreach (var dateOnly in _taskDays.Keys)
+			var dates = _taskDays.Keys.ToArray();
+			Array.Sort(dates);
+
+			foreach (var dateOnly in dates)
 			{
 				if (dateOnly > date)
 					break;
@@ -224,11 +227,26 @@ namespace Teleopti.Ccc.Domain.Backlog
 			return TimeSpan.Zero;
 		}
 
+		public DateOnlyPeriod GetActivePeriod()
+		{
+			var dates = _actualBacklog.Keys.ToArray();
+			Array.Sort(dates);
+
+			if (dates.Length > 0)
+			{
+				return new DateOnlyPeriod(dates.Last().AddDays(1), SpanningPeriod.EndDate);
+			}
+			return SpanningPeriod;
+		}
+
 		public TimeSpan GetEstimatedIncomingBacklogOnDate(DateOnly date)
 		{
 			var planned = TimeSpan.Zero;
 			var totalWorkTime = TotalWorkTime;
-			foreach (var dateOnly in _taskDays.Keys)
+
+			var dates = _taskDays.Keys.ToArray();
+			Array.Sort(dates);
+			foreach (var dateOnly in dates)
 			{
 				if (dateOnly >= date)
 					break;

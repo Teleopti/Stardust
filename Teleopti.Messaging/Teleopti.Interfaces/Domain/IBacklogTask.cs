@@ -39,5 +39,6 @@ namespace Teleopti.Interfaces.Domain
 		void SetRealScheduledTimeOnDate(DateOnly date, TimeSpan time);
 		bool GetManualPlannedInfoOnDate(DateOnly date);
 		void SetManualPlannedInfoOnDate(DateOnly date, bool isManualPlanneds);
+		DateOnlyPeriod GetActivePeriod();
 	}
 }

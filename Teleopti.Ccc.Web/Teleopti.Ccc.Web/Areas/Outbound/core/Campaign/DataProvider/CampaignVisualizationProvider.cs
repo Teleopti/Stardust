@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				var overstaffHours = TimeSpan.Zero;
 
 				visualizationVM.Dates.Add(date);
-				
-				if (backlogPreviousDay.HasValue && backlogHours == TimeSpan.Zero)
+
+				if (backlogPreviousDay.HasValue && backlogHours == TimeSpan.Zero && !incomingTask.GetActualBacklogOnDate(date).HasValue)
 				{
 					overstaffHours = (scheduledHours > TimeSpan.Zero)
 						? scheduledHours - backlogPreviousDay.Value
