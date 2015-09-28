@@ -28,8 +28,8 @@
 						<md-progress-circular md-mode="indeterminate" class="replan-loader"></md-progress-circular>
 					</div>
 					<div class="clearfix m-b-10 text-center" style="height: 38px;">
-						<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-						<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
+						<p class="campaign-message" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+						<p class="campaign-message campaign-message-healthyfix" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
 					</div>
 					<div class="chart text-center relative chartfix">
 						<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">

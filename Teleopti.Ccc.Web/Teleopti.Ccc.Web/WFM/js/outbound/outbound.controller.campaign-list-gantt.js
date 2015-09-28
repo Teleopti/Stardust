@@ -85,7 +85,7 @@
 				var campaign = { Id: c.id };
 				var newDataRow = {
 					id: c.id + '_expanded',
-					height: '600px',
+					height: '555px',
 					expansion: true,
 					campaign: campaign,
 					isLoadingData: true,

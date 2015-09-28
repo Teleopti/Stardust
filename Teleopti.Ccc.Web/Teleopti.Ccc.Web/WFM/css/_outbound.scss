@@ -60,14 +60,14 @@
 			.gantt-valign-content:not(.gantt-row-expansion) {
 				background-color: #F44336;
 				color: white;
-				border-radius: 6px;				
+				border-radius: 16px;				
 			}		  
 		}
 		.campaign-early {
 			.gantt-valign-content:not(.gantt-row-expansion) {
 				background-color: #FF7F0E;
 				color: white;
-				border-radius: 6px;				
+				border-radius: 16px;				
 			}		   
 		}
 		.gantt-body .gantt-row-expansion {
@@ -164,8 +164,6 @@
 
 		.campaign-chart-wrapper {	
 			position: relative;
-			padding-top: 35px;
-
 			.chart-extra-info {
 				top: 35px;
 			}
@@ -281,7 +279,8 @@
 		width:35%;
 		overflow:hidden;
 		position:relative;
-		bottom:-13px;
+		bottom:-2px;
+		float:left;
 		min-width:290px;
 		white-space:nowrap;
 		input{
@@ -522,6 +521,12 @@
 	.m-r-5{
 		margin-right:5px;
 	}
+	.p-l-5{
+	    padding-left:5px;
+	}
+	.p-r-5{
+	    padding-right:5px;
+	}
 	.m-l-10{
 		margin-left:10px;
 	}
@@ -531,9 +536,8 @@
 		display:inline-block;
 		color:#fff;
 		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
-		position:absolute;
-		top:0;
-		left:0;
+		float:left;
+		margin:5px;
 	}
 	.campaign-message-healthyfix{
 	    background-color:#2CA02C !important;
