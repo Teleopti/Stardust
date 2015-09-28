@@ -16,10 +16,10 @@
 				},
 					function () { return states; });
 
-				vm.fill({ name: '', usercode: '0097' });
+				vm.fill({ name: '', usercode: '0097' }, function() { return '!#¤atAbgT%'; });
 				vm.statecodes()[0].sendState();
 
-				expect(actualState.AuthenticationKey).toEqual(vm.AuthenticationKey);
+				expect(actualState.AuthenticationKey).toEqual('!#¤atAbgT%');
 				expect(actualState.UserCode).toEqual('0097');
 				expect(actualState.IsLoggedOn).toEqual(true);
 				expect(actualState.SecondsInState).toEqual(0);

@@ -11,13 +11,17 @@
 ) {
 
 	return function (rtaServerCall, rtaStateCodes) {
-
 		var self = this;
 
+		self.name = ko.observable();
+		self.usercode = ko.observable();
+		self.authenticationKey = ko.observable();
+		
 		rtaServerCall = rtaServerCall || rta.ServerCall;
 		rtaStateCodes = rtaStateCodes || rta.FetchStateCodes;
 
 		self.statecodes = ko.observableArray();
+
 
 		ko.utils.arrayForEach(rtaStateCodes(), function (data) {
 			var svm = new statecodevm(data, function () {
@@ -27,20 +31,15 @@
 			self.statecodes().push(svm);
 		});
 
-		self.AuthenticationKey = '!#¤atAbgT%';
-
-		self.name = ko.observable();
-
-		self.usercode = ko.observable();
-
-		self.fill = function(agent) {
+		self.fill = function (agent, authenticationKey) {
 			self.name(agent.name);
 			self.usercode(agent.usercode);
+			self.authenticationKey = authenticationKey;
 		}
 
 		var makeAgentState = function (stateCode, isLoggedOn) {
 			return  {
-				AuthenticationKey: self.AuthenticationKey,
+				AuthenticationKey: self.authenticationKey(),
 				UserCode: self.usercode(),
 				StateCode: stateCode,
 				StateDescription: stateCode,

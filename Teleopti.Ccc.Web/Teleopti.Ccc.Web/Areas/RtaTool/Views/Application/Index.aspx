@@ -30,6 +30,9 @@
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
 		<h3>RTA Tool</h3>
+		<form >
+				<input type="text" data-bind="value: authenticationKey" />
+		</form>
 		<table class="table table-striped">
 			<tbody data-bind="foreach: agents">
 				<tr>

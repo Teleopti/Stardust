@@ -14,10 +14,11 @@
 		fetchAgents = fetchAgents || rta.FetchAgents;
 
 		self.agents = ko.observableArray();
+		self.authenticationKey = ko.observable('!#¤atAbgT%');
 
 		ko.utils.arrayForEach(fetchAgents(), function (data) {
 			var agent = new agentvm();
-			agent.fill(data);
+			agent.fill(data, self.authenticationKey);
 
 			self.agents().push(agent);
 		});
