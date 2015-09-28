@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			_mutateNow.Is(new DateTime(ticks));
 
-			_activityChangesChecker.WaitForOneExecution();
+			_activityChangesChecker.ExecuteForTest();
 
 			return View("Message", new TestMessageViewModel
 			{

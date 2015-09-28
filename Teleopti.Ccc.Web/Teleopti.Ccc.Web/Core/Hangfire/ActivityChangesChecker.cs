@@ -34,52 +34,25 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly RtaTenants _tenants;
-		private readonly INow _now;
-		private readonly ManualResetEvent _hasExecuted = new ManualResetEvent(false);
-		private readonly ManualResetEvent _forceExecute = new ManualResetEvent(false);
 
 		public ActivityChangesChecker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta, 
-			RtaTenants tenants,
-			INow now
+			RtaTenants tenants
 			)
 		{
 			_rta = rta;
 			_tenants = tenants;
-			_now = now;
 		}
 
 		public void Execute(CancellationToken cancellationToken)
 		{
 			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
-			_hasExecuted.Set();
-			waitForNextRun(cancellationToken);
+			cancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
 		}
 
-		// this method ensure the server component will run when simulating the time moving forward
-		// test-induced damange
-		private void waitForNextRun(CancellationToken cancellationToken)
+		public void ExecuteForTest()
 		{
-			var nextRun = _now.UtcDateTime().AddMinutes(1);
-			while (!cancellationToken.IsCancellationRequested)
-			{
-				if (_forceExecute.WaitOne(0))
-				{
-					_forceExecute.Reset();
-					break;
-				}
-				if (_now.UtcDateTime() >= nextRun)
-					break;
-				cancellationToken.WaitHandle.WaitOne(TimeSpan.FromMilliseconds(200));
-			}
-		}
-
-		// test-induced damange
-		public void WaitForOneExecution()
-		{
-			_hasExecuted.Reset();
-			_forceExecute.Set();
-			_hasExecuted.WaitOne();
+			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
 		}
 	}
 }
