@@ -53,15 +53,6 @@ describe('ResourceplannerReportCtrl', function () {
 
         expect(scope.dayNodes[0].SkillDetails[0].weekend).toBe(undefined);
     }));
-	it ('should  get the number of days until next monday',inject(function($controller){
-	   var scope = $rootScope.$new();
-	   var day = new Date(2015,10,10);
-
-		$controller('ResourceplannerReportCtrl', {$scope: scope, $stateParams: result.withNoIssues() });
-		var week = scope.getdaysuntilnextmonday(day);
-
-		expect(week).toEqual(2);
-	}));
 	it('should be possible to publish a schedule', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerReportCtrl', { $scope: scope, $stateParams: result.withPeriodId() });
