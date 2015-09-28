@@ -96,7 +96,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.personAccountPermission = ko.observable();
-		self.showSeatBookingPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -314,7 +313,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
-			self.showSeatBookingPermission(data.ShowSeatBookingPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
@@ -415,7 +413,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.seatBookings = ko.observableArray(day.SeatBookings);
 
 		self.seatBookingIconVisible = ko.computed(function () {
-			return parent.showSeatBookingPermission() && self.seatBookings().length > 0;
+			return self.seatBookings().length > 0;
 		});
 
 
