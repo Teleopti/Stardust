@@ -19,15 +19,9 @@
 		        scope.enforceRadioBehavior = enforceRadioBehavior;
 		        scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
 		        scope.removeWorkingPeriod = removeWorkingPeriod;
+			    scope.getTimerangeDisplay = getTimerangeDisplay;
 
-		        scope.newWorkingPeriodStartTime = new Date();
-		        scope.newWorkingPeriodEndTime = new Date();
-
-		        resetTime(scope.newWorkingPeriodStartTime);
-		        resetTime(scope.newWorkingPeriodEndTime);
-
-		        scope.newWorkingPeriodStartTime.setHours(9);
-			    scope.newWorkingPeriodEndTime.setHours(17);
+			    scope.disableNextDay = true;
 
 		        var weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
 		        var translations = [];
@@ -43,35 +37,11 @@
 		            scope.weekDays = weekDays;
 		        });
 
-		        function resetTime(datetime) {
-		            datetime.setHours(0);
-		            datetime.setMinutes(0);
-		            datetime.setSeconds(0);
-		        }
-
 		        function enforceRadioBehavior(refIndex, weekDay) {
 		            clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
 		        }
 
-		        function addEmptyWorkingPeriod(startTime, endTime) {
-		            scope.newWorkingPeriodForm.$setValidity('empty', true);
-		            scope.newWorkingPeriodForm.$setValidity('order', true);
-
-		            startTime.setSeconds(0);
-		            endTime.setSeconds(0);
-
-		            if (!(startTime && endTime)) {
-		                scope.newWorkingPeriodForm.$setValidity('empty', false);
-		                return;
-		            }
-
-		            if (startTime >= endTime) {
-
-
-		                scope.newWorkingPeriodForm.$setValidity('order', false);
-		                return;
-		            }
-
+		        function addEmptyWorkingPeriod(startTime, endTime) {			      
 		            scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
 		        }
 
@@ -88,6 +58,15 @@
 		            });
 		        };
 
+		        function getTimerangeDisplay(startTime, endTime) {
+			        var startTimeMoment = moment(startTime),
+				        endTimeMoment = moment(endTime);
+			        if (startTimeMoment.isSame(endTimeMoment, 'day')) {
+				        return startTimeMoment.format('LT') + ' - ' + endTimeMoment.format('LT');
+			        } else {
+			        	return startTimeMoment.format('LT') + ' - ' + endTimeMoment.format('LT') + ' +1';
+			        }
+				}
 		    }
 		}
     ]);

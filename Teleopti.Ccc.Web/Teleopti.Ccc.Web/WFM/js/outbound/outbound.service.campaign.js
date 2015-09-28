@@ -195,10 +195,16 @@
 			campaign.WorkingHours.forEach(function(d) {
 				d.WeekDaySelections.forEach(function(e) {
 					if (e.Checked) {
+						var timespan = formatTimespanObj({
+							StartTime: d.StartTime,
+							EndTime: d.EndTime
+						});
+
+						
 						formattedWorkingHours.push({
 							WeekDay: e.WeekDay,
-							StartTime: formatTimespanInput(d.StartTime),
-							EndTime: formatTimespanInput(d.EndTime)
+							StartTime: timespan.StartTime,
+							EndTime: timespan.EndTime
 						});
 					}
 				});
@@ -208,19 +214,41 @@
 			return campaign;
 		}
 
-		function formatTimespanInput(dtObj) {
-			return $filter('date')(dtObj, 'HH:mm');
+		function formatTimespanObj(timespan) {
+			var startTimeMoment = moment(timespan.StartTime),
+				endTimeMoment = moment(timespan.EndTime);
+
+			if (startTimeMoment.isSame(endTimeMoment, 'day')) {
+				return {
+					StartTime: startTimeMoment.format('HH:mm'),
+					EndTime: endTimeMoment.format('HH:mm')
+				};
+			} else {
+				return {
+					StartTime: startTimeMoment.format('HH:mm'),
+					EndTime: '1.' + endTimeMoment.format('HH:mm')
+				};
+			}
 		}
 
 		function parseTimespanString(t) {
 			if (!angular.isString(t)) return t;
-			var parts = t.match(/^(\d{1,2}):(\d{1,2})(:|$)/);
+			var parts = t.match(/^(\d[.])?(\d{1,2}):(\d{1,2})(:|$)/);
 			if (parts) {
 				var d = new Date();
-				d.setHours(parts[1]);
-				d.setMinutes(parts[2]);
-				return d;
+				d.setHours(parts[2]);
+				d.setMinutes(parts[3]);
+
+				if (parts[1]) return moment(d).add(1, 'days').toDate();
+				else return d;
 			}
+		}
+
+		function sameTimespan(timespan1, timespan2) {
+			var formattedTimespan1 = formatTimespanObj(timespan1),
+				formattedTimespan2 = formatTimespanObj(timespan2);
+			return formattedTimespan1.StartTime == formattedTimespan2.StartTime &&
+				formattedTimespan1.EndTime == formattedTimespan2.EndTime;
 		}
 
 		function denormalizeCampaign(campaign) {
@@ -237,12 +265,15 @@
 
 			campaign.WorkingHours.forEach(function(a) {
 
-				var startTime = parseTimespanString(a.StartTime);
-				var endTime = parseTimespanString(a.EndTime);
-
-				var workingHourRows = reformattedWorkingHours.filter(function(wh) {
-					return formatTimespanInput(wh.StartTime) == formatTimespanInput(startTime)
-						&& formatTimespanInput(wh.EndTime) == formatTimespanInput(endTime);
+				var startTime = parseTimespanString(a.StartTime),
+					endTime = parseTimespanString(a.EndTime),
+					timespan = {
+						StartTime: startTime,
+						EndTime: endTime
+					};
+				
+				var workingHourRows = reformattedWorkingHours.filter(function (wh) {
+					return sameTimespan(timespan, wh);
 				});
 				var workingHourRow;
 				if (workingHourRows.length == 0) {

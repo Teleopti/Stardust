@@ -29,10 +29,8 @@
 						</span>
                     </div>
                     <div class="row labelfix">
-                        <div class="col-xs-3 w-200">
-                            <span>{{WorkingPeriod.StartTime | amDateFormat: 'LT' }}</span>
-                            <span> - </span>
-                            <span>{{WorkingPeriod.EndTime | amDateFormat: 'LT' }}</span>
+                        <div class="col-xs-3 w-200">	                       
+							{{ getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime)}}
                         </div>
                         <div ng-repeat-start="WeekDay in WorkingPeriod.WeekDaySelections" ng-repeat-end class="col-xs-1">
                             <div class="wfm-checkbox wfm-checkbox-inline ">
@@ -47,19 +45,12 @@
                 </li>
             </ul>
         </div>
-        <div class="wfm-block m-t-10">
-            <form name="newWorkingPeriodForm" ng-submit="">
-	            <div class="inline-fix clearfix">
-		            <button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
-					<timepicker-wrap ng-model="newWorkingPeriodStartTime"></timepicker-wrap>							            
-		            <div>-</div>
-					<timepicker-wrap ng-model="newWorkingPeriodEndTime"></timepicker-wrap>							            
-	            </div>
-	            <div class="error-msg-container ng-invalid-order alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>EndTimeMustBeGreaterOrEqualToStartTime</span></div>
-	            <div class="error-msg-container ng-invalid-empty alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>StartTimeAndEndTimeMustBeSet</span></div>
-				
-            
-			</form>
-        </div>
+	   
+
+	    <div class="wfm-block m-t-10">
+		    <time-range-picker start-time="newWorkingPeriodStartTime" end-time="newWorkingPeriodEndTime" disable-next-day="disableNextDay">
+			    <button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
+		    </time-range-picker>
+	    </div>
     </div>
-</div>
+</div> 
