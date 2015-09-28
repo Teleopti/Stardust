@@ -64,7 +64,7 @@
 
 		SeatPlanner_Logon_32003,
 		Wfm_SeatPlan_SeatMapBookingView_32814,
-		Wfm_SeatPlan_ShowSeatBookingInMyTime_34799,
+		MyTimeWeb_ShowSeatBooking_34799,
 		MyTeam_MakeTeamScheduleConsistent_31897,
 
 		Wfm_MinimumScaffolding_32659,
