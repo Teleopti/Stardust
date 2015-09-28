@@ -4,9 +4,9 @@ As a application owner
 I want to simpler life
 
 Background:
-	Given I have a role with
-	| Field | Value |
-	| Name  | Agent |
+	Given there is a role with
+	| Field | Value                 |
+	| Name  | Full access to mytime |
 
 Scenario: Log on to newly added scenario
 	Given There is a tenant called 'NewTenant'
@@ -15,8 +15,5 @@ Scenario: Log on to newly added scenario
 	| UserName | theUser     |
 	| Password | thePassword |
 	| Tenant   | NewTenant   |
-		When I try to sign in with
-	| Field    | Value       |
-	| UserName | theUser     |
-	| Password | thePassword |
+	When I am viewing an application page as 'theUser' with password 'thePassword'
 	Then I should be signed in

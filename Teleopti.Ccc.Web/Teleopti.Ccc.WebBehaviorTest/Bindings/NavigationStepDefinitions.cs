@@ -62,6 +62,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPage();
 		}
 
+		[When(@"I am viewing an application page as '(.*)' with password '(.*)'")]
+		public void WhenIAmViewingAnApplicationPage(string userName, string password)
+		{
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
+			TestControllerMethods.LogonForSpecificUser(userName, password);
+			Navigation.GotoAnApplicationPage();
+		}
+
+
 		[When(@"I manually navigate to week schedule page")]
 		public void WhenIManuallyNavigateToWeekSchedulePage()
 		{
