@@ -5,18 +5,72 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
+	[IoCTest]
+	[TestFixture]
+	public class TeamsControllerTest2 : ISetup
+	{
+		public FakeSiteRepository SiteRepository;
+		public FakeNumberOfAgentsInTeamReader NumberOfAgentsInTeam;
+		public TeamsController Target;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebAppModule(configuration));
+			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
+		}
+
+		[Test]
+		public void ShouldGetMultipleTeamsForSites()
+		{
+			var site1 = new Site("site1").WithId();
+			var team1 = new Team { Description = new Description("team1") }.WithId();
+			site1.AddTeam(team1);
+			SiteRepository.Has(site1);
+
+			var site2 = new Site("site2").WithId();
+			var team2 = new Team { Description = new Description("team2") }.WithId();
+			site2.AddTeam(team2);
+			SiteRepository.Has(site2);
+
+			var result = Target.ForSites(new[] { site1.Id.ToString(), site2.Id.ToString() }).Data as IEnumerable<TeamViewModel>;
+			result.Single(x => x.Id == team1.Id.ToString()).Name.Should().Be("team1");
+			result.Single(x => x.Id == team1.Id.ToString()).SiteId.Should().Be(site1.Id.ToString());
+
+			result.Single(x => x.Id == team2.Id.ToString()).Name.Should().Be("team2");
+			result.Single(x => x.Id == team2.Id.ToString()).SiteId.Should().Be(site2.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldGetNumberOfAgentsForMultipleTeamsOnSites()
+		{
+			var site = new Site("site1").WithId();
+			var team = new Team { Description = new Description("team1") }.WithId();
+			site.AddTeam(team);
+			SiteRepository.Has(site);
+			NumberOfAgentsInTeam.Has(team, 3);
+
+			var result = Target.ForSites(new[] { site.Id.ToString() }).Data as IEnumerable<TeamViewModel>;
+			result.Single(x => x.Id == team.Id.ToString()).NumberOfAgents.Should().Be(3);
+		}
+	}
+
+
+
 	[TestFixture]
 	public class TeamsControllerTest
 	{
@@ -39,6 +93,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Single().Name.Should().Be("team1");
 			result.Single().Id.Should().Be(team.ToString());
 		}
+
+		
 
 		[Test]
 		public void ShouldGetNumberOfAgents()

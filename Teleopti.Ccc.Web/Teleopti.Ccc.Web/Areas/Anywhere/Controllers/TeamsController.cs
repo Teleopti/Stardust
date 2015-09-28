@@ -1,5 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Filters;
 
@@ -10,7 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IGetTeamAdherence _getTeamAdherence;
 		private readonly IGetBusinessUnitId _getBusinessUnitId;
 
-		public TeamsController(IGetTeamAdherence getTeamAdherence, IGetBusinessUnitId getBusinessUnitId)
+		public TeamsController(IGetTeamAdherence getTeamAdherence,
+			IGetBusinessUnitId getBusinessUnitId)
 		{
 			_getTeamAdherence = getTeamAdherence;
 			_getBusinessUnitId = getBusinessUnitId;
@@ -20,6 +23,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public JsonResult ForSite(string siteId)
 		{
 			return Json(_getTeamAdherence.ForSite(siteId), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ForSites(string[] siteIds)
+		{
+			var teamModels = new List<TeamViewModel>();
+			siteIds.ForEach(x => teamModels.AddRange(_getTeamAdherence.ForSite(x)));
+			return Json(teamModels, JsonRequestBehavior.AllowGet);
 		}
 
 
@@ -40,5 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Json(_getBusinessUnitId.Get(teamId), JsonRequestBehavior.AllowGet);
 		}
+
 	}
 }

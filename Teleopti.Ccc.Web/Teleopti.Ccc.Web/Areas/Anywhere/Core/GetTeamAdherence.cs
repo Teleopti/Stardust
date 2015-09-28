@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -41,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Id = team.Id.Value.ToString(),
 				Name = team.Description.Name,
 				NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
+				SiteId = siteId
 			});
 
 		}

@@ -225,6 +225,8 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitControllerTest.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\FakeNumberOfAgentsInTeamReader.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\FakeSiteRepository.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SitesControllerTest.cs" />
