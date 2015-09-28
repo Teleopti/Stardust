@@ -59,6 +59,7 @@ Scenario: Send message
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
+@Ignore
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message after application sign in
 	Given there is a site named 'Paris'
