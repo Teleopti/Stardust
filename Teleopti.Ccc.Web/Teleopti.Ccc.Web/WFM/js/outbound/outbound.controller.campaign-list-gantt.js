@@ -75,6 +75,7 @@
 
 		$scope.campaignClicked = function (ev, c) {
 			if ($scope.isLoadingSchedule) return;
+			if (c.expansion) return;
 			if (c.expanded) {
 				c.expanded = false;
 				$scope.ganttData.splice(readIndex(c) + 1, 1);

@@ -195,7 +195,7 @@
 							 >
 						</div>
 						<div class="gantt-row-background gantt-row-expansion" ng-if="row.model.expansion">
-							<md-button ng-click="row.model.collapse($event, $index)" aria-label="Back"><i class="mdi mdi-rewind mdi-rotate-90"></i></md-button>
+							<!--<md-button ng-click="row.model.collapse($event, $index)" aria-label="Back"><i class="mdi mdi-rewind mdi-rotate-90"></i></md-button>-->
 						</div>
 					</div>
 				</div>
@@ -231,7 +231,7 @@
 					<div gantt-vertical-scroll-receiver>
 						<div class="gantt-table-row" ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id" ng-controller="TableColumnRowController">
 							<div gantt-row-label class="gantt-row-label gantt-row-height" ng-class="row.model.classes" ng-style="{'height': row.model.height}">
-								<div class="gantt-valign-container" >
+								<div class="gantt-valign-container" ng-click="scope.campaignClicked($event, row.model, task.model)">
 									<div class="gantt-valign-content" ng-class="{'gantt-row-expansion' : row.model.expansion}">
 										<span class="gantt-label-text" gantt-bind-compile-html="getRowContent()"></span>
 									</div>
