@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldAddCampaign()
 		{
-			var input = new CampaignInput()
+			var input = new CampaignInput
 			{
-				Days = new[] {new CampaignDay() {Date = new DateTime()}},
+				Days = new[] {new CampaignDay {Date = new DateTime()}},
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				CampaignTasksPercent = 50
@@ -162,9 +162,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
 			workloadRepository.Stub(x => x.Get(input.WorkloadId))
 				.Return(workload);
-			var target = new ForecastController(null, null, null, null, null, null, scenarioRepository, workloadRepository, campaignPersister);
+			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, campaignPersister);
 
-			target.AddCampaign(input);
+			var result = target.AddCampaign(input);
+			result.Result.Success.Should().Be.True();
 			campaignPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.CampaignTasksPercent));
 		}
 	}

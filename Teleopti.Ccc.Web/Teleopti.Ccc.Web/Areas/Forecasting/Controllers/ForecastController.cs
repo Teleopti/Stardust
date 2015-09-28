@@ -132,11 +132,36 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/AddCampaign")]
-		public virtual void AddCampaign(CampaignInput input)
+		public virtual Task<ForecastResultViewModel> AddCampaign(CampaignInput input)
 		{
-			var scenario = _scenarioRepository.Get(input.ScenarioId);
-			var workload = _workloadRepository.Get(input.WorkloadId);
-			_campaignPersister.Persist(scenario, workload, input.Days, input.CampaignTasksPercent);
+			var failedTask = Task.FromResult(new ForecastResultViewModel
+			{
+				Success = false,
+				Message = "Forecast is running, please try later."
+			});
+			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
+			{
+				return failedTask;
+			}
+			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
+			try
+			{
+				var scenario = _scenarioRepository.Get(input.ScenarioId);
+				var workload = _workloadRepository.Get(input.WorkloadId);
+				_campaignPersister.Persist(scenario, workload, input.Days, input.CampaignTasksPercent);
+				return Task.FromResult(new ForecastResultViewModel
+				{
+					Success = true
+				});
+			}
+			catch (OptimisticLockException)
+			{
+				return failedTask;
+			}
+			finally
+			{
+				_actionThrottler.Finish(token);
+			}
 		}
 	}
 

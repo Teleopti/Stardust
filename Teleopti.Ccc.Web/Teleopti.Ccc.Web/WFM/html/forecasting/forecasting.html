@@ -61,7 +61,7 @@
 								</md-tooltip>
 							</a>
 							<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign(), 'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
-								Add campaign {{selectedDayCountParenthesis()}}
+								Campaign {{selectedDayCountParenthesis()}}
 								<md-tooltip>
 									Select days in chart before adding
 								</md-tooltip>
@@ -167,7 +167,7 @@
 				<div class="modal-footer">
 					<aside>
 						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
-						<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="applyCampaign()">{{ 'Apply' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="applyCampaign()">{{ 'Apply' | translate }}</a>
 
 					</aside>
 				</div>

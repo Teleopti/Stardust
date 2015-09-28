@@ -225,7 +225,11 @@ angular.module('wfm.forecasting')
 				$scope.chart.unselect(['vc']);
 			};
 
-			$scope.applyCampaign = function() {
+			$scope.applyCampaign = function () {
+				if ($scope.disableApplyCampaign()) {
+					return;
+				}
+				$scope.isForecastRunning = true;
 				var workload = $scope.modalCampaignInfo.selectedWorkload;
 				workload.ShowProgress = true;
 				workload.IsSuccess = false;
@@ -238,15 +242,24 @@ angular.module('wfm.forecasting')
 						CampaignTasksPercent: $scope.modalCampaignInfo.campaignPercentage
 					}))
 					.success(function (data, status, headers, config) {
-						workload.IsSuccess = true;
+						if (data.Success) {
+							workload.IsSuccess = true;
+						} else {
+							workload.IsFailed = true;
+							workload.Message = data.Message;
+						}
 					})
 					.error(function (data, status, headers, config) {
 						workload.IsFailed = true;
-						workload.Message = "Failed to apply campaign.";
+						if (data)
+							workload.Message = data.Message;
+						else
+							workload.Message = "Failed";
 					})
 					.finally(function () {
 						workload.ShowProgress = false;
 						$scope.modalCampaignLaunch = false;
+						$scope.isForecastRunning = false;
 						if (workload.forecastResultLoaded) {
 							$scope.getForecastResult(workload);
 						}
@@ -324,6 +337,10 @@ angular.module('wfm.forecasting')
 
 			$scope.disableDoForecast = function () {
 				return $scope.moreThanOneYear() || $scope.isForecastRunning;
+			};
+
+			$scope.disableApplyCampaign = function () {
+				return $scope.isForecastRunning;
 			};
 
 			$scope.nextStepAdvanced = function (workload) {
