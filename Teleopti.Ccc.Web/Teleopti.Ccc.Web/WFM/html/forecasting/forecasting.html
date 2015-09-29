@@ -79,37 +79,42 @@
 	<div ng-cloak ng-if="modalForecastingLaunch">
 		<div class="modalbg">
 			<div class="dialog">
-				<div class="modal-header" translate>
-					SelectForecastPeriodIntro
+				<div class="modal-header" ng-if="modalForecastingInfo.forecastForAll">
+					Forecast all workloads
+				</div>
+				<div class="modal-header" ng-if="modalForecastingInfo.forecastForOneWorkload">
+					Forecast workload <b>{{modalForecastingInfo.selectedWorkload.Name}}</b> 
 				</div>
 				<div class="modal-inner-content">
-					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForAll">
-						<h4>Forecast all</h4>
-					</div>
-					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForOneWorkload">
-						<h4>Forecast workload <b>{{modalForecastingInfo.selectedWorkload.Name}}</b> for scenario <b>{{modalForecastingInfo.selectedScenario.Name}}</b></h4>
-					</div>
-					<div class="wfm-block forecast-period">
-						
-						<span class="row" ng-if="modalForecastingInfo.forecastForAll">
-							<div class=" forecast-campaign">
-								<label style="margin:0;">Scenario:</label>
-								<select class="col-lg-2" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
-							</div>
+					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForAll">
+						<label class="col-md-2">Scenario:</label>
+						<span class="col-md-2">
+							<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
 						</span>
-						<div class="wfm-datepicker-wrap">
-							<div class="sub-header">
-								{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
+					</div>
+					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForOneWorkload">
+						<label class="col-md-2">Scenario:</label>
+						<span class="col-md-2">
+							<b>{{modalForecastingInfo.selectedScenario.Name}}</b>
+						</span>
+					</div>
+					<div class="wfm-block row">
+						<label class="col-md-2" style="margin:0;">Future period:</label>
+						<div class="col-md-10">
+							<div class="wfm-datepicker-wrap">
+								<div class="sub-header">
+									{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
+								</div>
+								<datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
 							</div>
-							<datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
-						</div>
-						<div class="wfm-datepicker-wrap">
-							<div class="sub-header">
-								{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
+							<div class="wfm-datepicker-wrap">
+								<div class="sub-header">
+									{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
+								</div>
+								<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
 							</div>
-							<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
+							<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 1 year.</div>
 						</div>
-						<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 1 year.</div>
 					</div>
 				</div>
 				<div class="modal-footer">
