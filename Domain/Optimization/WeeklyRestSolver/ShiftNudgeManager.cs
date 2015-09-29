@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var fullySelectedBlocks =
 				_filterForTeamBlockInSelection.Filter(new List<ITeamBlockInfo> {leftTeamBlock, rightTeamBlock}, selectedPersons,
 					selectedPeriod);
-			if (fullySelectedBlocks.Count != 2)
+			if (fullySelectedBlocks.Count == 0)
 				return false;
 
 			//first clone the left and right teamblocks if we have to roll back
