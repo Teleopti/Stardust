@@ -88,6 +88,7 @@ Scenario: Send message after application sign in
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
+@Ignore
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Send message after windows sign in

@@ -42,6 +42,7 @@ Scenario: Change my description to first name last name
 	And I change Agent description to first name last name
 	Then I should see name 'John Smith'
 
+@ignore
 Scenario: Change my password
 	Given I am an agent
 	When I view my password
