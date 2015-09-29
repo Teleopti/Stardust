@@ -25,10 +25,6 @@
 		<!-- NPM dedupe command -->
 		<NpmDedupeCmd>"$(NpmCmd)" dedupe</NpmDedupeCmd>
 
-		<!-- NPM flatten command -->
-		<NpmFlattenCmd>$(NodeDir)flatten-packages</NpmFlattenCmd>
-		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4</NpmInstallFlattenPackages>
-		
 		<!-- Karma install command -->
 		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma@0.13.3</NpmInstallKarmaCmd>
 
@@ -53,13 +49,6 @@
 		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmDedupeCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
       
-		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
-		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
-    <Exec Command="mkdir $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test &amp;&amp; type NUL > $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test\api.js" />
 	</Target>
 
 	<!-- Executes Build -->
