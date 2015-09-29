@@ -85,12 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				wfmWebControl.Enabled = false;
-				wfmWebControl.Visible = false;
-			}
-			setBusinessUnitInWebView();
+			
 
 		}
 
@@ -201,7 +196,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				webControl1 = null;
 				webView1 = null;
 			}
-			
+			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
+			{
+				wfmWebControl.Enabled = false;
+				wfmWebControl.Visible = false;
+			}
+			setBusinessUnitInWebView();
+
 			webView1.LoadCompleted += WebView1_LoadCompleted;
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 
