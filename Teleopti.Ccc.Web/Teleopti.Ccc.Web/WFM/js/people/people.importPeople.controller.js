@@ -49,11 +49,10 @@
 						var blob = new Blob([response.data], {
 							type: response.headers()['content-type']
 						});
-						if (blob.size != 0) {
-							var processResult = response.headers()['message'].match(/[0-9]+/g);;
-							vm.successCount = processResult[0];
-							vm.failedCount = processResult[1];
-
+						var processResult = response.headers()['message'].match(/[0-9]+/g);;
+						vm.successCount = processResult[0];
+						vm.failedCount = processResult[1];
+						if (vm.failedCount > 0) {
 							vm.hasInvalidData = true;
 							var extension = isXlsx ? '.xlsx' : '.xls';
 							saveAs(blob, 'invalidUsers' + extension);
