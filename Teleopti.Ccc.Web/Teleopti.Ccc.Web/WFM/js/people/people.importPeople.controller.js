@@ -33,10 +33,13 @@
 				saveAs(blob, 'userTemplate.xls');
 			});
 		}
+		vm.successCount = 0;
+		vm.failedCount = 0;
 		vm.upload = function (files) {
 			vm.isSuccessful = false;
 			vm.isFailed = false;
 			vm.hasParsingError = false;
+			vm.hasInvalidData = false;
 			vm.errorMsg = '';
 			if (files && files.length) {
 				for (var i = 0; i < files.length; i++) {
