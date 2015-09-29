@@ -85,29 +85,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
+			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
+			{
+				wfmWebControl.Enabled = false;
+				wfmWebControl.Visible = false;
+			}
 			setBusinessUnitInWebView();
-         webView1.LoadCompleted += WebView1_LoadCompleted; 
-			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
-			
+
 		}
 
 		private void setBusinessUnitInWebView()
 		{
+			if (!wfmWebControl.Enabled) return;
 			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
 			var request = new Request(WebServer + "Start/AuthenticationApi/Logon");
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
 			wfmWebView.LoadRequest(request);
-			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 		}
 
 		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
 			JSObject window = wfmWebView.GetDOMWindow();
 			var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
-			//do
-			//{
-			//	iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
-			//} while (iAmCalledFromFatClient == null);
 			if (iAmCalledFromFatClient == null)
 			{
 				setWfmWebUrl(_permissionModule);
@@ -115,7 +114,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			
 			iAmCalledFromFatClient.Invoke(window, new object[] { });
-			
+		}
+
+		private int cnt;
+		private void keepWfmAlive()
+		{
+			if (!wfmWebControl.Enabled) return;
+			cnt ++;
+			if (cnt < 60) return;
+			cnt = 0;
+			JSObject window = wfmWebView.GetDOMWindow();
+			var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
+			if (ahAhAhAhStayingAlive != null)
+			{
+				ahAhAhAhStayingAlive.Invoke(window, new object[] { });
+			}
 		}
 
 		private void WebView1_LoadCompleted(object sender, LoadCompletedEventArgs e)
@@ -158,8 +171,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void Form_KeyPress(object sender, KeyPressEventArgs e)
 		{
-
-
 			if (e.KeyChar.Equals((Char)Keys.Space))
 			{
 				e.Handled = true;
@@ -191,7 +202,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				webView1 = null;
 			}
 			
-			
+			webView1.LoadCompleted += WebView1_LoadCompleted;
+			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
+
 		}
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
 		{
@@ -318,11 +331,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
-			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				//wfmWebControl.Visible = false;
-				setWfmWebUrl(_permissionModule);
-			}
+			
 			
 		}
 
@@ -600,9 +609,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				showBalloon();
 				_lastSystemCheck = isOk;
 			}
+			keepWfmAlive();
 		}
 
-		private void showBalloon()
+	private void showBalloon()
 		{
 			notifyIcon.ShowBalloonTip(100);
 		}
@@ -802,7 +812,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXReady");
-			setWfmWebUrl(_permissionModule);
+			
+			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
+			{
+				wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
+				setWfmWebUrl(_permissionModule);
+			}
 		}
 
 		private void webView1_Command(object sender, CommandEventArgs e)

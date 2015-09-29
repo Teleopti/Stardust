@@ -13,6 +13,8 @@
 			document.getElementById('materialcontainer').style.height = '100vh';
 
 		}
+
+		
 	</script>
 
 	<meta charset="UTF-8">
@@ -78,39 +80,51 @@
 
 </head>
 <body ng-show="isAuthenticated" ng-cloak>
-	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
-	<div class="layout-container">
-		<div id="leftsidenav" class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
-			<div ng-include="'html/left-sidenav.html'"></div>
-		</div>
+<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+<div class="layout-container">
+	<div id="leftsidenav" class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
+		<div ng-include="'html/left-sidenav.html'"></div>
+	</div>
 
 
-		<div id="lefttoogle" class="sidenav-toggle">
-			<div class="sidenav-wrapper left">
-				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
-				<label for="nav-left">
-					<i class="mdi" ng-class=" {'mdi-fast-forward':toggleLeftSide, 'mdi-rewind':!toggleLeftSide}"></i>
-				</label>
-			</div>
-		</div>
-		<div id="materialcontainer" class="container content material-depth-1 material-block">
-			<div ui-view></div>
-			<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper material-depth-1">
-				<div growl></div>
-			</div>
-		</div>
-
-		<div id="righttoogle" class="sidenav-toggle">
-			<div class="sidenav-wrapper right">
-				<input type="checkbox" id="nav-right" ng-model="toggleRightSide" />
-				<label for="nav-right">
-					<i class="mdi " ng-class="{'mdi-rewind':toggleRightSide, 'mdi-fast-forward':!toggleRightSide}"></i>
-				</label>
-			</div>
-		</div>
-		<div id="rightsidenav" class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}">
-			<span ng-include="'html/right-sidenav.html'"></span>
+	<div id="lefttoogle" class="sidenav-toggle">
+		<div class="sidenav-wrapper left">
+			<input type="checkbox" id="nav-left" ng-model="toggleLeftSide"/>
+			<label for="nav-left">
+				<i class="mdi" ng-class=" {'mdi-fast-forward':toggleLeftSide, 'mdi-rewind':!toggleLeftSide}"></i>
+			</label>
 		</div>
 	</div>
+	<div id="materialcontainer" class="container content material-depth-1 material-block">
+		<div ui-view></div>
+		<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper material-depth-1">
+			<div growl></div>
+		</div>
+	</div>
+
+	<div id="righttoogle" class="sidenav-toggle">
+		<div class="sidenav-wrapper right">
+			<input type="checkbox" id="nav-right" ng-model="toggleRightSide"/>
+			<label for="nav-right">
+				<i class="mdi " ng-class="{'mdi-rewind':toggleRightSide, 'mdi-fast-forward':!toggleRightSide}"></i>
+			</label>
+		</div>
+	</div>
+	<div id="rightsidenav" class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}">
+		<span ng-include="'html/right-sidenav.html'"></span>
+	</div>
+</div>
+	<script type="text/javascript">
+		function ahAhAhAhStayingAlive() {
+			$.get('../Start/Url/Index')
+				.success(function () {
+					return true;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		}
+
+	</script>
 </body>
+
 </html>
