@@ -3,5 +3,6 @@
 call ..\.node\npm run continuous
 
 :: Clear all dev dependencies and only install what we need for production
-call rmdir /S /Q node_modules
+call ..\.node\npm install rimraf
+call rimraf node_modules
 call ..\.node\npm install --production
