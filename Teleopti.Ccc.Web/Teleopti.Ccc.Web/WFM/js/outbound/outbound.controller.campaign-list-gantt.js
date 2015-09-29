@@ -29,11 +29,20 @@
 				}
 			}
 		});
+		
+		$scope.updateThreshold = function (threshold) {
+			$scope.$broadcast('outbound.updateThreshold', threshold);
+		};
 
 		function init() {
-			$scope.isLoadingSchedule = true;
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
+			loadWithinPeriod();
+			$scope.threshold = 60;//todo
+		}
+
+		function loadWithinPeriod() {
+			$scope.isLoadingSchedule = true;
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
 				outboundService.listCampaignsWithinPeriod(function success(data) {
 					updateAllCampaignGanttDisplay(data);

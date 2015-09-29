@@ -1,7 +1,7 @@
 ﻿<div ng-if="isGanttEnabled">
 	<div class="loading-gantt-section" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
-
+	<md-slider flex md-discrete min="0" max="100" aria-label="slider" ng-model="threshold" ng-click="updateThreshold(threshold)"></md-slider>
 	<div class="spacer material-depth-1 outbound-gantt-chart relative"
 		 gantt
 		 data="ganttData"
