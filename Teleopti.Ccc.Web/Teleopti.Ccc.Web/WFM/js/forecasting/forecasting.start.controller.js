@@ -2,12 +2,29 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http', '$filter',
-		function ($scope, $state, forecasting, $http, $filter) {
+		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval',
+		function ($scope, $state, forecasting, $http, $filter, $interval) {
 			$scope.isForecastRunning = false;
-			forecasting.status.get().$promise.then(function(result) {
-				$scope.isForecastRunning = result.IsRunning;
-			});
+			function updateRunningStatus() {
+				forecasting.status.get().$promise.then(function(result) {
+					$scope.isForecastRunning = result.IsRunning;
+				});
+			};
+
+			var stopPolling;
+			function startPoll() {
+				updateRunningStatus();
+				stopPolling = $interval(updateRunningStatus, 10 * 1000);
+			}
+			startPoll();
+
+			function cancelPoll() {
+				$scope.isForecastRunning = false;
+				if (angular.isDefined(stopPolling)) {
+					$interval.cancel(stopPolling);
+				}
+			}
+
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate };
@@ -278,6 +295,8 @@ angular.module('wfm.forecasting')
 			});
 			$scope.$on('$destroy', function () {
 				if (c3.restoreFixForForecast) c3.restoreFixForForecast();
+
+				cancelPoll();
 			});
 
 			var forecastWorkload = function (workload, finallyCallback, blockToken, isLastWorkload) {
