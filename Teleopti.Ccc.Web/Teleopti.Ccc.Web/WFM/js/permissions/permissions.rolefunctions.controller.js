@@ -28,7 +28,7 @@
 					}
 					else if (message) {
 						message.destroy();
-					} 
+					}
 
 					RolesFunctionsService.refreshFunctions(newSelectedRole.Id).then(function () {
 						$scope.allToggleElement.is = RolesFunctionsService.allFunctions;
@@ -38,15 +38,18 @@
 			);
 
 			$scope.$watch(function () { return RolesFunctionsService.functionsDisplayed; },
-					function (rolesFunctionsData) { 
+					function (rolesFunctionsData) {
 						$scope.functionsDisplayed = rolesFunctionsData;
+						if ($scope.functionsDisplayed.length > 0) {
+								$scope.functionsDisplayed[1].nodeShow = true;
+						}
 					}
 			);
-  
+
 			var traverseNodes = function (node) {
 				for (var i = 0; i < node.length; i++) {
 					if (node[i].ChildFunctions.length === 0)
-						node[i].selected = false; 
+						node[i].selected = false;
 					else {
 						node[i].selected = false;
 						traverseNodes(node[i].ChildFunctions);
@@ -67,11 +70,11 @@
 					}
 				}
 			}
-	
+
 			$scope.toggleFunctionForRole = function (node) {
 				if ($scope.selectedRole.BuiltIn) return;
 				var functionNode = node.$modelValue;
-					
+
 				if (functionNode.selected) {
 					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = false;
@@ -90,7 +93,7 @@
 			$scope.toggleAllNode = function (state) {
 
 				if (!state.is) {
-    
+
 					RolesFunctionsService.unselectAllFunctions($scope.selectedRole);
 					growl.warning("<i class='mdi mdi-alert'></i> All functions are disabled.", {
 						ttl: 5000,
@@ -99,10 +102,10 @@
 					return;
 				}
 
-			
+
 				RolesFunctionsService.selectAllFunctions($scope.selectedRole);
 				$scope.allToggleElement.is = state.is;
-				
+
 				growl.info("<i class='mdi mdi-thumb-up'></i> All functions are enabled.", {
 					ttl: 5000,
 					disableCountDown: true

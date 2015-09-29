@@ -60,14 +60,14 @@
 <!-- Nested node template for functions -->
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div class="tree-toggle-group">
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="childNodes().length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div class="toggle-handle" ng-class="{open: node.nodeShow}" ng-click="node.nodeShow = !node.nodeShow"><i ng-show="childNodes().length > 0" class="mdi mdi-chevron-right"></i></div>
 		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected, locked: node.IsDisabled}" ng-click="toggleFunctionForRole(this)">
 			{{node.LocalizedFunctionDescription}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
 
-	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
+	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.nodeShow">
 		{{$node}}
 		<li ng-repeat="node in node.ChildFunctions | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
 				ui-tree-node ng-include="'nodes_renderer.html'">
