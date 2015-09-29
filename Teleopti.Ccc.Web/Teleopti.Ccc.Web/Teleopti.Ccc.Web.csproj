@@ -1196,6 +1196,7 @@
     <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />

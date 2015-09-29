@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
-	public class ThrottledAction
+	internal class ThrottledAction
 	{
 		public const string Forecasting = "Forecasting";
 		public const string Scheduling = "Scheduling";
