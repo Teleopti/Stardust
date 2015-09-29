@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
