@@ -162,20 +162,18 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
 
-						var areas = ["MyTime", "Anywhere", "SeatPlanner", "Messages", "Reporting", "WFM"];
-						var areaToGo = ko.utils.arrayFirst(areas, function (a) {
-							var url = "/" + a + "/";
-							return window.location.href.toUpperCase().indexOf(url.toUpperCase()) !== -1;
-						});
+						var areaToGo = getCookie("areaToGo");
 						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 							return a.Area === "Anywhere";
 						});
+
 						var area;
 						if (areaToGo) {
 							area = areaToGo;
 							var returnHash = getCookie("returnHash");
 							if (returnHash) {
 								deleteCookie("returnHash");
+								deleteCookie("areaToGo");
 								window.location.href = data.baseUrl + area + returnHash;
 								return;
 							}
@@ -195,6 +193,8 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 						}
 						
+						deleteCookie("returnHash");
+						deleteCookie("areaToGo");
 						window.location.href = data.baseUrl + area;
 					}
 				});

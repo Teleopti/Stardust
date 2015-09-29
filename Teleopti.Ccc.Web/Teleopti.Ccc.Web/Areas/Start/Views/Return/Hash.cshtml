@@ -14,10 +14,22 @@
 		}
 
 		if (window.location.hash) {
+
 			var d = new Date();
 			d.setTime(d.getTime() + (5 * 60 * 1000));
 			var expires = 'expires=' + d.toUTCString();
 			document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
+			document.cookie = 'areaToGo' + '=' + getAreaToGoInReturnUrl() + '; ' + expires + '; path=/';
+		}
+
+		function getAreaToGoInReturnUrl() {
+			var areas = ['MyTime', 'Anywhere', 'SeatPlanner', 'Messages', 'Reporting', 'WFM'];
+			var areaToGo;
+			areas.some(function (area) {
+				areaToGo = area ;
+				return window.location.href.toUpperCase().indexOf(area.toUpperCase()) !== -1;
+			});
+			return areaToGo;
 		}
 
 		function redirect() {
