@@ -19,20 +19,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILinkProvider _linkProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
-		private readonly IUserCulture _userCulture;
 		private readonly IPersonNameProvider _personNameProvider;
 
 		public RequestsViewModelMappingProfile(IUserTimeZone userTimeZone,
 			ILinkProvider linkProvider,
 			ILoggedOnUser loggedOnUser,
-			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IUserCulture userCulture,
+			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
 			IPersonNameProvider personNameProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
-			_userCulture = userCulture;
 			_personNameProvider = personNameProvider;
 		}
 
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
 					return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate;
 				}))
-
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
 					return getStatusText(s);
@@ -122,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()))))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				.ForMember(d => d.PayloadId, o => o.ResolveUsing(s => resolvePayloadId(s)))
-				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s => IsRequestFullDay(s)))
+				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s => isRequestFullDay(s)))
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request, _loggedOnUser)))
 				.ForMember(d => d.From,
 					o =>
@@ -194,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				}));
 		}
 
-		protected String ConvertDateTimeToUserTimeZone(DateTime dateTime)
+		protected string ConvertDateTimeToUserTimeZone(DateTime dateTime)
 		{
 
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone()).ToShortDateTimeString();
@@ -223,7 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return ret;
 		}
 
-		private Boolean IsRequestFullDay(IPersonRequest personRequest)
+		private bool isRequestFullDay(IPersonRequest personRequest)
 		{
 			var start =
 				TimeZoneInfo.ConvertTimeFromUtc(
@@ -238,10 +235,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private string resolvePayloadId(IPersonRequest personRequest)
 		{
-			if (personRequest.Request.RequestType != RequestType.AbsenceRequest)
-				return null;
-
-			return ((IAbsenceRequest)personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
+			return personRequest.Request.RequestType != RequestType.AbsenceRequest
+				? null
+				: ((IAbsenceRequest) personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
 		}
 
 		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private ILoggedOnUser _loggedOnUser;
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
-		private IUserCulture _userCulture;
 		private IPersonNameProvider _personNameProvider;
 		private TimeZoneInfo _timeZone;
 
@@ -44,8 +43,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
 			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Stub(x => x.GetCulture()).Return(CultureInfo.CurrentCulture);
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("LoggedOn Agent");
@@ -56,7 +53,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				_linkProvider,
 				_loggedOnUser,
 				_shiftTradeRequestStatusChecker,
-				_userCulture,
 				_personNameProvider
 				)));
 		}
@@ -419,7 +415,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				_linkProvider,
 				_loggedOnUser,
 				_shiftTradeRequestStatusChecker,
-				_userCulture,
 				_personNameProvider
 				)));
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
