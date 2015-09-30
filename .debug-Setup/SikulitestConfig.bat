@@ -32,19 +32,6 @@ echo %ROOTDIR%\nhib\SikulitestConfig.json,BuildArtifacts\SikulitestConfig.json>>
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
 ECHO RC>"c:\nhib\Toggles.txt"
 
-:: Run SikulitestConfigFix
-ECHO %ROOTDIR%\.debug-setup\SikulitestConfigFix.bat >>%logFile%
-
-:: write WFM connection strings to tenant database
-ECHO Set WFM path in Tenant table ...
-SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql"
-
-:: restart iis express
-taskkill /F /IM iisexpress.exe
-timeout 10
-cd "c:\Program Files\IIS Express\"
-start iisexpress /AppPool:Clr4IntegratedAppPool
-
 ::final changes on Teleopti.Ccc.SmartClientPortal.Shell.exe.config
 SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
 SET commonFolder=%ROOTDIR%\.debug-setup\common
