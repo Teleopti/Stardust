@@ -186,6 +186,7 @@
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatPlanRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />

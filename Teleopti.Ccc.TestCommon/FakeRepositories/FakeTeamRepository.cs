@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ITeam Load (Guid id)
 		{
-			throw new NotImplementedException();
+			return _teams.First(x => x.Id.Equals(id));
 		}
 
 		public long CountAllEntities()

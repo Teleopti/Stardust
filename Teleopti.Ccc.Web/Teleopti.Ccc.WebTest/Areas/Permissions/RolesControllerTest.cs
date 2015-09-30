@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
         public RolesController Target;
         public IApplicationRoleRepository ApplicationRoleRepository;
         public IApplicationFunctionRepository ApplicationFunctionRepository;
+	    public ISiteRepository SiteRepository;
+	    public ITeamRepository TeamRepository;
+	    public IBusinessUnitRepository BusinessUnitRepository;
 
         [Test]
         public void ShouldCreateNewRole()
@@ -69,31 +72,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
             Target.AddFunctions(roleId, new FunctionsForRoleInput { Functions = new Collection<Guid> { functionOneId } });
 
             agentRole.ApplicationFunctionCollection.Should().Contain(functionOne);
-        }
-
-        [Test]
-        public void ShouldAddNewAvailableDataToRole()
-        {
-            var roleId = Guid.NewGuid();
-            var businessUnitId = Guid.NewGuid();
-            var siteId = Guid.NewGuid();
-            var teamId = Guid.NewGuid();
-
-            var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
-            ApplicationRoleRepository.Add(agentRole);
-            Target.AddAvailableData(roleId,
-                                                  new AvailableDataForRoleInput
-                                                  {
-                                                      BusinessUnits = new Collection<Guid> { businessUnitId },
-                                                      Sites = new Collection<Guid> { siteId },
-                                                      Teams = new Collection<Guid> { teamId },
-                                                      RangeOption = AvailableDataRangeOption.MyBusinessUnit
-                                                  });
-
-            agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
-            agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
-            agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
-            agentRole.AvailableData.AvailableDataRange.Should().Be.EqualTo(AvailableDataRangeOption.MyBusinessUnit);
         }
 
         [Test]
@@ -272,7 +250,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
         public void ShouldDeleteRole()
         {
             var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
-            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()));
+            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()), BusinessUnitRepository,SiteRepository,TeamRepository);
             var roleId = Guid.NewGuid();
             var role = new ApplicationRole();
             roleRepository.Stub(x => x.Load(roleId)).Return(role);
@@ -284,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
         public void ShouldNotDeleteBuiltInRole()
         {
             var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
-            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()));
+				var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()), BusinessUnitRepository, SiteRepository, TeamRepository);
             var roleId = Guid.NewGuid();
 
             var role = new ApplicationRole { BuiltIn = true };
@@ -433,6 +411,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			  Target.RemoveFunction(roleId, grandChildId, new FunctionsForRoleInput(){ Functions = new Guid[] { iamNoParentId, parentOfEverythingId }});
 
 			  agentRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
+		  }
+
+		  [Test]
+		  public void ShouldAddNewAvailableDataToRole()
+		  {
+			  var businessUnit = BusinessUnitFactory.CreateWithId("Businessunit");
+			  BusinessUnitRepository.Add(businessUnit);
+
+			  var team = TeamFactory.CreateTeamWithId("team1");
+			  TeamRepository.Add(team);
+			 
+			  var site = SiteFactory.CreateSimpleSite("site");
+			  var siteId = Guid.NewGuid();
+			  site.SetId(siteId);
+			  SiteRepository.Add(site);
+
+			  var roleId = Guid.NewGuid();
+			  var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
+			  agentRole.SetId(roleId);
+			  ApplicationRoleRepository.Add(agentRole);
+			  
+			  Target.AddAvailableData(roleId,
+																 new AvailableDataForRoleInput
+																 {
+																	 BusinessUnits = new Collection<Guid> { businessUnit.Id.Value },
+																	 Sites = new Collection<Guid> { siteId },
+																	 Teams = new Collection<Guid> { team.Id.Value },
+																	 RangeOption = AvailableDataRangeOption.MyBusinessUnit
+																 });
+
+			  agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
+			  agentRole.AvailableData.AvailableBusinessUnits.First().Name.Should().Be.EqualTo(businessUnit.Name);
+
+			  agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
+			  agentRole.AvailableData.AvailableSites.First().Description.Should().Be.EqualTo(site.Description);
+
+			  agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
+			  agentRole.AvailableData.AvailableTeams.First().Description.Should().Be.EqualTo(team.Description);
 		  }
     }
 }

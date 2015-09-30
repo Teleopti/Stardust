@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBusinessUnit Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _businessUnits.First(x => x.Id.Equals(id));
 		}
 
 		public long CountAllEntities()

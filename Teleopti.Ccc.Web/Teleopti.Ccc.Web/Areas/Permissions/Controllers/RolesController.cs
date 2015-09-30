@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using NodaTime.TimeZones;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
@@ -26,13 +27,20 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         private readonly IApplicationFunctionRepository _applicationFunctionRepository;
         private readonly IAvailableDataRepository _availableDataRepository;
         private readonly ICurrentBusinessUnit _currentBusinessUnit;
+	    private readonly IBusinessUnitRepository _businessUnitRepository;
+	    private readonly ISiteRepository _siteRepository;
+	    private readonly ITeamRepository _teamRepository;
+	 
 
-        public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit)
+        public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit, IBusinessUnitRepository businessUnitRepository, ISiteRepository siteRepository, ITeamRepository teamRepository)
         {
             _roleRepository = roleRepository;
             _applicationFunctionRepository = applicationFunctionRepository;
             _availableDataRepository = availableDataRepository;
             _currentBusinessUnit = currentBusinessUnit;
+	        _businessUnitRepository = businessUnitRepository;
+	        _siteRepository = siteRepository;
+	        _teamRepository = teamRepository;
         }
 
         [UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
@@ -191,24 +199,9 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
             var role = _roleRepository.Get(roleId);
             if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
-            model.BusinessUnits.ForEach(x =>
-            {
-                var businessUnit = new BusinessUnit("temp");
-                businessUnit.SetId(x);
-                role.AvailableData.AddAvailableBusinessUnit(businessUnit);
-            });
-            model.Sites.ForEach(x =>
-            {
-                var site = new Site("temp");
-                site.SetId(x);
-                role.AvailableData.AddAvailableSite(site);
-            });
-            model.Teams.ForEach(x =>
-            {
-                var team = new Team();
-                team.SetId(x);
-                role.AvailableData.AddAvailableTeam(team);
-            });
+            model.BusinessUnits.ForEach(x => role.AvailableData.AddAvailableBusinessUnit(_businessUnitRepository.Load(x)));
+            model.Sites.ForEach(x => role.AvailableData.AddAvailableSite(_siteRepository.Load(x)));
+            model.Teams.ForEach(x => role.AvailableData.AddAvailableTeam(_teamRepository.Load(x)));
             role.AvailableData.AvailableDataRange = model.RangeOption.GetValueOrDefault(role.AvailableData.AvailableDataRange);
 
             return Ok();
