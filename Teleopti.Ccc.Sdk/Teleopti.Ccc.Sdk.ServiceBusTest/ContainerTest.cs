@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
-using Rhino.ServiceBus.Hosting;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -45,6 +44,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				container.Resolve<ConsumerOf<NewAbsenceRequestCreated>>().Should().Not.Be.Null();
 			}
         }
+
+		[Test]
+		public void ShouldResolveScheduleStateHolder()
+		{
+
+			var builder = new ContainerBuilder();
+			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
+			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterModule<ServiceBusCommonModule>();
+			builder.RegisterModule<ForecastContainerInstaller>();
+			builder.RegisterModule<RequestContainerInstaller>();
+			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
+			builder.RegisterModule<IntraIntervalSolverServiceModule>();
+
+			using (var container = builder.Build())
+			{
+				container.Resolve<ISchedulerStateHolder>().Should().Not.Be.Null();
+			}
+		}
 
 		[Test]
 		public void ShouldResolveMessageModule()

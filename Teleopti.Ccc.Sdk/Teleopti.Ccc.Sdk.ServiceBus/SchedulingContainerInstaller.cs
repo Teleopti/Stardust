@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+			builder.RegisterType<TimeZoneGuardWrapper>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>();
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>();
 			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
