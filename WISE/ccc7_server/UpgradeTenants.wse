@@ -89,7 +89,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DIR%Tools\UpgradeTenants.bat" %SUSER% %SPASS% %URL%"
+  Command Line=/C ""%DIR%Tools\UpgradeTenants.bat" "%SUSER%" "%SPASS%" "%URL%""
   Default Directory=%DIR%
   Flags=00000110
 end
