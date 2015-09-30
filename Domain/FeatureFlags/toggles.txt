@@ -85,4 +85,4 @@ MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = true
 RTA_MultiTenancy_32539 = RC
 WfmPeople_AdjustSkill_34138 = true
-WfmPermission_ReplaceOldPermission_34671 = false
+#WfmPermission_ReplaceOldPermission_34671 = false

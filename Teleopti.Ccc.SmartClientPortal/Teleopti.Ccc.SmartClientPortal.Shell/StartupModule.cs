@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>();
 			builder.RegisterType<SystemCheckerValidator>();
 			builder.RegisterType<OutlookPanelContentWorker>();
-
+			builder.Register(c => new WebUrlHolder(_configuration.Args().ReportServer)).SingleInstance();
 			builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
 
 			builder.RegisterType<LogonModel>().SingleInstance();

@@ -1,38 +1,33 @@
-﻿using System.Configuration;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
-    public class ApplicationStartup
-    {
-        private readonly IComponentContext _componentContext;
-        private readonly ILogonPresenter _logonPresenter;
+	public class ApplicationStartup
+	{
+		private readonly IComponentContext _componentContext;
+		private readonly ILogonPresenter _logonPresenter;
+		private readonly WebUrlHolder _webUrlHolder;
 
-		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter)
-        {
-            _componentContext = componentContext;
-		    _logonPresenter = logonPresenter;
-        }
+		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter, WebUrlHolder webUrlHolder)
+		{
+			_componentContext = componentContext;
+			_logonPresenter = logonPresenter;
+			_webUrlHolder = webUrlHolder;
+		}
 
-        /// <summary>
-        /// Runs the shell application.
-        /// </summary>
-        public void LoadShellApplication()
-        {
-            var appl = new SmartClientShellApplication(_componentContext);
-            appl.Run();
-        }
+		/// <summary>
+		/// Runs the shell application.
+		/// </summary>
+		public void LoadShellApplication()
+		{
+			var appl = new SmartClientShellApplication(_componentContext);
+			appl.Run();
+		}
 
-        /// <summary>
-        /// Loads the authentication form.
-        /// </summary>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        public bool LogOn()
-        {
-			  string serverUrl = ConfigurationManager.AppSettings.Get("TenantServer");
-			  return _logonPresenter.Start(serverUrl);
-        }
-    }
+		public bool LogOn()
+		{
+			return _logonPresenter.Start(_webUrlHolder.WebUrl);
+		}
+	}
 }

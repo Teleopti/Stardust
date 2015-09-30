@@ -42,6 +42,7 @@ using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.Win.Sikuli;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private bool canAccessInternet = true;
 		private bool _webViewLoaded = true;
 		private const string _permissionModule = "/permissions";
+		private WebUrlHolder _webUrlHolder;
 
 		protected SmartClientShellForm()
 		{
@@ -86,14 +88,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
 			
-
 		}
 
 		private void setBusinessUnitInWebView()
 		{
 			if (!wfmWebControl.Enabled) return;
 			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
-			var request = new Request(WebServer + "Start/AuthenticationApi/Logon");
+			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
 			wfmWebView.LoadRequest(request);
 		}
@@ -187,6 +188,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
+			_webUrlHolder = _container.Resolve<WebUrlHolder>();
 			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
 				splitContainer.Panel2.Controls.Remove(webControl1);
@@ -338,16 +340,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public void setWfmWebUrl(string module)
 		{
-			var webServer = WebServer;
 			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", webServer, _permissionModule));
 		}
 
-		private static string WebServer
+		private string webServer
 		{
 			get
 			{
-				string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
-				return raptorServer;
+				return _webUrlHolder.WebUrl;
 			}
 		}
 

@@ -482,6 +482,7 @@
     <Compile Include="Main\LogonMatrix.cs" />
     <Compile Include="Main\LogonModel.cs" />
     <Compile Include="Main\LogonPresenter.cs" />
+    <Compile Include="Main\WebUrlHolder.cs" />
     <Compile Include="Main\WinTenantCredentials.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
