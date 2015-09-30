@@ -47,6 +47,7 @@
 		margin: 70px 0;
 		.gantt-scrollable{
 		    overflow:hidden;
+			-ms-overflow-style:none;
 		}
 		.gantt-schedule-loader{
 		    position:absolute;
