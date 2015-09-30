@@ -4,10 +4,8 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Collection;
@@ -82,14 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                         .SetFetchMode("ShiftLayers", FetchMode.Join)
 			                         .SetResultTransformer(Transformers.DistinctRootEntity);
 			addScenarioAndFilterClauses(assCriteria, scenario, period);
-			addBuClauseToNonRootQuery(assCriteria);
 			return assCriteria;
-		}
-
-		private static void addBuClauseToNonRootQuery(ICriteria criteria)
-		{
-			if (!typeof (IAggregateRoot).IsAssignableFrom(criteria.GetRootEntityTypeIfAvailable()))
-				criteria.Add(Restrictions.Eq("ass.BusinessUnit", CurrentBusinessUnit.Instance.Current()));
 		}
 
 		private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateOnlyPeriod period)
