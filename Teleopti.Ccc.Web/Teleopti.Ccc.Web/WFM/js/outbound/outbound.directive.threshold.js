@@ -8,7 +8,7 @@
 			link: postLink
 		};
 
-		function postLink(scope, elm, attrs, scrollfixTarget) {
+		function postLink(scope, elm) {
 			if (scope.row.model.id.indexOf("_") < 0) {
 				outboundChartService.getCampaignVisualization(scope.row.model.id, function(data, translations, manualPlan, closedDays, backlog) {
 					scope.campaignData = data;
@@ -18,10 +18,10 @@
 					scope.campaignData.unscheduledPlans.splice(0, 2);
 					scope.lastManualBacklogDay = scope.isManualBacklog.lastIndexOf(true);
 				});
-
+				
 				var overStaffed = [];
 				var underSLA = [];
-				scope.$on('outbound.updateThreshold', function(_s, threshold) {
+				scope.$on('outbound.updateThreshold', function (_s, threshold) {
 					for (var i = scope.lastManualBacklogDay; i < scope.campaignData.rawBacklogs.length; i++) {
 						var overStaff = scope.campaignData.overStaff[i];
 						var backlog = scope.campaignData.rawBacklogs[i];
@@ -31,15 +31,15 @@
 					}
 					var isOverStaffed = overStaffed.indexOf(true);
 					var isUnderSLA = underSLA.indexOf(true);
-					if (!elm.hasClass('threshold-overStaffed') && isOverStaffed) {
-						elm.addClass('threshold-overStaffed');
-					} else if (elm.hasClass('threshold-overStaffed') && !isOverStaffed) {
-						elm.removeClass('threshold-overStaffed');
+					if (!elm.hasClass('campaign-early') && isOverStaffed > 0) {
+						elm.addClass('campaign-early');
+					} else if (elm.hasClass('campaign-early') && isOverStaffed < 0) {
+						elm.removeClass('campaign-early');
 					}
-					if (!elm.hasClass('threshold-underSLA') && isUnderSLA) {
-						elm.addClass('threshold-underSLA');
-					} else if (elm.hasClass('threshold-underSLA') && !isUnderSLA) {
-						elm.removeClass('threshold-underSLA');
+					if (!elm.hasClass('campaign-late') && isUnderSLA > 0) {
+						elm.addClass('campaign-late');
+					} else if (elm.hasClass('campaign-late') && isUnderSLA < 0) {
+						elm.removeClass('campaign-late');
 					}
 				});
 			}

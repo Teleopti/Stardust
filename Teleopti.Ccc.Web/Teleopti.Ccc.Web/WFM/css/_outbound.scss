@@ -58,18 +58,14 @@
 			margin-top:-5px;
 		}
 		.campaign-late {
-			.gantt-valign-content:not(.gantt-row-expansion) {
-				background-color: #F44336;
-				color: white;
-				border-radius: 16px;				
-			}		  
+			background-color: #F44336;
+			color: white;
+			border-radius: 16px;
 		}
 		.campaign-early {
-			.gantt-valign-content:not(.gantt-row-expansion) {
-				background-color: #FF7F0E;
-				color: white;
-				border-radius: 16px;				
-			}		   
+			background-color: #FF7F0E;
+			color: white;
+			border-radius: 16px;
 		}
 		.gantt-body .gantt-row-expansion {
 			background-color: white;
@@ -166,7 +162,7 @@
 		.campaign-chart-wrapper {	
 			position: relative;
 			.chart-extra-info {
-				top: 35px;
+				top: 0;
 			}
 		}
 

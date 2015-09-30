@@ -232,10 +232,10 @@
 
 			campaignSummary.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'OutboundUnderSLARule') {
-					row.classes = 'campaign-late';
+					row.campaignNameClass = 'campaign-late';
 				}
 				if (warning.TypeOfRule == 'OutboundOverstaffRule') {
-					row.classes = 'campaign-early';
+					row.campaignNameClass = 'campaign-early';
 				}
 			});
 		}		
