@@ -26,24 +26,39 @@ SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Config
 SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
+echo %ROOTDIR%\nhib\SikulitestConfig.json,BuildArtifacts\SikulitestConfig.json>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
 ECHO RC>"c:\nhib\Toggles.txt"
 
-ECHO Set WFM path in Tenant table ...
-SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql"
+::final changes on Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET commonFolder=%ROOTDIR%\.debug-setup\common
+ECHO %configPath% >>%logFile%
+ECHO %commonFolder% >>%logFile%
 
-ECHO fix config files ...
-cd %ROOTDIR%\.debug-setup\
-call FixMyConfig.bat %CCC7DB% %AnalyticsDB% %configuration%
+COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
 
-ECHO Restart iis express ...
-timeout 5
-taskkill /F /IM iisexpress.exe
-timeout 5
-cd "c:\Program Files\IIS Express\"
-start iisexpress /AppPool:Clr4IntegratedAppPool
+SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\Domain\FeatureFlags\Toggles.txt
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='TenantServer']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\nhib\SikulitestConfig.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='ConfigServer']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\nhib\SikulitestConfig.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='ShowMem']
+SET attributeName=value
+SET attributeValue=true
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 ENDLOCAL
 GOTO:EOF
