@@ -51,6 +51,7 @@ Scenario: Keep campaigns when reforecasting
 	And I choose to add a campaign
 	And I increase the calls by 100 percent
 	And I apply the campaign
+	And forecast result has loaded
 	Then I use default forecast period and forecast for one workload
 	And Forecast has succeeded
 	And forecast result has loaded

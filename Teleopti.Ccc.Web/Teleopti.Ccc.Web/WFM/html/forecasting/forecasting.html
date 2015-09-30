@@ -54,13 +54,13 @@
 									View more numbers
 								</md-tooltip>
 							</a>
-							<a class="wfm-btn forecast-workload wfm-btn-invis-default" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
+							<a class="wfm-btn forecast-workload wfm-btn-invis-disabled" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
 								Forecast
 								<md-tooltip>
 									Forecast this workload
 								</md-tooltip>
 							</a>
-							<a class="wfm-btn forecast-add-campaign-button wfm-btn-invis-default" ng-class="{'wfm-btn-invis-disabled': disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
+							<a class="wfm-btn forecast-add-campaign-button wfm-btn-invis-disabled" ng-class="{'wfm-btn-invis-default': !disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
 								Campaign {{selectedDayCountParenthesis()}}
 								<md-tooltip>
 									Select days in chart before adding
