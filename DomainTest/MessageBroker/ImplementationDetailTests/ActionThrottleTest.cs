@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -128,10 +129,11 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 			_started.WaitOne();
 		}
 
-		protected override void WaitForNext(int waitMilliseconds)
+		protected override Task WaitForNext(int waitMilliseconds)
 		{
 			WaitedMilliseconds = waitMilliseconds;
 			_signal.WaitOne();
+			return Task.FromResult(false);
 		}
 
 		public void SignalHasWaited()

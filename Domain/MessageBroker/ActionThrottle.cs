@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 		public void Start()
 		{
-			Task.Factory.StartNew(() =>
+			Task.Factory.StartNew(async () =>
 			{
 				Started();
 				foreach (var action in actions.GetConsumingEnumerable(cancellation.Token))
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 					{
 						Logger.Error(ex);
 					}
-					WaitForNext(actionDelay);
+					await WaitForNext(actionDelay);
 				}
 			});
 		}
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 		}
 
-		protected virtual void WaitForNext(int waitMilliseconds)
+		protected virtual Task WaitForNext(int waitMilliseconds)
 		{
-			Thread.Sleep(waitMilliseconds);
+			return Task.Delay(waitMilliseconds, cancellation.Token);
 		}
 
 		public virtual void Dispose()
