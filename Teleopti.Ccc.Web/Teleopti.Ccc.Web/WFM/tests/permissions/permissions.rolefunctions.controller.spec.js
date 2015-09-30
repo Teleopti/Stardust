@@ -20,6 +20,11 @@ describe('FunctionController', function() {
             var deferred = $q.defer();
             deferred.resolve();
             return deferred.promise;
+        },
+        functionsDisplayed: function() {
+            var deferred = $q.defer();
+            deferred.resolve();
+            return deferred.promise;
         }
     };
     var mockRoles = {
@@ -46,7 +51,7 @@ describe('FunctionController', function() {
 
     it('should toggle the selected property of node from false to true', inject(function ($controller) {
         var scope = $rootScope.$new();
-       
+        scope.functionsDisplayed = [{},{}];
         $controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
         var node = {
         	$modelValue: { selected: false, Type: 'Team', ChildNodes: [] }, $nodeScope: { $parentNodeScope: null }
@@ -54,8 +59,8 @@ describe('FunctionController', function() {
 
         scope.toggleFunctionForRole(node);
         scope.$digest();
-		    
+
         expect(node.$modelValue.selected).toBe(true);
     }));
 
-});  
+});
