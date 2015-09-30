@@ -193,6 +193,12 @@ angular.module('wfm.forecasting')
 									vaht: 'Talk time >',
 									vacw: 'ACW >'
 								},
+								colors: {
+									vtc: '#0099FF',
+									vc: '#99D6FF',
+									vaht: '#9CCC65',
+									vacw: '#EC38A3'
+								},
 								onclick: function() {
 									$scope.$digest();
 								}
