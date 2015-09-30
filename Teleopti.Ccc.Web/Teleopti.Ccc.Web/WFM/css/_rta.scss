@@ -1,5 +1,13 @@
-﻿.rta-list-item{
-	padding:2%;
+﻿.rta-header{
+  margin-bottom:10px;
+}
+
+.rta-config{
+	display: inline-flex;
+}
+
+.rta-list-item{
+	padding:1%;
 	margin-top:10px;
 	cursor: pointer; 
 
@@ -10,10 +18,62 @@
 }
 
 .rta-stats{
-	display: flex;
-	justify-content: space-between;
+    justify-content: space-between;
 }
 
 .rta-nav-link {
 	cursor: pointer; 
 }
+
+
+.rta-list{
+  display: inline-flex;
+  max-width: 47%;
+  margin:5px;
+}
+
+.rtaGrid{
+  display: inline-flex;
+  max-width: 30%;
+  margin:5px;
+  min-height: 110px;
+}
+
+.site-name{
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+.rta-stats{
+  display:inline-flex;
+  width:100%;
+}
+
+
+.rta-stats .wfm-checkbox{
+  width:auto!important;
+}
+
+.rta-trigger-area{
+  width:100%;
+}
+
+.site-data{
+  margin-top: 10px;
+  width:100%;
+}
+
+@media only screen and (max-width: 700px), only screen and (max-device-width: 700px) {
+  .rta-list, .rtaGrid {
+    max-width: 100%!important;
+  }
+}
+
+@media only screen and (min-width: 1620px), only screen and (min-device-width: 1620px) {
+  .rtaGrid{
+    display: inline-flex;
+    max-width: 225px!important;
+    margin:5px;
+  }
+}
+

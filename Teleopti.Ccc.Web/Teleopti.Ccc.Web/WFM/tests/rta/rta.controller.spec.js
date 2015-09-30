@@ -55,9 +55,17 @@ describe('RtaCtrl', function () {
 	            }
 	        }
 	    };
+
+        var rtaOrgSvrc = {
+
+            getSites: function(){
+                return [];
+            }
+        };
+
 	    var scope = $rootScope.$new();
 		
-	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
+	    $controller('RtaCtrl', { $scope: scope, $interval: $interval, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
 		
 
 		scope.$digest(); // this is needed to resolve the promise
@@ -93,8 +101,16 @@ describe('RtaCtrl', function () {
 	            }
 	        }
 	    };
-	    var scope = $rootScope.$new();
-	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
+
+        var rtaOrgSvrc = {
+
+            getSites: function(){
+                return [];
+            }
+        };
+
+        var scope = $rootScope.$new();
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
 
 	    scope.$digest(); // this is needed to resolve the promise
 
@@ -124,8 +140,16 @@ describe('RtaCtrl', function () {
 	            }
 	        }
 	    };
+
+        var rtaOrgSvrc = {
+
+            getSites: function(){
+                return [];
+            }
+        };
+
 	    var scope = $rootScope.$new();
-	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc  });
 
 	    scope.$digest(); // this is needed to resolve the promise
 
@@ -162,9 +186,17 @@ describe('RtaCtrl', function () {
 	            }
             }
 	    };
+
+        var rtaOrgSvrc = {
+
+            getSites: function(){
+                return [];
+            }
+        };
+
 	    var scope = $rootScope.$new();
 
-	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, $interval: $interval});
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, $interval: $interval, RtaOrganizationService: rtaOrgSvrc });
 
 	    rtaSvrc.getAdherenceForAllSites = {
 	            query: function () {
@@ -212,17 +244,16 @@ describe('RtaCtrl', function () {
 			}
 		};
 
-
-		var orginaztionService = {
+		var rtaOrgSvrc = {
 
 			organization: [{ siteName: 'London', siteId: 4 }, { siteName: 'Paris', siteId: 5 }],
 
 			getSites: function (id) {
-				return orginaztionService.organization;
+				return rtaOrgSvrc.organization;
 			}
 		};
 
-		$controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: orginaztionService });
+		$controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
 		
 		expect(scope.sites).not.toBe(null);
 		expect(scope.sites.length).toBe(2);

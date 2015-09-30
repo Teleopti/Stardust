@@ -2,20 +2,20 @@
    'use strict';
 
     angular.module('wfm.rta').controller('RtaAgentsCtrl', [
-         '$scope', '$filter', '$state', '$stateParams', 'RtaOrganizationService', 'RtaAgentsService', 'RtaService',
-          function ($scope, $filter, $state, $stateParams, RtaOrganizationService, RtaAgentsService, RtaService) {
+         '$scope', '$filter', '$state', '$stateParams', 'RtaOrganizationService', 'RtaService',
+          function ($scope, $filter, $state, $stateParams, RtaOrganizationService) {
 
           	var teamId = $stateParams.teamId;
           	var siteId = $stateParams.siteId;
 
-          	$scope.agents = RtaAgentsService.getAgents($stateParams.teamId);
+          	$scope.agents = RtaOrganizationService.getAgents($stateParams.teamId);
           	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
           	$scope.teamName = RtaOrganizationService.getTeamName(teamId);
 
           	$scope.gridOptions = {
           		columnDefs: [
 					{ name: 'Name', field: 'Name', enableColumnMenu: false },
-					{ name: 'Team', field: 'Team', enableColumnMenu: false},
+					{ name: 'TeamName', field: 'TeamName', enableColumnMenu: false},
 					{ name: 'State', field: 'State', enableColumnMenu: false },
 					{ name: 'Activity', field: 'Activity', enableColumnMenu: false },
 					{ name: 'Next Activity', field: 'Next Activity', enableColumnMenu: false },
@@ -33,6 +33,5 @@
           	$scope.goBack = function () {
 				$state.go('rta-teams', { siteId: siteId });
           	};
-
-          }]);
+		  }]);
 })();
