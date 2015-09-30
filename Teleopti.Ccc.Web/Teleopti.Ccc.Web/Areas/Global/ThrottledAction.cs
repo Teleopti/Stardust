@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
-	internal class ThrottledAction
+	public class ThrottledAction
 	{
 		public const string Forecasting = "Forecasting";
 		public const string Scheduling = "Scheduling";
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		
 		private readonly static object Lock = new object();
 
-		public ThrottledAction(string action, int limit = 1)
+		internal ThrottledAction(string action, int limit = 1)
 		{
 			_limit = limit;
 			Action = action;
