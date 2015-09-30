@@ -76,5 +76,45 @@
 	};
 
 
+	var canvasPrototype = fabric.Canvas.prototype;
 
+	canvasPrototype._onDoubleClick = function (e) {
+		var self = this;
+		
+		var target = self.findTarget(e);
+		self.fire('mouse:dblclick', {
+			target: target,
+			e: e
+		});
+
+		if (target && !self.isDrawingMode) {
+
+			// To unify the behavior, the object's double click event does not fire on drawing mode.
+			target.fire('object:dblclick', {
+				e: e
+			});
+		}
+	};
+
+	var addListener = fabric.util.addListener;
+	var removeListener = fabric.util.removeListener;
+
+	
+	canvasPrototype._existingEventListenerCall = canvasPrototype._initEventListeners;
+	canvasPrototype._existingRemoveEventListenerCall = canvasPrototype.removeListeners;
+
+	canvasPrototype._initEventListeners = function () {
+		var self = this;
+		self._existingEventListenerCall();
+		addListener(self.upperCanvasEl, 'dblclick', self._onDoubleClick.bind(self));
+	},
+
+	canvasPrototype.removeListeners = function () {
+		var self = this;
+		self._existingRemoveEventListenerCall();
+		removeListener(self.upperCanvasEl, 'dblclick', self._onDoubleClick.bind(self));
+	}
+
+
+	
 }());

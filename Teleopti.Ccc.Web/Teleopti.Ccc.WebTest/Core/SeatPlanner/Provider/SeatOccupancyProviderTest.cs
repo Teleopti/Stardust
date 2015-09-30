@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -52,13 +53,13 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 				_person,
 				bookingDate,
 				new DateTime(2015, 8, 7, 8, 0, 0),
-				new DateTime(2015, 8, 7, 18, 0, 0));
+				new DateTime(2015, 8, 7, 12, 0, 0));
 
 
 			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(
 				_person,
 				bookingDate,
-				new DateTime(2015, 8, 7, 8, 0, 0),
+				new DateTime(2015, 8, 7, 13, 0, 0),
 				new DateTime(2015, 8, 7, 18, 0, 0));
 
 			booking.Book(seat);
@@ -68,8 +69,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(bookingSeat2);
 
 			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
-			var occupancyInformation = seatOccupancyProvider.Get(seat.Id.Value, bookingDate);
-			var occupancyInfo = occupancyInformation.Single();
+			var occupancyInformation = seatOccupancyProvider.Get(new List<Guid>{ seat.Id.GetValueOrDefault()}, bookingDate);
+			var occupancyInfo = occupancyInformation.Single().Occupancies.Single();
 
 			occupancyInfo.StartDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(booking.StartDateTime, _timeZone));
 			occupancyInfo.EndDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(booking.EndDateTime, _timeZone));
@@ -77,6 +78,62 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			occupancyInfo.SeatId.Should().Be.EqualTo(seat.Id);
 			occupancyInfo.BookingId.Should().Be.EqualTo(booking.Id);
 
+		}
+
+		[Test]
+		public void ShouldGetOccupancyInformationForMultipleSeats()
+		{
+			var location = new SeatMapLocation() { Name = "Location" };
+			location.SetId(Guid.NewGuid());
+
+			var person2 = PersonFactory.CreatePersonWithId();
+
+			var seat = location.AddSeat("Seat", 1);
+			var seat2 = location.AddSeat("Seat 2", 2);
+			var seat3 = location.AddSeat("Seat 3", 3);
+			_seatMapLocationRepository.Add(location);
+
+			var bookingDate = new DateOnly(2015, 8, 7);
+			var booking = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
+				new DateTime(2015, 8, 7, 8, 0, 0),
+				new DateTime(2015, 8, 7, 10, 0, 0));
+
+			var bookingSeat2 = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
+				new DateTime(2015, 8, 7, 10, 0, 0),
+				new DateTime(2015, 8, 7, 13, 0, 0));
+
+			var bookingSeat3 = SeatManagementProviderTestUtils.CreateSeatBooking(_person, bookingDate,
+				new DateTime(2015, 8, 7, 14, 0, 0),
+				new DateTime(2015, 8, 7, 16, 0, 0));
+
+			var bookingPerson2 = SeatManagementProviderTestUtils.CreateSeatBooking(person2, bookingDate,
+				new DateTime(2015, 8, 7, 8, 0, 0),
+				new DateTime(2015, 8, 7, 18, 0, 0));
+			
+			booking.Book(seat);
+			bookingSeat2.Book(seat2);
+			bookingSeat3.Book(seat3);
+			bookingPerson2.Book (seat);
+
+			_seatBookingRepository.Add(booking);
+			_seatBookingRepository.Add(bookingSeat2);
+			_seatBookingRepository.Add(bookingSeat3);
+			_seatBookingRepository.Add(bookingPerson2);
+
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var occupancyGroupedBySeat = seatOccupancyProvider.Get(new Guid[]
+			{
+				seat.Id.GetValueOrDefault(), seat2.Id.GetValueOrDefault()
+			}, bookingDate);
+
+			Assert.AreEqual (2, occupancyGroupedBySeat.Count);
+
+			occupancyGroupedBySeat[0].SeatId.Should().Be.EqualTo(seat.Id);
+			occupancyGroupedBySeat[1].SeatId.Should().Be.EqualTo(seat2.Id);
+
+			Assert.AreEqual(2, occupancyGroupedBySeat[0].Occupancies.Count);
+			occupancyGroupedBySeat[0].Occupancies[0].PersonId.Should().Be.EqualTo (_person.Id);
+			occupancyGroupedBySeat[0].Occupancies[1].PersonId.Should().Be.EqualTo(person2.Id);
 		}
 
 		[Test]
@@ -157,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
 			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new List<IScheduleDay>() { scheduleDayOnePerson1, scheduleDayOnePerson2 });
-			
+
 			Assert.AreEqual(2, occupancyInformation.Count);
 
 			Assert.AreEqual(_person.Id, occupancyInformation[0].PersonId);

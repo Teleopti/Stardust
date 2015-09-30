@@ -20,11 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			_userTimeZone = userTimeZone;
 		}
 
-		public IList<OccupancyViewModel> Get(Guid seatId, DateOnly date)
+		public IList<GroupedOccupancyViewModel> Get(IList<Guid> seatIds, DateOnly date)
 		{
-			var bookings = _seatBookingRepository.LoadSeatBookingsForSeatIntersectingDay(date, seatId);
-			return createViewModelsForBookings(bookings);
+			var bookings = _seatBookingRepository.LoadSeatBookingsForSeatsIntersectingDay(date, seatIds);
+			return createGroupedViewModelsForBookings(bookings);
 		}
+
 
 		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays (List<IScheduleDay> scheduleDays)
 		{
@@ -44,6 +45,21 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			return createViewModelsForBookings(bookings);
 		}
+
+		private IList<GroupedOccupancyViewModel> createGroupedViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
+		{
+			var groupedBookings = bookings.GroupBy (booking => booking.Seat);
+			var groupedOccupancyVieModelList = groupedBookings.Select (groupedBooking => new GroupedOccupancyViewModel()
+			{
+				SeatId = groupedBooking.Key.Id.GetValueOrDefault(), 
+				SeatName = groupedBooking.Key.Name, 
+				Occupancies = createViewModelsForBookings (groupedBooking)
+			});
+
+			
+			return groupedOccupancyVieModelList.OrderBy (groupedBooking => groupedBooking.SeatName).ToList();
+		}
+
 
 		private List<OccupancyViewModel> createViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
 		{
@@ -77,4 +93,18 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		
 	}
+
+	public class GroupedOccupancyViewModel
+	{
+		private List<OccupancyViewModel> _occupancies = new List<OccupancyViewModel>();
+		public Guid SeatId { get; set; }
+		public String SeatName { get; set; }
+
+		public List<OccupancyViewModel> Occupancies
+		{
+			get { return _occupancies; }
+			set { _occupancies = value; }
+		}
+	}
+
 }

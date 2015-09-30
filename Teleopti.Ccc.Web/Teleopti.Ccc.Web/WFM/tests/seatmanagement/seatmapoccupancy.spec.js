@@ -40,7 +40,7 @@ describe('seatmap booking view tests', function () {
 	});
 
 	it('should get class of previous day correctly', function () {
-		controller.occupancyDetail = fakeBooking();
+		controller.occupancyDetails = fakeBooking();
 
 		controller.scheduleDate = new Date("2015-01-01");
 		expect(controller.getSeatBookingDetailClass(fakeBooking())).toEqual("seatmap-seatbooking-previousday");
@@ -83,7 +83,7 @@ describe('seatmap booking view tests', function () {
 
 	function setUpController($controller) {
 		var scope = $rootScope.$new();
-		return $controller('SeatMapOccupancyDetailCtrl',
+		return $controller('SeatMapOccupancyCtrl',
 		{
 			utils: seatMapCanvasUtilsService,
 			seatMapService: mockSeatMapService

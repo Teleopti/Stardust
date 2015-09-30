@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
 	public interface ISeatOccupancyProvider
 	{
-		IList<OccupancyViewModel> Get (Guid seatId, DateOnly date);
+		IList<GroupedOccupancyViewModel> Get (IList<Guid> seatIds, DateOnly date);
 		IList<OccupancyViewModel> GetSeatBookingsForScheduleDays (List<IScheduleDay> dateOnlyPeriod);
 	}
 }

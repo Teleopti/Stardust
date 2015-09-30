@@ -35,36 +35,36 @@
 		return ret;
 	};
 
-	fabric.Object.prototype.drawBorders = function (ctx) {
-		var h, padding, padding2, rotateHeight, scaleX, scaleY, strokeWidth, w, zoom, _ref, _ref1;
-		if (!this.hasBorders) {
-			return this;
-		}
-		zoom = ((_ref = this.canvas) != null ? (_ref1 = _ref.viewport) != null ? _ref1.zoom : void 0 : void 0) || 1;
-		padding = this.padding;
-		padding2 = padding * 2;
-		strokeWidth = ~~(this.strokeWidth / 2) * 2;
-		ctx.save();
-		ctx.globalAlpha = this.isMoving ? this.borderOpacityWhenMoving : 1;
-		ctx.strokeStyle = this.borderColor;
-		scaleX = 1 / this._constrainScale(this.scaleX);
-		scaleY = 1 / this._constrainScale(this.scaleY);
-		ctx.lineWidth = 1 / this.borderScaleFactor / zoom;
-		ctx.scale(scaleX, scaleY);
-		w = this.getWidth();
-		h = this.getHeight();
-		ctx.strokeRect((-(w / 2) - padding - strokeWidth / 2 * this.scaleX) - 0.5 / zoom, (-(h / 2) - padding - strokeWidth / 2 * this.scaleY) - 0.5 / zoom, (w + padding2 + strokeWidth * this.scaleX) + 1 / zoom, (h + padding2 + strokeWidth * this.scaleY) + 1 / zoom);
-		if (this.hasRotatingPoint && this.isControlVisible('mtr') && !this.get('lockRotation') && this.hasControls) {
-			rotateHeight = (this.flipY ? h + ((strokeWidth * this.scaleY) + (padding * 2)) * zoom : -h - ((strokeWidth * this.scaleY) + (padding * 2)) * zoom) / 2;
-			ctx.beginPath();
-			ctx.moveTo(0, rotateHeight);
-			ctx.lineTo(0, rotateHeight + (this.flipY ? this.rotatingPointOffset : -this.rotatingPointOffset));
-			ctx.closePath();
-			ctx.stroke();
-		}
-		ctx.restore();
-		return this;
-	};
+	//fabric.Object.prototype.drawBorders = function (ctx) {
+	//	var h, padding, padding2, rotateHeight, scaleX, scaleY, strokeWidth, w, zoom, _ref, _ref1;
+	//	if (!this.hasBorders) {
+	//		return this;
+	//	}
+	//	zoom = ((_ref = this.canvas) != null ? (_ref1 = _ref.viewport) != null ? _ref1.zoom : void 0 : void 0) || 1;
+	//	padding = this.padding;
+	//	padding2 = padding * 2;
+	//	strokeWidth = ~~(this.strokeWidth / 2) * 2;
+	//	ctx.save();
+	//	ctx.globalAlpha = this.isMoving ? this.borderOpacityWhenMoving : 1;
+	//	ctx.strokeStyle = this.borderColor;
+	//	scaleX = 1 / this._constrainScale(this.scaleX);
+	//	scaleY = 1 / this._constrainScale(this.scaleY);
+	//	ctx.lineWidth = 1 / this.borderScaleFactor / zoom;
+	//	ctx.scale(scaleX, scaleY);
+	//	w = this.getWidth();
+	//	h = this.getHeight();
+	//	ctx.strokeRect((-(w / 2) - padding - strokeWidth / 2 * this.scaleX) - 0.5 / zoom, (-(h / 2) - padding - strokeWidth / 2 * this.scaleY) - 0.5 / zoom, (w + padding2 + strokeWidth * this.scaleX) + 1 / zoom, (h + padding2 + strokeWidth * this.scaleY) + 1 / zoom);
+	//	if (this.hasRotatingPoint && this.isControlVisible('mtr') && !this.get('lockRotation') && this.hasControls) {
+	//		rotateHeight = (this.flipY ? h + ((strokeWidth * this.scaleY) + (padding * 2)) * zoom : -h - ((strokeWidth * this.scaleY) + (padding * 2)) * zoom) / 2;
+	//		ctx.beginPath();
+	//		ctx.moveTo(0, rotateHeight);
+	//		ctx.lineTo(0, rotateHeight + (this.flipY ? this.rotatingPointOffset : -this.rotatingPointOffset));
+	//		ctx.closePath();
+	//		ctx.stroke();
+	//	}
+	//	ctx.restore();
+	//	return this;
+	//};
 
 	fabric.Viewport = (function () {
 		function Viewport(canvas) {
@@ -127,6 +127,7 @@
 		};
 
 		Viewport.prototype.transform = function (event) {
+
 			var ex, touchProp;
 			touchProp = event.type === 'touchend' ? 'changedTouches' : 'touches';
 			if (event[touchProp] && event[touchProp][0]) {
@@ -143,11 +144,15 @@
 		};
 
 		Viewport.prototype._transformEventParams = function (e) {
+			
 			var offsetLeft, offsetTop;
 			offsetTop = this.canvas.wrapperEl.getBoundingClientRect().top;
 			offsetLeft = this.canvas.wrapperEl.getBoundingClientRect().left;
+
+			// removed - just update event with appropriate values.
 			return {
 				which: 1,
+				shiftKey: e.shiftKey,  // added
 				clientX: (e.clientX - offsetLeft) / this.zoom + offsetLeft - this.translate().x,
 				clientY: (e.clientY - offsetTop) / this.zoom + offsetTop - this.translate().y,
 				pageX: e.pageX - this.translate().x,
@@ -155,6 +160,8 @@
 				screenX: e.screenX - this.translate().x,
 				screenY: e.screenY - this.translate().y
 			};
+	
+
 		};
 
 		return Viewport;

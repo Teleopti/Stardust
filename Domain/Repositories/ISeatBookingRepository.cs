@@ -17,5 +17,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging);
 		IList<ISeatBooking> LoadSeatBookingsIntersectingDay (DateOnly dateOnly, Guid locationId);
 		IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId);
+		IList<ISeatBooking> LoadSeatBookingsForSeatsIntersectingDay (DateOnly dateOnly, IList<Guid> seatIds);
 	}
 }

@@ -330,9 +330,11 @@ angular.module('wfm.seatMap')
 					canvas.remove(object);
 
 				});
-				var group = new fabric.Group(objectsInGroup, { left: activeGroup.left + 15, top: activeGroup.top + 15 });
+				var group = new fabric.Group(objectsInGroup, { left: activeGroup.left, top: activeGroup.top});
 				canvas.setActiveObject(group);
 				canvas.add(group);
+
+				canvas.renderAll();
 			}
 		};
 
@@ -450,7 +452,7 @@ angular.module('wfm.seatMap')
 
 		 function spaceActiveGroupHorizontal (canvas) {
 		 	if (canvas.getActiveGroup()) {
-		 		spaceGroupEvenlyHorizontal(canvas, canvas.getActiveGroup().objects);
+		 		spaceGroupEvenlyHorizontal(canvas, canvas.getActiveGroup()._objects);
 		 	}
 		 }
 
@@ -458,10 +460,10 @@ angular.module('wfm.seatMap')
 		 	if (objects) {
 		 		var left = 0;
 		 		var offset = 20;
-		 		var maxRange = objects.length - 1;
-		 		for (var i = maxRange; i > -1; i--) {
+		 		var maxRange = objects.length;
+		 		for (var i = 0; i < maxRange; i ++) {
 		 			var o = objects[i];
-		 			if (i == maxRange) {
+		 			if (i == 0) {
 		 				left = o.left;
 		 			} else {
 		 				left += o.width + offset;
@@ -474,7 +476,7 @@ angular.module('wfm.seatMap')
 
 		 function spaceActiveGroupVertical (canvas) {
 		 	if (canvas.getActiveGroup()) {
-		 		spaceGroupEvenlyVertical(canvas, canvas.getActiveGroup().objects);
+		 		spaceGroupEvenlyVertical(canvas, canvas.getActiveGroup()._objects);
 		 	}
 		 };
 
@@ -482,10 +484,10 @@ angular.module('wfm.seatMap')
 		 	if (objects) {
 		 		var top = 0;
 		 		var offset = 20;
-		 		var maxRange = objects.length - 1;
-		 		for (var i = maxRange; i > -1; i--) {
+		 		var maxRange = objects.length;
+		 		for (var i = 0; i < maxRange; i++) {
 		 			var o = objects[i];
-		 			if (i == maxRange) {
+		 			if (i == 0) {
 		 				top = o.top;
 		 			} else {
 		 				top += o.height + offset;

@@ -144,10 +144,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId)
 		{
-			var requestedDate = getDateTimePeriodFromRequestedDate(date);
+			return LoadSeatBookingsForSeatsIntersectingDay(date, new[] { seatId });
+		}
+
+		public IList<ISeatBooking> LoadSeatBookingsForSeatsIntersectingDay (DateOnly dateOnly, IList<Guid> seatIds)
+		{
+			var requestedDate = getDateTimePeriodFromRequestedDate(dateOnly);
 			return _seatBookings
 				.Where(booking => !((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime))
-					&& seatId == booking.Seat.Id)
+					&& seatIds.Contains (booking.Seat.Id.GetValueOrDefault()))
 				.ToList();
 		}
 

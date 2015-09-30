@@ -79,13 +79,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId)
 		{
-			return getSeatBookingsInterceptingDay(date)
-				.Where (booking => booking.Seat.Id == seatId)
-				.OrderBy (booking => booking.BelongsToDate)
+			return LoadSeatBookingsForSeatsIntersectingDay (date, new[] {seatId});
+		}
+
+		public IList<ISeatBooking> LoadSeatBookingsForSeatsIntersectingDay(DateOnly dateOnly, IList<Guid> seatIds)
+		{
+			return getSeatBookingsInterceptingDay(dateOnly)
+				.Where(booking => seatIds.Contains(booking.Seat.Id.Value))
+				.OrderBy(booking => booking.BelongsToDate)
 				.ThenBy(booking => booking.StartDateTime)
 				.ToList();
 		}
-
+		
 		private IQueryable<ISeatBooking> getSeatBookingsInterceptingDay (DateOnly date)
 		{
 			var requestedDate = getDateTimePeriodFromRequestedDate (date);
@@ -227,5 +232,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return reportCriteria.Teams.IsNullOrEmpty() ? null : string.Join(",", reportCriteria.Teams.Select(team => team.Id));
 		}
 
+		
 	}
 }

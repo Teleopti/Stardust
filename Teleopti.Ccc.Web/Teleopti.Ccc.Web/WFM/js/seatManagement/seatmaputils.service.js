@@ -13,7 +13,10 @@
 				scaleImage: scaleImage,
 				setSelectionMode: setSelectionMode,
 				getFirstObjectOfTypeFromCanvasObject: getFirstObjectOfTypeFromCanvasObject,
+				getObjectsOfTypeFromGroup: getObjectsOfTypeFromGroup,
+				getSeatObjectById : getSeatObjectById,
 				getSeatObject: getSeatObject,
+				getObjectsByType: getObjectsByType,
 				getLocations: getLocations,
 				getSeats: getSeats,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
@@ -25,13 +28,14 @@
 				ungroupObjects: ungroupObjects,
 				zoom: zoom,
 				showSeatBooking: showSeatBooking,
-				loadSeatDetails: loadSeatDetails,
+				loadOccupancyDetailsForSeats: loadOccupancyDetailsForSeats,
+				selectGroupOfObjects: selectGroupOfObjects,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected
 			};
 
 			function setupCanvas(canvas) {
 				canvas.isGrabMode = false;
-				canvas.renderOnAddRemove = true;
+				canvas.renderOnAddRemove = false;
 				canvas.stateful = false;
 			}
 
@@ -69,42 +73,37 @@
 				});
 			};
 
-			function drawGrid(canvas) {
-				var grid = 30;
+			function setSelectionMode(canvas, isEditMode, canSelect) {
 
-				for (var i = 0; i < (canvas.width / grid) ; i++) {
-					canvas.add(new fabric.Line([i * grid, 0, i * grid, canvas.width], { stroke: '#ccc', selectable: false }));
-					canvas.add(new fabric.Line([0, i * grid, canvas.width, i * grid], { stroke: '#ccc', selectable: false }));
-				}
-
-				canvas.on('object:moving', function (options) {
-					options.target.set({
-						left: Math.round(options.target.left / grid) * grid,
-						top: Math.round(options.target.top / grid) * grid
-					});
-				});
-
-
-				canvas.on('object:scaling', function (options) {
-					options.target.set({
-						left: Math.round(options.target.left / grid) * grid,
-						top: Math.round(options.target.top / grid) * grid
-					});
-				});
-
-			};
-
-			function setSelectionMode(canvas, allowSelection) {
 				var canvasObjects = canvas.getObjects();
 				canvas.deactivateAllWithDispatch().renderAll();
-				canvas.selection = allowSelection;
-				for (var idx in canvasObjects) {
 
-					canvasObjects[idx].selectable = allowSelection;
-					canvasObjects[idx].hasControls = allowSelection;
-					canvasObjects[idx].hasRotatingPoint = allowSelection;
+
+				if (!canSelect && !isEditMode) {
+					canvas.selection = false;
+					for (var idx in canvasObjects) {
+
+						canvasObjects[idx].selectable = false;
+
+					}
+					return;
 				}
-			};
+				
+				canvas.selection = true;
+				for (var idx in canvasObjects) {
+					if (canvasObjects[idx].type == 'location') {
+						canvasObjects[idx].selectable = isEditMode;
+					} else {
+						canvasObjects[idx].selectable = true;
+					}
+					canvasObjects[idx].hasBorders = true; 
+					canvasObjects[idx].lockRotation = !isEditMode;
+					canvasObjects[idx].lockScalingX = canvasObjects[idx].lockScalingY = !isEditMode;
+					canvasObjects[idx].lockMovementX = canvasObjects[idx].lockMovementY = !isEditMode;
+					canvasObjects[idx].hasControls = isEditMode;
+					
+				}
+			}
 
 
 			function getObjectsByType(canvas, type) {
@@ -232,19 +231,35 @@
 				return seats;
 			};
 
-			function getSeatObject(canvas, seatIndex, isFirstSeat) {
+			function getSeatObject(canvas, selectTopLeftSeat) {
 
 				var seatObjects = getObjectsByType(canvas, 'seat');
 				if (seatObjects.length > 0) {
 
-					if (isFirstSeat) {
+					if (selectTopLeftSeat) {
 						return seatObjects[getTopLeftSeat(canvas)];
 					}else {
-						return seatObjects[seatIndex];
+						return seatObjects[0];
 					}
 				}
 				return null;
 			};
+
+			function getSeatObjectById(canvas, id) {
+				
+				var seatObjects = getObjectsByType(canvas, 'seat');
+				if (seatObjects.length > 0) {
+					for (var i in seatObjects) {
+						var seat = seatObjects[i];
+				
+						if (seat.id == id) {
+							return seat;
+						}
+					};
+				}
+				return null;
+			};
+
 
 			function getTopLeftSeat(canvas) {
 
@@ -284,17 +299,17 @@
 				}
 			}
 
-			function loadSeatMap(id, date, canvas, allowEdit, callbackSuccess, callbackNoJson) {
+			function loadSeatMap(id, date, canvas, allowEdit, canSelectObjects, callbackSuccess, callbackNoJson) {
 				clearCanvas(canvas);
 
 				seatMapService.seatMap.get({ id: id, date: date }).$promise.then(function (data) {
-					loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson);
+					loadSeatMapData(canvas, data, allowEdit, canSelectObjects, callbackSuccess, callbackNoJson);
 				});
 
 			};
 
-			function loadSeatDetails(seatId, selectedDate) {
-				return seatMapService.occupancy.get({ seatId: seatId, date: selectedDate }).$promise;
+			function loadOccupancyDetailsForSeats(seatIds, selectedDate) {
+				return seatMapService.occupancy.get({ SeatIds: seatIds , Date: selectedDate }).$promise;
 			};
 
 			function resetPosition(canvas) {
@@ -319,7 +334,7 @@
 				return data.zoomValue;
 			};
 
-			function loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson) {
+			function loadSeatMapData(canvas, data, allowEdit, canSelect, callbackSuccess, callbackNoJson) {
 
 				if (data == null) {
 					callbackNoJson(null);
@@ -343,7 +358,7 @@
 							seatPriority = allSeats[loadedSeat].priority;
 						}
 					}
-					setSelectionMode(canvas, allowEdit);
+					setSelectionMode(canvas, allowEdit, canSelect);
 					data.seatPriority = seatPriority;
 					callbackSuccess(data);
 				});
@@ -452,6 +467,17 @@
 				}
 			};
 
+			function ungroupObjects(canvas, group) {
+
+				var items = group._objects;
+				// translate the group-relative coordinates to canvas relative ones
+				group._restoreObjectsState();
+				canvas.remove(group);
+				for (var i = 0; i < items.length; i++) {
+					canvas.add(items[i]);
+				}
+			};
+
 			function deepUnGroup(canvas, group) {
 				ungroupObjects(canvas, group);
 				group._objects.forEach(function (childItem) {
@@ -471,8 +497,27 @@
 					deepUnGroup(canvas, group);
 				});
 
-				setSelectionMode(canvas, false);
+				setSelectionMode(canvas, false, true);
 			};
+
+
+			function selectGroupOfObjects(canvas, objects) {
+
+				var objs = objects.map(function (o) {
+					return o.set('active', true);
+				});
+
+				var group = new fabric.Group(objs, {
+					originX: 'center',
+					originY: 'center'
+				});
+
+				canvas._activeObject = null;
+
+				canvas.setActiveGroup(group.setCoords()).renderAll();
+			}
+
+
 
 			return utils;
 		}]);

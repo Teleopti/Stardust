@@ -56,7 +56,7 @@
 				<i class="mdi mdi-gamepad"></i>
 			</button>
 			<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
-			<seatmap-occupancy-detail class="seatmap-occupancy-detail" ng-if="vm.occupancydetails" occupancy-detail="vm.occupancydetails" schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()"></seatmap-occupancy-detail>
+			<seatmap-occupancy-detail ng-if="vm.showOccupancy" schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()"></seatmap-occupancy-detail>
 		</div>
 	</div>
 </div>

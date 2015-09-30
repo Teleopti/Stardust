@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			return _seatBookingReportProvider.Get(command);
 		}
 
-		[UnitOfWork, Route("api/SeatPlanner/Occupancy"), HttpGet]
-		public virtual ICollection<OccupancyViewModel> Get(Guid seatId, DateTime date)
+		[UnitOfWork, Route("api/SeatPlanner/Occupancy"), HttpPost]
+		public virtual ICollection<GroupedOccupancyViewModel> Get([FromBody]OccupancyListParameters occupancyListParameters)
 		{
-			return _seatOccupancyProvider.Get(seatId, new DateOnly(date)).ToArray();
+			return _seatOccupancyProvider.Get(occupancyListParameters.SeatIds, occupancyListParameters.DateOnly).ToArray();
 		}
 
 		[HttpDelete, Route("api/SeatPlanner/Occupancy"), UnitOfWork]
@@ -85,4 +85,17 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		}
 		
 	}
+
+	public class OccupancyListParameters
+	{
+		public DateTime Date
+		{
+			set { DateOnly = new DateOnly(value); }
+		}
+
+		public DateOnly DateOnly { get; set; }
+		public IList<Guid> SeatIds{ get; set; }
+
+	}
+
 }

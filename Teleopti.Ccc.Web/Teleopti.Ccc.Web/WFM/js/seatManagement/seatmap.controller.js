@@ -6,7 +6,6 @@
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
 	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
 
 	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout) {
 
@@ -22,8 +21,6 @@
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
-		vm.previousSelectedSeatIndex = 0;
-		vm.selectTopLeftSeat = false;
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -38,9 +35,8 @@
 
 			fabric.Object.prototype.transparentCorners = false;
 			fabric.Object.prototype.lockScalingFlip = true;
-			fabric.Object.prototype.hasBorders = false;
+			canvas.hoverCursor = 'pointer';
 			canvasUtils.setupCanvas(canvas);
-			setupHandleSeatAndLocationClick();
 
 			angular.element($window).bind('resize', function () {
 				resize();
@@ -54,9 +50,7 @@
 
 			createDocumentListeners();
 			vm.isLoading = true;
-			vm.selectTopLeftSeat = true;
-
-			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		vm.getDisplaySelectedDate = function () {
@@ -83,22 +77,19 @@
 		vm.handleBreadcrumbClick = function (id) {
 
 			if (vm.isInEditMode) return;
-
 			vm.isLoading = true;
-			vm.selectTopLeftSeat = true;
 
-			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		vm.refreshSeatMap = function (selectTopLeftSeat) {
-			vm.selectTopLeftSeat = selectTopLeftSeat ? true : false;
+		vm.refreshSeatMap = function () {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
 		};
 
 		vm.onChangeOfDate = function () {
-			vm.refreshSeatMap(true);
+			vm.refreshSeatMap();
 			vm.isDatePickerOpened = false;
 		};
 
@@ -121,87 +112,30 @@
 			document.onmousewheel = scrollZooming;
 		};
 
-		function setupHandleSeatAndLocationClick() {
-			setupClickHandler('location', loadSeatMapOnLocationClick);
-			setupClickHandler('seat', loadOccupancyForSeat);
+		function setupLocationDoubleClickHandler() {
+			setupObjectTypeDoubleClickHandler('location', loadSeatMapOnLocationClick);
 		};
 
-		function setupClickHandler(targetName, callback) {
-			canvas.on('mouse:down', function (e) {
-				if (!vm.isInEditMode) {
-					var target = canvasUtils.getFirstObjectOfTypeFromCanvasObject(e.target, targetName);
-					if (target != null) {
-						callback(target);
-					}
-				};
+		function setupObjectTypeDoubleClickHandler(objectType, callback) {
+			canvasUtils.getObjectsByType(canvas, objectType).forEach(function (object) {
+				object.on('object:dblclick', function (e) {
+					if (!vm.isInEditMode) {
+						if (object != null) {
+							callback(object);
+						}
+					};
+				});
 			});
-		};
-
-		function onSeatOccupancyLoaded(occupancyDetails, seat) {
-
-			if (occupancyDetails && occupancyDetails.length) {
-				vm.occupancydetails = occupancyDetails;
-			} else {
-				createEmptyOccupancyDetail(seat);
-			}
-		};
-
-		function selectSeatToViewOccupancy(seat) {
-			var oldSelection = vm.currentSeat;
-			if (oldSelection !== undefined && oldSelection !== null) {
-				oldSelection.stroke = null;
-				oldSelection.strokeDashArray = [];
-			}
-			seat.stroke = '#ec38a3';
-			seat.strokeDashArray = [5, 5];
-
-			vm.currentSeat = seat;
-		};
-
-		function loadOccupancyForSeat(seat) {
-			if (vm.showOccupancy) {
-				selectSeatToViewOccupancy(seat);
-
-				var seats = canvasUtils.getSeats(canvas);
-
-				seats.forEach(function (currentSeat, seatIndex) {
-					if (currentSeat.Id == seat.id)
-						vm.previousSelectedSeatIndex = seatIndex;
-				});
-
-				canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
-					onSeatOccupancyLoaded(result, seat);
-				});
-			}
-		};
-
-		function createEmptyOccupancyDetail(seat) {
-			vm.occupancydetails = [
-			{
-				SeatName: seat.name,
-				IsEmpty: true
-			}];
 		};
 
 		function loadSeatMapOnLocationClick(location) {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		function selectSeat(seatIndex, isFirstSeat) {
-			if (vm.showOccupancy) {
-				var seat = canvasUtils.getSeatObject(canvas, seatIndex, isFirstSeat);
-
-				if (seat != null) {
-					loadOccupancyForSeat(seat);
-				} else {
-					vm.occupancydetails = undefined;
-					vm.currentSeat = null;
-				}
-			}
-		}
-
 		function resetOnLoad(data) {
+
+			setupLocationDoubleClickHandler();
 
 			if (data) {
 				vm.parentId = data.ParentId;
@@ -209,24 +143,18 @@
 				vm.breadcrumbs = data.BreadcrumbInfo;
 			}
 
-			if (vm.showOccupancy) {
-				canvasUtils.showSeatBooking(canvas, data.Seats);
-				canvasUtils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas);
-			}
-
-			selectSeat(vm.previousSelectedSeatIndex, vm.selectTopLeftSeat);
-			vm.previousSelectedSeatIndex = 0;
-
 			resetZoom();
 			vm.isLoading = false;
+			canvas.fire('seatmaplocation:loaded', { data: data });
+
+			$timeout(function () {
+				$scope.$apply();
+			});
 		};
 
 		function onLoadSeatMapSuccess(data) {
 			resetOnLoad(data);
 
-			$timeout(function () {
-				$scope.$apply();
-			});
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {
@@ -234,4 +162,5 @@
 		};
 	};
 }());
+
 

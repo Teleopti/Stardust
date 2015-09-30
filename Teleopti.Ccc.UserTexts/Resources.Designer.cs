@@ -23216,6 +23216,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The booking of seat	{0}  for {1} was deleted.
+        /// </summary>
+        public static string SeatBookingDeletedSuccessfully {
+            get {
+                return ResourceManager.GetString("SeatBookingDeletedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seat Bookings.
         /// </summary>
         public static string SeatBookings {

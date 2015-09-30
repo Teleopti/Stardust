@@ -254,6 +254,8 @@ seatmap-editor{
 	max-height:200px;
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
+	overflow-y:auto;
+	border-top: 1px solid #e1e2e3;
 
 	.bottom-header{
 		position:relative;

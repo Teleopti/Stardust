@@ -400,16 +400,65 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(afternoonBooking);
 			PersistAndRemoveFromUnitOfWork(morningBooking);
-			updatePersonScheduleDayFromBooking(afternoonBooking);
-			updatePersonScheduleDayFromBooking(morningBooking);
+			//updatePersonScheduleDayFromBooking(afternoonBooking);
+			//updatePersonScheduleDayFromBooking(morningBooking);
 
 
 			var repo = new SeatBookingRepository(UnitOfWork);
 
-			var viewModel = repo.LoadSeatBookingsForSeatIntersectingDay(dateOnly, seat.Id.GetValueOrDefault());
-			viewModel.Count().Should().Be(2);
-			viewModel.First().StartDateTime.Hour.Should().Be(8);
-			viewModel.Second().StartDateTime.Hour.Should().Be(13);
+			var seatBookings = repo.LoadSeatBookingsForSeatIntersectingDay(dateOnly, seat.Id.GetValueOrDefault());
+			seatBookings.Count().Should().Be(2);
+			seatBookings.First().StartDateTime.Hour.Should().Be(8);
+			seatBookings.Second().StartDateTime.Hour.Should().Be(13);
+		}
+
+
+		[Test]
+		public void ShouldLoadSeatBookingsForMultipleSeatsIntersectingDayInOrder()
+		{
+			var dateOnly = new DateOnly(2015, 10, 1);
+			var person = createPerson(dateOnly);
+			
+			var rep = new SeatMapLocationRepository(UnitOfWork);
+			var seatMapLocation = new SeatMapLocation();
+
+			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
+			rep.Add(seatMapLocation);
+
+			var seat1 = seatMapLocation.AddSeat("Test Seat", 0);
+			var seat2 = seatMapLocation.AddSeat("Test Seat 2", 0);
+			var seat3 = seatMapLocation.AddSeat("Test Seat 3", 0);
+
+			var morningBooking = new SeatBooking(person, dateOnly,
+					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 8, 0, 0),
+					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 12, 0, 0));
+
+			var afternoonBooking = new SeatBooking(person, dateOnly,
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 13, 0, 0),
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 17, 0, 0));
+
+			var eveningBooking = new SeatBooking(person, dateOnly,
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 18, 0, 0),
+				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 23, 0, 0));
+			
+			morningBooking.Book (seat1);
+			afternoonBooking.Book (seat2);
+			eveningBooking.Book (seat3);
+
+			PersistAndRemoveFromUnitOfWork(morningBooking);
+			PersistAndRemoveFromUnitOfWork(afternoonBooking);
+			PersistAndRemoveFromUnitOfWork(eveningBooking);
+			
+			var repo = new SeatBookingRepository(UnitOfWork);
+
+			var seatBookings = repo.LoadSeatBookingsForSeatsIntersectingDay(dateOnly, new []{
+				seat1.Id.GetValueOrDefault(), 
+				seat2.Id.GetValueOrDefault()} 
+			);
+			
+			seatBookings.Count().Should().Be(2);
+			seatBookings[0].Seat.Id.Should().Equals (seat1.Id);
+			seatBookings[1].Seat.Id.Should().Equals(seat2.Id);
 		}
 
 		private IPerson createPerson(DateOnly startDate, Team team = null)

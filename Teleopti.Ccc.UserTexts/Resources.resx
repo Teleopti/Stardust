@@ -13378,7 +13378,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Manually Planned</value>
     <comment>Label to indicate whether there are manual production plan for the campaign on the specified date.</comment>
   </data>
-<data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
     <value>All people on this page are selected.</value>
     <comment>Used in People search.  User has selected all people on the current page.</comment>
   </data>
@@ -13490,5 +13490,9 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
     <value>too long windows user;</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>The booking of seat	{0}  for {1} was deleted</value>
+    <comment>displayed when a seat booking is successfully deleted on the seat booking view</comment>
   </data>
 </root>
