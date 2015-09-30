@@ -61,15 +61,13 @@
 					<i class="mdi mdi-filter-outline"></i>
 					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
 				</div>
-				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills|orderBy:'SkillName'">
-					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
-						<label for="{{skill.SkillId}}">
-							<span class="wfm-checkbox-toggle"></span>
-							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
-						</label>
-					</div>
-				</md-list-item>
+				<div class="wfm-checkbox" ng-repeat="skill in vm.availableSkills|filter:searchSkills|orderBy:'SkillName'">
+					<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
+					<label for="{{skill.SkillId}}">
+						<span class="wfm-checkbox-toggle"></span>
+						<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
+					</label>
+				</div>
 			</md-content>
 			<div style="position: relative;float: right;">
 				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.setCurrentCommand('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
