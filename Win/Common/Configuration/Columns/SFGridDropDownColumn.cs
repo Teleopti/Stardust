@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
+			if(!e.Style.Enabled) return;
             if (e.Style.CellValue != null)
             {
                 var tItemType = typeof (TItem);
