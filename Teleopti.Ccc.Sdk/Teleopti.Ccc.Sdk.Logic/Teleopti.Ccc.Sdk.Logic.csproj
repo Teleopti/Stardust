@@ -185,6 +185,7 @@
     <Compile Include="CommandHandler\ChangePersonBasicDataCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
+    <Compile Include="CommandHandler\EndPersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\GrantPersonRoleCommandHandler.cs" />
     <Compile Include="CommandHandler\QuickForecastCommandHandler.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandler.cs" />
