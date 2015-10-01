@@ -39,6 +39,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 		//}
 
 		[Test]
+		public void ShouldDeleteAbsenceStartingNextDay()
+		{
+			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 28, 08, 2015, 08, 28, 10)));
+			Assert.IsTrue(_source.PersonAbsenceCollection(true).Any());
+
+			IScheduleDay result = _target.DoPaste(_source);
+			Assert.IsFalse(result.PersonAbsenceCollection(true).Any());
+		}
+
+
+		[Test]
 		public void ShouldCutLongAbsenceAtStartOfDay()
 		{
 			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 26, 2015, 08, 28)));
