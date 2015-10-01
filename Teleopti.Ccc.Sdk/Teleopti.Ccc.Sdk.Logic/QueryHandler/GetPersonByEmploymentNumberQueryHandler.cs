@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-    public class GetPersonByEmploymentNumberQueryHandler : IHandleQuery<GetPersonByEmploymentNumberQueryDto,ICollection<PersonDto>>
+	public class GetPersonByEmploymentNumberQueryHandler : IHandleQuery<GetPersonByEmploymentNumberQueryDto,ICollection<PersonDto>>
     {
         private readonly IAssembler<IPerson, PersonDto> _assembler;
         private readonly IPersonRepository _personRepository;

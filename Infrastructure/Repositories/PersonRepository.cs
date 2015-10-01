@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -253,7 +252,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				throw new DataSourceException(sqlException.Message, sqlException);
 			}
 		}
-
 
 		private Person loadPermissionData(IPerson person)
 		{
