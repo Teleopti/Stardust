@@ -177,6 +177,7 @@
     <Compile Include="CommandHandler\AddDayOffCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddOvertimeCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddPersonalActivityCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\AddPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdateTest.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandlerTest.cs" />

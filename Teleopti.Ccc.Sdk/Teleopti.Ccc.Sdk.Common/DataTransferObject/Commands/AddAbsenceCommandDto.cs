@@ -4,7 +4,7 @@ using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
-    /// <summary>
+	/// <summary>
     /// This command adds an absence layer to a schedule. The absence layer will be created according to a specified <see cref="AbsenceId"/> and <see cref="Period"/>. You can specify the schedule by a person's <see cref="PersonId"/> and the <see cref="Date"/> of schedule.
     /// </summary>
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/10/")]

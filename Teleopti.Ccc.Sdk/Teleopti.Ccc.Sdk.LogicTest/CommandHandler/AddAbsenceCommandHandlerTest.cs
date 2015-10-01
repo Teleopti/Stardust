@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-    [TestFixture]
+	[TestFixture]
     public class AddAbsenceCommandHandlerTest
     {
         private MockRepository _mock;

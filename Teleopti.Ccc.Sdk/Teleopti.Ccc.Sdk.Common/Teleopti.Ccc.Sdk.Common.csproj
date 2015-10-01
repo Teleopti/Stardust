@@ -150,6 +150,7 @@
     <Compile Include="DataTransferObject\Commands\AddDayOffCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\AddOvertimeCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\AddPersonalActivityCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\AddPersonCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelAbsenceCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelOvertimeCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelPersonalActivityCommandDto.cs" />

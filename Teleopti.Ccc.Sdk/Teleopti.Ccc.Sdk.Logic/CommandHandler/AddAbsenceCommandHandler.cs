@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    public class AddAbsenceCommandHandler : IHandleCommand<AddAbsenceCommandDto>
+	public class AddAbsenceCommandHandler : IHandleCommand<AddAbsenceCommandDto>
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly IAbsenceRepository _absenceRepository;
