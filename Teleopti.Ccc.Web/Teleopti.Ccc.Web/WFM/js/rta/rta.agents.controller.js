@@ -26,12 +26,16 @@
           		data: $scope.agents
           	};
 
+            $scope.refreshData = function() {
+              $scope.gridOptions.data = $filter('filter')( $scope.agents, $scope.filterText, undefined);
+            };
+
           	$scope.goBackToRoot = function () {
           		$state.go('rta-sites');
           	};
 
           	$scope.goBack = function () {
-				$state.go('rta-teams', { siteId: siteId });
+				      $state.go('rta-teams', { siteId: siteId });
           	};
 		  }]);
 })();

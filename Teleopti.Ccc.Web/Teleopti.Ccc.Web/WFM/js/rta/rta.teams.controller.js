@@ -11,8 +11,8 @@
           	$scope.teams = RtaOrganizationService.getTeams(siteId);
           	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
 
-       
-		
+
+
           	$scope.toggleSelection = function (teamId) {
           		var index = $scope.selectedTeams.indexOf(teamId);
 
@@ -24,7 +24,6 @@
           	};
 
           	$scope.openSelectedTeams = function (selectedTeams) {
-          		console.log(selectedTeams);
           		RtaOrganizationService.getAgentsForSelectedTeams(selectedTeams);
           	};
 
@@ -41,7 +40,6 @@
                       team.OutOfAdherence = 0;
                   });
                   $scope.teams = data;
-                  console.log(data);
                   RtaService.getAdherenceForTeamsOnSite.query({ siteId: siteId }).$promise.then(updateAdherence);
 
                   $interval(function () {

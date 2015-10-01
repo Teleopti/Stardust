@@ -2,14 +2,28 @@
   margin-bottom:10px;
 }
 
+.rta-search {
+	padding: 10px 0;
+
+    input {
+      width: 15%!important;
+      height: 23px;
+  }
+}
+
+
 .rta-config{
 	display: inline-flex;
 }
 
+
 .rta-list-item{
+
+
+
 	padding:1%;
 	margin-top:10px;
-	cursor: pointer; 
+	cursor: pointer;
 
 	&:hover{
 	transition: background 0.5s linear 0s;
@@ -22,7 +36,7 @@
 }
 
 .rta-nav-link {
-	cursor: pointer; 
+	cursor: pointer;
 }
 
 
@@ -76,4 +90,3 @@
     margin:5px;
   }
 }
-

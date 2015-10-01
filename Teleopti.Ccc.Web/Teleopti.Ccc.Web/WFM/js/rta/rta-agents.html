@@ -2,6 +2,10 @@
     <div class="col-lg-12">
 		<h3>Agents</h3>
 		<span ng-click="goBackToRoot()"><a class="rta-nav-link">Real Time Adherence</a></span> / <span ng-click="goBack()"><a  class="rta-nav-link">{{siteName}}</a></span> / <span>{{teamName}}</span>
-		<div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
+      <div class="input-prepend rta-search">
+        <i class="mdi mdi-magnify"></i>
+        <input type="text" placeholder="{{'Search'|translate}}..." ng-model="filterText" ng-change="refreshData()">
+      </div>
+    <div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
     </div>
 </div>
