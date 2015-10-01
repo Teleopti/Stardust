@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Mapping;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -201,6 +199,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public ICollection<IPerson> FindAllWithRolesSortByName()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IPerson FindPersonByEmail(string email)
 		{
 			throw new NotImplementedException();
 		}

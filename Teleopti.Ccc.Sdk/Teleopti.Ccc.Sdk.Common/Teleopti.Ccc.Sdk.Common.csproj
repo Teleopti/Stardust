@@ -213,6 +213,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmailQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByUserNameQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />

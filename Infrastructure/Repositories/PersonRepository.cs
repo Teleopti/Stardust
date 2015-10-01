@@ -253,6 +253,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public IPerson FindPersonByEmail(string email)
+		{
+			return Session.CreateCriteria(typeof (Person), "per")
+				.Add(Restrictions.Eq("Email", email))
+				.SetResultTransformer(Transformers.DistinctRootEntity).UniqueResult<IPerson>();
+		}
+
 		private Person loadPermissionData(IPerson person)
 		{
 			var personPeriods = DetachedCriteria.For<Person>()
