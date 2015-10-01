@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				string extension;
 
 				// Setup the report viewer object and get the array of bytes
-				byte[] bytes = viewer.LocalReport.Render(format, null, out mimeType, out encoding, out extension, out streamIds,
+				byte[] bytes = viewer.LocalReport.Render(format, "<DeviceInfo><OutputFormat>PNG</OutputFormat></DeviceInfo>", out mimeType, out encoding, out extension, out streamIds,
 					out warnings);
 
 				// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.

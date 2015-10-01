@@ -36,11 +36,11 @@
 				</div>
 				<div style="float: right; width: 69%">
 				    <div style="float: right; width: 20%">
-						<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="ButtonShowClickWord" ID="buttonShowWord"  ImageUrl="images/icon.doc.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float: left" formtarget="_self" OnClick="ButtonShowClickWord" ID="buttonShowWord"  ImageUrl="images/icon.doc.png" ToolTip='' runat="server" />
 					</div>
 					
 					<div style="float: right; width: 20%">
-						<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="ButtonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float: left" formtarget="_self" OnClick="ButtonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='' runat="server" />
 					</div>
 					
 					<div style="float:right; width: 20%;">

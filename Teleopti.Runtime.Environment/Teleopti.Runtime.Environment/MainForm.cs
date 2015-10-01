@@ -62,7 +62,19 @@ namespace Teleopti.Runtime.Environment
 			{
 				var sInfo = new ProcessStartInfo(e.TargetUrl);
 				Process.Start(sInfo);
+				return;
 			}
+			var form = new MainForm();
+			if (e.Height.HasValue)
+				form.Height = e.Height.Value;
+			if (e.Width.HasValue)
+				form.Width = e.Width.Value;
+			form.webControl1.WebView = e.WebView;
+			form.webControl1.WebView.NewWindow += form.WebView_NewWindow;
+			form.webControl1.WebView.BeforeContextMenu += webView1_BeforeContextMenu;
+			form.webControl1.WebView.IsLoadingChanged += webView1_IsLoadingChanged;
+			e.Accepted = true;
+			form.Show();
 		}
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
