@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Clipboard
@@ -8,18 +7,57 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 	{
 		public IScheduleDay DoPaste(IScheduleDay source)
 		{
-			//if (source.PersistableScheduleDataCollection().Any(scheduleData => scheduleData.Id.HasValue))
-			//{
-			//	throw new ArgumentException("Schedule day is not a copy");
-			//}
+			removeAbsenceWhichEndEarlierThanDayStart(source);
+			removeAbsenceWhichStartLaterThanDayEnd(source);
+			reduceAbsenceToDayLength(source);
 
+			return source;
+		}
+
+		private void reduceAbsenceToDayLength(IScheduleDay source)
+		{
 			foreach (var personAbsence in source.PersonAbsenceCollection(true))
 			{
 				reduceAbsenceAtStart(personAbsence, source);
 				reduceAbsenceAtEnd(personAbsence, source);
 			}
+		}
 
-			return source;
+		private void removeAbsenceWhichStartLaterThanDayEnd(IScheduleDay source)
+		{
+			IList<IPersonAbsence> personAbsencesToRemove = new List<IPersonAbsence>();
+
+			foreach (var personAbsence in source.PersonAbsenceCollection(true))
+			{
+				var scheduleDayLocalEndDateTime = source.DateOnlyAsPeriod.Period().EndDateTimeLocal(source.TimeZone);
+				var personAbsenceLocalStartDateTime = personAbsence.Period.StartDateTimeLocal(source.TimeZone);
+				if(personAbsenceLocalStartDateTime > scheduleDayLocalEndDateTime)
+ 					personAbsencesToRemove.Add(personAbsence);
+			}
+
+			foreach (var personAbsence in personAbsencesToRemove)
+			{
+				source.Remove(personAbsence);
+			}
+		}
+
+
+		private void removeAbsenceWhichEndEarlierThanDayStart(IScheduleDay source)
+		{
+			IList<IPersonAbsence> personAbsencesToRemove = new List<IPersonAbsence>();
+
+			foreach (var personAbsence in source.PersonAbsenceCollection(true))
+			{
+				var scheduleDayLocalStartDateTime = source.DateOnlyAsPeriod.Period().StartDateTimeLocal(source.TimeZone);
+				var personAbsenceLocalEndDateTime = personAbsence.Period.EndDateTimeLocal(source.TimeZone);
+				if (personAbsenceLocalEndDateTime < scheduleDayLocalStartDateTime)
+					personAbsencesToRemove.Add(personAbsence);
+			}
+
+			foreach (var personAbsence in personAbsencesToRemove)
+			{
+				source.Remove(personAbsence);
+			}
 		}
 
 		private void reduceAbsenceAtStart(IPersonAbsence personAbsence, IScheduleDay source)

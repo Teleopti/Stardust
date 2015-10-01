@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
@@ -28,38 +27,24 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 			_target = new SpecialPasteBehaviour();
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(ArgumentException))]
-		//public void SourceShouldBeClone()
-		//{
-		//	_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 27, 2015, 08, 28)));
-		//	var personAbsence = _source.PersistableScheduleDataCollection().First();
-		//	personAbsence.SetId(Guid.NewGuid());
-		//	IScheduleDay result = _target.DoPaste(_source);
-		//}
-
 		[Test]
-		public void ShouldDeleteAbsenceStartingNextDay()
+		public void ShouldDeleteAbsenceStartingLaterThanScheduleDayEnds()
 		{
 			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 28, 08, 2015, 08, 28, 10)));
 			Assert.IsTrue(_source.PersonAbsenceCollection(true).Any());
 
 			IScheduleDay result = _target.DoPaste(_source);
-			Assert.IsFalse(result.PersonAbsenceCollection(true).Any());
+			Assert.IsFalse(result.PersonAbsenceCollection(true).Any()); // absence deleted
 		}
 
-
 		[Test]
-		public void ShouldCutLongAbsenceAtStartOfDay()
+		public void ShouldDeleteAbsenceEndingEarlierThanScheduleDayStarts()
 		{
-			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 26, 2015, 08, 28)));
+			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 26, 08, 2015, 08, 26, 10)));
+			Assert.IsTrue(_source.PersonAbsenceCollection(true).Any());
 
 			IScheduleDay result = _target.DoPaste(_source);
-
-			var personAbsence = result.PersonAbsenceCollection(true).First();
-
-			var scheduleDayStartDateTime = _source.DateOnlyAsPeriod.Period().StartDateTime;
-			Assert.IsTrue(personAbsence.Period.StartDateTime==scheduleDayStartDateTime);
+			Assert.IsFalse(result.PersonAbsenceCollection(true).Any()); // absence deleted
 		}
 
 		[Test]
@@ -76,16 +61,29 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 		}
 
 		[Test]
-		public void ShouldCutLongAbsenceAtEndOfDay()
+		public void ShouldCutLongAbsenceAtStartOfScheduleDay()
 		{
-			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 27, 2015, 08, 29)));
+			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 26, 10, 2015, 08, 27, 10)));
 
 			IScheduleDay result = _target.DoPaste(_source);
 
 			var personAbsence = result.PersonAbsenceCollection(true).First();
 
-			var scheduleDayEndDateTime = _source.DateOnlyAsPeriod.Period().EndDateTime;
-			Assert.IsTrue(personAbsence.Period.EndDateTime == scheduleDayEndDateTime);
+			var scheduleDayLocalStartTime = _source.DateOnlyAsPeriod.Period().LocalStartDateTime;
+			Assert.IsTrue(personAbsence.Period.LocalStartDateTime == scheduleDayLocalStartTime);
+		}
+
+		[Test]
+		public void ShouldCutLongAbsenceAtEndOfScheduleDay()
+		{
+			_source.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 08, 27, 15, 2015, 08, 29, 10)));
+
+			IScheduleDay result = _target.DoPaste(_source);
+
+			var personAbsence = result.PersonAbsenceCollection(true).First();
+
+			var scheduleDayLocalEndDateTime = _source.DateOnlyAsPeriod.Period().LocalEndDateTime;
+			Assert.IsTrue(personAbsence.Period.LocalEndDateTime == scheduleDayLocalEndDateTime);
 		}
 
 	}
