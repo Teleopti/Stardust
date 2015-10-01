@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			  var signIn = new SignInRequestMessage(new Uri(issuer), _authenticationModule.Realm)
 			  {
-				  Context = "ru=" + "/",
+				  Context = "ru=" + _currentHttpContext.Current().Request.Url.AbsoluteUri.Replace("start/Url/RedirectToWebLogin", ""),
 				  HomeRealm = "urn:"
 			  };
 

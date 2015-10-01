@@ -71,5 +71,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
              var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon);
 		    target.AuthenticationDetails().Should().Be.Equals(personId);
 	    }
+
+		 [Test]
+		 public void ShouldRedirectToHomePage()
+		 {
+			 IPerson person = new Person();
+			 Guid? personId = Guid.NewGuid();
+			 IIdentityLogon identityLogon = new FakeAuthenticator();
+			 person.SetId(personId);
+			 const string url = "http://my.url.com/start/Url/RedirectToWebLogin";
+			 const string applicationPath = "/TeleoptiCCC/Web/";
+			 System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+					 new TeleoptiIdentity("test", null, null, null), person);
+			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
+			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon);
+			 var result = ((RedirectResult) target.RedirectToWebLogin());
+			 result.Url.Should().Not.Contain("start/Url/RedirectToWebLogin");
+		 }
     }
 }
