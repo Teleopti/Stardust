@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private DateTimePeriod _dateTimePeriod;
 		private IActivity _activity;
 		private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
+		private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 
 		[SetUp]
 		public void SetUp()
@@ -56,6 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_dateTimePeriod = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
 			_overtimePreferences.SkillActivity = _activity;
 			_skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
+			_multiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			_personPeriod.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(_multiplicatorDefinitionSet);
 		}
 
 		[Test,]
@@ -97,9 +100,60 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				Assert.IsFalse(res);
+			}	
+		}
+
+		[Test]
+		public void ShouldSkipWhenNoMultiplicatorDefinitionSetOfTypeOvertime()
+		{
+			_personPeriod.PersonContract.Contract.RemoveMultiplicatorDefinitionSetCollection(_multiplicatorDefinitionSet);
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.Person).Return(_person);
+			}
+
+			using (_mock.Playback())
+			{
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				Assert.IsFalse(res);
+			}
+		}
+
+		[Test]
+		public void ShouldSkipWhenNoPersonPeriod()
+		{
+			_person.RemoveAllPersonPeriods();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.Person).Return(_person);
+			}
+
+			using (_mock.Playback())
+			{
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				Assert.IsFalse(res);
+			}	
+		}
+
+		[Test]
+		public void ShouldSkipWhenNoPersonContract()
+		{
+			_person.PersonPeriodCollection[0].PersonContract = null;
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.Person).Return(_person);
+			}
+
+			using (_mock.Playback())
+			{
 				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
 				Assert.IsFalse(result);
-			}	
+			}		
 		}
 
 		[Test]

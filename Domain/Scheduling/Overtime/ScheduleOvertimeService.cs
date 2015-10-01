@@ -32,9 +32,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo)
 		{
+			var person = scheduleDay.Person;
+			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly)) return false;
+
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			var person = scheduleDay.Person;
 			var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 			
 			if (overtimeLayerLengthPeriods.Count == 0) return false;
@@ -125,6 +127,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		{
 			_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
 			return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
+		}
+
+		private static bool hasMultiplicatorDefinitionSetOfOvertimeType(IPerson person, DateOnly dateOnly)
+		{
+			var personPeriod = person.Period(dateOnly);
+			if (personPeriod == null) return false;
+
+			var personContract = personPeriod.PersonContract;
+			if (personContract == null) return false;
+
+			return personContract.Contract.MultiplicatorDefinitionSetCollection.Any(multiplicatorDefinitionSet => multiplicatorDefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
 		}
 	}
 }
