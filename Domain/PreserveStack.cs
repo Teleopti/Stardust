@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Domain
@@ -15,15 +16,26 @@ namespace Teleopti.Ccc.Domain
 
 		public static void For(Exception e)
 		{
+			var typeOfException = e.GetType();
+			if (exceptionIsNonSerializable(typeOfException))
+			{
+				return;
+			}
+
 			var ctx = new StreamingContext(StreamingContextStates.CrossAppDomain);
 			var mgr = new ObjectManager(null, ctx);
-			var si = new SerializationInfo(e.GetType(), new FormatterConverter());
+			var si = new SerializationInfo(typeOfException, new FormatterConverter());
 
 			e.GetObjectData(si, ctx);
 			mgr.RegisterObject(e, 1, si); // prepare for SetObjectData
 			mgr.DoFixups(); // ObjectManager calls SetObjectData
 
 			// voila, e is unmodified save for _remoteStackTraceString
+		}
+
+		private static bool exceptionIsNonSerializable(Type type)
+		{
+			return type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null, new[] {typeof (SerializationInfo), typeof (StreamingContext)}, null) == null;
 		}
 	}
 }

@@ -503,6 +503,7 @@
     <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
+    <Compile Include="PreserveStackTest.cs" />
     <Compile Include="TestHelper\FirstAvailableMockFactory.cs" />
     <Compile Include="TestHelper\IMockFactory.cs" />
     <Compile Include="TestHelper\IMockProxy.cs" />
