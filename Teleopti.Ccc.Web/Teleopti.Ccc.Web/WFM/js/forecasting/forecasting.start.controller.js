@@ -197,7 +197,7 @@ angular.module('wfm.forecasting')
 									vtc: '#0099FF',
 									vc: '#99D6FF',
 									vaht: '#9CCC65',
-									vacw: '#EC38A3'
+									vacw: '#F488C8'
 								},
 								onclick: function() {
 									$scope.$digest();
