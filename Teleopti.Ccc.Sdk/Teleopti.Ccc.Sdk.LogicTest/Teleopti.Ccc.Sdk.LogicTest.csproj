@@ -245,6 +245,7 @@
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonByEmailQueryDtoHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetPersonByIdentityQueryDtoHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonByUserNameQueryDtoHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandlerTest.cs" />
