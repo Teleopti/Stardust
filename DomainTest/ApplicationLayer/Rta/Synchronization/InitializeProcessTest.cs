@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
@@ -72,6 +69,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			EventPublisher.PublishedEvents.Should().Have.Count.GreaterThan(0);
+		}
+
+		[Test]
+		public void ShouldNotAddExistingStateCode()
+		{
+			var personId = Guid.NewGuid();
+			var platformId = Guid.NewGuid();
+			var buId = Guid.NewGuid();
+			Now.Is("2015-10-01 08:00");
+			Database
+				.WithBusinessUnit(buId)
+				.WithUser("user", personId)
+				.WithDefaultStateGroup()
+				.WithStateCode("statecode", platformId.ToString())
+				;
+			Database.PersistActualAgentReadModel(new AgentStateReadModel
+			{
+				PersonId = personId,
+				StateCode = "statecode",
+				PlatformTypeId = platformId,
+				BusinessUnitId = buId
+			});
+
+			Context.SimulateRestartWith(Now, Database);
+			Rta.SaveState(new ExternalUserStateForTest());
+
+			Database.AddedStateCodes.Should().Have.Count.EqualTo(1);
 		}
 	}
 }

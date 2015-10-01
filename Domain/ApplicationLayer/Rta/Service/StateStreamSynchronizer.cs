@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var context = new RtaProcessContext(
 						new ExternalUserStateInputModel
 						{
-							StateCode = s.StateCode
+							StateCode = s.StateCode,
+							PlatformTypeId = s.PlatformTypeId.ToString()
 						},
 						new PersonOrganizationData
 						{

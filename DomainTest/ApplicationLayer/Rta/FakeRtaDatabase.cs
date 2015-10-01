@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -38,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId, bool isDeleted = false);
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
+		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
 		FakeRtaDatabase Make();
 	}
@@ -108,6 +108,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public IRtaState AddedStateCode
 		{
 			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.SingleOrDefault(); }
+		}
+
+		public IEnumerable<IRtaState> AddedStateCodes
+		{
+			get { return RtaStateGroupRepository.LoadAll().Single().StateCollection; }
 		}
 
 		public IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state)
@@ -280,10 +285,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public IFakeDataBuilder WithStateCode(string statecode)
 		{
+			WithStateCode(statecode, _platformTypeId);
+			return this;
+		}
+
+		public IFakeDataBuilder WithStateCode(string statecode, string platformTypeId)
+		{
 			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
 			if (defaultStateGroup == null)
 				return this;
-			defaultStateGroup.AddState(statecode, statecode, Guid.Parse(_platformTypeId));
+			defaultStateGroup.AddState(statecode, statecode, Guid.Parse(platformTypeId));
 			return this;
 		}
 
