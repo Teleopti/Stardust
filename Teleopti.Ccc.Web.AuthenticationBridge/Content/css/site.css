@@ -7,7 +7,7 @@ body
 {
     background-color: white;
     font-size: .75em;
-    font-family: Verdana, Helvetica, Sans-Serif;
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
     margin: 0;
     padding: 0;
     color: #696969;
@@ -44,7 +44,6 @@ h1, h2, h3, h4, h5, h6
 {
     font-size: 1.5em;
     color: #000;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 h1
@@ -308,4 +307,18 @@ div#title
 {
     font-weight: bold;
     color: #ff0000;
+}
+
+.panel-info, .panel-heading, .panel-info>.panel-heading {
+    background-color: #0099FF;
+    border-color: #0099FF;
+}
+
+body, .login-header { 
+    color: #000; 
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
+
+.login-header {
+    text-align: center;
 }

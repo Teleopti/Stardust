@@ -1,3 +1,23 @@
-﻿body { 
-    color: #444; 
+﻿body, .login-header { 
+    color: #000; 
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
+
+.login-header {
+    text-align: center;
+}
+
+.alert-warning {
+    background-color: #ffc285;
+    border-color: #ffc285;
+    color: rgba(0, 0, 0, 0.541176);
+}
+
+.btn-primary {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    background-color: #09f;
 }

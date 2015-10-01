@@ -1,11 +1,22 @@
-﻿.login-logo 
-{
-	text-align: center;
-	margin-top: 40px;
-    max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
+﻿.login-header {
+    text-align: center;
 }
+
+.alert-warning {
+    background-color: #ffc285;
+    border-color: #ffc285;
+    color: rgba(0, 0, 0, 0.541176);
+}
+
+.btn-primary {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    background-color: #09f;
+}
+
 .login-form {
 	max-width: 300px;
 	margin-right: auto;

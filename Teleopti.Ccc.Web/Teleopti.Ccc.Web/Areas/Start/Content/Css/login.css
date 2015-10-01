@@ -1,11 +1,17 @@
-﻿.login-logo 
-{
-	text-align: center;
-	margin-top: 40px;
-    max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
+﻿.panel-info, .panel-heading, .panel-info>.panel-heading {
+    background-color: #0099FF;
+    border-color: #0099FF;
 }
+
+body, .login-header { 
+    color: #000; 
+    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
+
+.login-header {
+    text-align: center;
+}
+
 .login-form {
 	max-width: 300px;
 	margin-right: auto;
