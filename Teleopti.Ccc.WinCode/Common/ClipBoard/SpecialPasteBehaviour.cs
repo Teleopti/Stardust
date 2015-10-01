@@ -84,6 +84,5 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 				personAbsence.ReplaceLayer(personAbsence.Layer.Payload, newPeriod);
 			}
 		}
-
 	}
 }
