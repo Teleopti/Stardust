@@ -154,6 +154,7 @@
     <Compile Include="DataTransferObject\Commands\CancelAbsenceCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelOvertimeCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\CancelPersonalActivityCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\ChangePersonBasicDataCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChildSkillMappingDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChangePersonEmploymentCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />

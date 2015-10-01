@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			};
 			var workflowControlSet = new WorkflowControlSet("wcs1");
 			workflowControlSet.SetId(addPersonCommandDto.WorkflowControlSetId.Value);
-			workflowControlSetRepository.Stub(x => x.Get(addPersonCommandDto.WorkflowControlSetId.Value))
-				.Return(workflowControlSet);
+			workflowControlSetRepository.Stub(x => x.Get(addPersonCommandDto.WorkflowControlSetId.Value)).Return(workflowControlSet);
 			target.Handle(addPersonCommandDto);
 
 			personRepository.AssertWasCalled(x => x.Add(Arg<Person>.Matches(p =>

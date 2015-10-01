@@ -182,6 +182,7 @@
     <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
+    <Compile Include="CommandHandler\ChangePersonBasicDataCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\GrantPersonRoleCommandHandler.cs" />
