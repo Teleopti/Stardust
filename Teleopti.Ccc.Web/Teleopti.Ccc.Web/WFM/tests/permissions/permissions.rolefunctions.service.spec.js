@@ -141,7 +141,7 @@
 
         		var expectedObject = {Id: 42, FunctionId: "1", Functions:["1","2","4"]};
 
-        		spyOn(mockPermissionsService.deleteAllFunction, 'query')
+		        spyOn(mockPermissionsService.deleteAllFunction, 'query');
 
         		RolesFunctionsService.unselectAllFunctions({ Id: 42 });
 

@@ -95,6 +95,25 @@ describe('DataController', function() {
 		expect(node.$parentNodeScope.$modelValue.selected).toBe(true);
 
 	}));
+	it('should not send the parent to the service when a child is selected', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
+		var node = { $modelValue: { selected: false, Type: 'Team', Id: '22',ChildNodes: [] }, $parentNodeScope: { $modelValue: { selected: false } } };
+		var deferred = $q.defer();
+		var expectedObject = [{ type: 'Team', id: '22' }] ; 
+
+		spyOn(mockRoleDataService, 'toggleOrganizationSelection').and.returnValue(deferred.promise);
+		deferred.resolve();
+
+		scope.toggleOrganizationSelection(node);
+		scope.$digest();
+
+		expect(mockRoleDataService.toggleOrganizationSelection).toHaveBeenCalledWith('1', expectedObject);
+
+		expect(node.$modelValue.selected).toBe(true);
+		expect(node.$parentNodeScope.$modelValue.selected).toBe(true);
+
+	}));
 	it('should toggle child and child-of-child to not selected if parent is deselected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
