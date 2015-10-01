@@ -2,11 +2,16 @@
 {
 	public class WebUrlHolder
 	{
+		private readonly string _webUrl;
+
 		public WebUrlHolder(string webUrl)
 		{
-			WebUrl = webUrl;
+			_webUrl = webUrl;
 		}
 
-		public string WebUrl { get; }
+		public string WebUrl
+		{
+			get { return _webUrl; }
+		}
 	}
 }
