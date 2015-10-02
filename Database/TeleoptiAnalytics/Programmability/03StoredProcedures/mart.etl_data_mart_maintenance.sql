@@ -24,6 +24,10 @@ BEGIN
 	DECLARE @daysToKeepETLExecution INT
 	DECLARE @daysToKeepRTAEvents INT
 	
+	--Add new things to purge here instead of from db migration scripts
+	 if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 16)
+		  insert into mart.etl_maintenance_configuration values(16,'DaysToKeepMessagesPurged',60)
+	  
 	SELECT @daysToKeepETLExecution = configuration_value
 	FROM mart.etl_maintenance_configuration
 	WHERE configuration_name = 'daysToKeepETLExecution'
@@ -231,6 +235,13 @@ BEGIN
 		and f.date_from < (select dateadd(day,10,min(f2.date_from))
 							from dbo.agent_logg f2)
 	END
+
+	--Queue
+	SET @confMinDate = dateadd(day,-1*(select isnull(configuration_value,60) from [mart].[etl_maintenance_configuration] where configuration_id = 16),getdate())
+
+	delete top(10000) from Queue.MessagesPurged
+	where PurgedAt < @confMinDate
+	
 END
 
 GO
