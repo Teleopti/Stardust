@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -771,16 +772,30 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void AddPerson(PersonDto personDto)
 		{
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			if (personDto.Id.HasValue)
+				throw new FaultException("new person should not have an id");
+			var result = ExecuteCommand(new AddPersonCommandDto
 			{
-				IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				IPersonRepository repository = repositoryFactory.CreatePersonRepository(uow);
-				var assembler = _factoryProvider.CreatePersonAssembler();
-				((PersonAssembler)assembler).EnableSaveOrUpdate = true;
-				IPerson newPerson = assembler.DtoToDomainEntity(personDto);
-				repository.Add(newPerson);
-				uow.PersistAll();
-				_tenantPeopleSaver.SaveTenantData(personDto, newPerson.Id.Value);
+				FirstName = personDto.FirstName,
+				LastName = personDto.LastName,
+				ApplicationLogonName = personDto.ApplicationLogOnName,
+				ApplicationLogOnPassword = personDto.ApplicationLogOnPassword,
+				Identity = personDto.Identity,
+				Email = personDto.Email,
+				EmploymentNumber = personDto.EmploymentNumber,
+				CultureLanguageId = personDto.CultureLanguageId,
+				UICultureLanguageId = personDto.UICultureLanguageId,
+				Note = personDto.Note,
+				TimeZoneId = personDto.TimeZoneId,
+				WorkWeekStart = personDto.FirstDayOfWeek,
+				WorkflowControlSetId = personDto.WorkflowControlSet == null ? null : personDto.WorkflowControlSet.Id,
+				IsDeleted = personDto.IsDeleted
+			});
+
+			personDto.Id = result.AffectedId;
+			foreach (var personPeriodDto in personDto.PersonPeriodCollection)
+			{
+				AddPersonPeriod(personDto, personPeriodDto);
 			}
 		}
 		public void UpdatePerson(PersonDto personDto)
