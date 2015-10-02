@@ -46,12 +46,18 @@ namespace Teleopti.Ccc.Win.Main
 		public ILogonPresenter Presenter { get; set; }
 		public bool StartLogon(IMessageBrokerComposite messageBroker)
 		{
+			webView1.BeforeContextMenu += webView1_BeforeContextMenu;
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
+		}
+
+		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		{
+			e.Menu.Items.Clear();
 		}
 
 		private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
