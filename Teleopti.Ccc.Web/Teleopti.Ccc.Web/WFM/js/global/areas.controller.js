@@ -13,6 +13,7 @@ notification.controller('AreasCtrl', [
 					result[i].filters = [];
 				}
 				$scope.areas = result;
+				$scope.areasLoaded = true;
 			});
 		};
 	}
