@@ -160,6 +160,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			get { return _loadedPeriod; }
 		}
 
+		public void SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(DateTimePeriod period)
+		{
+			_loadedPeriod = period;
+		}
+
 		public IDateOnlyPeriodAsDateTimePeriod RequestedPeriod { get; set; }
 
 

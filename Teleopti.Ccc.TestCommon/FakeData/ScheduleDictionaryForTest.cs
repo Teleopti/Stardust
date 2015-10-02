@@ -38,31 +38,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void AddPersonAssignment(IPersonAssignment personAssignment)
 		{
-			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAssignment.Person, Period.VisiblePeriod));
-			scheduleRange.Add(personAssignment);
-			BaseDictionary.Add(personAssignment.Person, scheduleRange);
+			var person = personAssignment.Person;
+			if (BaseDictionary.ContainsKey(person))
+			{
+				((ScheduleRange)BaseDictionary[person]).Add(personAssignment);
+			}
+			else
+			{
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
+				scheduleRange.Add(personAssignment);
+				BaseDictionary[person] = scheduleRange;
+			}
 			TakeSnapshot();
 		}
-
-		public void AddPersonAssignmentsWithoutSnapshot(params IPersonAssignment[] personAssignments)
-		{
-			foreach (var personAssignment in personAssignments)
-			{
-				var person = personAssignment.Person;
-				if (BaseDictionary.ContainsKey(person))
-				{
-					((ScheduleRange) BaseDictionary[person]).Add(personAssignment);
-				}
-				else
-				{
-					var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
-					scheduleRange.Add(personAssignment);
-					BaseDictionary[person] = scheduleRange;
-				}
-			}
-		}
-
-
 
 		public static IScheduleDictionary WithPersonAbsence(IScenario scenario, DateTimePeriod period, IPersonAbsence personAbsence)
 		{

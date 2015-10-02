@@ -228,7 +228,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Autofac\AutofacServiceBus.cs" />
-    <Compile Include="Autofac\SecretSchedulingCommonModule.cs" />
     <Compile Include="Backlog\BacklogScheduledProvider.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />

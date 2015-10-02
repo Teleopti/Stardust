@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 			_containerBuilder.RegisterModule(new SchedulingCommonModule());
 			_containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
-			_containerBuilder.RegisterModule(new SecretSchedulingCommonModule());
 		}
 
 		[Test]

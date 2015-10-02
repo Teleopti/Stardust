@@ -38,6 +38,9 @@ using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -86,7 +89,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
 			
-			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().InstancePerLifetimeScope();
+			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().AsSelf().InstancePerLifetimeScope();
 			builder.RegisterType<TimeZoneGuardWrapper>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
@@ -290,7 +293,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>();
 			builder.RegisterType<MinWeekWorkTimeRule>().As<IMinWeekWorkTimeRule>();
 			builder.RegisterType<DailyValueByAllSkillsExtractor>().As<IDailyValueByAllSkillsExtractor>();
-			//IDailyValueByAllSkillsExtractor
+
+
+			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
+			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
 		}
 
 		private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

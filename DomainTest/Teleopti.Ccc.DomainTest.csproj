@@ -388,6 +388,7 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
+    <Compile Include="DomainTestAttribute.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldPickTheBestMethodTest.cs" />
@@ -731,6 +732,7 @@
     <Compile Include="Scheduling\PublishPlanningPeriodTest.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRuleTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleTest.cs" />
+    <Compile Include="Scheduling\Scenarios\WeeklyRestSolverTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandlerTest.cs" />
