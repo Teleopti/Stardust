@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					person.WorkflowControlSet = workflowControlSet;
 				}
 				person.Note = command.Note;
+				if (command.IsDeleted)
+					((IDeleteTag)person).SetDeleted();
 
 				_personRepository.Add(person);
 				uow.PersistAll();

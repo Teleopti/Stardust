@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					person.EmploymentNumber = command.EmploymentNumber;
 				if (command.Note != null)
 					person.Note = command.Note;
+				if (command.IsDeleted)
+					((IDeleteTag)person).SetDeleted();
 
 				uow.PersistAll();
 				command.Result = new CommandResultDto { AffectedId = person.Id.GetValueOrDefault(), AffectedItems = 1 };

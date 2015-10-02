@@ -87,5 +87,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// <value>The workflow control set id.</value>
 		[DataMember]
 		public Guid? WorkflowControlSetId { get; set; }
+		/// <summary>
+		/// Gets or sets deleted flag.
+		/// </summary>
+		/// <value>The deleted flag.</value>
+		[DataMember]
+		public bool IsDeleted { get; set; }
 	}
 }
