@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -669,10 +670,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 double sumTasks = _taskPeriodList.Sum(t => t.StatisticTask.StatAnsweredTasks);
                 if (sumTasks > 0d)
                 {
-                    _totalStatisticAverageTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Sum(t => t.StatisticTask.StatAverageTaskTime.Ticks * t.StatisticTask.StatAnsweredTasks) / sumTasks));
-                    _totalStatisticAverageAfterTaskTime = TimeSpan.FromTicks((long)
-                        (_taskPeriodList.Sum(t => t.StatisticTask.StatAverageAfterTaskTime.Ticks * t.StatisticTask.StatAnsweredTasks) / sumTasks));
+	                _totalStatisticAverageTaskTime = TimeSpan.FromTicks((long)
+		                (_taskPeriodList.Sum(
+			                t =>
+				                t.StatisticTask.StatAverageTaskTime.Ticks * (t.StatisticTask.StatAnsweredTasks == 0 ? 1 : t.StatisticTask.StatAnsweredTasks))/sumTasks));
+	                _totalStatisticAverageAfterTaskTime = TimeSpan.FromTicks((long)
+		                (_taskPeriodList.Sum(
+			                t =>
+				                t.StatisticTask.StatAverageAfterTaskTime.Ticks * (t.StatisticTask.StatAnsweredTasks == 0 ? 1 : t.StatisticTask.StatAnsweredTasks))/sumTasks));
                 }
                 else
                 {
