@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void Initialize();
 		bool Start(string raptorServer);
 		LoginStep CurrentStep { get; set; }
-		bool IdLogin(Guid parse);
+		bool webLogin(Guid parse);
 	}
 }

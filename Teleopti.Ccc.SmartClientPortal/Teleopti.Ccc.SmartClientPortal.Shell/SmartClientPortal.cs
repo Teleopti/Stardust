@@ -108,8 +108,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				setWfmWebUrl(_permissionModule);
 				return;
 			}
+			try
+			{
+				iAmCalledFromFatClient.Invoke(window, new object[] { });
+			}
+			catch (JSException)
+			{
+				setWfmWebUrl(_permissionModule);
+			}
 			
-			iAmCalledFromFatClient.Invoke(window, new object[] { });
 		}
 
 		private int cnt;

@@ -211,8 +211,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			return false;
 		}
 
-		// ReSharper disable once UnusedMember.Local
-		public bool IdLogin(Guid businessunitId)
+		public bool webLogin(Guid businessunitId)
 		{
 			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgent);
 			if (!StateHolderReader.IsInitialized)
@@ -231,11 +230,9 @@ namespace Teleopti.Ccc.WinCode.Main
 				
 				}
 				initApplication();
-				
 				return true;
 			}
 			_model.Warning = authenticationResult.FailReason;
-			// windows does not work we need to use application
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 			return false;
 		}

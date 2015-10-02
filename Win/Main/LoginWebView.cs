@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Win.Main
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
+			
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
@@ -60,9 +61,10 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
-			_model.PersonId = Guid.Parse(e.Arguments[1].ToString());
-
-			Presenter.IdLogin(Guid.Parse(e.Arguments[0].ToString()));
+			var personId = Guid.Parse(e.Arguments[1].ToString());
+			var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
+			_model.PersonId = personId;
+			Presenter.webLogin(businessUnitId);
 		}
 
 		public void ShowStep(bool showBackButton)
