@@ -1273,6 +1273,25 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			 Assert.AreEqual(96, _workloadDayBase.TaskPeriodList.Count);
 
 	    }
+
+	    [Test]
+	    public void ShouldCalculateAverageTimesWhenMissingAnsweredCalls()
+	    {
+				_workloadDayBase.Close();
+		    IList<TimePeriod> timePeriods = new TimePeriod[]{new TimePeriod(8,0,8,30)};
+		    _workloadDayBase.ChangeOpenHours(timePeriods);
+
+				_workloadDayBase.SortedTaskPeriodList[0].StatisticTask.StatAnsweredTasks = 0;
+				_workloadDayBase.SortedTaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 60;
+				_workloadDayBase.SortedTaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 30;
+				_workloadDayBase.SortedTaskPeriodList[1].StatisticTask.StatAnsweredTasks = 1;
+				_workloadDayBase.SortedTaskPeriodList[1].StatisticTask.StatAverageTaskTimeSeconds = 120;
+				_workloadDayBase.SortedTaskPeriodList[1].StatisticTask.StatAverageAfterTaskTimeSeconds = 60;
+				_workloadDayBase.RecalculateDailyAverageStatisticTimes();
+
+				Assert.AreEqual(TimeSpan.FromSeconds(180), _workloadDayBase.TotalStatisticAverageTaskTime);
+				Assert.AreEqual(TimeSpan.FromSeconds(90), _workloadDayBase.TotalStatisticAverageAfterTaskTime);
+	    }
     }
 
     public class TestWorkloadDayBase : WorkloadDayBase

@@ -673,11 +673,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	                _totalStatisticAverageTaskTime = TimeSpan.FromTicks((long)
 		                (_taskPeriodList.Sum(
 			                t =>
-				                t.StatisticTask.StatAverageTaskTime.Ticks * (t.StatisticTask.StatAnsweredTasks == 0 ? 1 : t.StatisticTask.StatAnsweredTasks))/sumTasks));
+				                t.StatisticTask.StatAverageTaskTime.Ticks * handleZeroCallsForInterval(t))/sumTasks));
 	                _totalStatisticAverageAfterTaskTime = TimeSpan.FromTicks((long)
 		                (_taskPeriodList.Sum(
 			                t =>
-				                t.StatisticTask.StatAverageAfterTaskTime.Ticks * (t.StatisticTask.StatAnsweredTasks == 0 ? 1 : t.StatisticTask.StatAnsweredTasks))/sumTasks));
+												t.StatisticTask.StatAverageAfterTaskTime.Ticks * handleZeroCallsForInterval(t)) / sumTasks));
                 }
                 else
                 {
@@ -707,7 +707,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        #endregion
+	    private static double handleZeroCallsForInterval(ITemplateTaskPeriod t)
+	    {
+		    return Math.Max(t.StatisticTask.StatAnsweredTasks, 1);
+	    }
+
+	    #endregion
 
         /// <summary>
         /// Called when [tasks changed].
