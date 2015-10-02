@@ -791,12 +791,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				WorkflowControlSetId = personDto.WorkflowControlSet == null ? null : personDto.WorkflowControlSet.Id,
 				IsDeleted = personDto.IsDeleted
 			});
-
-			personDto.Id = result.AffectedId;
-			foreach (var personPeriodDto in personDto.PersonPeriodCollection)
+			if (result.AffectedId != null)
 			{
-				AddPersonPeriod(personDto, personPeriodDto);
+				personDto.Id = result.AffectedId;
+				foreach (var personPeriodDto in personDto.PersonPeriodCollection)
+				{
+					AddPersonPeriod(personDto, personPeriodDto);
+				}
 			}
+			
 		}
 		public void UpdatePerson(PersonDto personDto)
 		{

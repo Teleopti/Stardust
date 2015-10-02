@@ -24,8 +24,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
 			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			tenantDataManager.Stub(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Is.Anything))
+				.Return(new SavePersonInfoResult
+				{
+					Success = true
+				});
 			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
 			var addPersonCommandDto = new AddPersonCommandDto
 			{
@@ -41,7 +47,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				WorkflowControlSetId = Guid.NewGuid(),
 				TimeZoneId = TimeZoneInfo.Utc.Id,
 				CultureLanguageId = CultureInfo.CurrentCulture.LCID,
-				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID
+				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID,
+				IsDeleted = true
 			};
 			var workflowControlSet = new WorkflowControlSet("wcs1");
 			workflowControlSet.SetId(addPersonCommandDto.WorkflowControlSetId.Value);
@@ -58,14 +65,59 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				p.WorkflowControlSet.Id.Value == addPersonCommandDto.WorkflowControlSetId.Value &&
 				p.PermissionInformation.DefaultTimeZone().Id == addPersonCommandDto.TimeZoneId &&
 				p.PermissionInformation.CultureLCID() == addPersonCommandDto.CultureLanguageId &&
-				p.PermissionInformation.UICultureLCID() == addPersonCommandDto.UICultureLanguageId
+				p.PermissionInformation.UICultureLCID() == addPersonCommandDto.UICultureLanguageId &&
+				p.IsDeleted == addPersonCommandDto.IsDeleted
 				)));
 			tenantDataManager.AssertWasCalled(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Matches(t =>
 				t.ApplicationLogonName == addPersonCommandDto.ApplicationLogonName &&
 				t.Password == addPersonCommandDto.ApplicationLogOnPassword &&
 				t.Identity == addPersonCommandDto.Identity
 				)));
+
+			unitOfWork.AssertWasCalled(x=>x.PersistAll());
 			addPersonCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldNotPersistPersonIfFailedToSaveTenantData()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var tenantDataManager = MockRepository.GenerateMock<ITenantDataManager>();
+			var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			tenantDataManager.Stub(x => x.SaveTenantData(Arg<TenantAuthenticationData>.Is.Anything))
+				.Return(new SavePersonInfoResult
+				{
+					Success = false
+				});
+			var target = new AddPersonCommandHandler(personRepository, currentUnitOfWorkFactory, tenantDataManager, workflowControlSetRepository);
+
+			var addPersonCommandDto = new AddPersonCommandDto
+			{
+				FirstName = "first",
+				LastName = "last",
+				Email = "test@teleopti.com",
+				EmploymentNumber = "employmentNumber",
+				Identity = "identity1",
+				ApplicationLogonName = "logonname",
+				ApplicationLogOnPassword = "password",
+				Note = "note1",
+				WorkWeekStart = DayOfWeek.Sunday,
+				TimeZoneId = TimeZoneInfo.Utc.Id,
+				CultureLanguageId = CultureInfo.CurrentCulture.LCID,
+				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID,
+				IsDeleted = true
+			};
+			target.Handle(addPersonCommandDto);
+
+			unitOfWork.AssertWasNotCalled(x=>x.PersistAll());
+			addPersonCommandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+			addPersonCommandDto.Result.AffectedId.Should().Be.EqualTo(null);
+		}
+
 	}
 }

@@ -56,16 +56,24 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					((IDeleteTag)person).SetDeleted();
 
 				_personRepository.Add(person);
-				uow.PersistAll();
+				uow.Flush();
 
-				_tenantDataManager.SaveTenantData(new TenantAuthenticationData
+				var saveTenantDataResult = _tenantDataManager.SaveTenantData(new TenantAuthenticationData
 				{
 					ApplicationLogonName = command.ApplicationLogonName,
 					Password = command.ApplicationLogOnPassword,
 					Identity = command.Identity,
 					PersonId = person.Id.GetValueOrDefault()
 				});
-				command.Result = new CommandResultDto { AffectedId = person.Id.GetValueOrDefault(), AffectedItems = 1 };
+				if (saveTenantDataResult.Success)
+				{
+					uow.PersistAll();
+					command.Result = new CommandResultDto { AffectedId = person.Id.GetValueOrDefault(), AffectedItems = 1 };
+				}
+				else
+				{
+					command.Result = new CommandResultDto { AffectedItems = 0 };
+				}
 			}
 		}
 	}

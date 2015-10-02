@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				WorkWeekStart = DayOfWeek.Sunday,
 				WorkflowControlSetId = Guid.NewGuid(),
 				CultureLanguageId = CultureInfo.CurrentCulture.LCID,
-				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID
+				UICultureLanguageId = CultureInfo.CurrentUICulture.LCID,
+				IsDeleted = true
 			};
 
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			person.WorkflowControlSet.Id.Should().Be.EqualTo(changePersonBasicDataCommandDto.WorkflowControlSetId);
 			person.PermissionInformation.CultureLCID().Should().Be.EqualTo(changePersonBasicDataCommandDto.CultureLanguageId);
 			person.PermissionInformation.UICultureLCID().Should().Be.EqualTo(changePersonBasicDataCommandDto.UICultureLanguageId);
+			person.IsDeleted.Should().Be.EqualTo(changePersonBasicDataCommandDto.IsDeleted);
 			changePersonBasicDataCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 		}
 	}

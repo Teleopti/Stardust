@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				{
 					var memberList = new List<IPerson>();
 					var logonInfo = _tenantLogonDataManager.GetLogonInfoForIdentity(query.Identity);
+					if (logonInfo == null)
+						return new PersonDto[] { };
 					var foundPersons = _personRepository.FindPeople(new[] { logonInfo.PersonId });
 					memberList.AddRange(foundPersons);
 					return _assembler.DomainEntitiesToDtos(memberList).ToList();
