@@ -18,6 +18,7 @@ IF "%URL%"=="" (
 SET /P URL=Url to admin site:
 )
 
-SET Kommandompigg=%CD%\UpgradeTenants.ps1 %SUSER% %SPASS% "%URL%"
+set WORKING_DIRECTORY=%~dp0
+SET Kommandompigg=%WORKING_DIRECTORY%UpgradeTenants.ps1
 
-powershell.exe -ExecutionPolicy Bypass -Command %Kommandompigg%
+powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%" %SUSER% %SPASS% "%URL%
