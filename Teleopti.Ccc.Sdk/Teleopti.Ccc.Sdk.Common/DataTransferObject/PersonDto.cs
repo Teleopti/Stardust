@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// </summary>
 		/// <value>The first day of week.</value>
 		[DataMember(IsRequired = false, Order = 9)]
-		public DayOfWeek FirstDayOfWeek { get; set; }
+		public DayOfWeek? FirstDayOfWeek { get; set; }
 	}
 
 }

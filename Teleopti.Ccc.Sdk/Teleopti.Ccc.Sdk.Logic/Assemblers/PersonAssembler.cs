@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				Email = entity.Email,
 				EmploymentNumber = entity.EmploymentNumber,
 				CultureLanguageId = entity.PermissionInformation.CultureLCID(),
-				UICultureLanguageId = entity.PermissionInformation.UICultureLCID()
+				UICultureLanguageId = entity.PermissionInformation.UICultureLCID(),
+				FirstDayOfWeek = entity.FirstDayOfWeek
 			};
 			
 			personDto.ApplicationLogOnName = "";
@@ -157,7 +158,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				person.Note = dto.Note;
 			if (dto.IsDeleted)
 				((IDeleteTag)person).SetDeleted();
-			
+			if (dto.FirstDayOfWeek.HasValue)
+				person.FirstDayOfWeek = dto.FirstDayOfWeek.Value;
 		}
 
 		private static bool personActivated(PersonDto dto, IPerson person)

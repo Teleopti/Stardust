@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(person.WorkflowControlSet.Id, personDto.WorkflowControlSet.Id);
 			Assert.AreEqual(person.Note, personDto.Note);
 			Assert.AreEqual(person.TerminalDate.Value.Date, personDto.TerminationDate.DateTime);
+			Assert.AreEqual(person.FirstDayOfWeek, personDto.FirstDayOfWeek);
 			Assert.AreEqual(((Person)person).IsDeleted, personDto.IsDeleted);
 		}
 
