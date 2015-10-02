@@ -75,6 +75,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			SignalRConfiguration.Configure(SignalRSettings.Load(), () => { });
 		}
 
+		[TearDown]
+		public void Teardown()
+		{
+			if (requestContainer != null)
+			{
+				requestContainer.Dispose();
+				requestContainer = null;
+			}
+		}
+
 		private ILifetimeScope buildContainer(Toggles toggle, bool value)
 		{
 			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
