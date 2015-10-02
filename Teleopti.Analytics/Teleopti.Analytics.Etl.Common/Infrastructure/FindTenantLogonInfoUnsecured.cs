@@ -35,5 +35,10 @@ where pi.Id in (:ids)";
 		{
 			throw new NotImplementedException();
 		}
+
+		public LogonInfo GetForIdentity(string identity)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

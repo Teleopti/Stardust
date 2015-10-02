@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		IEnumerable<LogonInfo> GetForIds(IEnumerable<Guid> ids);
 		LogonInfo GetForLogonName(string logonName);
+		LogonInfo GetForIdentity(string identity);
 	}
 }

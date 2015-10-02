@@ -253,6 +253,7 @@
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthenticationTest.cs" />
     <Compile Include="Areas\MultiTenancy\IdLogonTest.cs" />
     <Compile Include="Areas\MultiTenancy\IdentityLogonTest.cs" />
+    <Compile Include="Areas\MultiTenancy\PersonInfoControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />

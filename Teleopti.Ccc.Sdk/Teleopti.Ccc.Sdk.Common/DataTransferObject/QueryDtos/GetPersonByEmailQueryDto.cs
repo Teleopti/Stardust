@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 	/// Specify a query to get a <see cref="PersonDto"/> by email.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/07/")]
-	public class GetPersonByEmailQueryDto
+	public class GetPersonByEmailQueryDto : QueryDto
 	{
 		/// <summary>
 		/// Gets and sets the mandatory person email.

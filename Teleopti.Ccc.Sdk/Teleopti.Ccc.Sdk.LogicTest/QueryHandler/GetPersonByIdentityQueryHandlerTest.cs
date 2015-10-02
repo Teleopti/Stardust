@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -25,9 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var assembler = MockRepository.GenerateMock<IAssembler<IPerson, PersonDto>>();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var personInfo = new PersonInfo();
-			identityUserQuery.Stub(x => x.FindUserData("identity1")).Return(personInfo);
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personInfo.Id);
 			var persons = new List<IPerson> { person };
@@ -37,11 +36,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new GetPersonByIdentityQueryHandler(assembler, personRepository, currentUnitOfWorkFactory, identityUserQuery);
+			var tenantLogonDataManager = MockRepository.GenerateMock<ITenantLogonDataManager>();
+			const string identity = "identity1";
+			tenantLogonDataManager.Stub(x => x.GetLogonInfoForIdentity(identity)).Return(new LogonInfoModel
+			{
+				Identity = identity,
+				PersonId = person.Id.Value
+			});
+			var target = new GetPersonByIdentityQueryHandler(assembler, personRepository, currentUnitOfWorkFactory, tenantLogonDataManager);
 
 			var result = target.Handle(new GetPersonByIdentityQueryDto
 			{
-				Identity = "identity1"
+				Identity = identity
 			});
 
 			result.Count.Should().Be.EqualTo(1);

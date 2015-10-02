@@ -80,5 +80,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		{
 			return Json(_findLogonInfo.GetForLogonName(logonName));
 		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		public virtual JsonResult LogonInfoFromIdentity(string identity)
+		{
+			return Json(_findLogonInfo.GetForIdentity(identity));
+		}
 	}
 }

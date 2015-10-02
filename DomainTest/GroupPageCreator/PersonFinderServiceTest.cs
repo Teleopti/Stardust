@@ -92,5 +92,10 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			throw new NotImplementedException();
 		}
+
+		public LogonInfoModel GetLogonInfoForIdentity(string identity)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

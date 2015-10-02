@@ -76,5 +76,34 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 
 			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
 		}
+
+		[Test]
+		public void ShouldGetLogonInfoForIdentity()
+		{
+			const string identity = "identity1";
+			var personId = Guid.NewGuid();
+			HttpRequestFake.SetReturnValue(new LogonInfoModel
+			{
+				Identity = identity,
+				PersonId = personId
+			});
+
+			var result = Target.GetLogonInfoForIdentity(identity);
+
+			result.Identity.Should().Be.EqualTo(identity);
+			result.PersonId.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldSendTenantWhenPersistingByIdentity()
+		{
+			HttpRequestFake.SetReturnValue(new LogonInfoModel());
+			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
+			CurrentTenantCredentials.Has(tenantCredentials);
+
+			Target.GetLogonInfoForIdentity("identity1");
+
+			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+		}
 	}
 }

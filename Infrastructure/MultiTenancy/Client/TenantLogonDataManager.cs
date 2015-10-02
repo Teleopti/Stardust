@@ -43,5 +43,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromLogonName"), _jsonSerializer.SerializeObject(new {logonName}),
 				tenantCredentials);
 		}
+
+		public LogonInfoModel GetLogonInfoForIdentity(string identity)
+		{
+			var tenantCredentials = _currentTenantCredentials.TenantCredentials();
+			return _postHttpRequest.SendSecured<LogonInfoModel>(
+				_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromIdentity"), _jsonSerializer.SerializeObject(new { identity }),
+				tenantCredentials);
+		}
 	}
 }

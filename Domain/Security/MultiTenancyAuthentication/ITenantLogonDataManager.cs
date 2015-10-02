@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 	{
 		IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids);
 		LogonInfoModel GetLogonInfoForLogonName(string logonName);
+		LogonInfoModel GetLogonInfoForIdentity(string identity);
 	}
 }

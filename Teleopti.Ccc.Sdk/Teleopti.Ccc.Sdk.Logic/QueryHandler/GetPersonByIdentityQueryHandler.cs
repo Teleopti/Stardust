@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -16,14 +17,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IAssembler<IPerson, PersonDto> _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly IIdentityUserQuery _identityUserQuery;
+		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 
-		public GetPersonByIdentityQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IIdentityUserQuery identityUserQuery)
+		public GetPersonByIdentityQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-			_identityUserQuery = identityUserQuery;
+			_tenantLogonDataManager = tenantLogonDataManager;
 		}
 
 		public ICollection<PersonDto> Handle(GetPersonByIdentityQueryDto query)
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
 					var memberList = new List<IPerson>();
-					var personInfo = _identityUserQuery.FindUserData(query.Identity);
-					var foundPersons = _personRepository.FindPeople(new[] { personInfo.Id });
+					var logonInfo = _tenantLogonDataManager.GetLogonInfoForIdentity(query.Identity);
+					var foundPersons = _personRepository.FindPeople(new[] { logonInfo.PersonId });
 					memberList.AddRange(foundPersons);
 					return _assembler.DomainEntitiesToDtos(memberList).ToList();
 				}

@@ -145,6 +145,13 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// <value>The Identity.</value>
 		[DataMember(IsRequired = false, Order = 8)]
 		public string Identity { get; set; }
+
+		/// <summary>
+		/// Gets or sets the first day of week.
+		/// </summary>
+		/// <value>The first day of week.</value>
+		[DataMember(IsRequired = false, Order = 9)]
+		public DayOfWeek FirstDayOfWeek { get; set; }
 	}
 
 }

@@ -71,6 +71,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				throw new NotImplementedException();
 			}
+
+			public LogonInfoModel GetLogonInfoForIdentity(string identity)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

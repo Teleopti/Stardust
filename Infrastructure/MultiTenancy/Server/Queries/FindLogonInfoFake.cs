@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return data.Values.Single(x => x.LogonName == logonName);
 		}
 
+		public LogonInfo GetForIdentity(string identity)
+		{
+			return data.Values.Single(x => x.Identity == identity);
+		}
+
 		public void Add(LogonInfo logonInfo)
 		{
 			data[logonInfo.PersonId] = logonInfo;
