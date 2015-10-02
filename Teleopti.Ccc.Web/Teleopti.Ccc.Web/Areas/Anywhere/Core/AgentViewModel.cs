@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string Alarm { get; set; }
 		public DateTime? AlarmStart { get; set; }
 		public string AlarmColor { get; set; }
+		public int TimeInState { get; set; }
 	}
 
 }

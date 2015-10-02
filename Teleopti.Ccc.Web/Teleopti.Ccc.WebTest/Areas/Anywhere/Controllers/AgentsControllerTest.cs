@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				AlarmColor = "#FF0000"
 			};
 
-			var target = new AgentsController(null, null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }));
+			var target = new AgentsController(null, null, null, new Now(), null, new FakeAgentStateReadModelReader(new[] { data }));
 			new StubbingControllerBuilder().InitializeController(target);
 
 			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
@@ -92,14 +92,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson> { person });
 			personRepository.Stub(x => x.Get(personId)).Return(person);
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
 			var commonAgentNameProvider = MockRepository.GenerateMock<ICommonAgentNameProvider>();
 			var commonAgentNameSettings = new CommonNameDescriptionSetting();
 			commonAgentNameProvider.Stub(x => x.CommonAgentNameSettings).Return(commonAgentNameSettings);
 
-			var target = new AgentsController(new FakePermissionProvider(), teamRepository, personRepository, new Now(), userTimeZone, commonAgentNameProvider, null);
+			var target = new AgentsController(new FakePermissionProvider(), teamRepository, personRepository, new Now(), commonAgentNameProvider, null);
 			new StubbingControllerBuilder().InitializeController(target);
 
 			var expected = new AgentViewModel
@@ -136,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
 
-			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), null, null, null);
+			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), null, null);
 			new StubbingControllerBuilder().InitializeController(target);
 
 			var result = target.Team(person.Id.GetValueOrDefault(), date).Data;
@@ -155,11 +152,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			person.Name = new Name("bill", "gates");
 
-			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), null, commonAgentNameProvider, null);
+			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), commonAgentNameProvider, null);
 			new StubbingControllerBuilder().InitializeController(target);
 
 			dynamic result = target.PersonDetails(person.Id.GetValueOrDefault()).Data;
 			((object)result.Name).Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
+		}
+
+		[Test]
+		public void ShouldReturnTimeInStateWhenNoStateStart()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new AgentStateReadModel
+			{
+				TeamId = teamId
+			};
+			var target = new AgentsController(null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }));
+			new StubbingControllerBuilder().InitializeController(target);
+
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
+			result.Single().TimeInState.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldCalculateTimeInState()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new AgentStateReadModel
+			{
+				TeamId = teamId,
+				StateStart = "2015-10-02 09:00".Utc(),
+			};
+			var now = new MutableNow("2015-10-02 09:05");
+
+			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }));
+			new StubbingControllerBuilder().InitializeController(target);
+
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
+			result.Single().TimeInState.Should().Be((int)"5".Minutes().TotalSeconds);
 		}
 	}
 

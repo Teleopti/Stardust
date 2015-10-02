@@ -22,7 +22,7 @@
         	that.SiteName = "";
             that.BusinessUnitId = "";
 
-            that.TimeInState = ko.observable();
+            that.TimeInState = ko.observable(0);
             that.AlarmTime = ko.observable();
             that.State = ko.observable();
             that.Activity = ko.observable();
@@ -36,7 +36,6 @@
             that.AlarmColor = ko.observable();
             that.AlarmStart = ko.observable();
 
-            that.EnteredCurrentAlarm = ko.observable();
             that.TextWeight = ko.observable();
             that.TextColor = ko.observable();
             that.Selected = ko.observable(false);
@@ -56,12 +55,12 @@
             	that.SiteId = data.SiteId;
             	that.SiteName = data.SiteName;
 	            that.BusinessUnitId = data.BusinessUnitId;
-                that.State(data.State);
+	            that.State(data.State);
+	            that.TimeInState(data.TimeInState);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
                 that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(resources.TimeZoneOffsetMinutes, 'minutes')) : '');
-				that.EnteredCurrentAlarm(data.StateStart);
-                that.refreshAlarmTime();
+				that.updateAlarmTime();
 
 	            that.AlarmStart(data.AlarmStart
 	                ? moment.utc(data.AlarmStart)
@@ -81,19 +80,29 @@
                 that.AdherenceDetailsUrl = navigation.UrlForAdherenceDetails(that.BusinessUnitId, that.PersonId);
 	        };
 
-            that.refreshAlarmTime = function () {
-                that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId));
-                if (!that.EnteredCurrentAlarm()) return;
-                var duration = moment.duration(((new Date).getTime() - moment.utc(that.EnteredCurrentAlarm())));
-                if (that.Alarm() === '') that.AlarmTime('');
-                else that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+	        that.updateAlarmTime = function() {
+		        that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId));
+		        if (!that.TimeInState()) return;
+		        if (that.Alarm() === '') that.AlarmTime('');
+		        else {
+			        var duration = moment.duration(that.TimeInState(), 'seconds');
+			        that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+		        }
 
-                if (!that.HaveNewAlarm
-                    || that.shouldWaitWithUpdatingAlarm()) return;
-                that.Alarm(that.NextAlarm);
-                that.refreshColor(that.NextAlarmColor);
-                that.HaveNewAlarm = false;
-            }
+		        if (!that.HaveNewAlarm
+			        || that.shouldWaitWithUpdatingAlarm()) return;
+		        that.Alarm(that.NextAlarm);
+		        that.refreshColor(that.NextAlarmColor);
+		        that.HaveNewAlarm = false;
+	        };
+
+	        that.increaseAlarmTime = function() {
+		        if (!that.TimeInState()) return;
+
+		        var duration = moment.duration(that.TimeInState(), 'seconds');
+		        that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+		        that.TimeInState(that.TimeInState() + 1);
+	        };
 
             that.shouldWaitWithUpdatingAlarm = function (alarmStartUtc) {
             	return that.AlarmStart() && moment.utc().isBefore(alarmStartUtc);

@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -21,17 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _date;
-		private readonly IUserTimeZone _userTimeZone;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 
-		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider, IAgentStateReadModelReader agentStateReadModelReader)
+		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, ICommonAgentNameProvider commonAgentNameProvider, IAgentStateReadModelReader agentStateReadModelReader)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
 			_personRepository = personRepository;
 			_date = date;
-			_userTimeZone = userTimeZone;
 		    _commonAgentNameProvider = commonAgentNameProvider;
 		    _agentStateReadModelReader = agentStateReadModelReader;
 		}
@@ -49,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				NextActivityStartTime = getNullableUtcDatetime(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = getNullableUtcDatetime(x.AlarmStart),
-				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0))
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
+				TimeInState = calculateTimeInState(x.StateStart)
 			}).ToArray();
 
 			return Json(states, JsonRequestBehavior.AllowGet);
@@ -60,6 +58,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return dateTime == null ? (DateTime?)null : DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
 		}
 
+		private int calculateTimeInState(DateTime? dateTime)
+		{
+			var stateStart = getNullableUtcDatetime(dateTime);
+			return stateStart.HasValue ? (int) (_date.UtcDateTime() - stateStart.Value).TotalSeconds : 0;
+		}
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult ForTeam(Guid teamId)

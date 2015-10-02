@@ -90,6 +90,7 @@
                         PersonId: 'guid1',
                         State: 'Ready',
                         StateStart: moment('2014-01-21 12:00').format(),
+						TimeInState: 10,
                         Activity: 'Phone',
                         NextActivity: 'Lunch',
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
@@ -100,6 +101,7 @@
                     {
                         PersonId: 'guid2',
                         State: 'Pause',
+                        TimeInState: 20,
                         StateStart: moment('2014-01-21 12:00').format(),
                         Activity: 'Lunch',
                         NextActivity: 'Phone',
@@ -113,7 +115,7 @@
                 var agent = agentById(vm, "guid1");
                 assert.equals(agent.PersonId, "guid1");
                 assert.equals(agent.State(), "Ready");
-                assert.equals(agent.EnteredCurrentAlarm(), moment('2014-01-21 12:00').format());
+                assert.equals(agent.TimeInState(), 10);
                 assert.equals(agent.Activity(), "Phone");
                 assert.equals(agent.NextActivity(), "Lunch");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
@@ -123,7 +125,7 @@
                 agent = agentById(vm, "guid2");
                 assert.equals(agent.PersonId, "guid2");
                 assert.equals(agent.State(), "Pause");
-                assert.equals(agent.EnteredCurrentAlarm(), moment('2014-01-21 12:00').format());
+                assert.equals(agent.TimeInState(), 20);
                 assert.equals(agent.Activity(), "Lunch");
                 assert.equals(agent.NextActivity(), "Phone");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
@@ -199,12 +201,10 @@
                         PersonId: "guid1"
                     }
                 ]);
-                var now = moment();
                 vm.fillAgentsStates([
                     {
                         PersonId: 'guid1',
-                        StateStart: now.add(-10, 'seconds'),
-                        AlarmStart: now
+                        TimeInState: 10
                     }
                 ]);
 

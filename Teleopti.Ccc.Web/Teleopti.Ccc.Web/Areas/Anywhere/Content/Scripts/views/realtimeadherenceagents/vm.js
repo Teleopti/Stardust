@@ -163,7 +163,7 @@
 
 			that.refreshAlarmTime = function () {
 				that.agents().forEach(function (item) {
-					item.refreshAlarmTime();
+					item.increaseAlarmTime();
 				});
 			};
 
