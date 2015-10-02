@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return (from id in ids where data.ContainsKey(id) select data[id]).ToList();
 		}
 
+		public LogonInfo GetForLogonName(string logonName)
+		{
+			return data.Values.Single(x => x.LogonName == logonName);
+		}
+
 		public void Add(LogonInfo logonInfo)
 		{
 			data[logonInfo.PersonId] = logonInfo;

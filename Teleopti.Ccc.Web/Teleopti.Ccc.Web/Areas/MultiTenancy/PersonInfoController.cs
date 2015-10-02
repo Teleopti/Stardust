@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -73,6 +72,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
 		{
 			return Json(_findLogonInfo.GetForIds(personIdsToGet));
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		public virtual JsonResult LogonInfoFromLogonName(string logonName)
+		{
+			return Json(_findLogonInfo.GetForLogonName(logonName));
 		}
 	}
 }

@@ -87,5 +87,10 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			return new List<LogonInfoModel>();
 		}
+
+		public LogonInfoModel GetLogonInfoForLogonName(string logonName)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -44,6 +44,14 @@ where pi.Id in (:ids) and pi.Tenant=:tenant
 ]]>
 	</query>
 
+	<query name="findLogonInfoByLogonName">
+		<![CDATA[
+select pi.Id as "PersonId", pi.ApplicationLogonInfo.LogonName as "LogonName", pi.Identity as "Identity"
+from PersonInfo pi
+where pi.ApplicationLogonInfo.LogonName=:logonName and pi.Tenant=:tenant
+]]>
+	</query>
+
 	<query name="findUserByCredentials">
 		<![CDATA[
 select p from PersonInfo p 

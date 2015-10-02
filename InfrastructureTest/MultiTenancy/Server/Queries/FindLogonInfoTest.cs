@@ -79,6 +79,73 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			result.PersonId.Should().Be.EqualTo(info.Id);
 		}
 
+
+		[Test]
+		public void ShouldGetLogonInfoByName()
+		{
+			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetIdentity(RandomName.Make());
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
+
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
+
+			var result = target.GetForLogonName(info.ApplicationLogonInfo.LogonName);
+			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonInfo.LogonName);
+			result.Identity.Should().Be.EqualTo(info.Identity);
+			result.PersonId.Should().Be.EqualTo(info.Id);
+		}
+
+		[Test]
+		public void ShouldNotGetPersonInfoFromWrongTenantByLogonName()
+		{
+			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			info.SetIdentity(RandomName.Make());
+			var loggedOnTenant = new Tenant("_");
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
+			_tenantUnitOfWorkManager.CurrentSession().Save(loggedOnTenant);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(loggedOnTenant);
+
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
+
+			target.GetForLogonName(info.ApplicationLogonInfo.LogonName)
+				.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldSilentlyIgnoreNonExistingLogonName()
+		{
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
+
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
+
+			target.GetForLogonName("nonExists")
+				.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullForNonExistingColumnsByLogonName()
+		{
+			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
+			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
+
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
+
+			var result = target.GetForLogonName(info.ApplicationLogonInfo.LogonName);
+			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonInfo.LogonName);
+			result.Identity.Should().Be.Null();
+			result.PersonId.Should().Be.EqualTo(info.Id);
+		}
+
+
 		[SetUp]
 		public void InsertPreState()
 		{

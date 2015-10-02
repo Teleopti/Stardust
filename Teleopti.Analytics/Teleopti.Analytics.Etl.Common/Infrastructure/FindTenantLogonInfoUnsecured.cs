@@ -30,5 +30,10 @@ where pi.Id in (:ids)";
 				.SetResultTransformer(Transformers.AliasToBean<LogonInfo>())
 				.List<LogonInfo>();
 		}
+
+		public LogonInfo GetForLogonName(string logonName)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

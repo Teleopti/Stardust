@@ -221,9 +221,9 @@
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPersonByEmailQueryDtoHandler.cs" />
-    <Compile Include="QueryHandler\GetPersonByIdentityQueryDtoHandler.cs" />
-    <Compile Include="QueryHandler\GetPersonByUserNameQueryDtoHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByEmailQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByIdentityQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByUserNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />

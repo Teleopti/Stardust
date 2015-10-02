@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonByEmailQueryDtoHandlerTest
+	public class GetPersonByEmailQueryHandlerTest
 	{
 		[Test]
 		public void ShouldGetPeopleByEmail()
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new GetPersonByEmailQueryDtoHandler(assembler, personRepository, currentUnitOfWorkFactory);
+			var target = new GetPersonByEmailQueryHandler(assembler, personRepository, currentUnitOfWorkFactory);
 
 			var result = target.Handle(new GetPersonByEmailQueryDto
 			{

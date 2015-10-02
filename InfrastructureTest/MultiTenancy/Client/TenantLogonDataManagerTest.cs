@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			result.Count().Should().Be.EqualTo(400);
 		}
 
-
 		[Test]
 		public void ShouldSendTenantWhenPersisting()
 		{
@@ -45,6 +44,35 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			HttpRequestFake.SetReturnValue(Enumerable.Empty<LogonInfoModel>());
 
 			Target.GetLogonInfoModelsForGuids(new[]{Guid.NewGuid()});
+
+			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+		}
+
+		[Test]
+		public void ShouldGetLogonInfoForLogonName()
+		{
+			var logonName = RandomName.Make();
+			var personId = Guid.NewGuid();
+			HttpRequestFake.SetReturnValue(new LogonInfoModel
+			{
+				LogonName = logonName,
+				PersonId = personId
+			});
+			
+			var result = Target.GetLogonInfoForLogonName(logonName);
+			
+			result.LogonName.Should().Be.EqualTo(logonName);
+			result.PersonId.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldSendTenantWhenPersistingByLogonName()
+		{
+			HttpRequestFake.SetReturnValue(new LogonInfoModel());
+			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
+			CurrentTenantCredentials.Has(tenantCredentials);
+
+			Target.GetLogonInfoForLogonName("test1");
 
 			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
 		}

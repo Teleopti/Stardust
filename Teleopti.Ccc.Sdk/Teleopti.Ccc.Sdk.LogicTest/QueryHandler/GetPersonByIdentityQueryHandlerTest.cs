@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonByIdentityQueryDtoHandlerTest
+	public class GetPersonByIdentityQueryHandlerTest
 	{
 		[Test]
 		public void ShouldGetPeopleByIdentity()
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var assembler = MockRepository.GenerateMock<IAssembler<IPerson, PersonDto>>();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var findPersonInfoByIdentity = MockRepository.GenerateMock<IFindPersonInfoByIdentity>();
+			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var personInfo = new PersonInfo();
-			findPersonInfoByIdentity.Stub(x => x.Find("identity1")).Return(personInfo);
+			identityUserQuery.Stub(x => x.FindUserData("identity1")).Return(personInfo);
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personInfo.Id);
 			var persons = new List<IPerson> { person };
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new GetPersonByIdentityQueryDtoHandler(assembler, personRepository, currentUnitOfWorkFactory, findPersonInfoByIdentity);
+			var target = new GetPersonByIdentityQueryHandler(assembler, personRepository, currentUnitOfWorkFactory, identityUserQuery);
 
 			var result = target.Handle(new GetPersonByIdentityQueryDto
 			{

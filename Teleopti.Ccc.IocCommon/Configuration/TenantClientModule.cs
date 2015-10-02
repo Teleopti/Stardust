@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				return Enumerable.Empty<LogonInfoModel>();
 			}
+
+			public LogonInfoModel GetLogonInfoForLogonName(string logonName)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -17,7 +18,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonByUserNameQueryDtoHandlerTest
+	public class GetPersonByUserNameQueryHandlerTest
 	{
 		[Test]
 		public void ShouldGetPeopleByUserName()
@@ -25,9 +26,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var assembler = MockRepository.GenerateMock<IAssembler<IPerson, PersonDto>>();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var applicationUserQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo();
-			applicationUserQuery.Stub(x => x.Find("username1")).Return(personInfo);
+			const string logonName = "username1";
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personInfo.Id);
 			var persons = new List<IPerson> { person };
@@ -37,11 +37,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new GetPersonByUserNameQueryDtoHandler(assembler, personRepository, currentUnitOfWorkFactory, applicationUserQuery);
+			var tenantLogonDataManager = MockRepository.GenerateMock<ITenantLogonDataManager>();
+			tenantLogonDataManager.Stub(x => x.GetLogonInfoForLogonName(logonName)).Return(new LogonInfoModel
+			{
+				LogonName = logonName,
+				PersonId = personInfo.Id
+			});
+			var target = new GetPersonByUserNameQueryHandler(assembler, personRepository, currentUnitOfWorkFactory, tenantLogonDataManager);
 
 			var result = target.Handle(new GetPersonByUserNameQueryDto
 			{
-				UserName = "username1"
+				UserName = logonName
 			});
 
 			result.Count.Should().Be.EqualTo(1);

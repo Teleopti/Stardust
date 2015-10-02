@@ -25,5 +25,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 				.SetEntity("tenant", _currentTenant.Current())
 				.List<LogonInfo>();
 		}
+
+		public LogonInfo GetForLogonName(string logonName)
+		{
+			return _currentTenantSession.CurrentSession()
+				.GetNamedQuery("findLogonInfoByLogonName")
+				.SetResultTransformer(Transformers.AliasToBean<LogonInfo>())
+				.SetParameter("logonName", logonName)
+				.SetEntity("tenant", _currentTenant.Current())
+				.UniqueResult<LogonInfo>();
+		}
 	}
 }
