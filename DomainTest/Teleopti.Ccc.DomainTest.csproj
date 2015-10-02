@@ -1147,6 +1147,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCashesFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EarliestEndTimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EffectiveRestrictionShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\FakeScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\LatestStartTimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\MainShiftOptimizeActivitiesSpecificationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilterTest.cs" />

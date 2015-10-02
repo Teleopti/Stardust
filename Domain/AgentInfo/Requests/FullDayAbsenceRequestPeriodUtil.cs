@@ -37,17 +37,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var startDate = absencePeriodUserTime.StartDateTime.Date.Add(settingStartTime);
 				var endDate = absencePeriodUserTime.EndDateTime.Date.Add(settingEndTime);
 
-				if (dayScheduleForAbsenceReqStart.IsScheduled() && dayScheduleForAbsenceReqStart.PersonAssignment() != null && !dayScheduleForAbsenceReqStart.HasDayOff())
+				var personAssignment = dayScheduleForAbsenceReqStart.PersonAssignment();
+				if (dayScheduleForAbsenceReqStart.IsScheduled() && personAssignment != null && !dayScheduleForAbsenceReqStart.HasDayOff())
 				{
 					var dayScheduleStartTimeForAbsenceReqStart =
-						dayScheduleForAbsenceReqStart.PersonAssignment()
+						personAssignment
 							.Period.StartDateTimeLocal(personTimeZone);
                     startDate = dayScheduleStartTimeForAbsenceReqStart;
 				}
 
-				if (dayScheduleForAbsenceReqEnd.IsScheduled() && dayScheduleForAbsenceReqEnd.PersonAssignment() != null && !dayScheduleForAbsenceReqEnd.HasDayOff())
+				var assignment = dayScheduleForAbsenceReqEnd.PersonAssignment();
+				if (dayScheduleForAbsenceReqEnd.IsScheduled() && assignment != null && !dayScheduleForAbsenceReqEnd.HasDayOff())
 				{
-					var dayScheduleEndTimeForAbsenceReqEnd = dayScheduleForAbsenceReqEnd.PersonAssignment()
+					var dayScheduleEndTimeForAbsenceReqEnd = assignment
 						.Period.EndDateTimeLocal(personTimeZone);
                     endDate = dayScheduleEndTimeForAbsenceReqEnd;
 				}

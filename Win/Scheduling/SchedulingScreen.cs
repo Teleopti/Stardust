@@ -22,6 +22,7 @@ using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
@@ -6019,7 +6020,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (
 				var form = new FindMatchingNew(_restrictionExtractor, selected.Person, selected.DateOnlyAsPeriod.DateOnly,
-																			 _schedulerState.SchedulingResultState, _schedulerState.FilteredPersonDictionary.Values)
+																			 new ScheduleDayForPerson(() => new ScheduleRangeForPerson(() => _schedulerState.SchedulingResultState)), _schedulerState.FilteredPersonDictionary.Values)
 				)
 			{
 				form.ShowDialog(this);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -66,22 +67,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IPerson _sourcePerson;
 		private readonly DateOnly _dateOnly;
-	    private readonly ISchedulingResultStateHolder _resultStateHolder;
+	    private readonly IScheduleDayForPerson _scheduleDayForPerson;
 	    private readonly ICollection<IPerson> _filteredPersons;
 
-		public AvailableHourlyEmployeeFinder(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder resultStateHolder, ICollection<IPerson> filteredPersons)
+		public AvailableHourlyEmployeeFinder(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, IScheduleDayForPerson scheduleDayForPerson, ICollection<IPerson> filteredPersons)
 		{
 			_restrictionExtractor = restrictionExtractor;
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
-		    _resultStateHolder = resultStateHolder;
+		    _scheduleDayForPerson = scheduleDayForPerson;
 		    _filteredPersons = filteredPersons;
 		}
 
         public IList<AvailableHourlyEmployeeFinderResult> Find()
         {
 	        var ret = new BlockingCollection<AvailableHourlyEmployeeFinderResult>();
-            IScheduleDay source = _resultStateHolder.Schedules[_sourcePerson].ScheduledDay(_dateOnly);
+            IScheduleDay source = _scheduleDayForPerson.ForPerson(_sourcePerson,_dateOnly);
 			if (source.SignificantPart() != SchedulePartView.MainShift)
 				return new List<AvailableHourlyEmployeeFinderResult>(ret);
 
@@ -100,8 +101,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (!isHourly(person))
 				return;
 
-			var targetScheduleDay = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly); 
-			if (isScheduled(targetScheduleDay))
+			var targetScheduleDay = _scheduleDayForPerson.ForPerson(person,_dateOnly); 
+			if (targetScheduleDay.IsScheduled())
 				return;
 
 			var result = new AvailableHourlyEmployeeFinderResult(person, hasMatchingAvailibility(targetScheduleDay),
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private string workTimesYesterday(IPerson person)
 		{
-			IScheduleDay yesterday = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly.AddDays(-1));
+			IScheduleDay yesterday = _scheduleDayForPerson.ForPerson(person,_dateOnly.AddDays(-1));
 			if (yesterday.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private string workTimesTomorrow(IPerson person)
 		{
-			IScheduleDay tomorrow = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly.AddDays(1));
+			IScheduleDay tomorrow = _scheduleDayForPerson.ForPerson(person,_dateOnly.AddDays(1));
 			if (tomorrow.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
@@ -138,20 +139,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return availability.StartTimeLimitation.StartTimeString + " - " + availability.EndTimeLimitation.EndTimeString;
 		}
 
-		private bool isScheduled(IScheduleDay scheduleDay)
-		{
-            return scheduleDay.IsScheduled();
-		}
-
 		private bool isHourly(IPerson person)
 		{
 			IPersonPeriod period = person.Period(_dateOnly);
 			if (period == null)
 				return false;
-			if (period.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
-				return false;
 
-			return true;
+			return period.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff;
 		}
 
 		private bool hasMatchingAvailibility(IScheduleDay targetScheduleDay)
@@ -160,12 +154,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (!result.StudentAvailabilityList.Any())
 				return false;
 
-            IScheduleDay sourceScheduleDay = _resultStateHolder.Schedules[_sourcePerson].ScheduledDay(_dateOnly);
+            IScheduleDay sourceScheduleDay = _scheduleDayForPerson.ForPerson(_sourcePerson,_dateOnly);
 			IVisualLayerCollection visualLayerCollection = sourceScheduleDay.ProjectionService().CreateProjection();
-			if(!visualLayerCollection.Period().HasValue)
+			var layerPeriod = visualLayerCollection.Period();
+			if(!layerPeriod.HasValue)
 				return false;
 
-			DateTimePeriod period = visualLayerCollection.Period().Value;
+			DateTimePeriod period = layerPeriod.Value;
 			TimeZoneInfo tzInfo = targetScheduleDay.Person.PermissionInformation.DefaultTimeZone();
 			DateTime baseDate = _dateOnly.Date;
 			TimeSpan startTime = period.StartDateTimeLocal(tzInfo).Subtract(baseDate);
@@ -192,7 +187,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var nightlyRest = person.Period(_dateOnly).PersonContract.Contract.WorkTimeDirective.NightlyRest;
 			var sourceDayPeriod =
-				_resultStateHolder.Schedules[_sourcePerson].ScheduledDay(_dateOnly)
+				_scheduleDayForPerson.ForPerson(_sourcePerson,_dateOnly)
 				                                           .ProjectionService()
 				                                           .CreateProjection()
 				                                           .Period()
@@ -208,30 +203,26 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private bool nightRestFromYesterday(IPerson person, TimeSpan nightlyRest, DateTimePeriod sourceDayPeriod)
 		{
-			var scheduleDay = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly.AddDays(-1));
+			var scheduleDay = _scheduleDayForPerson.ForPerson(person,_dateOnly.AddDays(-1));
 			if (!scheduleDay.IsScheduled())
 				return true;
 
 			var sourceStart = sourceDayPeriod.StartDateTime;
 			var yesterdayEnd = scheduleDay.ProjectionService().CreateProjection().Period().Value.EndDateTime;
-			if (sourceStart.Subtract(yesterdayEnd) < nightlyRest)
-				return false;
-
-			return true;
+			
+			return sourceStart.Subtract(yesterdayEnd) >= nightlyRest;
 		}
 
 		private bool nightRestTillTomorrow(IPerson person, TimeSpan nightlyRest, DateTimePeriod sourceDayPeriod)
 		{
-			var scheduleDay = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly.AddDays(1));
+			var scheduleDay = _scheduleDayForPerson.ForPerson(person,_dateOnly.AddDays(1));
 			if (!scheduleDay.IsScheduled())
 				return true;
 
 			var sourceEnd = sourceDayPeriod.EndDateTime;
 			var tomorrowStart = scheduleDay.ProjectionService().CreateProjection().Period().Value.StartDateTime;
-			if (tomorrowStart.Subtract(sourceEnd) < nightlyRest)
-				return false;
-
-			return true;
+			
+			return tomorrowStart.Subtract(sourceEnd) >= nightlyRest;
 		}
 
 	}

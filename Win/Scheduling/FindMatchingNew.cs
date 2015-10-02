@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SetTexts();
 		}
 
-		public FindMatchingNew(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ICollection<IPerson> filteredPersons) : this()
+		public FindMatchingNew(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, IScheduleDayForPerson scheduleDayForPerson, ICollection<IPerson> filteredPersons) : this()
 		{
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
-            _finder = new AvailableHourlyEmployeeFinder(restrictionExtractor, sourcePerson, dateOnly, stateHolder, filteredPersons);
+            _finder = new AvailableHourlyEmployeeFinder(restrictionExtractor, sourcePerson, dateOnly, scheduleDayForPerson, filteredPersons);
 		}
 
 		public IPerson Selected()
