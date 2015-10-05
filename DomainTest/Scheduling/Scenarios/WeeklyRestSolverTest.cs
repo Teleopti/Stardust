@@ -48,8 +48,7 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 		private IPerson _kalle;
-		private DateOnlyPeriod _selectedPeriod;
-		private IList<IScheduleMatrixPro> _matrixlist;
+		private DateOnlyPeriod _selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);
 		private ScheduleDictionaryForTest _scheduleDictionary;
 
 
@@ -95,6 +94,9 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 
 		private void executeTarget(OptimizationPreferences optimizationPreferences)
 		{
+			var matrixlist = MatrixListFactory.CreateMatrixListAll(_selectedPeriod);
+			matrixlist.First().UnlockPeriod(_selectedPeriod);
+
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 				optimizationPreferences,
 				new[] { _kalle },
@@ -130,14 +132,13 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 					true
 					),
 				_selectedPeriod,
-				_matrixlist,
+				matrixlist,
 				new NoBackgroundWorker()
 				);
 		}
 
 		private void setupForLeftNudgerTests()
 		{
-			_selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);
 			var scenario = new Scenario("unimportant");
 			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			var shiftCategory = new ShiftCategory("unimportant");
@@ -191,8 +192,6 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 
 			}
 			SchedulerStateHolder.SchedulingResultState.Schedules = _scheduleDictionary;
-			_matrixlist = MatrixListFactory.CreateMatrixListAll(_selectedPeriod);
-			_matrixlist.First().UnlockPeriod(_selectedPeriod);
 
 			SchedulerStateHolder.SchedulingResultState.Skills.Add(skill);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, _selectedPeriod.StartDate, scenario);
