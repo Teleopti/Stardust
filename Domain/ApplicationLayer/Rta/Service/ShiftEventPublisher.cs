@@ -1,3 +1,4 @@
+using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -19,30 +20,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void publishShiftStartEvent(StateInfo info)
 		{
-			if (info.Schedule.ShiftStarted())
+			if (!info.Schedule.ShiftStarted())
+				return;
+			_eventPublisher.Publish(info, new PersonShiftStartEvent
 			{
-				_eventPublisher.Publish(info, new PersonShiftStartEvent
-				{
-					PersonId = info.Person.PersonId,
-					ShiftStartTime = info.Schedule.CurrentShiftStartTime,
-					ShiftEndTime = info.Schedule.CurrentShiftEndTime
-				});
-			}
+				PersonId = info.Person.PersonId,
+				ShiftStartTime = info.Schedule.CurrentShiftStartTime,
+				ShiftEndTime = info.Schedule.CurrentShiftEndTime
+			});
 		}
 
 		private void publishShiftEndEvent(StateInfo info)
 		{
-			if (info.Schedule.ShiftEnded())
+			if (!info.Schedule.ShiftEnded())
+				return;
+			_eventPublisher.Publish(info, new PersonShiftEndEvent
 			{
-				_eventPublisher.Publish(info, new PersonShiftEndEvent
-				{
-					PersonId = info.Person.PersonId,
-					ShiftStartTime = info.Schedule.ShiftStartTimeForPreviousActivity,
-					ShiftEndTime = info.Schedule.ShiftEndTimeForPreviousActivity
-				});
-			}
+				PersonId = info.Person.PersonId,
+				ShiftStartTime = info.Schedule.ShiftStartTimeForPreviousActivity,
+				ShiftEndTime = info.Schedule.ShiftEndTimeForPreviousActivity
+			});
 		}
-
 	}
 
 }

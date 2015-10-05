@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
 	{
 		private readonly IConfigReader _config;
+		private readonly INow _now;
 		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
 		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public FakeRtaDatabase(
 			IConfigReader config,
+			INow now,
 			FakeAgentStateReadModelReader agentStateReadModelReader,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			)
 		{
 			_config = config;
+			_now = now;
 			AgentStateReadModelReader = agentStateReadModelReader;
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
@@ -315,8 +318,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var layers = from l in _schedules
-						 where l.PersonId == personId
-						 select l.ScheduleLayer;
+				where
+					l.PersonId == personId &&
+					l.ScheduleLayer.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
+					l.ScheduleLayer.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
+				select l.ScheduleLayer;
 			return new List<ScheduleLayer>(layers);
 		}
 

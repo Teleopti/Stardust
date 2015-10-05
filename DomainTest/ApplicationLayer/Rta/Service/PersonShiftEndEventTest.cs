@@ -191,7 +191,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Last();
 			@event.ShiftEndTime.Should().Be("2014-10-20 11:00".Utc());
 		}
-		
+
+		[Test]
+		public void ShouldNotPublishEventWhenCheckingForActivityChangesTooLateSoItCantFindTheShift()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2015-10-05 9:00", "2015-10-05 17:00")
+				;
+
+			now.Is("2015-10-05 9:30");
+			target.CheckForActivityChanges(Database.TenantName());
+			now.Is("2015-10-08 8:00");
+			target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().SingleOrDefault();
+			@event.Should().Be.Null();
+		}
 	}
 
 }
