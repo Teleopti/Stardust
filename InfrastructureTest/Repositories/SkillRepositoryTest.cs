@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -82,41 +81,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanLoadSkillsWithSkillDaysOnly()
         {
-            ISkill skill1 = SkillFactory.CreateSkill("sdfsdf", _skillType, 15);
+            var skill1 = SkillFactory.CreateSkill("sdfsdf", _skillType, 15);
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill("test", _skillType, 15);
+            var multisiteSkill = SkillFactory.CreateMultisiteSkill("test", _skillType, 15);
             multisiteSkill.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(multisiteSkill);
 
-            QueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
-            QueueSource q2 = new QueueSource("ft", "peter", 1);
+            var q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            var q2 = new QueueSource("ft", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
 
-            IWorkload wl = WorkloadFactory.CreateWorkload(skill1);
+            var wl = WorkloadFactory.CreateWorkload(skill1);
             wl.AddQueueSource(q);
             PersistAndRemoveFromUnitOfWork(wl);
 
-            IWorkload wl2 = WorkloadFactory.CreateWorkload(skill1);
+            var wl2 = WorkloadFactory.CreateWorkload(skill1);
             wl2.AddQueueSource(q2);
             PersistAndRemoveFromUnitOfWork(wl2);
 
-            DateTime date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(skill1,date,wl,wl2);
-
-
+            var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+            var skillDay = SkillDayFactory.CreateSkillDay(skill1,date,wl,wl2);
             PersistAndRemoveFromUnitOfWork(skillDay.Scenario);
             PersistAndRemoveFromUnitOfWork(skillDay);
             
-            ISkill skill2 = SkillFactory.CreateSkill("tvåan", _skillType, 15);
+            var skill2 = SkillFactory.CreateSkill("tvåan", _skillType, 15);
             skill2.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill2);
 
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-10)), new DateOnly(date.AddDays(10)));
-            SkillRepository rep = new SkillRepository(UnitOfWork);
-            IList<ISkill> skills = new List<ISkill>(rep.FindAllWithSkillDays(period));
+            var rep = new SkillRepository(UnitOfWork);
+            var skills = new List<ISkill>(rep.FindAllWithSkillDays(period));
             Assert.AreEqual(1, skills.Count);
             Assert.IsFalse(skills[0].GetType().FullName.Contains("SkillProxy"));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skills[0].WorkloadCollection));
@@ -134,7 +131,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkill skill1 = SkillFactory.CreateChildSkill("sdfsdf", multisiteSkill);
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
-
             
             QueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
             QueueSource q2 = new QueueSource("ft", "peter", 1);
@@ -171,7 +167,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanFindAllIncludingWorkloadAndQueueSources()
         {
-
             ISkill skill1 = SkillFactory.CreateSkill("sdfsdf", _skillType, 15);
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -184,7 +179,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(wl);
             
             Workload wl2 = new Workload(skill1);
-            
             PersistAndRemoveFromUnitOfWork(wl2);
 
             Workload wl3 = new Workload(skill1);
@@ -209,18 +203,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skillToTest.Activity));
         }
 
-        /// <summary>
-        /// Determines whether this instance [can find all using multisite skill].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
         [Test]
         public void CanFindAllUsingMultisiteSkill()
         {
             ISkill skill1 = new MultisiteSkill("test","test",Color.Blue,15, _skillType);
-            skill1.TimeZone = (TimeZoneInfo.Utc);
+            skill1.TimeZone = TimeZoneInfo.Utc;
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
@@ -255,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAllUsingMultisiteSkillWithChildSkills()
         {
             IMultisiteSkill skill1 = SkillFactory.CreateMultisiteSkill("testp1",_skillType,15);
-            skill1.TimeZone = (TimeZoneInfo.Utc);
+            skill1.TimeZone = TimeZoneInfo.Utc;
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -300,7 +287,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAllWithoutMultisiteSkillUsingMultisiteSkillWithChildSkills()
         {
             IMultisiteSkill skill1 = SkillFactory.CreateMultisiteSkill("testp1", _skillType, 15);
-            skill1.TimeZone = (TimeZoneInfo.Utc);
+            skill1.TimeZone = TimeZoneInfo.Utc;
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -339,7 +326,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanDeleteSkillWithWorkloadAndQueueSources()
         {
-
             ISkill skill1 = SkillFactory.CreateSkill("sdfsdf", _skillType, 15);
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -442,7 +428,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {
-            ISkillRepository skillRepository = new SkillRepository(UnitOfWorkFactory.Current);
+            var skillRepository = new SkillRepository(UnitOfWorkFactory.Current);
             Assert.IsNotNull(skillRepository);
         }
 
@@ -479,7 +465,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadMultisiteSkill()
         {
             var skill1 = SkillFactory.CreateMultisiteSkill("multisite skill", _skillType, 15);
-            skill1.TimeZone = (TimeZoneInfo.Utc);
+            skill1.TimeZone = TimeZoneInfo.Utc;
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -511,7 +497,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skillToTest.ChildSkills));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(skillToTest.ChildSkills.First().TemplateWeekCollection.First().Value.TemplateSkillDataPeriodCollection));
         }
-
 
         [Test]
         public void ShouldLoadInboundTelephonySkills()
@@ -547,107 +532,95 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
           
             CollectionAssert.Contains(skillToTest,skill1);
             Assert.AreEqual(1,skillToTest.Count());
-           
         }
 
 	    [Test]
 	    public void ShouldFindSkillsWithAtLeastOneQueueSource()
 	    {
-		    var activity = new Activity("_");
-		    var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
-		    var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) {Activity = activity,TimeZone = TimeZoneInfo.Utc};
-				PersistAndRemoveFromUnitOfWork(activity);
-				PersistAndRemoveFromUnitOfWork(skillType);
-				PersistAndRemoveFromUnitOfWork(skill);
-				var wl = WorkloadFactory.CreateWorkload(skill);
-				wl.AddQueueSource(new QueueSource());
-				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
-				PersistAndRemoveFromUnitOfWork(wl);
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType)
+		    {
+			    Activity = _activity,
+			    TimeZone = TimeZoneInfo.Utc
+		    };
+		    PersistAndRemoveFromUnitOfWork(skill);
+		    var wl = WorkloadFactory.CreateWorkload(skill);
+		    wl.AddQueueSource(new QueueSource());
+		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
+		    PersistAndRemoveFromUnitOfWork(wl);
 
 		    var target = new SkillRepository(UnitOfWork);
 		    var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
-			  loadedSkill.Should().Be.EqualTo(skill);
+		    loadedSkill.Should().Be.EqualTo(skill);
 	    }
 
-			[Test]
-			public void ShouldNotFindSkillsWithWorkloadWithNoQueueSource()
-			{
-				var activity = new Activity("_");
-				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
-				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-				PersistAndRemoveFromUnitOfWork(activity);
-				PersistAndRemoveFromUnitOfWork(skillType);
-				PersistAndRemoveFromUnitOfWork(skill);
-				var wl = WorkloadFactory.CreateWorkload(skill);
-				PersistAndRemoveFromUnitOfWork(wl);
+	    [Test]
+	    public void ShouldNotFindSkillsWithWorkloadWithNoQueueSource()
+	    {
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType) {Activity = _activity, TimeZone = TimeZoneInfo.Utc};
+		    PersistAndRemoveFromUnitOfWork(skill);
+		    var wl = WorkloadFactory.CreateWorkload(skill);
+		    PersistAndRemoveFromUnitOfWork(wl);
 
-				var target = new SkillRepository(UnitOfWork);
-				target.FindSkillsWithAtLeastOneQueueSource()
-					.Should().Be.Empty();
-			}
+		    var target = new SkillRepository(UnitOfWork);
+		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
+	    }
 
 	    [Test]
 	    public void ShouldJoinFetchWorkloadWhenFindSkillsWithAtLeastOneQueueSource()
 	    {
-				var activity = new Activity("_");
-				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
-				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-				PersistAndRemoveFromUnitOfWork(activity);
-				PersistAndRemoveFromUnitOfWork(skillType);
-				PersistAndRemoveFromUnitOfWork(skill);
-				var wl = WorkloadFactory.CreateWorkload(skill);
-				wl.AddQueueSource(new QueueSource());
-				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
-				PersistAndRemoveFromUnitOfWork(wl);
+		    var activity = new Activity("_");
+		    var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) {Activity = activity, TimeZone = TimeZoneInfo.Utc};
+		    PersistAndRemoveFromUnitOfWork(activity);
+		    PersistAndRemoveFromUnitOfWork(skillType);
+		    PersistAndRemoveFromUnitOfWork(skill);
+		    var wl = WorkloadFactory.CreateWorkload(skill);
+		    wl.AddQueueSource(new QueueSource());
+		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
+		    PersistAndRemoveFromUnitOfWork(wl);
 
-				var target = new SkillRepository(UnitOfWork);
-				var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
-				LazyLoadingManager.IsInitialized(loadedSkill.WorkloadCollection).Should().Be.True();
+		    var target = new SkillRepository(UnitOfWork);
+		    var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
+		    LazyLoadingManager.IsInitialized(loadedSkill.WorkloadCollection).Should().Be.True();
 	    }
 
 	    [Test]
 	    public void ShouldFindOneSkillOnlyIfSkillHasMultipleQueueSources()
 	    {
-				var activity = new Activity("_");
-				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
-				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-				PersistAndRemoveFromUnitOfWork(activity);
-				PersistAndRemoveFromUnitOfWork(skillType);
-				PersistAndRemoveFromUnitOfWork(skill);
-				var wl = WorkloadFactory.CreateWorkload(skill);
-				wl.AddQueueSource(new QueueSource());
-				wl.AddQueueSource(new QueueSource());
-				var wl2 = WorkloadFactory.CreateWorkload(skill);
-				wl2.AddQueueSource(new QueueSource());
-				wl2.AddQueueSource(new QueueSource());
-				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.First());
-				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Last());
-				PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.First());
-				PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.Last());
-				PersistAndRemoveFromUnitOfWork(wl);
-				PersistAndRemoveFromUnitOfWork(wl2);
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType)
+		    {
+			    Activity = _activity,
+			    TimeZone = TimeZoneInfo.Utc
+		    };
+		    PersistAndRemoveFromUnitOfWork(skill);
+		    var wl = WorkloadFactory.CreateWorkload(skill);
+		    wl.AddQueueSource(new QueueSource());
+		    wl.AddQueueSource(new QueueSource());
+		    var wl2 = WorkloadFactory.CreateWorkload(skill);
+		    wl2.AddQueueSource(new QueueSource());
+		    wl2.AddQueueSource(new QueueSource());
+		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.First());
+		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Last());
+		    PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.First());
+		    PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.Last());
+		    PersistAndRemoveFromUnitOfWork(wl);
+		    PersistAndRemoveFromUnitOfWork(wl2);
 
-				var target = new SkillRepository(UnitOfWork);
-		    target.FindSkillsWithAtLeastOneQueueSource()
-			    .Count().Should().Be.EqualTo(1);
+		    var target = new SkillRepository(UnitOfWork);
+		    target.FindSkillsWithAtLeastOneQueueSource().Count().Should().Be.EqualTo(1);
 	    }
 
-			[Test]
-			public void ShouldNotFindSkillsWithNoWorkload()
-			{
-				var activity = new Activity("_");
-				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
-				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
-				PersistAndRemoveFromUnitOfWork(activity);
-				PersistAndRemoveFromUnitOfWork(skillType);
-				PersistAndRemoveFromUnitOfWork(skill);
+	    [Test]
+	    public void ShouldNotFindSkillsWithNoWorkload()
+	    {
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType) {Activity = _activity, TimeZone = TimeZoneInfo.Utc};
+		    PersistAndRemoveFromUnitOfWork(skill);
 
-				var target = new SkillRepository(UnitOfWork);
-				target.FindSkillsWithAtLeastOneQueueSource()
-					.Should().Be.Empty();
-			}
+		    var target = new SkillRepository(UnitOfWork);
+		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
+	    }
 
-        protected override Repository<ISkill> TestRepository(IUnitOfWork unitOfWork)
+	    protected override Repository<ISkill> TestRepository(IUnitOfWork unitOfWork)
         {
             return new SkillRepository(unitOfWork);
         }
