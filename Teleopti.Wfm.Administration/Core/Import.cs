@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_persistTenant.Persist(newTenant);
 
 			//run upgrade every time because it can be other changes (sp, views in analytics for example)
-			_tenantUpgrader.Upgrade(newTenant, adminUser, adminPassword, true);
+			_tenantUpgrader.Upgrade(newTenant, adminUser, adminPassword, true, false);
 
 			var conflicts = _getImportUsers.GetConflictionUsers(connStringApp, newTenant.Name);
 			saveToDb(conflicts.NotConflicting, newTenant);

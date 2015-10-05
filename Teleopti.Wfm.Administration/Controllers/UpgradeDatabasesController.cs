@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual JsonResult<TenantResultModel> UpgradeTenant(UpgradeTenantModel model)
 		{
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(model.Tenant));
-			_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false);
+			_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false, model.UseIntegratedSecurity);
 			return Json(new TenantResultModel {Success = true, Message = "Upgraded databases for tenant " + tenant.Name});
 		}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenants = _loadAllTenants.Tenants().ToList();
 			foreach (var tenant in tenants)
 			{
-				_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false);
+				_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword, false, model.UseIntegratedSecurity);
 			}
 			
 			return Json(new TenantResultModel { Success = true, Message = string.Format("Upgraded databases for {0} tenant(s).", tenants.Count()) });
@@ -66,5 +66,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string Tenant { get; set; }
 		public string AdminUserName { get; set; }
 		public string AdminPassword { get; set; }
+		public bool UseIntegratedSecurity { get; set; }
 	}
 }

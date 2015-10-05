@@ -17,5 +17,6 @@
 
 		public string AdminUser { get; set; }
 		public string AdminPassword { get; set; }
+		public bool UseIntegratedSecurity { get; set; }
 	}
 }

@@ -36,7 +36,9 @@
 				<div title="{{detailsVm.SqlUserOkMessage}}">
 					<fieldset>
 						<legend ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Credentials to upgrade</legend>
-						<div>
+						<div><input type="checkbox" ng-model="detailsVm.UseIntegratedSecurity" ng-change="detailsVm.CheckImportAdmin()"/> Use Integrated Security</div>
+
+						<div ng-hide="detailsVm.UseIntegratedSecurity">
 							<div class="importCaption">SQL User Name (that have permissions to upgrade databases on the server)</div>
 							<div>
 								<input class=" form-control" type="text" ng-model="detailsVm.CreateDbUser" ng-blur="detailsVm.CheckImportAdmin()" placeholder="SQL User Name">
@@ -44,9 +46,10 @@
 							<div>
 								<div class="importCaption">SQL Password</div>
 								<input class="form-control" type="password" ng-model="detailsVm.CreateDbPassword" ng-blur="detailsVm.CheckImportAdmin()" placeholder="SQL Password">
-								<label ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.SqlUserOkMessage}}</label>
 							</div>
+
 						</div>
+						<label ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.SqlUserOkMessage}}</label>
 						<br />
 						<a class="btn btn-warning" ng-show="detailsVm.SqlUserOk" ng-click="detailsVm.UpgradeTenant()">Upgrade Tenant</a>
 					</fieldset>

@@ -62,7 +62,8 @@
 			var model = {
 				Server: vm.Server,
 				AdminUser: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword
+				AdminPassword: vm.CreateDbPassword,
+				UseIntegratedSecurity: false
 			}
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())

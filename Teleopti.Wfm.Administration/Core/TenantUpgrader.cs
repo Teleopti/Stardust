@@ -18,19 +18,19 @@ namespace Teleopti.Wfm.Administration.Core
 			_upgradeRunner = upgradeRunner;
 		}
 
-		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode)
+		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
 		{
 			//dbmanager
 			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCC7, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
+				adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
 			var appConnstring = builder.ConnectionString;
 			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiAnalytics, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
+				adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
-					adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
+					adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 				builder.UserID = adminUserName;
 				builder.Password = adminPassword;
 				builder.IntegratedSecurity = false;

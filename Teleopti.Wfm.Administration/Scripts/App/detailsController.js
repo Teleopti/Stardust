@@ -30,6 +30,7 @@
 		
 		vm.CreateDbUser = '';
 		vm.CreateDbPassword = '';
+		vm.UseIntegratedSecurity = false;
 		vm.SqlUserOkMessage = '';
 		vm.SqlUserOk = false;
 
@@ -54,22 +55,32 @@
 				});
 		}
 
-		vm.ShowUpgrade = function() {
+		vm.ShowUpgrade = function () {
+			return true;
 			if (vm.Version === null) return false;
 			return vm.Version.AppVersionOk === false;
 		};
 
 		vm.CheckImportAdmin = function () {
 			vm.Message = '';
-			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '' || vm.Server === '') {
+			if (vm.UseIntegratedSecurity && vm.Server === '') {
 				vm.SqlUserOkMessage = '';
 				vm.SqlUserOk = false;
 				return;
 			}
+			if (vm.UseIntegratedSecurity !== true) {
+				if (vm.CreateDbUser === '' || vm.CreateDbPassword === '' || vm.Server === '') {
+					vm.SqlUserOkMessage = '';
+					vm.SqlUserOk = false;
+					return;
+				}
+			}
+			
 			var model = {
 				Server: vm.Server,
 				AdminUser: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword
+				AdminPassword: vm.CreateDbPassword,
+				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			}
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
@@ -121,7 +132,8 @@
 			var model = {
 				Tenant: vm.OriginalName,
 				AdminUserName: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword
+				AdminPassword: vm.CreateDbPassword,
+				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			}
 			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
 				.success(function (data) {

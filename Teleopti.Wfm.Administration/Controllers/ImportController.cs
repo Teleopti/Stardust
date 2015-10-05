@@ -150,7 +150,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Password = model.AdminPassword,
 				DataSource = model.Server,
 				InitialCatalog = "master",
-				IntegratedSecurity = false
+				IntegratedSecurity = model.UseIntegratedSecurity
 			}.ConnectionString;
 		}
 
