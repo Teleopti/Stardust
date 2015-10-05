@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
-		FakeRtaDatabase Make();
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
@@ -307,11 +305,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			return this;
 		}
+		
 
-		public FakeRtaDatabase Make()
-		{
-			return this;
-		}
 
 
 

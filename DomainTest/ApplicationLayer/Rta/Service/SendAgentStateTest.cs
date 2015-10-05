@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			};
 			Database
-				.WithDataFromState(state)
-				.Make();
+				.WithDataFromState(state);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(state);
@@ -120,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			};
 			Database
-				.WithDataFromState(state)
-				.Make();
+				.WithDataFromState(state);
 			Now.Is("2014-10-20 10:00");
 
 			Target.SaveState(state);

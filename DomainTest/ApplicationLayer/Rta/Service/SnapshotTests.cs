@@ -113,8 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
-				.WithAlarm("statecode2", Guid.Empty, true)
-				.Make();
+				.WithAlarm("statecode2", Guid.Empty, true);
 			
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
