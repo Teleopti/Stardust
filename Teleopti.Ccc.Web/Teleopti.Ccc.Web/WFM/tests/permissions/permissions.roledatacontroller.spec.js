@@ -41,7 +41,7 @@ describe('DataController', function() {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 	}));
-
+	
 
 	it('should toggle the selected property of node from false to true', inject(function ($controller) {
 		var scope = $rootScope.$new();
@@ -49,7 +49,7 @@ describe('DataController', function() {
 		var node = {
 		    $modelValue: { selected: false, Type: 'Team' ,ChildNodes:[]}, $parentNodeScope: null
 		};
-
+		
 		scope.toggleOrganizationSelection(node);
 		scope.$digest();
 
@@ -98,17 +98,20 @@ describe('DataController', function() {
 	it('should not send the parent to the service when a child is selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
-		var node = { $modelValue: { selected: false, Type: 'Team', Id: '22',ChildNodes: [] }, $parentNodeScope: { $modelValue: { selected: false } } };
+		var node = {
+			$modelValue: { selected: false, Type: 'Team', Id: '22', ChildNodes: [] },
+			$parentNodeScope: { $modelValue: { selected: false, Id: '11' } }
+		};
+		scope.selectedRole = "1";
 		var deferred = $q.defer();
 		var expectedObject = [{ type: 'Team', id: '22' }] ; 
-
-		spyOn(mockRoleDataService, 'toggleOrganizationSelection').and.returnValue(deferred.promise);
 		deferred.resolve();
+		spyOn(mockRoleDataService, 'assignOrganizationSelection').and.returnValue(deferred.promise);
 
 		scope.toggleOrganizationSelection(node);
 		scope.$digest();
 
-		expect(mockRoleDataService.toggleOrganizationSelection).toHaveBeenCalledWith('1', expectedObject);
+		expect(mockRoleDataService.assignOrganizationSelection).toHaveBeenCalledWith('1', expectedObject);
 
 		expect(node.$modelValue.selected).toBe(true);
 		expect(node.$parentNodeScope.$modelValue.selected).toBe(true);
@@ -173,6 +176,41 @@ describe('DataController', function() {
 	}));
 
 
+	it('should trigger the watch', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
+		var data = { BusinessUnit: [{ Sites: [{ Teams: [] }] }] };
 
+		mockRoleDataService.organization = data;
+		scope.$digest();
 
+		expect(mockRoleDataService.organization).toBe(data);
+	}));
+
+	it('should send node and its children', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		scope.selectedRole = '5';
+		$controller('RoleDataController', {$scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
+		var node = {
+			$modelValue: {
+				Id: '3',
+				Type: 'BusinessUnit',
+				selected: false,
+				ChildNodes: [{ selected: false, Type: 'Site', Id: '4', ChildNodes: [] },
+					{ selected: false, Type: 'Site', Id: '5', ChildNodes: [] }]
+			}
+		};
+		var expectedObj = [
+			{ type: 'Site', id: '4' },
+			{ type: 'Site', id: '5' },
+			{ type: 'BusinessUnit', id: '3' }
+		];
+
+		spyOn(mockRoleDataService,"assignOrganizationSelection");
+
+		scope.toggleOrganizationSelection(node);
+		scope.$digest();
+
+		expect(mockRoleDataService.assignOrganizationSelection).toHaveBeenCalledWith('5', expectedObj);
+	}));
 });

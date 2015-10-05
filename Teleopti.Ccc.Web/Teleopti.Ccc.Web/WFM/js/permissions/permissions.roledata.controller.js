@@ -18,8 +18,8 @@
 
 				$scope.$watch(function () { return RoleDataService.organization; },
 				   function (organization) {
-				       $scope.organization = organization;
-					   $scope.dynamicOptionSelected.data = RoleDataService.dynamicOptionSelected;
+				   	$scope.organization = organization;
+					 $scope.dynamicOptionSelected.data = RoleDataService.dynamicOptionSelected;
 
 				   }
 				);
@@ -67,30 +67,31 @@
 				};
 
 				uiTree.toggleChildSelection = function (node, state) {
+					var children = [];
 				    node.forEach(function(child) {
-				        child.selected = state;
+				    	child.selected = state;
+				    	children.push({ type: child.Type, id: child.Id });
+
 				        if (child.ChildNodes.length > 0){			            
-				            uiTree.toggleChildSelection(child.ChildNodes, state);
+				           children = children.concat(uiTree.toggleChildSelection(child.ChildNodes, state));
 				        }
+
 				    });
+					return children;
 				};
 
 				uiTree.toggleParentSelection = function (node) {
-					var dataNodes = [];
-					dataNodes.push({ type: node.$modelValue.Type, id: node.$modelValue.Id });
 					if (node.$parentNodeScope) {
 						var parent = node.$parentNodeScope;
 						while (parent) {
 							if (!parent.$modelValue.selected) {
 								parent.$modelValue.selected = true;
-								dataNodes.push({ type: parent.$modelValue.Type, id: parent.$modelValue.Id });
 							}
 							parent = parent.$parentNodeScope;
 						}
 					}
-					RoleDataService.assignOrganizationSelection($scope.selectedRole, dataNodes);
 				};
-
+				
 				$scope.toggleOrganizationSelection = function (node) {
 					if (Roles.selectedRole.BuiltIn) return;
 					var dataNode = node.$modelValue;
@@ -104,15 +105,19 @@
 						});
 					} else {
 						dataNode.selected = true;
-						uiTree.toggleChildSelection(dataNode.ChildNodes, true);
+						var children = uiTree.toggleChildSelection(dataNode.ChildNodes, true);
 						uiTree.toggleParentSelection(node);
+						var nodesToBeSaved = [];
+						nodesToBeSaved.push({ type: dataNode.Type, id: dataNode.Id });
+						nodesToBeSaved = children.concat(nodesToBeSaved);
+						RoleDataService.assignOrganizationSelection($scope.selectedRole, nodesToBeSaved);
 					}
 				};
 
 				$scope.changeOption = function (option) {
 					RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
-				};
-
+				}; 
+				 
 				RoleDataService.refreshOrganizationSelection();
 			}
 	]);

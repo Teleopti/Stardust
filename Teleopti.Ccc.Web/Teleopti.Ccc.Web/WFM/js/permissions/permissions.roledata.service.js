@@ -9,7 +9,7 @@
 			var flatData = function (dataTab) {
 				dataTab.forEach(function (item) {
 					dataFlat.push(item);
-					if (item.ChildNodes && item.ChildNodes.length != 0) {
+					if (item.ChildNodes && item.ChildNodes.length !== 0) {
 						flatData(item.ChildNodes);
 					} else {
 						item.ChildNodes = [];
@@ -46,8 +46,13 @@
 				var data = {};
 				data.Id = selectedRole;
 				dataNodes.forEach(function (node) {
-					data[node.type + 's'] = [node.id];
+					var attributeName = node.type + 's';
+					if (!data[attributeName]) {
+						data[attributeName]= [];
+					}
+					data[attributeName].push(node.id);
 				});
+
 				var deferred = $q.defer();
 				PermissionsService.assignOrganizationSelection.postData(data).$promise.then(function (result) {
 					deferred.resolve();
@@ -59,7 +64,7 @@
 				var data = {};
 				data.Id = selectedRole;
 				data['RangeOption'] = option;
-			  roleDataService.dynamicOptionSelected = option;
+				roleDataService.dynamicOptionSelected = option;
 				PermissionsService.assignOrganizationSelection.postData(data);
 			}
 
@@ -70,10 +75,23 @@
 					dataFlat.forEach(function (item) {
 						
 						var availableData = $filter('filter')(permsData, { Id: item.Id });
-						item.selected = availableData.length != 0 ? true : false;
+						item.selected = availableData.length !== 0 ? true : false;
+
 					});
+					checkChild(roleDataService.organization.BusinessUnit[0]);
 				});
 
+			};
+
+			var checkChild = function (node) {
+				node.ChildNodes.forEach(function (subnode) {
+					if (subnode.ChildNodes && subnode.ChildNodes.length > 0) {
+						checkChild(subnode);
+					}
+					if (subnode.selected) {
+						node.selected = true;
+					}
+				});
 			};
 
 			return roleDataService;
