@@ -264,7 +264,7 @@
     <Compile Include="ApplicationLayer\Rta\Synchronization\AdherencePercentageTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\IndividualModelsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\InitializeProcessTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\HandlerLockingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\SiteAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\TeamAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceTest.cs" />

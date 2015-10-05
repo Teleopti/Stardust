@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public MutableNow Now;
 		public RtaTestAttribute Context;
 
-		[Ignore, Test]
+		[Test]
 		public void ShouldInitializeTeamAdherence()
 		{
 			var teamIdA = Guid.NewGuid();

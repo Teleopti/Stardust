@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	[RtaTest]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TestFixture]
-	public class LockingTest : ISetup
+	public class HandlerLockingTest : ISetup
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		}
 
 		[Test]
-		public void ShouldNotPublishToHandlerWhileInitializing()
+		public void HangfireShouldNotPublishToHandlerWhileInitializing()
 		{
 			var personId = Guid.NewGuid();
 			Database.WithUser("user", personId);
@@ -48,18 +48,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 
 			Context.SimulateRestartWith(Now, Database);
-			Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
+			var initializeTask = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
+
 			Handler.EnteredHandler.WaitOne(TimeSpan.FromSeconds(1));
-			var systemTask = Task.Factory.StartNew(() =>
+			var hangfireTask = Task.Factory.StartNew(() =>
 			{
 				using (DistributedLock.LockForTypeOf(Handler))
 				{
 				}
 			});
-			var systemTaskRanWhileInitializing = systemTask.Wait(TimeSpan.FromMilliseconds(100));
-			Handler.ExitHandler.Set();
+			var hangfireTaskRanWhileInitializing = hangfireTask.Wait(TimeSpan.FromMilliseconds(100));
 
-			systemTaskRanWhileInitializing.Should().Be.False();
+			hangfireTaskRanWhileInitializing.Should().Be.False();
+
+			// wait for all to threads exit
+			Handler.ExitHandler.Set();
+			initializeTask.Join();
+			hangfireTask.Wait();
 		}
 
 		public class NonConcurrenctSafeHandler :
