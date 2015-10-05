@@ -78,6 +78,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			foreach (var person in selectedPersons)
 			{
 				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
+				var keepShiftStartTime = false;
+				if (optimizationPreferences != null)
+					keepShiftStartTime = optimizationPreferences.Shifts.KeepStartTimes;
 
 				foreach (var personMatrix in personMatrixes)
 				{
@@ -158,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							}
 							if (!success && firstDayOfElement != DateOnly.MinValue)
 							{
-								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week))
+								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week) && !keepShiftStartTime)
 									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement, rollbackService, selectedPeriod, personMatrix);
 							}
 						}

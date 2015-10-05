@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	        using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder);
+					_teamBlockInfo, _schedulingResultStateHolder, false);
 				Assert.IsTrue(result);
 			}
         }
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder);
+					_teamBlockInfo, _schedulingResultStateHolder, false);
 				Assert.IsFalse(result);
 			}
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder);
+					_teamBlockInfo, _schedulingResultStateHolder, false);
 				Assert.IsFalse(result);
 			}
 		}
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _teamBlockInfo, _schedulingResultStateHolder);
+				var result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _teamBlockInfo, _schedulingResultStateHolder, false);
 				Assert.IsFalse(result);
 			}
 		}

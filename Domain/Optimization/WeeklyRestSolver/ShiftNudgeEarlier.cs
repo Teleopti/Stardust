@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	{
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder);
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, bool keepStartTime);
 	}
 
 	public class ShiftNudgeEarlier : IShiftNudgeEarlier
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, bool keepStartTime)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriod = personAssignment.ProjectionService().CreateProjection().Period().Value;
@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var shiftEnd = projectionPeriod.EndDateTime;
 			var adjustedEnd = shiftEnd.Add(TimeSpan.FromMinutes(-15)); //allways adjust 15 minutes regardless of interval length
 			var dateOffset = (int)adjustedEnd.Date.Subtract(shiftStartDate).TotalDays;
-			var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedEnd, scheduleDay.TimeZone);
+			var timeZone = scheduleDay.TimeZone;
+			var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedEnd, timeZone);
 			var latestEndTime = shiftEndUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
 
 			rollbackService.ClearModificationCollection();
@@ -48,6 +49,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var shiftDate = personAssignment.Date;
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
 				schedulingOptions);
+
+			
 
 			if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue && effectiveRestriction.EndTimeLimitation.StartTime.Value > latestEndTime)
 				return false;
@@ -61,8 +64,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					return false;
 			}
 
+			var startTimeRestriction = personAssignment.Period.StartDateTime;
+			var localStartTimeRestriction = TimeZoneHelper.ConvertFromUtc(startTimeRestriction, timeZone);
+			var startTimeLimitationOverridden = new StartTimeLimitation(localStartTimeRestriction.TimeOfDay, localStartTimeRestriction.TimeOfDay);
+
 			var adjustedEndTimeLimitation = new EndTimeLimitation(effectiveRestriction.EndTimeLimitation.StartTime, latestEndTime);
-			var adjustedEffectiveRestriction = new EffectiveRestriction(effectiveRestriction.StartTimeLimitation,
+			var adjustedEffectiveRestriction = new EffectiveRestriction(startTimeLimitationOverridden,
 				adjustedEndTimeLimitation, effectiveRestriction.WorkTimeLimitation, effectiveRestriction.ShiftCategory,
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));

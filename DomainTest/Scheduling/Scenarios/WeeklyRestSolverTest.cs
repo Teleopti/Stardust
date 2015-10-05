@@ -48,8 +48,7 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 
-
-		[Test, Ignore("To be continued")]
+		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepStartTimeRestrictionIsSet()
 		{
 			var selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);

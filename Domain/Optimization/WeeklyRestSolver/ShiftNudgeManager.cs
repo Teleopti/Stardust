@@ -59,8 +59,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions)
 		{
+			bool keepStartTimePreference = false;
 			if (optimizationPreferences != null)
+			{
 				schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+				keepStartTimePreference = optimizationPreferences.Shifts.KeepStartTimes;
+			}
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
@@ -131,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				{
 					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
 						resourceCalculateDelayer, leftTeamBlock,
-						schedulingResultStateHolder);
+						schedulingResultStateHolder, keepStartTimePreference);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 
