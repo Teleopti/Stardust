@@ -47,8 +47,8 @@ module.exports = function(config) {
 		'vendor/d3/d3.min.js',
 		'vendor/c3/c3.min.js',
 		'vendor/c3/c3-angular.min.js',
-		'js/**/*.js', 
-		'dist/templates.js', 
+		'js/**/*.js',
+		'dist/templates.js',
 		'tests/**/*spec.js'
 	],
 

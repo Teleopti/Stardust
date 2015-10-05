@@ -8,9 +8,16 @@
           	var teamId = $stateParams.teamId;
           	var siteId = $stateParams.siteId;
 
-          	$scope.agents = RtaOrganizationService.getAgents($stateParams.teamId);
-          	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
-          	$scope.teamName = RtaOrganizationService.getTeamName(teamId);
+          	$scope.agents = RtaOrganizationService.getAgents(teamId);
+
+            $scope.siteName = '';
+            $scope.teamName = '';
+            RtaOrganizationService.getSiteName(siteId).then(function(name){
+             $scope.siteName = name;
+           });
+           RtaOrganizationService.getTeamName(teamId, siteId).then(function(name){
+              $scope.teamName = name;
+           });
 
           	$scope.gridOptions = {
           		columnDefs: [

@@ -1219,6 +1219,7 @@
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
+    <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\html\outbound\angular-gantt-custom.tpl.html" />

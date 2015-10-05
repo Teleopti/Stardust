@@ -2,8 +2,7 @@
 describe('RtaTeamsCtrl', function () {
 	var $q,
 	    $rootScope,
-        timerCallback,
-        $interval,
+      $interval,
 	    $httpBackend;
 
 	beforeEach(module('wfm'));
@@ -29,7 +28,7 @@ describe('RtaTeamsCtrl', function () {
                             "Name": "London",
                             "NumberOfAgents": 46
                         }
-                       
+
                     ]);
                     return { $promise: queryDeferred.promise };
                 }
@@ -87,9 +86,9 @@ describe('RtaTeamsCtrl', function () {
         };
 
         var rtaOrgSvrc = {
-			
+
             siteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-       
+
             getSites: function () {
                 return [];
             },
@@ -109,10 +108,7 @@ describe('RtaTeamsCtrl', function () {
         expect(scope.teams[0].OutOfAdherence).toEqual(3);
         expect(scope.teams[1].OutOfAdherence).toEqual(1);
     }));
-
-
-
-
+		
 	xit('should get the right teams for specific site', inject(function ($controller) {
 
 		var scope = $rootScope.$new();
@@ -142,7 +138,7 @@ describe('RtaTeamsCtrl', function () {
 
 			var rtaOrgSvrc = {
 
-			organization:  [{ siteName: 'London', siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c', teams: [{ teamName: 'Preferences', teamId: 42 }, { teamName: 'NoPreferences', teamId: 43 }] }, 
+			organization:  [{ siteName: 'London', siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c', teams: [{ teamName: 'Preferences', teamId: 42 }, { teamName: 'NoPreferences', teamId: 43 }] },
 				{ siteName: 'Paris', siteId: '6a21c802-7a34-4917-8dfd-9b5e015ab461', teams: [{ teamName: 'Agile', teamId: 40 }] }],
 
 			getSites: function (id) {

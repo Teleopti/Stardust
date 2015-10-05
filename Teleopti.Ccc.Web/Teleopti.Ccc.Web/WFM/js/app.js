@@ -132,9 +132,9 @@ wfm.config([
 		}).state('rta-sites', {
 			url: '/rta/sites',
 			templateUrl: 'js/rta/rta-sites.html',
-			controller: 'RtaCtrl'
+			controller: 'RtaCtrl',
 		}).state('rta-teams', {
-			url: '/rta/site/:siteId', 
+			url: '/rta/site/:siteId',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl',
 		}).state('rta-agents', {

@@ -2,16 +2,17 @@
 	'use strict';
 
 	angular.module('wfm.rta').controller('RtaTeamsCtrl', [
-         '$scope', '$state', '$stateParams','$interval', '$filter', 'RtaOrganizationService', 'RtaService',
-          function ($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService) {
+         '$scope', '$state', '$stateParams','$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location',
+          function ($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location) {
 
-          	var siteId = $stateParams.siteId;
+						var siteId = $stateParams.siteId;
 
           	$scope.selectedTeams = [];
           	$scope.teams = RtaOrganizationService.getTeams(siteId);
-          	$scope.siteName = RtaOrganizationService.getSiteName(siteId);
-
-
+						$scope.siteName = '';
+           	RtaOrganizationService.getSiteName(siteId).then(function(name){
+						 $scope.siteName = name;
+					 });
 
           	$scope.toggleSelection = function (teamId) {
           		var index = $scope.selectedTeams.indexOf(teamId);

@@ -3,7 +3,7 @@
     <h3>Sites</h3>
     <button class="wfm-btn wfm-btn-primary" ng-click="openSelectedSites(selectedSites)">Open selected</button>
 	</div>
-  <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{rtaGrid: sites.length > 5}">
+  <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{'rta-grid': sites.length > 5}">
     <div class="rta-stats">
       <div class="wfm-checkbox">
         <label>

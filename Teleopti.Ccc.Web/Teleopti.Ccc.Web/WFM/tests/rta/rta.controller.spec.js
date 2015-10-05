@@ -2,8 +2,7 @@
 describe('RtaCtrl', function () {
 	var $q,
 	    $rootScope,
-        timerCallback,
-        $interval,
+      $interval,
 	    $httpBackend;
 
 	beforeEach(module('wfm'));
@@ -64,12 +63,12 @@ describe('RtaCtrl', function () {
         };
 
 	    var scope = $rootScope.$new();
-		
+
 	    $controller('RtaCtrl', { $scope: scope, $interval: $interval, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
-		
+
 
 		scope.$digest(); // this is needed to resolve the promise
-		
+
 		expect(scope.sites[0].OutOfAdherence).toEqual(3);
 		expect(scope.sites[1].OutOfAdherence).toEqual(1);
 	}));
@@ -114,7 +113,7 @@ describe('RtaCtrl', function () {
 
 	    scope.$digest(); // this is needed to resolve the promise
 
-	    expect(scope.sites[0].OutOfAdherence).toEqual(0);	    
+	    expect(scope.sites[0].OutOfAdherence).toEqual(0);
 	}));
 
 	it('should have adherence 0 if no data provided', inject(function ($controller) {
@@ -157,7 +156,7 @@ describe('RtaCtrl', function () {
 	}));
 
 	it('should update OutOfAdherence data after every 5 sec', inject(function ($controller, $interval) {
-	  
+
 	    var rtaSvrc = {
 	        getSites: {
 	            query: function () {
@@ -214,7 +213,7 @@ describe('RtaCtrl', function () {
         $interval.flush(5000);
 	    scope.$digest();
 	    expect(scope.sites[0].OutOfAdherence).toEqual(5);
-        
+
 	}));
 
 	it('Should get all the sites', inject(function ($controller){
@@ -254,7 +253,7 @@ describe('RtaCtrl', function () {
 		};
 
 		$controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
-		
+
 		expect(scope.sites).not.toBe(null);
 		expect(scope.sites.length).toBe(2);
 
