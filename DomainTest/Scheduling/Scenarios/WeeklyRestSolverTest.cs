@@ -49,8 +49,6 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		public SchedulerStateHolder SchedulerStateHolder;
 		private IPerson _kalle;
 		private DateOnlyPeriod _selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);
-		private ScheduleDictionaryForTest _scheduleDictionary;
-
 
 		[Test, Ignore("to be continued")]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
@@ -65,7 +63,7 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 
 			executeTarget(optimizationPref);
 
-			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
+			SchedulerStateHolder.Schedules[_kalle].ScheduledDay(_selectedPeriod.StartDate)
 				.PersonAssignment()
 				.ShiftLayers.First()
 				.Period.EndDateTime
@@ -85,7 +83,7 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 
 			executeTarget(optimizationPref);
 
-			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
+			SchedulerStateHolder.Schedules[_kalle].ScheduledDay(_selectedPeriod.StartDate)
 				.PersonAssignment()
 				.ShiftLayers.First()
 				.Period.StartDateTime
@@ -170,10 +168,7 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 			SchedulerStateHolder.FilterPersons(new[] { _kalle });
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(_kalle);
 
-			
-			_scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { _kalle }).VisiblePeriod);
-
-
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { _kalle }).VisiblePeriod);
 			foreach (var date in _selectedPeriod.DayCollection())
 			{
 				var ass = new PersonAssignment(_kalle, scenario, date);
@@ -188,10 +183,9 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 					ass.AddActivity(activity, new DateTimePeriod(eightOClock, seventteenOClock));
 					ass.SetShiftCategory(shiftCategory);
 				}
-				_scheduleDictionary.AddPersonAssignment(ass);
-
+				scheduleDictionary.AddPersonAssignment(ass);
 			}
-			SchedulerStateHolder.SchedulingResultState.Schedules = _scheduleDictionary;
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			SchedulerStateHolder.SchedulingResultState.Skills.Add(skill);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, _selectedPeriod.StartDate, scenario);
