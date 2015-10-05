@@ -34,7 +34,7 @@ item: Global
   Variable Default3=C:\WINDOWS
   Variable Flags3=00001000
   Variable Name4=_WISE_
-  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Default4=C:\PROGRA~2\Altiris\Wise\WISESC~1
   Variable Flags4=00001000
   Requested Execution Level=asInvoker
 end
@@ -74,6 +74,29 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SAUTH
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Set Variable
+  Variable=INTEGRATED
+  Value=0
+end
+item: If/While Statement
+  Variable=SAUTH
+  Value=NT
+end
+item: Set Variable
+  Variable=INTEGRATED
+  Value=1
+end
+item: End Block
+end
 item: Set Variable
   Variable=URL
   Value=%DALIAS%%SITE%/Administration/
@@ -89,7 +112,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DIR%Tools\UpgradeTenants.bat" "%SUSER%" "%SPASS%" "%URL%""
+  Command Line=/C ""%DIR%Tools\UpgradeTenants.bat" "%INTEGRATED%" "%SUSER%" "%SPASS%" "%URL%""
   Default Directory=%DIR%
   Flags=00000110
 end
