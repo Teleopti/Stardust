@@ -1196,7 +1196,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
+    <Content Include="WFM\html\forecasting\forecasting.html" />
     <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
+    <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\outbound\outbound.directive.threshold.js" />
@@ -1777,7 +1779,7 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
-    <Content Include="WFM\html\forecasting\forecasting.html" />
+    <Content Include="WFM\html\forecasting\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\js\permissions\permissions.html" />

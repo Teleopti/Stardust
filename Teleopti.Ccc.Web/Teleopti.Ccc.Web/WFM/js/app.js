@@ -47,6 +47,10 @@ wfm.config([
 		}).state('forecasting', {
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
+			controller: 'ForecastingDefaultCtrl'
+		}).state('forecasting.start', {
+			url: '/forecasting/start',
+			templateUrl: 'html/forecasting/forecasting-overview.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting-method', {
 			params: { workloadId: {}, period: {} },
@@ -56,7 +60,7 @@ wfm.config([
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
-		}).state('forecasting-advanced', {
+		}).state('forecasting.advanced', {
 			params: { workloadId: {}, workloadName: {} },
 			templateUrl: 'html/forecasting/forecasting-advanced.html',
 			controller: 'ForecastingAdvancedCtrl'

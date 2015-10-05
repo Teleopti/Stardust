@@ -19,7 +19,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.back = function () {
-				$state.go("forecasting");
+				$state.go("forecasting.start");
 			};
 			
 			$scope.isQueueStatisticsEnabled = false;
