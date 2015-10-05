@@ -51,20 +51,20 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		private DateOnlyPeriod _selectedPeriod;
 		private IList<IScheduleMatrixPro> _matrixlist;
 		private ScheduleDictionaryForTest _scheduleDictionary;
-		private OptimizationPreferences _optimizationPref;
+
 
 		[Test, Ignore("to be continued")]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
 		{
 			setupForLeftNudgerTests();
 
-			_optimizationPref = new OptimizationPreferences
+			var optimizationPref = new OptimizationPreferences
 			{
 				Shifts = { KeepEndTimes = true },
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget();
+			executeTarget(optimizationPref);
 
 			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
 				.PersonAssignment()
@@ -78,13 +78,13 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		{
 			setupForLeftNudgerTests();
 
-			_optimizationPref = new OptimizationPreferences
+			var optimizationPref = new OptimizationPreferences
 			{
 				Shifts = { KeepStartTimes = true },
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget();
+			executeTarget(optimizationPref);
 
 			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
 				.PersonAssignment()
@@ -93,10 +93,10 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 				.Should().Be.EqualTo(new DateTime(_selectedPeriod.StartDate.Year, _selectedPeriod.StartDate.Month, _selectedPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
 		}
 
-		private void executeTarget()
+		private void executeTarget(OptimizationPreferences optimizationPreferences)
 		{
-			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(_optimizationPref),
-				_optimizationPref,
+			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
+				optimizationPreferences,
 				new[] { _kalle },
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
