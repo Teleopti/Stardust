@@ -3,6 +3,7 @@ using NHibernate.Cfg;
 using NHibernate.Mapping;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -31,13 +32,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             mocks = new MockRepository();
         }
 
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "entityType"), Test]
+        [Test]
         public void VerifyHasVersionSuitsWithMapping()
         {
             Configuration appCfg = new Configuration()
                                 .SetProperties(SetupFixtureForAssembly.Sql2005conf("doesnotmatter", null))
-                                .AddAssembly("Teleopti.Ccc.Domain");
+                                .AddAssembly(typeof(Person).Assembly);
             foreach (PersistentClass mapping in appCfg.ClassMappings)
             {
                 Type entityType = mapping.MappedClass;

@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
-			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
+			nhConfiguration.AddAssembly(typeof(Person).Assembly);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (UseSecondLevelCache)
 			{
