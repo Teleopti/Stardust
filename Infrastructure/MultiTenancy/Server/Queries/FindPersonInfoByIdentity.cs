@@ -11,10 +11,9 @@
 			_applicationUserQuery = applicationUserQuery;
 		}
 
-		public PersonInfo Find(string identity)
+		public PersonInfo Find(string identity, bool isTeleoptiApplicationLogon)
 		{
-			var identityHit = _identityUserQuery.FindUserData(identity);
-			return identityHit ?? _applicationUserQuery.Find(identity);
+			return isTeleoptiApplicationLogon ? _applicationUserQuery.Find(identity) : _identityUserQuery.FindUserData(identity);
 		}
 	}
 }

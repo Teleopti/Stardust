@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			identityUserQuery.Stub(x => x.FindUserData(identity)).Return(pInfo);
 
 			var target = new FindPersonInfoByIdentity(identityUserQuery, MockRepository.GenerateStub<IApplicationUserQuery>());
-			var result = target.Find(identity);
+			var result = target.Find(identity, false);
 			result.Tenant.Name.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.Id.Should().Be.EqualTo(pInfo.Id);
 		}
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			applicationQuery.Stub(x => x.Find(identity)).Return(pInfo);
 
 			var target = new FindPersonInfoByIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), applicationQuery);
-			var result = target.Find(identity);
+			var result = target.Find(identity, true);
 			result.Tenant.Name.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.Id.Should().Be.EqualTo(pInfo.Id);
 		}
 
 		[Test]
-		public void ShouldChooseIdentityIfExistInBoth()
+		public void ShouldChooseIdentityIfIsApplicationLogonFalse()
 		{
 			var identity = RandomName.Make();
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			applicationQuery.Stub(x => x.Find(identity)).Return(new PersonInfo());
 
 			var target = new FindPersonInfoByIdentity(identityUserQuery, applicationQuery);
-			var result = target.Find(identity);
+			var result = target.Find(identity, false);
 			result.Tenant.Name.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.Id.Should().Be.EqualTo(pInfo.Id);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var identity = RandomName.Make();
 
 			var target = new FindPersonInfoByIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), MockRepository.GenerateStub<IApplicationUserQuery>());
-			target.Find(identity)
+			target.Find(identity, true)
 				.Should().Be.Null();
 		}
 	}

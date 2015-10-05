@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			return new TokenIdentity
 			{
 				UserIdentifier = nameAndDatasource,
-				OriginalToken = nameClaimValue
+				OriginalToken = nameClaimValue,
+				IsTeleoptiApplicationLogon = true
 			};
 		}
 
@@ -65,7 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			return new TokenIdentity
 			{
 				UserIdentifier = nameAndDomain.Replace("#","\\").Replace("$$$" , "."),
-				OriginalToken = nameClaimValue
+				OriginalToken = nameClaimValue,
+				IsTeleoptiApplicationLogon = false
 			};
 		}
 	}
@@ -74,5 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 	{
 		public string UserIdentifier { get; set; }
 		public string OriginalToken { get; set; }
+		public bool IsTeleoptiApplicationLogon { get; set; }
 	}
 }

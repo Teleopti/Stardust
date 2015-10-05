@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			dataSourceForTenant.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, personInfo.Id)).Return(person);
-			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(personInfo);
+			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier, false)).Return(personInfo);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		{
 			var identity = RandomName.Make();
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(new TokenIdentity {UserIdentifier = identity});
-			_findPersonInfoByIdentity.Stub(x=> x.Find(identity)).Return(null);
+			_findPersonInfoByIdentity.Stub(x=> x.Find(identity, false)).Return(null);
 
 			target.LogonIdentityUser().Successful
 				.Should().Be.False();
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			dataSourceForTenant.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
-			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(personInfo);
+			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier, false)).Return(personInfo);
 			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, personInfo.Id)).Return(person);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);

@@ -2,6 +2,6 @@
 {
 	public interface IFindPersonInfoByIdentity
 	{
-		PersonInfo Find(string identity);
+		PersonInfo Find(string identity, bool isTeleoptiApplicationLogon);
 	}
 }
