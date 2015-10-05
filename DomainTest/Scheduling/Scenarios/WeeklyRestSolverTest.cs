@@ -47,80 +47,57 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 		public IWeeklyRestSolverCommand Target;
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
+		private IPerson _kalle;
+		private DateOnlyPeriod _selectedPeriod;
+		private IList<IScheduleMatrixPro> _matrixlist;
+		private ScheduleDictionaryForTest _scheduleDictionary;
+		private OptimizationPreferences _optimizationPref;
+
+		[Test, Ignore("to be continued")]
+		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
+		{
+			setupForLeftNudgerTests();
+
+			_optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { KeepEndTimes = true },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			executeTarget();
+
+			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.First()
+				.Period.EndDateTime
+				.Should().Be.EqualTo(new DateTime(_selectedPeriod.StartDate.Year, _selectedPeriod.StartDate.Month, _selectedPeriod.StartDate.Day, 17, 0, 0, DateTimeKind.Utc));
+		}
 
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepStartTimeRestrictionIsSet()
 		{
-			var selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);
-			var scenario = new Scenario("unimportant");
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			var shiftCategory = new ShiftCategory("unimportant");
+			setupForLeftNudgerTests();
 
-			shiftCategory.SetId(Guid.NewGuid());
-			var kalle = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
-			var weeklyRest = TimeSpan.FromHours(40);
-			kalle.Period(selectedPeriod.StartDate).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, weeklyRest);
-			kalle.Period(selectedPeriod.StartDate).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(17 - 8));
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
-
-			var ruleSetbag = new RuleSetBag();
-			ruleSetbag.AddRuleSet(ruleSet);
-			kalle.Period(selectedPeriod.StartDate).RuleSetBag = ruleSetbag;
-			kalle.SetId(Guid.NewGuid());
-
-			var skill = SkillFactory.CreateSkill("skill");
-			skill.Activity = activity;
-			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
-			var personPeriod = (IPersonPeriodModifySkills)kalle.Period(selectedPeriod.StartDate);
-			personPeriod.AddPersonSkill(personSkill);
-
-			var schedulePeriod = new SchedulePeriod(selectedPeriod.StartDate, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(1);
-			kalle.AddSchedulePeriod(schedulePeriod);
-
-			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
-			SchedulerStateHolder.FilterPersons(new[] { kalle });
-			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(kalle);
-
-			var optimizationPref = new OptimizationPreferences
+			_optimizationPref = new OptimizationPreferences
 			{
 				Shifts = { KeepStartTimes = true },
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { kalle }).VisiblePeriod);
 
+			executeTarget();
 
-			foreach (var date in selectedPeriod.DayCollection())
-			{
-				var ass = new PersonAssignment(kalle, scenario, date);
-				if (date == new DateOnly(2015, 09, 29))
-				{
-					ass.SetDayOff(new DayOffTemplate());
-				}
-				else
-				{
-					var eightOClock = new DateTime(date.Year, date.Month, date.Day, 8, 0, 0, DateTimeKind.Utc);
-					var seventteenOClock = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0, DateTimeKind.Utc);
-					ass.AddActivity(activity, new DateTimePeriod(eightOClock, seventteenOClock));
-					ass.SetShiftCategory(shiftCategory);
-				}
-				scheduleDictionary.AddPersonAssignment(ass);
+			_scheduleDictionary[_kalle].ScheduledDay(_selectedPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.First()
+				.Period.StartDateTime
+				.Should().Be.EqualTo(new DateTime(_selectedPeriod.StartDate.Year, _selectedPeriod.StartDate.Month, _selectedPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
+		}
 
-			}
-			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-			var matrixlist = MatrixListFactory.CreateMatrixListAll(selectedPeriod);
-			matrixlist.First().UnlockPeriod(selectedPeriod);
-
-			SchedulerStateHolder.SchedulingResultState.Skills.Add(skill);
-			var skillDay = SkillDayFactory.CreateSkillDay(skill, selectedPeriod.StartDate, scenario);
-			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, selectedPeriod);
-			SchedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
-			SchedulerStateHolder.SchedulingResultState.SkillDays.Add(new KeyValuePair<ISkill, IList<ISkillDay>>(skill, new[] { skillDay }));
-
-			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPref),
-				optimizationPref,
-				new[] { kalle },
+		private void executeTarget()
+		{
+			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(_optimizationPref),
+				_optimizationPref,
+				new[] { _kalle },
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
@@ -152,16 +129,77 @@ then I expect Kalle to still be scheduled on 2015-09-28 and start time should be
 					true,
 					true
 					),
-				selectedPeriod,
-				matrixlist,
+				_selectedPeriod,
+				_matrixlist,
 				new NoBackgroundWorker()
 				);
-
-			scheduleDictionary[kalle].ScheduledDay(selectedPeriod.StartDate)
-				.PersonAssignment()
-				.ShiftLayers.First()
-				.Period.StartDateTime
-				.Should().Be.EqualTo(new DateTime(selectedPeriod.StartDate.Year, selectedPeriod.StartDate.Month, selectedPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
 		}
+
+		private void setupForLeftNudgerTests()
+		{
+			_selectedPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 4);
+			var scenario = new Scenario("unimportant");
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			var shiftCategory = new ShiftCategory("unimportant");
+
+			shiftCategory.SetId(Guid.NewGuid());
+			_kalle = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var weeklyRest = TimeSpan.FromHours(40);
+			_kalle.Period(_selectedPeriod.StartDate).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, weeklyRest);
+			_kalle.Period(_selectedPeriod.StartDate).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(17 - 8));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+
+			var ruleSetbag = new RuleSetBag();
+			ruleSetbag.AddRuleSet(ruleSet);
+			_kalle.Period(_selectedPeriod.StartDate).RuleSetBag = ruleSetbag;
+			_kalle.SetId(Guid.NewGuid());
+
+			var skill = SkillFactory.CreateSkill("skill");
+			skill.Activity = activity;
+			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			var personPeriod = (IPersonPeriodModifySkills)_kalle.Period(_selectedPeriod.StartDate);
+			personPeriod.AddPersonSkill(personSkill);
+
+			var schedulePeriod = new SchedulePeriod(_selectedPeriod.StartDate, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(1);
+			_kalle.AddSchedulePeriod(schedulePeriod);
+
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(_selectedPeriod, TimeZoneInfo.Utc);
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			SchedulerStateHolder.FilterPersons(new[] { _kalle });
+			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(_kalle);
+
+			
+			_scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { _kalle }).VisiblePeriod);
+
+
+			foreach (var date in _selectedPeriod.DayCollection())
+			{
+				var ass = new PersonAssignment(_kalle, scenario, date);
+				if (date == new DateOnly(2015, 09, 29))
+				{
+					ass.SetDayOff(new DayOffTemplate());
+				}
+				else
+				{
+					var eightOClock = new DateTime(date.Year, date.Month, date.Day, 8, 0, 0, DateTimeKind.Utc);
+					var seventteenOClock = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0, DateTimeKind.Utc);
+					ass.AddActivity(activity, new DateTimePeriod(eightOClock, seventteenOClock));
+					ass.SetShiftCategory(shiftCategory);
+				}
+				_scheduleDictionary.AddPersonAssignment(ass);
+
+			}
+			SchedulerStateHolder.SchedulingResultState.Schedules = _scheduleDictionary;
+			_matrixlist = MatrixListFactory.CreateMatrixListAll(_selectedPeriod);
+			_matrixlist.First().UnlockPeriod(_selectedPeriod);
+
+			SchedulerStateHolder.SchedulingResultState.Skills.Add(skill);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, _selectedPeriod.StartDate, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, _selectedPeriod);
+			SchedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			SchedulerStateHolder.SchedulingResultState.SkillDays.Add(new KeyValuePair<ISkill, IList<ISkillDay>>(skill, new[] { skillDay }));
+		}
+
 	}
 }

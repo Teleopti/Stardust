@@ -66,7 +66,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			var startTimeRestriction = personAssignment.Period.StartDateTime;
 			var localStartTimeRestriction = TimeZoneHelper.ConvertFromUtc(startTimeRestriction, timeZone);
-			var startTimeLimitationOverridden = new StartTimeLimitation(localStartTimeRestriction.TimeOfDay, localStartTimeRestriction.TimeOfDay);
+			var startTimeLimitationOverridden = keepStartTime
+				? new StartTimeLimitation(localStartTimeRestriction.TimeOfDay, localStartTimeRestriction.TimeOfDay)
+				: effectiveRestriction.StartTimeLimitation;
 
 			var adjustedEndTimeLimitation = new EndTimeLimitation(effectiveRestriction.EndTimeLimitation.StartTime, latestEndTime);
 			var adjustedEffectiveRestriction = new EffectiveRestriction(startTimeLimitationOverridden,
