@@ -68,6 +68,8 @@ declare @from_date_id_utc int
 declare @from_date_date_utc smalldatetime
 declare @intervals_back smallint
 declare @detail_id int
+DECLARE @isAzure bit
+
 SET @detail_id=4 --deviation
 
 CREATE TABLE #fact_schedule_deviation(
@@ -158,6 +160,9 @@ SET @scenario_code	=	(SELECT scenario_code FROM mart.dim_scenario WHERE business
 
 /*Get business unit id*/
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+/*Check if azure*/
+set @isAzure = dbo.IsAzureDB()
 
 /*Remove old data*/
 if (@isIntraday=0)
@@ -517,40 +522,75 @@ BEGIN
 			fs.business_unit_id,
 			ch.person_code
 		
+		/*IF AZURE AVOID temp table*/
+		IF (@isAzure=1)
+		BEGIN	
+			/* a) Gather agent ready time */
+			INSERT INTO #fact_schedule_deviation
+				(
+				date_id, 
+				interval_id,
+				person_id, 
+				acd_login_id,--new 20131128
+				ready_time_s,
+				is_logged_in,
+				business_unit_id,
+				person_code
+				)
+			SELECT DISTINCT
+				date_id					= fa.date_id, 
+				interval_id				= fa.interval_id,
+				person_id				= b.person_id,
+				acd_login_id			= fa.acd_login_id, --new 20131128
+				ready_time_s			= fa.ready_time_s,
+				is_logged_in			= 1, --marks that we do have logged in time
+				business_unit_id		= b.business_unit_id,
+				person_code				= ch.person_code
+			FROM mart.bridge_acd_login_person b
+			INNER JOIN mart.fact_agent fa
+				ON b.acd_login_id = fa.acd_login_id
+			INNER JOIN #stg_schedule_changed ch
+				ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
+				AND ch.person_id			= b.person_id
+				AND b.acd_login_id			= fa.acd_login_id
+		END
+		ELSE
+		BEGIN
+			/*Use #temp table to speed up*/
+			INSERT INTO #bridge_acd_login_person(acd_login_id, person_id, business_unit_id)
+			SELECT b.acd_login_id, b.person_id ,b.business_unit_id
+			FROM mart.bridge_acd_login_person b 
+			INNER JOIN #stg_schedule_changed ch on ch.person_id=b.person_id
 		
-		INSERT INTO #bridge_acd_login_person(acd_login_id, person_id, business_unit_id)
-		SELECT b.acd_login_id, b.person_id ,b.business_unit_id
-		FROM mart.bridge_acd_login_person b 
-		INNER JOIN #stg_schedule_changed ch on ch.person_id=b.person_id
-		
-		/* a) Gather agent ready time */
-		INSERT INTO #fact_schedule_deviation
-			(
-			date_id, 
-			interval_id,
-			person_id, 
-			acd_login_id,--new 20131128
-			ready_time_s,
-			is_logged_in,
-			business_unit_id,
-			person_code
-			)
-		SELECT DISTINCT
-			date_id					= fa.date_id, 
-			interval_id				= fa.interval_id,
-			person_id				= b.person_id,
-			acd_login_id			= fa.acd_login_id, --new 20131128
-			ready_time_s			= fa.ready_time_s,
-			is_logged_in			= 1, --marks that we do have logged in time
-			business_unit_id		= b.business_unit_id,
-			person_code				= ch.person_code
-		FROM #bridge_acd_login_person b
-		INNER JOIN mart.fact_agent fa
-			ON b.acd_login_id = fa.acd_login_id
-		INNER JOIN #stg_schedule_changed ch
-			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
-			AND ch.person_id			= b.person_id
-			AND b.acd_login_id			= fa.acd_login_id
+			/* a) Gather agent ready time */
+			INSERT INTO #fact_schedule_deviation
+				(
+				date_id, 
+				interval_id,
+				person_id, 
+				acd_login_id,--new 20131128
+				ready_time_s,
+				is_logged_in,
+				business_unit_id,
+				person_code
+				)
+			SELECT DISTINCT
+				date_id					= fa.date_id, 
+				interval_id				= fa.interval_id,
+				person_id				= b.person_id,
+				acd_login_id			= fa.acd_login_id, --new 20131128
+				ready_time_s			= fa.ready_time_s,
+				is_logged_in			= 1, --marks that we do have logged in time
+				business_unit_id		= b.business_unit_id,
+				person_code				= ch.person_code
+			FROM #bridge_acd_login_person b
+			INNER JOIN mart.fact_agent fa
+				ON b.acd_login_id = fa.acd_login_id
+			INNER JOIN #stg_schedule_changed ch
+				ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
+				AND ch.person_id			= b.person_id
+				AND b.acd_login_id			= fa.acd_login_id
+		END
 	END
 END
 
