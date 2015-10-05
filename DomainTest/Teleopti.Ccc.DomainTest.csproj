@@ -1013,7 +1013,6 @@
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodTest.cs" />
     <Compile Include="Scheduling\LoadSchedulingStateHolderForResourceCalculationTest.cs" />
     <Compile Include="Scheduling\DayOffTest.cs" />
-    <Compile Include="Scheduling\LegalStateRuleTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByWeekMeetingTest.cs" />
     <Compile Include="Scheduling\MeetingPayloadTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByDayMeetingTest.cs" />
@@ -1513,23 +1512,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Optimization\RelativeBoostedDailyDifferencesAndPeriodValue.xlsm" />
-    <None Include="Optimization\ScheduleDayEquatorTest.doc" />
     <None Include="packages.config" />
-    <None Include="ResourceCalculation\DayOffOptimizerTestSet.xls" />
-    <None Include="ResourceCalculation\FurnessEvaluatorTestSet3.xls" />
-    <None Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.xls" />
-    <None Include="ResourceCalculation\WorkShiftLengthCalculatorBugTestCasesSet.xls" />
-    <None Include="ResourceCalculation\PopulationStatisticsCalculatorTestSet.xls" />
-    <None Include="ResourceCalculation\DayOffOptimizerLegalStateTestSet.xls" />
-    <None Include="ResourceCalculation\WorkShiftLengthBackToLegalStateTestSet.xls" />
-    <None Include="ResourceCalculation\WorkShiftLengthCalculatorTestSet.xls" />
-    <None Include="ResourceCalculation\WorkShiftLengthChangeTimeTestSet.xls" />
-    <None Include="ResourceCalculation\WorkShiftPeriodValueCalculatorTestSet.xls" />
-    <None Include="ResourceCalculation\OccupancyCalculatorTestSet.xls" />
-    <None Include="ResourceCalculation\ResourceOptimizerTestSet.xls" />
-    <None Include="ResourceCalculation\FurnessEvaluatorTestSet1.xls" />
-    <None Include="ResourceCalculation\FurnessEvaluatorTestSet2.xls" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
