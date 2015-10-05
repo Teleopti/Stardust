@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 	    private void createAndSaveReadModel()
 	    {
-		    var buid = CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault();
+		    var buid = CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault();
 		    Session.CreateSQLQuery(
 				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
 			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName',:businessUnitId);")

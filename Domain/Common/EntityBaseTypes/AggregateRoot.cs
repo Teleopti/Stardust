@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.Instance.Current()); }
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceForEntities.Current()); }
 			protected set { _businessUnit = value; }
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.Instance.Current()); }
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceForEntities.Current()); }
 			protected set { _businessUnit = value; }
 		}
 	}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.Instance.Current()); }
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceForEntities.Current()); }
 			protected set { _businessUnit = value; }
 		}
 	}

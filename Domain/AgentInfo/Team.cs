@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get
             {
                 if (_site == null)
-                    return CurrentBusinessUnit.Instance.Current();
+                    return CurrentBusinessUnit.InstanceForEntities.Current();
                 return _site.BusinessUnit;
             }
         }

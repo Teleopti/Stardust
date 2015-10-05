@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var existingForecastPerSkills = session(_currentUnitOfWork.Current()).GetNamedQuery("ExistingForecast")
 				.SetEntity("scenario", scenario)
-				.SetEntity("businessUnit", CurrentBusinessUnit.Instance.Current())
+				.SetEntity("businessUnit", CurrentBusinessUnit.InstanceForEntities.Current())
 				.SetDateOnly("startDate", range.StartDate)
 				.SetDateOnly("endDate", range.EndDate)
 				.SetString("longtermKey", TemplateReference.LongtermTemplateKey)

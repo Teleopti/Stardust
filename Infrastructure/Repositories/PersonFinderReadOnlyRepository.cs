@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
 				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
 				.SetInt32("culture", cultureId)
-				.SetGuid("business_unit_id", CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault())
+				.SetGuid("business_unit_id", CurrentBusinessUnit.InstanceForEntities.Current().Id.GetValueOrDefault())
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();

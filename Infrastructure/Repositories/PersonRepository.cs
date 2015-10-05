@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			try
 			{
-				var businessUnit = CurrentBusinessUnit.Instance.Current();
+				var businessUnit = CurrentBusinessUnit.InstanceForEntities.Current();
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					 .CreateAlias("Team", "team", JoinType.InnerJoin)
 					 .CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
+					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.InstanceForEntities.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateMultiCriteria()
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
+					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.InstanceForEntities.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateMultiCriteria()
@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				 .SetProjection(Projections.Id())
 				 .Add(Restrictions.Le("StartDate", period.EndDate))
 				 .Add(Restrictions.EqProperty("first.Parent", "per.Id"))
-				 .Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
+				 .Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.InstanceForEntities.Current()))
 				 .Add(Subqueries.NotExists(DetachedCriteria.For<PersonPeriod>()
 														  .SetProjection(Projections.Id())
 														  .Add(Restrictions.EqProperty("Parent", "first.Parent"))
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
 			return Session.GetNamedQuery("AgentSkillMatrix")
-					  .SetEntity("bu", CurrentBusinessUnit.Instance.Current())
+					  .SetEntity("bu", CurrentBusinessUnit.InstanceForEntities.Current())
 					  .SetEntity("scenario", scenario)
 					  .SetProperties(period)
 									.List<Tuple<Guid, Guid>>();
@@ -557,7 +557,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
 			return Session.GetNamedQuery("AgentSiteMatrix")
-					  .SetEntity("bu", CurrentBusinessUnit.Instance.Current())
+					  .SetEntity("bu", CurrentBusinessUnit.InstanceForEntities.Current())
 					  .SetProperties(period)
 					  .List<Guid>();
 		}

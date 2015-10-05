@@ -7,25 +7,29 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private readonly ICurrentIdentity _identity;
 		private readonly IIsHttpRequest _isHttpRequest;
-		private static ICurrentBusinessUnit _instanceFromContainer;
 
-		public static ICurrentBusinessUnit Instance
+		private static ICurrentBusinessUnit _instanceForEntities;
+
+		public static ICurrentBusinessUnit InstanceForEntities
 		{
 			get
 			{
-				if (_instanceFromContainer != null)
-					return _instanceFromContainer;
+				if (_instanceForEntities != null)
+					return _instanceForEntities;
+
 				var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
-				_instanceFromContainer = new CurrentBusinessUnit(identity, new HttpRequestFalse());
-				return _instanceFromContainer;
-			}
-			set
-			{
-				_instanceFromContainer = value;
+				_instanceForEntities = new CurrentBusinessUnit(identity, new HttpRequestFalse());
+				return _instanceForEntities;
 			}
 		}
 
- 
+		public static void SetInstanceFromContainer(ICurrentBusinessUnit instance)
+		{
+			_instanceForEntities = instance;
+		}
+
+
+
 		public CurrentBusinessUnit(ICurrentIdentity identity, IIsHttpRequest isHttpRequest)
 		{
 			_identity = identity;

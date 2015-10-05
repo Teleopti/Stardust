@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 
         public virtual IBusinessUnit BusinessUnit
         {
-            get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.Instance.Current()); }
+            get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceForEntities.Current()); }
 	        protected set { _businessUnit = value; }
         }
 
