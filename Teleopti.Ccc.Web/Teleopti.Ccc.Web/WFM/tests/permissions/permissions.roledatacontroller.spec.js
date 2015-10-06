@@ -24,7 +24,10 @@ describe('DataController', function() {
 			var deferred = $q.defer();
 			deferred.resolve();
 			return deferred.promise;
-		}   
+		},
+		deleteAllNodes: function (selectedRole, dataNodes) {
+			
+		}
 	};
 	var mockRoles = {
 		selectedRole: {
@@ -213,4 +216,30 @@ describe('DataController', function() {
 
 		expect(mockRoleDataService.assignOrganizationSelection).toHaveBeenCalledWith('5', expectedObj);
 	}));
+
+	it('should send the parent and all its children for deletion', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		scope.selectedRole = '5';
+		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
+
+		var node = {
+			$modelValue: {
+				Id: '3',
+				Type: 'BusinessUnit',
+				selected: true,
+				ChildNodes: [{ selected: true, Type: 'Site', Id: '4', ChildNodes: [] },
+					{ selected: true, Type: 'Site', Id: '5', ChildNodes: [] }]
+			}
+		};
+		var expectedObj = [
+			{ id: '4', type: 'Site' }, { id: '5', type: 'Site' }, { id: '3', type: 'BusinessUnit' }
+		];
+
+		spyOn(mockRoleDataService, "deleteAllNodes");
+		scope.toggleOrganizationSelection(node);
+		scope.$digest();
+		expect(mockRoleDataService.deleteAllNodes).toHaveBeenCalledWith('5', expectedObj);
+
+	})
+	);
 });

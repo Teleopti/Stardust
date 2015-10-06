@@ -35,6 +35,20 @@
 		        	return { $promise: queryDeferred.promise };
 		        }
             },
+        	deleteAvailableData: {
+		        query: function() {
+		        	var queryDeferred = $q.defer();
+		        	queryDeferred.resolve();
+		        	return { $promise: queryDeferred.promise };
+		        }
+        	},
+			deleteAllData: {
+				query: function (data) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve();
+					return { $promise: queryDeferred.promise };
+				}
+			},
 
 			organizationSelections: {
             query: function() {
@@ -108,6 +122,23 @@
 
 				expect(RoleDataService.organization.BusinessUnit[0].selected).toBe(true);
 				expect(RoleDataService.organization.BusinessUnit[0].ChildNodes[0].selected).toBe(true);
+			});
+		});
+		it('should call the rest server with the parent and all children', function () {
+			inject(function (RoleDataService) {
+				var scope = $rootScope.$new();
+				var selectedRole = '1';
+				var nodes = [{ type: 'BusinessUnit', id: '2' }, { type: 'Site', id: '3' }];
+				var expectedObject = {
+						Id: '1',
+						BusinessUnits: ['2'],
+						Sites: ['3']
+					};
+				spyOn(mockPermissionsService.deleteAllData, 'query');
+				
+				RoleDataService.deleteAllNodes(selectedRole, nodes);
+
+				expect(mockPermissionsService.deleteAllData.query).toHaveBeenCalledWith(expectedObject);
 			});
 		});
 

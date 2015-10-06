@@ -258,5 +258,32 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
             return Ok();
         }
-    }
+
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/DeleteData"), HttpPost]
+		public virtual IHttpActionResult RemoveAvailable(Guid roleId, [FromBody]AvailableDataForRoleInput data)
+		{
+			var role = _roleRepository.Get(roleId);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			data.Teams.ForEach(team =>
+			{
+				var teams = role.AvailableData.AvailableTeams.Where(t => team == t.Id.GetValueOrDefault()).ToArray();
+				teams.ForEach(role.AvailableData.DeleteAvailableTeam);
+			});
+
+			data.Sites.ForEach(site =>
+			{
+				var sites = role.AvailableData.AvailableSites.Where(s => site == s.Id.GetValueOrDefault()).ToArray();
+				sites.ForEach(role.AvailableData.DeleteAvailableSite);
+			});
+
+			data.BusinessUnits.ForEach(bu =>
+			{
+				var bus = role.AvailableData.AvailableBusinessUnits.Where(b => bu == b.Id.GetValueOrDefault()).ToArray();
+				bus.ForEach(role.AvailableData.DeleteAvailableBusinessUnit);
+			});
+
+			return Ok();
+		}
+	}
 }

@@ -95,22 +95,23 @@
 				$scope.toggleOrganizationSelection = function (node) {
 					if (Roles.selectedRole.BuiltIn) return;
 					var dataNode = node.$modelValue;
-					if (dataNode.selected) {
+					dataNode.selected = !dataNode.selected;
+					var formattedNodes = [{ id: dataNode.Id, type: dataNode.Type }];
+					var children = uiTree.toggleChildSelection(dataNode.ChildNodes, dataNode.selected);
+					formattedNodes = children.concat(formattedNodes);
 
-						RoleDataService.deleteAvailableData($scope.selectedRole, dataNode.Type, dataNode.Id).
-						then(function () {
-							dataNode.selected = false;
-							uiTree.toggleChildSelection(dataNode.ChildNodes, false);
-							uiTree.deselectParent(node);
-						});
+					if (!dataNode.selected) {
+						if (dataNode.ChildNodes.length > 0) {
+							RoleDataService.deleteAllNodes($scope.selectedRole, formattedNodes);
+						} else {
+							RoleDataService.deleteAvailableData($scope.selectedRole, dataNode.Type, dataNode.Id).
+								then(function() {
+									uiTree.deselectParent(node);
+								});
+						}
 					} else {
-						dataNode.selected = true;
-						var children = uiTree.toggleChildSelection(dataNode.ChildNodes, true);
 						uiTree.toggleParentSelection(node);
-						var nodesToBeSaved = [];
-						nodesToBeSaved.push({ type: dataNode.Type, id: dataNode.Id });
-						nodesToBeSaved = children.concat(nodesToBeSaved);
-						RoleDataService.assignOrganizationSelection($scope.selectedRole, nodesToBeSaved);
+						RoleDataService.assignOrganizationSelection($scope.selectedRole, formattedNodes);
 					}
 				};
 

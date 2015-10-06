@@ -42,6 +42,21 @@
 				return deferred.promise;
 			};
 
+			roleDataService.deleteAllNodes = function (selectedRole, dataNodes) {
+				var data = {};
+				data.Id = selectedRole;
+
+				dataNodes.forEach(function (node) {
+					var attributeName = node.type + 's';
+					if (!data[attributeName]) {
+						data[attributeName] = [];
+					}
+					data[attributeName].push(node.id);
+				});
+
+				PermissionsService.deleteAllData.query(data);
+			};
+
 			roleDataService.assignOrganizationSelection = function(selectedRole, dataNodes) {
 				var data = {};
 				data.Id = selectedRole;

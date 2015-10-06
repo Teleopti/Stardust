@@ -41,7 +41,10 @@
 			this.deleteAllFunction = $resource('../api/Permissions/Roles/:Id/DeleteFunction/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {
 				query: { method: 'POST', params: { Functions: [] }, isArray: false }
 			});
-
+			this.deleteAllData = $resource('../api/Permissions/Roles/:Id/DeleteData', { Id: "@Id" }, {
+				query: { method: 'POST', params: { Data: [] }, isArray: false }
+			});
+			
 			this.deleteAvailableData = $resource('../api/Permissions/Roles/:Id/AvailableData/:Type/:DataId', { Id: "@Id", Type: '@Type', DataId: "@DataId" }, {
 				query: { method: 'DELETE', params: {}, isArray: false }
 			});

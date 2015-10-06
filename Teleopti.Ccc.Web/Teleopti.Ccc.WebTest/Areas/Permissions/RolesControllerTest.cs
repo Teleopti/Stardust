@@ -450,5 +450,51 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			  agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
 			  agentRole.AvailableData.AvailableTeams.First().Description.Should().Be.EqualTo(team.Description);
 		  }
-    }
+
+		[Test]
+		public void ShouldDeleteParentAndAllChildren()
+		{
+			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+				new TeleoptiIdentity("test", null, businessUnit, null), PersonFactory.CreatePerson());
+			var roleId = Guid.NewGuid();
+			var site = SiteFactory.CreateSimpleSite();
+
+			businessUnit.SetId(site.BusinessUnit.Id);
+			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
+			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
+			ApplicationRoleRepository.Add(agentRole);
+
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var siteId = Guid.NewGuid();
+
+
+			site.SetId(siteId);
+			team.SetId(Guid.NewGuid());
+			team.Site = site;
+
+
+
+			var data = new AvailableDataForRoleInput
+			{
+				BusinessUnits = new Collection<Guid> {businessUnit.Id.Value},
+				Sites = new Collection<Guid> {siteId},
+				Teams = new Collection<Guid> {team.Id.Value},
+			};
+
+
+			agentRole.AvailableData.AddAvailableTeam(team);
+
+			agentRole.AvailableData.AddAvailableSite(site);
+			ApplicationRoleRepository.Add(agentRole);
+
+			Target.RemoveAvailable(roleId, data);
+
+			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
+			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
+			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
+		}
+	}
+
 }
