@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		public OptimizeBetweenDaysValidator()
 		{
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(23).Add(TimeSpan.FromSeconds(30))));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(10).Add(TimeSpan.FromSeconds(10))));
 		}
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)

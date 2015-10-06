@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		public SikuliValidationResult Validate(object data)
 		{
 			var memoryCounter = MemoryCounter.DefaultInstance();
-			var memoryUsageLimit = 100d;
+			var memoryUsageLimit = 70d;
 
 			var result = new SikuliValidationResult();
 
