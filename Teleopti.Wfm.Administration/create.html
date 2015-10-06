@@ -6,21 +6,20 @@
 			<h2>Create new Tenant</h2>
 			<p>
 				Lets you create new Tenant. You need to supply a user that have permissions to create database in the SQL Server.
-				<p/>
-				You should also provide a user and a password that will be used connecting to the databases by the application. This should be new user/login that does not exist in the SQL Server.
 			<p />
-				Then you input the first Business Unit and the first Person that can logon and start configuring the new Tenant.
+			You should also provide a user and a password that will be used connecting to the databases by the application. This should be new user/login that does not exist in the SQL Server.
+			<p />
+			Then you input the first Business Unit and the first Person that can logon and start configuring the new Tenant.
 			</p>
 			<div>
 				<div class="importCaption">Tenant name</div>
 				<input class="form-control" type="text" ng-model="vm.Tenant" ng-blur="vm.CheckTenantName()" placeholder="Tenant name">
 				<label ng-class="(vm.TenantOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.TenantMessage}}</label>
 			</div>
-			<br/>
+			<br />
 		</div>
 	</div>
 	<div class="row">
-
 		<div class="col-md-4" title="{{vm.SqlUserOkMessage}}">
 			<fieldset>
 				<legend ng-class="(vm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Database credentials to create databases</legend>
