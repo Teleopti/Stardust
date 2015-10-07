@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_teams.Add (entity);
 		}
 
+	    public void Has(ITeam team)
+	    {
+	        _teams.Add(team);
+	    }
+
 		public void Remove (ITeam entity)
 		{
 			throw new NotImplementedException();
