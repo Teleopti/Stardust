@@ -69,7 +69,7 @@ wfm.config([
 			templateUrl: 'html/settings/settings.html',
 			controller: 'SettingsDefaultCtrl'
 		}).state('settings.skillcreate', {
-			url: '/settings/skill/create',
+			url: '/skill/create',
 			templateUrl: 'html/settings/skill-create.html',
 			controller: 'SettingsSkillCreateCtrl'
 		}).state('resourceplanner', {
