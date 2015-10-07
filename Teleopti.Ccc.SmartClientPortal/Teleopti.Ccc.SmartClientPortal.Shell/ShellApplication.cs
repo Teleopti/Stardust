@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Text;
@@ -273,11 +274,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			handleException(e.Exception);
 		}
 
-		/// <summary>
-		/// Handles the exception.
-		/// </summary>
-		/// <param name="ex">The ex.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static void handleException(Exception ex)
 		{
 			if (ex == null) return;
@@ -292,7 +288,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			ITogglesActive toggles;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 			{
-				toggles = container.Resolve<ITogglesActive>();
+				try
+				{
+					toggles = container.Resolve<ITogglesActive>();
+				}
+				catch (Exception)
+				{
+					toggles = new emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached();
+				}
 			}
 			var exceptionMessageBuilder = new ExceptionMessageBuilder(ex, toggles);
 
@@ -336,6 +339,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			killOpenForms();
 			Application.Exit();
 
+		}
+
+		private class emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached: ITogglesActive
+		{
+			public IDictionary<Toggles, bool> AllActiveToggles()
+			{
+				return new Dictionary<Toggles, bool>();
+			}
 		}
 
 		private static void killOpenForms()
