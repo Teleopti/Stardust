@@ -34,7 +34,8 @@ var wfm = angular.module('wfm', [
 	'wfm.help',
 	'wfm.rta',
 	'wfm.start',
-	'wfm.businessunits'
+	'wfm.businessunits',
+	'wfm.settings'
 ]);
 
 wfm.config([
@@ -63,6 +64,14 @@ wfm.config([
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
+		}).state('settings', {
+			url: '/settings',
+			templateUrl: 'html/settings/settings.html',
+			controller: 'SettingsDefaultCtrl'
+		}).state('settings.skillcreate', {
+			url: '/settings/skill/create',
+			templateUrl: 'html/settings/skill-create.html',
+			controller: 'SettingsSkillCreateCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',

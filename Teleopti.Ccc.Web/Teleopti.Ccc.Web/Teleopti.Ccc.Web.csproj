@@ -1200,6 +1200,8 @@
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="WFM\html\forecasting\forecasting.html" />
     <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
+    <Content Include="WFM\html\settings\settings.html" />
+    <Content Include="WFM\html\settings\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
@@ -1207,6 +1209,9 @@
     <Content Include="WFM\js\outbound\outbound.directive.threshold.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
+    <Content Include="WFM\js\settings\settings.default.controller.js" />
+    <Content Include="WFM\js\settings\settings.skillcreate.controller.js" />
+    <Content Include="WFM\js\settings\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />

@@ -315,7 +315,6 @@ angular.module('wfm.forecasting')
 				} else {
 					workloadToSend.ForecastMethodId = -1;
 				}
-				debugger;
 				$http.post('../api/Forecasting/Forecast', JSON.stringify(
 					{
 						ForecastStart: $scope.period.startDate,
@@ -426,6 +425,10 @@ angular.module('wfm.forecasting')
 					}
 				}
 				$scope.period.endDate = angular.copy($scope.period.endDate);
+			};
+
+			$scope.createSkill = function() {
+				$state.go('settings.skillcreate');
 			};
 		}
 	]);
