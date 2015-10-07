@@ -16,11 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkill)]
-	public class SkillController : ApiController
-	{
-	}
-
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebForecasts)]
 	public class ForecastController : ApiController
 	{

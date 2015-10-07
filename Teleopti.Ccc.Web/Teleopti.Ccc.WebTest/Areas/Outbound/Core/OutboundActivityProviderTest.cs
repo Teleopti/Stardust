@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Core.Data;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
