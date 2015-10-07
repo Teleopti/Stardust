@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
         {
             using (_mocks.Record())
             {
-                Expect.Call(_findPersonsView.FromDate).Return(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc));
-                Expect.Call(_findPersonsView.ToDate).Return(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc));
+				Expect.Call(_findPersonsView.FromDate).Return(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)).Repeat.AtLeastOnce();
+                Expect.Call(_findPersonsView.ToDate).Return(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(() => _findPersonsView.SetErrorOnEndDate(UserTexts.Resources.StartDateMustBeSmallerThanEndDate));
                 Expect.Call(() => _findPersonsView.TextBoxFindEnabled = false);
             }
@@ -94,8 +94,6 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
             {
                 Expect.Call(_findPersonsView.FromDate).Return(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)).Repeat.Twice();
                 Expect.Call(_findPersonsView.ToDate).Return(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc));
-                Expect.Call(_findPersonsModel.ToDate).Return(new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)));
-                Expect.Call(_findPersonsModel.FromDate).Return(new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)));
                 Expect.Call(() => _findPersonsModel.FromDate = new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)));
                 Expect.Call(() => _findPersonsView.ClearDateErrors());
                 Expect.Call(() => _findPersonsView.TextBoxFindEnabled = true);
@@ -112,11 +110,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
         {
             using (_mocks.Record())
             {
-                Expect.Call(_findPersonsView.FromDate).Return(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc));
-                Expect.Call(_findPersonsView.ToDate).Return(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)).Repeat.Twice();
-                Expect.Call(_findPersonsModel.ToDate).Return(new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)));
-                Expect.Call(_findPersonsModel.FromDate).Return(new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)));
-                Expect.Call(() => _findPersonsModel.ToDate = new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)));
+				Expect.Call(_findPersonsView.FromDate).Return(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)).Repeat.AtLeastOnce();
+				Expect.Call(_findPersonsView.ToDate).Return(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)).Repeat.AtLeastOnce();
+				Expect.Call(() => _findPersonsModel.ToDate = new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)));
                 Expect.Call(() => _findPersonsView.ClearDateErrors());
                 Expect.Call(() => _findPersonsView.TextBoxFindEnabled = true);
             }
