@@ -11,6 +11,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignPersister _outboundCampaignPersister;
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
-		private readonly IOutboundActivityProvider _outboundActivityProvider;
+		private readonly IActivityProvider _activityProvider;
 		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
 		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
 		private readonly ICampaignListProvider _campaignListProvider;
@@ -31,14 +32,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 	
 
 		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
-			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider,
+			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IActivityProvider activityProvider, 
 			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, 
 			ICampaignListProvider campaignListProvider, ISettingsPersisterAndProvider<OutboundThresholdSettings> thresholdsSettingPersisterAndProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
-			_outboundActivityProvider = outboundActivityProvider;
+			_activityProvider = activityProvider;
 		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
 			_campaignVisualizationProvider = campaignVisualizationProvider;
 			_campaignListProvider = campaignListProvider;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
 		public virtual ICollection<ActivityViewModel> GetActivities()
 		{
-			return _outboundActivityProvider.GetAll().ToArray();
+			return _activityProvider.GetAll().ToArray();
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]

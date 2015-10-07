@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
+using Teleopti.Ccc.Web.Core.Data;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 	class OutboundActivityProviderTest
 	{
 		private FakeActivityRepository _activityRepository;
-		private OutboundActivityProvider _target;
+		private ActivityProvider _target;
 
 		[SetUp]
 		public void Init()
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			activity2.RequiresSkill = false;
 			_activityRepository.Add(activity2);
 
-			_target = new OutboundActivityProvider(_activityRepository);
+			_target = new ActivityProvider(_activityRepository);
 
 			var result = _target.GetAll();
 
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			activity2.RequiresSkill = false;
 			_activityRepository.Add(activity2);
 
-			_target = new OutboundActivityProvider(_activityRepository);
+			_target = new ActivityProvider(_activityRepository);
 
 			var result = _target.GetAll();
 

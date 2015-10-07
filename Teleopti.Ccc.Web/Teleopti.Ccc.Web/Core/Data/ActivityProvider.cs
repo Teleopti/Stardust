@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
-namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
+namespace Teleopti.Ccc.Web.Core.Data
 {
-	public class OutboundActivityProvider : IOutboundActivityProvider
+	public class ActivityProvider : IActivityProvider
 	{
 		private readonly IActivityRepository _activityRepository;
 
-		public OutboundActivityProvider(IActivityRepository activityRepository)
+		public ActivityProvider(IActivityRepository activityRepository)
 		{
 			_activityRepository = activityRepository;
 		}
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			foreach (var activity in _activityRepository.LoadAll())
 			{
-				if (activity.RequiresSkill) activities.Add(new ActivityViewModel(){Id = activity.Id, Name = activity.Name});
+				if (activity.RequiresSkill) activities.Add(new ActivityViewModel {Id = activity.Id, Name = activity.Name});
 			}
 
 			return activities;

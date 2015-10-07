@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
@@ -27,9 +28,5 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public TimeSpan EndTime;
 	}
 
-	public class ActivityViewModel
-	{
-		public Guid? Id;
-		public string Name;
-	}
+	
 }

@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Core.Data;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 {
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		[Test]
 		public void ShouldGetAllOutboundActivities()
 		{
-			var outboundActivityProvider = MockRepository.GenerateMock<IOutboundActivityProvider>();
+			var outboundActivityProvider = MockRepository.GenerateMock<IActivityProvider>();
 			outboundActivityProvider.Stub(x => x.GetAll()).Return(new List<ActivityViewModel>() {new ActivityViewModel()});
 
 			var target = new OutboundController(null, null, null, outboundActivityProvider, null, null, null, null)
