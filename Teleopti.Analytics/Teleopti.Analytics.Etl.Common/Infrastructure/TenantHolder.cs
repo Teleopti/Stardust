@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +35,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IDataSource TenantDataSource(string name)
 		{
-			return TenantBaseConfigs.FirstOrDefault(x => x.Tenant.Name.Equals(name)).TenantDataSource;
+			var config = TenantBaseConfigs.FirstOrDefault(x => x.Tenant.Name.Equals(name));
+			return config == null ? null : config.TenantDataSource;
 		} 
 		public IList<TenantBaseConfig> TenantBaseConfigs{ get; private set; }
 	}

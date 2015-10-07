@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Authentication;
+using NHibernate.Util;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -161,28 +163,39 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 
+			if (TenantHolder.Instance.TenantBaseConfigs == null) 
+				TenantHolder.Instance.SetTenantBaseConfigs(new List<TenantBaseConfig>());
+
+			_tenantNames = new List<ITenantName>();
+
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var tenants = _loadAllTenants.Tenants();
-				
-				var configs = new List<TenantBaseConfig>();
-				_tenantNames = new List<ITenantName>();
+				var tenants = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in tenants)
 				{
-					var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
-					IBaseConfiguration baseconfig = null;
-					if (config.IsConfigurationValid)
-						baseconfig = config.BaseConfiguration;
-					var applicationNhibConfiguration = new Dictionary<string, string>();
-					applicationNhibConfiguration[Environment.SessionFactoryName] = tenant.Name;
-					applicationNhibConfiguration[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
-				
-					var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
-					
-               configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+					var temp = TenantHolder.Instance.TenantDataSource(tenant.Name);
+					if (temp == null)
+					{
+						var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
+						IBaseConfiguration baseconfig = null;
+						if (config.IsConfigurationValid)
+							baseconfig = config.BaseConfiguration;
+						var applicationNhibConfiguration = new Dictionary<string, string>();
+						applicationNhibConfiguration[Environment.SessionFactoryName] = tenant.Name;
+						applicationNhibConfiguration[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+
+						var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+						TenantHolder.Instance.TenantBaseConfigs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+					}
 					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
 				}
-				TenantHolder.Instance.SetTenantBaseConfigs(configs);
+
+				var toRemove = (from baseConfig in TenantHolder.Instance.TenantBaseConfigs let name = baseConfig.Tenant.Name where tenants.FirstOrDefault(x => x.Name.Equals(name)) == null select baseConfig).ToList();
+				foreach (var tenantBaseConfig in toRemove)
+				{
+					TenantHolder.Instance.TenantBaseConfigs.Remove(tenantBaseConfig);
+            }
 			}
 		}
 	}
