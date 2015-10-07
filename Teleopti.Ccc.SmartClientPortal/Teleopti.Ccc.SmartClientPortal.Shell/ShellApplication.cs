@@ -280,23 +280,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			Application.ThreadException -= applicationThreadException;
 			AppDomain.CurrentDomain.UnhandledException -= appDomainUnhandledException;
-			string fallBack = string.Empty;
+			var fallBack = string.Empty;
 
-			var iocArgs = new IocArgs(configReader);
-			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
-			ITogglesActive toggles;
-			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
-			{
-				try
-				{
-					toggles = container.Resolve<ITogglesActive>();
-				}
-				catch (Exception)
-				{
-					toggles = new emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached();
-				}
-			}
+			var toggles = exceptionSafeTogglesActive();
 			var exceptionMessageBuilder = new ExceptionMessageBuilder(ex, toggles);
 
 			var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
@@ -332,6 +318,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			killOpenForms();
 			Application.Exit();
 
+		}
+
+		private static ITogglesActive exceptionSafeTogglesActive()
+		{
+			ITogglesActive toggles;
+			try
+			{
+				var iocArgs = new IocArgs(configReader);
+				var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
+				tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(
+					new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
+				using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
+				{
+					toggles = container.Resolve<ITogglesActive>();
+				}
+			}
+			catch (Exception)
+			{
+				toggles = new emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached();
+			}
+			return toggles;
 		}
 
 		private class emptyStubOfActivteToggles_OnlyUseIfWebCannotBeReached: ITogglesActive
