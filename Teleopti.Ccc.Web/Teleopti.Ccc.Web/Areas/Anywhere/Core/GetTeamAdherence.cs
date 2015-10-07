@@ -31,9 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var site = _siteRepository.Get(new Guid(siteId));
 			var teams = site.TeamCollection.ToArray();
-			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
-			if (_numberOfAgentsInTeamReader != null)
-				numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
+		    var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
 
 			return teams.Select(team => new TeamViewModel
 			{
