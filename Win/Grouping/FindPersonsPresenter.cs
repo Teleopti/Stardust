@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Win.Grouping
 		private readonly IFindPersonsView _view;
 		private readonly FindPersonsModel _model;
 		private readonly PersonFinderService _personFinderService;
-		private readonly PersonIndexBuilder _personIndexBuilder;
 		private readonly FindPersonPeriodHandler _findPersonPeriodHandler;
 
 		public FindPersonsPresenter(IFindPersonsView view, FindPersonsModel model, IApplicationFunction applicationFunction, IComponentContext container)
@@ -27,9 +26,9 @@ namespace Teleopti.Ccc.Win.Grouping
 
 			_view = view;
 			_model = model;
-			_personIndexBuilder = new PersonIndexBuilder(applicationFunction, _model.Persons, new DateOnlyPeriod(_model.FromDate, _model.ToDate), container.Resolve<ITenantLogonDataManager>());
-			_personFinderService = new PersonFinderService(_personIndexBuilder);
-			_findPersonPeriodHandler = new FindPersonPeriodHandler(_model, _view, _personIndexBuilder, _personFinderService);
+			var personIndexBuilder = new PersonIndexBuilder(applicationFunction, _model.Persons, container.Resolve<ITenantLogonDataManager>());
+			_personFinderService = new PersonFinderService(personIndexBuilder);
+			_findPersonPeriodHandler = new FindPersonPeriodHandler(_model, _view);
 		}
 
 		public void Initialize()
@@ -41,18 +40,26 @@ namespace Teleopti.Ccc.Win.Grouping
 		public void ToDateChanged()
 		{
 			_findPersonPeriodHandler.ToDateChanged();
+			if (_findPersonPeriodHandler.CheckPeriod())
+			{
+				RefreshResult();
+			}
 		}
 
 		public void FromDateChanged()
 		{
 			_findPersonPeriodHandler.FromDateChanged();
+			if (_findPersonPeriodHandler.CheckPeriod())
+			{
+				RefreshResult();
+			}
 		}
 
 		public void RefreshResult()
 		{
 			IList<TreeNodeAdv> nodes = new List<TreeNodeAdv>();
 			var commonNameDescription = new CommonNameDescriptionSetting();
-			foreach (var person in _personFinderService.Find(_view.FindText))
+			foreach (var person in _personFinderService.Find(_view.FindText, new DateOnlyPeriod(_model.FromDate, _model.ToDate)))
 			{
 				var personNode = new TreeNodeAdv(commonNameDescription.BuildCommonNameDescription(person));
 				personNode.TagObject = person;

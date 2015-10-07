@@ -24,14 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-				public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+	    public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork)
+		    : base(currentUnitOfWork)
 	    {
-		    
 	    }
 
-
-        public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
+	    public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
         {
             var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
 
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     }
                     return ret;
                 }
-                set { this[key] = value; }
+                set { base[key] = value; }
             }
         }
     }

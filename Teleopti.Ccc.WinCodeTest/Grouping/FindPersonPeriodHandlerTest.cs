@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
@@ -13,8 +12,6 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
         private FindPersonPeriodHandler _target;
         private IFindPersonsModel _findPersonsModel;
         private IFindPersonsView _findPersonsView;
-        private IPersonIndexBuilder _personIndexBuilder;
-        private IPersonFinderService _personFinderService;
         private MockRepository _mocks;
 
 
@@ -24,10 +21,8 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
             _mocks = new MockRepository();
             _findPersonsModel = _mocks.StrictMock<IFindPersonsModel>();
             _findPersonsView = _mocks.StrictMock<IFindPersonsView>();
-            _personIndexBuilder = _mocks.StrictMock<IPersonIndexBuilder>();
-            _personFinderService = _mocks.StrictMock<IPersonFinderService>();
 
-            _target = new FindPersonPeriodHandler(_findPersonsModel, _findPersonsView, _personIndexBuilder, _personFinderService);
+            _target = new FindPersonPeriodHandler(_findPersonsModel, _findPersonsView);
         }
 
         [Test]
@@ -104,8 +99,6 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
                 Expect.Call(() => _findPersonsModel.FromDate = new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)));
                 Expect.Call(() => _findPersonsView.ClearDateErrors());
                 Expect.Call(() => _findPersonsView.TextBoxFindEnabled = true);
-                Expect.Call(() => _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)), new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)))));
-                Expect.Call(() => _personFinderService.RebuildIndex());
             }
 
             using(_mocks.Playback())
@@ -126,8 +119,6 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
                 Expect.Call(() => _findPersonsModel.ToDate = new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)));
                 Expect.Call(() => _findPersonsView.ClearDateErrors());
                 Expect.Call(() => _findPersonsView.TextBoxFindEnabled = true);
-                Expect.Call(() => _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(new DateOnly(new DateTime(2011, 9, 9, 0, 0, 0, DateTimeKind.Utc)), new DateOnly(new DateTime(2011, 10, 10, 0, 0, 0, DateTimeKind.Utc)))));
-                Expect.Call(() => _personFinderService.RebuildIndex());
             }
 
             using (_mocks.Playback())

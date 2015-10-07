@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         {
             persons = new List<IPerson>();
             var applicationFunction =  ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
-            target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1),new fakeTenantLogonDataManager()));
+            target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new fakeTenantLogonDataManager()));
         }
 
         private void SetupPersons()
@@ -60,24 +60,13 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         public void ShouldFindPersons()
         {
             SetupPersons();
-            var result = target.Find("");
+            var result = target.Find("",new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1));
             result.Should().Have.Count.EqualTo(0);
 
-            result = target.Find("Team1 Contract3 cs3");
+            result = target.Find("Team1 Contract3 cs3", new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1));
 
-            result.Count.Should().Be.EqualTo(1);
+            result.Length.Should().Be.EqualTo(1);
             result.Should().Contain(findPerson3);
-        }
-
-        [Test]
-        public void ShouldBeAbleToRebuildIndex()
-        {
-            var snubbe = new Person() {Name = new Name("Rågge", "Bågge")};
-            target.Find("Rågge").Should().Be.Empty();
-            persons.Add(snubbe);
-            target.Find("Rågge").Should().Be.Empty();
-            target.RebuildIndex();
-            target.Find("Rågge").Should().Not.Be.Empty();
         }
     }
 

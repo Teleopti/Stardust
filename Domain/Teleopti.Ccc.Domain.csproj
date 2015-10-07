@@ -766,14 +766,12 @@
     <Compile Include="GroupPageCreator\GroupCreator.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
-    <Compile Include="GroupPageCreator\ISearchIndexBuilder.cs" />
     <Compile Include="GroupPageCreator\PersonFinderService.cs" />
     <Compile Include="GroupPageCreator\PersonGroupPage.cs" />
     <Compile Include="GroupPageCreator\GroupingsCreator.cs" />
     <Compile Include="GroupPageCreator\IGroupPageCreator.cs" />
     <Compile Include="GroupPageCreator\PartTimePercentageGroupPage.cs" />
     <Compile Include="GroupPageCreator\PersonNoteGroupPage.cs" />
-    <Compile Include="GroupPageCreator\GenericFinderService.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPage.cs" />
     <Compile Include="GroupPageCreator\PersonIndexBuilder.cs" />
     <Compile Include="GroupPageCreator\SingleAgentTeamGroupPage.cs" />
