@@ -21,16 +21,18 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		public SikuliValidationResult Validate(object data)
 		{
 			var memoryCounter = MemoryCounter.DefaultInstance();
-			var memoryUsageLimit = 70d;
+			const double memoryConsumptionLimit = 80d;
 
 			var result = new SikuliValidationResult();
 
-			if (memoryCounter.CurrentMemoryConsumption() > memoryUsageLimit)
+			var currentConsumption = memoryCounter.CurrentMemoryConsumption();
+
+			if (currentConsumption > memoryConsumptionLimit)
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 
 			result.AppendResultLine("Memory",
-				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", memoryUsageLimit),
-				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", memoryCounter.CurrentMemoryConsumption()), result.Result);
+				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", memoryConsumptionLimit),
+				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", currentConsumption), result.Result);
 
 			return result;
 		}
