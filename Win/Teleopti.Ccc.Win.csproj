@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.Win</RootNamespace>
     <AssemblyName>Teleopti.Ccc.Win</AssemblyName>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>
     </SccProjectName>
