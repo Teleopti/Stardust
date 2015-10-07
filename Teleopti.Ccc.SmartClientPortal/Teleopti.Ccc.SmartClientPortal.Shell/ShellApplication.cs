@@ -299,15 +299,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			var exceptionMessageBuilder = new ExceptionMessageBuilder(ex, toggles);
 
-			try
-			{
-				var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
-				log.Error(exceptionMessageBuilder.BuildSimpleExceptionMessage(), ex);
-			}
-			catch (Exception)
-			{
-				//do nothing
-			}
+			var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
+			log.Error(exceptionMessageBuilder.BuildSimpleExceptionMessage(), ex);
 
 			var emailSetting = new StringSetting();
 			if (StateHolderReader.IsInitialized)
