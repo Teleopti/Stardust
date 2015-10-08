@@ -1199,6 +1199,7 @@
     <Content Include="WFM\html\forecasting\forecasting.html" />
     <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
+    <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\outbound\outbound.directive.threshold.js" />
@@ -1361,7 +1362,6 @@
     <Content Include="WFM\js\outbound\outbound.directive.formLocator.js" />
     <Content Include="WFM\js\outbound\outbound.service.notification.js" />
     <Content Include="WFM\js\outbound\outbound.directive.range-validate.js" />
-    <Content Include="WFM\js\outbound\outbound.directive.timepicker.js" />
     <Content Include="WFM\js\outbound\outbound.service.view-utility.js" />
     <Content Include="WFM\js\outbound\outbound.directive.working-hours-picker.js" />
     <Content Include="WFM\js\outbound\_modules.js" />
@@ -2084,6 +2084,7 @@
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
+    <Content Include="WFM\css\_timerangepicker.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
