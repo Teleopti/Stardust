@@ -10,7 +10,7 @@
 		vm.previousSelectedSeats = [];
 
 		vm.getDisplayTime = function (booking) {
-			return utils.getSeatBookingTimeDisplay(booking, vm.scheduleDate);
+			return utils.getSeatBookingTimeDisplay(booking);
 		};
 
 		vm.deleteSeatBooking = function (booking) {

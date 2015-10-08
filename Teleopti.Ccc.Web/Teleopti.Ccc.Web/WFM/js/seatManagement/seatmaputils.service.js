@@ -309,7 +309,8 @@
 			};
 
 			function loadOccupancyDetailsForSeats(seatIds, selectedDate) {
-				return seatMapService.occupancy.get({ SeatIds: seatIds , Date: selectedDate }).$promise;
+				var selectedDateDateOnly = moment(selectedDate).format('YYYY-MM-DD');
+				return seatMapService.occupancy.get({ SeatIds: seatIds, Date: selectedDateDateOnly }).$promise;
 			};
 
 			function resetPosition(canvas) {
