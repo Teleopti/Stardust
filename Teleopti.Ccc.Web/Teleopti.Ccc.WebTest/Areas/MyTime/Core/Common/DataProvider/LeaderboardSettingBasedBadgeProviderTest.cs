@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldQueryForEveryone()
 		{
-			groupingRepository.Stub(x => x.AvailableGroups(null, date))
+			groupingRepository.Stub(x => x.AvailableGroups((ReadOnlyGroupPage)null, date))
 				.IgnoreArguments()
 				.Return(new[] {new ReadOnlyGroupDetail()});
 			groupingRepository.Stub(x => x.DetailsForGroup(Guid.Empty, date)).Return(new[] {personDetail1});
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Type = LeadboardQueryType.Everyone
 			};
 
-			groupingRepository.Stub(x => x.AvailableGroups(null, date))
+			groupingRepository.Stub(x => x.AvailableGroups((ReadOnlyGroupPage)null, date))
 				.IgnoreArguments()
 				.Return(new[] {new ReadOnlyGroupDetail()});
 			groupingRepository.Stub(x => x.DetailsForGroup(Guid.Empty, date)).Return(persons);

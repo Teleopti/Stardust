@@ -78,6 +78,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupDetail>();
 		}
 
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate)
+		{
+			const string sql =
+				"exec [ReadModel].[LoadAvailableGroups] @businessUnitId=:businessUnitId, @date=:queryDate,@pageIds=:pageIds";
+
+			var pageIds = string.Join(",", groupPages.Select(p => p.PageId).ToArray());
+
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetDateTime("queryDate", queryDate.Date)
+				.SetString("pageIds", pageIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupDetail)))
+				.SetReadOnly(true)
+				.List<ReadOnlyGroupDetail>();
+		}
+
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
 			const string sql =
@@ -97,33 +113,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupDetail>();
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
-        {
-            //change the array to comma seperated string
-            string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
-	        _currentUnitOfWork.Session().CreateSQLQuery(
-		        "exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
-        {
-            //change the array to comma seperated string
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+		public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
+		{
+			//change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
 			_currentUnitOfWork.Session().CreateSQLQuery(
-            		"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
-        }
+				"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
-        {
-            //change the array to comma seperated string
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+		public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
+		{
+			//change the array to comma seperated string
+			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
+			_currentUnitOfWork.Session().CreateSQLQuery(
+					"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+		public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
+		{
+			//change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
 
-	        _currentUnitOfWork.Session().CreateSQLQuery(
-		        "exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
-        }
+			_currentUnitOfWork.Session().CreateSQLQuery(
+				"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
+		}
 	}
 
 }

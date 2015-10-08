@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -39,8 +38,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnMyTeamAsDefaultGroup()
 		{
 			var site = SiteFactory.CreateSimpleSite("s");
+
+			var teamId = Guid.NewGuid();
 			var team = new Team {Site = site, Description = new Description("Team red")};
-			team.SetId(Guid.NewGuid());
+			team.SetId(teamId);
+
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);
 			var loggedOnUser = new FakeLoggedOnUser(person);
 
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var secondGroup = new ReadOnlyGroupDetail
 			{
-				GroupId = team.Id.Value,
+				GroupId = teamId,
 				GroupName = team.Description.Name
 			};
 
@@ -103,13 +105,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnGroupNameWithGroupPageName()
 		{
+			var pageId = Guid.NewGuid();
 			var groupPage = new ReadOnlyGroupPage
 			{
+				PageId = pageId,
 				PageName = "A group"
 			};
 
 			var firstGroup = new ReadOnlyGroupDetail
 			{
+				PageId = pageId,
 				GroupId = Guid.Empty,
 				GroupName = "Team green"
 			};
@@ -134,6 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var firstGroup = new ReadOnlyGroupDetail
 			{
+				PageId = Group.PageMainId,
 				GroupId = Guid.Empty,
 				GroupName = "Team green"
 			};
@@ -237,6 +243,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupPages()
 		{
 			return _readOnlyGroupPages;
+		}
+
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate)
+		{
+			return _readOnlyGroupDetails;
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate)

@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTextTranslator _userTextTranslator;
 
-		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser, IUserTextTranslator userTextTranslator)
+		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser,
+			IUserTextTranslator userTextTranslator)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_loggedOnUser = loggedOnUser;
@@ -47,37 +48,28 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					customGroupPages.Add(readOnlyGroupPage);
 			}
 
-
 			buildInGroupPages = buildInGroupPages.OrderBy(x => x.PageName).ToList();
+			customGroupPages = customGroupPages.OrderBy(x => x.PageName).ToList();
+
 			if (businessHierarchyPage != null)
 				buildInGroupPages.Insert(0, businessHierarchyPage);
 
-			var actualGroupPages = buildInGroupPages.Select(gp =>
+			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
+			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, new DateOnly(date));
+
+			var actualGroupPages = groupPages.Select(gp =>
+			{
+				var name = gp.PageName;
+				return new
 				{
-					var name = gp.PageName;
-					return new
-						{
-							Name = name,
-							Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
-								{
-									Name = gp.PageId == Group.PageMainId ? g.GroupName : name + "/" + g.GroupName,
-									Id = g.GroupId
-								}).Distinct().ToArray()
-						};
-				}).ToList();
-			actualGroupPages.AddRange(customGroupPages.Select(gp =>
-				{
-					var name = gp.PageName;
-					return new
-						{
-							Name = name,
-							Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
-								{
-									Name = name + "/" + g.GroupName,
-									Id = g.GroupId
-								}).Distinct().ToArray()
-						};
-				}).OrderBy(x => x.Name).ToList());
+					Name = name,
+					Groups = allAvailableGroups.Where(g => g.PageId == gp.PageId).Select(g => new
+					{
+						Name = gp.PageId == Group.PageMainId ? g.GroupName : name + "/" + g.GroupName,
+						Id = g.GroupId
+					}).Distinct().ToArray()
+				};
+			}).ToList();
 
 			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
 			var defaultGroupId = team != null ? team.Id : null;
