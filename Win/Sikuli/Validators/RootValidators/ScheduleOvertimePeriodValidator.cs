@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		public ScheduleOvertimePeriodValidator()
 		{
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(5))));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromSeconds(50)));
 		}
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
 		{
-			const double periodStandardDeviationLimit = 0.03d;
+			const double periodStandardDeviationLimit = 0.032d;
 			AtomicValidators.Add(new PeriodStandardDeviationValidator(data.SchedulerState, data.TotalSkill, periodStandardDeviationLimit));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
