@@ -615,7 +615,6 @@
     <Compile Include="Repositories\PersonAssignmentRepository.cs" />
     <Compile Include="Repositories\ActivityRepository.cs" />
     <Compile Include="Repositories\PersonRepository.cs" />
-    <Compile Include="Repositories\RepositoryNonGeneric.cs" />
     <Compile Include="Repositories\ApplicationFunctionRepository.cs" />
     <Compile Include="Repositories\ApplicationRoleRepository.cs" />
     <Compile Include="Repositories\BusinessUnitRepository.cs" />

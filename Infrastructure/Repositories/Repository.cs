@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,21 +17,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Used for NHibernate sessions.
     /// </summary>
     /// <typeparam name="T">Type of Aggregate root</typeparam>
-    public abstract class Repository<T> : Repository, IRepository<T> where T : IAggregateRoot
+    public abstract class Repository<T> : IRepository<T> where T : IAggregateRoot
     {
-        protected Repository(IUnitOfWork unitOfWork) : base(unitOfWork) 
+	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
+
+		//don't use this one!
+	    protected Repository(IUnitOfWork unitOfWork)
         {
+			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+        }
+		//don't use this one!
+		protected Repository(IUnitOfWorkFactory unitOfWorkFactory)
+        {
+			_currentUnitOfWork = new FromFactory(unitOfWorkFactory);
         }
 
-        protected Repository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-        {
-        }
-
-	    protected Repository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		//use this one!
+		protected Repository(ICurrentUnitOfWork currentUnitOfWork)
 	    {
+		    _currentUnitOfWork = currentUnitOfWork;
 	    }
 
-        public IList<T> LoadAll()
+	    public IList<T> LoadAll()
         {
             return Session.CreateCriteria(typeof(T)).List<T>();
         }
@@ -112,5 +124,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				delRootInfo.SetDeleted();
 			}
 		}
-    }
+
+		public IUnitOfWork UnitOfWork
+		{
+			get
+			{
+				return _currentUnitOfWork.Current();
+			}
+		}
+
+		protected ISession Session
+		{
+			get
+			{
+				if (ValidateUserLoggedOn)
+				{
+					var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal()).Current();
+					var loggedIn = identity != null && identity.IsAuthenticated;
+					if (!loggedIn)
+						throw new PermissionException("This repository is not available for non logged on users");
+				}
+				return UnitOfWork.Session();
+			}
+		}
+
+		public virtual bool ValidateUserLoggedOn
+		{
+			get { return true; }
+		}
+	}
 }
