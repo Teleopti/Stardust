@@ -8,17 +8,17 @@
         		query: { method: 'GET', params: {}, isArray: true }
         	});
 
-        	this.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {siteId: '@siteId'}, {
-        		query: { method: 'GET', params: {}, isArray: true }
-        	});
+        	//this.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {siteId: '@siteId'}, {
+        	//	query: { method: 'GET', params: {}, isArray: true }
+        	//});
 
             this.getSites = $resource('../Sites', {}, {
                 query: { method: 'GET', params: {}, isArray: true }
             });
 
-            /**this.getTeamsForSelectedSites('../Teams/ForSites?siteId=:siteId', { selecetedSites: '@selectedSites' }, {
-				query: { method: 'GET', params: {}, isArray: true}
-            });**/
+            this.getTeamsForSelectedSites = $resource('../Teams/ForSites', {}, {
+				        query: { method: 'GET', params: {siteIds: []}, isArray: true}
+            });
 
             this.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {siteId: '@siteId'}, {
                 query: {

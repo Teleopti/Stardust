@@ -1230,6 +1230,7 @@
     <Content Include="WFM\js\people\people.default.controller.js" />
     <Content Include="WFM\js\people\people.indeterminate.directive.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
+    <Content Include="WFM\js\rta\rta.agents.filters.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
     <Content Include="WFM\js\forecasting\skill.service.js" />
@@ -1239,6 +1240,7 @@
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
+    <Content Include="WFM\tests\rta\rta.agents.filters.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
@@ -1252,7 +1254,6 @@
     <Content Include="WFM\js\rta\rta-sites.html" />
     <Content Include="WFM\js\rta\rta-teams.html" />
     <Content Include="WFM\js\rta\rta.agents.controller.js" />
-    <Content Include="WFM\js\rta\rta.agents.service.js" />
     <Content Include="WFM\js\rta\rta.service.js" />
     <Content Include="WFM\js\rta\rta.teams.controller.js" />
     <Content Include="WFM\js\rta\_modules.js" />

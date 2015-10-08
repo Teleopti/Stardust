@@ -5,14 +5,16 @@
          '$scope', '$state', '$stateParams','$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location',
           function ($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location) {
 
-						var siteId = $stateParams.siteId;
+						//var siteId = $stateParams.siteId;
+						var siteIds = $stateParams.siteIds;
 
           	$scope.selectedTeams = [];
-          	$scope.teams = RtaOrganizationService.getTeams(siteId);
+          	$scope.teams = RtaOrganizationService.getTeams(siteIds);
 						$scope.siteName = '';
-           	RtaOrganizationService.getSiteName(siteId).then(function(name){
-						 $scope.siteName = name;
-					 });
+
+					 	RtaOrganizationService.getSiteName(siteIds).then(function(name){
+						$scope.siteName = name;
+						});
 
           	$scope.toggleSelection = function (teamId) {
           		var index = $scope.selectedTeams.indexOf(teamId);
@@ -28,9 +30,9 @@
           		RtaOrganizationService.getAgentsForSelectedTeams(selectedTeams);
           	};
 
-          	$scope.onTeamSelect = function (team) {
-          		$state.go('rta-agents', { siteId: siteId, teamId: team.Id});
-          	};
+          	// $scope.onTeamSelect = function (team) {
+          	// 	$state.go('rta-agents', { siteId: siteIds, teamId: team.Id});
+          	// };
 
           	$scope.goBack = function () {
           		$state.go('rta-sites');
@@ -41,10 +43,15 @@
                       team.OutOfAdherence = 0;
                   });
                   $scope.teams = data;
-                  RtaService.getAdherenceForTeamsOnSite.query({ siteId: siteId }).$promise.then(updateAdherence);
+
+									siteIds.forEach(function (id) {
+										  RtaService.getAdherenceForTeamsOnSite.query({ siteId: id }).$promise.then(updateAdherence);
+									});
 
                   $interval(function () {
-                      RtaService.getAdherenceForTeamsOnSite.query({ siteId: siteId }).$promise.then(updateAdherence);
+										siteIds.forEach(function(id) {
+												RtaService.getAdherenceForTeamsOnSite.query({ siteId: id }).$promise.then(updateAdherence);
+										});
                   }, 5000);
               };
 
@@ -55,6 +62,6 @@
                   })
               };
 
-              RtaService.getTeams.query({ siteId: siteId }).$promise.then(displayAdherence);
+              RtaService.getTeamsForSelectedSites.query({ siteIds: siteIds }).$promise.then(displayAdherence);
           }]);
 })();

@@ -4,20 +4,20 @@
             <button class="wfm-btn wfm-btn-primary" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
             <span ng-click="goBack()"><a class="rta-nav-link">Real Time Adherence</a></span> / <span>{{siteName}}</span>
         </div>
-        <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{rtaGrid: teams.length > 3}">
+        <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5}">
             <div class="rta-stats team">
                 <div class="wfm-checkbox">
                     <label>
                         <input type="checkbox" name="checkbox" value="value" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)">
                         <span class="wfm-checkbox-toggle"></span>
                     </label>
-
                 </div>
                 <div class="rta-trigger-area" ng-click="onTeamSelect(team)">
-
+                <h4 class="site-name">{{team.Name}}</h4>
                 <b class="site-name" ng-attr-data-value="{{team.OutOfAdherence}}" ng-attr-data-max="{{team.NumberOfAgents}}">{{team.Name}}</b>
                 <div class="site-data">
                     <div>
+                        <span>{{siteName}}</span>
                         <p>Out of adherence: <b>{{team.OutOfAdherence}}</b></p>
                     </div>
                 </div>

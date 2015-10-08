@@ -11,7 +11,7 @@
         <span class="wfm-checkbox-toggle"></span>
         </label>
       </div>
-      <div class="rta-trigger-area" ng-click="onSiteSelect(site)">
+      <div class="rta-trigger-area" ng-click="openSelectedSite(site.Id)">
         <b class="site-name" ng-attr-data-value="{{site.OutOfAdherence}}" ng-attr-data-max="{{site.NumberOfAgents}}">{{site.Name}}</b>
           <div class="site-data">
             <p>Out of adherence: <b>{{site.OutOfAdherence}}</b></p>

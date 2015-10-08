@@ -3,7 +3,7 @@ describe('PermissionsFilters', function() {
 	var $q,
 		$rootScope,
 		$httpBackend;
-	
+
 	beforeEach(module('wfm'));
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
@@ -25,14 +25,14 @@ describe('PermissionsFilters', function() {
 	}));
 
 	it('should filter on the selected data only', inject(function ($filter) {
-	    var allData = [{ id: 1, selected: true, nmbSelectedChildren: 1, Name: 'Name', Type: 'Site', 
+	    var allData = [{ id: 1, selected: true, nmbSelectedChildren: 1, Name: 'Name', Type: 'Site',
 	             ChildNodes: [{ id: 2, selected: true, Name: 'Name', Type: 'Team' },
                  { id: 3, selected: false, Name: 'Name', Type: 'Team' }]
 	    }];
 	    var filter = $filter('selectedData');
 
 	    var filteredArray = filter(allData, true);
-	    expect(filteredArray.length).toEqual(1); 
+	    expect(filteredArray.length).toEqual(1);
 	}));
 
 	it('should filter on the unselected functions only', inject(function ($filter) {
@@ -57,7 +57,7 @@ describe('PermissionsFilters', function() {
 
 		var filteredArray = filter(allFunctions, true);
 
-		expect(filteredArray.length).toEqual(2); 
+		expect(filteredArray.length).toEqual(2);
 	}));
 
 	it('should filter on the unselected data only', inject(function ($filter) {
@@ -66,7 +66,7 @@ describe('PermissionsFilters', function() {
 		    id: 1,
 		    Type: 'Site',
             Name: 'London',
-		    selected: true,		   
+		    selected: true,
 		    ChildNodes: [
 				{ id: 4, selected: false }
 		    ]
@@ -119,7 +119,7 @@ describe('PermissionsFilters', function() {
 
 	}));
 
-    
+
 	it('shold find matched parent nodes', inject(function ($filter) {
 	    var nodes = [
 			{

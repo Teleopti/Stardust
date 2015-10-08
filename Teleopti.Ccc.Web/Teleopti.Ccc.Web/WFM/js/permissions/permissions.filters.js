@@ -108,13 +108,13 @@
         });
         return unselectedChildren;
     };
-     
+
     permissionsFilters.filter('selectedData', [
         function () {
             return function (nodes, selectedDataToggle) {
                 if (!selectedDataToggle) return nodes;
                 var filteredNodes = [];
-                
+
                 nodes.forEach(function (node) {
                     var hasSelectedChildren = 0;
                     if (node.ChildNodes && node.ChildNodes.length > 0) {

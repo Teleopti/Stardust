@@ -7,9 +7,9 @@
         $scope.selectedSites = [];
 				$scope.sites = RtaOrganizationService.getSites();
 
-				$scope.onSiteSelect = function (site) {
-					$state.go('rta-teams', {siteId: site.Id});
-				};
+				//$scope.onSiteSelect = function (site) {
+				//	$state.go('rta-teams', {siteId: site.Id});
+				//};
 
         $scope.toggleSelection = function (siteId) {
           var index = $scope.selectedSites.indexOf(siteId);
@@ -22,8 +22,19 @@
           };
 
           $scope.openSelectedSites = function (selectedSites){
-            RtaOrganizationService.getTeamsForSelectedSites(selectedSites);
+            //RtaOrganizationService.getTeamsForSelectedSites(selectedSites);
+						console.log(selectedSites);
+						RtaOrganizationService.getTeams(selectedSites);
+						$state.go('rta-teams', {siteIds: $scope.selectedSites});
           };
+
+					$scope.openSelectedSite = function (siteId){
+						$scope.toggleSelection(siteId);
+						RtaOrganizationService.getTeams($scope.selectedSites);
+							console.log($scope.selectedSites);
+						$state.go('rta-teams', {siteIds: $scope.selectedSites});
+					};
+
 
 			    var displayAdherence = function (data) { // FIXME get adherence from the server with this first call
 			        data.forEach(function (site) {
