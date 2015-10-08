@@ -1211,6 +1211,7 @@
     <Content Include="WFM\js\outbound\outbound.directive.threshold.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
+    <Content Include="WFM\js\settings\settings.service.js" />
     <Content Include="WFM\js\settings\settings.default.controller.js" />
     <Content Include="WFM\js\settings\settings.skillcreate.controller.js" />
     <Content Include="WFM\js\settings\_modules.js" />
