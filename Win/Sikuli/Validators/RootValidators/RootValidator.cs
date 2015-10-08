@@ -10,6 +10,20 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		private IList<IAtomicValidator> _atomicValidators;
 
+		public virtual string Name
+		{
+			get
+			{
+				var fullClassName = GetType().Name;
+				var name = fullClassName;
+				if (fullClassName.EndsWith("Validator"))
+				{
+					name = name.Substring(0, name.Length - "Validator".Length);
+				}
+				return name;
+			}
+		}
+
 		public virtual string Description
 		{
 			get
