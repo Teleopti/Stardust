@@ -200,7 +200,6 @@
     <Compile Include="FakeUserTimeZone.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
-    <Compile Include="IoC\IoCTestTest.cs" />
     <Compile Include="IoC\ISetup.cs" />
     <Compile Include="IoC\SettingAttribute.cs" />
     <Compile Include="IoC\ToggleOffAttribute.cs" />
