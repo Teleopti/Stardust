@@ -68,10 +68,10 @@ Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 WfmPeople_AdvancedSearch_32973 = true
-Wfm_Outbound_Campaign_32696 = true
-Wfm_Outbound_Campaign_GanttChart_34259 = true
-SeatPlanner_Logon_32003 = true
-Wfm_SeatPlan_SeatMapBookingView_32814 = true
+Wfm_Outbound_Campaign_32696 = RC
+Wfm_Outbound_Campaign_GanttChart_34259 = RC
+SeatPlanner_Logon_32003 = RC
+Wfm_SeatPlan_SeatMapBookingView_32814 = RC
 MyTimeWeb_ShowSeatBooking_34799 = RC
 MyTimeWeb_PreferenceShowNightViolation_33152 = true
 
@@ -82,6 +82,7 @@ WfmForecast_MethodsComparisonView_33610 = true
 WfmForecast_IntradayPatternView_33069 = true
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
-WfmPeople_ImportUsers_33665 = true
+WfmPeople_ImportUsers_33665 = RC
 RTA_MultiTenancy_32539 = RC
-WfmPeople_AdjustSkill_34138 = true
+WfmPeople_AdjustSkill_34138 = RC
+
