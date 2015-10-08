@@ -1737,6 +1737,7 @@
     <Compile Include="SystemSetting\GlobalSetting\SmsSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\StringSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\TimeSpanSetting.cs" />
+    <Compile Include="SystemSetting\OutboundSetting\OutboundThresholdSettings.cs" />
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />
     <Compile Include="SystemSetting\SettingValue.cs" />

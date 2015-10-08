@@ -463,6 +463,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\OutboundThresholdSettingPersistorAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelReworkedMapper.cs" />
