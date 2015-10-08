@@ -18,13 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public NoteRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public NoteRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

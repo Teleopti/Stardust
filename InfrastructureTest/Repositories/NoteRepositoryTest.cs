@@ -73,13 +73,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            INoteRepository noteRepository = new NoteRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(noteRepository);
-        }
-
-        [Test]
         public void VerifyFindOnPersons()
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();

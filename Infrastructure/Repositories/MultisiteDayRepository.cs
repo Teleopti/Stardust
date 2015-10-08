@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class MultisiteDayRepository : Repository<IMultisiteDay>, IMultisiteDayRepository
     {
 #pragma warning disable 618
-    	public MultisiteDayRepository(IUnitOfWorkFactory unitOfWorkFactory) :base(unitOfWorkFactory)
-#pragma warning restore 618
-    	{
-    	}
-#pragma warning disable 618
         public MultisiteDayRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
 #pragma warning restore 618
         {

@@ -141,12 +141,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(days.FirstOrDefault(), Is.EqualTo(lastStudentAvailability));
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            Assert.IsNotNull(new StudentAvailabilityDayRepository(UnitOfWorkFactory.Current));
-        }
-
         protected override IStudentAvailabilityDay CreateAggregateWithCorrectBusinessUnit()
         {
             IStudentAvailabilityDay availDay = CreateStudentAvailabilityDay(_dateOnly, _person, false);

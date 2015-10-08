@@ -131,14 +131,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.Fail();
         }
 
-        
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            Assert.IsNotNull(new OvertimeAvailabilityRepository(UnitOfWorkFactory.Current));
-        }
-
         protected override IOvertimeAvailability CreateAggregateWithCorrectBusinessUnit()
         {
             IOvertimeAvailability availDay = createOvertimeAvailability(_dateOnly, _person, false);

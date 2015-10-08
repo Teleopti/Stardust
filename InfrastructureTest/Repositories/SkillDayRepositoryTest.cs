@@ -388,13 +388,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            ISkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(skillDayRepository);
-        }
-
-        [Test]
         public void ShouldCreateSkillDayWithCurrentDateAsDateAndNoTime()
         {
             _skill = SkillFactory.CreateSiteSkill("bbb");

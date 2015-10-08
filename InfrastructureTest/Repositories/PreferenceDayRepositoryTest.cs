@@ -189,13 +189,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return preferenceDay;
 		}
 
-		[Test]
-		public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-		{
-			IPreferenceDayRepository preferenceDayRepository = new PreferenceDayRepository(UnitOfWorkFactory.Current);
-			Assert.IsNotNull(preferenceDayRepository);
-		}
-
 		protected override void VerifyAggregateGraphProperties(IPreferenceDay loadedAggregateFromDatabase)
 		{
 			IPreferenceDay org = CreateAggregateWithCorrectBusinessUnit();

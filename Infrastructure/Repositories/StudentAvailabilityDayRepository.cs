@@ -25,13 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public StudentAvailabilityDayRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public StudentAvailabilityDayRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

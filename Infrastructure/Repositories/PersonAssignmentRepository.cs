@@ -21,13 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public PersonAssignmentRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-			: base(unitOfWorkFactory)
-#pragma warning restore 618
-		{
-		}
-
 		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

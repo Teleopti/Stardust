@@ -231,13 +231,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(day2);
         }
 
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(multisiteDayRepository);
-        }
-
         protected override Repository<IMultisiteDay> TestRepository(IUnitOfWork unitOfWork)
         {
             return new MultisiteDayRepository(unitOfWork);

@@ -18,20 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PreferenceDayRepository : Repository<IPreferenceDay>, IPreferenceDayRepository
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PersonRotationRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The unitofwork</param>
 		public PreferenceDayRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
 			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
-		public PreferenceDayRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-			: base(unitOfWorkFactory)
 #pragma warning restore 618
 		{
 		}

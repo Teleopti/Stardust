@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {
-            IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
+            IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(UnitOfWork);
             Assert.IsNotNull(personAssignmentRepository);
         }
 
