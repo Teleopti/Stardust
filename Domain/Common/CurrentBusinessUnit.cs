@@ -10,6 +10,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private static ICurrentBusinessUnit _instanceForEntities;
 
+		public static ICurrentBusinessUnit Make()
+		{
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			return new CurrentBusinessUnit(identity, new HttpRequestFalse());
+		}
+
 		public static ICurrentBusinessUnit InstanceForEntities
 		{
 			get
@@ -17,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Common
 				if (_instanceForEntities != null)
 					return _instanceForEntities;
 
-				var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
-				_instanceForEntities = new CurrentBusinessUnit(identity, new HttpRequestFalse());
+				var instance = Make();
+				_instanceForEntities = instance;
 				return _instanceForEntities;
 			}
 		}
@@ -27,8 +33,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			_instanceForEntities = instance;
 		}
-
-
 
 		public CurrentBusinessUnit(ICurrentIdentity identity, IIsHttpRequest isHttpRequest)
 		{

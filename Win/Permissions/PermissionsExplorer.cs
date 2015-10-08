@@ -1482,7 +1482,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					IPersonRepository personRepository = new PersonRepository(uow);
+					IPersonRepository personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 					personFromCache = personRepository.Load(id);
 					permissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
 					if (personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
@@ -1527,7 +1527,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					IPersonRepository personRepository = new PersonRepository(uow);
+					IPersonRepository personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 					personFromCache = personRepository.Load(id);
 
 					if (!personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))

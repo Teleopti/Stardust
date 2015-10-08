@@ -23,20 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
 	{
-		public PersonRepository(IUnitOfWork unitOfWork)
-			: base(unitOfWork)
-		{
-		}
-
-		public PersonRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
-		{
-		}
-
-		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork) 
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public IList<IPerson> FindPersonsThatAlsoAreUsers()

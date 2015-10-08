@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.ServiceBus
 		public ICurrentMessageSenders Create()
 		{
 			var populator = EventContextPopulator.Make();
-			var businessUnit = CurrentBusinessUnit.InstanceForEntities;
+			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
 			var senders = new List<IMessageSender>

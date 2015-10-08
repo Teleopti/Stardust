@@ -3,6 +3,7 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return Session.CreateCriteria(typeof(PersonalSettingData))
                         .Add(Restrictions.Eq("Key", key))
-                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork))))
+                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork)))))
                         .SetCacheable(true)
                         .UniqueResult<ISettingData>();
         }
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ISettingData data = FindByKey(key)
                    ?? new GlobalSettingDataRepository(UnitOfWork).FindByKey(key)
-                   ?? new PersonalSettingData(key, TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork)));
+                   ?? new PersonalSettingData(key, TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))));
             return data.GetValue(defaultValue);
         }
     }

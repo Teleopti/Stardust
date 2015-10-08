@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void forceReadModelUpdate()
 		{
-			var groupingReadModel = new GroupingReadOnlyRepository(new FixedCurrentUnitOfWork(UnitOfWork));
+			var groupingReadModel = new GroupingReadOnlyRepository(new ThisUnitOfWork(UnitOfWork));
 			groupingReadModel.UpdateGroupingReadModel(new[] {Guid.Empty});
 		}
 

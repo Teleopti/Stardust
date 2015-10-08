@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRepository(unitOfWork);
+			return new PersonRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		/// <summary>

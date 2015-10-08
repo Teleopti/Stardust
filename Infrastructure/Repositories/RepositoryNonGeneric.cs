@@ -16,28 +16,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		protected Repository(IUnitOfWork unitOfWork)
 		{
 			InParameter.NotNull("unitOfWork", unitOfWork);
-			_currentUnitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
+			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
 
 		//old way - don't use this one
 		protected Repository(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_currentUnitOfWork = new justForBackwardCompability(unitOfWorkFactory);
-		}
-		private class justForBackwardCompability : ICurrentUnitOfWork
-		{
-			private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-			public justForBackwardCompability(IUnitOfWorkFactory unitOfWorkFactory)
-			{
-				_unitOfWorkFactory = unitOfWorkFactory;
-			}
-
-			public IUnitOfWork Current()
-			{
-				return _unitOfWorkFactory.CurrentUnitOfWork();
-			}
+			_currentUnitOfWork = new FromFactory(unitOfWorkFactory);
 		}
 
 		//new, safe way

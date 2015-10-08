@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000,1,1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(uow);
+				var rep = new PersonRepository(new ThisUnitOfWork(uow));
 				rep.Add(person);
 				uow.PersistAll();
 			}

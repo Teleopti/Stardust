@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public SeatBookingRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
 		{
-			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
+			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
 		public SeatBookingRepository(IUnitOfWorkFactory unitOfWorkFactory)

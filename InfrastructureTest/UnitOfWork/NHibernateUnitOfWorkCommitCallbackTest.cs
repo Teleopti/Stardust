@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var correctEx = false;
 
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
-			new PersonRepository(UnitOfWork).Add(person);
+			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Add(person);
 			UnitOfWork.PersistAll();
 
 			UnitOfWork.AfterSuccessfulTx(() => isCalled = true);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				person.Email = "ok";
-				new PersonRepository(uow).Remove(person);
+				new PersonRepository(new ThisUnitOfWork(uow)).Remove(person);
 				uow.PersistAll();
 			}
 

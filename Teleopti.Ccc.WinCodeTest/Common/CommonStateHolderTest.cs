@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             _mockRep.ReplayAll();
 
-			_commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
+			_commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)));
             _commonStateHolder.LoadCommonStateHolder(repositoryFactory,unitOfWork);
 
             Assert.AreEqual(1, _commonStateHolder.Absences.Count());

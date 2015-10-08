@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			IPerson per = PersonFactory.CreatePerson("for test");
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IActivity activity = new Activity("Training");
-			new PersonRepository(UnitOfWork).Add(per);
+			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Add(per);
 			new ScenarioRepository(UnitOfWork).Add(scenario);
 			new ActivityRepository(UnitOfWork).Add(activity);
 			UnitOfWork.PersistAll();
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			//cleanup
 			new ActivityRepository(UnitOfWork).Remove(activity);
-			new PersonRepository(UnitOfWork).Remove(per);
+			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(per);
 			new ScenarioRepository(UnitOfWork).Remove(scenario);
 			UnitOfWork.PersistAll();
 		}
@@ -149,8 +149,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
             IPerson per1 = PersonFactory.CreatePerson("1");
             IPerson per2 = PersonFactory.CreatePerson("2");
-            new PersonRepository(uow).Add(per1);
-            new PersonRepository(uow).Add(per2);
+            new PersonRepository(new ThisUnitOfWork(uow)).Add(per1);
+            new PersonRepository(new ThisUnitOfWork(uow)).Add(per2);
 
             using (mocks.Record())
             {
@@ -179,8 +179,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 uow.PersistAll();
 
                 //clean up
-                new PersonRepository(uow).Remove(per1);
-                new PersonRepository(uow).Remove(per2);
+                new PersonRepository(new ThisUnitOfWork(uow)).Remove(per1);
+                new PersonRepository(new ThisUnitOfWork(uow)).Remove(per2);
                 uow.PersistAll();
             }
         }

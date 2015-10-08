@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			var sessionFactory = ((NHibernateUnitOfWorkFactory) dataSource.Application).SessionFactory;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var p = new PersonRepository(uow).Get(person.Id.Value);
+				var p = new PersonRepository(new ThisUnitOfWork(uow)).Get(person.Id.Value);
 				sessionFactory.Statistics.Clear();
 				LazyLoadingManager.Initialize(p.PermissionInformation.ApplicationRoleCollection);
 			}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			var sessionFactory = ((NHibernateUnitOfWorkFactory)dataSource.Application).SessionFactory;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var p = new PersonRepository(uow).Get(person.Id.Value);
+				var p = new PersonRepository(new ThisUnitOfWork(uow)).Get(person.Id.Value);
 				sessionFactory.Statistics.Clear();
 				LazyLoadingManager.Initialize(p.PermissionInformation.ApplicationRoleCollection);
 			}
@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				new ApplicationRoleRepository(uow).Add(applicationRole);
-				new PersonRepository(uow).Add(person);
+				new PersonRepository(new ThisUnitOfWork(uow)).Add(person);
 				uow.PersistAll();
 			}
 
 			//fill cache
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var p = new PersonRepository(uow).Get(person.Id.Value);
+				var p = new PersonRepository(new ThisUnitOfWork(uow)).Get(person.Id.Value);
 				LazyLoadingManager.Initialize(p.PermissionInformation.ApplicationRoleCollection);
 			}
 		}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				new ApplicationRoleRepository(uow).Remove(applicationRole);
-				new PersonRepository(uow).Remove(person);
+				new PersonRepository(new ThisUnitOfWork(uow)).Remove(person);
 				uow.PersistAll();
 			}
 		}

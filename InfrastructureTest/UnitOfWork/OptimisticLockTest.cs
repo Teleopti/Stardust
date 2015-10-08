@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -66,8 +67,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 							
                 IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IPersonRepository rep1 = new PersonRepository(uow1);
-                IPersonRepository rep2 = new PersonRepository(uow2);
+                IPersonRepository rep1 = new PersonRepository(new ThisUnitOfWork(uow1));
+                IPersonRepository rep2 = new PersonRepository(new ThisUnitOfWork(uow2));
                 mocks.ReplayAll();
 
                 //save
@@ -113,8 +114,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
                 IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IPersonRepository rep1 = new PersonRepository(uow1);
-                IPersonRepository rep2 = new PersonRepository(uow2);
+                IPersonRepository rep1 = new PersonRepository(new ThisUnitOfWork(uow1));
+                IPersonRepository rep2 = new PersonRepository(new ThisUnitOfWork(uow2));
                 mocks.ReplayAll();
 
                 //save
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         {
             using (IUnitOfWork uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                PersonRepository rep = new PersonRepository(uow);
+                PersonRepository rep = new PersonRepository(new ThisUnitOfWork(uow));
                 foreach (IPerson person in rep.LoadAll())
                 {
                     rep.Remove(person);

@@ -518,6 +518,7 @@
     <Compile Include="UnitOfWork\CurrentMessageSenders.cs" />
     <Compile Include="UnitOfWork\DisableDeletedFilter.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />
+    <Compile Include="UnitOfWork\FromFactory.cs" />
     <Compile Include="UnitOfWork\IBeforeSendEvents.cs" />
     <Compile Include="UnitOfWork\IClearEvents.cs" />
     <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
@@ -641,7 +642,7 @@
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\FixedCurrentUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessage.cs" />
     <Compile Include="UnitOfWork\EventsMessageSender.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSender.cs" />

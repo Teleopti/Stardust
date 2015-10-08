@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public PersonForScheduleFinder(IUnitOfWork unitOfWork)
 		{
-			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
+			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
 		private Guid getBusinessUnitId()

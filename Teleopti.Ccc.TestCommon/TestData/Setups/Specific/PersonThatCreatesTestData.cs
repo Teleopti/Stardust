@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 
         public void Apply(IUnitOfWork uow)
         {
-            new PersonRepository(uow).Add(_personThatCreatesTestData);
+            new PersonRepository(new ThisUnitOfWork(uow)).Add(_personThatCreatesTestData);
         }
     }
 }

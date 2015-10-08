@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         public void QueueDirtyPeopleCollection()
         {
-            IPersonRepository personRepository = new PersonRepository(UnitOfWork);
+            IPersonRepository personRepository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 
             foreach (PersonAdapter adapter in _personAdapterCollection)
             {

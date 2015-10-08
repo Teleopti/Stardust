@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setupFieldsForExternalPerson();
 
 			var rep = new PersonalSettingDataRepository(UnitOfWork);
-			testData s = rep.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork)), new testData());
+			testData s = rep.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))), new testData());
 			Assert.AreEqual(((ISettingValue)s).BelongsTo, rep.PersistSettingValue(s));
 			Session.Flush();
 			Session.Clear();
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private void setupFieldsForExternalPerson()
 		{
 			rep = new PersonalSettingDataRepository(UnitOfWork);
-			var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork));
+			var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork)));
 			ISettingData personalSettingData = new PersonalSettingData("rätt", person);
 			personalSettingData.SetValue(new testData { Data = 44 });
 			PersistAndRemoveFromUnitOfWork(personalSettingData);

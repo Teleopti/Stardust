@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Win.Reporting
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    _selectedAgents = new PersonRepository(uow).FindPeople(_selectedAgentGuids);
+                    _selectedAgents = new PersonRepository(new ThisUnitOfWork(uow)).FindPeople(_selectedAgentGuids);
                 }
             }
             catch (DataSourceException dataSourceException)

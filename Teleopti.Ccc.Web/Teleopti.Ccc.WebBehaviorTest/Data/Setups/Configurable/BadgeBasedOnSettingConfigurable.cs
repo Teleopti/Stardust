@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var totalBadgeAmount = (Gold * goldToSilverBadgeRate + Silver) * silverToBronzeBadgeRate + Bronze;
 
-			var rep = new PersonRepository(uow);
+			var rep = new PersonRepository(new ThisUnitOfWork(uow));
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
 

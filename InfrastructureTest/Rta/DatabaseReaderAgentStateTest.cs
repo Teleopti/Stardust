@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var personRepository = new PersonRepository(uow);
+				var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 				personRepository.LoadAll().ForEach(personRepository.Remove);
 				uow.PersistAll();
 			}

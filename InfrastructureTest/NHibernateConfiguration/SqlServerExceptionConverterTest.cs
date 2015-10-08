@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
 			grabSessionFieldFromUow(tempUow).Connection.Close();
 			Assert.Throws<CouldNotCreateTransactionException>(() =>
-			                        new PersonRepository(tempUow).Get(Guid.NewGuid()));
+			                        new PersonRepository(new ThisUnitOfWork(tempUow)).Get(Guid.NewGuid()));
 
 		}
 

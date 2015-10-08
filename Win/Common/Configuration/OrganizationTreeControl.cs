@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -220,7 +221,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var team = (ITeam)node.TagObject;
             //min date 1/1/1753-
             var period = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
-            var personRep = new PersonRepository(_unitOfWork);
+            var personRep = new PersonRepository(new ThisUnitOfWork(_unitOfWork));
 
             if (personRep.FindPeopleBelongTeam(team, period).Count == 0)
             {

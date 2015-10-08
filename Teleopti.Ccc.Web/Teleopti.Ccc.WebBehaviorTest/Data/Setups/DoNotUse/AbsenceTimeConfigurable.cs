@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var absenceRepository = new AbsenceRepository(uow);
 			var absence = absenceRepository.LoadAll().Single(a=>a.Name==Absence);
 
-			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
+			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(new ThisUnitOfWork(uow));
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());

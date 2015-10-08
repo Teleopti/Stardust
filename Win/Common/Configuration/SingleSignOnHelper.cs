@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 IPerson currentPerson;
                 using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+                    currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
                 }
                 var email = currentPerson.Email.Trim();
                 if (string.IsNullOrEmpty(email))

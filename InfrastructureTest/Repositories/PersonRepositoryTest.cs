@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_mockRepository = new MockRepository();
 			_personAccountUpdater = _mockRepository.StrictMock<IPersonAccountUpdater>();
 
-			target = new PersonRepository(UnitOfWork);
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 
 			absence = AbsenceFactory.CreateAbsence("for test");
 			PersistAndRemoveFromUnitOfWork(absence);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void CanCreate()
 		{
-			new PersonRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
+			new PersonRepository(new FromFactory(UnitOfWorkFactory.Current)).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), teamBu));
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1999, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(UnitOfWork).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false).Count());
 		}
 
 		[Test]
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			per.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(ctr, percentage, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(per);
-			Assert.AreEqual(0, new PersonRepository(UnitOfWork).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count());
+			Assert.AreEqual(0, new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)).Count());
 		}
 
 		/// <summary>
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToTest);
 
 			//load person
-			IPerson personLoaded = new PersonRepository(UnitOfWork).Load(personToTest.Id.Value);
+			IPerson personLoaded = new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Load(personToTest.Id.Value);
 			var personPeriodLoaded = personLoaded.PersonPeriodCollection.Single();
 			//asserts
 			Assert.AreEqual(personPeriod.StartDate, personPeriodLoaded.StartDate);
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 
 			//load
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(UnitOfWork).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			testList.Remove(LoggedOnPerson);
 			Assert.AreEqual(2, testList.Count);
@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(per);
 			//load
-			IPersonRepository repository = new PersonRepository(UnitOfWork);
+			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
 			//verify
 			personList.Remove(LoggedOnPerson);
@@ -558,7 +558,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per);
 
 			//load
-			IPersonRepository repository = new PersonRepository(UnitOfWork);
+			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(DateOnly.Today));
 			//verify
 			personList.Remove(LoggedOnPerson);
@@ -955,7 +955,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(per);
 
-			IPersonRepository repository = new PersonRepository(UnitOfWork);
+			IPersonRepository repository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(2000,2,1)));
 			((PersonPeriod) personList[0].Period(new DateOnly(2000, 1, 10))).internalEndDate.Should()
 				.Be.EqualTo(secondPersonPeriodStartDate.AddDays(-1));
@@ -1197,7 +1197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeam(team1, testeriod));
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1, testeriod));
 
 			//verify
 			testList.Remove(LoggedOnPerson);
@@ -1209,7 +1209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, testList[0].PersonPeriodCollection.Count());
 			Assert.AreEqual(1, testList[1].PersonPeriodCollection.Count());
 
-			testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
 		}
 
@@ -1240,7 +1240,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			var testeriod = new DateOnlyPeriod(2002, 12, 31, 2059, 01, 01);
-			IList<IPerson> testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeam(team1, testeriod));
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeam(team1, testeriod));
 			testList.Should().Be.Empty();
 		}
 
@@ -1311,7 +1311,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			#endregion
 
 			var testeriod = new DateOnlyPeriod(1999, 12, 31, 2059, 01, 01);
-			var testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
+			var testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
 		}
 
@@ -1490,7 +1490,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyNumberOfActiveAgentsWhenNone()
 		{
-			IPersonRepository pr = new PersonRepository(UnitOfWork);
+			IPersonRepository pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			Assert.AreEqual(0, pr.NumberOfActiveAgents());
 		}
 
@@ -1504,7 +1504,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson person3 = PersonFactory.CreatePerson("Fname", "lname");
 			PersistAndRemoveFromUnitOfWork(person3);
 
-			var pr = new PersonRepository(UnitOfWork);
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 
 			IList<IPerson> personList = pr.FindPersonsThatAlsoAreUsers();
 			Assert.IsTrue(personList.Contains(person1));
@@ -1520,7 +1520,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.EmploymentNumber = employmentNumber;
 			PersistAndRemoveFromUnitOfWork(person);
 
-			var pr = new PersonRepository(UnitOfWork);
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			IList<IPerson> personList = pr.FindPeopleByEmploymentNumber(employmentNumber).ToList();
 			Assert.AreEqual(employmentNumber, personList[0].EmploymentNumber);
 		}
@@ -1532,7 +1532,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.Email = "test@teleopti.com";
 			PersistAndRemoveFromUnitOfWork(person);
 
-			var pr = new PersonRepository(UnitOfWork);
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var foundPerson = pr.FindPersonByEmail(person.Email);
 			Assert.AreEqual("Fname", foundPerson.Name.FirstName);
 		}
@@ -1587,7 +1587,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.FirstDayOfWeek = DayOfWeek.Saturday;
 			PersistAndRemoveFromUnitOfWork(person);
 
-			var pr = new PersonRepository(UnitOfWork);
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var loaded = pr.Load(person.Id.Value);
 			Assert.That(loaded.FirstDayOfWeek.Equals(DayOfWeek.Saturday));
 		}
@@ -1615,7 +1615,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(UnitOfWork).FindAllSortByName());
+					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			//verify
 			testList.Remove(LoggedOnPerson);
 			Assert.AreEqual(3, testList.Count);
@@ -1645,7 +1645,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			//load
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(UnitOfWork).FindAllSortByName());
+					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			//verify
 			Assert.AreEqual(0, testList.Count);
 		}
@@ -1660,7 +1660,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			IList<IPerson> testList = new List<IPerson>(
-					new PersonRepository(UnitOfWork).FindAllSortByName());
+					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
 		}
@@ -1731,7 +1731,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private class justForTest : PersonRepository
 		{
 			public justForTest(IUnitOfWork unitOfWork)
-				: base(unitOfWork)
+				: base(new ThisUnitOfWork(unitOfWork))
 			{
 			}
 
@@ -1746,7 +1746,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<IPerson> TestRepository(IUnitOfWork unitOfWork)
 		{
-			return new PersonRepository(unitOfWork);
+			return new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 		}
 
 	}

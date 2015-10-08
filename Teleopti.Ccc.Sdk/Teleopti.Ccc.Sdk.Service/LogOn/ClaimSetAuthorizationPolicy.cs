@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 if (person == null) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
-                var personRepository = new PersonRepository(unitOfWorkFactory);
+                var personRepository = new PersonRepository(new FromFactory(unitOfWorkFactory));
                 var personId = person.Id.GetValueOrDefault();
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())

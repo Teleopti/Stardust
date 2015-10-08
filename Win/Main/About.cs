@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Main
             int numberOfActiveAgents;
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var rep = new PersonRepository(uow);
+                var rep = new PersonRepository(new ThisUnitOfWork(uow));
                 numberOfActiveAgents = rep.NumberOfActiveAgents();
             }
             return numberOfActiveAgents.ToString(CultureInfo.CurrentCulture);

@@ -549,7 +549,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					new SkillTypeRepository(uow).LoadAll();
 				}
 
-				PersonRepository repository = new PersonRepository(uow);
+				PersonRepository repository = new PersonRepository(new ThisUnitOfWork(uow));
 				//return repository.LoadAll();
 				List<IPerson> retList = new List<IPerson>();
 				// We want to load all persons, therefore we use a large date scope.
@@ -585,7 +585,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repository = new PersonRepository(uow);
+				var repository = new PersonRepository(new ThisUnitOfWork(uow));
 				IList<IPerson> retList = repository.FindPersonsThatAlsoAreUsers();
 
 				return retList;
@@ -1492,7 +1492,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPersonRepository personRepository = new PersonRepository(uow);
+				IPersonRepository personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 				new ApplicationRoleRepository(uow).LoadAll();
 				var permissionsResolver = new MatrixPermissionsResolver(personRepository,
 																		new FunctionsForRoleProvider(

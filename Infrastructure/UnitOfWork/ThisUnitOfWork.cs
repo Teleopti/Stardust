@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class FixedCurrentUnitOfWork : ICurrentUnitOfWork
+	public class ThisUnitOfWork : ICurrentUnitOfWork
 	{
 		private readonly IUnitOfWork _currentUnitOfWork;
 
-		public FixedCurrentUnitOfWork(IUnitOfWork currentUnitOfWork)
+		public ThisUnitOfWork(IUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}

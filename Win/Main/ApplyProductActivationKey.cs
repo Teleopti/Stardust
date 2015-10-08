@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Win.Main
                 try
                 {
                     var licenseRepository = new LicenseRepository(_unitOfWorkFactory);
-                    var personRepository = new PersonRepository(_unitOfWorkFactory);
+                    var personRepository = new PersonRepository(new FromFactory(_unitOfWorkFactory));
 
 					XDocument signedXml = XDocument.Load(licenseFilePath);
 					

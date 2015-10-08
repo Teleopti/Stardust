@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				{
 					Person = PersonFactory.CreatePerson(name);
 					Person.Name = name;
-					new PersonRepository(uow).Add(Person);
+					new PersonRepository(new ThisUnitOfWork(uow)).Add(Person);
 				});
 			Apply(new Setups.Specific.SwedishCulture());
 			Apply(new UtcTimeZone());

@@ -3,6 +3,7 @@ using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                var pProxy = new PersonRepository(uow).Load(p.Id.Value);
+                var pProxy = new PersonRepository(new ThisUnitOfWork(uow)).Load(p.Id.Value);
                 Assert.Greater(uow.DatabaseVersion(pProxy), 0);
             }
 
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         {
             Session.SessionFactory.Statistics.Clear();
             var p = PersonFactory.CreatePerson();
-            new PersonRepository(UnitOfWork).Add(p);
+            new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Add(p);
             Assert.IsTrue(UnitOfWork.IsDirty());
             UnitOfWork.Flush();
             Assert.IsFalse(UnitOfWork.IsDirty());
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             Guid id;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                var repository = new PersonRepository(uow1);
+                var repository = new PersonRepository(new ThisUnitOfWork(uow1));
                 p = PersonFactory.CreatePerson();
                 repository.Add(p);
                 id = p.Id.Value;
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (var uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                Assert.That(new PersonRepository(uow2).Get(id), Is.Null);
+                Assert.That(new PersonRepository(new ThisUnitOfWork(uow2)).Get(id), Is.Null);
             }
         }
 
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             IPerson cantBePersisted;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                var repository = new PersonRepository(uow1);
+                var repository = new PersonRepository(new ThisUnitOfWork(uow1));
                 cantBePersisted = PersonFactory.CreatePerson();
                 repository.Add(cantBePersisted);
                 cantBePersisted.Email = null;

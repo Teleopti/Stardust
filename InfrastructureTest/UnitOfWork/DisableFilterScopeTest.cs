@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotEnableFilterWhenNested()
 		{
-			var personRep = new PersonRepository(UnitOfWork);
+			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			personRep.LoadAll().Should().Not.Contain(deletedPerson);
 			using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldWorkWithCurrentUnitOfWork()
 		{
-			var personRep = new PersonRepository(UnitOfWork);
+			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			personRep.LoadAll().Should().Not.Contain(deletedPerson);
 			using (UnitOfWorkFactory.Current.CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
 			{

@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 
-			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(uow), new PersonRepository(uow), new AbsenceRepository(uow), new PersonAbsenceRepository(uow), new ThisCurrentScenario(scenario));
+			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(uow), new PersonRepository(new ThisUnitOfWork(uow)), new AbsenceRepository(uow), new PersonAbsenceRepository(uow), new ThisCurrentScenario(scenario));
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,

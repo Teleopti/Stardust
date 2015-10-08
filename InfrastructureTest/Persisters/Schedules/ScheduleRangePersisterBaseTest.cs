@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(unitOfWork).Add(Person);
+				new PersonRepository(new ThisUnitOfWork(unitOfWork)).Add(Person);
 				new ActivityRepository(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				new ScenarioRepository(unitOfWork).Add(Scenario);

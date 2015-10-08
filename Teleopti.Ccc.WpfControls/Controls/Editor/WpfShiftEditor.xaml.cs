@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 		{
 	        using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 	        {
-		        var stateHolder = new CommonStateHolder(new DisableDeletedFilter(new FixedCurrentUnitOfWork(uow)));
+		        var stateHolder = new CommonStateHolder(new DisableDeletedFilter(new ThisUnitOfWork(uow)));
 		        stateHolder.LoadCommonStateHolder(new RepositoryFactory(), uow);
 		        LoadFromStateHolder(stateHolder);
 	        }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		{
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				return new PersonRepository(uow).LoadPersonAndPermissions(personId);
+				return new PersonRepository(new ThisUnitOfWork(uow)).LoadPersonAndPermissions(personId);
 			}
 		}
 	}

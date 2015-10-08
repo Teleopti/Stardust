@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+				IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
 
 				return _factoryProvider.CreatePersonAssembler().DomainEntityToDto(currentPerson);
 			}
@@ -1479,7 +1479,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+					var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
 					personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
 				}
 				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1738,7 +1738,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+				IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
 				DateTime localTime = GetPersonLocalTime(utcDate, person);
 				DateOnly localDate = new DateOnly(localTime);
 				ITeam loggedOnPersonsTeam = person.MyTeam(localDate);

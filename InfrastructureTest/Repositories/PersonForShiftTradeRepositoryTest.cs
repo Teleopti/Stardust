@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("pageId", Guid.NewGuid())
 				.ExecuteUpdate();
 
-			return new PersonRepository(UnitOfWork).Get(person1.Id.GetValueOrDefault());
+			return new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Get(person1.Id.GetValueOrDefault());
 		}
 	}
 }

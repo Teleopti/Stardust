@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
 
-			var target = new ExistingForecastRepository(new FixedCurrentUnitOfWork(UnitOfWork));
+			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result =  target.ExistingForecastForAllSkills(range, _scenario );
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
 
-			var target = new ExistingForecastRepository(new FixedCurrentUnitOfWork(UnitOfWork));
+			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(day1);
 			PersistAndRemoveFromUnitOfWork(day2);
 
-			var target = new ExistingForecastRepository(new FixedCurrentUnitOfWork(UnitOfWork));
+			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(day1);
 
-			var target = new ExistingForecastRepository(new FixedCurrentUnitOfWork(UnitOfWork));
+			var target = new ExistingForecastRepository(new ThisUnitOfWork(UnitOfWork));
 
 			var range = new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30);
 			var result = target.ExistingForecastForAllSkills(range, _scenario);

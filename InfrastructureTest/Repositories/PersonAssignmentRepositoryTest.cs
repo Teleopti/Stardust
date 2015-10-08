@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                     _dummyCategory,
                     _dummyScenario);
             PersistAndRemoveFromUnitOfWork(agAssValid);
-            new PersonRepository(UnitOfWork).Remove(_dummyAgent);
+            new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(_dummyAgent);
             PersistAndRemoveFromUnitOfWork(_dummyAgent);
 
             Assert.AreEqual(0, _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);

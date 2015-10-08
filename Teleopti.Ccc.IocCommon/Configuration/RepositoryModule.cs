@@ -3,10 +3,8 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -19,12 +17,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
 			{
-				if (type.GetConstructor(new[] { RepositoryConstructorType }) != null)
+				if (type.GetConstructors().Length == 1)
 				{
 					builder.RegisterType(type)
-								 .UsingConstructor(RepositoryConstructorType)
-								 .AsImplementedInterfaces()
-								 .SingleInstance();					
+						.AsImplementedInterfaces()
+						.SingleInstance();
+				}
+				else if (type.GetConstructor(new[] {RepositoryConstructorType}) != null)
+				{
+					builder.RegisterType(type)
+						.UsingConstructor(RepositoryConstructorType)
+						.AsImplementedInterfaces()
+						.SingleInstance();
 				}
 			}
 
@@ -55,7 +59,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private bool hasCorrectCtor(Type repositoryType)
 		{
-			foreach (var constructorInfo in repositoryType.GetConstructors())
+			var constructors = repositoryType.GetConstructors();
+			if (constructors.Length == 1)
+				return true;
+			foreach (var constructorInfo in constructors)
 			{
 				var parameters = constructorInfo.GetParameters();
 				if (parameters.Count() == 1)

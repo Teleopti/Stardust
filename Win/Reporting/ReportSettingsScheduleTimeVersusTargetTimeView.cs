@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(UnitOfWorkFactory.Current);
+				var rep = new PersonRepository(new FromFactory(UnitOfWorkFactory.Current));
 
 				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Reporting
 				new PartTimePercentageRepository(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
-				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			}
 		}
 

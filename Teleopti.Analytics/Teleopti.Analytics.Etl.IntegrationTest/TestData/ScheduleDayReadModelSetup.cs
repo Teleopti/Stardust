@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public void Apply(IUnitOfWork uow)
 		{
 			var period = new DateOnlyPeriod(Model.BelongsToDate, Model.BelongsToDate);
-			var rep = new ScheduleDayReadModelRepository(new FixedCurrentUnitOfWork(uow));
+			var rep = new ScheduleDayReadModelRepository(new ThisUnitOfWork(uow));
 			rep.ClearPeriodForPerson(period,Model.PersonId);
 			rep.SaveReadModel(Model);
 		}

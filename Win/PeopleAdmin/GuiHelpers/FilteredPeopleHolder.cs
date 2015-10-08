@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		{
 			InParameter.NotNull("peopleId", peopleId);
 
-			var rep = new PersonRepository(GetUnitOfWork);
+			var rep = new PersonRepository(new ThisUnitOfWork(GetUnitOfWork));
 			var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
 			var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
@@ -946,14 +946,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			new PersonRepository(GetUnitOfWork).Remove(person);
+			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork)).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
 		}
 
 		public void MarkForInsert(IPerson person)
 		{
-			new PersonRepository(GetUnitOfWork).Add(person);
+			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork)).Add(person);
 		}
 
 		public void DeleteAndSavePerson(IPerson person)

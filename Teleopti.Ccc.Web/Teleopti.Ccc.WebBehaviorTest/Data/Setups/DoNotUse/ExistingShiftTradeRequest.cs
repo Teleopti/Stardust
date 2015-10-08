@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		private static IPerson getOrCreatePerson(string name, IUnitOfWork uow)
 		{
 			var personName = new CreateName().FromString(name);
-			var personRepository = new PersonRepository(uow);
+			var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)

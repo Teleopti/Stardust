@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPersonAbsence personAbsence = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(personAbsence);
-            new PersonRepository(UnitOfWork).Remove(personAbsence.Person);
+            new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(personAbsence.Person);
             PersistAndRemoveFromUnitOfWork(personAbsence.Person);
 
             Assert.AreEqual(0, rep.Find(new DateTimePeriod(1900,1,1,2111,1,1), dummyScenario).Count);

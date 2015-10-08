@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private Person createPersonInDb()
         {
-            var rep = new PersonRepository(UnitOfWork);
+            var rep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
             var person=new Person();
             person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
             rep.Add(person);

@@ -1724,7 +1724,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					var timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
 					var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(schedulePeriodPrevious.DateFrom.Date, previousPeriodEndDate.Date, timeZoneInfo);
 					var dateOnlyPeriod = new DateOnlyPeriod(schedulePeriodPrevious.DateFrom, previousPeriodEndDate);
-					var schedulerStateHolder = new SchedulerStateHolder(defaultScenario, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, timeZoneInfo), new List<IPerson> { selectedPerson }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+					var schedulerStateHolder = new SchedulerStateHolder(defaultScenario, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, timeZoneInfo), new List<IPerson> { selectedPerson }, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 					new ScheduleDataLoader(schedulerStateHolder).LoadSchedule(unitOfWork, dateTimePeriod, selectedPerson);
 					IScheduleContractTimeCalculator scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(schedulerStateHolder, selectedPerson, dateOnlyPeriod);
 					IScheduleTargetTimeCalculator scheduleTargetTimeCalculator = new ScheduleTargetTimeCalculator(schedulerStateHolder, selectedPerson, dateOnlyPeriod);

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			using (var container = builder.Build())
 			{
-				container.IsRegistered(typeof(IPersonRepository))
+				container.IsRegistered(typeof(IActivityRepository))
 					.Should().Be.False();
 			}
 		}

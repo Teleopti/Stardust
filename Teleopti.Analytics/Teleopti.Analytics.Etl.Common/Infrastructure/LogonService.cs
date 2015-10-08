@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
@@ -47,7 +48,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					);
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(uow));
+				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(new ThisUnitOfWork(uow)));
 			}
 			return true;
 		}

@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(uow).Add(loggedOnPerson);
+				new PersonRepository(new ThisUnitOfWork(uow)).Add(loggedOnPerson);
 				uow.PersistAll();
 			}
 		}

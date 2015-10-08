@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new[] { _person }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new[] { _person }, new DisableDeletedFilter(new ThisUnitOfWork(_unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
