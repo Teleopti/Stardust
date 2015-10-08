@@ -8,6 +8,7 @@
 
 		this.notifySuccess = notifySuccess;
 		this.notifyFailure = notifyFailure;
+		this.notifyWarning = notifyWarning;
 
 		this.notifyCampaignCreationSuccess = function(campaign) {
 			notifySuccess('CampaignCreated', [
@@ -46,7 +47,7 @@
 		}
 
 		this.notifyResetManualFailure = function (error) {
-			notifyFailure('CampaignFailedResetManual', [
+			notifyWarning('CampaignFailedResetManual', [
 				(error && error.Message ? error.Message : error)
 			]);
 		}
@@ -71,5 +72,14 @@
 			});
 		}
 
+		function notifyWarning(message, params) {
+			$translate(message).then(function(text) {
+				$growl.warning("<i class='mdi  mdi-alert'></i> "
+					+ text.replace('{0}', params[0]), {
+						ttl: 5000,
+						disableCountDown: true
+					});
+			});
+		}
 	}
 })();
