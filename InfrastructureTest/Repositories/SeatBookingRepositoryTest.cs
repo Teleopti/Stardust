@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldLoadSeatBookingsForMultipleSeatsIntersectingDayInOrder()
 		{
 			var dateOnly = new DateOnly(2015, 10, 1);
@@ -423,11 +423,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seatMapLocation = new SeatMapLocation();
 
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
-			rep.Add(seatMapLocation);
-
+			
 			var seat1 = seatMapLocation.AddSeat("Test Seat", 0);
 			var seat2 = seatMapLocation.AddSeat("Test Seat 2", 0);
 			var seat3 = seatMapLocation.AddSeat("Test Seat 3", 0);
+
+			rep.Add(seatMapLocation);
 
 			var morningBooking = new SeatBooking(person, dateOnly,
 					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 8, 0, 0),
