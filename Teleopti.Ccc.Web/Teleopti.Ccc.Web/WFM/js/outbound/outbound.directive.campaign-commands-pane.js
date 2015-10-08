@@ -17,11 +17,11 @@
 				isLoading: '=',
 				callbacks: '='
 			},
-			controller: ['$scope', '$state', 'outboundService', 'outboundChartService', campaignCommandsPaneCtrl],
+			controller: ['$scope', '$state', 'outboundService', 'outboundChartService', 'outboundNotificationService', campaignCommandsPaneCtrl],
 			link: postlink
 		};
 
-		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService) {
+		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, outboundNotificationService) {
 			$scope.manualPlanSwitch = false;
 			$scope.manualBacklogSwitch = false;
 			$scope.manualPlanInput = null;
@@ -79,17 +79,22 @@
 			}
 
 			function removeManualPlan() {
-				$scope.isLoading = true;
-				outboundChartService.removeManualPlan({
-					campaignId: $scope.campaign.Id,
-					selectedDates: $scope.selectedDates
-				}, function (response) {				
-					if (angular.isDefined($scope.callbacks.removeManualPlan)) {
-						$scope.callbacks.removeManualPlan(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});				
+				if ($scope.selectedDates.length == 0) {
+					outboundNotificationService.notifyResetManualFailure();
+				}
+				else {
+					$scope.isLoading = true;
+					outboundChartService.removeManualPlan({
+						campaignId: $scope.campaign.Id,
+						selectedDates: $scope.selectedDates
+					}, function(response) {
+						if (angular.isDefined($scope.callbacks.removeManualPlan)) {
+							$scope.callbacks.removeManualPlan(response, callbackDone);
+						} else {
+							callbackDone();
+						}
+					});
+				}
 			}
 
 			function addManualBacklog() {
@@ -108,17 +113,21 @@
 			}
 
 			function removeManualBacklog() {
-				$scope.isLoading = true;
-				outboundChartService.removeActualBacklog({
-					campaignId: $scope.campaign.Id,
-					selectedDates: $scope.selectedDates
-				}, function (response) {
-					if (angular.isDefined($scope.callbacks.removeManualBacklog)) {
-						$scope.callbacks.removeManualBacklog(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});
+				if ($scope.selectedDates.length == 0) {
+					outboundNotificationService.notifyResetManualFailure();
+				} else {
+					$scope.isLoading = true;
+					outboundChartService.removeActualBacklog({
+						campaignId: $scope.campaign.Id,
+						selectedDates: $scope.selectedDates
+					}, function(response) {
+						if (angular.isDefined($scope.callbacks.removeManualBacklog)) {
+							$scope.callbacks.removeManualBacklog(response, callbackDone);
+						} else {
+							callbackDone();
+						}
+					});
+				}
 			}
 
 			function replan() {

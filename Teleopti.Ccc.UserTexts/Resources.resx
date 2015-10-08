@@ -13495,4 +13495,8 @@ Reduce the complexity to use these shifts.</value>
     <value>The booking of seat	{0}  for {1} was deleted</value>
     <comment>displayed when a seat booking is successfully deleted on the seat booking view</comment>
   </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>You should choose one day at least!</value>
+    <comment>use in wfm web outbound, warning message for reset manual plan or manual backlog</comment>
+  </data>
 </root>

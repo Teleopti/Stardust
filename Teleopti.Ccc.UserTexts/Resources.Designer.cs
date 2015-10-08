@@ -4305,6 +4305,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You should choose one day at least!.
+        /// </summary>
+        public static string CampaignFailedResetManual {
+            get {
+                return ResourceManager.GetString("CampaignFailedResetManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to update campaign: {0} ..
         /// </summary>
         public static string CampaignFailedUpdate {
