@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -8,7 +9,6 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class TenantUpgrader
 	{
-		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 		private readonly DatabaseUpgrader _databaseUpgrader;
 		private readonly UpgradeRunner _upgradeRunner;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.IntegratedSecurity = false;
 			var analConnstring = builder.ConnectionString;
 			// and agg to
-			if (!isAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
+			if (!isAzure() && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
 			{
 				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
@@ -58,6 +58,12 @@ namespace Teleopti.Wfm.Administration.Core
 			_upgradeRunner.Logger = new TenantLogger(tenant.Name);
          _upgradeRunner.Upgrade(dbArgs);
 
+		}
+
+		private bool isAzure()
+		{
+			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 }

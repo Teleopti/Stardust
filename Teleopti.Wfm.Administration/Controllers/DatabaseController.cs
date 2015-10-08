@@ -28,8 +28,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly PersistTenant _persistTenant;
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
 
-		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
-
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 
 			ICurrentTenantSession currentTenantSession,
@@ -77,13 +75,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var dbPath = _dbPathProvider.GetDbPath();
 
-			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.AppUser, model.AppPassword, isAzure);
-			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure, model.Tenant);
+			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.AppUser, model.AppPassword, isAzure());
+			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure(), model.Tenant);
 			_databaseHelperWrapper.AddBusinessUnit(createAppDbConnectionString(model), model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure, model.Tenant);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure(), model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure(), model.Tenant);
 
-			if (isAzure)
+			if (isAzure())
 				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");
 			else
 				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAgg");
@@ -196,10 +194,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure()))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure()))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
@@ -226,7 +224,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			};
 			try
 			{
-				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure))
+				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure()))
 				{
 					return
 					new TenantResultModel
@@ -236,7 +234,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					};
 				}
 				var message = "";
-				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure, out message))
+				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure(), out message))
 				{
 					return
 					new TenantResultModel
@@ -341,6 +339,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
 			return new TenantResultModel { Success = true, Message = "Created new user." };
+		}
+
+		private bool isAzure()
+		{
+			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 

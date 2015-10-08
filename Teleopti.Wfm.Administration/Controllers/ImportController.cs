@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -19,8 +20,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ITenantExists _tenantExists;
 		private readonly Import _import;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
-		private readonly bool isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
-
+		
 		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import, ICheckDatabaseVersions checkDatabaseVersions)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
@@ -89,7 +89,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!result.Exists)
 				return Json(result);
 
-			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString,type,model.UserName,isAzure);
+			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString,type,model.UserName,isAzure());
 			//check so it works now
 			appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.Database, UserID = model.UserName, Password = model.Password };
 			return Json(_databaseHelperWrapper.Exists(appBuilder.ConnectionString, type));
@@ -122,13 +122,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("CheckAppLogin")]
 		public virtual JsonResult<TenantResultModel> CheckAppLogin(ImportDatabaseModel model)
 		{
-			if (_databaseHelperWrapper.LoginExists(createLoginConnectionString(model), model.UserName, isAzure))
+			if (_databaseHelperWrapper.LoginExists(createLoginConnectionString(model), model.UserName, isAzure()))
 				return Json(new TenantResultModel {Success = true, Message = "Login exists, make sure you have entered a correct password."});
 			string message;
-			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(createLoginConnectionString(model), model.UserName, model.Password, isAzure, out message);
+			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(createLoginConnectionString(model), model.UserName, model.Password, isAzure(), out message);
 			if(!canCreate)
 				return Json(new TenantResultModel { Success = false, Message = message });
-			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.UserName, model.Password,isAzure);
+			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.UserName, model.Password,isAzure());
 			return Json(new TenantResultModel {Success = true, Message = "Created new login."});
 		}
 
@@ -166,13 +166,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure()))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure()))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
+		}
+
+		private bool isAzure()
+		{
+			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 }
