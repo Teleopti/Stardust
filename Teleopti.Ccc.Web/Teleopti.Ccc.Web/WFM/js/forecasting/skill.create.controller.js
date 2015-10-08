@@ -1,16 +1,16 @@
 ﻿'use strict';
-angular.module('wfm.settings')
-	.controller('SettingsSkillCreateCtrl', [
-		'Settings', '$scope', '$filter',
-		function (settingsService, $scope, $filter) {
+angular.module('wfm.forecasting')
+	.controller('ForecastingSkillCreateCtrl', [
+		'SkillService', '$scope', '$filter',
+		function (skillService, $scope, $filter) {
 			$scope.model = {};
 
 			$scope.activities = [];
-			settingsService.activities.get().$promise.then(function(result) {
+			skillService.activities.get().$promise.then(function(result) {
 				$scope.activities = result;
 			});
 			$scope.timezones = [];
-			settingsService.timezones.get().$promise.then(function(result) {
+			skillService.timezones.get().$promise.then(function(result) {
 				$scope.timezones = result.Timezones;
 				$scope.model.selectedTimezone = $filter('filter')(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
 			});

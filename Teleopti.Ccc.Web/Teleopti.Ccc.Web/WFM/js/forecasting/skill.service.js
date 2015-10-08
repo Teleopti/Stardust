@@ -1,6 +1,6 @@
 ﻿'use strict';
-angular.module('wfm.settings')
-	.service('Settings', [
+angular.module('wfm.forecasting')
+	.service('SkillService', [
 		'$resource', function ($resource) {
 			this.activities = $resource('../api/Skill/Activities', {}, {
 				get: { method: 'GET', params: {}, isArray: true }

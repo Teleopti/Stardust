@@ -34,8 +34,7 @@ var wfm = angular.module('wfm', [
 	'wfm.help',
 	'wfm.rta',
 	'wfm.start',
-	'wfm.businessunits',
-	'wfm.settings'
+	'wfm.businessunits'
 ]);
 
 wfm.config([
@@ -56,6 +55,10 @@ wfm.config([
 			params: { workloadId: {}, workloadName: {} },
 			templateUrl: 'html/forecasting/forecasting-advanced.html',
 			controller: 'ForecastingAdvancedCtrl'
+		}).state('forecasting.skillcreate', {
+			url: '/skill/create',
+			templateUrl: 'html/forecasting/skill-create.html',
+			controller: 'ForecastingSkillCreateCtrl'
 		}).state('forecasting-method', {
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-method.html',
@@ -64,14 +67,6 @@ wfm.config([
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
-		}).state('settings', {
-			url: '/settings',
-			templateUrl: 'html/settings/settings.html',
-			controller: 'SettingsDefaultCtrl'
-		}).state('settings.skillcreate', {
-			url: '/skill/create',
-			templateUrl: 'html/settings/skill-create.html',
-			controller: 'SettingsSkillCreateCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',

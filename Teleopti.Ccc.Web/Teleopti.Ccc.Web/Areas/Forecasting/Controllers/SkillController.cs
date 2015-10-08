@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSettings)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkill)]
 	public class SkillController : ApiController
 	{
 		private readonly IActivityProvider _activityProvider;

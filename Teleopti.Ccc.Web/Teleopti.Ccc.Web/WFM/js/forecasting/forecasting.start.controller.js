@@ -428,7 +428,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.createSkill = function() {
-				$state.go('settings.skillcreate');
+				$state.go('forecasting.skillcreate');
 			};
 		}
 	]);
