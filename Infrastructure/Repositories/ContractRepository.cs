@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class ContractRepository : Repository<IContract>, IContractRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ContractRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public ContractRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

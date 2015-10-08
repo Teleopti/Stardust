@@ -16,12 +16,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class OptionalColumnRepository : Repository<IOptionalColumn>, IOptionalColumnRepository
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="unitOfWork"></param>
         public OptionalColumnRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

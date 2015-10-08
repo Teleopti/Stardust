@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
@@ -11,13 +10,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class OutboundCampaignRepository : Repository<IOutboundCampaign>, IOutboundCampaignRepository
 	{
 		public OutboundCampaignRepository(IUnitOfWork unitOfWork)
-			: base(unitOfWork)
-		{
-		}
-
-		public OutboundCampaignRepository(IUnitOfWorkFactory unitOfWorkFactory)
 #pragma warning disable 618
-			: base(unitOfWorkFactory)
+			: base(unitOfWork)
 #pragma warning restore 618
 		{
 		}
@@ -27,9 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		protected void SetRepositoryFactory(IRepositoryFactory repositoryFactory)
-		{
-		}
 
 		public IList<IOutboundCampaign> GetPlannedCampaigns()
 		{

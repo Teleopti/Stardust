@@ -17,11 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class TeamRepository : Repository<ITeam>, ITeamRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TeamRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The UnitOfWork.</param>
+#pragma warning disable 618
         public TeamRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class BudgetGroupRepository : Repository<IBudgetGroup>, IBudgetGroupRepository
     {
+#pragma warning disable 618
         public BudgetGroupRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+#pragma warning restore 618
 
 #pragma warning disable 618
         public BudgetGroupRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)

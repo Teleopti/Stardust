@@ -10,7 +10,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class GamificationSettingRepository : Repository<IGamificationSetting>, IGamificationSettingRepository
 	{
+#pragma warning disable 618
 		public GamificationSettingRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

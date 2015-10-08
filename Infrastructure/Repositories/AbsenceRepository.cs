@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
 	public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>, IProxyForId<IAbsence>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbsenceRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public AbsenceRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

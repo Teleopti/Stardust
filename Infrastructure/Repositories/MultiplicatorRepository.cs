@@ -18,23 +18,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class MultiplicatorRepository : Repository<IMultiplicator>, IMultiplicatorRepository
     {
 
-        #region Fields - Instance Member
-
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - MultiplicatorRepository Members
-
-        #endregion
-
-        #endregion
-
         #region Methods - Instance Member
 
         #region Constructor - (2)
         public MultiplicatorRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

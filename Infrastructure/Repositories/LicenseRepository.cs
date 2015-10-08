@@ -21,16 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class LicenseRepository : Repository<ILicense>, ILicenseRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LicenseRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The UnitOfWork used for retrieving a license.</param>
-        /// <remarks>
-        /// Created by: Klas
-        /// Created date: 2008-12-03
-        /// </remarks>
         public LicenseRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

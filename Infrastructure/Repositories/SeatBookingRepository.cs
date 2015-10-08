@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
 		public SeatBookingRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}

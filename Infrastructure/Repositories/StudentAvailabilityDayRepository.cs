@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class StudentAvailabilityDayRepository : Repository<IStudentAvailabilityDay>, IStudentAvailabilityDayRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonRotationRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public StudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

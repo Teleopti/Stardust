@@ -13,12 +13,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PushMessageDialogueRepository : Repository<IPushMessageDialogue>, IPushMessageDialogueRepository
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PushMessageRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The UnitOfWork.</param>
 		public PushMessageDialogueRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

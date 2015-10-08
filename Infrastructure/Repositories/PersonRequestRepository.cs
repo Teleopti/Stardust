@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonRequestRepository : Repository<IPersonRequest>, IPersonRequestRepository
 	{
 		public PersonRequestRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

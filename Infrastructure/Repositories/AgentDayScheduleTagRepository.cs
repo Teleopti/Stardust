@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class AgentDayScheduleTagRepository : Repository<IAgentDayScheduleTag>, IAgentDayScheduleTagRepository 
     {
+#pragma warning disable 618
         public AgentDayScheduleTagRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class PersonRotationRepository : Repository<IPersonRotation>, IPersonRotationRepository
     {
         public PersonRotationRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

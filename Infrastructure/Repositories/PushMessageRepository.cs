@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
 	{
 
+#pragma warning disable 618
 		public PushMessageRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

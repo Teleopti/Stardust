@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IStateGroupActivityAlarmRepository
 	{
 		public StateGroupActivityAlarmRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

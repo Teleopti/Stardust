@@ -13,11 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class MultiplicatorDefinitionSetRepository : Repository<IMultiplicatorDefinitionSet>, 
                                                         IMultiplicatorDefinitionSetRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MultiplicatorDefinitionSetRepository"/> class.
-        /// </summary>
-        /// <param name="uow">The uow.</param>
+#pragma warning disable 618
         public MultiplicatorDefinitionSetRepository(IUnitOfWork uow) : base(uow)
+#pragma warning restore 618
         {
         }
 

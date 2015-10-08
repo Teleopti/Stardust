@@ -10,12 +10,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class WorkloadRepository : Repository<IWorkload>, IWorkloadRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkloadRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public WorkloadRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

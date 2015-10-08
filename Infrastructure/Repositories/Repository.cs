@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     {
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		//don't use this one!
-	    protected Repository(IUnitOfWork unitOfWork)
+		[Obsolete("Should be removed. Don't impl this ctor if you create a new repository!")]
+		protected Repository(IUnitOfWork unitOfWork)
         {
 			_currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
         }
@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
         }
 
-		//use this one!
 		protected Repository(ICurrentUnitOfWork currentUnitOfWork)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;

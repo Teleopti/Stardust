@@ -18,11 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class BusinessUnitRepository : Repository<IBusinessUnit>, IBusinessUnitRepository
     {
-        /// <summary>
-        /// Initilaze a new instance of the <see cref="BusinessUnitRepository"/> class 
-        /// </summary>
-        /// <param name="unitOfWork"></param>
+#pragma warning disable 618
         public BusinessUnitRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

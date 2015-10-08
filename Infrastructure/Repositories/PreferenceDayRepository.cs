@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </summary>
 		/// <param name="unitOfWork">The unitofwork</param>
 		public PreferenceDayRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

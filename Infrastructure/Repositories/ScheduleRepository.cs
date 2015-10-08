@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 
         public ScheduleRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

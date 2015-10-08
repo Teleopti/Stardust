@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class WorkflowControlSetRepository : Repository<IWorkflowControlSet>, IWorkflowControlSetRepository
     {
+#pragma warning disable 618
         public WorkflowControlSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

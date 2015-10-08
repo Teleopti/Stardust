@@ -19,15 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ApplicationRoleRepository : Repository<IApplicationRole>, IApplicationRoleRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationRoleRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The UnitOfWork.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-11-09
-        /// </remarks>
+#pragma warning disable 618
         public ApplicationRoleRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

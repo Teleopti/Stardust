@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class AvailableDataRepository : Repository<IAvailableData>,IAvailableDataRepository
     {
         public AvailableDataRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

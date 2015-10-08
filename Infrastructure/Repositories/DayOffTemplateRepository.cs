@@ -15,16 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class DayOffTemplateRepository : Repository<IDayOffTemplate>, IDayOffTemplateRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ContractRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
-        /// <remarks>
-        /// Created by: shirang
-        /// Created date: 2008-10-28
-        /// </remarks>
         public DayOffTemplateRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

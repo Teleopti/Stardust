@@ -12,11 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class JobResultRepository : Repository<IJobResult>, IJobResultRepository
 	{
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public JobResultRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

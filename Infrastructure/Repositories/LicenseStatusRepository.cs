@@ -10,7 +10,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class LicenseStatusRepository : Repository<ILicenseStatus>, ILicenseStatusRepository
     {
         public LicenseStatusRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

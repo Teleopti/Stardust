@@ -13,11 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class ShiftCategoryRepository : Repository<IShiftCategory>, IShiftCategoryRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShiftCategoryRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public ShiftCategoryRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

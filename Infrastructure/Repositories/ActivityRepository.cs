@@ -15,11 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
 	public class ActivityRepository : Repository<IActivity>, IActivityRepository, IProxyForId<IActivity>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public ActivityRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

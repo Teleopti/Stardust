@@ -19,15 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class WorkShiftRuleSetRepository : Repository<IWorkShiftRuleSet>, IWorkShiftRuleSetRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkShiftRuleSetRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The UnitOfWork.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-27
-        /// </remarks>
+#pragma warning disable 618
         public WorkShiftRuleSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

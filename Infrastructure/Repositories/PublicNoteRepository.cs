@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class PublicNoteRepository: Repository<IPublicNote>, IPublicNoteRepository 
     {
+#pragma warning disable 618
         public PublicNoteRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
        

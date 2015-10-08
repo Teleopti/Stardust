@@ -1,7 +1,6 @@
 ﻿using System;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,7 +9,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PlanningPeriodRepository : Repository<IPlanningPeriod> , IPlanningPeriodRepository
 	{
+#pragma warning disable 618
 		public PlanningPeriodRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class ApplicationFunctionRepository : Repository<IApplicationFunction>, IApplicationFunctionRepository
 	{
 		public ApplicationFunctionRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

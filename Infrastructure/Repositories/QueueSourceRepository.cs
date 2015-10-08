@@ -11,11 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class QueueSourceRepository : Repository<IQueueSource>, IQueueSourceRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkillTypeRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public QueueSourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

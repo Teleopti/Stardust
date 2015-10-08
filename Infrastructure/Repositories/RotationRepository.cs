@@ -17,12 +17,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class RotationRepository : Repository<IRotation>, ILoadAggregateById<IRotation>
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RotationRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The unitofwork</param>
 		public RotationRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

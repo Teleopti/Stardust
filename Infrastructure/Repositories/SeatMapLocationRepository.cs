@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class SeatMapLocationRepository : Repository<ISeatMapLocation>, ISeatMapLocationRepository
 	{
 		public SeatMapLocationRepository (IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base (unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

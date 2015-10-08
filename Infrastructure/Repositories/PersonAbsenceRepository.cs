@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
@@ -18,7 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAbsenceRepository : Repository<IPersonAbsence>, IPersonAbsenceRepository
 	{
 		public PersonAbsenceRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

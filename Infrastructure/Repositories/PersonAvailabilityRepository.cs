@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
@@ -14,7 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAvailabilityRepository : Repository<IPersonAvailability>, IPersonAvailabilityRepository
 	{
 		public PersonAvailabilityRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

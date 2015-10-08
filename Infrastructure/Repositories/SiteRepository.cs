@@ -13,11 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class SiteRepository : Repository<ISite>, ISiteRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SiteRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public SiteRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

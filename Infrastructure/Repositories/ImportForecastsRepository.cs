@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class ImportForecastsRepository: Repository<IForecastFile>, IImportForecastsRepository
     {
         public ImportForecastsRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

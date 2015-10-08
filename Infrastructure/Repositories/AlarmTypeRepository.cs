@@ -9,12 +9,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class AlarmTypeRepository : Repository<IAlarmType>, IAlarmTypeRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlarmTypeRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public AlarmTypeRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

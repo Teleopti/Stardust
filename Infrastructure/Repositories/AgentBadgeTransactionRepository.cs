@@ -8,7 +8,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AgentBadgeTransactionRepository : Repository<IAgentBadgeTransaction>, IAgentBadgeTransactionRepository
 	{
+#pragma warning disable 618
 		public AgentBadgeTransactionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

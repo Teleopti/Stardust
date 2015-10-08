@@ -11,16 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AgentBadgeRepository : Repository<IAgentBadge>, IAgentBadgeRepository
 	{
-		public AgentBadgeRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-		{
-		}
-
-#pragma warning disable 618
-		public AgentBadgeRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-#pragma warning restore 618
-		{
-		}
-
 		public AgentBadgeRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

@@ -32,12 +32,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 #pragma warning restore 618
 		{
 		}
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SkillDayRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The unitofwork</param>
 		public SkillDayRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 

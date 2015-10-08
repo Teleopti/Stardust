@@ -20,11 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class MeetingRepository : Repository<IMeeting>, IMeetingRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MeetingRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+#pragma warning disable 618
         public MeetingRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

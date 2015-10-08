@@ -12,12 +12,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class PartTimePercentageRepository : Repository<IPartTimePercentage>, IPartTimePercentageRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PartTimePercentageRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public PartTimePercentageRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

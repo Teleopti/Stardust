@@ -22,15 +22,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class RuleSetBagRepository : Repository<IRuleSetBag>, IRuleSetBagRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RuleSetBagRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The UnitOfWork.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-28
-        /// </remarks>
+#pragma warning disable 618
         public RuleSetBagRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

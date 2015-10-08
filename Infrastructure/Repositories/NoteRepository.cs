@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class NoteRepository: Repository<INote>, INoteRepository 
     {
+#pragma warning disable 618
         public NoteRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

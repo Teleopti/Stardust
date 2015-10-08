@@ -8,12 +8,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class MultisiteSkillRepository : Repository<IMultisiteSkill>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MultisiteSkillRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public MultisiteSkillRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
             : base(unitOfWork)
+#pragma warning restore 618
         {
         }
 

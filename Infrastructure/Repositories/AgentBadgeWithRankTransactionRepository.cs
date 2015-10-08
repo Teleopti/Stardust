@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class AgentBadgeWithRankTransactionRepository : Repository<IAgentBadgeWithRankTransaction>, IAgentBadgeWithRankTransactionRepository
 	{
 		public AgentBadgeWithRankTransactionRepository(IUnitOfWork unitOfWork)
+#pragma warning disable 618
 			: base(unitOfWork)
+#pragma warning restore 618
 		{
 		}
 
