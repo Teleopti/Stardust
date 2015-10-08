@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(skill.Activity, loadedAggregateFromDatabase.Activity);
         }
 
-        protected override Repository<IMultisiteSkill> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IMultisiteSkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultisiteSkillRepository(unitOfWork);
+            return new MultisiteSkillRepository(currentUnitOfWork);
         }
 
 

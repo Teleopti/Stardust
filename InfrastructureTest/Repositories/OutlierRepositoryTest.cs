@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //Assert.AreEqual(outlier.Workload.Name, loadedAggregateFromDatabase.Workload.Name);
         }
 
-        protected override Repository<IOutlier> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IOutlier> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new OutlierRepository(unitOfWork);
+            return new OutlierRepository(currentUnitOfWork);
         }
 
         /// <summary>

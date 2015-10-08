@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -24,10 +25,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				FormatId = new Guid("605b87c4-b98a-4fe1-9ea2-9b7308caa947")
 			};
 
-			var rep = TestRepository(UnitOfWork);
+			var rep = TestRepository(new ThisUnitOfWork(UnitOfWork));
 			rep.Add(format2);
 			Session.Flush();
-			var all = TestRepository(UnitOfWork).LoadAll();
+			var all = rep.LoadAll();
 
 			all.Count.Should().Be.EqualTo(1);
 			all[0].Id.Should().Not.Be.EqualTo(null);
@@ -49,9 +50,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.FormatId.ToString().Should().Be.EqualTo("0e531434-a463-4ab6-8bf1-4696ddc9b296");
 		}
 
-		protected override Repository<IPayrollFormat> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IPayrollFormat> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PayrollFormatRepository(unitOfWork);
+			return new PayrollFormatRepository(currentUnitOfWork);
 		}
 	}
 }

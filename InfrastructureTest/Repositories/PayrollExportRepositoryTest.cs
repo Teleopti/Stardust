@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(export.PayrollFormatName , loadedAggregateFromDatabase.PayrollFormatName );
         }
 
-        protected override Repository<IPayrollExport> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPayrollExport> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PayrollExportRepository(unitOfWork);
+            return new PayrollExportRepository(currentUnitOfWork);
         }
     }
 }

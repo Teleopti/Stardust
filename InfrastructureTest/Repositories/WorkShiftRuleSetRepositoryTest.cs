@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 
-        protected override Repository<IWorkShiftRuleSet> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IWorkShiftRuleSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkShiftRuleSetRepository(unitOfWork);
+            return new WorkShiftRuleSetRepository(currentUnitOfWork);
         }
 
         [Test]

@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
           //  Assert.AreEqual(1, customShrinkage.AbsenceCollection.Count());
         }
 
-        protected override Repository<IBudgetDay> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IBudgetDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new BudgetDayRepository(unitOfWork);
+            return new BudgetDayRepository(currentUnitOfWork);
         }
 
         [Test]

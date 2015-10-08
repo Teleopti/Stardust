@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(" ", CreateAggregateWithCorrectBusinessUnit().Name);
         }
 
-        protected override Repository<IKeyPerformanceIndicator> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IKeyPerformanceIndicator> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new KpiRepository(unitOfWork);
+            return new KpiRepository(currentUnitOfWork.Current());
         }
     }
 }

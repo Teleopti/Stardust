@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			cat.Rank = 42;
 			PersistAndRemoveFromUnitOfWork(cat);
 
-			var loadedCat = ((IShiftCategoryRepository)TestRepository(UnitOfWork)).FindAll();
+			var loadedCat = new ShiftCategoryRepository(UnitOfWork).FindAll();
 			Assert.AreEqual(42, loadedCat[0].Rank);
 	    }
 
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             new ShiftCategoryRepository(UnitOfWork);
         }
 
-        protected override Repository<IShiftCategory> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IShiftCategory> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ShiftCategoryRepository(unitOfWork);
+            return new ShiftCategoryRepository(currentUnitOfWork);
         }
     }
 }

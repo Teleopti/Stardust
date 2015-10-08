@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(org.StateCollection[0].BusinessUnit.Id, loadedAggregateFromDatabase.StateCollection[0].BusinessUnit.Id);
         }
 
-        protected override Repository<IRtaStateGroup> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IRtaStateGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RtaStateGroupRepository(unitOfWork);
+            return new RtaStateGroupRepository(currentUnitOfWork);
         }
 
         [Test]

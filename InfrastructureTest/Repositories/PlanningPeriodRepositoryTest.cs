@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(CreateAggregateWithCorrectBusinessUnit().Range);
 		}
 
-		protected override Repository<IPlanningPeriod> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IPlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PlanningPeriodRepository(unitOfWork);
+			return new PlanningPeriodRepository(currentUnitOfWork);
 		}
 
 		[Test]

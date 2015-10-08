@@ -135,9 +135,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(result[0].AllowedPreferenceActivity, Is.EqualTo(activity));
         }
 
-        protected override Repository<IWorkflowControlSet> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkflowControlSetRepository(unitOfWork);
+            return new WorkflowControlSetRepository(currentUnitOfWork);
         }
     }
 }

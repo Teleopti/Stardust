@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
         }
 
-        protected override Repository<IContract> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IContract> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ContractRepository(unitOfWork);
+            return new ContractRepository(currentUnitOfWork);
         }
 
     }

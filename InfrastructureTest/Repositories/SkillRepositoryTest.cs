@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(skill);
 
-            IRepository<ISkill> skillRepository = TestRepository(UnitOfWork);
+            IRepository<ISkill> skillRepository = new SkillRepository(UnitOfWork);
             skill = skillRepository.Get(skill.Id.Value);
             skillDay = skill.TemplateWeekCollection[0];
 
@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skillDay.MergeTemplateSkillDataPeriods(new List<ITemplateSkillDataPeriod>(skillDay.TemplateSkillDataPeriodCollection));
             PersistAndRemoveFromUnitOfWork(skill);
 
-            skillRepository = TestRepository(UnitOfWork);
+            skillRepository = new SkillRepository(UnitOfWork);
             skill = skillRepository.Get(skill.Id.Value);
             skillDay = skill.TemplateWeekCollection[0];
 
@@ -620,9 +620,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
 	    }
 
-	    protected override Repository<ISkill> TestRepository(IUnitOfWork unitOfWork)
+	    protected override Repository<ISkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SkillRepository(unitOfWork);
+            return new SkillRepository(currentUnitOfWork);
         }
     }
 }

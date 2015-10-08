@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(real.TargetValue, loadedAggregateFromDatabase.TargetValue);
         }
 
-        protected override Repository<IKpiTarget> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IKpiTarget> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new KpiTargetRepository(unitOfWork);
+            return new KpiTargetRepository(currentUnitOfWork.Current());
         }
     }
 }

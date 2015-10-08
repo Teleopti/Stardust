@@ -122,9 +122,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsFalse(LazyLoadingManager.IsInitialized(read.First().XmlResult));
         }
         
-        protected override Repository<IPayrollResult> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPayrollResult> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PayrollResultRepository(unitOfWork);
+            return new PayrollResultRepository(currentUnitOfWork);
         }
     }
 }

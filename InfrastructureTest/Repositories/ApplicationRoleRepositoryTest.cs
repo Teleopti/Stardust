@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				loadedAggregateFromDatabase.DescriptionText);
 		}
 
-		protected override Repository<IApplicationRole> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IApplicationRole> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new ApplicationRoleRepository(unitOfWork);
+			return new ApplicationRoleRepository(currentUnitOfWork);
 		}
 
 		/// <summary>

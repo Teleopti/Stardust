@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
            
         }
 
-        protected override Repository<ISkillType> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<ISkillType> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SkillTypeRepository(unitOfWork);
+            return new SkillTypeRepository(currentUnitOfWork);
         }
     }
 }

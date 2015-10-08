@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-        protected override Repository<IPersonAbsenceAccount> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPersonAbsenceAccount> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonAbsenceAccountRepository(unitOfWork);
+            return new PersonAbsenceAccountRepository(currentUnitOfWork);
         }
 
         [Test]

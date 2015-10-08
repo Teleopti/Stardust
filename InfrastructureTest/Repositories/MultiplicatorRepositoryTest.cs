@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(multiplicator.MultiplicatorValue, loadedAggregateFromDatabase.MultiplicatorValue);
         }
 
-        protected override Repository<IMultiplicator> TestRepository(Teleopti.Interfaces.Infrastructure.IUnitOfWork unitOfWork)
+        protected override Repository<IMultiplicator> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultiplicatorRepository(unitOfWork);
+            return new MultiplicatorRepository(currentUnitOfWork);
         }
 
         /// <summary>

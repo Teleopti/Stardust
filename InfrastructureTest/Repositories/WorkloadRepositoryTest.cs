@@ -234,9 +234,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1,template.TaskPeriodList.Count);
         }
 
-        protected override Repository<IWorkload> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IWorkload> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new WorkloadRepository(unitOfWork);
+            return new WorkloadRepository(currentUnitOfWork);
         }
     }
 }

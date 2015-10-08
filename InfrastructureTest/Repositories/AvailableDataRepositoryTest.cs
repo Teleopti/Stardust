@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNotNull(loadedAggregateFromDatabase.ApplicationRole);
         }
 
-        protected override Repository<IAvailableData> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IAvailableData> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AvailableDataRepository(unitOfWork);
+            return new AvailableDataRepository(currentUnitOfWork);
         }
 
         [Test]

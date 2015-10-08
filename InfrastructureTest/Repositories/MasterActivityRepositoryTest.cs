@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(loadedAbctivity.Description.ShortName, Is.EqualTo("NM"));
         }
 
-        protected override Repository<IMasterActivity> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IMasterActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MasterActivityRepository(unitOfWork);
+            return new MasterActivityRepository(currentUnitOfWork.Current());
         }
     }
 }

@@ -231,9 +231,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(day2);
         }
 
-        protected override Repository<IMultisiteDay> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IMultisiteDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MultisiteDayRepository(unitOfWork);
+            return new MultisiteDayRepository(currentUnitOfWork);
         }
     }
 }

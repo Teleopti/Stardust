@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Availability, loadedAggregateFromDatabase.Availability);
         }
 
-        protected override Repository<IPersonAvailability> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPersonAvailability> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonAvailabilityRepository(unitOfWork);
+            return new PersonAvailabilityRepository(currentUnitOfWork.Current());
         }
 
         [Test]

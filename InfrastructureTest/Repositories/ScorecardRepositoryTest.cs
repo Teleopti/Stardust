@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual("DUMMYNAME", CreateAggregateWithCorrectBusinessUnit().Name);
         }
 
-        protected override Repository<IScorecard> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IScorecard> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScorecardRepository(unitOfWork);
+            return new ScorecardRepository(currentUnitOfWork.Current());
         }
     }
 }

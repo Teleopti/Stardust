@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 
-        protected override Repository<IScenario> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IScenario> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScenarioRepository(unitOfWork);
+            return new ScenarioRepository(currentUnitOfWork);
         }
     }
 }

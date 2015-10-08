@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         }
 
-        protected override Repository<IRotation> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IRotation> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RotationRepository(unitOfWork);
+            return new RotationRepository(currentUnitOfWork.Current());
         }
 
 

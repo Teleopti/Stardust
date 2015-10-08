@@ -167,9 +167,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsFalse(loadedAggregateFromDatabase.NotAvailable);
         }
 
-        protected override Repository<IStudentAvailabilityDay> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IStudentAvailabilityDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new StudentAvailabilityDayRepository(unitOfWork);
+            return new StudentAvailabilityDayRepository(currentUnitOfWork);
         }
 
 		[Test]

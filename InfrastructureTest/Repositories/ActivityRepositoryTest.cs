@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(true, loadedAbctivity.AllowOverwrite );
         }
 
-        protected override Repository<IActivity> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ActivityRepository(unitOfWork);
+            return new ActivityRepository(currentUnitOfWork);
         }
     }
 }

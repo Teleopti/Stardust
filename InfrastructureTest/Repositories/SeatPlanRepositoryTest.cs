@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(SeatPlanStatus.InError, loadedAggregateFromDatabase.Status);
 		}
 
-		protected override Repository<ISeatPlan> TestRepository (IUnitOfWork unitOfWork)
+		protected override Repository<ISeatPlan> TestRepository (ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SeatPlanRepository(unitOfWork); 
+			return new SeatPlanRepository(currentUnitOfWork); 
 		}
 
 		[Test]

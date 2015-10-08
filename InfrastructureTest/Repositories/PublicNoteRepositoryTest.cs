@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.NoteDate, loadedAggregateFromDatabase.NoteDate);
         }
 
-        protected override Repository<IPublicNote> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPublicNote> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PublicNoteRepository(unitOfWork); 
+            return new PublicNoteRepository(currentUnitOfWork); 
         }
 
         [Test]

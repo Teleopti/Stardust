@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Confidential, loadedAggregateFromDatabase.Confidential);
         }
 
-        protected override Repository<IAbsence> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IAbsence> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AbsenceRepository(unitOfWork);
+            return new AbsenceRepository(currentUnitOfWork);
         }
 
         [Test]

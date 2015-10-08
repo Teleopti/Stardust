@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(login.AcdLogOnMartId, loadedAggregateFromDatabase.AcdLogOnMartId);
         }
 
-        protected override Repository<IExternalLogOn> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IExternalLogOn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ExternalLogOnRepository(unitOfWork);
+            return new ExternalLogOnRepository(currentUnitOfWork);
         }
 
         /// <summary>

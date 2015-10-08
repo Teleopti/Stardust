@@ -1744,9 +1744,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		protected override Repository<IPerson> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IPerson> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PersonRepository(new ThisUnitOfWork(unitOfWork));
+			return new PersonRepository(currentUnitOfWork);
 		}
 
 	}

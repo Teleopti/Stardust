@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual("zalg", foundTemplates[3].Name);
         }
 
-        protected override Repository<IExtendedPreferenceTemplate> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IExtendedPreferenceTemplate> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ExtendedPreferenceTemplateRepository(unitOfWork);
+            return new ExtendedPreferenceTemplateRepository(currentUnitOfWork);
         }
     }
 }

@@ -541,9 +541,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				model.BusinessUnitId, new[] { model }, false);
 		}
 
-		protected override Repository<ISeatBooking> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<ISeatBooking> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SeatBookingRepository(unitOfWork);
+			return new SeatBookingRepository(currentUnitOfWork);
 		}
 	}
 }

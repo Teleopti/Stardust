@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Rotation, loadedAggregateFromDatabase.Rotation);
         }
 
-        protected override Repository<IPersonRotation> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPersonRotation> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonRotationRepository(unitOfWork);
+            return new PersonRotationRepository(currentUnitOfWork.Current());
         }
 
         [Test]

@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                            CreateAggregateWithCorrectBusinessUnit().Description.ToString());
         }
 
-        protected override Repository<IGroupPage> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IGroupPage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new GroupPageRepository(unitOfWork);
+            return new GroupPageRepository(currentUnitOfWork.Current());
         }
         #endregion
 

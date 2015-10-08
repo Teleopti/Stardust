@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, loadedAggregateFromDatabase.RuleSetCollection.Count);
         }
 
-        protected override Repository<IRuleSetBag> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IRuleSetBag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new RuleSetBagRepository(unitOfWork);
+            return new RuleSetBagRepository(currentUnitOfWork);
         }
 
         [Test]

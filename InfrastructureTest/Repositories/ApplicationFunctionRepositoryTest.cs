@@ -122,9 +122,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  Assert.AreEqual(functions.Count, 2);
 		  }
 
-        protected override Repository<IApplicationFunction> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IApplicationFunction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ApplicationFunctionRepository(unitOfWork);
+            return new ApplicationFunctionRepository(currentUnitOfWork);
         }
     }
 }

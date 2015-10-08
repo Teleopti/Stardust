@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(newBadgeTran.InsertedOn, loadedAggregateFromDatabase.InsertedOn);
 		}
 
-		protected override Repository<IAgentBadgeWithRankTransaction> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IAgentBadgeWithRankTransaction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new AgentBadgeWithRankTransactionRepository(unitOfWork);
+			return new AgentBadgeWithRankTransactionRepository(currentUnitOfWork);
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 			CleanUpAfterTest();
 
-			var target = (AgentBadgeWithRankTransactionRepository)TestRepository(UnitOfWork);
+			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
 			target.ResetAgentBadges();
 
 			var result = target.Find(person);

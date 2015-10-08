@@ -68,15 +68,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <summary>
         /// Tests the repository.
         /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="currentUnitOfWork">The unit of work.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-03-28
         /// </remarks>
-        protected override Repository<IValidatedVolumeDay> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IValidatedVolumeDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ValidatedVolumeDayRepository(unitOfWork);
+            return new ValidatedVolumeDayRepository(currentUnitOfWork);
         }
 
         /// <summary>

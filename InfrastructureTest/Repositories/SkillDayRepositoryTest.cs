@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             PersistAndRemoveFromUnitOfWork(skillDay);
 
-            IRepository<ISkillDay> skillDayRepository = TestRepository(UnitOfWork);
+            IRepository<ISkillDay> skillDayRepository = new SkillDayRepository(UnitOfWork);
             skillDay = skillDayRepository.Get(skillDay.Id.Value);
             skillDay.SetupSkillDay();
             
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skillDay.MergeSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
             PersistAndRemoveFromUnitOfWork(skillDay);
 
-            skillDayRepository = TestRepository(UnitOfWork);
+            skillDayRepository = new SkillDayRepository(UnitOfWork);
             skillDay = skillDayRepository.Get(skillDay.Id.Value);
             skillDay.SetupSkillDay();
 
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
 			new SkillDayRepository(UnitOfWork).Add(skillDay);
 
-		    var skillDayRepository = TestRepository(UnitOfWork);
+		    var skillDayRepository = new SkillDayRepository(UnitOfWork);
 		    skillDay = skillDayRepository.Get(skillDay.Id.Value);
 
 		    Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
@@ -418,9 +418,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(1);
 		}
 
-        protected override Repository<ISkillDay> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<ISkillDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SkillDayRepository(unitOfWork);
+            return new SkillDayRepository(currentUnitOfWork);
         }
     }
 }

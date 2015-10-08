@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			if (loadedAggregateFromDatabase != null) Assert.AreEqual(org.Sunday, loadedAggregateFromDatabase.Sunday);
 		}
 
-		protected override Repository<ISeniorityWorkDayRanks> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<ISeniorityWorkDayRanks> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SeniorityWorkDayRanksRepository(unitOfWork);
+			return new SeniorityWorkDayRanksRepository(currentUnitOfWork.Current());
 		}
 	}
 }

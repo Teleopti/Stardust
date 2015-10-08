@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(seatMapLocation.SeatMapJsonData, loaded.SeatMapJsonData);
 		}
 
-		protected override Repository<ISeatMapLocation> TestRepository (IUnitOfWork unitOfWork)
+		protected override Repository<ISeatMapLocation> TestRepository (ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SeatMapLocationRepository(unitOfWork);
+			return new SeatMapLocationRepository(currentUnitOfWork);
 		}
 	}
 }

@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			pagingDetail.TotalNumberOfResults.Should().Be.EqualTo(1);
 		}
 
-        protected override Repository<IJobResult> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IJobResult> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new JobResultRepository(unitOfWork);
+            return new JobResultRepository(currentUnitOfWork);
         }
     }
 }

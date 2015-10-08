@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(forecastFile.FileContent, loadedAggregateFromDatabase.FileContent);
         }
 
-        protected override Repository<IForecastFile> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IForecastFile> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ImportForecastsRepository(unitOfWork);
+            return new ImportForecastsRepository(currentUnitOfWork);
         }
     }
 }

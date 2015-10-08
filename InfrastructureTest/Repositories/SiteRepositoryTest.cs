@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual("for test", loadedAggregateFromDatabase.Description.Name);
         }
 
-        protected override Repository<ISite> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<ISite> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new SiteRepository(unitOfWork);
+            return new SiteRepository(currentUnitOfWork);
         }
 
         [Test]

@@ -198,9 +198,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(org.TemplateName, loadedAggregateFromDatabase.TemplateName);
 		}
 
-		protected override Repository<IPreferenceDay> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IPreferenceDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new PreferenceDayRepository(unitOfWork);
+			return new PreferenceDayRepository(currentUnitOfWork);
 		}
 
 		[Test]

@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.Name.Should().Be.EqualTo("Sept Sales");
 		}
 
-        protected override Repository<IOutboundCampaign> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IOutboundCampaign> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new OutboundCampaignRepository(unitOfWork);
+			return new OutboundCampaignRepository(currentUnitOfWork);
 		}
 
 		[Test]

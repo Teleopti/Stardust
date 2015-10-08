@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.ContractScheduleWeeks.Count(), loadedAggregateFromDatabase.ContractScheduleWeeks.Count());
         }
 
-        protected override Repository<IContractSchedule> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IContractSchedule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ContractScheduleRepository(unitOfWork);
+            return new ContractScheduleRepository(currentUnitOfWork);
         }
 
         [Test]

@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-        protected override Repository<IAgentDayScheduleTag> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IAgentDayScheduleTag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AgentDayScheduleTagRepository(unitOfWork);
+            return new AgentDayScheduleTagRepository(currentUnitOfWork);
         }
 
         [Test]

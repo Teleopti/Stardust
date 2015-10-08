@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(Adherence.In, loadedAggregateFromDatabase.Adherence);
         }
 
-        protected override Repository<IAlarmType> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IAlarmType> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AlarmTypeRepository(unitOfWork);
+            return new AlarmTypeRepository(currentUnitOfWork);
         }
     }
 }

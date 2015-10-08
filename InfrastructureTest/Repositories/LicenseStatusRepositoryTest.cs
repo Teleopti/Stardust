@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(_toVerify, loadedAggregateFromDatabase.XmlString);
         }
 
-        protected override Repository<ILicenseStatus> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<ILicenseStatus> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new FakeRepositoryThatAllowsOldAddRange(unitOfWork);
+            return new FakeRepositoryThatAllowsOldAddRange(currentUnitOfWork);
         }
 
         private class FakeRepositoryThatAllowsOldAddRange : LicenseStatusRepository
         {
-            public FakeRepositoryThatAllowsOldAddRange(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+            public FakeRepositoryThatAllowsOldAddRange(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork) { }
 
             public override void AddRange(IEnumerable<ILicenseStatus> entityCollection)
             {

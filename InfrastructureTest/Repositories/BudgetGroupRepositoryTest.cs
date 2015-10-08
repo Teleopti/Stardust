@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(budgetGroup.CustomEfficiencyShrinkages.Count(),loadedAggregateFromDatabase.CustomEfficiencyShrinkages.Count());
         }
 
-        protected override Repository<IBudgetGroup> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IBudgetGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new BudgetGroupRepository(unitOfWork);
+            return new BudgetGroupRepository(currentUnitOfWork);
         }
 
         [Test]

@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(opc.TableName, loadedAggregateFromDatabase.TableName);
         }
 
-        protected override Repository<IOptionalColumn> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IOptionalColumn> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new OptionalColumnRepository(unitOfWork);
+            return new OptionalColumnRepository(currentUnitOfWork);
         }
 
 		[Test]

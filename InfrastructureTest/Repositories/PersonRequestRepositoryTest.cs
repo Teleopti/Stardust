@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                             (loadedAggregateFromDatabase.Request).Period);
         }
 
-        protected override Repository<IPersonRequest> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PersonRequestRepository(unitOfWork);
+            return new PersonRequestRepository(currentUnitOfWork);
         }
 
 

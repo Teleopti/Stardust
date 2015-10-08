@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(LazyLoadingManager.IsInitialized(teams.First().Site), Is.True);
 		}
 
-        protected override Repository<ITeam> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new TeamRepository(unitOfWork);
+            return new TeamRepository(currentUnitOfWork);
         }
     }
 }

@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             if(loadedAggregateFromDatabase != null) Assert.AreEqual(org.Description, loadedAggregateFromDatabase.Description);
         }
 
-        protected override Repository<IScheduleTag> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IScheduleTag> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new ScheduleTagRepository(unitOfWork);
+            return new ScheduleTagRepository(currentUnitOfWork);
         }   
     }
 }

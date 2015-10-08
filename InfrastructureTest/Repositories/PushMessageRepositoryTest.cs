@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <summary>
         /// Tests the repository.
         /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="currentUnitOfWork">The unit of work.</param>
         /// <returns></returns>
-        protected override Repository<IPushMessage> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPushMessage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PushMessageRepository(unitOfWork);
+            return new PushMessageRepository(currentUnitOfWork);
         }
         
         [Test]

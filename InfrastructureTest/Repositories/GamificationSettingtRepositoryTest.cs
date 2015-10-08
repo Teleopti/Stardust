@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
 		}
 
-		protected override Repository<IGamificationSetting> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IGamificationSetting> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new GamificationSettingRepository(unitOfWork);
+			return new GamificationSettingRepository(currentUnitOfWork);
 		}
 	}
 }

@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
         }
 
-        protected override Repository<IStateGroupActivityAlarm> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IStateGroupActivityAlarm> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new StateGroupActivityAlarmRepository(unitOfWork);
+            return new StateGroupActivityAlarmRepository(currentUnitOfWork);
         }
 
         [Test]

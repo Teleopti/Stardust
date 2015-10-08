@@ -250,9 +250,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(linkedMeetings[0].OriginalMeetingId.Equals(meeting.Id.GetValueOrDefault()));
         }
 
-        protected override Repository<IMeeting> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IMeeting> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new MeetingRepository(unitOfWork);
+            return new MeetingRepository(currentUnitOfWork);
         }
     }
 }

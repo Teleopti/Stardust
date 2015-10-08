@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //don't matter if 4 or 8 is used - shouldn't crash, thats all
         }
 
-        protected override Repository<IQueueSource> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IQueueSource> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new QueueSourceRepository(unitOfWork);
+            return new QueueSourceRepository(currentUnitOfWork.Current());
         }
     }
 }

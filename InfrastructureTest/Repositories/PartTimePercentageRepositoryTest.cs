@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
         }
 
-        protected override Repository<IPartTimePercentage> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IPartTimePercentage> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new PartTimePercentageRepository(unitOfWork);
+            return new PartTimePercentageRepository(currentUnitOfWork);
         }
 
         [Test]

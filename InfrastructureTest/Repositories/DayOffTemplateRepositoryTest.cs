@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -65,9 +66,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(dayOff.PayrollCode, loadedAggregateFromDatabase.PayrollCode);
         }
 
-        protected override Repository<IDayOffTemplate> TestRepository(Teleopti.Interfaces.Infrastructure.IUnitOfWork unitOfWork)
+        protected override Repository<IDayOffTemplate> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new DayOffTemplateRepository(unitOfWork);
+            return new DayOffTemplateRepository(currentUnitOfWork);
         }
 
 

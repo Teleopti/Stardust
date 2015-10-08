@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,17 +27,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private Repository<T> rep;
         private T simpleEntity;
 
-
-        #region SetUpAndTeardownMethods
         protected override void SetupForRepositoryTest()
         {
-            rep = TestRepository(UnitOfWork);
+            rep = TestRepository(new ThisUnitOfWork(UnitOfWork));
             ConcreteSetup();
             simpleEntity = CreateAggregateWithCorrectBusinessUnit();
         }
-        #endregion
-
-        #region Tests
 
         /// <summary>
         /// Verifies that incorrect business unit is not readable.
@@ -249,9 +245,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-        #endregion
-
-        #region Abstract methods
 
         /// <summary>
         /// Runs every test. Can be overriden by repository's concrete implementation.
@@ -274,10 +267,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected abstract void VerifyAggregateGraphProperties(T loadedAggregateFromDatabase);
 
-        #endregion
 
 
-        protected abstract Repository<T> TestRepository(IUnitOfWork unitOfWork);
+        protected abstract Repository<T> TestRepository(ICurrentUnitOfWork currentUnitOfWork);
 
         private bool isMutable(T root)
         {
