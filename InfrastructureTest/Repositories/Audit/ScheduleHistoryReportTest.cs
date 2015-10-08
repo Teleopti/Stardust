@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAbsenceRepository(UnitOfWorkFactory.Current);
+				var rep = new PersonAbsenceRepository(uow);
 				rep.Remove(PersonAbsence);
 				uow.PersistAll();
 			}

@@ -23,13 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public PersonAbsenceRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-			: base(unitOfWorkFactory)
-#pragma warning restore 618
-		{
-		}
-
 		public PersonAbsenceRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

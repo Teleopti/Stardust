@@ -368,13 +368,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			rep.Find(new DateTimePeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 		}
 
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            IPersonAbsenceRepository personAbsenceRepository = new PersonAbsenceRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(personAbsenceRepository);
-        }
-
         private static void verifyRelatedObjectsAreEagerlyLoaded(IEnumerable<IPersonAbsence> personAbsenceCollection)
         {
             foreach (PersonAbsence personAbsence in personAbsenceCollection)

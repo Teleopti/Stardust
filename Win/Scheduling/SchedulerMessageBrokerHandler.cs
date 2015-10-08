@@ -259,43 +259,44 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
 			{
-			var unitOfWorkFactory = UnitOfWorkFactory.Current;
+
+			var currentUnitOfWork = new FromFactory(() => UnitOfWorkFactory.Current);
 
 				if (Log.IsInfoEnabled)
 				Log.Info("Message broker - Updating " + eventMessage.DomainObjectType + " [" + eventMessage.DomainObjectId + "]");
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IAgentDayScheduleTag)))
 			{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(unitOfWorkFactory.CurrentUnitOfWork()), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 			}
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAssignmentRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAssignmentRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAbsenceRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAbsenceRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPreferenceDay)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PreferenceDayRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PreferenceDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(INote)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new NoteRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new NoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPublicNote)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PublicNoteRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PublicNoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
             {
-                return _owner.SchedulerState.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+                return _owner.SchedulerState.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
             }
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
             {
-                return _owner.SchedulerState.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (unitOfWorkFactory), eventMessage.DomainObjectId);
+                return _owner.SchedulerState.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (currentUnitOfWork), eventMessage.DomainObjectId);
             }
 
 			Log.Warn("Message broker - Got a message of an unknown IScheduleData type: " + eventMessage.DomainObjectType);
