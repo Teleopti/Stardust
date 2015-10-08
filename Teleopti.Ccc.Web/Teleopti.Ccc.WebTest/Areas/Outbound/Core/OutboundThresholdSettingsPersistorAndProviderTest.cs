@@ -4,9 +4,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.DataProvider
+namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
 	[TestFixture]
 	public class OutboundThresholdSettingsPersistorAndProviderTest

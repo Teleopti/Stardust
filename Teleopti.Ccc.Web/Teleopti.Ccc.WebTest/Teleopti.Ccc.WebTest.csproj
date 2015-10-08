@@ -259,7 +259,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\OutboundThresholdSettingsPersistorAndProviderTest.cs" />
+    <Compile Include="Areas\Outbound\Core\OutboundThresholdSettingsPersistorAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonForScheduleFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelRepository.cs" />

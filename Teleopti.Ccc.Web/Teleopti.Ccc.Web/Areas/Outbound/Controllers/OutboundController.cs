@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
@@ -24,11 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
 		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
 		private readonly ICampaignListProvider _campaignListProvider;
+		private readonly ISettingsPersisterAndProvider<OutboundThresholdSettings> _thresholdsSettingPersisterAndProvider;
 	
 
 		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
-			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, 
-			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, ICampaignListProvider campaignListProvider)
+			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider,
+			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, 
+			ICampaignListProvider campaignListProvider, ISettingsPersisterAndProvider<OutboundThresholdSettings> thresholdsSettingPersisterAndProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
@@ -37,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
 			_campaignVisualizationProvider = campaignVisualizationProvider;
 			_campaignListProvider = campaignListProvider;
+			_thresholdsSettingPersisterAndProvider = thresholdsSettingPersisterAndProvider;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -177,6 +182,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			_outboundCampaignPersister.ManualReplanCampaign(Id);
 			return _campaignVisualizationProvider.ProvideVisualization(Id);
+		}
+
+		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
+		public virtual void UpdateThresholdsSetting(int value)
+		{
+			_thresholdsSettingPersisterAndProvider.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = value });
 		}
 	}
 }
