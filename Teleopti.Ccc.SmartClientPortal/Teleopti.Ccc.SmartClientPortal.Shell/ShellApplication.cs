@@ -191,16 +191,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				var builder = new ContainerBuilder();
 
-				var iocArgs = new IocArgs(configReader) { MessageBrokerListeningEnabled = true };
+				var iocArgs = new IocArgs(configReader) { MessageBrokerListeningEnabled = true, ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory)};
 				var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));
 
-				builder.RegisterModule(
-				new CommonModule(configuration)
-					{
-						RepositoryConstructorType = typeof(IUnitOfWorkFactory)
-					});
+				builder.RegisterModule(new CommonModule(configuration));
 				builder.RegisterType<WinTenantCredentials>().As<ICurrentTenantCredentials>().SingleInstance();
 				builder.RegisterModule<EncryptionModule>();
 				builder.RegisterModule<EventAggregatorModule>();

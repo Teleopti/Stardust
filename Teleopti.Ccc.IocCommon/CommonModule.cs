@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -6,14 +5,12 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon
 {
 	public class CommonModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
-		public Type RepositoryConstructorType { get; set; }
 
 		public static CommonModule ForTest()
 		{
@@ -36,7 +33,6 @@ namespace Teleopti.Ccc.IocCommon
 		public CommonModule(IIocConfiguration configuration)
 		{
 			_configuration = configuration;
-			RepositoryConstructorType = typeof(ICurrentUnitOfWork);
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -47,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
-			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<ForecasterModule>();

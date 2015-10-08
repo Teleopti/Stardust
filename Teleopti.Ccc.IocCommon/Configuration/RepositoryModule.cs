@@ -6,12 +6,13 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
-		public Type RepositoryConstructorType { get; set; }
+		private readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -23,10 +24,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.AsImplementedInterfaces()
 						.SingleInstance();
 				}
-				else if (type.GetConstructor(new[] {RepositoryConstructorType}) != null)
+				else if (type.GetConstructor(new[] { repositoryConstructorType }) != null)
 				{
 					builder.RegisterType(type)
-						.UsingConstructor(RepositoryConstructorType)
+						.UsingConstructor(repositoryConstructorType)
 						.AsImplementedInterfaces()
 						.SingleInstance();
 				}
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var parameters = constructorInfo.GetParameters();
 				if (parameters.Count() == 1)
 				{
-					if (parameters[0].ParameterType == RepositoryConstructorType)
+					if (parameters[0].ParameterType == repositoryConstructorType)
 						return true;
 				}
 			}

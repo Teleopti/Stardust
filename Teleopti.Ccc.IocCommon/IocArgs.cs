@@ -1,6 +1,8 @@
+using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
+		public Type ImplementationTypeForCurrentUnitOfWork { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.IocCommon
 			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			EnableNewResourceCalculation = configReader.ReadValue("EnableNewResourceCalculation", false);
+			ImplementationTypeForCurrentUnitOfWork = typeof (CurrentUnitOfWork);
 		}
 
 	}

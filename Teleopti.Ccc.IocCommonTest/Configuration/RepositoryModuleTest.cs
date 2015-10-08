@@ -72,20 +72,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				container.Resolve<IEtlJobStatusRepository>().Should().Not.Be.Null();
 			}
 		}
-
-		[Test]
-		public void RepositoriesWithIncorrectCtorAreNotWired()
-		{
-			var typeThatNoRepoAcceptAsArgument = GetType();
-			var config = new IocConfiguration(new IocArgs(new ConfigReader()) { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, new TrueToggleManager());
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(config) { RepositoryConstructorType = typeThatNoRepoAcceptAsArgument });
-
-			using (var container = builder.Build())
-			{
-				container.IsRegistered(typeof(IActivityRepository))
-					.Should().Be.False();
-			}
-		}
 	}
 }
