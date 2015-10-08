@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
@@ -29,28 +28,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 }
             }
         }
-
-        [Test]
-        public void VerifyRepositoryIsNotBoundToASpecificUnitOfWork()
-        {
-            var rep = new testRepository(uowFactory);
-            
-            using (var uow = uowFactory.CreateAndOpenUnitOfWork())
-            {
-                Assert.AreEqual(uow, rep.UnitOfWork);
-                using(var uow2 = uowFactory.CreateAndOpenUnitOfWork())
-                {
-                    Assert.AreEqual(uow2, rep.UnitOfWork);
-                }
-            }
-        }
-
-		private class testRepository : Repository
-		{
-			public testRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-			{
-			}
-		}
-
     }
 }

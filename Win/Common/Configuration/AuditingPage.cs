@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
-			Repository = new AuditSettingRepository(value);
+			Repository = new AuditSettingRepository(new ThisUnitOfWork(value));
 		}
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)

@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repWithExplicitUow = new AuditSettingRepository(uow);
-				repWithExplicitUow.Read().Should().Not.Be.Null();				
+				var repWithExplicitUow = new AuditSettingRepository(new ThisUnitOfWork(uow));
+				repWithExplicitUow.Read().Should().Not.Be.Null();
 			}
 		}
 	}

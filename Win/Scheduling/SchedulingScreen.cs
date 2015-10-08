@@ -3517,7 +3517,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void loadAuditingSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder, Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{
-			var repository = new AuditSettingRepository(uow);
+			var repository = new AuditSettingRepository(new ThisUnitOfWork(uow));
 			var auditSetting = repository.Read();
 			_isAuditingSchedules = auditSetting.IsScheduleEnabled;
 		}
