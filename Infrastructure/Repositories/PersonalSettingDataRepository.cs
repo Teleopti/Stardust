@@ -1,9 +1,7 @@
-﻿using System;
-using NHibernate.Criterion;
+﻿using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,20 +24,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	    }
 
-				public override bool ValidateUserLoggedOn
-				{
-					get
-					{
-						return false;
-					}
-				}
-
         public override ISettingData FindByKey(string key)
         {
-
-            return Session.CreateCriteria(typeof(PersonalSettingData))
+            return CurrentUnitOfWork.Current().Session().CreateCriteria(typeof(PersonalSettingData))
                         .Add(Restrictions.Eq("Key", key))
-                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork)))))
+                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(CurrentUnitOfWork))))
                         .SetCacheable(true)
                         .UniqueResult<ISettingData>();
         }
@@ -47,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
 		{
 
-			var data = Session.CreateCriteria(typeof(PersonalSettingData))
+			var data = CurrentUnitOfWork.Current().Session().CreateCriteria(typeof(PersonalSettingData))
 						.Add(Restrictions.Eq("Key", key))
 						.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
 						.SetCacheable(true)
@@ -60,8 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue
         {
             ISettingData data = FindByKey(key)
-                   ?? new GlobalSettingDataRepository(UnitOfWork).FindByKey(key)
-                   ?? new PersonalSettingData(key, TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))));
+                   ?? new GlobalSettingDataRepository(CurrentUnitOfWork).FindByKey(key)
+                   ?? new PersonalSettingData(key, TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(CurrentUnitOfWork)));
             return data.GetValue(defaultValue);
         }
     }

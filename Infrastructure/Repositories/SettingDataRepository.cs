@@ -1,32 +1,39 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public abstract class SettingDataRepository : Repository
+    public abstract class SettingDataRepository
     {
-        protected SettingDataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+	    protected SettingDataRepository(IUnitOfWork unitOfWork)
         {
+			CurrentUnitOfWork = new ThisUnitOfWork(unitOfWork);
         }
 
 
-	    protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+	    protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
 				{
+			CurrentUnitOfWork = new FromFactory(unitOfWorkFactory);
 				}
 
-	    protected SettingDataRepository(ICurrentUnitOfWork currentUnitOfWork): base(currentUnitOfWork)
+	    protected SettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
 	    {
+			CurrentUnitOfWork = currentUnitOfWork;
 	    }
 
-        public abstract ISettingData FindByKey(string key);
+		protected ICurrentUnitOfWork CurrentUnitOfWork { get; private set; }
+
+	    public abstract ISettingData FindByKey(string key);
 
         public ISettingData PersistSettingValue(ISettingValue value)
         {
+	        var uow = CurrentUnitOfWork.Current();
             var owner = value.BelongsTo;
             owner.SetValue(value);
             if (owner.Id.HasValue) //finns i db:n, ej nyskapad
             {
-                owner = UnitOfWork.Merge(owner);
+                owner = uow.Merge(owner);
             }
             else
             {
@@ -35,11 +42,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 if (old != null)
                 {
                     owner.SetId(old.Id.Value);
-                    owner = UnitOfWork.Merge(owner);
+                    owner = uow.Merge(owner);
                 }
                 else
                 {
-                    Session.Save(owner);
+                    uow.Session().Save(owner);
                 }
             }
             return owner;
@@ -48,11 +55,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public ISettingData PersistSettingValue(string entityName, ISettingValue value)
         {
-                var owner = value.BelongsTo;
+			var uow = CurrentUnitOfWork.Current();
+			var owner = value.BelongsTo;
                 owner.SetValue(value);
                 if (owner.Id.HasValue) //finns i db:n, ej nyskapad
                 {
-                    owner = UnitOfWork.Merge(owner);
+                    owner = uow.Merge(owner);
                 }
                 else
                 {
@@ -61,11 +69,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     if (old != null)
                     {
                         owner.SetId(old.Id.Value);
-                        owner = UnitOfWork.Merge(owner);
+                        owner = uow.Merge(owner);
                     }
                     else
                     {
-                        Session.Save(entityName,owner);
+					uow.Session().Save(entityName,owner);
                     }
                 }
                 return owner;

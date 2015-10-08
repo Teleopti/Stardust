@@ -20,5 +20,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return ((NHibernateStatelessUnitOfWork)statelessUnitOfWork).Session;
 		}
+
+		internal static ISession Session(this IUnitOfWork unitOfWok)
+		{
+			return ((NHibernateUnitOfWork) unitOfWok).Session;
+		}
 	}
 }

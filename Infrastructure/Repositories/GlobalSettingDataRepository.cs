@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public override ISettingData FindByKey(string key)
         {
-            return Session.CreateCriteria(typeof(GlobalSettingData))
+            return CurrentUnitOfWork.Current().Session().CreateCriteria(typeof(GlobalSettingData))
                         .Add(Restrictions.Eq("Key", key))
                         .UniqueResult<ISettingData>();
         }
