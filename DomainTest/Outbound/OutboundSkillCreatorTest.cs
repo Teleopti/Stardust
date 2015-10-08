@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		public void Setup()
 		{
 			_timeZone = new HawaiiTimeZone();
-			_target = new OutboundSkillCreator(_timeZone, new FakeOutboundSkillTypeProvider());
+			_target = new OutboundSkillCreator(_timeZone, new FakeSkillTypeProvider());
 		}
 
 		[Test]
@@ -116,12 +116,17 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		}
 	}
 
-	public class FakeOutboundSkillTypeProvider : IOutboundSkillTypeProvider
+	public class FakeSkillTypeProvider : ISkillTypeProvider
 	{
-		public ISkillType OutboundSkillType()
+		public ISkillType Outbound()
 		{
 			var desc = new Description("SkillTypeOutbound");
 			return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);
+		}
+
+		public ISkillType InboundTelephony()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -9,5 +9,13 @@ angular.module('wfm.forecasting')
 			this.timezones = $resource('../api/Skill/Timezones', {}, {
 				get: { method: 'GET', params: {}, isArray: false }
 			});
+
+			this.queues = $resource('../api/Skill/Queues', {}, {
+				get: { method: 'GET', params: {}, isArray: true }
+			});
+
+			this.skill = $resource('../api/Skill/Create', {}, {
+				create: { method: 'POST', params: {}, isArray: false }
+			});
 		}
 	]);

@@ -634,6 +634,7 @@
     <Compile Include="Outbound\OutboundRuleConfigurationProvider.cs" />
     <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
+    <Compile Include="Outbound\SkillTypeProvider.cs" />
     <Compile Include="Outbound\Rules\OutboundOverstaffRule.cs" />
     <Compile Include="Outbound\Rules\OutboundOverstaffRuleConfiguration.cs" />
     <Compile Include="Outbound\Rules\OutboundRule.cs" />
@@ -919,7 +920,6 @@
     <Compile Include="Outbound\Campaign.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactory.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
-    <Compile Include="Outbound\OutboundSkillTypeProvider.cs" />
     <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IExistingForecastRepository.cs" />

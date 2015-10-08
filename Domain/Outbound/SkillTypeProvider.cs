@@ -4,18 +4,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class OutboundSkillTypeProvider : IOutboundSkillTypeProvider
+	public class SkillTypeProvider : ISkillTypeProvider
 	{
 		private readonly ISkillTypeRepository _skillTypeRepository;
 
-		public OutboundSkillTypeProvider(ISkillTypeRepository skillTypeRepository)
+		public SkillTypeProvider(ISkillTypeRepository skillTypeRepository)
 		{
 			_skillTypeRepository = skillTypeRepository;
 		}
 
-		public ISkillType OutboundSkillType()
+		public ISkillType Outbound()
 		{
 			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeOutbound");
+		}
+
+		public ISkillType InboundTelephony()
+		{
+			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeInboundTelephony");
 		}
 	}
 }

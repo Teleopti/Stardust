@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<IDisallowedShiftProjectionCashesFilter>().InstancePerLifetimeScope();
 
 			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
-			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
+			builder.RegisterType<SkillTypeProvider>().As<ISkillTypeProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
 			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();

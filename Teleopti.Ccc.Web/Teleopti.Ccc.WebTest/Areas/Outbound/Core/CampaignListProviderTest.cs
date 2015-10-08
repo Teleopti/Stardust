@@ -560,7 +560,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 		public ISkill CreateSkill(string name)
 		{
-			return new Skill(name, "", Color.Blue, 60, new FakeOutboundSkillTypeProvider().OutboundSkillType())
+			return new Skill(name, "", Color.Blue, 60, new FakeSkillTypeProvider().Outbound())
 			{
 				TimeZone = new HawaiiTimeZone().TimeZone()
 			};
@@ -594,12 +594,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 	}
 
-	public class FakeOutboundSkillTypeProvider : IOutboundSkillTypeProvider
+	public class FakeSkillTypeProvider : ISkillTypeProvider
 	{
-		public ISkillType OutboundSkillType()
+		public ISkillType Outbound()
 		{
 			var desc = new Description("SkillTypeOutbound");
 			return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);
+		}
+
+		public ISkillType InboundTelephony()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

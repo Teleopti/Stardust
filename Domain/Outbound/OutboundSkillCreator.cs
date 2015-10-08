@@ -17,17 +17,17 @@ namespace Teleopti.Ccc.Domain.Outbound
 	public class OutboundSkillCreator : IOutboundSkillCreator
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly IOutboundSkillTypeProvider _outboundSkillTypeProvider;
+		private readonly ISkillTypeProvider _skillTypeProvider;
 
-		public OutboundSkillCreator(IUserTimeZone userTimeZone, IOutboundSkillTypeProvider outboundSkillTypeProvider)
+		public OutboundSkillCreator(IUserTimeZone userTimeZone, ISkillTypeProvider skillTypeProvider)
 		{
 			_userTimeZone = userTimeZone;
-			_outboundSkillTypeProvider = outboundSkillTypeProvider;
+			_skillTypeProvider = skillTypeProvider;
 		}
 
         public ISkill CreateSkill(IActivity activity, IOutboundCampaign campaign)
 		{
-			var skill = new Skill(campaign.Name, "", Color.Blue, 60, _outboundSkillTypeProvider.OutboundSkillType())
+			var skill = new Skill(campaign.Name, "", Color.Blue, 60, _skillTypeProvider.Outbound())
 			{
 				TimeZone = _userTimeZone.TimeZone(),
 				Activity = activity

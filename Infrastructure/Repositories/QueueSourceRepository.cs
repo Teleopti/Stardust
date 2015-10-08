@@ -17,6 +17,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+		public QueueSourceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		{
+		}
+
         /// <summary>
         /// Loads all queues.
         /// </summary>
