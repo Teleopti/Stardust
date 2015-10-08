@@ -165,16 +165,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         /// <summary>
-        /// Verifies the unitofwork is not null when creating a unitofwork.
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void VerifyUnitOfWorkIsNotNull()
-        {
-            rep = TestRepository(null);
-        }
-
-        /// <summary>
         /// Verifies that Add & remove works.
         /// </summary>
         [Test]
