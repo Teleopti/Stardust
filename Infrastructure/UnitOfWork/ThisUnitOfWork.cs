@@ -1,19 +1,21 @@
-﻿using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class ThisUnitOfWork : ICurrentUnitOfWork
 	{
-		private readonly IUnitOfWork _currentUnitOfWork;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public ThisUnitOfWork(IUnitOfWork currentUnitOfWork)
+		public ThisUnitOfWork(IUnitOfWork unitOfWork)
 		{
-			_currentUnitOfWork = currentUnitOfWork;
+			InParameter.NotNull("unitOfWork", unitOfWork);
+			_unitOfWork = unitOfWork;
 		}
 
 		public IUnitOfWork Current()
 		{
-			return _currentUnitOfWork;
+			return _unitOfWork;
 		}
 	}
 }
