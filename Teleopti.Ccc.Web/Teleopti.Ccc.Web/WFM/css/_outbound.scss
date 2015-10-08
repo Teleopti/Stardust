@@ -45,6 +45,13 @@
 	}
 	.outbound-gantt-chart {
 		margin: 70px 0;
+		.threshold-slider{
+		    position:absolute;
+			top:0;
+			left:0;
+			width:30%;
+			margin-top:-56px;
+		}
 		.gantt-scrollable{
 		    overflow:hidden;
 			-ms-overflow-style:none;
@@ -134,8 +141,7 @@
 		}
 
 		.gantt-header-row {
-			border-top: solid 4px #99d6ff;
-			border-bottom: solid 4px #99d6ff;			
+			border-top: solid 4px #09F;		
 		}
 
 		.gantt-header-row.gantt-header-row-first {
@@ -236,9 +242,6 @@
 	}
 	.pink{
 	    color: #EC38A3;
-	}
-	.m-b-10{
-	    margin-bottom:10px;
 	}
     .p-l-65{
 	    padding-left:65px;
