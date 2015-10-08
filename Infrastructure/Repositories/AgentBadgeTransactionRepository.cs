@@ -12,10 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public AgentBadgeTransactionRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-		{
-		}
-
 		public AgentBadgeTransactionRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

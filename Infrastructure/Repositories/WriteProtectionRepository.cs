@@ -9,11 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
     public class WriteProtectionRepository : Repository<IPersonWriteProtectionInfo>, IWriteProtectionRepository
     {
-        public WriteProtectionRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 				public WriteProtectionRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

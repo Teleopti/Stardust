@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
        
         public PublicNoteRepository(IUnitOfWorkFactory unitOfWorkFactory)
+#pragma warning disable 618
             : base(unitOfWorkFactory)
+#pragma warning restore 618
         {
         }
 		

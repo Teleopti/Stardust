@@ -29,11 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    
 	    }
 
-				public ContractRepository(IUnitOfWorkFactory unitOfWorkFactory)
-					: base(unitOfWorkFactory)
-				{
-				}
-
         /// <summary>
         /// Finds all contract by description.
         /// </summary>

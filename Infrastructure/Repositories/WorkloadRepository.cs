@@ -19,7 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+
+#pragma warning disable 618
         public WorkloadRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+#pragma warning restore 618
         {
         }
 

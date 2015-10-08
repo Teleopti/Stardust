@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+#pragma warning disable 618
 		public AgentBadgeRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+#pragma warning restore 618
 		{
 		}
 

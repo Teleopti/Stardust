@@ -13,10 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public SeatPlanRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-		{
-		}
-
 		public SeatPlanRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

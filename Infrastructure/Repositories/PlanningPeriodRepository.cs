@@ -14,10 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public PlanningPeriodRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-		{
-		}
-
 		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

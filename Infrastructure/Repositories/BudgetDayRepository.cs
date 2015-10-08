@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class BudgetDayRepository : Repository<IBudgetDay>, IBudgetDayRepository
     {
+#pragma warning disable 618
         public BudgetDayRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+#pragma warning restore 618
         {
         }
 

@@ -27,11 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = new ThisUnitOfWork(unitOfWork);
 		}
 
-		public SeatBookingRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
-		{
-		}
-
 		public SeatBookingRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

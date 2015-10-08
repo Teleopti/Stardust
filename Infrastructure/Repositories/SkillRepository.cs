@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         public SkillRepository(IUnitOfWorkFactory unitOfWorkFactory)
+#pragma warning disable 618
             : base(unitOfWorkFactory)
+#pragma warning restore 618
         {
         }
 

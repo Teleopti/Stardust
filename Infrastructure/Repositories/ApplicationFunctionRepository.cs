@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public ApplicationFunctionRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
-		{
-		}
-
 		public IList<IApplicationFunction> GetAllApplicationFunctionSortedByCode()
 		{
 			IList<IApplicationFunction> functions = Session.CreateCriteria(typeof(ApplicationFunction))

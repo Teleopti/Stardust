@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public WorkShiftRuleSetRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 		public WorkShiftRuleSetRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 	    {

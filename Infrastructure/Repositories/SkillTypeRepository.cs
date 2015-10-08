@@ -14,11 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public SkillTypeRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
-		{
-		}
-
 		public SkillTypeRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

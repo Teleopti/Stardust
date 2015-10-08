@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
 		public SkillDayRepository(IUnitOfWorkFactory unitOfWorkFactory)
+#pragma warning disable 618
 			: base(unitOfWorkFactory)
+#pragma warning restore 618
 		{
 		}
 		/// <summary>

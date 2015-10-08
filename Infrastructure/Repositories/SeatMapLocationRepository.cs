@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public SeatMapLocationRepository (IUnitOfWorkFactory unitOfWorkFactory)
-			: base (unitOfWorkFactory)
-		{
-		}
-
 		public SeatMapLocationRepository (ICurrentUnitOfWork currentUnitOfWork)
 			: base (currentUnitOfWork)
 		{

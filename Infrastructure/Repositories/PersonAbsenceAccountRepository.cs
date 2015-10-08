@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PersonAbsenceAccountRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 	    public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork)
 		    : base(currentUnitOfWork)
 	    {

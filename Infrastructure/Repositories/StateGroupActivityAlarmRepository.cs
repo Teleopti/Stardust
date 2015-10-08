@@ -16,12 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public StateGroupActivityAlarmRepository(IUnitOfWorkFactory currentUnitOfWork)
-			: base(currentUnitOfWork)
-		{
-
-		}
-
 		public StateGroupActivityAlarmRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

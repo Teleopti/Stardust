@@ -12,12 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class WorkflowControlSetRepository : Repository<IWorkflowControlSet>, IWorkflowControlSetRepository
     {
-
-        public WorkflowControlSetRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
         public WorkflowControlSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
