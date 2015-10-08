@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonRepository(new FromFactory(UnitOfWorkFactory.Current));
+				var rep = new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current));
 
 				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 

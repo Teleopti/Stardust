@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void CanCreate()
 		{
-			new PersonRepository(new FromFactory(UnitOfWorkFactory.Current)).Should().Not.Be.Null();
+			new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)).Should().Not.Be.Null();
 		}
 
 		[Test]

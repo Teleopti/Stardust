@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
 				{
-			CurrentUnitOfWork = new FromFactory(unitOfWorkFactory);
+			CurrentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
 				}
 
 	    protected SettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)

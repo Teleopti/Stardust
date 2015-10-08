@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public ScheduleProjectionReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_currentUnitOfWork = new FromFactory(unitOfWorkFactory);
+			_currentUnitOfWork = new FromFactory(() =>unitOfWorkFactory);
 		}
 
         public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,

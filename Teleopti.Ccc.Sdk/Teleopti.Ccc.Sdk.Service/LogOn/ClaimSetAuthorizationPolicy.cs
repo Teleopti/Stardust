@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 if (person == null) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
-                var personRepository = new PersonRepository(new FromFactory(unitOfWorkFactory));
+                var personRepository = new PersonRepository(new FromFactory(() => unitOfWorkFactory));
                 var personId = person.Id.GetValueOrDefault();
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())

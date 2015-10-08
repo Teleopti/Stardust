@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Main
                 try
                 {
                     var licenseRepository = new LicenseRepository(_unitOfWorkFactory);
-                    var personRepository = new PersonRepository(new FromFactory(_unitOfWorkFactory));
+                    var personRepository = new PersonRepository(new FromFactory(() => _unitOfWorkFactory));
 
 					XDocument signedXml = XDocument.Load(licenseFilePath);
 					

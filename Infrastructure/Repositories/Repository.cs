@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		//don't use this one!
 		protected Repository(IUnitOfWorkFactory unitOfWorkFactory)
         {
-			_currentUnitOfWork = new FromFactory(unitOfWorkFactory);
+			_currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
         }
 
 		//use this one!

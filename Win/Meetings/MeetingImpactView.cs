@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Meetings
 																	   new NonBlendSkillCalculator(),
 																	   ()=>personSkillProvider, new PeriodDistributionService(), 
 																		intraIntervalFinderService);
-			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
+			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);
 			var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,
