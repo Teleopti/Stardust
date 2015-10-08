@@ -9,14 +9,16 @@ describe('seatmap booking view tests', function () {
 		seatMapCanvasUtilsService,
 		seatMapService,
 		growl,
+		seatMapTranslator,
 		deleteResponse;
 
 	beforeEach(function () {
 		module('wfm.seatPlan');
 		module('wfm.seatMap');
+		module('pascalprecht.translate');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapService_, _growl_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapService_, _growl_, _seatMapTranslatorFactory_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -24,6 +26,7 @@ describe('seatmap booking view tests', function () {
 		controller = setUpController(_$controller_);
 		seatMapCanvasUtilsService = _seatMapCanvasUtilsService_;
 		seatMapService = _seatMapService_;
+		seatMapTranslator = _seatMapTranslatorFactory_;
 		growl = _growl_;
 	}));
 
@@ -86,7 +89,8 @@ describe('seatmap booking view tests', function () {
 		return $controller('SeatMapOccupancyCtrl',
 		{
 			utils: seatMapCanvasUtilsService,
-			seatMapService: mockSeatMapService
+			seatMapService: mockSeatMapService,
+			seatmapTranslator : seatMapTranslator
 		});
 	};
 });

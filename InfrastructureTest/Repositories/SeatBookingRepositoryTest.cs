@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldLoadSeatBookingsForMultipleSeatsIntersectingDayInOrder()
 		{
 			var dateOnly = new DateOnly(2015, 10, 1);
