@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team [data-value='{0}']:contains('{1}')", numberOfOutAdherence, team));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team [data-max='{0}']:contains('{1}')", total, team));
+			Browser.Interactions.AssertAnyContains(string.Format(".team [data-value='{0}']", numberOfOutAdherence), team);
+			Browser.Interactions.AssertAnyContains(string.Format(".team [data-max='{0}']", total), team);
 		}
 
 		[Then(@"I should see real time agent details for '(.*)'")]

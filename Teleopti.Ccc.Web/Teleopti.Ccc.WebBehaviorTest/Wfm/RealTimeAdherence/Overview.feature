@@ -90,7 +90,6 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
-@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with
 	| Field                                  | Value             |
@@ -137,7 +136,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
-	 When I view Real time adherence for site 'Paris'
+	 When I view Real time adherence for teams on site 'Paris'
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence

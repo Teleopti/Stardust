@@ -464,5 +464,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/sites");
 		}
+
+		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid buId, Guid siteId)
+		{
+			GoToPage("wfm/#/rta/site/" + siteId);
+		}
 	}
 }

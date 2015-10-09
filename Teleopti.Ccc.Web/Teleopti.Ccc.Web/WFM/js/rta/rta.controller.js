@@ -20,7 +20,7 @@
             $scope.selectedSites.push(siteId);
                }
           };
-					
+
           $scope.openSelectedSites = function (selectedSites){
             RtaOrganizationService.getTeamsForSelectedSites(selectedSites);
           };
