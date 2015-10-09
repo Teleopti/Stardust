@@ -88,9 +88,8 @@ datepicker.fillDayDisplay = function (jYear, jMonth, jStartDate, jEndDate) {
 			clsName += ' active';
 		}
 
-		// due to the internal workings of moment-datepicker.js, the startdate and end date will be in jalaali, so we need to 
-		// compare with the jalaali date, not the gregorian
-		if ((jStartDate && prevMonth.valueOf() < jStartDate.valueOf()) || (jEndDate && prevMonth.valueOf() > jEndDate.valueOf())) {
+		if ((this.startDate && prevMonth.valueOf() < this.startDate.valueOf()) ||
+			(this.endDate && prevMonth.valueOf() > this.endDate.valueOf())) {
 			clsName += ' disabled';
 		}
 		html.push('<td class="day' + clsName + '" value="' + prevMonth.date() + '" >' + prevMonth.jDate() + '</td>'); // use date as value, only presentation shows jalaali date..
@@ -133,14 +132,14 @@ datepicker.fillMonthPicker = function (jYear, jStartDate, jEndDate) {
 		months.eq(currentJMonth).addClass('active');
 	}
 
-	if (((jStartDate) && jYear < jStartDate.jYear()) || ((jEndDate) && jYear > jEndDate.jYear())) {
+	if (((jStartDate) && jYear < jStartDate.year()) || ((jEndDate) && jYear > jEndDate.year())) {
 		months.addClass('disabled');
 	}
-	if ((jStartDate) && jYear == jStartDate.jYear()) {
-		months.slice(0, jStartDate.jMonth()).addClass('disabled');
+	if ((jStartDate) && jYear == jStartDate.year()) {
+		months.slice(0, jStartDate.month()).addClass('disabled');
 	}
-	if ((jEndDate) && jYear == jEndDate.jYear()) {
-		months.slice(jEndDate.jMonth() + 1).addClass('disabled');
+	if ((jEndDate) && jYear == jEndDate.year()) {
+		months.slice(jEndDate.month() + 1).addClass('disabled');
 	}
 };
 
@@ -168,7 +167,7 @@ datepicker.fillYearPicker = function (jYear, jStartDate, jEndDate) {
 	year -= 1;
 	for (var i = -1; i < 11; i++) {
 		html += '<span class="year' + (i === -1 || i === 10 ? ' old' : '') + (currentJYear === jYear ? ' active' : '') +
-         (((jStartDate) && jYear < jStartDate.jYear()) || ((jEndDate) && jYear > jEndDate.jYear()) ? ' disabled' : '') +
+         (((jStartDate) && jYear < jStartDate.year()) || ((jEndDate) && jYear > jEndDate.year()) ? ' disabled' : '') +
                 '" value="' + year + '" >' + jYear + '</span>';
 		jYear += 1;
 		year += 1;
