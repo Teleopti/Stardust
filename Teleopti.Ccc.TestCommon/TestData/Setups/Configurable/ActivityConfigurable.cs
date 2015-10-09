@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-            Activity = new Activity(Name);
+            Activity = new Activity(Name) {RequiresSkill = true};
 
 			if (Color != null)
                 Activity.DisplayColor = System.Drawing.Color.FromName(Color);

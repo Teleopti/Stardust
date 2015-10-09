@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Core.Data;
@@ -66,6 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, Route("api/Skill/Create"), HttpPost]
 		public virtual IHttpActionResult Create(SkillInput input)
 		{
+			if (string.IsNullOrEmpty(input.Name))
+				return BadRequest("Bad skill name");
 			var skills = _skillRepository.LoadAll();
 			var skill = skills.FirstOrDefault(x => x.Activity.Id == input.ActivityId);
 			var intervalLength = skill != null ? skill.DefaultResolution : _intervalLengthFetcher.IntervalLength;
@@ -78,6 +82,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				Name = input.Name
 			};
+
+			Open24Hours(newWorkload);
+			SetSkillTemplates(newSkill);
+
 			var queues = _queueSourceRepository.LoadAll();
 			foreach (var queue in input.Queues)
 			{
@@ -90,6 +98,62 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_skillRepository.Add(newSkill);
 			_workloadRepository.Add(newWorkload);
 			return Ok();
+		}
+
+		private void SetSkillTemplates(ISkill skill)
+		{
+			const double serviceLevelPercent = 0.8;
+			const double serviceLevelSecond = 20.0;
+			const double minOccupancy = 0.3;
+			const double maxOccupancy = 0.9;
+			const double shrinkagePercent = 0.0;
+			const double efficiencyPercent = 1.0;
+			var serviceLevel = new ServiceLevel(new Percent(serviceLevelPercent), serviceLevelSecond);
+			var serviceAgreement = new ServiceAgreement
+			{
+				ServiceLevel = serviceLevel,
+				MinOccupancy = new Percent(minOccupancy),
+				MaxOccupancy = new Percent(maxOccupancy)
+			};
+
+			var shrinkage = new Percent(shrinkagePercent);
+			var efficiency = new Percent(efficiencyPercent);
+
+			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
+			startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
+
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.AddDays(1).Date, skill.TimeZone);
+			endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
+			var timePeriod = new DateTimePeriod(startDateTime, endDateTime);
+
+			var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement, new SkillPersonData(), timePeriod)
+			{
+				Shrinkage = shrinkage,
+				Efficiency = efficiency
+			};
+
+			foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
+			{
+				var skillDayTemplate = (ISkillDayTemplate) skill.GetTemplate(TemplateTarget.Skill, dayOfWeek);
+				skillDayTemplate.SetSkillDataPeriodCollection(new List<ITemplateSkillDataPeriod>
+				{
+					(ITemplateSkillDataPeriod)templateSkillDataPeriod.Clone()
+				});
+				skill.SetTemplateAt((int) dayOfWeek, skillDayTemplate);
+			}
+		}
+
+		private void Open24Hours(IWorkload newWorkload)
+		{
+			var startTimeSpan = newWorkload.Skill.MidnightBreakOffset;
+			var endTimeSpan = startTimeSpan.Add(TimeSpan.FromDays(1));
+			var open24Hours = new TimePeriod(startTimeSpan, endTimeSpan);
+			foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
+			{
+				var workloadDayTemplate = new WorkloadDayTemplate();
+				workloadDayTemplate.Create(dayOfWeek.ToString(), DateTime.UtcNow, newWorkload, new List<TimePeriod> {open24Hours});
+				newWorkload.SetTemplate(dayOfWeek, workloadDayTemplate);
+			}
 		}
 	}
 

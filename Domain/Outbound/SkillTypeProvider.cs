@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public ISkillType InboundTelephony()
 		{
-			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeInboundTelephony");
+			return _skillTypeRepository.FindAll().First(s => s.ForecastSource == ForecastSource.InboundTelephony);
 		}
 	}
 }

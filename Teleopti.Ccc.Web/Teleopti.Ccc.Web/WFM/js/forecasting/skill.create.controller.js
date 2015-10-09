@@ -1,8 +1,8 @@
 ﻿'use strict';
 angular.module('wfm.forecasting')
 	.controller('ForecastingSkillCreateCtrl', [
-		'SkillService', '$scope', '$filter',
-		function (skillService, $scope, $filter) {
+		'SkillService', '$scope', '$filter', '$state',
+		function (skillService, $scope, $filter, $state) {
 			$scope.model = {};
 
 			$scope.activities = [];
@@ -20,6 +20,7 @@ angular.module('wfm.forecasting')
 			$scope.gridOptions = {
 				enableGridMenu: false,
 				enableSelectAll: true,
+				enableFullRowSelection: true,
 				columnDefs: [
 					{ displayName: 'Name', field: 'Name', enableColumnMenu: false },
 					{ displayName: 'Log object', field: 'LogObjectName', enableColumnMenu: false },
@@ -47,7 +48,7 @@ angular.module('wfm.forecasting')
 					Queues: queues
 				}).$promise.then(
 					function(result) {
-						console.log(result);
+						$state.go('forecasting.start');
 					}
 				);
 			};

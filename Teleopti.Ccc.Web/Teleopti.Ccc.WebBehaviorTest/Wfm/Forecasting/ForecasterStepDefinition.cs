@@ -292,6 +292,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "-%");
 		}
+
+		[When(@"I choose to add a new skill")]
+		public void GivenIChooseToAddANewSkill()
+		{
+			Browser.Interactions.Click(".skill-create-button");
+		}
+
+		[When(@"I input the new skill with")]
+		public void WhenIInputTheNewSkillWith(Table table)
+		{
+			var newSkill = table.CreateInstance<NewSkill>();
+			Browser.Interactions.FillWith(".skill-name input", newSkill.Name);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-activity select", newSkill.Activity);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-timezone select", newSkill.Timezone);
+			Browser.Interactions.ClickContaining(".skill-queues .big-table-wrapper .ui-grid-cell-contents", newSkill.Queues);
+		}
+
+		[When(@"I save the new skill")]
+		public void WhenISaveTheNewSkill()
+		{
+			Browser.Interactions.Click(".skill-save");
+		}
+
+		[Then(@"I should see the new skill '(.*)' in the list")]
+		public void ThenIShouldSeeTheNewSkillInTheList(string name)
+		{
+			Browser.Interactions.AssertAnyContains(".wfm-card-list .wfm-card .card-header span b", name);
+		}
+
+
+	}
+
+	public class NewSkill
+	{
+		public string Name { get; set; }
+		public string Activity { get; set; }
+		public string Timezone { get; set; }
+		public string Queues { get; set; }
 	}
 
 	public class ForecastData

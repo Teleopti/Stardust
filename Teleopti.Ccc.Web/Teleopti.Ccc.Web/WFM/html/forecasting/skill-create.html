@@ -1,25 +1,25 @@
 ﻿<div>
 	<h3 style="border-bottom:1px solid rgba(0,0,0,0.12); padding-bottom: 5px">Create Skill</h3>
 	
-	<div class="row skill-row">
+	<div class="row skill-row skill-name">
 		<label class="col-lg-2">Name</label>
 		<input type="text" class="col-lg-3" ng-model="model.name" placeholder="Name..." />
 	</div>
-	<div class="row skill-row">
+	<div class="row skill-row skill-activity">
 		<label class="col-lg-2">Activity</label>
 		<select class="col-lg-3" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities"></select>
 	</div>
-	<div class="row skill-row">
+	<div class="row skill-row skill-timezone">
 		<label class="col-lg-2">Time zone</label>
 		<select class="col-lg-3" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones"></select>
 	</div>
-	<div class="row skill-row">
+	<div class="row skill-row skill-queues">
 		<label class="col-lg-2">Queues</label>
 		<div class="big-table-wrapper material-depth-1 col-lg-9 queue-list">
 			<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
 		</div>
 	</div>
-	<div class="row skill-row">
-		<button class="wfm-btn wfm-btn-primary pull-right" ng-click="createSkill()">Save</button>
+	<div class="row">
+		<button class="wfm-btn wfm-btn-primary pull-right skill-save" ng-click="createSkill()">Save</button>
 	</div>
 </div>

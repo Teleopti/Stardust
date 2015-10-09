@@ -74,4 +74,16 @@ Scenario: Save forecast to scenario
 	| Workload | TheWorkload2 |
 	| Scenario | Scenario 1   |
 
+@Ignore
+Scenario: Create new skill
+	Given I am viewing forecast page
+	When I choose to add a new skill
+	And I input the new skill with
+	| Field    | Value                                                        |
+	| Name     | NewSkill1                                                    |
+	| Activity | TheActivity1                                                 |
+	| Timezone | (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna |
+	| Queues   | Queue1                                                       |
+	And I save the new skill
+	Then I should see the new skill 'NewSkill1' in the list
 

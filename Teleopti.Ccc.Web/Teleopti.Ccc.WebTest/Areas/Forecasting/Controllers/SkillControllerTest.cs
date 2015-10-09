@@ -59,6 +59,90 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldOpen24Hours()
+		{
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			skillRepository.Stub(x => x.LoadAll()).Return(new ISkill[] { });
+			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
+			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			skillTypeProvider.Stub(x => x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
+			var input = new SkillInput
+			{
+				Name = "test1",
+				ActivityId = Guid.NewGuid(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				Queues = new[] {Guid.NewGuid()}
+			};
+
+			var queueSource = new QueueSource("testQ", "", 1);
+			queueSource.SetId(input.Queues[0]);
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] { queueSource });
+			var activity = ActivityFactory.CreateActivity("test1");
+			activity.SetId(input.ActivityId);
+			activityRepository.Stub(x => x.Load(input.ActivityId)).Return(activity);
+
+			target.Create(input);
+
+			var startTimeSpan = new TimeSpan(0, 0, 0);
+			var endTimeSpan = startTimeSpan.Add(TimeSpan.FromDays(1));
+			workloadRepository.AssertWasCalled(
+				x =>
+					x.Add(
+						Arg<IWorkload>.Matches(
+							w =>
+								w.TemplateWeekCollection[(int) DayOfWeek.Sunday].OpenHourList.First() ==
+								new TimePeriod(startTimeSpan, endTimeSpan))));
+		}
+
+		[Test]
+		public void ShouldSetSkillDayTemplates()
+		{
+			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			skillRepository.Stub(x => x.LoadAll()).Return(new ISkill[] { });
+			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
+			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
+			skillTypeProvider.Stub(x => x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
+			var input = new SkillInput
+			{
+				Name = "test1",
+				ActivityId = Guid.NewGuid(),
+				TimezoneId = TimeZoneInfo.Utc.Id,
+				Queues = new[] { Guid.NewGuid() }
+			};
+			var queueSource = new QueueSource("testQ", "", 1);
+			queueSource.SetId(input.Queues[0]);
+			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] { queueSource });
+			var activity = ActivityFactory.CreateActivity("test1");
+			activity.SetId(input.ActivityId);
+			activityRepository.Stub(x => x.Load(input.ActivityId)).Return(activity);
+
+			target.Create(input);
+
+			skillRepository.AssertWasCalled(
+				x =>
+					x.Add(
+						Arg<ISkill>.Matches(
+							s =>
+								s.TemplateWeekCollection[(int) DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelPercent==new Percent(0.8)&&
+								Math.Abs(s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelSeconds - 20.0) < 0.001&&
+								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().MinOccupancy==new Percent(0.3)&&
+								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().MaxOccupancy==new Percent(0.9)&&
+								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().Shrinkage==new Percent(0.0) &&
+								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().Efficiency==new Percent(1.0)
+								)));
+		}
+
+		[Test]
 		public void ShouldGetIntervalLengthFromExistingSkill()
 		{
 			var input = new SkillInput
