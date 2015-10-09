@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound.Rules
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
     {
         private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 
-        private int threshold;
+        private double threshold;
         private ThresholdType thresholdType;
 
         public OutboundUnderSLARule(IOutboundCampaignTaskManager campaignTaskManager)
@@ -36,10 +36,11 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
             var campaignTasks = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
             var response = new List<OutboundRuleResponse>();
 
-            var outsideSlaTime = campaignTasks.GetTimeOutsideSLA();
-            var totalWorkTime = campaignTasks.TotalWorkTime;
+			var totalWorkloadMinutes =
+			   campaignTasks.GetEstimatedIncomingBacklogOnDate(campaignTasks.GetActivePeriod().DayCollection().First()).TotalMinutes;
+            var outsideSlaMinutes = campaignTasks.GetTimeOutsideSLA().TotalMinutes;
 
-            if (checkAgainstThreshold(outsideSlaTime, totalWorkTime))
+			if (checkAgainstThreshold(outsideSlaMinutes, totalWorkloadMinutes))
             {
                 response.Add(new OutboundRuleResponse
                 {
@@ -48,22 +49,22 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
                     Campaign = campaign,
                     Threshold = threshold,
                     ThresholdType = thresholdType,
-                    TargetValue = (int)outsideSlaTime.TotalMinutes,
+					TargetValue = outsideSlaMinutes,
                 });
             }
             return response;
         }
 
 
-        private bool checkAgainstThreshold(TimeSpan outsideSlaTime, TimeSpan totalWorkTime)
+        private bool checkAgainstThreshold(double outsideSlaMinutes, double totalWorkloadMinutes)
         {
-            if (outsideSlaTime < TimeSpan.FromMinutes(1)) return false;
+			if (outsideSlaMinutes < 1) return false;
             switch (thresholdType)
             {
                 case ThresholdType.Absolute:
-                    return outsideSlaTime.TotalMinutes > threshold;
+					return outsideSlaMinutes > threshold;
                 case ThresholdType.Relative:
-                    return (outsideSlaTime.TotalMinutes - totalWorkTime.TotalMinutes) > totalWorkTime.TotalMinutes * threshold / 100.0;
+					return outsideSlaMinutes > totalWorkloadMinutes * threshold ;
                 default:
                     return false;
             }

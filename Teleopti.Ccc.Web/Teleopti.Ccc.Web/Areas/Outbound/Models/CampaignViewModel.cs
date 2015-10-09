@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class OutboundWarningViewModel
 	{
 		public string TypeOfRule { get; set; }
-		public int? Threshold { get; set; }
+		public double? Threshold { get; set; }
 		public ThresholdType ThresholdType { get; set; }
-		public int? TargetValue { get; set; }
+		public double? TargetValue { get; set; }
 		public DateOnly Date { get; set; }
 
 		public OutboundWarningViewModel(OutboundRuleResponse response)

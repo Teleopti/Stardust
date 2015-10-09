@@ -503,10 +503,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
 		    builder.RegisterType<OutboundOverstaffRule>().AsSelf();
 		    builder.RegisterType<OutboundUnderSLARule>().AsSelf();
-		    builder.RegisterType<CampaignRuleChecker>().As<IOutboundRuleChecker>().SingleInstance();
-		    builder.RegisterType<OutboundRuleConfigurationProvider>().AsSelf();
+			builder.RegisterType<CampaignRuleChecker>().As<IOutboundRuleChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<OutboundRuleConfigurationProvider>().As<IOutboundRuleConfigurationProvider>().InstancePerLifetimeScope();
 
-		    //OutboundCampaignRepository
+			//OutboundCampaignRepository
 		}
 	}
 }

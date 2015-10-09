@@ -14,9 +14,9 @@ namespace Teleopti.Interfaces.Domain
         public bool IsValid { get; set; }
         public Type TypeOfRule { get; set; }
         public IOutboundCampaign Campaign { get; set; }
-        public int? Threshold { get; set; }
+        public double? Threshold { get; set; }
         public ThresholdType ThresholdType { get; set; }
-        public int? TargetValue { get; set; }
+        public double? TargetValue { get; set; }
         public DateTime Date { get; set; }
     }
 

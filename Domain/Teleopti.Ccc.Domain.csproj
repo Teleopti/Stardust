@@ -637,7 +637,6 @@
     <Compile Include="Outbound\Rules\OutboundOverstaffRule.cs" />
     <Compile Include="Outbound\Rules\OutboundOverstaffRuleConfiguration.cs" />
     <Compile Include="Outbound\Rules\OutboundRule.cs" />
-    <Compile Include="Outbound\Rules\OutboundRuleConfiguration.cs" />
     <Compile Include="Outbound\Rules\OutboundUnderSLARule.cs" />
     <Compile Include="Outbound\Rules\OutboundUnderSLARuleConfiguration.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />

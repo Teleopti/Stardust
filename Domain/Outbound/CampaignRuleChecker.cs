@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Outbound
 {   
     public class CampaignRuleChecker : IOutboundRuleChecker
     {
-        private readonly OutboundRuleConfigurationProvider _outboundRuleConfigurationProvider;
+		private readonly IOutboundRuleConfigurationProvider _outboundRuleConfigurationProvider;
         private readonly OutboundUnderSLARule _outboundUnderSlaRule;
         private readonly OutboundOverstaffRule _outboundOverstaffRule;
 
-        public CampaignRuleChecker(OutboundRuleConfigurationProvider outboundRuleConfigurationProvider, OutboundUnderSLARule outboundUnderSlaRule, OutboundOverstaffRule outboundOverstaffRule)
+		public CampaignRuleChecker(IOutboundRuleConfigurationProvider outboundRuleConfigurationProvider, OutboundUnderSLARule outboundUnderSlaRule, OutboundOverstaffRule outboundOverstaffRule)
         {
             _outboundRuleConfigurationProvider = outboundRuleConfigurationProvider;
             _outboundUnderSlaRule = outboundUnderSlaRule;

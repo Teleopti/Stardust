@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-    public class OutboundRuleConfigurationProvider
+	public class OutboundRuleConfigurationProvider : IOutboundRuleConfigurationProvider
     {
         public OutboundRuleConfiguration GetConfiguration(Type rule)
         {

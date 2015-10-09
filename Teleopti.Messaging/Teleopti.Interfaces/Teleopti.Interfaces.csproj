@@ -157,6 +157,7 @@
     <Compile Include="Domain\IOutboundCampaign.cs" />
     <Compile Include="Domain\IOutboundCampaignTaskManager.cs" />
     <Compile Include="Domain\IOutboundRuleChecker.cs" />
+    <Compile Include="Domain\IOutboundRuleConfigurationProvider.cs" />
     <Compile Include="Domain\IOutboundSkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IPersonSkillDayCreator.cs" />

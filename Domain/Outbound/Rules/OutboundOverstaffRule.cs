@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound.Rules
@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
 
         private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 
-        private int threshold;
+        private double threshold;
         private ThresholdType thresholdType;
 
         public OutboundOverstaffRule(IOutboundCampaignTaskManager campaignTaskManager)
@@ -36,36 +36,36 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
         {
             var campaignTasks = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
             var response = new List<OutboundRuleResponse>();
+	      
+	        var totalWorkloadMinutes =
+		        campaignTasks.GetEstimatedIncomingBacklogOnDate(campaignTasks.GetActivePeriod().DayCollection().First()).TotalMinutes;
 
-			foreach (var dateOnly in campaignTasks.GetActivePeriod().DayCollection())
-            {
-                var callTime = campaignTasks.GetEstimatedOutgoingBacklogOnDate(dateOnly);
-                var overstaffTime = campaignTasks.GetOverstaffTimeOnDate(dateOnly);
+	        var overstaffMinutes =
+		        campaignTasks.GetActivePeriod().DayCollection().Sum(d => campaignTasks.GetOverstaffTimeOnDate(d).TotalMinutes);
 
-                if (checkAgainstThreshold(overstaffTime, callTime))
-                    response.Add(new OutboundRuleResponse
-                    {
-                        IsValid = false,
-                        TypeOfRule = typeof(OutboundOverstaffRule),
-                        Campaign = campaign,
-                        Threshold = threshold,
-                        ThresholdType = thresholdType,
-                        TargetValue = (int)overstaffTime.TotalMinutes,
-                        Date = dateOnly.Date
-                    });
-            }
+			if (checkAgainstThreshold(overstaffMinutes, totalWorkloadMinutes))
+				response.Add(new OutboundRuleResponse
+				{
+					IsValid = false,
+					TypeOfRule = typeof(OutboundOverstaffRule),
+					Campaign = campaign,
+					Threshold = threshold,
+					ThresholdType = thresholdType,
+					TargetValue = overstaffMinutes
+				});
+		
             return response;
         }
 
-        private bool checkAgainstThreshold(TimeSpan overstaffTime, TimeSpan callTime)
+        private bool checkAgainstThreshold(double overstaffMinutes, double totalWorkloadMinutes)
         {
-            if (overstaffTime < TimeSpan.FromMinutes(1)) return false;
+			if (overstaffMinutes < 1) return false;
             switch (thresholdType)
             {
                 case ThresholdType.Absolute:
-                    return overstaffTime.TotalMinutes > threshold;
+					return overstaffMinutes > threshold;
                 case ThresholdType.Relative:
-                    return (overstaffTime.TotalMinutes - callTime.TotalMinutes) > callTime.TotalMinutes * threshold / 100.0;
+					return overstaffMinutes > totalWorkloadMinutes * threshold;
                 default:
                     return false;
             }
