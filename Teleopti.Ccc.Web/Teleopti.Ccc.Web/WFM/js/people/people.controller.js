@@ -189,8 +189,13 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 			}
 		});
 
-		$scope.selectAllVisible = $scope.totalPages > 1
-			&& $scope.gridApi.selection.getSelectedRows().length === $scope.gridOptions.data.length;
+		var allRowsInCurrentPageSelected = $scope.gridApi.selection.getSelectedRows().length === $scope.gridOptions.data.length;
+
+		if (allRowsInCurrentPageSelected) {
+			$scope.gridApi.selection.selectAllRows();
+		}
+
+		$scope.selectAllVisible = $scope.totalPages > 1 && allRowsInCurrentPageSelected;
 	}
 
 	$scope.selectAllMatch = function () {
