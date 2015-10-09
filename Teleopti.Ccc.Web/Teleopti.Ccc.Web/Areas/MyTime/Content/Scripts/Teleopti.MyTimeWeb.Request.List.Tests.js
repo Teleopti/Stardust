@@ -5,14 +5,11 @@ $(document).ready(function() {
 
 	var getData = function(from, to , isFullDay, isShiftTrade) {
 
-		var isSingleDay = moment(from).format("YYYY-MM-DD") == moment(to).format("YYYY-MM-DD");
-		
 		return {
 			DateTimeFrom: from,
 			DateTimeTo: to,
 			UpdatedOnDateTime: "2014-05-01 10:00",
 			IsFullDay: isFullDay,
-			IsSingleDay: isSingleDay,
 			TypeEnum: isShiftTrade ? 2 : 1,
 			Text: 'test',
 			Link: {

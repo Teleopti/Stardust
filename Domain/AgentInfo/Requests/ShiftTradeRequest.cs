@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			        culture,
 			        notificationTemplate,
 			        Period.StartDateTimeLocal(timezone).ToString(datePattern),
-			        Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
+			        Period.EndDateTimeLocal(timezone).ToString(datePattern)), 
 		            new List<IPerson> { PersonTo });
 	        }
         }
@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (_shiftTradeSwapDetails.Count>0)
             {
                 DateOnly minDate = DateOnly.MaxValue, maxDate = DateOnly.MinValue;
-                TimeZoneInfo timeZoneInfo = PersonFrom.PermissionInformation.DefaultTimeZone();
-                foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in _shiftTradeSwapDetails)
+	            foreach (var shiftTradeSwapDetail in _shiftTradeSwapDetails)
                 {
                     shiftTradeSwapDetail.SetParent(this);
                     if (shiftTradeSwapDetail.DateFrom < minDate) minDate = shiftTradeSwapDetail.DateFrom;
@@ -102,7 +101,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                     if (shiftTradeSwapDetail.DateFrom > maxDate) maxDate = shiftTradeSwapDetail.DateFrom;
                     if (shiftTradeSwapDetail.DateTo > maxDate) maxDate = shiftTradeSwapDetail.DateTo;
                 }
-                var period = new DateOnlyPeriod(minDate, maxDate).ToDateTimePeriod(timeZoneInfo);
+	            var period = getPeriodEncompassingShiftTradeSwapDetails (minDate, maxDate);
+				
                 SetPeriod(period);
             }
             else
@@ -110,6 +110,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 SetPeriod(new DateTimePeriod());
             }
         }
+
+	    private DateTimePeriod getPeriodEncompassingShiftTradeSwapDetails (DateOnly startDate, DateOnly endDate)
+	    {
+			var timeZoneInfo = PersonFrom.PermissionInformation.DefaultTimeZone();
+		    var dateOnlyPeriod = new DateOnlyPeriod (startDate, endDate).ToDateTimePeriod (timeZoneInfo);
+			// Remove one minute so is end of last day
+			return dateOnlyPeriod.ChangeEndTime(new TimeSpan(0, -1, 0)); 
+	    }
 
         public virtual ReadOnlyCollection<IShiftTradeSwapDetail> ShiftTradeSwapDetails
         {
@@ -150,7 +158,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					culture,
                     notificationTemplate,
                     Period.StartDateTimeLocal(timezone).ToString(datePattern),
-                    Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)),
+                    Period.EndDateTimeLocal(timezone).ToString(datePattern)),
                     new List<IPerson> { shiftTradeSwapDetail.PersonTo });
             }
         }
@@ -243,7 +251,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						culture, 
 						notificationTemplate, 
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
-						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
+						Period.EndDateTimeLocal(timezone).ToString(datePattern));
 
              }
 
@@ -296,7 +304,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
-						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
+						Period.EndDateTimeLocal(timezone).ToString(datePattern));
             }
 
             InParameter.NotNull("acceptingPerson",acceptingPerson);
@@ -346,7 +354,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					culture,
 					notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
-					Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
+					Period.EndDateTimeLocal(timezone).ToString(datePattern));
             }
         }
 
@@ -405,7 +413,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
-						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
+						Period.EndDateTimeLocal(timezone).ToString(datePattern)), 
 						new List<IPerson>(InvolvedPeople()));
                 }
             }

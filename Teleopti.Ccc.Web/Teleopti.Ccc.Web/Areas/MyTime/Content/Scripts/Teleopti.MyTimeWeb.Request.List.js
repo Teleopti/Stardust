@@ -308,7 +308,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			self.StartDateTime(moment(data.DateTimeFrom));
 			self.EndDateTime(moment(data.DateTimeTo));
-			self.IsSingleDay(data.IsSingleDay);
+			self.IsSingleDay(moment(data.DateTimeFrom).isSame(moment(data.DateTimeTo), 'day')); 
 
 			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
 

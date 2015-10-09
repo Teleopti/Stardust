@@ -243,7 +243,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 										   startDate, startDate);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
-			result.IsSingleDay.Should().Be.EqualTo (true);
+
+			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo(startDate);
+			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(startDate);
+			
 			
 		}
 
@@ -261,8 +264,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 			
 			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo (startDate);
-			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(endDate.AddDays (1));
-			result.IsSingleDay.Should().Be (false);
+			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(endDate);
+			
 			
 		}
 

@@ -42,11 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember (d => d.Subject, o => o.MapFrom (s => s.GetSubject (new NoFormatting())))
 				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.StartDateTime)))
 				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.EndDateTime)))
-				.ForMember(d => d.IsSingleDay, o => o.ResolveUsing(s =>
-				{
-					var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
-					return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate;
-				}))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
 					return getStatusText(s);
