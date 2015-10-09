@@ -10,12 +10,12 @@
 		 headers-formats="headerFormats"
 		 template-url="html/outbound/angular-gantt-custom.tpl.html"
 		 scrollfix="+10">
-		<div ng-show="isLoadingSchedule" class="gantt-schedule-loader"><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>
+		<div ng-show="isRefreshingGantt" class="gantt-schedule-loader"><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>
 		<gantt-tooltips></gantt-tooltips>
 		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
 		<div class="threshold-slider">
 			<div><span >campaign threshold</span> {{threshold}}</div>
-			<md-slider flex md-discrete min="0" max="100" aria-label="slider" ng-model="threshold" ng-click="updateThreshold(threshold)"></md-slider>
+			<md-slider flex md-discrete min="0" max="100" aria-label="slider" ng-model="threshold" ng-click="updateThreshold(threshold)" ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
 	</div>
 </div>

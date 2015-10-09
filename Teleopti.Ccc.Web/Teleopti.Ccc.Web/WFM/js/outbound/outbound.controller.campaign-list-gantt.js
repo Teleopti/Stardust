@@ -33,6 +33,7 @@
 		$scope.updateThreshold = function(threshold) {
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
 			outboundService.updateThreshold(thresholdObj, function (data) {
+				console.log('update threshold', data);
 				loadWithinPeriod();
 			});
 		};
@@ -45,12 +46,12 @@
 		}
 
 		function loadWithinPeriod() {
-			$scope.isLoadingSchedule = true;
+			$scope.isRefreshingGantt = true;
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
 				outboundService.listCampaignsWithinPeriod(function success(data) {
 					updateAllCampaignGanttDisplay(data);
 					$scope.ganttStatistics = data;
-					$scope.isLoadingSchedule = false;
+					$scope.isRefreshingGantt = false;
 				});
 			});
 		}

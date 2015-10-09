@@ -94,7 +94,7 @@
 		test.target.init();
 		expect(test.scope.ganttData.length).toEqual(1);
 
-		test.scope.isLoadingSchedule = false;
+		test.scope.isRefreshingGantt = false;
 
 		test.scope.campaignClicked({}, campaign);
 		expect(test.scope.ganttData.length).toEqual(2);
@@ -119,7 +119,7 @@
 		test.target.init();
 		expect(test.scope.ganttData.length).toEqual(1);
 
-		test.scope.isLoadingSchedule = false;
+		test.scope.isRefreshingGantt = false;
 
 		test.scope.campaignClicked({}, campaign);
 		expect(test.scope.ganttData[1].campaign.graphData).toBeDefined();
