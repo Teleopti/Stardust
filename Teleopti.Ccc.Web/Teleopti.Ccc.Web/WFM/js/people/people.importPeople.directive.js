@@ -7,7 +7,7 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			require: ['importPeople', '^people'],
-			templateUrl: "js/people/template/importPeople.html",
+			templateUrl: "js/people/html/importPeople.html",
 			linkFunction: linkFunction
 		};
 	};

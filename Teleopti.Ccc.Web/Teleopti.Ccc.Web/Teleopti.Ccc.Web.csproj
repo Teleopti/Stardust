@@ -1307,7 +1307,7 @@
     <Content Include="WFM\html\outbound\campaign-list-cards.html" />
     <Content Include="WFM\html\outbound\phase-picker.tpl.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
-    <Content Include="WFM\html\people\people-selection-cart.html" />
+    <Content Include="WFM\js\people\html\people-selection-cart.html" />
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.method.controller.js" />
@@ -1367,7 +1367,7 @@
     <Content Include="WFM\js\outbound\outbound.directive.working-hours-picker.js" />
     <Content Include="WFM\js\outbound\_modules.js" />
     <Content Include="WFM\js\people\people.outsideClick.directive.js" />
-    <Content Include="WFM\js\people\template\importPeople.html" />
+    <Content Include="WFM\js\people\html\importPeople.html" />
     <Content Include="WFM\js\people\_modules.js" />
     <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
@@ -1398,7 +1398,7 @@
     <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
-    <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
+    <Content Include="WFM\js\people\html\advancedPeopleSearch.html" />
     <Content Include="WFM\js\seatManagement\seatplaninit.directive.js" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
@@ -1423,7 +1423,7 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\outbound\campaign-edit.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
-    <Content Include="WFM\html\people\people.html" />
+    <Content Include="WFM\js\people\html\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\global\areas.controller.js" />

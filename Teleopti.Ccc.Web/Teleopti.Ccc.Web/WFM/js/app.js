@@ -109,11 +109,11 @@ wfm.config([
 		}).state('people', {
 			url: '/people',
 			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
-			templateUrl: 'html/people/people.html',
+			templateUrl: 'js/people/html/people.html',
 			controller: 'PeopleCtrl'
 		}).state('people-selection-cart', {
 			params: { selectedPeopleIds: [], commandTag: {}, currentKeyword: '', paginationOptions: {} },
-			templateUrl: 'html/people/people-selection-cart.html',
+			templateUrl: 'js/people/html/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		}).state('seatPlan', {
 			url: '/seatPlan/:viewDate',
