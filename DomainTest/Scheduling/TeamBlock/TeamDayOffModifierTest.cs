@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-			
+
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(2015, 10, 7, 2015, 10, 9));
 			var personAbsence = new PersonAbsence(agent, scenario, absenceLayer);
 			scheduleDictionary.AddPersonAbsence(personAbsence);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Target.AddDayOffForMember(rollBackService, agent, date, new DayOffTemplate(), false);
 
-			var scheduleDayAfter  = scheduleDictionary[agent].ScheduledDay(date);
+			var scheduleDayAfter = scheduleDictionary[agent].ScheduledDay(date);
 			scheduleDayAfter.PersonAssignment(true).DayOff().Should().Be.Null();
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var ass = new PersonAssignment(agent, scenario, date);
 			var eightOClock = new DateTime(date.Year, date.Month, date.Day, 8, 0, 0, DateTimeKind.Utc);
 			var seventteenOClock = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0, DateTimeKind.Utc);
-			ass.AddActivity(new	Activity("hej"), new DateTimePeriod(eightOClock, seventteenOClock));
+			ass.AddActivity(new Activity("hej"), new DateTimePeriod(eightOClock, seventteenOClock));
 			ass.SetShiftCategory(new ShiftCategory("blajj"));
 			scheduleDictionary.AddPersonAssignment(ass);
 
@@ -88,10 +88,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldNotDeleteDayOffIfContractDayOff()
 		{
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
-			//var contractSchedule = new ContractSchedule("hepp");
-			//var contractScheduleWeek = new ContractScheduleWeek();
-			//contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
-
 			var scenario = new Scenario("unimportant");
 			var date = new DateOnly(2015, 10, 8);
 			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);

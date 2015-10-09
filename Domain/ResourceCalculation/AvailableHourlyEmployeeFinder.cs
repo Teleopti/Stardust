@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation

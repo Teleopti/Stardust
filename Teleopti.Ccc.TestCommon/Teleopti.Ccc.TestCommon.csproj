@@ -157,6 +157,7 @@
     <Compile Include="FakeData\FakeRequiredScheduleHelper.cs" />
     <Compile Include="FakeData\FakeResourceOptimizationHelper.cs" />
     <Compile Include="FakeData\FakeScheduleCommand.cs" />
+    <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />
     <Compile Include="FakeData\FakeScheduleParameters.cs" />
     <Compile Include="FakeData\FakeScheduleTagSetter.cs" />

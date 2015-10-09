@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -21,12 +22,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamDayOffModifier : ITeamDayOffModifier
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
+		private readonly Func<IScheduleDayForPerson> _scheduleDayForPerson;
 
-		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<ISchedulingResultStateHolder> stateHolder)
+		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<IScheduleDayForPerson> scheduleDayForPerson)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_stateHolder = stateHolder;
+			_scheduleDayForPerson = scheduleDayForPerson;
 		}
 
 		public void AddDayOffForTeamAndResourceCalculate(
@@ -45,10 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                               IPerson person, DateOnly dateOnly, IDayOffTemplate dayOffTemplate,
 		                               bool resourceCalculate)
 		{
-
-			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
-			IScheduleRange range = scheduleDictionary[person];
-			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			IScheduleDay scheduleDay = _scheduleDayForPerson().ForPerson(person, dateOnly);
 			if (scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
 				return;
 
@@ -73,9 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										  IPerson person, DateOnly dateOnly)
 		{
-			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
-			IScheduleRange range = scheduleDictionary[person];
-			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			IScheduleDay scheduleDay = _scheduleDayForPerson().ForPerson(person, dateOnly);
 			if (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
 				return;
 

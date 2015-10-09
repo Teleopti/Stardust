@@ -1,9 +1,8 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeScheduleDayForPerson : IScheduleDayForPerson
 	{
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 		public IScheduleDay ForPerson(IPerson person, DateOnly date)
 		{
-			return _scheduleDays.FirstOrDefault(s => person.Equals(s.Person) && s.DateOnlyAsPeriod.DateOnly == date) ?? ScheduleDayFactory.Create(date,person);
+			return _scheduleDays.FirstOrDefault(s => person.Equals(s.Person) && s.DateOnlyAsPeriod.DateOnly == date) ?? ScheduleDayFactory.Create(date, person);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;

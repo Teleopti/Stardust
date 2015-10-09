@@ -644,6 +644,10 @@
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\IScheduleDayForPerson.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\IScheduleRangeForPerson.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleDayForPerson.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
