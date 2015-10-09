@@ -45,9 +45,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                               IPerson person, DateOnly dateOnly, IDayOffTemplate dayOffTemplate,
 		                               bool resourceCalculate)
 		{
+
 			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
 			IScheduleRange range = scheduleDictionary[person];
 			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			if (scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
+				return;
+
 			scheduleDay.DeleteMainShift(scheduleDay);
 			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
@@ -72,6 +76,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
 			IScheduleRange range = scheduleDictionary[person];
 			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			if (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
+				return;
+
 			scheduleDay.DeleteDayOff();
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 		}

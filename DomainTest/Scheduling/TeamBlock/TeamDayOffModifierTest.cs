@@ -1,109 +1,154 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
-	[TestFixture]
+	[DomainTest]
 	public class TeamDayOffModifierTest
 	{
-		private MockRepository _mocks;
-		private ITeamDayOffModifier _target;
-		private IResourceOptimizationHelper _resourceOptimizationHelper;
-		private ISchedulingResultStateHolder _stateHolder;
-		private ISchedulePartModifyAndRollbackService _rollbackService;
-		private ITeamInfo _teamInfo;
-		private ISchedulingOptions _schedulingOptions;
-		private IScheduleDay _scheduleDay1;
-		private IScheduleDay _scheduleDay2;
-		private IScheduleRange _range1;
-		private IScheduleRange _range2;
-		private IScheduleDictionary _dic;
-		private IPerson _person1;
-		private IPerson _person2;
+		public ITeamDayOffModifier Target;
+		public IMatrixListFactory MatrixListFactory;
+		public SchedulerStateHolder SchedulerStateHolder;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
-		public void Setup()
+		[Test]
+		public void ShouldNotAddDayOffIfFullDayAbsence()
 		{
-			_mocks = new MockRepository();
-			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_target = new TeamDayOffModifier(_resourceOptimizationHelper, ()=>_stateHolder);
-			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
-			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
-			IList<IPerson> members = new List<IPerson>{_person1, _person2};
-			Group group = new Group(members, "hej");
-			_teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
-			_schedulingOptions = new SchedulingOptions {UseSameDayOffs = true};
-			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			_range1 = _mocks.StrictMock<IScheduleRange>();
-			_range2 = _mocks.StrictMock<IScheduleRange>();
-			IDictionary<IPerson, IScheduleRange> ranges = new Dictionary<IPerson, IScheduleRange>();
-			ranges.Add(_person1, _range1);
-			ranges.Add(_person2, _range2);
-			_dic = new ScheduleDictionaryForTest(new Scenario("s"),
-																	new ScheduleDateTimePeriod(new DateTimePeriod()), ranges);
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var scenario = new Scenario("unimportant");
+			var absence = new Absence();
+			var date = new DateOnly(2015, 10, 8);
+			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+			
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(2015, 10, 7, 2015, 10, 9));
+			var personAbsence = new PersonAbsence(agent, scenario, absenceLayer);
+			scheduleDictionary.AddPersonAbsence(personAbsence);
+
+			var rollBackService = new SchedulePartModifyAndRollbackService(
+				SchedulerStateHolder.SchedulingResultState,
+				new SchedulerStateScheduleDayChangedCallback(
+					new ResourceCalculateDaysDecider(),
+					() => SchedulerStateHolder),
+				new ScheduleTagSetter(new NullScheduleTag()));
+
+			Target.AddDayOffForMember(rollBackService, agent, date, new DayOffTemplate(), false);
+
+			var scheduleDayAfter  = scheduleDictionary[agent].ScheduledDay(date);
+			scheduleDayAfter.PersonAssignment(true).DayOff().Should().Be.Null();
 		}
 
 		[Test]
-		public void ShouldAddOnEveryTeamMemberAndResourceCalculate()
+		public void ShouldAddDayOffIfMainShift()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var scenario = new Scenario("unimportant");
+			var date = new DateOnly(2015, 10, 8);
+			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
 
-				Expect.Call(_range1.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay1);
-				Expect.Call(() => _scheduleDay1.DeleteMainShift(_scheduleDay1));
-				Expect.Call(() => _scheduleDay1.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
-				Expect.Call(() => _rollbackService.Modify(_scheduleDay1));
-				
-				Expect.Call(_range2.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay2);
-				Expect.Call(() => _scheduleDay2.DeleteMainShift(_scheduleDay2));
-				Expect.Call(() => _scheduleDay2.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
-				Expect.Call(() => _rollbackService.Modify(_scheduleDay2));
-				
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true,
-				                                                              _schedulingOptions.ConsiderShortBreaks));
-			}
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
-			using (_mocks.Playback())
-			{
-				_target.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate);
-			}
+			var ass = new PersonAssignment(agent, scenario, date);
+			var eightOClock = new DateTime(date.Year, date.Month, date.Day, 8, 0, 0, DateTimeKind.Utc);
+			var seventteenOClock = new DateTime(date.Year, date.Month, date.Day, 17, 0, 0, DateTimeKind.Utc);
+			ass.AddActivity(new	Activity("hej"), new DateTimePeriod(eightOClock, seventteenOClock));
+			ass.SetShiftCategory(new ShiftCategory("blajj"));
+			scheduleDictionary.AddPersonAssignment(ass);
+
+			var rollBackService = new SchedulePartModifyAndRollbackService(
+				SchedulerStateHolder.SchedulingResultState,
+				new SchedulerStateScheduleDayChangedCallback(
+					new ResourceCalculateDaysDecider(),
+					() => SchedulerStateHolder),
+				new ScheduleTagSetter(new NullScheduleTag()));
+
+			Target.AddDayOffForMember(rollBackService, agent, date, new DayOffTemplate(), false);
+
+			var scheduleDayAfter = scheduleDictionary[agent].ScheduledDay(date);
+			scheduleDayAfter.PersonAssignment(true).DayOff().Should().Not.Be.Null();
 		}
 
 		[Test]
-		public void ShouldRemoveOnEveryTeamMemberAndNotResourceCalculate()
+		public void ShouldNotDeleteDayOffIfContractDayOff()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			//var contractSchedule = new ContractSchedule("hepp");
+			//var contractScheduleWeek = new ContractScheduleWeek();
+			//contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
 
-				Expect.Call(_range1.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay1);
-				Expect.Call(() => _scheduleDay1.DeleteDayOff());
-				Expect.Call(() => _rollbackService.Modify(_scheduleDay1));
+			var scenario = new Scenario("unimportant");
+			var date = new DateOnly(2015, 10, 8);
+			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
-				Expect.Call(_range2.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay2);
-				Expect.Call(() => _scheduleDay2.DeleteDayOff());
-				Expect.Call(() => _rollbackService.Modify(_scheduleDay2));
+			var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(2015, 10, 7, 2015, 10, 9));
+			var personAbsence = new PersonAbsence(agent, scenario, absenceLayer);
+			scheduleDictionary.AddPersonAbsence(personAbsence);
 
-			}
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.SetDayOff(new DayOffTemplate());
+			scheduleDictionary.AddPersonAssignment(ass);
 
-			using (_mocks.Playback())
-			{
-				_target.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue);
-			}
+			var rollBackService = new SchedulePartModifyAndRollbackService(
+				SchedulerStateHolder.SchedulingResultState,
+				new SchedulerStateScheduleDayChangedCallback(
+					new ResourceCalculateDaysDecider(),
+					() => SchedulerStateHolder),
+				new ScheduleTagSetter(new NullScheduleTag()));
+
+			Target.RemoveDayOffForMember(rollBackService, agent, date);
+
+			var scheduleDayAfter = scheduleDictionary[agent].ScheduledDay(date);
+			scheduleDayAfter.PersonAssignment().DayOff().Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldDeleteDayOffIfNotContractDayOff()
+		{
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var scenario = new Scenario("unimportant");
+			var date = new DateOnly(2015, 10, 8);
+			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
+
+			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
+			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
+			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.SetDayOff(new DayOffTemplate());
+			scheduleDictionary.AddPersonAssignment(ass);
+
+			var rollBackService = new SchedulePartModifyAndRollbackService(
+				SchedulerStateHolder.SchedulingResultState,
+				new SchedulerStateScheduleDayChangedCallback(
+					new ResourceCalculateDaysDecider(),
+					() => SchedulerStateHolder),
+				new ScheduleTagSetter(new NullScheduleTag()));
+
+			Target.RemoveDayOffForMember(rollBackService, agent, date);
+
+			var scheduleDayAfter = scheduleDictionary[agent].ScheduledDay(date);
+			scheduleDayAfter.PersonAssignment().DayOff().Should().Be.Null();
+		}
 	}
 }
