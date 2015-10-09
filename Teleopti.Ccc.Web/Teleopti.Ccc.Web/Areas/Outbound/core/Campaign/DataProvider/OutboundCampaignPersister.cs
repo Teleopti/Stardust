@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 
