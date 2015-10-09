@@ -30,11 +30,17 @@
 			}
 		});
 
-		$scope.updateThreshold = function(threshold) {
+		$scope.updateThreshold = function (threshold) {
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
-			outboundService.updateThreshold(thresholdObj, function (data) {
-				console.log('update threshold', data);
-				loadWithinPeriod();
+			outboundService.updateThreshold(thresholdObj, function(data) {
+				loadWithinPeriod(function () {
+					$scope.ganttData.forEach(function (dataRow, indx) {
+						if (dataRow.expansion) {
+							$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
+						}
+					});
+				});
+					
 			});
 		};
 
@@ -45,13 +51,14 @@
 			$scope.threshold = 60;//todo
 		}
 
-		function loadWithinPeriod() {
+		function loadWithinPeriod(cb) {
 			$scope.isRefreshingGantt = true;
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
 				outboundService.listCampaignsWithinPeriod(function success(data) {
 					updateAllCampaignGanttDisplay(data);
 					$scope.ganttStatistics = data;
 					$scope.isRefreshingGantt = false;
+					if (cb) cb();
 				});
 			});
 		}
@@ -87,7 +94,7 @@
 		}
 
 		$scope.campaignClicked = function (ev, c) {
-			if ($scope.isLoadingSchedule) return;
+			if ($scope.isRefreshingGantt) return;
 			if (c.expansion) return;
 			if (c.expanded) {
 				c.expanded = false;
@@ -160,7 +167,6 @@
 					campaign.isManualBacklog = backlog;
 					campaign.translations = translations;
 					campaign.closedDays = closedDays;
-
 					updateSingleCampaignGanttDisplay(_campaign);
 					if (done) done();					
 				});
@@ -233,7 +239,6 @@
 		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
 			row.campaignNameClass = null;
 			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
-
 			campaignSummary.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'OutboundUnderSLARule') {
 					row.campaignNameClass = 'campaign-late';
@@ -242,7 +247,11 @@
 					row.campaignNameClass = 'campaign-early';
 				}
 			});
-		}		
+		}
+
+		function updateWarningInfo(row, campaignSummary) {
+			row.campaign.WarningInfo = campaignSummary.WarningInfo;
+		}
 
 		function updateAllCampaignGanttDisplay(campaignSummaryList) {
 			campaignSummaryList.forEach(function(campaignSummary) {
@@ -251,13 +260,14 @@
 		}
 
 		function updateSingleCampaignGanttDisplay(campaignSummary) {
-			for (var i = 0; i < $scope.ganttData.length; i++) {
-				var row = $scope.ganttData[i];
-				if (campaignSummary.Id == row.id) {
-					return updateGanttRowFromCampaignSummary(row, campaignSummary);
-					
-				}				
-			}			
+			$scope.ganttData.forEach(function (dataRow, indx) {
+				if (campaignSummary.Id == dataRow.id) {
+					return updateGanttRowFromCampaignSummary(dataRow, campaignSummary);
+				}
+				if (campaignSummary.Id + '_expanded' == dataRow.id) {
+					return updateWarningInfo(dataRow, campaignSummary);
+				}
+			});
 		}
 		return {
 			init: init,

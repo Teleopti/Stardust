@@ -74,11 +74,11 @@
 
 			
 
-			function loadGraph() {
+			function loadGraph(data) {
 				if (!$scope.graph) return;
-
 				$scope.campaign.selectedDates = [];
 				$scope.campaign.selectedDatesClosed = [];
+				$scope.campaign.WarningInfo = data.WarningInfo;
 
 				var yMax = _calculateYMax();
 
@@ -291,9 +291,9 @@
 
 			scope.$evalAsync(ctrl.init);
 
-			scope.$on('campaign.chart.refresh', function(_s, data) {
+			scope.$on('campaign.chart.refresh', function (_s, data) {
 				if (scope.campaign.Id == data.Id) {
-					scope.$evalAsync(ctrl.loadGraph);
+					scope.$evalAsync(ctrl.loadGraph(data));
 				}
 			});
 
