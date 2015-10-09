@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IClassicScheduleCommand
 	{
 		void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules);
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver);
 	}
 
 	public class ClassicScheduleCommand : IClassicScheduleCommand
@@ -23,7 +23,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
-		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, Func<IResourceOptimizationHelper> resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelper, Func<ISchedulerStateHolder> schedulerStateHolder)
+		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+			Func<IResourceOptimizationHelper> resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelper,
+			Func<ISchedulerStateHolder> schedulerStateHolder)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules)
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver)
 		{
 			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
 
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var allScheduleDays = new List<IScheduleDay>();
 			var stateHolder = _schedulerStateHolder();
-				
+
 			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
 			{
 				allScheduleDays.AddRange(
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
-				    daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
+					daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						allMatrixesOfSelectedPersons, true, backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
@@ -85,11 +88,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					allMatrixesOfSelectedPersons, true, backgroundWorker,
 					schedulingOptions);
 
-			runWeeklyRestSolver(schedulingOptions, selectedSchedules, stateHolder, selectedPeriod, backgroundWorker);
+			if(runWeeklyRestSolver)
+				solveWeeklyRest(schedulingOptions, selectedSchedules, stateHolder, selectedPeriod, backgroundWorker);
 		}
 
 
-		private void runWeeklyRestSolver(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorker)
+		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorker)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, true,
 				schedulingOptions.ConsiderShortBreaks);

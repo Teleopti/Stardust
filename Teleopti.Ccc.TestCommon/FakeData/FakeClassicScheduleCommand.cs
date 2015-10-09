@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeClassicScheduleCommand : IClassicScheduleCommand
 	{
 		public void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules)
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, bool runWeeklyRestSolver)
 		{
 			throw new NotImplementedException();
 		}

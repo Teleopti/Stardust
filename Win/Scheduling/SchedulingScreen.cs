@@ -2981,7 +2981,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var scheduleCommand = _container.Resolve<IScheduleCommand>();
 				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), _schedulerState,
 										argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
-										_optimizationPreferences);
+										_optimizationPreferences, true);
 			}
 			
 		}

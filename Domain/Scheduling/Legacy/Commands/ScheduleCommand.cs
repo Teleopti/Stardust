@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences);
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver);
 	}
 
 	public class ScheduleCommand : IScheduleCommand
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences)
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver)
 		{
 			setThreadCulture();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, selectedScheduleDays);
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, selectedScheduleDays, runWeeklyRestSolver);
 					}
 				}
 			}

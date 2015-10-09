@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays, IGroupPagePerDateHolder groupPagePerDateHolder,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IOptimizationPreferences optimizationPreferences)
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver)
 		{
 			Executed = true;
 		}
