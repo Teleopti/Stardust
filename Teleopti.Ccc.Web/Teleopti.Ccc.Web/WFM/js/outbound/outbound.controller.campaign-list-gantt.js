@@ -29,9 +29,13 @@
 				}
 			}
 		});
-		
-		$scope.updateThreshold = function (threshold) {
-			$scope.$broadcast('outbound.updateThreshold', threshold);
+
+		$scope.updateThreshold = function(threshold) {
+			$scope.isUpdatingThreshold = true;
+			var thresholdObj = { Value: threshold / 100, Type: 1 };
+			outboundService.updateThreshold(thresholdObj, function(data) {
+				$scope.isUpdatingThreshold = false;
+			});
 		};
 
 		function init() {

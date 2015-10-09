@@ -17,8 +17,19 @@
 		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
+		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
 
 		var self = this;
+
+		this.updateThreshold = function (threshold, successCb, errorCb) {
+			$http.put(updateThresholdUrl, threshold)
+				.success(function(data) {
+					if (successCb != null) successCb(data);
+				})
+				.error(function(data) {
+					if (errorCb != null) errorCb(data);
+				});
+		}
 
 		self.getVisualizationPeriod = function() {
 			return {
