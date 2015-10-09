@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public bool AutoDenied { get; set; }
 		public bool HasBeenReferred { get; set; }
 
-		public void Apply(IPerson user, IUnitOfWork iDontUse)
+		public void Apply(IPerson user, ICurrentUnitOfWork iDontUse)
 		{
 			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{

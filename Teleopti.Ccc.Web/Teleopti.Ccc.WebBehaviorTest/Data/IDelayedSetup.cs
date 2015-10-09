@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public interface IDelayedSetup
 	{
-		void Apply(IPerson user,IUnitOfWork uow);
+		void Apply(IPerson user, ICurrentUnitOfWork currentUnitOfWork);
 	}
 }

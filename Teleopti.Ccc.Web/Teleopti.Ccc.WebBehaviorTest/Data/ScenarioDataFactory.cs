@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			//TODO: ändra
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow.Current())));
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow)));
 
 			return Me().LogOnName;
 		}
