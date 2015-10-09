@@ -31,10 +31,9 @@
 		});
 
 		$scope.updateThreshold = function(threshold) {
-			$scope.isUpdatingThreshold = true;
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
-			outboundService.updateThreshold(thresholdObj, function(data) {
-				$scope.isUpdatingThreshold = false;
+			outboundService.updateThreshold(thresholdObj, function (data) {
+				loadWithinPeriod();
 			});
 		};
 
@@ -231,7 +230,7 @@
 		}
 
 		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
-			row.classes = null;
+			row.campaignNameClass = null;
 			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
 
 			campaignSummary.WarningInfo.forEach(function (warning) {
