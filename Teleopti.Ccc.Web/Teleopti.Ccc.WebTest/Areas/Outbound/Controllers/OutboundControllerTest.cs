@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var thresholdSetting = MockRepository.GenerateMock<ISettingsPersisterAndProvider<OutboundThresholdSettings>>();
 
 			var target = new OutboundController(null, null, null, null, null, null, null, thresholdSetting);
-			target.UpdateThresholdsSetting(1);
+			target.UpdateThresholdsSetting(new ThresholdSettingForm(){Value = 1, Type = 0});
 
 			thresholdSetting.AssertWasCalled(x => x.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = new Percent(1) }), y=>y.IgnoreArguments());
 		}

@@ -166,4 +166,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public CampaignStatus Status;
 		public GanttPeriod Period;
 	}
+
+	public class ThresholdSettingForm
+	{
+		public double Value;
+		public ThresholdType Type;
+	}
 }

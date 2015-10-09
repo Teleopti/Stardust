@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var thresholdSettings = new OutboundThresholdSettings
 			{
-				RelativeWarningThreshold = new Percent(0.5)
+				RelativeWarningThreshold = new Percent(0.5),
+				ThresholdType = ThresholdType.Relative
 			};
 			var returnedSettings = new OutboundThresholdSettings();
 			personalSettingDataRepository.Stub(x => x.FindValueByKey(outboundThresholdSettingKey, new OutboundThresholdSettings())).IgnoreArguments().Return(returnedSettings);
 			var target = new OutboundThresholdSettingsPersistorAndProvider(personalSettingDataRepository);
 			var result = target.Persist(thresholdSettings);
 			result.RelativeWarningThreshold.Should().Be.EqualTo(thresholdSettings.RelativeWarningThreshold);
+			result.ThresholdType.Should().Be.EqualTo(ThresholdType.Relative);
 		}
 
 		[Test]

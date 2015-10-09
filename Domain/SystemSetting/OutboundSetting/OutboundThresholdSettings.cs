@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting.OutboundSetting
 	public class OutboundThresholdSettings : SettingValue
 	{
 		public Percent RelativeWarningThreshold { get; set; }
+		public ThresholdType ThresholdType { get; set; }
 	}
 }

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			var setting = _personalSettingDataRepository.FindValueByKey(outboundThresholdSettingKey, new OutboundThresholdSettings());
 			setting.RelativeWarningThreshold = outboundThresholdSettings.RelativeWarningThreshold;
+			setting.ThresholdType = outboundThresholdSettings.ThresholdType;
 			_personalSettingDataRepository.PersistSettingValue(setting);
 			return setting;
 		}
