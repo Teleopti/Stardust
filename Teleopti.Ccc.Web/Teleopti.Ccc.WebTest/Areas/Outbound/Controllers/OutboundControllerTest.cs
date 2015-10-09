@@ -259,5 +259,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 
 			thresholdSetting.AssertWasCalled(x => x.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = new Percent(1) }), y=>y.IgnoreArguments());
 		}
+
+		[Test]
+		public void ShouldGetThresholdSettingValue()
+		{
+			var expectedValue = 0.01;
+			var thresholdSetting = MockRepository.GenerateMock<ISettingsPersisterAndProvider<OutboundThresholdSettings>>();
+			thresholdSetting.Stub(x => x.Get())
+				.Return(new OutboundThresholdSettings() {RelativeWarningThreshold = new Percent(expectedValue)});
+
+			var target = new OutboundController(null, null, null, null, null, null, null, thresholdSetting);
+			var result = target.GetThresholdSetting();
+
+			result.Value.Should().Be.EqualTo(expectedValue);
+		}		
+		
+		[Test]
+		public void ShouldGetThresholdSettingType()
+		{
+			var expectedType = ThresholdType.Relative;
+			var thresholdSetting = MockRepository.GenerateMock<ISettingsPersisterAndProvider<OutboundThresholdSettings>>();
+			thresholdSetting.Stub(x => x.Get())
+				.Return(new OutboundThresholdSettings() { ThresholdType = expectedType });
+
+			var target = new OutboundController(null, null, null, null, null, null, null, thresholdSetting);
+			var result = target.GetThresholdSetting();
+
+			result.Type.Should().Be.EqualTo(expectedType);
+		}
 	}
 }
