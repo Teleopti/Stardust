@@ -45,10 +45,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		}
 
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			activityRepository.Add(activity);
 
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
@@ -63,14 +63,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag.AddRuleSet(ruleSet1);
 			TheRuleSetBag.AddRuleSet(ruleSet2);
 
-			var workShiftRuleSetRepository = new WorkShiftRuleSetRepository(uow);
+			var workShiftRuleSetRepository = new WorkShiftRuleSetRepository(currentUnitOfWork);
 			workShiftRuleSetRepository.Add(ruleSet1);
 			workShiftRuleSetRepository.Add(ruleSet2);
-			new RuleSetBagRepository(uow).Add(TheRuleSetBag);
+			new RuleSetBagRepository(currentUnitOfWork).Add(TheRuleSetBag);
 
-			uow.Reassociate(user);
+			currentUnitOfWork.Current().Reassociate(user);
 			user.Period(DateOnlyForBehaviorTests.TestToday).RuleSetBag = TheRuleSetBag;
-			Debug.Assert(uow.Contains(user));
+			Debug.Assert(currentUnitOfWork.Current().Contains(user));
 		}
 	}
 }

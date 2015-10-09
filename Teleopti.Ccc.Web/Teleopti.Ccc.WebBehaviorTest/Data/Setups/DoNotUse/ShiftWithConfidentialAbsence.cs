@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(SwedishCultureInfo);
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			new AssignedShift {Date = Date}.Apply(uow, user, cultureInfo);
+			new AssignedShift {Date = Date}.Apply(currentUnitOfWork, user, cultureInfo);
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var date = TimeZoneHelper.ConvertToUtc(DateTime.Parse(Date,SwedishCultureInfo), timeZone);
@@ -39,16 +39,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				confidentialAbsence = AbsenceFactory.CreateAbsence(RandomName.Make());
 				confidentialAbsence.Confidential = true;
 				confidentialAbsence.DisplayColor = Color.GreenYellow;
-				new AbsenceRepository(uow).Add(confidentialAbsence);
+				new AbsenceRepository(currentUnitOfWork).Add(confidentialAbsence);
 			}
 			else
 			{
-				confidentialAbsence = new AbsenceRepository(uow).LoadAll().Single(x => x.Name == Absence);
+				confidentialAbsence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(x => x.Name == Absence);
 			}
 
 			var absenseLayer = new AbsenceLayer(confidentialAbsence, new DateTimePeriod(date.AddHours(8), date.AddHours(17)));
 			var personAbsence = new PersonAbsence(user, Scenario, absenseLayer);
-			var absRepository = new PersonAbsenceRepository(uow);
+			var absRepository = new PersonAbsenceRepository(currentUnitOfWork);
 			absRepository.Add(personAbsence);
 		}
 	}

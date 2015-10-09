@@ -40,11 +40,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Date = date;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson person, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var dateUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 
-			var assignmentRepository = new PersonAssignmentRepository(uow);
+			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));

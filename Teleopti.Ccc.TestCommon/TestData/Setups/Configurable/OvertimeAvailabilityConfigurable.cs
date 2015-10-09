@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string EndTime { get; set; }
 		public bool EndTimeNextDay { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var endTime = TimeSpan.Parse(EndTime);
 			var overtimeAvailability = new OvertimeAvailability(user, new DateOnly(Date), TimeSpan.Parse(StartTime),
 																EndTimeNextDay ? endTime.Add(new TimeSpan(1, 0, 0, 0)) : endTime);
 
-			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(uow);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
 			overtimeAvailabilityRepository.Add(overtimeAvailability);
 		}
 	}

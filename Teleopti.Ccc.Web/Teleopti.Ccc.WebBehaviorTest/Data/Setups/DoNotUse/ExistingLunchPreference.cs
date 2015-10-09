@@ -40,18 +40,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_length = new WorkTimeLimitation();
 		}
 
-		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		protected override PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			IActivity lunchActivity;
 			if (LunchActivity == null)
 			{
 				lunchActivity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
-				var activityRepository = new ActivityRepository(uow);
+				var activityRepository = new ActivityRepository(currentUnitOfWork);
 				activityRepository.Add(lunchActivity);
 			}
 			else
 			{
-				var activityRepository = new ActivityRepository(uow);
+				var activityRepository = new ActivityRepository(currentUnitOfWork);
 				lunchActivity = activityRepository.LoadAll().FirstOrDefault(a => a.Description.Name == LunchActivity);
 			}
 			var activityRestriction = new ActivityRestriction(lunchActivity)

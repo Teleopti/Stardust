@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_workTimeLimitation = workTimeLimitation;
 		}
 
-		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		protected override PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PreferenceRestriction
 			{

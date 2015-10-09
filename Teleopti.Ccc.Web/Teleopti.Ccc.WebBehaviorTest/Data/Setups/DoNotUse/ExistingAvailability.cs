@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_workTimeLimitation = workTimeLimitation;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var availabilityRestriction = new AvailabilityRestriction
 			                              	{
@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			availabilityRotation.AvailabilityDays[0].Restriction = availabilityRestriction;
 
-			var availabilityRotationRepository = new AvailabilityRepository(uow);
+			var availabilityRotationRepository = new AvailabilityRepository(currentUnitOfWork.Current());
 			availabilityRotationRepository.Add(availabilityRotation);
 
-			var personAvailabilityRepository = new PersonAvailabilityRepository(uow);
+			var personAvailabilityRepository = new PersonAvailabilityRepository(currentUnitOfWork.Current());
 			var personAvailability = new PersonAvailability(user, availabilityRotation, new DateOnly(2001,01,01));
 			personAvailabilityRepository.Add(personAvailability);
 		}

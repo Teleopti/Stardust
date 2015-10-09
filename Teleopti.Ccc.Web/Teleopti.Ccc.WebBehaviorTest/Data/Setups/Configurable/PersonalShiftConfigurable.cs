@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
 
-			var activity = new ActivityRepository(uow).LoadAll().Single(a => a.Name == Activity);
+			var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Activity);
 
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				user,
 				new DateTimePeriod(startTimeUtc, endTimeUtc),
 				scenario);
-			var repository = new PersonAssignmentRepository(uow);
+			var repository = new PersonAssignmentRepository(currentUnitOfWork);
 			repository.Add(assignment);
 		}
 	}

@@ -20,9 +20,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			_theDateOnly = theDateOnly;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson person, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var assignmentRepository = new PersonAssignmentRepository(uow);
+			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 			var assignment = assignmentRepository.Find(new List<IPerson> {person}, new DateOnlyPeriod(_theDateOnly, _theDateOnly), _scenario).First();
 			
 			assignmentRepository.Remove(assignment);

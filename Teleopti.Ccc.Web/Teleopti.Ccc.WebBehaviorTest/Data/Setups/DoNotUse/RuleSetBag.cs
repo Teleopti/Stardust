@@ -30,25 +30,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_latestEnd = latestEnd;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var start = new TimePeriodWithSegment(new TimePeriod(_earliestStart, 0, _latestStart, 0), new TimeSpan(0, 15, 0));
 			var end = new TimePeriodWithSegment(new TimePeriod(_earliestEnd, 0, _latestEnd, 0), new TimeSpan(0, 15, 0));
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			activityRepository.Add(activity);
 
 			IShiftCategory shiftCategory;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			}
 			else
 			{
 				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-				var shiftCategoryRepository= new ShiftCategoryRepository(uow);
+				var shiftCategoryRepository= new ShiftCategoryRepository(currentUnitOfWork);
 				shiftCategoryRepository.Add(shiftCategory);
 			}
 
@@ -59,10 +59,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag.Description = new Description("Påsen");
 			TheRuleSetBag.AddRuleSet(ruleSet);
 
-			new WorkShiftRuleSetRepository(uow).Add(ruleSet);
-			new RuleSetBagRepository(uow).Add(TheRuleSetBag);
+			new WorkShiftRuleSetRepository(currentUnitOfWork).Add(ruleSet);
+			new RuleSetBagRepository(currentUnitOfWork).Add(TheRuleSetBag);
 
-			uow.Reassociate(user);
+			currentUnitOfWork.Current().Reassociate(user);
 			user.Period(new DateOnly(2014, 1, 1)).RuleSetBag = TheRuleSetBag;
 		}
 	}

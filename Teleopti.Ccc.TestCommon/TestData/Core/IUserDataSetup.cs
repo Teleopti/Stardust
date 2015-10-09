@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public interface IUserDataSetup
 	{
-		void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo);
+		void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo);
 	}
 }

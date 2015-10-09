@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 	{
 		public string ShiftCategory { get; set; }
 
-		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		protected override PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			IShiftCategory shiftCategory;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			}
 			else
 			{
 				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-				new ShiftCategoryRepository(uow).Add(shiftCategory);
+				new ShiftCategoryRepository(currentUnitOfWork).Add(shiftCategory);
 			}
 
 			return new PreferenceRestriction

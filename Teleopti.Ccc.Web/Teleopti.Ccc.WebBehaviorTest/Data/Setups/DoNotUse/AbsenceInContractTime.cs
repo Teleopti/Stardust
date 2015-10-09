@@ -25,18 +25,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public string Date { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var absenceInContractTime = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(200, 150, 150));
 			absenceInContractTime.InContractTime = true;
-			new AbsenceRepository(uow).Add(absenceInContractTime);
+			new AbsenceRepository(currentUnitOfWork).Add(absenceInContractTime);
 
 			var date = DateTime.Parse(Date, swedishCulture);
 			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
 			var absence = new PersonAbsence(user, Scenario, new AbsenceLayer(absenceInContractTime, period));
-			var absenceRepository = new PersonAbsenceRepository(uow);
+			var absenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 			absenceRepository.Add(absence);
 		}
 	}

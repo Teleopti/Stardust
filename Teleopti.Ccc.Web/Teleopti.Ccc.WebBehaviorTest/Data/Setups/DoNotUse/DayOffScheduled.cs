@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_date = date;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			if (DayOffTemplate == null)
 			{
 				DayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(uow);
+				var repository = new DayOffTemplateRepository(currentUnitOfWork);
 				repository.Add(DayOffTemplate);
 			}
 
 			var ass = new PersonAssignment(user, Scenario, new DateOnly(_date));
 			ass.SetDayOff(DayOffTemplate);
-			var personAssignmentRepository = new PersonAssignmentRepository(uow);
+			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 			personAssignmentRepository.Add(ass);
 		}
 	}

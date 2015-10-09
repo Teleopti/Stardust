@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public ICurrentScenario CurrentScenario { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			var repository = new PersonAbsenceAccountRepository(uow);
-			var scheduleRepository = new ScheduleRepository(uow);
+			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
+			var scheduleRepository = new ScheduleRepository(currentUnitOfWork);
 			var traceableService = new TraceableRefreshService(CurrentScenario, scheduleRepository);
 			var updater = new PersonAccountUpdater(repository, traceableService);
 			updater.Update(user);

@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 	{
 		public string DayOffTemplate { get; set; }
 
-		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		protected override PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			IDayOffTemplate dayOffTemplate;
 			if (DayOffTemplate != null)
 			{
-				dayOffTemplate = new DayOffTemplateRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(DayOffTemplate));
+				dayOffTemplate = new DayOffTemplateRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(DayOffTemplate));
 			}
 			else
 			{
 				dayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(uow);
+				var repository = new DayOffTemplateRepository(currentUnitOfWork);
 				repository.Add(dayOffTemplate);
 				DayOffTemplate = dayOffTemplate.Description.Name;
 			}

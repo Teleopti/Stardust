@@ -25,16 +25,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(SwedishCultureInfo);
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			if (DayOff == null)
 			{
 				DayOff = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var repository = new DayOffTemplateRepository(uow);
+				var repository = new DayOffTemplateRepository(currentUnitOfWork);
 				repository.Add(DayOff);
 			}
 
-			var personAssignmentRepository = new PersonAssignmentRepository(uow);
+			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 			var ass = new PersonAssignment(user, Scenario, new DateOnly(DateTime.Parse(Date)));
 			ass.SetDayOff(DayOff);
 			personAssignmentRepository.Add(ass);

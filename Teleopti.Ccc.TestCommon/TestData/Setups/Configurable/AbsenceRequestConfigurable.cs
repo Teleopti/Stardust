@@ -18,18 +18,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 
 			IAbsence absence;
 			if (Absence != null)
 			{
-				absence = new AbsenceRepository(uow).LoadAll().Single(a => a.Name == Absence);
+				absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Absence);
 			}
 			else
 			{
 				absence  = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", Color.FromArgb(210, 150, 150));
-				var absenceRepository = new AbsenceRepository(uow);
+				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 				absenceRepository.Add(absence);
 			}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personRequest = new PersonRequest(user, absenceRequest) { Subject = "I need some vacation" };
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
-			var requestRepository = new PersonRequestRepository(uow);
+			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
 
 			requestRepository.Add(personRequest);
 		}

@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public string Date { get; set; }
 
-		protected abstract PreferenceRestriction ApplyRestriction(IUnitOfWork uow);
+		protected abstract PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork);
 		protected abstract DateTime ApplyDate(CultureInfo cultureInfo);
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = ApplyDate(cultureInfo);
 
-			var preferenceDay = new PreferenceDay(user, new DateOnly(date), ApplyRestriction(uow));
+			var preferenceDay = new PreferenceDay(user, new DateOnly(date), ApplyRestriction(currentUnitOfWork));
 
-			var preferenceDayRepository = new PreferenceDayRepository(uow);
+			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
 			preferenceDayRepository.Add(preferenceDay);
 		}
 	}

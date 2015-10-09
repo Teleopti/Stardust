@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public string SharingUrl { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			var personalSettingDataRepository = new PersonalSettingDataRepository(uow);
+			var personalSettingDataRepository = new PersonalSettingDataRepository(currentUnitOfWork);
 			var setting = personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = IsActive;
 			SharingUrl = TestSiteConfigurationSetup.URL + "MyTime/Share?id=" +

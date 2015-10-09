@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime EndTime { get; set; }
 		public ShiftExchangeLookingForDay WishShiftType { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var timeZone = user.PermissionInformation.DefaultTimeZone();
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var personRequest = new PersonRequest(user){Request = shiftExchangeOffer, Subject = "Announcement"};
 			personRequest.TrySetMessage("");
-			var personRequestRepository = new PersonRequestRepository(uow);
+			var personRequestRepository = new PersonRequestRepository(currentUnitOfWork);
 			personRequestRepository.Add(personRequest);
 		}
 	}

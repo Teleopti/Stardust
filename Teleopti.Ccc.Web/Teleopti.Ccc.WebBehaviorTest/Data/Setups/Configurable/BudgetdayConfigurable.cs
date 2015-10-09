@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public int Allowance { get; set; }
 		public int FulltimeEquivalentHours { get; set; }
 
-	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+	    public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 	    {
-		    var budgetDayRepository = new BudgetDayRepository(uow);
-            var budgetGroupRepository = new BudgetGroupRepository(uow);
+		    var budgetDayRepository = new BudgetDayRepository(currentUnitOfWork);
+            var budgetGroupRepository = new BudgetGroupRepository(currentUnitOfWork);
 			IBudgetGroup budgetGroup = new BudgetGroup() {Name = BudgetGroup };
 	        var existingBudgetGroups = budgetGroupRepository.LoadAll();
 			bool budgetGroupAlreadyExists = existingBudgetGroups.Any(b => b.Name == BudgetGroup);

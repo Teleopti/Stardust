@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(SwedishCultureInfo);
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = DateTime.Parse(Date,SwedishCultureInfo);
 			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var period = new DateTimePeriod(startTime, endTime);
 
 			Absence = new Absence { Description = new Description("Absence") };
-			new AbsenceRepository(uow).Add(Absence);
+			new AbsenceRepository(currentUnitOfWork).Add(Absence);
 			Absence.DisplayColor = AbsenceColor != null ? Color.FromName(AbsenceColor) : Color.FromArgb(210, 150, 150);
 
 			var absence = new PersonAbsence(user, Scenario, new AbsenceLayer(Absence, period));
 
-			var absenceRepository = new PersonAbsenceRepository(uow);
+			var absenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 
 			absenceRepository.Add(absence);
 

@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Apply(IUserDataSetup setup)
 		{
-			//TODO: ändra 
-			_unitOfWorkAction(uow => setup.Apply(uow.Current(), Person, Person.PermissionInformation.Culture()));
+			_unitOfWorkAction(uow => setup.Apply(uow, Person, Person.PermissionInformation.Culture()));
 			_userDataSetups.Add(setup);
 		}
 

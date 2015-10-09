@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_lunchEnd2 = lunchEnd2;
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var start1 = new TimePeriodWithSegment(new TimePeriod(_start1, 0, _start1, 0), new TimeSpan(0, 15, 0));
 			var end1 = new TimePeriodWithSegment(new TimePeriod(_end1, 0, _end1, 0), new TimeSpan(0, 15, 0));
@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				new TimePeriodWithSegment(new TimePeriod(_lunchEnd2 - _lunchStart2, 0, _lunchEnd2 - _lunchStart2, 0),
 				                          new TimeSpan(0, 15, 0));
 
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityLunch1 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
-			var activityLunch2 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
+			var activityLunch1 = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
+			var activityLunch2 = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
 			activityRepository.Add(activity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-			new ShiftCategoryRepository(uow).Add(shiftCategory);
+			new ShiftCategoryRepository(currentUnitOfWork).Add(shiftCategory);
 
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 			var generator1 = new WorkShiftTemplateGenerator(activity, start1, end1, shiftCategory);
@@ -85,14 +85,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag.AddRuleSet(ruleSet1);
 			TheRuleSetBag.AddRuleSet(ruleSet2);
 
-			var workShiftRuleSetRepository = new WorkShiftRuleSetRepository(uow);
+			var workShiftRuleSetRepository = new WorkShiftRuleSetRepository(currentUnitOfWork);
 			workShiftRuleSetRepository.Add(ruleSet1);
 			workShiftRuleSetRepository.Add(ruleSet2);
-			new RuleSetBagRepository(uow).Add(TheRuleSetBag);
+			new RuleSetBagRepository(currentUnitOfWork).Add(TheRuleSetBag);
 
-			uow.Reassociate(user);
+			currentUnitOfWork.Current().Reassociate(user);
 			user.Period(DateOnlyForBehaviorTests.TestToday).RuleSetBag = TheRuleSetBag;
-			Debug.Assert(uow.Contains(user));
+			Debug.Assert(currentUnitOfWork.Current().Contains(user));
 		}
 	}
 }

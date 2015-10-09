@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string WorkTimeMinimum { get; set; }
 		public string WorkTimeMaximum { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			if (Preference != null)
 				ShiftCategory = Preference;
@@ -37,21 +37,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			if (ShiftCategory != null)
 			{
-				var shiftCategoryRepository = new ShiftCategoryRepository(uow);
+				var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
 				var shiftCategory = shiftCategoryRepository.LoadAll().Single(b => b.Description.Name == ShiftCategory);
 				restriction.ShiftCategory = shiftCategory;
 			}
 
 			if (Dayoff != null)
 			{
-				var dayOffRepository = new DayOffTemplateRepository(uow);
+				var dayOffRepository = new DayOffTemplateRepository(currentUnitOfWork);
 				var dayOffTemplate = dayOffRepository.LoadAll().Single(b => b.Description.Name == Dayoff);
 				restriction.DayOffTemplate = dayOffTemplate;
 			}
 
 			if (Absence != null)
 			{
-				var absenceRepository = new AbsenceRepository(uow);
+				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 				var absence = absenceRepository.LoadAll().Single(b => b.Description.Name == Absence);
 				restriction.Absence = absence;
 			}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var preferenceDay = new PreferenceDay(user, new DateOnly(Date), restriction);
 
-			var preferenceDayRepository = new PreferenceDayRepository(uow);
+			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
 			preferenceDayRepository.Add(preferenceDay);
 		}
 

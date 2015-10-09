@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Extra = !string.IsNullOrEmpty(config.Extra) ? config.Extra : "0";
 		}
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			var absence = new AbsenceRepository(uow).LoadAll().Single(x => x.Description.Name == Absence);
-			var repository = new PersonAbsenceAccountRepository(uow);
+			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(x => x.Description.Name == Absence);
+			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
 			var result = repository.Find(user);
 			IPersonAbsenceAccount personAbsenceAccount = null;
 			if (result.Any())

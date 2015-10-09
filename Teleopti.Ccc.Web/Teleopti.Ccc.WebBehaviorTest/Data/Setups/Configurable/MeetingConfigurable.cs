@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Purple) };
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			activityRepository.Add(activity);
 
 			var scenario = DefaultScenario.Scenario;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				EndTime = EndTime.TimeOfDay
 			};
 
-			var repository = new MeetingRepository(uow);
+			var repository = new MeetingRepository(currentUnitOfWork);
 			repository.Add(meeting);
 		}
 	}

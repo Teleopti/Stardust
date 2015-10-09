@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public int PageSize = 20;
 		public int RequestCount = 30;
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			var requestRepository = new PersonRequestRepository(uow);
+			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
 
 			Enumerable.Range(0, RequestCount)
 				.ForEach(i =>

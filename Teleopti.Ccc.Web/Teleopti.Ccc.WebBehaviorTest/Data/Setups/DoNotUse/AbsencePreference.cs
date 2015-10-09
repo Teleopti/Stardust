@@ -16,17 +16,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		
 		public string Absence { get; set; }
 
-		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		protected override PreferenceRestriction ApplyRestriction(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			IAbsence absence;
 			if (Absence != null)
 			{
-				absence = new AbsenceRepository(uow).LoadAll().Single(a => a.Name == Absence);
+				absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Absence);
 			}
 			else
 			{
 				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
-				var absenceRepository = new AbsenceRepository(uow);
+				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 				absenceRepository.Add(absence);
 			}
 			return new PreferenceRestriction { Absence = absence };

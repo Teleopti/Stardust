@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string ShiftCategory { get; set; }
 		public DateTime? StartTimeMinimum { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var restriction = new PreferenceRestrictionTemplate();
 			if (ShiftCategory != null)
 			{
-				var shiftCategoryRepository = new ShiftCategoryRepository(uow);
+				var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
 				var shiftCategory = shiftCategoryRepository.LoadAll().Single(b => b.Description.Name == ShiftCategory);
 				restriction.ShiftCategory = shiftCategory;
 			}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				restriction.StartTimeLimitation = new StartTimeLimitation(null, StartTimeMinimum.Value.TimeOfDay);
 			}
 
-			var extendedPreferenceTemplateRepository = new ExtendedPreferenceTemplateRepository(uow);
+			var extendedPreferenceTemplateRepository = new ExtendedPreferenceTemplateRepository(currentUnitOfWork);
 			extendedPreferenceTemplateRepository.Add(new ExtendedPreferenceTemplate(user, restriction, Name, Color.Red));
 		}
 	}

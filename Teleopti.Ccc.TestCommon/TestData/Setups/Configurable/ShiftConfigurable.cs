@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string ShiftColor { get; set; }	
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			IShiftCategory shiftCategory = null;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 				if (ShiftColor != null && shiftCategory != null)
 					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 			}
@@ -54,27 +54,27 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			IActivity activity;
 			if (Activity != null)
 			{
-				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+				activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			}
 			else
 			{
 				activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-				var activityRepository = new ActivityRepository(uow);
+				var activityRepository = new ActivityRepository(currentUnitOfWork);
 				activityRepository.Add(activity);
 			}
 
-			var assignmentRepository = new PersonAssignmentRepository(uow);
+			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
 
 			var timeZone = user.PermissionInformation.DefaultTimeZone();
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = timeZone.SafeConvertTimeToUtc(EndTime);
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
+			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(x => x.Description.Name == Scenario);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
 			personAssignment.SetShiftCategory(shiftCategory);
 			personAssignment.AddActivity(activity, _assignmentPeriod);
-			addScheduleActivity(timeZone, personAssignment, uow);
+			addScheduleActivity(timeZone, personAssignment, currentUnitOfWork);
 
 			// simply publish the schedule changed event so that the read model is updated
 			personAssignment.ScheduleChanged();
@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			assignmentRepository.Add(personAssignment);
 		}
 
-		private void addScheduleActivity(TimeZoneInfo timeZone, IPersonAssignment personAssignment, IUnitOfWork uow)
+		private void addScheduleActivity(TimeZoneInfo timeZone, IPersonAssignment personAssignment, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (ScheduledActivity == null)
 				return;
 
-			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ScheduledActivity));
+			var scheduledActivity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ScheduledActivity));
 
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(ScheduledActivityStartTime);
 			var endTimeUtc = timeZone.SafeConvertTimeToUtc(ScheduledActivityEndTime);

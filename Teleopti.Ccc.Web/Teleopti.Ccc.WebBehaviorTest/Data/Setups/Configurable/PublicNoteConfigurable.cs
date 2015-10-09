@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public DateTime Date { get; set; }
 		public string NoteText { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
-			var publicNoteRepository = new PublicNoteRepository(uow);
+			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
 			publicNoteRepository.Add(new PublicNote(user, new DateOnly(Date), scenario, NoteText));
 		}
 	}

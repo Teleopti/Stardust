@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,12 +16,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
+			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 
-			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(uow), new PersonRepository(new ThisUnitOfWork(uow)), new AbsenceRepository(uow), new PersonAbsenceRepository(uow), new ThisCurrentScenario(scenario));
+			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(currentUnitOfWork), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario));
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,

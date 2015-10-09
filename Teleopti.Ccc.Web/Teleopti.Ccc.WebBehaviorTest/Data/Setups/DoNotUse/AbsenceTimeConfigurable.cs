@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public int Hours { get; set; }
 		public string Absence { get; set; }
 		
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
-			var absenceRepository = new AbsenceRepository(uow);
+			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 			var absence = absenceRepository.LoadAll().Single(a=>a.Name==Absence);
 
-			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(new ThisUnitOfWork(uow));
+			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(currentUnitOfWork);
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());
