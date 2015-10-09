@@ -3,40 +3,6 @@
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
-@ignore
-Scenario: Show site without always loading status
-	Given the time is '2014-01-21 13:00'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
-	And there is a site named 'London'
-	And there is a team named 'Red' on site 'London'
-	And Guy London has a person period with
-	| Field      | Value      |
-	| Team       | Red      |
-	| Start Date | 2014-01-01 |
-	When I view Real time adherence overview
-	Then I should see the site 'London'
-
-@ignore
-Scenario: Show team without always loading status
-	Given the time is '2014-01-21 13:00'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
-	And there is a site named 'London'
-	And there is a team named 'Red' on site 'London'
-	And Guy Red has a person period with
-	| Field      | Value      |
-	| Team       | Red      |
-	| Start Date | 2014-01-01 |
-	When I view Real time adherence for site 'London'
-	Then I should see the team 'Red'
-
 Scenario: View updates of sum of employees not adhering to schedule for each site
 	Given I have a role with
 	| Field                                  | Value             |
@@ -160,16 +126,6 @@ Scenario: Should not see Real time adherence overview in menu when not permitted
 	When I view Anywhere
 	Then I should not see Real time adherence overview in the menu
 	
-@ignore
-Scenario: Should be able to go to Real time adherence overview
-	Given I have a role with
-	 | Field                                  | Value              |
-	 | Name                                   | Real time analyist |
-	 | Access to real time adherence overview | True               |
-	 | Access to everyone                     | True               |
-	When I view Anywhere
-	Then I should see Real time adherence overview in the menu
-
 
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given I have a role with
@@ -220,7 +176,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	And the time is '2014-01-21 13:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
-	When I view Real time adherence overview
+	When I view Real time adherence sites
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
@@ -272,6 +228,6 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	And the time is '2014-01-21 13:00'
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
-	 When I view Real time adherence for site 'Paris'
+	 When I view Real time adherence for teams on site 'Paris'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
