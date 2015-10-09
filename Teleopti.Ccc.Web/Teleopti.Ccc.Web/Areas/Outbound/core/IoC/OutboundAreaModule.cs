@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			//dependences
-			builder.RegisterModule(new SchedulingCommonModule());
 			builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
