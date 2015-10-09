@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class BrowserInteractionsJQueryExtensions
 	{
-		public static void AssertExistsUsingJQuery(this IBrowserInteractions interactions, string selector, params object[] args)
+		public static void	AssertExistsUsingJQuery(this IBrowserInteractions interactions, string selector, params object[] args)
 		{
 			selector = f(selector, args);
 			var jquery = dollar(selector);

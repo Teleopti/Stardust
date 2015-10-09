@@ -23,7 +23,6 @@
             this.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {siteId: '@siteId'}, {
                 query: {
                     method: 'GET',
-                    headers: { 'X-Business-Unit-Filter': '928dd0bc-bf40-412e-b970-9b5e015aadea' },
                     params: {}, isArray: true
                 }
             });
@@ -31,7 +30,6 @@
             this.getAdherenceForAllSites = $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
                 query: {
                     method: 'GET',
-                    headers: { 'X-Business-Unit-Filter': '928dd0bc-bf40-412e-b970-9b5e015aadea' },
                     params: {}, isArray: true
                 }
             });

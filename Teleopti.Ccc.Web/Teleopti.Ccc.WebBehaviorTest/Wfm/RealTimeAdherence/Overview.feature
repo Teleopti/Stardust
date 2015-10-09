@@ -1,9 +1,9 @@
-﻿@ignore
-Feature: Real time adherence overview
+﻿Feature: Real time adherence overview
 	In order to easier find the team leader to blame
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
+@ignore
 Scenario: Show site without always loading status
 	Given the time is '2014-01-21 13:00'
 	And I have a role with
@@ -20,6 +20,7 @@ Scenario: Show site without always loading status
 	When I view Real time adherence overview
 	Then I should see the site 'London'
 
+@ignore
 Scenario: Show team without always loading status
 	Given the time is '2014-01-21 13:00'
 	And I have a role with
@@ -83,12 +84,13 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
-	 When I view Real time adherence overview
+	 When I view Real time adherence sites
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
+@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with
 	| Field                                  | Value             |
@@ -141,6 +143,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
+@ignore
 Scenario: Should not be able to view Real time adherence overview when not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -149,6 +152,7 @@ Scenario: Should not be able to view Real time adherence overview when not permi
 	When I try to view Real time adherence overview
 	Then I should see a message that I have no permission for this function
 
+@ignore
 Scenario: Should not see Real time adherence overview in menu when not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -157,6 +161,7 @@ Scenario: Should not see Real time adherence overview in menu when not permitted
 	When I view Anywhere
 	Then I should not see Real time adherence overview in the menu
 	
+@ignore
 Scenario: Should be able to go to Real time adherence overview
 	Given I have a role with
 	 | Field                                  | Value              |
@@ -166,6 +171,7 @@ Scenario: Should be able to go to Real time adherence overview
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
+@ignore
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given I have a role with
 	| Field                                  | Value             |
@@ -219,6 +225,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
+@ignore
 Scenario: View current state of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with
 	| Field                                  | Value             |

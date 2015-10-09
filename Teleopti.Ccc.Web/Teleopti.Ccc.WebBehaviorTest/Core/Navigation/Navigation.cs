@@ -459,5 +459,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/forecasting/");
 		}
+
+		public static void GotoRealTimeAdherenceSites()
+		{
+			GoToPage("wfm/#/rta/sites");
+		}
 	}
 }
