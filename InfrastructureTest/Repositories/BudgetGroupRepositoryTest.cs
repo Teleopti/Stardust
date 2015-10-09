@@ -68,12 +68,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new BudgetGroupRepository(currentUnitOfWork);
         }
-
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            IBudgetGroupRepository budgetGroupRepository = new BudgetGroupRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(budgetGroupRepository);
-        }
     }
 }

@@ -425,12 +425,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, skillDay.TemplateSkillDataPeriodCollection.Count);
         }
 
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var skillRepository = new SkillRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(skillRepository);
-        }
 
         [Test]
         public void ShouldLoadSkill()

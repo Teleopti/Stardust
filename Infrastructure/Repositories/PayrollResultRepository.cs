@@ -25,13 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PayrollResultRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public PayrollResultRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
@@ -49,13 +42,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             retList.ForEach(i => LazyLoadingManager.Initialize(i.Details));
             return retList;
         }
-
-        //public override bool ValidateUserLoggedOn
-        //{
-        //    get
-        //    {
-        //        return false;
-        //    }
-        //}
     }
 }

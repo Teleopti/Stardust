@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public RequestAllowanceView(IBudgetGroup budgetGroup, DateOnly defaultDate) : this()
 		{
-			var currentUowFactory = UnitOfWorkFactory.Current;
+			var currentUnitOfWork = new FromFactory(() => UnitOfWorkFactory.Current);
 			_presenter = new RequestAllowancePresenter(this,
-													   new RequestAllowanceModel(currentUowFactory,
-														   new BudgetDayRepository(currentUowFactory),
-														   new BudgetGroupRepository(currentUowFactory),
-														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUowFactory)), 
-														   new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(UnitOfWorkFactory.CurrentUnitOfWorkFactory()))));
+													   new RequestAllowanceModel(UnitOfWorkFactory.Current,
+														   new BudgetDayRepository(currentUnitOfWork),
+														   new BudgetGroupRepository(currentUnitOfWork),
+														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUnitOfWork)), 
+														   new ScheduleProjectionReadOnlyRepository(currentUnitOfWork)));
 														   
 			_presenter.Initialize(budgetGroup, defaultDate);
 			initializeGrid();

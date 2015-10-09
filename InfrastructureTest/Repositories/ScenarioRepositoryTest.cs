@@ -49,12 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(loadedAggregateFromDatabase.Description.Name, "Dummy");
         }
         
-        [Test]
-        public void ShouldCreateWithFactory()
-        {
-            Assert.NotNull(new ScenarioRepository(UnitOfWorkFactory.Current));
-        }
-
 		[Test]
 		public void ShouldThrowIfDefaultScenarioDoesNotExist()
 		{

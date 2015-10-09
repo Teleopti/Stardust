@@ -20,12 +20,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             InitializeComponent();
 
             if (DesignMode) return;
+						var currentUnitOfWork = new FromFactory(() => UnitOfWorkFactory.Current);
 
             Presenter = new CopyToSkillPresenter(this, model,
                                                  new CopyToSkillCommand(this, model,
-                                                                        new WorkloadRepository(UnitOfWorkFactory.Current),
+                                                                        new WorkloadRepository(currentUnitOfWork),
                                                                         UnitOfWorkFactory.Current),
-                                                 new SkillRepository(UnitOfWorkFactory.Current),
+                                                 new SkillRepository(currentUnitOfWork),
                                                  UnitOfWorkFactory.Current);
             SetTexts();
         }

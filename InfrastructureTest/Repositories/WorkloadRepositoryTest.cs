@@ -86,12 +86,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(workload.QueueAdjustments.OfferedTasks,loadedAggregateFromDatabase.QueueAdjustments.OfferedTasks);
         }
 
-        [Test]
-        public void ShouldCreateWithFactory()
-        {
-            Assert.NotNull(new WorkloadRepository(UnitOfWorkFactory.Current));
-        }
-
         /// <summary>
         /// Determines whether this instance can be created.
         /// </summary>

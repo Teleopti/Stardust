@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var service = new PayrollResultService(CurrentUnitOfWorkFactory.Make(), new PayrollResultRepository(result.DataSource.Application));
+				var service = new PayrollResultService(CurrentUnitOfWorkFactory.Make(), new PayrollResultRepository(new FromFactory(() => result.DataSource.Application)));
 				var buffer = service.CreatePayrollResultFileNameById(new Guid(guid));
 				Response.AppendHeader("content-disposition", string.Format(CultureInfo.CurrentCulture, "attachment; filename={0}", guid));
 				Response.OutputStream.Write(buffer, 0, buffer.Length);

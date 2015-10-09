@@ -27,13 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ScenarioRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public ScenarioRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
