@@ -48,10 +48,8 @@ angular.module('wfm.forecasting')
 				}).$promise.then(
 					function(result) {
 						console.log(result);
-
 					}
 				);
 			};
-
 		}
 	]);

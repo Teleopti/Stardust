@@ -36,14 +36,30 @@ angular.module('wfm.forecasting')
 
 			$scope.workloads = [];
 
+			var getName = function (skillName, workloadName) {
+				var name;
+				if (!workloadName || workloadName == skillName)
+					name = skillName;
+				else {
+					name = skillName + " - " + workloadName;
+				}
+				return name;
+			}
+
 			var getSkills = function() {
 				var skillsPromise = forecasting.skills.query().$promise;
 				skillsPromise.then(function(result) {
 					var skills = result;
 					var workloads = [];
 					angular.forEach(skills, function(skill) {
-						angular.forEach(skill.Workloads, function(workload) {
-							workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id, Scenario: $scope.modalForecastingInfo.selectedScenario });
+						angular.forEach(skill.Workloads, function (workload) {
+							workloads.push(
+								{
+									Id: workload.Id,
+									Name: getName(skill.Name, workload.Name),
+									ChartId: "chart" + workload.Id,
+									Scenario: $scope.modalForecastingInfo.selectedScenario
+								});
 						});
 					});
 					$scope.workloads = $filter('orderBy')(workloads, 'Name');

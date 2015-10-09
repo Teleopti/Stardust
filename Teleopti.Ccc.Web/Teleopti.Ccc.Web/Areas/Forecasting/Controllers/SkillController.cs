@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(input.TimezoneId),
 				Activity = _activityRepository.Load(input.ActivityId)
 			};
-			var newWorkload = new Workload(newSkill);
+			var newWorkload = new Workload(newSkill)
+			{
+				Name = input.Name
+			};
 			var queues = _queueSourceRepository.LoadAll();
 			foreach (var queue in input.Queues)
 			{
