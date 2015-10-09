@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				.SingleInstance()
 				.As<INextPlanningPeriodProvider>();
 
-			builder.RegisterModule(new SchedulingCommonModule());
 			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
 			builder.RegisterType<CurrentUnitOfWorkScheduleRangePersister>().As<IScheduleRangePersister>().InstancePerLifetimeScope();

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 			_containerBuilder.RegisterModule(new OutboundScheduledResourcesProviderModule());
-			_containerBuilder.RegisterModule(new SchedulingCommonModule());
+			_containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
 			
 		}
 

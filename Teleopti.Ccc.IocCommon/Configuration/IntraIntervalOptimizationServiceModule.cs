@@ -8,6 +8,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class IntraIntervalOptimizationServiceModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public IntraIntervalOptimizationServiceModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<IntraIntervalOptimizer>().As<IIntraIntervalOptimizer>();
@@ -19,7 +26,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftProjectionCacheIntraIntervalValueCalculator>().As<IShiftProjectionCacheIntraIntervalValueCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionIntraIntervalBestFitCalculator>().As<IShiftProjectionIntraIntervalBestFitCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodIntraIntervalPeriodFinder>().As<ISkillStaffPeriodIntraIntervalPeriodFinder>().SingleInstance();
-			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetter>().As<IMainShiftOptimizeActivitySpecificationSetter>();
+			
+			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetter>().As<MainShiftOptimizeActivitySpecificationSetter>();
+			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetterOff>().As<MainShiftOptimizeActivitySpecificationSetterOff>();
+			builder.Register(c => _configuration.Toggle(Toggles.ResourcePlanner_WeeklyRestSolver_35043)
+				? (IMainShiftOptimizeActivitySpecificationSetter)c.Resolve<MainShiftOptimizeActivitySpecificationSetter>()
+				: c.Resolve<MainShiftOptimizeActivitySpecificationSetterOff>())
+				.As<IMainShiftOptimizeActivitySpecificationSetter>();
 		}
 	}
 }

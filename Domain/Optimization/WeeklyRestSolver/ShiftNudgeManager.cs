@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -59,12 +60,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions)
 		{
-			bool keepStartTimePreference = false;
 			if (optimizationPreferences != null)
-			{
 				schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-				keepStartTimePreference = optimizationPreferences.Shifts.KeepStartTimes;
-			}
+
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
@@ -133,9 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 				if (leftNudgeSuccess)
 				{
-					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
-						resourceCalculateDelayer, leftTeamBlock,
-						schedulingResultStateHolder, keepStartTimePreference);
+					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions, resourceCalculateDelayer, leftTeamBlock, schedulingResultStateHolder, optimizationPreferences);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 
@@ -149,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					{
 						rightNudgeSuccess = _shiftNudgeLater.Nudge(rightScheduleDay, rollbackService, 
 							schedulingOptions, resourceCalculateDelayer, 
-							rightTeamBlock, schedulingResultStateHolder);
+							rightTeamBlock, schedulingResultStateHolder, optimizationPreferences);
 						restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 					}
 				}

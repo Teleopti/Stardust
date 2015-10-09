@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, false)).Return(true);
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(true);
@@ -142,9 +142,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, false)).Return(false);
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, null)).Return(false);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(false);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, null)).Return(false);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
 
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, false)).Return(true);
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_teamBlockOptimizationLimits.Stub(x => x.Validate(_leftTeamBlockInfo, _optimizationPreferences)).Return(false);
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Twice();
-			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, false)).Return(true);
-			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Twice();
 			_teamBlockOptimizationLimits.Stub(x => x.Validate(_leftTeamBlockInfo, _optimizationPreferences)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.Validate(_rightTeamBlockInfo, _optimizationPreferences)).Return(true);
@@ -290,9 +290,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, false)).Return(true);
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
-			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, null)).Return(true);
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(true);

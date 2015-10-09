@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			//TODO: move this to common
-			system.AddModule(new SchedulingCommonModule());
+			system.AddModule(new SchedulingCommonModule(configuration));
 			system.AddModule(new RuleSetModule(configuration, true));
 			//
 		}

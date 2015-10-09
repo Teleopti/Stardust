@@ -49,9 +49,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class SchedulingCommonModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public SchedulingCommonModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
+			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule<ScheduleOvertimeModule>();
@@ -64,7 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<DayOffOptimizationDecisionMakerFactory>();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<FlexibelDayOffOptimizationDecisionMakerFactory>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
+			builder.Register(c => _configuration.Toggle(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
 				? (IDayOffOptimizationDecisionMakerFactory)c.Resolve<FlexibelDayOffOptimizationDecisionMakerFactory>()
 				: c.Resolve<DayOffOptimizationDecisionMakerFactory>())
 				.As<IDayOffOptimizationDecisionMakerFactory>();
@@ -235,7 +242,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().As<TeamBlockDayOffsInPeriodValidator>();
 			builder.RegisterType<TeamBlockDayOffsInPeriodValidatorOff>().As<TeamBlockDayOffsInPeriodValidatorOff>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
+			builder.Register(c => _configuration.Toggle(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409)
 				? (ITeamBlockDayOffsInPeriodValidator)c.Resolve<TeamBlockDayOffsInPeriodValidator>()
 				: c.Resolve<TeamBlockDayOffsInPeriodValidatorOff>())
 				.As<ITeamBlockDayOffsInPeriodValidator>();

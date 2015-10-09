@@ -11,23 +11,16 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 	[TestFixture]
 	class IntraIntervalOptimizationServiceModuleTest
 	{
-		private ContainerBuilder _containerBuilder;
-
-		[SetUp]
+		[Test]
 		public void Setup()
 		{
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			_containerBuilder = new ContainerBuilder();
-			_containerBuilder.RegisterModule(new CommonModule(configuration));
-			_containerBuilder.RegisterModule(new SchedulingCommonModule());
-			_containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
-		}
-
-		[Test]
-		public void ShouldResolve()
-		{
-			_containerBuilder.RegisterModule<IntraIntervalOptimizationServiceModule>();
-			using (var container = _containerBuilder.Build())
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new CommonModule(configuration));
+			containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
+			containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
+			containerBuilder.RegisterModule(new IntraIntervalOptimizationServiceModule(configuration));
+			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IIntraIntervalOptimizationService>().Should().Not.Be.Null();
 			}

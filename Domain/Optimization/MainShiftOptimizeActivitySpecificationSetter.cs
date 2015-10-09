@@ -60,4 +60,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 	}
+
+	public class MainShiftOptimizeActivitySpecificationSetterOff : IMainShiftOptimizeActivitySpecificationSetter
+	{
+		public void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate){}	
+	}
 }

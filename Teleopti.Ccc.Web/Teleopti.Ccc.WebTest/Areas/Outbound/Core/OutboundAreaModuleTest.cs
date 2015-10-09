@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
+			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new OutboundAreaModule());
 		}
 

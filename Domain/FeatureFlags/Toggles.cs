@@ -83,6 +83,7 @@
 		WfmPermission_ReplaceOldPermission_34671,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
+		ResourcePlanner_WeeklyRestSolver_35043,
 		// ReSharper restore InconsistentNaming
 	}
 }

@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule<PermissionsModule>();
 				builder.RegisterModule<RequestHistoryModule>();
 				builder.RegisterModule<MainModule>();
-				builder.RegisterModule(new SchedulingCommonModule());
+				builder.RegisterModule(new SchedulingCommonModule(configuration));
 				builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 				//hack to get old behavior work
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();

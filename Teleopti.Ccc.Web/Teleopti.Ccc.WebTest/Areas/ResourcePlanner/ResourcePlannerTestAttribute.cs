@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebModule(configuration, null));
-			system.AddModule(new SchedulingCommonModule());
+			system.AddModule(new SchedulingCommonModule(configuration));
 			system.AddModule(new ResourcePlannerModule());
 
 			system.UseTestDouble<FakePeopleAndSkillLoaderDecider>().For<IPeopleAndSkillLoaderDecider>();
