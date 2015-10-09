@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_thresholdsSettingPersisterAndProvider.Persist(thresholdSetting);
 		}
 
-		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
 		public virtual ThresholdSettingForm GetThresholdSetting()
 		{
 			var threshold = _thresholdsSettingPersisterAndProvider.Get();
