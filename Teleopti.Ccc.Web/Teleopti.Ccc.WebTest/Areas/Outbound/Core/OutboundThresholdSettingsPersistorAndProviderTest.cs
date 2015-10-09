@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var thresholdSettings = new OutboundThresholdSettings
 			{
-				RelativeWarningThreshold = 0.5
+				RelativeWarningThreshold = new Percent(0.5)
 			};
 			var returnedSettings = new OutboundThresholdSettings();
 			personalSettingDataRepository.Stub(x => x.FindValueByKey(outboundThresholdSettingKey, new OutboundThresholdSettings())).IgnoreArguments().Return(returnedSettings);
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var returnedSettings = new OutboundThresholdSettings
 			{
-				RelativeWarningThreshold = 1
+				RelativeWarningThreshold = new Percent(1)
 			};
 			personalSettingDataRepository.Stub(x => x.FindValueByKey(outboundThresholdSettingKey, new OutboundThresholdSettings())).IgnoreArguments().Return(returnedSettings);
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var returnedSettings = new OutboundThresholdSettings
 			{
-				RelativeWarningThreshold = 1
+				RelativeWarningThreshold = new Percent(1)
 			};
 			personalSettingDataRepository.Stub(x => x.FindValueByKeyAndOwnerPerson(outboundThresholdSettingKey, person, new OutboundThresholdSettings())).IgnoreArguments().Return(returnedSettings);
 

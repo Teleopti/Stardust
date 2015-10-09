@@ -1,10 +1,11 @@
 ﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSetting.OutboundSetting
 {
 	[Serializable]
 	public class OutboundThresholdSettings : SettingValue
 	{
-		public double RelativeWarningThreshold { get; set; }
+		public Percent RelativeWarningThreshold { get; set; }
 	}
 }

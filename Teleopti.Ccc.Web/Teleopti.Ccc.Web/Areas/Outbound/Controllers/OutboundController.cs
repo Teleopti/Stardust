@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 {
@@ -185,9 +186,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
-		public virtual void UpdateThresholdsSetting(int value)
+		public virtual void UpdateThresholdsSetting(double value)
 		{
-			_thresholdsSettingPersisterAndProvider.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = value });
+			_thresholdsSettingPersisterAndProvider.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = new Percent(value) });
 		}
 	}
 }

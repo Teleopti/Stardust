@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 {
@@ -257,7 +258,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var target = new OutboundController(null, null, null, null, null, null, null, thresholdSetting);
 			target.UpdateThresholdsSetting(1);
 
-			thresholdSetting.AssertWasCalled(x => x.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = 1 }), y=>y.IgnoreArguments());
+			thresholdSetting.AssertWasCalled(x => x.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = new Percent(1) }), y=>y.IgnoreArguments());
 		}
 	}
 }
