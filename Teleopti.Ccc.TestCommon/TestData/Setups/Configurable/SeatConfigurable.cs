@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public int Priority { get; set; }
 
-		public void Apply(IUnitOfWork now)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var location = new SeatMapLocation();
 			var tempId = new Guid("00000000-0000-0000-0000-000000000000");
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var seat = location.AddSeat(Name, Priority);
 			location.UpdateSeatMapTemporaryId(tempId, seat.Id);
 
-			var rep = new SeatMapLocationRepository(now);
+			var rep = new SeatMapLocationRepository(currentUnitOfWork);
 			rep.Add(location);
 		}
 	}

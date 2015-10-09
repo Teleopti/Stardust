@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public string Name { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(uow);
+			var multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(currentUnitOfWork);
 			multiplicatorDefinitionSetRepository.Add(new MultiplicatorDefinitionSet(Name, MultiplicatorType.Overtime));
 		}
 	}

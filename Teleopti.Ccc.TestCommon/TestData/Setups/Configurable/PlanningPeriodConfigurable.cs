@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		
 		public DateTime Date { get; set; }
 		
-		public void Apply (IUnitOfWork uow)
+		public void Apply (ICurrentUnitOfWork currentUnitOfWork)
 		{
 
 			var period = new AggregatedSchedulePeriod()
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			Period = new PlanningPeriod (planningPeriodSuggestions);
 			
 
-			new PlanningPeriodRepository(uow).Add(Period);
+			new PlanningPeriodRepository(currentUnitOfWork).Add(Period);
 		}
 
 

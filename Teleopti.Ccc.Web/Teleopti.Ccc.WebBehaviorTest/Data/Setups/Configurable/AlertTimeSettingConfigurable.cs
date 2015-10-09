@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AlertTime = alertTime;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var globalSettingRep = new GlobalSettingDataRepository(uow);
+			var globalSettingRep = new GlobalSettingDataRepository(currentUnitOfWork);
 
 			var alertTimeSetting = globalSettingRep.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			alertTimeSetting.SecondsBeforeChange = AlertTime;

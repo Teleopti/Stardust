@@ -8,10 +8,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
     public class LicenseFromFile : IDataSetup
     {
-        public void Apply(IUnitOfWork uow)
+        public void Apply(ICurrentUnitOfWork currentUnitOfWork)
         {
             var license = new License { XmlString = File.ReadAllText("License.xml") };
-            var licenseRepository = new LicenseRepository(uow);
+            var licenseRepository = new LicenseRepository(currentUnitOfWork);
             licenseRepository.Add(license);
         }
     }

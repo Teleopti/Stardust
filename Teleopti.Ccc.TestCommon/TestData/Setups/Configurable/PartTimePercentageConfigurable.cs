@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public IPartTimePercentage PartTimePercentage { get; private set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Name == null)
 			{
 				Name = RandomName.Make();
 			}
 			PartTimePercentage = new PartTimePercentage(Name);
-			var repository = new PartTimePercentageRepository(uow);
+			var repository = new PartTimePercentageRepository(currentUnitOfWork);
 			repository.Add(PartTimePercentage);
 		}
 

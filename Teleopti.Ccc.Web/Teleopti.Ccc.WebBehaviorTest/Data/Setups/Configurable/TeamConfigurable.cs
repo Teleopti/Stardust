@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
 	public class TeamConfigurable : TestCommon.TestData.Setups.Configurable.TeamConfigurable
 	{
-		public override void Apply(IUnitOfWork uow)
+		public override void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Site == null)
 			{
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				Site = site.Name;
 			}
 
-			base.Apply(uow);
+			base.Apply(currentUnitOfWork);
 		}
 	}
 }

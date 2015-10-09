@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -11,9 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 		public static IPerson PersonThatCreatesDbData =
 			PersonFactory.CreatePerson("UserThatCreatesTestData");
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
+			var personRepository = new PersonRepository(currentUnitOfWork);
 			personRepository.Add(PersonThatCreatesDbData);
 		}
 

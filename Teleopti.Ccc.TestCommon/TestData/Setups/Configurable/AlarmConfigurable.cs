@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string BusinessUnit { get; set; }
 		public string Adherence { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
 			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, StaffingEffect);
 
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 
 			IRtaStateGroup stateGroup = null;
 			if (PhoneState != null)
 			{
-				var stateGroupRepository = new RtaStateGroupRepository(uow);
+				var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
 				stateGroup = (from g in stateGroupRepository.LoadAll()
 					from s in g.StateCollection
 					where s.StateCode == PhoneState
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
-				var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
+				var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
 				if (stateGroup != null)
 					stateGroup.SetBusinessUnit(businessUnit);
 				stateGroupActivityAlarm.SetBusinessUnit(businessUnit);
@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				alarmType.Adherence = adherence;
 			}
 			
-			var alarmTypeRepository = new AlarmTypeRepository(uow);
+			var alarmTypeRepository = new AlarmTypeRepository(currentUnitOfWork);
 			alarmTypeRepository.Add(alarmType);
 
-			var alarmRepository = new StateGroupActivityAlarmRepository(uow);
+			var alarmRepository = new StateGroupActivityAlarmRepository(currentUnitOfWork);
 			alarmRepository.Add(stateGroupActivityAlarm);
 		}
 	}

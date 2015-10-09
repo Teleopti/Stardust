@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public string Group { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var page = new GroupPage(Name);
 
 			var groups = Group.Split(',').Select(g => g.Trim());
 			groups.ForEach(g => page.AddRootPersonGroup(new RootPersonGroup(g)));
 
-			new GroupPageRepository(uow).Add(page);
+			new GroupPageRepository(currentUnitOfWork.Current()).Add(page);
 		}
 
 	}

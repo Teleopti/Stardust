@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			Site = site;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Site == null)
 			{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheTeam = TeamFactory.CreateSimpleTeam(TeamNameGenerator.Generate());
 			TheTeam.Site = Site;
 
-			var teamRepository = new TeamRepository(uow);
+			var teamRepository = new TeamRepository(currentUnitOfWork);
 			teamRepository.Add(TheTeam);
 		}
 	}

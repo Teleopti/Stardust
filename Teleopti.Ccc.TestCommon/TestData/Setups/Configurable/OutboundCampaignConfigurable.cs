@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime EndDate { get; set; }
 		public string Skill { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepository = new SkillRepository(uow);
+			var skillRepository = new SkillRepository(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == Skill);
 
 			Campaign = new Campaign()
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				SpanningPeriod = new DateTimePeriod(new DateTime(StartDate.Year, StartDate.Month, StartDate.Day), new DateTime(EndDate.Year, EndDate.Month, EndDate.Day))
 			};
 
-			new OutboundCampaignRepository(uow).Add(Campaign);
+			new OutboundCampaignRepository(currentUnitOfWork).Add(Campaign);
 		}
 
 	}

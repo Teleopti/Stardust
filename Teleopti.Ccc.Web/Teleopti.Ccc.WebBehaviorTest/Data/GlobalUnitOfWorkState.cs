@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -7,11 +8,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
-		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
+		public static void UnitOfWorkAction(Action<ICurrentUnitOfWork> action)
 		{
 			using (var unitOfWork = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				action.Invoke(unitOfWork);
+				action.Invoke(new ThisUnitOfWork(unitOfWork));
 				unitOfWork.PersistAll();
 			}
 		}

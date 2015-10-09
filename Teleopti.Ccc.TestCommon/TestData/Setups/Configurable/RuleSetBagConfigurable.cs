@@ -13,16 +13,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public string RuleSet { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var allRuleSets = new WorkShiftRuleSetRepository(uow).LoadAll();
+			var allRuleSets = new WorkShiftRuleSetRepository(currentUnitOfWork).LoadAll();
 			var ruleSetNames = RuleSet.Split(',').Select(s => s.Trim());
 			var ruleSets = from s in ruleSetNames select allRuleSets.Single(x => x.Description.Name == s);
 
 			var ruleSetBag = new RuleSetBag {Description = new Description(Name)};
 			ruleSets.ForEach(ruleSetBag.AddRuleSet);
 
-			new RuleSetBagRepository(uow).Add(ruleSetBag);
+			new RuleSetBagRepository(currentUnitOfWork).Add(ruleSetBag);
 		}
 	}
 }

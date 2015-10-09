@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 	    public IActivity Activity;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
             Activity = new Activity(Name);
 
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			if(!string.IsNullOrEmpty(BusinessUnit))
-				Activity.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
+				Activity.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
 
-			var activityRepository = new ActivityRepository(uow);
+			var activityRepository = new ActivityRepository(currentUnitOfWork);
 			activityRepository.Add(Activity);
 		}
 	}

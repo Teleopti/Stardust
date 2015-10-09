@@ -28,23 +28,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			OpenTo = "16:00";
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skillRepository = new SkillRepository(uow);
+			var skillRepository = new SkillRepository(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == Skill);
 			if (skill.WorkloadCollection.IsEmpty())
 			{
 				var workload = WorkloadFactory.CreateWorkload(Skill, skill);
-				var workloadRepository = new WorkloadRepository(uow);
+				var workloadRepository = new WorkloadRepository(currentUnitOfWork);
 				workloadRepository.Add(workload);
 				skill.AddWorkload(workload);
 			}
 
-			var scenarioRepository = new ScenarioRepository(uow);
+			var scenarioRepository = new ScenarioRepository(currentUnitOfWork);
 			var defaultScenario = scenarioRepository.LoadAll().FirstOrDefault();
 
 			var date = new DateOnly(Date);
-			var skillDayRepository = new SkillDayRepository(uow);
+			var skillDayRepository = new SkillDayRepository(currentUnitOfWork);
 			var skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(date, date), new Collection<ISkillDay>(), skill,
 			                                                   defaultScenario, s => skillDayRepository.AddRange(s));
 			var skillDay = skillDays.First();

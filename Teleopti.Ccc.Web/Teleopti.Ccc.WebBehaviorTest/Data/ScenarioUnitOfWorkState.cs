@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_unitOfWork = null;
 		}
 
-		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
+		public static void UnitOfWorkAction(Action<ICurrentUnitOfWork> action)
 		{
-			action.Invoke(unitOfWork);
+			action.Invoke(new ThisUnitOfWork(unitOfWork));
 			unitOfWork.PersistAll();
 		}
 	}

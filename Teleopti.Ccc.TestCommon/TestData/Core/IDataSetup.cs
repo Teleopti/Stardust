@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public interface IDataSetup
 	{
-		void Apply(IUnitOfWork uow);
+		void Apply(ICurrentUnitOfWork currentUnitOfWork);
 	}
 }

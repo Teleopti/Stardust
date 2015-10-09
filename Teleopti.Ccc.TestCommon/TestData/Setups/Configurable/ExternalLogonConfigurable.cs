@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
         
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
             ExternalLogOn = new ExternalLogOn
             {
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
                 DataSourceId = DataSourceId
             };
 
-			new ExternalLogOnRepository(uow).Add(ExternalLogOn);
+			new ExternalLogOnRepository(currentUnitOfWork).Add(ExternalLogOn);
 		}
 	}
 }

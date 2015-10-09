@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public string PhoneState { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var stateGroup = new RtaStateGroup(Name, false, true);
 			stateGroup.AddState(PhoneState, PhoneState, Guid.Empty);
-			var stateGroupRepository = new RtaStateGroupRepository(uow);
+			var stateGroupRepository = new RtaStateGroupRepository(currentUnitOfWork);
 			stateGroupRepository.Add(stateGroup);
 		}
 	}

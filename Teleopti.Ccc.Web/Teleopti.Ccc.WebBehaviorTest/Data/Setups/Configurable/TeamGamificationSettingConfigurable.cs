@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public string Team { get; set; }
 		public string GamificationSetting { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var team = new TeamRepository(uow).FindTeamByDescriptionName(Team).First();
-			var setting = new GamificationSettingRepository(uow).FindSettingByDescriptionName(GamificationSetting).First();
+			var team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
+			var setting = new GamificationSettingRepository(currentUnitOfWork).FindSettingByDescriptionName(GamificationSetting).First();
 
 			var teamSetting = new TeamGamificationSetting {Team = team, GamificationSetting = setting};
 
-			var teamSettingRepo = new TeamGamificationSettingRepository(uow);
+			var teamSettingRepo = new TeamGamificationSettingRepository(currentUnitOfWork);
 			teamSettingRepo.Add(teamSetting);
 
 		}

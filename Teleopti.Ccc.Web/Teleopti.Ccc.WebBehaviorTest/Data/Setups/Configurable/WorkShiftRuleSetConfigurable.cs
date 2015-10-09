@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Blacklisted = false;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var activity = new ActivityRepository(uow).LoadAll().Single(a => a.Name == Activity);
-			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(a => a.Description.Name == ShiftCategory);
+			var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Activity);
+			var shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(a => a.Description.Name == ShiftCategory);
 
 			var start = new TimePeriodWithSegment(Transform.ToTimePeriod(StartBoundry), Transform.ToTimeSpan(Segment));
 			var end = new TimePeriodWithSegment(Transform.ToTimePeriod(EndBoundry), Transform.ToTimeSpan(Segment));
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			              		OnlyForRestrictions = Blacklisted
 			              	};
 
-			new WorkShiftRuleSetRepository(uow).Add(ruleSet);
+			new WorkShiftRuleSetRepository(currentUnitOfWork).Add(ruleSet);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public String Name { get; set; }
 		
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 
 			SeatMapLocation = new SeatMapLocation()
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				SeatMapJsonData = "<fakedata/>"
 			};
 
-			new SeatMapLocationRepository(uow).Add(SeatMapLocation);
+			new SeatMapLocationRepository(currentUnitOfWork).Add(SeatMapLocation);
 		}
 
 

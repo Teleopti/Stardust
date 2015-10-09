@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime Date { get; set; }
 		public SeatPlanStatus Status { get; set; }
 
-		public void Apply (IUnitOfWork uow)
+		public void Apply (ICurrentUnitOfWork currentUnitOfWork)
 		{
 
 			SeatPlan = new SeatPlan()
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Status = Status
 			};
 
-			new SeatPlanRepository (uow).Add (SeatPlan);
+			new SeatPlanRepository (currentUnitOfWork).Add (SeatPlan);
 		}
 
 	}

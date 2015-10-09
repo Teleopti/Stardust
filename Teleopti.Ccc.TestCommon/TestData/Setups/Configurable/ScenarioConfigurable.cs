@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public IScenario Scenario;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			Scenario = ScenarioFactory.CreateScenario(Name, true, EnableReporting);
 
-			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
+			var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
 			Scenario.SetBusinessUnit(businessUnit);
 
-			new ScenarioRepository(uow).Add(Scenario);
+			new ScenarioRepository(currentUnitOfWork).Add(Scenario);
 		}
 	}
 }

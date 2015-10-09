@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				var testDataFactory = new TestDataFactory(action =>
 					{
-						action.Invoke(uow);
+						action.Invoke(new ThisUnitOfWork(uow));
 						uow.PersistAll();
 					},
 					tenantAction =>
@@ -65,9 +65,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork();
 		}
 
-		private static void UnitOfWorkAction(Action<IUnitOfWork> action)
+		private static void UnitOfWorkAction(Action<ICurrentUnitOfWork> action)
 		{
-			action(TestState.UnitOfWork);
+			action(new ThisUnitOfWork(TestState.UnitOfWork));
 			TestState.UnitOfWork.PersistAll();
 		}
 		

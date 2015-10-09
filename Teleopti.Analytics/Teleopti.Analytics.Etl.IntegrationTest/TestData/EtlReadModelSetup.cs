@@ -11,10 +11,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public IBusinessUnit BusinessUnit;
 		public string StepName;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var d = new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc);
-			var rep = new EtlReadModelRepository(uow);
+			var rep = new EtlReadModelRepository(currentUnitOfWork.Current());
 			rep.LastChangedDate(BusinessUnit, StepName,new DateTimePeriod(d.AddDays(-10),d.AddDays(10)));
 		}
 	}

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public Absence Absence;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			Absence = new Absence { Description = new Description(Name, ShortName) };
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (Requestable.HasValue)
 				Absence.Requestable = Requestable.Value;
 			
-			var absenceRepository = new AbsenceRepository(uow);
+			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 			absenceRepository.Add(Absence);
 		}
 	}

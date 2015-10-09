@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			Name = RandomName.Make("Workflow control set");
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var workflowControlSet = new WorkflowControlSet(Name) { SchedulePublishedToDate = !string.IsNullOrEmpty(SchedulePublishedToDate) ? DateTime.Parse(SchedulePublishedToDate) : (DateTime?)null };
 
@@ -64,19 +64,19 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AvailableShiftCategory))
 			{
-				var shiftCategory = new ShiftCategoryRepository(uow).FindAll().Single(c => c.Description.Name == AvailableShiftCategory);
+				var shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).FindAll().Single(c => c.Description.Name == AvailableShiftCategory);
 				workflowControlSet.AddAllowedPreferenceShiftCategory(shiftCategory);
 			}
 
 			if (!string.IsNullOrEmpty(AvailableDayOff))
 			{
-				var dayOffTemplate = new DayOffTemplateRepository(uow).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
+				var dayOffTemplate = new DayOffTemplateRepository(currentUnitOfWork).FindAllDayOffsSortByDescription().Single(c => c.Description.Name == AvailableDayOff);
 				workflowControlSet.AddAllowedPreferenceDayOff(dayOffTemplate);
 			}
 
 			if (!string.IsNullOrEmpty(AvailableAbsence))
 			{
-				var absence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
+				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
 
 				var absenceRequestOpenPeriodStart = String.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
@@ -155,13 +155,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AvailableActivity))
 			{
-				var activity = new ActivityRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableActivity);
+				var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableActivity);
 				workflowControlSet.AllowedPreferenceActivity = activity;
 			}
 
 			if (!string.IsNullOrEmpty(ReportableAbsence))
 			{
-				var absence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == ReportableAbsence);
+				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == ReportableAbsence);
 				workflowControlSet.AddAllowedAbsenceForReport(absence);
 			}
 
@@ -171,11 +171,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
-				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
+				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
 
 			workflowControlSet.AnonymousTrading = AnonymousTrading;
 
-			var repository = new WorkflowControlSetRepository(uow);
+			var repository = new WorkflowControlSetRepository(currentUnitOfWork);
 			repository.Add(workflowControlSet);
 		}
 	}

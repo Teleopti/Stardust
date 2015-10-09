@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 		private readonly DefinedRaptorApplicationFunctionFactory definedRaptorApplicationFunctionFactory = 
 			new DefinedRaptorApplicationFunctionFactory();
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
+			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
 
 			applicationFunctionRepository.AddRange(definedRaptorApplicationFunctionFactory.ApplicationFunctionList);
 		}

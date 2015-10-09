@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 	{
 		public static IScenario Scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			new ScenarioRepository(uow).Add(Scenario);
+			new ScenarioRepository(currentUnitOfWork).Add(Scenario);
 		}
 
 		public int HashValue()

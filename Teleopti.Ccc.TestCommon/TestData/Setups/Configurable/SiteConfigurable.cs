@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public ISite Site { get; private set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Name == null)
 				Name = RandomName.Make("site");
 			Site = SiteFactory.CreateSimpleSite(Name);
-			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
+			var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
 			if(!string.IsNullOrEmpty(BusinessUnit))
 				Site.SetBusinessUnit(businessUnit);
-			var siteRepository = new SiteRepository(uow);
+			var siteRepository = new SiteRepository(currentUnitOfWork);
 			siteRepository.Add(Site);
 			businessUnit.AddSite(Site);
 		}

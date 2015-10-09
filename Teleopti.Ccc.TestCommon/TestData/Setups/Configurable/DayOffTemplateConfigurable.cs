@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public string Name { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description(Name));
-			var dayOffRepository = new DayOffTemplateRepository(uow);
+			var dayOffRepository = new DayOffTemplateRepository(currentUnitOfWork);
 			dayOffRepository.Add(dayOffTemplate);
 		}
 	}

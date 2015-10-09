@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			MondayWorkDay = true;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Name == null)
 			{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			week.Add(DayOfWeek.Saturday, SaturdayWorkDay);
 			week.Add(DayOfWeek.Sunday, SundayWorkDay);
 			ContractSchedule.AddContractScheduleWeek(week);
-			new ContractScheduleRepository(uow).Add(ContractSchedule);
+			new ContractScheduleRepository(currentUnitOfWork).Add(ContractSchedule);
 		}
 
 	}

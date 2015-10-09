@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			AverageWorkTimePerDay = WorkTime.DefaultWorkTime.AvgWorkTimePerDay.Hours + ":00";
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Name == null)
 			{
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Contract.PositivePeriodWorkTimeTolerance = TimeSpan.Parse(PositiveTargetTolerance);
 			if (NegativeTargetTolerance != null)
 				Contract.NegativePeriodWorkTimeTolerance = TimeSpan.Parse(NegativeTargetTolerance);
-			new ContractRepository(uow).Add(Contract);
+			new ContractRepository(currentUnitOfWork).Add(Contract);
 		}
 	}
 }

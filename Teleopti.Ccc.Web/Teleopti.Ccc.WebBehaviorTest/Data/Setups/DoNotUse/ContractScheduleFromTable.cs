@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public bool SaturdayWorkDay = false;
 		public bool SundayWorkDay = false;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			ContractSchedule = ContractScheduleFactory.CreateContractSchedule("Contract schedule from table");
 			var week = new ContractScheduleWeek();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			week.Add(DayOfWeek.Saturday, SaturdayWorkDay);
 			week.Add(DayOfWeek.Sunday, SundayWorkDay);
 			ContractSchedule.AddContractScheduleWeek(week);
-			new ContractScheduleRepository(uow).Add(ContractSchedule);
+			new ContractScheduleRepository(currentUnitOfWork).Add(ContractSchedule);
 		}
 
 	}

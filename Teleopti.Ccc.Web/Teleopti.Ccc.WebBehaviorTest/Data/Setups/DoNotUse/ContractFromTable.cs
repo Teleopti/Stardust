@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			AverageWorkTimePerDay = WorkTime.DefaultWorkTime.AvgWorkTimePerDay.Hours;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var workTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(MinHoursPerWeek), TimeSpan.FromHours(MaxHoursPerWeek), new TimeSpan(), new TimeSpan());
 			Contract = new Contract("Contract from table")
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 					NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours),
 					WorkTimeDirective = workTimeDirective
 				};
-			new ContractRepository(uow).Add(Contract);
+			new ContractRepository(currentUnitOfWork).Add(Contract);
 		}
 	}
 }

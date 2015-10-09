@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 
 		public IBusinessUnit BusinessUnit { get { return BusinessUnitFromFakeState; } }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var businessUnitRepository = new BusinessUnitRepository(uow);
+			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
 			businessUnitRepository.Add(BusinessUnit);
 		}
 

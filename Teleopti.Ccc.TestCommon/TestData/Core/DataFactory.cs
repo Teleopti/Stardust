@@ -7,10 +7,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class DataFactory
 	{
-		private readonly Action<Action<IUnitOfWork>> _unitOfWorkAction;
+		private readonly Action<Action<ICurrentUnitOfWork>> _unitOfWorkAction;
 		private readonly IList<IDataSetup> _applied = new List<IDataSetup>();
 
-		public DataFactory(Action<Action<IUnitOfWork>> unitOfWorkAction) {
+		public DataFactory(Action<Action<ICurrentUnitOfWork>> unitOfWorkAction)
+		{
 			_unitOfWorkAction = unitOfWorkAction;
 		}
 

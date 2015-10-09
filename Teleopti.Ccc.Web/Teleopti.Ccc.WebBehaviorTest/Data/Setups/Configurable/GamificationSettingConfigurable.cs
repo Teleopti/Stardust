@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Common;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -20,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AdherenceUsed { get; set; }
 		public bool AHTUsed { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var setting = new GamificationSetting(Description)
 			{
@@ -32,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				AnsweredCallsBadgeEnabled = AnsweredCallsUsed
 			};
 
-			var rep = new GamificationSettingRepository(uow);
+			var rep = new GamificationSettingRepository(currentUnitOfWork);
 			rep.Add(setting);
 		}
 	}

@@ -13,20 +13,20 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string WorkloadName { get; set; }
 		public bool Open24Hours { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var skill = new SkillRepository(uow).LoadAll().Single(x => x.Name.Equals(SkillName));
+			var skill = new SkillRepository(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(SkillName));
 			var wl = new Workload(skill) {Name = WorkloadName};
 			if (QueueSourceName != null)
 			{
-				var qs = new QueueSourceRepository(uow).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
+				var qs = new QueueSourceRepository(currentUnitOfWork).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
 				wl.AddQueueSource(qs);
 			}
 			foreach (var dayTemplate in wl.TemplateWeekCollection)
 			{
 				dayTemplate.Value.MakeOpen24Hours();
 			}
-			new WorkloadRepository(uow).Add(wl);
+			new WorkloadRepository(currentUnitOfWork).Add(wl);
 		}
 
 	}

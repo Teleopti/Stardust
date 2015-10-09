@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Days = 1;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var availabilityRotation = new AvailabilityRotation(Name, Days);
 			var availabilityRestriction = new AvailabilityRestriction();
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			availabilityRotation.AvailabilityDays.ForEach(d => d.Restriction = availabilityRestriction);
 
-			new AvailabilityRepository(uow).Add(availabilityRotation);
+			new AvailabilityRepository(currentUnitOfWork.Current()).Add(availabilityRotation);
 		}
 	}
 }

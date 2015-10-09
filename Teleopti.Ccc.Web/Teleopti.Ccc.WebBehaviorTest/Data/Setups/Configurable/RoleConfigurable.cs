@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToOutbound = false;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var role = ApplicationRoleFactory.CreateRole(Name, Description);
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
-				var teamRepository = new TeamRepository(uow);
+				var teamRepository = new TeamRepository(currentUnitOfWork);
 				AccessToTeam.Split(',')
 					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableTeam);
@@ -141,23 +141,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(AccessToSite))
 			{
-				var siteRepository = new SiteRepository(uow);
+				var siteRepository = new SiteRepository(currentUnitOfWork);
 				AccessToSite.Split(',')
 					.Select(s => siteRepository.FindSiteByDescriptionName(s.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableSite);
 			}
 
-			var businessUnitRepository = new BusinessUnitRepository(uow);
+			var businessUnitRepository = new BusinessUnitRepository(currentUnitOfWork);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);
 			role.SetBusinessUnit(businessUnit);
 
-			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
+			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
 			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
 			var filteredApplicationFunctions = FilterApplicationFunctions(allApplicationFunctions);
 			filteredApplicationFunctions.ToList().ForEach(role.AddApplicationFunction);
 
-			var applicationRoleRepository = new ApplicationRoleRepository(uow);
-			var availableDataRepository = new AvailableDataRepository(uow);
+			var applicationRoleRepository = new ApplicationRoleRepository(currentUnitOfWork);
+			var availableDataRepository = new AvailableDataRepository(currentUnitOfWork);
 
 			applicationRoleRepository.Add(role);
 			availableDataRepository.Add(availableData);

@@ -15,18 +15,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public Team Team { get; private set; }
 
-		public virtual void Apply(IUnitOfWork uow)
+		public virtual void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			if (Name == null)
 				Name = RandomName.Make("team");
-			var siteRepository = new SiteRepository(uow);
+			var siteRepository = new SiteRepository(currentUnitOfWork);
 			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
 			Team = new Team
 			{
 				Description = new Description(Name),
 				Site = site
 			};
-			var teamRepository = new TeamRepository(uow);
+			var teamRepository = new TeamRepository(currentUnitOfWork);
 			teamRepository.Add(Team);
 		}
 	}

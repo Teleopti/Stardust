@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 			return guids[index];
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
+			var applicationFunctionRepository = new ApplicationFunctionRepository(currentUnitOfWork);
 			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
 
 			applicationFunctionRepository.AddRange(

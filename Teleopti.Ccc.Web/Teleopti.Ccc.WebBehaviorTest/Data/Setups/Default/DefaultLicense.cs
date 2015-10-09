@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 			get { return _licenseText ?? (_licenseText = File.ReadAllText("License.xml")); }
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var license = new License { XmlString = licenseText };
-			var licenseRepository = new LicenseRepository(uow);
+			var licenseRepository = new LicenseRepository(currentUnitOfWork);
 			licenseRepository.Add(license);
 		}
 

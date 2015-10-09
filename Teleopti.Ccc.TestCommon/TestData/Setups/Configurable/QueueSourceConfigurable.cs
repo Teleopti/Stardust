@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public int QueueId { get; set; }
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var qs = new QueueSource { Name = Name, QueueMartId = QueueId };
-			new QueueSourceRepository(uow).Add(qs);
+			new QueueSourceRepository(currentUnitOfWork).Add(qs);
 		}
 
 	}

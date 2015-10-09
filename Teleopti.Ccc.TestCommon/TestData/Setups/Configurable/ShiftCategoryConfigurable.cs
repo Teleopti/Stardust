@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public IShiftCategory ShiftCategory;
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			ShiftCategory = new ShiftCategory(Name);
 			if (Color != null)
 				ShiftCategory.DisplayColor = System.Drawing.Color.FromName(Color);
 			if (!string.IsNullOrEmpty(BusinessUnit))
-				ShiftCategory.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
+				ShiftCategory.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
 
-			var shiftCategoryRepository = new ShiftCategoryRepository(uow);
+			var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
 			shiftCategoryRepository.Add(ShiftCategory);
 		}
 
