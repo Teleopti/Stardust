@@ -2,6 +2,7 @@
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,6 +29,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 	    protected IUnitOfWork UnitOfWork
 	    {
 		    get { return _unitOfWork; }
+	    }
+
+	    protected ICurrentUnitOfWork CurrUnitOfWork
+	    {
+		    get { return new ThisUnitOfWork(_unitOfWork);}
 	    }
 
 	    protected MockRepository Mocks { get; private set; }

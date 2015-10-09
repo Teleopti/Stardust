@@ -576,13 +576,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyProperties()
-        {
-            _target = new ScheduleRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(_target);
-        }
-
-        [Test]
         public void CanFindSchedulesAbsencePersonAndPeriod()
         {
             IScheduleRange range;

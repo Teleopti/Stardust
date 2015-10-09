@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             result.PayrollExport = payrollExport;
             PersistAndRemoveFromUnitOfWork(result);
             
-            ICollection<IPayrollResult> payrollExports = new PayrollResultRepository(UnitOfWork).GetPayrollResultsByPayrollExport(payrollExport);
+            ICollection<IPayrollResult> payrollExports = new PayrollResultRepository(CurrUnitOfWork).GetPayrollResultsByPayrollExport(payrollExport);
             Assert.Contains(result, (ICollection)payrollExports);
         } 
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             result.PayrollExport = payrollExport;
             PersistAndRemoveFromUnitOfWork(result);
 
-            var read = new PayrollResultRepository(UnitOfWork).GetPayrollResultsByPayrollExport(payrollExport);
+            var read = new PayrollResultRepository(CurrUnitOfWork).GetPayrollResultsByPayrollExport(payrollExport);
             Assert.IsFalse(LazyLoadingManager.IsInitialized(read.First().XmlResult));
         }
         

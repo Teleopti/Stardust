@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.SmartParts.Payroll
         {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
+				var currUow = new ThisUnitOfWork(uow);
                 var guid = (Guid)SmartPartParameters[0].Value;
-                var payrollExport = new PayrollExportRepository(uow).Get(guid);
-                _payrollResults = new PayrollResultRepository(uow).GetPayrollResultsByPayrollExport(payrollExport);
+                var payrollExport = new PayrollExportRepository(currUow).Get(guid);
+                _payrollResults = new PayrollResultRepository(currUow).GetPayrollResultsByPayrollExport(payrollExport);
             }
         }
 

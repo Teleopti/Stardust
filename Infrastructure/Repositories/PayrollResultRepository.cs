@@ -14,17 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class PayrollResultRepository : Repository<IPayrollResult>, IPayrollResultRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PayrollResultRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
-        public PayrollResultRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
-
 				public PayrollResultRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

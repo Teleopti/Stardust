@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
