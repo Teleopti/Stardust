@@ -201,6 +201,40 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 		}
 
+		[Test]
+		public void OverstaffBeforeActualBacklogShouldBeIgnored()
+		{
+			var campaign = new Campaign();
+
+			var incomingTask = new IncomingTask(
+				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
+				100,
+				new TimeSpan(10, 0, 0),
+				null
+				);
+
+			campaignTaskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
+			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(2000, 0, 0), PlannedTimeTypeEnum.Calculated);
+			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
+			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
+			incomingTask.SetActualBacklogOnDate(new DateOnly(2015, 5, 2), new TimeSpan(500));
+			
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+
+			var configurationProvider = new FakeRuleConfigurationProvider();
+			configurationProvider.SetThresholdType(ThresholdType.Absolute);
+			configurationProvider.SetThreshold(200);
+
+			target = new CampaignRuleChecker(
+				configurationProvider,
+				new OutboundUnderSLARule(campaignTaskManager),
+				new OutboundOverstaffRule(campaignTaskManager));
+
+			var response = target.CheckCampaign(campaign);
+			response.ToList().Count().Should().Be.EqualTo(0);
+
+		}
+
 
 	    class FakeRuleConfigurationProvider : IOutboundRuleConfigurationProvider
 	    {
