@@ -243,6 +243,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return teamId;
 		}
 
+		private static Guid SiteIdForTeam(string teamName)
+		{
+			return (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
+						  let team = t.Team
+						  where team.Description.Name.Equals(teamName)
+						  select team.Site.Id.GetValueOrDefault()).First();
+		}
+
 		private static Guid IdForSite(string siteName)
 		{
 			var siteId = (from t in DataMaker.Data().UserDatasOfType<SiteConfigurable>()
@@ -548,6 +556,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team), IdForTeam(team));
+		}
+
+		[When(@"I view real time adherence for agents on team '(.*)'")]
+		public void WhenIViewRealTimeAdherenceForAgentsOnTeam(string team)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceAgentsOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team));
 		}
 
 		[When(@"I view real time adherence view for team '(.*)'")]

@@ -3,7 +3,7 @@ Feature: Real time adherence agents
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
-
+@ignore
 Scenario: Should not be able to see agents if not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -70,7 +70,7 @@ Scenario: Should be able to see current states of all agents
 	And the time is '2014-01-21 12:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
-	When I view real time adherence for team 'Red'
+	When I view real time adherence for agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
