@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_teamBlockScheduler = _mocks.StrictMock<ITeamBlockScheduler>();
 			_teamBlockRestrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
+			_mainShiftOptimizeActivitySpecificationSetter = _mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 			_target = new ShiftNudgeLater(_teamBlockClearer, _teamBlockRestrictionAggregator, _teamBlockScheduler, _mainShiftOptimizeActivitySpecificationSetter);
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
