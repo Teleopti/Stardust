@@ -79,6 +79,7 @@
 		WfmForecast_ResultView_33605,
 		WfmForecast_MethodsComparisonView_33610,
 		WfmForecast_IntradayPatternView_33069,
+		WfmForecast_CreateSkill_34591,
 		WfmPermission_ReplaceOldPermission_34671,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,

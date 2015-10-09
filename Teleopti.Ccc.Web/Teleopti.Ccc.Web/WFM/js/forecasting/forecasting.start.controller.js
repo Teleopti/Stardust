@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval',
-		function ($scope, $state, forecasting, $http, $filter, $interval) {
+		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle',
+		function ($scope, $state, forecasting, $http, $filter, $interval, toggleService) {
 			$scope.isForecastRunning = false;
 			function updateRunningStatus() {
 				forecasting.status.get().$promise.then(function(result) {
@@ -24,6 +24,11 @@ angular.module('wfm.forecasting')
 					$interval.cancel(stopPolling);
 				}
 			}
+
+			$scope.isCreateSkillEnabled = false;
+			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_CreateSkill_34591' }).$promise.then(function (result) {
+				$scope.isCreateSkillEnabled = result.IsEnabled;
+			});
 
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
