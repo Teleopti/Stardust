@@ -211,13 +211,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNull(meetingNotFound);
         }
 
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            IMeetingRepository meetingRepository = new MeetingRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(meetingRepository);
-        }
-
 		[Test]
 		public void ShouldHandleNoChangesInChangeTracker()
 		{

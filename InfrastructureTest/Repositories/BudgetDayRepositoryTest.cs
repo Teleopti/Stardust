@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IBudgetDay budgetDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(budgetDay);
 
-            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(UnitOfWork);
+            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(CurrentUnitOfWork.Make());
             DateOnly lastDayWithStaffEmployed = budgetDayRepository.FindLastDayWithStaffEmployed(scenario,budgetGroup,budgetDay.Day.AddDays(1));
             Assert.AreEqual(budgetDay.Day,lastDayWithStaffEmployed);
         }
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldReturnLastDateToSearchWhenNoBudgetDayFound()
         {
-            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(UnitOfWork);
+            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(CurrentUnitOfWork.Make());
             DateOnly lastDayWithStaffEmployed = budgetDayRepository.FindLastDayWithStaffEmployed(scenario, budgetGroup, DateOnly.Today);
             Assert.AreEqual(DateOnly.Today, lastDayWithStaffEmployed);
         }
@@ -128,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IBudgetDay budgetDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(budgetDay);
 
-            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(UnitOfWork);
+            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(CurrentUnitOfWork.Make());
             DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2010,9,10,2010,10,30);
             IList<IBudgetDay> foundBudgetDays = budgetDayRepository.Find(scenario, budgetGroup, dateOnlyPeriod);
             Assert.That(1, Is.EqualTo(foundBudgetDays.Count));
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {
-            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(UnitOfWorkFactory.Current);
+            IBudgetDayRepository budgetDayRepository = new BudgetDayRepository(CurrentUnitOfWork.Make());
             Assert.IsNotNull(budgetDayRepository);
         }
     }

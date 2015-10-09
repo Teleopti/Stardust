@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateInsertOnEventMeetings(IEventMessage message)
 		{
-			_owner.SchedulerState.Schedules.MeetingUpdateFromBroker(new MeetingRepository(UnitOfWorkFactory.Current), message.DomainObjectId);
+			_owner.SchedulerState.Schedules.MeetingUpdateFromBroker(new MeetingRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId);
 		}
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)

@@ -26,13 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public MeetingRepository(IUnitOfWorkFactory unitOfWorkFactory)
-#pragma warning disable 618
-            : base(unitOfWorkFactory)
-#pragma warning restore 618
-        {
-        }
-
 				public MeetingRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
