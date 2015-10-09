@@ -188,7 +188,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
 		public virtual void UpdateThresholdsSetting(ThresholdSettingForm input)
 		{
-			_thresholdsSettingPersisterAndProvider.Persist(new OutboundThresholdSettings() { RelativeWarningThreshold = new Percent(input.Value), ThresholdType = input.Type });
+			var thresholdSetting = new OutboundThresholdSettings()
+			{
+				RelativeWarningThreshold = new Percent(input.Value),
+				ThresholdType = input.Type
+			};
+			_thresholdsSettingPersisterAndProvider.Persist(thresholdSetting);
 		}
 	}
 }

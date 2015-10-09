@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				return new OutboundOverstaffRuleConfiguration
 				{
 					Threshold = setting.RelativeWarningThreshold.Value,
-					ThresholdType = ThresholdType.Relative
+					ThresholdType = setting.ThresholdType
 				};
 			}
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				return new OutboundUnderSLARuleConfiguration
 				{
 					Threshold = setting.RelativeWarningThreshold.Value,
-					ThresholdType = ThresholdType.Relative
+					ThresholdType = setting.ThresholdType
 				};
 			}
 
