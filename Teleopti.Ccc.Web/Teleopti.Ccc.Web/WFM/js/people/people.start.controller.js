@@ -2,12 +2,12 @@
 
 angular.module('wfm.people')
 	.constant('chunkSize', 50)
-	.controller('PeopleCtrl', [
+	.controller('PeopleStartCtrl', [
 		'$scope', '$filter', '$state', '$stateParams', '$translate', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$q', 'Toggle', 'People', PeopleController
+		'uiGridExporterConstants', '$q', 'Toggle', 'People', PeopleStartController
 	]);
 
-function PeopleController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,
+function PeopleStartController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,
 	uiGridExporterConstants, $q, toggleSvc, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
@@ -170,7 +170,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 	}
 
 	$scope.gotoCartView = function (commandTag) {
-		$state.go("people-selection-cart", {
+		$state.go("people.selection", {
 			selectedPeopleIds: getSelectedPeople(),
 			commandTag: commandTag,
 			currentKeyword: $scope.keyword,

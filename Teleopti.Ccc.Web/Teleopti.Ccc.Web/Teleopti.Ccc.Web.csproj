@@ -1206,6 +1206,9 @@
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
+    <Content Include="WFM\js\people\html\people-list.html" />
+    <Content Include="WFM\js\people\html\people.html" />
+    <Content Include="WFM\js\people\people.default.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\outbound\outbound.directive.threshold.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
@@ -1213,6 +1216,7 @@
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
+    <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
@@ -1429,7 +1433,6 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\outbound\campaign-edit.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
-    <Content Include="WFM\js\people\html\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\global\areas.controller.js" />
@@ -1444,7 +1447,7 @@
     <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
     <Content Include="WFM\js\rta\rta.controller.js" />
-    <Content Include="WFM\js\people\people.controller.js" />
+    <Content Include="WFM\js\people\people.start.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
@@ -2065,7 +2068,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
-    <Content Include="WFM\tests\people\people.controller.spec.js" />
     <Content Include="WFM\css\style.scss" />
     <Content Include="WFM\vendor\ng-mfb\mfb.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.eot" />

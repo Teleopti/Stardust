@@ -114,8 +114,11 @@ wfm.config([
 			url: '/people',
 			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'js/people/html/people.html',
-			controller: 'PeopleCtrl'
-		}).state('people-selection-cart', {
+			controller: 'PeopleDefaultCtrl'
+		}).state('people.start', {
+			templateUrl: 'js/people/html/people-list.html',
+			controller: 'PeopleStartCtrl'
+		}).state('people.selection', {
 			params: { selectedPeopleIds: [], commandTag: {}, currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'js/people/html/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'

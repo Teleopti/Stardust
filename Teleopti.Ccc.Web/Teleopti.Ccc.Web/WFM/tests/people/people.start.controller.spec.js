@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe("PeopleCtrl", function() {
+describe("PeopleStartCtrl", function() {
 	var $q,
 		$rootScope,
 		$httpBackend;
@@ -60,7 +60,7 @@ describe("PeopleCtrl", function() {
 	it("should show agent by search function", inject(function($controller) {
 		var scope = $rootScope.$new();
 		
-		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 		
 		scope.keyword = "ashley";
 		scope.searchKeyword();
@@ -76,7 +76,7 @@ describe("PeopleCtrl", function() {
 
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 		
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
@@ -86,7 +86,7 @@ describe("PeopleCtrl", function() {
 
 	it("should show agent by search with option", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 		
 
 		scope.advancedSearchForm = {
@@ -112,7 +112,7 @@ describe("PeopleCtrl", function() {
 
 	it("should change the advanced search field according to simple search input", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 
 		scope.keyword = "FirstName: Ashley Smith, Organization: London Shenzhen";
 
