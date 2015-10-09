@@ -1794,7 +1794,6 @@
     <Compile Include="Scheduling\Meetings\PersonMeetingByDateSorter.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleResponse.cs" />
     <Compile Include="Common\BusinessUnit.cs" />
-    <Compile Include="Common\Container.cs" />
     <Compile Include="Common\Contract.cs" />
     <Compile Include="Common\ContractSchedule.cs" />
     <Compile Include="Common\ContractScheduleWeek.cs" />

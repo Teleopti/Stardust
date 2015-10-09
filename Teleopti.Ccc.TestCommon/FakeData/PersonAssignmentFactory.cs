@@ -472,22 +472,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	/// <summary>
 	/// Test class for PersonAssignment test class
 	/// </summary>
-	public class PersonAssignmentListContainer : Container<IList<IProjectionService>>
+	public class PersonAssignmentListContainer
 	{
 		private readonly IList<ISkill> _allSkills;
 		private readonly IDictionary<string, ISkill> _containedSkills;
 		private readonly IDictionary<string, IActivity> _containedActivities;
 		private readonly IDictionary<string, IPerson> _containedPersons;
+		private readonly IList<IProjectionService> _projectionServices;
 		public IList<IPersonAssignment> PersonAssignmentListForActivityDividerTest { get; private set; }
 		public IScenario Scenario { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PersonAssignmentListContainer"/> class.
 		/// </summary>
-		/// <param name="testClass">The domain class.</param>
-		public PersonAssignmentListContainer(IList<IProjectionService> testClass)
-			: base(testClass)
+		public PersonAssignmentListContainer(IList<IProjectionService> projectionServices)
 		{
+			_projectionServices = projectionServices;
 			_allSkills = new List<ISkill>();
 			_containedSkills = new Dictionary<string, ISkill>();
 			_containedActivities = new Dictionary<string, IActivity>();
@@ -527,19 +527,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			get { return _containedPersons; }
 		}
 
-		/// <summary>
-		/// Gets the test data.
-		/// </summary>
-		/// <value>The test data.</value>
-		public IList<IProjectionService> TestData
-		{
-			get { return Content; }
-		}
-
 		public IList<IVisualLayerCollection> TestVisualLayerCollection()
 		{
 			IList<IVisualLayerCollection> ret = new List<IVisualLayerCollection>();
-			foreach (var projectionService in TestData)
+			foreach (var projectionService in _projectionServices)
 			{
 				var projection = projectionService.CreateProjection();
 				ret.Add(projection);
@@ -550,9 +541,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IFilteredVisualLayerCollection> TestFilteredVisualLayerCollectionWithSamePerson()
 		{
-			IPerson person = TestData[0].CreateProjection().Person;
+			IPerson person = _projectionServices[0].CreateProjection().Person;
 
-			return TestData
+			return _projectionServices
 				   .Select(projectionService => projectionService.CreateProjection())
 				   .Select(projection => new FilteredVisualLayerCollection(person, projection.ToList(), new ProjectionIntersectingPeriodMerger(), projection))
 				   .Take(2)

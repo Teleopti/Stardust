@@ -892,7 +892,6 @@
     <Compile Include="Common\PairDictionaryFactoryTest.cs" />
     <Compile Include="Common\PairMatrixServiceTest.cs" />
     <Compile Include="Common\RootPersonGroupTest.cs" />
-    <Compile Include="Common\ContainerTestClass.cs" />
     <Compile Include="Common\EntityContainerTest.cs">
       <SubType>
       </SubType>
@@ -1240,7 +1239,6 @@
     <Compile Include="Scheduling\Rules\BusinessRuleResponseTest.cs" />
     <Compile Include="Common\ContractScheduleTest.cs" />
     <Compile Include="Common\ContractScheduleWeekTest.cs" />
-    <Compile Include="Common\ContainerTest.cs" />
     <Compile Include="AgentInfo\PersonPeriodTest.cs" />
     <Compile Include="Common\ValidationExceptionTest.cs" />
     <Compile Include="Common\DescriptionTest.cs" />
