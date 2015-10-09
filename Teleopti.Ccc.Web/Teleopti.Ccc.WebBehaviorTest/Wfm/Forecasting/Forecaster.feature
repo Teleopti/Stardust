@@ -1,4 +1,4 @@
-﻿Feature: QuickForecaster
+﻿Feature: Forecaster
 	In order to create a forecast
 	As a user
 	I want to be able to do a forecast
@@ -15,7 +15,7 @@ Background:
 Scenario: Forecast all
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
-	When I am viewing quick forecast page
+	When I am viewing forecast page
 	And I use default forecast period and forecast for all
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload1'
@@ -24,7 +24,7 @@ Scenario: Forecast all
 Scenario: Forecast one workload
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
-	When I am viewing quick forecast page
+	When I am viewing forecast page
 	And I select workload 'TheWorkload2'
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
@@ -32,7 +32,7 @@ Scenario: Forecast one workload
 	And there is no forecast data for default period for 'TheWorkload1'
 
 Scenario: Add campaign
-	Given I am viewing quick forecast page
+	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
@@ -43,7 +43,7 @@ Scenario: Add campaign
 	Then I should see that the total calls for the first day has doubled
 
 Scenario: Keep campaigns when reforecasting
-	Given I am viewing quick forecast page
+	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
@@ -64,7 +64,7 @@ Scenario: Save forecast to scenario
 	| Business Unit | BusinessUnit |
 	And there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
-	When I am viewing quick forecast page
+	When I am viewing forecast page
 	And I select workload 'TheWorkload2'
 	And I choose scenario 'Scenario 1'
 	And I use default forecast period and forecast for one workload

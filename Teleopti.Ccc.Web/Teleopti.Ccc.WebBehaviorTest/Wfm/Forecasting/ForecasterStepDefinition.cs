@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -16,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 {
 	[Binding]
-	public class QuickForecasterSteps
+	public class ForecasterSteps
 	{
 		[Then(@"there is a SkillDay for '(.*)'")]
 		public void ThenThereIsASkillDayFor(string date)
@@ -41,9 +39,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
 		}
 		
-		[Given(@"I am viewing quick forecast page")]
-		[When(@"I am viewing quick forecast page")]
-		public void WhenIAmViewingQuickForecastPage()
+		[Given(@"I am viewing forecast page")]
+		[When(@"I am viewing forecast page")]
+		public void WhenIAmViewingForecastPage()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoQuickForecaster();

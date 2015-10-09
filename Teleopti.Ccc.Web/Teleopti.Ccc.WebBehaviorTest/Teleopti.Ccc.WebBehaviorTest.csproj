@@ -241,12 +241,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tenants.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\Forecasting\QuickForecaster.feature.cs">
+    <Compile Include="Wfm\Forecasting\Forecaster.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QuickForecaster.feature</DependentUpon>
+      <DependentUpon>Forecaster.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\Forecasting\QuickForecasterStepDefinition.cs" />
+    <Compile Include="Wfm\Forecasting\ForecasterStepDefinition.cs" />
     <Compile Include="HealthCheck\HealthCheck.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1061,9 +1061,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Tenants.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\Forecasting\QuickForecaster.feature">
+    <None Include="Wfm\Forecasting\Forecaster.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>QuickForecaster.feature.cs</LastGenOutput>
+      <LastGenOutput>Forecaster.feature.cs</LastGenOutput>
     </None>
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
