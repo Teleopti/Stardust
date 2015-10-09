@@ -108,8 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			campaign.SetId(new Guid());
 			_outboundCampaignRepository.Stub(x => x.Get(campaign.Id.Value)).Return(campaign);
 
-			var target = new OutboundController(_outboundCampaignPersister, _outboundCampaignRepository, null, null, null, null,
-				null, null);
+			var target = new OutboundController(_outboundCampaignPersister, _outboundCampaignRepository, null, null, null, null, null, null);
 			target.Remove(campaign.Id.Value);
 
 			_outboundCampaignPersister.AssertWasCalled(x => x.RemoveCampaign(campaign));
