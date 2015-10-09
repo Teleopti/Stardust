@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
 			builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
-			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerRequest();
-			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().InstancePerRequest();
+			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().SingleInstance();			
 			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().SingleInstance();
 
