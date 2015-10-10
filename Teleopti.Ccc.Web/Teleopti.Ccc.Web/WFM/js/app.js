@@ -164,8 +164,7 @@ wfm.config([
 					var d = new Date();
 					d.setTime(d.getTime() + (5 * 60 * 1000));
 					var expires = 'expires=' + d.toUTCString();
-					document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
-					document.cookie = 'areaToGo=WFM; ' + expires + '; path=/';
+					document.cookie = 'returnHash=WFM' + window.location.hash + '; ' + expires + '; path=/';
 				}
 			}
 			

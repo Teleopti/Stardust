@@ -162,40 +162,38 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
 
-						var areaToGo = getCookie("areaToGo");
+						var areaToGo;
+						var returnHash = getCookie("returnHash");
+						debugger;
+						var hasPermissionToGoToHash = applicationsData.some(function(app) {
+							return returnHash.indexOf(app.Area) === 0 ;
+						});
 						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 							return a.Area === "Anywhere";
 						});
 
-						var area;
-						if (areaToGo) {
-							area = areaToGo;
-							var returnHash = getCookie("returnHash");
-							if (returnHash) {
-								deleteCookie("returnHash");
-								deleteCookie("areaToGo");
-								window.location.href = data.baseUrl + area + returnHash;
-								return;
+
+						if (applicationsData.length > 1) {
+							if (hasPermissionToGoToHash) {
+								areaToGo = returnHash;
+							} else if (anywhereApplication) {
+								areaToGo = anywhereApplication.Area;
+							} else {
+								gotoMenuView();
+							}
+						} else if (applicationsData.length == 1) {
+							if (hasPermissionToGoToHash) {
+								areaToGo = returnHash;
+							} else {
+								areaToGo = applicationsData[0].Area;
 							}
 						} else {
-							if(anywhereApplication)
-								area = anywhereApplication.Area;
-							else if (applicationsData.length == 1)
-								area = applicationsData[0].Area;
-							else {
-								if (applicationsData.length > 1) {
-									gotoMenuView();
-								} else {
-									errormessage($('#Signin-error').data('nopermissiontext'));
-								}
-								return;
-							}
-
+							errormessage($('#Signin-error').data('nopermissiontext'));
+							return;
 						}
-						
+
 						deleteCookie("returnHash");
-						deleteCookie("areaToGo");
-						window.location.href = data.baseUrl + area;
+						window.location.href = data.baseUrl + areaToGo;
 					}
 				});
 

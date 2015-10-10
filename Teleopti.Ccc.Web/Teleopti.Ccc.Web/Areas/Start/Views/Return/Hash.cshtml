@@ -6,46 +6,63 @@
 <head>
 	<meta charset="UTF-8">
 	<script type="text/javascript">
+
+		if (typeof (Teleopti) === 'undefined') {
+			Teleopti = {};
+		}
+		if (typeof (Teleopti.Web) === 'undefined') {
+			Teleopti.Web = {};
+		}
+		Teleopti.Web.Areas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck'];
+		saveReturnHash();
+		redirect();
+
+		function saveReturnHash() {
+			var expiresTime = getTimeAfterFiveMinutes();
+			var expires = 'expires=' + expiresTime.toUTCString() + '; path=/';
+			var areaToGo = Teleopti.Web.Areas.filter(isAnyAreaInTheUrl)[0];
+			if (areaToGo === 'WFM') { // wfm project is handled in app.js
+				return;
+			} else if (areaToGo !== undefined) {
+				var cookie = 'returnHash=' + areaToGo + window.location.hash + '; ';
+				document.cookie = cookie + expires;
+			} else {
+				deleteCookie('returnHash');
+			}
+		}
+
+		function getTimeAfterFiveMinutes() {
+			var now = new Date();
+			return new Date(now.getTime() + (5 * 60 * 1000));
+		}
+
+		function isAnyAreaInTheUrl(area) {
+			return window.location.href.toUpperCase().indexOf(area.toUpperCase()) !== -1;
+		}
+
+		function deleteCookie(name) {
+			document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		};
+
+		function redirect() {
+			var redirectUrl = getParameterByName('redirectUrl');
+			var isUseRelativeMode = @Json.Encode(Model.UseRelative);
+			if (isUseRelativeMode) {
+				var pat = /^https?:\/\//i;
+				if (pat.test(redirectUrl)) {
+					window.location.replace(redirectUrl.replace(/^(?:\/\/|[^\/]+)*\//, ""));
+					return;
+				}
+			}
+			window.location.replace(redirectUrl);
+		}
+
 		function getParameterByName(name) {
 			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 				results = regex.exec(location.search);
 			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 		}
-
-		if (window.location.hash) {
-
-			var d = new Date();
-			d.setTime(d.getTime() + (5 * 60 * 1000));
-			var expires = 'expires=' + d.toUTCString();
-			document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
-			document.cookie = 'areaToGo' + '=' + getAreaToGoInReturnUrl() + '; ' + expires + '; path=/';
-		}
-
-		function getAreaToGoInReturnUrl() {
-			var areas = ['MyTime', 'Anywhere', 'SeatPlanner', 'Messages', 'Reporting', 'WFM'];
-			var areaToGo;
-			areas.some(function (area) {
-				areaToGo = area ;
-				return window.location.href.toUpperCase().indexOf(area.toUpperCase()) !== -1;
-			});
-			return areaToGo;
-		}
-
-		function redirect() {
-			var redirectUrl = getParameterByName('redirectUrl');
-			if (@Json.Encode(Model.UseRelative)) {
-				var pat = /^https?:\/\//i;
-				if (pat.test(redirectUrl))
-				{
-					window.location.replace(redirectUrl.replace(/^(?:\/\/|[^\/]+)*\//, ""));
-					return;
-				}
-			} 
-			window.location.replace(redirectUrl);
-		}
-
-		redirect();
 	</script>
 </head>
 <body>
