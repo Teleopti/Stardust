@@ -207,3 +207,7 @@
     padding-left: 0px;
 	color:#66C2FF;
 }
+
+.text-filter::-ms-clear {
+	display: none;
+}

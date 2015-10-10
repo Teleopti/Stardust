@@ -20,6 +20,7 @@
 		-ms-transition: none !important;
 		transition: none !important;
 	}
+
 </style>
 <div>
 	<div class="row people-cart" style="position: relative">
@@ -59,7 +60,7 @@
 			<md-content layout-padding style="height: 68vh">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
+					<input class="text-filter" type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
 				</div>
 				<div class="wfm-checkbox" ng-repeat="skill in vm.availableSkills|filter:searchSkills|orderBy:'SkillName'">
 					<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
