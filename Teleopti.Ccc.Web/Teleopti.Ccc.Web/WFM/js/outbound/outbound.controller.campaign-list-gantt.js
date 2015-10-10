@@ -130,19 +130,9 @@
 				getGraphData(campaign, function () {
 					newDataRow.isLoadingData = false;
 					newDataRow.campaign = campaign;
-					newDataRow.isOverStaffing = isOverStaffing(campaign);
 				});
 			}
 		};
-
-		function isOverStaffing(campaign) {
-			if (!campaign.WarningInfo) return false;
-			var d = campaign.WarningInfo;
-			var result = d.filter(function(e) {
-				return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
-			}).length > 0;
-			return result;
-		}
 
 		function getCommandCallback(campaign, dataRow, scope) {			
 			return function (resp, done) {
@@ -152,7 +142,6 @@
 					$scope.$broadcast('campaign.chart.clear.selection', campaign);
 					dataRow.isRefreshingData = false;
 					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
-					dataRow.isOverStaffing = isOverStaffing(campaign);
 					if (done) done();
 				});							
 			}			
@@ -272,7 +261,6 @@
 		return {
 			init: init,
 			readIndex: readIndex,
-			isOverStaffing: isOverStaffing,
 			getCommandCallback: getCommandCallback,
 			getGraphData: getGraphData,
 			setGanttOptions: setGanttOptions,
