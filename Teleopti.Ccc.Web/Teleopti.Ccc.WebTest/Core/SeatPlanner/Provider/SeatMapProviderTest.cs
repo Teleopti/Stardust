@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -13,10 +14,16 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatMapRepository _seatMapLocationRepository;
-		
+		private IUserTimeZone _userTimeZone;
+		private TimeZoneInfo _timeZone;
+
 		[SetUp]
 		public void Setup()
 		{
+
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));  //GMT +1
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatMapLocationRepository = new FakeSeatMapRepository();
@@ -43,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			booking.Book (seat);
 			_seatBookingRepository.Add (booking);
 
-			var provider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository);
+			var provider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
 			var locationViewModel = provider.Get (location.Id, bookingDate);
 			
 			Assert.IsTrue(locationViewModel.Seats[0].IsOccupied);

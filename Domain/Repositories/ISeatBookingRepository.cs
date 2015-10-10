@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void RemoveSeatBookingsForSeat (ISeat seat);
 		IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat);
 		ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging);
-		IList<ISeatBooking> LoadSeatBookingsIntersectingDay (DateOnly dateOnly, Guid locationId);
-		IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId);
-		IList<ISeatBooking> LoadSeatBookingsForSeatsIntersectingDay (DateOnly dateOnly, IList<Guid> seatIds);
+		IList<ISeatBooking> LoadSeatBookingsIntersectingDateTimePeriod(DateTimePeriod dateTimePeriod, Guid locationId);
+		IList<ISeatBooking> LoadSeatBookingsIntersectingDateTimePeriod(DateTimePeriod dateTImePeriod, IList<Guid> seatIds);
 	}
 }

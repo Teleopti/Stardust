@@ -594,6 +594,7 @@
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatOccupancyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatPlanProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\LocationHierarchyProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\SeatManagementProviderUtils.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\OccupancyViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatBookingReportProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatMapProvider.cs" />

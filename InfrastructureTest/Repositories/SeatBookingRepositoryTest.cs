@@ -128,11 +128,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldLoadBookingsThatIntersectWithDay()
+		public void ShouldLoadBookingsThatIntersectWithDateTimePeriod()
 		{
-			var utcStartDateTime = new DateTime (2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
-			var startDate = new DateOnly(2015,10,1);
-			var person = createPerson(startDate);
+			var targetDateTime = new DateTime(2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
+
+			var person = createPerson(new DateOnly(2015, 10, 1));
 			var seat = createSeatMapLocationAndSeatInDb();
 			var bookingOnCurrentDay = new SeatBooking(person,
 				new DateOnly(2015, 10, 2),
@@ -155,18 +155,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
 			PersistAndRemoveFromUnitOfWork(bookingOnNextDay);
 
-			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent.Id.Value);
+			var dateTimePeriod = new DateTimePeriod(targetDateTime, targetDateTime.AddDays(1).AddSeconds(-1));
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriod, seat.Parent.Id.Value);
 
 			Assert.AreEqual(seatBookings.Count, 3);
 		}
 
 
+
 		[Test]
-		public void ShouldLoadBookingsIntersectingWithDayForLocation()
+		public void ShouldLoadBookingsIntersectingWithDateTimePeriodForLocation()
 		{
-			var utcStartDateTime = new DateTime(2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
-			var startDate = new DateOnly(2015, 10, 1);
-			var person = createPerson(startDate);
+			var targetDateTime = new DateTime(2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
+
+			var person = createPerson(new DateOnly(2015, 10, 1));
 			var seat = createSeatMapLocationAndSeatInDb();
 			var seat2 = createSeatMapLocationAndSeatInDb();
 
@@ -186,7 +188,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(bookingOnCurrentDay);
 			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
 
-			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent.Id.Value);
+			var dateTimePeriod = new DateTimePeriod(targetDateTime, targetDateTime.AddDays(1).AddSeconds(-1));
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriod, seat.Parent.Id.Value);
 
 			Assert.AreEqual(seatBookings.Count, 1);
 		}
@@ -197,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var startDate = new DateOnly(2015, 10, 1);
 
-			var team = createTeam ("team");
+			var team = createTeam("team");
 
 			var person = createPerson(startDate, team);
 			var person2 = createPerson(startDate, team);
@@ -218,7 +221,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			updatePersonScheduleDayFromBooking(booking);
 			updatePersonScheduleDayFromBooking(booking2);
-			
+
 			var criteria = new SeatBookingReportCriteria()
 			{
 				Period = new DateOnlyPeriod(new DateOnly(2015, 10, 1), new DateOnly(2015, 10, 2))
@@ -227,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var viewModel = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsReport(criteria);
 
 			Assert.AreEqual(2, viewModel.SeatBookings.Count());
-			Assert.IsTrue(viewModel.SeatBookings.First().PersonId== person.Id);
+			Assert.IsTrue(viewModel.SeatBookings.First().PersonId == person.Id);
 			Assert.IsTrue(viewModel.SeatBookings.First().SeatId == seat.Id);
 
 		}
@@ -239,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var person = createPerson(startDate);
 			var person2 = createPerson(startDate);
-			
+
 			var seatMapLocation = new SeatMapLocation();
 			var seatMapLocation2 = new SeatMapLocation();
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
@@ -262,7 +265,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			booking.Book(seatLocation1);
 			booking2.Book(seatLocation2);
-			
+
 			PersistAndRemoveFromUnitOfWork(booking);
 			PersistAndRemoveFromUnitOfWork(booking2);
 
@@ -281,10 +284,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, viewModel.SeatBookings.Count());
 			Assert.AreEqual(viewModel.SeatBookings.First().PersonId, person2.Id);
 			Assert.AreEqual(viewModel.SeatBookings.First().SeatId, seatLocation2.Id);
-			Assert.AreEqual (viewModel.RecordCount, 1);
+			Assert.AreEqual(viewModel.RecordCount, 1);
 
 		}
-		
+
 		[Test]
 		public void ShouldFilterSeatBookingReportByTeam()
 		{
@@ -359,7 +362,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				updatePersonScheduleDayFromBooking(morningBooking);
 				updatePersonScheduleDayFromBooking(afternoonBooking);
-				
+
 				dateOnly = dateOnly.AddDays(1);
 			});
 
@@ -385,7 +388,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person = createPerson(dateOnly);
 			var person2 = createPerson(dateOnly);
 			var seat = createSeatMapLocationAndSeatInDb();
-			
+
 
 			var morningBooking = new SeatBooking(person, dateOnly,
 					new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 8, 0, 0),
@@ -400,13 +403,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(afternoonBooking);
 			PersistAndRemoveFromUnitOfWork(morningBooking);
-			//updatePersonScheduleDayFromBooking(afternoonBooking);
-			//updatePersonScheduleDayFromBooking(morningBooking);
-
 
 			var repo = new SeatBookingRepository(UnitOfWork);
 
-			var seatBookings = repo.LoadSeatBookingsForSeatIntersectingDay(dateOnly, seat.Id.GetValueOrDefault());
+			var targetDateTime = new DateTime(2015, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(targetDateTime, targetDateTime.AddDays(1).AddSeconds(-1));
+
+			var seatBookings = repo.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriod, new[] { seat.Id.GetValueOrDefault() });
 			seatBookings.Count().Should().Be(2);
 			seatBookings.First().StartDateTime.Hour.Should().Be(8);
 			seatBookings.Second().StartDateTime.Hour.Should().Be(13);
@@ -418,12 +421,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var dateOnly = new DateOnly(2015, 10, 1);
 			var person = createPerson(dateOnly);
-			
+
 			var rep = new SeatMapLocationRepository(UnitOfWork);
 			var seatMapLocation = new SeatMapLocation();
 
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
-			
+
 			var seat1 = seatMapLocation.AddSeat("Test Seat", 0);
 			var seat2 = seatMapLocation.AddSeat("Test Seat 2", 0);
 			var seat3 = seatMapLocation.AddSeat("Test Seat 3", 0);
@@ -441,24 +444,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var eveningBooking = new SeatBooking(person, dateOnly,
 				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 18, 0, 0),
 				new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 23, 0, 0));
-			
-			morningBooking.Book (seat1);
-			afternoonBooking.Book (seat2);
-			eveningBooking.Book (seat3);
+
+			morningBooking.Book(seat1);
+			afternoonBooking.Book(seat2);
+			eveningBooking.Book(seat3);
 
 			PersistAndRemoveFromUnitOfWork(morningBooking);
 			PersistAndRemoveFromUnitOfWork(afternoonBooking);
 			PersistAndRemoveFromUnitOfWork(eveningBooking);
-			
+
 			var repo = new SeatBookingRepository(UnitOfWork);
 
-			var seatBookings = repo.LoadSeatBookingsForSeatsIntersectingDay(dateOnly, new []{
+
+			var targetDateTime = new DateTime(2015, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(targetDateTime, targetDateTime.AddDays(1).AddSeconds(-1));
+
+			var seatBookings = repo.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriod, new[]{
 				seat1.Id.GetValueOrDefault(), 
-				seat2.Id.GetValueOrDefault()} 
+				seat2.Id.GetValueOrDefault()}
 			);
-			
+
 			seatBookings.Count().Should().Be(2);
-			seatBookings[0].Seat.Id.Should().Equals (seat1.Id);
+			seatBookings[0].Seat.Id.Should().Equals(seat1.Id);
 			seatBookings[1].Seat.Id.Should().Equals(seat2.Id);
 		}
 
@@ -479,7 +486,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return person;
 		}
 
-		private Team createTeam (String name)
+		private Team createTeam(String name)
 		{
 			var site = SiteFactory.CreateSimpleSite("d");
 			PersistAndRemoveFromUnitOfWork(site);
@@ -487,8 +494,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description (name);
-			PersistAndRemoveFromUnitOfWork (team);
+			team.Description = new Description(name);
+			PersistAndRemoveFromUnitOfWork(team);
 			return team;
 		}
 

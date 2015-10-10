@@ -72,7 +72,7 @@ WHERE personSchedule.BusinessUnitId = @businessUnitId and
 	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)
 	AND (EXISTS (select Id from @locationids where loc.Id = Id) or @locationIdList IS NULL)
   
- ORDER BY personSchedule.BelongsToDate ASC, Team.Name, LastName, FirstName
+  ORDER BY personSchedule.BelongsToDate ASC, SiteName, TeamName, LastName, FirstName
  
 END
 

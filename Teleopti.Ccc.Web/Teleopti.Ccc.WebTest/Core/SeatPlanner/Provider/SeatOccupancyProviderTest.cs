@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		{
 
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));  //GMT +1
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 
 			_person = PersonFactory.CreatePersonWithId();
@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		[Test]
 		public void ShouldGetOccupancyInformation()
 		{
+
 			var location = new SeatMapLocation() { Name = "Location" };
 			location.SetId(Guid.NewGuid());
 
@@ -79,6 +80,55 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			occupancyInfo.BookingId.Should().Be.EqualTo(booking.Id);
 
 		}
+
+
+		[Test]
+		public void ShouldIncludeOccupancyOnTimeZoneBoundary()
+		{
+			var occupancyInformation = createBookingForDateTimeAndReturnBookingsForFullDay(
+				new DateTime (2015, 8, 6, 20, 0, 0),
+				new DateTime(2015, 8, 6, 22, 0, 0),  // 2015-08-06:22:0:0 utc = 2015-08-07:00:00:00 west so should include occupancy
+				new DateOnly (2015, 8, 7)
+			);
+
+			Assert.AreEqual(1, occupancyInformation.Count);
+		}
+
+		[Test]
+		public void ShouldExcludeOccupancyOnTimeZoneBoundary()
+		{
+			var occupancyInformation = createBookingForDateTimeAndReturnBookingsForFullDay( 
+				new DateTime(2015, 8, 6, 20, 0, 0),
+				new DateTime(2015, 8, 6, 21, 59, 59),  // 2015-08-06:21:59:59 utc = 2015-08-06:23:59:59 west so should exclude occupancy
+				new DateOnly(2015, 8, 7)
+			);
+
+			Assert.AreEqual(0, occupancyInformation.Count);
+		}
+
+
+		private IList<GroupedOccupancyViewModel> createBookingForDateTimeAndReturnBookingsForFullDay(DateTime startDateTime, DateTime endDateTime, DateOnly dateToGet)
+		{
+			var location = new SeatMapLocation() {Name = "Location"};
+			location.SetId (Guid.NewGuid());
+
+			var seat = location.AddSeat ("Seat", 1);
+			_seatMapLocationRepository.Add (location);
+
+			var booking = SeatManagementProviderTestUtils.CreateSeatBooking (
+				_person,
+				new DateOnly(startDateTime.Date),
+				startDateTime,
+				endDateTime);
+
+			booking.Book (seat);
+			_seatBookingRepository.Add (booking);
+
+			var seatOccupancyProvider = new SeatOccupancyProvider (_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var occupancyInformation = seatOccupancyProvider.Get (new List<Guid>{seat.Id.GetValueOrDefault()}, dateToGet);
+			return occupancyInformation;
+		}
+
 
 		[Test]
 		public void ShouldGetOccupancyInformationForMultipleSeats()

@@ -21,15 +21,22 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private SeatMapProvider _seatMapProvider;
 		private ICommandDispatcher _commandDispatcher;
 		private ILoggedOnUser _loggedOnUser;
+		private IUserTimeZone _userTimeZone;
+		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
+
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));  //GMT +1
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
 			_seatMapLocationRepository = MockRepository.GenerateMock<ISeatMapLocationRepository>();
 			_seatBookingRepository = MockRepository.GenerateMock<ISeatBookingRepository>();
 			_commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			_loggedOnUser = new FakeLoggedOnUser();
-			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository);
+			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
 			_seatMapController = new SeatMapController(_seatMapProvider, _commandDispatcher,_loggedOnUser );
 		}
 

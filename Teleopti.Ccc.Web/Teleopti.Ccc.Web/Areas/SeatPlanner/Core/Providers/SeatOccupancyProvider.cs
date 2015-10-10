@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly IUserTimeZone _userTimeZone;
-		
+
 		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
 		{
 			_seatBookingRepository = seatBookingRepository;
@@ -22,12 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		public IList<GroupedOccupancyViewModel> Get(IList<Guid> seatIds, DateOnly date)
 		{
-			var bookings = _seatBookingRepository.LoadSeatBookingsForSeatsIntersectingDay(date, seatIds);
+
+			var dateTimePeriodUtc = SeatManagementProviderUtils.GetUtcDateTimePeriodForLocalFullDay(date, _userTimeZone.TimeZone());
+
+			var bookings = _seatBookingRepository.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriodUtc, seatIds);
 			return createGroupedViewModelsForBookings(bookings);
 		}
 
 
-		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays (List<IScheduleDay> scheduleDays)
+		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays(List<IScheduleDay> scheduleDays)
 		{
 			var bookings = new List<ISeatBooking>();
 
@@ -48,16 +51,16 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		private IList<GroupedOccupancyViewModel> createGroupedViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
 		{
-			var groupedBookings = bookings.GroupBy (booking => booking.Seat);
-			var groupedOccupancyVieModelList = groupedBookings.Select (groupedBooking => new GroupedOccupancyViewModel()
+			var groupedBookings = bookings.GroupBy(booking => booking.Seat);
+			var groupedOccupancyVieModelList = groupedBookings.Select(groupedBooking => new GroupedOccupancyViewModel()
 			{
-				SeatId = groupedBooking.Key.Id.GetValueOrDefault(), 
-				SeatName = groupedBooking.Key.Name, 
-				Occupancies = createViewModelsForBookings (groupedBooking)
+				SeatId = groupedBooking.Key.Id.GetValueOrDefault(),
+				SeatName = groupedBooking.Key.Name,
+				Occupancies = createViewModelsForBookings(groupedBooking)
 			});
 
-			
-			return groupedOccupancyVieModelList.OrderBy (groupedBooking => groupedBooking.SeatName).ToList();
+
+			return groupedOccupancyVieModelList.OrderBy(groupedBooking => groupedBooking.SeatName).ToList();
 		}
 
 
@@ -85,13 +88,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				LocationPath = location != null ? SeatMapProvider.GetLocationPath(location, true) : null
 			};
 		}
-		
+
 		private DateTime convertTimeToLocal(DateTime dateTime)
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone());
 		}
 
-		
+
 	}
 
 	public class GroupedOccupancyViewModel

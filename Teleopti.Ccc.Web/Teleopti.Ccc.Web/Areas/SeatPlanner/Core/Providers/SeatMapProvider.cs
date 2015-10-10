@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NPOI.POIFS.Properties;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -12,16 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 	public class SeatMapProvider : ISeatMapProvider
 	{
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
+		private readonly IUserTimeZone _userTimeZone;
 		private readonly ISeatBookingRepository _seatMapBookingRepository;
 
 		protected SeatMapProvider()
 		{
 		}
 
-		public SeatMapProvider(ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatMapBookingRepository)
+		public SeatMapProvider(ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatMapBookingRepository, IUserTimeZone userTimeZone)
 		{
 			_seatMapLocationRepository = seatMapLocationRepository;
 			_seatMapBookingRepository = seatMapBookingRepository;
+			_userTimeZone = userTimeZone;
 		}
 
 		public LocationViewModel Get(Guid? id, DateOnly? bookingDate = null)
@@ -64,7 +65,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		private void addOccupancyInformation (ISeatMapLocation seatMapLocation, LocationViewModel locationViewModel, DateOnly bookingDate)
 		{
-			var bookings = _seatMapBookingRepository.LoadSeatBookingsIntersectingDay (bookingDate, seatMapLocation.Id.GetValueOrDefault());
+			var dateTimePeriodUtc = SeatManagementProviderUtils.GetUtcDateTimePeriodForLocalFullDay(bookingDate, _userTimeZone.TimeZone());
+			
+			var bookings = _seatMapBookingRepository.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriodUtc, seatMapLocation.Id.GetValueOrDefault());
 			if (bookings != null)
 			{
 				locationViewModel.Seats = buildSeatViewModels(seatMapLocation, bookings);	

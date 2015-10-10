@@ -69,38 +69,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Where(booking => booking.BelongsToDate == date).ToList();
 		}
 
-		public IList<ISeatBooking> LoadSeatBookingsIntersectingDay(DateOnly date, Guid locationId)
+		public IList<ISeatBooking> LoadSeatBookingsIntersectingDateTimePeriod(DateTimePeriod date, Guid locationId)
 		{
 			return getSeatBookingsInterceptingDay (date).Where (booking => locationId == booking.Seat.Parent.Id).ToList();
 		}
 
-		public IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId)
-		{
-			return LoadSeatBookingsForSeatsIntersectingDay (date, new[] {seatId});
-		}
 
-		public IList<ISeatBooking> LoadSeatBookingsForSeatsIntersectingDay(DateOnly dateOnly, IList<Guid> seatIds)
+		public IList<ISeatBooking> LoadSeatBookingsIntersectingDateTimePeriod(DateTimePeriod dateTimePeriod, IList<Guid> seatIds)
 		{
-			return getSeatBookingsInterceptingDay(dateOnly)
+			return getSeatBookingsInterceptingDay(dateTimePeriod)
 				.Where(booking => seatIds.Contains(booking.Seat.Id.Value))
 				.OrderBy(booking => booking.BelongsToDate)
 				.ThenBy(booking => booking.StartDateTime)
 				.ToList();
 		}
 		
-		private IQueryable<ISeatBooking> getSeatBookingsInterceptingDay (DateOnly date)
+		private IQueryable<ISeatBooking> getSeatBookingsInterceptingDay (DateTimePeriod dateTimePeriod)
 		{
-			var requestedDate = getDateTimePeriodFromRequestedDate (date);
 			return Session.Query<ISeatBooking>()
-				.Where (booking =>!((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime)));
-		}
-
-
-		private static DateTimePeriod getDateTimePeriodFromRequestedDate(DateOnly dateOnly)
-		{
-			var dateOnlyAsUTCDateTIme = new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 0, 0, 0, DateTimeKind.Utc);
-			var requestedDate = new DateTimePeriod(dateOnlyAsUTCDateTIme, dateOnlyAsUTCDateTIme.AddDays(1).AddSeconds(-1));
-			return requestedDate;
+				.Where(booking => !((dateTimePeriod.EndDateTime < booking.StartDateTime) || (dateTimePeriod.StartDateTime > booking.EndDateTime)));
 		}
 
 		public IList<ISeatBooking> GetSeatBookingsForSeat(ISeat seat)
