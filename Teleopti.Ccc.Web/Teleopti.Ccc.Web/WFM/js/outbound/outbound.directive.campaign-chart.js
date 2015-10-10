@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.outbound').directive('campaignChart', ['$filter', campaignChart]);
+	angular.module('wfm.outbound').directive('campaignChart', ['$filter', '$http', campaignChart]);
 
-	function campaignChart($filter) {
+	function campaignChart($filter, $http) {
 		return {
 			controller: ['$scope', '$element',  campaignChartCtrl],
 			template: '<div id="Chart_{{campaign.Id}}"></div>' +
@@ -20,6 +20,7 @@
 
 			$scope.viewScheduleDiff = false;
 			$scope.dates = $scope.campaign.graphData['dates'].slice(1);
+			$scope.decimalSeparator = ".";
 
 			this.loadGraph = loadGraph;
 			this.init = init;
@@ -70,6 +71,10 @@
 
 			function init() {
 				if (!$scope.graph) $scope.graph = generateChart();
+				var format = $http.get('../api/Global/User/CurrentUser');
+				format.success(function (data) {
+					$scope.decimalSeparator = data.NumberFormat.currencyDecimalSeparator;
+				});
 			}
 
 			
@@ -271,11 +276,12 @@
 
 						name = nameFormat(d[i].name);
 						value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+						var valueAsString = value.toString().replace(".", $scope.decimalSeparator);
 						bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 
 						text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
 						text += "<td class='name' style='text-align: left' ><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
-						text += "<td class='value'>" + value + "</td>";
+						text += "<td class='value'>" + valueAsString + "</td>";
 						text += "</tr>";
 					}
 					if (text)
