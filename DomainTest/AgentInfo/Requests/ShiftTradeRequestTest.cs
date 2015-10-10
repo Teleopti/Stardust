@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             Assert.AreEqual(
                 new DateOnlyPeriod(_shiftTradeSwapDetail.DateFrom, _shiftTradeSwapDetail.DateFrom).ToDateTimePeriod(
-                    _target.Person.PermissionInformation.DefaultTimeZone()), _target.Period);
+                    _target.Person.PermissionInformation.DefaultTimeZone()).ChangeEndTime (new TimeSpan(0,-1,0)), _target.Period);
             Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 
             _target.RequestTypeDescription = "ShiftTrade";
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(_target,_target.ShiftTradeSwapDetails[0].Parent);
             Assert.AreEqual(
                 new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(
-                    _target.Person.PermissionInformation.DefaultTimeZone()), _target.Period);
+                    _target.Person.PermissionInformation.DefaultTimeZone()).ChangeEndTime (new TimeSpan(0,-1,0)), _target.Period);
         }
         [Test]
         public void VerifyCanGetDetails()
