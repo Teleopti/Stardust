@@ -14,7 +14,7 @@
 		<gantt-tooltips></gantt-tooltips>
 		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
 		<div class="threshold-slider">
-			<div><span >campaign threshold</span> {{threshold}}</div>
+			<div><span translate>CampaignThreshold</span> {{threshold}}%</div>
 			<md-slider flex md-discrete min="0" max="100" aria-label="slider" ng-model="threshold" ng-click="updateThreshold(threshold)" ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
 	</div>

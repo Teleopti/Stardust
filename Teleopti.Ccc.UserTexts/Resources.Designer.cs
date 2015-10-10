@@ -4377,6 +4377,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to campaign threshold.
+        /// </summary>
+        public static string CampaignThreshold {
+            get {
+                return ResourceManager.GetString("CampaignThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign {0} has been updated..
         /// </summary>
         public static string CampaignUpdated {
