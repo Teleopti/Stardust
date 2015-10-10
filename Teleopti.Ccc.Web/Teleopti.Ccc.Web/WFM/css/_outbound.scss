@@ -81,7 +81,8 @@
 			height: 100%;
 			pointer-events: auto;
 			border: solid 1px;
-			border-top: none;							
+			border-top: none;
+			overflow:hidden;							
 		}
 		.gantt-task-background {
 			height: 60%;
