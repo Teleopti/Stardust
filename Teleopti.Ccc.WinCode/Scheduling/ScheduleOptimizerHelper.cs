@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
 		{
-			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
+			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, LanguageResourceHelper.Translate("XXCollectingData"));
 			_backgroundWorker.ReportProgress(1, args);
-			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
+			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
