@@ -246,10 +246,7 @@
 					todayDate = new moment(),
 					startDate = new moment($scope.campaign.StartDate.Date);
 
-				var hints = [
-					{ value: endDate.format("YYYY-MM-DD"), text: $scope.dictionary['EndDate'] },
-					{ value: startDate.format("YYYY-MM-DD"), text: $scope.dictionary['Start'] }
-				];
+				var hints = [];
 
 				if (todayDate >= startDate && todayDate <= endDate) {
 					hints.push({ value: todayDate.format("YYYY-MM-DD"), text: $scope.dictionary['Today'] });
