@@ -27,11 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var minMaxBoostFactor = 0d;
 			var minMaxBoostFactorForStandardDeviation = 0d;
 
-            forecastedDemands.AddRange(from item in skillIntervalDataList
-                                       select item.ForecastedDemand);
-            currentDemands.AddRange(from item in skillIntervalDataList
-                                    select item.CurrentDemand);
- 
             foreach (var intervalData in skillIntervalDataList)
             {
 				forecastedDemands.Add(intervalData.ForecastedDemand);
@@ -45,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
 
             var startTime = DateTime.SpecifyKind(baseDate.Date.Add(key),DateTimeKind.Utc);
-			var endTime = DateTime.SpecifyKind(startTime.AddMinutes(resolution), DateTimeKind.Utc);
+			var endTime = startTime.AddMinutes(resolution);
             ISkillIntervalData skillIntervalData = new SkillIntervalData(
                 new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, 0 , null ,null);
 			skillIntervalData.MinMaxBoostFactor = minMaxBoostFactor;

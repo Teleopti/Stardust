@@ -235,8 +235,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    public bool HasProjection()
 	    {
-		    return (ScheduleDataInternalCollection().OfType<IPersonAssignment>().Any() ||
-		            ScheduleDataInternalCollection().OfType<IPersonAbsence>().Any());
+		    var internalCollection = ScheduleDataInternalCollection();
+		    return (internalCollection.OfType<IPersonAssignment>().Any() ||
+		            internalCollection.OfType<IPersonAbsence>().Any());
 	    }
 
 	    #region Methods (7)

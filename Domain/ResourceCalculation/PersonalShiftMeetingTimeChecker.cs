@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
 			var clone = mainShift.MakeCopy();
-			
-			if(!mainShiftProjection.Period().HasValue)
+
+			var mainShiftPeriod = mainShiftProjection.Period();
+			if(!mainShiftPeriod.HasValue)
 				return false;
 
-			var period = mainShiftProjection.Period().Value;
-
+			var period = mainShiftPeriod.Value;
 			foreach (var personMeeting in meetings)
 			{
 				if (!personMeeting.Period.Intersect(period))
@@ -54,10 +54,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var contractTime = mainShiftProjection.ContractTime();
 			var clone = mainShift.MakeCopy();
 
-			if (!mainShiftProjection.Period().HasValue)
+			var mainShiftProjectionPeriod = mainShiftProjection.Period();
+			if (!mainShiftProjectionPeriod.HasValue)
 				return false;
 
-			var period = mainShiftProjection.Period().Value;
+			var period = mainShiftProjectionPeriod.Value;
 
 			if (!personAssignment.Period.Intersect(period))
 				return false;

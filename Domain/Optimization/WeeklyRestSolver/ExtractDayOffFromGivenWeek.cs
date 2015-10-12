@@ -12,14 +12,13 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
     {
         public IList< DateOnly> GetDaysOff(IEnumerable<IScheduleDay> scheduleDayList)
         {
-            var daysOff = new List< DateOnly > ();
+	        var daysOff = new List<DateOnly>();
             foreach (var scheduleDay in scheduleDayList)
             {
                 var significantPart = scheduleDay.SignificantPart();
                 if (significantPart == SchedulePartView.DayOff)
                 {
-                    var personAssignment = scheduleDay.PersonAssignment();
-                    daysOff.Add(personAssignment.Date);
+                    daysOff.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
                 }
                     
             }

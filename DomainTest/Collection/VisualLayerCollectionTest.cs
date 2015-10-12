@@ -5,8 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -662,43 +660,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IActivity payload = createActivity(activityInReadyTime);
 			IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
 			return visualLayerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
-		}
-	}
-
-	public class VisualLayerCollectionFilterTest
-	{
-		[Test]
-		public void ShouldFilterAbsence([Range(1,10)] int r)
-		{
-			var phone1 = ActivityFactory.CreateActivity("Phone1");
-			var phone2 = ActivityFactory.CreateActivity("Phone2");
-			var workShift = new WorkShift(ShiftCategoryFactory.CreateShiftCategory());
-			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone2, new DateTimePeriod(WorkShift.BaseDate.AddHours(3), WorkShift.BaseDate.AddHours(10d / 3))));
-			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone1,new DateTimePeriod(WorkShift.BaseDate.AddHours(3.4),WorkShift.BaseDate.AddHours(3.5))));
-			var workShiftCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
-			workShiftCache.SetDate(new DateOnly(2015,10,25), TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			workShiftCache.MainShiftProjection.Period().HasValue.Should().Be.True();
-
-			/*
-			var scheduledDay = ScheduleDayFactory.Create(new DateOnly(2010, 1, 1));
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 10, 2010, 1, 1, 17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,8,2010,1,1,9), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,9,2010,1,1,17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,11,2010,1,1,17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 12, 2010, 1, 1, 17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 15, 2010, 1, 1, 17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,13,2010,1,1,17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,14,2010,1,1,17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,16,2010,1,1,17), shiftCategory);
-			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Lunch"),new DateTimePeriod(2010,1,1,12,2010,1,1,13), shiftCategory);
-			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 9, 2010, 1, 1, 13)));
-			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 12, 2010, 1, 1, 13)));
-			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 11, 2010, 1, 1, 13)));
-			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"),new DateTimePeriod(2010,1,1,10,2010,1,1,13)));
-			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"),new DateTimePeriod(2010,1,1,18,2010,1,1,19)));
-
-			scheduledDay.ProjectionService().CreateProjection().FilterLayers<IAbsence>().Period().HasValue.Should().Be.True();*/
 		}
 	}
 }

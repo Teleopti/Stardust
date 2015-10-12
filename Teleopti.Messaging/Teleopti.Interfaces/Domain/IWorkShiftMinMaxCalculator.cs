@@ -95,11 +95,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="matrix">The matrix.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix,  ISchedulingOptions schedulingOptions);
-        //int PeriodLegalStateStatus(
-        //    IScheduleMatrixPro matrix,
-        //    IRestrictionsOverLimitDecider restrictionsOverLimitDecider,
-        //    ISchedulingOptions schedulingOptions);
     }
 }

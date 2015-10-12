@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
         private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
+		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
 	    public ShiftProjectionCacheManager(IShiftFromMasterActivityService shiftFromMasterActivityService, 
             IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, DateOnly currentDate, TimeZoneInfo agentTimeZone)
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, currentDate, agentTimeZone);
-		    var ret = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+		    var ret = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
 			ret.SetDate(currentDate, agentTimeZone);
 
 		    return ret;
@@ -81,20 +82,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
 				var callback = new WorkShiftAddStopperCallback();
 				callback.StartNewRuleSet(ruleSet);
-				IEnumerable<IWorkShiftVisualLayerInfo> infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback);
-                IList<IWorkShift> tmpList = new List<IWorkShift>();
-                foreach (var workShiftVisualLayerInfo in infoList)
-                {
-                    tmpList.Add(workShiftVisualLayerInfo.WorkShift);
-                }
-
+				var tmpList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback).Select(s => s.WorkShift).ToArray();
+                
 				shiftProjectionCacheList = new List<IShiftProjectionCache>();
 	            foreach (IWorkShift shift in tmpList)
 	            {
 		            IEnumerable<IWorkShift> expandedShifts = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift);
 		            foreach (IWorkShift workShift in expandedShifts)
 		            {
-			            shiftProjectionCacheList.Add(new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker()));
+						shiftProjectionCacheList.Add(new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker));
 		            }
 	            }
 	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);

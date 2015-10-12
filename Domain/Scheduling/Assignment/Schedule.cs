@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         }
 
 
-        protected IEnumerable<IScheduleData> ScheduleDataInternalCollection()
+        protected IScheduleData[] ScheduleDataInternalCollection()
         {
-            IEnumerable<IScheduleData> retList;
+            IScheduleData[] retList;
             lock(lockObject)
             {
                 retList = _scheduleDataCollection.ToArray();

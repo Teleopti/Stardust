@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
 			IVirtualSchedulePeriod virtualSchedulePeriod = matrix.SchedulePeriod;
 
-			if (_extractedLengths[dateOnly] == null)
+	        IWorkTimeMinMax workTimeMinMax;
+	        if (!_extractedLengths.TryGetValue(dateOnly, out workTimeMinMax) || workTimeMinMax == null)
 			{
 				var result = _restrictionExtractor.Extract(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
 				IEffectiveRestriction restriction = result.CombinedRestriction(schedulingOptions);
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
                     ret = ruleSetBag.MinMaxWorkTime(
 						_workShiftWorkTime, dateOnly, restriction);
 					_extractedLengths[dateOnly] = ret;
+					workTimeMinMax = ret;
 				}
 				if (ret == null)
 				{
@@ -74,11 +76,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			if (empType == EmploymentType.HourlyStaff)
 			{
 				return new MinMax<TimeSpan>(TimeSpan.Zero,
-										_extractedLengths[dateOnly].WorkTimeLimitation.EndTime.Value);
+										workTimeMinMax.WorkTimeLimitation.EndTime.Value);
 			}
 
-			return new MinMax<TimeSpan>(_extractedLengths[dateOnly].WorkTimeLimitation.StartTime.Value,
-										_extractedLengths[dateOnly].WorkTimeLimitation.EndTime.Value);
+			return new MinMax<TimeSpan>(workTimeMinMax.WorkTimeLimitation.StartTime.Value,
+										workTimeMinMax.WorkTimeLimitation.EndTime.Value);
 
 		}
     }
