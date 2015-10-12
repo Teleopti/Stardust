@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
@@ -10,19 +11,39 @@ namespace Teleopti.Analytics.Etl.Transformer
 	{
 		public void Transform(IEnumerable<IStudentAvailabilityDay> rootList, DataTable table, ICommonStateHolder stateHolder, IScenario scenario)
 		{
-			foreach (var availDay in rootList)
+			var uniqueDays = new HashSet<IStudentAvailabilityDay>();
+			uniqueDays.UnionWith(rootList);
+			
+			var dictionary = stateHolder.GetSchedules(uniqueDays, scenario);
+			foreach (var availDay in uniqueDays)
 			{
-				foreach (var availRestriction in availDay.RestrictionCollection)
-				{
-					var persons = stateHolder.PersonsWithIds(new List<Guid> { availDay.Person.Id.GetValueOrDefault() });
-					var schedulePart = stateHolder.GetSchedulePartOnPersonAndDate(persons[0], availDay.RestrictionDate, scenario);
-					var newDataRow = table.NewRow();
-					newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
-					table.Rows.Add(newDataRow);
-				}
+				var availRestriction = availDay.RestrictionCollection.FirstOrDefault();
+				if(availRestriction == null)
+					continue;
+				var persons = stateHolder.PersonsWithIds(new List<Guid> { availDay.Person.Id.GetValueOrDefault() });
+				if(!persons.Any())
+					continue;
+				var schedulePart = getScheduleDay(dictionary, availDay.RestrictionDate, persons[0]);
+				if(schedulePart == null)
+					continue;
+				var newDataRow = table.NewRow();
+				newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
+				table.Rows.Add(newDataRow);
 			}
 		}
 
+		private IScheduleDay getScheduleDay(IDictionary<DateOnly, IScheduleDictionary> dictionary, DateOnly dateOnly,
+			IPerson person)
+		{
+			if (dictionary.ContainsKey(dateOnly))
+			{
+				var days = dictionary[dateOnly];
+				if (days.ContainsKey(person))
+					return days[person].ScheduledDay(dateOnly);
+			}
+
+			return null;
+		}
 		private DataRow fillDataRow(DataRow dataRow, IStudentAvailabilityRestriction availRestriction, IScheduleDay schedulePart)
 		{
 			var availDay = (IStudentAvailabilityDay)availRestriction.Parent;
