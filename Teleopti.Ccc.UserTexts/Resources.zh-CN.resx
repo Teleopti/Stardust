@@ -126,11 +126,11 @@
     <comment>Abandoned emails</comment>
   </data>
   <data name="AbandonedFacsimiles" xml:space="preserve">
-    <value>放弃的传真</value>
+    <value>放弃的传真数量</value>
     <comment>Abandoned facsimiles</comment>
   </data>
   <data name="AbandonedTasks" xml:space="preserve">
-    <value>放弃的任务</value>
+    <value>放弃的任务量</value>
     <comment>Abandoned tasks</comment>
   </data>
   <data name="Absence" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>AbsenceRequest</comment>
   </data>
   <data name="AbsenceRequestEmptyAbsenceTypeError" xml:space="preserve">
-    <value>未选中缺勤</value>
+    <value>未选择缺勤</value>
     <comment>Error message given when absence type isnot selected in the Absence Reuest</comment>
   </data>
   <data name="Absences" xml:space="preserve">
@@ -166,11 +166,11 @@
     <comment>Absolute Start</comment>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>可用性</value>
+    <value>可访问性</value>
     <comment>Accessibility</comment>
   </data>
   <data name="AccessibilityDatesGrid" xml:space="preserve">
-    <value>可使用的日期网格</value>
+    <value>可访问性日期网格</value>
     <comment>Help-QS parameter for the accessibility dates grid view</comment>
   </data>
   <data name="Accrued" xml:space="preserve">
@@ -221,7 +221,7 @@
     <comment>Activity position</comment>
   </data>
   <data name="ActivityTimeLimiterGrid" xml:space="preserve">
-    <value>活动局限</value>
+    <value>活动时间限制</value>
     <comment>Help-QS parameter for the activity time limiter grid view</comment>
   </data>
   <data name="Actual" xml:space="preserve">
@@ -237,47 +237,47 @@
     <comment>Actual handling time</comment>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
-    <value>实际通话时间</value>
+    <value>实际平均通话时长</value>
     <comment>Actual talk time</comment>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>增加</value>
+    <value>添加</value>
     <comment>Add</comment>
   </data>
   <data name="AddAbsence" xml:space="preserve">
-    <value>增加缺勤</value>
+    <value>添加缺勤</value>
     <comment>Add absence</comment>
   </data>
   <data name="AddAbsenceThreeDots" xml:space="preserve">
-    <value>增加缺勤…</value>
+    <value>添加缺勤…</value>
     <comment>Add Absence...</comment>
   </data>
   <data name="AddActivity" xml:space="preserve">
-    <value>增加活动</value>
+    <value>添加活动</value>
     <comment>Add activity menu item</comment>
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
-    <value>增加活动…</value>
+    <value>添加活动…</value>
     <comment>Add Activity...</comment>
   </data>
   <data name="AddAnotherLevel" xml:space="preserve">
-    <value>增加另外一个等级</value>
+    <value>添加另外一个等级</value>
     <comment>AddAnotherLevel</comment>
   </data>
   <data name="AddArrows" xml:space="preserve">
-    <value>增加(&amp;A)&gt;&gt;</value>
+    <value>添加(&amp;A)&gt;&gt;</value>
     <comment>&amp;Add&gt;&gt;</comment>
   </data>
   <data name="AddDayOff" xml:space="preserve">
-    <value>增加休息日</value>
+    <value>添加休息日</value>
     <comment>Add Day Off menu item</comment>
   </data>
   <data name="AddGroupingAbsence" xml:space="preserve">
-    <value>增加缺勤分组</value>
+    <value>添加缺勤分组</value>
     <comment>Add grouping absence</comment>
   </data>
   <data name="AddGroupingActivity" xml:space="preserve">
-    <value>增加活动分组</value>
+    <value>添加活动分组</value>
     <comment>New grouping activity</comment>
   </data>
   <data name="AddGroupPage" xml:space="preserve">
@@ -285,23 +285,23 @@
     <comment>Add Group Page</comment>
   </data>
   <data name="AddMainLayer" xml:space="preserve">
-    <value>增加主层次</value>
+    <value>添加主层次</value>
     <comment>Add Main Layer</comment>
   </data>
   <data name="AddNew" xml:space="preserve">
-    <value>增加新的</value>
+    <value>添加新的</value>
     <comment>Context menu value &lt;Add New&gt;</comment>
   </data>
   <data name="AddNewContract" xml:space="preserve">
-    <value>增加合同</value>
+    <value>添加合同</value>
     <comment>Add new contract</comment>
   </data>
   <data name="AddNewContractSchedule" xml:space="preserve">
-    <value>增加新的班表合同</value>
+    <value>添加新的班表合同</value>
     <comment>Add new contract schedule</comment>
   </data>
   <data name="AddNewOptionalColumn" xml:space="preserve">
-    <value>增加新的可选栏</value>
+    <value>添加新的可选列</value>
     <comment>Add New Optional Column</comment>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
@@ -316,23 +316,23 @@
     <value>增加新的班次类型</value>
   </data>
   <data name="AddNewSite" xml:space="preserve">
-    <value>增加新运营点</value>
+    <value>添加新站点</value>
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AddNewTeam" xml:space="preserve">
-    <value>增加新的小组</value>
+    <value>添加新的小组</value>
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AddNewWeekToSchedule" xml:space="preserve">
-    <value>添加新星期到班表合同</value>
+    <value>添加新的一周到班表合同</value>
     <comment>Add new week to schedule</comment>
   </data>
   <data name="AddOpenHours" xml:space="preserve">
-    <value>增加开放时间</value>
+    <value>添加开放时间</value>
     <comment>Add open hours</comment>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
-    <value>增加可选栏目</value>
+    <value>添加可选列</value>
     <comment>Add Optional Column</comment>
   </data>
   <data name="AddOutlierThreeDots" xml:space="preserve">
@@ -340,7 +340,7 @@
     <comment>Add special event... menu item</comment>
   </data>
   <data name="AddOvertime" xml:space="preserve">
-    <value>增加超时工作</value>
+    <value>添加加班工作</value>
     <comment>Add Overtime</comment>
   </data>
   <data name="AddOverTimeThreeDots" xml:space="preserve">
@@ -348,19 +348,19 @@
     <comment>Add Overtime...</comment>
   </data>
   <data name="AddPartTimePercentage" xml:space="preserve">
-    <value>提供兼职时间百分比定义</value>
+    <value>添加兼职时间百分比定义</value>
     <comment>New Part-time percentage</comment>
   </data>
   <data name="AddPersonalActivity" xml:space="preserve">
-    <value>增加个人活动</value>
+    <value>添加个人活动</value>
     <comment>Add personal activity menu item</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
-    <value>增加个人活动…</value>
+    <value>添加个人活动…</value>
     <comment>Add Personal Activity...</comment>
   </data>
   <data name="AddPersonalLayer" xml:space="preserve">
-    <value>增加个人专用层</value>
+    <value>添加个人专用层</value>
     <comment>Add Personal Layer menu item</comment>
   </data>
   <data name="AddPersonTimeActivity" xml:space="preserve">
@@ -368,7 +368,7 @@
     <comment>Add Person TimeActivity (layer)</comment>
   </data>
   <data name="AddPersonToRole" xml:space="preserve">
-    <value>增加人员到角色</value>
+    <value>添加人员到角色</value>
     <comment>Add Person to Role</comment>
   </data>
   <data name="AddQueuesThreeDots" xml:space="preserve">
@@ -391,7 +391,7 @@
     <comment>Add shift category text in the shit category settings page</comment>
   </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
-    <value>增加快捷工具条(&amp;A)</value>
+    <value>添加到快捷工具条(&amp;A)</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
   </data>
   <data name="Adherence" xml:space="preserve">
@@ -531,7 +531,7 @@
     <comment>&amp;Name:</comment>
   </data>
   <data name="AmpersandPeriodColon" xml:space="preserve">
-    <value>阶段(&amp;P)：</value>
+    <value>周期(&amp;P)：</value>
     <comment>&amp;Period:</comment>
   </data>
   <data name="AmpersandReplace" xml:space="preserve">
@@ -985,7 +985,7 @@
     <comment>Press OK to override the Rules. Press cancel to correct the errors first.</comment>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
-    <value>选择起始命令(&amp;C)：</value>
+    <value>选择命令自(&amp;C)：</value>
     <comment>&amp;Choose commands from:</comment>
   </data>
   <data name="ChooseContractScheduleToChange" xml:space="preserve">
@@ -1389,7 +1389,7 @@
     <comment>Default color</comment>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
-    <value>&lt;规则集包名称&gt;</value>
+    <value>&lt;班次包名称&gt;</value>
     <comment>Default name to be appeared in the tree in the shift creator module</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
@@ -2466,7 +2466,7 @@
     <comment>&amp;Less than:</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
-    <value>&lt;规则集名称&gt;</value>
+    <value>&lt;班次名称&gt;</value>
     <comment>&lt;Rule set name&gt;</comment>
   </data>
   <data name="LessThanSkillNameGreaterThan" xml:space="preserve">
@@ -4092,7 +4092,7 @@ Periods</comment>
     <comment>Rule Set</comment>
   </data>
   <data name="Rulesetavailable" xml:space="preserve">
-    <value>1个规则集可用</value>
+    <value>1个班次可用</value>
     <comment>1 rule set available</comment>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
@@ -4693,7 +4693,7 @@ Periods</comment>
     <comment>Standard colors</comment>
   </data>
   <data name="StandardDeviation" xml:space="preserve">
-    <value>标准偏差</value>
+    <value>标准偏差 (推荐算法，用于优化“休息日”，“每日班次”及“每日班次长度”)</value>
     <comment>Standard deviation row header</comment>
   </data>
   <data name="StartDate" xml:space="preserve">
@@ -5808,7 +5808,7 @@ Periods</comment>
     <value>&lt;计划分组的名称&gt;</value>
   </data>
   <data name="AddDayOffThreeDots" xml:space="preserve">
-    <value>增加休息日…</value>
+    <value>添加休息日…</value>
   </data>
   <data name="DayOffColon" xml:space="preserve">
     <value>休息日：</value>
@@ -5898,7 +5898,7 @@ Periods</comment>
     <value>正在删除 {0} 班表</value>
   </data>
   <data name="ValidatingPersons" xml:space="preserve">
-    <value>正在验证{0}人数</value>
+    <value>正在验证人员{0}</value>
   </data>
   <data name="BelongsToPlanningGroup" xml:space="preserve">
     <value>属于正在计划的分组</value>
@@ -6177,13 +6177,13 @@ Periods</comment>
     <value>乘数值</value>
   </data>
   <data name="AddMultiplicator" xml:space="preserve">
-    <value>增加乘数</value>
+    <value>添加乘数</value>
   </data>
   <data name="DeleteMultiplicator" xml:space="preserve">
     <value>删除乘数</value>
   </data>
   <data name="AddPerson" xml:space="preserve">
-    <value>增加人员</value>
+    <value>添加人员</value>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
     <value>筛选个人帐户</value>
@@ -6234,10 +6234,10 @@ Periods</comment>
     <value>总览名称</value>
   </data>
   <data name="AddPreferenceRestriction" xml:space="preserve">
-    <value>增加偏好限制</value>
+    <value>添加偏好限制条件</value>
   </data>
   <data name="AddStudentAvailability" xml:space="preserve">
-    <value>增加小时工可用性</value>
+    <value>添加小时工可用性</value>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>乘数</value>
@@ -6249,7 +6249,7 @@ Periods</comment>
     <value>根据合同时间局限筛选 (班次在合同时间{0}和{1}之间 )</value>
   </data>
   <data name="ACW" xml:space="preserve">
-    <value>电话后工作时间</value>
+    <value>平均后处理时长</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
     <value>Teleopti CCC</value>
@@ -6342,7 +6342,7 @@ Periods</comment>
     <value>Teleopti的授权例外</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
-    <value>增加会议</value>
+    <value>添加会议</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
     <value>乘数定义集</value>
@@ -6423,7 +6423,7 @@ Periods</comment>
     <value>无效的乘数值</value>
   </data>
   <data name="AbsoluteDifferenceIncoming" xml:space="preserve">
-    <value>呼入的绝对差异</value>
+    <value>到岗数的绝对差异</value>
   </data>
   <data name="ForecastedAgentsIncoming" xml:space="preserve">
     <value>预测用于呼入的座席代表</value>
@@ -6676,7 +6676,7 @@ Periods</comment>
     <value>打开座席代表排班消息工具栏</value>
   </data>
   <data name="AddNewGroupPage" xml:space="preserve">
-    <value>增加新的分组页面</value>
+    <value>添加新的分组页面</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
     <value>Teleopti CCC：人员</value>
@@ -6742,7 +6742,7 @@ Periods</comment>
     <value>小于等于</value>
   </data>
   <data name="RMS" xml:space="preserve">
-    <value>均方根</value>
+    <value>均方根（以均方根值为目标进行优化，一般不推荐使用）</value>
   </data>
   <data name="AvailabilityDate" xml:space="preserve">
     <value>可用日期</value>
@@ -6823,7 +6823,7 @@ Periods</comment>
     <value>加载</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>每座席缺勤时间</value>
+    <value>每个座席代表缺勤时间</value>
   </data>
   <data name="AllowTextReply" xml:space="preserve">
     <value>允许文字回复</value>
@@ -6919,7 +6919,7 @@ Periods</comment>
     <value>&lt;选择可选列&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
-    <value>座席</value>
+    <value>座席代表</value>
   </data>
   <data name="BuiltInAdministratorRole" xml:space="preserve">
     <value>管理员</value>
@@ -7030,7 +7030,7 @@ Periods</comment>
     <value>遵时计算</value>
   </data>
   <data name="AddDays" xml:space="preserve">
-    <value>增加天</value>
+    <value>增加天数</value>
   </data>
   <data name="DateFromColon" xml:space="preserve">
     <value>开始日期：</value>
@@ -7309,7 +7309,7 @@ Teleopti R&amp;D</value>
     <value>详情</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>调班申请 {0} - {1} 被另一方认可。</value>
+    <value>调换班申请 {0} - {1} 被对方接受。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>调班申请 {0} - {1} 被批准。</value>
@@ -7321,10 +7321,10 @@ Teleopti R&amp;D</value>
     <value>调班申请 {0} - {1} 由于班表修改必须重新确认。</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>一条文字申请被批准。</value>
+    <value>一条文本申请被批准。</value>
   </data>
   <data name="TextRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>一条文字申请被拒绝。</value>
+    <value>一条文本申请被拒绝。</value>
   </data>
   <data name="DeleteMeeting" xml:space="preserve">
     <value>删除会议</value>
@@ -7449,7 +7449,7 @@ Teleopti R&amp;D</value>
     <value>业务</value>
   </data>
   <data name="UseMaxStddev" xml:space="preserve">
-    <value>应用间隔差异</value>
+    <value>使用当日间隔差异（当班次活动时长（如小休）小于时段间隔时使用）</value>
   </data>
   <data name="EndTimeAsc" xml:space="preserve">
     <value>结束时间升序</value>
@@ -7506,10 +7506,10 @@ Teleopti R&amp;D</value>
     <value>休息日天数错误</value>
   </data>
   <data name="AddDateTime" xml:space="preserve">
-    <value>增加日期时间乘数</value>
+    <value>添加日期时间乘数</value>
   </data>
   <data name="AddDayOfWeek" xml:space="preserve">
-    <value>增加周中日乘数</value>
+    <value>添加周中日乘数</value>
   </data>
   <data name="Final" xml:space="preserve">
     <value>最后</value>
@@ -7530,10 +7530,10 @@ Teleopti R&amp;D</value>
     <value>未选择班表周期</value>
   </data>
   <data name="AddNewDefinitionSet" xml:space="preserve">
-    <value>增加新规则组</value>
+    <value>添加新的定义集</value>
   </data>
   <data name="AddNewMultiplicator" xml:space="preserve">
-    <value>增加新乘数</value>
+    <value>添加新的乘数</value>
   </data>
   <data name="DeleteDefinitionSet" xml:space="preserve">
     <value>删除规则组</value>
@@ -7650,7 +7650,7 @@ Teleopti R&amp;D</value>
     <value>与班次类别冲突，不是有效的批次。</value>
   </data>
   <data name="ActualHeads" xml:space="preserve">
-    <value>实际人员数</value>
+    <value>实际人头数量</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
     <value>您要为选定日期应用新的模板吗？</value>
@@ -7872,7 +7872,7 @@ Teleopti R&amp;D</value>
     <value>平滑</value>
   </data>
   <data name="ModifiedStandardDeviation" xml:space="preserve">
-    <value>修改标准差</value>
+    <value>已修改的标准差</value>
   </data>
   <data name="AbsenceRequests" xml:space="preserve">
     <value>缺勤申请</value>
@@ -7920,7 +7920,7 @@ Teleopti R&amp;D</value>
     <value>开始</value>
   </data>
   <data name="AddFromToPeriod" xml:space="preserve">
-    <value>增加时段从－到</value>
+    <value>添加周期从－到</value>
   </data>
   <data name="AddRollingPeriod" xml:space="preserve">
     <value>添加滚动时期</value>
@@ -8136,7 +8136,7 @@ Teleopti R&amp;D</value>
     <value>避免：</value>
   </data>
   <data name="AddNote" xml:space="preserve">
-    <value>增加备注</value>
+    <value>添加备注</value>
   </data>
   <data name="EditNote" xml:space="preserve">
     <value>编辑备注</value>
@@ -8181,13 +8181,13 @@ Teleopti R&amp;D</value>
     <value>使用增强计算</value>
   </data>
   <data name="Abandoned" xml:space="preserve">
-    <value>放弃</value>
+    <value>已放弃</value>
   </data>
   <data name="AbandonedAfterServiceLevel" xml:space="preserve">
     <value>服务目标时间外放弃</value>
   </data>
   <data name="AbandonedShort" xml:space="preserve">
-    <value>短放弃</value>
+    <value>短时放弃</value>
   </data>
   <data name="AbandonedWithinServiceLevel" xml:space="preserve">
     <value>服务目标时间内放弃</value>
@@ -8303,7 +8303,7 @@ Teleopti R&amp;D</value>
     <value>该周违反约定的周{0}休息日。</value>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>活动座席数：</value>
+    <value>激活的座席代表数：</value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
     <value>班次长度优化</value>
@@ -8445,7 +8445,7 @@ Teleopti R&amp;D</value>
     <value>小时工小时数</value>
   </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
-    <value>增加效率缩减</value>
+    <value>添加效率损耗</value>
   </data>
   <data name="AddShrinkageRow" xml:space="preserve">
     <value>增加缩减</value>
@@ -8538,10 +8538,10 @@ Teleopti R&amp;D</value>
     <value>当日优化</value>
   </data>
   <data name="AddDate" xml:space="preserve">
-    <value>增加日期</value>
+    <value>添加日期</value>
   </data>
   <data name="AddDates" xml:space="preserve">
-    <value>增加日期</value>
+    <value>添加日期</value>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
     <value>输入站点属性</value>
@@ -8731,10 +8731,10 @@ Teleopti R&amp;D</value>
     <value>正在关闭以前时段...</value>
   </data>
   <data name="PreferenceViewCalculationInfo" xml:space="preserve">
-    <value>{0} (Normal) {1} (Seasonality) {2} (Balance In) {3} (Extra) {4} (Balance Out) = {5}</value>
+    <value>{0} (正常) {1} (季节性) {2} (当前周期(被)补偿小时数) {3} (额外的) {4} (下一周期需(被)补偿小时数) = {5}</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
-    <value>拥有关键活动的班次不能在班表中使用</value>
+    <value>一个拥有主活动的班次不能在班表中使用</value>
   </data>
   <data name="PasteError" xml:space="preserve">
     <value>粘贴出错</value>
@@ -8872,7 +8872,7 @@ Teleopti R&amp;D</value>
     <value>所有必须拥有</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>每个座席活动时间</value>
+    <value>每个座席代表的活动时间</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
     <value>{0}已经阻止程序关闭，你希望强制关闭程序么？</value>
@@ -9091,10 +9091,10 @@ Teleopti R&amp;D</value>
     <value>您必须选择至少一个技能。</value>
   </data>
   <data name="UseStandardDeviation" xml:space="preserve">
-    <value>使用标准误差</value>
+    <value>使用标准差</value>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>使用微调值</value>
+    <value>使用微调值 (使用”最大或最小人员配备限制“或要求的"座席代表"时勾选此项)</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>每天的班次类别和全天缺勤</value>
@@ -9247,7 +9247,7 @@ Teleopti R&amp;D</value>
     <value>至少为{0}小时。</value>
   </data>
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
-    <value>活动设置不能为空</value>
+    <value>活动不能为空。</value>
   </data>
   <data name="ImportForecast" xml:space="preserve">
     <value>导入预测数据</value>
@@ -9325,7 +9325,7 @@ Teleopti R&amp;D</value>
     <value>查看历史</value>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
-    <value>实际呼叫后工作时间</value>
+    <value>实际话后处理均长</value>
   </data>
   <data name="PermissionsViewer" xml:space="preserve">
     <value>权限查看者</value>
@@ -9637,7 +9637,7 @@ Teleopti R&amp;D</value>
     <value>您正在使用的座席数 ({0}) 已经大于了您的许可证允许值 ({1})，您现在剩余 {2} 天来减少座席数，或者应用新的许可证以允许使用更多座席。</value>
   </data>
   <data name="Teleopti" xml:space="preserve">
-    <value>Teleopti</value>
+    <value>Teleopti (当使用”灵活工作时间的班次“及”灵活工作时间的休息“时勾选此项)</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
     <value>提交</value>
@@ -9658,7 +9658,7 @@ Teleopti R&amp;D</value>
     <value>零售</value>
   </data>
   <data name="ActualEmployees" xml:space="preserve">
-    <value>实际员工</value>
+    <value>实际员工数量</value>
   </data>
   <data name="ExportToBU" xml:space="preserve">
     <value>导出到业务单位</value>
@@ -10048,7 +10048,7 @@ Teleopti R&amp;D</value>
     <value>检查完共同活动类型</value>
   </data>
   <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
-    <value>添加小时工可用性</value>
+    <value>添加小时工可用性...</value>
   </data>
   <data name="DataHasBeenDeleted" xml:space="preserve">
     <value>保存错误。最有可能的原因是你正在修改的数据已经被另一用户删除。为了避免此冲突，该界面将被关闭。对不起，您的修改将会丢失。</value>
@@ -10135,7 +10135,7 @@ Teleopti R&amp;D</value>
     <value>警告！根据这些规则创建班次会花费很长时间。这将会在后面的排班和优化步骤中影响性能</value>
   </data>
   <data name="TooComplexRuleset" xml:space="preserve">
-    <value>是一个非常复杂的规则设置</value>
+    <value>是一个非常复杂的规则集</value>
   </data>
   <data name="ViewAllGroupPages" xml:space="preserve">
     <value>查看所有组的页面</value>
@@ -10234,7 +10234,7 @@ Teleopti R&amp;D</value>
     <value>在线服务</value>
   </data>
   <data name="AbandonedChats" xml:space="preserve">
-    <value>放弃的任务量</value>
+    <value>放弃的Chat数量</value>
   </data>
   <data name="AnsweredChats" xml:space="preserve">
     <value>应答的任务量</value>
@@ -10249,7 +10249,7 @@ Teleopti R&amp;D</value>
     <value>当地时间</value>
   </data>
   <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
-    <value>添加加班可用性</value>
+    <value>添加加班可用性...</value>
   </data>
   <data name="CalculatedChats" xml:space="preserve">
     <value>统计的任务量</value>
@@ -10549,7 +10549,7 @@ Teleopti R&amp;D</value>
     <value>我的报告</value>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
-    <value>激活的坐席代表</value>
+    <value>激活的座席代表</value>
   </data>
   <data name="NoSchedulePeriodPresent" xml:space="preserve">
     <value>没有排班时段显示</value>
@@ -10577,5 +10577,11 @@ Teleopti R&amp;D</value>
   <data name="NextActivityComingMessage" xml:space="preserve">
     <value>下一个活动“{0}”将于 {1} 开始</value>
     <comment>The notify message show in MyTimeWeb when next activity coming</comment>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;无批次&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;无小组&gt;</value>
   </data>
 </root>
