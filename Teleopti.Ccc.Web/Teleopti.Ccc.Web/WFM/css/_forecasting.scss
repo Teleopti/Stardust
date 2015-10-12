@@ -86,11 +86,22 @@
 
 .skill-row{
 	display: flex;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .queue-list {
 	padding-left: 0;
 	padding-right: 0;
+}
+
+.input-invalid-text{
+	color: red;
+	font-size: smaller;
+	opacity:0;
+	transition:0.2s opacity ease-in-out;
+}
+
+.invalidForm{
+	opacity:1;
 }

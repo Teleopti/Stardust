@@ -17,6 +17,8 @@ angular.module('wfm.forecasting')
 				$scope.model.selectedTimezone = $filter('filter')(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
 			});
 
+			$scope.queueSelected = true;
+			$scope.hideQueueInvalidMessage = true;
 			$scope.gridOptions = {
 				enableGridMenu: false,
 				enableSelectAll: true,
@@ -28,13 +30,28 @@ angular.module('wfm.forecasting')
 				],
 				onRegisterApi: function (gridApi) {
 					$scope.gridApi = gridApi;
+					gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+						$scope.queueSelected = row.grid.selection.selectedCount > 0;
+						$scope.hideQueueInvalidMessage = false;
+					});
+					gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows, test) {
+						$scope.queueSelected = rows[0].grid.selection.selectedCount > 0;
+						$scope.hideQueueInvalidMessage = false;
+					});
 				}
 			};
 			skillService.queues.get().$promise.then(function (result) {
 				$scope.gridOptions.data = result;
 			});
 
-			$scope.createSkill = function() {
+			$scope.createSkill = function (formValid) {
+				if ($scope.hideQueueInvalidMessage) {
+					$scope.queueSelected = false;
+					return;
+				}
+				if (!formValid || !$scope.queueSelected) {
+					return;
+				}
 				var selectedRows = $scope.gridApi.selection.getSelectedRows();
 				var queues = [];
 				angular.forEach(selectedRows, function(row) {
