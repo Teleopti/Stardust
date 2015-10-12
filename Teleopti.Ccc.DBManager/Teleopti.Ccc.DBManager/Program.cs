@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.DBManager
                // bool SafeMode = true;
                 
                 logWrite("Teleopti Database Manager version " + versionNumber);
-
-                if (args.Length > 0 && args.Length < 20)
+				logWrite("Was called with args: " + string.Join(" ", args));
+				if (args.Length > 0 && args.Length < 20)
                 {
                     var commandLineArgument = new CommandLineArgument(args);
 					var patcher = new DatabasePatcher();

@@ -203,6 +203,12 @@ Try
 	$SQLPwd = $SQLPwd.Replace("`r","")
 	$SQLPwd = $SQLPwd.Replace("`n","")
 
+    $colon = ":"
+    $SQLUserPwd = "-L$SQLUser$colon$SQLPwd"
+    $CONNSTRINGBASE="Data Source=$SQLServer;User Id=$SQLUser;Password=$SQLPwd"
+
+    log-info "SQLUserPwd " $SQLUserPwd
+
 	$AnalyticsDB = $SecondRow.Substring($SecondRow.LastIndexOf("|") + 1)
 	$AnalyticsDB = $AnalyticsDB.Replace("`r","")
 	$AnalyticsDB = $AnalyticsDB.Replace("`n","")
@@ -234,18 +240,20 @@ Try
 	$PATCHPWD = $PATCHPWD.Replace("`r","")
 	$PATCHPWD = $PATCHPWD.Replace("`n","")
 
-	log-info "Running PatchDBs.bat..."
+	#log-info "Running PatchDBs.bat..."
 	#Call patch databases .bat file
 	$PatchDBPath="$directory\..\Tools\Database"
-	$PatchDBTool=$PatchDBPath + "\PatchAzureDatabases.bat"
-    Remove-Item "$PatchDBPath\PatchDBs.bat"
-	Add-Content "$PatchDBPath\PatchDBs.bat" "$PatchDBTool $SQLServer $CCC7DB $AnalyticsDB $PATCHUSER $PATCHPWD $SQLUser $SQLPwd"
-    &"$PatchDBPath\PatchDBs.bat"
+	#$PatchDBTool=$PatchDBPath + "\PatchAzureDatabases.bat"
+    #Remove-Item "$PatchDBPath\PatchDBs.bat"
+	#Add-Content "$PatchDBPath\PatchDBs.bat" "$PatchDBTool $SQLServer $CCC7DB $AnalyticsDB $PATCHUSER $PATCHPWD $SQLUser $SQLPwd"
+    #&"$PatchDBPath\PatchDBs.bat"
 
+    log-info "Get databases to patch"
      # Create SqlConnection object and define connection string
     $con = New-Object System.Data.SqlClient.SqlConnection
-    $con.ConnectionString = "Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;PAssword=$PATCHPWD"
+    $con.ConnectionString = "Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD"
     $con.open()
+    log-info "opened " $con.ConnectionString 
 
     # Create SqlCommand object, define command text, and set the connection
     $cmd = New-Object System.Data.SqlClient.SqlCommand
@@ -254,9 +262,18 @@ Try
 
     # Create SqlDataReader
     $dr = $cmd.ExecuteReader()
+    
+    $SECSQLServer="-DS"+$SQLServer
+    $SECPATCHUSER = "-DU"+$PATCHUSER
+    $SECPATCHPWD= "-DP"+$PATCHPWD
+
+    $SQLServer="-S"+$SQLServer
+    $PATCHUSER = "-U"+$PATCHUSER
+    $PATCHPWD= "-P"+$PATCHPWD
 
     If ($dr.HasRows)
     {
+        log-info "Found databases"
       While ($dr.Read())
       {
         $array = ($dr["ApplicationConnectionString"] -split ";")
@@ -273,12 +290,23 @@ Try
                 $analDb = $cat[1]
             }
         }
-        if($appDb -ne $CCC7DB){
-            Write-EventLog -LogName Application -Source "Patch Databases" -EventID 1 -EntryType Information -Message "Patch databases: $appDb $analDb."
-            Remove-Item "$PatchDBPath\PatchDBs.bat"
-	        Add-Content "$PatchDBPath\PatchDBs.bat" "$PatchDBTool $SQLServer $appDb $analDb $PATCHUSER $PATCHPWD $SQLUser $SQLPwd"
-            &"$PatchDBPath\PatchDBs.bat"
-        }
+        $SECappDb = "-AP"+$appDb
+        $SECanalDb =  "-AN"+$analDb
+        $SECloggDb =  "-CD"+$analDb
+
+        log-info "Patch databases: $appDb $analDb."
+
+        $appDb = "-D"+$appDb
+        $analDb =  "-D"+$analDb
+
+        
+        $command = $PatchDBPath + "\DBManager.exe"
+
+        &"$command" $SQLServer $appDb "-OTeleoptiCCC7" $PATCHUSER $PATCHPWD "-T" "-R" $SQLUserPwd
+        &"$command" $SQLServer $analDb "-OTeleoptiAnalytics" $PATCHUSER $PATCHPWD "-T" "-R" $SQLUserPwd
+
+        $command = $PatchDBPath + "\Enrypted\Teleopti.Support.Security.exe"
+        &"$command" $SECSQLServer $SECappDb $SECanalDb $SECloggDb $CONNSTRINGBASE $SECPATCHUSER $SECPATCHPWD
       }
     }
 # Close the data reader and the connection
