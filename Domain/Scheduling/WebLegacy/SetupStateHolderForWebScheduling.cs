@@ -4,15 +4,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class SetupStateHolderForWebScheduling
 	{
@@ -25,8 +23,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly IRepositoryFactory _repositoryFactory;
 
-		public SetupStateHolderForWebScheduling(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IScheduleRepository scheduleRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<ISchedulerStateHolder> schedulerStateHolder)
+		public SetupStateHolderForWebScheduling(IScenarioRepository scenarioRepository, 
+					ISkillDayLoadHelper skillDayLoadHelper, 
+					ISkillRepository skillRepository, 
+					IScheduleRepository scheduleRepository, 
+					IPersonAbsenceAccountRepository personAbsenceAccountRepository, 
+					IPeopleAndSkillLoaderDecider decider, 
+					ICurrentTeleoptiPrincipal principal, 
+					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+					Func<ISchedulerStateHolder> schedulerStateHolder,
+					IRepositoryFactory repositoryFactory)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -37,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_principal = principal;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_schedulerStateHolder = schedulerStateHolder;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public void Setup(DateOnlyPeriod period, PeopleSelection people)
@@ -61,8 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
-			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
-				new RepositoryFactory());
+			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.AllPeople);
 			schedulerStateHolder.ResetFilteredPersons();
 			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),

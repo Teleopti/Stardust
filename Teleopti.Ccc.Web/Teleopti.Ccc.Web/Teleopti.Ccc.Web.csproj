@@ -574,7 +574,6 @@
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
-    <Compile Include="Areas\ResourcePlanner\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedSchedulePeriodBusinessRule.cs" />
