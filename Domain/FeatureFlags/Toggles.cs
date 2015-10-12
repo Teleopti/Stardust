@@ -52,6 +52,7 @@
 		MyTimeWeb_PreferenceShowNightViolation_33152,
 		MyTimeWeb_JalaaliCalendar_32997,
 		MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281,
+		MyTimeWeb_KeepUrlAfterLogon_34762,
 
 
 		Backlog_Module_23980,

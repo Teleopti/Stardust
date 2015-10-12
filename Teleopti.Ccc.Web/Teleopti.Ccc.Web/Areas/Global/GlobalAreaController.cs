@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Global
@@ -10,17 +10,20 @@ namespace Teleopti.Ccc.Web.Areas.Global
 	public class GlobalAreaController : ApiController
 	{
 		private readonly IAreaWithPermissionPathProvider _areaWithPermissionPathProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public GlobalAreaController(IAreaWithPermissionPathProvider areaWithPermissionPathProvider)
+		public GlobalAreaController(IAreaWithPermissionPathProvider areaWithPermissionPathProvider, IToggleManager toggleManager)
 		{
 			_areaWithPermissionPathProvider = areaWithPermissionPathProvider;
+			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork, HttpGet, Route("Global/Application/Areas")]
-		public virtual IEnumerable<object> GetApplicationAreas()
+		public IEnumerable<object> GetApplicationAreas()
 		{
-			return _areaWithPermissionPathProvider.GetAreasWithPermissions();
+			return _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762)
+				? _areaWithPermissionPathProvider.GetAreasWithPermissions()
+				: new List<object>();
 		}
-
 	}
 }

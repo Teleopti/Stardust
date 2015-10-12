@@ -1,9 +1,11 @@
 using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -21,18 +23,21 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILogLogonAttempt _logLogonAttempt;
 		private readonly IWebLogOn _webLogon;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly IToggleManager _toggleManager;
 
-		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory, 
+		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory,
 																					IIdentityLogon identityLogon,
 																					ILogLogonAttempt logLogonAttempt,
 																					IWebLogOn webLogon,
-																					IDataSourceForTenant dataSourceForTenant)
+																					IDataSourceForTenant dataSourceForTenant,
+																					IToggleManager toggleManager)
 		{
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
 			_identityLogon = identityLogon;
 			_logLogonAttempt = logLogonAttempt;
 			_webLogon = webLogon;
 			_dataSourceForTenant = dataSourceForTenant;
+			_toggleManager = toggleManager;
 		}
 
 		[HttpGet]
@@ -69,7 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_dataSourceForTenant.RemoveDataSource(result.DataSource.DataSourceName);
 				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
-			return Json(string.Empty, JsonRequestBehavior.AllowGet);
+
+			var isToggleOpen = _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762);
+			return Json(new { MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen }, JsonRequestBehavior.AllowGet);
 		}
 
 		private JsonResult errorMessage(string message)

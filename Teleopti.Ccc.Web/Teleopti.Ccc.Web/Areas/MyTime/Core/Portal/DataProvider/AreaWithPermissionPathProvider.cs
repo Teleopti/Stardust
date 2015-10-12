@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.WebPages;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -45,9 +44,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			var areas = new List<object>();
 
-			tryToAddWfmArea(areas);
 			tryToAddArea("MyTime", DefinedRaptorApplicationFunctionPaths.MyTimeWeb, areas);
 			tryToAddArea("Anywhere", DefinedRaptorApplicationFunctionPaths.Anywhere, areas);
+			tryToAddWfmArea(areas);
 			tryToAddArea("HealthCheck", string.Empty, areas);
 			tryToAddArea("Messages", string.Empty, areas);
 			tryToAddArea("Reporting", string.Empty, areas);

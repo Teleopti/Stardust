@@ -64,3 +64,19 @@ Scenario: Browse to Anywhere and sign in
 	When I navigate to Anywhere
 	And I sign in
 	Then I should see Anywhere
+
+@OnlyRunIfDisabled('MyTimeWeb_KeepUrlAfterLogon_34762')
+Scenario: Not keep url with toggle MyTimeWeb_KeepUrlAfterLogon_34762 off
+	Given I have the role 'Access to all areas'
+	When I navigate to Anywhere
+	And I navigate to MyTime
+	And I sign in
+	Then I should see Anywhere
+
+@OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
+Scenario: keep url with toggle MyTimeWeb_KeepUrlAfterLogon_34762 on
+	Given I have the role 'Access to all areas'
+	When I navigate to Anywhere
+	And I navigate to MyTime
+	And I sign in
+	Then I should see MyTime

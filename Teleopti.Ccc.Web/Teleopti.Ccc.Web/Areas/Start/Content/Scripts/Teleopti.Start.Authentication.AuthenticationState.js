@@ -10,7 +10,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	var gotoSignInView = Teleopti.Start.Authentication.Navigation.GotoSignIn;
 	var gotoBusinessUnitsView = Teleopti.Start.Authentication.Navigation.GotoBusinessUnits;
 	var gotoMenuView = Teleopti.Start.Authentication.Navigation.GotoMenu;
-	
+
 	this.AttemptGotoApplicationBySignIn = function (options) {
 		$.extend(options, {
 			success: function (responseData, textStatus, jqXHR) {
@@ -53,7 +53,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 		var success = options.success;
 
-		var optionForBusinessUnits= {
+		var optionForBusinessUnits = {
 			url: data.baseUrl + "Start/AuthenticationApi/BusinessUnits",
 			dataType: "json",
 			type: 'GET',
@@ -104,7 +104,24 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.ajax(options);
 	};
 
-	var getCookie = function(cname) {
+	var globalAreasAjax = function (options) {
+
+		var success = options.success;
+		$.extend(options, {
+			url: data.baseUrl + "Global/Application/Areas",
+			dataType: "json",
+			type: 'GET',
+			cache: false,
+			data: null,
+			success: function (responseData, textStatus, jqXHR) {
+				success(responseData, textStatus, jqXHR);
+			}
+		});
+
+		$.ajax(options);
+	};
+
+	var getCookie = function (cname) {
 		var name = cname + "=";
 		var ca = document.cookie.split(';');
 		for (var i = 0; i < ca.length; i++) {
@@ -145,9 +162,9 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			error: error
 		});
-		
+
 		self.AttemptGotoApplicationBySignIn(options);
-		
+
 	};
 
 	this.AttemptGotoApplicationBySelectingBusinessUnit = function (options) {
@@ -159,46 +176,59 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			success: function (logonData, textState, jqXHR) {
 
-				$.extend(options, {
-					success: function (applicationsData, textState, jqXHR) {
-
-						var areaToGo;
-						var returnHash = getCookie("returnHash");
-						debugger;
-						var hasPermissionToGoToHash = applicationsData.some(function(app) {
-							return returnHash.indexOf(app.Area) === 0 ;
-						});
-						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
-							return a.Area === "Anywhere";
-						});
-
-
-						if (applicationsData.length > 1) {
-							if (hasPermissionToGoToHash) {
-								areaToGo = returnHash;
-							} else if (anywhereApplication) {
-								areaToGo = anywhereApplication.Area;
-							} else {
-								gotoMenuView();
-							}
-						} else if (applicationsData.length == 1) {
-							if (hasPermissionToGoToHash) {
-								areaToGo = returnHash;
-							} else {
-								areaToGo = applicationsData[0].Area;
-							}
-						} else {
-							errormessage($('#Signin-error').data('nopermissiontext'));
-							return;
+				if (logonData.MyTimeWeb_KeepUrlAfterLogon_34762 === true ) {
+					$.extend(options, {
+						success: function(applicationsData, textState, jqXHR) {
+							keepUrlAfterLogon(applicationsData, textState, jqXHR);
 						}
+					});
+					globalAreasAjax(options);
 
-						deleteCookie("returnHash");
-						window.location.href = data.baseUrl + areaToGo;
-					}
-				});
+				} else {
+					$.extend(options, {
+						success: function (applicationsData, textState, jqXHR) {
 
-				applicationsAjax(options);
+							var areas = ["MyTime", "Anywhere", "SeatPlanner", "Messages", "Reporting", "WFM"];
+							var areaToGo = ko.utils.arrayFirst(areas, function (a) {
+								var url = "/" + a + "/";
+								return window.location.href.toUpperCase().indexOf(url.toUpperCase()) !== -1;
+							});
+							var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+								return a.Area === "Anywhere";
+							});
+							var area;
+							if (areaToGo) {
+								area = areaToGo;
+								var returnHash = getCookie("returnHash");
+								if (returnHash && returnHash.indexOf("#") !==-1) {
+									returnHash = returnHash.substring(returnHash.indexOf("#"), returnHash.length);
+									deleteCookie("returnHash");
+									window.location.href = data.baseUrl + area + returnHash;
+									return;
+								}
+							} else {
+								if (anywhereApplication)
+									area = anywhereApplication.Area;
+								else if (applicationsData.length == 1)
+									area = applicationsData[0].Area;
+								else {
+									if (applicationsData.length > 1) {
+										gotoMenuView();
+									} else {
+										errormessage($('#Signin-error').data('nopermissiontext'));
+									}
+									return;
+								}
 
+							}
+
+							window.location.href = data.baseUrl + area;
+
+						}
+					});
+					applicationsAjax(options);
+				}
+				
 			},
 			error: error,
 			errormessage: errormessage
@@ -210,6 +240,65 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 		logonAjax(options);
 	};
+
+
+	function keepUrlAfterLogon(applicationsData, textState, jqXHR) {
+
+		var areaToGo;
+		var returnHash = getCookie("returnHash");
+		
+		if (applicationsData.length > 1) {
+
+			tryToGoToHash(returnHash);
+			tryToGoToAnyWhere();
+			tryToGoToFirstApplication();
+
+		} else if (applicationsData.length == 1) {
+
+			tryToGoToHash(returnHash);
+			tryToGoToFirstApplication();
+
+		} else {
+			errormessage($('#Signin-error').data('nopermissiontext'));
+			return;
+		}
+
+		if (typeof fatClientWebLogin !== 'undefined') {
+			authenticationDetailsAjax(authenticationModel.businessUnitId);
+		}
+
+		deleteCookie("returnHash");
+		window.location.href = data.baseUrl + areaToGo;
+
+
+		function tryToGoToHash(hash) {
+			if (areaToGo && areaToGo.length > 0) return;
+
+			var hasPermissionToGoToHash = applicationsData.some(function (app) {
+				return hash.indexOf(app.Name) === 0;
+			});
+			if (hasPermissionToGoToHash) {
+				areaToGo = hash;
+			}
+		}
+
+		function tryToGoToAnyWhere() {
+			if (areaToGo && areaToGo.length > 0) return;
+
+			var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+				return a.Name === "Anywhere";
+			});
+			if (anywhereApplication) {
+				areaToGo = anywhereApplication.Name;
+			}
+		}
+
+		function tryToGoToFirstApplication() {
+			if (areaToGo && areaToGo.length > 0) return;
+
+			areaToGo = applicationsData[0].Name;
+		}
+	}
 
 
 	var authenticationDetailsAjax = function (buId) {

@@ -7,33 +7,27 @@
 	<meta charset="UTF-8">
 	<script type="text/javascript">
 
-		if (typeof (Teleopti) === 'undefined') {
-			Teleopti = {};
-		}
-		if (typeof (Teleopti.Web) === 'undefined') {
-			Teleopti.Web = {};
-		}
-		Teleopti.Web.Areas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck'];
-		saveReturnHash();
+		var globalApplicationAreas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck'];
+		var areaToGoInTheUrl = globalApplicationAreas.filter(isAnyAreaInTheUrl)[0];
+		tryToSaveReturnHash(areaToGoInTheUrl);
 		redirect();
 
-		function saveReturnHash() {
-			var expiresTime = getTimeAfterFiveMinutes();
-			var expires = 'expires=' + expiresTime.toUTCString() + '; path=/';
-			var areaToGo = Teleopti.Web.Areas.filter(isAnyAreaInTheUrl)[0];
+		function tryToSaveReturnHash(areaToGo) {
+			
 			if (areaToGo === 'WFM') { // wfm project is handled in app.js
 				return;
 			} else if (areaToGo !== undefined) {
-				var cookie = 'returnHash=' + areaToGo + window.location.hash + '; ';
-				document.cookie = cookie + expires;
+				saveAreaToGoInCookie(areaToGo);
 			} else {
 				deleteCookie('returnHash');
 			}
 		}
 
-		function getTimeAfterFiveMinutes() {
-			var now = new Date();
-			return new Date(now.getTime() + (5 * 60 * 1000));
+		function saveAreaToGoInCookie(areaToGo) {
+			var expiresTime = new Date((new Date()).getTime() + (5 * 60 * 1000));
+			var expires = 'expires=' + expiresTime.toUTCString() + '; path=/';
+			var cookie = 'returnHash=' + areaToGo + window.location.hash + '; ';
+			document.cookie = cookie + expires;
 		}
 
 		function isAnyAreaInTheUrl(area) {
