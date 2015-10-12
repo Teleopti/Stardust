@@ -186,7 +186,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.AreEqual(mainShift.LayerCollection[2], layer);
         }
 
-
         [Test]
         public void VerifyCanMoveUp()
         {
@@ -227,29 +226,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
             Assert.IsFalse(mainShift.LayerCollection.CanMoveDownLayer(layerNotInCollection), "cannot move if not in collection");
             Assert.IsFalse(mainShift.LayerCollection.CanMoveDownLayer(null), "cannot move if null");
-        }
-      
-        [Test]
-        public void VerifyAddRange()
-        {
-            ActivityLayer layer1 = new ActivityLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-            ActivityLayer layer2 = new ActivityLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-            ActivityLayer layer3 = new ActivityLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-            ActivityLayer layer4 = new ActivityLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
-
-            LayerCollection<IActivity> newLayerCollection = new LayerCollection<IActivity>();
-            newLayerCollection.Add(layer2);
-            newLayerCollection.Add(layer3);
-            newLayerCollection.Add(layer4);
-
-            target.Add(layer1);
-            target.AddRange(newLayerCollection);
-
-            Assert.AreEqual(4, target.Count);
-            Assert.IsTrue(target.Contains(layer1));
-            Assert.IsTrue(target.Contains(layer2));
-            Assert.IsTrue(target.Contains(layer3));
-            Assert.IsTrue(target.Contains(layer4));
         }
     }
 }

@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
 			foreach (IShiftProjectionCache proj in shiftList)
 			{
-				if (!proj.MainShiftProjection.Period().HasValue) continue;
-				DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
+				var period = proj.MainShiftProjection.Period();
+				if (!period.HasValue) continue;
+				DateTimePeriod virtualPeriod = period.Value;
 				if (virtualPeriod.StartDateTime <= latestStart)
 				{
 					workShiftsWithinPeriod.Add(proj);

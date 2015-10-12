@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -18,23 +17,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// /// </remarks>
 	public class ShiftProjectionCache : IShiftProjectionCache
     {
-        private IEditableShift _mainShift;
+        private Lazy<IEditableShift> _mainShift;
         private readonly IWorkShift _workShift;
-        private TimeSpan? _workShiftProjectionContractTime;
-        private DateTimePeriod? _workShiftProjectionPeriod;
-	    private IVisualLayerCollection _mainshiftProjection;
+	    private Lazy<IVisualLayerCollection> _mainshiftProjection;
         private TimeZoneInfo _localTimeZoneInfo;
-        private DayOfWeek _dayOfWeek;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
+	    private readonly Lazy<IVisualLayerCollection> _workShiftProjection;
 
 	    protected ShiftProjectionCache()
         { }
 
-     
         public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
         { 
             _workShift = workShift;
+	        _workShiftProjection = new Lazy<IVisualLayerCollection>(()=>_workShift.ProjectionService().CreateProjection());
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
 
@@ -43,9 +40,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (_dateOnlyAsPeriod == null || _dateOnlyAsPeriod.DateOnly != schedulingDate || _localTimeZoneInfo.Id != localTimeZoneInfo.Id)
             {
                 _localTimeZoneInfo = localTimeZoneInfo;
-                _dayOfWeek = schedulingDate.DayOfWeek;
-	            _mainShift = null;
-                _mainshiftProjection = null;
+				_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _localTimeZoneInfo));
+				_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
 	            _dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(schedulingDate, localTimeZoneInfo);
             }           
         }
@@ -62,9 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 	        get
 	        {
-		        if (_mainShift == null)
-					_mainShift = _workShift.ToEditorShift(_dateOnlyAsPeriod, _localTimeZoneInfo);
-				return _mainShift;
+				return _mainShift.Value;
 	        }
         }
         /// <summary>
@@ -86,9 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get
             {
-                if (!_workShiftProjectionContractTime.HasValue)
-                    _workShiftProjectionContractTime = _workShift.ProjectionService().CreateProjection().ContractTime();
-                return _workShiftProjectionContractTime.Value;
+                return _workShiftProjection.Value.ContractTime();
             }
         }
 
@@ -96,9 +88,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get 
             {
-                if (!_workShiftProjectionPeriod.HasValue)
-                    _workShiftProjectionPeriod = _workShift.ProjectionService().CreateProjection().Period();
-                return _workShiftProjectionPeriod.Value;
+                return _workShiftProjection.Value.Period().Value;
             }
         }
 
@@ -113,11 +103,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// /// </remarks>
         public IVisualLayerCollection MainShiftProjection
         {
-            get
-            {
-                if (_mainshiftProjection == null)
-                    _mainshiftProjection = TheMainShift.ProjectionService().CreateProjection();
-                return _mainshiftProjection;
+            get {
+	            return _mainshiftProjection.Value;
             }
         }
 
@@ -125,8 +112,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			get { return new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection); }
 		}
-
-        public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }
 
         public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
         {
@@ -144,11 +129,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return true;
         }
 
-        public int ShiftCategoryDayOfWeekJusticeValue
-        {
-			get { return 0; }
-        }
-
     	public TimeSpan WorkShiftStartTime
     	{
 			get { return WorkShiftProjectionPeriod.StartDateTime.TimeOfDay; }
@@ -158,9 +138,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	{
 			get
 			{
-				var basedate = WorkShift.BaseDate;
-				double day = WorkShiftProjectionPeriod.EndDateTime.Date.Subtract(basedate).TotalDays;
-				return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Add(TimeSpan.FromDays(day));
+				return WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 			}
     	}
 

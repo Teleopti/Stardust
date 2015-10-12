@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -11,25 +11,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// </summary>
 	public class ProjectionPayloadMerger : ProjectionMerger
 	{
-		protected override IList<IVisualLayer> ModifyCollection(IList<IVisualLayer> clonedUnmergedCollection)
+		protected override IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection)
 		{
-			for (var i = clonedUnmergedCollection.Count - 1; i > 0; i--)
+			var result = clonedUnmergedCollection.ToList();
+			for (var i = result.Count - 1; i > 0; i--)
 			{
 				var indexOfPrevious = i - 1;
-				var currLayer = clonedUnmergedCollection[i];
-				var prevLayer = clonedUnmergedCollection[indexOfPrevious];
+				var currLayer = result[i];
+				var prevLayer = result[indexOfPrevious];
 				if (currLayer.Payload.OptimizedEquals(prevLayer.Payload)
 						&& currLayer.Period.AdjacentTo(prevLayer.Period)
 						&& currLayer.DefinitionSet == prevLayer.DefinitionSet)
 				{
-					clonedUnmergedCollection.Remove(currLayer);
-					clonedUnmergedCollection.Remove(prevLayer);
+					result.Remove(currLayer);
+					result.Remove(prevLayer);
 					var newLayerPeriod = new DateTimePeriod(prevLayer.Period.StartDateTime,
 					                                        prevLayer.Period.EndDateTime.Add(currLayer.Period.ElapsedTime()));
-					clonedUnmergedCollection.Insert(indexOfPrevious, prevLayer.CloneWithNewPeriod(newLayerPeriod));
+					result.Insert(indexOfPrevious, prevLayer.CloneWithNewPeriod(newLayerPeriod));
 				}
 			}
-			return clonedUnmergedCollection;
+			return result.ToArray();
 		}
 
 		public override object Clone()

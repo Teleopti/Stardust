@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public abstract class ProjectionMerger : IProjectionMerger
 	{
-		private IList<IVisualLayer> _mergedCollection;
+		private IVisualLayer[] _mergedCollection;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ProjectionMerger));
 
-		public IList<IVisualLayer> MergedCollection(IList<IVisualLayer> unmergedCollection, IPerson person)
+		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
 		{
 			if (_mergedCollection == null)
 			{
@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _mergedCollection;
 		}
 
-		protected abstract IList<IVisualLayer> ModifyCollection(IList<IVisualLayer> clonedUnmergedCollection);
+		protected abstract IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection);
 		public abstract object Clone();
 
-		private static IList<IVisualLayer> cloneUnMergedCollection(IList<IVisualLayer> unmergedCollection, IPerson person)
+		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
 		{
-			var layers = new List<IVisualLayer>(unmergedCollection.Count);
+			var layers = new List<IVisualLayer>(unmergedCollection.Length);
 			foreach (var layer in unmergedCollection)
 			{
 				var layerClone = (IVisualLayer)layer.EntityClone();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					casted.Person = person;
 				layers.Add(layerClone);
 			}
-			return layers;
+			return layers.ToArray();
 		}
 	}
 }

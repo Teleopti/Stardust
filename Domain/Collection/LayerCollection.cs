@@ -25,20 +25,20 @@ namespace Teleopti.Ccc.Domain.Collection
             return Items.Remove(item);
         }
 
-        public virtual void Add(ILayer<T> item)
-        {
-            InParameter.NotNull("layer", item);
-            if(_owner!=null)
-                _owner.OnAdd(item);
-            Items.Add(item);
-						var itemAsPersistedLayer = item as IAggregateEntity;
-					if (itemAsPersistedLayer != null)
-					{
-						itemAsPersistedLayer.SetParent((IEntity)_owner);						
-					}
-        }
+	    public virtual void Add(ILayer<T> item)
+	    {
+		    InParameter.NotNull("layer", item);
+		    if (_owner != null)
+			    _owner.OnAdd(item);
+		    Items.Add(item);
+		    var itemAsPersistedLayer = item as IAggregateEntity;
+		    if (itemAsPersistedLayer != null)
+		    {
+			    itemAsPersistedLayer.SetParent((IEntity) _owner);
+		    }
+	    }
 
-        public DateTimePeriod? Period()
+	    public DateTimePeriod? Period()
         {
 	        return Items.OuterPeriod();
         }
@@ -78,22 +78,17 @@ namespace Teleopti.Ccc.Domain.Collection
             Items.Clear();
         }
 
-        public void AddRange(ILayerCollection<T> layerCollection)
-        {
-            layerCollection.ForEach(Add);
-        }
+	    public void Insert(int index, ILayer<T> item)
+	    {
+		    var itemAsPersistedLayer = item as IAggregateEntity;
+		    if (itemAsPersistedLayer != null)
+		    {
+			    itemAsPersistedLayer.SetParent((IEntity) _owner);
+		    }
+		    Items.Insert(index, item);
+	    }
 
-        public void Insert(int index, ILayer<T> item)
-        {
-					var itemAsPersistedLayer = item as IAggregateEntity;
-					if (itemAsPersistedLayer != null)
-					{
-						itemAsPersistedLayer.SetParent((IEntity)_owner);
-					}
-           Items.Insert(index, item);
-        }
-
-        public void MoveUpLayer(ILayer<T> layer)
+	    public void MoveUpLayer(ILayer<T> layer)
         {
             var index = Items.IndexOf(layer);
             if (index == -1) return;

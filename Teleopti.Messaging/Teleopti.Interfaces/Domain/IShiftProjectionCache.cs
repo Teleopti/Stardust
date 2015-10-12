@@ -61,25 +61,12 @@ namespace Teleopti.Interfaces.Domain
         IVisualLayerCollection MainShiftProjection { get; }
 
         /// <summary>
-        /// Gets the day of week.
-        /// </summary>
-        /// <value>The day of week.</value>
-        DayOfWeek DayOfWeek { get; }
-
-        /// <summary>
         /// Personals the shifts and meetings are in work time.
         /// </summary>
         /// <param name="meetings">The meetings.</param>
-        /// <param name="personAssignments">The person assignments.</param>
+        /// <param name="personAssignment">The person assignments.</param>
         /// <returns></returns>
-        bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings,
-                                                    IPersonAssignment personAssignment);
-
-        /// <summary>
-        /// Get the Shift Category Justice Value for the day in the week.
-        /// </summary>
-        /// <returns>The Justice Value for the ShiftCategory</returns>
-        int ShiftCategoryDayOfWeekJusticeValue { get; }
+        bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment);
 
     	/// <summary>
     	/// 

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -17,14 +17,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_userZone = userZone;
 		}
 
-		protected override IList<IVisualLayer> ModifyCollection(IList<IVisualLayer> clonedUnmergedCollection)
+		protected override IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection)
 		{
 			IVisualLayer newStartLayer =null;
 			IVisualLayer newEndLayer=null;
 			int? layer2RemoveIndex =null;
-			for (var i = 0; i < clonedUnmergedCollection.Count; i++)
+			var result = clonedUnmergedCollection.ToList();
+			for (var i = 0; i < result.Count; i++)
 			{
-				var visualLayer = (VisualLayer)clonedUnmergedCollection[i];
+				var visualLayer = (VisualLayer)result[i];
 				var startLocal = visualLayer.Period.StartDateTimeLocal(_userZone);
 				var endLocal = visualLayer.Period.EndDateTimeLocal(_userZone);
 				if (spansTwoDays(startLocal, endLocal))
@@ -41,11 +42,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (layer2RemoveIndex.HasValue)
 			{
-				clonedUnmergedCollection.RemoveAt(layer2RemoveIndex.Value);
-				clonedUnmergedCollection.Insert(layer2RemoveIndex.Value, newEndLayer);
-				clonedUnmergedCollection.Insert(layer2RemoveIndex.Value, newStartLayer);
+				result.RemoveAt(layer2RemoveIndex.Value);
+				result.Insert(layer2RemoveIndex.Value, newEndLayer);
+				result.Insert(layer2RemoveIndex.Value, newStartLayer);
 			}
-			return clonedUnmergedCollection;
+			return result.ToArray();
 		}
 
 		private static IVisualLayer cloneLayerWithNewPeriod(VisualLayer orgLayer, DateTimePeriod newPeriod)

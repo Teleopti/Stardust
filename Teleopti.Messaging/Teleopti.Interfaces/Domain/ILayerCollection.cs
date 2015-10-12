@@ -36,16 +36,6 @@ namespace Teleopti.Interfaces.Domain
         DateTime? LatestEnd();
 
         /// <summary>
-        /// Adds a layercollection to this instance.
-        /// </summary>
-        /// <param name="layerCollection">The layer collection.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-28
-        /// </remarks>
-        void AddRange(ILayerCollection<T> layerCollection);
-
-        /// <summary>
         /// </summary>
         /// <param name="layer">The layer.</param>
         /// <remarks>

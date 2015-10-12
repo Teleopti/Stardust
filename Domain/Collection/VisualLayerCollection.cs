@@ -20,27 +20,38 @@ namespace Teleopti.Ccc.Domain.Collection
 	/// </remarks>
 	public class VisualLayerCollection : IVisualLayerCollection
 	{
-		private IFilterOnPeriodOptimizer _periodOptimizer;
 		private readonly IProjectionMerger _merger;
+		private readonly Lazy<IList<IVisualLayer>> _mergedCollection;
+		
 		private readonly Lazy<DateTimePeriod?> _period;
-		private readonly Lazy<TimeSpan> _contractTime;
+		private readonly Lazy<LayerCollectionNumbers> _timeNumbers;
 
-		public VisualLayerCollection(IPerson assignedPerson, IList<IVisualLayer> layerCollection, IProjectionMerger merger)
+		private Lazy<IFilterOnPeriodOptimizer> _periodOptimizer = new Lazy<IFilterOnPeriodOptimizer>(()=>new NextPeriodOptimizer());
+		
+		public VisualLayerCollection(IPerson assignedPerson, IEnumerable<IVisualLayer> layerCollection, IProjectionMerger merger)
 		{
-			UnMergedCollection = layerCollection;
+			UnMergedCollection = layerCollection.ToArray();
 			Person = assignedPerson;
 			_merger = merger;
-			HasLayers = UnMergedCollection.Count > 0;
+			HasLayers = UnMergedCollection.Length > 0;
 			_period = new Lazy<DateTimePeriod?>(extractPeriod);
-			_contractTime = new Lazy<TimeSpan>(() =>
+			_timeNumbers = new Lazy<LayerCollectionNumbers>(() =>
 			{
-				var ret = TimeSpan.Zero;
+				var ret = new LayerCollectionNumbers();
 				foreach (VisualLayer layer in UnMergedCollection)
 				{
-					ret = ret.Add(layer.ThisLayerContractTime());
+					ret = new LayerCollectionNumbers(
+						ret.WorkTime.Add(layer.WorkTime()),
+						ret.ContractTime.Add(layer.ThisLayerContractTime()),
+						ret.PaidTime.Add(layer.PaidTime()),
+						ret.ReadyTime.Add(layer.ReadyTime()),
+						ret.OverTime.Add((layer.DefinitionSet != null &&
+							layer.HighestPriorityAbsence == null &&
+							layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime) ? layer.WorkTime() : TimeSpan.Zero));
 				}
 				return ret;
 			});
+			_mergedCollection = new Lazy<IList<IVisualLayer>>(() => _merger.MergedCollection(UnMergedCollection, Person).ToList());
 		}
 
 		public bool HasLayers { get; private set; }
@@ -49,16 +60,14 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public IFilterOnPeriodOptimizer PeriodOptimizer
 		{
-			get
+			get { return _periodOptimizer.Value; }
+			set
 			{
-				if (_periodOptimizer == null)
-					_periodOptimizer = new NextPeriodOptimizer();
-				return _periodOptimizer;
+				_periodOptimizer = new Lazy<IFilterOnPeriodOptimizer>(()=>value);
 			}
-			set { _periodOptimizer = value; }
 		}
 
-		internal IList<IVisualLayer> UnMergedCollection { get; private set; }
+		internal IVisualLayer[] UnMergedCollection { get; private set; }
 
 
 		public bool IsSatisfiedBy(ISpecification<IVisualLayerCollection> specification)
@@ -68,69 +77,27 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public TimeSpan ReadyTime()
 		{
-			var ret = TimeSpan.Zero;
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				ret = ret.Add(layer.ReadyTime());
-			}
-			return ret;
+			return _timeNumbers.Value.ReadyTime;
 		}
 
 		public TimeSpan WorkTime()
 		{
-			var ret = TimeSpan.Zero;
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				ret = ret.Add(layer.WorkTime());
-			}
-			return ret;
+			return _timeNumbers.Value.WorkTime;
 		}
 
 		public TimeSpan PaidTime()
 		{
-			var ret = TimeSpan.Zero;
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				ret = ret.Add(layer.PaidTime());
-			}
-			return ret;
+			return _timeNumbers.Value.PaidTime;
 		}
 
 		public TimeSpan Overtime()
 		{
-			var ret = TimeSpan.Zero;
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				if (layer.DefinitionSet != null)
-				{
-					if (layer.HighestPriorityAbsence == null && 
-						layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
-						ret = ret.Add(layer.WorkTime());
-				}
-			}
-			return ret;
-		}
-
-		public IDictionary<string, TimeSpan> TimePerDefinitionSet()
-		{
-			IDictionary<string, TimeSpan> result = new Dictionary<string, TimeSpan>();
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				if (layer.DefinitionSet != null)
-				{
-					string definitionSetName = layer.DefinitionSet.Name;
-					if (!result.ContainsKey(definitionSetName))
-						result.Add(definitionSetName, TimeSpan.Zero);
-
-					result[definitionSetName] = result[definitionSetName].Add(layer.Period.ElapsedTime());
-				}
-			}
-			return result;
+			return _timeNumbers.Value.OverTime;
 		}
 
 		public TimeSpan ContractTime()
 		{
-			return _contractTime.Value;
+			return _timeNumbers.Value.ContractTime;
 		}
 
 		//borde göras om till en IProjectionMerger
@@ -226,7 +193,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
-			int collCount = UnMergedCollection.Count;
+			int collCount = UnMergedCollection.Length;
 			if (collCount > 0)
 			{
 				DateTime endDateTimeSearch = periodToSearch.EndDateTime;
@@ -264,12 +231,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public int Count()
 		{
-			return _merger.MergedCollection(UnMergedCollection, Person).Count;
+			return _mergedCollection.Value.Count;
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return ((IEnumerable<IVisualLayer>)this).GetEnumerator();
+			return _mergedCollection.Value.GetEnumerator();
 		}
 
 		public DateTimePeriod? Period()
@@ -279,28 +246,52 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private DateTimePeriod? extractPeriod()
 		{
-			switch (UnMergedCollection.Count)
+			switch (UnMergedCollection.Length)
 			{
 				case 0:
 					return null;
 				case 1:
 					return UnMergedCollection[0].Period;
 				default:
+					var startDateTime = UnMergedCollection[0].Period.StartDateTime;
+					var endDateTime = UnMergedCollection[UnMergedCollection.Length - 1].Period.EndDateTime;
+					if (endDateTime < startDateTime)
+					{
+						throw new ArgumentOutOfRangeException(string.Format("The start datetime cannot be greater than the layer end datetime. ({0} - {1})", startDateTime, endDateTime));
+					}
 					return
-						new DateTimePeriod(UnMergedCollection[0].Period.StartDateTime,
-										   UnMergedCollection[UnMergedCollection.Count - 1].Period.EndDateTime);
+						new DateTimePeriod(startDateTime,
+										   endDateTime);
 			}
 		}
 
 		IEnumerator<IVisualLayer> IEnumerable<IVisualLayer>.GetEnumerator()
 		{
-			return _merger.MergedCollection(UnMergedCollection, Person).GetEnumerator();
+			return _mergedCollection.Value.GetEnumerator();
+		}
+
+		private struct LayerCollectionNumbers
+		{
+			public LayerCollectionNumbers(TimeSpan workTime, TimeSpan contractTime, TimeSpan paidTime, TimeSpan readyTime, TimeSpan overTime) : this()
+			{
+				WorkTime = workTime;
+				ContractTime = contractTime;
+				PaidTime = paidTime;
+				ReadyTime = readyTime;
+				OverTime = overTime;
+			}
+
+			public TimeSpan WorkTime { get; private set; }
+			public TimeSpan ContractTime { get; private set; }
+			public TimeSpan OverTime { get; private set; }
+			public TimeSpan PaidTime { get; private set; }
+			public TimeSpan ReadyTime { get; private set; }
 		}
 	}
 
 	public class FilteredVisualLayerCollection : VisualLayerCollection,IFilteredVisualLayerCollection
 	{
-		public FilteredVisualLayerCollection(IPerson assignedPerson, IList<IVisualLayer> layerCollection, IProjectionMerger merger, IVisualLayerCollection original) : base(assignedPerson, layerCollection, merger)
+		public FilteredVisualLayerCollection(IPerson assignedPerson, IEnumerable<IVisualLayer> layerCollection, IProjectionMerger merger, IVisualLayerCollection original) : base(assignedPerson, layerCollection, merger)
 		{
 			if (original!=null)
 			{

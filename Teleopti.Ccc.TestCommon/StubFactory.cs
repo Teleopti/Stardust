@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.TestCommon
 			//return projection;
 
 			// extremely ugly, but I find no better way of stubbing this hybrid collection class
-			var visualLayers = new List<IVisualLayer>(visualLayerCollection);
+			var visualLayers = visualLayerCollection.ToArray();
 			var projectionMerger = MockRepository.GenerateMock<IProjectionMerger>();
 			projectionMerger.Stub(x => x.MergedCollection(visualLayers, null)).IgnoreArguments().Return(visualLayers);
 			var projection = new VisualLayerCollection(null, visualLayers, projectionMerger);

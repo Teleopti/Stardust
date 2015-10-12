@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -50,15 +49,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 DateTime endTime = _layerCollectionOriginal.LatestEnd().Value;
                 DateTime currentTime = startTimeTemp.Value;
-                IVisualLayer workingLayer;
 
-                while (currentTime < endTime)
+	            while (currentTime < endTime)
                 {
                     bool layerFound = false;
                     for (int inverseLoop = _layerCollectionOriginal.Count - 1; inverseLoop >= 0; inverseLoop--)
                     {
-                        workingLayer = (IVisualLayer)_layerCollectionOriginal[inverseLoop];
-                        if (workingLayer.Period.Contains(currentTime))
+	                    var workingLayer = (IVisualLayer)_layerCollectionOriginal[inverseLoop];
+	                    if (workingLayer.Period.Contains(currentTime))
                         {
                             DateTime layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime);
                             IVisualLayer newLayer = _standardVisualLayerFactory.CreateResultLayer(workingLayer.Payload, 
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                             break;
                         }
                     }
-                    if (!layerFound)
+	                if (!layerFound)
                         currentTime = findNextTimeSlot(currentTime);
                 }
             }

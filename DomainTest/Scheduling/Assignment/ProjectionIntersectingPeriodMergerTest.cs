@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			             		createLayer(new DateTimePeriod(2000, 1, 1, 2001, 1, 1)),
 			             		createLayer(new DateTimePeriod(2001, 1, 1, 2002, 1, 1)),
 			             		createLayer(new DateTimePeriod(2004, 1, 1, 2005, 1, 1))
-			             	};
-			Assert.AreEqual(2, target.MergedCollection(layers, person).Count);
+			             	}.ToArray();
+			Assert.AreEqual(2, target.MergedCollection(layers, person).Length);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			             		createLayer(new DateTimePeriod(2012, 1, 1, 2013, 1, 1)),
 			             		createLayer(new DateTimePeriod(2013, 1, 1, 2014, 1, 1)),
 			             		createLayer(new DateTimePeriod(2014, 1, 1, 2015, 1, 1)),
-			             	};
+			             	}.ToArray();
 
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2003, 1, 1), target.MergedCollection(layers, person).First().Period);
 			Assert.AreEqual(new DateTimePeriod(2010, 1, 1, 2015, 1, 1), target.MergedCollection(layers, person).Last().Period);

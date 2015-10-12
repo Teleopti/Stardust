@@ -68,12 +68,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		TimeSpan Overtime();
 
-        /// <summary>
-        /// Times the per definition set.
-        /// </summary>
-        /// <returns></returns>
-	    IDictionary<string, TimeSpan> TimePerDefinitionSet();
-
 		/// <summary>
 		/// Gets the period of the hole collection.
 		/// </summary>

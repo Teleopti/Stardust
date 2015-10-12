@@ -15,6 +15,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="unmergedCollection"></param>
 		/// <param name="person"></param>
 		/// <returns></returns>
-		IList<IVisualLayer> MergedCollection(IList<IVisualLayer> unmergedCollection, IPerson person);
+		IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person);
 	}
 }

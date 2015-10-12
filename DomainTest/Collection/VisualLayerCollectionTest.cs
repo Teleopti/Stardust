@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 	[TestFixture]
 	public class VisualLayerCollectionTest
 	{
-		private IVisualLayerCollection target;
 		private IList<IVisualLayer> internalCollection;
 		private IActivity dummyPayload;
 		private IPerson dummyPerson;
@@ -27,16 +29,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			visualLayerOvertimeFactory = new VisualLayerOvertimeFactory();
 			dummyPerson = PersonFactory.CreatePerson("dummy");
 			internalCollection = new List<IVisualLayer>();
-			target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-									 {
-										 PeriodOptimizer = new FilterLayerNoOptimizer()
-									 };
+
 			dummyPayload = ActivityFactory.CreateActivity("f");
 		}
 
 		[Test]
 		public void VerifyPeriod()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.IsNull(target.Period());
 
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPayload));
@@ -62,7 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(vLayer1);
 			internalCollection.Add(vLayer2);
 			internalCollection.Add(vLayer3);
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			IList<IVisualLayer> enumeratorRet = new List<IVisualLayer>();
 			foreach (IVisualLayer layer in target)
 			{
@@ -83,7 +89,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPerson));
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okNoActivity, new DateTimePeriod(2001, 1, 1, 2002, 1, 1), dummyPerson));
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(okActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1), dummyPerson));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			IVisualLayerCollection ret = target.FilterLayers(okActivity);
 			Assert.AreEqual(2, ret.Count());
 			Assert.AreEqual(0, target.FilterLayers(ActivityFactory.CreateActivity("sdf")).Count());
@@ -93,23 +102,31 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyHasLayers()
 		{
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPerson));
-			target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
 			{
 				PeriodOptimizer = new FilterLayerNoOptimizer()
 			};
+			target.HasLayers.Should().Be.True();
 		}
 
 		[Test]
 		public void VerifyHasNotLayers()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.IsFalse(target.HasLayers);
 		}
 
 		[Test]
 		public void PersonShouldBeSetOnLayerWhenEnumerating()
 		{
-			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload,
-																											new DateTimePeriod(2000, 1, 1, 2001, 1, 1), null));
+			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), null));
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreNotSame(dummyPerson, ((VisualLayer)internalCollection.First()).Person);
 			Assert.AreSame(dummyPerson, ((VisualLayer)target.First()).Person);
 		}
@@ -122,7 +139,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 													new DateTimePeriod(new DateTime(2006, 1, 1, 18, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc)), dummyPerson));
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone,
 													new DateTimePeriod(new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 2, 6, 0, 0, DateTimeKind.Utc)), dummyPerson));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			IVisualLayerCollection ret =
 					target.FilterLayers(
 							new DateTimePeriod(new DateTime(2006, 1, 1, 23, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 23, 15, 0, DateTimeKind.Utc)));
@@ -144,7 +164,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(
 					visualLayerFactory.CreateShiftSetupLayer(phone,
 													new DateTimePeriod(new DateTime(2006, 1, 1, 0, 9, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 15, 0, DateTimeKind.Utc)), dummyPerson));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			IVisualLayerCollection ret =
 					target.FilterLayers(
 							new DateTimePeriod(new DateTime(2006, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2006, 1, 1, 0, 15, 0, DateTimeKind.Utc)));
@@ -174,7 +197,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				period = period.MovePeriod(TimeSpan.FromDays(1));
 				internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(phone, period, dummyPerson));
 			}
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			IVisualLayerCollection ret =
 					target.FilterLayers(
 							new DateTimePeriod(new DateTime(2006, 1, 30, 1, 15, 0, DateTimeKind.Utc), new DateTime(2006, 1, 30, 1, 20, 0, DateTimeKind.Utc)));
@@ -187,7 +213,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyIsSatisfiedBy()
 		{
 			MockRepository mocks = new MockRepository();
-			ISpecification<IVisualLayerCollection> spec = mocks.StrictMock<ISpecification<IVisualLayerCollection>>();
+			ISpecification<IVisualLayerCollection> spec = mocks.StrictMock<ISpecification<IVisualLayerCollection>>(); 
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			using (mocks.Record())
 			{
 				using (mocks.Ordered())
@@ -208,16 +238,23 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyDefaultPeriodOptimizer()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			//defined here at the test
 			Assert.AreEqual(typeof(FilterLayerNoOptimizer), target.PeriodOptimizer.GetType());
 			//default one
 			Assert.AreEqual(typeof(NextPeriodOptimizer), new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger()).PeriodOptimizer.GetType());
 		}
 
-		#region ContractTime tests
 		[Test]
 		public void VerifyContractTimeReturnsZeroIfNoLayers()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(0), target.ContractTime());
 		}
 
@@ -225,14 +262,20 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyContractTimeOneActivityInContractTime()
 		{
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.ContractTime());
 		}
 		[Test]
 		public void VerifyContractTimeOneActivityNotInContractTime()
 		{
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), false));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.Zero, target.ContractTime());
 		}
 		[Test]
@@ -241,7 +284,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), false));
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 3, 2000, 1, 4), true));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), target.ContractTime());
 		}
 
@@ -254,7 +300,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), true, false));
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 3, 2000, 1, 4), false, true));
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 4, 2000, 1, 5), false, false));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.ContractTime());
 		}
 
@@ -283,16 +332,20 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activityNotInContractTimePeriod, false), absence2Period));
 			internalCollection.Add(visualLayerFactory.CreateAbsenceSetupLayer(absence, createLayer(activity2Period, true), absence3Period));
 			internalCollection.Add(createLayer(afterAbsencePeriod, true));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.FromMinutes(30), target.ContractTime(absence1Period.MovePeriod(TimeSpan.FromMinutes(30))));
 		}
 
-		#endregion
-
-		#region ReadyTime tests
 		[Test]
 		public void VerifyReadyTimeReturnsZeroIfNoLayers()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(0), target.ReadyTime());
 		}
 
@@ -300,23 +353,34 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyReadyTimeOneActivityInReadyTime()
 		{
 			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.ReadyTime());
 		}
+
 		[Test]
 		public void VerifyReadyTimeOneActivityNotInContractTime()
 		{
 			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), false));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.Zero, target.ReadyTime());
 		}
+
 		[Test]
 		public void VerifyReadyTimeMultipleActivities()
 		{
 			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
 			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), false));
 			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 3, 2000, 1, 4), true));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), target.ReadyTime());
 		}
 
@@ -325,12 +389,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
 			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), false));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.Zero, target.ReadyTime());
 		}
-		#endregion
-
-		#region Overtime tests
+		
 		[Test]
 		public void VerifyOvertime()
 		{
@@ -348,13 +413,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 3, 2000, 1, 4), activity));
 
 			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 4, 2000, 1, 5), false));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.FromDays(2), target.Overtime());
-			IDictionary<string, TimeSpan> ret = target.TimePerDefinitionSet();
-			Assert.AreEqual(3, ret.Count);
-			Assert.AreEqual(TimeSpan.FromDays(1), ret["overtime"]);
-			Assert.AreEqual(TimeSpan.FromDays(1), ret["ob"]);
-			Assert.AreEqual(TimeSpan.FromDays(1), ret["overtime1"]);
 		}
 
 		[Test]
@@ -369,12 +432,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(activity, activityPeriod, dummyPerson));
 			internalCollection.Add(createLayerWithOvertime(set, overTimePeriod));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(TimeSpan.FromMinutes(30), target.Overtime(overTimePeriod.MovePeriod(TimeSpan.FromMinutes(-30))));
 			Assert.AreEqual(TimeSpan.FromMinutes(15), target.Overtime(activityPeriod.MovePeriod(TimeSpan.FromMinutes(15))));
 			Assert.AreEqual(TimeSpan.FromMinutes(0), target.Overtime(activityPeriod));
 		}
-
 
 		[Test]
 		public void ShouldOnlyCalculateOvertimeForActivitiesInworktime()
@@ -393,8 +458,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			var activityPeriodAfter = new DateTimePeriod(new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc));
 			internalCollection.Add(createLayerWithOvertime(set, activityPeriodAfter, overtimePhoneActivity));
-
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			var overtime = target.Overtime();
 			Assert.AreEqual(2, overtime.TotalHours);
 
@@ -404,12 +471,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Assert.AreEqual(2, overtime.TotalHours);
 		}
 
-		#endregion
-
-		#region PaidTime tests
 		[Test]
 		public void VerifyPaidTimeReturnsZeroIfNoLayers()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(0), target.PaidTime());
 		}
 
@@ -419,7 +487,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerInPaidTime(true, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			internalCollection.Add(createLayerInPaidTime(false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 			internalCollection.Add(createLayerInPaidTime(true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), target.PaidTime());
 		}
 
@@ -432,7 +503,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerInPaidTime(true, false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 			internalCollection.Add(createLayerInPaidTime(false, true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
 			internalCollection.Add(createLayerInPaidTime(false, false, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.PaidTime());
 		}
 
@@ -445,15 +519,20 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerInPaidTime(true, false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 			internalCollection.Add(createLayerInPaidTime(false, true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
 			internalCollection.Add(createLayerInPaidTime(false, false, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.PaidTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 		}
-		#endregion
-
-		#region WorkTime tests
+		
 		[Test]
 		public void VerifyWorkTimeReturnsZeroIfNoLayers()
 		{
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(0), target.WorkTime());
 		}
 
@@ -463,7 +542,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerInWorkTime(true, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			internalCollection.Add(createLayerInWorkTime(false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 			internalCollection.Add(createLayerInWorkTime(true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), target.WorkTime());
 		}
 
@@ -476,20 +558,19 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			internalCollection.Add(createLayerInWorkTime(true, false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 			internalCollection.Add(createLayerInWorkTime(false, true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
 			internalCollection.Add(createLayerInWorkTime(false, false, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
-
+			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
+			{
+				PeriodOptimizer = new FilterLayerNoOptimizer()
+			};
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.WorkTime());
 		}
-		#endregion
-
-
-
+		
 		private IVisualLayer createLayer(DateTimePeriod period, IActivity activity)
 		{
 			return visualLayerFactory.CreateShiftSetupLayer(activity, period, dummyPerson);
 		}
 
-		private IVisualLayer createLayer(DateTimePeriod period,
-																						bool activityInContractTime)
+		private IVisualLayer createLayer(DateTimePeriod period, bool activityInContractTime)
 		{
 			IActivity activity = ActivityFactory.CreateActivity("for test");
 			activity.InContractTime = activityInContractTime;
@@ -532,7 +613,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			return ret;
 		}
 
-
 		private IVisualLayer createLayerInPaidTime(bool inPaidTime, DateTimePeriod period)
 		{
 			IActivity underActivity = ActivityFactory.CreateActivity("for test");
@@ -552,9 +632,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			return ret;
 		}
 
-		private IVisualLayer createLayer(DateTimePeriod period,
-																		bool activityInContractTime,
-																		bool absenceInContractTime)
+		private IVisualLayer createLayer(DateTimePeriod period, bool activityInContractTime, bool absenceInContractTime)
 		{
 			IAbsence absence = AbsenceFactory.CreateAbsence("vacation");
 			absence.InContractTime = absenceInContractTime;
@@ -565,8 +643,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			return ret;
 		}
 
-		private IVisualLayer createVisualLayerWithActivityForReadyTime(DateTimePeriod period,
-																						bool activityInReadyTime)
+		private IVisualLayer createVisualLayerWithActivityForReadyTime(DateTimePeriod period, bool activityInReadyTime)
 		{
 			IActivity payload = createActivity(activityInReadyTime);
 			IVisualLayer ret = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
@@ -585,6 +662,43 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IActivity payload = createActivity(activityInReadyTime);
 			IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(payload, period, dummyPerson);
 			return visualLayerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
+		}
+	}
+
+	public class VisualLayerCollectionFilterTest
+	{
+		[Test]
+		public void ShouldFilterAbsence([Range(1,10)] int r)
+		{
+			var phone1 = ActivityFactory.CreateActivity("Phone1");
+			var phone2 = ActivityFactory.CreateActivity("Phone2");
+			var workShift = new WorkShift(ShiftCategoryFactory.CreateShiftCategory());
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone2, new DateTimePeriod(WorkShift.BaseDate.AddHours(3), WorkShift.BaseDate.AddHours(10d / 3))));
+			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone1,new DateTimePeriod(WorkShift.BaseDate.AddHours(3.4),WorkShift.BaseDate.AddHours(3.5))));
+			var workShiftCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+			workShiftCache.SetDate(new DateOnly(2015,10,25), TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			workShiftCache.MainShiftProjection.Period().HasValue.Should().Be.True();
+
+			/*
+			var scheduledDay = ScheduleDayFactory.Create(new DateOnly(2010, 1, 1));
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 10, 2010, 1, 1, 17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,8,2010,1,1,9), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,9,2010,1,1,17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,11,2010,1,1,17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 12, 2010, 1, 1, 17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2010, 1, 1, 15, 2010, 1, 1, 17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,13,2010,1,1,17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,14,2010,1,1,17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),new DateTimePeriod(2010,1,1,16,2010,1,1,17), shiftCategory);
+			scheduledDay.CreateAndAddActivity(ActivityFactory.CreateActivity("Lunch"),new DateTimePeriod(2010,1,1,12,2010,1,1,13), shiftCategory);
+			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 9, 2010, 1, 1, 13)));
+			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 12, 2010, 1, 1, 13)));
+			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"), new DateTimePeriod(2010, 1, 1, 11, 2010, 1, 1, 13)));
+			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"),new DateTimePeriod(2010,1,1,10,2010,1,1,13)));
+			scheduledDay.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("Komp"),new DateTimePeriod(2010,1,1,18,2010,1,1,19)));
+
+			scheduledDay.ProjectionService().CreateProjection().FilterLayers<IAbsence>().Period().HasValue.Should().Be.True();*/
 		}
 	}
 }

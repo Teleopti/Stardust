@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					if (periodValueCalculationParameters.HasMaxSeatSkill
 					    && periodValueCalculationParameters.MaxSeatsFeatureOption != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 					{
-						var maxSeatReached = new IntervalLevelMaxSeatInfo();
+						IntervalLevelMaxSeatInfo maxSeatReached;
 						var maxSeatsPerIntervalDictionary = periodValueCalculationParameters.MaxSeatInfoPerInterval;
 						if (!maxSeatsPerIntervalDictionary.TryGetValue(currentSkillStaffPeriodKey, out maxSeatReached))
 						{

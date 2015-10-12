@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
     public abstract class FilterLayerBaseTest
     {
-        private IVisualLayerCollection target;
         private IList<IVisualLayer> internalCollection;
         private IVisualLayerFactory layerFactory;
     	private IPerson person;
@@ -22,9 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             layerFactory = new VisualLayerFactory();
             internalCollection = new List<IVisualLayer>();
         	person = PersonFactory.CreatePerson();
-            target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
             Optimizer = CreateOptimizer();
-            target.PeriodOptimizer = Optimizer;
         }
 
         protected abstract IFilterOnPeriodOptimizer CreateOptimizer();
@@ -33,22 +30,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         [Test]
         public void VerifyFilterPeriod()
-        {
-            internalCollection.Add(createLayer(10, 11));
+		{
+			internalCollection.Add(createLayer(10, 11));
             internalCollection.Add(createLayer(12, 13));
             internalCollection.Add(createLayer(14, 15));
             internalCollection.Add(createLayer(16, 17));
             internalCollection.Add(createLayer(17, 18));
-            Assert.AreEqual(3, target.FilterLayers(createPeriod(12, 17)).Count());
+			
+			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			target.PeriodOptimizer = Optimizer;
+
+			Assert.AreEqual(3, target.FilterLayers(createPeriod(12, 17)).Count());
             Assert.AreEqual(1, target.FilterLayers(createPeriod(17, 18)).Count()); //opt
             Assert.AreEqual(1, target.FilterLayers(createPeriod(8, 12)).Count()); //non opt
         }
 
         [Test]
         public void VerifyDoNotCrashZeroHits()
-        {
+		{
             internalCollection.Add(createLayer(10, 12));
             internalCollection.Add(createLayer(13, 14));
+
+			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			target.PeriodOptimizer = Optimizer;
+
             Assert.AreEqual(0, target.FilterLayers(createPeriod(9, 10)).Count());
             Assert.AreEqual(1, target.FilterLayers(createPeriod(11, 12)).Count());
             Assert.AreEqual(1, target.FilterLayers(createPeriod(13, 14)).Count());
@@ -60,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         [Test, Explicit("Keep this for perf test")]
         public void PerformanceTestToRunWithDotTrace()
-        {
-            internalCollection.Add(createLayer(4, 7));
+		{
+			internalCollection.Add(createLayer(4, 7));
             internalCollection.Add(createLayer(7, 10));
             internalCollection.Add(createLayer(11, 14));
 
@@ -69,7 +74,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             internalCollection.Add(createLayer(21, 24));
             internalCollection.Add(createLayer(24, 27));
 
-            Assert.AreEqual(0, target.FilterLayers(createPeriod(2, 3)).Count());
+			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			target.PeriodOptimizer = Optimizer;
+
+			Assert.AreEqual(0, target.FilterLayers(createPeriod(2, 3)).Count());
             Assert.AreEqual(0, target.FilterLayers(createPeriod(3, 4)).Count());
             Assert.AreEqual(1, target.FilterLayers(createPeriod(4, 5)).Count());
             Assert.AreEqual(1, target.FilterLayers(createPeriod(5, 6)).Count());
@@ -103,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         private static DateTimePeriod createPeriod(int startHour, int endHour)
         {
-            DateTime date = TimeZoneHelper.ConvertToUtc(new DateTime(2000, 1, 1));
+	        var date = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return new DateTimePeriod(date.AddHours(startHour), date.AddHours(endHour));
         }
     }
