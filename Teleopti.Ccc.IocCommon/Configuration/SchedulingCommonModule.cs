@@ -305,9 +305,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
+
+			builder.RegisterType<ScheduleOptimization>().AsSelf().SingleInstance();
 		}
 
-		private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
+		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
 		{
 			builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>().InstancePerLifetimeScope();
 			builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>().InstancePerLifetimeScope();
@@ -318,7 +320,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>().InstancePerLifetimeScope();
 		}
 
-		private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
+		private static void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
 			builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
@@ -342,7 +344,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>().InstancePerLifetimeScope();
 		}
 
-		private void registerFairnessOptimizationService(ContainerBuilder builder)
+		private static void registerFairnessOptimizationService(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().InstancePerLifetimeScope();

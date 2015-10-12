@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.WebLegacy
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	[Serializable]
 	public class OptimizationResultModel
