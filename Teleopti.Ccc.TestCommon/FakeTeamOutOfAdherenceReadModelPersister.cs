@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeTeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister
+	public class FakeTeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader
 	{
 		private readonly List<TeamOutOfAdherenceReadModel> _models = new List<TeamOutOfAdherenceReadModel>();
 
@@ -34,6 +35,11 @@ namespace Teleopti.Ccc.TestCommon
 		public void Clear()
 		{
 			_models.Clear();
+		}
+
+		public void Has(TeamOutOfAdherenceReadModel model)
+		{
+			_models.Add(model);
 		}
 	}
 }

@@ -23,7 +23,7 @@ Scenario: Should be able to see agents for multiple sites
 	 | Field      | Value       |
 	 | Team       | Team London |
 	 | Start Date | 2014-01-21  |
-	When I view Real time adherence overview
+	When  I view Real time adherence sites
 	And I click the site checkbox for 'London'
 	And I click the site checkbox for 'Paris'
 	And I click 'open'

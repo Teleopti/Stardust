@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I click the team checkbox for '(.*)'")]
 		public void WhenIClickTheCheckboxFor(string name)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format(".checkbox[name='{0}']", name));
+			Browser.Interactions.Click(string.Format("[name='{0}']", name));
 		}
 
 		[When(@"I choose business unit '(.*)'")]

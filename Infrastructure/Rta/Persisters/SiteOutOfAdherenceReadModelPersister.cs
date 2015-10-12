@@ -83,18 +83,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return result;
 		}
 
-		public IEnumerable<SiteOutOfAdherenceReadModel> Read(Guid[] siteIds)
+		public IEnumerable<SiteOutOfAdherenceReadModel> Read()
 		{
 			return _unitOfWork.Current()
 			.CreateSqlQuery(
 				"SELECT " +
 				"SiteId," +
 				"Count " +
-				"FROM ReadModel.SiteOutOfAdherence " +
-				"WHERE SiteId IN(:siteIds)")
+				"FROM ReadModel.SiteOutOfAdherence")
 			.AddScalar("SiteId", NHibernateUtil.Guid)
 			.AddScalar("Count", NHibernateUtil.Int32)
-			.SetParameterList("siteIds", siteIds)
 			.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
 			.List()
 			.Cast<SiteOutOfAdherenceReadModel>();

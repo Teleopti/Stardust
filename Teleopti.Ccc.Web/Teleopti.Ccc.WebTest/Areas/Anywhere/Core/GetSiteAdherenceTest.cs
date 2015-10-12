@@ -10,54 +10,62 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 {
 	[TestFixture]
-	public class GetSiteAdherenceTest
+	[IoCTest]
+	public class GetSiteAdherenceTest : ISetup
 	{
+		public IGetSiteAdherence Target;
+		public FakeSiteRepository Sites;
+		public FakeSiteOutOfAdherenceReadModelPersister OutOfAdherence;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebAppModule(configuration));
+			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelReader>();
+		}
+
 		[Test]
-		public void ShouldReadAdherenceForAllPermittedSitesFromReadModel()
+		public void ShouldReturnOutOfAdherenceCount()
 		{
 			var site = new Site("s").WithId();
-			var permittedSites = new[] {site};
-			var now = new Now();
-			var siteAdherencePersister = MockRepository.GenerateMock<ISiteOutOfAdherenceReadModelReader>();
-			var availableSitesProvider = MockRepository.GenerateMock<IPersonalAvailableDataProvider>();
-			siteAdherencePersister.Stub(x => x.Read(new[]{site.Id.Value}))
-				.Return(new List<SiteOutOfAdherenceReadModel>()
-			          {
-				          new SiteOutOfAdherenceReadModel()
-				          {
-					          SiteId = site.Id.GetValueOrDefault(),
-					          Count = 1
-				          }
-			          });
-			availableSitesProvider.Stub(x => x.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, now.LocalDateOnly()))
-				.Return(permittedSites);
-
-			var target = new GetSiteAdherence(siteAdherencePersister, availableSitesProvider, now);
-
-			var result = target.ReadAdherenceForAllPermittedSites();
+			Sites.Has(site);
+			OutOfAdherence.Has(new SiteOutOfAdherenceReadModel
+			{
+				SiteId = site.Id.Value,
+				Count = 1
+			});
+			
+			var result = Target.OutOfAdherence();
 
 			result.Single().Id.Should().Be(site.Id.ToString());
 			result.Single().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
-		public void ShouldReturnEmtpyIfNotSiteAvailable()
+		public void ShouldReturnSitesWithoutAdherence()
 		{
-			var now = new Now();
-			var availableSitesProvider = MockRepository.GenerateMock<IPersonalAvailableDataProvider>();
-			availableSitesProvider.Stub(x => x.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, now.LocalDateOnly()))
-				.Return(new List<ISite>());
+			var site = new Site("s").WithId();
+			Sites.Has(site);
+			
+			var result = Target.OutOfAdherence();
 
-			var target = new GetSiteAdherence(null, availableSitesProvider, now);
-
-			var result = target.ReadAdherenceForAllPermittedSites();
-
-			result.Should().Be.Empty();
+			result.Single().Id.Should().Be(site.Id.ToString());
+			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}
 }

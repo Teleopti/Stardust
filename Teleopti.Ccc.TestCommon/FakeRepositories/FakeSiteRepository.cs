@@ -9,10 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSiteRepository : ISiteRepository
 	{
-		private List<ISite> _sites = new List<ISite>(); 
+		private List<ISite> _data = new List<ISite>(); 
+
 		public void Add(ISite root)
 		{
-			_sites.Add(root);
+			_data.Add(root);
 		}
 
 		public void Remove(ISite root)
@@ -20,19 +21,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public void Has(ISite site)
+		{
+			_data.Add(site);
+		}
+
 		public ISite Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _data.Single(x => x.Id == id);
 		}
 
 		public IList<ISite> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _data;
 		}
 
 		public ISite Load(Guid id)
 		{
-			return _sites.First(x => x.Id.Equals(id));
+			return _data.First(x => x.Id.Equals(id));
 		}
 
 		public long CountAllEntities()

@@ -6,14 +6,24 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeSiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister
+	public class FakeSiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister, ISiteOutOfAdherenceReadModelReader
 	{
 		private readonly List<SiteOutOfAdherenceReadModel> _models = new List<SiteOutOfAdherenceReadModel>();
+
+		public void Has(SiteOutOfAdherenceReadModel model)
+		{
+			Persist(model);
+		}
 
 		public void Persist(SiteOutOfAdherenceReadModel model)
 		{
 			_models.RemoveAll(x => x.SiteId == model.SiteId);
 			_models.Add(model);
+		}
+
+		public IEnumerable<SiteOutOfAdherenceReadModel> Read()
+		{
+			return _models;
 		}
 
 		public SiteOutOfAdherenceReadModel Get(Guid siteId)
@@ -35,5 +45,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _models.Any();
 		}
+
 	}
 }

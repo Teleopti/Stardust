@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 							new SiteOutOfAdherence(){Id="Site2",OutOfAdherence = 5}
 						};
 		
-			getAdherence.Stub(g => g.ReadAdherenceForAllPermittedSites()).Return(sites);
+			getAdherence.Stub(g => g.OutOfAdherence()).Return(sites);
 
 			var result = target.GetOutOfAdherenceForAllSites().Data as IEnumerable<SiteOutOfAdherence>;
 

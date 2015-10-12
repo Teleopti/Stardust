@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public interface ISiteOutOfAdherenceReadModelReader
 	{
-		IEnumerable<SiteOutOfAdherenceReadModel> Read(Guid[] siteIds);
+		IEnumerable<SiteOutOfAdherenceReadModel> Read();
 	}
 
 	public interface ISiteOutOfAdherenceReadModelPersister

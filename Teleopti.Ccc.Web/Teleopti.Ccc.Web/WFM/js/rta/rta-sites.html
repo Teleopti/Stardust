@@ -1,13 +1,13 @@
 ﻿<div class="row">
   <div class="rta-header">
     <h3>Sites</h3>
-    <button class="wfm-btn wfm-btn-primary" ng-click="openSelectedSites(selectedSites)">Open selected</button>
+    <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedSites(selectedSites)">Open selected</button>
 	</div>
   <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{'rta-grid': sites.length > 5}">
     <div class="rta-stats site">
       <div class="wfm-checkbox">
-        <label>
-        <input type="checkbox" name="checkbox" value="value" ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)">
+        <label style="width: 20px; height: 20px;" ng-attr-name="{{site.Name}}">
+        <input type="checkbox" value="value" ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)">
         <span class="wfm-checkbox-toggle"></span>
         </label>
       </div>

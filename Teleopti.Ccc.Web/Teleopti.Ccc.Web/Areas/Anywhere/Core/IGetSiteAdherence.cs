@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public interface IGetSiteAdherence
 	{
-		IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllPermittedSites();
+		IEnumerable<SiteOutOfAdherence> OutOfAdherence();
 	}
 }

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = siteId1, BusinessUnitId = bu1A, Count = 1 });
 			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = siteId2, BusinessUnitId = bu1A, Count = 2 });
 			
-			var models = Reader.Read(new []{siteId1, siteId2});
+			var models = Reader.Read();
 			models.Should().Have.Count.EqualTo(2);
 			models.Single(x => x.SiteId == siteId1).Count.Should().Be(1);
 			models.Single(x => x.SiteId == siteId2).Count.Should().Be(2);

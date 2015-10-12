@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
 		public virtual JsonResult GetOutOfAdherenceForAllSites()
 		{
-			return Json(_getAdherence.ReadAdherenceForAllPermittedSites(), JsonRequestBehavior.AllowGet);
+			return Json(_getAdherence.OutOfAdherence(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
