@@ -83,7 +83,7 @@
 				if (!$scope.graph) return;
 				$scope.campaign.selectedDates = [];
 				$scope.campaign.selectedDatesClosed = [];
-				$scope.campaign.WarningInfo = data.WarningInfo;
+				if (data) $scope.campaign.WarningInfo = data.WarningInfo;
 
 				var yMax = _calculateYMax();
 
