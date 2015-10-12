@@ -442,6 +442,7 @@
     <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
+    <Compile Include="Areas\Global\GlobalAreaController.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\StatusController.cs" />
@@ -461,6 +462,8 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\AreaWithPermissionPathProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IAreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />

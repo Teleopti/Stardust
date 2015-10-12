@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
@@ -13,9 +14,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotGetUnpermittedModules()
 		{
 			var toggleManager = new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892);
-			var target = new ApplicationController(new FakeNoPermissionProvider(), toggleManager);
-			var result = target.GetAreas();
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager);
+			var target = new ApplicationController(areaPathProvider);
 
+			var result = target.GetAreas();
 			result.Count().Should().Be.EqualTo(0);
 		}
 
@@ -23,10 +25,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetEnabledModules()
 		{
 			var toggleManager = new FakeToggleManager();
-			var target = new ApplicationController(new FakePermissionProvider(), toggleManager);
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager);
+			var target = new ApplicationController(areaPathProvider);
 
 			var result = target.GetAreas();
-
 			result.Any(x=>((dynamic)(x)).InternalName == "resourceplanner" ).Should().Be.False();
 		}
 	}
