@@ -59,12 +59,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private DateTimePeriod? createOptionalDateTimePeriod(ShiftExchangeOfferForm form, DateOnly date)
 		{
-			if (form.StartTime.HasValue && form.EndTime.HasValue)
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(form.StartTime.Value),
-					date.Date.Add(form.EndTime.Value.Add((form.EndTimeNextDay ? TimeSpan.FromDays(1) : TimeSpan.Zero))),
-					_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			
-			return null;
+			if (!form.StartTime.HasValue || !form.EndTime.HasValue)
+			{
+				return null;
+			}
+
+			var localStartTime = date.Date.Add(form.StartTime.Value);
+			var endTimeSpan = form.EndTime.Value.Add(form.EndTimeNextDay ? TimeSpan.FromDays(1) : TimeSpan.Zero);
+			var localEndTime = date.Date.Add(endTimeSpan);
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localStartTime, localEndTime, timezone);
 		}
 	}
 }
