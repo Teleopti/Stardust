@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class ScheduleControllerPrerequisites : IScheduleControllerPrerequisites
 	{

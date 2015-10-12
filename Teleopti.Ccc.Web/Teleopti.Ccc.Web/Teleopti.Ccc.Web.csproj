@@ -561,9 +561,7 @@
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
     <Compile Include="Areas\Global\IActionThrottler.cs" />
-    <Compile Include="Areas\ResourcePlanner\IScheduleControllerPrerequisites.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
-    <Compile Include="Areas\ResourcePlanner\OptimizationResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
     <Compile Include="Areas\ResourcePlanner\IMissingForecastProvider.cs" />
@@ -572,7 +570,6 @@
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
-    <Compile Include="Areas\ResourcePlanner\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Global\ThrottledAction.cs" />

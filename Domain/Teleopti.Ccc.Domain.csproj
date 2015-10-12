@@ -627,6 +627,7 @@
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
+    <Compile Include="Optimization\WebLegacy\OptimizationResultModel.cs" />
     <Compile Include="Outbound\CampaignRuleChecker.cs" />
     <Compile Include="Outbound\CampaignTaskManager.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
@@ -654,6 +655,8 @@
     <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
+    <Compile Include="Scheduling\WebLegacy\IScheduleControllerPrerequisites.cs" />
+    <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequestAssembler.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
