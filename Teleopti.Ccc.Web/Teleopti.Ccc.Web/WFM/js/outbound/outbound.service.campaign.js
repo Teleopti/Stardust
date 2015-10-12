@@ -21,6 +21,12 @@
 
 		var self = this;
 
+		this.getThreshold = function (successCb) {
+			$http.post(updateThresholdUrl).success(function(data) {
+				if (successCb != null) successCb(data);
+			});
+		}
+
 		this.updateThreshold = function (threshold, successCb, errorCb) {
 			$http.put(updateThresholdUrl, threshold)
 				.success(function(data) {

@@ -32,7 +32,7 @@
 
 		$scope.updateThreshold = function (threshold) {
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
-			outboundService.updateThreshold(thresholdObj, function(data) {
+			outboundService.updateThreshold(thresholdObj, function (data) {
 				loadWithinPeriod(function () {
 					$scope.ganttData.forEach(function (dataRow, indx) {
 						if (dataRow.expansion) {
@@ -48,7 +48,13 @@
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
 			loadWithinPeriod();
-			$scope.threshold = 60;//todo
+			getThreshold();
+		}
+
+		function getThreshold() {
+			outboundService.getThreshold(function(data) {
+				$scope.threshold = data.Value ? Math.round(data.Value * 100) : 0;
+			});
 		}
 
 		function loadWithinPeriod(cb) {

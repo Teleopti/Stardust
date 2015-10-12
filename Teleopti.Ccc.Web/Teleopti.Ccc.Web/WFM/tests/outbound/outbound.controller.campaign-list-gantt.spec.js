@@ -125,6 +125,15 @@
 		expect(test.scope.ganttData[1].campaign.graphData).toBeDefined();
 	});
 
+	it('should get threshold value at the beginning', function() {
+		var test = setUpTarget();
+		outboundService.setThreshold({ Value:0.6, Type:2 });
+
+		expect(test.scope.threshold).not.toBeDefined();
+		test.target.init();
+		expect(test.scope.threshold).toEqual(60);
+	});
+
 
 	function setUpTarget() {
 		var scope = $rootScope.$new();
@@ -155,8 +164,17 @@
 		var PhaseStatistics;
 		var ganttVisualization = [];
 		var campaignDetail = {};
+		var thresholdObj = {};
 
 		var listCampaign = [];
+
+		this.setThreshold=function(threshold) {
+			thresholdObj = threshold;
+		}
+
+		this.getThreshold = function(cb) {
+			cb(thresholdObj);
+		};
 
 		this.setCampaignDetail=function(campaignD) {
 			campaignDetail = campaignD;
