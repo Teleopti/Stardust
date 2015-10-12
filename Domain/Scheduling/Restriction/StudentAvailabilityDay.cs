@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 
 		public override bool Equals(IEntity other)
 		{
+			if (other == null) return false;
 			return GetHashCode().Equals(other.GetHashCode());
 		}
 	}

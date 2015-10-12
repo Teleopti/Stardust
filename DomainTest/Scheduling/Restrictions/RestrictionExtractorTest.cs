@@ -184,6 +184,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			Assert.IsTrue(combined.IsRotationDay);
         }
 
+		  [Test]
+		  public void VerifyEqualsReturnFalseIfOneElementIsNull()
+		  {
+			  var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			  var dateTime = new DateTime(2006, 12, 23, 7, 30, 0);
+			  dateTime = TimeZoneHelper.ConvertToUtc(dateTime, timeZone);
+			  var dateTimePeriod = new DateTimePeriod(dateTime, TimeZoneHelper.ConvertToUtc(dateTime.AddHours(12), timeZone));
+			  TimeZoneInfo timeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+			  IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
+			  DateTime start = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
+			  DateTime end = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
+			  restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay, null);
+			  restriction.EndTimeLimitation = new EndTimeLimitation(null, end.AddMinutes(-1).TimeOfDay);
+			  var pr = new StudentAvailabilityDay(_person, new DateOnly(2009, 1, 1), new List<IStudentAvailabilityRestriction> { restriction })
+			  {
+				  NotAvailable = false
+			  };
+			  Assert.IsFalse(pr.Equals(null));
+		  }
+
         private IExtractedRestrictionResult extract(IEnumerable<IRestrictionBase> restrictions, ReadOnlyCollection<IScheduleData> studentRestriction)
         {
             using(_mocks.Record())
