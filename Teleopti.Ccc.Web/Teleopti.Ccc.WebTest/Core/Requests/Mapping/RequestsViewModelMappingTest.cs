@@ -229,8 +229,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, _timeZone).ToShortDateTimeString());
-			result.DateTimeTo.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, _timeZone).ToShortDateTimeString());
+			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, _timeZone).ToShortDateTimeString());
+			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, _timeZone).ToShortDateTimeString());
 		}
 
 		[Test]
@@ -244,8 +244,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo(startDate);
-			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(startDate);
+			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo(startDate);
+			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(startDate);
 			
 			
 		}
@@ -263,8 +263,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 			
-			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo (startDate);
-			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(endDate);
+			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo (startDate);
+			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(endDate);
 			
 			
 		}
@@ -328,8 +328,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortDateTimeString());
-			result.DateTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortDateTimeString());
+			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(startInCorrectTimezone.ToShortDateTimeString());
+			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(endInCorrectTimezone.ToShortDateTimeString());
 		}
 
 		[Test, SetCulture("ar-SA")]

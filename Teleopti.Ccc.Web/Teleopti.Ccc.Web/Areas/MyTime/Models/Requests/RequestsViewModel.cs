@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public RequestType TypeEnum;
 		public string UpdatedOn;
 
-		public string DateTimeFrom;
-		public string DateTimeTo;
-		public string UpdatedOnDateTime;
+		public DateTime DateTimeFrom;
+		public DateTime DateTimeTo;
+		public DateTime? UpdatedOnDateTime;
 
 		public string Status;
 		public string Payload;
