@@ -7,14 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    /// <summary>
-    /// Used in Scheduling to cache the projection so it only has to be done once
-    /// </summary>
-    /// /// 
-    /// <remarks>
-    ///  Created by: Ola
-    ///  Created date: 2008-09-16    
-    /// /// </remarks>
 	public class ShiftProjectionCache : IShiftProjectionCache
     {
         private Lazy<IEditableShift> _mainShift;
@@ -45,15 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	            _dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(schedulingDate, localTimeZoneInfo);
             }           
         }
-        /// <summary>
-        /// Gets the main shift.
-        /// </summary>
-        /// <value>The main shift.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-16    
-        /// /// </remarks>
+
         public IEditableShift TheMainShift
         {
 	        get
@@ -61,15 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return _mainShift.Value;
 	        }
         }
-        /// <summary>
-        /// Gets the work shift.
-        /// </summary>
-        /// <value>The work shift.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-16    
-        /// /// </remarks>
+
         public IWorkShift TheWorkShift
         {
 	        get
@@ -92,15 +68,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        /// <summary>
-        /// Gets the main shift projection.
-        /// </summary>
-        /// <value>The main shift projection.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-16    
-        /// /// </remarks>
         public IVisualLayerCollection MainShiftProjection
         {
             get {

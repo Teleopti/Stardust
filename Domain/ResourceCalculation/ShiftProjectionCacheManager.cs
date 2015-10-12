@@ -89,21 +89,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 }
 
 				shiftProjectionCacheList = new List<IShiftProjectionCache>();
-                foreach (IWorkShift shift in tmpList)
-                {
-					IEnumerable<IWorkShift> shiftsFromMasterActivity = _shiftFromMasterActivityService.Generate(shift);
-
-                    if (shiftsFromMasterActivity == null)
-						shiftProjectionCacheList.Add(new ShiftProjectionCache(shift, new PersonalShiftMeetingTimeChecker()));
-                    else
-                    {
-                        foreach (IWorkShift workShift in shiftsFromMasterActivity)
-                        {
-							shiftProjectionCacheList.Add(new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker()));
-                        }
-                    }
-                }
-				_ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
+	            foreach (IWorkShift shift in tmpList)
+	            {
+		            IEnumerable<IWorkShift> expandedShifts = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift);
+		            foreach (IWorkShift workShift in expandedShifts)
+		            {
+			            shiftProjectionCacheList.Add(new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker()));
+		            }
+	            }
+	            _ruleSetListDictionary.Add(ruleSet, shiftProjectionCacheList);
             }
 			return shiftProjectionCacheList;
         }

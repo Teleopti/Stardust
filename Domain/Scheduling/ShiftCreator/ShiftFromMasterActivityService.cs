@@ -1,43 +1,42 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
     public class ShiftFromMasterActivityService : IShiftFromMasterActivityService
     {
-        public IList<IWorkShift> Generate(IWorkShift workShift)
+        public IList<IWorkShift> ExpandWorkShiftsWithMasterActivity(IWorkShift workShift)
         {
-            if (HasMasterActivity(workShift))
+            if (hasMasterActivity(workShift))
             {
-                IList<IWorkShift> workShifts = new List<IWorkShift>();
-                using(PerformanceOutput.ForOperation("Creating shifts from master activity"))
-                CreateShiftsFromShift(workShift, workShifts);
-
-                return workShifts; 
+	            using (PerformanceOutput.ForOperation("Creating shifts from master activity"))
+	            {
+		            return createShiftsFromShift(workShift);
+	            }
             }
            
-            return null;    
+            return new[]{workShift};
         }
 
-        private static void CreateShiftsFromShift(IWorkShift workShift, IList<IWorkShift> workShifts)
+        private static IList<IWorkShift> createShiftsFromShift(IWorkShift workShift)
         {
+			var result = new List<IWorkShift>();
             IVisualLayerCollection visualLayers = workShift.ProjectionService().CreateProjection();
 
-            foreach (VisualLayer layer in visualLayers)
+            foreach (var layer in visualLayers)
             {
                 IMasterActivity masterActivity = layer.Payload as MasterActivity;
-
                 if (masterActivity != null)
                 {
-                    foreach (IActivity activity in masterActivity.ActivityCollection)
+                    foreach (var activity in masterActivity.ActivityCollection)
                     {
                         if (activity.IsDeleted == false && activity.InContractTime && activity.RequiresSkill)
                         {
                             IWorkShift newWorkShift = new WorkShift(workShift.ShiftCategory);
 
-                            foreach (ActivityLayer a in workShift.LayerCollection)
+                            foreach (var a in workShift.LayerCollection)
                             {
                                 IMasterActivity ma = a.Payload as MasterActivity;
 
@@ -50,41 +49,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                             WorkShiftActivityLayer activityLayer = new WorkShiftActivityLayer(activity, layer.Period);
                             newWorkShift.LayerCollection.Add(activityLayer);
 
-                            foreach (VisualLayer l in visualLayers)
+                            foreach (var l in visualLayers)
                             {
                                 IMasterActivity m = l.Payload as MasterActivity;
 
                                 if (l != layer && m != null)
                                 {
                                     IActivity act = l.Payload as Activity;
-                                    WorkShiftActivityLayer acl = new WorkShiftActivityLayer(act, l.Period);
+                                    var acl = new WorkShiftActivityLayer(act, l.Period);
                                     newWorkShift.LayerCollection.Add(acl);
                                 }
                             }
 
-                            if (HasMasterActivity(newWorkShift))
-                                CreateShiftsFromShift(newWorkShift, workShifts);
+                            if (hasMasterActivity(newWorkShift))
+                                result.AddRange(createShiftsFromShift(newWorkShift));
                             else
-                                workShifts.Add(newWorkShift);
+                                result.Add(newWorkShift);
                         }
                     }
 
                     break;
                 }
             }
+	        return result;
         }
 
-        private static bool HasMasterActivity(IWorkShift workShift)
+        private static bool hasMasterActivity(IWorkShift workShift)
         {
-            foreach (ILayer<IActivity> activity in workShift.LayerCollection)
-            {
-                IMasterActivity masterActivity = activity.Payload as MasterActivity;
-
-                if (masterActivity != null)
-                    return true;
-            }
-
-            return false;
+			return workShift.LayerCollection.Any(l => l.Payload is IMasterActivity);
         }
     }
 }

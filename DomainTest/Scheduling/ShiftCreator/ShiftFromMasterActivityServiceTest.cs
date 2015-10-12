@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
@@ -98,14 +100,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        public void ShouldReturnNullWhenNoMasterActivity()
+        public void ShouldReturnOriginalWorkShiftWhenNoMasterActivity()
         {
             WorkShiftActivityLayer layer = new WorkShiftActivityLayer(_activity1, new DateTimePeriod());
             _workShift.LayerCollection.Add(layer);
 
-            IList<IWorkShift> workShifts = _shiftFromMasterActivityService.Generate(_workShift);
-
-            Assert.IsNull(workShifts);
+            IList<IWorkShift> workShifts = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
+	        workShifts.Single().Should().Be.SameInstanceAs(_workShift);
         }
 
         [Test]
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
  
             _workShift.LayerCollection.Add(layer);
 
-            _workShiftList = _shiftFromMasterActivityService.Generate(_workShift);
+            _workShiftList = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
 
             Assert.AreEqual(0,_workShiftList.Count);
         }
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             _workShift.LayerCollection.Add(layer);
 
-            _workShiftList = _shiftFromMasterActivityService.Generate(_workShift);
+            _workShiftList = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
 
             Assert.AreEqual(0, _workShiftList.Count);
         }
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _workShift.LayerCollection.Add(layer2);
             _workShift.LayerCollection.Add(layer3);
 
-            _workShiftList = _shiftFromMasterActivityService.Generate(_workShift);
+            _workShiftList = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
 
             Assert.AreEqual(8, _workShiftList.Count);
 
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _workShift.LayerCollection.Add(layer2);
             _workShift.LayerCollection.Add(layer3);
 
-            _workShiftList = _shiftFromMasterActivityService.Generate(_workShift);
+            _workShiftList = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
 
             Assert.AreEqual(4, _workShiftList.Count);
 
@@ -302,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _workShift.LayerCollection.Add(layer2);
             _workShift.LayerCollection.Add(layer3);
 
-            _workShiftList = _shiftFromMasterActivityService.Generate(_workShift);
+            _workShiftList = _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(_workShift);
 
             Assert.AreEqual(4, _workShiftList.Count);
 

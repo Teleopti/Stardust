@@ -14,6 +14,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="workShift"></param>
         /// <returns></returns>
-        IList<IWorkShift> Generate(IWorkShift workShift);
+        IList<IWorkShift> ExpandWorkShiftsWithMasterActivity(IWorkShift workShift);
     }
 }
