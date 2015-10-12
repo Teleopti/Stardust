@@ -4692,7 +4692,7 @@ Periods</comment>
     <comment>Standard colors</comment>
   </data>
   <data name="StandardDeviation" xml:space="preserve">
-    <value>标准偏差（默认推荐的优化算法，推荐用于优化“休息日”，“每日班次”及“每日班次长度”）</value>
+    <value>标准偏差 (推荐算法，用于优化“休息日”，“每日班次”及“每日班次长度”)</value>
     <comment>Standard deviation row header</comment>
   </data>
   <data name="StartDate" xml:space="preserve">
@@ -7239,10 +7239,10 @@ Teleopti R&amp;D</value>
     <value>调换班申请 {0} - {1} 由于班表修改必须重新确认接受。</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>一条文字申请被批准。</value>
+    <value>一条文本申请被批准。</value>
   </data>
   <data name="TextRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>一条文字申请被拒绝。</value>
+    <value>一条文本申请被拒绝。</value>
   </data>
   <data name="DeleteMeeting" xml:space="preserve">
     <value>删除会议</value>
@@ -8994,7 +8994,7 @@ Teleopti R&amp;D</value>
     <value>使用标准差</value>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>使用微调值 (当设定了”最大或最小人员配备限制“或要求的"座席代表"，推荐勾选此项)</value>
+    <value>使用微调值 (使用”最大或最小人员配备限制“或要求的"座席代表"时勾选此项)</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>每天的班次类别和全天缺勤</value>
@@ -9534,7 +9534,7 @@ Teleopti R&amp;D</value>
     <value>目标值</value>
   </data>
   <data name="Teleopti" xml:space="preserve">
-    <value>Teleopti（当勾选”灵活工作时间的班次“及”灵活工作时间的休息“时，建议勾选此项）</value>
+    <value>Teleopti (当使用”灵活工作时间的班次“及”灵活工作时间的休息“时勾选此项)</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
     <value>提交</value>
@@ -11553,28 +11553,190 @@ Teleopti R&amp;D</value>
   <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
     <value>青铜徽章阈值：</value>
   </data>
-  <data name="ManagePeople" xml:space="preserve">
-    <value>管理人员</value>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
   </data>
-  <data name="AdjustSkill" xml:space="preserve">
-    <value>更新技能</value>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
   </data>
-  <data name="ChangeShiftBag" xml:space="preserve">
-    <value>更改班次包</value>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
   </data>
-  <data name="PickAShiftBag" xml:space="preserve">
-    <value>选择班次包</value>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>添加积压量</value>
   </data>
-  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
-    <value>成功更新人数：</value>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>重复的windows用户:</value>
   </data>
-  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
-    <value>你可能需要相应地更改人员的班次包。</value>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>重复的应用程序用户ID:</value>
   </data>
-  <data name="SelectedPeople" xml:space="preserve">
-    <value>当前选中人员</value>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>Windows用户名称无效:</value>
   </data>
-  <data name="ResetSelection" xml:space="preserve">
-    <value>重置</value>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>姓氏过长:</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>名字过长:</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>应用程序用户ID过长:</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>角色 {0} 不存在;</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>无登录账户;</value>
+  </data>
+  <data name="OutboundOverstaffRule" xml:space="preserve">
+    <value>早</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>正在进行</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>空密码:</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>无效密码:</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>提供的活动名称无效. 名称最多包含255个字符.</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>名字和姓氏均为空;</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>新活动名称</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>手工计划</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>使用已有的活动</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>积压</value>
+  </data>
+  <data name="Overscheduled" xml:space="preserve">
+    <value>冗员</value>
+  </data>
+  <data name="Underscheduled" xml:space="preserve">
+    <value>缺员</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>新活动名称</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>活动 {0} 已被更更新.</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>更新活动失败: {0} .</value>
+  </data>
+  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
+    <value>拖拽.csv到此或点击上传</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>导入用户</value>
+  </data>
+  <data name="OutboundUnderSLARule" xml:space="preserve">
+    <value>晚</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>无应用程序用户ID:</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>请参考文件模板</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>被拒绝的文件:</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>创建活动失败: {0} .</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>活动 {0} 已经被创建.</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>必须设定开始和结束时间.</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>需要的小时数</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>编辑活动</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>创建活动</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>小组班表</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>无法从message broker获取信息</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>未选择组或地点</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>座位安排已成功提交</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>座位</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>排座</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>正在安排周期：</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>无可用地点</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>正在读取排座状态</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>所有选定座席代表已被分配座位</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>此日期无作为被安排</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>此日期的排座正在进行中</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>此日期有部分座席代表未被分配座位</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>抱歉，此时系统忙。请尝试缩小选定条件范围或再试一次。</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>生成报表</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>当前条件下无报表</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>当小组或批次排班被选定时优化步骤 {0} 不会被执行.</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>加载活动: {0} 失败.</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>按时</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>座席代表</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>筛选地点</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>排座报表</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>手工安排</value>
   </data>
 </root>
