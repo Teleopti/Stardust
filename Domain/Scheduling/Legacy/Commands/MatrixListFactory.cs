@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Interfaces.Domain;
 
@@ -20,21 +21,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListAll(DateOnlyPeriod selectedPeriod)
+		public IList<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(DateOnlyPeriod selectedPeriod)
 		{
-			var allSchedules = new List<IScheduleDay>();
 			var stateHolder = _schedulerStateHolder();
 			var period = stateHolder.RequestedPeriod.DateOnlyPeriod;
 			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
 			var persons = stateHolder.FilteredPersonDictionary;
-
+			var startDate = period.StartDate;
+			var matrixes = new List<IScheduleMatrixPro>();
 			foreach (var person in persons)
 			{
-				var theDays = stateHolder.Schedules[person.Value].ScheduledDayCollection(period);
-				allSchedules.AddRange(theDays);
+				var date = startDate;
+				while (date <= period.EndDate)
+				{
+					var matrix = createMatrixForPersonAndDate(person.Value, date);
+					if (matrix == null)
+					{
+						date = date.AddDays(1);
+						continue;
+					}
+					matrixes.Add(matrix);
+					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
+				}
 			}
+			_matrixUserLockLocker.Execute(matrixes, selectedPeriod);
+			_matrixNotPermittedLocker.Execute(matrixes);
 
-			return CreateMatrixList(allSchedules, selectedPeriod);
+
+			return matrixes;
+		}
+
+		private IScheduleMatrixPro createMatrixForPersonAndDate(IPerson person, DateOnly date)
+		{
+			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
+			if (!virtualSchedulePeriod.IsValid)
+				return null;
+			
+			IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
+				new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, person);
+
+			return new ScheduleMatrixPro(_schedulerStateHolder().SchedulingResultState,
+				fullWeekOuterWeekPeriodCreator,
+				virtualSchedulePeriod);
 		}
 
 		public IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod)

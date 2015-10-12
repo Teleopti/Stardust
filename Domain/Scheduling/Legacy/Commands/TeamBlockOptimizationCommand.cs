@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
 			_backgroundWorker.ReportProgress(1, args);
 
-			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 			}
 
-			allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+			allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 				rollbackServiceWithResourceCalculation, allMatrixes,

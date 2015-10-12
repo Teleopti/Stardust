@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, _matrixListFactory.CreateMatrixListAll(selectedPeriod), backgroundWorker);
+				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod), backgroundWorker);
 		}
 	}
 }

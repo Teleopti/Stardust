@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return new WorkShiftFinderResultHolder();
 
-			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+			var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
 			_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 			_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedPersons,

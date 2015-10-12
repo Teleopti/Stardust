@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (optimizationPreferences.Extra.UseTeams)
 					{
-						allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 					}
 
 					scheduleOptimizerHelper.GetBackToLegalState(matrixList, schedulerStateHolder, backgroundWorker,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
 
-						allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 						runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes, selectedPersons,
 							rollbackService, resourceCalculateDelayer, backgroundWorker);
 

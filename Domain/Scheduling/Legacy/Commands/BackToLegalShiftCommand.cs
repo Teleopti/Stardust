@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
-			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
 			var selectedPersons = extractor.ExtractPersons().ToList();
 			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions);

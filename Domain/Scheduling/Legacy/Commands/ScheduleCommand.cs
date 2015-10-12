@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 					if (schedulingOptions.UseTeam)
 					{
-						allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 					}
 
 					IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays =

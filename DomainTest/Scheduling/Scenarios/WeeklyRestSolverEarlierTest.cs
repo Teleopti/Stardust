@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences)
 		{
 			var selectedPeriod = new DateOnlyPeriod(weekPeriod.StartDate, weekPeriod.StartDate);
-			var matrixlist = MatrixListFactory.CreateMatrixListAll(weekPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(weekPeriod);
 			matrixlist.First().UnlockPeriod(selectedPeriod);
 			
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),

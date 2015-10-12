@@ -527,6 +527,7 @@
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodIntraIntervalPeriodFinderTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
+    <Compile Include="Optimization\MatrixListFactoryTest.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixKeepActivityLockerTest.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLockerTest.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
