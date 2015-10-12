@@ -253,6 +253,10 @@
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.ApplicationConfig\Teleopti.Ccc.ApplicationConfig.csproj">
+      <Project>{abe4f614-595c-4a28-ad45-62b86ffd5109}</Project>
+      <Name>Teleopti.Ccc.ApplicationConfig</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
       <Project>{cf33f7a6-78d3-4167-a42d-20e453f8b1b6}</Project>
       <Name>Teleopti.Ccc.DBManager.Library</Name>

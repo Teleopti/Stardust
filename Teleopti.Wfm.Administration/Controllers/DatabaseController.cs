@@ -293,7 +293,30 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
          return Json(addSuperUserToTenant(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
 		}
+		
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddBusinessUnitToTenant")]
+		public virtual JsonResult<TenantResultModel> AddBusinessUnitToTenant(AddBuToTenantModel model)
+		{
 
+			if (string.IsNullOrEmpty(model.BuName))
+			{
+				return Json(new TenantResultModel { Success = false, Message = "The Business Unit name can not be empty." });
+			}
+			if (string.IsNullOrEmpty(model.Tenant))
+			{
+				return Json(new TenantResultModel { Success = false, Message = "The Tenant name can not be empty." });
+			}
+			
+			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.Tenant));
+			if (tenant == null)
+			{
+				return Json(new TenantResultModel { Success = false, Message = "Can not find this Tenant in the database." });
+			}
+			_databaseHelperWrapper.AddBusinessUnit(tenant.DataSourceConfiguration.ApplicationConnectionString, model.BuName);
+			return Json(new TenantResultModel {Message = string.Format("Created new Business Unit wih name: {0}",model.BuName), Success = true});
+		}
 		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{
 
@@ -377,5 +400,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string LastName { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
+	}
+
+	public class AddBuToTenantModel
+	{
+		public string Tenant { get; set; }
+		public string BuName { get; set; }
+
 	}
 }

@@ -34,6 +34,10 @@
 		vm.SqlUserOkMessage = '';
 		vm.SqlUserOk = false;
 
+		vm.BuName = '';
+		vm.NewBusinessUnitMessage = '';
+		vm.NewBuOk = true;
+
 		vm.LoadTenant = function () {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
@@ -142,6 +146,20 @@
 						return;
 					}
 					window.location = "#";
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		}
+
+		vm.AddBu = function () {
+			var model = {
+				Tenant: vm.OriginalName,
+				BuName: vm.BuName
+
+			}
+			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders())
+				.success(function (data) {
+						vm.NewBusinessUnitMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});

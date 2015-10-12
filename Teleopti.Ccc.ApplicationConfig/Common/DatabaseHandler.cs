@@ -22,21 +22,31 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             {
                 if (_sessionFactory == null)
                 {
-                    Configuration cfg = new Configuration()
-                        .AddProperties(DataSourceSettings())
-                        .AddAssembly(typeof(ApplicationRole).Assembly);
-                    _sessionFactory = cfg.BuildSessionFactory();
+                   buildSessionFactory(_commandLineArgument.DestinationConnectionString);
                 }
                 return _sessionFactory;
             }
         }
 
-        public IDictionary<string, string> DataSourceSettings()
+	    public ISessionFactory GetSessionFactory(string destinationConnectionString)
+	    {
+		    buildSessionFactory(destinationConnectionString);
+		    return _sessionFactory;
+	    }
+
+       private void buildSessionFactory(string destinationConnectionString)
+	    {
+			Configuration cfg = new Configuration()
+							 .AddProperties(DataSourceSettings(destinationConnectionString))
+							 .AddAssembly(typeof(ApplicationRole).Assembly);
+			_sessionFactory = cfg.BuildSessionFactory();
+		}
+        public static IDictionary<string, string> DataSourceSettings(string destinationConnectionString)
         {
             return new Dictionary<string, string>
                        {
                            {"connection.provider", "NHibernate.Connection.DriverConnectionProvider" },
-                           {"connection.connection_string", _commandLineArgument.DestinationConnectionString},
+                           {"connection.connection_string", destinationConnectionString},
                            {"show_sql", "false"},
                            {"dialect", "NHibernate.Dialect.MsSql2008Dialect"},
                            {"adonet.batch_size", "50"},

@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Globalization;
+using Teleopti.Ccc.ApplicationConfig;
+using Teleopti.Ccc.ApplicationConfig.Common;
+using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -101,8 +106,10 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void AddBusinessUnit(string connectionToNewDb, string name)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
-			helper.AddBusinessUnit(name);
+			var helper = new DatabaseHandler(new Ccc.ApplicationConfig.Common.CommandLineArgument(new string[0]));
+			var defaultDataCreator = new DefaultDataCreator(name,CultureInfo.CurrentCulture, TimeZoneInfo.Local, "","", helper.GetSessionFactory(connectionToNewDb),TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connectionToNewDb));
+			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
+			defaultDataCreator.Save(defaultAggregateRoot);
 		}
 
 		public bool LoginExists(string connectionToNewDb, string login, bool isAzure)

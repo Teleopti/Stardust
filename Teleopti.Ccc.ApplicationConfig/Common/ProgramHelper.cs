@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var dataSource = dataSourcesFactory.Create(databaseHandler.DataSourceSettings(), "");
+			var dataSource = dataSourcesFactory.Create(DatabaseHandler.DataSourceSettings(argument.DestinationConnectionString), "");
 			
 			var state = new StateNewVersion();
 			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null);
