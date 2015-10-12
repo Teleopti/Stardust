@@ -2,7 +2,7 @@
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
+namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class PersistConflict
 	{

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters

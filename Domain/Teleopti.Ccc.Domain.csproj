@@ -641,6 +641,7 @@
     <Compile Include="Outbound\Rules\OutboundUnderSLARule.cs" />
     <Compile Include="Outbound\Rules\OutboundUnderSLARuleConfiguration.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
+    <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
@@ -650,6 +651,7 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
+    <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequestAssembler.cs" />

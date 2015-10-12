@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Drawing;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Win.Common;

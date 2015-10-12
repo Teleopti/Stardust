@@ -474,11 +474,9 @@
     <Compile Include="Persisters\IMessageQueueRemoval.cs" />
     <Compile Include="Persisters\Requests\IRequestPersister.cs" />
     <Compile Include="Persisters\Requests\RequestPersister.cs" />
-    <Compile Include="Persisters\Schedules\IScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\NoScheduleRangeConflictCollector.cs" />
-    <Compile Include="Persisters\Schedules\PersistConflict.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersister.cs" />
