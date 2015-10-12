@@ -31,6 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IGroupPersonBuilderForOptimization Create(ISchedulingOptions schedulingOptions)
 		{
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+			if( groupPageType == GroupPageType.SingleAgent)
+				return new GroupPersonBuilderForOptimizationAndSingleAgentTeam();
+
 			var schedulerStateHolder = _schedulerStateHolder();
 			if (schedulerStateHolder.LoadedPeriod != null)
 			{
