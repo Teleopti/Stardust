@@ -101,6 +101,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
+			callScriptToHideNavigation();
+		}
+
+		private void callScriptToHideNavigation()
+		{
 			JSObject window = wfmWebView.GetDOMWindow();
 			var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
 			if (iAmCalledFromFatClient == null)
@@ -116,7 +121,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				setWfmWebUrl(_permissionModule);
 			}
-			
 		}
 
 		private int cnt;
@@ -421,6 +425,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				}
 				else
 				{
+					callScriptToHideNavigation();
 					backStageViewMain.HideBackStage();
 					toggleWebControls(false);
 				}
