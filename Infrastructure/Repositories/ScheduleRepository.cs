@@ -37,16 +37,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-				public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork)
+				public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
 					: base(currentUnitOfWork)
-	    {
-		    
-	    }
-
-        protected void SetRepositoryFactory(IRepositoryFactory repositoryFactory)
-        {
-            _repositoryFactory = repositoryFactory;
-        }
+				{
+					_repositoryFactory = repositoryFactory;
+				}
 
         public IPersistableScheduleData Get(Type concreteType, Guid id)
         {

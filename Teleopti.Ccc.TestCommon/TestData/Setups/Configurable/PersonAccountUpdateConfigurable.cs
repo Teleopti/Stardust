@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
-			var scheduleRepository = new ScheduleRepository(currentUnitOfWork);
+			var scheduleRepository = new ScheduleRepository(currentUnitOfWork, new RepositoryFactory());
 			var traceableService = new TraceableRefreshService(CurrentScenario, scheduleRepository);
 			var updater = new PersonAccountUpdater(repository, traceableService);
 			updater.Update(user);

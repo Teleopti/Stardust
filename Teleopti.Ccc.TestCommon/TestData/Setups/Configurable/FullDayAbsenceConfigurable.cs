@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 
-			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(currentUnitOfWork), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario));
+			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(currentUnitOfWork, new RepositoryFactory()), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario));
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,

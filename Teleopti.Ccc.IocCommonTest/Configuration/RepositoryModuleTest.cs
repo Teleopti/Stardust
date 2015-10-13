@@ -1,12 +1,10 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -70,6 +68,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = builder.Build())
 			{
 				container.Resolve<IEtlJobStatusRepository>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveScheduleRepository()
+		{
+			using (var container = builder.Build())
+			{
+				container.Resolve<IScheduleRepository>().Should().Not.Be.Null();
 			}
 		}
 	}

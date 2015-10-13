@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             CreateRelatedRepositories();
             SetupExpectationsForRelatedRepositories();
 
-            _target = new ScheduleRepositoryForTest(_unitOfWork,_repositoryFactory);
+            _target = new ScheduleRepository(new ThisUnitOfWork(_unitOfWork),_repositoryFactory);
 
             CreateBasicStuff();
             CreateEmptyLists();
@@ -835,14 +835,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldThrowExceptionOnNullScheduleDictionaryLoadOptionsInGivenPeriod()
         {
 			_target.FindSchedulesForPersonsOnlyInGivenPeriod(new IPerson[]{}, null, _longDateOnlyPeriod, _scenario);
-        }
-    }
-
-    internal class ScheduleRepositoryForTest : ScheduleRepository
-    {
-        public ScheduleRepositoryForTest(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory) : base(unitOfWork)
-        {
-            SetRepositoryFactory(repositoryFactory);
         }
     }
 }
