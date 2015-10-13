@@ -543,6 +543,7 @@
     <Compile Include="Optimization\RestrictionOverLimitDeciderTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterExTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancePersonalSettingTest.cs" />
