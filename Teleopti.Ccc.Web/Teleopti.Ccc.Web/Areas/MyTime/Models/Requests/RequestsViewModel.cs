@@ -22,11 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Text;
 		public string Type;
 		public RequestType TypeEnum;
-		public string UpdatedOn;
 
-		public DateTime DateTimeFrom;
-		public DateTime DateTimeTo;
-		public DateTime? UpdatedOnDateTime;
+		public String DateTimeFrom;
+		public String DateTimeTo;
+		public String UpdatedOnDateTime;
 
 		public string Status;
 		public string Payload;

@@ -464,6 +464,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningConfigurationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignWarningConfigurationProvider.cs" />

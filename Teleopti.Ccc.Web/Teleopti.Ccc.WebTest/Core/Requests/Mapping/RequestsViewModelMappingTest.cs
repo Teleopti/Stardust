@@ -229,8 +229,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, _timeZone).ToShortDateTimeString());
-			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, _timeZone).ToShortDateTimeString());
+			result.DateTimeFrom.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.StartDateTime, _timeZone));
+			result.DateTimeTo.Should().Be.EqualTo(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(period.EndDateTime, _timeZone));
+
+			DateTime.Parse(result.DateTimeFrom).Kind.Should().Be(DateTimeKind.Unspecified);
+			DateTime.Parse(result.DateTimeTo).Kind.Should().Be(DateTimeKind.Unspecified);
+
 		}
 
 		[Test]
@@ -244,10 +248,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo(startDate);
-			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(startDate);
-			
-			
+			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo(startDate);
+			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(startDate);
+
 		}
 
 		[Test]
@@ -263,8 +266,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 			
-			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo (startDate);
-			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(endDate);
+			new DateOnly(DateTime.Parse(result.DateTimeFrom)).Should().Be.EqualTo (startDate);
+			new DateOnly(DateTime.Parse(result.DateTimeTo)).Should().Be.EqualTo(endDate);
 			
 			
 		}
@@ -293,7 +296,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {UpdatedOn = DateTime.UtcNow};
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, _timeZone).ToShortDateTimeString());
+			result.UpdatedOnDateTime.Should().Be(DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(request.UpdatedOn.Value, _timeZone));
+			
 		}
 
 		[Test]
@@ -328,8 +332,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(startInCorrectTimezone.ToShortDateTimeString());
-			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(endInCorrectTimezone.ToShortDateTimeString());
+			result.DateTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToString("o"));
+			result.DateTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToString("o"));
 		}
 
 		[Test, SetCulture("ar-SA")]

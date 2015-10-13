@@ -34,14 +34,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personNameProvider = personNameProvider;
 		}
 
-		
+
 		protected override void Configure()
 		{
 			CreateMap<IPersonRequest, RequestViewModel>()
-				.ForMember (d => d.Link, o => o.MapFrom (s => s))
-				.ForMember (d => d.Subject, o => o.MapFrom (s => s.GetSubject (new NoFormatting())))
-				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.StartDateTime)))
-				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.EndDateTime)))
+				.ForMember(d => d.Link, o => o.MapFrom(s => s))
+				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
+				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(
+					s => DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.Request.Period.StartDateTime, _userTimeZone.TimeZone())))
+				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(
+					s => DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.Request.Period.EndDateTime, _userTimeZone.TimeZone())))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
 					return getStatusText(s);
@@ -70,12 +72,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
 				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
-				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
-					? ConvertDateTimeToUserTimeZone (s.UpdatedOn.Value)
-					: null))
 				.ForMember(d => d.UpdatedOnDateTime, o => o.MapFrom(s => s.UpdatedOn.HasValue
-					? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.TimeZone())
-					: default(DateTime?)))
+					? DateTimeMappingUtils.ConvertUtcToLocalDateTimeString(s.UpdatedOn.Value, _userTimeZone.TimeZone())
+					: null))
 				.ForMember(d => d.DateFromYear,
 					o =>
 						o.MapFrom(
@@ -186,12 +185,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				}));
 		}
 
-		protected string ConvertDateTimeToUserTimeZone(DateTime dateTime)
-		{
-
-			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone()).ToShortDateTimeString();
-		}
-
 		private string getStatusText(IPersonRequest s)
 		{
 			var ret = s.StatusText;
@@ -232,7 +225,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			return personRequest.Request.RequestType != RequestType.AbsenceRequest
 				? null
-				: ((IAbsenceRequest) personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
+				: ((IAbsenceRequest)personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
 		}
 
 		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)

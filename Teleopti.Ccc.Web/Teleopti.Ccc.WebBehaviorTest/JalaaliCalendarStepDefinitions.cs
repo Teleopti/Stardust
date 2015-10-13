@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.AssertAnyContains(".datepicker-days .table-condensed .switch", date.Year.ToString());
 			Browser.Interactions.AssertAnyContains(".datepicker-days .table-condensed .switch", monthName );
-			Browser.Interactions.AssertInputValue (".request-edit-datefrom", date.ToString("yyyy/MM/dd"));
+			Browser.Interactions.AssertInputValue (".request-edit-datefrom", date.ToString("yyyy\\/MM\\/dd"));
 			
 		}
 

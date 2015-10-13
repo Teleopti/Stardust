@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			using (var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null))
 			{
 				var id = Guid.NewGuid();
-				var viewModel = new RequestViewModel { Id = "b", Status = "c", Subject = "d", Text = "e", Type = "f", UpdatedOn = "g" };
+				var viewModel = new RequestViewModel { Id = "b", Status = "c", Subject = "d", Text = "e", Type = "f", UpdatedOnDateTime = "g" };
 
 				modelFactory.Stub(f => f.CreateRequestViewModel(id)).Return(viewModel);
 
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.Subject.Should().Be.EqualTo(expected.Subject);
 			target.Text.Should().Be.EqualTo(expected.Text);
 			target.Type.Should().Be.EqualTo(expected.Type);
-			target.UpdatedOn.Should().Be.EqualTo(expected.UpdatedOn);
+			target.UpdatedOnDateTime.Should().Be.EqualTo(expected.UpdatedOnDateTime);
 			target.DateTimeFrom.Should().Be.EqualTo (expected.DateTimeFrom);
 			target.DateTimeTo.Should().Be.EqualTo(expected.DateTimeTo);
 		}
