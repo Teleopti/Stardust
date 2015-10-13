@@ -4,7 +4,7 @@
 		<div class="row skill-row skill-name">
 			<label class="col-lg-2" style="margin:0;">Name</label>
 			<div class="col-lg-3">
-				<input type="text" name="skillName" ng-model="model.name" placeholder="Name" required="" style="width: 100%" ng-maxlength="50" />
+				<input type="text" name="skillName" ng-model="model.name" placeholder="Name" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillNameValidation.isValid(form)}" />
 				<div class="input-invalid-text" ng-class="{invalidForm: skillNameValidation.isValid(form)}">{{skillNameValidation.errorMessage(form)}}</div>
 			</div>
 		</div>
