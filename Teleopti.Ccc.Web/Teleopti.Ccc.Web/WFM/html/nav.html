@@ -2,9 +2,15 @@
 	<div class="navbar-header content">
 		<div class="navbar-left">
 			<span class="brand" ui-sref="main">Teleopti WFM</span>
+
 			<span ng-controller="BusinessUnitsCtrl" data-ng-init="loadBusinessUnits()">
-				<select id="business-unit-select" ng-if="show" class="global-search" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" style="width:auto!important;background:transparent;"></select>
+				<label for="business-unit-select"  ng-if="show">
+					<select id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" >
+					</select>
+					<i class="mdi mdi-menu-down"></i>
+				</label>
 			</span>
+
 		</div>
 		<div class="navbar-right" >
 			<span ng-controller="SearchCtrl">
