@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         [Test]
         public void VerifyCanGetProperties()
         {
-            Assert.IsNotNull(_target.DataSourceSettings());
+            Assert.IsNotNull(DatabaseHandler.DataSourceSettings(_commandLineArgument.DestinationConnectionString));
             Assert.IsNotNull(_target.SessionFactory);
         }
     }
