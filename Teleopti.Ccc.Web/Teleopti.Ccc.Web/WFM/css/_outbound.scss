@@ -45,6 +45,9 @@
 	}
 	.outbound-gantt-chart {
 		margin: 70px 0;
+		.gantt-task-truncated-left{
+		    top:-2px;
+		}
 		.gantt-body-rows{
 		    overflow:hidden;
 		}
