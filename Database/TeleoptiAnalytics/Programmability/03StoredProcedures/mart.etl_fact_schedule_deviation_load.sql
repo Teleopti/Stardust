@@ -1,6 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_schedule_deviation_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 GO
+
 -- =============================================
 -- Author:		ChLu
 -- Design/calculation: http://challenger/sites/DefaultCollection/matrix/Shared%20Documents/Design%20Specifications/Adherance.xlsx
@@ -333,6 +334,16 @@ BEGIN
 			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 			AND ch.person_id			= b.person_id
 			AND b.acd_login_id			= fa.acd_login_id
+		INNER JOIN 
+			mart.dim_person p
+		ON 
+		p.person_id = b.person_id
+		AND
+		 (
+			(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
+			OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
+			OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
+		 )
 	END
 
 	if (@isIntraday=2)
@@ -549,6 +560,16 @@ BEGIN
 			FROM mart.bridge_acd_login_person b
 			INNER JOIN mart.fact_agent fa
 				ON b.acd_login_id = fa.acd_login_id
+			INNER JOIN 
+				mart.dim_person p
+			ON 
+			p.person_id = b.person_id
+				AND
+				(
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
+					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
+				)
 			INNER JOIN #stg_schedule_changed ch
 				ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 				AND ch.person_id			= b.person_id
@@ -590,6 +611,16 @@ BEGIN
 				ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 				AND ch.person_id			= b.person_id
 				AND b.acd_login_id			= fa.acd_login_id
+			INNER JOIN 
+			mart.dim_person p
+			ON 
+			p.person_id = b.person_id
+			AND
+			(
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
+					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
+			)
 		END
 	END
 END
