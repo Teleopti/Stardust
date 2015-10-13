@@ -25,7 +25,7 @@
 			controller: 'WfmCardCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			scope: {},
+			scope: { preselected: "=" },
 			templateUrl: "js/global/wfmcardList/wfmcard.html",
 			transclude: true,
 			require: ['wfmCard', '^wfmCardList'],
@@ -65,6 +65,10 @@
 						}
 					});
 				});
+
+				if (vm.preselected) {
+					vm.select();
+				}
 			}
 		};
 	};

@@ -65,7 +65,7 @@ angular.module('wfm.forecasting')
 					Queues: queues
 				}).$promise.then(
 					function(result) {
-						$state.go('forecasting.start');
+						$state.go('forecasting.start', { workloadId: result.WorkloadId });
 					}
 				);
 			};

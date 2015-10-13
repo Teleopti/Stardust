@@ -50,6 +50,7 @@ wfm.config([
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingDefaultCtrl'
 		}).state('forecasting.start', {
+			params: { workloadId: undefined },
 			templateUrl: 'html/forecasting/forecasting-overview.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting.advanced', {

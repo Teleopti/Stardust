@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			newSkill.AddWorkload(newWorkload);
 			_skillRepository.Add(newSkill);
 			_workloadRepository.Add(newWorkload);
-			return Ok();
+			return Ok(new { WorkloadId = newWorkload.Id });
 		}
 
 		private void SetSkillTemplates(ISkill skill)

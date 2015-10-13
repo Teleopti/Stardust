@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle',
-		function ($scope, $state, forecasting, $http, $filter, $interval, toggleService) {
+		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$timeout',
+		function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams, $timeout) {
 			$scope.isForecastRunning = false;
 			function updateRunningStatus() {
 				forecasting.status.get().$promise.then(function(result) {
@@ -53,13 +53,17 @@ angular.module('wfm.forecasting')
 					var workloads = [];
 					angular.forEach(skills, function(skill) {
 						angular.forEach(skill.Workloads, function (workload) {
-							workloads.push(
-								{
-									Id: workload.Id,
-									Name: getName(skill.Name, workload.Name),
-									ChartId: "chart" + workload.Id,
-									Scenario: $scope.modalForecastingInfo.selectedScenario
-								});
+							var w = {
+								Id: workload.Id,
+								Name: getName(skill.Name, workload.Name),
+								ChartId: "chart" + workload.Id,
+								Scenario: $scope.modalForecastingInfo.selectedScenario
+							};
+							if ($stateParams.workloadId == workload.Id) {
+								w.preselected = true;
+								$scope.getForecastResult(w);
+							}
+							workloads.push(w);
 						});
 					});
 					$scope.workloads = $filter('orderBy')(workloads, 'Name');

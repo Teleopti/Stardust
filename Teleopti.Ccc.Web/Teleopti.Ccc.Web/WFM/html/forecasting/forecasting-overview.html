@@ -22,61 +22,65 @@
 	</div>
 	<div class="material-block-content">
 		<wfm-card-list>
-			<wfm-card ng-repeat="workload in workloads">
-				<card-header ng-click="getForecastResult(workload)">
-					<div>
-						<span><b>{{workload.Name}}</b></span>
-						<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
-						<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>Success</md-tooltip><i class="mdi mdi-check"></i></span>
-						<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
-						<span class="chevron pull-right"><i class="mdi mdi-chevron-right"></i></span>
-					</div>
-				</card-header>
-				<card-body>
-					<span>This is your existing forecast. To be able to add a campaign select some day(s) in the chart. 
-						<i class=" mdi mdi-block-helper pull-right toggle-handle" ng-if="workload.forecastResultLoaded" ng-click="clearChartSelection()">
-							<md-tooltip>
-								Clear chart selection
-							</md-tooltip>
-						</i>
-						<span class="row">
-							<div class=" forecast-campaign">
-								<label style="margin:0;">Scenario:</label>
-								<select class="col-lg-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
-							</div>
+			<div ng-repeat="workload in workloads">
+				<wfm-card preselected="workload.preselected">
+					<card-header ng-click="getForecastResult(workload)">
+						<div>
+							<span><b>{{workload.Name}}</b></span>
+							<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
+							<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>Success</md-tooltip><i class="mdi mdi-check"></i></span>
+							<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
+							<span class="chevron pull-right"><i class="mdi mdi-chevron-right"></i></span>
+						</div>
+					</card-header>
+					<card-body>
+						<span>
+							This is your existing forecast. To be able to add a campaign select some day(s) in the chart.
+							<i class=" mdi mdi-block-helper pull-right toggle-handle" ng-if="workload.forecastResultLoaded" ng-click="clearChartSelection()">
+								<md-tooltip>
+									Clear chart selection
+								</md-tooltip>
+							</i>
+							<span class="row">
+								<div class=" forecast-campaign">
+									<label style="margin:0;">Scenario:</label>
+									<select class="col-lg-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
+								</div>
+							</span>
 						</span>
-					</span>
-					
-					<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
-						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-					</div>
-					<div ng-show="workload.forecastResultLoaded" class="wfm-block">
 
-						<div id="{{workload.ChartId}}"></div>
-					</div>
-					<div class="modal-footer">
-						<aside>
-							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Statistics' | translate }}
-								<md-tooltip>
-									View more numbers
-								</md-tooltip>
-							</a>
-							<a class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
-								Forecast
-								<md-tooltip>
-									Forecast this workload
-								</md-tooltip>
-							</a>
-							<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-default': !disableAddCampaign(), 'wfm-btn-invis-disabled': disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
-								Campaign {{selectedDayCountParenthesis()}}
-								<md-tooltip>
-									Select days in chart before adding
-								</md-tooltip>
-							</a>
-						</aside>
-					</div>
-				</card-body>
-			</wfm-card>
+						<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
+							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+						</div>
+						<div ng-show="workload.forecastResultLoaded" class="wfm-block">
+
+							<div id="{{workload.ChartId}}"></div>
+						</div>
+						<div class="modal-footer">
+							<aside>
+								<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
+									{{ 'Statistics' | translate }}
+									<md-tooltip>
+										View more numbers
+									</md-tooltip>
+								</a>
+								<a class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
+									Forecast
+									<md-tooltip>
+										Forecast this workload
+									</md-tooltip>
+								</a>
+								<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-default': !disableAddCampaign(), 'wfm-btn-invis-disabled': disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
+									Campaign {{selectedDayCountParenthesis()}}
+									<md-tooltip>
+										Select days in chart before adding
+									</md-tooltip>
+								</a>
+							</aside>
+						</div>
+					</card-body>
+				</wfm-card>
+			</div>
 		</wfm-card-list>
 	</div>
 	<div class="clearfix"></div>
