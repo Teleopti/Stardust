@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public string TypeOfRule { get; set; }
 		public double? Threshold { get; set; }
-		public WarningThresholdType WarningThresholdType { get; set; }
+		public WarningThresholdType ThresholdType { get; set; }
 		public double? TargetValue { get; set; }
 		
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		{
 			TypeOfRule = response.WarningName;
 			Threshold = response.Threshold;
-			WarningThresholdType = response.WarningThresholdType;
+			ThresholdType = response.WarningThresholdType;
 			TargetValue = response.TargetValue;		
 		}
 	}
