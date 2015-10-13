@@ -296,6 +296,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				ShowErrorMessage(Resources.ScenarioMustBeCreated, Resources.NoScenario);
 				_scenarios = new List<IScenario>();
 			}
+			if (!validateSelectedDatesControl(dateSelectionControl1.GetCurrentlySelectedDates()))
+				return;
+			DateOnly dateOnly = dateSelectionControl1.GetCurrentlySelectedDates()[0].StartDate;
+			checkScenarios(dateOnly);
 		}
 
 		private void removeNotPermittedRestrictedScenarios(IList<IScenario> scenarios, DateOnly dateOnly)
@@ -356,6 +360,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			if (!validateSelectedDatesControl(e.SelectedDates))
 				return;
 			DateOnly dateOnly = e.SelectedDates[0].StartDate;
+			checkScenarios(dateOnly);
+		}
+
+		void checkScenarios(DateOnly dateOnly)
+		{
 			IList<IScenario> permittedScenarios = filterPermittedScenarios(dateOnly);
 			if (!validateScenarioControl(permittedScenarios))
 				return;
