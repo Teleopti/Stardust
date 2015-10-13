@@ -171,7 +171,7 @@
 
 		$scope.isOverStaffing = function(d) {
 			var result = d.filter(function(e) {
-				return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
+				return (e.TypeOfRule == 'CampaignOverstaff') ? true : false;
 			}).length > 0;
 			return result;
 		};

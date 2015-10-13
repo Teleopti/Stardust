@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
@@ -23,24 +25,23 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public DateOnly StartDate;
 		public DateOnly EndDate;
 		public CampaignStatus Status;
-		public IEnumerable<OutboundRuleResponse> WarningInfo;
+		public IEnumerable<CampaignWarning> WarningInfo;
 	}
 
 	public class OutboundWarningViewModel
 	{
 		public string TypeOfRule { get; set; }
 		public double? Threshold { get; set; }
-		public ThresholdType ThresholdType { get; set; }
+		public WarningThresholdType WarningThresholdType { get; set; }
 		public double? TargetValue { get; set; }
-		public DateOnly Date { get; set; }
+		
 
-		public OutboundWarningViewModel(OutboundRuleResponse response)
+		public OutboundWarningViewModel(CampaignWarning response)
 		{
-			TypeOfRule = response.TypeOfRule.Name;
+			TypeOfRule = response.WarningName;
 			Threshold = response.Threshold;
-			ThresholdType = response.ThresholdType;
-			TargetValue = response.TargetValue;
-			Date = new DateOnly(response.Date);
+			WarningThresholdType = response.WarningThresholdType;
+			TargetValue = response.TargetValue;		
 		}
 	}
 
@@ -171,6 +172,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class ThresholdSettingForm
 	{
 		public double Value;
-		public ThresholdType Type;
+		public WarningThresholdType Type;
 	}
 }

@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var thresholdSettings = new OutboundThresholdSettings
 			{
 				RelativeWarningThreshold = new Percent(0.5),
-				ThresholdType = ThresholdType.Relative
+				WarningThresholdType = WarningThresholdType.Relative
 			};
 			var returnedSettings = new OutboundThresholdSettings();
 			personalSettingDataRepository.Stub(x => x.FindValueByKey(outboundThresholdSettingKey, new OutboundThresholdSettings())).IgnoreArguments().Return(returnedSettings);
 			var target = new OutboundThresholdSettingsPersistorAndProvider(personalSettingDataRepository);
 			var result = target.Persist(thresholdSettings);
 			result.RelativeWarningThreshold.Should().Be.EqualTo(thresholdSettings.RelativeWarningThreshold);
-			result.ThresholdType.Should().Be.EqualTo(ThresholdType.Relative);
+			result.WarningThresholdType.Should().Be.EqualTo(WarningThresholdType.Relative);
 		}
 
 		[Test]

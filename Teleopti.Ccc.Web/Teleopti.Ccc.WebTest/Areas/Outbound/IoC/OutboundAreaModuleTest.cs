@@ -9,7 +9,6 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 {
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
         {
             using (var ioc = _containerBuilder.Build())
             {
-                var checker = ioc.Resolve<IOutboundRuleChecker>();
+                var checker = ioc.Resolve<ICampaignWarningProvider>();
                 checker.Should().Not.Be.Null();
             }
         }

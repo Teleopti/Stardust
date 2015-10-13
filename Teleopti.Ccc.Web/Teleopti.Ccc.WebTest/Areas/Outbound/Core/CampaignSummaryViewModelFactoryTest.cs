@@ -3,11 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Outbound.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
@@ -32,27 +31,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
                     new CampaignSummary
                     {
                         Name = "A",
-                        WarningInfo = new List<OutboundRuleResponse>()
+                        WarningInfo = new List<CampaignWarning>()
                     },
                     new CampaignSummary
                     {
                         Name = "B",
-                        WarningInfo = new List<OutboundRuleResponse>()
+                        WarningInfo = new List<CampaignWarning>()
                     },
                     new CampaignSummary
                     {
                         Name = "C",
-                        WarningInfo = new List<OutboundRuleResponse>
+                        WarningInfo = new List<CampaignWarning>
                         {
-                            new OutboundRuleResponse() {TypeOfRule = typeof(OutboundOverstaffRule)}
+                            new CampaignWarning() {TypeOfRule = typeof(CampaignOverstaffRule)}
                         }
                     },
                     new CampaignSummary
                     {
                         Name = "D",
-                        WarningInfo = new List<OutboundRuleResponse>
+                        WarningInfo = new List<CampaignWarning>
                         {
-                            new OutboundRuleResponse() {TypeOfRule = typeof(OutboundUnderSLARule)}
+                            new CampaignWarning() {TypeOfRule = typeof(CampaignUnderServiceLevelRule)}
                         }
                     }
                 });
@@ -77,9 +76,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
                     new CampaignSummary
                     {
                         Name = "D",
-                        WarningInfo = new List<OutboundRuleResponse>
+                        WarningInfo = new List<CampaignWarning>
                         {
-                            new OutboundRuleResponse() {TypeOfRule = typeof(OutboundUnderSLARule)}
+                            new CampaignWarning()
+                            {
+	                            TypeOfRule = typeof(CampaignUnderServiceLevelRule),
+								WarningName = "CampaignUnderSLA"
+                            }
                         }
                     }
                 });
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
                 warnings.Count.Should().Be.EqualTo(1);
                 warnings.ForEach(w =>
                 {
-                    w.TypeOfRule.Should().Be.EqualTo("OutboundUnderSLARule");
+					w.TypeOfRule.Should().Be.EqualTo("CampaignUnderSLA");
                 });
             });
         }

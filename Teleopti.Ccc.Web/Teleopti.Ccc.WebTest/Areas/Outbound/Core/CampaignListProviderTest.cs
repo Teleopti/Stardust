@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.Outbound.Rules;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 		private FakeCampaignRepository _outboundCampaignRepository;
 		private FakeScheduleResourceProvider _scheduledResourcesProvider;
-		private FakeOutboundRuleChecker _outboundRuleChecker;
+		private FakeCampaignWarningProvider _campaignWarningProvider;
 		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
 		private IUserTimeZone _userTimeZone;
 
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignRepository = new FakeCampaignRepository();
 			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
-			_outboundRuleChecker = new FakeOutboundRuleChecker();
+			_campaignWarningProvider = new FakeCampaignWarningProvider();
 
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"),
 				new TimeSpan(4, 0, 0));
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				CampaignStatus.Scheduled
 			});
 
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone);
 		}
 
 		[Test]
@@ -244,11 +243,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
 		{
 			setCampaigns();
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
+			_campaignWarningProvider.SetCampaignRuleCheckResponse(ongoingCampaign, new List<CampaignWarning>
 			{
-				new OutboundRuleResponse()
+				new CampaignWarning()
 				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
+					TypeOfRule = typeof (CampaignOverstaffRule)
 				}
 			});
 
@@ -259,7 +258,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				warnings.Should().Not.Be.Empty();
 				warnings.ForEach(w =>
 				{
-					w.TypeOfRule.Should().Be.EqualTo(typeof (OutboundOverstaffRule));
+					w.TypeOfRule.Should().Be.EqualTo(typeof(CampaignOverstaffRule));
 				});
 			});
 		}
@@ -268,11 +267,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
 		{
 			setCampaigns();
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
+			_campaignWarningProvider.SetCampaignRuleCheckResponse(scheduledCampaign, new List<CampaignWarning>
 			{
-				new OutboundRuleResponse()
+				new CampaignWarning()
 				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
+					TypeOfRule = typeof (CampaignOverstaffRule)
 				}
 			});
 
@@ -283,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				warnings.Should().Not.Be.Empty();
 				warnings.ForEach(w =>
 				{
-					w.TypeOfRule.Should().Be.EqualTo(typeof (OutboundOverstaffRule));
+					w.TypeOfRule.Should().Be.EqualTo(typeof (CampaignOverstaffRule));
 				});
 			});
 		}
@@ -307,19 +306,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			setCampaigns();
 
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
+			_campaignWarningProvider.SetCampaignRuleCheckResponse(ongoingCampaign, new List<CampaignWarning>
 			{
-				new OutboundRuleResponse()
+				new CampaignWarning()
 				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
+					TypeOfRule = typeof (CampaignOverstaffRule)
 				}
 			});
 
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
+			_campaignWarningProvider.SetCampaignRuleCheckResponse(scheduledCampaign, new List<CampaignWarning>
 			{
-				new OutboundRuleResponse()
+				new CampaignWarning()
 				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
+					TypeOfRule = typeof (CampaignOverstaffRule)
 				}
 			});
 
@@ -353,7 +352,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaigns = new List<IOutboundCampaign>() {createCampaign("campaign1", new DateTimePeriod()), createCampaign("campaign2", new DateTimePeriod())};
 			var repository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
 			repository.Stub(x => x.GetCampaigns(getUtcPeroid(period))).IgnoreArguments().Return(campaigns);
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).IgnoreArguments();
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -373,7 +372,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid) campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x=>x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -394,7 +393,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -414,7 +413,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -434,7 +433,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -454,7 +453,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.FromHours(8));
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -474,7 +473,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.Zero);
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
@@ -494,16 +493,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			repository.Stub(x => x.Get((Guid)campaigns[0].Id)).Return(campaigns[0]);
 			var _scheduledResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_scheduledResourceProvider.Stub(x => x.GetScheduledTimeOnDate(DateOnly.Today, campaigns[0].Skill)).Return(TimeSpan.Zero);
-			var ruleChecker = MockRepository.GenerateMock<IOutboundRuleChecker>();
-			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).Return(new List<OutboundRuleResponse>()
+			var ruleChecker = MockRepository.GenerateMock<ICampaignWarningProvider>();
+			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).Return(new List<CampaignWarning>()
 			{
-				new OutboundRuleResponse()
+				new CampaignWarning()
 				{
-					TypeOfRule = typeof(OutboundOverstaffRule),
+					TypeOfRule = typeof(CampaignOverstaffRule),
 					Threshold = 20,
-					ThresholdType = ThresholdType.Absolute,
+					WarningThresholdType = WarningThresholdType.Absolute,
 					TargetValue = 10,
-					Date = DateTime.Today
+					WarningName = "CampaignOverstaff"
 				}
 			});
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
@@ -511,11 +510,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
-			result.ToList()[0].WarningInfo.ToList()[0].TypeOfRule.Should().Be.EqualTo("OutboundOverstaffRule");
+			result.ToList()[0].WarningInfo.ToList()[0].TypeOfRule.Should().Be.EqualTo("CampaignOverstaff");
 			result.ToList()[0].WarningInfo.ToList()[0].Threshold.Should().Be.EqualTo(20);
 			result.ToList()[0].WarningInfo.ToList()[0].TargetValue.Should().Be.EqualTo(10);
-			result.ToList()[0].WarningInfo.ToList()[0].ThresholdType.Should().Be.EqualTo(ThresholdType.Absolute);
-			result.ToList()[0].WarningInfo.ToList()[0].Date.Should().Be.EqualTo(DateOnly.Today);
+			result.ToList()[0].WarningInfo.ToList()[0].WarningThresholdType.Should().Be.EqualTo(WarningThresholdType.Absolute);
+			
 		}
 
 		public IOutboundCampaign GetTestCampaign(int index)

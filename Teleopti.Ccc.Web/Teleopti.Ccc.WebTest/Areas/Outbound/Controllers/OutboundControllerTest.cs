@@ -278,10 +278,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		[Test]
 		public void ShouldGetThresholdSettingType()
 		{
-			var expectedType = ThresholdType.Relative;
+			var expectedType = WarningThresholdType.Relative;
 			var thresholdSetting = MockRepository.GenerateMock<ISettingsPersisterAndProvider<OutboundThresholdSettings>>();
 			thresholdSetting.Stub(x => x.Get())
-				.Return(new OutboundThresholdSettings() { ThresholdType = expectedType });
+				.Return(new OutboundThresholdSettings() { WarningThresholdType = expectedType });
 
 			var target = new OutboundController(null, null, null, null, null, null, null, thresholdSetting);
 			var result = target.GetThresholdSetting();

@@ -4341,6 +4341,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Early.
+        /// </summary>
+        public static string CampaignOverstaff {
+            get {
+                return ResourceManager.GetString("CampaignOverstaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaigns.
         /// </summary>
         public static string Campaigns {
@@ -4382,6 +4391,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignThreshold {
             get {
                 return ResourceManager.GetString("CampaignThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Late.
+        /// </summary>
+        public static string CampaignUnderSLA {
+            get {
+                return ResourceManager.GetString("CampaignUnderSLA", resourceCulture);
             }
         }
         
@@ -17989,24 +18007,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OutboundCampaigns {
             get {
                 return ResourceManager.GetString("OutboundCampaigns", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Early.
-        /// </summary>
-        public static string OutboundOverstaffRule {
-            get {
-                return ResourceManager.GetString("OutboundOverstaffRule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Late.
-        /// </summary>
-        public static string OutboundUnderSLARule {
-            get {
-                return ResourceManager.GetString("OutboundUnderSLARule", resourceCulture);
             }
         }
         

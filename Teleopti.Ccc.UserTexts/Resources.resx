@@ -13326,13 +13326,13 @@ Reduce the complexity to use these shifts.</value>
     <value>Manual Backlog</value>
     <comment>for campaigns to add backlog</comment>
   </data>
-  <data name="OutboundOverstaffRule" xml:space="preserve">
+  <data name="CampaignOverstaff" xml:space="preserve">
     <value>Early</value>
-    <comment>campaign error type</comment>
+    <comment>campaign error type: campaign is overstaffing</comment>
   </data>
-  <data name="OutboundUnderSLARule" xml:space="preserve">
+  <data name="CampaignUnderSLA" xml:space="preserve">
     <value>Late</value>
-    <comment>campaign error type</comment>
+    <comment>campaign error type: campaign is under service level</comment>
   </data>
   <data name="ManualPlan" xml:space="preserve">
     <value>Manual Plan</value>

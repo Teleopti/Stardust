@@ -6,10 +6,10 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
-using OutboundRuleConfigurationProvider = Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider.OutboundRuleConfigurationProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 {
@@ -19,6 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 		{
 			//dependences
 			builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
+
+
+			builder.RegisterType<CampaignWarningProvider>().As<ICampaignWarningProvider>();
+			builder.RegisterType<CampaignWarningConfigurationProvider>().As<ICampaignWarningConfigurationProvider>();
+			builder.RegisterType<CampaignOverstaffRule>().AsSelf();
+			builder.RegisterType<CampaignUnderServiceLevelRule>().AsSelf();
+
 
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
 			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
@@ -35,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().SingleInstance();			
 			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().SingleInstance();
 
-			builder.RegisterType<OutboundRuleConfigurationProvider>().As<IOutboundRuleConfigurationProvider>().InstancePerLifetimeScope();
 		}
 	}
 }

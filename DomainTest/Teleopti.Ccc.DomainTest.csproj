@@ -684,7 +684,6 @@
     <Compile Include="Outbound\OutboundAssignedStaffProviderTest.cs" />
     <Compile Include="Outbound\OutboundPeriodMoverTest.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactoryTest.cs" />
-    <Compile Include="Outbound\OutboundRuleCheckerTest.cs" />
     <Compile Include="Outbound\OutboundSkillCreatorTest.cs" />
     <Compile Include="Payroll\PayrollExportProgressTest.cs" />
     <Compile Include="Payroll\PayrollResultDetailTest.cs" />

@@ -235,10 +235,10 @@
 			row.campaignNameClass = null;
 			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
 			campaignSummary.WarningInfo.forEach(function (warning) {
-				if (warning.TypeOfRule == 'OutboundUnderSLARule') {
+				if (warning.TypeOfRule == 'CampaignUnderSLA') {
 					row.campaignNameClass = 'campaign-late';
 				}
-				if (warning.TypeOfRule == 'OutboundOverstaffRule') {
+				if (warning.TypeOfRule == 'CampaignOverstaff') {
 					row.campaignNameClass = 'campaign-early';
 				}
 			});

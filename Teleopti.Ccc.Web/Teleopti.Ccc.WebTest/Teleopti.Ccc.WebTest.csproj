@@ -261,6 +261,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\Outbound\Core\CampaignWarningProviderTest.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundThresholdSettingsPersistorAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonForScheduleFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelFinder.cs" />
@@ -354,7 +355,7 @@
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\FakeOutboundCampaignListOrderProvider.cs" />
-    <Compile Include="Core\Common\DataProvider\FakeOutboundRuleChecker.cs" />
+    <Compile Include="Core\Common\DataProvider\FakeCampaignWarningProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakePreferenceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleResourceProvider.cs" />

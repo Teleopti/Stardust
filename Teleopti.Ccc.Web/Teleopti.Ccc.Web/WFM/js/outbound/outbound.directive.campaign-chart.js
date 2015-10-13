@@ -156,10 +156,10 @@
 				};
 
 				$scope.campaign.WarningInfo.forEach(function (e) {
-					if (e.TypeOfRule == 'OutboundUnderSLARule') {
+					if (e.TypeOfRule == 'CampaignUnderSLA') {
 						colorMap.progress = '#F44336';
 					}
-					if (e.TypeOfRule == 'OutboundOverstaffRule') {
+					if (e.TypeOfRule == 'CampaignOverstaff') {
 						colorMap.progress = '#FF7F0E';
 					}
 				});

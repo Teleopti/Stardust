@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var thresholdSetting = new OutboundThresholdSettings()
 			{
 				RelativeWarningThreshold = new Percent(input.Value),
-				ThresholdType = input.Type
+				WarningThresholdType = input.Type
 			};
 			_thresholdsSettingPersisterAndProvider.Persist(thresholdSetting);
 		}
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return new ThresholdSettingForm()
 			{
 				Value = threshold.RelativeWarningThreshold.Value,
-				Type = threshold.ThresholdType
+				Type = threshold.WarningThresholdType
 			};
 		}
 	}

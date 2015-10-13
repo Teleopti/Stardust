@@ -464,7 +464,10 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundRuleConfigurationProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningConfigurationProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignWarningConfigurationProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignWarningProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundThresholdSettingPersistorAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />
@@ -494,6 +497,9 @@
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignMapper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignOverstaffRule.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignUnderServiceLevelRule.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignWarningCheckRule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\CampaignSummaryViewModelFactory.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\ICampaignSummaryViewModelFactory.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />

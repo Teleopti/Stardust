@@ -71,9 +71,9 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('should tell the campaign whether it is overstaffing', function () {
 		var test = setUpTarget();
-		var warnings = [{ TypeOfRule: 'OutboundOverstaffRule' }];
+		var warnings = [{ TypeOfRule: 'CampaignOverstaff' }];
 		expect(test.scope.isOverStaffing(warnings)==true);
-		var warnings = [{ TypeOfRule: 'OutboundUnderSLARule' }];
+		var warnings = [{ TypeOfRule: 'CampaignUnderSLA' }];
 		expect(test.scope.isOverStaffing(warnings)==false);
 
 	});

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Diagnostics.CodeAnalysis;
+using Autofac;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.Outbound.Rules;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private static void registerWorkShiftFilters(ContainerBuilder builder)
 		{
 			builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>().InstancePerLifetimeScope();
@@ -510,12 +510,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
 		    builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>().SingleInstance();
 		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
-		    builder.RegisterType<OutboundOverstaffRule>().AsSelf();
-		    builder.RegisterType<OutboundUnderSLARule>().AsSelf();
-			builder.RegisterType<CampaignRuleChecker>().As<IOutboundRuleChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<OutboundRuleConfigurationProvider>().As<IOutboundRuleConfigurationProvider>().InstancePerLifetimeScope();
-
-			//OutboundCampaignRepository
+		 			
 		}
 	}
 }
