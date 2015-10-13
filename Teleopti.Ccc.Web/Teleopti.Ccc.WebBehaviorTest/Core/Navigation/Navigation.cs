@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoToPage("MyTime/Schedule/Week");
+			GoToPage("MyTime#Schedule/Week");
 		}
 
 		public static void GotoAnApplicationPage()
@@ -159,8 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoPasswordPage()
 		{
-			GotoWeekSchedulePage();
-			GoToPage("MyTime#Settings/Password");
+			GoToPage("MyTime#Settings/Password", new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoRequests()
