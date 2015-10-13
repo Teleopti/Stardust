@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.ToList()[0].WarningInfo.ToList()[0].TypeOfRule.Should().Be.EqualTo("CampaignOverstaff");
 			result.ToList()[0].WarningInfo.ToList()[0].Threshold.Should().Be.EqualTo(20);
 			result.ToList()[0].WarningInfo.ToList()[0].TargetValue.Should().Be.EqualTo(10);
-			result.ToList()[0].WarningInfo.ToList()[0].WarningThresholdType.Should().Be.EqualTo(WarningThresholdType.Absolute);
+			result.ToList()[0].WarningInfo.ToList()[0].ThresholdType.Should().Be.EqualTo(WarningThresholdType.Absolute);
 			
 		}
 
