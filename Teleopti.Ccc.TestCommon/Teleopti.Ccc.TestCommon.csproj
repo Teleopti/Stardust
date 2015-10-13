@@ -159,6 +159,7 @@
     <Compile Include="FakeData\FakeScheduleCommand.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />
+    <Compile Include="FakeData\FakeScheduleDictionaryPersister.cs" />
     <Compile Include="FakeData\FakeScheduleParameters.cs" />
     <Compile Include="FakeData\FakeScheduleTagSetter.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolder.cs" />
@@ -183,11 +184,13 @@
     <Compile Include="FakeRepositories\FakePersonAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakePlanningPeriodRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
+    <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
     <Compile Include="FakeRepositories\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatPlanRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSkillDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />
@@ -205,6 +208,7 @@
     <Compile Include="IoC\SettingAttribute.cs" />
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
+    <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />

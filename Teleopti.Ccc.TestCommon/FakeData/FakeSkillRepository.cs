@@ -17,6 +17,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_skills = new List<ISkill>();
 		}
 
+		public ISkill Has(string skillName)
+		{
+			var skill = SkillFactory.CreateSkill(skillName);
+			_skills.Add(skill);
+			return skill;
+		}
+
 		public void Add(ISkill skill)
 		{
 			_skills.Add(skill);

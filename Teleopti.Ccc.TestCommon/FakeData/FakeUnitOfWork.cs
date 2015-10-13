@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IDisposable DisableFilter(IQueryFilter filter)
 		{
-			throw new NotImplementedException();
+			return new GenericDisposable(() =>{});
 		}
 
 		public void Flush()

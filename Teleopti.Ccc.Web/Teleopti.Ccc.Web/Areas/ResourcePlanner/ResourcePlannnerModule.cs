@@ -37,11 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<CreateWorkShiftsFromTemplate>().As<ICreateWorkShiftsFromTemplate>();
 			builder.RegisterType<RuleSetProjectionEntityService>().As<IRuleSetProjectionEntityService>();
 
-			
-			
-			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>();
-			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>();
-			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
 			builder.RegisterType<ClearEvents>().As<IClearEvents>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>();

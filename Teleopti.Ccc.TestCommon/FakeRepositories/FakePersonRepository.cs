@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,6 +34,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Has(IPerson person)
 		{
 			_persons.Add(person);
+		}
+
+		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team)
+		{
+			var agent = new Person();
+			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
+			_persons.Add(agent);
+			return agent;
 		}
 
 		public void Add(IPerson person)

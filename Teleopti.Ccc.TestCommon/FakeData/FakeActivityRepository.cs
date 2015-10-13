@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,6 +16,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public FakeActivityRepository()
 		{
 			_activities = new List<IActivity>();
+		}
+
+		public IActivity Has(string name)
+		{
+			var newActivity = new Activity(name)
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				RequiresSkill = true
+			};
+			_activities.Add(newActivity);
+			return newActivity;
 		}
 
 		public void SetOutboundActivity(bool isOutboundActivity)

@@ -9,11 +9,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScenarioRepository : IScenarioRepository
 	{
-		private readonly IScenario _scenario;
+		private IScenario _scenario;
+
+		public FakeScenarioRepository()
+		{			
+		}
 
 		public FakeScenarioRepository(IScenario scenario)
 		{
 			_scenario = scenario;
+		}
+
+
+		public IScenario Has(string name)
+		{
+			_scenario = new Scenario(name);
+			return _scenario;
 		}
 
 		public void Add(IScenario entity)

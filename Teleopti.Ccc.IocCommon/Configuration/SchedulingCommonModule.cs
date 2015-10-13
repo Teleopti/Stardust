@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Autofac;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -34,6 +35,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -307,6 +309,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
 
 			builder.RegisterType<ScheduleOptimization>().AsSelf().SingleInstance();
+			builder.RegisterType<SetupStateHolderForWebScheduling>().SingleInstance();
+			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
+			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
