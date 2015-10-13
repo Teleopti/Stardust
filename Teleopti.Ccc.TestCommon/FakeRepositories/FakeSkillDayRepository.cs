@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ISkillDay> FindRange(DateOnlyPeriod period, ISkill skill, IScenario scenario)
 		{
 			throw new NotImplementedException();
