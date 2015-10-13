@@ -30,19 +30,13 @@ namespace Teleopti.Ccc.DomainTest
 			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
-
-			/*
-			                LoadActivity(repositoryFactory.CreateActivityRepository(unitOfWork));
-                LoadAbsences(repositoryFactory.CreateAbsenceRepository(unitOfWork));
-                LoadDayOffs(repositoryFactory.CreateDayOffRepository(unitOfWork));
-                LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
-                LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
-                LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
-                loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
-	            loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
-	*/
-
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
+			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
+			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
+			system.UseTestDouble<FakeScheduleTagRepository>().For<IScheduleTagRepository>();
+			system.UseTestDouble<FakeWorkflowControlSetRepository>().For<IWorkflowControlSetRepository>();
 		}
 	}
 }

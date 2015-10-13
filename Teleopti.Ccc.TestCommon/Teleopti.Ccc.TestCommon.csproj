@@ -175,7 +175,10 @@
     <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="FakeMessageSender.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="FakeRepositories\FakeAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
+    <Compile Include="FakeRepositories\FakeContractRepository.cs" />
+    <Compile Include="FakeRepositories\FakeContractScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeExistingForecastRepository.cs" />
     <Compile Include="FakeRepositories\FakeFixedStaffLoader.cs" />
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
@@ -186,12 +189,15 @@
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
     <Compile Include="FakeRepositories\FakeScheduleRangePersister.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatPlanRepository.cs" />
+    <Compile Include="FakeRepositories\FakeShiftCategoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
+    <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 
-		[Test, Ignore("2 be continued")]
+		[Test, Explicit("2 be continued")]
 		public void ShouldMoveDayOff()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team);
 
 			var skill = SkillRepository.Has("skill");
-			var skillDay0 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay, TimeSpan.FromHours(5), scenario);
+			SkillDayRepository.HasSkillDayWithDemand(skill, firstDay, TimeSpan.FromHours(5), scenario);
 			var skillDay1 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(1), TimeSpan.FromHours(1), scenario);
-			var skillDay2 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(2), TimeSpan.FromHours(5), scenario);
-			var skillDay3 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(3), TimeSpan.FromHours(5), scenario);
-			var skillDay4 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(4), TimeSpan.FromHours(5), scenario);
+			SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(2), TimeSpan.FromHours(5), scenario);
+			SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(3), TimeSpan.FromHours(5), scenario);
+			SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(4), TimeSpan.FromHours(5), scenario);
 			var skillDay5 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(5), TimeSpan.FromHours(25), scenario);
-			var skillDay6 = SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(6), TimeSpan.FromHours(5), scenario);
+			SkillDayRepository.HasSkillDayWithDemand(skill, firstDay.AddDays(6), TimeSpan.FromHours(5), scenario);
 
 			for (var dayNumber = 0; dayNumber < 7; dayNumber++)
 			{
