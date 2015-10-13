@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Then(@"I should see the new skill '(.*)' in the list")]
 		public void ThenIShouldSeeTheNewSkillInTheList(string name)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-card-list .wfm-card .card-header span b", name);
+			Browser.Interactions.AssertAnyContains(".wfm-card-list wfm-card card-header", name);
 		}
 
 
