@@ -134,8 +134,7 @@ wfm.config([
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl',
 		}).state('rta-teams', {
-			url: '/rta/site/?siteIds',
-			params: {siteIds: {array:true}},
+			url: '/rta/site/:siteIds',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl'
 		}).state('rta-agents', {
@@ -168,7 +167,7 @@ wfm.config([
 					document.cookie = 'returnHash=WFM' + window.location.hash + '; ' + expires + '; path=/';
 				}
 			}
-			
+
 			$sessionStorage.$reset();
 			window.location = 'Authentication';
 		};
