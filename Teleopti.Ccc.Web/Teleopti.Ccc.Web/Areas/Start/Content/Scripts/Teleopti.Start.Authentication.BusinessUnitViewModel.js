@@ -7,6 +7,7 @@ Teleopti.Start.Authentication.BusinessUnitViewModel = function (data) {
 
 	this.Select = function () {
 		data.authenticationState.AttemptGotoApplicationBySelectingBusinessUnit({
+			baseUrl: data.baseUrl,
 			data: {
 				businessUnitId: self.Id
 			}, 
