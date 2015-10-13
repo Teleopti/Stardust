@@ -33,7 +33,7 @@
 		$scope.updateThreshold = function (threshold) {
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
 			outboundService.updateThreshold(thresholdObj, function (data) {
-				loadWithinPeriod(function () {
+				getListCampaignsWithinPeriod(function () {
 					$scope.ganttData.forEach(function (dataRow, indx) {
 						if (dataRow.expansion) {
 							$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
@@ -57,15 +57,20 @@
 			});
 		}
 
-		function loadWithinPeriod(cb) {
+		function getListCampaignsWithinPeriod(cb) {
+			$scope.isRefreshingGantt = true;
+			outboundService.listCampaignsWithinPeriod(function success(data) {
+				updateAllCampaignGanttDisplay(data);
+				$scope.ganttStatistics = data;
+				$scope.isRefreshingGantt = false;
+				if (cb) cb();
+			});
+		}
+
+		function loadWithinPeriod() {
 			$scope.isRefreshingGantt = true;
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
-				outboundService.listCampaignsWithinPeriod(function success(data) {
-					updateAllCampaignGanttDisplay(data);
-					$scope.ganttStatistics = data;
-					$scope.isRefreshingGantt = false;
-					if (cb) cb();
-				});
+				getListCampaignsWithinPeriod();
 			});
 		}
 		
