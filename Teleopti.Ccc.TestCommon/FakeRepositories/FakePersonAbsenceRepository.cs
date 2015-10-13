@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			return _personAbsences.Where(x => x.BelongsToScenario(scenario) && x.Period.Intersect(period)).ToArray();
 		}
 
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
