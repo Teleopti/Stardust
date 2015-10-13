@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -89,7 +91,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if(!createAppConfigReader())
 				return;
-			
+
+			AppDomain.CurrentDomain.SetThreadPrincipal(new TeleoptiPrincipal(new GenericIdentity(""), null));
 			IContainer container = configureContainer();
 #if (!DEBUG)
 			 //NHibernateProfiler.Initialize();
