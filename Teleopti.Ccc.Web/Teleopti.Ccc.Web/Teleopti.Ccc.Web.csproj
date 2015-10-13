@@ -1228,6 +1228,7 @@
     <Content Include="WFM\js\people\html\people-list.html" />
     <Content Include="WFM\js\people\html\people.html" />
     <Content Include="WFM\js\people\people.default.controller.js" />
+    <Content Include="WFM\js\people\people.indeterminate.directive.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
