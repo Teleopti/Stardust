@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IContract> FindAllContractByDescription()
 		{
 			return _contracts.OrderBy(x => x.Description).ToArray();

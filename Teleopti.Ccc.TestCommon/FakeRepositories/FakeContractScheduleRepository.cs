@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IContractSchedule> FindAllContractScheduleByDescription()
 		{
 			throw new NotImplementedException();
