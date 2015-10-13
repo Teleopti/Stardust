@@ -25,7 +25,7 @@
 			this.parseRelDif = function(period){
 				period.forEach(function(node){
 						node.SkillDetails.forEach(function(subnode){
-							var parseDif = Math.floor((subnode.RelativeDifference / 1) * 100)
+							var parseDif = (subnode.RelativeDifference * 100).toFixed(1)
 							return subnode.parseDif = parseDif;
 						})
 					})
