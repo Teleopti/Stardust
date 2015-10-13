@@ -69,5 +69,20 @@ angular.module('wfm.forecasting')
 					}
 				);
 			};
+
+			$scope.skillNameValidation = {
+				isValid: function(form) {
+					return ((form.$submitted || form.skillName.$touched) && (form.skillName.$error.required || form.skillName.$error.maxlength));
+				},
+				errorMessage: function(form) {
+					if (form.skillName.$error) {
+						if (form.skillName.$error.required)
+							return "The name is required.";
+						else if (form.skillName.$error.maxlength)
+							return "The name must be less than 50 characters long.";
+					}
+					return "error";
+				}
+			};
 		}
 	]);
