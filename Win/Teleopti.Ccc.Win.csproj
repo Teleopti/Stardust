@@ -145,6 +145,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.CompositeUI.1.0.0\lib\3.5\Microsoft.Practices.CompositeUI.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.ReportViewer.11.0.3366.16\lib\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -2646,6 +2650,81 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
+    <Compile Include="SmartParts\Forecasting\BudgetsSmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\BudgetsSmartPart.Designer.cs">
+      <DependentUpon>BudgetsSmartPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\DetailedSmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\DetailedSmartPart.Designer.cs">
+      <DependentUpon>DetailedSmartPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\DrawPositionAndWidth.cs" />
+    <Compile Include="SmartParts\Forecasting\DrawProperties.cs" />
+    <Compile Include="SmartParts\Forecasting\DrawSmartPart.cs" />
+    <Compile Include="SmartParts\Forecasting\EntityUpdateInformation.cs" />
+    <Compile Include="SmartParts\Forecasting\ForecastGraphsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\ForecastGraphsControl.Designer.cs">
+      <DependentUpon>ForecastGraphsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\IDrawingBehavior.cs" />
+    <Compile Include="SmartParts\Forecasting\IDrawPositionAndWidth.cs" />
+    <Compile Include="SmartParts\Forecasting\IDrawProperties.cs" />
+    <Compile Include="SmartParts\Forecasting\IDrawSmartPart.cs" />
+    <Compile Include="SmartParts\Forecasting\ISmartPartModel.cs" />
+    <Compile Include="SmartParts\Forecasting\NamedEntity.cs" />
+    <Compile Include="SmartParts\Forecasting\NavigationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\NavigationControl.Designer.cs">
+      <DependentUpon>NavigationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\SmartPartModel.cs" />
+    <Compile Include="SmartParts\Forecasting\TemplateSmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\TemplateSmartPart.Designer.cs">
+      <DependentUpon>TemplateSmartPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\ValidationSmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Forecasting\ValidationSmartPart.Designer.cs">
+      <DependentUpon>ValidationSmartPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\PayrollExportDataGridView.xaml.cs">
+      <DependentUpon>PayrollExportDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\PayrollExportsSmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\PayrollExportsSmartPart.Designer.cs">
+      <DependentUpon>PayrollExportsSmartPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\PayrollExportView.xaml.cs">
+      <DependentUpon>PayrollExportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\PayrollResultView.xaml.cs">
+      <DependentUpon>PayrollResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\SampleData.cs" />
+    <Compile Include="SmartParts\Payroll\StatusDoneView.xaml.cs">
+      <DependentUpon>StatusDoneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\StatusErrorView.xaml.cs">
+      <DependentUpon>StatusErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SmartParts\Payroll\StatusWorkingView.xaml.cs">
+      <DependentUpon>StatusWorkingView.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Backlog\AddActualBacklogView.resx">
       <DependentUpon>AddActualBacklogView.cs</DependentUpon>
     </EmbeddedResource>
@@ -3124,6 +3203,27 @@
       <DependentUpon>SkillGeneral.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\BudgetsSmartPart.resx">
+      <DependentUpon>BudgetsSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\DetailedSmartPart.resx">
+      <DependentUpon>DetailedSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\ForecastGraphsControl.resx">
+      <DependentUpon>ForecastGraphsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\NavigationControl.resx">
+      <DependentUpon>NavigationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\TemplateSmartPart.resx">
+      <DependentUpon>TemplateSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Forecasting\ValidationSmartPart.resx">
+      <DependentUpon>ValidationSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SmartParts\Payroll\PayrollExportsSmartPart.resx">
+      <DependentUpon>PayrollExportsSmartPart.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config">
       <Link>Teleopti.Ccc.Sdk.ServiceBus.Client.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -3177,6 +3277,10 @@
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\Teleopti.Ccc.PayrollFormatter.csproj">
+      <Project>{d3a96039-45cd-42ca-bcec-1ae495651082}</Project>
+      <Name>Teleopti.Ccc.PayrollFormatter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
@@ -3184,10 +3288,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>
       <Name>Teleopti.Common.UI.SmartPartControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.SmartParts\Teleopti.Ccc.SmartParts.csproj">
-      <Project>{2D32D355-5660-4DD7-B45B-655363F42550}</Project>
-      <Name>Teleopti.Ccc.SmartParts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
@@ -4035,6 +4135,7 @@
     <Content Include="Resources\Refresh1.ico" />
     <None Include="Resources\Reports.ico" />
     <None Include="Resources\Reports_filled_16x16.png" />
+    <Content Include="Resources\resultset_previous.png" />
     <Content Include="Resources\rightScale.png" />
     <Content Include="Resources\RightToLeft.bmp" />
     <None Include="Resources\scheduler.ico" />
@@ -4071,7 +4172,52 @@
     <None Include="Resources\server.jpg" />
     <None Include="Scheduling\ScheduleViewMVP.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Resources\CCCBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Common.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\CommonBrushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\PayrollExportDataGridView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\PayrollExportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\PayrollResultView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\ProgressView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\StatusDoneView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\StatusErrorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SmartParts\Payroll\StatusWorkingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

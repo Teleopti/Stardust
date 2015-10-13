@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Win.Payroll
 		private readonly PortalSettings _portalSettings;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private const string Assembly = "Teleopti.Ccc.SmartParts";
+		private const string Assembly = "Teleopti.Ccc.Win";
 		private const string PayrollExports = ".PayrollExportsSmartPart";
-		private const string ClassPrefix = "Teleopti.Ccc.SmartParts.Payroll";
+		private const string ClassPrefix = "Teleopti.Ccc.Win.SmartParts.Payroll";
 		private static BackgroundWorker _payrollBackgroundWorker;
 		private readonly IComponentContext _componentContext;
 		private readonly IPayrollResultRepository _payrollResultRepository;

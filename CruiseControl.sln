@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -52,8 +52,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.CommonTest", "Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\Teleopti.Analytics.Etl.CommonTest.csproj", "{6A0FB65D-B08B-479C-BA5B-7CFE665E03E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ConfigTool", "Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\Teleopti.Analytics.Etl.ConfigTool.csproj", "{8A4806D6-8587-43F2-86FE-915B81C9F863}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.SmartParts", "Teleopti.Ccc.SmartParts\Teleopti.Ccc.SmartParts.csproj", "{2D32D355-5660-4DD7-B45B-655363F42550}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Host", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.Host.csproj", "{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}"
 EndProject
@@ -397,18 +395,6 @@ Global
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|x86.ActiveCfg = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|.NET.ActiveCfg = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2D32D355-5660-4DD7-B45B-655363F42550}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU

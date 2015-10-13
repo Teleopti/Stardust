@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IMessagePopulatingServiceBusSender _messageSender;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private const string assembly = "Teleopti.Ccc.SmartParts";
-		private const string classPrefix = "Teleopti.Ccc.SmartParts.Forecasting";
+		private const string assembly = "Teleopti.Ccc.Win";
+		private const string classPrefix = "Teleopti.Ccc.Win.SmartParts.Forecasting";
 		private const string detailed = ".DetailedSmartPart";
 		private const string validation = ".ValidationSmartPart";
 		private const string budget = ".BudgetsSmartPart";
