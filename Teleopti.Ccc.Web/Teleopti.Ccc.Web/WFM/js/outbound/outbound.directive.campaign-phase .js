@@ -6,7 +6,7 @@
 	function phasePicker() {
 		return {
 			controller: ['$scope', '$element', phasePickerCtrl],
-			templateUrl: 'html/outbound/phase-picker.tpl.html',
+			templateUrl: 'js/outbound/html/phase-picker.tpl.html',
 			scope: {
 				'phaseStatistics': '=?',
 				'activePhaseCode': '=',

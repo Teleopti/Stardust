@@ -1198,10 +1198,22 @@
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="WFM\html\forecasting\forecasting.html" />
-    <Content Include="WFM\html\outbound\campaign-commands-pane.tpl.html" />
     <Content Include="WFM\html\forecasting\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
+    <Content Include="WFM\js\outbound\html\activity-picker.tpl.html" />
+    <Content Include="WFM\js\outbound\html\angular-gantt-custom.tpl.html" />
+    <Content Include="WFM\js\outbound\html\campaign-commands-pane.tpl.html" />
+    <Content Include="WFM\js\outbound\html\campaign-create.html" />
+    <Content Include="WFM\js\outbound\html\campaign-edit.html" />
+    <Content Include="WFM\js\outbound\html\campaign-list-cards.html" />
+    <Content Include="WFM\js\outbound\html\campaign-list-gantt.html" />
+    <Content Include="WFM\js\outbound\html\campaign-production-plan.html" />
+    <Content Include="WFM\js\outbound\html\campaign-sheet.tpl.html" />
+    <Content Include="WFM\js\outbound\html\outbound-overview.html" />
+    <Content Include="WFM\js\outbound\html\outbound.html" />
+    <Content Include="WFM\js\outbound\html\phase-picker.tpl.html" />
+    <Content Include="WFM\js\outbound\html\working-hours-picker.tpl.html" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\people\html\people-list.html" />
     <Content Include="WFM\js\people\html\people.html" />
@@ -1218,10 +1230,6 @@
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
-    <Content Include="WFM\html\outbound\angular-gantt-custom.tpl.html" />
-    <Content Include="WFM\html\outbound\campaign-sheet.tpl.html" />
-    <Content Include="WFM\html\outbound\campaign-list-gantt.html" />
-    <Content Include="WFM\html\outbound\outbound-overview.html" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
@@ -1308,12 +1316,6 @@
     <Content Include="WFM\html\forecasting\forecasting-intraday.html" />
     <Content Include="WFM\html\forecasting\forecasting-method.html" />
     <Content Include="WFM\html\left-sidenav.html" />
-    <Content Include="WFM\html\outbound\activity-picker.tpl.html" />
-    <Content Include="WFM\html\outbound\campaign-create.html" />
-    <Content Include="WFM\html\outbound\campaign-production-plan.html" />
-    <Content Include="WFM\html\outbound\campaign-list-cards.html" />
-    <Content Include="WFM\html\outbound\phase-picker.tpl.html" />
-    <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
     <Content Include="WFM\js\people\html\people-selection-cart.html" />
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
@@ -1428,8 +1430,6 @@
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css" />
     <Content Include="WFM\Gruntfile.js" />
-    <Content Include="WFM\html\outbound\campaign-edit.html" />
-    <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\global\areas.controller.js" />

@@ -9,7 +9,7 @@
 		        scope: {
 		            workingHours: '='
 		        },
-		        templateUrl: 'html/outbound/working-hours-picker.tpl.html',
+		        templateUrl: 'js/outbound/html/working-hours-picker.tpl.html',
 		        link: postLink
 
 		    };

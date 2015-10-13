@@ -9,7 +9,7 @@
 
 		return {
 			restrict: 'E',
-			templateUrl: 'html/outbound/campaign-commands-pane.tpl.html',
+			templateUrl: 'js/outbound/html/campaign-commands-pane.tpl.html',
 			scope: {
 				campaign: '=',
 				selectedDates: '=',

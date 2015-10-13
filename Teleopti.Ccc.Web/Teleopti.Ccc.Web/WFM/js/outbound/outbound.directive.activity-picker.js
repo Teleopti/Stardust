@@ -9,7 +9,7 @@
 		        require: ['ngModel'],
 		        scope: {
 		        },
-		        templateUrl: 'html/outbound/activity-picker.tpl.html',
+		        templateUrl: 'js/outbound/html/activity-picker.tpl.html',
 		        link: postLink
 		    };
 

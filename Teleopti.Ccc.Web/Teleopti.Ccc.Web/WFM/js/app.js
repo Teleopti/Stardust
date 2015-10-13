@@ -85,30 +85,30 @@ wfm.config([
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
 			url: '/outbound',
-			templateUrl: 'html/outbound/outbound.html',
+			templateUrl: 'js/outbound/html/outbound.html',
 			controller: 'OutboundDefaultCtrl'
 		}).state('outbound.summary', {
 			url: '/summary',
 			views: {
 				'': {
-					templateUrl: 'html/outbound/outbound-overview.html'
+					templateUrl: 'js/outbound/html/outbound-overview.html'
 				},
 				'cards@outbound.summary': {
-					templateUrl: 'html/outbound/campaign-list-cards.html',
+					templateUrl: 'js/outbound/html/campaign-list-cards.html',
 					controller: 'OutboundListCardsCtrl'
 				},
 				'gantt@outbound.summary': {
-					templateUrl: 'html/outbound/campaign-list-gantt.html',
+					templateUrl: 'js/outbound/html/campaign-list-gantt.html',
 					controller: 'CampaignListGanttCtrl'
 				}
 			}
 		}).state('outbound.create', {
 			url: '/create',
-			templateUrl: 'html/outbound/campaign-create.html',
+			templateUrl: 'js/outbound/html/campaign-create.html',
 			controller: 'OutboundCreateCtrl'
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',
-			templateUrl: 'html/outbound/campaign-edit.html',
+			templateUrl: 'js/outbound/html/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
 			url: '/people',
