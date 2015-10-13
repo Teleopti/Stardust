@@ -49,11 +49,7 @@
 		</div>
 
 		<div id="businessunit">
-			<div id="BusinessUnit-error"
-				 class="alert alert-warning"
-				 data-bind="visible: HasErrors, text: ErrorMesg">
-			</div>
-			<div id="BusinessUnits" data-bind="visible: !HasErrors(), foreach: BusinessUnits" class="list-group">
+			<div id="BusinessUnits" data-bind="foreach: BusinessUnits" class="list-group">
 				<a href="#" class="list-group-item" data-bind="text: Name, click: Select"></a>
 			</div>
 		</div>
