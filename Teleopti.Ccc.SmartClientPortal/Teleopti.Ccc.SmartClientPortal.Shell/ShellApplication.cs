@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if(!createAppConfigReader())
 				return;
 
-			AppDomain.CurrentDomain.SetThreadPrincipal(new TeleoptiPrincipal(new GenericIdentity(""), null));
+			setDummyPrincipalBeforeContainerRegistrations();
 			IContainer container = configureContainer();
 #if (!DEBUG)
 			 //NHibernateProfiler.Initialize();
@@ -123,6 +123,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 #endif
 
+		}
+
+		private static void setDummyPrincipalBeforeContainerRegistrations()
+		{
+			AppDomain.CurrentDomain.SetThreadPrincipal(new TeleoptiPrincipal(new GenericIdentity(""), null));
 		}
 
 		private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
