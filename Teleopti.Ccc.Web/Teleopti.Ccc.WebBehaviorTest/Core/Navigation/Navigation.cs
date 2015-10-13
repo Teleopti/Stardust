@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoPermissions()
 		{
-			GoToPage("wfm/#/permissions");
+			GoToPage("wfm/#/permissions", new WaitUntilLoaded());
 		}
 
 		public static void GotoSeatMap()
