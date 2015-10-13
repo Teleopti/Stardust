@@ -238,6 +238,15 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		    authenticationDetailsAjax(authenticationModel.businessUnitId);
 		}
 
+		$.extend(options, {
+			error: function (jqXHR, textStatus, errorThrown) {
+					if (jqXHR.status == 400) {
+						var json = JSON.parse(jqXHR.responseText);
+						options.businessUnitSelectionError(json.Errors[0]);
+					}
+			}
+		});
+		
 		logonAjax(options);
 	};
 

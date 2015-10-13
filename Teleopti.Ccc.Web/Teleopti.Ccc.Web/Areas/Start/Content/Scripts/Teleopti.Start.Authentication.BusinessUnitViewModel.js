@@ -10,6 +10,9 @@ Teleopti.Start.Authentication.BusinessUnitViewModel = function (data) {
 			baseUrl: data.baseUrl,
 			data: {
 				businessUnitId: self.Id
+			}, 
+			businessUnitSelectionError: function (mesg) {
+				data.businessUnitError(mesg);
 			}
 		});
 
