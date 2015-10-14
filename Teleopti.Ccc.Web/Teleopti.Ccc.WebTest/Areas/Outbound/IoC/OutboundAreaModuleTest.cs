@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
@@ -87,6 +88,41 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 					var factory = scope.Resolve<ICampaignSummaryViewModelFactory>();
 					factory.Should().Not.Be.Null();
 				}
+			}
+		}
+
+		//IOutboundCampaignPersister
+		[Test]
+		public void ShouldResolveOutboundCampaignPersister()
+		{
+			using (var ioc = _containerBuilder.Build())
+			{
+				using (var scope = ioc.BeginLifetimeScope(_requestTag))
+				{
+					scope.Resolve<IOutboundCampaignPersister>()
+						.Should().Not.Be.Null();
+				}
+			}
+		}
+
+
+		[Test]
+		public void ShouldResolveOutboundSkillCreator()
+		{
+			using (var container = _containerBuilder.Build())
+			{
+				container.Resolve<IOutboundSkillCreator>()
+								 .Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveOutboundSkillPersister()
+		{
+			using (var container = _containerBuilder.Build())
+			{
+				container.Resolve<IOutboundSkillPersister>()
+								 .Should().Not.Be.Null();
 			}
 		}
 
