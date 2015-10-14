@@ -6,7 +6,7 @@
 			   ng-model="manualPlanInput"
 			   range-validate range-min="0" integer-only="false" />
 		<div class="manual-input-btns">
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0"
 					ng-click="addManualPlan()"
 					ng-disabled="!validManualProductionPlan()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualProductionPlan()}"
@@ -27,7 +27,7 @@
 			   ng-model="manualBacklogInput" 
 			   range-validate range-min="0" integer-only="false" />
 		<div class="manual-input-btns">
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0 m-r-0"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0"
 					ng-click="addManualBacklog()"
 					ng-disabled="!validManualBacklog()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualBacklog()}"
@@ -58,7 +58,7 @@
 			translate>
 		Replan
 	</button>	
-	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0"
 			ng-click="gotoEditCampaign()"
 			translate>
 		Edit
