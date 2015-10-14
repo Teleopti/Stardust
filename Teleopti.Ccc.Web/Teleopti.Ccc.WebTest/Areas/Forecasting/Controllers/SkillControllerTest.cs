@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
 			skillTypeProvider.Stub(x=>x.InboundTelephony()).Return(new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony));
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var workloadRepository = new FakeWorkloadRepository();
 			var target = new SkillController(null, skillRepository, intervalLengthFetcher, null, queueSourceRepository, activityRepository, skillTypeProvider, workloadRepository);
 			var input = new SkillInput
 			{
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			activity.SetId(input.ActivityId);
 			activityRepository.Stub(x => x.Load(input.ActivityId)).Return(activity);
 
-			target.Create(input);
+			IHttpActionResult  result = target.Create(input);
 
 			skillRepository.AssertWasCalled(
 				x =>
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 								s.TimeZone.Id == input.TimezoneId &&
 								s.WorkloadCollection.First().QueueSourceCollection.First().Id.GetValueOrDefault() == input.Queues[0] &&
 								s.DefaultResolution == 14)));
-			workloadRepository.AssertWasCalled(x=>x.Add(Arg<IWorkload>.Is.Anything));
+			Assert.NotNull(((dynamic)result).Content.WorkloadId);
 		}
 
 		[Test]

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Add(IWorkload workload)
 		{
+			workload.SetId(Guid.NewGuid());
 			_workloads.Add(workload);
 		}
 

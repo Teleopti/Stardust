@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$timeout',
-		function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams, $timeout) {
+		'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams',
+		function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams) {
 			$scope.isForecastRunning = false;
 			function updateRunningStatus() {
 				forecasting.status.get().$promise.then(function(result) {
@@ -51,6 +51,7 @@ angular.module('wfm.forecasting')
 				skillsPromise.then(function(result) {
 					var skills = result;
 					var workloads = [];
+					var addedWorkload = null;
 					angular.forEach(skills, function(skill) {
 						angular.forEach(skill.Workloads, function (workload) {
 							var w = {
@@ -62,11 +63,17 @@ angular.module('wfm.forecasting')
 							if ($stateParams.workloadId == workload.Id) {
 								w.preselected = true;
 								$scope.getForecastResult(w);
+								addedWorkload = w;
+							} else {
+								workloads.push(w);
 							}
-							workloads.push(w);
 						});
 					});
-					$scope.workloads = $filter('orderBy')(workloads, 'Name');
+					workloads = $filter('orderBy')(workloads, 'Name');
+					if (addedWorkload) {
+						workloads.unshift(addedWorkload);
+					}
+					$scope.workloads = workloads;
 				});
 			};
 
