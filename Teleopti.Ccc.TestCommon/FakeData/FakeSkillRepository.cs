@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ICollection<ISkill> FindAllWithSkillDays(DateOnlyPeriod periodWithSkillDays)
 		{
-			return new Collection<ISkill> { SkillFactory.CreateSkillWithId("Direct Sales") };
+			//This is not correct. Depending on another aggregate... Leave that problem for now
+			return _skills.ToArray();
 		}
 
 		public ISkill LoadSkill(ISkill skill)
