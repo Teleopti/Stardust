@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest
 			system.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
 			system.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
 			system.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
+			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
 		}
 	}
 }
