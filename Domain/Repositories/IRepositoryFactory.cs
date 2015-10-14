@@ -434,7 +434,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
 		IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork);
 		IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
-		IGamificationSettingRepository CreateGamificationSettingRepository(IUnitOfWork unitOfWork);
-		ITeamGamificationSettingRepository CreateTeamGamificationSettingRepository(IUnitOfWork unitOfWork);
 	}
 }

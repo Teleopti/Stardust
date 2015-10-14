@@ -399,15 +399,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new PersonalSettingDataRepository(unitOfWork);
 		}
-
-		public IGamificationSettingRepository CreateGamificationSettingRepository(IUnitOfWork unitOfWork)
-		{
-			return new GamificationSettingRepository(unitOfWork);
-		}
-
-		public ITeamGamificationSettingRepository CreateTeamGamificationSettingRepository(IUnitOfWork unitOfWork)
-		{
-			return new TeamGamificationSettingRepository(unitOfWork);
-		}
 	}
 }
