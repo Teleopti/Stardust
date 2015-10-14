@@ -81,16 +81,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		public IPerson TryFindBasicAuthenticatedPerson(string logOnName)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool TryFindIdentityAuthenticatedPerson(string identity, out IPerson foundPerson)
-		{
-			throw new NotImplementedException();
-		}
-
 		public ICollection<IPerson> LoadAllPeopleWithHierarchyDataSortByName(DateOnly earliestTerminalDate)
 		{
 			throw new NotImplementedException();
@@ -118,22 +108,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IPerson LoadPermissionData(IPerson person)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IPerson LoadPermissionDataWithoutReassociate(IPerson person)
-		{
-			throw new NotImplementedException();
-		}
-
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IPerson> FindPersonsWithGivenUserCredentials(IList<IPerson> persons)
 		{
 			throw new NotImplementedException();
 		}
@@ -173,16 +148,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public bool DoesIdentityExists(string identity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerator<IPerson> GetEnumerator()
 		{
 			return _persons.GetEnumerator();
@@ -193,17 +158,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _persons.GetEnumerator();
 		}
 
-		public IPerson LoadAggregate(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
 		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ICollection<IPerson> FindAllSortByName(bool includeSuperUserThatAlsoIsAgent)
 		{
 			throw new NotImplementedException();
 		}
@@ -216,11 +171,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPerson FindPersonByEmail(string email)
 		{
 			throw new NotImplementedException();
-		}
-
-		public IPerson LoadPersonAndPermissions(Guid id)
-		{
-			return _persons.SingleOrDefault(x => x.Id.Equals(id));
 		}
 	}
 }
