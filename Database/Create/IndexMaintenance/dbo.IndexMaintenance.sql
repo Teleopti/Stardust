@@ -24,7 +24,9 @@ BEGIN
 	EXEC @ReturnCode = [dbo].[IndexOptimize]
 				@Databases=@CurrentDatabase,
 				@LogToTable='Y',
-				@PageCountLevel=100
+				@PageCountLevel=100,
+				@UpdateStatistics = 'ALL',
+				@OnlyModifiedStatistics = 'Y'
 END
 
 IF @ReturnCode <> 0
