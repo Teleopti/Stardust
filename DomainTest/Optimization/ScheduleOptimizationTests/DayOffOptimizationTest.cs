@@ -4,9 +4,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -23,12 +25,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test, Explicit("2 be continued")]
 		public void ShouldMoveDayOff()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
-			var planningGroupId = Guid.NewGuid();
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(firstDay.Date.AddDays(-7)), new[]
+				{
+					new AggregatedSchedulePeriod
+					{
+						DateFrom = firstDay.Date,
+						Number = 1,
+						PeriodType = SchedulePeriodType.Week
+					}
+				}));
+			PlanningPeriodRepository.Add(planningPeriod);
 
 			var contract = new Contract("_");
 			var partTimePercentage = new PartTimePercentage("_");
@@ -60,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDay5.CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate()); //TODO: behöver förmodligen använda en template som finns i repo (?)
 
-			Target.Execute(planningGroupId);
+			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDay1.CurrentDate)
 				.DayOff().Should().Not.Be.Null();
