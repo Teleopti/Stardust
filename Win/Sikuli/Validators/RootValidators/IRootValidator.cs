@@ -8,6 +8,10 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	public interface IRootValidator
 	{
 		/// <summary>
+		/// Id of the validator
+		/// </summary>
+		string Name { get; }
+		/// <summary>
 		/// Flag to signal sikuli helper the validator waits for explicit call for validation
 		/// </summary>
 		bool ExplicitValidation { get; } 

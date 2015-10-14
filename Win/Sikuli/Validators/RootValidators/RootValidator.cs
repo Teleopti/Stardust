@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			}
 		}
 
-		public bool ExplicitValidation { get { return true; } }
+		public virtual bool ExplicitValidation { get { return true; } }
 
 		public abstract SikuliValidationResult Validate(object data);
 

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeIntervalBalanceAfterValidator : IRootValidator
+	internal class OptimizeIntervalBalanceAfterValidator : RootValidator
 	{
 		private const double _limit = 0.8d;
 		private const int _maxRuleBreaks = 3;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			_durationValidator = new DurationValidator(_durationLimit);
 		}
 
-		public string Description
+		public override string Description
 		{
 			get
 			{
@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			}
 		}
 
-		public bool ExplicitValidation { get { return true; } }
-
-		public SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data)
 		{
 			var scheduleTestData = data as SchedulerTestData;
 			if (scheduleTestData == null)

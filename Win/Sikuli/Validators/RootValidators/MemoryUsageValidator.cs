@@ -4,17 +4,17 @@ using Teleopti.Ccc.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class MemoryUsageValidator : IRootValidator
+	internal class MemoryUsageValidator : RootValidator
 	{
-		public string Description
+		public override string Description
 		{
 			get { return "Memory usage must be under limit."; }
 		}
 
-		public bool ExplicitValidation { get { return false; } }
+		public override bool ExplicitValidation { get { return false; } }
 
 
-		public SikuliValidationResult Validate(object data)
+		public override SikuliValidationResult Validate(object data)
 		{
 			var memoryCounter = MemoryCounter.DefaultInstance();
 			const double memoryConsumptionLimit = 100d;

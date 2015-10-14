@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Views;
@@ -7,6 +8,9 @@ namespace Teleopti.Ccc.Win.Sikuli
 {
 	public static class SikuliHelper
 	{
+
+		//private static readonly IDictionary<string, IRootValidator> _activeValidators = new Dictionary<string, IRootValidator>();
+
 		public static void ShowLoadedView(IWin32Window owner)
 		{
 			if (!InteractiveMode)
@@ -32,6 +36,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 		internal static IRootValidator CurrentValidator { get; private set; }
 
+		//internal static IDictionary<string, IRootValidator> ActiveValidators 
+		//{
+		//	get { return _activeValidators; }
+		//}
+
 		public static void EnterValidator(IWin32Window owner)
 		{
 			if (!InteractiveMode)
@@ -41,7 +50,9 @@ namespace Teleopti.Ccc.Win.Sikuli
 				dialog.ShowDialog(owner);
 				if (dialog.DialogResult == DialogResult.OK)
 				{
-					CurrentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(dialog.GetValidatorName);
+					var validator = SikuliValidatorFactory.Scheduler.CreateValidator(dialog.GetValidatorName);
+					CurrentValidator = validator;
+					//ActiveValidators.Add(validator.Name, validator);
 				}
 			}
 			if (!CurrentValidator.ExplicitValidation)
