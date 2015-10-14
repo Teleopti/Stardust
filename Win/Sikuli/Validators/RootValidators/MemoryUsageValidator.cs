@@ -1,10 +1,6 @@
-﻿using System;
-using System.Globalization;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+﻿using System.Globalization;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
@@ -21,7 +17,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		public SikuliValidationResult Validate(object data)
 		{
 			var memoryCounter = MemoryCounter.DefaultInstance();
-			const double memoryConsumptionLimit = 80d;
+			const double memoryConsumptionLimit = 100d;
 
 			var result = new SikuliValidationResult();
 

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
 		{
-			const double periodStandardDeviationLimit = 0.032d;
+			const double periodStandardDeviationLimit = 0.035d;
 			AtomicValidators.Add(new PeriodStandardDeviationValidator(data.SchedulerState, data.TotalSkill, periodStandardDeviationLimit));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
