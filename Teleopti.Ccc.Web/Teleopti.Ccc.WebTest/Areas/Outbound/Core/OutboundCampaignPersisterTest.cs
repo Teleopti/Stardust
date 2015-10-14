@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeCampaignRepository _fakeCampaignRepository;
 		private FakeSkillRepository _fakeSkillRepository;
 		private FakeActivityRepository _fakeActivityRepository;
-		private CampaignForm _campaignInput;
-		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
+		private CampaignForm _campaignInput;	
 		private ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
+		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_fakeCampaignRepository = new FakeCampaignRepository();
 			_fakeSkillRepository = new FakeSkillRepository();
 			_fakeActivityRepository = new FakeActivityRepository();
+			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
 			
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository, _userTimeZone), new OutboundCampaignViewModelMapper(),
