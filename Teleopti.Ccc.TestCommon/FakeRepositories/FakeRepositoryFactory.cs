@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IMeetingRepository _meetingRepository;
+		private readonly IAgentDayScheduleTagRepository _agentDayScheduleTagRepository;
 
 		public FakeRepositoryFactory(
 			IActivityRepository activityRepository,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IWorkflowControlSetRepository workflowControlSetRepository,
 			IPersonAbsenceRepository personAbsenceRepository,
 			IPersonAssignmentRepository personAssignmentRepository,
-			IMeetingRepository meetingRepository
+			IMeetingRepository meetingRepository,
+			IAgentDayScheduleTagRepository agentDayScheduleTagRepository
 			)
 		{
 			_activityRepository = activityRepository;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAbsenceRepository = personAbsenceRepository;
 			_personAssignmentRepository = personAssignmentRepository;
 			_meetingRepository = meetingRepository;
+			_agentDayScheduleTagRepository = agentDayScheduleTagRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -294,7 +297,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _agentDayScheduleTagRepository;
 		}
 
 		public IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork)
