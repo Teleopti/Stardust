@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 
@@ -5,13 +7,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
 	public class ProductionReplanHelper : IProductionReplanHelper
 	{
-      private readonly IOutboundCampaignTaskManager _campaignTaskManager;	
+		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 		private readonly ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
+		private readonly IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
-		public ProductionReplanHelper(IOutboundCampaignTaskManager campaignTaskManager, ICreateOrUpdateSkillDays createOrUpdateSkillDays)
+		public ProductionReplanHelper(IOutboundCampaignTaskManager campaignTaskManager,
+			ICreateOrUpdateSkillDays createOrUpdateSkillDays, IOutboundScheduledResourcesCacher outboundScheduledResourcesCacher)
 		{
 			_campaignTaskManager = campaignTaskManager;
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
+			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}
 
 		public void Replan(IOutboundCampaign campaign)
@@ -20,8 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			incomingTask.RecalculateDistribution();
+
+			var forecasts = new Dictionary<DateOnly, TimeSpan>();
 			//persist productionPlan
-			_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
+			_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask, forecasts);
+			_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
 		}
 	}
 }

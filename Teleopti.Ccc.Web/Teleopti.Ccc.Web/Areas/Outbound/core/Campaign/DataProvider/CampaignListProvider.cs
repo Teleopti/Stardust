@@ -16,15 +16,17 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly ICampaignWarningProvider _campaignWarningProvider;
 		private readonly ICampaignListOrderProvider _campaignListOrderProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
 		public CampaignListProvider(IOutboundCampaignRepository outboundCampaignRepository, IOutboundScheduledResourcesProvider scheduledResourcesProvider, 
-			ICampaignWarningProvider campaignWarningProvider, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone)
+			ICampaignWarningProvider campaignWarningProvider, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone, IOutboundScheduledResourcesCacher outboundScheduledResourcesCacher)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_scheduledResourcesProvider = scheduledResourcesProvider;
 			_campaignWarningProvider = campaignWarningProvider;
 			_campaignListOrderProvider = campaignListOrderProvider;
 			_userTimeZone = userTimeZone;
+			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}
 
 		public void LoadData(GanttPeriod peroid)
@@ -39,6 +41,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			_scheduledResourcesProvider.Load(campaigns, campaignPeriod);
+
+			foreach (var campaign in campaigns)
+			{
+				var dates = campaign.SpanningPeriod.DateCollection();
+				var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill));
+				var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill));
+				_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
+				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);				
+			}
+
 		}
 
 		public CampaignStatistics GetCampaignStatistics(GanttPeriod peroid)
@@ -103,8 +115,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (campaign == null) return null;
 
 			var warningViewModel = _campaignWarningProvider.CheckCampaign(campaign).Select(warning => new OutboundWarningViewModel(warning));
-			var isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
-				date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+			
+			var schedules = _outboundScheduledResourcesCacher.GetScheduledTime(campaign);
+			bool isScheduled;
+			if (schedules == null)
+			{
+				isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
+					date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+			}
+			else
+			{
+				isScheduled = schedules.Keys.Any(d => schedules[d] > TimeSpan.Zero);
+			}
 
 			return new PeriodCampaignSummaryViewModel()
 			{
@@ -124,9 +146,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			Func<IOutboundCampaign, bool> campaignHasSchedulePredicate = campaign =>
 			{
-				return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
-					date =>
-						_scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+				var schedules = _outboundScheduledResourcesCacher.GetScheduledTime(campaign);
+				bool isScheduled;
+				if (schedules == null)
+				{
+					isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
+						date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+				}
+				else
+				{
+					isScheduled = schedules.Keys.Any(d => schedules[d] > TimeSpan.Zero);
+				}
+				return isScheduled;
 			};
 
 			return campaigns.Where(campaignHasSchedulePredicate).Select(campaign =>
@@ -140,9 +171,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			Func<IOutboundCampaign, bool> campaignNoSchedulePredicate = campaign =>
 			{
-				return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().All(
-					date =>
-						_scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) == TimeSpan.Zero);
+				var schedules = _outboundScheduledResourcesCacher.GetScheduledTime(campaign);
+				bool isScheduled;
+				if (schedules == null)
+				{
+					isScheduled = campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
+						date => _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+				}
+				else
+				{
+					isScheduled = schedules.Keys.Any(d => schedules[d] > TimeSpan.Zero);
+				}
+				return isScheduled;
 			};
 
 			return campaigns.Where(campaignNoSchedulePredicate).Select(campaign =>

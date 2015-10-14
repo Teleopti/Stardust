@@ -319,6 +319,7 @@
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
@@ -468,10 +469,13 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningConfigurationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignWarningConfigurationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignWarningProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundScheduledResourcesCacher.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundScheduledResourcesCacher.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundThresholdSettingPersistorAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />

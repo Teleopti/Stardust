@@ -33,13 +33,13 @@
 		$scope.updateThreshold = function (threshold) {
 			var thresholdObj = { Value: threshold / 100, Type: 1 };
 			outboundService.updateThreshold(thresholdObj, function (data) {
-				getListCampaignsWithinPeriod(function () {
+				
 					$scope.ganttData.forEach(function (dataRow, indx) {
 						if (dataRow.expansion) {
 							$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
 						}
 					});
-				});
+				
 					
 			});
 		};
@@ -57,20 +57,15 @@
 			});
 		}
 
-		function getListCampaignsWithinPeriod(cb) {
-			$scope.isRefreshingGantt = true;
-			outboundService.listCampaignsWithinPeriod(function success(data) {
-				updateAllCampaignGanttDisplay(data);
-				$scope.ganttStatistics = data;
-				$scope.isRefreshingGantt = false;
-				if (cb) cb();
-			});
-		}
-
-		function loadWithinPeriod() {
+		function loadWithinPeriod(cb) {
 			$scope.isRefreshingGantt = true;
 			outboundService.loadWithinPeriod(function handleSuccess(isload) {
-				getListCampaignsWithinPeriod();
+				outboundService.listCampaignsWithinPeriod(function success(data) {
+					updateAllCampaignGanttDisplay(data);
+					$scope.ganttStatistics = data;
+					$scope.isRefreshingGantt = false;
+					if (cb) cb();
+				});
 			});
 		}
 		
@@ -239,7 +234,7 @@
 		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
 			row.campaignNameClass = null;
 			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
-			campaignSummary.WarningInfo.forEach(function (warning) {
+			campaignSummary.WarningInfo.forEach(function (warning) {				
 				if (warning.TypeOfRule == 'CampaignUnderSLA') {
 					row.campaignNameClass = 'campaign-late';
 				}

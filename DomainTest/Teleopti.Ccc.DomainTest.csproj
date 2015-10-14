@@ -681,7 +681,6 @@
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateStepTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
-    <Compile Include="Outbound\CampaignTaskManagerTest.cs" />
     <Compile Include="Outbound\CampaignTest.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDaysTest.cs" />
     <Compile Include="Outbound\OutboundAssignedStaffProviderTest.cs" />

@@ -30,11 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IOutboundPeriodMover _outboundPeriodMover;
 		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
 			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, 
-			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, ISkillRepository skillRepository)
+			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, ISkillRepository skillRepository, IOutboundScheduledResourcesCacher outboundScheduledResourcesCacher)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundPeriodMover = outboundPeriodMover;
 			_campaignTaskManager = campaignTaskManager;
 			_skillRepository = skillRepository;
+			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -188,7 +190,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (isUpdateForecasted)
 			{
 				var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
-				_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
+
+				var forecasts = new Dictionary<DateOnly, TimeSpan>();
+				_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask, forecasts);
+
+				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
 			}
 		}
 

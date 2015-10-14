@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeSkillRepository _fakeSkillRepository;
 		private FakeActivityRepository _fakeActivityRepository;
 		private CampaignForm _campaignInput;
+		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 		private ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private IUserTimeZone _userTimeZone;
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository, _userTimeZone), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
-				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null, null);
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null, null, _outboundScheduledResourcesCacher);
 		}
 
 		[Test]
@@ -222,6 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IList<IActivity> _activityList;
 		private IOutboundPeriodMover _outboundPeriodMover;
 		private ISkillRepository _skillRepository;
+		private IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
 		[SetUp]
 		public void Setup()
@@ -235,13 +237,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_productionReplanHelper = MockRepository.GenerateMock<IProductionReplanHelper>();
 			_outboundPeriodMover = MockRepository.GenerateMock<IOutboundPeriodMover>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			_outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
 			_activityList = new List<IActivity>() { ActivityFactory.CreateActivity("aa") };
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
 			_skillRepository.Stub(x => x.Get(new Guid()));
 			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator,
-				_activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, _skillRepository);
+				_activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, _skillRepository, _outboundScheduledResourcesCacher);
 
 		}
 
@@ -252,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, null, _outboundScheduledResourcesCacher);
 			_target.ManualReplanCampaign(campaignId);
 
 			_productionReplanHelper.AssertWasCalled(x => x.Replan(campaign));
@@ -268,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			skill.TimeZone = TimeZoneInfo.Utc;
 			_outboundSkillCreator.Stub(x=>x.CreateSkill(ActivityFactory.CreateActivity("myActivity"), new Domain.Outbound.Campaign())).IgnoreArguments().Return(skill);
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository,
-				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null, null);
+				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null, null, _outboundScheduledResourcesCacher);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist(new CampaignForm()
@@ -295,7 +298,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel() };
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null, null, _outboundScheduledResourcesCacher);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
@@ -624,7 +627,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null, _outboundScheduledResourcesCacher);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(new TimeSpan(1, 2, 33, 35));
@@ -660,7 +663,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null, _outboundScheduledResourcesCacher);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(null);
@@ -678,7 +681,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var removeManualForm = new RemoveManualPlanForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null, _outboundScheduledResourcesCacher);
 			_target.RemoveManualProductionPlan(removeManualForm);
 
 			(campaign.GetManualProductionPlan(date)==null).Should().Be.True();
@@ -696,7 +699,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var removeForm = new RemoveActualBacklogForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null, _outboundScheduledResourcesCacher);
 			_target.RemoveActualBacklog(removeForm);
 
 			(campaign.GetActualBacklog(date) == null).Should().Be.True();			
@@ -720,7 +723,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository, _outboundScheduledResourcesCacher);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasCalled(x=>x.Remove(activity));
@@ -739,7 +742,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository, _outboundScheduledResourcesCacher);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
@@ -765,7 +768,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill1;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository, _outboundScheduledResourcesCacher);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
@@ -784,7 +787,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository, _outboundScheduledResourcesCacher);
 			_target.RemoveCampaign(campaign);
 
 			_outboundSkillPersister.AssertWasCalled(x => x.RemoveSkill(skill));

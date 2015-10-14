@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
-		    builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>().SingleInstance();
+		
 		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
 		 			
 		}

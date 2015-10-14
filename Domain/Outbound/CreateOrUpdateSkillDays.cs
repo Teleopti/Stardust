@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours);
 
 		void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask);
+		void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask, Dictionary<DateOnly, TimeSpan> forecasts);
 	}
 
 	public class CreateOrUpdateSkillDays : ICreateOrUpdateSkillDays
@@ -47,6 +48,11 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask)
 		{
+			UpdateSkillDays(skill, incomingTask, null);
+		}
+
+		public void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask, Dictionary<DateOnly, TimeSpan> forecasts)
+		{
 			ICollection<ISkillDay> skillDays = _fetchAndFillSkillDays.FindRange(incomingTask.SpanningPeriod, skill);
 			var workload = skill.WorkloadCollection.First();
 			var workLoadDays = new List<IWorkloadDay>();
@@ -74,6 +80,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 					forecastingTarget.Tasks = timeOnDate.TotalSeconds / incomingTask.AverageWorkTimePerItem.TotalSeconds;
 					forecastingTarget.AverageTaskTime = incomingTask.AverageWorkTimePerItem;
 					_outboundScheduledResourcesProvider.SetForecastedTimeOnDate(dateOnly, skill, timeOnDate);
+					if (forecasts != null)
+					{
+						forecasts.Add(dateOnly, timeOnDate);
+					}
 				}
 
 				forecastingTargets.Add(forecastingTarget);

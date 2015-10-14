@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeScheduleResourceProvider _scheduledResourcesProvider;
 		private FakeCampaignWarningProvider _campaignWarningProvider;
 		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
+		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 		private IUserTimeZone _userTimeZone;
 
 		private IOutboundCampaign doneCampaign;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				CampaignStatus.Scheduled
 			});
 
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
 		}
 
 		[Test]
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			setCampaigns();
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, _outboundScheduledResourcesCacher);
 
 			target.LoadData(null);
 
@@ -356,7 +357,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0])).IgnoreArguments();
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, null, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, null, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.Count().Should().Be.EqualTo(2);
@@ -376,7 +377,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].Id.Should().Be.EqualTo(campaigns[0].Id);
@@ -397,7 +398,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].Name.Should().Be.EqualTo(name);
@@ -417,7 +418,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].StartDate.Should().Be.EqualTo(campaigns[0].SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
@@ -437,7 +438,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].EndDate.Should().Be.EqualTo(campaigns[0].SpanningPeriod.ToDateOnlyPeriod(campaigns[0].Skill.TimeZone).EndDate);
@@ -457,7 +458,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].IsScheduled.Should().Be.True();
@@ -477,7 +478,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			ruleChecker.Stub(x => x.CheckCampaign(campaigns[0]));
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].IsScheduled.Should().Be.False();
@@ -507,7 +508,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			});
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(0), "", ""));
 
-			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone);
+			var _target = new CampaignListProvider(repository, _scheduledResourceProvider, ruleChecker, null, _userTimeZone, _outboundScheduledResourcesCacher);
 			var result = _target.GetPeriodCampaignsSummary(period);
 
 			result.ToList()[0].WarningInfo.ToList()[0].TypeOfRule.Should().Be.EqualTo("CampaignOverstaff");

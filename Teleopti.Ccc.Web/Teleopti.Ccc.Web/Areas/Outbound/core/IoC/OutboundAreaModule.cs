@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<CampaignOverstaffRule>().AsSelf();
 			builder.RegisterType<CampaignUnderServiceLevelRule>().AsSelf();
 
+			builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>().SingleInstance();
+			builder.RegisterType<OutboundScheduledResourcesCacher>().As<IOutboundScheduledResourcesCacher>().SingleInstance();
 
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
 			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
