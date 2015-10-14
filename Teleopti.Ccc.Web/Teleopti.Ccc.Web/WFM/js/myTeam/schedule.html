@@ -1,0 +1,7 @@
+﻿<div>
+	Person schedule!
+	<select ng-model="vm.People">
+		<option value="" disabled selected>Pick a person...</option>
+		<option value={{person.PersonId}} ng-repeat="person in vm.People|orderBy: 'LastName'">{{person.FirstName}} {{person.LastName}}</option>
+	</select>
+</div>

@@ -514,6 +514,7 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
     <Compile Include="Areas\People\Controllers\PeopleCommandController.cs" />
     <Compile Include="Areas\People\Controllers\PeopleCommandInput.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleTestController.cs" />
     <Compile Include="Areas\People\Controllers\PeopleDataController.cs" />
     <Compile Include="Areas\People\Controllers\PersonCommandInputModel.cs" />
     <Compile Include="Areas\People\Controllers\ResultModel.cs" />
@@ -1211,6 +1212,8 @@
     <Content Include="WFM\html\forecasting\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
+    <Content Include="WFM\js\myTeam\myTeam.personSchedule.service.js" />
+    <Content Include="WFM\js\myTeam\schedule.html" />
     <Content Include="WFM\js\outbound\html\activity-picker.tpl.html" />
     <Content Include="WFM\js\outbound\html\angular-gantt-custom.tpl.html" />
     <Content Include="WFM\js\outbound\html\campaign-commands-pane.tpl.html" />
@@ -1229,6 +1232,8 @@
     <Content Include="WFM\js\people\html\people.html" />
     <Content Include="WFM\js\people\people.default.controller.js" />
     <Content Include="WFM\js\people\people.indeterminate.directive.js" />
+    <Content Include="WFM\js\myTeam\helpers.js" />
+    <Content Include="WFM\js\myTeam\_modules.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\rta\rta.agents.filters.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
@@ -2103,6 +2108,7 @@
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
     <Content Include="WFM\css\_timerangepicker.scss" />
+    <Content Include="WFM\js\myTeam\myTeam.personSchedule.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

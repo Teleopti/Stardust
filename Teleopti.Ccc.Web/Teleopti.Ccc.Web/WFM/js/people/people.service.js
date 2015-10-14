@@ -3,7 +3,15 @@
 angular
 	.module('peopleService', ['ngResource'])
 	.service('People', [
-		'$resource','$http', function($resource, $http) {
+		'$resource', '$http', function ($resource, $http) {
+		this.loadPeopleInMyTeam = $resource('../api/TestData/CurrentTeam', {}, {
+			get: {
+				method: "GET",
+				params: {},
+				isArray: true
+			}
+		});
+
 			this.search = $resource('../api/Search/People/Keyword', {
 				keyword: "@searchKey",
 				pageSize: "@pageSize",

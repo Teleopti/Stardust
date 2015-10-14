@@ -34,7 +34,8 @@ var wfm = angular.module('wfm', [
 	'wfm.help',
 	'wfm.rta',
 	'wfm.start',
-	'wfm.businessunits'
+	'wfm.businessunits',
+	'wfm.personSchedule'
 ]);
 
 wfm.config([
@@ -141,6 +142,10 @@ wfm.config([
 			url: '/rta/site/:siteId/team/:teamId',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
+		}).state('personSchedule', {
+			url: '/myTeam',
+			templateUrl: 'js/myTeam/schedule.html',
+			controller: 'PersonScheduleCtrl as vm'
 		});
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
