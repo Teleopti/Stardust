@@ -32,6 +32,7 @@ using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
@@ -165,6 +166,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleMailFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<PayrollFormatHandler>().InstancePerLifetimeScope();
 			builder.RegisterType<PublicNoteTypeFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonsFromLoadOptionFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FactoryProvider>().As<IFactoryProvider>().SingleInstance();

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
@@ -11,7 +10,6 @@ using System.ServiceModel;
 using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -321,7 +319,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public ICollection<PayrollFormatDto> GetPayrollFormats()
 		{
 			var dataSource = ((TeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName;
-			var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
+			var formatter = _lifetimeScope.Resolve<PayrollFormatHandler>();
 			return formatter.Load(dataSource);
 		}
 
@@ -334,8 +332,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void InitializePayrollFormats(ICollection<PayrollFormatDto> payrollFormatDtos)
 		{
-			//Saves to an xml file called internal.storage.xml in the esent folder
-			var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
+			var formatter = _lifetimeScope.Resolve<PayrollFormatHandler>();
 			formatter.Save(payrollFormatDtos);
 		}
 

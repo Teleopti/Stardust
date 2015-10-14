@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
 			
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PayrollFormatRepository(uow);
+				var rep = new PayrollFormatRepository(new ThisUnitOfWork(uow));
 
 				bool someTreeNodeIsOptioned = false;
 

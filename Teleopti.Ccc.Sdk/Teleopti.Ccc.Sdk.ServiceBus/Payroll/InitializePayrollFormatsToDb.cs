@@ -5,6 +5,7 @@ using System.ServiceModel;
 using log4net;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				{
 					using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
 					{
-						var payrollFormatRepository = new PayrollFormatRepository(unitOfWork);
+						var payrollFormatRepository = new PayrollFormatRepository(new ThisUnitOfWork(unitOfWork));
 						var oldOnes = payrollFormatRepository.LoadAll();
 						foreach (var payrollFormat in oldOnes)
 						{
