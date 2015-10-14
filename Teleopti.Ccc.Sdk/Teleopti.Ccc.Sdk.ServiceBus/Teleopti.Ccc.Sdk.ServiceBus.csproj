@@ -186,6 +186,7 @@
     <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
+    <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NewAbsenceReportConsumer.cs" />

@@ -8,7 +8,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
-			Task.Run(() => Container.Resolve<IDataSourceForTenant>().DoOnAllTenants_AvoidUsingThis(tenant =>
+			Task.Run(() => Container.Resolve<DataSourceForTenantWrapper>().DataSource()().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())

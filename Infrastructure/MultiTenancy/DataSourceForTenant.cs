@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			}
 		}
 
-
 		public void MakeSureDataSourceExists_UseOnlyFromTests(IDataSource datasource)
 		{
 			_registeredDataSources[datasource.DataSourceName] = datasource;

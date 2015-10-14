@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(makeContainer(toggleManager, sharedContainer)));
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_payrollBus.Start();
 
 			AppDomain.MonitoringIsEnabled = true;

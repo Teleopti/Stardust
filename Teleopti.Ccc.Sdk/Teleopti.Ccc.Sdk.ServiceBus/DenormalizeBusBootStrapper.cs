@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autofac;
 using Rhino.ServiceBus;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			Task.Run(() =>
 			{
-				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>(), Container.Resolve<IDataSourceForTenant>());
+				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>(), Container.Resolve<DataSourceForTenantWrapper>().DataSource()());
 				initialLoad.Check();
 			});
 		}
