@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IMeetingRepository _meetingRepository;
 		private readonly IAgentDayScheduleTagRepository _agentDayScheduleTagRepository;
+		private readonly IPreferenceDayRepository _preferenceDayRepository;
 
 		public FakeRepositoryFactory(
 			IActivityRepository activityRepository,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IPersonAbsenceRepository personAbsenceRepository,
 			IPersonAssignmentRepository personAssignmentRepository,
 			IMeetingRepository meetingRepository,
-			IAgentDayScheduleTagRepository agentDayScheduleTagRepository
+			IAgentDayScheduleTagRepository agentDayScheduleTagRepository,
+			IPreferenceDayRepository preferenceDayRepository
 			)
 		{
 			_activityRepository = activityRepository;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignmentRepository = personAssignmentRepository;
 			_meetingRepository = meetingRepository;
 			_agentDayScheduleTagRepository = agentDayScheduleTagRepository;
+			_preferenceDayRepository = preferenceDayRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -232,7 +235,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDayRepository CreatePreferenceDayRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _preferenceDayRepository;
 		}
 
 		public IStudentAvailabilityDayRepository CreateStudentAvailabilityDayRepository(IUnitOfWork unitOfWork)

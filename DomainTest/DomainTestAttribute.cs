@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest
 			system.UseTestDouble<FakeWorkflowControlSetRepository>().For<IWorkflowControlSetRepository>();
 			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
 			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
+			system.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
 		}
 	}
 }
