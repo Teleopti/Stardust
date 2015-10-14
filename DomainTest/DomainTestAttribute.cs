@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest
 			system.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
 			system.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
 			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 		}
 	}
 }

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public ISkill Has(string skillName)
 		{
 			var skill = SkillFactory.CreateSkill(skillName);
+			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
 			return skill;
 		}

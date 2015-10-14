@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team)
 		{
 			var agent = new Person();
+			agent.SetId(Guid.NewGuid());
 			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
 			_persons.Add(agent);
 			return agent;
@@ -125,12 +126,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
-			return new List<Tuple<Guid, Guid>>();
+			foreach (var agent in _persons)
+			{
+				foreach (var personPeriod in agent.PersonPeriods(period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone())))
+				{
+					foreach (var personSkill in personPeriod.PersonSkillCollection)
+					{
+						yield return new Tuple<Guid, Guid>(agent.Id.Value, personSkill.Skill.Id.Value);
+					}
+				}
+			}
 		}
 
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
-			return new List<Guid> {Guid.NewGuid()};
+			foreach (var agent in _persons)
+			{
+				foreach (var personPeriod in agent.PersonPeriods(period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone())))
+				{
+					var site = personPeriod.Team.Site;
+					if (site.MaxSeats != null)
+					{
+						yield return agent.Id.Value;
+					}
+				}
+			}
 		}
 
 		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)
