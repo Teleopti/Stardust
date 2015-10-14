@@ -820,6 +820,7 @@
     <Compile Include="Core\IoC\AutofacServiceBus.cs" />
     <Compile Include="Core\Hangfire\HangfireModule.cs" />
     <Compile Include="Core\IoC\WebAppModule.cs" />
+    <Compile Include="Core\IoC\WebCommonModule.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />

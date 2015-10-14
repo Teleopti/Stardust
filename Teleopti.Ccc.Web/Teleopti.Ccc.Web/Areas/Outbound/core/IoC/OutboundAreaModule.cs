@@ -1,15 +1,12 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
-using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
-using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 {
@@ -20,30 +17,36 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			//dependences
 			builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 
+			overwriteSchedulingCommonModule(builder);
 
 			builder.RegisterType<CampaignWarningProvider>().As<ICampaignWarningProvider>();
 			builder.RegisterType<CampaignWarningConfigurationProvider>().As<ICampaignWarningConfigurationProvider>();
 			builder.RegisterType<CampaignOverstaffRule>().AsSelf();
 			builder.RegisterType<CampaignUnderServiceLevelRule>().AsSelf();
 
-			builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>().SingleInstance();
-			builder.RegisterType<OutboundScheduledResourcesCacher>().As<IOutboundScheduledResourcesCacher>().SingleInstance();
+			builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>();
+			builder.RegisterType<OutboundScheduledResourcesCacher>().As<IOutboundScheduledResourcesCacher>();
 
-			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
-			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
-			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().SingleInstance();
-			builder.RegisterType<ActivityProvider>().As<IActivityProvider>().SingleInstance();
-			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
-			builder.RegisterType<SkillTypeProvider>().As<ISkillTypeProvider>().SingleInstance();
-			builder.RegisterType<OutboundSkillPersister>().As<IOutboundSkillPersister>().SingleInstance();
-			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().SingleInstance();
-			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
+
+			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().InstancePerRequest();
+			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().InstancePerRequest();
+			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().InstancePerRequest();
+
+			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().InstancePerRequest();
 			builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
-			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerLifetimeScope();
-			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().SingleInstance();			
-			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().SingleInstance();
 
+
+			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerRequest();
+			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().InstancePerRequest();
+			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().InstancePerRequest();
+			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().InstancePerRequest();		
+		}
+
+		private void overwriteSchedulingCommonModule(ContainerBuilder builder)
+		{
+			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>();
+			builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>();
+			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>();			
 		}
 	}
 }

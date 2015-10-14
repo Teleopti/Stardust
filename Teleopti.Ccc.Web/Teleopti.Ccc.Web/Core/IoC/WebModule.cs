@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			registerPortalTypes(builder);
 			registerRequestContextTypes(builder);
 
+			builder.RegisterModule<WebCommonModule>();
 			builder.RegisterModule(new MyTimeAreaModule(_configuration));
 			builder.RegisterModule<SSOAreaModule>();
 			builder.RegisterModule<StartAreaModule>();

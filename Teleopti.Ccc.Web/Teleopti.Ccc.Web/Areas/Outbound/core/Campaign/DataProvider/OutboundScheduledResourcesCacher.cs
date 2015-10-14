@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public class OutboundScheduledResourcesCacher : IOutboundScheduledResourcesCacher
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly object cacheLockObject = new object();
+		static private readonly object cacheLockObject = new object();
 
 		public OutboundScheduledResourcesCacher(ILoggedOnUser loggedOnUser)
 		{
@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		}
 
 		public Dictionary<DateOnly, TimeSpan> GetScheduledTime(IOutboundCampaign campaign)
-		{
-			return null;
+		{			
 			lock (cacheLockObject)
 			{
 				if (!campaign.Id.HasValue) return null;
@@ -39,8 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		}
 
 		public Dictionary<DateOnly, TimeSpan> GetForecastedTime(IOutboundCampaign campaign)
-		{
-			return null;
+		{		
 			lock (cacheLockObject)
 			{
 				if (!campaign.Id.HasValue) return null;

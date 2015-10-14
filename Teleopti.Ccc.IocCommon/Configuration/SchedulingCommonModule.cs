@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<SkillTypeProvider>().As<ISkillTypeProvider>().SingleInstance();
-			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
+			builder.RegisterType<OutboundSkillPersister>().As<IOutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
 			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();
 			builder.RegisterType<OutboundProductionPlanFactory>().As<OutboundProductionPlanFactory>().SingleInstance();
