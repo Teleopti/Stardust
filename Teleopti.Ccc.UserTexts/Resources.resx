@@ -12807,7 +12807,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Miscellaneous</value>
-    <comment>the colleciton of shift trade related settings under shift trade request tab in admin client settings of work flow control set</comment>
+    <comment>the collection of shift trade related settings under shift trade request tab in admin client settings of work flow control set</comment>
   </data>
   <data name="SearchHintForName" xml:space="preserve">
     <value>Search name</value>
@@ -12880,8 +12880,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Maximum number of report rows reached</comment>
   </data>
   <data name="NarrowToSeeAll" xml:space="preserve">
-    <value>Narrow the criterias to be able to see all data</value>
-    <comment>Narrow the criterias to be able to see all data</comment>
+    <value>Narrow the criteria to be able to see all data</value>
+    <comment>Narrow the criteria to be able to see all data</comment>
   </data>
   <data name="AddMustHave" xml:space="preserve">
     <value>Add must have</value>
@@ -12926,7 +12926,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Manage permissions header on the web</comment>
   </data>
   <data name="ManagePermissionsIntro" xml:space="preserve">
-    <value>Here you can decide who is allowed to access specific parts of the application</value>
+    <value>Here you can define who is allowed to access specific parts of the application</value>
     <comment>Manage permissions introductory text on the web</comment>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
@@ -13138,19 +13138,19 @@ Reduce the complexity to use these shifts.</value>
     <value>Schedule period range is not within planning period</value>
   </data>
   <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
-    <value>Target of {0} Day Offs is not fulfilled</value>
+    <value>Target of {0} days off is not fulfilled</value>
   </data>
   <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
     <value>Optimization step(s) {0} are not executed when team or block are selected.</value>
     <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
   </data>
   <data name="ReportTimeoutMessage" xml:space="preserve">
-    <value>I'm sorry but the system is a bit busy right now. Try a more narrow report selection critera or try again later.</value>
+    <value>I'm sorry but the system is a bit busy right now. Try more narrow report selection criteria or try again later.</value>
     <comment>Info to user when there is a database timeout watching reports</comment>
   </data>
   <data name="SeatPlanStatusError" xml:space="preserve">
-    <value>Some agents were not able to be allocated seats on this day</value>
-    <comment>Some agents were not able to be allocated seats on this day</comment>
+    <value>Some agents could not be allocated seats on this day</value>
+    <comment>Some agents could not be allocated seats on this day</comment>
   </data>
   <data name="SeatPlanStatusInProgress" xml:space="preserve">
     <value>Seat planning is currently in progress for this day</value>
@@ -13181,7 +13181,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Used in Seat Planning</comment>
   </data>
   <data name="PlanningPeriodsFor" xml:space="preserve">
-    <value>Planning Periods For</value>
+    <value>Planning Periods for</value>
     <comment>Title on the seat planning form, showing the planning periods for the chosen month</comment>
   </data>
   <data name="PlanSeats" xml:space="preserve">
@@ -13203,8 +13203,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Could not get messages from message broker</comment>
   </data>
   <data name="MyTeamSchedules" xml:space="preserve">
-    <value>My Team Schedules</value>
-    <comment>My Team Schedules for MyTeam in Permission Module</comment>
+    <value>MyTeam Schedules</value>
+    <comment>MyTeam Schedules for MyTeam in Permission Module</comment>
   </data>
   <data name="CreateCampaign" xml:space="preserve">
     <value>Create Campaign</value>
@@ -13295,11 +13295,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
-    <value>too long firstname;</value>
+    <value>too long first name;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
-    <value>too long lastname;</value>
+    <value>too long last name;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
   <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
@@ -13343,7 +13343,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Outbound campaign backlog (remaining work to do)</comment>
   </data>
   <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
-    <value>Drag and Drop .xls or .xlsx files here or click to upload</value>
+    <value>Drag and drop .xls or .xlsx files here or click to upload</value>
     <comment>Hint to tell user to upload file</comment>
   </data>
   <data name="ImportUsers" xml:space="preserve">
@@ -13367,7 +13367,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Tooltip for generate report button</comment>
   </data>
   <data name="NoReportForCurrentConditions" xml:space="preserve">
-    <value>No Report For Current Conditions</value>
+    <value>No Report for Current Conditions</value>
     <comment>Tooltip for no report of seat plan</comment>
   </data>
   <data name="SeatPlanReport" xml:space="preserve">
@@ -13395,7 +13395,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>count of people successfully update skills</comment>
   </data>
   <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
-    <value>Start Date must be equal to or earlier than End Date</value>
+    <value>Start date must be equal to or earlier than end date</value>
   </data>
   <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
     <value>Must set the start and end dates.</value>
@@ -13463,7 +13463,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>error message for file validation in importing user in People module</comment>
   </data>
   <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
-    <value>The selected file can not be accepted. Please check the file type.</value>
+    <value>The selected file cannot be accepted. Please check the file type.</value>
     <comment>warning to tell user selected file is not accepted in web People.</comment>
   </data>
   <data name="SeatBookings" xml:space="preserve">
@@ -13475,7 +13475,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="InternalErrorXMsg" xml:space="preserve">
     <value>some internal error happens:{0};</value>
-    <comment>unknow error in importing user.</comment>
+    <comment>unknown error in importing user.</comment>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Please find the downloaded excel sheet to check the detailed error.</value>

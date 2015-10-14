@@ -12123,7 +12123,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Använd konvertering</value>
   </data>
   <data name="AnyLocationShouldBeSelected" xml:space="preserve">
-    <value>En plats måste väljas</value>
+    <value>En lokal måste väljas</value>
   </data>
   <data name="AnyTeamShouldBeSelected" xml:space="preserve">
     <value>Ett team måste väljas</value>
@@ -12268,16 +12268,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
   </data>
   <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
-    <value>{0} har du följande plats {1}.</value>
+    <value>{0} har du följande sittplats {1}.</value>
   </data>
   <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
-    <value>{0} har du inte någon tilldelad plats.</value>
-  </data>
-  <data name="SeatMap" xml:space="preserve">
-    <value>Platskarta</value>
-  </data>
-  <data name="SeatPlan" xml:space="preserve">
-    <value>Platsplan</value>
+    <value>{0} har du inte någon tilldelad sittplats.</value>
   </data>
   <data name="showMoreHeaderFields" xml:space="preserve">
     <value>Fler rubrikfält</value>
@@ -12337,16 +12331,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Tyvärr är systemet upptaget just nu. Försök med ett smalare rapporturval eller prova igen senare.</value>
   </data>
   <data name="SeatPlanStatusError" xml:space="preserve">
-    <value>Vissa agenter kunde inte tilldelas någon plats den här dagen.</value>
+    <value>Vissa agenter kunde inte tilldelas någon sittplats den här dagen.</value>
   </data>
   <data name="SeatPlanStatusInProgress" xml:space="preserve">
-    <value>Platsplanering pågår för den här dagen.</value>
+    <value>Sittplatsplanering pågår för den här dagen.</value>
   </data>
   <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
-    <value>Inga platser har tilldelats den här dagen.</value>
+    <value>Inga sittplatser har tilldelats den här dagen.</value>
   </data>
   <data name="SeatPlanStatusOK" xml:space="preserve">
-    <value>Alla valda agenter tilldelades platser.</value>
+    <value>Alla valda agenter tilldelades sittplatser.</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agenter</value>
@@ -12355,7 +12349,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Planeringsperioder för</value>
   </data>
   <data name="SeatCountTitle" xml:space="preserve">
-    <value>platser</value>
+    <value>sittplatser</value>
   </data>
   <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
     <value>Kunde inte få meddelanden från message broker</value>
@@ -12402,17 +12396,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="CampaignNameInvalid" xml:space="preserve">
     <value>Det angivna kampanjnamnet är inte giltigt. Det kan innehålla max 255 tecken.</value>
   </data>
-  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
-    <value>tomt lösenord;</value>
-  </data>
   <data name="Ongoing" xml:space="preserve">
     <value>Pågående</value>
-  </data>
-  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
-    <value>inget inloggningskonto;</value>
-  </data>
-  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
-    <value>rollen {0} finns inte;</value>
   </data>
   <data name="ManualPlan" xml:space="preserve">
     <value>manuell planering</value>
@@ -12455,5 +12440,122 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="PickAShiftBag" xml:space="preserve">
     <value>Välj en skiftpåse</value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>Följer schema</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>problem</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>Målet {0} fridagar har inte uppfyllts</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filtrera lokaler</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>Laddar status för sittplatsplaneringen</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>Ingen lokal tillgänglig</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>Planera sittplatser</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>Sittplatsplan </value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>team eller lokal måste anges</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>Scheman i MyTeam</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>Behov i timmar</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Starttid och sluttid måste anges.</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>Manuell backlog</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>Tidig</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>Sen</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Dra och släpp .xls- eller .xslx-filer här eller klicka för att ladda upp filer</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>Avvisade filer:</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>Ingen rapport för nuvarande villkor</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Rapport för sittplatsplanering</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Alla personer på denna sida är valda.</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Klicka här för att välja alla personer på varje sida.</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>Startdatum måste vara samma som eller tidigare än slutdatum</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Visa sittplatsbokningar</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>Den valda sittplatsen har inga bokningar för detta datum</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här kampanjen?</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>Ta bort kampanj</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Misslyckades att ta bort kampanj: {0}.</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Valda personer</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Återställ urval</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Var god välj datum i tabellen.</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Kolumn saknas: {0}.</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>Den valda filen är ogiltig. Var god kontrollera filtypen. </value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Sittplatsbokningar</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Var god se den nedladdade Excel-filen för att se detaljerade felmeddelanden.</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>Bokningen av sittplats {0} för {1} har tagits bort</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Du måste välja minst en dag.</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>kampanjtröskelvärde</value>
   </data>
 </root>
