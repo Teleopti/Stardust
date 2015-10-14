@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			if (!_planningPeriods.Any())
 				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
-			return _planningPeriods.SingleOrDefault(x => x.Id.Value==id);
+			//TODO: fix this!
+			return _planningPeriods.FirstOrDefault();
 		}
 
 		public long CountAllEntities()
