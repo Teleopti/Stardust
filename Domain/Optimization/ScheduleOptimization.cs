@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 
-			var period = new DateOnlyPeriod(new DateOnly(planningPeriod.Range.StartDate.Date),
-				new DateOnly(planningPeriod.Range.EndDate.Date));
+			var period = planningPeriod.Range;
 
 			_prerequisites.MakeSureLoaded();
 
@@ -55,8 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			var optimizationPreferences = new OptimizationPreferences
 			{
-				DaysOff =
-					new DaysOffPreferences
+				DaysOff = new DaysOffPreferences
 					{
 						ConsecutiveDaysOffValue = new MinMax<int>(1, 3),
 						UseConsecutiveDaysOff = true,
@@ -69,8 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					},
 				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }
 			};
-			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(),
-				new NoBackgroundWorker());
+			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
 
 			_persister.Persist(_schedulerStateHolder().Schedules);
 

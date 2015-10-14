@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDay5.CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate()); //TODO: behöver förmodligen använda en template som finns i repo (?)
 
-
-
 			Target.Execute(planningGroupId);
 
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDay1.CurrentDate)
