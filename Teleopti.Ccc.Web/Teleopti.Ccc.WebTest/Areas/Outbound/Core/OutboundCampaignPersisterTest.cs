@@ -636,6 +636,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
+		public void ShouldWriteToCacheForecastWhenPersistingManualProductionPlan()
+		{
+			var id = new Guid();
+			var date = new DateOnly(2015, 7, 20);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.TimeZone = TimeZoneInfo.Utc;
+			campaign.Skill = skill;
+
+			var productionPlanFactory = new OutboundProductionPlanFactory(new IncomingTaskFactory(new FlatDistributionSetter()));
+			var campaignTaskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
+			var incommingTask = productionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), 1000, TimeSpan.FromHours(4), campaign.WorkingHours);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(new Domain.Outbound.Campaign()))
+				.IgnoreArguments()
+				.Return(incommingTask);
+			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
+			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
+
+			var outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
+
+			var manualProductionPlan = new ManualPlanForm()
+			{
+				CampaignId = id,
+				ManualProductionPlan = new List<ManualViewModel>()
+				{
+					new ManualViewModel() {Date = date, Time = 26.56}
+				}
+			};
+			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null, outboundScheduledResourcesCacher);
+			_target.PersistManualProductionPlan(manualProductionPlan);
+
+			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(new TimeSpan(1, 2, 33, 35));
+			createOrUpdateSkillDays.AssertWasCalled(x => x.UpdateSkillDays(campaign.Skill, incommingTask));
+
+			outboundScheduledResourcesCacher.AssertWasCalled(x => x.SetForecastedTime(
+				Arg<IOutboundCampaign>.Is.Equal(campaign),
+				Arg<Dictionary<DateOnly, TimeSpan>>.Is.Anything));
+
+		}
+
+		[Test]
 		public void ShouldNotPersistWhenDateIsOutOfSpanningPeriod()
 		{
 			var id = new Guid();

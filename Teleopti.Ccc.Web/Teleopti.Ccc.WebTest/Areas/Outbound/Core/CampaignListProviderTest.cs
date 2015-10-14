@@ -100,6 +100,57 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
+		public void ShouldUpdateCacheScheduleAfterLoadingData()
+		{
+			setCampaigns();
+			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			var outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
+
+			var today = new DateTime(DateOnly.Today.Year, DateOnly.Today.Month, DateOnly.Today.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dayAfterTwoWeeks = new DateOnly(today.AddDays(14));
+
+			scheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(dayAfterTwoWeeks, scheduledCampaign.Skill))
+				.Return(new TimeSpan(10, 0, 0));
+
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, outboundScheduledResourcesCacher);
+
+			target.LoadData(null);
+			
+			outboundScheduledResourcesCacher.AssertWasCalled(x => x.SetScheduledTime(
+				Arg<IOutboundCampaign>.Is.Equal(scheduledCampaign), 
+				Arg<Dictionary<DateOnly, TimeSpan>>.Is.Equal(new Dictionary<DateOnly, TimeSpan>
+				{
+					{dayAfterTwoWeeks, new TimeSpan(10, 0, 0)}
+				})));			
+		}
+
+		[Test]
+		public void ShouldUpdateCacheForecastAfterLoadingData()
+		{
+
+			setCampaigns();
+			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			var outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
+
+			var today = new DateTime(DateOnly.Today.Year, DateOnly.Today.Month, DateOnly.Today.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dayAfterTwoWeeks = new DateOnly(today.AddDays(14));
+
+			scheduledResourcesProvider.Stub(x => x.GetForecastedTimeOnDate(dayAfterTwoWeeks, scheduledCampaign.Skill))
+				.Return(new TimeSpan(10, 0, 0));
+
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, outboundScheduledResourcesCacher);
+
+			target.LoadData(null);
+
+			outboundScheduledResourcesCacher.AssertWasCalled(x => x.SetForecastedTime(
+				Arg<IOutboundCampaign>.Is.Equal(scheduledCampaign),
+				Arg<Dictionary<DateOnly, TimeSpan>>.Is.Equal(new Dictionary<DateOnly, TimeSpan>
+				{
+					{dayAfterTwoWeeks, new TimeSpan(10, 0, 0)}
+				})));			
+		}
+
+		[Test]
 		public void ShouldListDoneCampaigns()
 		{
 			setCampaigns();

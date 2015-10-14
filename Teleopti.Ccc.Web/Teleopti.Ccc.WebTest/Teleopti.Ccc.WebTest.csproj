@@ -277,6 +277,7 @@
     <Compile Include="Areas\Outbound\Core\OutboundActivityProviderTest.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundCampaignPersisterTest.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignViewModelMapperTests.cs" />
+    <Compile Include="Areas\Outbound\Core\ProductionReplanHelperTest.cs" />
     <Compile Include="Areas\Outbound\IoC\OutboundAreaModuleTest.cs" />
     <Compile Include="Areas\People\PeopleDataControllerTest.cs" />
     <Compile Include="Areas\People\PeopleCommandControllerTest.cs" />

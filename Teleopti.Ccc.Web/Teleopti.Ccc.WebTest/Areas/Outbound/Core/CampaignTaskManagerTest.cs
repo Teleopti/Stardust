@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 	{
 		private OutboundProductionPlanFactory _outboundProductionPlanFactory;
 		private IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
-		private IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
+		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
 		private IOutboundCampaign _campaign;
 
@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_outboundProductionPlanFactory = new OutboundProductionPlanFactory(new IncomingTaskFactory(new FlatDistributionSetter()));
 			_outboundScheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			_outboundScheduledResourcesCacher = MockRepository.GenerateMock<IOutboundScheduledResourcesCacher>();
+			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
 			
 			_campaign = MockRepository.GenerateMock<IOutboundCampaign>();
+			_campaign.Stub(x => x.Id).Return(new Guid());
 			_campaign.Stub(x => x.SpanningPeriod).Return(new DateTimePeriod(2015, 8, 18, 2015, 8, 18));
 			_campaign.Stub(x => x.CampaignTasks()).Return(1000);
 			_campaign.Stub(x => x.AverageTaskHandlingTime()).Return(TimeSpan.FromMinutes(6));
@@ -161,6 +162,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var result = target.GetIncomingTaskFromCampaign(_campaign);
 
 			result.GetManualPlannedInfoOnDate(date).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldUseCachedScheduleIfCacheIsAvailable()
+		{
+			var date = new DateOnly(2015, 8, 18);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(TimeSpan.Zero);
+
+			_outboundScheduledResourcesCacher.AddCampaignSchedule(_campaign, new Dictionary<DateOnly, TimeSpan>
+			{
+				{date, new TimeSpan(10, 0, 0)}
+			});
+
+			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
+			var result = target.GetIncomingTaskFromCampaign(_campaign);
+
+			result.GetRealScheduledTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+		}
+
+		[Test]
+		public void ShouldUseCachedForecastIfCacheIsAvailable()
+		{
+			var date = new DateOnly(2015, 8, 18);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(TimeSpan.Zero);
+
+			_outboundScheduledResourcesCacher.AddCampaignForecasts(_campaign, new Dictionary<DateOnly, TimeSpan>
+			{
+				{date, new TimeSpan(10, 0, 0)}
+			});
+
+			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
+			var result = target.GetIncomingTaskFromCampaign(_campaign);
+
+			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
 		}
 	}
 }

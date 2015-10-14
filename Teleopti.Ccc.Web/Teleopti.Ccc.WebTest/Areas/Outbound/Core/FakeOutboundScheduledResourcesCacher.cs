@@ -36,14 +36,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			 */
 		}
 
-		public void AddCampaignSchedule(Dictionary<Guid, Dictionary<DateOnly, TimeSpan>> schedules)
+		public void AddCampaignSchedule(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> schedules)
 		{
-			campaignSchedules = schedules;
+			if (!campaign.Id.HasValue) return;
+			campaignSchedules.Add(campaign.Id.Value, schedules); 
 		}
 
-		public void SetCampaignForecasts(Dictionary<Guid, Dictionary<DateOnly, TimeSpan>> forecasts)
+		public void AddCampaignForecasts(IOutboundCampaign campaign,  Dictionary<DateOnly, TimeSpan> forecasts)
 		{
-			campaignForecasts = forecasts;
+			if (!campaign.Id.HasValue) return;
+			campaignForecasts.Add(campaign.Id.Value, forecasts); 			
 		}
 
 		public void Reset()
