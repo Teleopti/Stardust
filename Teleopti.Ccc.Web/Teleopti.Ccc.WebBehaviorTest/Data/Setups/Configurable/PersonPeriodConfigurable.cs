@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				var contract = new ContractConfigurable();
 				DataMaker.Data().Apply(contract);
 				Contract = contract.Name;
-
 			}
 
 			if (PartTimePercentage == null)

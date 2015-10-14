@@ -52,17 +52,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		{
 			referenceName = trimName(referenceName);
 
-			if (_persons.ContainsKey(referenceName))
-				return _persons[referenceName];
-
-			var person = new PersonDataFactory(
-				actualName,
-				new[] { new UserConfigurable { Name = referenceName } },
-				_unitOfWorkAction,
-				_tenantUnitOfWorkAction
-				);
-			_persons.Add(referenceName, person);
-			return person;
+			PersonDataFactory foundPerson;
+			if (!_persons.TryGetValue(referenceName, out foundPerson))
+			{
+				foundPerson = new PersonDataFactory(
+					actualName,
+					new[] {new UserConfigurable {Name = referenceName}},
+					_unitOfWorkAction,
+					_tenantUnitOfWorkAction
+					);
+				_persons.Add(referenceName, foundPerson);
+			}
+			return foundPerson;
 		}
 
 		public PersonDataFactory Me()

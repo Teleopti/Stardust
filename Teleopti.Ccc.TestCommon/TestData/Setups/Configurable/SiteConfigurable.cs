@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Site.SetBusinessUnit(businessUnit);
 			var siteRepository = new SiteRepository(currentUnitOfWork);
 			siteRepository.Add(Site);
-			businessUnit.AddSite(Site);
 		}
 	}
 }
