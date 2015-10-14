@@ -32,12 +32,6 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The agents list.</value>
         ReadOnlyCollection<ISite> SiteCollection { get; }
 
-		/// <summary>
-		/// Gets the Sites.
-		/// Sorted by description, ascending
-		/// </summary>
-		ReadOnlyCollection<ISite> SortedSiteCollection { get; }
-
         /// <summary>
         /// Get the Teams that are is the BusinessUnit.
         /// </summary>

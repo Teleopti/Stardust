@@ -234,24 +234,5 @@ namespace Teleopti.Ccc.DomainTest.Common
             bu.RemoveSite(bu.SiteCollection[0]);
             Assert.AreEqual(siteCount - 1, bu.SiteCollection.Count);
         }
-
-		[Test]
-		public void ShouldReturnSortedSiteList()
-		{
-			var siteA = SiteFactory.CreateSimpleSite("A");
-			var siteB = SiteFactory.CreateSimpleSite("B");
-			var siteC = SiteFactory.CreateSimpleSite("C");
-
-			_target = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
-			_target.AddSite(siteC);
-			_target.AddSite(siteA);
-			_target.AddSite(siteB);
-
-			var sites = _target.SortedSiteCollection;
-
-			Assert.AreEqual(siteA, sites[0]);
-			Assert.AreEqual(siteB, sites[1]);
-			Assert.AreEqual(siteC, sites[2]);
-		}
     }
 }

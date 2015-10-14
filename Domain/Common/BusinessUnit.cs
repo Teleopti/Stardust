@@ -100,18 +100,6 @@ namespace Teleopti.Ccc.Domain.Common
             get { return new ReadOnlyCollection<ISite>(_siteCollection); }
         }
 
-		public virtual ReadOnlyCollection<ISite> SortedSiteCollection
-		{
-			get
-			{
-				var sortedList = (from site in _siteCollection
-								  orderby site.Description.Name ascending
-								  select site).ToList();
-
-				return new ReadOnlyCollection<ISite>(sortedList);
-			}
-		}
-
         public virtual bool IsDeleted
         {
             get { return _isDeleted; }
