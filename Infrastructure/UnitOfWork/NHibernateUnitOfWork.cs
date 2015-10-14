@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
 using System.Transactions;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -191,12 +189,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (_messageSenders == null) return;
 
-
 			_messageSenders.Current().ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-						ignoreHttpRequestAndThreadAbortExceptions(() => d.Execute(modifiedRoots));
+						d.Execute(modifiedRoots);
 					}
 				});
 		}
@@ -312,29 +309,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-
 			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
-            ignoreHttpRequestAndThreadAbortExceptions(() => new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots));
+			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 
-        private void ignoreHttpRequestAndThreadAbortExceptions(Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (AggregateException e)
-            {
-                if (e.InnerException.GetType() == typeof (HttpRequestException) ||
-                    e.InnerException.GetType() == typeof (ThreadAbortException))
-                {
-                    _logger.Error("Could not contact the broker", e);
-                    return;
-                }
-                throw;
-            }
-        }
-        private static void throwIncorrectDbVersionParameter(IAggregateRoot root)
+		private static void throwIncorrectDbVersionParameter(IAggregateRoot root)
 		{
 			throw new ArgumentException("Cannot find " + root + " in db");
 		}
