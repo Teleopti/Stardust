@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 
-		[Test]
+		[Test, Explicit("2 be continued")]
 		public void ShouldMoveDayOff()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
