@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			get { return "Memory usage must be under limit."; }
 		}
 
-		public override bool ExplicitValidation { get { return false; } }
-
+		public override bool InstantValidation { get { return true; } }
 
 		public override SikuliValidationResult Validate(object data)
 		{

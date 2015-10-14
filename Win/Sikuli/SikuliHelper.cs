@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 					//ActiveValidators.Add(validator.Name, validator);
 				}
 			}
-			if (!CurrentValidator.ExplicitValidation)
+			if (CurrentValidator.InstantValidation)
 				Validate(CurrentValidator, owner);
 		}
 

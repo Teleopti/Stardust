@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		/// </summary>
 		string Name { get; }
 		/// <summary>
-		/// Flag to signal sikuli helper the validator waits for explicit call for validation
+		/// Flag to signal sikuli helper the validator validated instantly after created
 		/// </summary>
-		bool ExplicitValidation { get; } 
+		bool InstantValidation { get; } 
 		/// <summary>
 		/// abstract method for running validation logic
 		/// </summary>
