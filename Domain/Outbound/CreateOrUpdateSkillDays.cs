@@ -13,9 +13,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 	{
 		void Create(ISkill skill, DateOnlyPeriod campaignPeriod, int campaignTasks,
 			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours);
-
-		void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask);
-		void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask, Dictionary<DateOnly, TimeSpan> forecasts);
+	
+		Dictionary<DateOnly, TimeSpan> UpdateSkillDays(ISkill skill, IBacklogTask incomingTask);
 	}
 
 	public class CreateOrUpdateSkillDays : ICreateOrUpdateSkillDays
@@ -46,12 +45,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 			UpdateSkillDays(skill, incomingTask);
 		}
 
-		public void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask)
-		{
-			UpdateSkillDays(skill, incomingTask, null);
-		}
-
-		public void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask, Dictionary<DateOnly, TimeSpan> forecasts)
+		
+		public Dictionary<DateOnly, TimeSpan> UpdateSkillDays(ISkill skill, IBacklogTask incomingTask)
 		{
 			ICollection<ISkillDay> skillDays = _fetchAndFillSkillDays.FindRange(incomingTask.SpanningPeriod, skill);
 			var workload = skill.WorkloadCollection.First();
@@ -70,6 +65,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 			}
 
 			var forecastingTargets = new List<IForecastingTarget>();
+			var forecasts = new Dictionary<DateOnly, TimeSpan>();
+
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 			{
 				var isOpen = incomingTask.PlannedTimeTypeOnDate(dateOnly) != PlannedTimeTypeEnum.Closed;
@@ -80,16 +77,15 @@ namespace Teleopti.Ccc.Domain.Outbound
 					forecastingTarget.Tasks = timeOnDate.TotalSeconds / incomingTask.AverageWorkTimePerItem.TotalSeconds;
 					forecastingTarget.AverageTaskTime = incomingTask.AverageWorkTimePerItem;
 					_outboundScheduledResourcesProvider.SetForecastedTimeOnDate(dateOnly, skill, timeOnDate);
-					if (forecasts != null)
-					{
-						forecasts.Add(dateOnly, timeOnDate);
-					}
+					
+					forecasts.Add(dateOnly, timeOnDate);					
 				}
 
 				forecastingTargets.Add(forecastingTarget);
 			}
 			_forecastingTargetMerger.Merge(forecastingTargets, workLoadDays);
 			_skillDayRepository.AddRange(skillDays);
+			return forecasts;
 		}
 	}
 }

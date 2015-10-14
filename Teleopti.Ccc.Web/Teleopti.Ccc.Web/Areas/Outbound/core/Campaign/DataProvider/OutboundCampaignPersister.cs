@@ -191,9 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 
-				var forecasts = new Dictionary<DateOnly, TimeSpan>();
-				_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask, forecasts);
-
+				var forecasts = _createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);				
 				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
 			}
 		}

@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
 			_campaignWarningProvider = new FakeCampaignWarningProvider();
+			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
 
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"),
 				new TimeSpan(4, 0, 0));

@@ -42,11 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			_scheduledResourcesProvider.Load(campaigns, campaignPeriod);
 
+			_outboundScheduledResourcesCacher.Reset();
 			foreach (var campaign in campaigns)
 			{
 				var dates = campaign.SpanningPeriod.DateCollection();
-				var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill));
-				var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill));
+				var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill))
+					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value); 
+				var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill))
+					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
 				_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
 				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);				
 			}
@@ -182,7 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				{
 					isScheduled = schedules.Keys.Any(d => schedules[d] > TimeSpan.Zero);
 				}
-				return isScheduled;
+				return !isScheduled;
 			};
 
 			return campaigns.Where(campaignNoSchedulePredicate).Select(campaign =>
