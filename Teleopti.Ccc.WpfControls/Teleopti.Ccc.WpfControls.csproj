@@ -1057,7 +1057,6 @@
       <DependentUpon>LayerListBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LayerTemplateSelector.cs" />
-    <Compile Include="Controls\Intraday\ListViewPresenter.cs" />
     <Compile Include="Controls\Messaging\PushMessageControl.xaml.cs">
       <DependentUpon>PushMessageControl.xaml</DependentUpon>
     </Compile>

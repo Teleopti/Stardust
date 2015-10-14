@@ -13503,4 +13503,12 @@ Reduce the complexity to use these shifts.</value>
     <value>campaign threshold</value>
     <comment>the name of outbound campaign threshold</comment>
   </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>Logged in</value>
+    <comment>used in Intraday</comment>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>Logged out</value>
+    <comment>used in Intraday</comment>
+  </data>
 </root>

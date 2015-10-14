@@ -480,7 +480,6 @@
     <Compile Include="Meetings\MeetingGeneralPresenterTest.cs" />
     <Compile Include="Converters\ColumnWidthConverterTest.cs" />
     <Compile Include="Converters\ConverterComparerTest.cs" />
-    <Compile Include="Converters\AvailableConverterTest.cs" />
     <Compile Include="Converters\TimeSpanRoundingConverterTest.cs" />
     <Compile Include="Converters\PersonNameConverterTest.cs" />
     <Compile Include="Converters\IsNullConverterTest.cs" />

@@ -826,7 +826,6 @@
     <Compile Include="Meetings\Interfaces\IMeetingGeneralView.cs" />
     <Compile Include="Converters\ConverterComparer.cs" />
     <Compile Include="Converters\ColumnWidthConverter.cs" />
-    <Compile Include="Converters\AvailableConverter.cs" />
     <Compile Include="Converters\TimeSpanRoundingConverter.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
     <Compile Include="Converters\PersonNameConverter.cs" />

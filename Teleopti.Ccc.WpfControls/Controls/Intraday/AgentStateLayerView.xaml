@@ -19,7 +19,7 @@
             <Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaPinnedHeaderStyle">
 
             </Style>
-            <Converters:AvailableConverter x:Key="availableConverter"/>
+            
         </ResourceDictionary>
     </UserControl.Resources>
         <DockPanel LastChildFill="True">
@@ -40,7 +40,7 @@
                             <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,1,0,0" Header="{Binding Path=Name, Converter={StaticResource availableConverter}}" >
+                                            <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,1,0,0" Header="{Binding Path=Name}" >
                                                 <Expander.Content>
                                                     <ItemsPresenter />
                                                 </Expander.Content>
@@ -59,7 +59,7 @@
                         
                         <GridViewColumn Header="{x:Static Member=UserTexts:Resources.Name}"
                                         Width="Auto"
-                                        DisplayMemberBinding="{Binding Path=StateGroup.Name}"/>
+                                        DisplayMemberBinding="{Binding Path=Name}"/>
 
                         <GridViewColumn Header="{x:Static Member=UserTexts:Resources.Total}"                                       
                                         DisplayMemberBinding="{Binding Path=TotalPersons}"/>

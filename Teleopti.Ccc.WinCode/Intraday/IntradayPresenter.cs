@@ -497,7 +497,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public IEnumerable<AgentStateViewAdapter> CreateAgentStateViewAdapterCollection(IDayLayerViewModel model)
         {
-            return _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(rtaStateGroup, model));
+            var adapters = _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(rtaStateGroup, model)).ToList();
+
+				adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAME", false, false),model, _rtaStateHolder.RtaStateGroups));
+				adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false),model, _rtaStateHolder.RtaStateGroups));
+
+	        return adapters;
         }
 
         public void RetryHandlingMessages()

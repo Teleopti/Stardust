@@ -12558,4 +12558,12 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="CampaignThreshold" xml:space="preserve">
     <value>kampanjtröskelvärde</value>
   </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>Inloggade</value>
+    <comment>used in Intraday</comment>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>Utloggade</value>
+    <comment>used in Intraday</comment>
+  </data>
 </root>

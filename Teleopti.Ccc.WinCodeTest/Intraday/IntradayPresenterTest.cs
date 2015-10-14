@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -546,12 +547,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             var stategroups = new ReadOnlyCollection<IRtaStateGroup>(new List<IRtaStateGroup> { new RtaStateGroup("test", true, true) });
             var model = MockRepository.GenerateMock<IDayLayerViewModel>();
             _rtaStateHolder.Stub(x => x.RtaStateGroups).Return(stategroups);
-            string test = "";
-            foreach (var adaper in _target.CreateAgentStateViewAdapterCollection(model))
-            {
-                test = adaper.StateGroup.Name;
-            }
-            Assert.AreEqual("test", test);
+	        var adaper = _target.CreateAgentStateViewAdapterCollection(model);
+	        adaper.First().Name.Should().Be.EqualTo("test");
         }
 
 		[Test]

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Common;
@@ -99,5 +102,135 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Assert.That(_target.TotalPersons, Is.EqualTo(1));
 
 		}
-    }
+
+		[Test]
+		public void ShouldAddToNotLoggedOutWhenNotDefined()
+		{
+			_rtaStateGroup = new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false);
+			
+			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>()
+			{
+				_rtaStateGroup, new RtaStateGroup("LoggedOut",false,false) {IsLogOutState = true},
+				new RtaStateGroup("InCall", false, false)
+			};
+			_target = new AgentStateViewAdapter(_rtaStateGroup, _dayLayerViewModel,rtaStateGroups);
+			var dayLayerModel =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = null
+				};
+
+			var dayLayerModel2 =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = "InCall"
+				};
+
+			var dayLayerModel3 =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = "LoggedOut"
+				};
+
+			var collection = new Collection<DayLayerModel> { dayLayerModel, dayLayerModel2,dayLayerModel3 };
+
+			_dayLayerViewModel.Expect(d => d.Models).Return(collection);
+
+			_mocks.ReplayAll();
+
+			_target.Refresh();
+			_mocks.VerifyAll();
+			Assert.That(_target.TotalPersons, Is.EqualTo(2));
+
+		}
+
+		[Test]
+		public void ShouldAddToLoggedOnWhenAgentIsAvailable()
+		{
+			_rtaStateGroup = new RtaStateGroup("OLAANDASADSSECRETNAME", false, false);
+
+			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>()
+			{
+				_rtaStateGroup, new RtaStateGroup("LoggedOut", false, false) { IsLogOutState = true },
+				new RtaStateGroup("InCall", false, false) 
+			};
+			_target = new AgentStateViewAdapter(_rtaStateGroup, _dayLayerViewModel, rtaStateGroups);
+			var dayLayerModel =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = null
+				};
+
+			var dayLayerModel2 =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = "InCall"
+				};
+
+			var dayLayerModel3 =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+											 new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+					new CommonNameDescriptionSetting("test"))
+				{
+					CurrentStateDescription = "LoggedOut"
+				};
+
+			var collection = new Collection<DayLayerModel> { dayLayerModel, dayLayerModel2, dayLayerModel3 };
+
+			_dayLayerViewModel.Expect(d => d.Models).Return(collection);
+
+			_mocks.ReplayAll();
+
+			_target.Refresh();
+			_mocks.VerifyAll();
+			Assert.That(_target.TotalPersons, Is.EqualTo(1));
+
+		}
+	}
 }

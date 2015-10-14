@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Collection;
@@ -17,16 +18,15 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
     {
         private readonly ObservableCollection<AgentStateViewAdapter> _agentStateViewAdapterCollection = new ObservableCollection<AgentStateViewAdapter>();
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private readonly ListViewPresenter _listViewPresenter;
         private DateTimePeriod _nowPeriod = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddMinutes(1));
 
         public AgentStateLayerView()
         {
             InitializeComponent();
-            _listViewPresenter = new ListViewPresenter(mainGrid);
-
+            
             var view = (ListCollectionView)CollectionViewSource.GetDefaultView(mainGrid.ItemsSource);
-            view.GroupDescriptions.Add(new PropertyGroupDescription("StateGroup.Available"));
+            view.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+            view.SortDescriptions.Add(new SortDescription() {PropertyName = "Sort"});
         }
 
         public ObservableCollection<AgentStateViewAdapter> AgentStateViewAdapterCollection
