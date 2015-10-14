@@ -2,15 +2,13 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 {
@@ -31,7 +29,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 
 		}
 
-		
+		[Test]
+		public void ScheduleResourcesProviderShouldBeDifferentForDifferentRequest()
+		{
+			using (var ioc = _containerBuilder.Build())
+			{
+				IOutboundScheduledResourcesProvider holder1, holder2;
+
+				using (var scope = ioc.BeginLifetimeScope(_requestTag))
+				{
+					holder1 = scope.Resolve<IOutboundScheduledResourcesProvider>();					
+				}
+
+				using (var scope = ioc.BeginLifetimeScope(_requestTag))
+				{
+					holder2 = scope.Resolve<IOutboundScheduledResourcesProvider>();
+				}
+
+				holder1.Should().Not.Be.EqualTo(holder2);
+			}
+		}
 
 		[Test]
 		public void ShouldResolveOutboundController()
