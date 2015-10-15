@@ -59,7 +59,6 @@ Scenario: Send message
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
-@Ignore
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message after application sign in
 	Given there is a site named 'Paris'
@@ -83,12 +82,12 @@ Scenario: Send message after application sign in
 	 | Ashley Andeen |
 	Then I should be redirected to the sign in page
 	When I sign in
-	Then I should see receivers as
+	Then messages page load will complete within 30 seconds
+	And I should see receivers as
 	 | Name          |
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
-@Ignore
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Send message after windows sign in
@@ -114,8 +113,8 @@ Scenario: Send message after windows sign in
 	 | Name          |
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
-	Then I should see receivers as
+	Then messages page load will complete within 30 seconds
+	And I should see receivers as
 	 | Name          |
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
-
