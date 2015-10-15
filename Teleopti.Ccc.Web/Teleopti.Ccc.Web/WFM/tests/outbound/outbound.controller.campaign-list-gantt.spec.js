@@ -127,11 +127,9 @@
 
 	it('should get threshold value at the beginning', function() {
 		var test = setUpTarget();
-		outboundService.setThreshold({ Value:0.6, Type:2 });
-
-		expect(test.scope.threshold).not.toBeDefined();
+		outboundService.setThreshold({ Value:0.6, Type:2 });		
 		test.target.init();
-		expect(test.scope.threshold).toEqual(60);
+		expect(test.scope.settings.threshold).toEqual(60);
 	});
 
 
