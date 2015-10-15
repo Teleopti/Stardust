@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -17,10 +16,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_skills = new List<ISkill>();
 		}
 
-		public ISkill Has(string skillName)
+		public ISkill Has(string skillName, IActivity activity)
 		{
 			var skill = SkillFactory.CreateSkill(skillName);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			skill.Activity = activity;
 			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
 			return skill;

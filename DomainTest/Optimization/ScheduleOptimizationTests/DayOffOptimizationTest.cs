@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var partTimePercentage = new PartTimePercentage("_");
 			var contractSchedule = new ContractSchedule("_");
 			var team = new Team {Site = new Site("site")};
-			var skill = SkillRepository.Has("skill");
-			var scenario = ScenarioRepository.Has("some name");
 			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team);
 			agent.AddSkill(new PersonSkill(skill, new Percent(100)), agent.Period(firstDay));
 
