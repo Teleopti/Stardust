@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Analytics.ETL.Tool");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Etl.Tool");
 		}
 
 		[Test]
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Sdk.Host");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Sdk.Host");
 		}
 
 		[Test]
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.True();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.ServiceBus.Host");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.ServiceBus.Host");
 		}
 
 		[Test]
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.True();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Web");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Web");
 		}
 
 		[Test]
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.SmartClientPortal.Shell");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.SmartClientPortal.Shell");
 		}
 
 
