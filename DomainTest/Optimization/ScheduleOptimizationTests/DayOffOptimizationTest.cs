@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -44,8 +45,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
+			
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod);
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)) {Active=true}, agent.Period(firstDay));
+
+			var shiftCategory = new ShiftCategory("unimportant");
+			shiftCategory.SetId(Guid.NewGuid());
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var shiftBag = new RuleSetBag();
+			shiftBag.AddRuleSet(ruleSet);
+			agent.Period(firstDay).RuleSetBag = shiftBag;
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(5),
@@ -62,8 +71,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				var someTimeDuringTheDay = new DateTime(currDate.Year, currDate.Month, currDate.Day, 8, 0, 0, DateTimeKind.Utc);
 				var ass = new PersonAssignment(agent, scenario, currDate);
 				ass.AddActivity(activity, new DateTimePeriod(someTimeDuringTheDay, someTimeDuringTheDay.AddHours(8)));
+				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
+
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate()); //TODO: behöver förmodligen använda en template som finns i repo (?)
 
