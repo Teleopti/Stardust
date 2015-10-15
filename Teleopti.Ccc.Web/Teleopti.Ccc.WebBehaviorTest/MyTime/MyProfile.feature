@@ -42,6 +42,8 @@ Scenario: Change my description to first name last name
 	And I change Agent description to first name last name
 	Then I should see name 'John Smith'
 
+#It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
+@OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
 Scenario: Change my password
 	Given I am an agent
 	When I view my password
