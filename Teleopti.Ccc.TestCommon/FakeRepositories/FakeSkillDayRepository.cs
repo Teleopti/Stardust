@@ -10,19 +10,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSkillDayRepository : ISkillDayRepository
 	{
-		private IList<ISkillDay> _skillDays = new List<ISkillDay>();
+		private readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
 
 		public void Add(ISkillDay root)
 		{
 			_skillDays.Add(root);
 		}
 
-		public ISkillDay HasSkillDayWithDemand(ISkill skill, DateOnly dateOnly, TimeSpan demand, IScenario scenario)
+		public IList<ISkillDay> Has(IList<ISkillDay> skillDays)
 		{
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			var skillDay = skill.CreateSkillDayWithDemand(dateOnly, demand, scenario);
-			_skillDays.Add(skillDay);
-			return skillDay;
+			_skillDays.AddRange(skillDays);
+			return skillDays;
 		}
 
 		public void Remove(ISkillDay root)

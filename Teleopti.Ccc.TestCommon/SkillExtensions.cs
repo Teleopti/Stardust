@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class SkillExtensions
 	{
-		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, DateOnly dateOnly, TimeSpan demand, IScenario scenario)
+		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demand)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
@@ -28,6 +28,18 @@ namespace Teleopti.Ccc.TestCommon
 
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, dateOnlyPeriod);
 			return skillDay;
+		}
+
+		public static IList<ISkillDay> CreateSkillDaysWithDemandOnConsecutiveDays(this ISkill skill, IScenario scenario, DateOnly startDate, params TimeSpan[] demands)
+		{
+			var skillDays = new List<ISkillDay>();
+			for (var day = 0; day < demands.Length; day++)
+			{
+				var date = startDate.AddDays(day);
+				var skillDay = skill.CreateSkillDayWithDemand(scenario, date, demands[day]);
+				skillDays.Add(skillDay);
+			}
+			return skillDays;
 		}
 	}
 }

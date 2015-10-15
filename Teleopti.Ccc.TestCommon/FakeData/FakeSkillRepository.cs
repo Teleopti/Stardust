@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public ISkill Has(string skillName)
 		{
 			var skill = SkillFactory.CreateSkill(skillName);
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
 			return skill;
