@@ -54,6 +54,18 @@
 	}
 	.outbound-gantt-chart {
 		margin: 70px 0;
+		.gantt-alert-message{
+		    position: absolute;
+			bottom: -30px;
+			z-index: 100;
+			width: 100%;
+			left: 0;
+			height: 25px;
+			line-height: 25px;
+			padding: 0;
+			text-align: center;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+		}
 		.gantt-task-truncated-left,.gantt-task-truncated-right{
 		    top:-2px;
 		}
@@ -292,7 +304,6 @@
 		padding-left: 10px;
 		height:40px;
 		width:35%;
-		overflow:hidden;
 		position:relative;
 		bottom:-2px;
 		float:left;
@@ -300,7 +311,7 @@
 		white-space:nowrap;
 		input{
 			margin-top:10px;
-			width:200px;
+			width:190px;
 		}
 		.manual-input-btns{
 			display: inline-block;
@@ -394,6 +405,9 @@
 	}
 	.m-b-10{
 	    margin-bottom:10px !important;
+	}
+	.m-b-5{
+	    margin-bottom:5px !important;
 	}
 	.m-t-0{
 	    margin-top:0 !important;

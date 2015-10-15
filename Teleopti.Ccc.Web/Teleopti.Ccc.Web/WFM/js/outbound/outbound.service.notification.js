@@ -46,12 +46,6 @@
 			]);
 		}
 
-		this.notifyResetManualFailure = function (error) {
-			notifyWarning('CampaignFailedResetManual', [
-				(error && error.Message ? error.Message : error)
-			]);
-		}
-
 		function notifySuccess(message, params) {
 			$translate(message).then(function(text) {
 				$growl.success("<i class='mdi mdi-thumb-up'></i> "

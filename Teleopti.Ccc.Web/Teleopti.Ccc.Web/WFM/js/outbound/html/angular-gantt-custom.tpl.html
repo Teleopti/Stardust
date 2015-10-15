@@ -45,7 +45,7 @@
 						<div class="loading-whole-section loading-card-bodyfix" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
 							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 						</div>
-						<div class="clearfix m-b-10 text-center" style="height: 40px;">
+						<div class="clearfix m-b-5 text-center" style="height: 40px;">
 							<p class="campaign-message orangefix" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignOverstaff'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignOverstaff</span></p>
 							<p class="campaign-message" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignUnderSLA'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignUnderSLA</span></p>
 						</div>

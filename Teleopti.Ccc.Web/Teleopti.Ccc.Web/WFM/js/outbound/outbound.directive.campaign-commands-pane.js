@@ -34,6 +34,7 @@
 			$scope.replan = replan;
 			$scope.validManualProductionPlan = validManualProductionPlan;
 			$scope.validManualBacklog = validManualBacklog;
+			$scope.validManualReset = validManualReset;
 			$scope.showDateSelectionHint = showDateSelectionHint;
 
 			$scope.gotoEditCampaign = function () {
@@ -79,10 +80,8 @@
 			}
 
 			function removeManualPlan() {
-				if ($scope.selectedDates.length == 0) {
-					outboundNotificationService.notifyResetManualFailure();
-				}
-				else {
+				if ($scope.selectedDates.length == 0) return;
+				
 					$scope.isLoading = true;
 					outboundChartService.removeManualPlan({
 						campaignId: $scope.campaign.Id,
@@ -94,7 +93,7 @@
 							callbackDone();
 						}
 					});
-				}
+				
 			}
 
 			function addManualBacklog() {
@@ -113,9 +112,8 @@
 			}
 
 			function removeManualBacklog() {
-				if ($scope.selectedDates.length == 0) {
-					outboundNotificationService.notifyResetManualFailure();
-				} else {
+				if ($scope.selectedDates.length == 0) return;
+
 					$scope.isLoading = true;
 					outboundChartService.removeActualBacklog({
 						campaignId: $scope.campaign.Id,
@@ -127,7 +125,7 @@
 							callbackDone();
 						}
 					});
-				}
+				
 			}
 
 			function replan() {
@@ -152,12 +150,13 @@
 				else return $scope.manualBacklogInput >= 0 && $scope.selectedDates && $scope.selectedDates.length > 0;
 			}
 
+			function validManualReset() {
+				return $scope.selectedDates && $scope.selectedDates.length > 0;
+			}
+
 			function showDateSelectionHint() {
-				if ($scope.isLoading) return false;
 				if ($scope.selectedDates && $scope.selectedDates.length > 0) return false;
-				if ($scope.manualPlanSwitch) return  $scope.manualPlanInput != null;
-				if ($scope.manualBacklogSwitch) return  $scope.manualBacklogInput != null;
-				return false;
+				return true;
 			}
 
 		}
