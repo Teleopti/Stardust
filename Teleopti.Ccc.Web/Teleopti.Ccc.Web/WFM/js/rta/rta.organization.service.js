@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
 	'use strict';
 
 	var rtaModule = angular.module('wfm.rta');
@@ -9,8 +9,8 @@
 			service.sites = RtaService.getSites ? RtaService.getSites.query() : null;
 			service.teams = undefined;
 
-	   	service.getSiteName = function (siteIds) {
-				var siteId = siteIds[0] || siteIds;
+	   	service.getSiteName = function (siteId) {
+				//var siteId = siteId[0] || siteId;//siteIds[0] || siteIds;
 				var deferred = $q.defer();
 				service.sites.$promise.then(function(data){
 					var siteName = null;

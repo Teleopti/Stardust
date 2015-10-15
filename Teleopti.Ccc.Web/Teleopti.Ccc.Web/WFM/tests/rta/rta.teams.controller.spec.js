@@ -1,4 +1,3 @@
-﻿
 'use strict';
 describe('RtaTeamsCtrl', function() {
 	var $q,
@@ -37,6 +36,10 @@ describe('RtaTeamsCtrl', function() {
 			Id: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
 			Name: "Paris",
 			NumberOfAgents: 1
+		}, {
+			Id: "413157c4-74a9-482c-9760-a0a200d9f90f",
+			Name: "Stores",
+			NumberOfAgents: 98
 		}];
 		teams = [{
 			Id: "2d45a50e-db48-41db-b771-a53000ef6565",
@@ -91,10 +94,14 @@ describe('RtaTeamsCtrl', function() {
 			}
 		});
 
+		//London
 		$httpBackend.whenGET("../Teams/ForSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teams);
-
+		//Paris
 		$httpBackend.whenGET("../Teams/ForSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(200, []);
+		//Stores
+		$httpBackend.whenGET("../Teams/ForSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
 			.respond(200, []);
 
 		rtaSvrc.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {
@@ -106,11 +113,15 @@ describe('RtaTeamsCtrl', function() {
 				isArray: true
 			}
 		});
+		//London
 		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teamAdherence);
+		//Paris
 		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, []);
-
+		//Stores
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
+			.respond(200, []);
 
 		rtaSvrc.getSites = $resource('../Sites', {}, {
 			query: {
@@ -122,8 +133,6 @@ describe('RtaTeamsCtrl', function() {
 		$httpBackend.whenGET("../Sites")
 			.respond(200, sites);
 	}));
-
-
 
 	var createController = function() {
 		$controller('RtaTeamsCtrl', {
@@ -266,4 +275,21 @@ describe('RtaTeamsCtrl', function() {
 		});
 	});
 
+	it('should display site name Stores', function() {
+		stateParams.siteId = "413157c4-74a9-482c-9760-a0a200d9f90f";
+		sites = [{
+			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+			Name: "London"
+		}, {
+			Id: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			Name: "Paris"
+		}, {
+			Id: "413157c4-74a9-482c-9760-a0a200d9f90f",
+			Name: "Stores"
+		}];
+
+		createController();
+
+		expect(scope.siteName).toEqual("Stores");
+	});
 });
