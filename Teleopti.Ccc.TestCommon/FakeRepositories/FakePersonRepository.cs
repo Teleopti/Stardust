@@ -37,14 +37,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_persons.Add(person);
 		}
 
-		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team)
+		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod)
 		{
-			//TODO: not hard coded dates here!
 			var agent = new Person();
 			agent.SetId(Guid.NewGuid());
 			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1950, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
-			var schedulePeriod = new SchedulePeriod(new DateOnly(2015, 10, 12), SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(1);
       agent.AddSchedulePeriod(schedulePeriod);
 			_persons.Add(agent);
 			return agent;
