@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldNotKeepShiftWhenOptimizeAndWeeklyRestIsBrokenAndKeepActivityRestrictionNotAffectShift()
+		public void ShouldNotKeepShiftWhenOptimizeAndWeeklyRestIsBrokenAndDontMoveActivityRestrictionNotAffectShift()
 		{
 			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activityForRuleSet.SetId(Guid.NewGuid());
@@ -302,6 +302,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var optimizationPref = new OptimizationPreferences
 			{
 				Shifts = { AlterBetween = true, SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36)) },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			executeTarget(new[] { agent }, optimizationPref);
+
+			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotKeepShiftWhenOptimizeIfWeeklyRestIsBrokenAndKeepActivityLengthRestrictionNotAffectShift()
+		{
+
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activityForRuleSet.SetId(Guid.NewGuid());
+
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activity.SetId(Guid.NewGuid());
+
+			var shiftCategory = new ShiftCategory("unimportant");
+			shiftCategory.SetId(Guid.NewGuid());
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+			
+			var agent = setupAgent(ruleSet, activity);
+			setUpSchedules(agent, activity, shiftCategory);
+
+			var optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { KeepActivityLength = true, ActivityToKeepLengthOn = activityForRuleSet },
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 

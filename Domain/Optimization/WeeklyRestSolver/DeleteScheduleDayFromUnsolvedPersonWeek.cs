@@ -52,23 +52,25 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			if (optimizationPreferences == null)
 				return false;
 
-			var keepSelectedActivities = isKeepSelectedActivitiesAffecting(optimizationPreferences, scheduleDay);
-			var alterBetween = isAlterBetweenAffecting(optimizationPreferences, scheduleDay);
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var timeZoneInfo = scheduleDay.TimeZone;
+
+			var keepSelectedActivities = isKeepSelectedActivitiesAffecting(optimizationPreferences, projection);
+			var alterBetween = isAlterBetweenAffecting(optimizationPreferences, projection, timeZoneInfo);
+			var keepActivityLength = isKeepActivityLengthAffecting(optimizationPreferences, projection);
 
 			return	(optimizationPreferences.Shifts.KeepStartTimes ||
 					optimizationPreferences.Shifts.KeepEndTimes ||
 					optimizationPreferences.Shifts.KeepShiftCategories ||
 					keepSelectedActivities ||
-					optimizationPreferences.Shifts.KeepActivityLength ||
+					keepActivityLength ||
 					alterBetween);
 		}
 
-	    private bool isAlterBetweenAffecting(IOptimizationPreferences optimizationPreferences, IScheduleDay scheduleDay)
+	    private bool isAlterBetweenAffecting(IOptimizationPreferences optimizationPreferences, IVisualLayerCollection projection, TimeZoneInfo timeZone)
 	    {
 		    if (!optimizationPreferences.Shifts.AlterBetween)
 			    return false;
-
-			var projection = scheduleDay.ProjectionService().CreateProjection();
 
 		    var dateTimePeriod = projection.Period();
 		    if (dateTimePeriod == null)
@@ -78,7 +80,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		    var shiftStart = dateTimePeriod.Value.StartDateTime;
 			var shiftEnd = dateTimePeriod.Value.EndDateTime;
 			var dateOffset = (int)shiftEnd.Date.Subtract(shiftStartDate).TotalDays;
-			var timeZone = scheduleDay.TimeZone;
 			var shiftStartUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(shiftStart, timeZone);
 		    var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(shiftEnd, timeZone);
 		    var shiftTimePeriod = new TimePeriod(shiftStartUserLocalDateTime.TimeOfDay, shiftEndUserLocalDateTime.TimeOfDay.Add((TimeSpan.FromDays(dateOffset))));
@@ -89,24 +90,34 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		    return true;
 	    }
 
-	    private bool isKeepSelectedActivitiesAffecting(IOptimizationPreferences optimizationPreferences, IProjectionSource scheduleDay)
+	    private bool isKeepSelectedActivitiesAffecting(IOptimizationPreferences optimizationPreferences, IVisualLayerCollection projection)
 	    {
 		    if (!optimizationPreferences.Shifts.SelectedActivities.Any())
 			    return false;
-
-			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var keepSelectedActivities = false;
-
+	
 			foreach (var selectedActivity in optimizationPreferences.Shifts.SelectedActivities)
 			{
 				if (projection.Any(visualLayer => selectedActivity.Equals(visualLayer.Payload)))
-					keepSelectedActivities = true;
-
-				if (keepSelectedActivities)
-					break;
+					return true;
+	
 			}
 
-		    return keepSelectedActivities;
+		    return false;
+	    }
+
+	    private bool isKeepActivityLengthAffecting(IOptimizationPreferences optimizationPreferences, IEnumerable<IVisualLayer> projection)
+	    {
+		    if (!optimizationPreferences.Shifts.KeepActivityLength)
+			    return false;
+
+		    foreach (var visualLayer in projection)
+		    {
+			    if (visualLayer.Payload.Equals(optimizationPreferences.Shifts.ActivityToKeepLengthOn))
+				    return true;
+
+		    }
+
+		    return false;
 	    }
     }
 }

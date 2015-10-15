@@ -316,6 +316,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				.Should().Be.EqualTo(new DateTime(weekPeriod.StartDate.Year, weekPeriod.StartDate.Month, weekPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
 		}
 
+		[Test]
+		public void ShouldKeepShiftWhenOptimizeIfWeeklyRestIsBrokenAndKeepActivityLengthRestrictionNotAffectShift()
+		{
+
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activityForRuleSet.SetId(Guid.NewGuid());
+
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activity.SetId(Guid.NewGuid());
+
+			var shiftCategory = new ShiftCategory("unimportant");
+			shiftCategory.SetId(Guid.NewGuid());
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+
+			var agent = setupAgent(ruleSet, activity);
+			setUpSchedules(agent, activity, shiftCategory);
+
+			var optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { KeepActivityLength = true, ActivityToKeepLengthOn = activityForRuleSet },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			executeTarget(new[] { agent }, optimizationPref);
+
+			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.First()
+				.Period.StartDateTime
+				.Should().Be.EqualTo(new DateTime(weekPeriod.StartDate.Year, weekPeriod.StartDate.Month, weekPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
+		}
+
 		private void executeTarget(IList<IPerson> agents, OptimizationPreferences optimizationPreferences)
 		{
 			var date = new DateOnly(2015, 09, 30);
