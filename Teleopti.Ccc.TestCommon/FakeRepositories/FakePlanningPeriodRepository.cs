@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -28,6 +29,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			entity.SetId(Guid.NewGuid());
 			_planningPeriods.Add(entity);
 			AddExecuted = true;
+		}
+
+		public IPlanningPeriod HasOneWeek(DateOnly start)
+		{
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7)), new[]
+			{
+				new AggregatedSchedulePeriod
+				{
+					DateFrom = start.Date,
+					Number = 1,
+					PeriodType = SchedulePeriodType.Week
+				}
+			}));
+			planningPeriod.SetId(Guid.NewGuid());
+			_planningPeriods.Add(planningPeriod);
+			return planningPeriod;
 		}
 
 		public void Remove(IPlanningPeriod entity)

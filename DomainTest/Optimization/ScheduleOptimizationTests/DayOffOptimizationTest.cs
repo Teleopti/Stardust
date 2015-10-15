@@ -4,11 +4,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -31,16 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public void ShouldMoveDayOff()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
-			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(firstDay.Date.AddDays(-7)), new[]
-				{
-					new AggregatedSchedulePeriod
-					{
-						DateFrom = firstDay.Date,
-						Number = 1,
-						PeriodType = SchedulePeriodType.Week
-					}
-				}));
-			PlanningPeriodRepository.Add(planningPeriod);
+			var planningPeriod = PlanningPeriodRepository.HasOneWeek(firstDay);
 
 			var contract = new Contract("_");
 			var partTimePercentage = new PartTimePercentage("_");
