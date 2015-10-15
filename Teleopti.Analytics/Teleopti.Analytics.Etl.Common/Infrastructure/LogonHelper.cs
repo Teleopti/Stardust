@@ -38,13 +38,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public LogOnHelper(ILoadAllTenants loadAllTenants, 
 									ITenantUnitOfWork tenantUnitOfWork,
-									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, bool usedInService)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			initializeStateHolder();
-			RefreshTenantList();
+			RefreshTenantList(usedInService);
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -155,10 +155,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logonService.LogOff();
 		}
 
-		public void RefreshTenantList()
+		public void RefreshTenantList(bool usedInService)
 		{
+			var dataSourceConfigSetter = usedInService ? DataSourceConfigurationSetter.ForEtlService() : DataSourceConfigurationSetter.ForEtl();
+
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
-				DataSourceConfigurationSetter.ForEtl(),
+				dataSourceConfigSetter,
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);

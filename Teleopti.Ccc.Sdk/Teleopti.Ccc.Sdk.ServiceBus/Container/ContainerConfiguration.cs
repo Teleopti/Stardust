@@ -35,7 +35,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { SharedContainer = sharedContainer }, _toggleManager)));
+			build.RegisterModule(
+				new CommonModule(
+					new IocConfiguration(
+						new IocArgs(new ConfigReader())
+						{
+							SharedContainer = sharedContainer,
+							DataSourceConfigurationSetter =
+								Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForServiceBus()
+						}, _toggleManager)));
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();

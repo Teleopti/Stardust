@@ -24,9 +24,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private IMessageSender _messageSender;
 
 		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, bool usedInService = false)
 		{
-			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider);
+			UsedInService = usedInService;
+			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, usedInService);
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] {},
@@ -75,9 +76,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		}
 
 		public IDataSource SelectedDataSource { get { return _logHelp.SelectedDataSourceContainer.DataSource; } }
+		public bool UsedInService { get; set; }
+
 		public void RefreshTenantList()
 		{
-			_logHelp.RefreshTenantList();
+			_logHelp.RefreshTenantList(UsedInService);
 		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)

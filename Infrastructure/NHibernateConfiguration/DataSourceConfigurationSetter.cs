@@ -19,27 +19,33 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.Tool", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Etl.Tool", new ConfigReader());
 		}
+
+		public static IDataSourceConfigurationSetter ForEtlService()
+		{
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Etl.Service", new ConfigReader());
+		}
+
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.ApplicationConfiguration", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.Sdk.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Sdk.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.ServiceBus.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Ccc.Web", new ConfigReader());
+			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Wfm.Web", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.SmartClientPortal.Shell", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
 		}
 
 		public const string NoDataSourceName = "[not set]";

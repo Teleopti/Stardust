@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon
 			ThrottleMessages = configReader.ReadValue("ThrottleMessages", true);
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
-			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
+			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			EnableNewResourceCalculation = configReader.ReadValue("EnableNewResourceCalculation", false);
 			ImplementationTypeForCurrentUnitOfWork = typeof (CurrentUnitOfWork);
 		}
