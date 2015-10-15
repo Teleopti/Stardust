@@ -24,6 +24,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			},
 			nobusinessunit: function () {
 				self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));
+				self.ShowSignInAsAnotherUser(true);
 			},
 			nodatasource: function() {
 				self.ErrorMessage($('#Signin-error').data('nodatasourcetext'));
