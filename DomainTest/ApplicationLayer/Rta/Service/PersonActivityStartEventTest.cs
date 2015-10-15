@@ -3,14 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -21,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public FakeEventPublisher Publisher;
-		public FakeCurrentDatasource DataSource;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 

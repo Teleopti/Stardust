@@ -237,7 +237,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\EventsStreamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForSnapshot.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeMessageSender.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeRtaDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoBrokerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationExtension.cs" />

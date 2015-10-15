@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public FakeEventPublisher Publisher;
-		public FakeCurrentDatasource DataSource;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 

@@ -3,14 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-		public FakeCurrentDatasource DataSource;
 
 		[Test]
 		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
@@ -207,7 +204,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId, null, null)
 				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
 				.WithAlarm("admin", admin, 0, Adherence.Neutral);
-			DataSource.FakeName("datasource");
 			Now.Is("2015-03-10 8:30");
 
 			Target.SaveState(new ExternalUserStateForTest

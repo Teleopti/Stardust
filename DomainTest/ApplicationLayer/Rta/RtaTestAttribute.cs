@@ -1,27 +1,20 @@
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
-	public class RtaTestAttribute : IoCTestAttribute
+	public class RtaTestAttribute : DomainTestAttribute
 	{
 		protected override FakeConfigReader Config()
 		{
@@ -38,18 +31,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddModule(new TenantServerModule(configuration));
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			base.Setup(system, configuration);
 
-			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			registerFakeDatabase(system, configuration, null);
-
-			system.UseTestDouble(new FakeReadModelUnitOfWorkAspect()).For<IReadModelUnitOfWorkAspect>();
-			system.UseTestDouble(new FakeAllBusinessUnitsUnitOfWorkAspect()).For<IAllBusinessUnitsUnitOfWorkAspect>();
-			system.UseTestDouble(new FakeDistributedLockAcquirer()).For<IDistributedLockAcquirer>();
 
 			system.AddService(this);
 		}

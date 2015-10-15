@@ -3,13 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -18,11 +16,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class PersonInAdherenceEventTest
 	{
-		public FakeRtaDatabase database;
-		public FakeEventPublisher publisher;
-		public MutableNow now;
-		public FakeCurrentDatasource dataSource;
-		public Domain.ApplicationLayer.Rta.Service.Rta target;
+		public FakeRtaDatabase Database;
+		public FakeEventPublisher Publisher;
+		public MutableNow Now;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldPublishPersonInAdherenceEventWhenNoStaffingEffect()
@@ -34,16 +31,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", activityId, 0);
-			now.Is("2014-10-20 9:00");
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
 		
@@ -62,18 +59,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			};
 			var activityId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(state1)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 0);
-			now.Is("2014-10-20 9:00");
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state1);
-			target.SaveState(state2);
+			Target.SaveState(state1);
+			Target.SaveState(state2);
 
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -86,16 +83,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", activityId, 0);
-			now.Is("2014-10-20 9:00");
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.Timestamp.Should().Be("2014-10-20 9:00".Utc());
 		}
 
@@ -105,21 +102,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			database
+			Database
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-11-11 10:00", "2014-11-11 12:00")
 				.WithAlarm("statecode", activityId, 0);
-			dataSource.FakeName("datasource");
-			now.Is("2014-11-11 11:00");
+			Now.Is("2014-11-11 11:00");
 
-			target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
 			});
 
-			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -134,16 +130,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", activityId, 0);
-			now.Is("2014-10-20 9:00");
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Single()
 				.TeamId.Should().Be(teamId);
 		}
@@ -159,16 +155,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			database
+			Database
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, null, siteId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", activityId, 0);
-			now.Is("2014-10-20 9:00");
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Single()
 				.SiteId.Should().Be(siteId);
 		}

@@ -1,12 +1,20 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest
 {
@@ -14,11 +22,29 @@ namespace Teleopti.Ccc.DomainTest
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			// Tenant stuff
+			system.AddModule(new TenantServerModule(configuration));
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			//
+
+			// Outbound stuff
+			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			//
+
+			// Database aspects
+			system.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
+			system.UseTestDouble<FakeAllBusinessUnitsUnitOfWorkAspect>().For<IAllBusinessUnitsUnitOfWorkAspect>();
+			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
+			//
+
 			//TODO: move this to common
 			system.AddModule(new SchedulingCommonModule(configuration));
 			system.AddModule(new RuleSetModule(configuration, true));
 			system.AddModule(new OutboundScheduledResourcesProviderModule());
 			//
+
 			system.UseTestDouble<FakeScheduleDictionaryPersister>().For<IScheduleDictionaryPersister>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();

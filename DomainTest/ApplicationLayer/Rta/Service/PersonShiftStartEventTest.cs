@@ -3,13 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -19,10 +17,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class PersonShiftStartEventTest
 	{
 		public FakeRtaDatabase Database;
-		public FakeEventPublisher publisher;
-		public MutableNow now;
-		public FakeCurrentDatasource dataSource;
-		public Domain.ApplicationLayer.Rta.Service.Rta target;
+		public FakeEventPublisher Publisher;
+		public MutableNow Now;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldPublishEvent()
@@ -35,16 +32,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 
-			now.Is("2014-10-19 17:02".Utc());
-			target.SaveState(new ExternalUserStateForTest
+			Now.Is("2014-10-19 17:02".Utc());
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logout"
 			});
-			now.Is("2014-10-20 10:00".Utc());
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2014-10-20 10:00".Utc());
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
 
@@ -58,11 +55,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
-			now.Is("2014-10-20 10:02");
+			Now.Is("2014-10-20 10:02");
 
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
 
@@ -78,18 +75,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, activityId, "2014-10-19 10:00", "2014-10-19 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 
-			now.Is("2014-10-19 10:59");
-			target.SaveState(new ExternalUserStateForTest
+			Now.Is("2014-10-19 10:59");
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logout"
 			});
-			now.Is("2014-10-19 11:01");
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
-			now.Is("2014-10-20 10:00");
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2014-10-19 11:01");
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2014-10-20 10:00");
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Last();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Last();
 			@event.ShiftStartTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
@@ -104,11 +101,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 09:00", "2014-10-20 10:00")
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
-			now.Is("2014-10-20 10:02");
+			Now.Is("2014-10-20 10:02");
 
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.ShiftStartTime.Should().Be("2014-10-20 09:00".Utc());
 		}
 
@@ -123,11 +120,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00");
-			now.Is("2014-10-20 10:02");
+			Now.Is("2014-10-20 10:02");
 
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.ShiftEndTime.Should().Be("2014-10-20 12:00".Utc());
 		}
 		
@@ -142,12 +139,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2015-08-21 06:00", "2015-08-21 15:00");
 
-			now.Is("2015-08-21 07:00".Utc());
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
-			now.Is("2015-08-21 07:03".Utc());
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2015-08-21 07:00".Utc());
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2015-08-21 07:03".Utc());
+			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
 	}
