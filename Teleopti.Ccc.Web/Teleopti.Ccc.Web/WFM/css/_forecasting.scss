@@ -84,12 +84,6 @@
 	height: 30px;
 }
 
-.skill-row{
-	display: flex;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
 .queue-list {
 	padding-left: 0;
 	padding-right: 0;
@@ -108,4 +102,22 @@
 
 .invalidInput{
 	border-bottom: 1px solid red !important; 
+}
+
+.create-skill-header{
+	border-bottom:1px solid rgba(0,0,0,0.12); 
+	padding-bottom: 11px;
+}
+
+.skill-section-header{
+	padding-top: 9px;
+}
+
+.skill-input-label{
+	margin-bottom: 0px!important;
+	color: #C1BEBE!important;
+}
+
+.skill-queues{
+	padding-top: 9px;
 }
