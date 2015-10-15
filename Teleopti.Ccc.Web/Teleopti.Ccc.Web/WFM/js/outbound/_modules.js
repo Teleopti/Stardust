@@ -1,6 +1,7 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.outbound', [
+	var outbound = angular.module('wfm.outbound', [
+			'ui.router',
 			'outboundServiceModule',
 			'ngAnimate',
 			'pascalprecht.translate',
@@ -14,7 +15,9 @@
 			'gantt.tooltips'
 		]
 	);
-	angular.module('outboundServiceModule', ['ngResource', 'pascalprecht.translate']).run([
+	angular.module('outboundServiceModule', [ 'ngResource', 'pascalprecht.translate']);
+
+	outbound.run([
 		'$rootScope', '$state', '$location', function($rootScope, $state, $location) {
 
 			$rootScope.$on('$stateChangeSuccess',
