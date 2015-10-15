@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod);
-			agent.AddSkill(new PersonSkill(skill, new Percent(100)) {Active=true}, agent.Period(firstDay));
+			agent.AddSkill(new PersonSkill(skill, new Percent(1)) {Active=true}, agent.Period(firstDay));
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(5),
