@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		private SikuliValidationResult intradayBalanceValidationResult(SchedulerTestData schedulerData)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(schedulerData.SchedulerState,
+			var lowestIntervalBalances = ValidatorHelperMethods.GetDailyLowestIntraIntervalBalanceForPeriod(schedulerData.SchedulerState,
 				schedulerData.TotalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{

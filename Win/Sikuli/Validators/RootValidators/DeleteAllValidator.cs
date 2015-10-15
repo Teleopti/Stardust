@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var schedulerState = scheduleTestData.SchedulerState;
 			var totalSkill = scheduleTestData.TotalSkill;
-			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(schedulerState, totalSkill);
+			var scheduledHours = ValidatorHelperMethods.GetDailyScheduledHoursForFullPeriod(schedulerState, totalSkill);
 			if (scheduledHours.Any(d => d.HasValue && d.Value > 0))
 			{
 				result.Details.AppendLine("Scheduled hours = 0 : Fail");

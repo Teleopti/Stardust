@@ -853,8 +853,7 @@
     </Compile>
     <Compile Include="Sikuli\SikuliHelper.cs" />
     <Compile Include="Sikuli\Helpers\SikuliValidationResult.cs" />
-    <Compile Include="Sikuli\SikuliValidatorFactory.cs" />
-    <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
+    <Compile Include="Sikuli\Helpers\SikuliValidatorFactory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2649,7 +2648,7 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestWarnValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
-    <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
+    <Compile Include="Sikuli\Helpers\ValidatorHelperMethods.cs" />
     <Compile Include="SmartParts\Forecasting\BudgetsSmartPart.cs">
       <SubType>UserControl</SubType>
     </Compile>

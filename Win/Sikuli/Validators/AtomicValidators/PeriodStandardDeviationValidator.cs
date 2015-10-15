@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
+			var std = ValidatorHelperMethods.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
 			if (std.Value > _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.AppendResultLine("Period StdDev", _limit.ToString(CultureInfo.CurrentCulture), std.Value.ToString(CultureInfo.CurrentCulture), result.Result);

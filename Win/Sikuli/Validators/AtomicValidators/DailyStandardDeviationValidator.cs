@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var sumOfStandardDeviations = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
+			var sumOfStandardDeviations = ValidatorHelperMethods.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
 
 			if (sumOfStandardDeviations > _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;

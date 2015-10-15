@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			}
 
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(scheduleTestData.SchedulerState, scheduleTestData.TotalSkill.AggregateSkills[1]);
+			var lowestIntervalBalances = ValidatorHelperMethods.GetDailyLowestIntraIntervalBalanceForPeriod(scheduleTestData.SchedulerState, scheduleTestData.TotalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;

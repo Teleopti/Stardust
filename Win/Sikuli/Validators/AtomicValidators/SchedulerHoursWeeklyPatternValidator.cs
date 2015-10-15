@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
+			var scheduledHours = ValidatorHelperMethods.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
 			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
 			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;

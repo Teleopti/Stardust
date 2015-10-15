@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.Win.Sikuli.Helpers
 {
 	internal static class SikuliValidatorFactory
 	{
