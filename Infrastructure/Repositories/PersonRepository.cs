@@ -242,11 +242,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IPerson FindPersonByEmail(string email)
+		public ICollection<IPerson> FindPeopleByEmail(string email)
 		{
 			return Session.CreateCriteria(typeof (Person), "per")
 				.Add(Restrictions.Eq("Email", email))
-				.SetResultTransformer(Transformers.DistinctRootEntity).UniqueResult<IPerson>();
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+						 .List<IPerson>();
 		}
 
 		private Person loadPermissionData(IPerson person)

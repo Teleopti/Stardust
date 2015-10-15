@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var person = PersonFactory.CreatePerson();
-			personRepository.Stub(x => x.FindPersonByEmail(person.Email)).Return(person);
+			personRepository.Stub(x => x.FindPeopleByEmail(person.Email)).Return(new []{person});
 			var personDto = new PersonDto();
 			assembler.Stub(x => x.DomainEntitiesToDtos(new []{person})).Return(new[] { personDto });
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();

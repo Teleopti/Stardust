@@ -1526,15 +1526,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldFindPersonByEmail()
+		public void ShouldFindPeopleByEmail()
 		{
-			var person = PersonFactory.CreatePerson("Fname", "lname");
-			person.Email = "test@teleopti.com";
-			PersistAndRemoveFromUnitOfWork(person);
+			var person1 = PersonFactory.CreatePerson("Fname", "lname");
+			person1.Email = "test@teleopti.com";
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			var person2 = PersonFactory.CreatePerson("Fname2", "lname2");
+			person2.Email = "test@teleopti.com";
+			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			var foundPerson = pr.FindPersonByEmail(person.Email);
-			Assert.AreEqual("Fname", foundPerson.Name.FirstName);
+			var foundPeople = pr.FindPeopleByEmail(person1.Email);
+			Assert.AreEqual(2, foundPeople.Count);
 		}
 
 		[Test]

@@ -84,6 +84,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
 	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
 		ICollection<IPerson> FindAllWithRolesSortByName();
-		IPerson FindPersonByEmail(string email);
+		ICollection<IPerson> FindPeopleByEmail(string email);
 	}
 }

@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IPerson FindPersonByEmail(string email)
+		public ICollection<IPerson> FindPeopleByEmail(string email)
 		{
 			throw new NotImplementedException();
 		}

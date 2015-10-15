@@ -29,11 +29,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					var memberList = new List<IPerson>();
 					var foundPerson =
-						_personRepository.FindPersonByEmail(query.Email);
-					memberList.AddRange(new[] {foundPerson});
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+						_personRepository.FindPeopleByEmail(query.Email);
+					return _assembler.DomainEntitiesToDtos(foundPerson).ToList();
 				}
 			}
 		}
