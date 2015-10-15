@@ -28,21 +28,26 @@
 					init();
 				}
 			}
-		});
+		});		
 
-		$scope.updateThreshold = function (threshold) {
-			var thresholdObj = { Value: threshold / 100, Type: 1 };
-			outboundService.updateThreshold(thresholdObj, function (data) {
-				getListCampaignsWithinPeriod(function () {
-					$scope.ganttData.forEach(function (dataRow, indx) {
-						if (dataRow.expansion) {
-							$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
-						}
+		$scope.settings = { threshold: null };
+
+		$scope.$watch(function() {
+			return $scope.settings.threshold;
+		}, function (newValue, oldValue) {			
+			if (newValue !== oldValue) {
+				var thresholdObj = { Value: newValue / 100, Type: 1 };
+				outboundService.updateThreshold(thresholdObj, function (data) {
+					getListCampaignsWithinPeriod(function () {
+						$scope.ganttData.forEach(function (dataRow, indx) {
+							if (dataRow.expansion) {
+								$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
+							}
+						});
 					});
 				});
-					
-			});
-		};
+			}
+		});
 
 		function init() {
 			getGanttVisualization();
@@ -53,7 +58,7 @@
 
 		function getThreshold() {
 			outboundService.getThreshold(function(data) {
-				$scope.threshold = data.Value ? Math.round(data.Value * 100) : 0;
+				$scope.settings.threshold = data.Value ? Math.round(data.Value * 100) : 0;
 			});
 		}
 
