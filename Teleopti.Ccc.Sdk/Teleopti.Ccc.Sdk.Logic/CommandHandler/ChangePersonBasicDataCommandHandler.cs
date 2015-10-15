@@ -24,7 +24,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		{
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var person = _personRepository.Load(command.PersonId);
+				var person = _personRepository.Get(command.PersonId);
+				if (person == null)
+				{
+					command.Result = new CommandResultDto { AffectedItems = 0 };
+					return;
+				}
 				if (command.CultureLanguageId.HasValue)
 					person.PermissionInformation.SetCulture(new CultureInfo(command.CultureLanguageId.Value));
 				if (command.UICultureLanguageId.HasValue)
@@ -37,8 +42,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					person.WorkflowControlSet = workflowControlSet;
 				}
 
-				if (command.FirstName != null || command.LastName != null)
+				if (command.FirstName != null && command.LastName != null)
 					person.Name = new Name(command.FirstName, command.LastName);
+				else if (command.FirstName != null)
+					person.Name = new Name(command.FirstName, person.Name.LastName);
+				else if (command.LastName != null)
+					person.Name = new Name(person.Name.FirstName, command.LastName);
+
 				if (command.Email != null)
 					person.Email = command.Email;
 				if (command.EmploymentNumber != null)

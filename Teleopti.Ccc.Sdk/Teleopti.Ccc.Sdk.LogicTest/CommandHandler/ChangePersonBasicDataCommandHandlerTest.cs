@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
@@ -15,6 +16,76 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	[TestFixture]
 	public class ChangePersonBasicDataCommandHandlerTest
 	{
+		[Test]
+		public void ShouldUpdateFirstNameCorrectly()
+		{
+			var changePersonBasicDataCommandDto = new ChangePersonBasicDataCommandDto
+			{
+				PersonId = Guid.NewGuid(),
+				FirstName = "first"
+			};
+
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			var person = new Person {Name = new Name("oldFirst", "oldLast")};
+			person.SetId(changePersonBasicDataCommandDto.PersonId);
+			personRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.PersonId)).Return(person);
+			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, null);
+
+			target.Handle(changePersonBasicDataCommandDto);
+
+			person.Name.FirstName.Should().Be.EqualTo(changePersonBasicDataCommandDto.FirstName);
+			person.Name.LastName.Should().Be.EqualTo(person.Name.LastName);
+		}
+
+		[Test]
+		public void ShouldUpdateLastNameCorrectly()
+		{
+			var changePersonBasicDataCommandDto = new ChangePersonBasicDataCommandDto
+			{
+				PersonId = Guid.NewGuid(),
+				LastName = "last"
+			};
+
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			var person = new Person { Name = new Name("oldFirst", "oldLast") };
+			person.SetId(changePersonBasicDataCommandDto.PersonId);
+			personRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.PersonId)).Return(person);
+			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, null);
+
+			target.Handle(changePersonBasicDataCommandDto);
+
+			person.Name.LastName.Should().Be.EqualTo(changePersonBasicDataCommandDto.LastName);
+			person.Name.FirstName.Should().Be.EqualTo(person.Name.FirstName);
+		}
+
+		[Test]
+		public void DoNothingIfNotFind()
+		{
+			var changePersonBasicDataCommandDto = new ChangePersonBasicDataCommandDto
+			{
+				PersonId = Guid.NewGuid()
+			};
+
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, null);
+
+			target.Handle(changePersonBasicDataCommandDto);
+
+			changePersonBasicDataCommandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+		}
+
 		[Test]
 		public void ChangePersonBasicDataSuccessfully()
 		{
@@ -44,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			workflowControlSetRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.WorkflowControlSetId.Value)).Return(workflowControlSet);
 			var person = new Person();
 			person.SetId(changePersonBasicDataCommandDto.PersonId);
-			personRepository.Stub(x => x.Load(changePersonBasicDataCommandDto.PersonId)).Return(person);
+			personRepository.Stub(x => x.Get(changePersonBasicDataCommandDto.PersonId)).Return(person);
 			var target = new ChangePersonBasicDataCommandHandler(personRepository, currentUnitOfWorkFactory, workflowControlSetRepository);
 			
 			target.Handle(changePersonBasicDataCommandDto);
