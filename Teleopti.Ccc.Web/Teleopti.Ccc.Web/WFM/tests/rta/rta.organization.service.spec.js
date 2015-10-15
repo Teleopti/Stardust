@@ -147,22 +147,6 @@ describe('RtaOrganizationService', function() {
 		});
 	});
 
-
-	it('should get the correct site name from the site id', function(done) {
-		inject(function(RtaOrganizationService) {
-			var scope = $rootScope.$new();
-			var siteIds = ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'];
-			var siteNamePromise = RtaOrganizationService.getSiteName(siteIds);
-
-			siteNamePromise
-				.then(function(result) {
-					expect(result).toEqual('London');
-					done();
-				});
-			scope.$digest();
-		});
-	});
-
 	it('should get the states for all agents in team', function(done) {
 		inject(function(RtaOrganizationService) {
 			var scope = $rootScope.$new();

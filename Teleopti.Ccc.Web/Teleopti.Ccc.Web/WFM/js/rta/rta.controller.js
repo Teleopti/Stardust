@@ -1,60 +1,55 @@
-﻿(function () {
+(function() {
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', function ($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService) {
 
-        $scope.selectedSites = [];
-				$scope.sites = RtaOrganizationService.getSites();
+				var selectedSiteIds = [];
 
-				//$scope.onSiteSelect = function (site) {
-				//	$state.go('rta-teams', {siteId: site.Id});
-				//};
+				var updateAdherence = function(siteAdherence) {
+					siteAdherence.forEach(function(site) {
+						var filteredSite = $filter('filter')($scope.sites, {
+							Id: site.Id
+						});
+						if (filteredSite.length > 0)
+							filteredSite[0].OutOfAdherence = site.OutOfAdherence ? site.OutOfAdherence : 0;
+					})
+				};
 
-        $scope.toggleSelection = function (siteId) {
-          var index = $scope.selectedSites.indexOf(siteId);
+				RtaService.getSites.query()
+					.$promise.then(function(sites) {
+						$scope.sites = sites;
+						return RtaService.getAdherenceForAllSites.query().$promise;
+					}).then(function(siteAdherence) {
+						updateAdherence(siteAdherence);
+						$interval(function() {
+							RtaService.getAdherenceForAllSites.query()
+								.$promise.then(updateAdherence);
+						}, 5000);
+					});
 
-          if(index > -1){
-            $scope.selectedSites.splice(index, 1);
-          }else{
-            $scope.selectedSites.push(siteId);
-               }
-          };
+				$scope.onSiteSelect = function(site) {
+					$state.go('rta-teams', {
+						siteId: site.Id
+					});
+				};
 
-          $scope.openSelectedSites = function (selectedSites){
-            //RtaOrganizationService.getTeamsForSelectedSites(selectedSites);
-						console.log(selectedSites);
-						RtaOrganizationService.getTeams(selectedSites);
-						$state.go('rta-teams', {siteIds: $scope.selectedSites});
-          };
+				$scope.toggleSelection = function(siteId) {
+					var index = selectedSiteIds.indexOf(siteId);
+					if (index > -1) {
+						selectedSiteIds.splice(index, 1);
+					} else {
+						selectedSiteIds.push(siteId);
+					}
+				};
 
-					$scope.openSelectedSite = function (siteId){
-						$scope.toggleSelection(siteId);
-						RtaOrganizationService.getTeams($scope.selectedSites);
-							console.log($scope.selectedSites);
-						$state.go('rta-teams', {siteIds: $scope.selectedSites});
-					};
+				$scope.openSelectedSites = function() {
+					$state.go('rta-agents-sites-selected', {
+						siteIds: selectedSiteIds
+					});
+				};
 
-
-			    var displayAdherence = function (data) { // FIXME get adherence from the server with this first call
-			        data.forEach(function (site) {
-			            site.OutOfAdherence = 0;
-			        });
-			        $scope.sites = data;
-			        RtaService.getAdherenceForAllSites.query().$promise.then(updateAdherence);
-
-                    $interval(function () {
-                    	RtaService.getAdherenceForAllSites.query().$promise.then(updateAdherence);
-			        }, 5000);
-			    };
-
-			    var updateAdherence = function (data) {
-			        data.forEach( function(dataSite) {
-			            var filteredSite = $filter('filter')($scope.sites, { Id: dataSite.Id });
-			            filteredSite[0].OutOfAdherence = dataSite.OutOfAdherence ? dataSite.OutOfAdherence : 0;
-			        })
-			    };
-
-			   RtaService.getSites.query({ id: $stateParams.id }).$promise.then(displayAdherence);
-        }]);
+			}
+		]);
 })();
