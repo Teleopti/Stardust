@@ -34,6 +34,16 @@
 				}
 			});
 
+			this.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {
+				siteId: '@siteId'
+			}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: true
+				}
+			});
+
 			this.getTeamsForSelectedSites = $resource('../Teams/ForSites', {}, {
 				query: {
 					method: 'GET',

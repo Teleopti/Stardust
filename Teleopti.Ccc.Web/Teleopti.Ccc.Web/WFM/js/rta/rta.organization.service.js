@@ -6,7 +6,7 @@
 	   '$filter', '$q', 'RtaService', function ($filter, $q, RtaService) {
 
 	  	var service = {};
-			service.sites = RtaService.getSites.query();
+			service.sites = RtaService.getSites ? RtaService.getSites.query() : null;
 			service.teams = undefined;
 
 	   	service.getSiteName = function (siteIds) {
@@ -41,9 +41,8 @@
 	   		return service.sites;
 	   	};
 
-	   	service.getTeams = function (selectedSites) {
-			service.teams =  RtaService.getTeamsForSelectedSites.query({siteIds: selectedSites});
-			return service.teams;
+	   	service.getTeams = function (siteId) {
+				return RtaService.getTeams.query({siteId: siteId});
 	   	};
 
 		  service.getAgents = function (teamId) {

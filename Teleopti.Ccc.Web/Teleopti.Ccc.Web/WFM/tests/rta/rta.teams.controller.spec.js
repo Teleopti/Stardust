@@ -1,163 +1,268 @@
-﻿'use strict';
-describe('RtaTeamsCtrl', function () {
+﻿
+'use strict';
+describe('RtaTeamsCtrl', function() {
 	var $q,
-	    $rootScope,
-      $interval,
-	    $httpBackend;
+		$rootScope,
+		$interval,
+		$httpBackend,
+		$controller,
+		$resource,
+		$state,
+		scope;
+
+	var stateParams = {};
+	var teamAdherence = [];
+	var sites = [];
+	var teams = [];
+	var rtaSvrc = {};
 
 	beforeEach(module('wfm'));
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$interval_) {
+
+	beforeEach(function() {
+		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
+
+		teamAdherence = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565",
+			OutOfAdherence: 1
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
+			OutOfAdherence: 5,
+		}];
+
+		sites = [{
+			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+			Name: "London",
+			NumberOfAgents: 11
+		}, {
+			Id: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			Name: "Paris",
+			NumberOfAgents: 1
+		}];
+		teams = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565",
+			Name: "Green",
+			NumberOfAgents: 1
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
+			Name: "Team 1",
+			NumberOfAgents: 10,
+		}];
+	});
+
+	beforeEach(function() {
+		module(function($provide) {
+			$provide.service('RtaService', function() {
+				return rtaSvrc;
+			});
+			$provide.service('$stateParams', function() {
+				return stateParams;
+			});
+		});
+	});
+
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_) {
+		$controller = _$controller_;
+		scope = _$rootScope_.$new();
 		$q = _$q_;
 		$interval = _$interval_;
 		$rootScope = _$rootScope_;
+		$resource = _$resource_;
+		$state = _$state_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+
 		$httpBackend.expectGET("html/forecasting/forecasting.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
+
+		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, {
+			Language: "en",
+			DateFormat: "something"
+		});
+		// $httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, '');
+
+
+		rtaSvrc.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {
+			siteId: '@siteId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: true
+			}
+		});
+
+		$httpBackend.whenGET("../Teams/ForSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+			.respond(200, teams);
+
+		$httpBackend.whenGET("../Teams/ForSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(200, []);
+
+		rtaSvrc.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {
+			siteId: '@siteId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: true
+			}
+		});
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+			.respond(200, teamAdherence);
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(200, []);
+
+
+		rtaSvrc.getSites = $resource('../Sites', {}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: true
+			}
+		});
+		$httpBackend.whenGET("../Sites")
+			.respond(200, sites);
 	}));
 
-    xit('should update out of adherence for all teams on site', inject( function ($controller) {
-        var rtaSvrc = {
-            getSites: {
-                query: function () {
 
-                    var queryDeferred = $q.defer();
-                    queryDeferred.resolve([
-                        {
-                            "Id": "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                            "Name": "London",
-                            "NumberOfAgents": 46
-                        }
 
-                    ]);
-                    return { $promise: queryDeferred.promise };
-                }
-            },
-            getTeams: {
-                query: function () {
+	var createController = function() {
+		$controller('RtaTeamsCtrl', {
+			$scope: scope
+		});
+		scope.$digest();
+		$httpBackend.flush();
+	}
 
-                    var queryDeferred = $q.defer();
-                    queryDeferred.resolve([
-                        {
-                            "Id": "e5f968d7-6f6d-407c-81d5-9b5e015ab495",
-                            "Name": "Students",
-                            "NumberOfAgents": 7
-                        },
-                        {
-                            "Id": "d7a9c243-8cd8-406e-9889-9b5e015ab495",
-                            "Name": "Team Flexible",
-                            "NumberOfAgents": 10
-                        }
-                    ]);
-                }
-            },
-            getAdherenceForTeamsOnSite: {
-                query: function () {
-                    var queryDeferred = $q.defer();
-                    queryDeferred.resolve([
-                        {
-                            "Id": "e5f968d7-6f6d-407c-81d5-9b5e015ab495",
-                            "OutOfAdherence": 3
-                        },
-                        {
-                            "Id": "d7a9c243-8cd8-406e-9889-9b5e015ab495",
-                            "OutOfAdherence": 1
-                        }
-                    ]);
-                    return { $promise: queryDeferred.promise };
-                }
-            },
-            getAdherenceForAllSites: {
-                query: function () {
-                    var queryDeferred = $q.defer();
-                    queryDeferred.resolve([
-                        {
-                            "Id": "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                            "OutOfAdherence": 3
-                        },
-                        {
-                            "Id": "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-                            "OutOfAdherence": 1
-                        }
-                    ]);
-                    return { $promise: queryDeferred.promise };
-                }
-            }
-        };
+	it('should display team for site', function() {
+		teams = [{
+			Name: "Green",
+			NumberOfAgents: 1
+		}];
+		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
 
-        var rtaOrgSvrc = {
+		createController();
 
-            siteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+		expect(scope.teams[0].Name).toEqual("Green");
+		expect(scope.teams[0].NumberOfAgents).toEqual(1);
+	});
 
-            getSites: function () {
-                return [];
-            },
+	it('should display agents out of adherence in the team', function() {
+		teams = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+		}];
+		teamAdherence = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565",
+			OutOfAdherence: 1
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
+			OutOfAdherence: 5,
+		}];
+		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
 
-            getTeams: function (siteId) {
-                return [];
-            }
-        };
+		createController();
 
-        var scope = $rootScope.$new();
+		expect(scope.teams[0].OutOfAdherence).toEqual(1);
+		expect(scope.teams[1].OutOfAdherence).toEqual(5);
+	});
 
-        $controller('RtaCtrl', { $scope: scope, $interval: $interval, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
+	it('should display site name London', function() {
+		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
+		sites = [{
+			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+			Name: "London"
+		}];
 
-        scope.$digest(); // this is needed to resolve the promise
+		createController();
 
-        expect(scope.teams.length).not.toEqual(0);
-        expect(scope.teams[0].OutOfAdherence).toEqual(3);
-        expect(scope.teams[1].OutOfAdherence).toEqual(1);
-    }));
-		
-	xit('should get the right teams for specific site', inject(function ($controller) {
+		expect(scope.siteName).toEqual("London");
+	});
 
-		var scope = $rootScope.$new();
+	it('should display site name Paris', function() {
+		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
+		sites = [{
+			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+			Name: "London"
+		}, {
+			Id: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			Name: "Paris"
+		}];
 
-		var rtaSvrc = {
-			getSites: {
-				query: function () {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve([
-                        {
-                        	"Id": "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                        	"Name": "London",
-                        	"NumberOfAgents": 46
-                        }
-					]);
-					return { $promise: queryDeferred.promise };
-				}
-			},
-			getAdherenceForAllSites: {
-				query: function () {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve([]);
-					return { $promise: queryDeferred.promise };
-				}
-			}
-		};
+		createController();
 
-			var rtaOrgSvrc = {
+		expect(scope.siteName).toEqual("Paris");
+	});
 
-			organization:  [{ siteName: 'London', siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c', teams: [{ teamName: 'Preferences', teamId: 42 }, { teamName: 'NoPreferences', teamId: 43 }] },
-				{ siteName: 'Paris', siteId: '6a21c802-7a34-4917-8dfd-9b5e015ab461', teams: [{ teamName: 'Agile', teamId: 40 }] }],
+	it('should update adhernce', function() {
+		teamAdherence[0].OutOfAdherence = 1;
+		createController();
 
-			getSites: function (id) {
-				return rtaOrgSvrc.organization;
-			},
+		teamAdherence[0].OutOfAdherence = 3;
+		$interval.flush(5000);
+		$httpBackend.flush();
 
-			getTeams: function(siteId){
-				return rtaOrgSvrc.organization.teams;
-			},
-			getSiteName: function (siteIdParam) {
-				return '';
-			}
+		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+	});
 
-		};
+	it('should go to agents', function() {
+		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
+		teams = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+		}];
+		createController();
+		spyOn($state, 'go');
 
-		$controller('RtaTeamsCtrl', { $scope: scope, RtaService: rtaSvrc, RtaOrganizationService: rtaOrgSvrc });
+		scope.onTeamSelect(teams[0]);
 
-		expect(scope.teams).not.toBe(null);
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
+			siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c',
+			teamId: '2d45a50e-db48-41db-b771-a53000ef6565'
+		});
+	});
 
-	}));
+	it('should go back to sites', function() {
+		createController();
+		spyOn($state, 'go');
+
+		scope.goBack();
+
+		expect($state.go).toHaveBeenCalledWith('rta-sites');
+	});
+
+	it('should go to agents for multiple teams', function() {
+		teams = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+		}];
+		createController();
+		spyOn($state, 'go');
+
+		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+		scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
+		scope.openSelectedTeams();
+
+		expect($state.go).toHaveBeenCalledWith('rta-agents-selected', {
+			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
+				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+			]
+		});
+	});
+
+	it('should go to agents after deselecting team', function() {
+		teams = [{
+			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+		}];
+		createController();
+		spyOn($state, 'go');
+
+		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+		scope.openSelectedTeams();
+
+		expect($state.go).toHaveBeenCalledWith('rta-agents-selected', {
+			teamIds: []
+		});
+	});
 
 });

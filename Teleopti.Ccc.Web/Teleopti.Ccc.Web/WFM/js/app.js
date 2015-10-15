@@ -136,7 +136,7 @@ wfm.config([
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl',
 		}).state('rta-teams', {
-			url: '/rta/site/:siteIds',
+			url: '/rta/site/:siteId',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl'
 		}).state('rta-agents', {
@@ -147,6 +147,11 @@ wfm.config([
 			url: '/myTeam',
 			templateUrl: 'js/myTeam/schedule.html',
 			controller: 'PersonScheduleCtrl as vm'
+		}).state('rta-agents-selected', {
+			url: '/rta/teams/?teamIds',
+			templateUrl: 'js/rta/rta-agents.html',
+			controller: 'RtaAgentsCtrl',
+			params: {teamIds: {array:true}}
 		});
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');

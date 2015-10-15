@@ -6,64 +6,63 @@
 		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location',
 		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location) {
 
-			//var siteId = $stateParams.siteId;
-			var siteIds = $stateParams.siteIds;
+			var siteId = $stateParams.siteId;
+			var selectedTeamIds = [];
 
-			$scope.selectedTeams = [];
-			$scope.teams = RtaOrganizationService.getTeams(siteIds);
-			$scope.siteName = '';
+			var updateAdherence = function(teamAdherence) {
+				teamAdherence.forEach(function(team) {
+					var filteredTeam = $filter('filter')($scope.teams, {
+						Id: team.Id
+					});
+					if (filteredTeam.length > 0)
+						filteredTeam[0].OutOfAdherence = team.OutOfAdherence ? team.OutOfAdherence : 0;
+				})
+			};
+			
+			RtaService.getTeams.query({siteId: siteId})
+				.$promise.then(function(teams) {
+					$scope.teams = teams;
+					return RtaService.getAdherenceForTeamsOnSite.query({
+						siteId: siteId
+					}).$promise;
+				}).then(function(teamAdherence) {
+					updateAdherence(teamAdherence);
+					$interval(function() {
+						RtaService.getAdherenceForTeamsOnSite.query({
+							siteId: siteId
+						}).$promise.then(updateAdherence);
+					}, 5000);
+				});
 
-			RtaOrganizationService.getSiteName(siteIds).then(function(name) {
+			RtaOrganizationService.getSiteName(siteId).then(function(name) {
 				$scope.siteName = name;
 			});
 
 			$scope.toggleSelection = function(teamId) {
-				var index = $scope.selectedTeams.indexOf(teamId);
-
+				var index = selectedTeamIds.indexOf(teamId);
 				if (index > -1) {
-					$scope.selectedTeams.splice(index, 1);
+					selectedTeamIds.splice(index, 1);
 				} else {
-					$scope.selectedTeams.push(teamId);
+					selectedTeamIds.push(teamId);
 				}
 			};
 
-			$scope.openSelectedTeams = function(selectedTeams) {
-				RtaOrganizationService.getAgentsForSelectedTeams(selectedTeams);
+			$scope.openSelectedTeams = function() {
+				$state.go('rta-agents-selected', {
+					teamIds: selectedTeamIds
+				});
 			};
 
-			// $scope.onTeamSelect = function (team) {
-			// 	$state.go('rta-agents', { siteId: siteIds, teamId: team.Id});
-			// };
+			$scope.onTeamSelect = function(team) {
+				$state.go('rta-agents', {
+					siteId: siteId,
+					teamId: team.Id
+				});
+			};
 
 			$scope.goBack = function() {
 				$state.go('rta-sites');
 			};
-
-			var displayAdherence = function(data) { // FIXME get adherence from the server with this first call
-				data.forEach(function(team) {
-					team.OutOfAdherence = 0;
-				});
-				$scope.teams = data;
-				console.log(data);
-				RtaService.getAdherenceForTeamsOnSite.query({siteId: data[0].SiteId	}).$promise.then(updateAdherence);
-
-				$interval(function() {
-					RtaService.getAdherenceForTeamsOnSite.query({siteId: data[0].SiteId}).$promise.then(updateAdherence);
-				}, 5000);
-			};
-
-			var updateAdherence = function(data) {
-				data.forEach(function(dataTeam) {
-					var filteredTeam = $filter('filter')($scope.teams, {
-						Id: dataTeam.Id
-					});
-					filteredTeam[0].OutOfAdherence = dataTeam.OutOfAdherence ? dataTeam.OutOfAdherence : 0;
-				})
-			};
-
-			RtaService.getTeamsForSelectedSites.query({
-				siteIds: siteIds
-			}).$promise.then(displayAdherence);
 		}
 	]);
 })();
