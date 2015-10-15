@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -39,8 +41,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team)
 		{
 			var agent = new Person();
+			agent.PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
 			agent.SetId(Guid.NewGuid());
-			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
+			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1950, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
+			agent.AddSchedulePeriod(new SchedulePeriod(new DateOnly(1950,1,1), SchedulePeriodType.Month, 1));
 			_persons.Add(agent);
 			return agent;
 		}
