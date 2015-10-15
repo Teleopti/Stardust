@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -40,10 +39,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team)
 		{
+			//TODO: not hard coded dates here!
 			var agent = new Person();
 			agent.SetId(Guid.NewGuid());
 			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1950, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
-			var schedulePeriod = new SchedulePeriod(new DateOnly(1950, 1, 1), SchedulePeriodType.Month, 1);
+			var schedulePeriod = new SchedulePeriod(new DateOnly(2015, 10, 12), SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
       agent.AddSchedulePeriod(schedulePeriod);
 			_persons.Add(agent);
