@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							var endDayOfWeek = personWeek.Week.EndDate.AddDays(1);
 							while(!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							{
-								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek, rollbackService, selectedPeriod, personMatrix);
+								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek, rollbackService, selectedPeriod, personMatrix, optimizationPreferences);
 								endDayOfWeek = endDayOfWeek.AddDays(-1);
 								if(endDayOfWeek < personWeek.Week.StartDate)
 									break;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 										if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions,
 											allPersonMatrixList, personWeek.Week))
 											_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange,
-												possiblePositionsToFix.First().Key, rollbackService, selectedPeriod, personMatrix);
+												possiblePositionsToFix.First().Key, rollbackService, selectedPeriod, personMatrix, optimizationPreferences);
 									}
 									break;
 								}
@@ -158,25 +158,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							}
 							if (!success && firstDayOfElement != DateOnly.MinValue)
 							{
-								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week) && !isAnyOptimizeShiftPreferencesUsed(optimizationPreferences))
-									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement, rollbackService, selectedPeriod, personMatrix);
+								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week))
+									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement, rollbackService, selectedPeriod, personMatrix, optimizationPreferences);
 							}
 						}
 					}
 				}
 			}
 
-		}
-
-		private bool isAnyOptimizeShiftPreferencesUsed(IOptimizationPreferences optimizationPreferences)
-		{
-			return	optimizationPreferences != null && (
-					optimizationPreferences.Shifts.KeepStartTimes ||
-					optimizationPreferences.Shifts.KeepEndTimes ||
-					optimizationPreferences.Shifts.KeepShiftCategories ||
-					optimizationPreferences.Shifts.SelectedActivities.Any() ||
-					optimizationPreferences.Shifts.KeepActivityLength ||
-					optimizationPreferences.Shifts.AlterBetween);
 		}
 
 		private bool isFullTeamSelected(IList<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator,

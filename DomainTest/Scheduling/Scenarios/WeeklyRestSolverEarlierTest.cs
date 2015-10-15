@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		private readonly IScenario scenario = new Scenario("unimportant");
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndAlterBetweenRestrictionIsSet()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndAlterBetweenRestrictionIsSet()
 		{
 			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activity.SetId(Guid.NewGuid());
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepTimeOfActivityRestrictionIsSet()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepTimeOfActivityRestrictionIsSet()
 		{
 			var extendedActivity = new Activity("extendedActivity") { InWorkTime = true, InContractTime = true, RequiresSkill = false };
 			extendedActivity.SetId(Guid.NewGuid());
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityIsNotSameAndKeepActivityRestrictionIsNotEmpty()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityIsNotSameAndKeepActivityRestrictionIsNotEmpty()
 		{
 			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activityForRuleSet.SetId(Guid.NewGuid());
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityPeriodIsNotSameAndKeepActivitiesRestrictionIsNotEmpty()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityPeriodIsNotSameAndKeepActivitiesRestrictionIsNotEmpty()
 		{
 			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activity.SetId(Guid.NewGuid());
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepShiftCategoryRestrictionIsSet()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepShiftCategoryRestrictionIsSet()
 		{
 			var shiftCategoryForRuleSet = new ShiftCategory("shiftCategoryForRuleSet");
 			shiftCategoryForRuleSet.SetId(Guid.NewGuid());
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
 		{
 			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activity.SetId(Guid.NewGuid());
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		}
 
 		[Test]
-		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepStartTimeRestrictionIsSet()
+		public void ShouldKeepShiftWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepStartTimeRestrictionIsSet()
 		{
 			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
 			activity.SetId(Guid.NewGuid());
@@ -250,6 +250,66 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				.ShiftLayers.First()
 				.Period.StartDateTime
 				.Should().Be.EqualTo(new DateTime(weekPeriod.StartDate.Year, weekPeriod.StartDate.Month, weekPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
+		}
+
+		[Test]
+		public void ShouldNotKeepShiftWhenOptimizeAndWeeklyRestIsBrokenAndKeepActivityRestrictionNotAffectShift()
+		{
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activityForRuleSet.SetId(Guid.NewGuid());
+
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activity.SetId(Guid.NewGuid());
+
+			var shiftCategory = new ShiftCategory("unimportant");
+			shiftCategory.SetId(Guid.NewGuid());
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+			var agent = setupAgent(ruleSet, activityForRuleSet);
+			setUpSchedules(agent, activity, shiftCategory);
+
+			var selectedActivities = new List<IActivity> { activityForRuleSet };
+
+			var optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { SelectedActivities = selectedActivities },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			executeTarget(new[] { agent }, optimizationPref);
+
+			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotKeepShiftWhenOptimizeIfWeeklyRestIsBrokenAndAlterBetweenRestrictionNotAffectShift()
+		{
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activityForRuleSet.SetId(Guid.NewGuid());
+
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
+			activity.SetId(Guid.NewGuid());
+
+			var shiftCategory = new ShiftCategory("unimportant");
+			shiftCategory.SetId(Guid.NewGuid());
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+			var agent = setupAgent(ruleSet, activity);
+			setUpSchedules(agent, activity, shiftCategory);
+
+			var optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { AlterBetween = true, SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36)) },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			executeTarget(new[] { agent }, optimizationPref);
+
+			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
+				.PersonAssignment()
+				.ShiftLayers.Should().Be.Empty();
 		}
 
 		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences)

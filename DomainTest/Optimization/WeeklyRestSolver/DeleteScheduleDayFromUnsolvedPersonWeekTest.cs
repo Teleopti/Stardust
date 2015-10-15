@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             }
             using (_mock.Playback())
             {
-                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService, new DateOnlyPeriod(2014,03,25,2014,03,27), _scheduleMatrixPro);
+                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService, new DateOnlyPeriod(2014,03,25,2014,03,27), _scheduleMatrixPro, null);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			  var personRange = _mock.StrictMock<IScheduleRange>();
 			  var date = new DateOnly(2014, 03, 26);
 			  var rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			  _target.DeleteAppropiateScheduleDay(personRange, date, rollbackService, new DateOnlyPeriod(2014, 04, 25, 2014, 04, 27), _scheduleMatrixPro);
+			  _target.DeleteAppropiateScheduleDay(personRange, date, rollbackService, new DateOnlyPeriod(2014, 04, 25, 2014, 04, 27), _scheduleMatrixPro, null);
 		  }
     }
 }
