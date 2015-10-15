@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Web.Core.Data
@@ -21,7 +23,8 @@ namespace Teleopti.Ccc.Web.Core.Data
 				if (activity.RequiresSkill) activities.Add(new ActivityViewModel {Id = activity.Id, Name = activity.Name});
 			}
 
-			return activities;
+			var sorted = activities.OrderBy(x=>x.Name);
+			return sorted;
 		}
 	}
 }

@@ -52,5 +52,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			result.Count().Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldSortByName()
+		{
+			var activity1 = ActivityFactory.CreateActivity("a2");
+			activity1.RequiresSkill = true;
+			_activityRepository.Add(activity1);
+			var activity2 = ActivityFactory.CreateActivity("a1");
+			activity2.RequiresSkill = true;
+			_activityRepository.Add(activity2);
+
+			_target = new ActivityProvider(_activityRepository);
+
+			var result = _target.GetAll();
+
+			result.First().Name.Should().Be.EqualTo("a1");
+			result.Last().Name.Should().Be.EqualTo("a2");
+		}
 	}
 }
