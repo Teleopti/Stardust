@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			throw new NotSupportedException(notAllowedAction);
 		}
 
+		public void ClickVisibleOnly(string selector)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void ClickContaining(string selector, string text)
 		{
 			throw new NotSupportedException(notAllowedAction);

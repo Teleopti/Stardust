@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void GoTo(string uri);
 
 		void Click(string selector);
+		void ClickVisibleOnly(string selector);
 		void ClickContaining(string selector, string text);
 
 		void Clear(string selector);

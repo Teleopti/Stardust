@@ -73,6 +73,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			_browser.FindCss(selector, options()).Click(options());
 		}
+		
+		public void ClickVisibleOnly(string selector)
+		{
+			_browser.FindCss(selector, optionsVisibleOnly()).Click(optionsVisibleOnly());
+		}
 
 		public void ClickContaining(string selector, string text)
 		{

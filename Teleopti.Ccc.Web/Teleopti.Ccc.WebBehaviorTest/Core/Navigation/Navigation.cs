@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					date.Year.ToString("0000"),
 					date.Month.ToString("00"),
 					date.Day.ToString("00")
-					));
+					), new WaitUntilSubscriptionIsCompleted());
 		}
 
 		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid buId, Guid groupId, Guid personId, DateTime date)

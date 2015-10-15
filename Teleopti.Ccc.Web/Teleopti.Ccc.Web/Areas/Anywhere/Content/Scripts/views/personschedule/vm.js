@@ -228,7 +228,7 @@ define([
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
 			self.MoveActivityForm.SetData(data);
-			
+			$('.time-line-for').attr("data-subscription-done", " ");
 		};
 
 		this.UpdateSchedules = function (data) {
