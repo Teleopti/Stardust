@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		[Test, Explicit("2 be continued")]
+		[Test]
 		public void ShouldMoveDayOff()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
@@ -44,14 +44,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
+
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
-			
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod);
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)) {Active=true}, agent.Period(firstDay));
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var shiftBag = new RuleSetBag();
 			shiftBag.AddRuleSet(ruleSet);
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			}
 
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
-				.SetDayOff(new DayOffTemplate()); //TODO: behöver förmodligen använda en template som finns i repo (?)
+				.SetDayOff(new DayOffTemplate()); 
 
 			Target.Execute(planningPeriod.Id.Value);
 
