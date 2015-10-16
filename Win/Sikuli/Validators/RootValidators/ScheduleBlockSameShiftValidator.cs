@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		public ScheduleBlockSameShiftValidator()
 		{
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(5))));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20))));
 		}
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
