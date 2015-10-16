@@ -29,27 +29,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
-		public void ShouldMoveDayOff()
+		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
 			var firstDay = new DateOnly(2015,10,12); //mon
 			var planningPeriod = PlanningPeriodRepository.HasOneWeek(firstDay);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+
 			var contract = new Contract("_")
 			{
 				WorkTime = new WorkTime(TimeSpan.FromHours(8)),
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
-			var partTimePercentage = new PartTimePercentage("_");
-			var contractSchedule = new ContractSchedule("_");
-			var team = new Team {Site = new Site("site")};
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
-
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
-			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod);
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site")}, schedulePeriod);
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)) {Active=true}, agent.Period(firstDay));
-var shiftCategory = new ShiftCategory("_").WithId();
+			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var shiftBag = new RuleSetBag();
 			shiftBag.AddRuleSet(ruleSet);
