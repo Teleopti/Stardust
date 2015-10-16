@@ -23,6 +23,30 @@
 				<div class="input-invalid-text">error</div>
 			</div>
 		</div>
+		
+		<h5 class="skill-section-header">Staffing levels</h5>
+		<div class="row skill-service-level-percent">
+			<div class="col-lg-4">
+				<h6 class="skill-input-label">Service level (%)</h6>
+				<input type="number" max="100" min="1" name="skillServiceLevelPercent" ng-model="model.serviceLevelPercent" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelPercentValidation.isValid(form)}" />
+				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelPercentValidation.isValid(form)}">{{skillServiceLevelPercentValidation.errorMessage(form)}}</div>
+			</div>
+		</div>
+		<div class="row skill-service-level-seconds">
+			<div class="col-lg-4">
+				<h6 class="skill-input-label">Service level (s)</h6>
+				<input type="number" min="1" max="86400" name="skillServiceLevelSeconds" ng-model="model.serviceLevelSeconds" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelSecondsValidation.isValid(form)}" />
+				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelSecondsValidation.isValid(form)}">{{skillServiceLevelSecondsValidation.errorMessage(form)}}</div>
+			</div>
+		</div>
+		<div class="row skill-shrinkage">
+			<div class="col-lg-4">
+				<h6 class="skill-input-label">Shrinkage (%)</h6>
+				<input type="number" min="0" max="99" name="skillShrinkage" ng-model="model.shrinkage" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillShrinkageValidation.isValid(form)}" />
+				<div class="input-invalid-text" ng-class="{invalidForm: skillShrinkageValidation.isValid(form)}">{{skillShrinkageValidation.errorMessage(form)}}</div>
+			</div>
+		</div>
+
 		<h5 class="skill-section-header">Queues</h5>
 		<div class="row skill-queues">
 			<div class="col-lg-9">

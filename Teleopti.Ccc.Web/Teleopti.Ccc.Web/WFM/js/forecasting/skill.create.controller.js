@@ -3,7 +3,11 @@ angular.module('wfm.forecasting')
 	.controller('ForecastingSkillCreateCtrl', [
 		'SkillService', '$scope', '$filter', '$state',
 		function (skillService, $scope, $filter, $state) {
-			$scope.model = {};
+			$scope.model = {
+				serviceLevelPercent: 80,
+				serviceLevelSeconds: 20,
+				shrinkage: 0
+			};
 
 			$scope.activities = [];
 			skillService.activities.get().$promise.then(function(result) {
@@ -65,7 +69,10 @@ angular.module('wfm.forecasting')
 					Name: $scope.model.name,
 					ActivityId: $scope.model.selectedActivity.Id,
 					TimezoneId: $scope.model.selectedTimezone.Id,
-					Queues: queues
+					Queues: queues,
+					ServiceLevelPercent: $scope.model.serviceLevelPercent,
+					ServiceLevelSeconds: $scope.model.serviceLevelSeconds,
+					Shrinkage: $scope.model.shrinkage
 				}).$promise.then(
 					function(result) {
 						$state.go('forecasting.start', { workloadId: result.WorkloadId });
@@ -82,6 +89,51 @@ angular.module('wfm.forecasting')
 						if (form.skillName.$error.required)
 							return "The name is required.";
 						else if (form.skillName.$error.maxlength)
+							return "The name must be less than 50 characters long.";
+					}
+					return "";
+				}
+			};
+
+			$scope.skillServiceLevelPercentValidation = {
+				isValid: function(form) {
+					return ((form.$submitted || form.skillServiceLevelPercent.$touched) && (form.skillServiceLevelPercent.$error.required || form.skillServiceLevelPercent.$error.maxlength));
+				},
+				errorMessage: function(form) {
+					if (form.skillServiceLevelPercent.$error) {
+						if (form.skillServiceLevelPercent.$error.required)
+							return "Percentage is required.";
+						else if (form.skillServiceLevelPercent.$error.maxlength)
+							return "The name must be less than 50 characters long.";
+					}
+					return "error";
+				}
+			};
+
+			$scope.skillServiceLevelSecondsValidation = {
+				isValid: function(form) {
+					return ((form.$submitted || form.skillServiceLevelSeconds.$touched) && (form.skillServiceLevelSeconds.$error.required || form.skillServiceLevelSeconds.$error.maxlength));
+				},
+				errorMessage: function(form) {
+					if (form.skillServiceLevelSeconds.$error) {
+						if (form.skillServiceLevelSeconds.$error.required)
+							return "Seconds are required.";
+						else if (form.skillServiceLevelSeconds.$error.maxlength)
+							return "The name must be less than 50 characters long.";
+					}
+					return "error";
+				}
+			};
+
+			$scope.skillShrinkageValidation = {
+				isValid: function(form) {
+					return ((form.$submitted || form.skillShrinkage.$touched) && (form.skillShrinkage.$error.required || form.skillShrinkage.$error.maxlength));
+				},
+				errorMessage: function(form) {
+					if (form.skillShrinkage.$error) {
+						if (form.skillShrinkage.$error.required)
+							return "Shrinkage is required.";
+						else if (form.skillShrinkage.$error.maxlength)
 							return "The name must be less than 50 characters long.";
 					}
 					return "error";

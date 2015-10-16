@@ -118,7 +118,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Name = "test1",
 				ActivityId = Guid.NewGuid(),
 				TimezoneId = TimeZoneInfo.Utc.Id,
-				Queues = new[] { Guid.NewGuid() }
+				Queues = new[] { Guid.NewGuid() },
+				ServiceLevelPercent = 20,
+				ServiceLevelSeconds =10,
+				Shrinkage= 21
 			};
 			var queueSource = new QueueSource("testQ", "", 1);
 			queueSource.SetId(input.Queues[0]);
@@ -134,11 +137,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					x.Add(
 						Arg<ISkill>.Matches(
 							s =>
-								s.TemplateWeekCollection[(int) DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelPercent==new Percent(0.8)&&
-								Math.Abs(s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelSeconds - 20.0) < 0.001&&
+								s.TemplateWeekCollection[(int) DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelPercent==new Percent(input.ServiceLevelPercent/100.0)&&
+								Math.Abs(s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().ServiceLevelSeconds - 10.0) < 0.001&&
 								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().MinOccupancy==new Percent(0.3)&&
 								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().MaxOccupancy==new Percent(0.9)&&
-								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().Shrinkage==new Percent(0.0) &&
+								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().Shrinkage==new Percent(input.Shrinkage/100.0) &&
 								s.TemplateWeekCollection[(int)DayOfWeek.Sunday].TemplateSkillDataPeriodCollection.First().Efficiency==new Percent(1.0)
 								)));
 		}

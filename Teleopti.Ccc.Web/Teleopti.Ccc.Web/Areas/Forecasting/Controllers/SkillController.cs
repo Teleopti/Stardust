@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			};
 
 			Open24Hours(newWorkload);
-			SetSkillTemplates(newSkill);
+			SetSkillTemplates(newSkill, input.ServiceLevelPercent, input.ServiceLevelSeconds, input.Shrinkage);
 
 			var queues = _queueSourceRepository.LoadAll();
 			foreach (var queue in input.Queues)
@@ -100,15 +100,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Ok(new { WorkloadId = newWorkload.Id });
 		}
 
-		private void SetSkillTemplates(ISkill skill)
+		private void SetSkillTemplates(ISkill skill, int serviceLevelPercent, int serviceLevelSecond, int shrinkagePercent)
 		{
-			const double serviceLevelPercent = 0.8;
-			const double serviceLevelSecond = 20.0;
 			const double minOccupancy = 0.3;
 			const double maxOccupancy = 0.9;
-			const double shrinkagePercent = 0.0;
 			const double efficiencyPercent = 1.0;
-			var serviceLevel = new ServiceLevel(new Percent(serviceLevelPercent), serviceLevelSecond);
+			var serviceLevel = new ServiceLevel(new Percent(serviceLevelPercent/100.0), serviceLevelSecond);
 			var serviceAgreement = new ServiceAgreement
 			{
 				ServiceLevel = serviceLevel,
@@ -116,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				MaxOccupancy = new Percent(maxOccupancy)
 			};
 
-			var shrinkage = new Percent(shrinkagePercent);
+			var shrinkage = new Percent(shrinkagePercent/100.0);
 			var efficiency = new Percent(efficiencyPercent);
 
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
@@ -163,5 +160,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public Guid ActivityId { get; set; }
 		public string TimezoneId { get; set; }
 		public Guid[] Queues { get; set; }
+		public int ServiceLevelPercent { get; set; }
+		public int ServiceLevelSeconds { get; set; }
+		public int Shrinkage { get; set; }
 	}
 }
