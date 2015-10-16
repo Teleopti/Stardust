@@ -35,7 +35,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Name = "test1",
 				ActivityId = Guid.NewGuid(),
 				TimezoneId = TimeZoneInfo.Utc.Id,
-				Queues = new[] {Guid.NewGuid()}
+				Queues = new[] {Guid.NewGuid()},
+				ServiceLevelPercent = 10,
+				ServiceLevelSeconds = 20,
+				Shrinkage = 5
 			};
 			var queueSource = new QueueSource("testQ","",1);
 			queueSource.SetId(input.Queues[0]);
@@ -77,7 +80,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Name = "test1",
 				ActivityId = Guid.NewGuid(),
 				TimezoneId = TimeZoneInfo.Utc.Id,
-				Queues = new[] {Guid.NewGuid()}
+				Queues = new[] {Guid.NewGuid()},
+				ServiceLevelPercent = 10,
+				ServiceLevelSeconds = 20,
+				Shrinkage = 5
 			};
 
 			var queueSource = new QueueSource("testQ", "", 1);
@@ -154,7 +160,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Name = "test1",
 				ActivityId = Guid.NewGuid(),
 				TimezoneId = TimeZoneInfo.Utc.Id,
-				Queues = new[] { Guid.NewGuid() }
+				Queues = new[] { Guid.NewGuid() },
+				ServiceLevelPercent = 10,
+				ServiceLevelSeconds = 20,
+				Shrinkage = 5
 			};
 			var activity = ActivityFactory.CreateActivity("test1");
 			activity.SetId(input.ActivityId);

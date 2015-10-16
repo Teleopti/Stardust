@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Ok(new { WorkloadId = newWorkload.Id });
 		}
 
-		private void SetSkillTemplates(ISkill skill, int serviceLevelPercent, int serviceLevelSecond, int shrinkagePercent)
+		private void SetSkillTemplates(ISkill skill, double serviceLevelPercent, double serviceLevelSecond, double shrinkagePercent)
 		{
 			const double minOccupancy = 0.3;
 			const double maxOccupancy = 0.9;
@@ -160,8 +160,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public Guid ActivityId { get; set; }
 		public string TimezoneId { get; set; }
 		public Guid[] Queues { get; set; }
-		public int ServiceLevelPercent { get; set; }
-		public int ServiceLevelSeconds { get; set; }
-		public int Shrinkage { get; set; }
+		public double ServiceLevelPercent { get; set; }
+		public double ServiceLevelSeconds { get; set; }
+		public double Shrinkage { get; set; }
 	}
 }
