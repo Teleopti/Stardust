@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
 	public class FakeNumberOfAgentsInTeamReader : INumberOfAgentsInTeamReader
 	{

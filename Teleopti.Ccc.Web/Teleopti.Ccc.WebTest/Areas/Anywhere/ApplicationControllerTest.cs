@@ -17,7 +17,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	public class ApplicationControllerTest
 	{

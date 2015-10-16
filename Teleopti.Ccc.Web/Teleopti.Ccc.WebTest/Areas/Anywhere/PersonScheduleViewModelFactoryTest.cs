@@ -18,7 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
 	public class PersonScheduleViewModelFactoryTest

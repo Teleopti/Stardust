@@ -6,7 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
 	public class PublishedScheduleSpecificationTest

@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
 	public class ReportsControllerTest

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			base.Setup(system, configuration);
 
-			// because DomainTest project has a SetupFixtureForAssembly that creates 
+			// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
 			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 
 			registerFakeDatabase(system, configuration, null);

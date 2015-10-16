@@ -12,7 +12,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	public class GroupPageControllerTest
 	{

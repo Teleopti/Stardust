@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
 	public class GroupScheduleViewModelMapperTest

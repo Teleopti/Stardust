@@ -202,7 +202,6 @@
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeDistributedLockAcquirer.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NeutralAdherenceTest.cs" />
@@ -387,7 +386,6 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
-    <Compile Include="DomainTestAttribute.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldPickTheBestMethodTest.cs" />

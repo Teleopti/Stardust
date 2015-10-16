@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	public class FakeClientBuilder
 	{

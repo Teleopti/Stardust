@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
 	public class PersonalAvailableDataProviderTest

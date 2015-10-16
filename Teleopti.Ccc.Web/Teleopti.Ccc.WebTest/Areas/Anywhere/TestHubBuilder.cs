@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[CLSCompliant(false)]
 	public class TestHubBuilder

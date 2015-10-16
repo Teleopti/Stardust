@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Rta;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
     public class FakeTeamAdherenceAggregator : ITeamAdherenceAggregator
     {

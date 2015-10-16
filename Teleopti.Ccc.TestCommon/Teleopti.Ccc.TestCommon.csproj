@@ -172,6 +172,7 @@
     <Compile Include="FakeData\NoCurrentIdentity.cs" />
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
     <Compile Include="FakeData\PrincipalAuthorizationWithFullPermission.cs" />
+    <Compile Include="FakeDistributedLockAcquirer.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="FakeUserCulture.cs" />
     <Compile Include="FakeUserTimeZone.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
+    <Compile Include="IoC\DomainTestAttribute.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\ISetup.cs" />
     <Compile Include="IoC\SettingAttribute.cs" />

@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers;
+using Teleopti.Ccc.WebTest.Areas.Anywhere;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {

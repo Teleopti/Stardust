@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -12,62 +11,50 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
 	[TestFixture]
 	[IoCTest]
-	public class GetTeamAdherenceTest : ISetup
+	public class GetSiteAdherenceTest : ISetup
 	{
-		public IGetTeamAdherence Target;
-		public FakeTeamRepository Teams;
+		public IGetSiteAdherence Target;
 		public FakeSiteRepository Sites;
-		public FakeTeamOutOfAdherenceReadModelPersister OutOfAdherence;
+		public FakeSiteOutOfAdherenceReadModelPersister OutOfAdherence;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelReader>();
+			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelReader>();
 		}
 
 		[Test]
 		public void ShouldReturnOutOfAdherenceCount()
 		{
 			var site = new Site("s").WithId();
-			var team = new Team().WithId();
-			team.Site = site;
-			site.AddTeam(team);
-			Teams.Has(team);
 			Sites.Has(site);
-			OutOfAdherence.Has(new TeamOutOfAdherenceReadModel
+			OutOfAdherence.Has(new SiteOutOfAdherenceReadModel
 			{
-				TeamId = team.Id.Value,
 				SiteId = site.Id.Value,
 				Count = 1
 			});
+			
+			var result = Target.OutOfAdherence();
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString());
-
-			result.Single().Id.Should().Be(team.Id.ToString());
+			result.Single().Id.Should().Be(site.Id.ToString());
 			result.Single().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
-		public void ShouldReturnTeamsWithoutAdherence()
+		public void ShouldReturnSitesWithoutAdherence()
 		{
 			var site = new Site("s").WithId();
-			var team = new Team().WithId();
-			team.Site = site;
-			site.AddTeam(team);
-			Teams.Has(team);
 			Sites.Has(site);
+			
+			var result = Target.OutOfAdherence();
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString());
-
-			result.Single().Id.Should().Be(team.Id.ToString());
+			result.Single().Id.Should().Be(site.Id.ToString());
 			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}
-
 }
