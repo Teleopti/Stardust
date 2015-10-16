@@ -28,6 +28,7 @@ using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using System.Windows.Forms;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
@@ -58,6 +59,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    private readonly IPoller _poller;
 	    private readonly IToggleManager _toggleManger;
 	    private bool? _pollingEnabled;
+	    private readonly IPersonAccountPersister _personAccountPersister;
+
 
 	    public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
@@ -98,6 +101,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
 			_poller = poller;
 		    _toggleManger = toggleManger;
+		    _personAccountPersister = personAccountPersister;
         }
 
         public bool EarlyWarningEnabled
@@ -424,6 +428,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	                }
                     uow.PersistAll(this);
                 }
+	            _personAccountPersister.Persist(_schedulingResultLoader.SchedulerState.Schedules.ModifiedPersonAccounts);
             }
             catch (OptimisticLockException)
             {

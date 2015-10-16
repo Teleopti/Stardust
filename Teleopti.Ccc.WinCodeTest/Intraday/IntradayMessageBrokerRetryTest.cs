@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventForecastDataMessageCommand forecastCommand;
         private OnEventMeetingMessageCommand meetingCommand;
 		private IToggleManager toggleManger;
+		private IPersonAccountPersister personAccountPersister;
 
         [SetUp]
         public void Setup()
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			scheduleCommand = mocks.StrictMock < OnEventScheduleMessageCommand>();
 			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
 			toggleManger = mocks.StrictMock<IToggleManager>();
+			personAccountPersister = mocks.StrictMock<IPersonAccountPersister>();
             target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, unitOfWorkFactory, null,
                                            null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller(), toggleManger);
         }
@@ -180,6 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		        DomainUpdateType.Delete,
 		        string.Empty,
 		        DateTime.UtcNow) {InterfaceType = typeof (IPersonAssignment)};
+			{ InterfaceType = typeof(IPersonAssignment) };
 
             using (mocks.Record())
             {

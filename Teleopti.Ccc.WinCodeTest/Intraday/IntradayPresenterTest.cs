@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventMeetingMessageCommand _meetingCommand;
 		private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 	    private IToggleManager _toggleManger;
+		private IPersonAccountPersister _personAccountPersister;
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 				public void Setup()
@@ -86,6 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_statisticCommand = MockRepository.GenerateMock<OnEventStatisticMessageCommand>();
 					_loadStatisticCommand = MockRepository.GenerateMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
 					_toggleManger = MockRepository.GenerateMock<IToggleManager>();
+			_personAccountPersister = MockRepository.GenerateMock<IPersonAccountPersister>();
 					_schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
 
 					_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
