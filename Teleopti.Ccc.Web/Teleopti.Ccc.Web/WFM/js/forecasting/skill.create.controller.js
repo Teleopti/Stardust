@@ -52,16 +52,10 @@ angular.module('wfm.forecasting')
 			});
 
 			$scope.createSkill = function (formValid) {
-				if ($scope.hideQueueInvalidMessage) {
-					$scope.queueSelected = false;
-					growl.warning("<i class='mdi mdi-alert'></i> Changes are disabled for predefined roles.", {
-						ttl: 5000,
-						disableCountDown: true
-					});
-					return;
-				}
-				if (!formValid || !$scope.queueSelected) {
-					growl.warning("<i class='mdi mdi-alert'></i> Changes are disabled for predefined roles.", {
+				if (!formValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
+					if ($scope.hideQueueInvalidMessage)
+						$scope.queueSelected = false;
+					growl.warning("<i class='mdi mdi-alert'></i> Could not apply. See issues above.", {
 						ttl: 5000,
 						disableCountDown: true
 					});
