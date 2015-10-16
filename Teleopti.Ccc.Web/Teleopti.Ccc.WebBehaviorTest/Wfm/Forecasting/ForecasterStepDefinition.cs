@@ -304,6 +304,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var newSkill = table.CreateInstance<NewSkill>();
 			Browser.Interactions.FillWith(".skill-name input", newSkill.Name);
+			Browser.Interactions.FillWith(".skill-service-level-percent input", newSkill.ServiceLevelPercent);
+			Browser.Interactions.FillWith(".skill-service-level-seconds input", newSkill.ServiceLevelSeconds);
+			Browser.Interactions.FillWith(".skill-shrinkage input", newSkill.Shrinkage);
 			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-activity select", newSkill.Activity);
 			Browser.Interactions.SelectOptionByTextUsingJQuery(".skill-timezone select", newSkill.Timezone);
 			Browser.Interactions.ClickContaining(".skill-queues .big-table-wrapper .ui-grid-cell-contents", newSkill.Queues);
@@ -320,8 +323,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertAnyContains(".wfm-card-list wfm-card card-header", name);
 		}
-
-
 	}
 
 	public class NewSkill
@@ -330,6 +331,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public string Activity { get; set; }
 		public string Timezone { get; set; }
 		public string Queues { get; set; }
+		public string ServiceLevelPercent { get; set; }
+		public string ServiceLevelSeconds { get; set; }
+		public string Shrinkage { get; set; }
 	}
 
 	public class ForecastData

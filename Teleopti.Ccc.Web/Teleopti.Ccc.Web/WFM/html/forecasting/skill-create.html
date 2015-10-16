@@ -5,21 +5,21 @@
 		<div class="row skill-name">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Name</h6>
-				<input type="text" name="skillName" ng-model="model.name" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillNameValidation.isValid(form)}" />
+				<input style="width: 100%" type="text" name="skillName" ng-model="model.name" required="" ng-maxlength="50" ng-class="{invalidInput: skillNameValidation.isValid(form)}" />
 				<div class="input-invalid-text" ng-class="{invalidForm: skillNameValidation.isValid(form)}">{{skillNameValidation.errorMessage(form)}}</div>
 			</div>
 		</div>
 		<div class="row skill-activity">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Activity</h6>
-				<select ng-model="model.selectedActivity" ng-options="activity.Name disable when activity.Disabled for activity in activities"></select>
+				<select style="width: 100%" ng-model="model.selectedActivity" ng-options="activity.Name disable when activity.Disabled for activity in activities"></select>
 				<div class="input-invalid-text">error</div>
 			</div>
 		</div>
 		<div class="row skill-timezone">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Time zone</h6>
-				<select ng-model="model.selectedTimezone" ng-options="timezone.Name disable when timezone.Disabled for timezone in timezones"></select>
+				<select style="width: 100%" ng-model="model.selectedTimezone" ng-options="timezone.Name disable when timezone.Disabled for timezone in timezones"></select>
 				<div class="input-invalid-text">error</div>
 			</div>
 		</div>
@@ -28,28 +28,28 @@
 		<div class="row skill-service-level-percent">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Service level (%)</h6>
-				<input type="number" max="100" min="1" name="skillServiceLevelPercent" ng-model="model.serviceLevelPercent" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelPercentValidation.isValid(form)}" />
+				<input type="number" max="100" min="1" name="skillServiceLevelPercent" ng-model="model.serviceLevelPercent" required="" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelPercentValidation.isValid(form)}" />
 				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelPercentValidation.isValid(form)}">{{skillServiceLevelPercentValidation.errorMessage(form)}}</div>
 			</div>
 		</div>
 		<div class="row skill-service-level-seconds">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Service level (s)</h6>
-				<input type="number" min="1" max="86400" name="skillServiceLevelSeconds" ng-model="model.serviceLevelSeconds" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelSecondsValidation.isValid(form)}" />
+				<input type="number" min="1" max="86400" name="skillServiceLevelSeconds" ng-model="model.serviceLevelSeconds" required="" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelSecondsValidation.isValid(form)}" />
 				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelSecondsValidation.isValid(form)}">{{skillServiceLevelSecondsValidation.errorMessage(form)}}</div>
 			</div>
 		</div>
 		<div class="row skill-shrinkage">
 			<div class="col-lg-4">
 				<h6 class="skill-input-label">Shrinkage (%)</h6>
-				<input type="number" min="0" max="99" name="skillShrinkage" ng-model="model.shrinkage" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillShrinkageValidation.isValid(form)}" />
+				<input type="number" min="0" max="99" name="skillShrinkage" ng-model="model.shrinkage" required="" ng-maxlength="50" ng-class="{invalidInput: skillShrinkageValidation.isValid(form)}" />
 				<div class="input-invalid-text" ng-class="{invalidForm: skillShrinkageValidation.isValid(form)}">{{skillShrinkageValidation.errorMessage(form)}}</div>
 			</div>
 		</div>
 
 		<h5 class="skill-section-header">Queues</h5>
 		<div class="row skill-queues">
-			<div class="col-lg-9">
+			<div class="col-lg-12">
 				<div class="big-table-wrapper material-depth-1 queue-list">
 					<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
 				</div>

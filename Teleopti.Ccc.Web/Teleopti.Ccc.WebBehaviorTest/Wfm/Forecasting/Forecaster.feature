@@ -79,11 +79,14 @@ Scenario: Create new skill
 	Given I am viewing forecast page
 	When I choose to add a new skill
 	And I input the new skill with
-	| Field    | Value                                                        |
-	| Name     | NewSkill1                                                    |
-	| Activity | TheActivity1                                                 |
-	| Timezone | (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna |
-	| Queues   | Queue1                                                       |
+	| Field               | Value                                                        |
+	| Name                | NewSkill1                                                    |
+	| Activity            | TheActivity1                                                 |
+	| Timezone            | (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna |
+	| Queues              | Queue1                                                       |
+	| ServiceLevelPercent | 50                                                           |
+	| ServiceLevelSeconds | 20                                                           |
+	| Shrinkage           | 40                                                           |
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
 

@@ -1,8 +1,8 @@
 ﻿'use strict';
 angular.module('wfm.forecasting')
 	.controller('ForecastingSkillCreateCtrl', [
-		'SkillService', '$scope', '$filter', '$state',
-		function (skillService, $scope, $filter, $state) {
+		'SkillService', '$scope', '$filter', '$state', 'growl',
+		function (skillService, $scope, $filter, $state, growl) {
 			$scope.model = {
 				serviceLevelPercent: 80,
 				serviceLevelSeconds: 20,
@@ -54,9 +54,17 @@ angular.module('wfm.forecasting')
 			$scope.createSkill = function (formValid) {
 				if ($scope.hideQueueInvalidMessage) {
 					$scope.queueSelected = false;
+					growl.warning("<i class='mdi mdi-alert'></i> Changes are disabled for predefined roles.", {
+						ttl: 5000,
+						disableCountDown: true
+					});
 					return;
 				}
 				if (!formValid || !$scope.queueSelected) {
+					growl.warning("<i class='mdi mdi-alert'></i> Changes are disabled for predefined roles.", {
+						ttl: 5000,
+						disableCountDown: true
+					});
 					return;
 				}
 				var selectedRows = $scope.gridApi.selection.getSelectedRows();
