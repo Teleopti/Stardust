@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 {
-	[DomainTest, Toggle(Toggles.ResourcePlanner_WeeklyRestSolver_35043), Ignore("Hangs forever now when user has permission to change schedule. ShiftNudgeManager row 126.")]
+	[DomainTest, Toggle(Toggles.ResourcePlanner_WeeklyRestSolver_35043)]
 	public class WeeklyRestSolverLaterTest
 	{
 		public IWeeklyRestSolverCommand Target;
@@ -353,8 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		{
 			var date = new DateOnly(2015, 09, 30);
 			var selectedPeriod = new DateOnlyPeriod(date, date);
-			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(weekPeriod);
-			matrixlist.First().UnlockPeriod(selectedPeriod);
+			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 				optimizationPreferences,
