@@ -168,8 +168,10 @@
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeWorkloadRepository.cs" />
+    <Compile Include="FakeData\PrincipalAuthorizationWithNoPermission.cs" />
     <Compile Include="FakeData\NoCurrentIdentity.cs" />
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
+    <Compile Include="FakeData\PrincipalAuthorizationWithFullPermission.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />

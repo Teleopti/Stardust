@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -163,100 +164,7 @@ namespace Teleopti.Ccc.TestCommon
         }
     }
 
-    public class PrincipalAuthorizationWithFullPermission : IPrincipalAuthorization
-    {
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
-        {
-            return true;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
-        {
-            return true;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
-        {
-            return true;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
-        {
-            return true;
-        }
-
-        public bool IsPermitted(string functionPath)
-        {
-            return true;
-        }
-
-    	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
-
-    	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
-
-        public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
-        {
-            return true;
-        }
-
-    	public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
-    	{
-    		return true;
-    	}
-
-    	public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
-    	{
-			return new[] { period };
-    	}
-    }
-
-    public class PrincipalAuthorizationWithNoPermission : IPrincipalAuthorization
-    {
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
-        {
-            return false;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
-        {
-            return false;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
-        {
-            return false;
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
-        {
-            return false;
-        }
-
-        public bool IsPermitted(string functionPath)
-        {
-            return false;
-        }
-
-    	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
-
-    	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
-
-        public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
-        {
-            return false;
-        }
-
-    	public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
-    	{
-    		return false;
-    	}
-
-    	public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
-    	{
-			return new List<DateOnlyPeriod>(0);
-    	}
-    }
-
+  
 	public class CustomAuthorizationContext : IDisposable
 	{
 		private IPrincipalAuthorization _previousAuthorization;
