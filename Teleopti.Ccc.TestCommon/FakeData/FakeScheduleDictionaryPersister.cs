@@ -6,14 +6,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	//this thing might need some more hugs and knådning
+	//only work for personassignments ATM
+	//if needed, create a new type called SchedulesInDb or something that shares state between "schedule repositories",
+	//then we can manipulate that list here
 	public class FakeScheduleDictionaryPersister : IScheduleDictionaryPersister
 	{
-		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 
-		public FakeScheduleDictionaryPersister(IScheduleRepository scheduleRepository)
+		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository)
 		{
-			_scheduleRepository = scheduleRepository;
+			_personAssignmentRepository = personAssignmentRepository;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
@@ -24,15 +26,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc);
 				foreach (var scheduleChange in diff)
 				{
+					var currAss = (IPersonAssignment)scheduleChange.CurrentItem;
+					var orgAss = (IPersonAssignment)scheduleChange.OriginalItem;
 					switch (scheduleChange.Status)
 					{
 						case DifferenceStatus.Added:
-							_scheduleRepository.Add(scheduleChange.CurrentItem);
+							_personAssignmentRepository.Add(currAss);
 							break;
 						case DifferenceStatus.Deleted:
-							_scheduleRepository.Remove(scheduleChange.OriginalItem);
+							_personAssignmentRepository.Remove(orgAss);
 							break;
 						case DifferenceStatus.Modified:
+							_personAssignmentRepository.Remove(orgAss);
+							_personAssignmentRepository.Add(currAss);
 							break;
 					}
 				}

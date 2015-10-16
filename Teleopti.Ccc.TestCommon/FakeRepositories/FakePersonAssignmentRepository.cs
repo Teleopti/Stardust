@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IPersonAssignment entity)
 		{
-			throw new NotImplementedException();
+			_personAssignments.Remove(entity);
 		}
 
 		public IPersonAssignment Get(Guid id)
