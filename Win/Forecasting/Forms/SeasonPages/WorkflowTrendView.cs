@@ -61,51 +61,67 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 		  }
 
 		  #region chart methods
-		  
-		  private void setStaticChartRequiremants()
-		  {
-				_chartControl.BackColor = ColorHelper.ChartControlBackColor();
-				_chartControl.BackInterior = ColorHelper.ChartControlBackInterior();
-				_chartControl.PrimaryXAxis.DrawGrid = true;
-				_chartControl.PrimaryXAxis.HidePartialLabels = false;
-				_chartControl.PrimaryYAxis.HidePartialLabels = false;
-				_chartControl.ChartArea.BackInterior = ColorHelper.ChartControlChartAreaBackInterior();
-				_chartControl.ChartAreaMargins = ColorHelper.ChartMargins();
-				_chartControl.ChartInterior = ColorHelper.ChartControlChartInterior();
-				_chartControl.ElementsSpacing = 1;
-				_chartControl.ChartArea.AutoScale = true;
-				_chartControl.EnableXZooming = !CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
-				_chartControl.EnableYZooming = true;
-				_chartControl.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-				_chartControl.Legend.BackInterior = ColorHelper.ChartControlBackInterior();
-				_chartControl.Legend.BackColor = ColorHelper.ChartControlBackColor();
-				_chartControl.Legend.VisibleCheckBox = true;
-				_chartControl.LegendPosition = ChartDock.Bottom;
-				_chartControl.LegendAlignment = ChartAlignment.Center;
-				_chartControl.LegendsPlacement = ChartPlacement.Outside;
-				_chartControl.Series3D = false;
-				_chartControl.PrimaryYAxis.ValueType = ChartValueType.Double;
-				_chartControl.PrimaryYAxis.RangeType = ChartAxisRangeType.Auto;
-				_chartControl.PrimaryYAxis.LineType.ForeColor = Color.Black;
-				_chartControl.PrimaryYAxis.GridLineType.ForeColor = Color.Black;
-				if (RightToLeft == RightToLeft.Yes) _chartControl.PrimaryXAxis.Inversed = true;
-				_chartControl.TextRenderingHint = TextRenderingHint.AntiAlias;
-				_chartControl.PrimaryXAxis.HidePartialLabels = true;
-				_chartControl.PrimaryXAxis.LabelIntersectAction = ChartLabelIntersectAction.Rotate;
-				_chartControl.PrimaryXAxis.DateTimeFormat = "d";
-				_chartControl.PrimaryYAxis.Range.Min = 0;
 
-			// ErikS: BUG: 26483
-			// Ugly hack to make syncfusion to work
-			// Throws ArgumentOutOfRangeException if set to DateTime when using ar-SA
-			_chartControl.PrimaryXAxis.ValueType = CultureInfo.CurrentCulture.Calendar.AlgorithmType ==
+		 private void setStaticChartRequiremants()
+		 {
+			 if (_chartControl == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl is null");
+			 _chartControl.BackColor = ColorHelper.ChartControlBackColor();
+			 _chartControl.BackInterior = ColorHelper.ChartControlBackInterior();
+			 if (_chartControl.PrimaryXAxis == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.PrimaryXAxis is null");
+			 _chartControl.PrimaryXAxis.DrawGrid = true;
+			 _chartControl.PrimaryXAxis.HidePartialLabels = false;
+			 if (_chartControl.PrimaryYAxis == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.PrimaryYAxis is null");
+			 _chartControl.PrimaryYAxis.HidePartialLabels = false;
+			 if (_chartControl.ChartArea == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.ChartArea is null");
+			 _chartControl.ChartArea.BackInterior = ColorHelper.ChartControlChartAreaBackInterior();
+			 _chartControl.ChartAreaMargins = ColorHelper.ChartMargins();
+			 _chartControl.ChartInterior = ColorHelper.ChartControlChartInterior();
+			 _chartControl.ElementsSpacing = 1;
+			 _chartControl.ChartArea.AutoScale = true;
+			 _chartControl.EnableXZooming = !CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+			 _chartControl.EnableYZooming = true;
+			 _chartControl.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			 if (_chartControl.Legend == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.Legend is null");
+			 _chartControl.Legend.BackInterior = ColorHelper.ChartControlBackInterior();
+			 _chartControl.Legend.BackColor = ColorHelper.ChartControlBackColor();
+			 _chartControl.Legend.VisibleCheckBox = true;
+			 _chartControl.LegendPosition = ChartDock.Bottom;
+			 _chartControl.LegendAlignment = ChartAlignment.Center;
+			 _chartControl.LegendsPlacement = ChartPlacement.Outside;
+			 _chartControl.Series3D = false;
+			 _chartControl.PrimaryYAxis.ValueType = ChartValueType.Double;
+			 _chartControl.PrimaryYAxis.RangeType = ChartAxisRangeType.Auto;
+			 if (_chartControl.PrimaryYAxis.LineType == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.PrimaryYAxis.LineType is null");
+			 _chartControl.PrimaryYAxis.LineType.ForeColor = Color.Black;
+			 if (_chartControl.PrimaryYAxis.GridLineType == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.PrimaryYAxis.GridLineType is null");
+			 _chartControl.PrimaryYAxis.GridLineType.ForeColor = Color.Black;
+			 if (RightToLeft == RightToLeft.Yes) _chartControl.PrimaryXAxis.Inversed = true;
+			 _chartControl.TextRenderingHint = TextRenderingHint.AntiAlias;
+			 _chartControl.PrimaryXAxis.HidePartialLabels = true;
+			 _chartControl.PrimaryXAxis.LabelIntersectAction = ChartLabelIntersectAction.Rotate;
+			 _chartControl.PrimaryXAxis.DateTimeFormat = "d";
+			 if (_chartControl.PrimaryYAxis.Range == null)
+				 MessageBox.Show(this, "Diagnostic: _chartControl.PrimaryYAxis.Range is null");
+			 _chartControl.PrimaryYAxis.Range.Min = 0;
+
+			 // ErikS: BUG: 26483
+			 // Ugly hack to make syncfusion to work
+			 // Throws ArgumentOutOfRangeException if set to DateTime when using ar-SA
+			 _chartControl.PrimaryXAxis.ValueType = CultureInfo.CurrentCulture.Calendar.AlgorithmType ==
 													CalendarAlgorithmType.SolarCalendar
-														? ChartValueType.DateTime
-														: ChartValueType.Custom;
-			  _chartControl.PrimaryXAxis.TickLabelsDrawingMode = ChartAxisTickLabelDrawingMode.UserMode;
-		  }
+				 ? ChartValueType.DateTime
+				 : ChartValueType.Custom;
+			 _chartControl.PrimaryXAxis.TickLabelsDrawingMode = ChartAxisTickLabelDrawingMode.UserMode;
+		 }
 
-		  private void setChartRequirements()
+		 private void setChartRequirements()
 		  {
 			  int count = _currentHistoricPeriod.TaskOwnerDayCollection.Count;
 			  _chartControl.PrimaryYAxis.RangeType = ChartAxisRangeType.Auto;
