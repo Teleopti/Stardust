@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventScheduleMessageCommand scheduleCommand;
         private OnEventForecastDataMessageCommand forecastCommand;
         private OnEventMeetingMessageCommand meetingCommand;
+		private IPersonAccountPersister personAccountPersister;
 
         [SetUp]
         public void Setup()
@@ -38,8 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			forecastCommand = mocks.StrictMock < OnEventForecastDataMessageCommand>();
 			scheduleCommand = mocks.StrictMock < OnEventScheduleMessageCommand>();
 			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
+			personAccountPersister = mocks.StrictMock<IPersonAccountPersister>();
             target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, unitOfWorkFactory, null,
-                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller());
+													 null, statisticCommand, forecastCommand, scheduleCommand, meetingCommand, null, new Poller(), personAccountPersister);
         }
 
         [Test]
@@ -173,7 +176,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         	                               typeof (IPersonAssignment).Name,
         	                               DomainUpdateType.Delete,
         	                               string.Empty,
-        	                               DateTime.UtcNow) {InterfaceType = typeof (IPersonAssignment)};
+													 DateTime.UtcNow)
+			{ InterfaceType = typeof(IPersonAssignment) };
 
             using (mocks.Record())
             {

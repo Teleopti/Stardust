@@ -20,6 +20,7 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using System.Windows.Forms;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
@@ -48,6 +49,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 	    private readonly IPoller _poller;
+	    private readonly IPersonAccountPersister _personAccountPersister;
+
         public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
 			IMessageListener messageBroker,
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
             OnEventMeetingMessageCommand onEventMeetingMessageCommand,
             LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
-			IPoller poller)
+		    IPoller poller, IPersonAccountPersister personAccountPersister)
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -86,6 +89,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
 			_poller = poller;
+		    _personAccountPersister = personAccountPersister;
         }
 
         public bool EarlyWarningEnabled
@@ -362,6 +366,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	                }
                     uow.PersistAll(this);
                 }
+	            _personAccountPersister.Persist(_schedulingResultLoader.SchedulerState.Schedules.ModifiedPersonAccounts);
             }
             catch (OptimisticLockException optLockEx)
             {
