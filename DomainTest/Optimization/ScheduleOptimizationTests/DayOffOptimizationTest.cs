@@ -70,13 +70,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
-
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate()); 
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate)
+			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
+				.DayOff().Should().Be.Null();
+			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate) //tuesday
 				.DayOff().Should().Not.Be.Null();
 		}
 	}
