@@ -1,17 +1,15 @@
-﻿using System.Net.Configuration;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -31,10 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<EnvironmentWindowsUserProvider>()
 					 .As<IWindowsUserProvider>()
 					 .SingleInstance();
-			builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
-			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>();
-			builder.RegisterType<SystemCheckerValidator>();
 			builder.RegisterType<OutlookPanelContentWorker>();
 			builder.Register(c => new WebUrlHolder(_configuration.Args().ReportServer)).SingleInstance();
 			builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();

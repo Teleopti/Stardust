@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Interfaces.Domain;
 

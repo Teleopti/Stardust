@@ -4,14 +4,28 @@ namespace Teleopti.Messaging.Client.Http
 {
 	public class HttpServer : IHttpServer
 	{
-		public HttpResponseMessage PostAsync(HttpClient client, string uri, HttpContent httpContent)
+		public void Post(HttpClient client, string uri, HttpContent httpContent)
 		{
-			return client.PostAsync(uri, httpContent).Result;
+			client.PostAsync(uri, httpContent);
 		}
 
-		public HttpResponseMessage Get(HttpClient client, string uri)
+		public void PostOrThrow(HttpClient client, string uri, HttpContent httpContent)
 		{
-			return client.GetAsync(uri).Result;
+			client
+				.PostAsync(uri, httpContent)
+				.Result
+				.EnsureSuccessStatusCode();
+		}
+
+		public string GetOrThrow(HttpClient client, string uri)
+		{
+			return client
+				.GetAsync(uri)
+				.Result
+				.EnsureSuccessStatusCode()
+				.Content
+				.ReadAsStringAsync()
+				.Result;
 		}
 	}
 }

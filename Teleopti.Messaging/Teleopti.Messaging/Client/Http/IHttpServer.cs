@@ -4,7 +4,8 @@ namespace Teleopti.Messaging.Client.Http
 {
 	public interface IHttpServer
 	{
-		HttpResponseMessage PostAsync(HttpClient client, string uri, HttpContent httpContent);
-		HttpResponseMessage Get(HttpClient client, string uri);
+		void Post(HttpClient client, string uri, HttpContent httpContent);
+		void PostOrThrow(HttpClient client, string uri, HttpContent httpContent);
+		string GetOrThrow(HttpClient client, string uri);
 	}
 }

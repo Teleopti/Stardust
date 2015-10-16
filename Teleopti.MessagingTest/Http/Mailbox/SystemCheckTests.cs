@@ -1,15 +1,16 @@
 using System;
+using System.Linq;
 using System.Net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
@@ -25,7 +26,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public IMessageListener Target;
 		public FakeHttpServer Server;
 		public FakeTime Time;
-		public ISystemCheck SystemCheck;
+		public SystemCheckerValidator SystemCheck;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -36,19 +37,41 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldTellIfPollingIsNotWorking()
+		public void ShouldNotBeOkWhenSubscribingWithServerError()
+		{
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
+
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+
+			SystemCheck.IsOk().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotBeOkWhenPollingGivesServerError()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Time.Passes("60".Seconds());
 
-			SystemCheck.IsRunningOk().Should().Be.False();
+			SystemCheck.IsOk().Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldTellIfPollingIsWorking()
+		public void ShouldNotBeOkWhenPollingWhenServerIsDown()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+
+			Server.Down();
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsOk().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldBeOk()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
 			Server.Has(new testMessage
@@ -60,47 +83,40 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			});
 			Time.Passes("60".Seconds());
 
-			SystemCheck.IsRunningOk().Should().Be.True();
-		}
-
-
-		[Test]
-		public void ShouldNotTellThatPollingIsNotWorkingBeforeTrying()
-		{
-			SystemCheck.IsRunningOk().Should().Be.True();
+			SystemCheck.IsOk().Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldTellIfCreatingMailboxIsNotWorking()
+		public void ShouldDefaultToOk()
 		{
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
-
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
-
-			SystemCheck.IsRunningOk().Should().Be.False();
+			SystemCheck.IsOk().Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldGiveWarningMessage()
 		{
-			SystemCheck.WarningText.Should().Be("Could not get messages from message broker");
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+
+			SystemCheck.IsOk();
+			
+			SystemCheck.Result.Single().Should().Be("Could not get messages from message broker");
 		}
 
-
 		[Test]
-		public void ShouldTellIfAnyCreationOfMailboxIsNotWorking()
+		public void ShouldNotBeOkIfAnyCreationOfMailboxIsNotWorking()
 		{
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 			Server.Succeeds();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 
-			SystemCheck.IsRunningOk().Should().Be.False();
+			SystemCheck.IsOk().Should().Be.False();
 
 			Time.Passes("30".Seconds());
-			SystemCheck.IsRunningOk().Should().Be.True();
+			SystemCheck.IsOk().Should().Be.True();
 		}
 	}
 }

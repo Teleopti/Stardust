@@ -11,8 +11,6 @@ namespace Teleopti.MessagingTest.Http
 	public class FakeHttpServer : IHttpServer
 	{
 		private readonly IList<Message> _messages = new List<Message>();
-		private bool _shouldFail;
-		private HttpStatusCode _statusCode;
 		private Exception _exception;
 
 		public class RequestInfo
@@ -29,48 +27,47 @@ namespace Teleopti.MessagingTest.Http
 			_messages.Add(message);
 		}
 
-		public HttpResponseMessage PostAsync(HttpClient client, string uri, HttpContent httpContent)
+		public void Post(HttpClient client, string uri, HttpContent httpContent)
 		{
 			Requests.Add(new RequestInfo {Client = client, Uri = uri, HttpContent = httpContent});
-
-			if (_exception != null)
-				throw _exception;
-			if (_shouldFail)
-				return new HttpResponseMessage {StatusCode = _statusCode};
-
-			return new HttpResponseMessage();
 		}
 
-		public HttpResponseMessage Get(HttpClient client, string uri)
+		public void PostOrThrow(HttpClient client, string uri, HttpContent httpContent)
+		{
+			Requests.Add(new RequestInfo { Client = client, Uri = uri, HttpContent = httpContent });
+			if (_exception != null)
+				throw _exception;
+		}
+
+		public string GetOrThrow(HttpClient client, string uri)
 		{
 			Requests.Add(new RequestInfo {Client = client, Uri = uri});
-
 			if (_exception != null)
 				throw _exception;
-			if (_shouldFail)
-				return new HttpResponseMessage { StatusCode = _statusCode };
-
 			var result = JsonConvert.SerializeObject(_messages);
 			_messages.Clear();
-
-			return new HttpResponseMessage {Content = new StringContent(result)};
+			return result;
 		}
 
-		public void Fails(HttpStatusCode statusCode)
+		public void Down()
 		{
-			_shouldFail = true;
-			_statusCode = statusCode;
+			Throws(new AggregateException(new HttpRequestException()));
+		}
+
+		public void GivesError(HttpStatusCode httpCode)
+		{
+			Throws(new HttpRequestException());
 		}
 
 		public void Succeeds()
 		{
-			_shouldFail = false;
-			_statusCode = HttpStatusCode.OK;
+			Throws(null);
 		}
 
 		public void Throws(Exception type)
 		{
 			_exception = type;
 		}
+
 	}
 }

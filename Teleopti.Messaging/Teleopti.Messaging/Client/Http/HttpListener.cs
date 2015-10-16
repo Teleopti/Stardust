@@ -60,10 +60,10 @@ namespace Teleopti.Messaging.Client.Http
 				if (!e.MailboxAdded)
 					return;
 
-				HttpContent content = null;
+				string content = null;
 				ignoreHttpRequestExceptions(() =>
 				{
-					content = _client.Get("MessageBroker/PopMessages/" + e.Subscription.MailboxId).Content;
+					content = _client.GetOrThrow("MessageBroker/PopMessages/" + e.Subscription.MailboxId);
 				});
 				// safe to assume that no content means an error? Im not so sure, but keeping the behavior
 				if (content == null)
@@ -72,8 +72,7 @@ namespace Teleopti.Messaging.Client.Http
 					return;
 				}
 
-				var contentString = content.ReadAsStringAsync().Result;
-				var messages = _jsonDeserializer.DeserializeObject<Message[]>(contentString);
+				var messages = _jsonDeserializer.DeserializeObject<Message[]>(content);
 				messages.ForEach(m => _eventHandlers.CallHandlers(m));
 			});
 		}
@@ -83,7 +82,8 @@ namespace Teleopti.Messaging.Client.Http
 			var result = false;
 			ignoreHttpRequestExceptions(() =>
 			{
-				result = _client.Post("MessageBroker/AddMailbox", subscription).IsSuccessStatusCode;
+				_client.PostOrThrow("MessageBroker/AddMailbox", subscription);
+				result = true;
 			});
 			return result;
 		}
@@ -109,6 +109,9 @@ namespace Teleopti.Messaging.Client.Http
 			try
 			{
 				action();
+			}
+			catch (HttpRequestException)
+			{
 			}
 			catch (AggregateException e)
 			{

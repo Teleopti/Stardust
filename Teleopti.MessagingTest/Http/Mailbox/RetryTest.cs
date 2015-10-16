@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
@@ -12,7 +10,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
@@ -39,10 +36,10 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryToAddMailboxIfItFails()
+		public void ShouldRetryToAddMailboxIfServerFails()
 		{
 			var wasEventHandlerCalled = false;
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 			Server.Succeeds();
@@ -60,9 +57,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryAddingMailboxBasedOnTimer()
+		public void ShouldRetryAddingMailboxBasedOnTimerIfServerFails()
 		{
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 
@@ -70,9 +67,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryAddingMailboxBasedOnTimerForTwoSubscriptions()
+		public void ShouldRetryAddingMailboxBasedOnTimerForTwoSubscriptionsIfServerFails()
 		{
-			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 			Server.Succeeds();
@@ -81,5 +78,27 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
 			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(3);
 		}
+
+		[Test]
+		public void ShouldRetryToAddMailboxIfNoConnection()
+		{
+			var wasEventHandlerCalled = false;
+			Server.Down();
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+			Server.Succeeds();
+
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Time.Passes("120".Seconds());
+
+			wasEventHandlerCalled.Should().Be.True();
+		}
+
 	}
 }

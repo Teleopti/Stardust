@@ -28,17 +28,24 @@ namespace Teleopti.Messaging.Client.Http
 				});
 		}
 
-		public HttpResponseMessage Get(string call)
-		{
-			var u = url(call);
-			return _server.Get(_httpClient, u);
-		}
-
-		public HttpResponseMessage Post(string call, object thing)
+		public void Post(string call, object thing)
 		{
 			var content = _serializer.SerializeObject(thing);
 			var u = url(call);
-			return _server.PostAsync(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+			_server.Post(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+		}
+
+		public void PostOrThrow(string call, object thing)
+		{
+			var content = _serializer.SerializeObject(thing);
+			var u = url(call);
+			_server.PostOrThrow(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+		}
+
+		public string GetOrThrow(string call)
+		{
+			var u = url(call);
+			return _server.GetOrThrow(_httpClient, u);
 		}
 
 		private string url(string call)

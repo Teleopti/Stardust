@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
@@ -26,8 +22,6 @@ namespace Teleopti.MessagingTest.Http.Mailbox
     {
         public IMessageListener Target;
         public FakeHttpServer Server;
-        public FakeTime Time;
-        public ISystemCheck SystemCheck;
 
         public void Setup(ISystem system, IIocConfiguration configuration)
         {

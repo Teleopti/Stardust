@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.SystemCheck
+namespace Teleopti.Ccc.Domain.SystemCheck
 {
 
     public class SystemCheckerValidator

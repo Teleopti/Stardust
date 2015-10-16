@@ -1729,6 +1729,7 @@
     <Compile Include="Specification\All.cs" />
     <Compile Include="Specification\Not.cs" />
     <Compile Include="Specification\PersonRequestSpecification.cs" />
+    <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />

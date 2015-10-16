@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -24,7 +22,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	public class SubscriptionsTest : ISetup
 	{
-		public IMessageListener Target;
+		public IMessageListener Client;
 		public FakeHttpServer Server;
 		public FakeTime Time;
 		public ISystemCheck SystemCheck;
@@ -38,10 +36,10 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldInvokeSubscriptionCallback()
+		public void ShouldInvokeSubscriptionCallbackWhenPollGotAMessage()
 		{
 			var wasEventHandlerCalled = false;
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+			Client.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 
 			Server.Has(new testMessage
 			{
@@ -58,7 +56,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		[Test]
 		public void ShouldOnlyCallServerForSubscriptionOnce()
 		{
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true);
+			Client.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true);
 			Time.Passes("15".Minutes());
 			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
 		}
@@ -73,8 +71,8 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public void ShouldUnsubscribe()
 		{
 			wasCalled_pleaseForgiveMeForSharingState = false;
-			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
-			Target.UnregisterSubscription(EventMessageHandler);
+			Client.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
+			Client.UnregisterSubscription(EventMessageHandler);
 
 			Server.Has(new testMessage
 			{
@@ -94,7 +92,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public void ShouldUnsubscribeWithBase64Encoding()
 		{
 			wasCalled_pleaseForgiveMeForSharingState = false;
-			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), true, true);
+			Client.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), true, true);
 			Server.Has(new testMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
@@ -106,7 +104,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			wasCalled_pleaseForgiveMeForSharingState.Should().Be.True();
 			wasCalled_pleaseForgiveMeForSharingState = false;
 
-			Target.UnregisterSubscription(EventMessageHandler);
+			Client.UnregisterSubscription(EventMessageHandler);
 			Server.Has(new testMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
@@ -120,5 +118,12 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			wasCalled_pleaseForgiveMeForSharingState = false;
 		}
 
+		[Test]
+		public void ShouldThrowOnMostExceptions()
+		{
+			Server.Throws(new AggregateException(new NullReferenceException()));
+
+			Assert.Throws<AggregateException>(() => Client.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true));
+		}
 	}
 }
