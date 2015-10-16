@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 						if (t1.Skill.Name.Trim() == t.Trim() && !addedSkills.Contains(t1.Skill))
 						{
 							addedSkills.Add(t1.Skill);
-							retPersonSkill.Add(new PersonSkill(t1.Skill, t1.SkillPercentage) { Active = true });
+							retPersonSkill.Add(new PersonSkill(t1.Skill, t1.SkillPercentage));
 							break;
 						}
 					}

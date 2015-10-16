@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPersonSkill CreatePersonSkill(ISkill skill, double percent)
         {
         	var percent1 = new Percent(percent);
-			return new PersonSkill(skill, percent1) { Active = true };
+			return new PersonSkill(skill, percent1);
         }
 
     	/// <summary>
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             Percent percent1 = new Percent(1);
 
-			return new PersonSkill(skill, percent1) { Active = true };
+			return new PersonSkill(skill, percent1);
         }
     }
 }

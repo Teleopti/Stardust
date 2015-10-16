@@ -978,7 +978,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			foreach (ISkill skill in skillCollection)
 			{
-				_personSkillCollection.Add(new PersonSkill(skill, new Percent(1)));
+				_personSkillCollection.Add(new PersonSkill(skill, new Percent(1)) { Active = false });
 			}
 
 			_personSkillAdapterCollection.AddRange(_personSkillCollection.ConvertAll(

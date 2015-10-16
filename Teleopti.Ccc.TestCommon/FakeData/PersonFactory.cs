@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			foreach (ISkill skill in skillsInPersonPeriod)
 			{
-				IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
+				IPersonSkill pSkill = new PersonSkill(skill, new Percent(1));
 				if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 				{
 					pPeriod.AddPersonMaxSeatSkill(pSkill);

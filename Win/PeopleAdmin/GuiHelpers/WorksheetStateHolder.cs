@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					IPersonSkill personSkillFromCollection = currentPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
 					if (personSkillFromCollection == null)
 					{
-						personPeriodModel.Parent.AddSkill(new PersonSkill(personSkill.Skill, skillPercentage), currentPeriod);
+						personPeriodModel.Parent.AddSkill(new PersonSkill(personSkill.Skill, skillPercentage) { Active = false }, currentPeriod);
 						personPeriodModel.CanBold = true;
 					}
 					else

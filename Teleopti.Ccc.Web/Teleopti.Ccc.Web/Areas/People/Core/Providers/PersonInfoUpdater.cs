@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			foreach (var skillId in inputSkills)
 			{
 				var skill = _skillRepository.Get(skillId);
-				person.AddSkill(new PersonSkill(skill, new Percent(1)), period);
+				person.AddSkill(new PersonSkill(skill, new Percent(1)) { Active = false }, period);
 			}
 		}
 	}

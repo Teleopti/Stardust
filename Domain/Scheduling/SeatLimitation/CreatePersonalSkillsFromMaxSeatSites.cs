@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 			if(!found)
 			{
-				IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)){Active = true};
+				IPersonSkill personSkill = new PersonSkill(skill, new Percent(1));
 				personPeriod.AddPersonMaxSeatSkill(personSkill);
 			}
 		}

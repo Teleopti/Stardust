@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var skillRepository = new SkillRepository(uow);
 				var skill = skillRepository.LoadAll().Single(c => c.Name == Skill);
-				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)){Active = true});
+				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)));
 			}
 			
 			if (!string.IsNullOrEmpty(BudgetGroup))

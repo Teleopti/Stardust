@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			_skill = skill;
 			_skillPercentage = skillPercentage;
+			_active = true;
 		}
 
         public virtual ISkill Skill
