@@ -1230,7 +1230,7 @@
     <Content Include="WFM\js\outbound\html\outbound-overview.html" />
     <Content Include="WFM\js\outbound\html\outbound.html" />
     <Content Include="WFM\js\outbound\html\phase-picker.tpl.html" />
-    <Content Include="WFM\js\outbound\html\working-hours-picker.tpl.html" />
+    <Content Include="WFM\js\global\workinghourspicker\working-hours-picker.tpl.html" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\people\html\people-list.html" />
     <Content Include="WFM\js\people\html\people.html" />
@@ -1397,7 +1397,7 @@
     <Content Include="WFM\js\outbound\outbound.service.notification.js" />
     <Content Include="WFM\js\outbound\outbound.directive.range-validate.js" />
     <Content Include="WFM\js\outbound\outbound.service.view-utility.js" />
-    <Content Include="WFM\js\outbound\outbound.directive.working-hours-picker.js" />
+    <Content Include="WFM\js\global\workinghourspicker\working-hours-picker.directive.js" />
     <Content Include="WFM\js\outbound\_modules.js" />
     <Content Include="WFM\js\people\people.outsideClick.directive.js" />
     <Content Include="WFM\js\people\html\importPeople.html" />

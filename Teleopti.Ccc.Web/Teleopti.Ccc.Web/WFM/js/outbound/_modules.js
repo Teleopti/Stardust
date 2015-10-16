@@ -8,7 +8,7 @@
 			'angularMoment',
 			'wfm.cardList',
 			'wfm.daterangepicker',
-			'wfm.timerangepicker',
+			'wfm.workinghourspicker',
 			'toggleService',
 			'gantt',
 			'gantt.table',
