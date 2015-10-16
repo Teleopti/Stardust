@@ -20,7 +20,6 @@
 
 			$scope.viewScheduleDiff = false;
 			$scope.dates = $scope.campaign.graphData['dates'].slice(1);
-			$scope.decimalSeparator = ".";
 
 			this.loadGraph = loadGraph;
 			this.init = init;
@@ -71,10 +70,6 @@
 
 			function init() {
 				if (!$scope.graph) $scope.graph = generateChart();
-				var format = $http.get('../api/Global/User/CurrentUser');
-				format.success(function (data) {
-					$scope.decimalSeparator = data.NumberFormat.currencyDecimalSeparator;
-				});
 			}
 
 			
@@ -273,7 +268,7 @@
 
 						name = nameFormat(d[i].name);
 						value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
-						var valueAsString = value.toString().replace(".", $scope.decimalSeparator);
+						var valueAsString = value.toString().replace(".", wfm_cultureInfo_numberFormat.currencyDecimalSeparator);
 						bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 
 						text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";

@@ -1,5 +1,7 @@
 'use strict';
 
+var wfm_cultureInfo_numberFormat;
+
 var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.bootstrap',
 	'ui.tree',
@@ -225,6 +227,7 @@ wfm.config([
 		});
 		startContext.success(function (data) {
 			$rootScope.isAuthenticated = true;
+			wfm_cultureInfo_numberFormat = data.NumberFormat;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
 			angularMoment.changeLocale(data.DateFormat);
