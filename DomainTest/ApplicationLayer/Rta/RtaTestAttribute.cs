@@ -1,11 +1,10 @@
-using System.Data.SqlClient;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -16,24 +15,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class RtaTestAttribute : DomainTestAttribute
 	{
-		protected override FakeConfigReader Config()
-		{
-			var config = base.Config();
-			config.FakeConnectionString(
-				"RtaApplication",
-				new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests)
-				{
-					InitialCatalog = "FakeRtaDatabase",
-					DataSource = "FakeRtaDatasource"
-				}.ToString());
-			return config;
-		}
-
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
 
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			// because DomainTest project has a SetupFixtureForAssembly that creates 
+			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+
 			registerFakeDatabase(system, configuration, null);
 
 			system.AddService(this);

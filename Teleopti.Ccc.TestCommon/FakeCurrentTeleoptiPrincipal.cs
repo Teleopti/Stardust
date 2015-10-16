@@ -6,6 +6,10 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly ITeleoptiPrincipal _principal;
 
+		public FakeCurrentTeleoptiPrincipal()
+		{
+		}
+
 		public FakeCurrentTeleoptiPrincipal(ITeleoptiPrincipal principal)
 		{
 			_principal = principal;
