@@ -1,48 +1,97 @@
-﻿(function () {
-   'use strict';
+(function() {
+	'use strict';
 
-    angular.module('wfm.rta').controller('RtaAgentsCtrl', [
-         '$scope', '$filter', '$state', '$stateParams', 'RtaOrganizationService', 'RtaService',
-          function ($scope, $filter, $state, $stateParams, RtaOrganizationService) {
+	angular.module('wfm.rta').controller('RtaAgentsCtrl', [
+		'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaOrganizationService', 'RtaService',
+		function($scope, $filter, $state, $stateParams, $interval, RtaOrganizationService, RtaService) {
 
-          	var teamId = $stateParams.teamId;
-          	var siteId = $stateParams.siteId;
+			var siteId = $stateParams.siteId;
+			var teamId = $stateParams.teamId;
+			var siteIds = $stateParams.siteIds;
+			var teamIds = $stateParams.teamIds;
 
-          	$scope.agents = RtaOrganizationService.getAgents(teamId);
+			var updateStates = function() {
+				RtaService.getStates.query({
+						teamId: teamId
+					}).$promise
+					.then(function(states) {
+						$scope.states = states;
+					});
+			};
 
-            $scope.siteName = '';
-            $scope.teamName = '';
-            RtaOrganizationService.getSiteName(siteId).then(function(name){
-             $scope.siteName = name;
-           });
-           RtaOrganizationService.getTeamName(teamId, siteId).then(function(name){
-              $scope.teamName = name;
-           });
+			var updateStatesForSites = function() {
+				RtaService.getStatesForSites.query({
+					siteIds: siteIds
+				}).$promise.then(function(states) {
+					$scope.states = states;
+				})
+			};
 
-          	$scope.gridOptions = {
-          		columnDefs: [
-					{ name: 'Name', field: 'Name', enableColumnMenu: false },
-					{ name: 'TeamName', field: 'TeamName', enableColumnMenu: false},
-					{ name: 'State', field: 'State', enableColumnMenu: false },
-					{ name: 'Activity', field: 'Activity', enableColumnMenu: false },
-					{ name: 'Next Activity', field: 'Next Activity', enableColumnMenu: false },
-					{ name: 'Next Activity Start Time', field: 'Next Activity Start Time', enableColumnMenu: false },
-					{ name: 'Alarm', field: 'Alarm', enableColumnMenu: false },
-					{ name: 'Time in Alarm', field: 'Time in Alarm', enableColumnMenu: false }
-          		],
-          		data: $scope.agents
-          	};
+			var updateStatesForTeams = function() {
+				RtaService.getStatesForTeams.query({
+					teamIds: teamIds
+				}).$promise.then(function(states){
+					$scope.states = states;
+				})
+			};
 
-            $scope.refreshData = function() {
-              $scope.gridOptions.data = $filter('filter')( $scope.agents, $scope.filterText, undefined);
-            };
+			if (teamId) {
+				RtaService.getAgents.query({
+						teamId: teamId
+					}).$promise
+					.then(function(agents) {
+						$scope.agents = agents;
+						$scope.siteName = agents[0].SiteName;
+						$scope.teamName = agents[0].TeamName;
+					}).then(updateStates);
 
-          	$scope.goBackToRoot = function () {
-          		$state.go('rta-sites');
-          	};
+				$interval(function() {
+					updateStates();
+				}, 5000);
+			}
 
-          	$scope.goBack = function () {
-				      $state.go('rta-teams', { siteId: siteId });
-          	};
-		  }]);
+			if (siteIds) {
+				RtaService.getAgentsForSites.query({
+						siteIds: siteIds
+					}).$promise
+					.then(function(agents) {
+						$scope.agents = agents;
+					}).then(updateStatesForSites);
+
+				$interval(function() {
+					updateStatesForSites();
+				}, 5000);
+			}
+
+			if (teamIds) {
+				RtaService.getAgentsForTeams.query({
+					teamIds: teamIds
+				}).$promise
+				.then(function(agents){
+					$scope.agents = agents;
+				}).then(updateStatesForTeams);
+
+				$interval(function() {
+					updateStatesForTeams();
+				}, 5000);
+			}
+
+			$scope.format = function(time) {
+				return moment.utc(time).format('YYYY-MM-DD HH:mm:ss');
+			};
+
+			$scope.formatDuration = function(duration) {
+				var durationInSeconds = moment.duration(duration, 'seconds');
+				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
+			};
+
+			$scope.goBackToRoot = function () {
+				$state.go('rta-sites');
+			};
+
+			$scope.goBack = function () {
+				$state.go('rta-teams', siteId);
+			};
+		}
+	]);
 })();

@@ -10,7 +10,6 @@
 			service.teams = undefined;
 
 	   	service.getSiteName = function (siteId) {
-				//var siteId = siteId[0] || siteId;//siteIds[0] || siteIds;
 				var deferred = $q.defer();
 				service.sites.$promise.then(function(data){
 					var siteName = null;
@@ -36,22 +35,6 @@
 				})
 	   		return deferred.promise;
 	   	};
-
-	   	service.getSites = function () {
-	   		return service.sites;
-	   	};
-
-	   	service.getTeams = function (siteId) {
-				return RtaService.getTeams.query({siteId: siteId});
-	   	};
-
-		  service.getAgents = function (teamId) {
-			return RtaService.getAgents.query({ teamId: teamId });
-			};
-
-			service.getStates = function (teamId) {
-				return RtaService.getStates.query({ teamId: teamId }).$promise;
-			};
 
 	   	return service;
 	   }]);

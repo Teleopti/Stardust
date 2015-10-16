@@ -16,12 +16,52 @@
 				}
 			});
 
+			this.getAgentsForSites = $resource('../Agents/ForSites', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						siteIds: []
+					},
+					isArray: true
+				}
+			});
+
 			this.getStates = $resource('../Agents/GetStates?teamId=:teamId', {
 				teamId: '@teamId'
 			}, {
 				query: {
 					method: 'GET',
 					params: {},
+					isArray: true
+				}
+			});
+
+			this.getStatesForSites = $resource('../Agents/GetStatesForSites', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						siteIds: []
+					},
+					isArray: true
+				}
+			});
+
+			this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						teamIds: []
+					},
+					isArray: true
+				}
+			});
+
+			this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						teamIds: []
+					},
 					isArray: true
 				}
 			});

@@ -203,7 +203,7 @@ describe('RtaTeamsCtrl', function() {
 		expect(scope.siteName).toEqual("Paris");
 	});
 
-	it('should update adhernce', function() {
+	it('should update adherence', function() {
 		teamAdherence[0].OutOfAdherence = 1;
 		createController();
 
