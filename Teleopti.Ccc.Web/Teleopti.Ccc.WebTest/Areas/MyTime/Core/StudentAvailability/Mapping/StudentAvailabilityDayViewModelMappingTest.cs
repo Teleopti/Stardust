@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
+			var studentAvailabilityDay = new StudentAvailabilityDay(PersonFactory.CreatePerson("student"), DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
 			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			                                     		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(7), null),
 			                                     		EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(18))
 			                                     	};
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+			var studentAvailabilityDay = new StudentAvailabilityDay(PersonFactory.CreatePerson("student"), DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(studentAvailabilityRestriction);
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapAvailableTimeSpanWhenNoRestriction()
 		{
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
+			var studentAvailabilityDay = new StudentAvailabilityDay(PersonFactory.CreatePerson("student"), DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(null);
 
