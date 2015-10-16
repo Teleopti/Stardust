@@ -443,6 +443,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.toggleAdvancedSearchOption = function ($event) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
 		$event.stopPropagation();
+		parseSearchKeywordInputted();
 	};
 
 	$scope.turnOffAdvancedSearch = function () {
