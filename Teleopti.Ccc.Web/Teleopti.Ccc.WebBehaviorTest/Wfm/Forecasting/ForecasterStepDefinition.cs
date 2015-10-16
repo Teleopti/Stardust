@@ -323,6 +323,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertAnyContains(".wfm-card-list wfm-card card-header", name);
 		}
+
+		[When(@"I input opening hours with")]
+		public void WhenIInputOpeningHoursWith(Table table)
+		{
+			var openingHours = table.CreateInstance<OpeningHours>();
+		}
+	}
+
+	public class OpeningHours
+	{
+
 	}
 
 	public class NewSkill

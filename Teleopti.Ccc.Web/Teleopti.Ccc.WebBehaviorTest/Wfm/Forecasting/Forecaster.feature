@@ -87,6 +87,15 @@ Scenario: Create new skill
 	| ServiceLevelPercent | 50                                                           |
 	| ServiceLevelSeconds | 20                                                           |
 	| Shrinkage           | 40                                                           |
+	And I input opening hours with
+	| Field     | Value      |
+	| Monday    | 9:00-17:00 |
+	| Tuesday   | 9:00-17:00 |
+	| Wednesday | 9:00-17:00 |
+	| Thursday  | 9:00-17:00 |
+	| Friday    | 9:00-17:00 |
+	| Saturday  | 9:00-17:00 |
+	| Sunday    | 9:00-17:00 |
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
 
