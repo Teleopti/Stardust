@@ -13,17 +13,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 	[Binding]
 	public class MessageStepDefinitions
 	{
-
-		[Then(@"messages page load will complete within (.*) seconds")]
-		public void ThenMessagesPageLoadWillCompleteWithinSeconds(int seconds)
-		{
-			Browser.TimeoutScope(TimeSpan.FromSeconds(seconds));
-			Browser.Interactions.AssertExists(".message-send-feedback");
-		}
-
 		[Then(@"I should see receivers as")]
 		public void ThenIShouldSeeReceiversAs(Table table)
 		{
+			Browser.Interactions.AssertExists(".message-send-feedback");
 			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
 			foreach (var person in persons)
 			{
