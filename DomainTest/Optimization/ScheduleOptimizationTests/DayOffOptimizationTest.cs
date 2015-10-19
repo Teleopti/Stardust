@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -67,10 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				);
 			for (var dayNumber = 0; dayNumber < 7; dayNumber++)
 			{
-				var currDate = firstDay.AddDays(dayNumber);
-				var someTimeDuringTheDay = new DateTime(currDate.Year, currDate.Month, currDate.Day, 8, 0, 0, DateTimeKind.Utc);
-				var ass = new PersonAssignment(agent, scenario, currDate);
-				ass.AddActivity(activity, new DateTimePeriod(someTimeDuringTheDay, someTimeDuringTheDay.AddHours(8)));
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
+				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
@@ -122,17 +119,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				);
 			for (var dayNumber = -1; dayNumber < 8; dayNumber++)
 			{
-				var currDate = firstDay.AddDays(dayNumber);
-				var someTimeDuringTheDay = new DateTime(currDate.Year, currDate.Month, currDate.Day, 8, 0, 0, DateTimeKind.Utc);
-				var ass = new PersonAssignment(agent, scenario, currDate);
-				ass.AddActivity(activity, new DateTimePeriod(someTimeDuringTheDay, someTimeDuringTheDay.AddHours(8)));
+				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
+				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
-			var tuesday = new DateTime(firstDay.Year, firstDay.Month, firstDay.Day, 0, 0, 0, DateTimeKind.Utc);
-			var mondayAss = PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate);
+			var mondayAss = PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate); //monday
 			mondayAss.Clear();
-			mondayAss.AddActivity(activity, new DateTimePeriod(tuesday.AddHours(12), tuesday.AddHours(20)));
+			mondayAss.AddActivity(activity, new TimePeriod(12, 0, 20, 0));
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 

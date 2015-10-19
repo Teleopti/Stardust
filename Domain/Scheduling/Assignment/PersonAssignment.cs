@@ -282,6 +282,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddActivity(activity, period, null);
 		}
 
+		//For now "period" is UTC. Don't know if that's the way to go?
+		public virtual void AddActivity(IActivity activity, TimePeriod period)
+		{
+			var dateTimeAsUtc = new DateTime(Date.Year, Date.Month, Date.Day, 0, 0, 0, DateTimeKind.Utc);
+			AddActivity(activity, new DateTimePeriod(dateTimeAsUtc.Add(period.StartTime), dateTimeAsUtc.Add(period.EndTime)));
+		}
+
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			addActivityInternal(activity, period);
