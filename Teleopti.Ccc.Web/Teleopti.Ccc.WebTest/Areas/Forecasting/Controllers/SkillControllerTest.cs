@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldOpen24Hours()
+		public void ShouldSetOpenHours()
 		{
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
@@ -83,7 +83,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				Queues = new[] {Guid.NewGuid()},
 				ServiceLevelPercent = 10,
 				ServiceLevelSeconds = 20,
-				Shrinkage = 5
+				Shrinkage = 5,
+				OpenHours = new[] { new OpenHoursInput
+				{
+					DayOfWeek=DayOfWeek.Sunday,
+					StartTime=new TimeSpan(8,0,0),
+					EndTime=new TimeSpan(17,0,0),
+				}}
 			};
 
 			var queueSource = new QueueSource("testQ", "", 1);
@@ -95,15 +101,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			target.Create(input);
 
-			var startTimeSpan = new TimeSpan(0, 0, 0);
-			var endTimeSpan = startTimeSpan.Add(TimeSpan.FromDays(1));
 			workloadRepository.AssertWasCalled(
 				x =>
 					x.Add(
 						Arg<IWorkload>.Matches(
 							w =>
 								w.TemplateWeekCollection[(int) DayOfWeek.Sunday].OpenHourList.First() ==
-								new TimePeriod(startTimeSpan, endTimeSpan))));
+								new TimePeriod(input.OpenHours[0].StartTime, input.OpenHours[0].EndTime))));
 		}
 
 		[Test]

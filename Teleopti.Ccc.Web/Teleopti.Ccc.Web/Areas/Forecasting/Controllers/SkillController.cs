@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				Name = input.Name
 			};
 
-			Open24Hours(newWorkload);
+			SetOpenHours(newWorkload, input.OpenHours);
 			SetSkillTemplates(newSkill, input.ServiceLevelPercent, input.ServiceLevelSeconds, input.Shrinkage);
 
 			var queues = _queueSourceRepository.LoadAll();
@@ -140,16 +140,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 		}
 
-		private void Open24Hours(IWorkload newWorkload)
+		private void SetOpenHours(IWorkload newWorkload, IEnumerable<OpenHoursInput> openHours)
 		{
-			var startTimeSpan = newWorkload.Skill.MidnightBreakOffset;
-			var endTimeSpan = startTimeSpan.Add(TimeSpan.FromDays(1));
-			var open24Hours = new TimePeriod(startTimeSpan, endTimeSpan);
-			foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
+			foreach (var openHoursInput in openHours)
 			{
+				var period = new TimePeriod(openHoursInput.StartTime, openHoursInput.EndTime);
 				var workloadDayTemplate = new WorkloadDayTemplate();
-				workloadDayTemplate.Create(dayOfWeek.ToString(), DateTime.UtcNow, newWorkload, new List<TimePeriod> {open24Hours});
-				newWorkload.SetTemplate(dayOfWeek, workloadDayTemplate);
+				workloadDayTemplate.Create(openHoursInput.DayOfWeek.ToString(), DateTime.UtcNow, newWorkload, new List<TimePeriod> { period });
+				newWorkload.SetTemplate(openHoursInput.DayOfWeek, workloadDayTemplate);
 			}
 		}
 	}
@@ -163,5 +161,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public double ServiceLevelPercent { get; set; }
 		public double ServiceLevelSeconds { get; set; }
 		public double Shrinkage { get; set; }
+		public OpenHoursInput[] OpenHours { get; set; }
+	}
+
+	public class OpenHoursInput
+	{
+		public DayOfWeek DayOfWeek { get; set; }
+		public TimeSpan StartTime { get; set; }
+		public TimeSpan EndTime { get; set; }
 	}
 }
