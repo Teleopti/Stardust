@@ -80,7 +80,7 @@
 												<table class="edit-area">
 													<tr>
 														<td class="col-md-3 edit-time-column">
-															<select class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
+															<select class="absence-type input-sm form-control" data-bind="disable: $root.Loading, options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
 														</td>
 														<td class="other-time-zone">
 															<div data-bind="visible:IsOtherTimezone">
@@ -148,7 +148,7 @@
 												<table class="edit-area">
 													<tr>
 														<td class="col-md-3 edit-time-column">
-															<select class="activity-type input-sm form-control" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
+															<select class="activity-type input-sm form-control" data-bind="disable: $root.Loading, options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
 														</td>
 														<td class="other-time-zone">
 															<div data-bind="visible:IsOtherTimezone">
@@ -266,7 +266,7 @@
 												<table class="edit-area">
 													<tr>
 														<td class="col-md-5 edit-time-column">
-															<select id="absence-type" class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
+															<select id="absence-type" class="absence-type input-sm form-control" data-bind="disable: $root.Loading, options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
 														</td>
 													</tr>
 													<tr>
@@ -304,9 +304,9 @@
 															<!-- /ko -->
 															<div>
 																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
-                                                                <button class="btn btn-default cancel" data-bind="enable: !$root.Loading(), text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+                                                                <button class="btn btn-default cancel" data-bind="disable: $root.Loading, text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
 																<!-- /ko -->
-																<button class="btn btn-primary apply" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+																<button class="btn btn-primary apply" data-bind="disable: InvalidEndDate() || $root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
 															</div>
 														</td>
 														<td></td>
