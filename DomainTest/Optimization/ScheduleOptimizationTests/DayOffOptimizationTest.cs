@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.DayOff().Should().Not.Be.Null();
 		}
 
-		[Test, Explicit("Wrongly green")]
+		[Test]
 		public void ShouldFixWeeklyRest()
 		{
 			var weeklyRest = TimeSpan.FromHours(38);
