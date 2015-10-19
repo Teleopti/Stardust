@@ -157,8 +157,8 @@ wfm.config([
 			controller: 'RtaAgentsCtrl',
 			params: {siteIds: {array:true}}
 		}).state('personSchedule', {
-			url: '/myTeam',
-			templateUrl: 'js/myTeam/schedule.html',
+			url: '/teamSchedule',
+			templateUrl: 'js/teamSchedule/schedule.html',
 			controller: 'PersonScheduleCtrl as vm'
 		});
 
