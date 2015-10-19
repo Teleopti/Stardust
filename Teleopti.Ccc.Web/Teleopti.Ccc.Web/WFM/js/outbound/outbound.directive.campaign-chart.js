@@ -33,7 +33,7 @@
 			$scope.campaign.selectedDatesClosed = [];
 
 			$scope.extraInfos = [
-				"M: " + $scope.dictionary['ManuallyPlanned'],
+				"M: " + $scope.dictionary['ManualPlan'],
 				"C: " + $scope.dictionary['ClosedDay'],
 				"B: " + $scope.dictionary['AddBacklog']
 			];

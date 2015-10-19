@@ -23,6 +23,7 @@
            'Today',
            'Start',
 		   'ManuallyPlanned',
+		   'ManualPlan',
 		   'ClosedDay',
 		   'Overstaff',
 		   'AddBacklog'
