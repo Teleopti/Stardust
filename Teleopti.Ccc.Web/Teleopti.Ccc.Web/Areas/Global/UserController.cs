@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		public object CurrentUser()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();
-			var numberFormat = CultureInfo.CurrentCulture.NumberFormat;
 			return new
 			{
 				UserName = principal.Identity.Name,
