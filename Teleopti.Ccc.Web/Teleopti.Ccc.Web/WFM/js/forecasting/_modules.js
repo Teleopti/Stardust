@@ -1,6 +1,6 @@
 ﻿(function () {
 	'use strict';
-	var forecaster = angular.module('wfm.forecasting', ['gridshore.c3js.chart', 'ngResource', 'toggleService', 'ui.router']);
+	var forecaster = angular.module('wfm.forecasting', ['gridshore.c3js.chart', 'ngResource', 'toggleService', 'ui.router', 'wfm.workinghourspicker']);
 
 
 	forecaster.run([

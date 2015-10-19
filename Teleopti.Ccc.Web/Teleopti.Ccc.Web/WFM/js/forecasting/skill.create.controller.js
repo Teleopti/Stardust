@@ -6,7 +6,8 @@ angular.module('wfm.forecasting')
 			$scope.model = {
 				serviceLevelPercent: 80,
 				serviceLevelSeconds: 20,
-				shrinkage: 0
+				shrinkage: 0,
+				workingHours : []
 			};
 
 			$scope.activities = [];
@@ -74,7 +75,8 @@ angular.module('wfm.forecasting')
 					Queues: queues,
 					ServiceLevelPercent: $scope.model.serviceLevelPercent,
 					ServiceLevelSeconds: $scope.model.serviceLevelSeconds,
-					Shrinkage: $scope.model.shrinkage
+					Shrinkage: $scope.model.shrinkage,
+					WorkingHours: $scope.model.workingHours
 				}).$promise.then(
 					function(result) {
 						$state.go('forecasting.start', { workloadId: result.WorkloadId });
