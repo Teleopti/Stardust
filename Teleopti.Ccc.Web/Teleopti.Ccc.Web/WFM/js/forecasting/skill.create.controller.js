@@ -7,7 +7,41 @@ angular.module('wfm.forecasting')
 				serviceLevelPercent: 80,
 				serviceLevelSeconds: 20,
 				shrinkage: 0,
-				workingHours : []
+				workingHours: [
+				{
+					StartTime: new Date(2000, 1, 1, 0, 0, 0, 0),
+					EndTime: new Date(2000, 1, 2, 0, 0, 0, 0),
+					 WeekDaySelections: [
+						 {
+						 	Checked: true,
+						 	WeekDay:1
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 2
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 3
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 4
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 5
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 6
+						 },
+						 {
+						 	Checked: true,
+						 	WeekDay: 0
+						 }
+					 ]
+				}]
 			};
 
 			$scope.activities = [];
