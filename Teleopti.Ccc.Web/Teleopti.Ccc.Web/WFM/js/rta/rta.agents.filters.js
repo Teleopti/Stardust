@@ -1,20 +1,26 @@
-﻿(function () {
-  'use strict';
-  var rtaAgentsFilters = angular.module('wfm.rta');
+﻿
+(function() {
+	'use strict';
+	var rtaAgentsFilters = angular.module('wfm.rta');
 
-  rtaAgentsFilters.filter('agentFilter', [
-    function () {
-    return function (agents, filterText){
-      console.log("HELLO");
-    var filteredAgents = [];
-    var filterTextMatch = new RegExp(filterText, 'i');
-    for (var i = 0; i < agents.length; i++){
-      var agent = agents[i];
-      if (filterTextMatch.test(agent.substring(0,1))) {
-        filteredAgents.push(agent);
-      }
-    }
-    return filteredAgents;
-  };
-  }]);
+	rtaAgentsFilters.filter('agentFilter', [
+		function() {
+			return function(data, input) {
+				var matchedItems = [];
+				var keywords = input.split(' ');
+				for (var i = 0; i < data.length; i++) {
+					var item = data[i];
+					for (var property in item) {
+						var matched = true;
+						keywords.forEach(function(keyword) {
+							matched = matched && (item[property].toString().search(new RegExp(keyword, "i")) !== -1 ? true : false);
+						});
+						if (matched === true && matchedItems.indexOf(item) === -1)
+							matchedItems.push(item);
+					}
+				}
+				return matchedItems;
+			};
+		}
+	]);
 })();
