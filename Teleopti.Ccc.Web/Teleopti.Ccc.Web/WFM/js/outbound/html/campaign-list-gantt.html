@@ -1,7 +1,7 @@
-﻿<div ng-if="isGanttEnabled">
-	<div class="loading-gantt-section" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular>
+﻿<div ng-if="isGanttEnabled&&ganttData.length!=0">
+	<div class="loading-gantt-section" ng-show="!isLoadFinished">
+		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
-	
 	<div class="spacer material-depth-1 outbound-gantt-chart relative"
 		 gantt
 		 data="ganttData"
