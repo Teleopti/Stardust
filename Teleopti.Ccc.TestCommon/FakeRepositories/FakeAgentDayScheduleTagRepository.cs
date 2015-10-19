@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IAgentDayScheduleTag> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			//change when needed
+			return new List<IAgentDayScheduleTag>();
 		}
 	}
 }

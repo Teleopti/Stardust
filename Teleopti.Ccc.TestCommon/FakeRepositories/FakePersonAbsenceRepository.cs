@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			//impl correct when needed
+			return _personAbsences;
 		}
 
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)

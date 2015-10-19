@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			//impl correct when needed
+			return new List<IMeeting>();
 		}
 
 		public ICollection<IMeeting> Find(DateTimePeriod period, IScenario scenario)
