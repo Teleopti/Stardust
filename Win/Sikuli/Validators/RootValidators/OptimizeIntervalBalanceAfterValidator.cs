@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		private const double _limit = 0.8d;
 		private const int _maxRuleBreaks = 3;
-		private TimeSpan _durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(01));
+		private TimeSpan _durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(07));
 		private DurationValidator _durationValidator;
 
 		public OptimizeIntervalBalanceAfterValidator()
