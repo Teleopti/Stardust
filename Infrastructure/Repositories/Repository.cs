@@ -69,17 +69,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Counts all entities of this entity type.
-        /// </summary>
-        /// <returns></returns>
-        public virtual long CountAllEntities()
-        {
-            return Session.CreateCriteria(typeof(T))
-                .SetProjection(Projections.RowCount())
-                .UniqueResult<int>();
-        }
-
-        /// <summary>
         /// Adds the specified entity to repository.
         /// Will be persisted when PersistAll is called (or sooner).
         /// </summary>

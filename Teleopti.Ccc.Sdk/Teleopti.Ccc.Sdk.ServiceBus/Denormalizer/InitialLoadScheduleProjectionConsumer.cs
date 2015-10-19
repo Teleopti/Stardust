@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var personScheduleDayModelInitialized = _personScheduleDayReadModelRepository.IsInitialized();
 				
 				if (projectionModelInitialized && scheduleDayModelInitialized && personScheduleDayModelInitialized) return;
-				if (!hasAssignments()) return;
 
 				loadPeopleAndScenario(message.StartDays, message.EndDays);
 
@@ -105,12 +104,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						EndDateTime = _utcPeriod.EndDateTime,
 						SkipDelete = true
 					}).ToArray();
-		}
-
-		private bool hasAssignments()
-		{
-			var entitiesCount = _personAssignmentRepository.CountAllEntities();
-			return (entitiesCount > 0);
 		}
 	}
 }

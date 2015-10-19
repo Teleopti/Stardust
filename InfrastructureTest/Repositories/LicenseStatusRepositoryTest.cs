@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ILicenseStatus oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
             licenseRepository.Add(oneLicenseTooMany);
             Session.Flush();
-            Assert.AreEqual(1, licenseRepository.CountAllEntities());
+            Assert.AreEqual(1, licenseRepository.LoadAll().Count);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
             licenseRepository.AddRange(new Collection<ILicenseStatus> {oneLicenseTooMany} );
             Session.Flush();
-            Assert.AreEqual(1, licenseRepository.CountAllEntities());
+            Assert.AreEqual(1, licenseRepository.LoadAll().Count);
         }
 
         [Test]

@@ -153,17 +153,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, coll.Count);
         }
 
-
-        /// <summary>
-        /// Can count database entities of one type.
-        /// </summary>
-        [Test]
-        public void CanCountDatabaseEntities()
-        {
-            PersistAndRemoveFromUnitOfWork(simpleEntity);
-            Assert.AreEqual(1, rep.CountAllEntities());
-        }
-
         /// <summary>
         /// Verifies that Add & remove works.
         /// </summary>

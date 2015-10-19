@@ -43,12 +43,6 @@ namespace Teleopti.Interfaces.Domain
         T Load(Guid id);
 
         /// <summary>
-        /// Counts all entities of this entity type.
-        /// </summary>
-        /// <returns></returns>
-        long CountAllEntities();
-
-        /// <summary>
         /// Adds the specified entity collection to repository.
         /// Will be persisted when PersistAll is called (or sooner).
         /// </summary>
