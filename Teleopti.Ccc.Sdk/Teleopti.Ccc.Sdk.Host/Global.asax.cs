@@ -127,7 +127,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<WebWindowsUserProvider>()
 				 .As<IWindowsUserProvider>()
 				 .InstancePerDependency();
-			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
 			registerSdkFactories(builder, configuration);
 

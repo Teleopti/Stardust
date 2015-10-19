@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetScheduleRangePersister()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangePersister>()
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetScheduleDictionaryPersister()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleDictionaryPersister>()
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetConflictChecker()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, null,null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -60,7 +57,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetNonConflictChecker()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -71,8 +67,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetExplicitSetOwnMessage()
 		{
-			var reassociater = new reassociater();
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, reassociater,null));
+			containerBuilder.RegisterType<reassociater>().As<IReassociateDataForSchedules>();
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IReassociateDataForSchedules>()
@@ -83,7 +78,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetExplicitSeMessageBrokerIdentifier()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeInitiatorIdentifier(), null,null));
+			containerBuilder.RegisterType<FakeInitiatorIdentifier>().As<IInitiatorIdentifier>();
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IInitiatorIdentifier>()

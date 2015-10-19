@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
-			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
 
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();

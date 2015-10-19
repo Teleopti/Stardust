@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 		
 			using (var container = builder.Build())
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 
 			using (var container = builder.Build())

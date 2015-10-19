@@ -462,7 +462,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static void updateContainer(IComponentRegistry componentRegistry, IInitiatorIdentifier initiatorIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, IClearReferredShiftTradeRequests clearReferredShiftTradeRequests, IToggleManager toggleManager)
 		{
 			var updater = new ContainerBuilder();
-			updater.RegisterModule(SchedulePersistModule.ForScheduler(initiatorIdentifier, reassociateDataForSchedules, toggleManager));
+			updater.Register(c => reassociateDataForSchedules).As<IReassociateDataForSchedules>();
+			updater.Register(c => initiatorIdentifier).As<IInitiatorIdentifier>();
+			updater.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();

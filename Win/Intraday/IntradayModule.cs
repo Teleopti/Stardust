@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Win.Intraday
 			intradayGlobalWiring(builder);
 			builder.RegisterType<noMessageQueueRemoval>().As<IMessageQueueRemoval>().InstancePerLifetimeScope();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().InstancePerLifetimeScope();
-			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			builder.RegisterType<Poller>().As<IPoller>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();
