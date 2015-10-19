@@ -13,6 +13,10 @@
 					for (var property in item) {
 						var matched = true;
 						keywords.forEach(function(keyword) {
+							if (item[property] === null) {
+								matched = false;
+								return;
+							}
 							matched = matched && (item[property].toString().search(new RegExp(keyword, "i")) !== -1 ? true : false);
 						});
 						if (matched === true && matchedItems.indexOf(item) === -1)

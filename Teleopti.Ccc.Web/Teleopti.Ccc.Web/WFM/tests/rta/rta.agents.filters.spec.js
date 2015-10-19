@@ -4,6 +4,20 @@ describe('RtaAgentsFilters', function() {
 
 	beforeEach(module('wfm'));
 
+	it('should filter with the whole input string without space', inject(function($filter) {
+		var data = [{
+			name: 'Julian'
+		}, {
+			name: 'Kevin'
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, 'Julian');
+
+		expect(filteredData.length).toEqual(1);
+		expect(filteredData[0].name).toEqual('Julian');
+	}));
+
 	it('should filter with the whole input string', inject(function($filter) {
 		var data = [{
 			name: 'Julian Feldman'
@@ -100,4 +114,21 @@ describe('RtaAgentsFilters', function() {
 
 		expect(filteredData[0].id).toEqual(123);
 	}));
+
+	it('should not filter on null values', inject(function($filter) {
+		var data = [{
+			name: "Julian",
+			state: null
+		},{
+			name: null,
+			state: "Ready"
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, 'Julian');
+
+		expect(filteredData.length).toEqual(1);
+		expect(filteredData[0].name).toEqual('Julian');
+	}));
+
 });
