@@ -18,6 +18,7 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
+	'currentUserInfoService',
 	'toggleService',
 	'outboundServiceModule',
 	'RtaService',
@@ -168,8 +169,8 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout',
-	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout, currentUserInfo) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -230,8 +231,10 @@ wfm.config([
 			wfm_cultureInfo_numberFormat = data.NumberFormat;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
-			angularMoment.changeLocale(data.DateFormat);
+			angularMoment.changeLocale(data.DateFormatLocale);
 			increaseTimeout();
+
+			currentUserInfo.SetCurrentUserInfo(data);
 
 			// i18nService is for UI Grid localization.
 			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).

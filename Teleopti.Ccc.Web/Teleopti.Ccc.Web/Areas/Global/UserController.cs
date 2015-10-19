@@ -1,26 +1,32 @@
 ﻿using System.Globalization;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class UserController : ApiController
 	{
-		private readonly ICurrentIdentity _currentIdentity;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public UserController(ICurrentIdentity currentIdentity)
+		public UserController(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
-			_currentIdentity = currentIdentity;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		[Route("api/Global/User/CurrentUser"), HttpGet, Authorize]
 		public object CurrentUser()
 		{
+			var principal = _currentTeleoptiPrincipal.Current();
+			var numberFormat = CultureInfo.CurrentCulture.NumberFormat;
 			return new
 			{
-				UserName = _currentIdentity.Current().Name, 
-				Language = CultureInfo.CurrentUICulture.IetfLanguageTag, 
-				DateFormat = CultureInfo.CurrentCulture.Name,
+				UserName = principal.Identity.Name,
+				DefaultTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id),
+				Language = CultureInfo.CurrentUICulture.IetfLanguageTag,
+				DateFormatLocale = CultureInfo.CurrentCulture.Name,
 				NumberFormat = CultureInfo.CurrentCulture.NumberFormat
 			};
 		}
