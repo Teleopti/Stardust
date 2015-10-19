@@ -6,7 +6,6 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
@@ -39,14 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
 		}
 		
-		[Given(@"I am viewing forecast page")]
-		[When(@"I am viewing forecast page")]
-		public void WhenIAmViewingForecastPage()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoQuickForecaster();
-		}
-
 		[When(@"I select skill '(.*)'")]
 		public void WhenISelectSkill(string skill)
 		{

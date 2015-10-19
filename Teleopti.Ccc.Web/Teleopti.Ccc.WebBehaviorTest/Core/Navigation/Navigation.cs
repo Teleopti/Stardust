@@ -418,11 +418,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")));
 		}
 
-		public static void GotoQuickForecaster()
-		{
-			GoToPage("wfm");
-		}
-
 		public static void GotoMessageTool(IEnumerable<Guid> ids)
 		{
 			GoToPage(string.Format("Messages#{0}",
@@ -456,7 +451,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToForecasting()
 		{
-			GoToPage("wfm/#/forecasting/");
+			GoToPage("wfm/#/forecasting");
 		}
 
 		public static void GotoRealTimeAdherenceSites()

@@ -601,6 +601,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I view forecasting")]
+		[Given(@"I am viewing forecast page")]
+		[When(@"I am viewing forecast page")]
 		public void GivenIViewForecasting()
 		{
 			TestControllerMethods.Logon();
