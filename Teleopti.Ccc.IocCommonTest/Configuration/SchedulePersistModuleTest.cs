@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetConflictChecker()
 		{
+			containerBuilder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
