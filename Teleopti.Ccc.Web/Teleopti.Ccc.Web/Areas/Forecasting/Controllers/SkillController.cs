@@ -142,12 +142,20 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 		private void SetOpenHours(IWorkload newWorkload, IEnumerable<OpenHoursInput> openHours)
 		{
+			if (openHours == null)
+				return;
 			foreach (var openHoursInput in openHours)
 			{
-				var period = new TimePeriod(openHoursInput.StartTime, openHoursInput.EndTime);
-				var workloadDayTemplate = new WorkloadDayTemplate();
-				workloadDayTemplate.Create(openHoursInput.DayOfWeek.ToString(), DateTime.UtcNow, newWorkload, new List<TimePeriod> { period });
-				newWorkload.SetTemplate(openHoursInput.DayOfWeek, workloadDayTemplate);
+				foreach (var dayOfWeek in openHoursInput.WeekDaySelections)
+				{
+					if (dayOfWeek.Checked)
+					{
+						var period = new TimePeriod(openHoursInput.StartTime, openHoursInput.EndTime);
+						var workloadDayTemplate = new WorkloadDayTemplate();
+						workloadDayTemplate.Create(dayOfWeek.WeekDay.ToString(), DateTime.UtcNow, newWorkload, new List<TimePeriod> { period });
+						newWorkload.SetTemplate(dayOfWeek.WeekDay, workloadDayTemplate);
+					}
+				}
 			}
 		}
 	}
@@ -166,8 +174,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 	public class OpenHoursInput
 	{
-		public DayOfWeek DayOfWeek { get; set; }
 		public TimeSpan StartTime { get; set; }
 		public TimeSpan EndTime { get; set; }
+		public WeekDaySelection[] WeekDaySelections { get; set; }
+	}
+
+
+	public class WeekDaySelection
+	{
+		public DayOfWeek WeekDay { get; set; }
+		public bool Checked { get; set; }
 	}
 }

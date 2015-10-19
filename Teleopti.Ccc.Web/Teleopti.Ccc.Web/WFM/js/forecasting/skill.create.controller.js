@@ -86,6 +86,23 @@ angular.module('wfm.forecasting')
 				$scope.gridOptions.data = result;
 			});
 
+			function formatTimespanObj(timespan) {
+				var startTimeMoment = moment(timespan.StartTime),
+					endTimeMoment = moment(timespan.EndTime);
+
+				if (startTimeMoment.isSame(endTimeMoment, 'day')) {
+					return {
+						StartTime: startTimeMoment.format('HH:mm'),
+						EndTime: endTimeMoment.format('HH:mm')
+					};
+				} else {
+					return {
+						StartTime: startTimeMoment.format('HH:mm'),
+						EndTime: '1.' + endTimeMoment.format('HH:mm')
+					};
+				}
+			}
+
 			$scope.createSkill = function (formValid) {
 				if (!formValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
 					if ($scope.hideQueueInvalidMessage)
@@ -101,6 +118,15 @@ angular.module('wfm.forecasting')
 				angular.forEach(selectedRows, function(row) {
 					queues.push(row.Id);
 				});
+				var workingHours = [];
+				angular.forEach($scope.model.workingHours, function(workingHour) {
+					var period = formatTimespanObj(workingHour);
+					workingHours.push({
+						StartTime: period.StartTime,
+						EndTime: period.EndTime,
+						WeekDaySelections: workingHour.WeekDaySelections
+					});
+				});
 				skillService.skill.create(
 				{
 					Name: $scope.model.name,
@@ -110,7 +136,7 @@ angular.module('wfm.forecasting')
 					ServiceLevelPercent: $scope.model.serviceLevelPercent,
 					ServiceLevelSeconds: $scope.model.serviceLevelSeconds,
 					Shrinkage: $scope.model.shrinkage,
-					WorkingHours: $scope.model.workingHours
+					OpenHours: workingHours
 				}).$promise.then(
 					function(result) {
 						$state.go('forecasting.start', { workloadId: result.WorkloadId });

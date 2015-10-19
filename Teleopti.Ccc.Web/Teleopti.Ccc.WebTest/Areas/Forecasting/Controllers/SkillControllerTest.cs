@@ -84,12 +84,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ServiceLevelPercent = 10,
 				ServiceLevelSeconds = 20,
 				Shrinkage = 5,
-				OpenHours = new[] { new OpenHoursInput
+				OpenHours = new[]
 				{
-					DayOfWeek=DayOfWeek.Sunday,
-					StartTime=new TimeSpan(8,0,0),
-					EndTime=new TimeSpan(17,0,0),
-				}}
+					new OpenHoursInput
+					{
+						WeekDaySelections = new[]
+						{
+							new WeekDaySelection
+							{
+								WeekDay = DayOfWeek.Sunday,
+								Checked = true
+							}
+						},
+						StartTime = new TimeSpan(8, 0, 0),
+						EndTime = new TimeSpan(17, 0, 0),
+					}
+				}
 			};
 
 			var queueSource = new QueueSource("testQ", "", 1);
@@ -262,4 +272,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.AreEqual(activityViewModel.Name, first.Name);
 		}
 	}
+
 }
