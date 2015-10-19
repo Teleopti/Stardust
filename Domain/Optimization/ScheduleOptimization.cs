@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -22,11 +23,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
+		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 	IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 	IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository)
+	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
+	WeeklyRestSolverExecuter weeklyRestSolverExecuter)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
+			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 		}
 
 		public OptimizationResultModel Execute(Guid planningPeriodId)
@@ -68,6 +72,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }
 			};
 			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
+
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople);
 
 			_persister.Persist(_schedulerStateHolder().Schedules);
 

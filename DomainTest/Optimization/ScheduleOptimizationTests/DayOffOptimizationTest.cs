@@ -130,15 +130,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PersonAssignmentRepository.Add(ass);
 			}
 			var tuesday = new DateTime(firstDay.Year, firstDay.Month, firstDay.Day, 0, 0, 0, DateTimeKind.Utc);
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate) //monday
-				.AddActivity(activity, new DateTimePeriod(tuesday.AddHours(12), tuesday.AddHours(20)));
+			var mondayAss = PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate);
+			mondayAss.Clear();
+			mondayAss.AddActivity(activity, new DateTimePeriod(tuesday.AddHours(12), tuesday.AddHours(20)));
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			var agentRange = 
-				ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
+			var agentRange = ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, new PersonWeek(agent, weekPeriod), weeklyRest)
 				.Should().Be.True();

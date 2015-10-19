@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
 			builder.RegisterType<PersonWeekViolatingWeeklyRestSpecification>().As<IPersonWeekViolatingWeeklyRestSpecification>();
 			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
+			builder.RegisterType<WeeklyRestSolverExecuter>().SingleInstance();
 		}
 	}
 }

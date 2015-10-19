@@ -630,6 +630,7 @@
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Optimization\OptimizationResultModel.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverExecuter.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
     <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />
