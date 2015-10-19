@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			var agentRange = ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 
-			CheckWeeklyRestRule.IsSatisfyBy(agentRange, new PersonWeek(agent, weekPeriod), weeklyRest)
+			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest)
 				.Should().Be.True();
 		}
 	}

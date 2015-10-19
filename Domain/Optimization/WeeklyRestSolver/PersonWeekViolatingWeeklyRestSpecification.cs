@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
 	public interface IPersonWeekViolatingWeeklyRestSpecification
 	{
-		bool IsSatisfyBy(IScheduleRange currentSchedules, PersonWeek personWeek, TimeSpan weeklyRest);
+		bool IsSatisfyBy(IScheduleRange currentSchedules, DateOnlyPeriod week, TimeSpan weeklyRest);
 	}
 
 	public class PersonWeekViolatingWeeklyRestSpecification : IPersonWeekViolatingWeeklyRestSpecification
@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_ensureWeeklyRestRule = ensureWeeklyRestRule;
 		}
 
-		public bool IsSatisfyBy(IScheduleRange currentSchedules, PersonWeek personWeek, TimeSpan weeklyRest)
+		public bool IsSatisfyBy(IScheduleRange currentSchedules, DateOnlyPeriod week, TimeSpan weeklyRest)
 		{
-			var scheduleDayList = currentSchedules.ScheduledDayCollection(personWeek.Week);
+			var personWeek = new PersonWeek(currentSchedules.Person, week);
+			var scheduleDayList = currentSchedules.ScheduledDayCollection(week);
 			var daysOffInProvidedWeek = _extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList);
 			if (_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules))
 				if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, currentSchedules, weeklyRest))

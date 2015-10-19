@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_verifyWeeklyRestAroundDayOffSpecification = _mock.StrictMock<IVerifyWeeklyRestAroundDayOffSpecification>();
 			_target = new PersonWeekViolatingWeeklyRestSpecification(_extractDayOffFromGivenWeek ,_verifyWeeklyRestAroundDayOffSpecification,_ensureWeeklyRestRule  );
 			_currentSchedules = _mock.StrictMock<IScheduleRange>();
+			
 			_personWeek = new PersonWeek(PersonFactory.CreatePerson( "test1"),new DateOnlyPeriod(2014,06,15,2014,06,18));
 			_scheduleDay1 = _mock.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mock.StrictMock<IScheduleDay>();
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			IEnumerable<IScheduleDay> listOfScheduleDays = new List<IScheduleDay> {_scheduleDay1, _scheduleDay2};
 			using (_mock.Record())
 			{
+				Expect.Call(_currentSchedules.Person).Return(_personWeek.Person);
 				Expect.Call(_currentSchedules.ScheduledDayCollection(_personWeek.Week)).Return(listOfScheduleDays);
 				Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(listOfScheduleDays)).Return(new List<DateOnly>());
 				Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(new List<DateOnly>(), _currentSchedules))
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsTrue(_target.IsSatisfyBy(_currentSchedules, _personWeek, _weeklyRest));
+				Assert.IsTrue(_target.IsSatisfyBy(_currentSchedules, _personWeek.Week, _weeklyRest));
 			}
 			
 		}
@@ -64,6 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			IEnumerable<IScheduleDay> listOfScheduleDays = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
 			using (_mock.Record())
 			{
+				Expect.Call(_currentSchedules.Person).Return(_personWeek.Person);
 				Expect.Call(_currentSchedules.ScheduledDayCollection(_personWeek.Week)).Return(listOfScheduleDays);
 				Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(listOfScheduleDays)).Return(new List<DateOnly>());
 				Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(new List<DateOnly>(), _currentSchedules))
@@ -72,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsFalse(_target.IsSatisfyBy(_currentSchedules, _personWeek, _weeklyRest));
+				Assert.IsFalse(_target.IsSatisfyBy(_currentSchedules, _personWeek.Week, _weeklyRest));
 			}
 
 		}
@@ -83,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			IEnumerable<IScheduleDay> listOfScheduleDays = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
 			using (_mock.Record())
 			{
+				Expect.Call(_currentSchedules.Person).Return(_personWeek.Person);
 				Expect.Call(_currentSchedules.ScheduledDayCollection(_personWeek.Week)).Return(listOfScheduleDays);
 				Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(listOfScheduleDays)).Return(new List<DateOnly>());
 				Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(new List<DateOnly>(), _currentSchedules))
@@ -90,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsTrue( _target.IsSatisfyBy(_currentSchedules, _personWeek, _weeklyRest));
+				Assert.IsTrue( _target.IsSatisfyBy(_currentSchedules, _personWeek.Week, _weeklyRest));
 			}
 
 		}

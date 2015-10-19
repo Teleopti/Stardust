@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						if (!weeklyRestInPersonWeek.ContainsKey(personWeek))
 							weeklyRestInPersonWeek.Add(personWeek, weeklyRest);
 
-						if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(personScheduleRange, personWeek, weeklyRest))
+						if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(personScheduleRange, personWeek.Week, weeklyRest))
 							personWeeksViolatingWeeklyRest.Add(personWeek);
 					}
 					var totalNumberOfBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays, personScheduleRange);

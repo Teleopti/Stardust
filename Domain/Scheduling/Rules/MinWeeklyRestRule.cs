@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				}
 				else
 				{
-					if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek, weeklyRest))
+					if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek.Week, weeklyRest))
 					{
 						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
 						string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
