@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				.DayOff().Should().Not.Be.Null();
 		}
 
-		[Test, Ignore("Wrongly green")]
+		[Test, Explicit("Wrongly green")]
 		public void ShouldFixWeeklyRest()
 		{
 			var weeklyRest = TimeSpan.FromHours(38);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(25),
 				TimeSpan.FromHours(5))
 				);
-			for (var dayNumber = -10; dayNumber < 17; dayNumber++)
+			for (var dayNumber = -1; dayNumber < 8; dayNumber++)
 			{
 				var currDate = firstDay.AddDays(dayNumber);
 				var someTimeDuringTheDay = new DateTime(currDate.Year, currDate.Month, currDate.Day, 8, 0, 0, DateTimeKind.Utc);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				PersonAssignmentRepository.Add(ass);
 			}
 			var tuesday = new DateTime(firstDay.Year, firstDay.Month, firstDay.Day, 0, 0, 0, DateTimeKind.Utc);
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate) //tuesday
+			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate) //monday
 				.AddActivity(activity, new DateTimePeriod(tuesday.AddHours(12), tuesday.AddHours(20)));
 			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
@@ -139,11 +139,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			var agentRange = 
 				ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
-
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[5].CurrentDate) //saturday
-	.DayOff().Should().Be.Null();
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate) //tuesday
-				.DayOff().Should().Not.Be.Null();
 
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, new PersonWeek(agent, weekPeriod), weeklyRest)
 				.Should().Be.True();
