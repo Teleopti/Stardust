@@ -34,6 +34,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void AddActivityWithTimePeriodShouldConsiderAgentTimeZone()
+		{
+			//Swedish, vintertid
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+      testPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+
+			target.AddActivity(new Activity("_"), new TimePeriod(8, 0, 16, 0));
+
+			var dateAsDateTimeUTC = DateTime.SpecifyKind(target.Date.Date, DateTimeKind.Utc);
+
+			target.Period
+				.Should()
+				.Be.EqualTo(new DateTimePeriod(dateAsDateTimeUTC.AddHours(7), dateAsDateTimeUTC.AddHours(15)));
+		}
+
+		[Test]
 		public void VerifyBelongsToScenario()
 		{
 			Assert.IsTrue(target.BelongsToScenario(target.Scenario));
