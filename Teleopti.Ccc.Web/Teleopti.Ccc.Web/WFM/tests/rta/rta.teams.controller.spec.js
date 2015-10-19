@@ -73,7 +73,7 @@ describe('RtaTeamsCtrl', function() {
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.expectGET("html/forecasting/forecasting.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
+		$httpBackend.expectGET("html/main.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
 		$httpBackend.whenGET("html/forecasting/forecasting-overview.html").respond(200);
 
 		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, {

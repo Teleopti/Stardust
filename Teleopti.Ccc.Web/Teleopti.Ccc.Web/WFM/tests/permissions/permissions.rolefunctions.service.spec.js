@@ -53,7 +53,7 @@
             deleteAllFunction: {
 				query: function (queryObject){}
             }
-        }; 
+        };
 
         beforeEach(function () {
             module('wfm');
@@ -64,13 +64,12 @@
 
         beforeEach(inject(function (_$httpBackend_, _$q_, _$filter_) {
             $q = _$q_;
-            $filter = _$filter_;          
+            $filter = _$filter_;
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
             $httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en' });
-            $httpBackend.expectGET("html/forecasting/forecasting.html").respond(200);
+            $httpBackend.expectGET("html/main.html").respond(200);
             $httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
-            $httpBackend.expectGET("html/forecasting/forecasting-overview.html").respond(200);
         }));
 
 
@@ -82,13 +81,13 @@
                     ChildFunctions: [{ selected: false }]
                 };
 
-                RolesFunctionsService.functionsDisplayed = [node];              
+                RolesFunctionsService.functionsDisplayed = [node];
              RolesFunctionsService.selectAllFunctions(role);
-             
+
                 $httpBackend.flush();
-                
-                expect(node.selected).toBe(true);                
-                expect(node.ChildFunctions[0].selected).toBe(true);               
+
+                expect(node.selected).toBe(true);
+                expect(node.ChildFunctions[0].selected).toBe(true);
                 done();
             });
         });
@@ -112,7 +111,7 @@
                     Id: "1", FunctionCode: "All", FunctionPath: "All", LocalizedFunctionDescription: "",
                     ChildFunctions: [{ Id: "2", ChildFunctions:[] }]
                   }];
-                
+
                 RolesFunctionsService.parseFunctions(allFunctionsAvailable,functionsAvailableForARole, nmbFunctionsTotal, allSelected);
 
                 $httpBackend.flush();
@@ -137,7 +136,7 @@
                 	ChildFunctions: []
                 }
         		];
-        		
+
         		RolesFunctionsService.functionsDisplayed = allFunctionsAvailable;
 
         		var expectedObject = {Id: 42, FunctionId: "1", Functions:["1","2","4"]};

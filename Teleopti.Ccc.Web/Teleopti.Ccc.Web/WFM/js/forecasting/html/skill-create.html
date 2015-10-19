@@ -1,0 +1,38 @@
+﻿<div>
+	<form name="form" novalidate ng-submit="createSkill(form.$valid)">
+		<h3 style="border-bottom:1px solid rgba(0,0,0,0.12); padding-bottom: 5px">Create Skill</h3>
+		<div class="row skill-row skill-name">
+			<label class="col-lg-2" style="margin:0;">Name</label>
+			<div class="col-lg-3">
+				<input type="text" name="skillName" ng-model="model.name" placeholder="Name" required="" style="width: 100%" ng-maxlength="50" ng-class="{invalidInput: skillNameValidation.isValid(form)}" />
+				<div class="input-invalid-text" ng-class="{invalidForm: skillNameValidation.isValid(form)}">{{skillNameValidation.errorMessage(form)}}</div>
+			</div>
+		</div>
+		<div class="row skill-row skill-activity">
+			<label class="col-lg-2" style="margin:0;">Activity</label>
+			<div class="col-lg-3">
+				<select ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities"></select>
+				<div class="input-invalid-text">error</div>
+			</div>
+		</div>
+		<div class="row skill-row skill-timezone">
+			<label class="col-lg-2" style="margin:0;">Time zone</label>
+			<div class="col-lg-3">
+				<select ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones"></select>
+				<div class="input-invalid-text">error</div>
+			</div>
+		</div>
+		<div class="row skill-row skill-queues">
+			<label class="col-lg-2">Queues</label>
+			<div class="col-lg-9">
+				<div class="big-table-wrapper material-depth-1 queue-list">
+					<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
+				</div>
+				<div class="input-invalid-text" ng-class="{invalidForm:  !queueSelected }">The queue is required.</div>
+			</div>
+		</div>
+		<div class="row">
+			<button type="submit" class="wfm-btn wfm-btn-primary pull-right skill-save">Save</button>
+		</div>
+	</form>
+</div>

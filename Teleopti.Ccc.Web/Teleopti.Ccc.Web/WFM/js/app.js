@@ -43,34 +43,34 @@ var wfm = angular.module('wfm', [
 
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
-		$urlRouterProvider.otherwise("forecasting");
+		$urlRouterProvider.otherwise("/#");
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html',
 			controller: 'MainCtrl'
 		}).state('forecasting', {
 			url: '/forecasting',
-			templateUrl: 'html/forecasting/forecasting.html',
+			templateUrl: 'js/forecasting/html/forecasting.html',
 			controller: 'ForecastingDefaultCtrl'
 		}).state('forecasting.start', {
 			params: { workloadId: undefined },
-			templateUrl: 'html/forecasting/forecasting-overview.html',
+			templateUrl: 'js/forecasting/html/forecasting-overview.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting.advanced', {
 			params: { workloadId: {}, workloadName: {} },
-			templateUrl: 'html/forecasting/forecasting-advanced.html',
+			templateUrl: 'js/forecasting/html/forecasting-advanced.html',
 			controller: 'ForecastingAdvancedCtrl'
 		}).state('forecasting.skillcreate', {
 			url: '/skill/create',
-			templateUrl: 'html/forecasting/skill-create.html',
+			templateUrl: 'js/forecasting/html/skill-create.html',
 			controller: 'ForecastingSkillCreateCtrl'
 		}).state('forecasting-method', {
 			params: { workloadId: {}, period: {} },
-			templateUrl: 'html/forecasting/forecasting-method.html',
+			templateUrl: 'js/forecasting/html/forecasting-method.html',
 			controller: 'ForecastingMethodCtrl'
 		}).state('forecasting-intraday', {
 			params: { workloadId: {}, period: {} },
-			templateUrl: 'html/forecasting/forecasting-intraday.html',
+			templateUrl: 'js/forecasting/html/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',

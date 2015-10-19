@@ -8,6 +8,7 @@ describe('RtaCtrl', function() {
 		$resource,
 		$state,
 		scope;
+		$httpBackend.expectGET("html/main.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
 
 	var sites = [];
 	var siteAdherence = [];

@@ -1213,8 +1213,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
-    <Content Include="WFM\html\forecasting\forecasting.html" />
-    <Content Include="WFM\html\forecasting\skill-create.html" />
+    <Content Include="WFM\js\forecasting\html\forecasting.html" />
+    <Content Include="WFM\js\forecasting\html\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
@@ -1258,7 +1258,7 @@
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
-    <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
+    <Content Include="WFM\js\forecasting\html\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\js\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\js\outbound\outbound.directive.scroll-fix.js" />
@@ -1337,8 +1337,8 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
-    <Content Include="WFM\html\forecasting\forecasting-intraday.html" />
-    <Content Include="WFM\html\forecasting\forecasting-method.html" />
+    <Content Include="WFM\js\forecasting\html\forecasting-intraday.html" />
+    <Content Include="WFM\js\forecasting\html\forecasting-method.html" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\js\people\html\people-selection-cart.html" />
     <Content Include="WFM\html\right-sidenav.html" />
@@ -1812,7 +1812,7 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
-    <Content Include="WFM\html\forecasting\forecasting-overview.html" />
+    <Content Include="WFM\js\forecasting\html\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\js\permissions\permissions.html" />
