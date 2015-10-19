@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.Http;
 
-namespace Teleopti.MessagingTest.Http
+namespace Teleopti.MessagingTest
 {
 	public class FakeHttpServer : IHttpServer
 	{

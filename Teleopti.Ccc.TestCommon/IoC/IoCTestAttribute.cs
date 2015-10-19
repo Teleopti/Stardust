@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configuration = new IocConfiguration(args, Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
+			builder.RegisterInstance(new FakeTime()).As<ITime>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new SetNoLicenseActivator()).As<ISetLicenseActivator>().SingleInstance(); //don't check license for every test

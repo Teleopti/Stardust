@@ -3,39 +3,25 @@ using System.Linq;
 using System.Net;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.SystemCheck;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {
 	[TestFixture]
-	[IoCTest]
+	[MessagingTest]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
-	public class SystemCheckTests : ISetup
+	public class SystemCheckTest
 	{
 		public IMessageListener Target;
 		public FakeHttpServer Server;
 		public FakeTime Time;
 		public SystemCheckerValidator SystemCheck;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble(new FakeUrl("http://someserver/")).For<IMessageBrokerUrl>();
-			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(new FakeConfigReader("MessageBrokerMailboxPollingIntervalInSeconds", "60")).For<IConfigReader>();
-		}
-
+		
 		[Test]
 		public void ShouldNotBeOkWhenSubscribingWithServerError()
 		{
@@ -74,7 +60,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public void ShouldBeOk()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
-			Server.Has(new testMessage
+			Server.Has(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,

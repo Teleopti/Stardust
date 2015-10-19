@@ -3,9 +3,9 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {
-	public class testMessage : Message
+	public class TestMessage : Message
 	{
-		public testMessage()
+		public TestMessage()
 		{
 			StartDate = Subscription.DateToString(DateTime.UtcNow);
 			EndDate = Subscription.DateToString(DateTime.UtcNow);

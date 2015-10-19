@@ -143,7 +143,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Client\EventHandlers.cs" />
-    <Compile Include="Client\FakeUrl.cs" />
     <Compile Include="Client\Http\HttpClientM.cs" />
     <Compile Include="Client\Http\HttpListener.cs" />
     <Compile Include="Client\Http\HttpSender.cs" />
