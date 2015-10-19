@@ -193,6 +193,8 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 		if (allRowsInCurrentPageSelected) {
 			$scope.gridApi.selection.selectAllRows();
+		} else {
+			$scope.gridApi.grid.selection.selectAll = false;
 		}
 
 		$scope.selectAllVisible = $scope.totalPages > 1 && allRowsInCurrentPageSelected;
