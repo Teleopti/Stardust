@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmVNextPilot);
 
 			//if (licenseService.TeleoptiWFMOutboundEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmOutbound);
+				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmOutbound);			
+			//if (licenseService.TeleoptiWFMSeatPlannerEnabled)
+				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmSeatPlanner);
 
             return licenseActivator;
         }

@@ -1341,6 +1341,7 @@
     <Compile Include="Security\AuthorizationEntities\LicenseActivatorTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmOutboundLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmVNextPilotLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseTest.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolverTest.cs" />

@@ -30,6 +30,7 @@
 
 		public const string TeleoptiWfmVNextPilot = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/VNext";
 		public const string TeleoptiWfmOutbound = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/Outbound";
+		public const string TeleoptiWfmSeatPlanner = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/SeatPlanner";
 
         /// <summary>
         /// Constant string for Freemium base option

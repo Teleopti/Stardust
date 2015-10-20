@@ -657,6 +657,7 @@
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersister.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmOutboundLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmVNextPilotLicenseOption.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQuerierResult.cs" />

@@ -6,17 +6,17 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
 	[TestFixture]
-	public class TeleoptiWfmVNextPilotLicenseOptionTest
+	class TeleoptiWfmSeatPlannerLicenseOptionTest
 	{
 		[Test]
 		public void VerifyEnable()
 		{
 			IList<IApplicationFunction> inputList = new List<IApplicationFunction>();
 
-			var target = new TeleoptiWfmVNextPilotLicenseOption();
+			var target = new TeleoptiWfmSeatPlannerLicenseOption();
 			target.EnableApplicationFunctions(inputList);
 			IList<IApplicationFunction> resultList = target.EnabledApplicationFunctions;
-			Assert.AreEqual(5, resultList.Count);
+			Assert.AreEqual(1, resultList.Count);
 		}
 	}
 }
