@@ -1,5 +1,6 @@
 ﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 {
@@ -47,6 +48,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		{
 			Browser.Interactions.HoverOver("seatmap-occupancy-detail .wfm-list li");
 			Browser.Interactions.Click("seatmap-occupancy-detail .wfm-leave-behind span");
+		}
+
+		[When(@"I click add agents to seat button")]
+		public void WhenIClickAddAgentsToSeatButton()
+		{
+			Browser.Interactions.Click(".seatbooking-operations-add .add-agents");
+		}
+
+		[Then(@"I should see people search list")]
+		public void ThenIShouldSeePeopleSearchList()
+		{
+			Browser.Interactions.AssertExists(".people-search");
+			Browser.Interactions.AssertExists(".people-list");
+		}
+
+		[When(@"I click cancel button after open people search list")]
+		public void WhenIClickCancelButtonAfterOpenPeopleSearchList()
+		{
+			Browser.Interactions.Click(".seatbooking-operations-cancel .cancel-operation");
+		}
+
+		[Then(@"I should not see people search list")]
+		public void ThenIShouldNotSeePeopleSearchList()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".seatmap-occupancy-detail .people-search");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".seatmap-occupancy-detail .people-list");
+		}
+
+		[Then(@"I should not see the action buttons of people")]
+		public void ThenIShouldNotSeeTheActionButtonsOfPeople()
+		{
+			Browser.Interactions.AssertNotExists(".seatmap-occupancy-detail", ".seatmap-occupancy-detail .action-panel");
 		}
 
 	}

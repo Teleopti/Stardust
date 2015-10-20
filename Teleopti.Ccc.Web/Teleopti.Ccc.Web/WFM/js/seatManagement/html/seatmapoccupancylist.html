@@ -15,13 +15,13 @@
 <div class="seatmap-occupancy-detail" ng-show="vm.occupancyDetails">
 
 	<div class="seatbooking-operations-add" ng-click="vm.showPeopleSelection = true;" ng-if="!vm.showPeopleSelection">
-		<button class="wfm-btn wfm-btn-invis-primary">Clear</button>
-		<button class="wfm-btn wfm-btn-invis-primary">Add</button>
+		<button class="wfm-btn wfm-btn-invis-primary clear-seatbooking">Clear</button>
+		<button class="wfm-btn wfm-btn-invis-primary add-agents">Add</button>
 	</div>
 
 	<div class="seatbooking-operations-cancel" ng-click="vm.showPeopleSelection = false;" ng-if="vm.showPeopleSelection">
-		<button class="wfm-btn wfm-btn-invis-primary">Cancel</button>
-		<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.asignAgentsToSeats()">Asign</button>
+		<button class="wfm-btn wfm-btn-invis-primary cancel-operation">Cancel</button>
+		<button class="wfm-btn wfm-btn-invis-primary asign-agents" ng-click="vm.asignAgentsToSeats()">Asign</button>
 	</div>
 
 	<people-picker-list ng-show="vm.showPeopleSelection" selection-only selected-people="vm.selectedPeople"></people-picker-list>
