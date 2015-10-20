@@ -53,6 +53,10 @@
 				})
 			};
 
+			var updateGrid = function() {
+				$scope.gridOptions.data = $scope.agents;
+			};
+
 			if (teamId) {
 				RtaService.getAgents.query({
 						teamId: teamId
@@ -61,10 +65,13 @@
 						$scope.agents = agents;
 						$scope.siteName = agents[0].SiteName;
 						$scope.teamName = agents[0].TeamName;
-					}).then(updateStates);
+					})
+					.then(updateStates)
+					.then(updateGrid);
 
 				$interval(function() {
 					updateStates();
+					updateGrid();
 				}, 5000);
 			}
 
@@ -74,10 +81,13 @@
 					}).$promise
 					.then(function(agents) {
 						$scope.agents = agents;
-					}).then(updateStatesForSites);
+					})
+					.then(updateStatesForSites)
+					.then(updateGrid);
 
 				$interval(function() {
 					updateStatesForSites();
+					updateGrid();
 				}, 5000);
 			}
 
@@ -87,10 +97,12 @@
 					}).$promise
 					.then(function(agents) {
 						$scope.agents = agents;
-					}).then(updateStatesForTeams);
+					}).then(updateStatesForTeams)
+					.then(updateGrid);
 
 				$interval(function() {
 					updateStatesForTeams();
+					updateGrid();
 				}, 5000);
 			}
 
@@ -102,23 +114,67 @@
 				$state.go('rta-teams', siteId);
 			};
 
-			// 	$scope.gridOptions = {
-			// 		columnDefs: [
-			// { name: 'Name', field: 'Name', enableColumnMenu: false },
-			// { name: 'TeamName', field: 'TeamName', enableColumnMenu: false},
-			// { name: 'State', field: 'State', enableColumnMenu: false },
-			// { name: 'Activity', field: 'Activity', enableColumnMenu: false },
-			// { name: 'Next Activity', field: 'Next Activity', enableColumnMenu: false },
-			// { name: 'Next Activity Start Time', field: 'Next Activity Start Time', enableColumnMenu: false },
-			// { name: 'Alarm', field: 'Alarm', enableColumnMenu: false },
-			// { name: 'Time in Alarm', field: 'Time in Alarm', enableColumnMenu: false }
-			// 		],
-			// 		data: $scope.filteredAgents
-			// 	};
+			$scope.format = function(time) {
+				return moment.utc(time).format('YYYY-MM-DD HH:mm:ss');
+			};
 
-			  $scope.filterData = function() {
-			    $scope.filteredAgents = $filter('agentFilter')( $scope.agents, $scope.filterText, undefined);
-			  };
+			$scope.formatDuration = function(duration) {
+				var durationInSeconds = moment.duration(duration, 'seconds');
+				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
+			};
+
+			var coloredCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
+			var coloredWithTimeCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
+			var coloredWithDurationCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
+
+			$scope.gridOptions = {
+				columnDefs: [{
+					name: 'Name',
+					field: 'Name',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate,
+				}, {
+					name: 'TeamName',
+					field: 'TeamName',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate,
+				}, {
+					name: 'State',
+					field: 'State',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate,
+				}, {
+					name: 'Activity',
+					field: 'Activity',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate,
+				}, {
+					name: 'Next Activity',
+					field: 'NextActivity',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate,
+				}, {
+					name: 'Next Activity Start Time',
+					field: 'NextActivityStartTime',
+					enableColumnMenu: false,
+					cellTemplate: coloredWithTimeCellTemplate
+				}, {
+					name: 'Alarm',
+					field: 'Alarm',
+					enableColumnMenu: false,
+					cellTemplate: coloredCellTemplate
+				}, {
+					name: 'Time in Alarm',
+					field: 'TimeInState',
+					enableColumnMenu: false,
+					cellTemplate: coloredWithDurationCellTemplate
+				}],
+				data: $scope.agents
+			};
+
+			$scope.filterData = function() {
+				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, undefined);
+			};
 		}
 	]);
 })();

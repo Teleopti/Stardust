@@ -26,16 +26,5 @@
 					return matchedItems;
 				};
 			}
-		])
-		.filter('timeFormatGridCellFilter', function() {
-			return function(value) {
-				return moment.utc(value).format('YYYY-MM-DD HH:mm');
-			}
-		})
-		.filter('timeDurationGridCellFilter', function() {
-			return function(value) {
-				var durationInSeconds = moment.duration(value, 'seconds');
-				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
-			}
-		});
+		]);
 })();
