@@ -88,4 +88,5 @@ RTA_MultiTenancy_32539 = RC
 WfmPeople_AdjustSkill_34138 = RC
 ResourcePlanner_WeeklyRestSolver_35043 = RC
 MyTimeWeb_KeepUrlAfterLogon_34762 = RC
+WfmPermission_ReplaceOldPermission_34671 = RC
 
