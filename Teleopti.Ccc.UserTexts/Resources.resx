@@ -13511,4 +13511,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Logged out</value>
     <comment>used in Intraday</comment>
   </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Modify Skill</value>
+    <comment>"Modify Skill" used in permission</comment>
+  </data>
 </root>
