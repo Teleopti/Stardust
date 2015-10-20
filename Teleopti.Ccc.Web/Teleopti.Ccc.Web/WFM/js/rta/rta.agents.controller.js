@@ -94,15 +94,6 @@
 				}, 5000);
 			}
 
-			$scope.format = function(time) {
-				return moment.utc(time).format('YYYY-MM-DD HH:mm:ss');
-			};
-
-			$scope.formatDuration = function(duration) {
-				var durationInSeconds = moment.duration(duration, 'seconds');
-				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
-			};
-
 			$scope.goBackToRoot = function() {
 				$state.go('rta-sites');
 			};

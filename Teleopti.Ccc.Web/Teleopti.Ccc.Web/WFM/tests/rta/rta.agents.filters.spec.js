@@ -119,7 +119,7 @@ describe('RtaAgentsFilters', function() {
 		var data = [{
 			name: "Julian",
 			state: null
-		},{
+		}, {
 			name: null,
 			state: "Ready"
 		}];
@@ -129,6 +129,24 @@ describe('RtaAgentsFilters', function() {
 
 		expect(filteredData.length).toEqual(1);
 		expect(filteredData[0].name).toEqual('Julian');
+	}));
+
+	it('should format datetime', inject(function($filter) {
+		var time = "\/Date(1445329201000)\/";
+
+		var filter = $filter('timeFormatGridCellFilter');
+		var formatedTime = filter(time);
+
+		expect(formatedTime).toEqual("2015-10-20 08:20");
+	}));
+
+	it('should format time duration', inject(function($filter) {
+		var duration =  15473;
+
+		var filter = $filter('timeDurationGridCellFilter');
+		var formatedTime = filter(duration);
+
+		expect(formatedTime).toEqual("4:17:53");
 	}));
 
 });
