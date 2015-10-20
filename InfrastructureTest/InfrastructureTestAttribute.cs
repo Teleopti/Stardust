@@ -64,7 +64,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var nonFakedDataSourceForTenant = DataSourceForTenant as DataSourceForTenant;
 			if (nonFakedDataSourceForTenant != null)
 				nonFakedDataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(DataSourcesFactory.Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null));
-				
+
+			MessageSender.AllNotifications.Clear();
+
 			_messageSenderScope = MessageSendersScope.GloballyUse(MessageSenders);
 		}
 

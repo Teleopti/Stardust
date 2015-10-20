@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_clearEvents = clearEvents;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
+		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 			if (diff.IsEmpty())
 			{
-				return Enumerable.Empty<PersistConflict>();
+				return new SchedulePersistResult();
 			}
 			var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
 			if (conflicts.IsEmpty())
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				_clearEvents.Execute(diff.Select(d => d.CurrentItem));
 				_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 			}
-			return conflicts;
+			return new SchedulePersistResult {PersistConflicts = conflicts};
 		}
 	}
 }

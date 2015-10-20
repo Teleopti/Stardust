@@ -50,6 +50,12 @@ namespace Teleopti.Ccc.TestCommon
 			return TimeSpan.FromMilliseconds(Convert.ToInt32(value));
 		}
 
+		public static DateTimePeriod Period(this string periodString)
+		{
+			var parts = periodString.Split(" - ");
+			return new DateTimePeriod(parts[0].Utc(), parts[1].Utc());
+		}
+
 		public static DateOnly Date(this string dateString)
 		{
 			return new DateOnly(dateString.Utc());

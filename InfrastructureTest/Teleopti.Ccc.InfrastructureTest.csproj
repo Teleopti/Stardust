@@ -224,6 +224,7 @@
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
+    <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="ServiceBus\MessageSenderCreatorTest.cs" />
@@ -324,7 +325,6 @@
     <Compile Include="Persisters\Schedules\NoConflictForOvertimeAvailabilityTest.cs" />
     <Compile Include="Persisters\Schedules\NoConflictsOfScheduleRangeConflictCollectorNoneTest.cs" />
     <Compile Include="Persisters\Schedules\PersistConflictTest.cs" />
-    <Compile Include="Persisters\Schedules\ScheduleDictionaryPersisterTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterBaseTest.cs" />
     <Compile Include="Persisters\Refresh\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\Refresh\ScheduleRefresherTest.cs" />
@@ -512,6 +512,8 @@
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\EventsTest.cs" />
+    <Compile Include="UnitOfWork\MessageSenders\MessageSenderInvokationTest.cs" />
+    <Compile Include="Persisters\Schedules\ScheduleDictionaryPersistTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkRealTest.cs" />

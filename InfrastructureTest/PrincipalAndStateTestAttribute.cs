@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.BeforeTest();
 
 			_login = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
-			MessageSender.AllNotifications.Clear();
 		}
 
 		protected override void AfterTest()

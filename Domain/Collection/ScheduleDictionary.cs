@@ -7,7 +7,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Collection
     /// Created by: rogerkr
     /// Created date: 2008-02-12
     /// </remarks>
-    public class ScheduleDictionary : IScheduleDictionary,
-                                        IPermissionCheck
+    public class ScheduleDictionary : IScheduleDictionary, IPermissionCheck
     {
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
         private readonly IScheduleDateTimePeriod _period;
@@ -225,13 +227,17 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
 
-        public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay)
+		{
+			return Modify(ScheduleModifier.NotApplicable, new List<IScheduleDay> {scheduleDay}, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+		}
+
+		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
         {
             return Modify(modifier, new List<IScheduleDay> { schedulePart }, newBusinessRuleCollection, scheduleDayChangeCallback, scheduleTagSetter);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
+		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)
         {
             var lstErrors = new List<IBusinessRuleResponse>();
 
@@ -314,7 +320,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         private bool notInUndoRedo()
         {
-            return _undoRedo == null || !_undoRedo.InUndoRedo;
+            return _undoRedo != null && _undoRedo.InUndoRedo;
         }
 
         private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts, IPrincipalAuthorization authorization)

@@ -1,11 +1,12 @@
-﻿using Teleopti.Ccc.Infrastructure.UnitOfWork;
+﻿using System;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentInitiatorIdentifier : ICurrentInitiatorIdentifier
 	{
-		private readonly IInitiatorIdentifier _initiatorIdentifier;
+		private IInitiatorIdentifier _initiatorIdentifier;
 
 		public FakeCurrentInitiatorIdentifier()
 			: this(new EmptyInitiatorIdentifier())
@@ -20,6 +21,11 @@ namespace Teleopti.Ccc.TestCommon
 		public IInitiatorIdentifier Current()
 		{
 			return _initiatorIdentifier;
+		}
+
+		public void InitiatorIdentifier(Guid initiator)
+		{
+			_initiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = initiator };
 		}
 	}
 }

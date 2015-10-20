@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 			else
 			{
-				var conflicts = Target.Persist(myRange);
+				var conflicts = Target.Persist(myRange).PersistConflicts;
 				Then(conflicts);
 				Then(myRange);
 

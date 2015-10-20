@@ -342,6 +342,7 @@
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkScheduleRangePersister.cs" />
+    <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />
@@ -529,6 +530,7 @@
     <Compile Include="UnitOfWork\NoMessageSenders.cs" />
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
+    <Compile Include="UnitOfWork\InUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />

@@ -4,7 +4,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-    public class ScheduleTagSetter : IScheduleTagSetter
+	public class NoScheduleTagSetter : IScheduleTagSetter
+	{
+		public void SetTagOnScheduleDays(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts)
+		{
+		}
+
+		public void ChangeTagToSet(IScheduleTag tag)
+		{
+		}
+	}
+
+	public class ScheduleTagSetter : IScheduleTagSetter
     {
         private IScheduleTag _tag;
 

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 
 		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 									  IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
-		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
+									  IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 																	IScheduleDifferenceSaver scheduleDifferenceSaver,
 																	IInitiatorIdentifier initiatorIdentifier)
 		{
@@ -28,23 +28,28 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
+		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 			if (diff.IsEmpty())
 			{
-				return Enumerable.Empty<PersistConflict>();
+				return new SchedulePersistResult ();
 			}
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
 				if (conflicts.IsEmpty())
 				{
-					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
+					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)scheduleRange);
 				}
-				uow.PersistAll(_initiatorIdentifier);
-				return conflicts;
+				var modifiedRoots = uow.PersistAll(_initiatorIdentifier);
+				return new SchedulePersistResult()
+				{
+					InitiatorIdentifier = _initiatorIdentifier,
+					PersistConflicts = conflicts,
+					ModifiedRoots = modifiedRoots
+				};
 			}
 		}
 	}
-} 
+}

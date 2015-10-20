@@ -20,4 +20,5 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="tag">The tag.</param>
         void ChangeTagToSet(IScheduleTag tag);
     }
+
 }

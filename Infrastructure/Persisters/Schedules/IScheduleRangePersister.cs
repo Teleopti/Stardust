@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public interface IScheduleRangePersister
 	{
-		IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange);
+		SchedulePersistResult Persist(IScheduleRange scheduleRange);
 	}
 }

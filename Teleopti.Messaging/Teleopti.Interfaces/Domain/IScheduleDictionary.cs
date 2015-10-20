@@ -75,21 +75,22 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period);
 
+		IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay);
 
-        /// <summary>
-        /// Modifies the specified modifier.
-        /// </summary>
-        /// <param name="modifier">The modifier.</param>
-        /// <param name="scheduleParts">The schedule parts.</param>
-        /// <param name="newBusinessRuleCollection">The new business rule collection.</param>
-        /// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
-        /// <param name="scheduleTagSetter">The schedule tag setter.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2010-04-22
-        /// </remarks>
-        IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier,
+		/// <summary>
+		/// Modifies the specified modifier.
+		/// </summary>
+		/// <param name="modifier">The modifier.</param>
+		/// <param name="scheduleParts">The schedule parts.</param>
+		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
+		/// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
+		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2010-04-22
+		/// </remarks>
+		IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier,
                                                   IEnumerable<IScheduleDay> scheduleParts,
                                                   INewBusinessRuleCollection newBusinessRuleCollection,
                                                   IScheduleDayChangeCallback scheduleDayChangeCallback,
@@ -116,16 +117,17 @@ namespace Teleopti.Interfaces.Domain
                                                   IScheduleTagSetter scheduleTagSetter
             );
 
-        /// <summary>
-        /// Gets all the schedules for the specified period.
-        /// </summary>
-        /// <param name="dateOnly">The date.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-02-26
-        /// </remarks>
-        IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly);
+
+		/// <summary>
+		/// Gets all the schedules for the specified period.
+		/// </summary>
+		/// <param name="dateOnly">The date.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-02-26
+		/// </remarks>
+		IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly);
 
         /// <summary>
         /// Takes the snapshot for later use when checking what has been changed.
