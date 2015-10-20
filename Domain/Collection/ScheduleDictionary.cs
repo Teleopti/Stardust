@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         private bool notInUndoRedo()
         {
-            return _undoRedo != null && _undoRedo.InUndoRedo;
+            return _undoRedo == null || !_undoRedo.InUndoRedo;
         }
 
         private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts, IPrincipalAuthorization authorization)
