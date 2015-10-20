@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
 				EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
 				service.ReportProgress += handler;
 				service.Execute(optimizerContainers);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					25,
 					_dayOffDecisionMaker);
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 
 			var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
 				_effectiveRestrictionCreator,

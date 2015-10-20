@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
     public interface IResourceOptimizationHelperExtended
     {
-        void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment);
-	    void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment);
+        void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker);
+	    void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks);
     }
 }

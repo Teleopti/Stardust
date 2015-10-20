@@ -15,13 +15,12 @@ namespace Teleopti.Interfaces.Domain
         /// Resource calculates the given date.
         /// </summary>
         /// <param name="localDate">The local date.</param>
-        /// <param name="useOccupancyAdjustment">if set to <c>true</c> use occupancy adjustment.</param>
         /// <param name="considerShortBreaks">if set to <c>true</c> [consider short breaks].</param>
         /// <remarks>
         /// Created by: peterwe
         /// Created date: 2009-01-21
         /// </remarks>
-        void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks);
+        void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks);
 
     	/// <summary>
     	/// Creates the skill skill staff dictionary on skills.
@@ -35,6 +34,6 @@ namespace Teleopti.Interfaces.Domain
     		DateTimePeriod keyPeriod);
 
 	    void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
-	                                               DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks);
+	                                               DateOnly localDate, bool considerShortBreaks);
     }
 }

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment)
+		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
@@ -35,20 +35,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, stateHolder.ConsiderShortBreaks,
-					stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+				resourceCalculateDays(backgroundWorker, stateHolder.ConsiderShortBreaks, stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
 			}
 		}
 
-		private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks)
+		private void prepareAndCalculateDate(DateOnly date, bool considerShortBreaks)
 		{
 			using (PerformanceOutput.ForOperation("PrepareAndCalculateDate " + date.ToShortDateString(CultureInfo.CurrentCulture)))
 			{
-				_basicHelper.ResourceCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
+				_basicHelper.ResourceCalculateDate(date, considerShortBreaks);
 			}
 		}
 
-		public  void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
+		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
@@ -59,13 +58,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
+				resourceCalculateDays(backgroundWorker, considerShortBreaks,
 					stateHolder.DaysToRecalculate.ToList());
 				stateHolder.ClearDaysToRecalculate();
 			}
 		}
 
-		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, ICollection<DateOnly> datesList)
+		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, ICollection<DateOnly> datesList)
 		{
 			if (datesList.Count == 0)
 				return;
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var cancel = false;
 			foreach (var date in datesList)
 			{
-				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
+				prepareAndCalculateDate(date, considerShortBreaks);
 
 				if (backgroundWorker != null)
 				{

@@ -47,16 +47,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 10));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true, true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true, true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true, true));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true));
 			}
 
 			IList<IScheduleDay> ret;
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 2));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true));
 				Expect.Call(
 					() =>
-						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true, true));
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true));
 			}
 			IList<IScheduleDay> ret;
 

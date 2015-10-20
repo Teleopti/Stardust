@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
-		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
+		public void ResourceCalculateDate(DateOnly localDate,  bool considerShortBreaks)
 		{
-			resourceCalculateDate(localDate, useOccupancyAdjustment, considerShortBreaks);
+			resourceCalculateDate(localDate, considerShortBreaks);
 		}
 
-		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
+		private void resourceCalculateDate(DateOnly localDate, bool considerShortBreaks)
 		{
 			var stateHolder = _stateHolder();
 			if (stateHolder.SchedulingResultState.TeamLeaderMode)
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    }
 
 				
-				ResourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks);
+				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
 
 				_intraIntervalFinderService.Execute(stateHolder.SchedulingResultState, localDate, relevantProjections);
 				
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
-		                                   DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
+		                                   DateOnly localDate, bool considerShortBreaks)
 		{
 
 			var timePeriod = getPeriod(localDate);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				                                        ordinarySkills, timePeriod);
 
 			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, schedulerStateHolder.SchedulingResultState.Skills,
-			                                                          relevantProjections, useOccupancyAdjustment, _personSkillProvider());
+			                                                          relevantProjections, _personSkillProvider());
 
 			schedulingResultService.SchedulingResult(timePeriod);
 

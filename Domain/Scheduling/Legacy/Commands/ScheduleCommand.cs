@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
 			}
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
@@ -92,8 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-							schedulingOptions.ConsiderShortBreaks);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
 						ISchedulePartModifyAndRollbackService rollbackService =
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					selectedPeriod, allMatrixes);	
 					
 					ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,_scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 					_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays,backgroundWorker);
 				}
 			}

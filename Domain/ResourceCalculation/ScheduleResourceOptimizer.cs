@@ -36,15 +36,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 this.clearSkillStaffPeriods();
         }
 
-        public void Optimize(DateTimePeriod datePeriodToRecalculate, bool useOccupancyAdjustment)
+        public void Optimize(DateTimePeriod datePeriodToRecalculate)
         {
             var affectedSkills = _personSkillService.AffectedSkills;
 	        _distinctActivities.ForEach(
 		        currentActivity =>
-			        optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate, useOccupancyAdjustment));
+			        optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate));
         }
 
-        private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate, bool useOccupancyAdjustment)
+        private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate)
         {
             IList<ISkill> skills = new List<ISkill>();
             foreach (var affectedSkill in affectedSkills)
@@ -81,12 +81,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         }
                     }
                 }
-                optimizeActivityPeriod(currentActivity, completeIntervalPeriod, useOccupancyAdjustment);
+                optimizeActivityPeriod(currentActivity, completeIntervalPeriod);
                 currentStart = currentStart.Add(defaultResolution);
             }
         }
 
-        private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, bool useOccupancyAdjustment)
+        private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod)
         {
             IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
                                                                   currentActivity, _relevantProjections,
@@ -98,14 +98,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (relevantSkillStaffPeriods.Count > 0)
             {
-                if (useOccupancyAdjustment)
-                {
-                    //Do nothing here until occupancy works
-                    //var occCalculator =
-                    //    new OccupancyCalculator(relevantSkillStaffPeriods, dividedActivityData.RelativeKeyedSkillResourceResources);
-                    //occCalculator.AdjustOccupancy();
-                }
-
                 var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
                 IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
 

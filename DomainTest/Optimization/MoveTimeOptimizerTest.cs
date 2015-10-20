@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_schedulingOptions = new SchedulingOptions{ConsiderShortBreaks = true};
             _mockRepository = new MockRepository();
 			_resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
-			_resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+			_resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
             _periodValueCalculator = _mockRepository.StrictMock<IPeriodValueCalculator>();
             _personalSkillsDataExtractor = _mockRepository.StrictMock<IScheduleResultDataExtractor>();
             _decisionMaker = _mockRepository.StrictMock<IMoveTimeDecisionMaker>();
@@ -438,8 +438,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void resourceCalculation()
 		{
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true, true)).IgnoreArguments();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true, true)).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true)).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true)).IgnoreArguments();
 		}
     }
 }

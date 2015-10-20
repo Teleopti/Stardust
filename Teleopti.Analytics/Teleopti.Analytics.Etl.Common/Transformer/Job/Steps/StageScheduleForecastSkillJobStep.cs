@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 																										   skillDaysDictionary))
 				{
 					ISchedulingResultService schedulingResultService =
-						new SchedulingResultService(schedulingResultStateHolder, skills, false, new PersonSkillProvider());
+						new SchedulingResultService(schedulingResultStateHolder, skills, new PersonSkillProvider());
 					DateTimePeriod visiblePeriod = scheduleDictionary.Period.VisiblePeriod;
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
 						new ScheduleForecastSkillResourceCalculation(skillDaysDictionary, schedulingResultService,

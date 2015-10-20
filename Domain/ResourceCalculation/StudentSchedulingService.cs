@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
+        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
 
     }
 
@@ -48,13 +48,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
+        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
             var skills = _schedulingResultStateHolder.Skills;
             if (skills.Count == 0) return false;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-																		useOccupancyAdjustment,
 																		schedulingOptions.ConsiderShortBreaks);
 
             var extractor = new ScheduleProjectionExtractor(_personSkillProvider, skills.Min(s => s.DefaultResolution));

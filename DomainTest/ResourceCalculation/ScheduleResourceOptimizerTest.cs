@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
             _mocks.ReplayAll();
-            _target.Optimize(_inPeriod, false);
+            _target.Optimize(_inPeriod);
             ISkillSkillStaffPeriodExtendedDictionary resultSkillStaffPeriods = _skillStaffPeriods;
             double totalMinutes = _inPeriod.ElapsedTime().TotalMinutes;
             Assert.AreEqual(12.3/totalMinutes,
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                         _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
             _mocks.ReplayAll();
-            _target.Optimize(_inPeriod, false);
+            _target.Optimize(_inPeriod);
 
             Assert.AreEqual(0.833, _skillStaffPeriods[_personAssignmentListContainer.ContainedSkills["PhoneA"]].First(
                     s => s.Key.StartDateTime == _startTime).Value.Payload.CalculatedResource, 0.001);

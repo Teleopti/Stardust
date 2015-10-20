@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
 				IIntradayOptimizer2 optimizer =
 					new IntradayOptimizer2(

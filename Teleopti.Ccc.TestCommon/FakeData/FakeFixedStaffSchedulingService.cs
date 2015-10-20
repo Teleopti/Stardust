@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment,
+		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, 
 			bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			throw new NotImplementedException();

@@ -47,14 +47,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, TimeZoneInfo.Utc));
 				Expect.Call(_scheduleDay2.DateOnlyAsPeriod)
 					  .Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue.AddDays(10), TimeZoneInfo.Utc));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true,
-				                                                              _schedulingOptions.ConsiderShortBreaks));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true,
-																			  _schedulingOptions.ConsiderShortBreaks));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(10), true,
-																			  _schedulingOptions.ConsiderShortBreaks));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(11), true,
-																			  _schedulingOptions.ConsiderShortBreaks));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, _schedulingOptions.ConsiderShortBreaks));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), _schedulingOptions.ConsiderShortBreaks));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(10), _schedulingOptions.ConsiderShortBreaks));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(11), _schedulingOptions.ConsiderShortBreaks));
 			}
 
 			using (_mocks.Playback())

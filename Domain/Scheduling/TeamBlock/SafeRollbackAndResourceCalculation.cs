@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var dateOnly in dates)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, schedulingOptions.ConsiderShortBreaks);
 			}
 		}
 	}

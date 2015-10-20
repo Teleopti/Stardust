@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll,
-			bool useOccupancyAdjustment, IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions)
+			IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions)
 		{
 			throw new NotImplementedException();
 		}

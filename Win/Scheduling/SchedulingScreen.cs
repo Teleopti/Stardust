@@ -2056,7 +2056,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+			_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks);
 		}
 
 		private void validateAllPersons()
@@ -3182,7 +3182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling));
 			}
 
 			_totalScheduled = 0;
@@ -3200,8 +3200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
-																						 true, true);
+			var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true);
 
 			_container.Resolve<IScheduleOvertimeCommand>().Exectue(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), scheduleDays, resouceCalculateDelayer, _gridLockManager);
 
@@ -3357,7 +3356,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData));
 			}
 
 			if (e.Cancel)

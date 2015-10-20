@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
+		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
     public class FixedStaffSchedulingService : IFixedStaffSchedulingService
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
-		    bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
+		   bool breakIfPersonCannotSchedule,
 		    ISchedulePartModifyAndRollbackService rollbackService)
 	    {
 		    var result = true;
@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var resourceCalculateDelayer = new ResourceCalculateDelayer(
 			    _resourceOptimizationHelper,
 			    schedulingOptions.ResourceCalculateFrequency,
-			    useOccupancyAdjustment,
 			    schedulingOptions.ConsiderShortBreaks);
 
 		    var personDateDictionary = (from p in selectedParts

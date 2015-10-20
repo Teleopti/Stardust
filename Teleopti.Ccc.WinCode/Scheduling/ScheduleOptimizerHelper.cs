@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true);
 				}
 			}
 		}
@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_backgroundWorker.ReportProgress(1, args);
 			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), tagSetter);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
 			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
 		}
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
 				}
 			}
 

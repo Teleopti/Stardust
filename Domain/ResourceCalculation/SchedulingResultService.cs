@@ -11,15 +11,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
 		private readonly IList<ISkill> _allSkills;
 		private readonly IResourceCalculationDataContainer _relevantProjections;
-		private readonly bool _useOccupancyAdjustment;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder,
 			IList<ISkill> allSkills,
-			bool useOccupancyAdjustment,
 			IPersonSkillProvider personSkillProvider)
 		{
-			_useOccupancyAdjustment = useOccupancyAdjustment;
 			_relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 			_allSkills = allSkills;
 			_personSkillProvider = personSkillProvider;
@@ -30,13 +27,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public SchedulingResultService(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
 			IList<ISkill> allSkills,
 			IResourceCalculationDataContainer relevantProjections,
-			bool useOccupancyAdjustment,
 			IPersonSkillProvider personSkillProvider)
 		{
 			_relevantSkillStaffPeriods = relevantSkillStaffPeriods;
 			_allSkills = allSkills;
 			_relevantProjections = relevantProjections;
-			_useOccupancyAdjustment = useOccupancyAdjustment;
 			_personSkillProvider = personSkillProvider;
 		}
 
@@ -66,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,
 			                                       emptyCache, new ActivityDivider());
-			rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);
+			rc.Optimize(periodToRecalculate);
 
 			return _relevantSkillStaffPeriods;
 		}

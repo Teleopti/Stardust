@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var resourceCalculationDataContainer = new ResourceCalculationDataContainerFromStorage();
 			_calculateSkillCommand.Execute(_currentScenario.Current(), new DateOnlyPeriod(dateOnly,dateOnly).ToDateTimePeriod(skill.TimeZone), skill, resourceCalculationDataContainer);
 
-			_resourceOptimizationHelper.ResourceCalculateDate(resourceCalculationDataContainer, dateOnly, true, true);
+			_resourceOptimizationHelper.ResourceCalculateDate(resourceCalculationDataContainer, dateOnly, true);
 
 			var skillDay = _stateHolder.SkillDays[skill].First(d => d.CurrentDate == dateOnly);
 			var sumOfForecastedHours = skillDay.ForecastedIncomingDemand;

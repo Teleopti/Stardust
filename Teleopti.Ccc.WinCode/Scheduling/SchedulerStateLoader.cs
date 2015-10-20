@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			using (PerformanceOutput.ForOperation("Loading schedule data"))
 			{
 				var service =
-					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, false, _personSkillProvider);
+					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, _personSkillProvider);
 				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), true);
 			}
 		}

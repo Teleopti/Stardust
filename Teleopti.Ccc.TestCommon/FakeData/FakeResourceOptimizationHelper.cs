@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeResourceOptimizationHelper : IResourceOptimizationHelper
 	{
-		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
+		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks)
 		{
 			throw new NotImplementedException();
 		}
@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections, DateOnly localDate,
-			bool useOccupancyAdjustment, bool considerShortBreaks)
+		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
 		{
 			throw new NotImplementedException();
 		}

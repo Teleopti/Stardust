@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
 				_resources,
-				false,
 				_personSkillProvider);
 		}
 
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 						                                {
 							                                {_personAssignmentListContainer.AllSkills[0], new List<ISkillDay>()}
 						                                }),
-					_personAssignmentListContainer.AllSkills, true, new PersonSkillProvider());
+					_personAssignmentListContainer.AllSkills, new PersonSkillProvider());
 			Assert.IsNotNull(_target);
 		}
 
@@ -88,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 												  _personAssignmentListContainer.AllSkills,
 												  new ResourceCalculationDataContainer(_personSkillProvider, 15), 
-												  false,
 												  _personSkillProvider);
 			Assert.IsNotNull(_target);
 
@@ -107,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
 				_resources,
-				false,
 				_personSkillProvider);
 
 			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(stateHolder.SkillStaffPeriodHolder).Return(holder);
 			Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(_skillStaffPeriods);
 			mock.ReplayAll();
-			_target = new SchedulingResultService(stateHolder, new List<ISkill>(), false, _personSkillProvider);
+			_target = new SchedulingResultService(stateHolder, new List<ISkill>(), _personSkillProvider);
 			Assert.IsNotNull(_target);
 			mock.VerifyAll();
 		}

@@ -167,8 +167,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Playback())
             {
-				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, true, _rollbackService);
-				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, false, _rollbackService);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, _rollbackService);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, false, _rollbackService);
             }
         }
 
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 _studentSchedulingService.DayScheduled += (sender, e) => { e.Cancel = true; };
-				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, preferences.SchedulingOptions, true, false, _rollbackService);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, preferences.SchedulingOptions, false, _rollbackService);
             }
         }
 
@@ -509,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 var result =
                     _studentSchedulingService.DoTheScheduling(new List<IScheduleDay>(),
-                        null, true, true, _rollbackService);
+                        null, true, _rollbackService);
                 result.Should().Be(false);
             }
         }

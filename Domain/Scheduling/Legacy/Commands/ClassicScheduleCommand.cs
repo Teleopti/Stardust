@@ -63,29 +63,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, true, backgroundWorker,
+						allMatrixesOfSelectedPersons, backgroundWorker,
 						daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, true, backgroundWorker,
+						allMatrixesOfSelectedPersons, backgroundWorker,
 						daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, true, backgroundWorker,
+						allMatrixesOfSelectedPersons, backgroundWorker,
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
 					daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, true, backgroundWorker,
+						allMatrixesOfSelectedPersons, backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
 				requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-					allMatrixesOfSelectedPersons, true, backgroundWorker,
+					allMatrixesOfSelectedPersons, backgroundWorker,
 					schedulingOptions);
 
 			if(runWeeklyRestSolver)
@@ -95,8 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void solveWeeklyRest(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorker)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, true,
-				schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 					_scheduleDayChangeCallback(),

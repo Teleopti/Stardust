@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker);
 			}
 			var selectedSchedules = selectedScheduleDays;
 			var selectedPeriod = _optimizerHelper().GetSelectedPeriod(selectedSchedules);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						daysOffPreferences);
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
-						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
+						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks);
 					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
 
 
@@ -118,9 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				case false:
 					var personExtractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
 					var selectedPersons = personExtractor.ExtractPersons().ToList();
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-						true,
-						schedulingOptions.ConsiderShortBreaks);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 					var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 					var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,
 						_scheduleDayChangeCallback,

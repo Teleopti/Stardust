@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes);
 
 		void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			IList<IScheduleMatrixPro> matrixListAll, bool useOccupancyAdjustment,
-			IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions);
+			IList<IScheduleMatrixPro> matrixListAll, IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions);
 	}
 
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 					var shiftNudgeDirective = new ShiftNudgeDirective();
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 					foreach (var matrix in matrixList)
 					{
 						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, matrixList, shiftNudgeDirective, optimizationPreferences);
@@ -103,8 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList,
-			IList<IScheduleMatrixPro> matrixListAll, bool useOccupancyAdjustment,
-			IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions)
+			IList<IScheduleMatrixPro> matrixListAll, IBackgroundWorkerWrapper backgroundWorker, ISchedulingOptions schedulingOptions)
 		{
 			if (matrixList == null) throw new ArgumentNullException("matrixList");
 
@@ -159,8 +157,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 					deleteAndResourceCalculateService,
 					_scheduleService, _allResults,
-					new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-						schedulingOptions.ConsiderShortBreaks));
+					new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks));
 
 			using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
 			{
@@ -200,8 +197,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				fixedStaffSchedulingService.DayScheduled += onDayScheduled;
 				if (!scheduleRunCancelled)
 				{
-					fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false,
-						rollbackService);
+					fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, rollbackService);
 				}
 				_allResults().AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
 				fixedStaffSchedulingService.FinderResults.Clear();
@@ -286,7 +282,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						TagToUseOnScheduling));
 			using (PerformanceOutput.ForOperation("Scheduling " + unlockedSchedules.Count))
 			{
-				_studentSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, false, rollbackService);
+				_studentSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, rollbackService);
 			}
 
 			_allResults().AddResults(_studentSchedulingService.FinderResults, schedulingTime);

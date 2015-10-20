@@ -379,7 +379,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 							)
 						),
 					1,
-					true,
 					true
 					),
 				selectedPeriod,

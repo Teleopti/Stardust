@@ -158,8 +158,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-																		schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
             {

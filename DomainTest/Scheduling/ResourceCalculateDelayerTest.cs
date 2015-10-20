@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldNotCalculateIfSameDateAndCounterUnderLimit()
 		{
-			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true, true);
+			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true);
 			using(_mocks.Record())
 			{
 				
@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldCalculateLastDateAndNextDateIfDifferentDateAndCounterUnderLimit()
 		{
-			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true, true);
+			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
 			}
 
 			using (_mocks.Playback())
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldCalculateThisDateAndNextIfLimitReachedAndAbove1()
 		{
-			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 2, true, true);
+			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 2, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
 			}
 
 			using (_mocks.Playback())
@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1));
 			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
-			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true));
 			}
 
 			using (_mocks.Playback())
@@ -94,10 +94,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly());
 			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
 			dp = dp.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true));
 			}
 
 			using (_mocks.Playback())

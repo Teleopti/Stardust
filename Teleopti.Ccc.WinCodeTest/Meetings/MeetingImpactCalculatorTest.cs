@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			Expect.Call(schedulePeriod.LoadedPeriod()).Return(_period);
 			Expect.Call(_scheduleDic[_person]).Return(range);
 
-            Expect.Call(() => _resourceOpt.ResourceCalculateDate(_meetingDate, false, true));
+            Expect.Call(() => _resourceOpt.ResourceCalculateDate(_meetingDate, true));
 
         	var permissionCheck = (IPermissionCheck) _scheduleDic;
         	Expect.Call(permissionCheck.SynchronizationObject).Return(new object()).Repeat.AtLeastOnce();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_scheduleDic[_person]).Return(range).Repeat.AtLeastOnce();
             Expect.Call(() => range.Remove(personMeeting)).Repeat.AtLeastOnce();
             
-            Expect.Call(() => _resourceOpt.ResourceCalculateDate(_meetingDate, false, true));
+            Expect.Call(() => _resourceOpt.ResourceCalculateDate(_meetingDate, true));
 
             _mocks.ReplayAll();
             _target.RemoveAndRecalculateResources(_meeting, _meetingDate);

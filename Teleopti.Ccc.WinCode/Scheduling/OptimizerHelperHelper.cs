@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					{
 						var effectiveRestriction =
 							effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, true,
-							schedulingOptions.ConsiderShortBreaks);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, schedulingOptions.ConsiderShortBreaks);
 
 						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 					}

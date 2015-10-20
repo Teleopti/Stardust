@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			//backgroundWorker.ReportProgress(0, "Calculating resources...");
 			foreach (var dateOnly in _period.DayCollection())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, true);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true);
 			}
 
 			//backgroundWorker.ReportProgress(0, "Initializing...");
