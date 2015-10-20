@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfTenantExists()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfWrongCredentials()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 
 
 			var model = new CreateTenantModel { Tenant = "New Tenant",CreateDbUser = "dummy", CreateDbPassword = "dummy"};
@@ -85,7 +85,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfNotDbCreator()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
@@ -101,7 +101,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueCreatedDb()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			TestPolutionCleaner.Clean("New Tenant", "new TenantAppUser");
 
 			var result = Target.CreateDatabases(new CreateTenantModelForTest

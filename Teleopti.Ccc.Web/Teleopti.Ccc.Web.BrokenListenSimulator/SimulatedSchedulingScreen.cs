@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			addMailbox(new Subscription
 			{
 				MailboxId = Guid.NewGuid().ToString(),
-				DomainType = typeof(IAggregatedScheduleChange).Name,
+				DomainType = typeof(IScheduleChangedMessage).Name,
 				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
 				DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),

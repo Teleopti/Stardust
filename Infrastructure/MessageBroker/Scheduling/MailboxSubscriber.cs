@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				onEventMessage,
 				scenario,
 				typeof(Scenario),
-				typeof(IAggregatedScheduleChange),
+				typeof(IScheduleChangedMessage),
 				period.StartDateTime,
 				period.EndDateTime,
 				false,

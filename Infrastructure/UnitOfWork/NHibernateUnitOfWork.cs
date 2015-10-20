@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
-		private ICurrentMessageSenders _messageSenders;
+		private ICurrentPersistCallbacks _persistCallbacks;
 		private readonly Action<ISession> _unbind;
 		private readonly Action<ISession, IInitiatorIdentifier> _bindInitiator;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private IInitiatorIdentifier _initiator;
 
-		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, ICurrentMessageSenders messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, ICurrentPersistCallbacks persistCallbacks, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_bindInitiator = bindInitiator;
 			_isolationLevel = isolationLevel;
 			setInitiator(initiator);
-			_messageSenders = messageSenders;
+			_persistCallbacks = persistCallbacks;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				invokeMessageSenders(modifiedRoots);
+				invokeCallbacks(modifiedRoots);
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -185,17 +185,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return modifiedRoots;
 		}
 
-		private void invokeMessageSenders(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void invokeCallbacks(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (_messageSenders == null) return;
+			if (_persistCallbacks == null) return;
 
-			_messageSenders.Current().ForEach(d =>
+			_persistCallbacks.Current().ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-						d.Execute(modifiedRoots);
+						d.AfterFlush(modifiedRoots);
 					}
 				});
+		}
+
+		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
+			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 
 		private void persistExceptionHandler(Exception ex)
@@ -307,12 +313,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
-			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
-		}
-
 		private static void throwIncorrectDbVersionParameter(IAggregateRoot root)
 		{
 			throw new ArgumentException("Cannot find " + root + " in db");
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 				_filterManager = null;
 
-				_messageSenders = null;
+				_persistCallbacks = null;
 				_messageBroker = null;
 				_sendPushMessageWhenRootAlteredService = null;
 			}

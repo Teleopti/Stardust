@@ -13,12 +13,12 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
 	public class TeamOrSiteChangedMessageSenderTest
 	{
-		private IMessageSender _target;
+		private IPersistCallback _target;
 		private MockRepository _mocks;
 		private IEventPopulatingPublisher _serviceBusSender;
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			_mocks = new MockRepository();
 			_serviceBusSender = _mocks.DynamicMock<IEventPopulatingPublisher>();
-			_target = new TeamOrSiteChangedMessageSender(_serviceBusSender, new SpecificBusinessUnit(BusinessUnitFactory.CreateWithId("fakeBu")));
+			_target = new PersonCollectionChangedEventPublisherForTeamOrSite(_serviceBusSender, new SpecificBusinessUnit(BusinessUnitFactory.CreateWithId("fakeBu")));
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(roots);
+				_target.AfterFlush(roots);
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(roots);
+				_target.AfterFlush(roots);
 			}
 		}
 	}

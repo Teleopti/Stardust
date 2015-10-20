@@ -15,12 +15,12 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {
 	[TestFixture]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	[ScheduleDictionaryPersistTest]
-	public class AggregatedScheduleChangeMessageScheduleDictionaryPersisterTest : ISetup
+	public class ScheduleChangedMessageDictionaryPersisterTest : ISetup
 	{
 		public FakeMessageSender MessageSender;
 		public IScheduleDictionaryPersister Target;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 
 			Target.Persist(schedules);
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new[] { person1.Id.Value, person2.Id.Value });
 		}
 
@@ -74,13 +74,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 
 			Target.Persist(schedules);
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.DataSource.Should().Be(DataSource.CurrentName());
 			message.BusinessUnitIdAsGuid().Should().Be(BusinessUnit.Current().Id.Value);
 			message.StartDateAsDateTime().Should().Be("2015-10-19 8:00".Utc());
 			message.EndDateAsDateTime().Should().Be("2015-10-19 17:00".Utc());
 			message.DomainReferenceIdAsGuid().Should().Be(schedules.Scenario.Id.Value);
-			message.DomainQualifiedType.Should().Be(typeof(IAggregatedScheduleChange).AssemblyQualifiedName);
+			message.DomainQualifiedType.Should().Be(typeof(IScheduleChangedMessage).AssemblyQualifiedName);
 			message.DomainUpdateType.Should().Be(DomainUpdateType.NotApplicable);
 			message.BinaryData.Should().Contain(person.Id.ToString());
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 
 			Target.Persist(schedules);
 
-			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single()
+			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
 

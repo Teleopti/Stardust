@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	{
 		private readonly IScheduleRangePersister _scheduleRangePersister;
 		private readonly IMessageSendersScope _messageSendersScope;
-		private readonly ICurrentMessageSenders _messageSenders;
+		private readonly ICurrentPersistCallbacks _persistCallbacks;
 
 		public ScheduleDictionaryPersister(
 			IScheduleRangePersister scheduleRangePersister, 
 			IMessageSendersScope messageSendersScope,
-			ICurrentMessageSenders messageSenders)
+			ICurrentPersistCallbacks persistCallbacks)
 		{
 			_scheduleRangePersister = scheduleRangePersister;
 			_messageSendersScope = messageSendersScope;
-			_messageSenders = messageSenders;
+			_persistCallbacks = persistCallbacks;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var completeResult = new SchedulePersistResult();
             foreach (var scheduleRange in scheduleDictionary.Values)
 			{
-				using (_messageSendersScope.OnThisThreadExclude<AggregatedScheduleChangeMessageSender>())
+				using (_messageSendersScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
 				{
 					var result = _scheduleRangePersister.Persist(scheduleRange);
 					completeResult.PersistConflicts = completeResult.PersistConflicts.Concat(result.PersistConflicts);
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					completeResult.InitiatorIdentifier = result.InitiatorIdentifier;
 				}				
 			}
-			var aggregatedScheduleChangeMessageSender = _messageSenders.Current().OfType<AggregatedScheduleChangeMessageSender>().SingleOrDefault();
+			var aggregatedScheduleChangeMessageSender = _persistCallbacks.Current().OfType<ScheduleChangedMessageSender>().SingleOrDefault();
 			if (aggregatedScheduleChangeMessageSender != null)
-				aggregatedScheduleChangeMessageSender.Execute(completeResult.InitiatorIdentifier, completeResult.ModifiedRoots);
+				aggregatedScheduleChangeMessageSender.Send(completeResult.InitiatorIdentifier, completeResult.ModifiedRoots);
             
 			return completeResult.PersistConflicts;
 		}

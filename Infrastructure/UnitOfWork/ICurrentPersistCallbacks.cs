@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface ICurrentMessageSenders
+	public interface ICurrentPersistCallbacks
 	{
-		IEnumerable<IMessageSender> Current();
+		IEnumerable<IPersistCallback> Current();
 	}
 }

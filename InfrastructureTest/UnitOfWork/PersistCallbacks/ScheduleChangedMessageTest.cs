@@ -16,12 +16,12 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {
 	[TestFixture]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	[PrincipalAndStateTest]
-	public class AggregatedScheduleChangeMessageTest
+	public class ScheduleChangedMessageTest
 	{
 		public FakeMessageSender MessageSender;
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll();
 			}
 
-			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Should().Have.Count.EqualTo(1);
+			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Should().Have.Count.EqualTo(1);
 		}
 		
 		[Test]
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll();
 			}
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.DataSource.Should().Be(DataSource.CurrentName());
 			message.BusinessUnitIdAsGuid().Should().Be(BusinessUnit.Current().Id.Value);
 			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
 			message.EndDateAsDateTime().Should().Be("2015-06-24 17:00".Utc());
 			message.DomainReferenceIdAsGuid().Should().Be(scenario.Id.Value);
-			message.DomainQualifiedType.Should().Be(typeof (IAggregatedScheduleChange).AssemblyQualifiedName);
+			message.DomainQualifiedType.Should().Be(typeof (IScheduleChangedMessage).AssemblyQualifiedName);
 			message.DomainUpdateType.Should().Be(DomainUpdateType.NotApplicable);
 			message.BinaryData.Should().Contain(person.Id.ToString());
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 
 				uow.PersistAll();
 			}
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new []{person1.Id.Value, person2.Id.Value});
 		}
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll();
 			}
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Count().Should().Be(1);
 		}
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll();
 			}
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
 		}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll();
 			}
 
-			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.EndDateAsDateTime().Should().Be("2015-06-25 17:00".Utc());
 		}
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 				uow.PersistAll(InitiatorIdentifier);
 			}
 
-			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single()
+			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
 

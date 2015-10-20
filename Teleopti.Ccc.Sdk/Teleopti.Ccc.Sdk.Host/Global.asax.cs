@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		private static void registerDataSourcesFactory(ContainerBuilder builder)
 		{
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentMessageSenders>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
 
 			builder.Register(c => new DataSourcesFactory(
 				new EnversConfiguration(),
-				c.Resolve<ICurrentMessageSenders>(),
+				c.Resolve<ICurrentPersistCallbacks>(),
 				DataSourceConfigurationSetter.ForSdk(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging

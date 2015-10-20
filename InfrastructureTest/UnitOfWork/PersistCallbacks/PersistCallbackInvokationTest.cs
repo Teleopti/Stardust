@@ -8,14 +8,14 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {
 	[TestFixture]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	[ScheduleDictionaryPersistTest]
-	public class MessageSenderInvokationTest
+	public class PersistCallbackInvokationTest
 	{
-		public FakeUnitOfWorkMessageSender MessageSender;
+		public FakePersistCallback MessageSender;
 		public IScheduleDictionaryPersister Target;
 		public IScheduleDictionaryPersistTestHelper Helper;
 

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(onEventMessage), sender, e);
 				return;
 			}
-			if (e.Message.InterfaceType.IsAssignableFrom(typeof (IAggregatedScheduleChange)))
+			if (e.Message.InterfaceType.IsAssignableFrom(typeof (IScheduleChangedMessage)))
 			{
 				dispatchAggregatedScheduleChangeEvent(sender, e);
 			}

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IScheduleDictionaryPersister Target;
 		public IScheduleDictionaryPersistTestHelper Helper;
 		public IPersonAssignmentRepository PersonAssignments;
-		public InUnitOfWork InUnitOfWork;
+		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
 		public void ShouldPersist()
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			Target.Persist(schedules);
 
-			InUnitOfWork.Do(() => PersonAssignments.LoadAll().Single().Person.Should().Be(person));
+			WithUnitOfWork.Do(() => PersonAssignments.LoadAll().Single().Person.Should().Be(person));
 		}
 
 	}

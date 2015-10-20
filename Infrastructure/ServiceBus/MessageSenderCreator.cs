@@ -30,26 +30,26 @@ namespace Teleopti.Ccc.Infrastructure.ServiceBus
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public ICurrentMessageSenders Create()
+		public ICurrentPersistCallbacks Create()
 		{
 			var populator = EventContextPopulator.Make();
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
-			var senders = new List<IMessageSender>
+			var senders = new List<IPersistCallback>
 			{
-				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+				new ScheduleChangedEventPublisher(eventPublisher, new ClearEvents()),
 				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-				new MeetingMessageSender(eventPublisher),
-				new GroupPageChangedMessageSender(messageSender),
-				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-				new PersonChangedMessageSender(eventPublisher, businessUnit),
-				new PersonPeriodChangedMessageSender(messageSender)
+				new ScheduleChangedEventFromMeetingPublisher(eventPublisher),
+				new GroupPageChangedBusMessageSender(messageSender),
+				new PersonCollectionChangedEventPublisherForTeamOrSite(eventPublisher, businessUnit),
+				new PersonCollectionChangedEventPublisher(eventPublisher, businessUnit),
+				new PersonPeriodChangedBusMessagePublisher(messageSender)
 			};
 			if (_toggleManager.IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				senders.Add(new AggregatedScheduleChangeMessageSender(_messageSender, CurrentDataSource.Make(), businessUnit, _serializer,
+				senders.Add(new ScheduleChangedMessageSender(_messageSender, CurrentDataSource.Make(), businessUnit, _serializer,
 					_initiatorIdentifier));
-			return new CurrentMessageSenders(senders);
+			return new CurrentPersistCallbacks(senders);
 		}
 	}
 }

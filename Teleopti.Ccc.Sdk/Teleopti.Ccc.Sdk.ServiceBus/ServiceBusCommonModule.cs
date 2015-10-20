@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentMessageSenders>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.Register(c => DataSourceConfigurationSetter.ForServiceBus())
 				.As<IDataSourceConfigurationSetter>()

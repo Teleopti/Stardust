@@ -6,21 +6,22 @@ using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class AggregatedScheduleChangeMessageSender : IMessageSender
+	public class ScheduleChangedMessageSender : IPersistCallback
 	{
-		private readonly Interfaces.MessageBroker.Client.IMessageSender _messageSender;
+		private readonly IMessageSender _messageSender;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly IJsonSerializer _serializer;
 		private static readonly Type[] includedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 
-		public AggregatedScheduleChangeMessageSender(
-			Interfaces.MessageBroker.Client.IMessageSender messageSender,
+		public ScheduleChangedMessageSender(
+			IMessageSender messageSender,
 			ICurrentDataSource dataSource,
 			ICurrentBusinessUnit businessUnit,
 			IJsonSerializer serializer,
@@ -32,8 +33,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_serializer = serializer;
 			_initiatorIdentifier = initiatorIdentifier;
 		}
-		
-		public void Execute(IInitiatorIdentifier initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+			Send(_initiatorIdentifier.Current(), modifiedRoots);
+		}
+
+		public void Send(IInitiatorIdentifier initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
@@ -68,18 +74,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					EndDate = Subscription.DateToString(endDateTime),
 					DomainReferenceId = scenario.Id.Value.ToString(),
 					DomainUpdateType = (int)DomainUpdateType.NotApplicable,
-					DomainQualifiedType = typeof(IAggregatedScheduleChange).AssemblyQualifiedName,
-					DomainType = typeof(IAggregatedScheduleChange).Name,
+					DomainQualifiedType = typeof(IScheduleChangedMessage).AssemblyQualifiedName,
+					DomainType = typeof(IScheduleChangedMessage).Name,
 					BinaryData = _serializer.SerializeObject(personIds)
 				};
 
 				_messageSender.Send(messge);
 			}
-		}
-
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			Execute(_initiatorIdentifier.Current(), modifiedRoots);
 		}
 
 		private static IEnumerable<IPersistableScheduleData> extractScheduleChangesOnly(IEnumerable<IRootChangeInfo> modifiedRoots)

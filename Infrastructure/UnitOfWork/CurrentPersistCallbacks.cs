@@ -5,24 +5,24 @@ using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class CurrentMessageSenders : ICurrentMessageSenders, IMessageSendersScope
+	public class CurrentPersistCallbacks : ICurrentPersistCallbacks, IMessageSendersScope
 	{
-		private static IEnumerable<IMessageSender> _globalMessageSenders;
+		private static IEnumerable<IPersistCallback> _globalMessageSenders;
 		[ThreadStatic]
-		private static IEnumerable<IMessageSender> _threadMessageSenders;
-		private readonly IEnumerable<IMessageSender> _messageSenders;
+		private static IEnumerable<IPersistCallback> _threadMessageSenders;
+		private readonly IEnumerable<IPersistCallback> _messageSenders;
 
-		public CurrentMessageSenders(IEnumerable<IMessageSender> messageSenders)
+		public CurrentPersistCallbacks(IEnumerable<IPersistCallback> messageSenders)
 		{
 			_messageSenders = messageSenders;
 		}
 
-		public IEnumerable<IMessageSender> Current()
+		public IEnumerable<IPersistCallback> Current()
 		{
 			return _threadMessageSenders ?? _globalMessageSenders ?? _messageSenders;
 		}
 
-		public IDisposable GloballyUse(IEnumerable<IMessageSender> messageSenders)
+		public IDisposable GloballyUse(IEnumerable<IPersistCallback> messageSenders)
 		{
 			_globalMessageSenders = messageSenders;
 			return new GenericDisposable(() =>
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			});
 		}
 
-		public IDisposable OnThisThreadUse(IEnumerable<IMessageSender> messageSenders)
+		public IDisposable OnThisThreadUse(IEnumerable<IPersistCallback> messageSenders)
 		{
 			_threadMessageSenders = messageSenders;
 			return new GenericDisposable(() =>

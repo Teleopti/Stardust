@@ -31,16 +31,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>().SingleInstance();
 			builder.Register(c => c.Resolve<ICurrentDataSource>().Current()).As<IDataSource>().ExternallyOwned();
 
-			builder.RegisterType<InUnitOfWork>().SingleInstance();
+			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
-			builder.RegisterType<CurrentMessageSenders>()
-				.As<ICurrentMessageSenders>()
+			builder.RegisterType<CurrentPersistCallbacks>()
+				.As<ICurrentPersistCallbacks>()
 				.As<IMessageSendersScope>()
 				.SingleInstance();
 
-			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>().SingleInstance();
 			if(_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<AggregatedScheduleChangeMessageSender>().As<IMessageSender>().AsSelf().SingleInstance();
+				builder.RegisterType<ScheduleChangedMessageSender>().As<IPersistCallback>().AsSelf().SingleInstance();
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
 				.OnActivated(e => CurrentBusinessUnit.SetInstanceFromContainer(e.Instance))
 				.OnRelease(e => CurrentBusinessUnit.SetInstanceFromContainer(null))

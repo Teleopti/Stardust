@@ -613,7 +613,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterEventsMessageSender()
 		{
-			requestContainer.Resolve<IEnumerable<IMessageSender>>()
+			requestContainer.Resolve<IEnumerable<IPersistCallback>>()
 				.OfType<EventsMessageSender>()
 				.Single()
 				.Should().Not.Be.Null();

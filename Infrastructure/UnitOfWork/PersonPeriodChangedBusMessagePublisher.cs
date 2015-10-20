@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    public class PersonPeriodChangedMessageSender :IMessageSender
+    public class PersonPeriodChangedBusMessagePublisher :IPersistCallback
     {
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson)
 		                                                        	};
 
-		public PersonPeriodChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
+		public PersonPeriodChangedBusMessagePublisher(IMessagePopulatingServiceBusSender serviceBusSender)
 		{
 	        _serviceBusSender = serviceBusSender;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()

@@ -13,11 +13,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class EventsTest : ISetup
+	public class EventPublishingTest : ISetup
 	{
 		public ICurrentUnitOfWorkFactory Uow;
 		public FakeEventPublisher EventsPublisher;

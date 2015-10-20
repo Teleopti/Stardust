@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class TeamOrSiteChangedMessageSender : IMessageSender
+	public class PersonCollectionChangedEventPublisherForTeamOrSite : IPersistCallback
 	{
 		private readonly IEventPopulatingPublisher _eventsPublisher;
 		private readonly ICurrentBusinessUnit _businessUnit;
@@ -22,13 +19,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				typeof (ISite),
 			};
 
-		public TeamOrSiteChangedMessageSender(IEventPopulatingPublisher eventsPublisher, ICurrentBusinessUnit businessUnit)
+		public PersonCollectionChangedEventPublisherForTeamOrSite(IEventPopulatingPublisher eventsPublisher, ICurrentBusinessUnit businessUnit)
 		{
 			_eventsPublisher = eventsPublisher;
 			_businessUnit = businessUnit;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			// we are signed in with a transient BU and cant publish events
 			var bu = _businessUnit.Current();

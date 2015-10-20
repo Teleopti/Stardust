@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -16,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
 	public class ScheduleMessageSenderTest
@@ -30,9 +29,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] { rootChangeInfo });
+			target.AfterFlush(new[] { rootChangeInfo });
 
 			serviceBusSender.AssertWasCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
@@ -46,9 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] {rootChangeInfo});
+			target.AfterFlush(new[] {rootChangeInfo});
 
 			beforeSendEvents.AssertWasCalled(x => x.Execute(null), o => o.IgnoreArguments());
 		}
@@ -61,9 +60,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var person = PersonFactory.CreatePerson();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, null);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] {rootChangeInfo});
+			target.AfterFlush(new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(false,null), o => o.IgnoreArguments());
 		}
@@ -75,9 +74,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] {rootChangeInfo});
+			target.AfterFlush(new[] {rootChangeInfo});
 			
 			serviceBusSender.AssertWasNotCalled(x => x.Send( false, null), o => o.IgnoreArguments());
 		}
@@ -91,9 +90,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var note = new Note(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] {rootChangeInfo});
+			target.AfterFlush(new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
@@ -107,9 +106,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var note = new PublicNote(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-			target.Execute(new[] {rootChangeInfo});
+			target.AfterFlush(new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
@@ -123,9 +122,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             var agentDayScheduleTag = new AgentDayScheduleTag(person, DateOnly.Today, scenario, new ScheduleTag());
             IRootChangeInfo rootChangeInfo = new RootChangeInfo(agentDayScheduleTag, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator()), beforeSendEvents);
 
-            target.Execute(new[] { rootChangeInfo });
+            target.AfterFlush(new[] { rootChangeInfo });
 
             serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
         }
@@ -140,9 +139,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 			var initiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = Guid.NewGuid() };
-			var target = new ScheduleMessageSender(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new EventContextPopulator(null, null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))), beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new EventContextPopulator(null, null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))), beforeSendEvents);
 
-			target.Execute(new[] { rootChangeInfo });
+			target.AfterFlush(new[] { rootChangeInfo });
 
 			serviceBusSender.AssertWasCalled(x => x.Send(Arg<bool>.Is.Anything, Arg<object[]>.Matches(e =>
 				((ScheduleChangedEvent)e.First()).InitiatorId == initiatorIdentifier.InitiatorId
@@ -158,8 +157,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
-			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
-			target.Execute(new[] { rootChangeInfo });
+			var target = new ScheduleChangedEventPublisher(publisher, beforeSendEvents);
+			target.AfterFlush(new[] { rootChangeInfo });
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
 		}
@@ -173,10 +172,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
-			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
+			var target = new ScheduleChangedEventPublisher(publisher, beforeSendEvents);
 			try
 			{
-				target.Execute(new[] { rootChangeInfo });
+				target.AfterFlush(new[] { rootChangeInfo });
 			}
 			catch (Exception)
 			{

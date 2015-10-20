@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
@@ -355,11 +354,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			ITransaction tx = mocks.DynamicMock<ITransaction>();
 			ISessionImplementor sessImpl = mocks.StrictMock<ISessionImplementor>();
-			IMessageSender messageSender = mocks.StrictMock<IMessageSender>();
+			IPersistCallback messageSender = mocks.StrictMock<IPersistCallback>();
 
 			session = mocks.DynamicMock<ISession>();
 			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-			uow = new testUnitOfWork(session, messageBroker, pushMessageService, new FakeCurrentMessageSenders(new[] { messageSender }));
+			uow = new testUnitOfWork(session, messageBroker, pushMessageService, new FakeCurrentPersistCallbacks(new[] { messageSender }));
 
 			AggregateRootInterceptor interceptor = new AggregateRootInterceptor();
 
@@ -376,7 +375,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					.Call(session.BeginTransaction())
 					.Return(tx);
 
-				Expect.Call(() => messageSender.Execute(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
+				Expect.Call(() => messageSender.AfterFlush(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
 				Expect.Call(messageBroker.IsAlive).Return(true);
 			}
@@ -458,8 +457,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class testUnitOfWork : NHibernateUnitOfWork
 		{
-			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, ICurrentMessageSenders messageSenders)
-				: base(mock, messageBroker, messageSenders ?? new NoMessageSenders(), null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
+			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, ICurrentPersistCallbacks persistCallbacks)
+				: base(mock, messageBroker, persistCallbacks ?? new NoPersistCallbacks(), null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
 			{
 			}
 

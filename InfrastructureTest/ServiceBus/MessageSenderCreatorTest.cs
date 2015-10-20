@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ServiceBus
 
 			var senderTypes = new[]
 			{
-				typeof (ScheduleMessageSender),
+				typeof (ScheduleChangedEventPublisher),
 				typeof (EventsMessageSender),
-				typeof (MeetingMessageSender),
-				typeof (GroupPageChangedMessageSender),
-				typeof (TeamOrSiteChangedMessageSender),
-				typeof (PersonChangedMessageSender),
-				typeof (PersonPeriodChangedMessageSender),
-				typeof (AggregatedScheduleChangeMessageSender)
+				typeof (ScheduleChangedEventFromMeetingPublisher),
+				typeof (GroupPageChangedBusMessageSender),
+				typeof (PersonCollectionChangedEventPublisherForTeamOrSite),
+				typeof (PersonCollectionChangedEventPublisher),
+				typeof (PersonPeriodChangedBusMessagePublisher),
+				typeof (ScheduleChangedMessageSender)
 			};
 
 			var senders = creator.Create().Current().ToList();

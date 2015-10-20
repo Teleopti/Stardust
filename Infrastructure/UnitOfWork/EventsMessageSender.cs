@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class EventsMessageSender : IMessageSender
+	public class EventsMessageSender : IPersistCallback
 	{
 		private readonly IEventsPublisher _publisher;
 
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_publisher = publisher;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
 			if (!withEvents.Any()) return;

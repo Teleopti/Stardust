@@ -9,19 +9,19 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ScheduleMessageSender : IMessageSender
+	public class ScheduleChangedEventPublisher : IPersistCallback
 	{
-		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IBeforeSendEvents _clearEvents;
 		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
-		public ScheduleMessageSender(IEventPopulatingPublisher eventPopulatingPublisher, IBeforeSendEvents clearEvents)
+		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher, IBeforeSendEvents clearEvents)
 		{
-			_eventPopulatingPublisher = eventPopulatingPublisher;
+			_eventPublisher = eventPublisher;
 			_clearEvents = clearEvents;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					try
 					{
 						retries++;
-						_eventPopulatingPublisher.Publish(messages.ToArray());
+						_eventPublisher.Publish(messages.ToArray());
 						return;
 					}
 					catch (SqlException)

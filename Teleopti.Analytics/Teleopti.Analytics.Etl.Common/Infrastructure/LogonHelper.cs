@@ -159,7 +159,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			var dataSourceConfigSetter = usedInService ? DataSourceConfigurationSetter.ForEtlService() : DataSourceConfigurationSetter.ForEtl();
 
-			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
+			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoPersistCallbacks(),
 				dataSourceConfigSetter,
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging

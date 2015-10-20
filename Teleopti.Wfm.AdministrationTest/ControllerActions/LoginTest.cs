@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfWrongEmail()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfWrongPassword()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueWhenCorrectLogon()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel {ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };

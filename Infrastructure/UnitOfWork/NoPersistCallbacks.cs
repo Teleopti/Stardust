@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NoMessageSenders : ICurrentMessageSenders
+	public class NoPersistCallbacks : ICurrentPersistCallbacks
 	{
-		public IEnumerable<IMessageSender> Current()
+		public IEnumerable<IPersistCallback> Current()
 		{
 			yield break;
 		}

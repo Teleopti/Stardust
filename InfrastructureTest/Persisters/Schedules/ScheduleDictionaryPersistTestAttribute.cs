@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 	public class ScheduleDictionaryPersistTestAttribute : PrincipalAndStateTestAttribute, IScheduleDictionaryPersistTestHelper
 	{
-		public InUnitOfWork InUnitOfWork;
+		public WithUnitOfWork WithUnitOfWork;
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IScenarioRepository ScenarioRepository;
@@ -32,13 +32,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IScheduleRepository ScheduleRepository;
 		public IPersonRepository PersonRepository;
 		public ICurrentScenario Scenario;
-		public FakeUnitOfWorkMessageSender MessageSender2;
+		public FakePersistCallback MessageSender2;
 
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
 
-			InUnitOfWork.Do(() =>
+			WithUnitOfWork.Do(() =>
 			{
 				ActivityRepository.Add(new Activity("persist test"));
 				ShiftCategoryRepository.Add(new ShiftCategory("persist test"));
@@ -54,14 +54,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-			system.UseTestDouble<FakeUnitOfWorkMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<FakePersistCallback>().For<IPersistCallback>();
 			system.AddService(this);
 		}
 
 		public IScheduleDictionary MakeDictionary()
 		{
 			IScheduleDictionary schedules = null;
-			InUnitOfWork.Do(() =>
+			WithUnitOfWork.Do(() =>
 			{
 				schedules = ScheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 					Scenario.Current(),
@@ -74,35 +74,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		public IActivity Activity()
 		{
-			return InUnitOfWork.Get(() => ActivityRepository.LoadAll().First());
+			return WithUnitOfWork.Get(() => ActivityRepository.LoadAll().First());
 		}
 
 		public IPerson NewPerson()
 		{
 			var person = PersonFactory.CreatePerson();
-			InUnitOfWork.Do(() =>
+			WithUnitOfWork.Do(() =>
 			{
 				PersonRepository.Add(person);
 			});
 			return person;
-		}
-	}
-
-	public class FakeUnitOfWorkMessageSender : IMessageSender
-	{
-		public IEnumerable<IRootChangeInfo> InvokedWith;
-		public IEnumerable<object> ModifiedRoots;
-
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			InvokedWith = modifiedRoots;
-			ModifiedRoots = InvokedWith.Select(x => x.Root);
-		}
-
-		public void Clear()
-		{
-			InvokedWith = null;
-			ModifiedRoots = null;
 		}
 	}
 }

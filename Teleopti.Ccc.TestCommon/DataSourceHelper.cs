@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		public static IDataSource CreateDataSource(ICurrentMessageSenders messageSenders, string name)
+		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
 		{
 			setupCcc7(name);
 			setupAnalytics();
-			return makeDataSource(messageSenders, name);
+			return makeDataSource(persistCallbacks, name);
 		}
 
 		public static void RestoreCcc7Database(int dataHash)
@@ -178,12 +178,12 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
 		}
 
-		private static IDataSource makeDataSource(ICurrentMessageSenders messageSenders, string name)
+		private static IDataSource makeDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
 		{
 			return exceptionToConsole(
 				() =>
 				{
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), persistCallbacks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
 					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
 					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 				},

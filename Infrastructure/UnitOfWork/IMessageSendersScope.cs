@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public interface IMessageSendersScope
 	{
-		IDisposable GloballyUse(IEnumerable<IMessageSender> messageSenders);
-		IDisposable OnThisThreadUse(IEnumerable<IMessageSender> messageSenders);
+		IDisposable GloballyUse(IEnumerable<IPersistCallback> messageSenders);
+		IDisposable OnThisThreadUse(IEnumerable<IPersistCallback> messageSenders);
 		IDisposable OnThisThreadExclude<T>();
 	}
 }

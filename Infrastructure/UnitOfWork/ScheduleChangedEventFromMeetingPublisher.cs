@@ -8,16 +8,16 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class MeetingMessageSender : IMessageSender
+	public class ScheduleChangedEventFromMeetingPublisher : IPersistCallback
 	{
-		private readonly IEventPopulatingPublisher _serviceBusSender;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 
-		public MeetingMessageSender(IEventPopulatingPublisher serviceBusSender)
+		public ScheduleChangedEventFromMeetingPublisher(IEventPopulatingPublisher eventPublisher)
 		{
-			_serviceBusSender = serviceBusSender;
+			_eventPublisher = eventPublisher;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = customChange.Period.EndDateTime,
 					              		PersonId = customChange.MainRoot.Id.GetValueOrDefault()
 					              	};
-					_serviceBusSender.Publish(message);
+					_eventPublisher.Publish(message);
 				}
 			}
 		}

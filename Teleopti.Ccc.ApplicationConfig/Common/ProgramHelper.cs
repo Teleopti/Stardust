@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		{
 			var dataSourcesFactory = new DataSourcesFactory(
 				new EnversConfiguration(),
-				new NoMessageSenders(),
+				new NoPersistCallbacks(),
 				DataSourceConfigurationSetter.ForApplicationConfig(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging

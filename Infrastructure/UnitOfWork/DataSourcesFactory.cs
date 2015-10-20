@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly ICurrentMessageSenders _messageSenders;
+		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public DataSourcesFactory(
 			IEnversConfiguration enversConfiguration,
-			ICurrentMessageSenders messageSenders,
+			ICurrentPersistCallbacks persistCallbacks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext, 
 			Func<IMessageBrokerComposite> messageBroker)
 		{
 			_enversConfiguration = enversConfiguration;
-			_messageSenders = messageSenders;
+			_persistCallbacks = persistCallbacks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
 			_messageBroker = messageBroker ?? (() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				sessionFactory,
 				_enversConfiguration.AuditSettingProvider, 
 				applicationConnectionString,
-				_messageSenders, 
+				_persistCallbacks, 
 				_messageBroker);
 
 			if (!string.IsNullOrEmpty(statisticConnectionString))

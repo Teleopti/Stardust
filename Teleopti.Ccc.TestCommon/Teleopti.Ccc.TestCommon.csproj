@@ -140,7 +140,7 @@
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeApplicationData.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
-    <Compile Include="FakeCurrentMessageSenders.cs" />
+    <Compile Include="FakeCurrentPersistCallbacks.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeClassicDaysOffOptimizationCommand.cs" />

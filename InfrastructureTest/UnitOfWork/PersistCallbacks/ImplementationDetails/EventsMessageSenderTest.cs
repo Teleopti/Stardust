@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
 	public class EventsMessageSenderTest
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.Stub(x => x.PopAllEvents()).Return(Enumerable.Empty<IEvent>());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(roots);
+			target.AfterFlush(roots);
 
 			root.AssertWasCalled(x => x.PopAllEvents());
 		}
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime, new TrackedCommandInfo());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(roots);
+			target.AfterFlush(roots);
 
 			eventsPublisher.PublishedEvents.Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
 		}

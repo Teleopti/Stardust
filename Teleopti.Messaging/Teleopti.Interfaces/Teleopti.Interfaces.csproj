@@ -143,7 +143,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
-    <Compile Include="Domain\IAggregatedScheduleChange.cs" />
+    <Compile Include="Domain\IScheduleChangedMessage.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
     <Compile Include="Domain\ICurrentBusinessUnit.cs" />
     <Compile Include="Domain\IDataSourceForTenant.cs" />

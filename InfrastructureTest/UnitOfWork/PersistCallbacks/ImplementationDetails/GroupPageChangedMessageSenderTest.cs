@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
 	public class GroupPageChangedMessageSenderTest
 	{
-		private IMessageSender _target;
+		private IPersistCallback _target;
 		private MockRepository _mocks;
 		private IMessagePopulatingServiceBusSender _serviceBusSender;
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			_mocks = new MockRepository();
 			_serviceBusSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
 
-			_target = new GroupPageChangedMessageSender(_serviceBusSender);
+			_target = new GroupPageChangedBusMessageSender(_serviceBusSender);
 		}
 
         [Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             using (_mocks.Playback())
             {
-				_target.Execute(roots);
+				_target.AfterFlush(roots);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+				_target.AfterFlush(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
 			}
 		}
 	}

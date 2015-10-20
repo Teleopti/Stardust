@@ -3,8 +3,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface IMessageSender
+	public interface IPersistCallback
 	{
-		void Execute(IEnumerable<IRootChangeInfo> modifiedRoots);
+		void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots);
 	}
 }

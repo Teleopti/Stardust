@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotBeNull()
 		{
 			//create database
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 
 			Target.GetAllTenants().Should().Not.Be.Null();
 		}

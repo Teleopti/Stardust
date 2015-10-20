@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public IMessageSendersScope MessageSendersScope;
-		public IEnumerable<IMessageSender> MessageSenders;
+		public IEnumerable<IPersistCallback> MessageSenders;
 		private IDisposable _messageSenderScope;
 		public FakeMessageSender MessageSender;
 		public IDataSourceForTenant DataSourceForTenant;

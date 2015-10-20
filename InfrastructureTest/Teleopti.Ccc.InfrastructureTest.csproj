@@ -224,12 +224,13 @@
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
+    <Compile Include="Persisters\Schedules\FakePersistCallback.cs" />
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="ServiceBus\MessageSenderCreatorTest.cs" />
-    <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageScheduleDictionaryPersisterTest.cs" />
-    <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
     <Compile Include="Repositories\OutboundCampaignRepositoryTest.cs" />
@@ -506,13 +507,13 @@
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
     <Compile Include="UnitOfWork\DoNotReuseTransactionLevelTest.cs" />
-    <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\EventsMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
-    <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
-    <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
-    <Compile Include="UnitOfWork\MessageSenders\EventsTest.cs" />
-    <Compile Include="UnitOfWork\MessageSenders\MessageSenderInvokationTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\MeetingMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\EventPublishingTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\PersistCallbackInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersistTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
@@ -536,11 +537,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
-    <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
-    <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\ScheduleMessageSenderTest.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusEventPublishingTest.cs" />
-    <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />

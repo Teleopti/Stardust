@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldUgradeToLatestVersion()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
 
 			var builder = TestPolutionCleaner.TestTenantConnection();

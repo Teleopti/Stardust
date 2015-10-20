@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfUserExists()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			var tenant = new Tenant("Tenn");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -55,7 +55,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueIfUserNotExists()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			var tenant = new Tenant("Tenn");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

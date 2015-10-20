@@ -1,6 +1,6 @@
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IAggregatedScheduleChange
+	public interface IScheduleChangedMessage
 	{
 		
 	}

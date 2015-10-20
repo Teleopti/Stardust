@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
         [SetUp]
         public void Setup()
         {
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoPersistCallbacks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
             dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, 1),
 								  ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
         }

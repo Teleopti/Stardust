@@ -14,7 +14,6 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
-using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -32,12 +31,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				FeatureToggle = "http://notinuse"
 			};
 			builder.RegisterModule(new CommonModule(new IocConfiguration(args, new FalseToggleManager())));
-			builder.RegisterType<TeamOrSiteChangedMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<PersonChangedMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<IPersistCallback>().SingleInstance();
+			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<IPersistCallback>().SingleInstance();
+			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>().SingleInstance();
 			var container = builder.Build();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), UserConfigurable.DefaultTenantName);
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentPersistCallbacks>(), UserConfigurable.DefaultTenantName);
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));

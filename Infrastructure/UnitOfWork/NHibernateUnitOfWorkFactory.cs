@@ -18,21 +18,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ISessionFactory _factory;
 		private readonly IAuditSetter _auditSettingProvider;
 
-		private readonly ICurrentMessageSenders _messageSenders;
+		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
 
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			IAuditSetter auditSettingProvider,
 			string connectionString,
-			ICurrentMessageSenders messageSenders,
+			ICurrentPersistCallbacks persistCallbacks,
 			Func<IMessageBrokerComposite> messageBroker)
 		{
 			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
-			_messageSenders = messageSenders;
+			_persistCallbacks = persistCallbacks;
 			_messageBroker = messageBroker;
 		}
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return new NHibernateUnitOfWork(session,
 											messaging,
-											_messageSenders,
+											_persistCallbacks,
 											filterManager,
 											new SendPushMessageWhenRootAlteredService(),
 											SessionContextBinder.Unbind,

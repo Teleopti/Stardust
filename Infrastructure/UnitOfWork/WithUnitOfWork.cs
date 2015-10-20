@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class InUnitOfWork
+	public class WithUnitOfWork
 	{
 		private readonly ICurrentUnitOfWorkFactory _factory;
 
-		public InUnitOfWork(ICurrentUnitOfWorkFactory factory)
+		public WithUnitOfWork(ICurrentUnitOfWorkFactory factory)
 		{
 			_factory = factory;
 		}

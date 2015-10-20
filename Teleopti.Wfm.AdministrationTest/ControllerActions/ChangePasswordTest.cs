@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldNotWorkWithUnknownId()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			var changeModel = new ChangePasswordModel { Id = 65656565 };
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotWorkWithWrongPassword()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -57,7 +57,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotWorkWithWrongConfirmPassword()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldWorkWithCorrectPasswords()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

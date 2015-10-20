@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -10,12 +9,12 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.ImplementationDetails
 {
 	[TestFixture]
 	public class MeetingMessageSenderTest
 	{
-		private IMessageSender target;
+		private IPersistCallback target;
 		private MockRepository mocks;
 		private IEventPopulatingPublisher serviceBusSender;
 
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			mocks = new MockRepository();
 			serviceBusSender = mocks.DynamicMock<IEventPopulatingPublisher>();
-			target = new MeetingMessageSender(serviceBusSender);
+			target = new ScheduleChangedEventFromMeetingPublisher(serviceBusSender);
 		}
 
 		[Test]
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(new[] { rootChangeInfo });
+				target.AfterFlush(new[] { rootChangeInfo });
 			}
 		}
 
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(new[] { rootChangeInfo });
+				target.AfterFlush(new[] { rootChangeInfo });
 			}
 		}
 	}
