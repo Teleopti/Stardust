@@ -41,6 +41,10 @@ a:focus {
 	margin-left: 0;
 }
 
+dd {
+	margin-left: 40px!important;	
+}
+
 .select-toggle {
 	opacity: 0;
 }
@@ -257,7 +261,8 @@ a:focus {
 
 	label{
 		font-weight: normal!important;
-		color:#616161;
+		color:#CACACA;
+		font-size: 13px;
 	}
 
 	input[type="text"],

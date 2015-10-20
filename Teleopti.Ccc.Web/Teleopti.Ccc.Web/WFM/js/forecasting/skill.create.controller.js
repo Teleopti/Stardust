@@ -48,14 +48,12 @@ angular.module('wfm.forecasting')
 			skillService.activities.get().$promise.then(function(result) {
 				var activities = $filter('orderBy')(result, 'Name');
 				$scope.activities = activities;
-				$scope.activities.unshift({ Name: 'Pick an activity...', Disabled: true });
-				$scope.model.selectedActivity = $scope.activities[1];
+				$scope.model.selectedActivity = $scope.activities[0];
 
 			});
 			$scope.timezones = [];
 			skillService.timezones.get().$promise.then(function(result) {
 				$scope.timezones = result.Timezones;
-				$scope.timezones.unshift( {Name: 'Pick a timezone...', Disabled: true} );
 				$scope.model.selectedTimezone = $filter('filter')(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
 			});
 
