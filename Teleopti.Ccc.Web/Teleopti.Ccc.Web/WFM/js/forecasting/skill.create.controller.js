@@ -49,8 +49,8 @@
 				skillService.activities.get().$promise.then(function (result) {
 					var activities = $filter('orderBy')(result, 'Name');
 					$scope.activities = activities;
-					$scope.model.selectedActivity = $scope.activities[0];
-
+					if ($scope.activities[0])
+						$scope.model.selectedActivity = $scope.activities[0];
 				});
 				$scope.timezones = [];
 				skillService.timezones.get().$promise.then(function (result) {
@@ -75,7 +75,7 @@
 							$scope.queueSelected = row.grid.selection.selectedCount > 0;
 							$scope.hideQueueInvalidMessage = false;
 						});
-						gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows, test) {
+						gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
 							$scope.queueSelected = rows[0].grid.selection.selectedCount > 0;
 							$scope.hideQueueInvalidMessage = false;
 						});

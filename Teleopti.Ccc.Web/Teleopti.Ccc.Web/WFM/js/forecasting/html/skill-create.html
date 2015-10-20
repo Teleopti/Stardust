@@ -5,26 +5,25 @@
 			<h5 class="skill-section-header">General</h5>
 			<dd>
 				<div class="form-input-wrap skill-name">
-					<label for="nameId">Name <input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" /></label>
+					<label for="nameId">Name</label>
+					<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">The name is required</div>
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">The name must be less than 50 characters long</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-activity">
-					<label for="drop">Activity</label>
-					<select id="drop" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities"></select>
-
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || model.selectedActivity.$error.required.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:model.selectedActivity.$error.required}">Pick at least one</div>
+					<label for="activityId">Activity</label>
+					<select id="activityId" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities" name="Activity" required></select>
+					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
+						<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">The activity is required</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-timezone">
-					<label for="drop">Time zone</label>
-					<select id="drop" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones"></select>
-
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || model.selectedTimezone.$error.required.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:model.selectedTimezone.$error.required}">Pick at least one</div>
+					<label for="timezoneId">Time zone</label>
+					<select id="timezoneId" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones" name="Timezone" required></select>
+					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
+						<div class="form-input-message" ng-class="{formInvalidInput:form.Timezone.$error.required}">The time zone is required</div>
 					</div>
 				</div>
 			</dd>
