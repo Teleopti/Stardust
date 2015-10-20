@@ -52,10 +52,14 @@
 		</div>
 
 		<div class="seatmap-bottom-bar">
-			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
-				<i class="mdi mdi-gamepad"></i>
-			</button>
-			<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
+
+			<div class="seatmap-zoom-bar">
+				<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
+					<i class="mdi mdi-gamepad"></i>
+				</button>
+				<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()" aria-label="{{vm.zoomData.zoomValue}}"></md-slider>
+			</div>
+
 			<seatmap-occupancy-detail ng-if="vm.showOccupancy" schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()"></seatmap-occupancy-detail>
 		</div>
 	</div>

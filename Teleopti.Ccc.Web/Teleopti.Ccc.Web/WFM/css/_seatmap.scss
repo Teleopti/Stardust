@@ -248,39 +248,67 @@ seatmap-editor{
 	margin-left: 40px;
 }
 
+.seatmap-zoom-bar{
+	background:linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
+	background:-webkit-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
+	background:-o-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
+	background:-moz-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
+}
+
 .seatmap-occupancy-detail {
 	display: block;
 	min-height:120px;
-	max-height:200px;
+	max-height:500px;
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
-	overflow-y:auto;
 	border-top: 1px solid #e1e2e3;
+	overflow:hidden;
 
-	.bottom-header{
-		position:relative;
-		background:#ffffff;
-		border-top:1px solid #e1e2e3;
+	.seatbooking-operations-add, .seatbooking-operations-cancel {
+		position:absolute;
+		top:0;
+		right:0;
 		
 		.wfm-btn{
-			margin:2px;
-			padding: 3px 12px;
-			text-transform: none;
+			background:#ffffff;
 		}
-
-		.pull-right{
-			height:100%;
-			margin-top:-3px;
+		
+		.wfm-btn:hover{
+			background:#f1f2f3;		
 		}
 	}
-	
-	.wfm-list{
-		max-height:166px;
+
+	.seat-booking-list{
+		max-height:250px;
 		overflow-y:auto;
-	}
 
-	span{
-		max-width:100%;
+		.seat-booking-item{
+			.booking-list-header{
+				position:relative;
+				background:#ffffff;
+				border-top:1px solid #e1e2e3;
+		
+				.wfm-btn{
+					margin:2px;
+					padding: 3px 12px;
+					text-transform: none;
+				}
+
+				.pull-right{
+					height:100%;
+					margin-top:-3px;
+				}
+			}
+	
+			.wfm-list{
+				max-height:166px;
+				overflow-y:auto;
+			}
+
+			span{
+				max-width:100%;
+			}
+		}
 	}
 	
 }

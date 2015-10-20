@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿'use strict';
 
 describe('seatmap booking view tests', function () {
 
@@ -16,6 +16,7 @@ describe('seatmap booking view tests', function () {
 		module('wfm.seatPlan');
 		module('wfm.seatMap');
 		module('pascalprecht.translate');
+		module('ui.router');
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapService_, _growl_, _seatMapTranslatorFactory_) {
@@ -90,7 +91,7 @@ describe('seatmap booking view tests', function () {
 		{
 			utils: seatMapCanvasUtilsService,
 			seatMapService: mockSeatMapService,
-			seatmapTranslator : seatMapTranslator
+			seatmapTranslator: seatMapTranslator
 		});
 	};
 });

@@ -17,7 +17,7 @@
 </style>
 <div>
 	<div class="row" style="position:relative">
-		<h4>{{'ManagePeople' | translate}}</h4>
+		<h4 ng-hide="isPickerMode">{{'ManagePeople' | translate}}</h4>
 		<div class="col-md-4">
 			<div class="input-prepend people-search">
 				<i class="mdi mdi-magnify"></i>
@@ -29,7 +29,7 @@
 
 		</div>
 		
-		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled)">
+		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isPickerMode">
 			<button ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-fab wfm-panel-delete material-depth-1" ng-click="clearCart()">
 				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
 				<i class="mdi mdi-account-remove"></i>

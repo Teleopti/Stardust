@@ -65,7 +65,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		return $scope.isAdjustSkillEnabled;
 	};
 
-	var dynamicColumnLoaded = false;
+	$scope.dynamicColumnLoaded = false;
 
 	var paginationOptions = {
 		pageNumber: $stateParams.paginationOptions.pageNumber != undefined ? $stateParams.paginationOptions.pageNumber : 1,
@@ -278,7 +278,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 			});
 
-			if (!dynamicColumnLoaded) {
+			if (!$scope.dynamicColumnLoaded) {
 				angular.forEach(result.OptionalColumns, function (col) {
 					var isFound = false;
 					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
@@ -300,7 +300,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 				});
 
-				dynamicColumnLoaded = true;
+				$scope.dynamicColumnLoaded = true;
 			}
 			setPeopleSelectionStatus();
 			$scope.optionalColumns = result.OptionalColumns;

@@ -3,12 +3,24 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatMapService', 'growl', 'seatMapTranslatorFactory'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
 
-	function seatMapOccupancyDirectiveController(utils, seatMapService, growl, seatmapTranslator) {
+	function seatMapOccupancyDirectiveController(utils, seatMapService, growl, seatmapTranslator, $stateParams) {
 		var vm = this;
+
+		$stateParams.currentKeyword = "";
+		$stateParams.paginationOptions = {};
+
+		vm.selectedPeople = [];
+		vm.showPeopleSelection = false;
+
 		vm.previousSelectedSeats = [];
 
+		vm.asignAgentsToSeats = function () {
+			seatMapService.searchPeople.save({ Date: vm.scheduleDate, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeats }).$promise.then(function () {
+				vm.refreshSeatMap();
+			});
+		};
 		vm.getDisplayTime = function (booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
 		};
@@ -16,7 +28,7 @@
 		vm.deleteSeatBooking = function (booking) {
 			seatMapService.occupancy.remove({ Id: booking.BookingId }).$promise.then(function () {
 				vm.refreshSeatMap();
-				var deleteSuccessMessage = seatmapTranslator.TranslatedStrings['SeatBookingDeletedSuccessfully'].replace('{0}', booking.SeatName).replace('{1}', booking.FirstName +' '+ booking.LastName);
+				var deleteSuccessMessage = seatmapTranslator.TranslatedStrings['SeatBookingDeletedSuccessfully'].replace('{0}', booking.SeatName).replace('{1}', booking.FirstName + ' ' + booking.LastName);
 
 				onSuccessDeleteSeatBooking(deleteSuccessMessage);
 			});
@@ -46,8 +58,8 @@
 
 				object.hasRotatingPoint = false;
 				object.hasControls = false;
-				if (objIsGroup){
-					
+				if (objIsGroup) {
+
 					object.hasBorders = false;
 					var seats = utils.getObjectsOfTypeFromGroup(object, 'seat');
 					if (seats.length > 0) {
@@ -59,6 +71,8 @@
 						loadOccupancyForSeats([object]);
 					}
 				}
+
+				vm.showPeopleSelection = false;
 			};
 
 			canvas().on('selection:created', function (e) {

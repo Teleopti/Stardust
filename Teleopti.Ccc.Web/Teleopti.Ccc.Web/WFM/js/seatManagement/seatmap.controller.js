@@ -15,6 +15,7 @@
 		vm.breadcrumbs = [];
 		vm.showEditor = false;
 		vm.showOccupancy = false;
+		vm.showSearchPeople = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
 		vm.newLocationName = '';

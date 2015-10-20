@@ -1239,6 +1239,7 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\rta\rta.agents.filters.js" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
+    <Content Include="WFM\js\seatManagement\agentpicker.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
