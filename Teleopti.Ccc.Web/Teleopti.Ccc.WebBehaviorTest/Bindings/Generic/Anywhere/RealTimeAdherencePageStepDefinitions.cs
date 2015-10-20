@@ -1,9 +1,15 @@
 using System;
 using System.Drawing;
+using System.Linq;
+using System.Web.UI;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -47,6 +53,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStateInfo>();
 			assertRealTimeAgentDetails(name,stateInfo);
+		}
+		
+		[Then(@"I should see agent details for '(.*)'")]
+		public void ThenIShouldSeeAgentDetailsFor(string name, Table table)
+		{
+			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStateInfo>();
+			assertAgentDetails(name,stateInfo);
 		}
 
 		[Then(@"I should see real time agent name for '(.*)'")]
@@ -169,6 +182,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
 			}
 		}
+
+		private static void assertAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
+		{
+			var selector = "[agentid*='" + IdForPerson(name) + "']"+"[agentvalue*='{0}']";
+
+			if (stateInfo.State != null)
+			Browser.Interactions.AssertExists(selector, stateInfo.State);
+			if (stateInfo.Activity != null)
+				Browser.Interactions.AssertExists(selector, stateInfo.Activity);
+			if (stateInfo.NextActivity != null)
+				Browser.Interactions.AssertExists(selector, name, stateInfo.NextActivity);
+			if (stateInfo.NextActivityStartTimeFormatted() != null)
+				Browser.Interactions.AssertExists(selector, name, stateInfo.NextActivityStartTimeFormatted());
+			if (stateInfo.Alarm != null)
+				Browser.Interactions.AssertExists(selector, name, stateInfo.Alarm);
+			if (stateInfo.AlarmTimeFormatted() != null)
+				Browser.Interactions.AssertExists(selector, name, stateInfo.AlarmTimeFormatted());
+
+			if (stateInfo.AlarmColor != null)
+			{
+				var colorSelector = "[agentid*='" + IdForPerson(name) + "']" + "[style*='background-color: {0}']";
+				Browser.Interactions.AssertExists(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"));
+			}
+		}
+
+		private static Guid IdForPerson(string name)
+		{
+			return DataMaker.Person(name).Person.Id.Value;
+		}
+
 
 		private static void assertRealTimeAgentName(string name)
 		{

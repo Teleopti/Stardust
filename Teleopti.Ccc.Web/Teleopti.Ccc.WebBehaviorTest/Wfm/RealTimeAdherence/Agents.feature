@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Real time adherence agents
+﻿Feature: Real time adherence agents
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
@@ -38,33 +37,33 @@ Scenario: Should be able to see current states of all agents
 	 | Start Date     | 2014-01-21    |
 	 | External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And Ashley Andeen has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Alarm Color           | Green	|
+	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Alarm Color           | Red	|
+	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 12:30:00'
@@ -72,26 +71,26 @@ Scenario: Should be able to see current states of all agents
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	When I view real time adherence for agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
-	Then I should see real time agent details for 'Pierre Baldi'
-		| Name                     |                  |
-		| Name                     | Pierre Baldi     |
-		| State                    | Pause            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 13:00 |
-		| Alarm                    | Not adhering     |
-		| Alarm Time               | 0:15:00 |
-		| Alarm Color              | Red              |
-	And I should see real time agent details for 'Ashley Andeen'
-		| Field				| Value				|
-		| Name				| Ashley Andeen		|
-		| State				| Ready		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 13:00	|
-		| Alarm	| Adhering	|
-		| Alarm Time	| 0:15:00 |
-		| Alarm Color              | Green              |
+	Then I should see agent details for 'Pierre Baldi'
+		| Name                     |              |
+		| Name                     | Pierre Baldi |
+		| State                    | Pause        |
+		| Activity                 | Phone        |
+		| Next activity            | Lunch        |
+		| Next activity start time | 13:00        |
+		| Alarm                    | Not adhering |
+		| Alarm Time               | 0:15:00      |
+		| Alarm Color              | Red          |
+	And I should see agent details for 'Ashley Andeen'
+		| Field                    | Value         |
+		| Name                     | Ashley Andeen |
+		| State                    | Ready         |
+		| Activity                 | Phone         |
+		| Next activity            | Lunch         |
+		| Next activity start time | 13:00         |
+		| Alarm                    | Adhering      |
+		| Alarm Time               | 0:15:00       |
+		| Alarm Color              | Green         |
 
 Scenario: Should be able to see state updates of all agents
 	Given there is an activity named 'Phone'
@@ -147,11 +146,11 @@ Scenario: Should be able to see state updates of all agents
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 12:30:00'
-	When I view real time adherence for team 'Red'
+	When I view real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	And the time is '2014-01-21 12:45:00'
-	Then I should see real time agent details for 'Pierre Baldi'
+	Then I should see agent details for 'Pierre Baldi'
 		| Name                     |              |
 		| Name                     | Pierre Baldi |
 		| State                    | Pause        |
@@ -161,7 +160,7 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm                    | Not adhering |
 		| Alarm Time               | 0:15:00      |
 		| Alarm Color              | Red          |
-	And I should see real time agent details for 'Ashley Andeen'
+	And I should see agent details for 'Ashley Andeen'
 		| Field                    | Value         |
 		| Name                     | Ashley Andeen |
 		| State                    | Ready         |
@@ -238,11 +237,11 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 12:30:00'
-	When I view real time adherence for team 'Red'
+	When I view real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	And the time is '2014-01-21 12:45:00'
-	Then I should see real time agent details for 'Pierre Baldi'
+	Then I should see agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
 		| State                    | Pause            |
@@ -252,7 +251,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 0:15:00          |
 		| Alarm Color              | Red              |
-	And I should see real time agent details for 'Ashley Andeen'
+	And I should see agent details for 'Ashley Andeen'
 		| Field                    | Value            |
 		| Name                     | Ashley Andeen    |
 		| State                    | Ready            |
@@ -262,7 +261,9 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm                    | Adhering         |
 		| Alarm Time               | 0:15:00          |
 		| Alarm Color              | Green            |
-	And I should see real time agent name for 'John Smith'
+	And I should see agent details for 'John Smith'
+		| Field                    | Value            |
+		| Name                     | Ashley Andeen    |
 
 Scenario: Should see adherence status when call center is in Istanbul
 	Given I am located in Istanbul
@@ -297,9 +298,8 @@ Scenario: Should see adherence status when call center is in Istanbul
 	When the utc time is '2015-03-24 06:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
 	And the utc time is '2015-03-24 07:00:00'
-	And I view real time adherence view for team 'Red'
-	And I click on an agent state
-	Then I should see real time agent details for 'Pierre Baldi'
+	And I view real time adherence for agents on team 'Red'
+	Then I should see agent details for 'Pierre Baldi'
 		| Field       | Value        |
 		| Name        | Pierre Baldi |
 		| State       | Ready        |

@@ -115,7 +115,11 @@
 			};
 
 			$scope.format = function(time) {
-				return moment.utc(time).format('YYYY-MM-DD HH:mm:ss');
+				var momentTime = moment.utc(time);
+				if (momentTime.format("YYYYMMDD") > moment().format("YYYYMMDD")) {
+					return momentTime.format('YYYY-MM-DD HH:mm:ss');
+				}
+				return momentTime.format('HH:mm');
 			};
 
 			$scope.formatDuration = function(duration) {
@@ -123,9 +127,18 @@
 				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
 			};
 
-			var coloredCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
-			var coloredWithTimeCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
-			var coloredWithDurationCellTemplate = '<div style="background-color: {{ row.entity.AlarmColor }};" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
+			$scope.hexToRgb = function(hex) {
+				hex = hex ? hex.substring(1) : 'ffffff';
+				var bigint = parseInt(hex, 16);
+				var r = (bigint >> 16) & 255;
+				var g = (bigint >> 8) & 255;
+				var b = bigint & 255;
+				return "rgba(" + r + ", " + g + ", " + b + ", 0.6)";
+			}
+
+			var coloredCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents" ng-attr-agentid="{{row.entity.PersonId}}" ng-attr-agentvalue="{{COL_FIELD}}">{{COL_FIELD}}</div>';
+			var coloredWithTimeCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
+			var coloredWithDurationCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 			$scope.gridOptions = {
 				columnDefs: [{
