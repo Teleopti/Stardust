@@ -68,7 +68,7 @@
 			<dd>
 				<div>
 					<working-hours-picker class="skill-create-form-picker" working-hours="model.workingHours"></working-hours-picker>
-					<div ng-cloak class="animate-input-message" ng-show="model.workingHours.length==0">
+					<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
 						<div class="form-input-message formWarningInput">Warning: All days are closed</div>
 					</div>
 				</div>

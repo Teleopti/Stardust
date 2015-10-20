@@ -142,6 +142,15 @@
 						}
 					);
 				};
+
+				$scope.noOpenHoursWarning = function() {
+					for (var i = 0, len = $scope.model.workingHours.length; i < len; i++) {
+						var workingHour = $scope.model.workingHours[i];
+						if ($filter('filter')(workingHour.WeekDaySelections, function(x) { return x.Checked; }).length !== 0)
+							return false;
+					}
+					return true;
+				};
 			}
 		]);
 })();
