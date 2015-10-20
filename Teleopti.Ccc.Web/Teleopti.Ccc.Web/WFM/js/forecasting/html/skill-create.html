@@ -1,49 +1,51 @@
 ﻿<div>
-	<form name="form" novalidate ng-submit="createSkill(form.$valid)">
+	<form name="form" class="wfm-form" novalidate ng-submit="createSkill(form.$valid)">
 		<h4 class="create-skill-header">Create Skill</h4>
 		<h5 class="skill-section-header">General</h5>
-		<div class="row skill-name">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Name</h6>
-				<input style="width: 100%" type="text" name="skillName" ng-model="model.name" required="" ng-maxlength="50" ng-class="{invalidInput: skillNameValidation.isValid(form)}" />
-				<div class="input-invalid-text" ng-class="{invalidForm: skillNameValidation.isValid(form)}">{{skillNameValidation.errorMessage(form)}}</div>
+		<div class="form-input-wrap">
+			<label for="nameId">Name <input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" /></label>
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">The name is required</div>
+				<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">The name must be less than 50 characters long</div>
 			</div>
 		</div>
-		<div class="row skill-activity">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Activity</h6>
-				<select style="width: 100%" ng-model="model.selectedActivity" ng-options="activity.Name disable when activity.Disabled for activity in activities"></select>
-				<div class="input-invalid-text">error</div>
+		<div class="form-input-wrap">
+			<label for="drop">Activity</label>
+				<select style="width: 100%" id="drop" ng-model="model.selectedActivity" ng-options="activity.Name disable when activity.Disabled for activity in activities"></select>
+
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || model.selectedActivity.$error.required.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:model.selectedActivity.$error.required}">Pick at least one</div>
 			</div>
 		</div>
-		<div class="row skill-timezone">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Time zone</h6>
-				<select style="width: 100%" ng-model="model.selectedTimezone" ng-options="timezone.Name disable when timezone.Disabled for timezone in timezones"></select>
-				<div class="input-invalid-text">error</div>
+		<div class="form-input-wrap">
+			<label for="drop">Time zone</label>
+			<select style="width: 100%" id="drop" ng-model="model.selectedTimezone" ng-options="timezone.Name disable when timezone.Disabled for timezone in timezones"></select>
+
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || model.selectedTimezone.$error.required.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:model.selectedTimezone.$error.required}">Pick at least one</div>
 			</div>
 		</div>
 
 		<h5 class="skill-section-header">Staffing levels</h5>
-		<div class="row skill-service-level-percent">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Service level (%)</h6>
-				<input type="number" max="100" min="1" name="skillServiceLevelPercent" ng-model="model.serviceLevelPercent" required="" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelPercentValidation.isValid(form)}" />
-				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelPercentValidation.isValid(form)}">{{skillServiceLevelPercentValidation.errorMessage(form)}}</div>
+		<div class="form-input-wrap">
+			<label for="serviceLevelPercentId">Service level (%) <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">Percentage is required</div>
+				<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">Percentage should be 1-100</div>
 			</div>
 		</div>
-		<div class="row skill-service-level-seconds">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Service level (s)</h6>
-				<input type="number" min="1" max="86400" name="skillServiceLevelSeconds" ng-model="model.serviceLevelSeconds" required="" ng-maxlength="50" ng-class="{invalidInput: skillServiceLevelSecondsValidation.isValid(form)}" />
-				<div class="input-invalid-text" ng-class="{invalidForm: skillServiceLevelSecondsValidation.isValid(form)}">{{skillServiceLevelSecondsValidation.errorMessage(form)}}</div>
+		<div class="form-input-wrap">
+			<label for="skillServiceLevelSecondsId">Service level (s) <input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">Seconds are required</div>
+				<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">Seconds should be 1-86400</div>
 			</div>
 		</div>
-		<div class="row skill-shrinkage">
-			<div class="col-lg-4">
-				<h6 class="skill-input-label">Shrinkage (%)</h6>
-				<input type="number" min="0" max="99" name="skillShrinkage" ng-model="model.shrinkage" required="" ng-maxlength="50" ng-class="{invalidInput: skillShrinkageValidation.isValid(form)}" />
-				<div class="input-invalid-text" ng-class="{invalidForm: skillShrinkageValidation.isValid(form)}">{{skillShrinkageValidation.errorMessage(form)}}</div>
+		<div class="form-input-wrap">
+			<label for="shrinkageId">Shrinkage (%) <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
+			<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
+				<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">Shrinkage is required</div>
+				<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">Shrinkage should be 1-99</div>
 			</div>
 		</div>
 
@@ -53,7 +55,7 @@
 				<div class="big-table-wrapper material-depth-1 queue-list">
 					<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
 				</div>
-				<div class="input-invalid-text" ng-class="{invalidForm:  !queueSelected }">The queue is required.</div>
+				<div class="input-invalid-text" ng-class="{invalidForm: !queueSelected }">The queue is required</div>
 			</div>
 		</div>
 
