@@ -256,6 +256,7 @@ seatmap-editor{
 }
 
 .seatmap-occupancy-detail {
+	background:#ffffff;
 	display: block;
 	min-height:120px;
 	max-height:500px;
@@ -276,6 +277,31 @@ seatmap-editor{
 		.wfm-btn:hover{
 			background:#f1f2f3;		
 		}
+	}
+
+	.people-search{
+		padding-top: 5px;
+		padding-bottom: 3px;
+	}
+
+	.select-all-dialog{
+		margin:0;
+	}
+
+	.big-table-wrapper{
+		box-shadow: none;
+	}
+
+	.pagination {
+		 margin: 5px 0px;
+	}
+	
+	.pagination li {
+		padding: 4px 8px 4px 8px;
+	}
+
+	.people-list.grid {
+		height: 100%;
 	}
 
 	.seat-booking-list{

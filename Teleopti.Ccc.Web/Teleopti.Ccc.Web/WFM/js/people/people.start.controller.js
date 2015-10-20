@@ -11,7 +11,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	uiGridExporterConstants, $q, toggleSvc, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
-	$scope.keyword = $stateParams.currentKeyword !== '' ? $stateParams.currentKeyword : "";
+	$scope.keyword = $stateParams.currentKeyword != undefined ? $stateParams.currentKeyword : "";
 	$scope.totalPages = 0;
 	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
@@ -67,10 +67,12 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	$scope.dynamicColumnLoaded = false;
 
+	var stateParamsPagination = $stateParams.paginationOptions != undefined ? $stateParams.paginationOptions : {};
+
 	var paginationOptions = {
-		pageNumber: $stateParams.paginationOptions.pageNumber != undefined ? $stateParams.paginationOptions.pageNumber : 1,
-		pageSize: $stateParams.paginationOptions.pageSize != undefined ? $stateParams.paginationOptions.pageSize : 20,
-		sortColumns: $stateParams.paginationOptions.sortColumns != undefined ? $stateParams.paginationOptions.sortColumns : [
+		pageNumber: stateParamsPagination.pageNumber != undefined ? stateParamsPagination.pageNumber : 1,
+		pageSize: stateParamsPagination.pageSize != undefined ? stateParamsPagination.pageSize : 20,
+		sortColumns: stateParamsPagination.sortColumns != undefined ? stateParamsPagination.sortColumns : [
 			{
 				ColumnName: "LastName",
 				SortASC: true

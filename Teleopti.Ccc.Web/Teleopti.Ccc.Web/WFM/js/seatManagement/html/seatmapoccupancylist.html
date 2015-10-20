@@ -1,18 +1,4 @@
-﻿<style>
-	.people-search-container .pagination {
-		margin: 5px 0px;
-	}
-	
-	.pagination li {
-		padding: 4px 8px 4px 8px;
-	}
-
-	.people-list.grid {
-		height: 100%;
-	}
-</style>
-
-<div class="seatmap-occupancy-detail" ng-show="vm.occupancyDetails">
+﻿<div class="seatmap-occupancy-detail" ng-show="vm.occupancyDetails">
 
 	<div class="seatbooking-operations-add" ng-click="vm.showPeopleSelection = true;" ng-if="!vm.showPeopleSelection">
 		<button class="wfm-btn wfm-btn-invis-primary clear-seatbooking">Clear</button>
@@ -24,7 +10,7 @@
 		<button class="wfm-btn wfm-btn-invis-primary asign-agents" ng-click="vm.asignAgentsToSeats()">Asign</button>
 	</div>
 
-	<people-picker-list ng-show="vm.showPeopleSelection" selection-only selected-people="vm.selectedPeople"></people-picker-list>
+	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople"></people-selection-list>
 
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
 		<div class="seat-booking-item" ng-repeat="detail in vm.occupancyDetails">

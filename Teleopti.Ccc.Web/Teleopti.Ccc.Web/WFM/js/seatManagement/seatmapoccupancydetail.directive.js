@@ -5,11 +5,8 @@
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
 	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
 
-	function seatMapOccupancyDirectiveController(utils, seatMapService, growl, seatmapTranslator, $stateParams) {
+	function seatMapOccupancyDirectiveController(utils, seatMapService, growl, seatmapTranslator) {
 		var vm = this;
-
-		$stateParams.currentKeyword = "";
-		$stateParams.paginationOptions = {};
 
 		vm.selectedPeople = [];
 		vm.showPeopleSelection = false;
