@@ -82,6 +82,7 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
 			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
+			this.chkOutbound = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -239,7 +240,7 @@
 			// 
 			// btnCreateAndSave
 			// 
-			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 636);
+			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 663);
 			this.btnCreateAndSave.Name = "btnCreateAndSave";
 			this.btnCreateAndSave.Size = new System.Drawing.Size(99, 27);
 			this.btnCreateAndSave.TabIndex = 18;
@@ -330,6 +331,7 @@
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.chkOutbound);
 			this.grpBoxModules.Controls.Add(this.chkMyTeam);
 			this.grpBoxModules.Controls.Add(this.chkCalendarLink);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
@@ -345,7 +347,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 332);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 356);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "Teleopti WFM options";
@@ -652,11 +654,21 @@
 			this.chkVNextPilot.Text = "VNext Pilot";
 			this.chkVNextPilot.UseVisualStyleBackColor = true;
 			// 
+			// chkOutbound
+			// 
+			this.chkOutbound.AutoSize = true;
+			this.chkOutbound.Location = new System.Drawing.Point(6, 331);
+			this.chkOutbound.Name = "chkOutbound";
+			this.chkOutbound.Size = new System.Drawing.Size(73, 17);
+			this.chkOutbound.TabIndex = 41;
+			this.chkOutbound.Text = "Outbound";
+			this.chkOutbound.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 682);
+			this.ClientSize = new System.Drawing.Size(639, 706);
 			this.Controls.Add(this.chkVNextPilot);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
@@ -762,6 +774,7 @@
 		private System.Windows.Forms.CheckBox chkNotify;
 		private System.Windows.Forms.CheckBox chkMyTeam;
 		private System.Windows.Forms.CheckBox chkVNextPilot;
+		private System.Windows.Forms.CheckBox chkOutbound;
 	}
 }
 
