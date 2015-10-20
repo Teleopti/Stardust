@@ -1,18 +1,5 @@
-﻿.col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
-	padding: 0;
-}
-
 html, body{
 	background:#f3f3f3!important;
-}
-
-button, input, select{	font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif!important;
-}
-
-a:focus {
-   outline: none!important;
-   outline: 0px auto -webkit-focus-ring-color!important;
-   outline-offset: 0px;
 }
 
 .current-nav{
@@ -36,13 +23,13 @@ a:focus {
 }
 
 /*override bootstrap*/
+.col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
+	padding: 0;
+}
+
 .row {
 	margin-right: 0;
 	margin-left: 0;
-}
-
-dd {
-	margin-left: 40px!important;	
 }
 
 .select-toggle {
@@ -253,27 +240,3 @@ dd {
 			transform: scale(0);
 		}
 	}
-
-
-/*froms - remove after v16*/
-
-.wfm-form{
-
-	label{
-		font-weight: normal!important;
-		color:#CACACA;
-		font-size: 13px;
-	}
-
-	input[type="text"],
-	input[type="number"],
-	input[type="password"],
-	input[type="email"]{
-		padding-left: 7px;
-	}
-
-	.form-input-message{
-		font-size: 13px;
-	}
-
-}

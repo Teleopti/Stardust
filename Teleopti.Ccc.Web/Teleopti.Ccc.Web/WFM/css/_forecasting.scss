@@ -25,7 +25,7 @@
 }
 
 .campaign-position{
-	width: 80%; 
+	width: 80%;
 	margin: auto;
 }
 
@@ -101,11 +101,11 @@
 }
 
 .invalidInput{
-	border-bottom: 1px solid red !important; 
+	border-bottom: 1px solid red !important;
 }
 
 .create-skill-header{
-	border-bottom:1px solid rgba(0,0,0,0.12); 
+	border-bottom:1px solid rgba(0,0,0,0.12);
 	padding-bottom: 11px;
 }
 
@@ -127,6 +127,11 @@
 }
 .wfm-table.wfm-dense td{
 	height: 22px;
+}
+
+.forecasting-skill-form{
+	width:100%;
+	overflow:hidden;
 }
 
 .skill-create-form-picker .wfm-block {
