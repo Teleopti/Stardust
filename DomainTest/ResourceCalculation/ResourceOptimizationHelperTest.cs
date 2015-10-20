@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class ResourceOptimizationHelperTest
 	{
-		private IResourceOptimizationHelper _target;
+		private ResourceOptimizationHelper _target;
 		private ISchedulingResultStateHolder _stateHolder;
 		private MockRepository _mocks;
 		private IOccupiedSeatCalculator _occupiedSeatCalculator;
