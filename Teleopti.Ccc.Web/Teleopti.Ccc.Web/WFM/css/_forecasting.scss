@@ -96,14 +96,6 @@
 	transition:0.2s opacity ease-in-out;
 }
 
-.invalidForm{
-	opacity:1;
-}
-
-.invalidInput{
-	border-bottom: 1px solid red !important;
-}
-
 .create-skill-header{
 	border-bottom:1px solid rgba(0,0,0,0.12);
 	padding-bottom: 11px;
@@ -136,4 +128,10 @@
 
 .skill-create-form-picker .wfm-block {
 	padding-left: 0!important;
+}
+
+.formWarningInput{
+	opacity: 1 !important;
+	height: auto !important; 
+	color: #ffc285; 
 }
