@@ -157,7 +157,7 @@ angular.module('wfm.forecasting')
 				campaignDays = [];
 				angular.forEach($scope.chart.selected(), function (value) {
 					campaignDays.push({
-						date: value.x
+						date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
 					});
 					tempsum += value.value;
 				});
