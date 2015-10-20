@@ -20,20 +20,24 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
 		{
+			if (string.IsNullOrEmpty(adminUserName))
+				adminUserName = "";
+			if (string.IsNullOrEmpty(adminPassword))
+				adminPassword = "";
 			//dbmanager
 			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCC7, adminUserName,
 				adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
-			builder.IntegratedSecurity = false;
+			builder.IntegratedSecurity = useIntegratedSecurity;
 			var appConnstring = builder.ConnectionString;
 			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiAnalytics, adminUserName,
 				adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
-			builder.IntegratedSecurity = false;
+			builder.IntegratedSecurity = useIntegratedSecurity;
 			var analConnstring = builder.ConnectionString;
 			// and agg to
 			if (!isAzure() && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
@@ -43,9 +47,9 @@ namespace Teleopti.Wfm.Administration.Core
 					adminPassword, useIntegratedSecurity, builder.UserID, builder.Password, permissionMode, tenant.Name);
 				builder.UserID = adminUserName;
 				builder.Password = adminPassword;
-				builder.IntegratedSecurity = false;
+				builder.IntegratedSecurity = useIntegratedSecurity;
 			}
-			
+
 			//security 
 			var dbArgs = new DatabaseArguments
 			{
@@ -56,7 +60,7 @@ namespace Teleopti.Wfm.Administration.Core
 				AggDatabase = builder.ConnectionString,
 			};
 			_upgradeRunner.Logger = new TenantLogger(tenant.Name);
-         _upgradeRunner.Upgrade(dbArgs);
+			_upgradeRunner.Upgrade(dbArgs);
 
 		}
 
