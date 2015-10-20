@@ -258,11 +258,14 @@ describe('RtaAgentsCtrl', function() {
 			"AlarmStart": "\/Date(1432105910000)\/"
 		}];
 
+		var baseTime = new Date(2015, 4, 17);
+		jasmine.clock().mockDate(baseTime);
+
 		createController();
 
 		expect(scope.format(scope.states[0].StateStart)).toEqual("07:15");
-		expect(scope.format(scope.states[0].NextActivityStartTime)).toEqual("08:15");
-		expect(scope.format(scope.states[0].AlarmStart)).toEqual("07:11");
+		expect(scope.format(scope.states[0].NextActivityStartTime)).toEqual("2015-05-20 08:15:00");
+		expect(scope.format(scope.states[0].AlarmStart)).toEqual("2015-05-20 07:11:50");
 	});
 
 	it('should display in correct time duration format', function() {
