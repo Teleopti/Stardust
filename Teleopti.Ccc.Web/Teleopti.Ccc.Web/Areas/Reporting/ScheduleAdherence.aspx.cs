@@ -57,16 +57,19 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				ParameterSelector.ReportId = ReportId;
 
-				var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-				Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
-				string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}", groupPageComboBoxControlCollectionId);
+				using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
+				{
+					Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
+					string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}",
+						groupPageComboBoxControlCollectionId);
 
-				GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
-											? Selector.BusinessHierarchyCode
-											: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
-				ParameterSelector.GroupPageCode = GroupPageCode;
-				commonReports.LoadReportInfo();
-				Page.Header.Title = commonReports.Name;
+					GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
+						? Selector.BusinessHierarchyCode
+						: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
+					ParameterSelector.GroupPageCode = GroupPageCode;
+					commonReports.LoadReportInfo();
+					Page.Header.Title = commonReports.Name;
+				}
 			}
 		}
 
@@ -1086,8 +1089,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
-			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-			ParameterSelector.DbTimeout = commonReports.DbTimeout;
+			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
+			{
+				ParameterSelector.DbTimeout = commonReports.DbTimeout;
+			}
 		}
 
 		protected void showSelection(object sender, ImageClickEventArgs e)
