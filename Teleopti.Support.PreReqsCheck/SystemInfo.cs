@@ -201,8 +201,16 @@ namespace CheckPreRequisites
 													break;
                                  }
                               }
-                              break;
-                        }
+									
+		                        break;
+									case 10:
+										{
+											version = osVersionInfo.wProductType == Win32Api.VER_NT_WORKSTATION ?
+															WindowsVersion.Windows10 :
+															WindowsVersion.WindowsServer2016;
+										}
+										break;
+								}
                      }
                      break;
                }

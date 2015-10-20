@@ -1,0 +1,33 @@
+#-----------------
+#note: The orders of the features matters!
+#-----------------
+NetFx3ServerFeatures,.NET Framework 3.5 Features
+NetFx3,NET Framework 3.5 (includes .NET 2.0 and 3.0)
+#NetFx4-AdvSrvs,NET Framework 4.5 Advanced Services
+NetFx4Extended-ASPNET45,ASP.NET 4.5
+
+IIS-WebServerRole,Internet Information Services
+
+IIS-Security,Security
+IIS-BasicAuthentication,Basic Authentication
+IIS-WindowsAuthentication,Windows Authentication
+
+IIS-ApplicationDevelopment,Application Development Features
+IIS-NetFxExtensibility,.NET Extensibility 3.5
+IIS-NetFxExtensibility45,.NET Extensibility 4.5
+IIS-ISAPIExtensions,ISAPI Extensions
+IIS-ISAPIFilter,ISAPI Filters
+IIS-ASPNET,ASP.NET 3.5
+IIS-ASPNET45,ASP.NET 4.5
+	
+#Legacy III6 - needed for Analyzer install
+IIS-IIS6ManagementCompatibility,IIS 6 Management Compatibility
+IIS-Metabase,IIS Metabase and IIS 6 configuration compatibility
+IIS-WMICompatibility,IIS 6 WMI Compatibility
+IIS-LegacyScripts,IIS 6 Scripting Tools
+
+WAS-WindowsActivationService,Windows Process Activation Service
+WAS-ProcessModel,Process Model
+WAS-ConfigurationAPI, Configuration APIs
+WCF-Services45,WCF Services
+WCF-HTTP-Activation45,HTTP Activation

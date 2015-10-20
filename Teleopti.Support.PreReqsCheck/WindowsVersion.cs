@@ -28,5 +28,7 @@
       Windows8,
 		WindowsServer2012R2,
 		Windows81,
+		Windows10,
+		WindowsServer2016
    }
 }
