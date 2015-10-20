@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_decisionMaker.Execute(null, null)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_dayOffDecisionMakerExecuter.Execute(null, null, _scheduleMatrix, _originalStateContainer, true, true, true)).IgnoreArguments().Return(true).Repeat.Once();
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(null, null, _scheduleMatrix, _originalStateContainer)).IgnoreArguments().Return(true).Repeat.Once();
 
                 // not essetial to the test logic
                 Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.AtLeastOnce();

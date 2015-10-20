@@ -80,10 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArray workingBitArray, 
             ILockableBitArray originalBitArray, 
             IScheduleMatrixPro currentScheduleMatrix, 
-            IScheduleMatrixOriginalStateContainer originalStateContainer, 
-            bool doReschedule, 
-            bool handleDayOffConflict,
-			bool goBackToLegalState)
+            IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
@@ -98,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var changesTracker = new LockableBitArrayChangesTracker();
 			IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 			double oldValue;
-			if(!_optimizerPreferences.Advanced.UseTweakedValues && doReschedule)
+			if(!_optimizerPreferences.Advanced.UseTweakedValues)
 			{
 				oldValue = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(currentScheduleMatrix);
 				double predictedNewValue = _dayOffOptimizerPreMoveResultPredictor.PredictedValue(currentScheduleMatrix, workingBitArray,
@@ -122,14 +119,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
 
-			if(goBackToLegalState)
-			{
+
 				if (!removeIllegalDayOffs(workingBitArray))
 				{
 					writeToLogBackToLegalStateFailed();
 					return false;
 				}
-			}
            
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
@@ -142,24 +137,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return true;
             }
 
-            if (doReschedule)
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-            var result = 
-                executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, daysOffPreferences, handleDayOffConflict);
+            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, daysOffPreferences);
             IEnumerable<changedDay> movedDates = result.MovedDays;
 
 			IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
             if (!result.Result)
             {
-                if (doReschedule)
-                    rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
+                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
 
-			if (goBackToLegalState)
-			{
+
 				removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions, _schedulePartModifyAndRollbackService);
 				if (removedIllegalWorkTimeDays == null)
 				{
@@ -169,10 +160,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				
 				if (removedIllegalWorkTimeDays.Count > 0)
 					writeToLogWorkShiftBackToLegalStateRemovedDays(removedIllegalWorkTimeDays);
-			}
-
-        	if (!doReschedule)
-                return true;
 
             if (!rescheduleWhiteSpots(movedDates, removedIllegalWorkTimeDays, schedulingOptions, currentScheduleMatrix, originalStateContainer))
             {
@@ -288,8 +275,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArray originalBitArray, 
             IScheduleMatrixPro matrix,
             ISchedulingOptions schedulingOptions,
-            IDaysOffPreferences daysOffPreferences, 
-            bool handleConflict)
+            IDaysOffPreferences daysOffPreferences)
         {
             IList<changedDay> movedDays = new List<changedDay>();
             bool result = true;
@@ -326,7 +312,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         changed.CurrentSchedule = scheduleDayPro.DaySchedulePart();
                         movedDays.Add(changed);
 
-                        if (handleConflict && !_dayOffOptimizerValidator.Validate(part.DateOnlyAsPeriod.DateOnly, matrix))
+                        if (!_dayOffOptimizerValidator.Validate(part.DateOnlyAsPeriod.DateOnly, matrix))
                         {
                             //if day off rule validation fails, try to reschedule day before and day after
                             result = _dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, part.DateOnlyAsPeriod.DateOnly);

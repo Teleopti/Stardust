@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
             }
 
             Assert.IsTrue(result);
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
 			}
 
 			Assert.IsTrue(result);
@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
             }
 
             Assert.IsFalse(result);
@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+                result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
             }
 
             Assert.IsTrue(result);
@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
 			}
 
 			Assert.IsTrue(result);
@@ -730,7 +730,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
 			}
 
 			Assert.IsFalse(result);
@@ -857,122 +857,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, true);
+				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer);
 			}
 
 			Assert.IsFalse(result);
-		}
-
-		[Test]
-		public void VerifyOverLimitExceeded()
-		{
-
-			// test criterion
-			const bool overtimeLimitExceeded = true;
-
-			ISchedulingOptions schedulingOptions = new SchedulingOptions();
-			_optimizerPreferences.Advanced.UseTweakedValues = true;
-		
-			ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
-			bitArrayBeforeMove.Set(0, true);
-			ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
-			bitArrayAfterMove.Set(1, true);
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay3 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay4 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay5 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay6 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay7 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay8 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay9 = _mocks.StrictMock<IScheduleDayPro>();
-			IList<IScheduleDayPro> outerWeekList = new List<IScheduleDayPro>
-                                                       {
-                                                           scheduleDay1,
-                                                           scheduleDay2,
-                                                           scheduleDay3,
-                                                           scheduleDay4,
-                                                           scheduleDay5,
-                                                           scheduleDay6,
-                                                           scheduleDay7,
-                                                           scheduleDay8,
-                                                           scheduleDay9
-                                                       };
-			var part = _mocks.StrictMock<IScheduleDay>();
-			var dateOnlyPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			var dateOnly = new DateOnly();
-
-			using (_mocks.Record())
-			{
-				// mocks needed to come to the right place ...
-				Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix))
-					.Return(_lastOverLimitCounts);
-				Expect.Call(_optimizationLimits.HasOverLimitExceeded(_lastOverLimitCounts, _scheduleMatrix))
-					.Return(overtimeLimitExceeded);
-
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
-					.Return(schedulingOptions);
-				Expect.Call(_originalStateContainer.OriginalWorkTime())
-					.Return(new TimeSpan());
-				_rollbackService.ClearModificationCollection();
-				Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays)
-					.Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList))
-					.Repeat.Times(4);
-				Expect.Call(scheduleDay8.DaySchedulePart())
-					.Return(part).Repeat.Twice();
-				Expect.Call(scheduleDay9.DaySchedulePart())
-					.Return(part).Repeat.Twice();
-				Expect.Call(part.PersonAssignment())
-					.Return(_personAssignment);
-				Expect.Call(_personAssignment.ShiftCategory)
-					.Return(new ShiftCategory("s"));
-				Expect.Call(part.Clone()).Return(part).Repeat.Times(4);
-				part.DeleteMainShift(part);
-				part.CreateAndAddDayOff(_dayOffTemplate);
-				part.DeleteDayOff();
-				Expect.Call(() => _rollbackService.Modify(part)).Repeat.Twice();
-				Expect.Call(scheduleDay8.Day)
-					.Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
-				Expect.Call(scheduleDay9.Day)
-					.Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true))
-					.IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrix.GetScheduleDayByKey(new DateOnly())).IgnoreArguments()
-					.Return(_scheduleDayPro).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.DaySchedulePart())
-					.Return(part).Repeat.AtLeastOnce();
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null))
-					.Return(_effectiveRestriction).IgnoreArguments();
-				Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, null, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
-					.Return(true).Repeat.Twice();
-				Expect.Call(part.DateOnlyAsPeriod)
-					.Return(dateOnlyPeriod).Repeat.AtLeastOnce();
-				Expect.Call(dateOnlyPeriod.DateOnly)
-					.Return(dateOnly);
-				Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
-					.Return(true);
-				Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit())
-					.Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_decider.DecideDates(part, part))
-					.Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Times(2);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(0);
-				setExpectationsForSettingOriginalShiftCategory();
-
-				// sepcial part for criterion expectation: rollback and lock days 
-				Expect.Call(() => _rollbackService.Rollback());
-				Expect.Call(() => _scheduleMatrix.LockPeriod(new DateOnlyPeriod(new DateOnly(2010, 1, 2), new DateOnly(2010, 1, 2))));
-			}
-
-			bool result;
-
-			using (_mocks.Playback())
-			{
-				_target = createTarget();
-				result = _target.Execute(bitArrayAfterMove, bitArrayBeforeMove, _scheduleMatrix, _originalStateContainer, true, true, false);
-			}
-
-			Assert.IsTrue(result);
 		}
 
         private DayOffDecisionMakerExecuter createTarget()
