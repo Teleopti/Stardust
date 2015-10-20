@@ -29,6 +29,7 @@
 		public const string TeleoptiCccMyTeam = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/MyTeam";
 
 		public const string TeleoptiWfmVNextPilot = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/VNext";
+		public const string TeleoptiWfmOutbound = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/Outbound";
 
         /// <summary>
         /// Constant string for Freemium base option
