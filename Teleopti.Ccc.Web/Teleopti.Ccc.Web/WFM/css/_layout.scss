@@ -249,3 +249,26 @@ a:focus {
 			transform: scale(0);
 		}
 	}
+
+
+/*froms - migrate to styleguide*/
+
+.wfm-form{
+
+	label{
+		font-weight: normal!important;
+		color:#616161;}
+	}
+
+	input[type="text"],
+	input[type="number"],
+	input[type="password"],
+	input[type="email"]{
+		padding-left: 7px;
+	}
+
+	.form-input-message{
+		font-size: 13px;
+	}
+
+}
