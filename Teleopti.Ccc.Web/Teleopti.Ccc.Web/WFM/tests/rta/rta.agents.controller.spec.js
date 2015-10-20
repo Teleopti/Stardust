@@ -260,9 +260,9 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.format(scope.states[0].StateStart)).toEqual("2015-04-17 07:15:05");
-		expect(scope.format(scope.states[0].NextActivityStartTime)).toEqual("2015-05-20 08:15:00");
-		expect(scope.format(scope.states[0].AlarmStart)).toEqual("2015-05-20 07:11:50");
+		expect(scope.format(scope.states[0].StateStart)).toEqual("07:15");
+		expect(scope.format(scope.states[0].NextActivityStartTime)).toEqual("08:15");
+		expect(scope.format(scope.states[0].AlarmStart)).toEqual("07:11");
 	});
 
 	it('should display in correct time duration format', function() {
