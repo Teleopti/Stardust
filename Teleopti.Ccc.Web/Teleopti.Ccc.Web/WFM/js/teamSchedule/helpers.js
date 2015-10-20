@@ -2,7 +2,7 @@
 
 (function () {
 
-	angular.module('wfm.personSchedule').factory('shiftHelper', shiftHelper);
+	angular.module('wfm.teamSchedule').factory('shiftHelper', shiftHelper);
 
 	shiftHelper.$inject = [];
 

@@ -1246,8 +1246,8 @@
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
     <Content Include="WFM\js\teamSchedule\helpers.js" />
-    <Content Include="WFM\js\teamSchedule\personSchedule.controller.js" />
-    <Content Include="WFM\js\teamSchedule\personSchedule.service.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\schedule.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />

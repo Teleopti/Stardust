@@ -38,7 +38,7 @@ var wfm = angular.module('wfm', [
 	'wfm.rta',
 	'wfm.start',
 	'wfm.businessunits',
-	'wfm.personSchedule'
+	'wfm.teamSchedule'
 ]);
 
 wfm.config([
@@ -159,7 +159,7 @@ wfm.config([
 		}).state('personSchedule', {
 			url: '/teamSchedule',
 			templateUrl: 'js/teamSchedule/schedule.html',
-			controller: 'PersonScheduleCtrl as vm'
+			controller: 'TeamScheduleCtrl as vm'
 		});
 
 

@@ -1,3 +1,4 @@
 ﻿(function () {
-	angular.module('wfm.personSchedule', []);
+	angular.module('wfm.teamSchedule', [
+		'teamScheduleService']);
 })();
