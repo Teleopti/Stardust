@@ -122,6 +122,10 @@ p {
 	margin-top: 10px;
 }
 
+.hideChevron{
+	visibility: hidden;
+	pointer-events: none;
+}
 
 .data-auth {
 	margin-top:15px;
