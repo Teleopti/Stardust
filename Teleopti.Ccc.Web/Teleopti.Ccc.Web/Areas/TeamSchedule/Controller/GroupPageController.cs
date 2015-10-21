@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using GroupPage = Teleopti.Ccc.Domain.GroupPageCreator.Group;
@@ -14,87 +13,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
 	public class GroupPageController : ApiController
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IUserTextTranslator _userTextTranslator;
 
-		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser,
-			IUserTextTranslator userTextTranslator)
+		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
-			_loggedOnUser = loggedOnUser;
-			_userTextTranslator = userTextTranslator;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/GroupPage/AllAvailable")]
-		public virtual JsonResult<GroupPageListViewModel> AvailableGroupPages(DateTime date)
+		[UnitOfWork, HttpGet, Route("api/GroupPage/AllTeams")]
+		public virtual JsonResult<IEnumerable<GroupViewModel>> AllTeams(DateTime date)
 		{
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages();
+			var businessHierarchyPage = allGroupPages.Single(gp => gp.PageId == GroupPage.PageMainId);
+			var allTeams = _groupingReadOnlyRepository.AvailableGroups(businessHierarchyPage, new DateOnly(date));
 
-			var buildInGroupPages = new List<ReadOnlyGroupPage>();
-			var customGroupPages = new List<ReadOnlyGroupPage>();
-			ReadOnlyGroupPage businessHierarchyPage = null;
-			foreach (var readOnlyGroupPage in allGroupPages)
-			{
-				var name = _userTextTranslator.TranslateText(readOnlyGroupPage.PageName);
-				if (name != readOnlyGroupPage.PageName)
+			var teams = allTeams.Select(g => new GroupViewModel
 				{
-					readOnlyGroupPage.PageName = name;
+					Name = g.GroupName,
+					Id = g.GroupId
+				}).Distinct();
 
-					if (readOnlyGroupPage.PageId == GroupPage.PageMainId)
-						businessHierarchyPage = readOnlyGroupPage;
-					else
-						buildInGroupPages.Add(readOnlyGroupPage);
-				}
-				else
-					customGroupPages.Add(readOnlyGroupPage);
-			}
-
-			buildInGroupPages = buildInGroupPages.OrderBy(x => x.PageName).ToList();
-			customGroupPages = customGroupPages.OrderBy(x => x.PageName).ToList();
-
-			if (businessHierarchyPage != null)
-			{
-				buildInGroupPages.Insert(0, businessHierarchyPage);
-			}
-
-			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
-			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, new DateOnly(date));
-
-			var actualGroupPages = groupPages.Select(gp =>
-			{
-				var name = gp.PageName;
-				return new GroupPageViewModel
-				{
-					Name = name,
-					Groups = allAvailableGroups.Where(g => g.PageId == gp.PageId).Select(g => new GroupViewModel
-					{
-						Name = gp.PageId == GroupPage.PageMainId ? g.GroupName : name + "/" + g.GroupName,
-						Id = g.GroupId
-					}).Distinct()
-				};
-			});
-
-			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
-			var defaultGroupId = team != null ? team.Id : null;
-
-			return Json(new GroupPageListViewModel
-			{
-				GroupPages = actualGroupPages,
-				DefaultGroupId = defaultGroupId
-			});
+			return Json(teams);
 		}
-	}
-
-	public class GroupPageListViewModel
-	{
-		public IEnumerable<GroupPageViewModel> GroupPages { get; set; }
-		public Guid? DefaultGroupId { get; set; }
-	}
-
-	public class GroupPageViewModel
-	{
-		public string Name { get; set; }
-		public IEnumerable<GroupViewModel> Groups { get; set; }
 	}
 
 	public class GroupViewModel

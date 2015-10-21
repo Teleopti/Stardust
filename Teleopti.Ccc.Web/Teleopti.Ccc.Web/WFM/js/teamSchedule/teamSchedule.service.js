@@ -2,13 +2,13 @@
 
 angular.module('teamScheduleService', ['ngResource']).service('TeamSchedule', [
 	'$resource', '$http', function($resource, $http) {
-		this.loadAailableGroupPages = $resource('../api/GroupPage/AllAvailable', {
+		this.loadAllTeams = $resource('../api/GroupPage/AllTeams', {
 			date: "@queryDate"
 		}, {
 			query: {
 				method: 'GET',
 				params: {},
-				isArray: false
+				isArray: true
 			}
 		});
 	}

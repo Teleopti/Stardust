@@ -1,9 +1,9 @@
 ﻿<div>
-	Person schedule!
-	<select ng-model="vm.GroupPages">
-		<option value="" disabled selected>Pick a person...</option>
-		<option value={{group.Name}} ng-repeat="group in vm.GroupPages|orderBy: 'Name'">
-			{{group.Name}}
+	Team schedule
+	<select ng-model="vm.Teams">
+		<option value="" disabled selected>Pick a team...</option>
+		<option value={{team.Name}} ng-repeat="team in vm.Teams|orderBy: 'Name'">
+			{{team.Name}}
 		</option>
 	</select>
 </div>
