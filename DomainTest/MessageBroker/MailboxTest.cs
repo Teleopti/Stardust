@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		public void ShouldAddMailboxWithId()
 		{
 			var id = Guid.NewGuid();
-			var subscription = new Subscription { MailboxId = id.ToString() };
+			var subscription = new Subscription {MailboxId = id.ToString()};
 
 			Server.AddMailbox(subscription);
 
@@ -74,12 +73,12 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			var mailbox2Id = Guid.NewGuid();
 			var mailbox1 = new Subscription
 			{
-				MailboxId = mailbox1Id.ToString(), 
+				MailboxId = mailbox1Id.ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
 			var mailbox2 = new Subscription
 			{
-				MailboxId = mailbox2Id.ToString(), 
+				MailboxId = mailbox2Id.ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
 			Server.AddMailbox(mailbox1);
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldReturnMessagesFromMailbox()
 		{
-			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
+			var subscription = new Subscription {MailboxId = Guid.NewGuid().ToString()};
 			Server.AddMailbox(subscription);
 			var notification = new Message();
 			Server.NotifyClients(notification);
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPopMessagesFromMailbox()
 		{
-			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
+			var subscription = new Subscription {MailboxId = Guid.NewGuid().ToString()};
 			Server.AddMailbox(subscription);
 			var notification = new Message();
 			Server.NotifyClients(notification);
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		}
 
 		[Test]
-		public void ShouldUIOU()
+		public void ShouldPublish2MessagesToMailbox()
 		{
 			var mailbox = new Subscription
 			{
@@ -148,72 +147,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Mailboxes.Data.Single().PopAllMessages().Should().Have.Count.EqualTo(2);
 		}
-
-		[Test]
-		public void ShouldSetExpiresAtWhenCreatingMailbox()
-		{
-			Now.Is("2015-06-26 08:00");
-			var subscription = new Subscription
-			{
-				MailboxId = Guid.NewGuid().ToString()
-			};
-			Server.AddMailbox(subscription);
-
-			Mailboxes.PersistedLast.ExpiresAt.Should().Be("2015-06-26 08:30".Utc());
-		}
-		
-		[Test]
-		public void ShouldUpdateExpiresAtWhenPoppingMailbox()
-		{
-			Now.Is("2015-06-26 08:00");
-			var mailboxId = Guid.NewGuid().ToString();
-			var subscription = new Subscription
-			{
-				MailboxId = mailboxId
-			};
-			Server.AddMailbox(subscription);
-			Now.Is("2015-06-26 08:15");
-
-			Server.PopMessages(mailboxId);
-
-			Mailboxes.PersistedLast.ExpiresAt.Should().Be("2015-06-26 08:45".Utc());
-		}
-
-		[Test]
-		public void ShouldNotUpdateExpiresAtWhenPoppingBeforeConfigThreshold()
-		{
-			Now.Is("2015-06-26 08:00");
-			var mailboxId = Guid.NewGuid().ToString();
-			var subscription = new Subscription
-			{
-				MailboxId = mailboxId
-			};
-			Server.AddMailbox(subscription);
-			Now.Is("2015-06-26 08:14");
-
-			Server.PopMessages(mailboxId);
-
-			Mailboxes.PersistedLast.ExpiresAt.Should().Be("2015-06-26 08:30".Utc());
-		}
-
-		[Test]
-		public void ShouldRemoveExpiredMailboxBeforeAddingNewOne()
-		{
-			Now.Is("2015-06-26 08:00");
-			Server.AddMailbox(new Subscription
-			{
-				MailboxId = Guid.NewGuid().ToString()
-			});
-
-			Now.Is("2015-06-26 08:31");
-
-			var mailBoxId = Guid.NewGuid().ToString();
-			Server.AddMailbox(new Subscription
-			{
-				MailboxId = mailBoxId
-			});
-
-			Mailboxes.Data.Single().Id.ToString().Should().Be(mailBoxId);
-		}
 	}
 }
+

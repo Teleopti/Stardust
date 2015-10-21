@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Infrastructure.MessageBroker
@@ -16,14 +17,19 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		private readonly ICurrentMessageBrokerUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
+		private readonly INow _now;
 
-		public MailboxRepository(ICurrentMessageBrokerUnitOfWork unitOfWork,
+		public MailboxRepository(
+			ICurrentMessageBrokerUnitOfWork unitOfWork,
 			IJsonSerializer serializer,
-			IJsonDeserializer deserializer)
+			IJsonDeserializer deserializer,
+			INow now
+			)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
 			_deserializer = deserializer;
+			_now = now;
 		}
 
 		public void Persist(Mailbox model)
@@ -67,12 +73,12 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			return Load(null, routes);
 		}
 
-		public void Purge(DateTime utcDateTime)
+		public void Purge()
 		{
 			_unitOfWork.Current().CreateSqlQuery(
 				"DELETE FROM [msg].Mailbox "+
 				"WHERE ExpiresAt < :utcDateTime;")
-				.SetParameter("utcDateTime", utcDateTime)
+				.SetParameter("utcDateTime", _now.UtcDateTime())
 				.ExecuteUpdate();
 		}
 

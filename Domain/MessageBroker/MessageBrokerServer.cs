@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
 		private readonly int _expirationInterval;
+		private DateTime _nextPurge;
 
 		public MessageBrokerServer(
 			IActionScheduler actionScheduler,
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
 
 			if (configuration == null ||
-			    !int.TryParse(configuration.AppConfig("MessageBrokerMailboxExpirationInSeconds"), out _expirationInterval))
+				!int.TryParse(configuration.AppConfig("MessageBrokerMailboxExpirationInSeconds"), out _expirationInterval))
 				_expirationInterval = 900;
 		}
 
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		[MessageBrokerUnitOfWork]
 		public virtual void AddMailbox(Subscription subscription)
 		{
-			_mailboxRepository.Purge(_now.UtcDateTime());
+			purgeSometimes();
 			_mailboxRepository.Persist(new Mailbox
 			{
 				Route = subscription.Route(),
@@ -101,6 +103,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 					message.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName)));
 
+			purgeSometimes();
+
 			_mailboxRepository.Load(routes)
 				.ForEach(mailbox =>
 				{
@@ -112,6 +116,20 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			{
 				var r = route;
 				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, message));
+			}
+		}
+
+		private void purgeSometimes()
+		{
+			if (_nextPurge == DateTime.MinValue)
+			{
+				_nextPurge = _now.UtcDateTime().AddMinutes(5);
+				return;
+			}
+			if (_now.UtcDateTime() >= _nextPurge)
+			{
+				_nextPurge = _now.UtcDateTime().AddMinutes(5); // INTE INte fel = INTE RÄTT	 = Fel
+				_mailboxRepository.Purge();
 			}
 		}
 

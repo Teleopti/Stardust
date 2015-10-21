@@ -129,7 +129,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			};
 			Target.Persist(mailbox);
 
-			Target.Purge("2015-06-26 08:31".Utc());
+			Now.Is("2015-06-26 08:31");
+			Target.Purge();
 
 			Target.Load(mailbox.Id).Should().Be.Null();
 		}

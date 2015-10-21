@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			
 			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
 
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
 			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
 
-			system.UseTestDouble(new FakeMailboxRepository()).For<IMailboxRepository>();
+			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 		}
 	}
 }

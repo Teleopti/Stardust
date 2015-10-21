@@ -4,13 +4,20 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMailboxRepository : IMailboxRepository
 	{
+		private readonly INow _now;
 		public readonly IList<Mailbox> Data = new List<Mailbox>();
+
+		public FakeMailboxRepository(INow now)
+		{
+			_now = now;
+		}
 
 		public Mailbox PersistedLast
 		{
@@ -43,9 +50,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				).ToArray();
 		}
 
-		public void Purge(DateTime utcDateTime)
+		public bool PurgeWasCalled;
+
+		public void Purge()
 		{
-			var mailboxesToDelete = Data.Where(x => utcDateTime > x.ExpiresAt).ToArray();
+			PurgeWasCalled = true;
+			var mailboxesToDelete = Data.Where(x => _now.UtcDateTime() > x.ExpiresAt).ToArray();
 			mailboxesToDelete.ForEach(x => Data.Remove(x));
 		}
 	}

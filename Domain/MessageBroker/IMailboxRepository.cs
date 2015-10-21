@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		void Persist(Mailbox mailbox);
 		Mailbox Load(Guid id);
 		IEnumerable<Mailbox> Load(string[] routes);
-		void Purge(DateTime utcDateTime);
+		void Purge();
 	}
 }
