@@ -139,7 +139,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
-
+@ignore
 Scenario: Should not be able to view Real time adherence overview when not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -147,7 +147,7 @@ Scenario: Should not be able to view Real time adherence overview when not permi
 	 | Access to real time adherence overview | False       |
 	When I try to view Real time adherence overview
 	Then I should see a message that I have no permission for this function
-
+@ignore
 Scenario: Should not see Real time adherence overview in menu when not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
