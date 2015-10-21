@@ -44,6 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
 	}
 }
