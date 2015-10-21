@@ -11,6 +11,7 @@ using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Syncfusion.Windows.Forms.Tools.Win32API;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -607,5 +608,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 }
             }
         }
-    }
+
+		protected override void WndProc(ref Message m)
+		{
+			if (m.Msg == (int)Msg.WM_NCHITTEST)
+			{
+				if (m.LParam.ToInt64() > int.MaxValue)
+				{
+					m.LParam = new IntPtr(int.MaxValue);
+				}
+			}
+			base.WndProc(ref m);
+		}
+	}
 }
