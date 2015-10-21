@@ -83,7 +83,7 @@
 			month: 'MMMM',
 			week: function (column) {				
 				return '<div class="week-days-header">'
-				+ '<div class="week-start-day">' + column.date.format('D') + '</div>'
+				+ '<div class="week-start-day">' + (miscService.isLastDayOfMonth(column.date) ? '' : column.date.format('D')) + '</div>'
 				+ '<div></div>'
 				+ '<div class="week-end-day">'  + '</div>'
 				+ '</div>';

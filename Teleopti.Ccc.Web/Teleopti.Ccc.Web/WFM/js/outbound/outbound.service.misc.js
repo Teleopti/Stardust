@@ -18,6 +18,11 @@
 			return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
 		};
 
+		this.isLastDayOfMonth = function(momentDate) {
+			var next = momentDate.clone().add(1, 'day');
+			return next.format('M') !== momentDate.format('M');
+		};
+
 		this.getAllWeekendsInPeriod = function (period) {
 			var periodStart = period[0],
 				periodEnd = period[1];
