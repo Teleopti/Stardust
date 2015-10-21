@@ -151,7 +151,7 @@ wfm.config([
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
 		}).state('rta-agents-selected', {
-			url: '/rta/agents/?teamIds',
+			url: '/rta/agentes/?teamIds',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl',
 			params: {teamIds: {array:true}}

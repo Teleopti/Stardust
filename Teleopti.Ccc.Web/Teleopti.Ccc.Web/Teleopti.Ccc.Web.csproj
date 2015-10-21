@@ -395,6 +395,8 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
+    <Compile Include="Areas\Anywhere\Core\GetAgents.cs" />
+    <Compile Include="Areas\Anywhere\Core\GetAgentStates.cs" />
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GetTeamAdherence.cs" />

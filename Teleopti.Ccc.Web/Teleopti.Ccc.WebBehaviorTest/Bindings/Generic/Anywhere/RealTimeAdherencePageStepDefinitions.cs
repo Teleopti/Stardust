@@ -185,25 +185,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void assertAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
-			var selector = "[agentid*='" + IdForPerson(name) + "']"+"[agentvalue*='{0}']";
-
+			var selector = "[agentid='" + IdForPerson(name) + "']";
+			 
 			if (stateInfo.State != null)
-			Browser.Interactions.AssertExists(selector, stateInfo.State);
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.State);
 			if (stateInfo.Activity != null)
-				Browser.Interactions.AssertExists(selector, stateInfo.Activity);
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.Activity);
 			if (stateInfo.NextActivity != null)
-				Browser.Interactions.AssertExists(selector, name, stateInfo.NextActivity);
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.NextActivity);
 			if (stateInfo.NextActivityStartTimeFormatted() != null)
-				Browser.Interactions.AssertExists(selector, name, stateInfo.NextActivityStartTimeFormatted());
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.NextActivityStartTimeFormatted());
 			if (stateInfo.Alarm != null)
-				Browser.Interactions.AssertExists(selector, name, stateInfo.Alarm);
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.Alarm);
 			if (stateInfo.AlarmTimeFormatted() != null)
-				Browser.Interactions.AssertExists(selector, name, stateInfo.AlarmTimeFormatted());
+				Browser.Interactions.AssertAnyContains(selector, stateInfo.AlarmTimeFormatted());
 
 			if (stateInfo.AlarmColor != null)
 			{
-				var colorSelector = "[agentid*='" + IdForPerson(name) + "']" + "[style*='background-color: {0}']";
-				Browser.Interactions.AssertExists(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"));
+				var colorSelector = "[agentid='" + IdForPerson(name) + "'][style*='background-color: " + toRGBA(stateInfo.AlarmColor, "0.6") +"']";
+				Browser.Interactions.AssertExists(colorSelector);
 			}
 		}
 
@@ -215,9 +215,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void assertRealTimeAgentName(string name)
 		{
-			const string selector = ".agent-name:contains('{0}')";
+			const string selector = "body";
 
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name);
+			Browser.Interactions.AssertAnyContains(selector, name);
 		}
 
 		private static String toRGBA(string colorName, string transparency)

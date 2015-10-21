@@ -16,15 +16,17 @@
 					var state = $filter('filter')(states, {
 						PersonId: agent.PersonId
 					});
-					agent.State = state[0].State;
-					agent.StateStart = state[0].StateStart;
-					agent.Activity = state[0].Activity;
-					agent.NextActivity = state[0].NextActivity;
-					agent.NextActivityStartTime = state[0].NextActivityStartTime;
-					agent.Alarm = state[0].Alarm;
-					agent.AlarmStart = state[0].AlarmStart;
-					agent.AlarmColor = state[0].AlarmColor;
-					agent.TimeInState = state[0].TimeInState;
+					if (state.length > 0) {
+						agent.State = state[0].State;
+						agent.StateStart = state[0].StateStart;
+						agent.Activity = state[0].Activity;
+						agent.NextActivity = state[0].NextActivity;
+						agent.NextActivityStartTime = state[0].NextActivityStartTime;
+						agent.Alarm = state[0].Alarm;
+						agent.AlarmStart = state[0].AlarmStart;
+						agent.AlarmColor = state[0].AlarmColor;
+						agent.TimeInState = state[0].TimeInState;
+					}
 				});
 			};
 
@@ -136,11 +138,12 @@
 				return "rgba(" + r + ", " + g + ", " + b + ", 0.6)";
 			}
 
-			var coloredCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents" ng-attr-agentid="{{row.entity.PersonId}}" ng-attr-agentvalue="{{COL_FIELD}}">{{COL_FIELD}}</div>';
-			var coloredWithTimeCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
-			var coloredWithDurationCellTemplate = '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}};" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
+			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
+			var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
+			var coloredWithDurationCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 			$scope.gridOptions = {
+				rowTemplate: '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}} !important;" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-attr-agentid="{{row.entity.PersonId}}" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div>',
 				columnDefs: [{
 					name: 'Name',
 					field: 'Name',

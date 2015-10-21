@@ -230,6 +230,8 @@
     <Compile Include="Areas\Anywhere\Rta\FakeTeamOutOfAdherenceReadModelReader.cs" />
     <Compile Include="Areas\Anywhere\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
+    <Compile Include="Areas\Anywhere\Rta\GetAgentStatesTest.cs" />
+    <Compile Include="Areas\Anywhere\Rta\GetAgentsTest.cs" />
     <Compile Include="Areas\Anywhere\SitesControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetSiteAdherenceTest.cs" />

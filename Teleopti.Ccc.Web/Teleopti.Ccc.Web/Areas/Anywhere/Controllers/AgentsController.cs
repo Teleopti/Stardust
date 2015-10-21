@@ -22,8 +22,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly INow _date;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly IGetAgents _getAgents;
+		private readonly IGetAgentStates _getAgentsStates;
 
-		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, ICommonAgentNameProvider commonAgentNameProvider, IAgentStateReadModelReader agentStateReadModelReader)
+		public AgentsController(IPermissionProvider permissionProvider,
+			ITeamRepository teamRepository, 
+			IPersonRepository personRepository, 
+			INow date, 
+			ICommonAgentNameProvider commonAgentNameProvider, 
+			IAgentStateReadModelReader agentStateReadModelReader,
+			IGetAgents getAgents,
+			IGetAgentStates getAgentsStates)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
@@ -31,6 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_date = date;
 		    _commonAgentNameProvider = commonAgentNameProvider;
 		    _agentStateReadModelReader = agentStateReadModelReader;
+			_getAgents = getAgents;
+			_getAgentsStates = getAgentsStates;
 		}
 
 		[HttpGet]
@@ -109,6 +120,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 						Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))
 					},
 					JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ForSites(Guid[] siteIds)
+		{
+			return Json(_getAgents.ForSites(siteIds), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetStatesForSites(Guid[] siteIds)
+		{
+			return Json(_getAgentsStates.ForSites(siteIds), JsonRequestBehavior.AllowGet);
 		}
 	}
 

@@ -111,19 +111,48 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}  
 	    }
 
-	    private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
+		{
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT 
+						PlatformTypeId,
+						BusinessUnitId,
+						StateCode,
+						StateId,
+						State,
+						ScheduledId,
+						Scheduled,
+						ScheduledNextId,
+						ScheduledNext,
+						ReceivedTime,
+						Color,
+						AlarmId,
+						AlarmName,
+						StateStart,
+						NextStart,
+						BatchId,
+						OriginalDataSourceId,
+						AlarmStart,
+						PersonId,
+						StaffingEffect,
+						Adherence,
+						TeamId,
+						SiteId 
+					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
+					.SetParameterList("siteIds", siteIds)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+		}
+
+		private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             return identity.DataSource.Statistic;
         }
-
-
-
-
-
-
-
-
 
 		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
 		{

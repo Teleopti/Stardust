@@ -78,6 +78,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldLoadAgentStatesBySiteIds()
+		{
+			var siteId1= Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest { SiteId = siteId1, PersonId = personId1 };
+			var state2 = new AgentStateReadModelForTest { SiteId = siteId2, PersonId = personId2};
+			var state3 = new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = personId3};
+			var dbWritter = new DatabaseWriter(new FakeConnectionStrings());
+            dbWritter.PersistActualAgentReadModel(state1);
+			dbWritter.PersistActualAgentReadModel(state2);
+			dbWritter.PersistActualAgentReadModel(state3);
+
+			var result = target.LoadForSites(new[] {siteId1, siteId2});
+
+			result.Count().Should().Be(2);
+		}
+
+		[Test]
 		public void ShouldLoadStatesWithAdherence()
 		{
 			var teamId = Guid.NewGuid();

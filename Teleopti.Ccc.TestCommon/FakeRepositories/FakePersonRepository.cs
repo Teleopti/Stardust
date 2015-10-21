@@ -49,6 +49,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
+		public FakePersonRepository Has(IPerson person, ITeam team, DateOnly startDate)
+		{
+			person.AddPersonPeriod(new PersonPeriod(startDate, new PersonContract(new Contract("."), new PartTimePercentage("."), new ContractSchedule(".")), team));
+			_persons.Add(person);
+			return this;
+		}
+
 		public void Add(IPerson person)
 		{
 			_persons.Add(person);
@@ -93,7 +100,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			var people = from per in _persons
+						 let periods = per.PersonPeriods(period)
+						 where periods.Any(personPeriod => personPeriod.Team == team)
+						 select per;
+
+			return people.ToList();
 		}
 
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)

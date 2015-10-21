@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GetTeamAdherence>().As<IGetTeamAdherence>().InstancePerLifetimeScope();
 			builder.RegisterType<GetBusinessUnitId>().As<IGetBusinessUnitId>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonalAvailableDataProvider>().As<IPersonalAvailableDataProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<GetAgents>().As<IGetAgents>().InstancePerLifetimeScope();
+			builder.RegisterType<GetAgentStates>().As<IGetAgentStates>().InstancePerLifetimeScope();
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();

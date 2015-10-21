@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Real time adherence agents in multiple teams
+﻿Feature: Real time adherence agents in multiple teams
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
@@ -29,8 +28,8 @@ Scenario: Should be able to see agents for multiple sites
 	And I click 'open'
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
-
-Scenario: Should be able to see agents for multiple teams
+@ignore
+Scenario: Should be able to see agents for multiple teamsa
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'
@@ -47,7 +46,7 @@ Scenario: Should be able to see agents for multiple teams
 	 | Field      | Value      |
 	 | Team       | Garnisonen |
 	 | Start Date | 2014-01-21 |
-	 When I view Real time adherence for site 'Stockholm'
+	When I view Real time adherence for teams on site 'Stockholm'
 	And I click the team checkbox for 'Täby'
 	And I click the team checkbox for 'Garnisonen'
 	And I click 'open'

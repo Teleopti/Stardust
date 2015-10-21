@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			data.ForEach(model =>_data.AddOrUpdate(model.PersonId, model, (g, m) => model));
 		}
-		
-		public void Has(AgentStateReadModel model)
+
+		public FakeAgentStateReadModelReader Has(AgentStateReadModel model)
 		{
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
+			return this;
 		}
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
@@ -39,6 +40,14 @@ namespace Teleopti.Ccc.TestCommon
 		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
+		{
+			return (from s in siteIds
+				from m in _data.Values
+				where s == m.SiteId
+				select m).ToArray();
 		}
 
 		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)

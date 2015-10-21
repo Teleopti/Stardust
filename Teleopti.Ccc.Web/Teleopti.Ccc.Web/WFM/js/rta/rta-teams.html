@@ -1,13 +1,13 @@
 ﻿<div class="row">
         <div class="rta-header">
             <h3>Teams</h3>
-            <button class="wfm-btn wfm-btn-primary" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
+            <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
             <span ng-click="goBack()"><a class="rta-nav-link">Real Time Adherence</a></span> / <span>{{siteName}}</span>
         </div>
         <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5}">
             <div class="rta-stats team">
                 <div class="wfm-checkbox">
-                    <label>
+                    <label style="width: 20px; height: 20px; display:block !important;"  ng-attr-name="{{team.Name}}">
                         <input type="checkbox" name="checkbox" value="value" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)">
                         <span class="wfm-checkbox-toggle"></span>
                     </label>
