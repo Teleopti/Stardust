@@ -1,7 +1,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	public class MessageBrokerWebModule : Module
 	{

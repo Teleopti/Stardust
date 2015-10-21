@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Analytics.Portal.Reports.Ccc
+namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 {
 	public static class GroupingExtensions
 	{

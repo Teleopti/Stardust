@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	[CLSCompliant(false)]
 	public class MessageBrokerController : Controller

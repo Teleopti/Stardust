@@ -464,8 +464,8 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\AreaWithPermissionPathProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IAreaWithPermissionPathProvider.cs" />
+    <Compile Include="Areas\Global\Core\AreaWithPermissionPathProvider.cs" />
+    <Compile Include="Areas\Global\Core\IAreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
@@ -1156,8 +1156,8 @@
     <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IPermissionProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\PermissionProvider.cs" />
+    <Compile Include="Areas\Global\Core\IPermissionProvider.cs" />
+    <Compile Include="Areas\Global\Core\PermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />

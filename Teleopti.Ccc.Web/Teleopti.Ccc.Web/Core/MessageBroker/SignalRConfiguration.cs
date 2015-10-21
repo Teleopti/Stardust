@@ -5,7 +5,7 @@ using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	public static class SignalRConfiguration
 	{

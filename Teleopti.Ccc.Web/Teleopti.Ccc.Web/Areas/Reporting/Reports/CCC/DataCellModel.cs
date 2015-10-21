@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using Teleopti.Analytics.Portal.Reports.Ccc;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC

@@ -5,10 +5,9 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Models.Shared;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
+namespace Teleopti.Ccc.Web.Areas.Global.Core
 {
 	public class AreaWithPermissionPathProvider : IAreaWithPermissionPathProvider
 	{

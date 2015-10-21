@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {

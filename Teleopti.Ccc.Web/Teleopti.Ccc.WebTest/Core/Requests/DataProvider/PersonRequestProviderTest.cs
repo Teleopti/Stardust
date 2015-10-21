@@ -18,6 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Teleopti.Analytics.Portal.Reports.Ccc
+namespace Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC
 {
 	public class IntervalToolTip
 	{

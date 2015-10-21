@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
+namespace Teleopti.Ccc.Web.Areas.Global.Core
 {
 	public class PermissionProvider : IPermissionProvider
 	{

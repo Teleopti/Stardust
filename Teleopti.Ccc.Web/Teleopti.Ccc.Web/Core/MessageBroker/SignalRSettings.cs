@@ -2,7 +2,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	public class SignalRSettings
 	{
