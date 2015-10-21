@@ -379,6 +379,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereRealTimeAdherenceOverview(true);
 		}
 
+		[When(@"I view Wfm")]
+		public void WhenIViewWfm()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmLandingPage();
+		}
+
 		[When(@"I view Real time adherence sites")]
 		public void WhenIViewRealTimeAdherenceSites()
 		{

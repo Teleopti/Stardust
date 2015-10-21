@@ -49,5 +49,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertUrlContains("permissions");
 			Browser.Interactions.AssertAnyContains(".help-widget", "permissions");
 		}
+
+		[Then(@"I should not see Real time adherence in the menu")]
+		public void ThenIShouldNotSeeRealTimeAdherenceInTheMenu()
+		{
+			Browser.Interactions.AssertNotExists(".nav-item", "Real Time Adherence");
+		}
 	}
 }
