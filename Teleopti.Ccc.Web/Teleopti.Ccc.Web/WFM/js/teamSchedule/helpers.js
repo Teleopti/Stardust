@@ -29,6 +29,24 @@
 				return "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
 			return rgb;
 		}
+		service.MinutesFromHours = function (hours) {
+			return hours * 60;
+		}
+		service.MinutesForHourOfDay = function (hour) {
+			return hour * 60;
+		}
+		service.MinutesStartOfHour = function (minutes) {
+			return minutes - (minutes % 60);
+		}
+		service.MinutesEndOfHour = function (minutes) {
+			var reminder = (minutes % 60);
+			if (reminder == 0)
+				return minutes;
+			return minutes + (60 - reminder);
+		}
+		service.MinutesAddHours = function (minutes, hours) {
+			return minutes + 60 * hours;
+		}
 
 		return service;
 	};
