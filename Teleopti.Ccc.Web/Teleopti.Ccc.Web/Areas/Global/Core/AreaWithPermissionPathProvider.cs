@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound,() => Resources.Outbound,"outbound"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => Resources.People,"people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatPlan,"seatPlan"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatMap,"seatMap"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => Resources.RealTimeAdherence,"rta")
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatMap,"seatMap")
 		};
 
 
