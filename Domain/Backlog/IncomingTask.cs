@@ -234,7 +234,9 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 			if (dates.Length > 0)
 			{
-				return new DateOnlyPeriod(dates.Last().AddDays(1), SpanningPeriod.EndDate);
+				var periodStart = dates.Last().AddDays(1);
+				return new DateOnlyPeriod(periodStart < SpanningPeriod.EndDate ? periodStart : SpanningPeriod.EndDate, 
+					SpanningPeriod.EndDate);
 			}
 			return SpanningPeriod;
 		}
