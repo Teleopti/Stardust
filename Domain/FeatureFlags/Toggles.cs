@@ -82,6 +82,7 @@
 		WfmForecast_IntradayPatternView_33069,
 		WfmForecast_CreateSkill_34591,
 		WfmPermission_ReplaceOldPermission_34671,
+		Wfm_RTA_34621,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
