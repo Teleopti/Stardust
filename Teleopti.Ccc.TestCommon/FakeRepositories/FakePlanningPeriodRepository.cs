@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			AddExecuted = true;
 		}
 
-		public IPlanningPeriod HasOneWeek(DateOnly start)
+		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
-			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7)), new[]
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(start.Date.AddDays(-7 * numberOfWeeks)), new[]
 			{
 				new AggregatedSchedulePeriod
 				{
 					DateFrom = start.Date,
-					Number = 1,
+					Number = numberOfWeeks,
 					PeriodType = SchedulePeriodType.Week
 				}
 			}));

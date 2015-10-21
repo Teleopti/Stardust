@@ -208,6 +208,7 @@
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
+    <Compile Include="FakeRepositories\FakeWorkRuleSettingsRepository.cs" />
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />

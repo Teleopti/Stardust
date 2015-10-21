@@ -541,6 +541,7 @@
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterExTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\WorkRuleSettingsTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancePersonalSettingTest.cs" />

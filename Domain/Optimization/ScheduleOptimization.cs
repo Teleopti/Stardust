@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -24,12 +25,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
+		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 	IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 	IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
-	WeeklyRestSolverExecuter weeklyRestSolverExecuter)
+	WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
+			_optimizationPreferencesFactory = optimizationPreferencesFactory;
 		}
 
 		public OptimizationResultModel Execute(Guid planningPeriodId)
@@ -56,22 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
-			var optimizationPreferences = new OptimizationPreferences
-			{
-				DaysOff = new DaysOffPreferences
-					{
-						ConsecutiveDaysOffValue = new MinMax<int>(1, 3),
-						UseConsecutiveDaysOff = true,
-						ConsecutiveWorkdaysValue = new MinMax<int>(2, 6),
-						UseConsecutiveWorkdays = true,
-						ConsiderWeekAfter = true,
-						ConsiderWeekBefore = true,
-						DaysOffPerWeekValue = new MinMax<int>(1, 3),
-						UseDaysOffPerWeek = true
-					},
-				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }
-			};
-			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
+			var optimizationPreferences = _optimizationPreferencesFactory.Create();
+      _classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
 
 			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople);
 
