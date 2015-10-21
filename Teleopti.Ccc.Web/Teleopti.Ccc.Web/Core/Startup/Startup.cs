@@ -21,8 +21,8 @@ using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 

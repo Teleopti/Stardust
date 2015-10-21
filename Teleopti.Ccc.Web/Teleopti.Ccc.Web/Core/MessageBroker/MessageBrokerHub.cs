@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using log4net;
 using Microsoft.AspNet.SignalR.Hubs;
+using log4net;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Core.MessageBroker
+namespace Teleopti.Ccc.Web.Broker
 {
 	[HubName("MessageBrokerHub")]
 	[CLSCompliant(false)]

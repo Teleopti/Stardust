@@ -20,7 +20,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Web.Areas.Global.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {

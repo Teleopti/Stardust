@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Global.Core
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {
 	public interface IPermissionProvider
 	{

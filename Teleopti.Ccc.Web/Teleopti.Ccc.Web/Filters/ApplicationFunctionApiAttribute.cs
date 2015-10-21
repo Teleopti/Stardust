@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Web.Http.Controllers;
-using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Filters

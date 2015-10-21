@@ -9,6 +9,7 @@ using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Teleopti.Analytics.Parameters;
+using Teleopti.Analytics.Portal.Reports.Ccc;
 using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;

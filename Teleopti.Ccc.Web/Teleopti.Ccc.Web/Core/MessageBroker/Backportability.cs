@@ -4,7 +4,7 @@ using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Core.MessageBroker
+namespace Teleopti.Ccc.Web.Broker
 {
 	[CLSCompliant(false)]
 	public class BackportableHub : Hub

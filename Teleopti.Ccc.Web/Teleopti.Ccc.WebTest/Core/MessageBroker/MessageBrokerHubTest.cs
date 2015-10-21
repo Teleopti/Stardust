@@ -2,7 +2,7 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Core.MessageBroker;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.WebTest.Areas.Anywhere;
 using Teleopti.Interfaces.Domain;
 
