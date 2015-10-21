@@ -1056,6 +1056,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			CheckParametersCollection();
 			try
 			{
+				dateOffset.Value = "0";
 				CreateReport();
 			}
 			catch (SqlException exception)
