@@ -36,10 +36,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Send(_initiatorIdentifier.Current(), modifiedRoots);
+			send(_initiatorIdentifier.Current, modifiedRoots);
 		}
 
 		public void Send(IInitiatorIdentifier initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+			send(() => initiatorIdentifier, modifiedRoots);
+		}
+
+		private void send(Func<IInitiatorIdentifier> initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
@@ -55,7 +60,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				foreach (var person in people)
 				{
 					var matchedItems =
-						scheduleData.Where(s => s.Scenario != null && s.Scenario.Equals(scenario) && s.Person.Equals(person)).ToArray();
+						scheduleData.Where(s => s.Scenario != null && s.Scenario.Equals(scenario) && s.Person.Equals(person))
+							.ToArray();
 					if (!matchedItems.Any()) continue;
 
 					startDateTime = new[] { matchedItems.Min(s => s.Period.StartDateTime), startDateTime }.Min();
@@ -64,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				}
 				var initiatorId = Guid.Empty.ToString();
 				if (initiatorIdentifier != null)
-					initiatorId = initiatorIdentifier.InitiatorId.ToString();
+					initiatorId = initiatorIdentifier().InitiatorId.ToString();
 				var messge = new Message
 				{
 					ModuleId = initiatorId,
