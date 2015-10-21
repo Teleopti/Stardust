@@ -81,4 +81,35 @@
         condition=":businessUnitParameter = BusinessUnit" />
 
   </class>
+
+	<sql-query name="SkillTaskDetails">
+		<![CDATA[
+		select 
+				s.Name,
+				ttp.Minimum,
+				ttp.Maximum,
+				ttp.Tasks,
+				ttp.CampaignTasks,
+				(ttp.Tasks * CampaignTasks + ttp.Tasks) as TotalTasks ,
+				sdb.Scenario,
+				s.Id as SkillId
+		from 
+				skill s 
+				left join SkillDay sdb on (s.Id=sdb.Skill) and (sdb.SkillDayDate between :startDate and :endDate) and (sdb.Scenario = :scenario) 
+				left join WorkloadDay wld on (wld.Parent = sdb.Id) 
+				and (wld.TemplateName is null OR wld.TemplateName <> :longTermKey)
+				left join WorkloadDayBase wldb on wld.WorkloadDayBase = wldb.Id
+				left join TemplateTaskPeriod ttp on ttp.parent = wldb.id
+		where 
+				s.IsDeleted = 0
+				and ttp.Minimum >= :startDate 
+				and ttp.Maximum <= :endDate															
+    ]]>
+		<query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
+		<query-param name="onDate" type="datetime"/>
+		<query-param name="startDate" type="datetime"/>
+		<query-param name="endDate" type="datetime"/>
+		<query-param name="longtermKey" type="string"/>
+	</sql-query>
+	
 </hibernate-mapping>

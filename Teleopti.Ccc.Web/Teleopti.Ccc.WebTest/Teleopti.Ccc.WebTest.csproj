@@ -252,6 +252,7 @@
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
     <Compile Include="Areas\Global\StatusControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />
+    <Compile Include="Areas\Intraday\SkillTasksDetailProviderTest.cs" />
     <Compile Include="Areas\MultiTenancy\ApplicationLogonTest.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUserTest.cs" />

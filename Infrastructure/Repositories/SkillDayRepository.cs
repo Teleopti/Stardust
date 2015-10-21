@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
@@ -324,5 +325,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 throw new DataSourceException(ex.Message, ex);
             }
         }
+
+		 public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+		 {
+			 IList<SkillTaskDetailsModel> taskDetails = new List<SkillTaskDetailsModel>();
+			 taskDetails = Session.GetNamedQuery("SkillTaskDetails")
+				 .SetEntity("scenario", scenario)
+				 .SetDateTime("startDate", period.StartDate.Date)
+				 .SetDateTime("endDate", (period.EndDate.Date.AddDays(1).AddSeconds(-1)))
+				 .SetString("longTermKey", TemplateReference.LongtermTemplateKey)
+				 .SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillTaskDetailsModel)))
+				 .List<SkillTaskDetailsModel>();
+			 return taskDetails;
+		 }
 	}
 }

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource()
 		{
-			throw new NotImplementedException();
+			return _skills;
 		}
 	}
 }
