@@ -22,7 +22,7 @@ var wfm = angular.module('wfm', [
 	'toggleService',
 	'outboundServiceModule',
 	'RtaService',
-	'wfmCtrls',
+	'wfm.http',
 	'wfm.permissions',
 	'wfm.people',
 	'wfm.outbound',
@@ -42,12 +42,11 @@ var wfm = angular.module('wfm', [
 ]);
 
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {
 		$urlRouterProvider.otherwise("/#");
 		$stateProvider.state('main', {
 			url: '/',
-			templateUrl: 'html/main.html',
-			controller: 'MainCtrl'
+			templateUrl: 'html/main.html'
 		}).state('forecasting', {
 			url: '/forecasting',
 			templateUrl: 'js/forecasting/html/forecasting.html',
@@ -167,6 +166,7 @@ wfm.config([
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
+		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
 	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo',
@@ -266,3 +266,7 @@ wfm.config([
 		});
 	}
 ]);
+
+
+
+
