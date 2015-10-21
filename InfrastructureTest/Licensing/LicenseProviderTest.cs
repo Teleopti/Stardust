@@ -59,6 +59,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
         }
 
+		  [Test]
+		  public void CanGetLicenseActivatorForWFM()
+		  {
+			  using (ILicenseService licenseService = new stubWFMLicenseService(_expirationDate, _expirationGracePeriod, _maxActiveAgentsGrace.Value))
+			  {
+				  ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
+
+				  Assert.IsTrue(licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiWfmOutbound));
+				  Assert.IsTrue(licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiWfmSeatPlanner));
+			  }
+		  }
+
         [Test]
         public void CanGetLicenseActivatorForFreemium()
         {
@@ -246,9 +258,88 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
 	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
+	        public bool TeleoptiWFMOutboundEnabled { get; private set; }
+	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
 
 	        #endregion
         }
+
+		  private class stubWFMLicenseService : ILicenseService
+		  {
+			  public stubWFMLicenseService(DateTime expirationDate, TimeSpan expirationGracePeriod,
+				  double maxActiveAgentsGrace)
+			  {
+				  CustomerName = customerName;
+				  ExpirationDate = expirationDate;
+				  ExpirationGracePeriod = expirationGracePeriod;
+				  MaxActiveAgents = maxActiveAgents;
+				  MaxActiveAgentsGrace = maxActiveAgentsGrace;
+
+				  TeleoptiWFMOutboundEnabled = true;
+				  TeleoptiWFMSeatPlannerEnabled = true;
+			  }
+
+			  #region Implementation of IDisposable
+			  public void Dispose()
+			  {
+				  GC.SuppressFinalize(this);
+			  }
+			  #endregion
+
+			  #region Implementation of ILicenseService
+			  public bool IsThisTooManyActiveAgents(int activeAgents)
+			  {
+				  throw new NotImplementedException();
+			  }
+
+			  public bool IsThisAlmostTooManyActiveAgents(int activeAgents)
+			  {
+				  throw new NotImplementedException();
+			  }
+
+			  public string CustomerName { get; private set; }
+			  public DateTime ExpirationDate { get; private set; }
+			  public TimeSpan ExpirationGracePeriod { get; private set; }
+			  public int MaxActiveAgents { get; private set; }
+			  public double MaxActiveAgentsGrace { get; private set; }
+			  public bool TeleoptiCccPilotCustomersBaseEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersForecastsEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersShiftsEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersPeopleEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersAgentPortalEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersOptionsEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersSchedulerEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersIntradayEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersPermissionsEnabled { get; private set; }
+			  public bool TeleoptiCccPilotCustomersReportsEnabled { get; private set; }
+			  public bool TeleoptiCccBaseEnabled { get; private set; }
+			  public bool TeleoptiCccDeveloperEnabled { get; private set; }
+			  public bool TeleoptiCccAgentSelfServiceEnabled { get; private set; }
+			  public bool TeleoptiCccShiftTradesEnabled { get; private set; }
+			  public bool TeleoptiCccAgentScheduleMessengerEnabled { get; private set; }
+			  public bool TeleoptiCccHolidayPlannerEnabled { get; private set; }
+			  public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
+			  public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
+			  public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
+			  public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+			  public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
+			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
+			  public int MaxSeats { get; private set; }
+			  public LicenseType LicenseType { get; private set; }
+			  public decimal Ratio { get; private set; }
+			  public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
+			  public bool TeleoptiWFMShiftTraderEnabled { get; private set; }
+			  public bool TeleoptiWFMLifestyleEnabled { get; private set; }
+			  public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
+			  public bool TeleoptiWFMNotifyEnabled { get; private set; }
+			  public bool TeleoptiWFMVNextEnabled { get; private set; }
+			  public bool TeleoptiWFMMyTeamEnabled { get; private set; }
+			  public bool TeleoptiWFMOutboundEnabled { get; private set; }
+			  public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
+
+			  #endregion
+		  }
 
         private class stubFreemiumLicenseService : ILicenseService
         {
@@ -363,6 +454,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
 	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
+	        public bool TeleoptiWFMOutboundEnabled { get; private set; }
+	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
@@ -482,6 +575,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
 	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
+	        public bool TeleoptiWFMOutboundEnabled { get; private set; }
+	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
