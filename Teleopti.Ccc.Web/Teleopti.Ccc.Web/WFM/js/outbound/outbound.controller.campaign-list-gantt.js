@@ -6,6 +6,7 @@
 		.controller('CampaignListGanttCtrl', [
 			'$scope',
 			'$filter',
+			'$q',
 			'OutboundToggles',
 			'outboundService',
 			'miscService',
@@ -14,7 +15,7 @@
 			'outboundNotificationService',
 			campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService) {
+	function campaignListGanttCtrl($scope, $filter, $q, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService) {
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
@@ -32,51 +33,61 @@
 
 		$scope.settings = { threshold: null };
 
-		$scope.$watch(function() {
-			return $scope.settings.threshold;
-		}, function (newValue, oldValue) {			
-			if (newValue !== oldValue) {
-				var thresholdObj = { Value: newValue / 100, Type: 1 };
-				outboundService.updateThreshold(thresholdObj, function (data) {
-					getListCampaignsWithinPeriod(function () {
-						$scope.ganttData.forEach(function (dataRow, indx) {
-							if (dataRow.expansion) {
-								$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
-							}
-						});
-					});
-				});
-			}
-		});
-
 		function init() {
-			getGanttVisualization();
+			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
-			loadWithinPeriod();
-			getThreshold();
+
+			$q.all([getGanttVisualization(), loadWithinPeriod(), getThreshold()]).then(function () {
+				getListCampaignsWithinPeriod(function () {
+					$scope.isRefreshingGantt = false;
+					addThresholdChangeWatch();
+				});				
+			});		
+						
 		}
 
-		function getThreshold() {
-			outboundService.getThreshold(function(data) {
-				$scope.settings.threshold = data.Value ? Math.round(data.Value * 100) : 0;
+		function addThresholdChangeWatch() {
+			$scope.$watch(function () {
+				return $scope.settings.threshold;
+			}, function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					var thresholdObj = { Value: newValue / 100, Type: 1 };
+					outboundService.updateThreshold(thresholdObj, function (data) {
+						getListCampaignsWithinPeriod(function () {
+							$scope.ganttData.forEach(function (dataRow, indx) {
+								if (dataRow.expansion) {
+									$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
+								}
+							});
+						});
+					});
+				}
 			});
 		}
 
+		function getThreshold() {
+			var deferred = $q.defer();
+			outboundService.getThreshold(function(data) {
+				$scope.settings.threshold = data.Value ? Math.round(data.Value * 100) : 0;
+				deferred.resolve();
+			});
+			return deferred.promise;
+		}
+
 		function getListCampaignsWithinPeriod(cb) {
-			$scope.isRefreshingGantt = true;
 			outboundService.listCampaignsWithinPeriod(function success(data) {
 				updateAllCampaignGanttDisplay(data);
-				$scope.ganttStatistics = data;
-				$scope.isRefreshingGantt = false;
+				$scope.ganttStatistics = data;			
 				if (cb) cb();
 			});
 		}
 
-		function loadWithinPeriod() {
-			$scope.isRefreshingGantt = true;
-			outboundService.loadWithinPeriod(function handleSuccess(isload) {
-				getListCampaignsWithinPeriod();
+		function loadWithinPeriod() {			
+			var deferred = $q.defer();
+			outboundService.loadWithinPeriod(function handleSuccess() {
+				deferred.resolve();				
 			});
+			return deferred.promise;
 		}
 		
 		$scope.headerFormats = {
@@ -88,7 +99,7 @@
 				+ '<div class="week-end-day">'  + '</div>'
 				+ '</div>';
 			}			
-		};
+		};		
 
 		$scope.tableHeaders = {
 			'model.name': ''
@@ -214,6 +225,7 @@
 				EndDate: { Date: endDate ? endDate : defaultPeriod[1] }
 			};
 
+			var deferred = $q.defer();
 			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
@@ -235,7 +247,11 @@
 				});
 				$scope.ganttData = ganttArr;
 				$scope.isLoadFinished = true;
+
+				deferred.resolve();
 			});
+
+			return deferred.promise;
 		}
 
 		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
