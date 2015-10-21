@@ -24,16 +24,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 		public void SetScheduledTime(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> value)
 		{
-			/*
-			 * Do nothing
-			 */
+			if (!campaign.Id.HasValue) return;
+			campaignSchedules.Add(campaign.Id.Value, value);
 		}
 
 		public void SetForecastedTime(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> value)
 		{
-			/*
-			 * Do nothing
-			 */
+			if (!campaign.Id.HasValue) return;
+			campaignForecasts.Add(campaign.Id.Value, value);
 		}
 
 		public void AddCampaignSchedule(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> schedules)

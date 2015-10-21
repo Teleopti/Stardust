@@ -85,6 +85,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return skill;
         }
 
+	    public static ISkill CreateSkill(string skillName, TimeZoneInfo TimeZoneInfo)
+	    {
+			ISkill newSkill = CreateSkill(skillName);
+			newSkill.TimeZone = TimeZoneInfo;			
+			return newSkill;
+	    }
+
 
 		public static ISkill CreateSkillWithId(string skillName)
 		{
