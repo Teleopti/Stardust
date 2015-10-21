@@ -69,8 +69,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					personIds.Add(person.Id.Value);
 				}
 				var initiatorId = Guid.Empty.ToString();
-				if (initiatorIdentifier != null)
-					initiatorId = initiatorIdentifier().InitiatorId.ToString();
+				var identifier = initiatorIdentifier();
+				if (identifier != null)
+					initiatorId = identifier.InitiatorId.ToString();
 				var messge = new Message
 				{
 					ModuleId = initiatorId,
