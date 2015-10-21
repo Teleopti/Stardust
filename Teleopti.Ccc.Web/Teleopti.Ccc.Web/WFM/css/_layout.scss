@@ -46,6 +46,11 @@ html, body{
 	overflow: auto;
 }
 
+input::-ms-clear {
+	display: none;
+}
+
+
 /*
  * growl-item styles
  */
