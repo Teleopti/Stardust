@@ -2474,7 +2474,7 @@ Periods</comment>
     <comment>New Group Name</comment>
   </data>
   <data name="TerminalDate" xml:space="preserve">
-    <value>Afskeds dato</value>
+    <value>Ophørsdato</value>
     <comment>Leaving date</comment>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
@@ -5360,7 +5360,7 @@ Tilgængelighed</value>
     <comment>Use Min Staffing</comment>
   </data>
   <data name="UsePreferences" xml:space="preserve">
-    <value>Anvend Præferencer</value>
+    <value>Anvend præferencer</value>
     <comment>Use Preferences</comment>
   </data>
   <data name="UseShiftCategory" xml:space="preserve">
@@ -7984,7 +7984,7 @@ Ugedag</value>
     <comment>From - To</comment>
   </data>
   <data name="ExtendedPreferences" xml:space="preserve">
-    <value>Udvidede Præferencer</value>
+    <value>Udvidede præferencer</value>
     <comment>Extended Preferences</comment>
   </data>
   <data name="ContractTimeDoesNotMeetTheTargetTime" xml:space="preserve">
@@ -8101,11 +8101,11 @@ Ugedag</value>
     <comment>Resource Optimizer Day Off Preferences Panel</comment>
   </data>
   <data name="MustHave" xml:space="preserve">
-    <value>Skal have</value>
+    <value>Veto</value>
     <comment>"Must have prefererences" Former Veto</comment>
   </data>
   <data name="MustHaveCapitalized" xml:space="preserve">
-    <value>Skal Have</value>
+    <value>Veto</value>
     <comment>"Must have prefererences" Former Veto</comment>
   </data>
   <data name="Confidential" xml:space="preserve">
@@ -8228,7 +8228,7 @@ Ugedag</value>
     <value>Tilgængelige Timeansatte</value>
   </data>
   <data name="PreferenceStartDate" xml:space="preserve">
-    <value>Start dato for ønker</value>
+    <value>Start dato for præferencer</value>
   </data>
   <data name="CreateStudentAvailability" xml:space="preserve">
     <value>Tilgængelige Timeansatte</value>
@@ -8525,7 +8525,7 @@ Periode: {3}</value>
     <value>Ingen Arbejdsproces styring defineret.</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
-    <value>Aktiviteten er tilgængelig for udvidet ønsker</value>
+    <value>Aktiviteten er tilgængelig for udvidet Præferencer</value>
   </data>
   <data name="Basic" xml:space="preserve">
     <value>Basic</value>
@@ -8552,10 +8552,10 @@ Periode: {3}</value>
     <value>Er åben</value>
   </data>
   <data name="OpenPreferences" xml:space="preserve">
-    <value>Åben ønsker</value>
+    <value>Åben præferencer</value>
   </data>
   <data name="PreferencePeriod" xml:space="preserve">
-    <value>Ønske periode</value>
+    <value>Præference periode</value>
   </data>
   <data name="StartDateMustBeSmallerThanEndDate" xml:space="preserve">
     <value>Start dato skal være mindre end slut dato</value>
@@ -8579,10 +8579,10 @@ Periode: {3}</value>
     <value>Vagtbytte Forespørgelse</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Vagtkategorier tilgængelig for ønsker</value>
+    <value>Vagtkategorier tilgængelig for præferencer</value>
   </data>
   <data name="DaysOffAvailableForExtendedPreferences" xml:space="preserve">
-    <value>Fridage tilgængelig for ønsker</value>
+    <value>Fridage tilgængelig for præferencer</value>
   </data>
   <data name="NotAvailable" xml:space="preserve">
     <value>ikke tilgængelig</value>
@@ -8609,7 +8609,7 @@ Periode: {3}</value>
     <value>Ingen forslag</value>
   </data>
   <data name="PreferencesColon" xml:space="preserve">
-    <value>Ønsker:</value>
+    <value>Præferencer:</value>
   </data>
   <data name="PublishedColon" xml:space="preserve">
     <value>Offentliggjort:</value>
@@ -8772,7 +8772,7 @@ Kontroller reglerne for længde og karaktere. </value>
     <value>Målet for fridage i perioden er {0} men der er {1}, så der kan ikke planlægges </value>
   </data>
   <data name="ExtendedPreferencesTemplate" xml:space="preserve">
-    <value>Udvidet ønske skabelon</value>
+    <value>Udvidet præferencer skabelon</value>
   </data>
   <data name="SaveAsTemplate" xml:space="preserve">
     <value>Gem som skabelon</value>
@@ -9118,13 +9118,13 @@ Fejl besked: {0}</value>
     <value>Håndtere Planlægnings Tags</value>
   </data>
   <data name="ScheduleTagColon" xml:space="preserve">
-    <value>Palnlægnings tag:</value>
+    <value>Planlægnings tag:</value>
   </data>
   <data name="ScheduleTags" xml:space="preserve">
     <value>Planlæg tags</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>Team Planlægning</value>
+    <value>Team plan</value>
   </data>
   <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
     <value>Kontraktsplan</value>
@@ -9193,7 +9193,7 @@ Fejl besked: {0}</value>
     <value>Uge</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
-    <value>Planlæg kun ønsker med Veto</value>
+    <value>Planlæg kun præferencer med Veto</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
     <value>Agent Schedule Messenger</value>
@@ -9578,7 +9578,7 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
     <value>Lås Tilgængelighed</value>
   </data>
   <data name="LockPreferences" xml:space="preserve">
-    <value>Lås Ønsker</value>
+    <value>Lås præferencer</value>
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Lås Restriktioner</value>
@@ -9722,7 +9722,7 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
     <value>Du skal vælge mindst en kompetence.</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Fravær tilgængelig for ønsker</value>
+    <value>Fravær tilgængelig for præferencer</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
     <value>Kan ikke vise alle møder på dette tidspunkt!</value>
@@ -9812,34 +9812,34 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
     <value>Budgetterde overskud</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
-    <value>Ønske opfyldelse</value>
+    <value>Præference opfyldelse</value>
   </data>
   <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
-    <value>Dine ønsker kan resultere i {0} fridage.</value>
+    <value>Dine præferencer kan resultere i {0} fridage.</value>
   </data>
   <data name="YourPreferencesCanResultXHours" xml:space="preserve">
-    <value>Dine ønsker kan resultere i {0} timer.</value>
+    <value>Dine præferencer kan resultere i {0} timer.</value>
   </data>
   <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
-    <value>Dine ønsker kan resultere i {0} til {1} timer</value>
+    <value>Dine præferencer kan resultere i {0} til {1} timer</value>
   </data>
   <data name="CampaignCustomersPercent" xml:space="preserve">
     <value>Kampagne ekstra kunder %</value>
   </data>
   <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
-    <value>Dine ønsker er udenfor det tilladte</value>
+    <value>Dine præferencer er udenfor det tilladte</value>
   </data>
   <data name="AddExtendedPreference" xml:space="preserve">
-    <value>Tilføj uddvidet ønsker</value>
+    <value>Tilføj udvidet Præferencer</value>
   </data>
   <data name="ExtendedPreferencesWeb" xml:space="preserve">
-    <value>Udviddet Ønsker</value>
+    <value>Udvidet præferencer</value>
   </data>
   <data name="EmptyTemplateName" xml:space="preserve">
     <value>Skabelon navnet er tomt</value>
   </data>
   <data name="AddPreferenceThreeDots" xml:space="preserve">
-    <value>Tilføj Ønsker...</value>
+    <value>Tilføj Præferencer...</value>
   </data>
   <data name="CampaignChatsPercentSign" xml:space="preserve">
     <value>Kampagne Chats %</value>
@@ -10252,7 +10252,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Du ska have {0} fridage.</value>
   </data>
   <data name="Anywhere" xml:space="preserve">
-    <value>Overalt</value>
+    <value>Web</value>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Du skal have mellem {0} og {1} fridage.</value>
@@ -10967,5 +10967,179 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="LengthOfActivity" xml:space="preserve">
     <value>Total tid af valgt aktivitet</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Mellem fridage</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Ugyldig</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Angiv Valgfri Kolonne der indeholder SMS mobilnummer</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Gennemsnit</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per Vagtkategori</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Kompetencer</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Budget Group mangler</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Vagtbytte afvist. Vagter er på forskellige dage</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Tilføj fravær del af dag</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Fravær del af dag</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Min Rapport</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Ugyldig sluttid</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Tilføj fravær på existerende vagt</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Data mangler</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Mål</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Parathed</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Værdi</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>I går</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Opgave tid</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Total opgave tid</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chat tid</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Du mangler tilladelser til team data</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Vis Personlige konti</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Flyt aktivitet</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Mine vagtbytter: </value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alle teams</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Tilføj fravær del af dag for</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Dette kommer at fjerne alle badges for alle agenter. Ingen fortryd er mulig. Fortsætt?</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Vagtbytte Opslagtavle</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Der er ingen tilbud for bytte som passer din vagt</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Tilbud Vagtbytte</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Tilbud gyldig indtil</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Jeg søger efter en vagt med følgende betingelser</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>Ugyldig period for vagtbytte</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>Tilbud kan kun være gyldigt indtil vagtens dato</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Det er ikke muligt med et vagtbytte på en fraværsdage</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Ugyldig tilbud til Vagtbytte</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Dit tilbud til Vagtbytte af {0} er ugyldig fordi din vagt er ændret</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Tilbud til Vagtbytte</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Tilbud til Vagtbytte</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Afsluttet</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Udløbet</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Fridage</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Fridage eller ikke-planlagt dag</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Ikke-planlagt dag</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Arbejdsdag</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Anonym Opslagstavle</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Søg navn</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Vil du gennemføre vagtbyttet?</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>'Først til mølle' princip</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>Der er ingen fravær at fjerne i vagten.</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Denne vagt er allerede valgt af en anden. Venligst vælg en anden vagt.</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Tilføj Veto</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Fjern Veto</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>MyTeam plan</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Diverse</value>
   </data>
 </root>
