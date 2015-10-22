@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff().Should().Not.Be.Null();
 		}
 
-		[Test, Ignore("Works locally but not on build machine")]
+		[Test]
 		public void ShouldUseSettingForDayOffPerWeek_Valid()
 		{
 			var firstDay = new DateOnly(2015, 10, 26); //mon
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings { DayOffsPerWeek = new MinMax<int>(1, 3) });
+			WorkRuleSettingsRepository.Add(new WorkRuleSettings { DayOffsPerWeek = new MinMax<int>(1, 3), ConsecutiveWorkdays = new MinMax<int>(2, 20) });
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
 			schedulePeriod.SetDaysOff(2);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod);
