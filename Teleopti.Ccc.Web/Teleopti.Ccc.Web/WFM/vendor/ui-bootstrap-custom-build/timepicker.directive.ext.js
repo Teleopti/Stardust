@@ -18,7 +18,7 @@
 					"          <input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" ng-readonly=\"::readonlyInput\" maxlength=\"2\" tabindex=\"1\"/>" +
 					"      </td>" +
 					"      <td ng-show=\"showMeridian\">" +
-					"	<md-button ng-disabled=\"noToggleMeridian()\" ng-click=\"toggleMeridian()\" tabindex=\"1\">{{meridian}}</md-button>" +
+					"	<md-button type=\"button\" ng-disabled=\"noToggleMeridian()\" ng-click=\"toggleMeridian()\" tabindex=\"1\">{{meridian}}</md-button>" +
 					"      </td>" +
 					"    </tr>" +
 					"  </tbody>" +
