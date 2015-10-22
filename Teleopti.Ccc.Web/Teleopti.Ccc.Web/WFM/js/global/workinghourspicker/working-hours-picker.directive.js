@@ -1,9 +1,27 @@
 ﻿(function() {
-    'use strict';
+	'use strict';
 
-    angular.module('wfm.workinghourspicker', ['wfm.timerangepicker']).directive('workingHoursPicker', [
-        '$q', '$translate', '$filter',
-		function ($q, $translate, $filter) {
+	angular.module('wfm.workinghourspicker', ['wfm.timerangepicker']);
+
+	angular.module('wfm.workinghourspicker').service('workingHoursService', [
+		function() {
+			this.createEmptyWorkingPeriod = function(startTime, endTime) {
+				var weekdaySelections = [];
+				var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
+
+				for (var i = 0; i < 7; i++) {
+					var curDow = (startDow + i) % 7;
+					weekdaySelections.push({ WeekDay: curDow, Checked: false });
+				}
+
+				return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
+			};
+		}
+	]);
+
+    angular.module('wfm.workinghourspicker').directive('workingHoursPicker', [
+        '$q', '$translate', '$filter', 'workingHoursService',
+		function ($q, $translate, $filter, workingHoursPickerService) {
 		    return {
 		        restrict: 'E',
 		        scope: {
@@ -14,18 +32,6 @@
 
 		    };
 
-		    function createEmptyWorkingPeriod(startTime, endTime) {
-		    	var weekdaySelections = [];
-		    	var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
-
-		    	for (var i = 0; i < 7; i++) {
-		    		var curDow = (startDow + i) % 7;
-		    		weekdaySelections.push({ WeekDay: curDow, Checked: false });
-		    	}
-
-		    	return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
-		    }
-
 		    function postLink(scope, elem, attrs) {
 
 		        scope.enforceRadioBehavior = enforceRadioBehavior;
@@ -35,7 +41,7 @@
 
 			    scope.disableNextDay = true;
 
-		        var weekDays = createEmptyWorkingPeriod().WeekDaySelections;
+			    var weekDays = workingHoursPickerService.createEmptyWorkingPeriod().WeekDaySelections;
 		        var translations = [];
 		        var i;
 		        for (i = 0; i < weekDays.length; i++) {
@@ -54,7 +60,7 @@
 		        }
 
 		        function addEmptyWorkingPeriod(startTime, endTime) {			      
-		            scope.workingHours.push(createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
+		        	scope.workingHours.push(workingHoursPickerService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
 		        }
 
 		        function removeWorkingPeriod(index) {

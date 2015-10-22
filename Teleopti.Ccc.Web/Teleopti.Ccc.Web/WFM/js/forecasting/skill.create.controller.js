@@ -2,47 +2,18 @@
 	'use strict';
 	angular.module('wfm.forecasting')
 		.controller('ForecastingSkillCreateCtrl', [
-			'SkillService', '$scope', '$filter', '$state', 'growl',
-			function (skillService, $scope, $filter, $state, growl) {
+			'SkillService', '$scope', '$filter', '$state', 'growl', 'workingHoursService',
+			function (skillService, $scope, $filter, $state, growl, workingHoursService) {
+				var open24Hours = workingHoursService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 0, 0, 0, 0), new Date(2000, 1, 2, 0, 0, 0, 0));
+				angular.forEach(open24Hours.WeekDaySelections, function (weekDay) {
+					weekDay.Checked = true;
+				});
+
 				$scope.model = {
 					serviceLevelPercent: 80,
 					serviceLevelSeconds: 20,
 					shrinkage: 0,
-					workingHours: [
-					{
-						StartTime: new Date(2000, 1, 1, 0, 0, 0, 0),
-						EndTime: new Date(2000, 1, 2, 0, 0, 0, 0),
-						WeekDaySelections: [
-							{
-								Checked: true,
-								WeekDay: 1
-							},
-							{
-								Checked: true,
-								WeekDay: 2
-							},
-							{
-								Checked: true,
-								WeekDay: 3
-							},
-							{
-								Checked: true,
-								WeekDay: 4
-							},
-							{
-								Checked: true,
-								WeekDay: 5
-							},
-							{
-								Checked: true,
-								WeekDay: 6
-							},
-							{
-								Checked: true,
-								WeekDay: 0
-							}
-						]
-					}]
+					workingHours: [open24Hours]
 				};
 
 				$scope.activities = [];
