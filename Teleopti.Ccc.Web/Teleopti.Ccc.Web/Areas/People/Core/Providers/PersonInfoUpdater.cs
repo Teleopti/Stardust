@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 					var newPeriod = currentPeriod.NoneEntityClone();
 					newPeriod.StartDate = new DateOnly(model.Date);
-					person.ResetPersonSkills(newPeriod);
 
 					newPeriod.RuleSetBag = inputShiftBag;
 
@@ -124,7 +123,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					updatedCount++;
 					continue;
 				}
-				person.ResetPersonSkills(currentPeriod);
 
 				currentPeriod.RuleSetBag = inputShiftBag;
 				updatedCount++;
