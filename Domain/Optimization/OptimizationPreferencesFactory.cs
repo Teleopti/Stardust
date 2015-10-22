@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					ConsecutiveDaysOffValue = new MinMax<int>(1, 3),
 					UseConsecutiveDaysOff = true,
-					ConsecutiveWorkdaysValue = new MinMax<int>(2, 6),
+					ConsecutiveWorkdaysValue = workrules.ConsecutiveWorkdays,
 					UseConsecutiveWorkdays = true,
 					ConsiderWeekAfter = true,
 					ConsiderWeekBefore = true,
