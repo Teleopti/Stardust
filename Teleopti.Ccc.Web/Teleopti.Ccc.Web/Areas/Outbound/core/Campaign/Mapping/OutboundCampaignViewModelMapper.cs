@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.Web.Core.Data;
@@ -14,8 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() { WeekDay = workingHour.Key, StartTime = workingHour.Value.StartTime, EndTime = workingHour.Value.EndTime });
 
-	      var startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone).Date);
-			var endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone).Date);
+			var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
+			var endDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone);
+
+			var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
+			var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
+		
 			var campaignVm = new CampaignViewModel
 			{
 				Id = campaign.Id,
@@ -28,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				ConnectAverageHandlingTime = campaign.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = campaign.RightPartyAverageHandlingTime,
 				UnproductiveTime = campaign.UnproductiveTime,
-				StartDate = startDate,
-				EndDate = endDate,
+				StartDate = startDateAsUtc,
+				EndDate = endDateAsUtc,
 				WorkingHours = workingHours
 			};
 

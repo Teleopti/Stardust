@@ -228,9 +228,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var ganttCampaigns = new List<GanttCampaignViewModel>();
 			foreach (var campaign in campaigns)
 			{
-				var startDate = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, _userTimeZone.TimeZone());
-				var endDate = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, _userTimeZone.TimeZone());
-				ganttCampaigns.Add(new GanttCampaignViewModel(){Id = (Guid) campaign.Id, Name = campaign.Name, StartDate = new DateOnly(startDate), EndDate = new DateOnly(endDate)});
+				var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
+				var endDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone);
+
+				var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
+				var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
+
+				ganttCampaigns.Add(new GanttCampaignViewModel() { Id = (Guid)campaign.Id, Name = campaign.Name, StartDate = startDateAsUtc, EndDate = endDateAsUtc });
 			}
 
 			return ganttCampaigns;
@@ -238,12 +242,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		private DateTimePeriod getUtcPeroid(GanttPeriod period)
 		{
-			var start = new DateTime(period.StartDate.Date.Ticks);
-			start = TimeZoneHelper.ConvertToUtc(start, _userTimeZone.TimeZone());
-			var end = new DateTime(period.EndDate.Year, period.EndDate.Month, period.EndDate.Day, 23, 59, 59);
-			end = TimeZoneHelper.ConvertToUtc(end, _userTimeZone.TimeZone());
-
-			return new DateTimePeriod(start, end);
+			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1)).ToDateTimePeriod(_userTimeZone.TimeZone());
 		}
 
 		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status, IEnumerable<CampaignWarning> warnings)

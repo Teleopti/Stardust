@@ -198,9 +198,10 @@ describe('OutboundService Test', function () {
 	});
 
 	it('misService getDateFromServer should work correctly', function() {
-		var input = '2015-10-01';
+		var input = '2015-10-01Z';
 		var result = miscService.getDateFromServer(input);
 		expect(result.getDate()).toEqual(1);
+		expect(result.getHours()).toEqual(0);
 	});
 
 

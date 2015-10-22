@@ -230,13 +230,15 @@
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
 				if (data) data.forEach(function (ele, ind) {
+					
+
 					ganttArr[ind] = {};
 					ganttArr[ind].name = ele.Name;
 					ganttArr[ind].id = ele.Id;
 					ganttArr[ind].tasks = [];
 					ganttArr[ind].tasks[0] = {};
-					ganttArr[ind].tasks[0].from = ele.StartDate.Date;
-					ganttArr[ind].tasks[0].to = moment(ele.EndDate.Date).add(1, 'days').toDate();	
+					ganttArr[ind].tasks[0].from =  miscService.getDateFromServer(ele.StartDate.Date);
+					ganttArr[ind].tasks[0].to = miscService.getDateFromServer(moment(ele.EndDate.Date).add(1, 'days').toDate());
 					ganttArr[ind].tasks[0].id = ele.Id;
 					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.6)';
 					ganttArr[ind].tasks[0].tooltips = {
