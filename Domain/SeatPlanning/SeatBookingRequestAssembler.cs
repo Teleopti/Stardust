@@ -7,33 +7,31 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	public class SeatBookingRequestAssembler
+	public class SeatBookingRequestAssembler : ISeatBookingRequestAssembler
 	{
-		private readonly IPersonRepository _personRepository;
+	
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly IScenario _scenario;
-		private readonly IList<ITeamGroupedBooking> _bookingsWithDateAndTeam = new List<ITeamGroupedBooking>();
+		private IList<ITeamGroupedBooking> _bookingsWithDateAndTeam;
 		private IList<ISeatBooking> _existingSeatBookings;
 
-		public SeatBookingRequestAssembler(IPersonRepository personRepository, IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository, IScenario scenario)
+		public SeatBookingRequestAssembler(IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository, ICurrentScenario scenario)
 		{
-			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_seatBookingRepository = seatBookingRepository;
-			_scenario = scenario;
+			_scenario = scenario.Current();
 		}
 
-		public SeatBookingRequestParameters AssembleAndGroupSeatBookingRequests(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
+		public ISeatBookingRequestParameters AssembleAndGroupSeatBookingRequests(IList<IPerson> people, DateOnlyPeriod period)
 		{
+			_bookingsWithDateAndTeam = new List<ITeamGroupedBooking>();
 
-			var people = getPeople(teams, period);
 			var bookingPeriodWithSurroundingDays = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
-
 			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(bookingPeriodWithSurroundingDays);
-			groupNewBookings(period, people);
-			loadExistingSeatBookings(rootSeatMapLocation);
 
+			groupNewBookings(period, people);
+			
 			 return new SeatBookingRequestParameters()
 			 {
 				 ExistingSeatBookings =  _existingSeatBookings,
@@ -41,19 +39,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			 };
 		}
 
-		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
-		{
-			var people = new List<IPerson>();
-			foreach (var team in teams)
-			{
-				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
-				people.AddRange(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(team, period));
-			}
+		
 
-			return people;
-		}
-
-		private void groupNewBookings(DateOnlyPeriod period, List<IPerson> people)
+		private void groupNewBookings(DateOnlyPeriod period, IList<IPerson> people)
 		{
 			var schedulesForPeople = getScheduleDaysForPeriod(period, people, _scenario);
 			foreach (var person in people)
@@ -75,6 +63,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var date = personAssignment.Date;
 			var team = person.MyTeam(date);
 
+			//ROBTODO: perhaps it would be better to mark these for deletion, and only delete them
+			// when the agent has successfully been allocated a new seat for this day.  Otherwise we could
+			// remove the existing booking, but the new requested booking can fail.
 			removeExistingBookingForPersonOnThisDay(person, date);
 
 			addBooking(team, new SeatBooking(person, date, shiftPeriod.StartDateTime, shiftPeriod.EndDateTime));
@@ -100,17 +91,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			return _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, currentScenario);
 		}
-
-		private void loadExistingSeatBookings(SeatMapLocation rootSeatMapLocation)
-		{
-			foreach (var seat in rootSeatMapLocation.Seats)
-			{
-				var seatBookings = _existingSeatBookings.Where(booking => Equals(booking.Seat, seat)).ToList();
-				seat.AddSeatBookings(seatBookings);
-			}
-
-			rootSeatMapLocation.ChildLocations.ForEach(loadExistingSeatBookings);
-		}
+		
 	}
 
 	public class TeamGroupedBooking : ITeamGroupedBooking

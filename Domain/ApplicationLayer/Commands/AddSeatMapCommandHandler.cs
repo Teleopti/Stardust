@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (parentSeatMapLocation.ChildLocations == null) return;
 
 
-			IEnumerable<SeatMapLocation> locationsToDelete;
+			IEnumerable<ISeatMapLocation> locationsToDelete;
 
 			if (command.ChildLocations == null)
 			{
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			locationsToDelete.ToList().ForEach(deleteSeatMapAndLocation);
 		}
 
-		private void deleteSeatMapAndLocation(SeatMapLocation seatMapLocation)
+		private void deleteSeatMapAndLocation(ISeatMapLocation seatMapLocation)
 		{
 			deleteSeatsAndBookingsFromLocation(seatMapLocation, seatMapLocation.Seats);
 			seatMapLocation.ParentLocation.ChildLocations.Remove(seatMapLocation);

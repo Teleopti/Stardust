@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Interfaces.Domain;
@@ -11,46 +10,70 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class AddSeatPlanCommandHandler : IHandleCommand<AddSeatPlanCommand>
 	{
 		
-		private readonly ICurrentScenario _scenario;
-		private readonly IScheduleRepository _scheduleRepository;
+		
 		private readonly ITeamRepository _teamRepository;
-		private readonly IPersonRepository _personRepository;
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
-		private readonly ISeatBookingRepository _seatBookingRepository;
-		private readonly ISeatPlanRepository _seatPlanRepository;
+		private readonly ISeatPlanner _seatPlanner;
 
-		public AddSeatPlanCommandHandler(	IScheduleRepository scheduleRepository, ITeamRepository teamRepository, 
-											IPersonRepository personRepository, ICurrentScenario scenario, 
-											ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository, 
-											ISeatPlanRepository seatPlanRepository)
+		public AddSeatPlanCommandHandler(ITeamRepository teamRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatPlanner seatPlanner)
 		{
-			_scenario = scenario;
 			_seatMapLocationRepository = seatMapLocationRepository;
-			_seatBookingRepository = seatBookingRepository;
-			_seatPlanRepository = seatPlanRepository;
-			_scheduleRepository = scheduleRepository;
+			_seatPlanner = seatPlanner;
 			_teamRepository = teamRepository;
-			_personRepository = personRepository;
 		}
 
 		public void Handle(AddSeatPlanCommand command)
 		{
 
-			var rootLocation = _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
+			if (command.SeatIds != null)
+			{
+				handleSeatsInSeatPlanCommand(command);
+			}
+			else if (command.Locations != null)
+			{
+				handleLocationsInSeatPlanCommand(command);
+			}
+			
+		}
+
+		private void handleLocationsInSeatPlanCommand(AddSeatPlanCommand command)
+		{
+			
+			var rootLocation = _seatMapLocationRepository.LoadRootSeatMap();
 			if (rootLocation != null)
 			{
 				setIncludeInSeatPlan(rootLocation, command.Locations);
 			}
 
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
-			var teams = _teamRepository.FindTeams (command.Teams);
-			var seatPlanner = new SeatPlanner(_scenario.Current(), _personRepository, _scheduleRepository, _seatBookingRepository,_seatPlanRepository);
+			var teams = _teamRepository.FindTeams(command.Teams);
 
-			seatPlanner.CreateSeatPlansForPeriod (rootLocation, teams, period, command.TrackedCommandInfo);
+			_seatPlanner.CreateSeatPlansForPeriod(rootLocation, teams, period);
 
 		}
-		
-		private static void setIncludeInSeatPlan(SeatMapLocation location, IEnumerable<Guid> locationsSelected)
+
+		private void handleSeatsInSeatPlanCommand(AddSeatPlanCommand command)
+		{
+
+			if ( command.Locations.Count != 1)
+			{
+				throw new ArgumentException("There should only be one location when planning by seats");
+			}
+
+			var seats = getSeatsInCommand(command);
+			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
+			_seatPlanner.CreateSeatPlansForPeriod(seats, command.PersonIds, period);
+
+		}
+
+
+		private IEnumerable<ISeat> getSeatsInCommand(AddSeatPlanCommand command)
+		{
+			var location = _seatMapLocationRepository.FindLocations(command.Locations).Single();
+			return location.Seats.Where(seat => command.SeatIds.Contains(seat.Id.Value));
+		}
+
+		private static void setIncludeInSeatPlan(ISeatMapLocation location, IEnumerable<Guid> locationsSelected)
 		{
 			location.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
 			foreach (var childLocation in location.ChildLocations)

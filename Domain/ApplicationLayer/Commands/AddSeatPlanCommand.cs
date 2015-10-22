@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -12,20 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
-
-		// Robtodo: needed anymore??
-		public IList<string> ValidationResult { get; set; }
-		public bool IsValid()
-		{
-			var isValid = true;
-			ValidationResult = new List<string>();
-			if (StartDate > EndDate)
-			{
-				isValid = false;
-				ValidationResult.Add(Resources.StartDateMustBeSmallerThanEndDate);
-			}
-			return isValid;
-		}
+		public List<Guid> SeatIds { get; set; }
+		public List<Guid> PersonIds { get; set; }
 		
 	}
 }

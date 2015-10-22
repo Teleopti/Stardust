@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<ISeatBooking> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _seatBookings;
 		}
 
 		public ISeatBooking Load (Guid id)

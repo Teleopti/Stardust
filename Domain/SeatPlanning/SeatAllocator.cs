@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	public class SeatAllocator
 	{
 
-		private readonly SeatMapLocation[] _seatMapLocations;
+		private readonly ISeatMapLocation[] _seatMapLocations;
 
-		public SeatAllocator(params SeatMapLocation[] seatMapLocations)
+		public SeatAllocator(params ISeatMapLocation[] seatMapLocations)
 		{
 			_seatMapLocations = seatMapLocations;
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<ISeatBooking> unallocatedShifts, SeatMapLocation targetSeatMapLocation)
+		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<ISeatBooking> unallocatedShifts, ISeatMapLocation targetSeatMapLocation)
 		{
 			foreach (var shift in unallocatedShifts)
 			{

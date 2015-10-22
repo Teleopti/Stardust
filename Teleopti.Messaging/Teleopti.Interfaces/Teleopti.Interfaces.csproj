@@ -155,6 +155,7 @@
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IOutboundCampaign.cs" />
+    <Compile Include="Domain\ISeatBookingRequestAssembler.cs" />
     <Compile Include="Domain\ISkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IPersonSkillDayCreator.cs" />

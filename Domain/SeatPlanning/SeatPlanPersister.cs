@@ -12,17 +12,19 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
-		private readonly List<SeatPlan> _seatPlansToUpdate = new List<SeatPlan>();
+		private List<SeatPlan> _seatPlansToUpdate;
 
 
 		public SeatPlanPersister(ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
 		{
 			_seatBookingRepository = seatBookingRepository;
-			_seatPlanRepository = seatPlanRepository;
+			_seatPlanRepository = seatPlanRepository;		
 		}
 
 		public void Persist (DateOnlyPeriod period, ISeatBookingRequestParameters seatBookingRequestParameters)
 		{
+			_seatPlansToUpdate = new List<SeatPlan>();
+
 			prepareSeatPlans(period);
 
 			_seatBookingRepository.AddRange (seatBookingRequestParameters.TeamGroupedBookings

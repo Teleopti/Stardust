@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -7,29 +8,58 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatPlanner : ISeatPlanner
 	{
-		private readonly SeatBookingRequestAssembler _seatBookingRequestAssembler;
-		private readonly SeatPlanPersister _seatPlanPersister;
+		private readonly IPersonRepository _personRepository;
+		private readonly ISeatBookingRequestAssembler _seatBookingRequestAssembler;
+		private readonly ISeatPlanPersister _seatPlanPersister;
 
-		public SeatPlanner(IScenario currentScenario,
-							IPersonRepository personRepository,
-							IScheduleRepository scheduleRepository,
-							ISeatBookingRepository seatBookingRepository, 
-							ISeatPlanRepository seatPlanRepository)
+		public SeatPlanner(IPersonRepository personRepository, ISeatBookingRequestAssembler seatBookingRequestAssembler, ISeatPlanPersister seatPlanPersister)
 		{
-			_seatBookingRequestAssembler = new SeatBookingRequestAssembler(personRepository, scheduleRepository, seatBookingRepository, currentScenario);
-			_seatPlanPersister = new SeatPlanPersister(seatBookingRepository, seatPlanRepository);
+			_personRepository = personRepository;
+			_seatBookingRequestAssembler = seatBookingRequestAssembler;
+			_seatPlanPersister = seatPlanPersister;
 		}
 
-		public void CreateSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
+		public void CreateSeatPlansForPeriod(ISeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
 		{
-			var seatBookingInformation = _seatBookingRequestAssembler.AssembleAndGroupSeatBookingRequests(rootSeatMapLocation, teams, period);
+			var people = getPeople(teams, period);
+			var seatBookingInformation = _seatBookingRequestAssembler.AssembleAndGroupSeatBookingRequests(people, period);
+			SeatPlannerHelper.AttachExistingSeatBookingsToSeats(rootSeatMapLocation, seatBookingInformation.ExistingSeatBookings);
+
 			allocateSeatsToRequests(rootSeatMapLocation, seatBookingInformation);
 			_seatPlanPersister.Persist(period, seatBookingInformation);
 		}
-		
-		private static void allocateSeatsToRequests (SeatMapLocation rootSeatMapLocation, ISeatBookingRequestParameters seatBookingInformation)
+
+		public void CreateSeatPlansForPeriod(IEnumerable<ISeat> seats, List<Guid> personIds, DateOnlyPeriod period)
 		{
-			var groupedRequests = groupByDateAndTeam (seatBookingInformation.TeamGroupedBookings);
+			var people = _personRepository.FindPeople(personIds).ToList();
+			var seatBookingInformation = _seatBookingRequestAssembler.AssembleAndGroupSeatBookingRequests(people, period);
+			SeatPlannerHelper.AttachExistingSeatBookingsToSeats(seats, seatBookingInformation.ExistingSeatBookings);
+
+			allocateSeatsToRequests(seats, seatBookingInformation);
+			_seatPlanPersister.Persist(period, seatBookingInformation);
+		}
+
+		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
+		{
+			var people = new List<IPerson>();
+			foreach (var team in teams)
+			{
+				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
+				people.AddRange(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(team, period));
+			}
+
+			return people;
+		}
+
+		private void allocateSeatsToRequests(IEnumerable<ISeat> seats, ISeatBookingRequestParameters seatBookingInformation)
+		{
+			var groupedRequests = groupByDateAndTeam(seatBookingInformation.TeamGroupedBookings);
+			new SeatLevelAllocator(seats).AllocateSeats(groupedRequests);
+		}
+
+		private static void allocateSeatsToRequests(ISeatMapLocation rootSeatMapLocation, ISeatBookingRequestParameters seatBookingInformation)
+		{
+			var groupedRequests = groupByDateAndTeam(seatBookingInformation.TeamGroupedBookings);
 			new SeatAllocator(rootSeatMapLocation).AllocateSeats(groupedRequests);
 		}
 
@@ -54,7 +84,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return seatBookingRequests.ToArray();
 		}
 
-		
+
 	}
 
 }

@@ -1198,6 +1198,7 @@
     <Compile Include="Scheduling\WorkTimeMinMaxCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />
     <Compile Include="SeatPlanning\SeatAllocatorTests.cs" />
+    <Compile Include="SeatPlanning\SeatLevelAllocatorTests.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />

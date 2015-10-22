@@ -657,7 +657,9 @@
     <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequestAssembler.cs" />
+    <Compile Include="SeatPlanning\SeatLevelAllocator.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
+    <Compile Include="SeatPlanning\SeatPlannerHelper.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersister.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmOutboundLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOption.cs" />
