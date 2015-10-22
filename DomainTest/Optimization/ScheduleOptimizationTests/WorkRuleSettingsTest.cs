@@ -59,13 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(5),
 				TimeSpan.FromHours(5))
 				);
-			for (var dayNumber = -1; dayNumber < 8; dayNumber++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				PersonAssignmentRepository.Add(ass);
-			}
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
+
 			PersonAssignmentRepository.GetSingle(skillDays[3].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
@@ -118,13 +113,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(20),
 				TimeSpan.FromHours(20)
 				));
-			for (var dayNumber = 0; dayNumber < 14; dayNumber++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				PersonAssignmentRepository.Add(ass);
-			}
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
+
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
@@ -173,13 +163,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(20),
 				TimeSpan.FromHours(20)
         ));
-			for (var dayNumber = 0; dayNumber < 14; dayNumber++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				PersonAssignmentRepository.Add(ass);
-			}
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
+
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 

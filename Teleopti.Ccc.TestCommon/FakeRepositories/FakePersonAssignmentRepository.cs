@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -48,11 +50,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void AddRange(IEnumerable<IPersonAssignment> entityCollection)
 		{
 			throw new NotImplementedException();
@@ -88,6 +85,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
 		{
 			return _personAssignments.Single(pa => pa.Date == dateOnly);
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod)
+		{
+			foreach (var date in period.DayCollection())
+			{
+				var ass = new PersonAssignment(agent, scenario, date);
+				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+				ass.SetShiftCategory(shiftCategory);
+				Add(ass);
+			}
 		}
 	}
 }

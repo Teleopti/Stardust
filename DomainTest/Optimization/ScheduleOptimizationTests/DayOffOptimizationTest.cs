@@ -63,13 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(25),
 				TimeSpan.FromHours(5))
 				);
-			for (var dayNumber = 0; dayNumber < 7; dayNumber++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				PersonAssignmentRepository.Add(ass);
-			}
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate()); 
 
@@ -114,13 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				TimeSpan.FromHours(25),
 				TimeSpan.FromHours(5))
 				);
-			for (var dayNumber = -1; dayNumber < 8; dayNumber++)
-			{
-				var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(dayNumber));
-				ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-				ass.SetShiftCategory(shiftCategory);
-				PersonAssignmentRepository.Add(ass);
-			}
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			var mondayAss = PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate); //monday
 			mondayAss.Clear();
 			mondayAss.AddActivity(activity, new TimePeriod(12, 0, 20, 0));
