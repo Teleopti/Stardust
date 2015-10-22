@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		[UnitOfWork, HttpGet, Route("api/PeopleData/loadAllSkills")]
 		public virtual JsonResult<IEnumerable<SkillDataModel>> LoadAllSkills()
 		{
-			var skills = _skillRepo.LoadAll();
+			var skills = _skillRepo.FindAllWithoutMultisiteSkills();
 			var result = skills.Select(s => new SkillDataModel
 			{
 				SkillId = s.Id.GetValueOrDefault(),
