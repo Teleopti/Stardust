@@ -5,7 +5,8 @@ describe('OutboundService Test', function () {
 	var $q,
 		$rootScope,
 		$httpBackend,
-		outboundService
+		outboundService,
+		miscService
 	;
 
 	beforeEach(function () {
@@ -18,13 +19,13 @@ describe('OutboundService Test', function () {
 	});
 
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _outboundService_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _outboundService_, _miscService_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		outboundService = _outboundService_;
-		
+		miscService = _miscService_;
 		$httpBackend.resetExpectations();	
 	}));
 
@@ -194,6 +195,12 @@ describe('OutboundService Test', function () {
 		expect(result.OnGoing).toEqual(5);
 		expect(result.OnGoingWarning).toEqual(6);
 		expect(result.Done).toEqual(7);
+	});
+
+	it('misService getDateFromServer should work correctly', function() {
+		var input = '2015-10-01';
+		var result = miscService.getDateFromServer(input);
+		expect(result.getDate()).toEqual(1);
 	});
 
 
