@@ -55,12 +55,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					updatedCount++;
 					continue;
 				}
+
 				var currentPeriod = periods.First();
 				var currentSkills = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList();
 				if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any())
 				{
 					continue;
 				}
+
 				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
 				{
 
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					newPeriod.StartDate = new DateOnly(model.Date);
 					person.ResetPersonSkills(newPeriod);
 
-					updatePeriodWithSkill(person, inputSkills, newPeriod);
+					updatePeriodWithSkill(person, inputSkills, newPeriod, currentPeriod.PersonSkillCollection);
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 			return updatedCount;
 		}
+
 		public int UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
@@ -95,25 +98,28 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				var periods = person.PersonPeriods(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)));
 				if (!periods.Any())
 				{
-					var newPeriod = new PersonPeriod(new DateOnly(model.Date),
-						new PersonContract(_contractRepository.LoadAll().FirstOrDefault(),
-							_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault()),
-						_teamRepository.LoadAll().FirstOrDefault());
-
-					newPeriod.RuleSetBag = inputShiftBag;
+					var contract = new PersonContract(_contractRepository.LoadAll().FirstOrDefault(),
+						_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault());
+					var newPeriod = new PersonPeriod(new DateOnly(model.Date), contract, _teamRepository.LoadAll().FirstOrDefault())
+					{
+						RuleSetBag = inputShiftBag
+					};
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
 					continue;
 				}
+
 				var currentPeriod = periods.First();
-				if ((currentPeriod.RuleSetBag == null && inputShiftBag == null) || (currentPeriod.RuleSetBag != null && (currentPeriod.RuleSetBag.Id.GetValueOrDefault() == inputShiftBag.Id.GetValueOrDefault())))
+				if ((currentPeriod.RuleSetBag == null && inputShiftBag == null) ||
+					(currentPeriod.RuleSetBag != null &&
+					 (currentPeriod.RuleSetBag.Id.GetValueOrDefault() == inputShiftBag.Id.GetValueOrDefault())))
 				{
 					continue;
 				}
+
 				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
 				{
-
 					var newPeriod = currentPeriod.NoneEntityClone();
 					newPeriod.StartDate = new DateOnly(model.Date);
 
@@ -131,12 +137,22 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return updatedCount;
 		}
 
-		private void updatePeriodWithSkill(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period)
+		private void updatePeriodWithSkill(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period,
+			IEnumerable<IPersonSkill> currentExistingSkills = null)
 		{
+			var currentSkills = currentExistingSkills != null ? currentExistingSkills.ToList() : new List<IPersonSkill>();
 			foreach (var skillId in inputSkills)
 			{
+				var currentSkill = currentSkills.SingleOrDefault(s => s.Skill.Id == skillId);
+				var proficiency = currentSkill == null ? new Percent(1) : currentSkill.SkillPercentage;
+
 				var skill = _skillRepository.Get(skillId);
-				person.AddSkill(new PersonSkill(skill, new Percent(1)) { Active = false }, period);
+				var personSkill = new PersonSkill(skill, proficiency)
+				{
+					Active = true
+				};
+
+				person.AddSkill(personSkill, period);
 			}
 		}
 	}

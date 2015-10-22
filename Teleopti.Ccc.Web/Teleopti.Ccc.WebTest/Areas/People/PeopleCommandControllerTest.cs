@@ -28,18 +28,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public IRuleSetBagRepository RuleSetBagRepository;
 		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 
-		private IPerson prepareData(DateTime date)
+		private IPerson prepareData(DateTime date, IEnumerable<IPersonSkill> personSkills = null)
 		{
 			var person = new Person { Name = new Name("John", "Smith") };
 			person.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);
 
-			var period = createPersonPeriod(date);
+			var period = createPersonPeriod(date, personSkills);
 			person.AddPersonPeriod(period);
 			return person;
 		}
 
-		private IPersonPeriod createPersonPeriod(DateTime date)
+		private IPersonPeriod createPersonPeriod(DateTime date, IEnumerable<IPersonSkill> personSkills)
 		{
 			var contract = new Contract("test");
 			ContractRepository.Add(contract);
@@ -53,7 +53,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var team = new Team();
 			TeamRepository.Add(team);
 
-			return new PersonPeriod(new DateOnly(date), new PersonContract(contract, partTimePercentage, contractSchdule), team);
+			var newPeriod = new PersonPeriod(new DateOnly(date),
+				new PersonContract(contract, partTimePercentage, contractSchdule), team);
+
+			if (personSkills != null)
+			{
+				foreach (var personSkill in personSkills)
+				{
+					newPeriod.AddPersonSkill(personSkill);	
+				}
+			}
+
+			return newPeriod;
 		}
 
 		[Test]
@@ -80,23 +91,56 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldCreatePersonPeriodBasedOnCurrentPeriod()
 		{
+			const double phoneProficiency = 0.42;
+			const double emailProficiency = 0.84;
+
 			var date = new DateTime(2015, 8, 20);
-			var person = prepareData(date.AddDays(-10));
-			var skill = SkillFactory.CreateSkillWithId("phone");
-			SkillRepository.Add(skill);
+			var testDate = date.AddDays(-10);
+
+			var skillPhone = SkillFactory.CreateSkillWithId("phone");
+			SkillRepository.Add(skillPhone);
+
+			var skillEmail = SkillFactory.CreateSkillWithId("Email");
+			SkillRepository.Add(skillEmail);
+
+			var personSkills = new[]
+			{
+				new PersonSkill(skillPhone, new Percent(phoneProficiency)),
+				new PersonSkill(skillEmail, new Percent(emailProficiency))
+			};
+			var person = prepareData(testDate, personSkills);
+			
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People =
 					new List<SkillUpdateCommandInputModel>
 					{
-						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new[] {skill.Id.GetValueOrDefault()}}
+						new SkillUpdateCommandInputModel
+						{
+							PersonId = person.Id.Value,
+							SkillIdList = new[]
+							{
+								skillPhone.Id.GetValueOrDefault()
+							}
+						}
 					},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(2);
-			updatedPerson.PersonPeriodCollection.First().StartDate.Date.Should().Be.EqualTo(date.AddDays(-10));
-			updatedPerson.PersonPeriodCollection.Second().StartDate.Date.Should().Be.EqualTo(date);
+			
+			var existingPeriod = updatedPerson.PersonPeriodCollection.First();
+			existingPeriod.StartDate.Date.Should().Be.EqualTo(date.AddDays(-10));
+			existingPeriod.PersonSkillCollection.Count().Should().Be.EqualTo(2);
+
+			var newCreatedPeriod = updatedPerson.PersonPeriodCollection.Second();
+			newCreatedPeriod.StartDate.Date.Should().Be.EqualTo(date);
+			newCreatedPeriod.PersonSkillCollection.Count().Should().Be(1);
+
+			var personSkillInNewPeriod = newCreatedPeriod.PersonSkillCollection.Single();
+			personSkillInNewPeriod.Skill.Id.Should().Be.EqualTo(skillPhone.Id);
+			personSkillInNewPeriod.Active.Should().Be.EqualTo(true);
+			personSkillInNewPeriod.SkillPercentage.Should().Be.EqualTo(new Percent(phoneProficiency));
 		}
 
 		[Test]
