@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -82,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IPersonAssignment GetSingle(DateOnly dateOnly)
+		{
+			return _personAssignments.Single(pa => pa.Date == dateOnly);
 		}
 	}
 }

@@ -69,16 +69,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[3].CurrentDate) //saturday
+			PersonAssignmentRepository.GetSingle(skillDays[3].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate.AddDays(-1)) //sunday in week before
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate.AddDays(-1)) //sunday in week before
 				.SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
 			
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate) //tuesday
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
 				.DayOff().Should().Not.Be.Null();	
 		}
 
@@ -130,13 +130,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate).DayOff().Should().Not.Be.Null();
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate).DayOff().Should().Not.Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).DayOff().Should().Not.Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff().Should().Not.Be.Null();
 		}
 
 		[Test, Ignore("Works locally but not on build machine")]
@@ -187,13 +187,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				ass.SetShiftCategory(shiftCategory);
 				PersonAssignmentRepository.Add(ass);
 			}
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[2].CurrentDate).DayOff().Should().Not.Be.Null();
-			PersonAssignmentRepository.LoadAll().Single(pa => pa.Date == skillDays[9].CurrentDate).DayOff().Should().Not.Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff().Should().Not.Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff().Should().Not.Be.Null();
 		}
 
 	}
