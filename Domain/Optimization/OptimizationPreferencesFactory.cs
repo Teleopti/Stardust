@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				DaysOff = new DaysOffPreferences
 				{
-					ConsecutiveDaysOffValue = new MinMax<int>(1, 3),
+					ConsecutiveDaysOffValue = workrules.ConsecutiveDayOffs,
 					UseConsecutiveDaysOff = true,
 					ConsecutiveWorkdaysValue = workrules.ConsecutiveWorkdays,
 					UseConsecutiveWorkdays = true,
