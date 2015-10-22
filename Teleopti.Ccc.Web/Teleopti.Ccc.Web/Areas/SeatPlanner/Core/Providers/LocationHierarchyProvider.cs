@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			LocationViewModel locationViewModel = null;
 			var rootSeatMapLocation = _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
-			
-			if ( rootSeatMapLocation != null )
+
+			if (rootSeatMapLocation != null)
 			{
-				locationViewModel = getLocationViewModel (rootSeatMapLocation);
+				locationViewModel = getLocationViewModel(rootSeatMapLocation);
 			}
 			return locationViewModel;
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			var locationViewModel = new LocationViewModel()
 			{
-				Id = Guid.Parse (location.Id.ToString()),
+				Id = Guid.Parse(location.Id.ToString()),
 				Name = location.Name,
 				Seats = seatViewModels,
 				Children = childViewModels
@@ -53,24 +53,26 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		private static List<LocationViewModel> getChildViewModels(ISeatMapLocation location)
 		{
-			if (location.ChildLocations != null)
+			var seatMapLocation = location as SeatMapLocation;
+
+			if (seatMapLocation != null && seatMapLocation.ChildLocations != null)
 			{
-				var childLocations = location.ChildLocations.OrderBy (childLocation => childLocation.Name);
-				return childLocations.Select (getLocationViewModel).ToList();
+				var childLocations = seatMapLocation.ChildLocations.OrderBy(childLocation => childLocation.Name);
+				return childLocations.Select(getLocationViewModel).ToList();
 			}
 
 			return null;
 		}
 
-		private static List<SeatViewModel> getSeatViewModels (ISeatMapLocation location)
+		private static List<SeatViewModel> getSeatViewModels(ISeatMapLocation location)
 		{
 			if (location.Seats != null)
 			{
 				var seatViewModels = new List<SeatViewModel>();
 				foreach (var seat in location.Seats)
 				{
-					var seatViewModel = new SeatViewModel() {Id = seat.Id.Value, Name = seat.Name};
-					seatViewModels.Add (seatViewModel);
+					var seatViewModel = new SeatViewModel() { Id = seat.Id.Value, Name = seat.Name };
+					seatViewModels.Add(seatViewModel);
 				}
 				return seatViewModels;
 			}

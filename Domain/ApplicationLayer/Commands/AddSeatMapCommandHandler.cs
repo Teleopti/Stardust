@@ -82,9 +82,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private void deleteSeatMapAndLocation(ISeatMapLocation seatMapLocation)
 		{
-			deleteSeatsAndBookingsFromLocation(seatMapLocation, seatMapLocation.Seats);
-			seatMapLocation.ParentLocation.ChildLocations.Remove(seatMapLocation);
-			_seatMapLocationRepository.Remove(seatMapLocation);
+
+			var location = seatMapLocation as SeatMapLocation;
+			if (location != null)
+			{
+				deleteSeatsAndBookingsFromLocation(seatMapLocation, seatMapLocation.Seats);
+				location.ParentLocation.ChildLocations.Remove(location);
+				_seatMapLocationRepository.Remove(seatMapLocation);
+			}
 		}
 
 		private void createChildSeatMaps(SaveSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
@@ -139,8 +144,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private IEnumerable<IGrouping<DateOnly, ISeatBooking>> getBookingsForDeletedSeats(IEnumerable<ISeat> seatsToDelete)
 		{
 			return from seat in seatsToDelete
-				from booking in _seatBookingRepository.GetSeatBookingsForSeat (seat)
-				group booking by booking.BelongsToDate;
+				   from booking in _seatBookingRepository.GetSeatBookingsForSeat(seat)
+				   group booking by booking.BelongsToDate;
 		}
 
 		private void updateSeatPlans(IEnumerable<IGrouping<DateOnly, ISeatBooking>> seatBookingsByDate)
@@ -148,10 +153,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			foreach (var deletedBookingsOnDate in seatBookingsByDate)
 			{
 				var date = deletedBookingsOnDate.Key;
-				var bookings = from booking in _seatBookingRepository.LoadSeatBookingsForDay (date)
-					where !deletedBookingsOnDate.Contains (booking)
-					select booking;
-				
+				var bookings = from booking in _seatBookingRepository.LoadSeatBookingsForDay(date)
+							   where !deletedBookingsOnDate.Contains(booking)
+							   select booking;
+
 				if (!bookings.Any())
 				{
 					_seatPlanRepository.RemoveSeatPlanForDate(date);

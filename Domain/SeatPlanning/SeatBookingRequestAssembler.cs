@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
-		private readonly IScenario _scenario;
+		private readonly ICurrentScenario _scenario;
 		private IList<ITeamGroupedBooking> _bookingsWithDateAndTeam;
 		private IList<ISeatBooking> _existingSeatBookings;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			_scheduleRepository = scheduleRepository;
 			_seatBookingRepository = seatBookingRepository;
-			_scenario = scenario.Current();
+			_scenario = scenario;
 		}
 
 		public ISeatBookingRequestParameters AssembleAndGroupSeatBookingRequests(IList<IPerson> people, DateOnlyPeriod period)
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void groupNewBookings(DateOnlyPeriod period, IList<IPerson> people)
 		{
-			var schedulesForPeople = getScheduleDaysForPeriod(period, people, _scenario);
+			var schedulesForPeople = getScheduleDaysForPeriod(period, people, _scenario.Current());
 			foreach (var person in people)
 			{
 				var scheduleDays = getScheduleDaysToPlanSeats(schedulesForPeople[person].ScheduledDayCollection(period));

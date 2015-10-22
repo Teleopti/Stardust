@@ -13,9 +13,6 @@ namespace Teleopti.Interfaces.Domain
 		
 		IList<ISeat> Seats { get; }
 
-		IList<ISeatMapLocation> ChildLocations { get; }
-		ISeatMapLocation ParentLocation { get; set; }
-		void ClearBookingInformation();
 
 		ISeatMapLocation GetLocationToAllocateSeats(IEnumerable<ISeatBooking> agentShifts);
 		ISeat GetNextUnallocatedSeat(ISeatBooking booking, Boolean ignoreChildren);

@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
 	{
 		private IList<ISeat> _seats = new List<ISeat>();
-		private IList<ISeatMapLocation> _childLocations = new List<ISeatMapLocation>();
+		private IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();
 
 		public virtual IList<ISeat> Seats
 		{
 			get { return _seats; }
 		}
 
-		public virtual IList<ISeatMapLocation> ChildLocations
+		public virtual IList<SeatMapLocation> ChildLocations
 		{
 			get { return _childLocations; }
 			
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public virtual string Name { get; set; }
 		public virtual bool IncludeInSeatPlan { get; set; }
-		public virtual ISeatMapLocation ParentLocation { get; set; }
+		public virtual SeatMapLocation ParentLocation { get; set; }
 		public virtual string SeatMapJsonData { get; set; }
 
 		public SeatMapLocation()

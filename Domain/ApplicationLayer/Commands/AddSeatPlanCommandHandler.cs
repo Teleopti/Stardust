@@ -75,11 +75,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private static void setIncludeInSeatPlan(ISeatMapLocation location, IEnumerable<Guid> locationsSelected)
 		{
-			location.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
-			foreach (var childLocation in location.ChildLocations)
+			var seatMapLocation = location as SeatMapLocation;
+			if (seatMapLocation != null)
 			{
-				setIncludeInSeatPlan (childLocation, locationsSelected);
+				seatMapLocation.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
+				foreach (var childLocation in seatMapLocation.ChildLocations)
+				{
+					setIncludeInSeatPlan(childLocation, locationsSelected);
+				}	
 			}
+
+			
 		}
 	}
 }
