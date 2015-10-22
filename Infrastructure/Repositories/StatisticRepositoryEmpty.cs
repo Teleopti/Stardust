@@ -51,6 +51,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    throw new NotImplementedException();
 	    }
 
+	    public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    /// <summary>
         /// Stub for loading matrix reports. 
         /// Note: It will return null, instead of an empty list.
