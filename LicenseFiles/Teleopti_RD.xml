@@ -23,6 +23,8 @@
     <PayrollIntegration>true</PayrollIntegration>
     <MyTeam>true</MyTeam>
     <VNext>true</VNext>
+    <Outbound>true</Outbound>
+    <SeatPlanner>true</SeatPlanner>
   </TeleoptiWFM>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
   <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -34,9 +36,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>mtArPPdJiSI0YlBZqy/HSyNN5/k=</DigestValue>
+        <DigestValue>8ZZb0GuJByN4c8X2I2EujK6KtyI=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>EbaWtu9guYzJWnwaQLQhn7xnUMDOBf2J8oepzGZhWCSOKFW1EqX/JpqoYXhSEeOJZa9xEt5TNJMpNtQ4F4dHpO+KkT3xsCpl2r6x9+7RivXUe9MZnRJH5Krw63TuXx9NpJsAIfopnyGzG6bDHIsTAAnTV7V2+nQmxD+CjTukEek=</SignatureValue>
+    <SignatureValue>ctN2zI9rdYV+g7+8PhnQ247x23YEF+VB8aW/NEuEQ/EUQXD+muFvYaSi10MploB+BQLmcKwz6krceK3v+QAQ7wBaJqRheTrittkrlxBCU3rn01kumJ9zOrHtDZUzSWvjpoE80IrQBhPUwwv7WxMl8xGLCkmna0zuB72WI/H1sPc=</SignatureValue>
   </Signature>
 </License>
