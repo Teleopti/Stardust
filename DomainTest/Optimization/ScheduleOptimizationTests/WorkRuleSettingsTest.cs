@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings { ConsecutiveWorkdays = new MinMax<int>(2, 20) });
+			WorkRuleSettingsRepository.Add(new WorkRuleSettings { DayOffsPerWeek = new MinMax<int>(1, 3), ConsecutiveWorkdays = new MinMax<int>(2, 20) });
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
 			schedulePeriod.SetDaysOff(2);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod);
