@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Principal;
 using System.Text;
@@ -10,38 +11,35 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
+using EO.WebBrowser;
 using log4net;
+using log4net.Config;
+using Microsoft.Practices.CompositeUI;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections;
-using Teleopti.Ccc.Win.Forecasting;
-using log4net.Config;
-using Microsoft.Practices.CompositeUI;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Persisters;
-using Teleopti.Ccc.Infrastructure.Persisters.Account;
-using Teleopti.Ccc.Infrastructure.Persisters.Requests;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.Win.Forecasting;
 using Teleopti.Ccc.Win.Grouping;
 using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Main;
@@ -49,15 +47,12 @@ using Teleopti.Ccc.Win.Meetings.Overview;
 using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
-using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
-using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -66,7 +61,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	/// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
 	/// main form will be SmartClientShellForm, also created by default by this solution template
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
 	{
 
@@ -76,7 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[STAThread]
 		private static void Main()
 		{
-			EO.WebBrowser.Runtime.AddLicense(
+			Runtime.AddLicense(
 												"r6a3wN2vaqumsR70m7z8ARTxnurFBeihb6a3wN2vaq2msSHkq+rtABm8W6mm" +
 	 "sdq9RoGkscufdert+Bngrez29unlgd7aCeO2rdvbyf73adru6vjmbM/Vzui7" +
 	 "aOrt+Bngrez29umMQ7Oz/RTinuX39umMQ3Xj7fQQ7azcwp61n1mXpM0X6Jzc" +
@@ -146,7 +141,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			catch (Exception ex)
 			{
-				using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
+				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
 				{
 					view.ShowDialog();
 				}
@@ -160,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static string toggleExceptionMessageBuilder()
 		{
 			var ret = new StringBuilder();
-			ret.AppendLine(UserTexts.Resources.WebServerDown);
+			ret.AppendLine(Resources.WebServerDown);
 
 			foreach (var toggle in Enum.GetValues(typeof(Toggles)))
 			{

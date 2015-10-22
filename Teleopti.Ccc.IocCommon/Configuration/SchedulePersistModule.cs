@@ -26,10 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private class dontReassociateDataForSchedules : IReassociateDataForSchedules
 		{
-			public dontReassociateDataForSchedules()
-			{
-			}
-
 			public void ReassociateDataForAllPeople()
 			{
 			}

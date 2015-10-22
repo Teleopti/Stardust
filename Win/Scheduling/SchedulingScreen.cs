@@ -325,8 +325,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var updater = new ContainerBuilder();
 
-			//updater.RegisterModule<SchedulePersistModule>();
-
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<ScheduleRangePersister>().As<IScheduleRangePersister>().InstancePerLifetimeScope();
@@ -341,8 +339,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<WorkflowControlSetPublishDatePersister>().As<IWorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
-
-			//updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
 
 			updater.Update(_container.ComponentRegistry);
 		}
@@ -3740,13 +3736,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IEnumerable<PersistConflict> foundConflicts = null;
 			try
 			{
-				//var persister = _container.Resolve<ISchedulingScreenPersister>(
-				//	TypedParameter.From<IScheduleDictionaryPersister>(
-				//		_container.Resolve<IScheduleDictionaryPersister>(
-				//			TypedParameter.From<IScheduleRangePersister>(_container.Resolve<IScheduleRangePersister>())
-				//			)
-				//		)
-				//	);
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
 				bool success = persister.TryPersist(_schedulerState.Schedules,
 					_schedulerState.PersonRequests,
