@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Collection;
@@ -163,6 +164,11 @@ namespace Teleopti.Ccc.Domain.Common
 					SkillsBefore = skillsBefore
 				});
 		}
+
+	    public virtual void AddSkill(ISkill skill, DateOnly personPeriodDate)
+	    {
+		    AddSkill(new PersonSkill(skill, new Percent(1)), Period(personPeriodDate));
+	    }
 
 		public virtual void ResetPersonSkills(IPersonPeriod personPeriod)
 		{

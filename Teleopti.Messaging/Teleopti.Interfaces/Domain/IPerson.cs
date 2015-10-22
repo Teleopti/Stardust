@@ -275,6 +275,7 @@ namespace Teleopti.Interfaces.Domain
 	    void ChangeSchedulePeriodStartDate(DateOnly startDate, ISchedulePeriod schedulePeriod);
 	    void ChangeTeam(ITeam team, IPersonPeriod personPeriod);
 	    void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod);
+	    void AddSkill(ISkill skill, DateOnly personPeriodDate);
 	    void ActivateSkill(ISkill skill, IPersonPeriod personPeriod);
 	    void DeactivateSkill(ISkill skill, IPersonPeriod personPeriod);
 	    void RemoveSkill(ISkill skill, IPersonPeriod personPeriod);
