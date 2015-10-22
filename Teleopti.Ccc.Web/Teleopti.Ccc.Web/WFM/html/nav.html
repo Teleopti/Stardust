@@ -6,10 +6,9 @@
 			<span ng-controller="BusinessUnitsCtrl" data-ng-init="loadBusinessUnits()">
 				<span ng-if="show">
 					<span class="ui-select">
-						<label for="business-unit-select">
-							<select id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
-							<i class="mdi mdi-menu-down"></i>
-						</label>
+						<i class="bu-caret mdi mdi-menu-down"></i>
+						<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
+						<md-tooltip>Switch business unit</md-tooltip>
 					</span>
 				</span>
 			</span>

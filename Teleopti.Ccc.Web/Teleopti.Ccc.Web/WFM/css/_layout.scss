@@ -135,7 +135,17 @@ input::-ms-clear {
 	}
 }
 
-.ui-select{width: 100%}
+.ui-select{
+	width: 100%;
+	position: relative;
+
+	.bu-caret{
+			position: absolute;
+			right: -8px;
+	    top: 4px;
+			pointer-events: none;
+	}
+
 	/* This is to remove the arrow of select element in IE */
 	select::-ms-expand {	display: none; }
 	select{
@@ -156,7 +166,7 @@ input::-ms-clear {
 			border: none !important;
 		}
 	}
-
+}
 /*start (main)*/
 	.start-wrapper {
 		width: 75%;
