@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -35,11 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndAlterBetweenRestrictionIsSet()
 		{
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activity);
@@ -63,14 +61,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepTimeOfActivityRestrictionIsSet()
 		{
-			var extendedActivity = new Activity("extendedActivity") { InWorkTime = true, InContractTime = true, RequiresSkill = false };
-			extendedActivity.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var extendedActivity = new Activity("extendedActivity") { InWorkTime = true, InContractTime = true, RequiresSkill = false }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var extender = new ActivityAbsoluteStartExtender(extendedActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(6, 0, 6, 0, 15));
@@ -99,14 +92,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityIsNotSameAndKeepActivityRestrictionIsNotEmpty()
 		{
-			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activityForRuleSet.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activityForRuleSet);
@@ -134,11 +122,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndActivityPeriodIsNotSameAndKeepActivitiesRestrictionIsNotEmpty()
 		{
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activity);
@@ -166,14 +151,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepShiftCategoryRestrictionIsSet()
 		{
-			var shiftCategoryForRuleSet = new ShiftCategory("shiftCategoryForRuleSet");
-			shiftCategoryForRuleSet.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var shiftCategoryForRuleSet = new ShiftCategory("shiftCategoryForRuleSet").WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategoryForRuleSet));
 			var agent = setupAgent(ruleSet, activity);
@@ -198,11 +178,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepEndTimeRestrictionIsSet()
 		{
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activity);
@@ -227,11 +204,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShifttWhenOptimizeEvenIfWeeklyRestIsBrokenAndKeepStartTimeRestrictionIsSet()
 		{
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activity);
@@ -255,14 +229,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShiftWhenOptimizeAndWeeklyRestIsBrokenAndKeepActivityRestrictionNotAffectShift()
 		{
-			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activityForRuleSet.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activityForRuleSet);
@@ -288,14 +257,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShiftWhenOptimizeIfWeeklyRestIsBrokenAndAlterBetweenRestrictionNotAffectShift()
 		{
-			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activityForRuleSet.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 			var agent = setupAgent(ruleSet, activity);
@@ -319,15 +283,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		[Test]
 		public void ShouldKeepShiftWhenOptimizeIfWeeklyRestIsBrokenAndKeepActivityLengthRestrictionNotAffectShift()
 		{
-
-			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activityForRuleSet.SetId(Guid.NewGuid());
-
-			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true };
-			activity.SetId(Guid.NewGuid());
-
-			var shiftCategory = new ShiftCategory("unimportant");
-			shiftCategory.SetId(Guid.NewGuid());
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
 
@@ -424,15 +382,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 
 		private IPerson setupAgent(IWorkShiftRuleSet ruleSet, IActivity skillActivity)
 		{
-			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var agent = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue).WithId();
 			var weeklyRest = TimeSpan.FromHours(40);
 			agent.Period(weekPeriod.StartDate).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(54), TimeSpan.Zero, weeklyRest);
 			agent.Period(weekPeriod.StartDate).PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(17 - 8));
 
-			var ruleSetbag = new RuleSetBag();
-			ruleSetbag.AddRuleSet(ruleSet);
+			var ruleSetbag = new RuleSetBag(ruleSet);
 			agent.Period(weekPeriod.StartDate).RuleSetBag = ruleSetbag;
-			agent.SetId(Guid.NewGuid());
 
 			var skill = SkillFactory.CreateSkill("skill");
 			skill.Activity = skillActivity;
