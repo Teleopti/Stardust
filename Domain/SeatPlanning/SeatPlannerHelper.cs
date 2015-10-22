@@ -13,11 +13,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			if (rootLocation != null)
 			{
 				AttachExistingSeatBookingsToSeats(rootSeatMapLocation.Seats, existingSeatBookings);
-				rootLocation
+				rootLocation 
 					.ChildLocations
-					.ForEach(location => AttachExistingSeatBookingsToSeats(location, existingSeatBookings));	
+					.ForEach(location => AttachExistingSeatBookingsToSeats(location, existingSeatBookings));
 			}
-			
 		}
 
 		public static void AttachExistingSeatBookingsToSeats(IEnumerable<ISeat> seats, IList<ISeatBooking> existingSeatBookings)

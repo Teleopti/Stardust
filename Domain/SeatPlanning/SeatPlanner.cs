@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
 		{
 			var people = new List<IPerson>();
-			foreach (var team in teams)
+			foreach (var team in teams)								 
 			{
 				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
 				people.AddRange(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(team, period));

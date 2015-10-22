@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddSeatPlanCommandHandler : IHandleCommand<AddSeatPlanCommand>
 	{
-		
-		
+
+
 		private readonly ITeamRepository _teamRepository;
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
 		private readonly ISeatPlanner _seatPlanner;
@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				handleLocationsInSeatPlanCommand(command);
 			}
-			
+
 		}
 
 		private void handleLocationsInSeatPlanCommand(AddSeatPlanCommand command)
 		{
-			
-			var rootLocation = _seatMapLocationRepository.LoadRootSeatMap();
+
+			var rootLocation = _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
 			if (rootLocation != null)
 			{
 				setIncludeInSeatPlan(rootLocation, command.Locations);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private void handleSeatsInSeatPlanCommand(AddSeatPlanCommand command)
 		{
 
-			if ( command.Locations.Count != 1)
+			if (command.Locations.Count != 1)
 			{
 				throw new ArgumentException("There should only be one location when planning by seats");
 			}
@@ -73,19 +73,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return location.Seats.Where(seat => command.SeatIds.Contains(seat.Id.Value));
 		}
 
-		private static void setIncludeInSeatPlan(ISeatMapLocation location, IEnumerable<Guid> locationsSelected)
+		private static void setIncludeInSeatPlan(SeatMapLocation location, IEnumerable<Guid> locationsSelected)
 		{
-			var seatMapLocation = location as SeatMapLocation;
-			if (seatMapLocation != null)
+			location.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
+			foreach (var childLocation in location.ChildLocations)
 			{
-				seatMapLocation.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
-				foreach (var childLocation in seatMapLocation.ChildLocations)
-				{
-					setIncludeInSeatPlan(childLocation, locationsSelected);
-				}	
+				setIncludeInSeatPlan(childLocation, locationsSelected);
 			}
 
-			
 		}
 	}
 }
