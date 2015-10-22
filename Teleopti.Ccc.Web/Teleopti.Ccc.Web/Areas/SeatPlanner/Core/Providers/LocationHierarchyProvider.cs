@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return locationViewModel;
 		}
 
-		private static LocationViewModel getLocationViewModel(SeatMapLocation location)
+		private static LocationViewModel getLocationViewModel(ISeatMapLocation location)
 		{
 			if (location == null)
 			{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return locationViewModel;
 		}
 
-		private static List<LocationViewModel> getChildViewModels(SeatMapLocation location)
+		private static List<LocationViewModel> getChildViewModels(ISeatMapLocation location)
 		{
 			if (location.ChildLocations != null)
 			{
