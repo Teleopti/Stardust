@@ -248,6 +248,8 @@
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactoryTest.cs" />
     <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
+    <Compile Include="Areas\Global\FakePermissionProvider.cs" />
     <Compile Include="Areas\Global\GlobalAreaControllerTest.cs" />
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
     <Compile Include="Areas\Global\StatusControllerTest.cs" />
