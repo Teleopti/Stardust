@@ -180,7 +180,7 @@
           "     <td><timepicker-wrap ng-model=\"endTime\"></timepicker></td> " +
           "     <td> " +
           "       <div class=\"next-day-toggle\"  ng-show=\"!disableNextDay || nextDay\" >" +
-          " 	      <button class=\"wfm-btn wfm-btn-invis-default\" ng-class=\"{'wfm-btn-invis-disabled': disableNextDay }\" ng-click=\"toggleNextDay()\">{{nextDayToggleText}}</button> " +
+          " 	      <button type=\"button\" class=\"wfm-btn wfm-btn-invis-default\" ng-class=\"{'wfm-btn-invis-disabled': disableNextDay }\" ng-click=\"toggleNextDay()\">{{nextDayToggleText}}</button> " +
           "       </div>       " +
           "     </td> " +
           "   </tr> " +
