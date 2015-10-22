@@ -13,10 +13,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 		private readonly ILazyLoadingManager _lazyLoadingManager;
 
-		public ScheduleRangeConflictCollector(IScheduleRepository scheduleRepository,
-																					IPersonAssignmentRepository personAssignmentRepository,
-																					IReassociateDataForSchedules reassociateDataForSchedules,
-																					ILazyLoadingManager lazyLoadingManager)
+		public ScheduleRangeConflictCollector(
+			IScheduleRepository scheduleRepository,
+			IPersonAssignmentRepository personAssignmentRepository,
+			IReassociateDataForSchedules reassociateDataForSchedules,
+			ILazyLoadingManager lazyLoadingManager)
 		{
 			_scheduleRepository = scheduleRepository;
 			_personAssignmentRepository = personAssignmentRepository;

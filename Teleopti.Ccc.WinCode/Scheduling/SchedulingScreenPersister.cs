@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IWriteProtectionPersister _writeProtectionPersister;
 		private readonly IWorkflowControlSetPublishDatePersister _workflowControlSetPublishDatePersister;
 
-		public SchedulingScreenPersister(IScheduleDictionaryPersister scheduleDictionaryPersister,
-																		IPersonAccountPersister personAccountPersister,
-																		IRequestPersister requestPersister,
-																		IWriteProtectionPersister writeProtectionPersister,
-																		IWorkflowControlSetPublishDatePersister workflowControlSetPublishDatePersister)
+		public SchedulingScreenPersister(
+			IScheduleDictionaryPersister scheduleDictionaryPersister,
+			IPersonAccountPersister personAccountPersister,
+			IRequestPersister requestPersister,
+			IWriteProtectionPersister writeProtectionPersister,
+			IWorkflowControlSetPublishDatePersister workflowControlSetPublishDatePersister)
 		{
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 			_personAccountPersister = personAccountPersister;
@@ -32,17 +33,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		public bool TryPersist(IScheduleDictionary scheduleDictionary,
-														IEnumerable<IPersonRequest> personRequests,
-														ICollection<IPersonWriteProtectionInfo> writeProtectionInfos,
-														ICollection<IWorkflowControlSet> workflowControlSets,
-														out IEnumerable<PersistConflict> foundConflicts)
+			IEnumerable<IPersonRequest> personRequests,
+			ICollection<IPersonWriteProtectionInfo> writeProtectionInfos,
+			ICollection<IWorkflowControlSet> workflowControlSets,
+			out IEnumerable<PersistConflict> foundConflicts)
 		{
 			foundConflicts = _scheduleDictionaryPersister.Persist(scheduleDictionary);
 			_requestPersister.Persist(personRequests);
 			_writeProtectionPersister.Persist(writeProtectionInfos);
 			_workflowControlSetPublishDatePersister.Persist(workflowControlSets);
-			
-			return foundConflicts==null || !foundConflicts.Any();
+
+			return foundConflicts == null || !foundConflicts.Any();
 		}
 
 

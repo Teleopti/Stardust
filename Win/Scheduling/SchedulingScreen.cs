@@ -72,6 +72,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
@@ -320,14 +321,42 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SchedulerRibbonHelper.SetShowRibbonTexts(_showRibbonTexts, toolStripPanelItemLoadOptions, toolStripPanelItem1, toolStripPanelItemLocks, toolStripPanelItemAssignments, toolStripPanelItemViews2, _editControl, _editControlRestrictions, _clipboardControl, _clipboardControlRestrictions, toolStripExHandleRequests);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void updateLifeTimeScopeWith2ThingsWithFullDependencyChain()
+		{
+			var updater = new ContainerBuilder();
+
+			//updater.RegisterModule<SchedulePersistModule>();
+
+			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<ScheduleRangePersister>().As<IScheduleRangePersister>().InstancePerLifetimeScope();
+			updater.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().InstancePerLifetimeScope();
+			updater.Register(c => _schedulerMessageBrokerHandler)
+				.As<IInitiatorIdentifier>()
+				.As<IReassociateDataForSchedules>();
+
+			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();
+			updater.RegisterType<PersonAccountConflictResolver>().As<IPersonAccountConflictResolver>().InstancePerLifetimeScope();
+			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<WorkflowControlSetPublishDatePersister>().As<IWorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
+
+			//updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
+
+			updater.Update(_container.ComponentRegistry);
+		}
+
 		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, IList<IEntity> allSelectedEntities, Form ownerWindow)
 			: this()
 		{
 			Application.DoEvents();
 			_mainWindow = ownerWindow;
-			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
-			_container = lifetimeScope.BeginLifetimeScope();
+
+			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
+			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
+			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
+
 			var toggleManager = _container.Resolve<IToggleManager>();
 			_skillDayGridControl = new SkillDayGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
 			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
@@ -336,7 +365,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
 			setUpZomMenu();
-
 
 			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", toggleManager) { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
@@ -360,8 +388,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			_schedulerState.UndoRedoContainer = _undoRedo;
-			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
-			updateContainer(_container.ComponentRegistry, _schedulerMessageBrokerHandler, _schedulerMessageBrokerHandler, (IClearReferredShiftTradeRequests) _schedulerState, toggleManager);
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 			
@@ -456,25 +482,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart, checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 
 			checkSmsLinkLicense(toggleManager);
-		}
-
-		//flytta ut till modul
-		private static void updateContainer(IComponentRegistry componentRegistry, IInitiatorIdentifier initiatorIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, IClearReferredShiftTradeRequests clearReferredShiftTradeRequests, IToggleManager toggleManager)
-		{
-			var updater = new ContainerBuilder();
-			updater.Register(c => reassociateDataForSchedules).As<IReassociateDataForSchedules>();
-			updater.Register(c => initiatorIdentifier).As<IInitiatorIdentifier>();
-			updater.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
-			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
-			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
-			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();
-			updater.RegisterType<PersonAccountConflictResolver>().As<IPersonAccountConflictResolver>().InstancePerLifetimeScope();
-			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
-			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
-			updater.RegisterType<WorkflowControlSetPublishDatePersister>().As<IWorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
-			
-			updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
-			updater.Update(componentRegistry);
 		}
 
 		private SchedulingScreenSettings loadSchedulingScreenSettings()
@@ -3733,7 +3740,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IEnumerable<PersistConflict> foundConflicts = null;
 			try
 			{
-				bool success = _container.Resolve<ISchedulingScreenPersister>().TryPersist(_schedulerState.Schedules,
+				//var persister = _container.Resolve<ISchedulingScreenPersister>(
+				//	TypedParameter.From<IScheduleDictionaryPersister>(
+				//		_container.Resolve<IScheduleDictionaryPersister>(
+				//			TypedParameter.From<IScheduleRangePersister>(_container.Resolve<IScheduleRangePersister>())
+				//			)
+				//		)
+				//	);
+				var persister = _container.Resolve<ISchedulingScreenPersister>();
+				bool success = persister.TryPersist(_schedulerState.Schedules,
 					_schedulerState.PersonRequests,
 					_modifiedWriteProtections,
 					_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets,

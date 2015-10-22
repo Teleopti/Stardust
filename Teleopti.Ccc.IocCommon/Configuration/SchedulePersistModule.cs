@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class SchedulePersistModule : Module
+	public class SchedulePersistModule : Module
 	{		
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -20,12 +20,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NoScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>().SingleInstance();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().SingleInstance();
-			builder.RegisterType<EmptyInitiatorIdentifier>().As<IInitiatorIdentifier>();
-			builder.RegisterType<dontReassociateDataForSchedules>().As<IReassociateDataForSchedules>();
+			builder.RegisterType<EmptyInitiatorIdentifier>().As<IInitiatorIdentifier>().SingleInstance(); // shouldnt be registered at all, inject ICurrentInitiatorIdentifier!
+			builder.RegisterType<dontReassociateDataForSchedules>().As<IReassociateDataForSchedules>().SingleInstance();
 		}
 
 		private class dontReassociateDataForSchedules : IReassociateDataForSchedules
 		{
+			public dontReassociateDataForSchedules()
+			{
+			}
+
 			public void ReassociateDataForAllPeople()
 			{
 			}

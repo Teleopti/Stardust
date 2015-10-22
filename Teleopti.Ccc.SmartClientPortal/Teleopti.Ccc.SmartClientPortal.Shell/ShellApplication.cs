@@ -30,6 +30,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
+using Teleopti.Ccc.Infrastructure.Persisters.Requests;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -48,6 +53,7 @@ using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
@@ -229,6 +235,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
+				
 				builder.Register(c => new WebConfigReader(() =>
 				{
 					var webSettings = new WebSettings

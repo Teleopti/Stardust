@@ -15,11 +15,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IInitiatorIdentifier _initiatorIdentifier;
 
-		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-									  IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
-									  IScheduleRangeConflictCollector scheduleRangeConflictCollector,
-																	IScheduleDifferenceSaver scheduleDifferenceSaver,
-																	IInitiatorIdentifier initiatorIdentifier)
+		public ScheduleRangePersister(
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
+			IScheduleRangeConflictCollector scheduleRangeConflictCollector,
+			IScheduleDifferenceSaver scheduleDifferenceSaver,
+			IInitiatorIdentifier initiatorIdentifier)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -98,7 +99,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
 			
-			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().AsSelf().InstancePerLifetimeScope();
+			builder.RegisterType<SchedulerStateHolder>()
+				.As<ISchedulerStateHolder>()
+				.As<IClearReferredShiftTradeRequests>()
+				.AsSelf()
+				.InstancePerLifetimeScope();
 			builder.RegisterType<TimeZoneGuardWrapper>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
