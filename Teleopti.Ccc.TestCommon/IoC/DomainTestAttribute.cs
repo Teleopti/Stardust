@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
+			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
