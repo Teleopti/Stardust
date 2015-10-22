@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			WorkRuleSettingsRepository.Add(new WorkRuleSettings());
 			var contract = new Contract("_")
 			{
-				WorkTime = new WorkTime(TimeSpan.FromHours(8)),
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(1), weeklyRest)
 			};
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
