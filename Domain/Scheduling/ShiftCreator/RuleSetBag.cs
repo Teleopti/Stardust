@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -40,6 +39,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _description = new Description();
             _ruleSetCollection = new List<IWorkShiftRuleSet>();
         }
+
+	    public RuleSetBag(IWorkShiftRuleSet workShiftRuleSet) : this()
+	    {
+		    AddRuleSet(workShiftRuleSet);
+	    }
 
 		#endregion Constructors 
 

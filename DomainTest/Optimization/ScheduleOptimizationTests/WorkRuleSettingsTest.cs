@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -49,9 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)), agent.Period(firstDay));
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var shiftBag = new RuleSetBag();
-			shiftBag.AddRuleSet(ruleSet);
-			agent.Period(firstDay).RuleSetBag = shiftBag;
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(5),
@@ -103,9 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)), agent.Period(firstDay));
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var shiftBag = new RuleSetBag();
-			shiftBag.AddRuleSet(ruleSet);
-			agent.Period(firstDay).RuleSetBag = shiftBag;
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(20),
@@ -160,9 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			agent.AddSkill(new PersonSkill(skill, new Percent(1)), agent.Period(firstDay));
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var shiftBag = new RuleSetBag();
-			shiftBag.AddRuleSet(ruleSet);
-			agent.Period(firstDay).RuleSetBag = shiftBag;
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(20),
