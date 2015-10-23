@@ -52,8 +52,23 @@
 	.mdi-rotate-90 {
 		transform: rotateZ(90deg);
 	}
+	.threshold-slider{
+		    width:25%;
+		}
+	.gantt-datepicker{
+	    position:absolute;
+		top:15px;
+		left:-2px;
+		z-index:100;
+	}
+	.gantt-datepicker-container{
+	    margin-top:25px;
+		height:48px;
+	}
+	.wfm-btn-sm{
+	    padding:5px;
+	}
 	.outbound-gantt-chart {
-		margin: 70px 0;
 		.gantt-alert-message{
 		    position: absolute;
 			bottom: -30px;
@@ -71,13 +86,6 @@
 		}
 		.gantt-body-rows{
 		    overflow:hidden;
-		}
-		.threshold-slider{
-		    position:absolute;
-			top:0;
-			left:0;
-			width:30%;
-			margin-top:-56px;
 		}
 		.gantt-scrollable{
 		    overflow:hidden;
@@ -399,9 +407,20 @@
 	.wfm-list li:hover .wfm-checkbox-toggle:after {
 		background-color: white;
 	}
-
+	.middle{
+	    vertical-align:middle;
+	}
 	.m-t-10{
 		margin-top: 10px;
+	}
+	.m-r-10{
+	    margin-right:10px !important;
+	}
+	.m-r-15{
+	    margin-right:15px !important;
+	}
+	.m-t-15{
+		margin-top: 15px !important;
 	}
 	.m-b-10{
 	    margin-bottom:10px !important;

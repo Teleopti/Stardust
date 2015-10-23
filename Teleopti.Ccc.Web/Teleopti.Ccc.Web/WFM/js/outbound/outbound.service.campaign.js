@@ -19,6 +19,14 @@
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
 		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
 
+		var periodStart = moment().subtract(1, "months").date(1);
+		var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days');
+		var visualizationPeriod = {
+			StartDate: { Date: periodStart.format() },
+			EndDate: { Date: periodEnd.format() }
+		};
+		var defaultPeriod = [periodStart, periodEnd];
+	
 		var self = this;
 
 		this.getThreshold = function (successCb) {
@@ -37,15 +45,51 @@
 				});
 		}
 
+		self.visualizationPeriodPlusOneMonth = function(cb) {
+			visualizationPeriod.StartDate.Date = moment(visualizationPeriod.StartDate.Date).add(1, "months").date(1).format();
+			visualizationPeriod.EndDate.Date = moment(visualizationPeriod.EndDate.Date).add(2, "months").date(1).subtract(1, 'days').format();
+			if (cb) cb();
+		}
+
+		self.visualizationPeriodMinusOneMonth = function(cb) {
+			visualizationPeriod.StartDate.Date = moment(visualizationPeriod.StartDate.Date).subtract(1, "months").date(1).format();
+			visualizationPeriod.EndDate.Date = moment(visualizationPeriod.EndDate.Date).subtract(0, "months").date(1).subtract(1, 'days').format();
+			if (cb) cb();
+		}
+
+		self.setVisualizationPeriod = function(startDate,cb) {
+			if (startDate) {
+				visualizationPeriod.StartDate.Date = moment(startDate).date(1).format();
+				visualizationPeriod.EndDate.Date = moment(startDate).add(3, "months").date(1).subtract(1, 'days').format();
+				if (cb) cb();
+			}
+		}
+
 		self.getVisualizationPeriod = function() {
-			return {
-				StartDate: { Date: moment().subtract(1, "months").date(1).format() },
-				EndDate: { Date: moment().add(2, "months").date(1).subtract(1, 'days').format() }
+			return visualizationPeriod;
+		}
+
+		self.defaultPeriodPlusOneMonth = function(cb) {
+			defaultPeriod[0] = moment(defaultPeriod[0]).add(1, "months").date(1);
+			defaultPeriod[1] = moment(defaultPeriod[1]).add(2, "months").date(1).subtract(1, 'days');
+			if (cb) cb();
+		}
+
+		self.defaultPeriodMinusOneMonth = function(cb) {
+			defaultPeriod[0] = moment(defaultPeriod[0]).subtract(1, "months").date(1);
+			defaultPeriod[1] = moment(defaultPeriod[1]).subtract(0, "months").date(1).subtract(1, 'days');
+			if (cb) cb();
+		}
+
+		self.setDefaultPeriod = function(startDate,cb) {
+			if (startDate) {
+				defaultPeriod = [moment(startDate).date(1), moment(startDate).add(3, "months").date(1).subtract(1, 'days')];
+				if (cb) cb();
 			}
 		}
 
 		self.getDefaultPeriod = function() {
-			return [moment().subtract(1, "months").date(1), moment().add(2, "months").date(1).subtract(1, 'days')];
+			return defaultPeriod;
 		}
 
 		this.load = function(successCb) {
