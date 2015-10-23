@@ -205,6 +205,7 @@
     <Compile Include="FakeRepositories\FakeShiftCategoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepository.cs" />
+    <Compile Include="FakeRepositories\FakeStatisticRepository.cs" />
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
