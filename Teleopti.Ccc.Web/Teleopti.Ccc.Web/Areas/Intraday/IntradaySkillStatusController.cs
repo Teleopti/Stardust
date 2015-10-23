@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 {
     public class IntradaySkillStatusController : ApiController
     {
-	    private readonly IntradaySkillStatusService _intradaySkillStatusService;
+	    private readonly IIntradaySkillStatusService _intradaySkillStatusService;
 
-		 public IntradaySkillStatusController(IntradaySkillStatusService intradaySkillStatusService)
+		 public IntradaySkillStatusController(IIntradaySkillStatusService intradaySkillStatusService)
 		 {
 			 _intradaySkillStatusService = intradaySkillStatusService;
 		 }
@@ -20,19 +20,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	    [HttpGet]
 	    [UnitOfWork]
 	    [Route("GetSkillStatus")]
-	    public virtual JsonResult<List<SkillStatusModel>> GetSkillStatus()
+	    public virtual JsonResult<IEnumerable<SkillStatusModel>> GetSkillStatus()
 	    {
-		    var ret = new List<SkillStatusModel>();
-			 var taskDetails = _intradaySkillStatusService.GetForecastedTasks();
-
-		    foreach (KeyValuePair<ISkill, IList<SkillTaskDetails>> pair in taskDetails)
-		    {
-			    var skill = pair.Key;
-			    var values = pair.Value;
-			    var sumvalues = values.Sum(tasks => tasks.Task);
-			    ret.Add(new SkillStatusModel {SkillName = skill.Name, Measures = new List<SkillStatusMeasure> {new SkillStatusMeasure{Name = "Calls", Value = sumvalues,Severity = 1}} });
-		    }
-		    return Json(ret);
+		    return Json(_intradaySkillStatusService.GetSkillStatusModels());
 	    }
     }
 }

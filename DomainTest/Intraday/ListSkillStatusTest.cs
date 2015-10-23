@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public ISkillForecastedTasksDetailProvider SkillForecastedTasksDetailProvider;
 		public IntradaySkillStatusService Target;
 
 		[Test]
@@ -43,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Add(skill);
 			SkillDayRepository.AddFakeTemplateTaskModels(models);
 			Assert.True(true);
-			//var result = Target.GetSkillStatus().Content;
-			//result.Should().Not.Be.Null();
+			var result = Target.GetSkillStatusModels();
+			result.Should().Not.Be.Null();
 		}
 
 	}
