@@ -20,22 +20,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
 			var futureData = MockRepository.GenerateMock<IFutureData>();
 			var target = new CampaignPersister(skillDayRepository, futureData);
-			var dateTime = new DateTime();
+			var dateOnly = new DateOnly();
 			var campaignDays = new[]
 			{
-				new CampaignDay()
+				new CampaignDay
 				{
-					Date = dateTime
+					Date = dateOnly.Date
 				}
 			};
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var scenario = new Scenario("scenario1");
-			var skillDays = new[] {new SkillDay(),};
-			var futurePeriod = new DateOnlyPeriod(new DateOnly(campaignDays[0].Date), new DateOnly(campaignDays[0].Date));
+			var skillDays = new[] {new SkillDay()};
+			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			skillDayRepository.Stub(
 				x => x.FindRange(futurePeriod, workload.Skill, scenario))
 				.Return(skillDays);
-			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, new DateOnly(dateTime));
+			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly);
 			workloadDay.MakeOpen24Hours();
 			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod))
 				.Return(new[] {workloadDay});
@@ -43,6 +43,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
 			target.Persist(scenario, workload, campaignDays, 80);
 			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(80d);
+		}
+
+		[Test]
+		public void ShouldPersistForInputDates()
+		{
+			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			var futureData = MockRepository.GenerateMock<IFutureData>();
+			var target = new CampaignPersister(skillDayRepository, futureData);
+			var dateOnly = new DateOnly();
+			var fiveDaysLater = dateOnly.AddDays(5);
+			var campaignDays = new[]
+			{
+				new CampaignDay
+				{
+					Date = dateOnly.Date
+				},
+
+				new CampaignDay
+				{
+					Date = fiveDaysLater.Date
+				}
+			};
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
+			var scenario = new Scenario("scenario1");
+			var skillDays = new[] { new SkillDay(), };
+			var futurePeriod = new DateOnlyPeriod(dateOnly, fiveDaysLater);
+			skillDayRepository.Stub(
+				x => x.FindRange(futurePeriod, workload.Skill, scenario))
+				.Return(skillDays);
+			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly);
+			var workloadDayOneDayLater = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly.AddDays(1));
+			var workloadDayFiveDaysLater = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, fiveDaysLater);
+			workloadDay.MakeOpen24Hours();
+			workloadDayFiveDaysLater.MakeOpen24Hours();
+			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod)).Return(new[] {workloadDay, workloadDayOneDayLater, workloadDayFiveDaysLater});
+
+			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+			workloadDayOneDayLater.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+			workloadDayFiveDaysLater.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+			target.Persist(scenario, workload, campaignDays, 80);
+			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(80d);
+			workloadDayOneDayLater.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+			workloadDayFiveDaysLater.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(80d);
 		}
 	}
 }
