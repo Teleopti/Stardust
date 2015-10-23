@@ -1,4 +1,21 @@
-﻿<div>
+﻿<style>
+	.time-line .ruler {
+		height: 100px; /*should be 100%*/
+		width: 1px;
+		background-color: rgba(0,0,0,0.2);
+		z-index: 100;
+	}
+
+	.time-line .label {
+		font-size: xx-small;
+		height: 12px;
+		z-index: 111;
+	}
+	.absolute {
+		position: absolute;
+	}
+</style>
+<div class="team-schedule">
 	Team schedule
 	<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamChanged()">
 		<option value="" disabled selected>Pick a team...</option>
@@ -6,6 +23,13 @@
 			{{team.Name}}
 		</option>
 	</select>
-	<time-line data="vm.Schedules">{{vm.data}}</time-line>
-	<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
+	<div class="row">
+		<div class="col-md-12">
+			<div class="relative">
+				<time-line data="vm.groupScheduleVm.TimeLine"></time-line>
+				<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
+			</div>
+		</div>
+	</div>
 </div>
+

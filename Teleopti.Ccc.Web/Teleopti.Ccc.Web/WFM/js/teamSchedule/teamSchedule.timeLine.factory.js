@@ -64,7 +64,7 @@
 			return 0;
 		};
 
-		var hourPointViewModel = function (baseDate, minutes, pixelsPerMinute) {
+		var hourPointViewModel = function (baseDate, minutes, start, pixelsPerMinute) {
 			var time = ((baseDate == undefined)
 				? moment.tz(currentUserInfo.DefaultTimeZone)
 				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
@@ -91,7 +91,7 @@
 
 			var timePoint = start;
 			while (timePoint < end + 1) {
-				hourPoints.push(new hourPointViewModel(baseDate, timePoint, 1)); // TODO: Change 1 to pixelPerMinute
+				hourPoints.push(new hourPointViewModel(baseDate, timePoint, start, 1)); // TODO: Change 1 to pixelPerMinute
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
 			var timeLineVm = {

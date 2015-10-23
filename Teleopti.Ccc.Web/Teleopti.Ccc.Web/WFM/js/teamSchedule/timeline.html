@@ -1,8 +1,11 @@
-<div class="time-line absolute" > {{vm.data}}
+
+<div class="time-line absolute">
 	<div class="relative">
-		<!--<div data-bind="foreach: vm.Times()">
-				<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-				<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-			</div>-->
+		<div ng-repeat="hourPoint in vm.data.HourPoints">
+			<div class="ruler absolute" ng-style="{left: (hourPoint.Pixel() + 'px')}"></div>
+			<div class="label label-info absolute" ng-style="{left: (hourPoint.Pixel() - 13) + 'px'}">{{ hourPoint.Time}}</div>
+		</div>
 	</div>
 </div>
+
+
