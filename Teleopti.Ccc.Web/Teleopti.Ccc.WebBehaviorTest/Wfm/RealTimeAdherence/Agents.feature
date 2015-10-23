@@ -2,16 +2,6 @@
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
-@ignore
-Scenario: Should not be able to see agents if not permitted
-	Given I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to real time adherence overview | True		|
-	And there is a site named 'Paris'
-	And there is a team named 'Red' on site 'Paris'
-	When I try to view real time adherence for team 'Red'
-	Then I should see a message that I have no permission for this function
 
 Scenario: Should be able to see current states of all agents
 	Given there is an activity named 'Phone'

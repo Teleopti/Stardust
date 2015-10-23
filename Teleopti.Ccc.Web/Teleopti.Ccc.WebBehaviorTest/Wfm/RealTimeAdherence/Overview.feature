@@ -108,15 +108,6 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
-Scenario: Should not see Real time adherence overview in menu when not permitted
-	Given I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to real time adherence overview | False       |
-	When I view Wfm
-	Then I should not see Real time adherence in the menu
-	
-
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given I have a role with
 	| Field                                  | Value             |
