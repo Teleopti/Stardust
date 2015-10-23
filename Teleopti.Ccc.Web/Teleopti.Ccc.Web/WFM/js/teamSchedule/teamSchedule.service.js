@@ -11,5 +11,16 @@ angular.module('teamScheduleService', ['ngResource']).service('TeamSchedule', [
 				isArray: true
 			}
 		});
+
+		this.loadSchedules = $resource('../api/TeamSchedule/Group', {
+			groupId: "@groupId",
+			date: "@queryDate"
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false
+			}
+		});
 	}
 ]);

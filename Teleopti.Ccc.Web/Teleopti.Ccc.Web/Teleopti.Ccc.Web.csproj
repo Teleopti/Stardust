@@ -1248,9 +1248,14 @@
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
     <Content Include="WFM\js\teamSchedule\helpers.js" />
+    <Content Include="WFM\js\teamSchedule\myTeam.timeLine.controller.js" />
+    <Content Include="WFM\js\teamSchedule\myTeam.timeline.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.groupSchedule.factory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\schedule.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.unit.factory.js" />
+    <Content Include="WFM\js\teamSchedule\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
@@ -2306,7 +2311,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackages;RunGruntBuild" />
+    <!--<CallTarget Targets="RestoreNodePackages;RunGruntBuild" /-->
   </Target>
   <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

@@ -1,9 +1,11 @@
 ﻿<div>
 	Team schedule
-	<select ng-model="vm.Teams">
+	<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamChanged()">
 		<option value="" disabled selected>Pick a team...</option>
-		<option value={{team.Name}} ng-repeat="team in vm.Teams|orderBy: 'Name'">
+		<option value={{team.Id}} ng-repeat="team in vm.Teams|orderBy: 'Name'">
 			{{team.Name}}
 		</option>
 	</select>
+	<time-line data="vm.Schedules">{{vm.data}}</time-line>
+	<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
 </div>

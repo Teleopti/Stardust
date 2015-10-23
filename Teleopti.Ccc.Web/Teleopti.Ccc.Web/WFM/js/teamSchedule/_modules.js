@@ -1,4 +1,4 @@
 ﻿(function () {
 	angular.module('wfm.teamSchedule', [
-		'teamScheduleService']);
+		'teamScheduleService', 'currentUserInfoService']);
 })();

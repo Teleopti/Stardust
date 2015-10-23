@@ -2,11 +2,11 @@
 
 (function () {
 
-	angular.module('wfm.teamSchedule').factory('shiftHelper', shiftHelper);
+	angular.module('wfm.teamSchedule').factory('ShiftHelper', ShiftHelper);
 
-	shiftHelper.$inject = [];
+	//shiftHelper.$inject = [];
 
-	function shiftHelper() {
+	function ShiftHelper() {
 		var service = {};
 
 		service.GetTextBackgroundColor = function(backgroundColor) {
