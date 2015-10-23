@@ -150,13 +150,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         private static int SortByValueAscending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
         {
-            return x.Value.CompareTo(y.Value);
+	        var ret = x.Value.CompareTo(y.Value);
+
+	        return ret == 0 ? -x.Key.CompareTo(y.Key) : ret;
         }
 
-        private static int SortByValueDescending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
+	    private static int SortByValueDescending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
         {
-            return -1 * x.Value.CompareTo(y.Value);
-        }
+			var ret = -1 * x.Value.CompareTo(y.Value);
+
+			return ret == 0 ? x.Key.CompareTo(y.Key) : ret;
+		}
 
         private static string CreateCommaSeparatedString(IEnumerable<int> indexesToMoveFrom)
         {
