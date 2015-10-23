@@ -37,12 +37,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_persons.Add(person);
 		}
 
-		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod)
+		public IPerson Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, ISkill skill)
 		{
+			var ppDate = new DateOnly(1950, 1, 1);
 			var agent = new Person();
 			agent.SetId(Guid.NewGuid());
-			agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1950, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team));
+			agent.AddPersonPeriod(new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team));
       agent.AddSchedulePeriod(schedulePeriod);
+			agent.AddSkill(skill, ppDate);
 			_persons.Add(agent);
 			return agent;
 		}
