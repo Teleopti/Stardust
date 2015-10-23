@@ -46,6 +46,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldNotPersistForClosedDay()
+		{
+			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			var futureData = MockRepository.GenerateMock<IFutureData>();
+			var target = new CampaignPersister(skillDayRepository, futureData);
+			var dateOnly = new DateOnly();
+			var campaignDays = new[]
+			{
+				new CampaignDay
+				{
+					Date = dateOnly.Date
+				}
+			};
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
+			var scenario = new Scenario("scenario1");
+			var skillDays = new[] { new SkillDay() };
+			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			skillDayRepository.Stub(
+				x => x.FindRange(futurePeriod, workload.Skill, scenario))
+				.Return(skillDays);
+			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly);
+			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod))
+				.Return(new[] { workloadDay });
+
+			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+			target.Persist(scenario, workload, campaignDays, 80);
+			workloadDay.CampaignTasks.ValueAsPercent().Should().Be.EqualTo(0d);
+		}
+
+		[Test]
 		public void ShouldPersistForInputDates()
 		{
 			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();

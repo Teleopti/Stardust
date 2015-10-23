@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
 			var workloadDays = _futureData.Fetch(workload, skillDays, futurePeriod);
 
-			foreach (var workloadDay in days.Select(campaignDay => workloadDays.Single(x => x.CurrentDate == new DateOnly(campaignDay.Date))))
+			foreach (var workloadDay in days.Select(campaignDay => workloadDays.Single(x => x.CurrentDate == new DateOnly(campaignDay.Date))).Where(workloadDay => workloadDay.OpenForWork.IsOpen))
 			{
 				workloadDay.CampaignTasks = new Percent(campaignTasksPercent / 100d);
 			}
