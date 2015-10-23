@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => Resources.People,"people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatPlan,"seatPlan"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => Resources.SeatMap,"seatMap"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => Resources.RealTimeAdherence,"rta")
-		};
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => Resources.RealTimeAdherence,"rta"),
+            new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning,() => Resources.Intraday,"intraday")
+        };
 
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager)
@@ -81,9 +82,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892);
 			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Outbound))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_Outbound_Campaign_32696);
+				return _toggleManager.IsEnabled(Toggles.WfmIntraday_MonitorActualvsForecasted_35176);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.SeatPlanner))
 			{

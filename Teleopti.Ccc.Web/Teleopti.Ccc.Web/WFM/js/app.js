@@ -38,7 +38,8 @@ var wfm = angular.module('wfm', [
 	'wfm.rta',
 	'wfm.start',
 	'wfm.businessunits',
-	'wfm.teamSchedule'
+	'wfm.teamSchedule',
+    'wfm.intraday'
 ]);
 
 wfm.config([
@@ -87,6 +88,10 @@ wfm.config([
 		    url: '/permissions',
 			templateUrl: 'js/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
+		}).state('intraday', {
+		    url: '/intraday',
+		    templateUrl: 'js/intraday/intraday.html',
+		    controller: 'IntradayCtrl'
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'js/outbound/html/outbound.html',
