@@ -19,6 +19,7 @@
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
+		$scope.isTravelEnabled = false;
 		$scope.month = "month";
 
 		$scope.$watch(function() {
@@ -29,6 +30,7 @@
 					$scope.isGanttEnabled = true;
 					init();
 				}
+				if (OutboundToggles.isTravelEnabled()) $scope.isTravelEnabled = true;
 			}
 		});		
 
