@@ -19,11 +19,11 @@
 				var projCutInsideDayStartMinutes = projStartTimeMin >= 0 ? projStartTimeMin : 0;
 
 				if (projection.Date.diff(baseDate) === 0) {
-					var startMin = projCutInsideDayStartMinutes;
+					var projStartMinutes = projCutInsideDayStartMinutes;
 					if (start === undefined)
-						start = startMin;
-					if (startMin < start)
-						start = startMin;
+						start = projStartMinutes;
+					if (projStartMinutes < start)
+						start = projStartMinutes;
 				}
 			});
 
@@ -67,7 +67,7 @@
 		var hourPointViewModel = function (baseDate, minutes, pixelsPerMinute) {
 			var time = ((baseDate == undefined)
 				? moment.tz(currentUserInfo.DefaultTimeZone)
-				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add('minutes', minutes);
+				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
 
 			var formattedTime = time.format("HH:mm");
 
@@ -89,9 +89,10 @@
 			var start = startMinutes(groupSchedules, baseDate);
 			var end = endMinutes(groupSchedules, baseDate);
 
-			while (start < end + 1) {
-				hourPoints.push(new hourPointViewModel(baseDate, start, 1)); // TODO: Change 1 to pixelPerMinute
-				start = shiftHelper.MinutesAddHours(start, 1);
+			var timePoint = start;
+			while (timePoint < end + 1) {
+				hourPoints.push(new hourPointViewModel(baseDate, timePoint, 1)); // TODO: Change 1 to pixelPerMinute
+				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
 			var timeLineVm = {
 				StartMinute: start,
