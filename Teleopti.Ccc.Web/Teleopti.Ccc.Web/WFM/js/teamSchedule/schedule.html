@@ -15,7 +15,7 @@
 		position: absolute;
 	}
 </style>
-<div class="team-schedule">
+<div class="team-schedule" id="team-schedule">
 	Team schedule
 	<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamChanged()">
 		<option value="" disabled selected>Pick a team...</option>
@@ -23,13 +23,28 @@
 			{{team.Name}}
 		</option>
 	</select>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="relative">
-				<time-line data="vm.groupScheduleVm.TimeLine"></time-line>
-				<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
-			</div>
-		</div>
-	</div>
+	<table class="table table-hover">
+		<thead>
+			<tr class="person">
+				<th class="person-name person-name-column"></th>
+				<th id="time-line-container"class="schedule schedule-column">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="relative">
+								<time-line data="vm.groupScheduleVm.TimeLine"></time-line>
+								<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
+							</div>
+						</div>
+					</div>
+				</th>
+				<th class="contract-time contract-time-title"><span xdata-bind="text: Resources.ContractTime"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules"></tr>
+		</tbody>
+	</table>
+
+		
 </div>
 

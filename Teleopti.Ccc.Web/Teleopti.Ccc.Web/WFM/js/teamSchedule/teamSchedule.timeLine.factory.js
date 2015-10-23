@@ -57,10 +57,10 @@
 			return shiftHelper.MinutesEndOfHour(end);
 		};
 
-		var pixelsPerMinute = function (start, end, widthPixels) {
+		var calculatePixelsPerMinute = function (start, end, widthPixels) {
 			var lengthInMin = end - start;
 			if (lengthInMin > 0)
-				return widthPixels / end - start;
+				return widthPixels / lengthInMin;
 			return 0;
 		};
 
@@ -83,21 +83,23 @@
 			return hourPointVm;
 		};
 
-		timeLine.Create = function (groupSchedules, baseDate) {
+		timeLine.Create = function (groupSchedules, baseDate, canvasSize) {
 			var hourPoints = [];
 
 			var start = startMinutes(groupSchedules, baseDate);
 			var end = endMinutes(groupSchedules, baseDate);
+			var pixelsPerMinute = calculatePixelsPerMinute(start, end, canvasSize);
 
 			var timePoint = start;
 			while (timePoint < end + 1) {
-				hourPoints.push(new hourPointViewModel(baseDate, timePoint, start, 1)); // TODO: Change 1 to pixelPerMinute
+				hourPoints.push(new hourPointViewModel(baseDate, timePoint, start, pixelsPerMinute)); 
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
 			var timeLineVm = {
 				StartMinute: start,
 				EndMinute: end,
-				HourPoints: hourPoints
+				HourPoints: hourPoints,
+				PixelsPerMinute: pixelsPerMinute
 			}
 			return timeLineVm;
 		}

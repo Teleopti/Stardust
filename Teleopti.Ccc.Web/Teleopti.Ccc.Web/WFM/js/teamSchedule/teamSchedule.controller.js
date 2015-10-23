@@ -13,12 +13,16 @@
 		vm.selectedTeamId = '';
 		vm.scheduleDate = queryDate;
 
-		vm.selectedTeamChanged = function() {
+		vm.selectedTeamChanged = function () {
+			vm.canvasSize = angular.element($('#time-line-container'))[0].offsetWidth;
 			teamScheduleSvc.loadSchedules.query({ groupId: vm.selectedTeamId, date: queryDate.format("YYYY-MM-DD") }).$promise
-				.then(function(data) {
+				.then(function (data) {
+					
 					vm.groupScheduleVm = groupScheduleFactory;
-					vm.groupScheduleVm.Create(data.Schedules, queryDate);
+					vm.groupScheduleVm.Create(data.Schedules, queryDate, vm.canvasSize);
 				});
 		}
+
+		
 	}
 }());

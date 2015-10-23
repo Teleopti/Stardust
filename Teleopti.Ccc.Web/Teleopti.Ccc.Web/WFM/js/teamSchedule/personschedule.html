@@ -1,0 +1,21 @@
+﻿<tr class="person">
+	<td class="person-name person-name-column">
+		<div class="person-name nowrap" >{{person.Name}}</div>
+	</td>
+	<td class="schedule schedule-column">
+		<div class="relative time-line-for">
+			<div class="shift" ng-repeat="projection in person.ShiftProjections">
+				<div class="layer absolute floatleft" style="height: 30px" ng-style="{
+        left: projection.StartPixels() + 'px',
+        width: projection.LengthPixels() + 'px',
+        backgroundColor: projection.Color
+    }">
+
+					<!--<span class="label label-default layer-description">{{projection.Description}}</span>-->
+				</div>
+
+			</div>
+		</div>
+	</td>
+	<td class="contract-time contract-time-column"></td>
+</tr>

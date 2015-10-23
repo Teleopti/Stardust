@@ -22,7 +22,8 @@
 					var pixels = lengthMinutes * timeLine.PixelsPerMinute;
 					return Math.round(pixels);
 				},
-				Color: projection.Color
+				Color: projection.Color,
+				Description: projection.Description
 			};
 
 			return shiftProjectionVm;

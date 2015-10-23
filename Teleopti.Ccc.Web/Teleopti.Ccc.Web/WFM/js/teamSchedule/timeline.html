@@ -1,10 +1,10 @@
 
 <div class="time-line absolute">
 	<div class="relative">
-		<div ng-repeat="hourPoint in vm.data.HourPoints">
-			<div class="ruler absolute" ng-style="{left: (hourPoint.Pixel() + 'px')}"></div>
-			<div class="label label-info absolute" ng-style="{left: (hourPoint.Pixel() - 13) + 'px'}">{{ hourPoint.Time}}</div>
-		</div>
+		<span ng-repeat="hourPoint in vm.data.HourPoints">
+			<span class="ruler absolute" ng-style="{left: (hourPoint.Pixel() + 'px')}"></span>
+			<span class="label label-info absolute" ng-style="{left: (hourPoint.Pixel() - 13) + 'px'}">{{ hourPoint.Time}}</span>
+		</span>
 	</div>
 </div>
 
