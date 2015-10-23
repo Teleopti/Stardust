@@ -88,11 +88,9 @@
 				s.Name,
 				ttp.Minimum,
 				ttp.Maximum,
-				ttp.Tasks,
-				ttp.CampaignTasks,
-				(ttp.Tasks * CampaignTasks + ttp.Tasks) as TotalTasks ,
 				sdb.Scenario,
-				s.Id as SkillId
+				s.Id as SkillId,
+				sum((ttp.Tasks * CampaignTasks + ttp.Tasks)) as TotalTasks
 		from 
 				skill s 
 				left join SkillDay sdb on (s.Id=sdb.Skill) and (sdb.SkillDayDate between :startDate and :endDate) and (sdb.Scenario = :scenario) 
@@ -103,7 +101,13 @@
 		where 
 				s.IsDeleted = 0
 				and ttp.Minimum >= :startDate 
-				and ttp.Maximum <= :endDate															
+				and ttp.Maximum <= :endDate
+		group by 
+		s.Name,
+				ttp.Minimum,
+				ttp.Maximum,
+				sdb.Scenario,
+				s.Id 
     ]]>
 		<query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
 		<query-param name="onDate" type="datetime"/>

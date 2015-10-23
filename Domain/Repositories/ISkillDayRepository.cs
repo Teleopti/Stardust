@@ -79,8 +79,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public string Name { get; set; }
 		public DateTime Minimum { get; set; }
 		public DateTime Maximum { get; set; }
-		public Double Tasks { get; set; }
-		public Double CampaignTasks { get; set; }
 		public Double TotalTasks { get; set; }
 		public Guid Scenario { get; set; }
 		public Guid SkillId { get; set; }

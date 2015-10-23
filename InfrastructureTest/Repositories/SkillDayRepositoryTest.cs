@@ -434,10 +434,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			 PersistAndRemoveFromUnitOfWork(workload);
 
 			 var skillDayRepository = new SkillDayRepository(UnitOfWork);
-			 DateOnly defaultLastSkillDayDate = skillDayRepository.FindLastSkillDayDate(_workload, _scenario);
-
-			 Assert.AreEqual(new DateOnly(DateTime.Today.AddMonths(-1)), defaultLastSkillDayDate);
-
 			 SkillDay skillDay = createSkillDay(new DateOnly(_date), _workload, _skill, _scenario, new Percent(.1));
 			 SkillDay skillDayLocal = createSkillDay(new DateOnly(_date), workload, skill, _scenario, new Percent(.1));
 			 PersistAndRemoveFromUnitOfWork(skillDay);
@@ -445,10 +441,64 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)), new[] { _skill, skill }, _scenario).ToList();
 			 skillToTaskDetails.Count.Should().Be.EqualTo(40);
-			 skillToTaskDetails.First().Tasks.Should().Be.EqualTo(7);
-			 skillToTaskDetails.First().CampaignTasks.Should().Be.EqualTo(0.1);
 			 skillToTaskDetails.First().TotalTasks.Should().Be.EqualTo(7.7);
 		 }
+
+		 [Test]
+		 public void ShouldReturnForecastedTasksForTwoWorkloads()
+		 {
+			 var skill = SkillFactory.CreateSkill("dummy2", _skillType, 15);
+			 var activity = new Activity("dummyActivity2");
+			 skill.Activity = activity;
+
+			 TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			 skill.TimeZone = timeZoneInfo;
+			 PersistAndRemoveFromUnitOfWork(activity);
+			 PersistAndRemoveFromUnitOfWork(skill);
+
+			 var workload1 = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			 var workload2 = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			 PersistAndRemoveFromUnitOfWork(workload1);
+			 PersistAndRemoveFromUnitOfWork(workload2);
+
+			 var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			 
+			 WorkloadDay workloadDay1 = createWorkloadDay(_date,workload1,  0.1);
+			 WorkloadDay workloadDay2 = createWorkloadDay(_date, workload1, 0.5);
+
+			 IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
+			 skillDataPeriods.Add(
+				  new SkillDataPeriod(
+						ServiceAgreement.DefaultValues(),
+						new SkillPersonData(2, 5),
+						DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date, DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12))));
+			 skillDataPeriods.Add(
+				  new SkillDataPeriod(
+						skillDataPeriods[0].ServiceAgreement,
+						skillDataPeriods[0].SkillPersonData,
+						skillDataPeriods[0].Period.ChangeStartTime(TimeSpan.FromHours(12))));
+
+			 SkillDay skillDay = new SkillDay(new DateOnly(_date), skill, _scenario,
+				  new List<IWorkloadDay> { workloadDay1, workloadDay2 }, skillDataPeriods);
+
+			 PersistAndRemoveFromUnitOfWork(skillDay);
+			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)), new[] { _skill, skill }, _scenario).ToList();
+			 skillToTaskDetails.Count.Should().Be.EqualTo(20);
+			 skillToTaskDetails.First().TotalTasks.Should().Be.EqualTo(18.2);
+		 }
+
+	    private WorkloadDay createWorkloadDay(DateTime date, IWorkload workload1, double campaign)
+	    {
+			 IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
+			 openHourPeriods.Add(new TimePeriod("12:30-17:30"));
+			 var workloadDay = new WorkloadDay();
+			 workloadDay.Create(new DateOnly(date), workload1, openHourPeriods);
+			 workloadDay.Tasks = 7 * 20;
+			 workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
+			 workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
+			 workloadDay.CampaignTasks = new Percent(campaign);
+		    return workloadDay;
+	    }
 
 		 private static SkillDay createSkillDay(DateOnly skillDate, IWorkload workload, ISkill skill, IScenario scenario, Percent campaign)
 		 {
