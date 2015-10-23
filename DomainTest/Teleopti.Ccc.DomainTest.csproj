@@ -515,7 +515,7 @@
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeamTest.cs" />
-    <Compile Include="Optimization\GroupPersonBuilderForOptimizationFactoryTest.cs" />
+    <Compile Include="Optimization\GroupPersonBuilderWrapperTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationServiceTest.cs" />

@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
+		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IBackToLegalShiftService backToLegalShiftService,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IOptimizerHelperHelper optimizerHelper)
+			IOptimizerHelperHelper optimizerHelper,
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_optimizerHelper = optimizerHelper;
+			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
 		public void Execute(IBackgroundWorkerWrapper backgroundWorker,
@@ -56,8 +59,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 
-			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+			_groupPersonBuilderWrapper.Reset();
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+
+			if (groupPageType == GroupPageType.SingleAgent)
+				_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			else
+				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+
+			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);

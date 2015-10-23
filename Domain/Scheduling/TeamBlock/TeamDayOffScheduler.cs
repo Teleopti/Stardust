@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
 		                      ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
-		                      IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
 	}
 
 	public class TeamDayOffScheduler : ITeamDayOffScheduler
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
 		                             ISchedulePartModifyAndRollbackService rollbackService,
 		                             ISchedulingOptions schedulingOptions,
-		                             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+									 IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
 			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
 			var matrixDataForSelectedPersons = new List<IMatrixData>();
@@ -103,12 +104,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
-		                      IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+							  IGroupPersonBuilderWrapper groupPersonBuilderForOptimization,
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)
 		{
 			var selectedMatrixesForOnePerson = new List<IScheduleMatrixPro>();
-			var group = groupPersonBuilderForOptimization.BuildGroup(person, scheduleDate);
+
+
+			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
 			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);

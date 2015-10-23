@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IPersonAssignment _personAssignment;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 		private IPrincipalAuthorization _principalAuthorization;
+		private IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 
 		[SetUp]
 		public void Setup()
@@ -85,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			_groupPersonBuilderWrapper = _mocks.StrictMock<IGroupPersonBuilderWrapper>();
 		}
 
 		[Test]
@@ -118,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderWrapper);
 			}
 		}
 
@@ -153,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderWrapper);
 			}
 		}
 
@@ -181,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-					                         _groupPersonBuilderForOptimization);
+											 _groupPersonBuilderWrapper);
 				}
 			}
 		}
@@ -211,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-											 _groupPersonBuilderForOptimization);
+											 _groupPersonBuilderWrapper);
 				}
 			}
 		}
@@ -234,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.DayScheduled += targetDayScheduled;
-				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderWrapper);
 				_target.DayScheduled -= targetDayScheduled;
 			}
 		}
@@ -262,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				_target.DayScheduled += targetDayScheduled;
 				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-					_groupPersonBuilderForOptimization);
+					_groupPersonBuilderWrapper);
 				_target.DayScheduled -= targetDayScheduled;
 			}
 		}
@@ -287,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-					_groupPersonBuilderForOptimization);
+					_groupPersonBuilderWrapper);
 			}
 		}
 
@@ -345,6 +348,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		private void getMatrixesAndRestrictionMocks()
 		{
+			Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
 			Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_person1, new DateOnly(2013, 2, 1)))
 			      .Return(_group);
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);

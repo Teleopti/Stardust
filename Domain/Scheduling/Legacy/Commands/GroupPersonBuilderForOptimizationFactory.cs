@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -29,12 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
-		public IGroupPersonBuilderForOptimization Create(ISchedulingOptions schedulingOptions)
+		public void Create(ISchedulingOptions schedulingOptions)
 		{
-			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
-			if( groupPageType == GroupPageType.SingleAgent)
-				return new GroupPersonBuilderForOptimizationAndSingleAgentTeam();
-
 			var schedulerStateHolder = _schedulerStateHolder();
 			if (schedulerStateHolder.LoadedPeriod != null)
 			{
@@ -47,11 +42,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						schedulingOptions.GroupOnGroupPageForTeamBlockPer,
 						true);
 			}
+		}
 
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-				new GroupPersonBuilderForOptimization(()=>schedulerStateHolder.SchedulingResultState,
-					_groupPagePerDateHolder, new GroupCreator());
-			return groupPersonBuilderForOptimization;
+
+	}
+
+
+	public interface IGroupPersonBuilderWrapper
+	{
+		void SetSingleAgentTeam();
+		IGroupPersonBuilderForOptimization ForOptimization();
+		void Reset();
+	}
+
+	public class GroupPersonBuilderWrapper : IGroupPersonBuilderWrapper
+	{
+		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+		private GroupPersonBuilderForOptimizationAndSingleAgentTeam _singleAgentTeam;
+
+		public GroupPersonBuilderWrapper(IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		{
+			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+		}
+
+		public void SetSingleAgentTeam()
+		{
+			_singleAgentTeam = new GroupPersonBuilderForOptimizationAndSingleAgentTeam();
+		}
+
+		public IGroupPersonBuilderForOptimization ForOptimization()
+		{
+			return _singleAgentTeam ?? _groupPersonBuilderForOptimization;
+		}
+
+		public void Reset()
+		{
+			_singleAgentTeam = null;
 		}
 	}
 }

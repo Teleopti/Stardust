@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -15,18 +16,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamInfoFactory : ITeamInfoFactory
 	{
-		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 
-		public TeamInfoFactory(IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		public TeamInfoFactory(IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
 		{
-			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
 		public ITeamInfo CreateTeamInfo(IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
 			DateOnly firstDateOfMatrix = dateOnly;
-			Group group = _groupPersonBuilderForOptimization.BuildGroup(person, firstDateOfMatrix);
+			Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(person, firstDateOfMatrix);
 			if (!group.GroupMembers.Any()) return null;
 
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    Group group = _groupPersonBuilderForOptimization.BuildGroup(person, period.StartDate);
+		    Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(person, period.StartDate);
 		    if (group == null) return null;
 			if (!group.GroupMembers.Any()) return null;
 

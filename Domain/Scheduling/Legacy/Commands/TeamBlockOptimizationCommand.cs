@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
+		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -85,7 +86,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator)
+			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -119,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
+			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
 		public void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -134,8 +137,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
-			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+			_groupPersonBuilderWrapper.Reset();
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+			if (groupPageType == GroupPageType.SingleAgent)
+				_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			else
+				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+
+			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockScheudlingOptions);
 

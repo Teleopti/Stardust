@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -16,23 +15,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
+		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
+			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_weeklyRestSolverService = weeklyRestSolverService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
+			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker)
 		{
-			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+
+			_groupPersonBuilderWrapper.Reset();
+			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+			if (groupPageType == GroupPageType.SingleAgent)
+				_groupPersonBuilderWrapper.SetSingleAgentTeam();
+			else
+				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+			
+			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 

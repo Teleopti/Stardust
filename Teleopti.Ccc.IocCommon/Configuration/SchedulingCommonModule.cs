@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
 			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
+			builder.RegisterType<GroupPersonBuilderWrapper>().As<IGroupPersonBuilderWrapper>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().InstancePerLifetimeScope();

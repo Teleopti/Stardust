@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IGroupPersonBuilderForOptimizationFactory
 	{
-		IGroupPersonBuilderForOptimization Create(ISchedulingOptions schedulingOptions);
+		void Create(ISchedulingOptions schedulingOptions);
 	}
 }

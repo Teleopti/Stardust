@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff;
@@ -11,8 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     public interface IAdvanceDaysOffSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, 
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+		void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization);
     }
 
     public class AdvanceDaysOffSchedulingService : IAdvanceDaysOffSchedulingService
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         }
 
 		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
 			var cancelMe = false;
 			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>

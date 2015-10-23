@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private MockRepository _mocks;
 		private ITeamInfoFactory _target;
 		private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+		private IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private BaseLineData _baseLineData;
 
 		[SetUp]
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			_mocks = new MockRepository();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
-			_target = new TeamInfoFactory(_groupPersonBuilderForOptimization);
+			_groupPersonBuilderWrapper = _mocks.StrictMock<IGroupPersonBuilderWrapper>();
+			_target = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			_baseLineData = new BaseLineData();
 		}
 
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
@@ -80,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_groupPersonBuilderWrapper.ForOptimization()).Return(_groupPersonBuilderForOptimization);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
 
