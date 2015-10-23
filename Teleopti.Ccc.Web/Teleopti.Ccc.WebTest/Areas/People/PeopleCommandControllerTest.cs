@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private IPerson prepareData(DateTime date, IEnumerable<IPersonSkill> personSkills = null)
 		{
-			var person = new Person { Name = new Name("John", "Smith") };
+			var person = new Person {Name = new Name("John", "Smith")};
 			person.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);
 
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				foreach (var personSkill in personSkills)
 				{
-					newPeriod.AddPersonSkill(personSkill);	
+					newPeriod.AddPersonSkill(personSkill);
 				}
 			}
 
@@ -80,12 +79,77 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date.AddDays(10));
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel>
+				{
+					new SkillUpdateCommandInputModel {PersonId = person.Id.GetValueOrDefault()}
+				},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(2);
 			updatedPerson.PersonPeriodCollection.First().StartDate.Date.Should().Be.EqualTo(date);
+		}
+
+		[Test]
+		public void ShouldDoNothingWhenSkillListNotChanged()
+		{
+			const double phoneProficiency = 0.42;
+			const double emailProficiency = 0.84;
+
+			var date = new DateTime(2015, 8, 20);
+			var testDate = date.AddDays(-10);
+
+			var phoneSkill = SkillFactory.CreateSkillWithId("phone");
+			var phoneSkillId = phoneSkill.Id.GetValueOrDefault();
+			SkillRepository.Add(phoneSkill);
+
+			var emailSkill = SkillFactory.CreateSkillWithId("Email");
+			var emailSkillId = emailSkill.Id.GetValueOrDefault();
+			SkillRepository.Add(emailSkill);
+
+			var personSkills = new[]
+			{
+				new PersonSkill(phoneSkill, new Percent(phoneProficiency))
+				{
+					Active = true
+				},
+				new PersonSkill(emailSkill, new Percent(emailProficiency))
+				{
+					Active = false
+				}
+			};
+			var person = prepareData(testDate, personSkills);
+			var personId = person.Id.GetValueOrDefault();
+
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
+			{
+				People =
+					new List<SkillUpdateCommandInputModel>
+					{
+						new SkillUpdateCommandInputModel
+						{
+							PersonId = personId,
+							SkillIdList = new[] {phoneSkillId, emailSkillId}
+						}
+					},
+				Date = date
+			});
+			var updatedPerson = PersonRepository.Get(personId);
+			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
+
+			var existingPeriod = updatedPerson.PersonPeriodCollection.Single();
+			existingPeriod.StartDate.Date.Should().Be.EqualTo(date.AddDays(-10));
+			existingPeriod.PersonSkillCollection.Count().Should().Be.EqualTo(2);
+
+			var firstPersonSkill = existingPeriod.PersonSkillCollection.First();
+			firstPersonSkill.Skill.Id.Should().Be.EqualTo(phoneSkill.Id);
+			firstPersonSkill.Active.Should().Be.EqualTo(true);
+			firstPersonSkill.SkillPercentage.Should().Be.EqualTo(new Percent(phoneProficiency));
+
+			var secondPersonSkill = existingPeriod.PersonSkillCollection.Second();
+			secondPersonSkill.Skill.Id.Should().Be.EqualTo(emailSkill.Id);
+			secondPersonSkill.Active.Should().Be.EqualTo(false);
+			secondPersonSkill.SkillPercentage.Should().Be.EqualTo(new Percent(emailProficiency));
 		}
 
 		[Test]
@@ -97,19 +161,27 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var date = new DateTime(2015, 8, 20);
 			var testDate = date.AddDays(-10);
 
-			var skillPhone = SkillFactory.CreateSkillWithId("phone");
-			SkillRepository.Add(skillPhone);
+			var phoneSkill = SkillFactory.CreateSkillWithId("phone");
+			var phoneSkillId = phoneSkill.Id.GetValueOrDefault();
+			SkillRepository.Add(phoneSkill);
 
-			var skillEmail = SkillFactory.CreateSkillWithId("Email");
-			SkillRepository.Add(skillEmail);
+			var emailSkill = SkillFactory.CreateSkillWithId("Email");
+			SkillRepository.Add(emailSkill);
 
 			var personSkills = new[]
 			{
-				new PersonSkill(skillPhone, new Percent(phoneProficiency)),
-				new PersonSkill(skillEmail, new Percent(emailProficiency))
+				new PersonSkill(phoneSkill, new Percent(phoneProficiency))
+				{
+					Active = false
+				},
+				new PersonSkill(emailSkill, new Percent(emailProficiency))
+				{
+					Active = true
+				}
 			};
 			var person = prepareData(testDate, personSkills);
-			
+			var personId = person.Id.GetValueOrDefault();
+
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People =
@@ -117,18 +189,15 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					{
 						new SkillUpdateCommandInputModel
 						{
-							PersonId = person.Id.Value,
-							SkillIdList = new[]
-							{
-								skillPhone.Id.GetValueOrDefault()
-							}
+							PersonId = personId,
+							SkillIdList = new[] {phoneSkillId}
 						}
 					},
 				Date = date
 			});
-			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
+			var updatedPerson = PersonRepository.Get(personId);
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(2);
-			
+
 			var existingPeriod = updatedPerson.PersonPeriodCollection.First();
 			existingPeriod.StartDate.Date.Should().Be.EqualTo(date.AddDays(-10));
 			existingPeriod.PersonSkillCollection.Count().Should().Be.EqualTo(2);
@@ -138,7 +207,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			newCreatedPeriod.PersonSkillCollection.Count().Should().Be(1);
 
 			var personSkillInNewPeriod = newCreatedPeriod.PersonSkillCollection.Single();
-			personSkillInNewPeriod.Skill.Id.Should().Be.EqualTo(skillPhone.Id);
+			personSkillInNewPeriod.Skill.Id.Should().Be.EqualTo(phoneSkillId);
 			personSkillInNewPeriod.Active.Should().Be.EqualTo(true);
 			personSkillInNewPeriod.SkillPercentage.Should().Be.EqualTo(new Percent(phoneProficiency));
 		}
@@ -150,7 +219,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date);
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel>
+				{
+					new SkillUpdateCommandInputModel
+					{
+						PersonId = person.Id.GetValueOrDefault()
+					}
+				},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -166,7 +241,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			person.TerminatePerson(new DateOnly(date.AddDays(-1)), new PersonAccountUpdaterDummy());
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel>
+				{
+					new SkillUpdateCommandInputModel
+					{
+						PersonId = person.Id.GetValueOrDefault()
+					}
+				},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -185,7 +266,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				People =
 					new List<SkillUpdateCommandInputModel>
 					{
-						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
+						new SkillUpdateCommandInputModel
+						{
+							PersonId = person.Id.GetValueOrDefault(),
+							SkillIdList = new List<Guid> {skill.Id.GetValueOrDefault()}
+						}
 					},
 				Date = date
 			});
@@ -207,7 +292,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				People =
 					new List<SkillUpdateCommandInputModel>
 					{
-						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
+						new SkillUpdateCommandInputModel
+						{
+							PersonId = person.Id.GetValueOrDefault(),
+							SkillIdList = new List<Guid> {skill.Id.GetValueOrDefault()}
+						}
 					},
 				Date = date
 			});
@@ -239,8 +328,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					{
 						new ShiftBagUpdateCommandInputModel
 						{
-							PersonId = person.Id.Value,
-							ShiftBagId = shiftbag.Id.Value
+							PersonId = person.Id.GetValueOrDefault(),
+							ShiftBagId = shiftbag.Id.GetValueOrDefault()
 						}
 					},
 				Date = date
@@ -248,7 +337,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
 			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
-			personPeriod.RuleSetBag.Id.Should().Be.EqualTo(shiftbag.Id.Value);
+			personPeriod.RuleSetBag.Id.Should().Be.EqualTo(shiftbag.Id.GetValueOrDefault());
 			result.Content.Success.Should().Be.EqualTo(true);
 			result.Content.SuccessCount.Should().Be.EqualTo(1);
 		}
