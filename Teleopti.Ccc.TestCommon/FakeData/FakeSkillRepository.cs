@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ICollection<ISkill> FindAllWithoutMultisiteSkills()
 		{
-			throw new NotImplementedException();
+			return _skills;
 		}
 
 		public ICollection<ISkill> FindAllWithSkillDays(DateOnlyPeriod periodWithSkillDays)
