@@ -1,0 +1,10 @@
+﻿namespace Teleopti.Ccc.Domain.Intraday
+{
+	public class SkillStatusMeasure
+	{
+		public string Name { get; set; }
+		public double Value { get; set; }
+		public string StringValue { get; set; }
+		public int Severity { get; set; }
+	}
+}

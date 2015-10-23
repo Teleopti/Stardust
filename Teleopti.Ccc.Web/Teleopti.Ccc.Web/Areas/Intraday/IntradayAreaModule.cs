@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Intraday;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
@@ -6,8 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SkillForecastedTasksProvider>().As<ISkillTasksDetailProvider>().SingleInstance();
-			
+			builder.RegisterType<IntradaySkillStatusService>().SingleInstance();
 		}
 	}
 }

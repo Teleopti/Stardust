@@ -449,9 +449,8 @@
     <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
-    <Compile Include="Areas\Intraday\SkillForecastedTasksProvider.cs" />
-    <Compile Include="Areas\Intraday\IntradaySkillStatusController.cs" />
     <Compile Include="Areas\Intraday\IntradayAreaModule.cs" />
+    <Compile Include="Areas\Intraday\IntradaySkillStatusController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />

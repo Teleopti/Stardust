@@ -4,13 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.Web.Areas.Intraday;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Intraday
+namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	public class SkillForecastedTasksProviderTest
 	{
@@ -101,8 +100,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Intraday
 			return new SkillTaskDetailsModel()
 			{
 				SkillId = skillId,
-				Tasks = tasks,
-				CampaignTasks = campaign,
 				TotalTasks = tasks + (tasks*campaign),
 				Minimum = new DateTime(2015,10,21,9,0,0,DateTimeKind.Utc),
 				Maximum = new DateTime(2015,10,21,10,0,0,DateTimeKind.Utc)

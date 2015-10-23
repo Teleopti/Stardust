@@ -3,18 +3,19 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
     public class IntradaySkillStatusController : ApiController
     {
-	    private readonly ISkillTasksDetailProvider _skillTasksDetailProvider;
+	    private readonly IntradaySkillStatusService _intradaySkillStatusService;
 
-	    public IntradaySkillStatusController(ISkillTasksDetailProvider skillTasksDetailProvider)
-	    {
-		    _skillTasksDetailProvider = skillTasksDetailProvider;
-	    }
+		 public IntradaySkillStatusController(IntradaySkillStatusService intradaySkillStatusService)
+		 {
+			 _intradaySkillStatusService = intradaySkillStatusService;
+		 }
 
 	    [HttpGet]
 	    [UnitOfWork]
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	    public virtual JsonResult<List<SkillStatusModel>> GetSkillStatus()
 	    {
 		    var ret = new List<SkillStatusModel>();
-          var taskDetails = _skillTasksDetailProvider.GetForecastedTasks();
+			 var taskDetails = _intradaySkillStatusService.GetForecastedTasks();
 
 		    foreach (KeyValuePair<ISkill, IList<SkillTaskDetails>> pair in taskDetails)
 		    {
@@ -34,20 +35,4 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		    return Json(ret);
 	    }
     }
-
-	public class SkillStatusModel
-	{
-		public string	SkillName { get; set; }
-		public int  Severity { get; set; }
-
-		public List<SkillStatusMeasure> Measures { get; set; }
-	}
-
-	public class SkillStatusMeasure
-	{
-		public string Name { get; set; }
-		public double Value { get; set; }
-		public string StringValue { get; set; }
-		public int Severity { get; set; }
-	}
 }

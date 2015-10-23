@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Rhino.ServiceBus.DataStructures;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Intraday
+namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class SkillForecastedTasksProvider : ISkillTasksDetailProvider
+	public class SkillForecastedTasksProvider : ISkillForecastedTasksDetailProvider
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		}
 	}
 
-	public interface ISkillTasksDetailProvider
+	public interface ISkillForecastedTasksDetailProvider
 	{
 		IDictionary<ISkill, IList<SkillTaskDetails>> GetForecastedTasks();
 	}

@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -12,9 +15,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeStatisticRepository : IStatisticRepository
 	{
+		private Dictionary<IQueueSource, IList<IStatisticTask>> _statisticTaskDataPerQueueSource = new Dictionary<IQueueSource, IList<IStatisticTask>>();
+
 		public ICollection<IStatisticTask> LoadSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
 		{
-			throw new NotImplementedException();
+			IList<IStatisticTask> result = new List<IStatisticTask>();
+			foreach (var source in sources)
+			{
+				if (_statisticTaskDataPerQueueSource.ContainsKey(source))
+				{
+					foreach (var task in _statisticTaskDataPerQueueSource[source])
+					{
+						result.Add(task);
+					}
+				}
+			}
+			return result;
 		}
 
 		public ICollection<MatrixReportInfo> LoadReports()
@@ -110,6 +126,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _intradayStat;
 		}
+
+			public void FakeStatisticData(IQueueSource queueSource, List<IStatisticTask> statisticTaskList)
+			{
+				_statisticTaskDataPerQueueSource.Add(queueSource, statisticTaskList);
+			}
+		
 
 		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>(); 
 		public void AddIntradayStatistics(IList<IIntradayStatistics> intradayStat)
