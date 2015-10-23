@@ -12,9 +12,6 @@ angular.module('wfm.seatMap')
 			get: { method: 'POST', params: {Date: {}, SeatIds: [] }, isArray: true },
 			remove: { method: 'DELETE', params: {  }, isArray: false }
 		});
-		seatMapService.selectPeople = $resource('../api/SeatPlanner/SelectPeople',{}, {
-			save: { method: 'POST', params: { Date: {}, PersonIds: [] , SeatIds: []}, isArray: false }
-		});
 
 		return seatMapService;
 	}]);

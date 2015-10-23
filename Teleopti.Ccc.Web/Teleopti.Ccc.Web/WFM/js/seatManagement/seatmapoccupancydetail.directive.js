@@ -3,20 +3,21 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService','seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
 
-	function seatMapOccupancyDirectiveController(utils, seatMapService, growl, seatmapTranslator) {
+	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, growl, seatmapTranslator) {
 		var vm = this;
 
 		vm.selectedPeople = [];
 		vm.showPeopleSelection = false;
-
-		vm.previousSelectedSeats = [];
+		vm.previousSelectedSeatIds = [];
 
 		vm.asignAgentsToSeats = function () {
-			seatMapService.searchPeople.save({ Date: vm.scheduleDate, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeats }).$promise.then(function () {
-				vm.refreshSeatMap();
-			});
+
+			seatPlanService.seatPlan.add({ StartDate: vm.scheduleDate, EndDate: vm.scheduleDate, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
+									.$promise.then(function () {
+										vm.refreshSeatMap();
+									});
 		};
 		vm.getDisplayTime = function (booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
@@ -44,6 +45,7 @@
 
 		function setupObjectSelectionHandlers() {
 			var onObjectSelection = function (e, handleGroupOnlyAction) {
+
 				var object = e.target;
 
 				var objIsGroup = (object.get('type') == 'group');
@@ -97,20 +99,19 @@
 
 				if (count == unselectedCount) {
 					vm.occupancyDetails = undefined;
-					vm.previousSelectedSeats = [];
+					vm.previousSelectedSeatIds = [];
 				}
 			});
 
 		};
 
 		function loadOccupancyForSeats(seats) {
-			vm.previousSelectedSeats = seats;
-			var seatIds = [];
+			vm.previousSelectedSeatIds = [];
 			seats.forEach(function (seat) {
-				seatIds.push(seat.id);
+				vm.previousSelectedSeatIds.push(seat.id);
 			});
 
-			utils.loadOccupancyDetailsForSeats(seatIds, vm.scheduleDate).then(function (result) {
+			utils.loadOccupancyDetailsForSeats(vm.previousSelectedSeatIds, vm.scheduleDate).then(function (result) {
 				onSeatOccupancyLoaded(result, seats);
 			});
 		};
@@ -155,9 +156,9 @@
 		};
 
 		function selectSeat() {
-			if (vm.previousSelectedSeats.length > 0) {
-				if (vm.previousSelectedSeats.length == 1) {
-					var seat = utils.getSeatObjectById(canvas(), vm.previousSelectedSeats[0].id);
+			if (vm.previousSelectedSeatIds.length > 0) {
+				if (vm.previousSelectedSeatIds.length == 1) {
+					var seat = utils.getSeatObjectById(canvas(), vm.previousSelectedSeatIds[0]);
 					if (seat != null) {
 						canvas().setActiveObject(seat);
 					} else {
@@ -165,8 +166,8 @@
 					}
 				} else {
 					var seatObjects = [];
-					vm.previousSelectedSeats.forEach(function (seat) {
-						var seatObj = utils.getSeatObjectById(canvas(), seat.id);
+					vm.previousSelectedSeatIds.forEach(function (seatId) {
+						var seatObj = utils.getSeatObjectById(canvas(), seatId);
 						if (seatObj != null)
 							seatObjects.push(seatObj);
 					});

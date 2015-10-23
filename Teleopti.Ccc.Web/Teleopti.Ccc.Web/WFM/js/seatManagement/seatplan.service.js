@@ -18,7 +18,7 @@ angular.module('wfm.seatPlan')
 		});
 
 		seatPlanService.seatPlan = $resource('../api/SeatPlanner/SeatPlan', {}, {
-			add: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {} }, isArray: false }
+			add: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {}, PersonIds: [], SeatIds: [] }, isArray: false }
 		});
 
 		seatPlanService.seatBookingReport = $resource('../api/SeatPlanner/SeatBookingReport', {}, {
