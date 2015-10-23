@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B2", StateCode = "phone"});
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B3", StateCode = "phone"});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(teamIdA).Count.Should().Be(2);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(existingTeam).Count.Should().Be(3);

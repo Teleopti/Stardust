@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "state"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			var initializeTask = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
 
 			Handler.EnteredHandler.WaitOne(TimeSpan.FromSeconds(1));

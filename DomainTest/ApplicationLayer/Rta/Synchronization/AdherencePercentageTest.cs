@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			Now.Is("2015-01-08 12:00");
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Persister.Get(new DateOnly("2015-01-08".Utc()), personId).Should().Not.Be.Null();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Persister.Clear();
 			Now.Is("2015-04-11 8:00");
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
 
 			Persister.PersistedModels.Should().Be.Empty();

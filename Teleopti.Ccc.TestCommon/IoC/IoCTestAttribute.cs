@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public interface IIoCTestContext
 	{
-		void Reset();
-		void Reset(Action<ISystem, IIocConfiguration> setup);
+		void SimulateRestart();
 	};
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 
 		private IContainer _container;
+		private TestDoubles _testDoubles;
 		private object _fixture;
 		private Type _fixtureType;
 		private MethodInfo _method;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			fixture(testDetails);
 			method(testDetails);
-			buildContainer((b, c) => { });
+			buildContainer();
 			Startup(_container);
 			injectMembers();
 			BeforeTest();
@@ -103,36 +103,50 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_method = testDetails.Method;
 		}
 
-		private void buildContainer(Action<ISystem, IIocConfiguration> setup)
+		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
+			_testDoubles = new TestDoubles();
+			setupBuilder(new SystemImpl(builder, _testDoubles));
+			_container = builder.Build();
+		}
+
+		private void rebuildContainer()
+		{
+			var builder = new ContainerBuilder();
+			setupBuilder(new IgnoringTestDoubles(builder, null));
+			_testDoubles.RegisterFromPreviousContainer(builder);
+			_container = builder.Build();
+		}
+
+		private void setupBuilder(ISystem system)
+		{
 			var configReader = Config();
 			var args = new IocArgs(configReader)
 			{
-				ThrottleMessages = false// the throttler shouldnt be started in ioc common at all, but...
+				ThrottleMessages = false // the throttler shouldnt be started in ioc common at all, but...
 			};
 			var configuration = new IocConfiguration(args, Toggles());
-			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf().SingleInstance();
-			builder.RegisterType<FakeTime>().As<ITime>().AsSelf().SingleInstance();
+
+			system.AddModule(new CommonModule(configuration));
+
+			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
+			system.UseTestDouble<FakeTime>().For<ITime>();
 
 			// maybe these shouldnt be faked after all.. maybe its just the principal that should handle it..
-			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
-			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 
 			//don't check license for every test
-			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
+			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 
-			builder.RegisterInstance(configReader).AsSelf().As<IConfigReader>();
-			builder.RegisterInstance(this).As<IIoCTestContext>();
+			system.UseTestDouble(configReader).For<IConfigReader>();
 
-			var system = new ContainerBuilderWrapper(builder);
+			system.AddService(this);
+
 			Setup(system, configuration);
 			if (_fixture is ISetup)
 				(_fixture as ISetup).Setup(system, configuration);
-			setup(system, configuration);
-
-			_container = builder.Build();
 		}
 
 		private void disposeContainer()
@@ -166,19 +180,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return _container.Resolve<T>();
 		}
 
-
-
-		public void Reset()
+		public void SimulateRestart()
 		{
 			disposeContainer();
-			buildContainer((b, c) => { });
-			injectMembers();
-		}
-
-		public void Reset(Action<ISystem, IIocConfiguration> setup)
-		{
-			disposeContainer();
-			buildContainer(setup);
+			rebuildContainer();
 			injectMembers();
 		}
 

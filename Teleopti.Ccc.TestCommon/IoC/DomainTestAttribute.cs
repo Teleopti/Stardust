@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using NHibernate.Util;
+﻿using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;

@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Database.StoredState.AlarmTypeId.Should().Be(alarm);

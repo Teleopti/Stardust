@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "phone"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Activities.Single().StartTime
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				Model = null
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Should().Be.Null();

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(siteId).Count.Should().Be(1);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			Model.Get(existingSite).Count.Should().Be(3);

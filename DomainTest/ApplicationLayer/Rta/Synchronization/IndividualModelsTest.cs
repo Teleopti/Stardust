@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Context.SimulateRestartWith(Now, Database);
+			Context.SimulateRestart();
 			Rta.SaveState(new ExternalUserStateForTest());
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);

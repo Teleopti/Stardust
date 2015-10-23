@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode1"
 			});
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
-			context.SimulateRestartWith(now, database);
+			publisher.Clear();
+			context.SimulateRestart();
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
