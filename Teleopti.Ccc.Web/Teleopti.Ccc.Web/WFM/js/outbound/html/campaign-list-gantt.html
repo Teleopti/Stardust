@@ -11,11 +11,11 @@
 					   ng-model="settings.threshold"
 					   ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="gantt-travel-kit pull-left m-l-10" ng-show="isTravelEnabled">
-			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-l-0" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-left middle"></i></button>
-			<div class="gantt-datepicker-container inline-block relative" ng-init="showDatePicker=false">
-				<i class="mdi mdi-calendar" ng-click="showDatePicker=!showDatePicker"></i>
-				<input type="text" placeholder="{{settings.ganttStartDate | amDateFormat: 'L'}}" ng-click="showDatePicker=!showDatePicker" value="{{settings.ganttStartDate|amDateFormat: 'LL'}}" readonly />
+		<div class="gantt-travel-kit pull-left m-l-10  relative" ng-show="isTravelEnabled">
+			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-left middle"></i></button>
+			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
+				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
+				<input class="pointer" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.ganttStartDate|amDateFormat: 'LL'}}" readonly />
 				<div class="wfm-datepicker-wrap gantt-datepicker" ng-show="showDatePicker">
 					<datepicker show-weeks="true" ng-model="settings.ganttStartDate" class="wfm-datepicker" datepicker-mode="month" min-mode="month" ng-change="onChangeGanttDate();showDatePicker=false"></datepicker>
 				</div>

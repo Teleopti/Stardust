@@ -57,18 +57,22 @@
 		}
 	.gantt-datepicker{
 	    position:absolute;
-		top:20px;
-		left:-44px;
+		top:30px;
+		left:50%;
 		z-index:1000;
+		margin-left:-130px;
 	}
 	.gantt-datepicker-container{
 		.wfm-datepicker-wrap{
-		    min-height:initial;
-			padding-bottom:10px;
+		    min-height:auto;
+			padding:5px;
 		}
 	}
 	.wfm-btn-sm{
 	    padding:5px;
+	}
+	.pointer{
+	    cursor:pointer;
 	}
 	.outbound-gantt-chart {
 		.gantt-alert-message{
