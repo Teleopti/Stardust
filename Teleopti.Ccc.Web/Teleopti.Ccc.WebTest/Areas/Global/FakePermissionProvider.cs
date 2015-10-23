@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{
-		private static readonly List<string> applicationFunctions = new List<string>();
+		private readonly List<string> applicationFunctions = new List<string>();
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			throw new NotImplementedException();
 		}
 
-		public static void Permit(string applicationFunction)
+		public void Permit(string applicationFunction)
 		{
 			if (!applicationFunctions.Contains(applicationFunction))
 				applicationFunctions.Add(applicationFunction);

@@ -32,13 +32,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldHaveRtaAreaWhenFeatureEnabledAndPermitted()
 		{
 			ToggleManager.Enable(Toggles.Wfm_RTA_34621);
-			FakePermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 			areas.Single().Name.Invoke().Should().Be(Resources.RealTimeAdherence);
 			areas.Single().InternalName.Should().Be("rta");
+		}
+
+		[Test]
+		public void ShouldNotHaveRtaAreaWhenFeatureIsDisabled()
+		{
+			ToggleManager.Disable(Toggles.Wfm_RTA_34621);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHaveRtaAreaWhenItIsNotPermitted()
+		{
+			ToggleManager.Enable(Toggles.Wfm_RTA_34621);
+			
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
 		}
 	}
 }

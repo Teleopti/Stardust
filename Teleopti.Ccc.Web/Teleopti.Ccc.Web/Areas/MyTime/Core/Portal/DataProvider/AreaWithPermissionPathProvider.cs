@@ -89,7 +89,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.SeatPlanner_Logon_32003);
 			}
-
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview))
+			{
+				return _toggleManager.IsEnabled(Toggles.Wfm_RTA_34621);
+			}
 			return true;
 		}
 	}
