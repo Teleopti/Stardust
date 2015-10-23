@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -37,37 +37,27 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected virtual FakeToggleManager Toggles()
 		{
 			var toggles = new FakeToggleManager();
-
-			var enableTogglesFixture = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
-			var enableTogglesTest = _method.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
-			var enableToggles = enableTogglesFixture.Union(enableTogglesTest);
-
-			enableToggles.ForEach(a => toggles.Enable(a.Toggle));
-
-			var disableTogglesFixture = _fixtureType.GetCustomAttributes(typeof(ToggleOffAttribute), false).Cast<ToggleOffAttribute>();
-			var disableTogglesTest = _method.GetCustomAttributes(typeof(ToggleOffAttribute), false).Cast<ToggleOffAttribute>();
-			var disableToggles = disableTogglesFixture.Union(disableTogglesTest);
-
-			disableToggles.ForEach(a => toggles.Disable(a.Toggle));
-
+			QueryAllAttributes<ToggleAttribute>().ForEach(a => toggles.Enable(a.Toggle));
+			QueryAllAttributes<ToggleOffAttribute>().ForEach(a => toggles.Disable(a.Toggle));
 			return toggles;
 		}
 
 		protected virtual FakeConfigReader Config()
 		{
 			var config = new FakeConfigReader();
-
-			var settingsFixture = _fixtureType.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
-			var settingsTest = _method.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
-			var settingsAttribute = GetType().GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
-			var settings = settingsFixture
-				.Union(settingsTest)
-				.Union(settingsAttribute)
-				.ToArray();
-
-			settings.ForEach(x => config.FakeSetting(x.Setting, x.Value));
-
+			QueryAllAttributes<SettingAttribute>().ForEach(x => config.FakeSetting(x.Setting, x.Value));
 			return config;
+		}
+
+		protected IEnumerable<T> QueryAllAttributes<T>()
+		{
+			var fromFixture = _fixtureType.GetCustomAttributes(typeof (T), false).Cast<T>();
+			var fromTest = _method.GetCustomAttributes(typeof (T), false).Cast<T>();
+			var fromAttribute = GetType().GetCustomAttributes(typeof (T), false).Cast<T>();
+			return fromFixture
+				.Union(fromTest)
+				.Union(fromAttribute)
+				.ToArray();
 		}
 
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
@@ -123,18 +113,25 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			};
 			var configuration = new IocConfiguration(args, Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
-			builder.RegisterInstance(new FakeTime()).As<ITime>().AsSelf();
+			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf().SingleInstance();
+			builder.RegisterType<FakeTime>().As<ITime>().AsSelf().SingleInstance();
+
+			// maybe these shouldnt be faked after all.. maybe its just the principal that should handle it..
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
-			builder.RegisterInstance(new SetNoLicenseActivator()).As<ISetLicenseActivator>().SingleInstance(); //don't check license for every test
+
+			//don't check license for every test
+			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
+
 			builder.RegisterInstance(configReader).AsSelf().As<IConfigReader>();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
+
 			var system = new ContainerBuilderWrapper(builder);
 			Setup(system, configuration);
 			if (_fixture is ISetup)
 				(_fixture as ISetup).Setup(system, configuration);
 			setup(system, configuration);
+
 			_container = builder.Build();
 		}
 

@@ -1,5 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System;
+using System.Threading;
+using NHibernate.Util;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,6 +25,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			fakePrincipal(system);
+
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
@@ -77,6 +83,25 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeWorkRuleSettingsRepository>().For<IWorkRuleSettingsRepository>();
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
+		}
+
+		private void fakePrincipal(ISystem system)
+		{
+			var principal = new FakeCurrentTeleoptiPrincipal();
+			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
+			if (signedIn)
+			{
+				// because DomainTest project has a SetupFixtureForAssembly that creates a principal and sets it to that static thing... 
+				var thePrincipal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+				if (thePrincipal == null)
+					// add more when required, but we have to sure its the correct "things" added
+					// for example, which datasource? if the test creates one, it should probably be that one...
+					// and for businessunit, it should probably not just be just "newing up" one
+					// MAYBE the principal should be create on demand (Func<ITeleoptiPrincipal>), adding whatever is the ICurrent* stuff at the time
+					thePrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null), null);
+				principal.Fake(thePrincipal);
+			}
+			system.UseTestDouble(principal).For<ICurrentTeleoptiPrincipal>();
 		}
 	}
 }

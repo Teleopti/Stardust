@@ -4,13 +4,18 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentTeleoptiPrincipal : ICurrentTeleoptiPrincipal
 	{
-		private readonly ITeleoptiPrincipal _principal;
+		private ITeleoptiPrincipal _principal;
 
 		public FakeCurrentTeleoptiPrincipal()
 		{
 		}
 
 		public FakeCurrentTeleoptiPrincipal(ITeleoptiPrincipal principal)
+		{
+			_principal = principal;
+		}
+
+		public void Fake(ITeleoptiPrincipal principal)
 		{
 			_principal = principal;
 		}

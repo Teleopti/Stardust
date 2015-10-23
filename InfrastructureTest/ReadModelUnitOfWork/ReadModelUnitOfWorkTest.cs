@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			system.AddService<NestedService2>();
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
-			system.UseTestDouble(new MutableFakeCurrentTeleoptiPrincipal()).For<ICurrentTeleoptiPrincipal>();
+			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<ICurrentApplicationData, IDataSourceForTenant>();
 		}
 	}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public NestedService2 NestedService2;
 		public MutableFakeCurrentHttpContext HttpContext;
 		public ICurrentReadModelUnitOfWork UnitOfWork;
-		public MutableFakeCurrentTeleoptiPrincipal Principal;
+		public FakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
 		public FakeApplicationDataWithTestDatasource ApplicationData;
 		public FakeConfigReader ConfigReader;
@@ -206,10 +206,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				var dataSource1 = factory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTests, null);
 				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 
-				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
+				Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
 				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
+				Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
 				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);

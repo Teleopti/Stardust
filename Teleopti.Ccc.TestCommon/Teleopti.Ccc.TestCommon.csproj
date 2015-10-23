@@ -224,6 +224,7 @@
     <Compile Include="IoC\DomainTestAttribute.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\ISetup.cs" />
+    <Compile Include="IoC\LoggedOffAttribute.cs" />
     <Compile Include="IoC\SettingAttribute.cs" />
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
@@ -265,7 +266,6 @@
     <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeConfigReader.cs" />
     <Compile Include="SwedishCulture.cs" />
-    <Compile Include="MutableFakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Web\FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\AbsenceAccountFactory.cs" />
