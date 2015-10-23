@@ -1272,6 +1272,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.factory.js" />
     <Content Include="WFM\js\teamSchedule\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
+    <Content Include="WFM\tests\global\currentuserinfo.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />

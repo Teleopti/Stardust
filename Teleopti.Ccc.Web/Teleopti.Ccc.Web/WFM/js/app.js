@@ -173,31 +173,7 @@ wfm.config([
 ]).run([
 	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo','FakeDateTime',
 	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout, currentUserInfo, fakeDateTime) {
-		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
-
-		function checkCurrentUser() {
-			return $http.get('../api/Global/User/CurrentUser');
-		};
-
-		function userNotAuthenticatedHandler(data, state) {
-			var unAuthenticatedStateCode = 401;
-			if (state === unAuthenticatedStateCode) {
-				if (window.location.hash) {
-					var d = new Date();
-					d.setTime(d.getTime() + (5 * 60 * 1000));
-					var expires = 'expires=' + d.toUTCString();
-					document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
-				}
-			}
-
-			$sessionStorage.$reset();
-			window.location = 'Authentication';
-		};
-
-		function increaseTimeout() {
-			timeout = Date.now() + 10000;
-		};
 
 		function broadcastEventOnToggle() {
 			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
@@ -207,34 +183,32 @@ wfm.config([
 			});
 		}
 
-		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+		var ab1 = new ABmetrics();
+		ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
 
-			if (Date.now() > timeout) { // TODO : extract it in a service
+		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+			if (!currentUserInfo.isConnected()){
 				event.preventDefault();
-				var context = checkCurrentUser();
-				context.error(function (data, state) {
-					userNotAuthenticatedHandler(data, state);
-				});
-				context.success(function (data) {
-					increaseTimeout();
+				currentUserInfo.initContext().then(function () {
 					$state.go(next, toParams);
 				});
 			}
 		});
 
+		$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+			ab1.sendPageView();
+			HelpService.updateState($state.current.name);
+		});
+
 		broadcastEventOnToggle();
 
-		var startContext = checkCurrentUser();
-		startContext.error(function (data,state) {
-			userNotAuthenticatedHandler(data, state);
-		});
-		startContext.success(function (data) {
+		var startContext = currentUserInfo.initContext();
+		startContext.then(function (data) {
 			$rootScope.isAuthenticated = true;
 			wfm_cultureInfo_numberFormat = data.NumberFormat;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
 			angularMoment.changeLocale(data.DateFormatLocale);
-			increaseTimeout();
 
 			currentUserInfo.SetCurrentUserInfo(data);
 
@@ -252,14 +226,6 @@ wfm.config([
 				currentLang = primaryLang;
 			}
 			i18nService.setCurrentLang(currentLang);
-
-			var ab1 = new ABmetrics();
-			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
-			$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
-				ab1.sendPageView();
-				HelpService.updateState($state.current.name);
-			});
-
 
 			var buid = $sessionStorage.buid;
 			if (buid) {

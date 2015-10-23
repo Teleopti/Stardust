@@ -6,7 +6,7 @@
         .factory('httpInterceptor', ['$q','growl', '$sessionStorage', httpInterceptor]);
 
 	function httpInterceptor($q, growl, $sessionStorage) {
-		/*var service = {
+		var service = {
 			'responseError': reject
 		};
 		return service;
@@ -32,7 +32,7 @@
 			} else {
 				return rejection;
 			}
-		};*/
-		return {};
+		};
+		//return {};
 	}
 })();
