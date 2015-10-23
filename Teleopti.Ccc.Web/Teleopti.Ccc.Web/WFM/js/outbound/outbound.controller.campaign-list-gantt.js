@@ -19,6 +19,7 @@
 
 		$scope.isGanttEnabled = false;
 		$scope.isLoadFinished = false;
+		$scope.month = "month";
 
 		$scope.$watch(function() {
 			return OutboundToggles.ready;
