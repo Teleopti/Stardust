@@ -11,7 +11,7 @@
 					   ng-model="settings.threshold"
 					   ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="gantt-travel-kit pull-left m-l-10  relative" ng-show="isTravelEnabled">
+		<div class="gantt-travel-kit pull-left m-l-10  relative" ng-show="isNavigationEnabled">
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>

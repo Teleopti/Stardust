@@ -7,7 +7,7 @@
 
 		self.toggleNames = [
 			'Wfm_Outbound_Campaign_GanttChart_34259',
-			'Wfm_Outbound_Campaign_GanttChart_Travel_34924'
+			'Wfm_Outbound_Campaign_GanttChart_Navigation_34924'
 		];
 
 		self.toggles = {};
@@ -15,20 +15,20 @@
 
 		$q.all(self.toggleNames.map(function(t) {
 			return Toggle.isFeatureEnabled.query({ toggle: t }).$promise;
-		})).then(function (resp) {			
+		})).then(function(resp) {
 			for (var i = 0; i < self.toggleNames.length; i ++) {
 				self.toggles[self.toggleNames[i]] = resp[i].IsEnabled;
-			}			
+			}
 			self.ready = true;
 		});
 
-		self.isGanttEnabled = function () {
+		self.isGanttEnabled = function() {
 			return self.ready && self.toggles['Wfm_Outbound_Campaign_GanttChart_34259'];
 		};
 
-		self.isTravelEnabled=function() {
-						return self.ready && self.toggles['Wfm_Outbound_Campaign_GanttChart_Travel_34924'];
-					}
+		self.isNavigationEnabled = function() {
+			return self.ready && self.toggles['Wfm_Outbound_Campaign_GanttChart_Navigation_34924'];
+		}
 	}
 
 })();
