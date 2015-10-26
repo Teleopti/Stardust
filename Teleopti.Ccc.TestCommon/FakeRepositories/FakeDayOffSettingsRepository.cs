@@ -10,6 +10,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly IList<DayOffSettings> _workRuleSettings = new List<DayOffSettings>();
 
+		public FakeDayOffSettingsRepository()
+		{
+			//adding default settings
+			_workRuleSettings.Add(new DayOffSettings().WithId());
+		}
+
 		public void Add(DayOffSettings root)
 		{
 			_workRuleSettings.Add(root);
@@ -41,5 +47,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
+		public DayOffSettings DefaultSettings()
+		{
+			return _workRuleSettings.Single(x => x.Default);
+		}
 	}
 }

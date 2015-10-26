@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeDayOffSettingsRepository DayOffSettingsRepository;
 		public IScheduleRepository ScheduleRepository;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffSettingsRepository.Add(new DayOffSettings());
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site")}, schedulePeriod, skill);
@@ -78,7 +76,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffSettingsRepository.Add(new DayOffSettings());
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(1), weeklyRest)

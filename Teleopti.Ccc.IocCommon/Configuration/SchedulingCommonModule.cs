@@ -319,6 +319,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>().SingleInstance();
 			builder.RegisterType<OptimizationPreferencesFactory>().SingleInstance();
+			builder.RegisterType<FetchDayOffSettingsModel>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
