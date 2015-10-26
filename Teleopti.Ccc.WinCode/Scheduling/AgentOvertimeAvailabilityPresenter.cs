@@ -30,16 +30,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var scheduleDate = _scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var person = _scheduleDay.Person;
-			var personPeriod = person.Period(scheduleDate);
-			var periodStartDate = person.SchedulePeriodStartDate(scheduleDate);
 			long workLengthTicks = 0;
-			if (personPeriod != null && periodStartDate.HasValue)
-			{
-				if (personPeriod.PersonContract.Contract.WorkTimeSource == WorkTimeSource.FromContract)
-					workLengthTicks = (long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
-				else
-					workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
-			}
+
+			var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
+			if (averageWorkTimeOfDay.WorkTimeSource == WorkTimeSource.FromContract)
+				workLengthTicks = (long) (averageWorkTimeOfDay.AverageWorkTime.Ticks*averageWorkTimeOfDay.PartTimePercentage.Value);
+			else
+				workLengthTicks = averageWorkTimeOfDay.AverageWorkTime.Ticks;
+
 			_endTime = _startTime.Add(TimeSpan.FromTicks(workLengthTicks));
 		}
 

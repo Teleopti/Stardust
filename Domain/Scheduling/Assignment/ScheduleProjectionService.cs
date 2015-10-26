@@ -76,19 +76,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var scheduleDate = ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var person = ScheduleDay.Person;
-				var personPeriod = person.Period(scheduleDate);
-				var periodStartDate = person.SchedulePeriodStartDate(scheduleDate);
 				long workLengthTicks = 0;
-				var shouldWork = false;
-				if (personPeriod != null && periodStartDate.HasValue)
-				{
-                    if (personPeriod.PersonContract.Contract.WorkTimeSource == WorkTimeSource.FromContract)
-                        workLengthTicks = (long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks*personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
-                    else
-                        workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
-					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStartDate.Value, scheduleDate) &&
-						!ScheduleDay.HasDayOff();
-				}
+
+				var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
+				if (averageWorkTimeOfDay.WorkTimeSource == WorkTimeSource.FromContract)
+					workLengthTicks = (long) (averageWorkTimeOfDay.AverageWorkTime.Ticks*averageWorkTimeOfDay.PartTimePercentage.Value);
+				else
+					workLengthTicks = averageWorkTimeOfDay.AverageWorkTime.Ticks;
+
+				var shouldWork = averageWorkTimeOfDay.IsWorkDay && !ScheduleDay.HasDayOff();
+
 				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
 				if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
 					projection.Add(fakeLayer);

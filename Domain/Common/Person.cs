@@ -877,24 +877,34 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-        public virtual TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly)
+		public virtual PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly)
         {
             var personPeriod = Period(dateOnly);
-            if (personPeriod == null) return TimeSpan.Zero;
-            var contract = personPeriod.PersonContract.Contract;
+            if (personPeriod == null) return new PersonWorkDay(dateOnly);
+
+			var averageWorkTimePerDay = TimeSpan.Zero;
+			var contract = personPeriod.PersonContract.Contract;
+			var contractSchedule = personPeriod.PersonContract.ContractSchedule;
+			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage;
             switch (contract.WorkTimeSource)
             {
                 case WorkTimeSource.FromContract:
-                    return contract.WorkTime.AvgWorkTimePerDay;
+		            averageWorkTimePerDay = contract.WorkTime.AvgWorkTimePerDay;
+					break;
                 case WorkTimeSource.FromSchedulePeriod:
                     {
                         var schedulePeriod = VirtualSchedulePeriod(dateOnly);
-                        return schedulePeriod == null
-                                   ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
-                                   : schedulePeriod.AverageWorkTimePerDay;
+	                    averageWorkTimePerDay = schedulePeriod == null
+		                    ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
+		                    : schedulePeriod.AverageWorkTimePerDay;
+						break;
                     }
             }
-            return TimeSpan.Zero;
+			var schedulePeriodStartDate = SchedulePeriodStartDate(dateOnly);
+			return new PersonWorkDay(dateOnly, averageWorkTimePerDay,
+				contract.WorkTimeSource,
+				partTimePercentage != null ? partTimePercentage.Percentage : new Percent(1d),
+				contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly));
         }
 
 		public override int GetHashCode()
@@ -902,4 +912,5 @@ namespace Teleopti.Ccc.Domain.Common
 			return base.GetHashCode() ^ 431;
 		}
     }
+
 }

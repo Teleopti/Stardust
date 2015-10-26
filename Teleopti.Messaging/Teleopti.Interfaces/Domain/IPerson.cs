@@ -250,7 +250,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns>work time</returns>
-        TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly);
+		PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly);
 
 		/// <summary>
 		/// activates / reactivates person
@@ -286,4 +286,27 @@ namespace Teleopti.Interfaces.Domain
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 	    bool IsTerminated();
     }
+
+	public struct PersonWorkDay
+	{
+		public PersonWorkDay(DateOnly date, bool workDay = false)
+			: this(date,TimeSpan.Zero, WorkTimeSource.FromSchedulePeriod, new Percent(1), workDay)
+		{
+		}
+
+		public PersonWorkDay(DateOnly date, TimeSpan averageWorkTime, WorkTimeSource workTimeSource, Percent partTimePercentage, bool isWorkDay = false) : this()
+		{
+			IsWorkDay = isWorkDay;
+			AverageWorkTime = averageWorkTime;
+			WorkTimeSource = workTimeSource;
+			Date = date;
+			PartTimePercentage = partTimePercentage;
+		}
+
+		public DateOnly Date { get; private set; }
+		public TimeSpan AverageWorkTime { get; private set; }
+		public WorkTimeSource WorkTimeSource { get; private set; }
+		public Percent PartTimePercentage { get; private set; }
+		public bool IsWorkDay { get; private set; }
+	}
 }

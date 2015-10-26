@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[SetUp]
 		public void SetUp()
 		{
-			
 			_mock = new MockRepository();
 			_scenario = new Scenario("scenario");
 			_dateOnly = new DateOnly(2014, 1, 1);
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_skill = SkillFactory.CreateSkill("skill");
 			_skill.Activity = _skillActivity;
 			_person = PersonFactory.CreatePerson("person");
-			var start = new DateTime(_dateOnly.Year, _dateOnly.Month, _dateOnly.Day, 10, 0, 0, DateTimeKind.Utc);
+			var start = DateTime.SpecifyKind(_dateOnly.Date.AddHours(10), DateTimeKind.Utc);
 			var end = start.AddMinutes(5);
 			_mainShiftPeriod = new DateTimePeriod(start, end);
 			_intervalPeriod = new DateTimePeriod(start, end.AddMinutes(25));

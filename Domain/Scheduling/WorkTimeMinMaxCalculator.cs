@@ -50,14 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var person = scheduleDay.Person;
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var personPeriod = person.Period(scheduleDate);
-			var personContract = personPeriod.PersonContract;
-			var avgWorkTime = new TimeSpan((long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personContract.PartTimePercentage.Percentage.Value));
+			var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
+			var avgWorkTime = new TimeSpan((long)(averageWorkTimeOfDay.AverageWorkTime.Ticks * averageWorkTimeOfDay.PartTimePercentage.Value));
 
-			var schedulePeriod = person.VirtualSchedulePeriod(scheduleDate);
-
-			if (!personContract.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDate))
-				return null;
+			if (!averageWorkTimeOfDay.IsWorkDay) return null;
 
 			return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(avgWorkTime, avgWorkTime)};
 		}

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -659,7 +658,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void ShouldCheckPersonHasPersonPeriodBeforeGetContractTime()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.Zero));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.Zero));
         }
 
         [Test]
@@ -672,7 +671,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
         }
 
         [Test]
@@ -688,7 +687,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(dateOnly);
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
             _target.AddSchedulePeriod(schedulePeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromHours(6)));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.FromHours(6)));
         } 
         
         [Test]
@@ -716,7 +715,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             schedulePeriod.PeriodTime = new TimeSpan(0, 167, 42, 0);
             schedulePeriod.DaysOff = 12;
             _target.AddSchedulePeriod(schedulePeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
         }
 
 	    [Test]
@@ -725,8 +724,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			DateOnly dateOnly = new DateOnly();
 		    MockRepository mocks = new MockRepository();
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
-	        var scenario = mocks.DynamicMock<IScenario>();
-		    using (mocks.Record())
+	        using (mocks.Record())
 		    {
 			   Expect.Call(() => personAccountUpdater.Update(_target))
 				   .Repeat.Once();
@@ -735,8 +733,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 		    {
 				_target.TerminatePerson(dateOnly, personAccountUpdater);
 		    }
-
-
 	    }
 
 		[Test]
