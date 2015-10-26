@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpPost, Route("api/Outbound/Campaign/Period/Load"), UnitOfWork]
 		public virtual bool LoadData([FromBody]GanttPeriod period)
 		{
+			_campaignListProvider.ResetCache();
 			_campaignListProvider.LoadData(period);
 			return true;
 		}

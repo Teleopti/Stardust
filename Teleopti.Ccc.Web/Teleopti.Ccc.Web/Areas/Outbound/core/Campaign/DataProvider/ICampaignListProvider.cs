@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		CampaignStatistics GetCampaignStatistics(GanttPeriod peroid);
 		void LoadData(GanttPeriod peroid);
+		void ResetCache();
 		CampaignSummary GetCampaignById(Guid Id);
 		IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period);
 	}

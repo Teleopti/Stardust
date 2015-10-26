@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			updateCache(campaigns);
 		}
 
+		public void ResetCache()
+		{
+			_outboundScheduledResourcesCacher.Reset();
+		}
+
 		public CampaignStatistics GetCampaignStatistics(GanttPeriod peroid)
 		{
 			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
@@ -249,7 +254,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		private void updateCache(IEnumerable<IOutboundCampaign> campaigns)
 		{
-			_outboundScheduledResourcesCacher.Reset();
 			foreach (var campaign in campaigns)
 			{
 				var dates = campaign.SpanningPeriod.DateCollection();
