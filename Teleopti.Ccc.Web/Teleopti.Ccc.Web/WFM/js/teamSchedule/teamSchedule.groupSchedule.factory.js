@@ -14,7 +14,16 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 			var schedules = [];
 			angular.forEach(groupSchedules, function(schedule) {
 				var scheduleVm = personSchedule;
-				schedules.push(scheduleVm.Create(schedule, groupScheduleViewModel.TimeLine));
+				var personExisted = false;
+				for (var i = 0; i < schedules.length; i++) {
+					if (schedules[i].PersonId == schedule.PersonId) {
+						personExisted = true;
+					}
+				}
+				if (!personExisted) {
+					schedules.push(scheduleVm.Create(schedule, groupScheduleViewModel.TimeLine));
+				}
+				
 			});
 
 			groupScheduleViewModel.Schedules = schedules;
