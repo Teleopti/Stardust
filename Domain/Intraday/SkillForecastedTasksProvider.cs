@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -19,31 +21,50 @@ namespace Teleopti.Ccc.Domain.Intraday
 			//can this be different?
 		}
 
-		public IDictionary<ISkill, IList<SkillTaskDetails>> GetForecastedTasks()
+		public IList<SkillTaskDetails> GetForecastedTasks()
 		{
 			var allSkills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
 			var skillToTaskData =  _skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), allSkills.ToList(),
-				_scenarioRepository.LoadDefaultScenario());
-			var result = new Dictionary<ISkill, IList<SkillTaskDetails>>();
+				_scenarioRepository.LoadDefaultScenario()).ToList();
+			var result = new List<SkillTaskDetails>();
 			foreach (var item in skillToTaskData)
 			{
-				var skill = allSkills.First(x => x.Id == item.SkillId);
-				if (!result.ContainsKey(skill))
+				if (!result.Contains(new SkillTaskDetails(){SkillId = item.SkillId}))
 				{
-					result.Add(skill, new List<SkillTaskDetails>()); 
+					result.Add(new SkillTaskDetails()
+					{
+						SkillId = item.SkillId,
+						SkillName = item.Name,
+						IntervalTasks =
+							skillToTaskData.Where(x => x.SkillId == item.SkillId)
+								.Select(x => new IntervalTasks() {Interval = new DateTimePeriod(x.Minimum, x.Maximum), Task = x.TotalTasks}).ToList()
+					});
 				}
-				result[skill].Add(new SkillTaskDetails(){Interval = new DateTimePeriod(item.Minimum,item.Maximum),Task = item.TotalTasks});
 			}
+			
 			return result;
 		}
 	}
 
 	public interface ISkillForecastedTasksDetailProvider
 	{
-		IDictionary<ISkill, IList<SkillTaskDetails>> GetForecastedTasks();
+		IList<SkillTaskDetails> GetForecastedTasks();
 	}
 
-	public class SkillTaskDetails
+	public class SkillTaskDetails : IEquatable<SkillTaskDetails>
+	{
+		public Guid SkillId { get; set; }
+		public string SkillName { get; set; }
+		public List<IntervalTasks> IntervalTasks { get; set; }
+
+		public bool Equals(SkillTaskDetails other)
+		{
+			return SkillId==other.SkillId;
+		}
+
+	}
+
+	public class IntervalTasks
 	{
 		public DateTimePeriod Interval { get; set; }
 		public double Task { get; set; }

@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var ret = new List<SkillStatusModel>();
 			var taskDetails = _skillForecastedTasksDetailProvider.GetForecastedTasks();
 
-			foreach (KeyValuePair<ISkill, IList<SkillTaskDetails>> pair in taskDetails)
+			foreach (var item in taskDetails)
 			{
-				var skill = pair.Key;
-				var values = pair.Value;
+				var skill = item.SkillName;
+				var values = item.IntervalTasks;
 				var sumvalues = values.Sum(tasks => tasks.Task);
-				ret.Add(new SkillStatusModel { SkillName = skill.Name, Measures = new List<SkillStatusMeasure> { new SkillStatusMeasure { Name = "Calls", Value = sumvalues, Severity = 1 } } });
+				ret.Add(new SkillStatusModel { SkillName = skill, Measures = new List<SkillStatusMeasure> { new SkillStatusMeasure { Name = "Calls", Value = sumvalues, Severity = 1 } } });
 			}
 
 			return ret;

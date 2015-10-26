@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			//system.AddModule(new IntradayAreaModule());
 			system.UseTestDouble<IntradaySkillStatusService>().For<IIntradaySkillStatusService>();
 			system.UseTestDouble<SkillForecastedTasksProvider>().For<ISkillForecastedTasksDetailProvider>();
+			system.UseTestDouble<SkillActualTasksProvider>().For<ISkillActualTasksProvider>();
 		}
 	}
 }
