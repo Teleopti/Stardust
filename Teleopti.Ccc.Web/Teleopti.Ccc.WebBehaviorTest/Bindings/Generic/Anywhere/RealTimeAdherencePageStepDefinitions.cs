@@ -160,6 +160,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(string.Format("span:contains('{0}')", businessUnitName));
 		}
 
+		[When(@"I change to business unit '(.*)'")]
+		public void WhenIChangeToBusinessUnit(string businessUnitName)
+		{
+			Browser.Interactions.ClickContaining("option", businessUnitName);
+		}
+
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
 			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";

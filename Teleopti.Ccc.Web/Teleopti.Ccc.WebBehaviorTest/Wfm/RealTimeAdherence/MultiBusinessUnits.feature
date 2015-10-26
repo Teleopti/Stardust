@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Real time adherence multiple business units
+﻿Feature: Real time adherence multiple business units
 	In order to ...
 	As a real time analyst
 	I want to see ...
@@ -23,14 +22,14 @@ Scenario: Should display sites of a selected business unit
 	And there is a team named 'Green' on site 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
-	 | Team       | Red |
+	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
 	And Ashley Andeen has a person period with
-	 | Field      | Value       |
-	 | Team       | Green |
-	 | Start Date | 2014-01-21  |
-	When I view Real time adherence overview
-	And I choose business unit 'Business Unit 1'
+	 | Field      | Value      |
+	 | Team       | Green      |
+	 | Start Date | 2014-01-21 |
+	When I view Real time adherence sites
+	And I change to business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
 
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
@@ -57,11 +56,11 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	| Business Unit | Business Unit 1 |
 	| Phone state   | Ready           |
 	And the time is '2014-01-21 12:30:00'
-	When I view Real time adherence overview
-	And I choose business unit 'Business Unit 1'
-	And I view real time adherence for team 'Red'
+	When I view Real time adherence sites
+	And I change to business unit 'Business Unit 1'
+	And I view real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	Then I should see real time agent details for 'Pierre Baldi'
-		| Name                     |                  |
-		| Name                     | Pierre Baldi     |
-		| State                    | Ready            |
+	Then I should see agent details for 'Pierre Baldi'
+		| Name  |              |
+		| Name  | Pierre Baldi |
+		| State | Ready        |
