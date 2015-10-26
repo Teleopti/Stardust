@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists(".wfm-btn:enabled");
 			Browser.Interactions.Click(".wfm-btn");
+			Browser.Interactions.AssertExists(".schedule-button:enabled");
 		}
 
 
