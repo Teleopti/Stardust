@@ -1037,6 +1037,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IDateOnlyAsDateTimePeriod periodPart1 = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), _timeZoneInfo);
 			IDateOnlyAsDateTimePeriod periodPart2 = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 2), _timeZoneInfo);
 
+			var absence = new Absence();
+			var absenceLayer = new AbsenceLayer (absence, rangePeriod);
+
             using (_mocks.Record())
             {
                 ExpectCallsDialogOnShouldNotAddAbsenceOnLockedDay(rangePeriod);
@@ -1059,7 +1062,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				
 				Expect.Call(day2.Period).Return(new DateTimePeriod(2011, 01, 02, 2011, 01, 03)).Repeat.AtLeastOnce();
 				// the absence is addes to the last day
-				Expect.Call(() => day2.CreateAndAddAbsence(null)).IgnoreArguments();
+				Expect.Call(day2.CreateAndAddAbsence(null))
+					.IgnoreArguments()
+					.Return (new PersonAbsence (_person, _scenario, absenceLayer))
+					.Repeat.Once();
+
 				Expect.Call(day2.PersonAssignment()).Return(_ass).Repeat.AtLeastOnce();
             	Expect.Call(_ass.CheckRestrictions);
 
@@ -1107,6 +1114,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_selectedSchedules = new List<IScheduleDay> { schedulePart };
 			var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
 			var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
+			
+			var absence = new Absence();
+			var absenceLayer = new AbsenceLayer (absence, period);
+
 			Expect.Call(schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(date, DateTimeKind.Utc), 0)).Repeat.Any();
 			ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
 			ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(period);
@@ -1121,7 +1132,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(schedulePart);
 			//Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
 
-			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments();
+			Expect.Call (schedulePart
+				.CreateAndAddAbsence (null))
+				.IgnoreArguments()
+				.Return (new PersonAbsence (_person, _scenario, absenceLayer))
+				.Repeat.Once();
 		    
 
 			_mocks.ReplayAll();
@@ -1157,6 +1172,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
 			var period = new DateTimePeriod(2009, 2, 1, 2009, 2, 2);
 
+			var absence = new Absence();
+			var absenceLayer = new AbsenceLayer(absence, period);
+
             _personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(new DateTime(2009,2,1)));
             _personAssignmentsList.Add(_personAssignment);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
@@ -1178,7 +1196,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(scheduleRange).Repeat.AtLeastOnce();
 			Expect.Call(scheduleRange.ScheduledDay(new DateOnly())).IgnoreArguments()
 				.Return(schedulePart).Repeat.AtLeastOnce();
-			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments(); // a new absence created, that why ignore arguments
+			
+			Expect.Call(schedulePart.CreateAndAddAbsence(null))
+					.IgnoreArguments()
+					.Return(new PersonAbsence(_person, _scenario, absenceLayer))
+					.Repeat.Once();
+
 			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
 			Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
