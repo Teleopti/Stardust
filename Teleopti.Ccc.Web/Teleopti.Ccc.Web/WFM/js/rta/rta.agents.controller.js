@@ -12,7 +12,6 @@
 			$scope.agents = [];
 
 			var setStatesInAgents = function(states) {
-				$scope.states = states;
 				$scope.agents.forEach(function(agent) {
 					var state = $filter('filter')(states, {
 						PersonId: agent.PersonId

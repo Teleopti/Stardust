@@ -231,15 +231,15 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.states[0].State).toEqual("Ready");
-		expect(scope.states[0].StateStart).toEqual("\/Date(1429254905000)\/");
-		expect(scope.states[0].Activity).toEqual("Phone");
-		expect(scope.states[0].NextActivity).toEqual("Short break");
-		expect(scope.states[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
-		expect(scope.states[0].Alarm).toEqual("In Adherence");
-		expect(scope.states[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
-		expect(scope.states[0].AlarmColor).toEqual("#00FF00");
-		expect(scope.states[0].TimeInState).toEqual(15473);
+		expect(scope.agents[0].State).toEqual("Ready");
+		expect(scope.agents[0].StateStart).toEqual("\/Date(1429254905000)\/");
+		expect(scope.agents[0].Activity).toEqual("Phone");
+		expect(scope.agents[0].NextActivity).toEqual("Short break");
+		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
+		expect(scope.agents[0].Alarm).toEqual("In Adherence");
+		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
+		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
+		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});
 
 	it('should update agent state', function() {
@@ -251,7 +251,7 @@ describe('RtaAgentsCtrl', function() {
 		$interval.flush(5000);
 		$httpBackend.flush();
 
-		expect(scope.states[0].State).toEqual("In Call");
+		expect(scope.agents[0].State).toEqual("In Call");
 	});
 
 	it('should display in correct time format', function() {
@@ -267,9 +267,9 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.format(scope.states[0].StateStart)).toEqual("07:15");
-		expect(scope.format(scope.states[0].NextActivityStartTime)).toEqual("2015-05-20 08:15:00");
-		expect(scope.format(scope.states[0].AlarmStart)).toEqual("2015-05-20 07:11:50");
+		expect(scope.format(scope.agents[0].StateStart)).toEqual("07:15");
+		expect(scope.format(scope.agents[0].NextActivityStartTime)).toEqual("2015-05-20 08:15:00");
+		expect(scope.format(scope.agents[0].AlarmStart)).toEqual("2015-05-20 07:11:50");
 	});
 
 	it('should display in correct time duration format', function() {
@@ -280,7 +280,7 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.formatDuration(scope.states[0].TimeInState)).toEqual("4:17:53");
+		expect(scope.formatDuration(scope.agents[0].TimeInState)).toEqual("4:17:53");
 	});
 
 	it('should get agents for multiple sites', function() {
@@ -309,8 +309,8 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.states[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-		expect(scope.states[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 	});
 
 	it('should update agent states for multiple sites', function() {
@@ -324,8 +324,8 @@ describe('RtaAgentsCtrl', function() {
 		$interval.flush(5000);
 		$httpBackend.flush();
 
-		expect(scope.states[0].State).toEqual("In Call");
-		expect(scope.states[1].State).toEqual("Ready");
+		expect(scope.agents[0].State).toEqual("In Call");
+		expect(scope.agents[1].State).toEqual("Ready");
 	});
 
 	it('should get agents for multiple teams', function() {
@@ -348,7 +348,7 @@ describe('RtaAgentsCtrl', function() {
 
 		createController();
 
-		expect(scope.states[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 	it('should update agent states for multiple teams', function() {
