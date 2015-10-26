@@ -45,26 +45,26 @@
 					isArray: true
 				}
 			});
-
-			this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						teamIds: []
-					},
-					isArray: true
-				}
-			});
-
-			this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						teamIds: []
-					},
-					isArray: true
-				}
-			});
+			//
+			// this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
+			// 	query: {
+			// 		method: 'GET',
+			// 		params: {
+			// 			teamIds: []
+			// 		},
+			// 		isArray: true
+			// 	}
+			// });
+			//
+			// this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
+			// 	query: {
+			// 		method: 'GET',
+			// 		params: {
+			// 			teamIds: []
+			// 		},
+			// 		isArray: true
+			// 	}
+			// });
 
 			this.getSites = $resource('../Sites', {}, {
 				query: {

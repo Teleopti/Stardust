@@ -9,6 +9,7 @@
 			var teamId = $stateParams.teamId;
 			var siteIds = $stateParams.siteIds;
 			var teamIds = $stateParams.teamIds;
+			$scope.agents = [];
 
 			var setStatesInAgents = function(states) {
 				$scope.states = states;
@@ -47,12 +48,20 @@
 				})
 			};
 
-			var updateStatesForTeams = function() {
-				RtaService.getStatesForTeams.query({
-					teamIds: teamIds
+			// var updateStatesForTeams = function() {
+			// 	RtaService.getStatesForTeams.query({
+			// 		teamIds: teamIds
+			// 	}).$promise.then(function(states) {
+			// 		setStatesInAgents(states);
+			// 	})
+			// };
+
+			var updateStatesForTeams = function(teamId) {
+				RtaService.getStates.query({
+					teamId: teamId
 				}).$promise.then(function(states) {
 					setStatesInAgents(states);
-				})
+				});
 			};
 
 			var updateGrid = function() {
@@ -94,19 +103,44 @@
 			}
 
 			if (teamIds) {
-				RtaService.getAgentsForTeams.query({
-						teamIds: teamIds
-					}).$promise
-					.then(function(agents) {
-						$scope.agents = agents;
-					}).then(updateStatesForTeams)
-					.then(updateGrid);
-
+				teamIds.forEach(function(teamId) {
+					RtaService.getAgents.query({
+							teamId: teamId
+						}).$promise
+						.then(function(agents) {
+							agents.forEach(function(a) {
+								$scope.agents.push(a)
+							});
+							return agents[0].TeamId;
+						})
+						.then(function(teamId) {
+							updateStatesForTeams(teamId)
+						})
+						.then(updateGrid);
+				});
 				$interval(function() {
-					updateStatesForTeams();
+					teamIds.forEach(function(teamId) {
+						updateStatesForTeams(teamId);
+					});
 					updateGrid();
 				}, 5000);
-			}
+
+			};
+
+			// if (teamIds) {
+			// 	RtaService.getAgentsForTeams.query({
+			// 			teamIds: teamIds
+			// 		}).$promise
+			// 		.then(function(agents) {
+			// 			$scope.agents = agents;
+			// 		}).then(updateStatesForTeams)
+			// 		.then(updateGrid);
+			//
+			// 	$interval(function() {
+			// 		updateStatesForTeams();
+			// 		updateGrid();
+			// 	}, 5000);
+			// }
 
 			$scope.goBackToRoot = function() {
 				$state.go('rta-sites');
@@ -137,6 +171,10 @@
 				var b = bigint & 255;
 				return "rgba(" + r + ", " + g + ", " + b + ", 0.6)";
 			}
+
+			$scope.filterData = function() {
+				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, undefined);
+			};
 
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
@@ -188,9 +226,6 @@
 				data: $scope.agents
 			};
 
-			$scope.filterData = function() {
-				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, undefined);
-			};
 		}
 	]);
 })();

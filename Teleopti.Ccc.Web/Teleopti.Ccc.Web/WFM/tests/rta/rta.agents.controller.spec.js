@@ -109,15 +109,15 @@ describe('RtaAgentsCtrl', function() {
 			}
 		});
 
-		rtaSvrc.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					teamIds: []
-				},
-				isArray: true
-			}
-		});
+		// rtaSvrc.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
+		// 	query: {
+		// 		method: 'GET',
+		// 		params: {
+		// 			teamIds: []
+		// 		},
+		// 		isArray: true
+		// 	}
+		// });
 
 		rtaSvrc.getStates = $resource('../Agents/GetStates?teamId=:teamId', {
 			teamId: '@teamId'
@@ -139,32 +139,36 @@ describe('RtaAgentsCtrl', function() {
 			}
 		});
 
-		rtaSvrc.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					teamIds: []
-				},
-				isArray: true
-			}
-		});
+		// rtaSvrc.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
+		// 	query: {
+		// 		method: 'GET',
+		// 		params: {
+		// 			teamIds: []
+		// 		},
+		// 		isArray: true
+		// 	}
+		// });
 
 		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, agents);
 		$httpBackend.whenGET("../Agents/ForTeam?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, agents);
-		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, agents);
-		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
-			.respond(200, agents);
+			.respond(200, [agents[0]]);
+		$httpBackend.whenGET("../Agents/ForTeam?teamId=103afc66-2bfa-45f4-9823-9e06008d5062")
+			.respond(200, [agents[1]]);
+		// $httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
+		// 	.respond(200, agents);
+		// $httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
+		// 	.respond(200, agents);
 		$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, states);
+			.respond(200, [states[0]]);
+		$httpBackend.whenGET("../Agents/GetStates?teamId=103afc66-2bfa-45f4-9823-9e06008d5062")
+			.respond(200, [states[1]]);
 		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, states);
-		$httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, states);
-		$httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
-			.respond(200, states);
+		// $httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
+		// 	.respond(200, states);
+		// $httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
+		// 	.respond(200, states);
 	}));
 
 	var createController = function() {
@@ -348,7 +352,7 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should update agent states for multiple teams', function() {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		states[0].State = "Ready";
 		states[1].State = "In Call";
 
@@ -358,8 +362,8 @@ describe('RtaAgentsCtrl', function() {
 		$interval.flush(5000);
 		$httpBackend.flush();
 
-		expect(scope.states[0].State).toEqual("In Call");
-		expect(scope.states[1].State).toEqual("Ready");
+		expect(scope.agents[0].State).toEqual("In Call");
+		expect(scope.agents[1].State).toEqual("Ready");
 	});
 
 	it('should go back to teams', function() {
