@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
+using EO.Internal;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private IEventAggregator _eventAggregator;
         private readonly IPersonRequestCheckAuthorization _authorization;
 		private bool _isWindowLoaded;
-
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
@@ -52,7 +50,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             handlePersonRequestView.DataContext = _model;
         }
 
-        public void InsertPersonRequestViewModel(IPersonRequest personRequest)
+		public event EventHandler SelectionChanged
+		{
+			add { _model.PersonRequestViewModels.CurrentChanged += value; }
+			remove { _model.PersonRequestViewModels.CurrentChanged -= value; }
+		}
+
+	    public void InsertPersonRequestViewModel(IPersonRequest personRequest)
         {
             _model.InsertPersonRequestViewModel(personRequest, _shiftTradeRequestStatusChecker, _authorization);
         }

@@ -111,12 +111,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Close();
 		}
 
-		private void toolStripButtonApprove_Click(object sender, EventArgs e)
-		{
-			new ApproveRequestFromRequestDetailsView(_model).PublishEvent("ApproveRequestFromRequestDetailsView", _eventAggregator);
-			Close();
-		}
-
 		private void toolStripButtonDenyClick(object sender, EventArgs e)
 		{
 			new DenyRequestFromRequestDetailsView(_model).PublishEvent("DenyRequestFromRequestDetailsView", _eventAggregator);

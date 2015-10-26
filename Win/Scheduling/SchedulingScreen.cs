@@ -2364,6 +2364,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				toolStripComboBoxExFilterDays.SelectedIndex = toolStripComboBoxExFilterDays.Items.Count - 1;
 				_requestView.PropertyChanged += _requestView_PropertyChanged;
+				_requestView.SelectionChanged += _requestView_SelectionChanged;
 			}
 			else
 			{
@@ -2393,6 +2394,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 
 			SikuliHelper.ShowLoadedView(this);
+		}
+
+		private void _requestView_SelectionChanged(object sender, EventArgs e)
+		{
+			var request = _requestView.SelectedAdapters().FirstOrDefault();
+			if (request == null) return;
+			
+			selectCellFromPersonDate(request.PersonRequest.Person,new DateOnly(request.FirstDateInRequest));
 		}
 
 		private void setupRequestViewButtonStates()
@@ -5055,7 +5064,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				notesEditor.PublicNotesChanged -= notesEditor_PublicNotesChanged;
 			}
 			if (_requestView != null)
+			{
 				_requestView.PropertyChanged -= _requestView_PropertyChanged;
+				_requestView.SelectionChanged -= _requestView_SelectionChanged;
+			}
 
 			if (_skillResultHighlightGridControl != null) _skillResultHighlightGridControl.GoToDate -= _skillResultHighlightGridControl_GoToDate;
 

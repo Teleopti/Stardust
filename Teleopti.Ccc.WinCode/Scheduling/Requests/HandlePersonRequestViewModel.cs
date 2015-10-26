@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly IList<IPerson> _permittedPersons;
 		private readonly IUndoRedoContainer _undoRedoContainer;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
-		private IEventAggregator _eventAggregator;
+		private readonly IEventAggregator _eventAggregator;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly TimeZoneInfo _timeZoneInfo;
-		private static readonly object FilterLock = new object();
+		private readonly object FilterLock = new object();
 	   public ListCollectionView PersonRequestViewModels { get; set; }
 
 		public IList<PersonRequestViewModel> SelectedModels
