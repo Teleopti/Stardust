@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var target = new EventsMessageSender(eventsPublisher);
 
 			var absence = new Absence();
-			var startDateTime = new DateTime (2015, 10, 1);
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, startDateTime.AddHours (8)));
+			var startDateTime = new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc);
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, startDateTime.AddHours(8)));
 
 			var root = new PersonAbsence(new Person(), new FakeCurrentScenario().Current(), absenceLayer);
-			
+
 			root.FullDayAbsence(PersonFactory.CreatePersonWithId());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class FakeEventsPublisher : IEventsPublisher
 	{
 		public IList<IEvent> PublishedEvents = new List<IEvent>();
- 
+
 		public void Publish(IEnumerable<IEvent> events)
 		{
 			events.ForEach(PublishedEvents.Add);
