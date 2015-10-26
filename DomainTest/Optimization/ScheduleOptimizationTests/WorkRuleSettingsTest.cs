@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeWorkRuleSettingsRepository WorkRuleSettingsRepository;
+		public FakeDayOffSettingsRepository DayOffSettingsRepository;
 
 		[Test]
 		public void ShouldUseSettingForConsecutiveDayOffs()
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings
+			DayOffSettingsRepository.Add(new DayOffSettings
 			{
 				DayOffsPerWeek = new MinMax<int>(1, 4),
 				ConsecutiveDayOffs = new MinMax<int>(1, 4)
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings { ConsecutiveWorkdays = new MinMax<int>(1, 6) });
+			DayOffSettingsRepository.Add(new DayOffSettings { ConsecutiveWorkdays = new MinMax<int>(1, 6) });
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings { DayOffsPerWeek = new MinMax<int>(3, 4) });
+			DayOffSettingsRepository.Add(new DayOffSettings { DayOffsPerWeek = new MinMax<int>(3, 4) });
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
 			schedulePeriod.SetDaysOff(2);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			WorkRuleSettingsRepository.Add(new WorkRuleSettings { DayOffsPerWeek = new MinMax<int>(1, 3), ConsecutiveWorkdays = new MinMax<int>(2, 20) });
+			DayOffSettingsRepository.Add(new DayOffSettings { DayOffsPerWeek = new MinMax<int>(1, 3), ConsecutiveWorkdays = new MinMax<int>(2, 20) });
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
 			schedulePeriod.SetDaysOff(2);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);

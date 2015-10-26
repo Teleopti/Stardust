@@ -632,13 +632,13 @@
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
-    <Compile Include="Optimization\IWorkRuleSettingsRepository.cs" />
+    <Compile Include="Optimization\IDayOffSettingsRepository.cs" />
     <Compile Include="Optimization\ScheduleOptimization.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Optimization\OptimizationResultModel.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverExecuter.cs" />
-    <Compile Include="Optimization\WorkRuleSettings.cs" />
+    <Compile Include="Optimization\DayOffSettings.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
     <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />

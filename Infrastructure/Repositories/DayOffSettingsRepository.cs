@@ -5,41 +5,41 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class WorkRuleSettingsRepository : IWorkRuleSettingsRepository
+	public class DayOffSettingsRepository : IDayOffSettingsRepository
 	{
-		public WorkRuleSettingsRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public DayOffSettingsRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 		}
 
-		public void Add(WorkRuleSettings root)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Remove(WorkRuleSettings root)
+		public void Add(DayOffSettings root)
 		{
 			throw new NotImplementedException();
 		}
 
-		public WorkRuleSettings Get(Guid id)
+		public void Remove(DayOffSettings root)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<WorkRuleSettings> LoadAll()
+		public DayOffSettings Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<DayOffSettings> LoadAll()
 		{
 			return new[]
 			{
-				new WorkRuleSettings()
+				new DayOffSettings()
 			};
 		}
 
-		public WorkRuleSettings Load(Guid id)
+		public DayOffSettings Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<WorkRuleSettings> entityCollection)
+		public void AddRange(IEnumerable<DayOffSettings> entityCollection)
 		{
 			throw new NotImplementedException();
 		}

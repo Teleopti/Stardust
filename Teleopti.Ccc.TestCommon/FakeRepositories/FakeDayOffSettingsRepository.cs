@@ -6,36 +6,36 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeWorkRuleSettingsRepository : IWorkRuleSettingsRepository
+	public class FakeDayOffSettingsRepository : IDayOffSettingsRepository
 	{
-		private readonly IList<WorkRuleSettings> _workRuleSettings = new List<WorkRuleSettings>();
+		private readonly IList<DayOffSettings> _workRuleSettings = new List<DayOffSettings>();
 
-		public void Add(WorkRuleSettings root)
+		public void Add(DayOffSettings root)
 		{
 			_workRuleSettings.Add(root);
 		}
 
-		public void Remove(WorkRuleSettings root)
+		public void Remove(DayOffSettings root)
 		{
 			throw new NotImplementedException();
 		}
 
-		public WorkRuleSettings Get(Guid id)
+		public DayOffSettings Get(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<WorkRuleSettings> LoadAll()
+		public IList<DayOffSettings> LoadAll()
 		{
 			return _workRuleSettings.ToArray();
 		}
 
-		public WorkRuleSettings Load(Guid id)
+		public DayOffSettings Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<WorkRuleSettings> entityCollection)
+		public void AddRange(IEnumerable<DayOffSettings> entityCollection)
 		{
 			throw new NotImplementedException();
 		}

@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizationPreferencesFactory
 	{
-		private readonly IWorkRuleSettingsRepository _workRuleSettingsRepository;
+		private readonly IDayOffSettingsRepository _dayOffSettingsRepository;
 
-		public OptimizationPreferencesFactory(IWorkRuleSettingsRepository workRuleSettingsRepository)
+		public OptimizationPreferencesFactory(IDayOffSettingsRepository dayOffSettingsRepository)
 		{
-			_workRuleSettingsRepository = workRuleSettingsRepository;
+			_dayOffSettingsRepository = dayOffSettingsRepository;
 		}
 
 		public OptimizationPreferences Create()
 		{
-			var workrules = _workRuleSettingsRepository.LoadAll().Single();
+			var workrules = _dayOffSettingsRepository.LoadAll().Single();
 			return new OptimizationPreferences
 			{
 				DaysOff = new DaysOffPreferences

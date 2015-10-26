@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IWorkRuleSettingsRepository : IRepository<WorkRuleSettings>
+	public interface IDayOffSettingsRepository : IRepository<DayOffSettings>
 	{
 		 
 	}
