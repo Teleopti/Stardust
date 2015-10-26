@@ -2518,6 +2518,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Optimization\DayOffSettings.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\SeatPlan.hbm.xml" />
     <EmbeddedResource Include="Scheduling\PlanningPeriod.hbm.xml" />
     <EmbeddedResource Include="Outbound\Campaign.hbm.xml">

@@ -5,9 +5,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffSettings : AggregateRoot
 	{
-		public MinMax<int> DayOffsPerWeek { get; set; }
-		public MinMax<int> ConsecutiveWorkdays { get; set; }
-		public MinMax<int> ConsecutiveDayOffs { get; set; }
-		public bool Default { get; set; }
+		public virtual MinMax<int> DayOffsPerWeek { get; set; }
+		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }
+		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
+		public virtual bool Default { get; protected set; }
+
+		public virtual DayOffSettings MakeDefault_UseOnlyFromTest()
+		{
+			Default = true;
+			return this;
+		}
 	}
 }

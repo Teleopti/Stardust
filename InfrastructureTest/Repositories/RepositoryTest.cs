@@ -139,20 +139,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 
-
-        /// <summary>
-        /// Determines whether this instance can load all entities.
-        /// Objects should not be lazy loaded (agg root)
-        /// </summary>
-        [Test]
-        public void CanLoadAllEntities()
-        {
-            T simpleEntity1 = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(simpleEntity1);
-            ICollection<T> coll = rep.LoadAll();
-            Assert.AreEqual(1, coll.Count);
-        }
-
         /// <summary>
         /// Verifies that Add & remove works.
         /// </summary>

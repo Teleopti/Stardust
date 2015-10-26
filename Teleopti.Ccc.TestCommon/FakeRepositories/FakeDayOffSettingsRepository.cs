@@ -13,14 +13,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDayOffSettingsRepository()
 		{
-			//adding default settings
 			_workRuleSettings.Add(new DayOffSettings
 			{
+				//should be same as default values in db script
 				DayOffsPerWeek = new MinMax<int>(1, 3),
 				ConsecutiveWorkdays = new MinMax<int>(2, 6),
-				ConsecutiveDayOffs = new MinMax<int>(1, 3),
-				Default = true
-			}.WithId());
+				ConsecutiveDayOffs = new MinMax<int>(1, 3)
+			}.WithId().MakeDefault_UseOnlyFromTest());
 		}
 
 		public void Add(DayOffSettings root)

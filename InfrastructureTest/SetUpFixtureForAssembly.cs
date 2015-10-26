@@ -10,6 +10,7 @@ using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 					.List<IAggregateRoot>();
 				foreach (var aggregateRoot in allDbRoots)
 				{
-					if (!(aggregateRoot is IPersonWriteProtectionInfo))
+					if (!(aggregateRoot is IPersonWriteProtectionInfo) && !(aggregateRoot is DayOffSettings))
 					{
 						var deleteTag = aggregateRoot as IDeleteTag;
 						if(deleteTag==null)
@@ -159,6 +160,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				{
 					ISession s = uowTemp.FetchSession();
 					s.CreateSQLQuery(@"delete from PersonWriteProtectionInfo").ExecuteUpdate();
+					s.CreateSQLQuery(@"delete from DayOffSettings").ExecuteUpdate();
 					IList<IAggregateRoot> leftInDb = s.CreateCriteria(typeof(IAggregateRoot))
 											  .List<IAggregateRoot>();
 					if (leftInDb.Count > 0)
