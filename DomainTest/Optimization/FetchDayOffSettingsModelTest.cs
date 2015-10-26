@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[DomainTest]
 	public class FetchDayOffSettingsModelTest
 	{
-		public FetchDayOffSettingsModel Target;
+		public IFetchDayOffSettingsModel Target;
 		public FakeDayOffSettingsRepository DayOffSettingsRepository;
 
 		[Test]

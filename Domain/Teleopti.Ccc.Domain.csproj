@@ -632,6 +632,7 @@
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\DayOffSettingsModel.cs" />
     <Compile Include="Optimization\FetchDayOffSettingsModel.cs" />
+    <Compile Include="Optimization\IFetchDayOffSettingsModel.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffSettingsRepository.cs" />

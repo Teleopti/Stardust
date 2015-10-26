@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -28,10 +29,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<DayOffSettings> LoadAll()
 		{
-			return new[]
-			{
-				new DayOffSettings()
-			};
+			var ret =
+				new DayOffSettings
+				{
+					//TODO: put default values here until we use real db values. remove this later...
+					DayOffsPerWeek = new MinMax<int>(1, 3),
+					ConsecutiveWorkdays = new MinMax<int>(2, 6),
+					ConsecutiveDayOffs = new MinMax<int>(1, 3),
+					Default = true
+				};
+			ret.SetId(Guid.NewGuid());
+			return new[] {ret};
 		}
 
 		public DayOffSettings Load(Guid id)

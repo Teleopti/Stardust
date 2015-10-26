@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -13,7 +14,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDayOffSettingsRepository()
 		{
 			//adding default settings
-			_workRuleSettings.Add(new DayOffSettings().WithId());
+			_workRuleSettings.Add(new DayOffSettings
+			{
+				DayOffsPerWeek = new MinMax<int>(1, 3),
+				ConsecutiveWorkdays = new MinMax<int>(2, 6),
+				ConsecutiveDayOffs = new MinMax<int>(1, 3),
+				Default = true
+			}.WithId());
 		}
 
 		public void Add(DayOffSettings root)

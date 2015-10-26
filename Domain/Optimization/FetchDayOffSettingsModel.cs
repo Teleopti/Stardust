@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class FetchDayOffSettingsModel
+	public class FetchDayOffSettingsModel : IFetchDayOffSettingsModel
 	{
 		private readonly IDayOffSettingsRepository _dayOffSettingsRepository;
 

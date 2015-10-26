@@ -297,6 +297,7 @@
     <Compile Include="Areas\Permissions\PermissionsTestAttribute.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\DayOffSettingsControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\FakePlanningPeriod.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
@@ -527,6 +528,7 @@
     <Compile Include="TestHelper\RhinoMocksFactory.cs" />
     <Compile Include="TestHelper\RhinoMocksProxy.cs" />
     <Compile Include="TestHelper\TestControllerBuilder.cs" />
+    <Compile Include="TestHelper\WebApiExtensions.cs" />
     <Compile Include="TestHelper\WriteableHttpFileCollection.cs" />
     <Compile Include="TestRouteBuilder.cs" />
     <Compile Include="TestUrlHelperBuilder.cs" />
