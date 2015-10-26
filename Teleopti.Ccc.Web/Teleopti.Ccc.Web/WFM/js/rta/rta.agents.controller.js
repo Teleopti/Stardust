@@ -149,7 +149,7 @@
 			};
 
 			$scope.goBack = function() {
-				$state.go('rta-teams', siteId);
+				$state.go('rta-teams', {siteId: siteId});
 			};
 
 			$scope.format = function(time) {

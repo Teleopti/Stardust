@@ -373,7 +373,7 @@ describe('RtaAgentsCtrl', function() {
 
 		scope.goBack();
 
-		expect($state.go).toHaveBeenCalledWith('rta-teams', 'd970a45a-90ff-4111-bfe1-9b5e015ab45c');
+		expect($state.go).toHaveBeenCalledWith('rta-teams', {siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'});
 	});
 
 	it('should go back to sites', function() {
