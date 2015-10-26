@@ -44,7 +44,7 @@
 					else {
 						name = skillName + " - " + workloadName;
 					}
-					return name;g
+					return name;
 				}
 
 				var getSkills = function () {
