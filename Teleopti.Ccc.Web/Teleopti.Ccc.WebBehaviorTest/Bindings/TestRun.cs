@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			Browser.Interactions.Javascript("sessionStorage.clear();");
 			Browser.Interactions.GoTo("about:blank");
 
 			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
