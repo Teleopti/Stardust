@@ -6,11 +6,11 @@
 
 		var personScheduleVm = {};
 
-		var shiftProjectionViewModel = function(projection, baseDate, timeLine) {
+		var shiftProjectionViewModel = function(projection, timeLine) {
 			if (!projection) projection = {};
 
-			var startTime = moment.tz(projection.Start, currentUserInfo.DefaultTimeZone);
-			var startTimeMinutes = startTime.diff(baseDate, 'minutes');
+			var startTime = moment(projection.Start);
+			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 			var shiftProjectionVm = {
 				StartPixels: function() {
 					var start = startTimeMinutes - timeLine.StartMinute;
@@ -29,11 +29,11 @@
 			return shiftProjectionVm;
 		}
 
-		var dayOffViewModel = function(dayOff, baseDate, timeLine) {
+		var dayOffViewModel = function(dayOff, timeLine) {
 			if (!dayOff) dayOff = {}
 
-			var startTime = moment.tz(dayOff.Start, currentUserInfo.DefaultTimeZone);
-			var startTimeMinutes = startTime.diff(baseDate, 'minutes');
+			var startTime = moment(dayOff.Start);
+			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 			var dayOffStartMinutes = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
@@ -57,16 +57,16 @@
 		}
 
 		//person Schedule ViewModel
-		personScheduleVm.Create = function(personSchedule, queryDate, timeLine) {
+		personScheduleVm.Create = function(personSchedule, timeLine) {
 			if (!personSchedule) personSchedule = {};
 
 			var projectionVms = [];
 			angular.forEach(personSchedule.Projection, function(projection) {
 				var unit = timeLineUnit;
 				unit.init(projection, timeLine);
-				projection.Offset = queryDate;
+				projection.Offset = timeLine.Offset;
 				projection.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes();
-				projectionVms.push(new shiftProjectionViewModel(projection, queryDate, timeLine));
+				projectionVms.push(new shiftProjectionViewModel(projection, timeLine));
 			});
 
 			var vm = {
@@ -76,7 +76,7 @@
 				ShiftProjections: projectionVms,
 				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
 				DayOff: personSchedule.DayOff == undefined || personSchedule.DayOff == null ? {}
-					: new dayOffViewModel(personSchedule.DayOff, queryDate, timeLine)
+					: new dayOffViewModel(personSchedule.DayOff, timeLine)
 			}
 
 			return vm;

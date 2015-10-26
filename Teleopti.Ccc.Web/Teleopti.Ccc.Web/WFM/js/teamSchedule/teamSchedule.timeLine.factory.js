@@ -14,16 +14,15 @@
 			});
 
 			angular.forEach(allProjections, function (projection) {
-				var projStartTime = moment.tz(projection.Start, currentUserInfo.DefaultTimeZone);
+				var projStartTime = moment(projection.Start);
 				var projStartTimeMin = projStartTime.diff(baseDate, 'minutes');
 				var projCutInsideDayStartMinutes = projStartTimeMin >= 0 ? projStartTimeMin : 0;
 
-				if (moment(projection.Date).diff(baseDate) === 0) {
+				if (projStartTime.startOf("day").diff(baseDate, "days") === 0) {
 					var projStartMinutes = projCutInsideDayStartMinutes;
-					if (start === undefined)
+					if (start === undefined || projStartMinutes < start) {
 						start = projStartMinutes;
-					if (projStartMinutes < start)
-						start = projStartMinutes;
+					}
 				}
 			});
 
@@ -42,13 +41,12 @@
 			});
 
 			angular.forEach(allProjections, function (projection) {
-				var projStartTime = moment.tz(projection.Start, currentUserInfo.DefaultTimeZone);
+				var projStartTime = moment(projection.Start);
 				var projStartTimeMin = projStartTime.diff(baseDate, 'minutes');
 				var projEndMinutes = projStartTimeMin + projection.Minutes;
-				if (end === undefined)
+				if (end === undefined || projEndMinutes > end) {
 					end = projEndMinutes;
-				if (projEndMinutes > end)
-					end = projEndMinutes;
+				}
 			});
 
 			if (end === undefined)
@@ -83,19 +81,20 @@
 			return hourPointVm;
 		};
 
-		timeLine.Create = function (groupSchedules, baseDate, canvasSize) {
+		timeLine.Create = function (groupSchedules, utcBaseDate, canvasSize) {
 			var hourPoints = [];
 
-			var start = startMinutes(groupSchedules, baseDate);
-			var end = endMinutes(groupSchedules, baseDate);
+			var start = startMinutes(groupSchedules, utcBaseDate);
+			var end = endMinutes(groupSchedules, utcBaseDate);
 			var pixelsPerMinute = calculatePixelsPerMinute(start, end, canvasSize);
 
 			var timePoint = start;
 			while (timePoint < end + 1) {
-				hourPoints.push(new hourPointViewModel(baseDate, timePoint, start, pixelsPerMinute)); 
+				hourPoints.push(new hourPointViewModel(utcBaseDate, timePoint, start, pixelsPerMinute));
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
 			var timeLineVm = {
+				Offset: utcBaseDate,
 				StartMinute: start,
 				EndMinute: end,
 				HourPoints: hourPoints,
