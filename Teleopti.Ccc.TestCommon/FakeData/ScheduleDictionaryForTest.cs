@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class ScheduleDictionaryForTest : ScheduleDictionary
+	public class ScheduleDictionaryForTest : ScheduleDictionary, IReadOnlyScheduleDictionary
 	{
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
 			: this(scenario, new DateTimePeriod(cloneToUtc(date.Date), cloneToUtc(date.Date.AddHours(24)))) { }
@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			TakeSnapshot();
 		}
 
-
-
 		public static IScheduleDictionary WithScheduleData(IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
 		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
@@ -73,13 +71,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void AddScheduleData(params IScheduleData[] data)
 		{
 			var person = data.First().Person;
+			var scheduleRange = new ScheduleRange (this, new ScheduleParameters (Scenario, person, Period.VisiblePeriod));
+			scheduleRange.AddRange (data);
+			BaseDictionary.Add (person, scheduleRange);
+			TakeSnapshot();
+			
+		}
+
+		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
+		{
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			scheduleDictionary.AddScheduleData(person, data);
+			return scheduleDictionary;
+		}
+
+		public void AddScheduleData(IPerson person, params IScheduleData[] data)
+		{
 			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
 			scheduleRange.AddRange(data);
 			BaseDictionary.Add(person, scheduleRange);
 			TakeSnapshot();
 		}
-
-
+		
 
 		public void AddTestItem(IPerson person, IScheduleRange range)
 		{
@@ -89,6 +102,37 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private static DateTime cloneToUtc(DateTime dateTime)
 		{
 			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, DateTimeKind.Utc);
+		}
+
+		public static IScheduleDictionary WithScheduleDataForManyPeople (IScenario scenario, DateTimePeriod period, IPersistableScheduleData[] data)
+		{
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			scheduleDictionary.AddScheduleDataManyPeople(data);
+			return scheduleDictionary;
+		}
+
+
+		public void AddScheduleDataManyPeople(params IScheduleData[] data)
+		{
+			foreach (var scheduleData in data)
+			{
+				IScheduleRange scheduleRange;
+
+				if (!BaseDictionary.TryGetValue(scheduleData.Person, out scheduleRange))
+				{
+					scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, scheduleData.Person, Period.VisiblePeriod));
+					BaseDictionary.Add(scheduleData.Person, scheduleRange);
+				}
+
+				((ScheduleRange)scheduleRange).Add(scheduleData);
+			}
+
+			TakeSnapshot();
+		}
+
+		public void MakeEditable()
+		{
+			//throw new NotImplementedException();
 		}
 	}
 }

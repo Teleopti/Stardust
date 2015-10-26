@@ -1,6 +1,4 @@
-using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
+namespace Teleopti.Interfaces.Domain
 {
 	public interface IBusinessRulesForPersonalAccountUpdate
 	{

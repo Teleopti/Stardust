@@ -45,18 +45,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
+		public virtual void FullDayAbsence(IPerson person)
 		{
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
-			_layer = absenceLayer;
-
+			
 			AddEvent(new FullDayAbsenceAddedEvent
 				{
-					AbsenceId = absence.Id.GetValueOrDefault(),
+					AbsenceId = _layer.Payload.Id.GetValueOrDefault(),
 					PersonId = person.Id.GetValueOrDefault(),
-					StartDateTime = startDateTimeInUtc,
-					EndDateTime = endDateTimeInUtc,
+					StartDateTime = _layer.Period.StartDateTime,
+					EndDateTime = _layer.Period.EndDateTime,
 					ScenarioId = _scenario.Id.GetValueOrDefault()
 				});
 		}

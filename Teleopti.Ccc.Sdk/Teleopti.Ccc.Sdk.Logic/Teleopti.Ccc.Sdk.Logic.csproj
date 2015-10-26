@@ -170,7 +170,6 @@
     <Compile Include="CommandHandler\AddOvertimeCommandHandler.cs" />
     <Compile Include="CommandHandler\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ApproveRequestCommandHandler.cs" />
-    <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
@@ -185,7 +184,6 @@
     <Compile Include="CommandHandler\DenyRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\EmployPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\ExportMultisiteSkillToSkillCommandHandler.cs" />
-    <Compile Include="CommandHandler\IBusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
@@ -246,7 +244,6 @@
     <Compile Include="Restrictions\PreferenceNightRestChecker.cs" />
     <Compile Include="Restrictions\RestrictionsValidator.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculator.cs" />
-    <Compile Include="SaveSchedulePartService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

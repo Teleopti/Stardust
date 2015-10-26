@@ -121,5 +121,10 @@ namespace Teleopti.Interfaces.Domain
             DateTimePeriod dateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
             return dateTimePeriod;
         }
+
+	    public static DateTimePeriod NewUtcDateTimePeriodFromLocalDate(DateOnly localStartDate, DateOnly localEndDate, TimeZoneInfo timeZone)
+		{
+			return NewUtcDateTimePeriodFromLocalDateTime(localStartDate.Date, localEndDate.Date, timeZone);
+	    }
     }
 }

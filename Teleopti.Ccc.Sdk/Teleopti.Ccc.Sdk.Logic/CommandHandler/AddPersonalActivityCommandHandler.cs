@@ -1,8 +1,8 @@
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -59,10 +59,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				scheduleDay.CreateAndAddPersonalActivity(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
-				_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
+
+				try
 				{
-					uow.PersistAll();
+					_saveSchedulePartService.Save (scheduleDay, rules, scheduleTagEntity);
+					using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
+					{
+						uow.PersistAll();
+					}
+				}
+				catch (BusinessRuleValidationException ex)
+				{	
+					throw new FaultException(ex.Message);
 				}
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };

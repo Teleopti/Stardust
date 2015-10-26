@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.Logic
+namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 {
     public interface ISaveSchedulePartService
     {
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
             if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
-				throw new FaultException(
+				throw new BusinessRuleValidationException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture, "At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
 					              string.Join(Environment.NewLine,
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));

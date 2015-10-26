@@ -132,6 +132,8 @@
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
+    <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreationHandler.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
@@ -252,6 +254,7 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\BusinessRuleValidationException.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -645,6 +648,8 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRule.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />

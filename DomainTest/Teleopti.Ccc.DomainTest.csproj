@@ -447,6 +447,7 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRuleTest.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />

@@ -95,6 +95,7 @@
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
     <Compile Include="FakeInitiatorIdentifier.cs" />
+    <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="FakeLoggedOnUser.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleRepository.cs" />
+    <Compile Include="FakeScheduleDifferenceSaver.cs" />
+    <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeTime.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />

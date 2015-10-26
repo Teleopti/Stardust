@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.LogicTest
+namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 {
 	[TestFixture]
 	public class SaveSchedulePartServiceTest
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		}
 
 		[Test]
-		public void ShouldThrowFaultExceptionOnBrokenBusinessRules()
+		public void ShouldThrowBusinessRuleExceptionOnBrokenBusinessRules()
 		{
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var response = new List<IBusinessRuleResponse>{mocks.DynamicMock<IBusinessRuleResponse>()};
@@ -65,12 +65,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(()=>target.Save(scheduleDay,null, new ScheduleTag()));
+				Assert.Throws<BusinessRuleValidationException>(() => target.Save(scheduleDay, null, new ScheduleTag()));
 			}
 		}
 
 		[Test]
-		public void ShouldNotThrowFaultExceptionOnBrokenBusinessRulesWhenOverriden()
+		public void ShouldNotThrowBusinessRuleExceptionOnBrokenBusinessRulesWhenOverriden()
 		{
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var businessRuleResponse = mocks.DynamicMock<IBusinessRuleResponse>();
