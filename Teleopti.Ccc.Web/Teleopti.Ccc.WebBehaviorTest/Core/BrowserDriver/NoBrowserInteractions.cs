@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		public string Javascript(string javascript)
 		{
-			throw new NotSupportedException(notAllowedAction);
+			return null;
 		}
 
 		public void GoTo(string uri)
