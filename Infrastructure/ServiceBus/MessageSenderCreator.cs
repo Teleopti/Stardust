@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.ServiceBus
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public ICurrentPersistCallbacks Create()
+		public CurrentPersistCallbacks Create()
 		{
 			var populator = EventContextPopulator.Make();
 			var businessUnit = CurrentBusinessUnit.Make();

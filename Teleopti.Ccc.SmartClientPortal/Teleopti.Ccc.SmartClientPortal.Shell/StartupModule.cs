@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().As<IMessageSendersScope>().SingleInstance();
 		}
 	}
 }
