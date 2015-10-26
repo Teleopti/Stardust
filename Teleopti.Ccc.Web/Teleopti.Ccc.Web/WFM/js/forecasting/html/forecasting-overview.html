@@ -36,11 +36,6 @@
 					<card-body>
 						<span>
 							This is your existing forecast. To be able to add a campaign select some day(s) in the chart.
-							<i class=" mdi mdi-block-helper pull-right toggle-handle" ng-if="workload.forecastResultLoaded" ng-click="clearChartSelection()">
-								<md-tooltip>
-									Clear chart selection
-								</md-tooltip>
-							</i>
 							<span class="row">
 								<div class=" forecast-campaign">
 									<label style="margin:0;">Scenario:</label>
@@ -53,9 +48,9 @@
 							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 						</div>
 						<div ng-show="workload.forecastResultLoaded" class="wfm-block">
-
-							<div id="{{workload.ChartId}}"></div>
+							<forecast-result-chart chart-id="workload.ChartId" chart-data="workload.ResultChartData" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" number-of-selected="workload.numberOfSelected"></forecast-result-chart>
 						</div>
+						
 						<div class="modal-footer">
 							<aside>
 								<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
@@ -70,8 +65,8 @@
 										Forecast this workload
 									</md-tooltip>
 								</a>
-								<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-default': !disableAddCampaign(), 'wfm-btn-invis-disabled': disableAddCampaign()}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign()">
-									Campaign {{selectedDayCountParenthesis()}}
+								<a class="wfm-btn forecast-add-campaign-button" ng-class="{'wfm-btn-invis-default': !disableAddCampaign(workload), 'wfm-btn-invis-disabled': disableAddCampaign(workload)}" ng-click="displayCampaignModal(workload)" ng-disabled="disableAddCampaign(workload)">
+									Campaign <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
 									<md-tooltip>
 										Select days in chart before adding
 									</md-tooltip>
@@ -147,7 +142,7 @@
 				</div>
 				<div class="modal-inner-content">
 					<div class="wfm-block">
-						<h4>Enter campaign for the selected <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalCampaignInfo.selectedScenario.Name}}</b></h4>
+						<h4>Enter campaign for the selected <b>{{formatDayCount(campaignDays.length)}}</b> day(s) for scenario <b>{{modalCampaignInfo.selectedScenario.Name}}</b></h4>
 					</div>
 					<div class="wfm-block campaign-position">
 						<table class="wfm-table wfm-table-multi forecast-period">
@@ -162,7 +157,7 @@
 								<tr>
 									<td>Calls</td>
 									<td class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}</td>
-									<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</tdclass>
+									<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</td>
 								</tr>
 							</tbody>
 						</table>

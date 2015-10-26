@@ -44,7 +44,7 @@
 					else {
 						name = skillName + " - " + workloadName;
 					}
-					return name;
+					return name;g
 				}
 
 				var getSkills = function () {
@@ -119,25 +119,36 @@
 					return ($scope.sumOfCallsForSelectedDays * ($scope.modalCampaignInfo.campaignPercentage + 100) / 100).toFixed(1);
 				};
 
+				$scope.campaignDays = [];
+				$scope.sumOfCallsForSelectedDays = 0;
+				$scope.campaignPercentageConst = {
+					max: 1000,
+					min: -100
+				};
+
+				var getCampaignDays = function (workload) {
+					var tempsum = 0;
+					$scope.campaignDays = [];
+					angular.forEach(workload.selectedDays(), function (value) {
+						$scope.campaignDays.push({
+							date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
+						});
+						tempsum += value.value;
+					});
+					$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
+				};
+
 				$scope.modalCampaignLaunch = false;
 				$scope.displayCampaignModal = function (workload) {
-					if ($scope.disableAddCampaign()) {
+					if ($scope.disableAddCampaign(workload)) {
 						return;
 					}
 					$scope.modalCampaignLaunch = true;
-					$scope.getCampaignDays();
+					getCampaignDays(workload);
 					$scope.modalCampaignInfo.campaignPercentage = 0;
 					$scope.modalCampaignInfo.selectedWorkload = workload;
 					$scope.modalCampaignInfo.selectedScenario = workload.Scenario;
 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
-				};
-
-				var campaignDays = [];
-				$scope.sumOfCallsForSelectedDays = 0;
-
-				$scope.campaignPercentageConst = {
-					max: 1000,
-					min: -100
 				};
 
 				$scope.campaignPercentageChanged = function (campaignForm) {
@@ -153,40 +164,23 @@
 					}
 				};
 
-				$scope.getCampaignDays = function () {
-					var tempsum = 0;
-					campaignDays = [];
-					angular.forEach($scope.chart.selected(), function (value) {
-						campaignDays.push({
-							date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
-						});
-						tempsum += value.value;
-					});
-					$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
-				};
-
 				$scope.cancelCampaignModal = function () {
 					$scope.modalCampaignLaunch = false;
 				};
 
-				$scope.selectedDayCount = function () {
-					if ($scope.chart && $scope.chart.selected())
-						return $scope.chart.selected().length;
-					return '';
+				$scope.formatDayCount = function (count, withParenthesis) {
+					if (count > 0)
+						if (withParenthesis)
+							return '(' + count + ')';
+						else
+							return count;
+					else
+						return '';
 				};
-
-				$scope.selectedDayCountParenthesis = function () {
-					if ($scope.selectedDayCount() > 0)
-						return '(' + $scope.chart.selected().length + ')';
-					return '';
-				};
-
-				$scope.chart = undefined;
 
 				$scope.getForecastResult = function (workload) {
 					workload.forecastResultLoaded = false;
 
-					$scope.resultChartData = [];
 					var resultStartDate = moment().utc().add(1, 'days');
 					var resultEndDate = moment(resultStartDate).add(6, 'months');
 					$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id, ScenarioId: workload.Scenario.Id })).
@@ -194,68 +188,8 @@
 							angular.forEach(data.Days, function (day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							workload.resultChartData = data.Days;
+							workload.Refresh(data.Days);
 							workload.forecastResultLoaded = true;
-							$scope.chart = c3.generate({
-								bindto: "#" + workload.ChartId,
-								data: {
-									json:
-										workload.resultChartData,
-									keys: {
-										// x: 'name', // it's possible to specify 'x' when category axis
-										x: 'date',
-										value: ['vtc', 'vc', 'vaht', 'vacw']
-									},
-									axes: {
-										vaht: 'y2',
-										vacw: 'y2'
-									},
-									selection: {
-										enabled: true,
-										grouped: true,
-										draggable: true,
-										isselectable: function (chartPoint) {
-											if (chartPoint.id === 'vacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vaht')
-												return false;
-											return true;
-										}
-									},
-									names: {
-										vtc: 'Total Calls <',
-										vc: 'Calls <',
-										vaht: 'Talk time >',
-										vacw: 'ACW >'
-									},
-									colors: {
-										vtc: '#0099FF',
-										vc: '#99D6FF',
-										vaht: '#9CCC65',
-										vacw: '#F488C8'
-									},
-									onclick: function () {
-										$scope.$digest();
-									}
-								},
-								axis: {
-									x: {
-										type: 'timeseries',
-										tick: {
-											format: '%Y-%m-%d'
-										}
-									},
-									y2: {
-										show: true
-									}
-								},
-								subchart: {
-									show: true
-								},
-								tooltip: {
-									format: {
-										value: d3.format('.1f')
-									}
-								}
-							});
 						}).
 						error(function (data, status, headers, config) {
 							$scope.error = { message: "Failed to get forecast result." };
@@ -263,29 +197,11 @@
 						});
 				};
 
-				$scope.chartInfo = {
-					resultChartDataColumns: [
-						{ id: "vc", type: "line", name: "Calls" },
-						{ id: "vaht", type: "line", name: "Talk time" },
-						{ id: "vacw", type: "line", name: "ACW" }
-					],
-					dataX: {
-						id: "date"
-					}
-				};
-
-				$scope.disableAddCampaign = function () {
+				$scope.disableAddCampaign = function (workload) {
 					if ($scope.isForecastRunning) {
 						return true;
 					}
-					if ($scope.chart && $scope.chart.selected())
-						return $scope.chart.selected().length == 0;
-					return true;
-				};
-
-				$scope.clearChartSelection = function () {
-					$scope.chart.unzoom();
-					$scope.chart.unselect(['vc']);
+					return workload.selectedDays().length == 0;
 				};
 
 				$scope.applyCampaign = function () {
@@ -300,7 +216,7 @@
 					workload.IsFailed = false;
 					$http.post("../api/Forecasting/AddCampaign", JSON.stringify(
 						{
-							Days: campaignDays,
+							Days: $scope.campaignDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
 							CampaignTasksPercent: $scope.modalCampaignInfo.campaignPercentage
@@ -330,10 +246,12 @@
 				};
 
 				if (c3.applyFixForForecast) c3.applyFixForForecast(function () {
-					$scope.$digest();
+					$scope.$apply();
 				});
+
 				$scope.$on('$destroy', function () {
-					if (c3.restoreFixForForecast) c3.restoreFixForForecast();
+					if (c3.restoreFixForForecast)
+						c3.restoreFixForForecast();
 
 					cancelPoll();
 				});
