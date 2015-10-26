@@ -89,6 +89,7 @@ Scenario: Send message after application sign in
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
+@ignore
 #It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
 @OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
