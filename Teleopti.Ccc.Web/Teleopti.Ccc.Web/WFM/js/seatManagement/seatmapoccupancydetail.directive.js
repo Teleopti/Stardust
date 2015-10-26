@@ -44,17 +44,12 @@
 		};
 
 		function setupObjectSelectionHandlers() {
-			var onObjectSelection = function (e, handleGroupOnlyAction) {
+			var onObjectSelection = function (e) {
 
 				var object = e.target;
 
 				var objIsGroup = (object.get('type') == 'group');
-				if (objIsGroup) {
-					if (!handleGroupOnlyAction) {
-						return;
-					}
-				};
-
+				
 				object.hasRotatingPoint = false;
 				object.hasControls = false;
 				if (objIsGroup) {
@@ -74,12 +69,8 @@
 				vm.showPeopleSelection = false;
 			};
 
-			canvas().on('selection:created', function (e) {
-				onObjectSelection(e, true);
-			});
-
 			canvas().on('object:selected', function (e) {
-				onObjectSelection(e, false);
+				onObjectSelection(e);
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
