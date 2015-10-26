@@ -2,6 +2,19 @@
 
 	'use strict';
 
+	angular.module('gantt').config(['$provide', function ($provide) {
+
+		$provide.decorator('GanttScroll', [
+			'$delegate', function($delegate) {
+				$delegate.prototype.getBordersWidth = function () {
+					var result = this.$element === undefined ? undefined : (this.$element[0].offsetWidth - $(this.$element[0]).width());
+					return result;
+				};
+				return $delegate;
+			}
+		]);
+	}]);
+
 	// gantt-column-header-content
 	angular.module('gantt').directive('ganttColumnHeaderContent', ganttColumnHeaderContent);
 
