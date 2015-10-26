@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 			if (diff.IsEmpty())
 			{
-				return new SchedulePersistResult ();
+				return new SchedulePersistResult
+				{
+					InitiatorIdentifier = _initiatorIdentifier
+				};
 			}
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
