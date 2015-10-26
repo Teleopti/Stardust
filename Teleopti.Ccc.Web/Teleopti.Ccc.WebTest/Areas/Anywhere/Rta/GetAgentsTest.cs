@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agent.Single().Name.Should().Be(person.Name.ToString());
 			agent.Single().PersonId.Should().Be(person.Id);
 			agent.Single().TeamId.Should().Be(team.Id.ToString());
-			agent.Single().TeamName.Should().Be("angle");
+			agent.Single().TeamName.Should().Be("angel");
 			agent.Single().SiteId.Should().Be(site.Id.ToString());
 			agent.Single().SiteName.Should().Be("bla");
 		}
