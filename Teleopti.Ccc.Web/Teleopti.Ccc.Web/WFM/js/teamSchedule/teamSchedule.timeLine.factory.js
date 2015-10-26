@@ -10,7 +10,7 @@
 
 			var allProjections = [];
 			angular.forEach(groupSchedule, function (personSchedule) {
-				allProjections.concat(personSchedule.Projection);
+				allProjections = allProjections.concat(personSchedule.Projection);
 			});
 
 			angular.forEach(allProjections, function (projection) {
@@ -18,7 +18,7 @@
 				var projStartTimeMin = projStartTime.diff(baseDate, 'minutes');
 				var projCutInsideDayStartMinutes = projStartTimeMin >= 0 ? projStartTimeMin : 0;
 
-				if (projection.Date.diff(baseDate) === 0) {
+				if (moment(projection.Date).diff(baseDate) === 0) {
 					var projStartMinutes = projCutInsideDayStartMinutes;
 					if (start === undefined)
 						start = projStartMinutes;
@@ -38,7 +38,7 @@
 
 			var allProjections = [];
 			angular.forEach(groupSchedule, function (personSchedule) {
-				allProjections.concat(personSchedule.Projection);
+				allProjections = allProjections.concat(personSchedule.Projection);
 			});
 
 			angular.forEach(allProjections, function (projection) {
