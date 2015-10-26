@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadSkillStatisticForSpecificDates()
 		{
-			target.LoadSkillStatisticForSpecificDates( new DateTimePeriod(2006, 1, 1, 2006, 1, 2), "W. Europe Standard Time", TimeSpan.FromHours(2));
+			target.LoadSkillStatisticForSpecificDates( new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
 		}
 
 		protected override void SetupForRepositoryTest()

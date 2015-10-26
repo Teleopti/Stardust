@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
 		{
 			return _intradayStat;
 		}

@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				IQuery query = createSkillIntervalStatisticQuery(uow, period, timeZoneId, midnightBreakOffset);
+				IQuery query = createSkillIntervalStatisticQuery(uow, period);
 				query.SetTimeout(1200);
 				return query.SetResultTransformer(Transformers.AliasToBean(typeof(IntradayStatistics))).List<IIntradayStatistics>();
 			}
@@ -204,9 +204,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}
 
-		private IQuery createSkillIntervalStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string timeZoneId, TimeSpan midnightBreakOffset)
+		private IQuery createSkillIntervalStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date)
 		{
-			return session(uow).CreateSQLQuery("exec mart.IntradaySkillStatistics @DateFrom=:DateFrom, @DateTo=:DateTo,  @TimeZoneCode=:TimeZoneId, @MidnightBreakDifference=:MidnightBreakDifference")
+			return session(uow).CreateSQLQuery("exec mart.IntradaySkillStatistics @DateFrom=:DateFrom, @DateTo=:DateTo")
 				.AddScalar("SkillId", NHibernateUtil.Guid)
 				.AddScalar("SkillName", NHibernateUtil.String)
 				.AddScalar("Interval", NHibernateUtil.DateTime)
@@ -222,8 +222,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetReadOnly(true)
 				.SetString("DateFrom", date.StartDateTime.ToString(CultureInfo.InvariantCulture))
 				.SetString("DateTo", date.EndDateTime.ToString(CultureInfo.InvariantCulture))
-				.SetString("TimeZoneId", timeZoneId)
-				.SetString("MidnightBreakDifference", midnightBreakOffset.TotalMinutes.ToString(CultureInfo.InvariantCulture))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}
 

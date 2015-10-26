@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    throw new NotImplementedException();
 	    }
 
-	    public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+	    public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
 	    {
 		    throw new NotImplementedException();
 	    }

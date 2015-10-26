@@ -8,16 +8,14 @@ GO
 -- ---------------------------------------------
 -- ChangeLog:
 -- Date			Author	Description
--- ---------------------------------------------
+-- 2015-11-26   Ola		Get timezone from the skill, and remove the midnightbreakoffset, needs to be handled on client id needed, it is not in the mart
 
 -- =============================================
--- EXEC [mart].[IntradaySkillStatistics] '2015-04-14 00:00','2015-04-14 00:00', 'UTC', -60
+-- EXEC [mart].[IntradaySkillStatistics] '2011-04-14 00:00','2011-04-14 00:00'
 
 CREATE PROCEDURE [mart].[IntradaySkillStatistics] 
 (@DateFrom					smalldatetime,
-@DateTo						smalldatetime,
-@TimeZoneCode				nvarchar(50),
-@MidnightBreakDifference	int
+@DateTo						smalldatetime
 )
 AS
 
@@ -28,11 +26,11 @@ BEGIN
 	DECLARE @time_zone_id as int
 
 	SET @mindate = CAST('19000101' as smalldatetime)
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @TimeZoneCode
-
+	
 	CREATE TABLE #PreResult(
 	skill_code uniqueidentifier NOT NULL,
 	skill_name varchar(100),
+	skill_timezone_id int,
 	[date_id] [int] NOT NULL,
 	[interval_id] [smallint] NULL,
 	[interval_start] [smalldatetime] NULL,
@@ -52,6 +50,7 @@ BEGIN
 	SELECT
 		s.skill_code,
 		s.skill_name,
+		s.time_zone_id,
 		d.date_id,
 		i.interval_id,
 		i.interval_start,
@@ -78,7 +77,7 @@ BEGIN
 	SELECT 
 		skill_code AS SkillId,
 		skill_name AS SkillName,
-		DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) - @MidnightBreakDifference, d.date_date) as Interval,
+		DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) , d.date_date) as Interval,
 		--r.date_id, r.interval_id,
 		SUM(r.StatAnsweredTasks) as StatAnsweredTasks,
 		SUM(r.StatOfferedTasks) as StatOfferedTasks,
@@ -100,7 +99,7 @@ BEGIN
 	FROM 
 		#PreResult r
 	INNER JOIN mart.bridge_time_zone b 
-		ON b.time_zone_id = @time_zone_id
+		ON b.time_zone_id = skill_timezone_id
 			AND b.date_id = r.date_id 
 			AND b.interval_id = r.interval_id
 	INNER JOIN mart.dim_interval i 
@@ -108,7 +107,7 @@ BEGIN
 	INNER JOIN mart.dim_date d 
 		ON d.date_id = b.local_date_id
 	WHERE
-		CONVERT(DATE, DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) - @MidnightBreakDifference, d.date_date)) BETWEEN @DateFrom AND @DateTo
+		CONVERT(DATE, DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) , d.date_date)) BETWEEN @DateFrom AND @DateTo
 	GROUP BY 
-		skill_code, skill_name, DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) - @MidnightBreakDifference, d.date_date)--,r.date_id, r.interval_id
+		skill_code, skill_name, DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) , d.date_date)--,r.date_id, r.interval_id
 END
