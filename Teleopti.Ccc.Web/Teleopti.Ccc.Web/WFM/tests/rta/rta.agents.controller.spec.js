@@ -538,7 +538,7 @@ describe('RtaAgentsCtrl', function() {
 			Name: "Ashley Andeen",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		}, {
-			Name: "Bill Gates",
+			Name: "Charley Caper",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		}];
 
@@ -547,5 +547,27 @@ describe('RtaAgentsCtrl', function() {
 		scope.filterData();
 
 		expect(scope.gridOptions.data[0].Name).toEqual("Ashley Andeen");
+	});
+
+	it('should filter agent state updates with agentFilter ', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
+		agents = [{
+			Name: "Ashley Andeen",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}, {
+			Name: "Charley Caper",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}];
+		states[1].State = "In Call";
+
+		createController();
+		scope.filterText = 'Caper';
+		scope.filterData();
+		states[1].State = "Ready";
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		expect(scope.gridOptions.data[0].Name).toEqual("Charley Caper");
+		expect(scope.gridOptions.data[0].State).toEqual("Ready");
 	});
 });

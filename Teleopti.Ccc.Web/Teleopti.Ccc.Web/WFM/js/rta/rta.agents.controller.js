@@ -64,7 +64,10 @@
 			};
 
 			var updateGrid = function() {
-				$scope.gridOptions.data = $scope.agents;
+				if ($scope.filterText === undefined)
+					$scope.gridOptions.data = $scope.agents;
+				else
+					$scope.filterData();
 			};
 
 			if (teamId) {
@@ -172,7 +175,7 @@
 			}
 
 			$scope.filterData = function() {
-				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, undefined);
+				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText);
 			};
 
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
