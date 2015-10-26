@@ -140,7 +140,7 @@
 
 				$scope.modalCampaignLaunch = false;
 				$scope.displayCampaignModal = function (workload) {
-					if ($scope.disableAddCampaign(workload)) {
+					if ($scope.disableModify(workload)) {
 						return;
 					}
 					$scope.modalCampaignLaunch = true;
@@ -191,10 +191,20 @@
 							ScenarioId: workload.Scenario.Id
 						})).
 						success(function (data, status, headers, config) {
-							angular.forEach(data.Days, function (day) {
+
+							for (var i = 0; i < data.Days.length; i++) {
+								var day = data.Days[i];
 								day.date = new Date(Date.parse(day.date));
-							});
+								if (i == 0) {
+									day.vcampaign = 5;
+								}
+								if (i == 1) {
+									day.vmanual = 5;
+								}
+							}
 							workload.Refresh(data.Days);
+
+
 							workload.forecastResultLoaded = true;
 						}).
 						error(function (data, status, headers, config) {
@@ -203,7 +213,8 @@
 						});
 				};
 
-				$scope.disableAddCampaign = function (workload) {
+				
+				$scope.disableModify = function (workload) {
 					if ($scope.isForecastRunning) {
 						return true;
 					}

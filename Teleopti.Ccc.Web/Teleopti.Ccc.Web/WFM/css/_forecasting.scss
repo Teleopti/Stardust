@@ -145,3 +145,38 @@
 	right: 5%;
 	top: -25px;
 }
+
+.c3-circles-vcampaign > .c3-circle{
+ stroke:tomato!important;
+ stroke-width: 3!important;
+ fill:tomato!important;
+ transform: translate(0px,15px);
+ cy:155!important;
+}
+
+.c3-lines-vcampaign{
+ opacity: 0;
+}
+
+.c3-circles-vmanual > .c3-circle{
+ stroke:purple!important;
+ stroke-width: 3!important;
+ fill:purple!important;
+ transform: translate(0px,15px);
+ cy:155!important;
+}
+
+.c3-lines-vmanual{
+ opacity: 0;
+}
+
+
+.c3-legend-item-vcampaign, .c3-tooltip-name-vcampaign{
+	display:none;
+	visability:hidden;
+}
+
+.c3-legend-item-vmanual, .c3-tooltip-name-vmanual{
+	display:none;
+	visability:hidden;
+}

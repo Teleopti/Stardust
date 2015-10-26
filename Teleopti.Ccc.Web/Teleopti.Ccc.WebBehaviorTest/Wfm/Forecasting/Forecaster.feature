@@ -37,6 +37,7 @@ Scenario: Add campaign
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
 	When I select the first day in the forecast chart
+	And I select to modify the forecast
 	And I choose to add a campaign
 	And I increase the calls by 100 percent
 	And I apply the campaign
@@ -48,6 +49,7 @@ Scenario: Keep campaigns when reforecasting
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
 	When I select the first day in the forecast chart
+	And I select to modify the forecast
 	And I choose to add a campaign
 	And I increase the calls by 100 percent
 	And I apply the campaign
@@ -99,3 +101,14 @@ Scenario: Create new skill
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
 
+Scenario: Change the forecasted calls for one day
+	Given I am viewing forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	When I select the first day in the forecast chart
+	And I select to modify the forecast
+	And I select to do a manual change
+	And I enter '500' calls per day
+	And I apply the manual change
+	Then I should see that the total calls for the first day is '500'

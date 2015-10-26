@@ -203,16 +203,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".c3-event-rect-0");
 		}
 
+		[When(@"I select to modify the forecast")]
+		public void WhenISelectToModifyTheForecast()
+		{
+			Browser.Interactions.Click(".forecast-modify-button");
+		}
+
 		[When(@"I choose to add a campaign")]
 		public void WhenIChooseToAddACampaign()
 		{
 			Browser.Interactions.Click(".forecast-add-campaign-button");
 		}
 
-		[When(@"I increase the calls by (.*) percent")]
-		public void WhenIIncreaseTheCallsByPercent(int p0)
+		[When(@"I select to do a manual change")]
+		public void WhenISelectToDoAManualChange()
 		{
-			Browser.Interactions.FillWith(".forecast-campaign-input", "100");
+			Browser.Interactions.Click(".forecast-manual-change-button");
+		}
+
+		[When(@"I enter '(.*)' calls per day")]
+		public void WhenIEnterCallsPerDay(string calls)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".forecast-manual-change-input", calls);
+		}
+
+		[When(@"I increase the calls by (.*) percent")]
+		public void WhenIIncreaseTheCallsByPercent(string percent)
+		{
+			Browser.Interactions.FillWith(".forecast-campaign-input", percent);
 			var callCount = Browser.Interactions.GetText(".forecast-campaign-calls-count");
 			Browser.Interactions.AssertNoContains(".forecast-campaign-calls-count", ".forecast-campaign-totalcalls-count", callCount);
 		}
@@ -223,6 +241,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-apply-campaign-button");
 		}
 
+		[When(@"I apply the manual change")]
+		public void WhenIApplyTheManualChange()
+		{
+			Browser.Interactions.Click(".forecast-apply-manual-change-button");
+		}
+		
 		[When(@"I should see that the total calls for the first day has doubled")]
 		[Then(@"I should see that the total calls for the first day has doubled")]
 		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasDoubled()
@@ -235,6 +259,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				"return (v1==v2) + '  ' + v1+'  '+ v2;"
 				, "true");
 		}
+
+		[Then(@"I should see that the total calls for the first day is '(.*)'")]
+		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayIs(string calls)
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+					string.Format(
+					"var numberOfCalls = parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+					"return (numberOfCalls=={0}) + '  ' + numberOfCalls';"
+					, calls)
+				, "true");
+		}
+
 
 		[Given(@"I am viewing the forecast chart")]
 		public void GivenIAmViewingTheForecastChart()
