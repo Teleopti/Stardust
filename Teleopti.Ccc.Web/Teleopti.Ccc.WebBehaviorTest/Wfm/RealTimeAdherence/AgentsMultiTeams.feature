@@ -28,8 +28,8 @@ Scenario: Should be able to see agents for multiple sites
 	And I click 'open'
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
-@ignore
-Scenario: Should be able to see agents for multiple teamsa
+
+Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'
