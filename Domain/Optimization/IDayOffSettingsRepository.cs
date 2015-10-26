@@ -4,6 +4,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffSettingsRepository : IRepository<DayOffSettings>
 	{
-		 
 	}
 }

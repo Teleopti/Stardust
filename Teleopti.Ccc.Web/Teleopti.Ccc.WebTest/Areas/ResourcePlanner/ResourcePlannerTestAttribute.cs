@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
 			system.UseTestDouble<FakeClassicDaysOffOptimizationCommand>().For<IClassicDaysOffOptimizationCommand>();
+			system.UseTestDouble<FakeDayOffSettingsRepository>().For<IDayOffSettingsRepository>();
 		}
 	}
 }

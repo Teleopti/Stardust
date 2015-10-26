@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class DayOffSettingsRepository : Repository<DayOffSettings>
+	public class DayOffSettingsRepository : Repository<DayOffSettings>, IDayOffSettingsRepository
 	{
 		public DayOffSettingsRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
