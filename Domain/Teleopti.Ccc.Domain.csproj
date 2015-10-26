@@ -133,7 +133,7 @@
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
-    <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreationHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
