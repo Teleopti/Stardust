@@ -1225,6 +1225,7 @@
     <Content Include="WFM\js\forecasting\html\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
+    <Content Include="WFM\js\global\fakedatetime.service.js" />
     <Content Include="WFM\js\global\http.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />

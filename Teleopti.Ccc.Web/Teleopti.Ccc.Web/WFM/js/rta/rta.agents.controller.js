@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.rta').controller('RtaAgentsCtrl', [
-		'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaOrganizationService', 'RtaService',
-		function($scope, $filter, $state, $stateParams, $interval, RtaOrganizationService, RtaService) {
+		'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaOrganizationService', 'RtaService',
+		function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaOrganizationService, RtaService) {
 
 			var siteId = $stateParams.siteId;
 			var teamId = $stateParams.teamId;
@@ -149,7 +149,9 @@
 			};
 
 			$scope.goBack = function() {
-				$state.go('rta-teams', {siteId: siteId});
+				$state.go('rta-teams', {
+					siteId: siteId
+				});
 			};
 
 			$scope.format = function(time) {
@@ -172,18 +174,22 @@
 				var g = (bigint >> 8) & 255;
 				var b = bigint & 255;
 				return "rgba(" + r + ", " + g + ", " + b + ", 0.6)";
-			}
+			};
 
 			$scope.filterData = function() {
 				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText);
 			};
 
+			$scope.changeScheduleUrl = function(teamId, personId) {
+				return "/Anywhere#teamschedule/" + $sessionStorage.buid + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
+			};
+
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
 			var coloredWithDurationCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
-
+			var rowTemplate = '<div ng-click="checked=!checked" class="agent-state"><div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}} !important;" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell agent-row" ng-attr-agentid="{{row.entity.PersonId}}" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div><div ng-show="checked"><a href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId, row.entity.PersonId)}}" class="change-schedule">Change schedule</a></div>';
 			$scope.gridOptions = {
-				rowTemplate: '<div style="background-color: {{grid.appScope.hexToRgb(row.entity.AlarmColor)}} !important;" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-attr-agentid="{{row.entity.PersonId}}" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div>',
+				rowTemplate: rowTemplate,
 				columnDefs: [{
 					name: 'Name',
 					field: 'Name',
@@ -227,7 +233,6 @@
 				}],
 				data: $scope.agents
 			};
-
 		}
 	]);
 })();

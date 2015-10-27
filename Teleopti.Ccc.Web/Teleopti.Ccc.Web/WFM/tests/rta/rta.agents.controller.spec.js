@@ -7,6 +7,7 @@ describe('RtaAgentsCtrl', function() {
 		$controller,
 		$resource,
 		$state,
+		$sessionStorage,
 		scope;
 
 	var stateParams = {};
@@ -69,7 +70,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_) {
 		$controller = _$controller_;
 		scope = _$rootScope_.$new();
 		$q = _$q_;
@@ -77,6 +78,7 @@ describe('RtaAgentsCtrl', function() {
 		$rootScope = _$rootScope_;
 		$resource = _$resource_;
 		$state = _$state_;
+		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
 		$httpBackend.whenGET("html/forecasting/forecasting.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
@@ -262,7 +264,7 @@ describe('RtaAgentsCtrl', function() {
 			"AlarmStart": "\/Date(1432105910000)\/"
 		}];
 
-		var baseTime = new Date(2015, 4, 17);
+		var baseTime = new Date('2015-04-17');
 		jasmine.clock().mockDate(baseTime);
 
 		createController();
@@ -373,7 +375,9 @@ describe('RtaAgentsCtrl', function() {
 
 		scope.goBack();
 
-		expect($state.go).toHaveBeenCalledWith('rta-teams', {siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'});
+		expect($state.go).toHaveBeenCalledWith('rta-teams', {
+			siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'
+		});
 	});
 
 	it('should go back to sites', function() {
@@ -570,4 +574,21 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.gridOptions.data[0].Name).toEqual("Charley Caper");
 		expect(scope.gridOptions.data[0].State).toEqual("Ready");
 	});
+
+	it('should get change schedule url for agent', function() {
+		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+		}];
+		var fakeDate = new Date('2015-10-28');
+		jasmine.clock().mockDate(fakeDate);
+
+		createController();
+
+		expect(scope.changeScheduleUrl("34590a63-6331-4921-bc9f-9b5e015ab495", "11610fe4-0130-4568-97de-9b5e015b2564"))
+		.toEqual("/Anywhere#teamschedule/928dd0bc-bf40-412e-b970-9b5e015aadea/34590a63-6331-4921-bc9f-9b5e015ab495/11610fe4-0130-4568-97de-9b5e015b2564/20151028");
+	});
+
 });

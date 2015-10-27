@@ -19,6 +19,7 @@ var externalModules = angular.module('externalModules', ['ui.router',
 var wfm = angular.module('wfm', [
 	'externalModules',
 	'currentUserInfoService',
+	'fakeDateTimeService',
 	'toggleService',
 	'outboundServiceModule',
 	'RtaService',
@@ -174,8 +175,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo',
-	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout, currentUserInfo) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo','FakeDateTime',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout, currentUserInfo, fakeDateTime) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -271,7 +272,3 @@ wfm.config([
 		});
 	}
 ]);
-
-
-
-

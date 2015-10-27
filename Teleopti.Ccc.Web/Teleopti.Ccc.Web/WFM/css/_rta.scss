@@ -16,7 +16,6 @@
 	display: inline-flex;
 }
 
-
 .rta-list-item{
 	padding:1%;
 	margin-top:10px;
@@ -35,7 +34,6 @@
 .rta-nav-link {
 	cursor: pointer;
 }
-
 
 .rta-list{
   display: inline-flex;
@@ -61,7 +59,6 @@
   width:100%;
 }
 
-
 .rta-stats .wfm-checkbox{
   width:auto!important;
 }
@@ -73,6 +70,10 @@
 .site-data{
   margin-top: 10px;
   width:100%;
+}
+
+.agent-row{
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 700px), only screen and (max-device-width: 700px) {
