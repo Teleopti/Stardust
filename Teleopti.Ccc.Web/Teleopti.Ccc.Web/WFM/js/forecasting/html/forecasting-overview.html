@@ -39,7 +39,7 @@
 							<span class="row">
 								<div class=" forecast-campaign">
 									<label style="margin:0;">Scenario:</label>
-									<select class="col-lg-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
+									<select class="col-xs-6 col-md-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
 								</div>
 							</span>
 						</span>
@@ -47,7 +47,7 @@
 						<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
 							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 						</div>
-						<div ng-show="workload.forecastResultLoaded" class="wfm-block">
+						<div ng-show="workload.forecastResultLoaded" class="wfm-block forecast-result-chart-wrapper">
 							<forecast-result-chart chart-id="workload.ChartId" chart-data="workload.ResultChartData" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" number-of-selected="workload.numberOfSelected"></forecast-result-chart>
 						</div>
 						

@@ -135,3 +135,13 @@
 	height: auto !important; 
 	color: #ffc285; 
 }
+
+.forecast-result-chart-wrapper{
+	position: relative;
+}
+
+.clear-button{
+	position: absolute;
+	right: 5%;
+	top: -25px;
+}

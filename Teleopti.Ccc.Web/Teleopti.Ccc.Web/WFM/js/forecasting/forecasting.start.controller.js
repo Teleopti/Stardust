@@ -183,7 +183,13 @@
 
 					var resultStartDate = moment().utc().add(1, 'days');
 					var resultEndDate = moment(resultStartDate).add(6, 'months');
-					$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id, ScenarioId: workload.Scenario.Id })).
+					$http.post("../api/Forecasting/ForecastResult", JSON.stringify(
+						{
+							ForecastStart: resultStartDate.toDate(),
+							ForecastEnd: resultEndDate.toDate(),
+							WorkloadId: workload.Id,
+							ScenarioId: workload.Scenario.Id
+						})).
 						success(function (data, status, headers, config) {
 							angular.forEach(data.Days, function (day) {
 								day.date = new Date(Date.parse(day.date));
