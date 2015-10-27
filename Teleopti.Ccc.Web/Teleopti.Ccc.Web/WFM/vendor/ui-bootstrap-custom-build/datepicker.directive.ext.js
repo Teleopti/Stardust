@@ -3,6 +3,7 @@
 
 (function () {
 
+
 	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
 		$provide.decorator('datepickerDirective', ['$delegate', '$timeout', function ($delegate, $timeout) {
 			var directive = $delegate[0];
@@ -23,12 +24,14 @@
 
 					scope.$watch(function () {
 						return ctrl[0].activeDate.getTime();
-					}, function () {
-						if (scope.onChangeOfMonth != undefined) {
-							$timeout(function() {
-								 scope.onChangeOfMonth({ date: ctrl[0].activeDate });
-							});
+					}, function (newVal, oldVal) {
 
+						if (scope.onChangeOfMonth != undefined) {
+							if (moment(oldVal).month() !== moment(newVal).month()) {
+								$timeout(function () {
+									scope.onChangeOfMonth({ date: ctrl[0].activeDate });
+								});
+							}
 						}
 					});
 				}
