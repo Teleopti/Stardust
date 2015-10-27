@@ -14,6 +14,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Intraday;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
@@ -113,6 +114,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule<IntradayAreaModule>();
 
 			tenantWebSpecificTypes(builder);
 		}

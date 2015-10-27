@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<IntradaySkillStatusService>().SingleInstance();
+			builder.RegisterType<IntradaySkillStatusService>().As<IIntradaySkillStatusService>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillForecastedTasksProvider>().As<ISkillForecastedTasksProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillActualTasksProvider>().As<ISkillActualTasksProvider>().InstancePerLifetimeScope();
 		}
 	}
 }

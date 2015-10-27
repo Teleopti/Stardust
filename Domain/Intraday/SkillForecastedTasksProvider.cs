@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class SkillForecastedTasksProvider : ISkillForecastedTasksDetailProvider
+	public class SkillForecastedTasksProvider : ISkillForecastedTasksProvider
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
@@ -37,7 +37,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 						SkillName = item.Name,
 						IntervalTasks =
 							skillToTaskData.Where(x => x.SkillId == item.SkillId)
-								.Select(x => new IntervalTasks() {Interval = new DateTimePeriod(x.Minimum, x.Maximum), Task = x.TotalTasks}).ToList()
+								.Select(x => new IntervalTasks()
+								{
+									//should use timezone helper
+									Interval =
+										new DateTimePeriod( new DateTime(x.Minimum.Year,x.Minimum.Month,x.Minimum.Day,x.Minimum.Hour,x.Minimum.Minute,x.Minimum.Second,DateTimeKind.Utc),
+											new DateTime(x.Maximum.Year, x.Maximum.Month, x.Maximum.Day, x.Maximum.Hour, x.Maximum.Minute, x.Maximum.Second, DateTimeKind.Utc)),
+									Task = x.TotalTasks
+								}).ToList()
 					});
 				}
 			}
@@ -46,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 	}
 
-	public interface ISkillForecastedTasksDetailProvider
+	public interface ISkillForecastedTasksProvider
 	{
 		IList<SkillTaskDetails> GetForecastedTasks();
 	}

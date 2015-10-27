@@ -8,12 +8,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class SkillActualTasksProvider : ISkillActualTasksProvider
 	{
-		private readonly ISkillRepository _skillRepository;
 		private readonly IStatisticRepository _statisticRepository;
 
-		public SkillActualTasksProvider(ISkillRepository skillRepository, IStatisticRepository statisticRepository)
+		public SkillActualTasksProvider(IStatisticRepository statisticRepository)
 		{
-			_skillRepository = skillRepository;
 			_statisticRepository = statisticRepository;
 		}
 
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 						SkillName = item.SkillName,
 						IntervalTasks =
 							intradayStatistics.Where(x => x.SkillId == item.SkillId)
-								.Select(x => new IntervalTasks() { Interval = new DateTimePeriod(x.Interval, x.Interval), Task = x.StatOfferedTasks }).ToList()
+								.Select(x => new IntervalTasks() { Interval = new DateTimePeriod((x.Interval), x.Interval), Task = x.StatOfferedTasks }).ToList()
 					});
 				}
 			}

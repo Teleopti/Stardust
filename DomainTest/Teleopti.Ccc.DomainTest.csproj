@@ -466,7 +466,6 @@
     <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
     <Compile Include="Intraday\IntradayTestAttribute.cs" />
     <Compile Include="Intraday\ListSkillStatusTest.cs" />
-    <Compile Include="Intraday\SkillActualTaskProviderTest.cs" />
     <Compile Include="MessageBroker\ImplementationDetailTests\ActionImmediateTest.cs" />
     <Compile Include="MessageBroker\ImplementationDetailTests\ActionThrottleTest.cs" />
     <Compile Include="MessageBroker\ImplementationDetailTests\SubscriptionTest.cs" />
