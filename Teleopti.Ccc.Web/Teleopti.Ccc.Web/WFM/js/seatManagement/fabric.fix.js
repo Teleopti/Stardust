@@ -80,8 +80,7 @@
 
 	canvasPrototype._onDoubleClick = function (e) {
 		var self = this;
-		
-		var target = self.findTarget(e);
+		var target = self.findTarget(self.viewport.transform(e));
 		self.fire('mouse:dblclick', {
 			target: target,
 			e: e
