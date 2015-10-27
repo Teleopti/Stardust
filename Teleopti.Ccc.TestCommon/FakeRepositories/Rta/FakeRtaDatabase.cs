@@ -3,27 +3,36 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
+	public class ExternalUserStateForTest : ExternalUserStateInputModel
+	{
+		public ExternalUserStateForTest()
+		{
+			AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey;
+			PlatformTypeId = Guid.Empty.ToString();
+			SourceId = "sourceId";
+			UserCode = "8808";
+			StateCode = "AUX2";
+			IsLoggedOn = true;
+		}
+	}
+
 	public interface IFakeDataBuilder
 	{
 		IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state);
@@ -138,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					.Union(ApplicationData.RegisteredDataSources)
 					.Randomize()
 					.ToArray();
-			Tenants.Has(new Tenant(name) {RtaKey = key});
+			Tenants.Has(new Infrastructure.MultiTenancy.Server.Tenant(name) {RtaKey = key});
 			return this;
 		}
 
@@ -355,188 +364,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.ToArray();
 		}
 
-	}
-
-	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants
-	{
-		private readonly List<Tenant> _data = new List<Tenant>();
-
-		public void Has(Tenant tenant)
-		{
-			// making the key safe is done for real in db scripts when the default tenant is added
-			var key = ConfiguredKeyAuthenticator.MakeLegacyKeyEncodingSafe(tenant.RtaKey);
-			// when a test adds its own tenant with the legacy key, lets not add duplicates
-			if (_data.Any(x => x.RtaKey == key))
-				return;
-			tenant.RtaKey = key;
-			_data.Add(tenant);
-		}
-
-		public string Find(string rtaKey)
-		{
-			var tenant = _data.SingleOrDefault(x => x.RtaKey == rtaKey);
-			if (tenant == null)
-				return null;
-			return tenant.Name;
-		}
-
-		public int Count()
-		{
-			return _data.Count;
-		}
-
-		public IEnumerable<Tenant> Tenants()
-		{
-			return _data.ToArray();
-		}
-	}
-
-	public class FakeStateGroupActivityAlarmRepository : IStateGroupActivityAlarmRepository
-	{
-		private readonly IList<IStateGroupActivityAlarm> _data = new List<IStateGroupActivityAlarm>();
-
-		public void Add(IStateGroupActivityAlarm entity)
-		{
-			_data.Add(entity);
-		}
-
-		public void Remove(IStateGroupActivityAlarm entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IStateGroupActivityAlarm Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IStateGroupActivityAlarm> LoadAll()
-		{
-			return _data;
-		}
-
-		public IStateGroupActivityAlarm Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IStateGroupActivityAlarm> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public IList<IStateGroupActivityAlarm> LoadAllCompleteGraph()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
-	{
-		private readonly IList<IRtaStateGroup> _data = new List<IRtaStateGroup>();
-		
-		public void Add(IRtaStateGroup entity)
-		{
-			_data.Add(entity);
-		}
-
-		public void Remove(IRtaStateGroup entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IRtaStateGroup Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IRtaStateGroup> LoadAll()
-		{
-			return _data;
-		}
-
-		public IRtaStateGroup Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IRtaStateGroup> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public IList<IRtaStateGroup> LoadAllCompleteGraph()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	public class FakeAlarmTypeRepository : IAlarmTypeRepository
-	{
-		private readonly IList<IAlarmType> _data = new List<IAlarmType>();
-
-		public void Add(IAlarmType entity)
-		{
-			_data.Add(entity);
-		}
-
-		public void Remove(IAlarmType entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IAlarmType Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IAlarmType> LoadAll()
-		{
-			return _data;
-		}
-
-		public IAlarmType Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IAlarmType> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
 	}
 
 	public static class FakeDatabaseBuilderExtensions

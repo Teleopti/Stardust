@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader
 	{

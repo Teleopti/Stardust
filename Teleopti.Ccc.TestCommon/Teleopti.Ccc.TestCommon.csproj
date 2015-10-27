@@ -211,6 +211,15 @@
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffSettingsRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelReader.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelReader.cs" />
+    <Compile Include="FakeRepositories\FakeAlarmTypeRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
+    <Compile Include="FakeRepositories\FakeRtaStateGroupRepository.cs" />
+    <Compile Include="FakeRepositories\FakeStateGroupActivityAlarmRepository.cs" />
+    <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
     <Compile Include="FakeScheduleDifferenceSaver.cs" />
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />

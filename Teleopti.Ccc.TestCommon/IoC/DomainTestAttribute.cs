@@ -1,18 +1,24 @@
 ﻿using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -23,12 +29,19 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			//TODO: move this to common
+			system.AddModule(new SchedulingCommonModule(configuration));
+			system.AddModule(new RuleSetModule(configuration, true));
+			system.AddModule(new OutboundScheduledResourcesProviderModule());
+			//
+
 			fakePrincipal(system);
 
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
 			//
 
 			// Outbound stuff
@@ -43,14 +56,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			//
 
-			//Permission stuff
+			// Permission stuff
 			system.UseTestDouble<PrincipalAuthorizationWithFullPermission>().For<IPrincipalAuthorization>();
 			//
 
-			//TODO: move this to common
-			system.AddModule(new SchedulingCommonModule(configuration));
-			system.AddModule(new RuleSetModule(configuration, true));
-			system.AddModule(new OutboundScheduledResourcesProviderModule());
+			// Rta
+			system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter>();
+			system.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
+			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
+			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
 			//
 
 			system.UseTestDouble<FakeScheduleDictionaryPersister>().For<IScheduleDictionaryPersister>();
@@ -81,6 +97,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakeDayOffSettingsRepository>().For<IDayOffSettingsRepository>();
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
+			system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
+			system.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
 		}
 
 		private void fakePrincipal(ISystem system)

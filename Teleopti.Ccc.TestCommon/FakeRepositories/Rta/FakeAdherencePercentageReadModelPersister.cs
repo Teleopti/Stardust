@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader
 	{

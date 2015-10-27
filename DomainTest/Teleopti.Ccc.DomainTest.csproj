@@ -198,10 +198,6 @@
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\RtaDataSourceScopeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Cache\CacheTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NeutralAdherenceTest.cs" />
@@ -235,8 +231,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\EventsOrderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsStreamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForSnapshot.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeRtaDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoBrokerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityStartEventTest.cs" />
