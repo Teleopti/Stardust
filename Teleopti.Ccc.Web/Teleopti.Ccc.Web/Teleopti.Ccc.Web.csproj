@@ -1230,8 +1230,10 @@
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
+    <Content Include="WFM\js\intraday\intraday.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.html" />
+    <Content Include="WFM\js\intraday\intraday.service.spec.js" />
     <Content Include="WFM\js\intraday\_module.js" />
     <Content Include="WFM\js\outbound\html\activity-picker.tpl.html" />
     <Content Include="WFM\js\outbound\html\angular-gantt-custom.tpl.html" />

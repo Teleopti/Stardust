@@ -1,27 +1,30 @@
 ﻿<div class="intraday">
-    <div class="row">
-        <div class="col-lg-12">
-            <h4 translate>Intraday</h4>
-            <p>See if you are on track or not.</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <label for="skill-select">Pick a skill:</label>
-            <select name="skill-select" id="skill-select" required="">
-                <option value="" disabled selected>Pick a skill</option>
-                <option>Skill A</option>
-                <option>Skill B</option>
-                <option>Skill Group</option>
-            </select>        
-            <div class="role-nav material-depth-1 container-block">
-                <div class="wfm-block sub-header" translate>Calls</div>
-                <div class="wfm-block">
-                    <p>Actual: </p>
-                    <p>Forecasted: </p>
-                    <p>Summary: </p>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-lg-12">
+			<h4 translate>Intraday</h4>
+			<p>See if you are on track or not.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4">
+			<form class="wfm-form">
+				<div class="form-input-wrap">
+					<label for="skill-select">Pick a skill:</label>
+					<select name="skill-select" id="skill-select" required="" onchange="this.form.submit()">
+						<option selected="selected">McLaren Honda Support</option>
+						<option>Williams Martini Racing Support</option>
+						<option>FIA Merch Sales Group</option>
+					</select>
+					<noscript><input type="submit" value="Submit"></noscript>
+				</div>
+			</form>
+			<div class="role-nav material-depth-1 container-block">
+				<div class="wfm-block sub-header" translate>Calls</div>
+				<div class="wfm-block">
+					<p>Value: </p>
+					<p>Error description: </p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
