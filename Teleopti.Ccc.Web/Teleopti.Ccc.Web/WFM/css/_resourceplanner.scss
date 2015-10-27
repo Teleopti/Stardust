@@ -1,4 +1,4 @@
-﻿.resourceplanner-icon:before{
+.resourceplanner-icon:before{
 	vertical-align: text-top;
 }
 .resourceplanner-report{
@@ -87,6 +87,7 @@
     text-align: center;
     height: auto;
     width: auto;
+		position: relative;
     cursor: pointer;
     margin: 1px;
     height: 10px;
@@ -97,8 +98,12 @@
   visibility: hidden;
   background:rgba(0,0,0,0.6);
   color:white;
+	top: -1px;
+	width: 195px;
+	right: 0px;
+	display: flex;
   position: absolute;
-  padding: 10px;
+	padding: 5px;
   margin-top: 17px;
   opacity:0;
   transition-delay: 0.3s;
@@ -172,6 +177,7 @@ background-color: #cacaca;
 .overview{
   border-collapse: separate;
   padding: 5px;
+	margin-bottom:35px;
   width: 100%;
   empty-cells: show;
 
