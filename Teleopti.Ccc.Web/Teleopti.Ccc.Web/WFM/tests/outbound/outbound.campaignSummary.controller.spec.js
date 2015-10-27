@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('OutboundSummaryCtrl', function () {
+xdescribe('OutboundSummaryCtrl', function () {
 	var $q,
 		$rootScope,
 		$controller,

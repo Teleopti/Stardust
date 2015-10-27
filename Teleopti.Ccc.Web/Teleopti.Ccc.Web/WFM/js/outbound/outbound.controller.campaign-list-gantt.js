@@ -266,7 +266,7 @@
 
 		function setGanttOptions() {
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
-			$scope.settings.ganttStartDate = ganttPeriod.PeriodStart;
+			$scope.settings.periodStart = ganttPeriod.PeriodStart;
 			return {
 				headers: ['month', 'week'],
 				fromDate: ganttPeriod.PeriodStart,
