@@ -103,10 +103,6 @@ wfm.config([
 				'': {
 					templateUrl: 'js/outbound/html/outbound-overview.html'
 				},
-				'cards@outbound.summary': {
-					templateUrl: 'js/outbound/html/campaign-list-cards.html',
-					controller: 'OutboundListCardsCtrl'
-				},
 				'gantt@outbound.summary': {
 					templateUrl: 'js/outbound/html/campaign-list-gantt.html',
 					controller: 'CampaignListGanttCtrl'
