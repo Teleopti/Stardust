@@ -113,10 +113,10 @@
 					$scope.modalForecastingLaunch = false;
 				};
 
-				$scope.modalCampaignInfo = {};
+				$scope.modalModifyInfo = {};
 
 				var calculateCampaignCalls = function () {
-					return ($scope.sumOfCallsForSelectedDays * ($scope.modalCampaignInfo.campaignPercentage + 100) / 100).toFixed(1);
+					return ($scope.sumOfCallsForSelectedDays * ($scope.modalModifyInfo.campaignPercentage + 100) / 100).toFixed(1);
 				};
 
 				$scope.campaignDays = [];
@@ -138,16 +138,18 @@
 					$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
 				};
 
-				$scope.modalCampaignLaunch = false;
-				$scope.displayCampaignModal = function (workload) {
+$scope.modalModifyLaunch = false;
+				$scope.displayModifyModal = function (workload) {
+
 					if ($scope.disableModify(workload)) {
 						return;
 					}
-					$scope.modalCampaignLaunch = true;
-					getCampaignDays(workload);
-					$scope.modalCampaignInfo.campaignPercentage = 0;
-					$scope.modalCampaignInfo.selectedWorkload = workload;
-					$scope.modalCampaignInfo.selectedScenario = workload.Scenario;
+					$scope.modalModifyLaunch = true;
+					getModifyDays(workload);
+					$scope.modalModifyInfo.campaignPercentage = 0;
+					$scope.modalModifyInfo.manualChangeValue = 0;
+					$scope.modalModifyInfo.selectedWorkload = workload;
+					$scope.modalModifyInfo.selectedScenario = workload.Scenario;
 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 				};
 
@@ -156,16 +158,16 @@
 						if (campaignForm.campaignPercentageInput.$valid) {
 							// do nothing
 						} else if (campaignForm.campaignPercentageInput.$error.max) {
-							$scope.modalCampaignInfo.campaignPercentage = $scope.campaignPercentageConst.max;
+							$scope.modalModifyInfo.campaignPercentage = $scope.campaignPercentageConst.max;
 						} else if (campaignForm.campaignPercentageInput.$error.min) {
-							$scope.modalCampaignInfo.campaignPercentage = $scope.campaignPercentageConst.min;
+							$scope.modalModifyInfo.campaignPercentage = $scope.campaignPercentageConst.min;
 						}
 						$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 					}
 				};
 
-				$scope.cancelCampaignModal = function () {
-					$scope.modalCampaignLaunch = false;
+				$scope.cancelModifyModal = function () {
+					$scope.modalModifyLaunch = false;
 				};
 
 				$scope.formatDayCount = function (count, withParenthesis) {
@@ -222,12 +224,12 @@
 				};
 
 				$scope.applyCampaign = function () {
-					if ($scope.disableApplyCampaign()) {
+					if ($scope.disableApplyModification()) {
 						return;
 					}
-					$scope.modalCampaignLaunch = false;
+					$scope.modalModifyLaunch = false;
 					$scope.isForecastRunning = true;
-					var workload = $scope.modalCampaignInfo.selectedWorkload;
+					var workload = $scope.modalModifyInfo.selectedWorkload;
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
@@ -236,7 +238,48 @@
 							Days: $scope.campaignDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
-							CampaignTasksPercent: $scope.modalCampaignInfo.campaignPercentage
+							CampaignTasksPercent: $scope.modalModifyInfo.campaignPercentage
+						}))
+						.success(function (data, status, headers, config) {
+							if (data.Success) {
+								workload.IsSuccess = true;
+							} else {
+								workload.IsFailed = true;
+								workload.Message = data.Message;
+							}
+						})
+						.error(function (data, status, headers, config) {
+							workload.IsFailed = true;
+							if (data)
+								workload.Message = data.Message;
+							else
+								workload.Message = "Failed";
+						})
+						.finally(function () {
+							workload.ShowProgress = false;
+							$scope.isForecastRunning = false;
+							if (workload.forecastResultLoaded) {
+								$scope.getForecastResult(workload);
+							}
+						});
+				};
+
+				$scope.applyManualChange = function () {
+					if ($scope.disableApplyModification()) {
+						return;
+					}
+					$scope.modalModifyLaunch = false;
+					$scope.isForecastRunning = true;
+					var workload = $scope.modalModifyInfo.selectedWorkload;
+					workload.ShowProgress = true;
+					workload.IsSuccess = false;
+					workload.IsFailed = false;
+					$http.post("../api/Forecasting/ManualChange", JSON.stringify(
+						{
+							Days: campaignDays,
+							WorkloadId: workload.Id,
+							ScenarioId: workload.Scenario.Id,
+							ManualChangeValue: $scope.modalModifyInfo.manualChangeValue
 						}))
 						.success(function (data, status, headers, config) {
 							if (data.Success) {
@@ -351,7 +394,7 @@
 					return $scope.moreThanOneYear() || $scope.isForecastRunning;
 				};
 
-				$scope.disableApplyCampaign = function () {
+				$scope.disableApplyModification = function () {
 					return $scope.isForecastRunning;
 				};
 

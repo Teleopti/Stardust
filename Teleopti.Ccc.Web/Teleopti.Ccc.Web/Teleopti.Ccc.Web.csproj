@@ -436,6 +436,7 @@
     <Compile Include="Areas\Forecasting\Controllers\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ICampaignPersister.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\IManualChangePersister.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />

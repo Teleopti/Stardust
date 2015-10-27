@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var dateOnly = new DateOnly();
 			var campaignDays = new[]
 			{
-				new CampaignDay
+				new ModifiedDay
 				{
 					Date = dateOnly.Date
 				}
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var dateOnly = new DateOnly();
 			var campaignDays = new[]
 			{
-				new CampaignDay
+				new ModifiedDay
 				{
 					Date = dateOnly.Date
 				}
@@ -85,12 +85,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var fiveDaysLater = dateOnly.AddDays(5);
 			var campaignDays = new[]
 			{
-				new CampaignDay
+				new ModifiedDay
 				{
 					Date = dateOnly.Date
 				},
 
-				new CampaignDay
+				new ModifiedDay
 				{
 					Date = fiveDaysLater.Date
 				}

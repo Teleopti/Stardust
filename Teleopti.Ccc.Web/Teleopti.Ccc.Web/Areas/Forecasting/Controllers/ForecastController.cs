@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly ICampaignPersister _campaignPersister;
+		private readonly IManualChangePersister _manualChangePersister;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IManualChangePersister manualChangePersister)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_campaignPersister = campaignPersister;
+			_manualChangePersister = manualChangePersister;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -182,6 +184,39 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				_actionThrottler.Finish(token);
 			}
 		}
+
+		[UnitOfWork, HttpPost, Route("api/Forecasting/ManualChange")]
+		public virtual Task<ForecastResultViewModel> AddManualChange(ManualChangeInput input)
+		{
+			var failedTask = Task.FromResult(new ForecastResultViewModel
+			{
+				Success = false,
+				Message = "Forecast is running, please try later."
+			});
+			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
+			{
+				return failedTask;
+			}
+			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
+			try
+			{
+				var scenario = _scenarioRepository.Get(input.ScenarioId);
+				var workload = _workloadRepository.Get(input.WorkloadId);
+				_manualChangePersister.Persist(scenario, workload, input.Days, input.ManualChangeValue);
+				return Task.FromResult(new ForecastResultViewModel
+				{
+					Success = true
+				});
+			}
+			catch (OptimisticLockException)
+			{
+				return failedTask;
+			}
+			finally
+			{
+				_actionThrottler.Finish(token);
+			}
+		}
 	}
 
 	public class ScenarioViewModel
@@ -197,15 +232,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public BlockToken BlockToken { get; set; }
 	}
 
-	public class CampaignInput
+	public class ModifyInput
 	{
-		public CampaignDay[] Days { get; set; }
+		public ModifiedDay[] Days { get; set; }
 		public Guid ScenarioId { get; set; }
 		public Guid WorkloadId { get; set; }
+	}
+
+	public class CampaignInput : ModifyInput
+	{
 		public int CampaignTasksPercent { get; set; }
 	}
 
-	public class CampaignDay
+	public class ManualChangeInput : ModifyInput
+	{
+		public int ManualChangeValue { get; set; }
+	}
+
+	public class ModifiedDay
 	{
 		public DateTime Date { get; set; }
 	}

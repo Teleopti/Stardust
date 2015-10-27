@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
 	public interface ICampaignPersister
 	{
-		void Persist(IScenario scenario, IWorkload workload, CampaignDay[] days, int campaignTasksPercent);
+		void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, int campaignTasksPercent);
 	}
 }

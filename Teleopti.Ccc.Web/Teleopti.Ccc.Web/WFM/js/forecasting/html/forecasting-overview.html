@@ -68,7 +68,7 @@
 								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayCampaignModal(workload)" ng-disabled="disableModify(workload)">
 									Campaign <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
 									<md-tooltip>
-										Select days in chart before adding
+										Select days in chart before modifying
 									</md-tooltip>
 								</a>
 							</aside>
@@ -134,7 +134,7 @@
 	</div>
 </div>
 <div ng-cloak class="modal-box">
-	<div ng-cloak ng-if="modalCampaignLaunch">
+	<div ng-cloak ng-if="modalModifyLaunch">
 		<div class="modalbg">
 			<div class="dialog">
 				<div class="modal-header">
@@ -142,7 +142,7 @@
 				</div>
 				<div class="modal-inner-content">
 					<div ng-hide="addCampaign || addManual">
-						<h4>Select manual change or campaign to modify the <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalCampaignInfo.selectedScenario.Name}}. </b></h4>
+						<h4>Select manual change or campaign to modify the <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalModifyInfo.selectedScenario.Name}}. </b></h4>
 						<br/>
 						<label class="forecast-manual-change-button" for="addManualToggle" style="font-weight: normal;">
 							<input type="checkbox" ng-model="addManual" id="addManualToggle" style="display: none;" />
@@ -158,27 +158,40 @@
 						<br/>
 						<div class="modal-footer">
 							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
+								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
 							</aside>
 						</div>
 					</div>
 					<div ng-show="addManual && !addCampaign">
-						<h4>Manual change</h4>
-						<p>Manual change of the forecasted values. Changes made here will be saved until they are cleared.</p>
-						<br />
-						<label>Calls/day</label>
-						<input class="forecast-manual-change-input" type="text" />
-						<a href="#" class="wfm-btn wfm-btn-invis-default">Clear manual changes</a>
-						<br/>
-						<br/>
-						<br />
-						<div class="modal-footer">
-							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
-								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-manual-change-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="addCampaign===false">{{ 'Apply' | translate }}</a>
-							</aside>
-						</div>
+						<form name="form" class="wfm-form" novalidate>
+							<h4>Manual change</h4>
+							<dl>
+								<p>Manual change of the forecasted values. Changes made here will be saved until they are cleared.</p>
+								<dd>
+									<div class="form-input-wrap skill-service-level-seconds">
+										<label for="manualChangeInputId">
+											Calls/day
+											<input type="number" ng-model="modalModifyInfo.manualChangeValue" name="manualChangeInput" required="" id="manualChangeInputId" min="0" />
+										</label>
+										<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.manualChangeInput.$touched">
+											<div class="form-input-message" ng-class="{formInvalidInput:form.manualChangeInput.$error.required}">Seconds are required</div>
+											<div class="form-input-message" ng-class="{formInvalidInput:form.manualChangeInput.$error.min}">Negative values are not allowed</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+							<br />
+							<br />
+							<br />
+							<div class="modal-footer">
+								<aside>
+									<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
+									<a class="wfm-btn wfm-btn-invis-primary forecast-apply-manual-change-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyManualChange(); addManual=false">{{ 'Apply' | translate }}</a>
+								</aside>
+							</div>
+						</form>
 					</div>
+
 					<div ng-show="!addManual && addCampaign">
 						<div class="wfm-block">
 							<h4>Campaign</h4>
@@ -208,8 +221,8 @@
 
 								<form name="campaignForm">
 									<div class="row forecast-campaign">
-										<input class="forecast-campaign-input forecast-campaign" name="campaignPercentageInput" type="number" ng-model-options="{ debounce: 500 }" max="{{campaignPercentageConst.max}}" min="{{campaignPercentageConst.min}}" ng-model="modalCampaignInfo.campaignPercentage" ng-change="campaignPercentageChanged(campaignForm)" />
-										<md-slider flex md-discrete min="{{campaignPercentageConst.min}}" ng-model-options="{ debounce: 250 }" max="{{campaignPercentageConst.max}}" aria-label="slider" ng-model="modalCampaignInfo.campaignPercentage" ng-change="campaignPercentageChanged(campaignForm)"></md-slider>
+										<input class="forecast-campaign-input forecast-campaign" name="campaignPercentageInput" type="number" ng-model-options="{ debounce: 500 }" max="{{campaignPercentageConst.max}}" min="{{campaignPercentageConst.min}}" ng-model="modalModifyInfo.campaignPercentage" ng-change="campaignPercentageChanged(campaignForm)" />
+										<md-slider flex md-discrete min="{{campaignPercentageConst.min}}" ng-model-options="{ debounce: 250 }" max="{{campaignPercentageConst.max}}" aria-label="slider" ng-model="modalModifyInfo.campaignPercentage" ng-change="campaignPercentageChanged(campaignForm)"></md-slider>
 									</div>
 								</form>
 							</div>
@@ -217,8 +230,8 @@
 
 						<div class="modal-footer">
 							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelCampaignModal()">{{ 'Close' | translate }}</a>
-								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="applyCampaign(); addCampaign===false">{{ 'Apply' | translate }}</a>
+								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
+								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyCampaign(); addCampaign=false">{{ 'Apply' | translate }}</a>
 							</aside>
 						</div>
 					</div>
