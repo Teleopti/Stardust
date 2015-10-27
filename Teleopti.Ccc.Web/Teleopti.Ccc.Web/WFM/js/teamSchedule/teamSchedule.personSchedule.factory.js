@@ -11,9 +11,11 @@
 
 			var startTime = moment(projection.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
+
 			var shiftProjectionVm = {
 				StartPixels: function() {
-					var start = startTimeMinutes - timeLine.StartMinute;
+					var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
+					var start = displayStartTimeMinutes - timeLine.StartMinute;
 					var pixels = start * timeLine.PixelsPerMinute;
 					return Math.round(pixels);
 				},
@@ -56,12 +58,9 @@
 			return dayOffVm;
 		}
 
-		//person Schedule ViewModel
-		personScheduleVm.Create = function(personSchedule, timeLine) {
-			if (!personSchedule) personSchedule = {};
-
+		var createProjections = function(projections, timeLine) {
 			var projectionVms = [];
-			angular.forEach(personSchedule.Projection, function(projection) {
+			angular.forEach(projections, function(projection) {
 				var unit = timeLineUnit;
 				unit.init(projection, timeLine);
 				projection.Offset = timeLine.Offset;
@@ -69,15 +68,33 @@
 				projectionVms.push(new shiftProjectionViewModel(projection, timeLine));
 			});
 
+			return projectionVms;
+		}
+
+		var merge = function (otherSchedule, timeLine) {
+			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
+			this.ShiftProjections = this.ShiftProjections.concat(otherProjections);
+			if (this.DayOff == undefined && otherSchedule.DayOff != undefined && otherSchedule.DayOff != null){
+				this.DayOff = new dayOffViewModel(otherSchedule.DayOff, timeLine);
+			}
+		}
+
+		personScheduleVm.Create = function(personSchedule, timeLine) {
+			if (!personSchedule) personSchedule = {};
+
+			var projectionVms = createProjections(personSchedule.Projection, timeLine);
+
 			var vm = {
 				PersonId: personSchedule.PersonId,
 				Name: personSchedule.Name,
 				Date: moment.tz(personSchedule.Date, currentUserInfo.DefaultTimeZone),
 				ShiftProjections: projectionVms,
 				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
-				DayOff: personSchedule.DayOff == undefined || personSchedule.DayOff == null ? {}
+				DayOff: personSchedule.DayOff == undefined || personSchedule.DayOff == null ? undefined
 					: new dayOffViewModel(personSchedule.DayOff, timeLine)
 			}
+
+			vm.Merge = merge;
 
 			return vm;
 		}

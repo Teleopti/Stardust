@@ -16,15 +16,14 @@
 			angular.forEach(allProjections, function (projection) {
 				var projStartTime = moment(projection.Start);
 				var projStartTimeMin = projStartTime.diff(baseDate, 'minutes');
-				var projCutInsideDayStartMinutes = projStartTimeMin >= 0 ? projStartTimeMin : 0;
 
-				if (projStartTime.startOf("day").diff(baseDate, "days") === 0) {
-					var projStartMinutes = projCutInsideDayStartMinutes;
-					if (start === undefined || projStartMinutes < start) {
-						start = projStartMinutes;
-					}
+				if (start === undefined || projStartTimeMin < start) {
+					start = projStartTimeMin;
 				}
 			});
+
+			// If exists any schedule started from yesterday, set timeline start from 00:00;
+			start = start > 0 ? start : 0;
 
 			if (start === undefined)
 				return shiftHelper.MinutesForHourOfDay(8);

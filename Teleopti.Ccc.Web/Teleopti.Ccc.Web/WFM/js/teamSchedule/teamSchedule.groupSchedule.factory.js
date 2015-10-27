@@ -6,26 +6,28 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 		var groupScheduleViewModel = {};
 
 		groupScheduleViewModel.Create = function (groupSchedules, queryDate, canvasSize) {
-			var scheduleTimeLine = timeLine;
-
 			var baseDate = queryDate.startOf('day');
-			groupScheduleViewModel.TimeLine = scheduleTimeLine.Create(groupSchedules, baseDate, canvasSize);
+			var scheduleTimeLine = timeLine.Create(groupSchedules, baseDate, canvasSize);
 
 			var schedules = [];
 			angular.forEach(groupSchedules, function(schedule) {
 				var scheduleVm = personSchedule;
-				var personExisted = false;
+				var existedPersonSchedule = null;
 				for (var i = 0; i < schedules.length; i++) {
-					if (schedules[i].PersonId == schedule.PersonId) {
-						personExisted = true;
+					if (schedules[i].PersonId === schedule.PersonId) {
+						existedPersonSchedule = schedules[i];
+						break;
 					}
 				}
-				if (!personExisted) {
-					schedules.push(scheduleVm.Create(schedule, groupScheduleViewModel.TimeLine));
+
+				if (existedPersonSchedule == null) {
+					schedules.push(scheduleVm.Create(schedule, scheduleTimeLine));
+				} else {
+					existedPersonSchedule.Merge(schedule, scheduleTimeLine);
 				}
-				
 			});
 
+			groupScheduleViewModel.TimeLine = scheduleTimeLine;
 			groupScheduleViewModel.Schedules = schedules;
 		}
 
