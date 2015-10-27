@@ -13,8 +13,8 @@
 		vm.previousSelectedSeatIds = [];
 
 		vm.asignAgentsToSeats = function () {
-
-			seatPlanService.seatPlan.add({ StartDate: vm.scheduleDate, EndDate: vm.scheduleDate, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
+			var selectedDay = moment(vm.scheduleDate).format("YYYY-MM-DD");
+			seatPlanService.seatPlan.add({ StartDate: selectedDay, EndDate: selectedDay, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
 									.$promise.then(function () {
 										vm.refreshSeatMap();
 									});

@@ -82,5 +82,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			Browser.Interactions.AssertNotExists(".seatmap-occupancy-detail", ".seatmap-occupancy-detail .action-panel");
 		}
 
+		[When(@"I select agent '(.*)' from search list")]
+		public void WhenISelectAgentFromSearchList(string agent)
+		{
+			Browser.Interactions.AssertAnyContains("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child",agent);
+			Browser.Interactions.Click("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child");
+		}
+
+		[When(@"I click assign button")]
+		public void WhenIClickAssignButton()
+		{
+			Browser.Interactions.Click(".seatbooking-operations-cancel .assign-agents");
+		}
+
+		[Then(@"I should see '(.*)' in the result of seat plan")]
+		public void ThenIShouldSeeInTheResultOfSeatPlan(string agent)
+		{
+			Browser.Interactions.AssertAnyContains(".seatmap-occupancy-detail", agent);
+		}
+
 	}
 }
