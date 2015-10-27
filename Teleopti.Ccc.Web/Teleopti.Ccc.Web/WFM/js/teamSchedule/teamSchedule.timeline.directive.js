@@ -8,7 +8,7 @@
 			bindToController: true,
 			templateUrl: "js/teamSchedule/timeline.html",
 			scope: {
-				data: '=',
+				times: '=?',
 			},
 			linkFunction: linkFunction
 		};

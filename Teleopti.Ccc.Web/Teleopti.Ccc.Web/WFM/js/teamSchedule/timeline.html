@@ -1,7 +1,7 @@
 
 <div class="time-line absolute">
 	<div class="relative">
-		<span ng-repeat="hourPoint in vm.data.HourPoints">
+		<span ng-repeat="hourPoint in vm.times">
 			<span class="ruler absolute" ng-style="{left: (hourPoint.Pixel() + 'px')}"></span>
 			<span class="label label-info absolute" ng-style="{left: (hourPoint.Pixel() - 13) + 'px'}">{{ hourPoint.Time}}</span>
 		</span>
