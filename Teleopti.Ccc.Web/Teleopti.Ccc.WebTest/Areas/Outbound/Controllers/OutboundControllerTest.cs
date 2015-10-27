@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var listProvider = MockRepository.GenerateMock<ICampaignListProvider>();
 
 			var target = new OutboundController(null, null, null, null, null, null, listProvider, null);
-			target.UpdateCatch(period);
+			target.UpdateCache(period);
 
 			listProvider.AssertWasCalled(x=>x.CheckAndUpdateCache(period));
 		}

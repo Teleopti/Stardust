@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			};
 		}
 
-		[HttpPut, Route("api/Outbound/Campaign/Navigation")]
-		public virtual bool UpdateCatch(GanttPeriod period)
+		[HttpPut, Route("api/Outbound/Campaign/Navigation"), UnitOfWork]
+		public virtual bool UpdateCache(GanttPeriod period)
 		{
 			_campaignListProvider.CheckAndUpdateCache(period);
 			return true;
