@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpPost, Route("api/Outbound/Campaign/Load"), UnitOfWork]
 		public virtual bool LoadData()
 		{
+			_campaignListProvider.ResetCache();
 			_campaignListProvider.LoadData(null);
 			return true;
 		}		
@@ -207,6 +208,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 				Value = threshold.RelativeWarningThreshold.Value,
 				Type = threshold.WarningThresholdType
 			};
+		}
+
+		[HttpPut, Route("api/Outbound/Campaign/Navigation")]
+		public virtual bool UpdateCatch(GanttPeriod period)
+		{
+			_campaignListProvider.CheckAndUpdateCache(period);
+			return true;
 		}
 	}
 }

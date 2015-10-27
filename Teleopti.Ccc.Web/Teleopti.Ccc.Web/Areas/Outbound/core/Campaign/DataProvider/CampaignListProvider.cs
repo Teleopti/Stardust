@@ -256,13 +256,32 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			foreach (var campaign in campaigns)
 			{
-				var dates = campaign.SpanningPeriod.DateCollection();
-				var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill))
-					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
-				var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill))
-					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
-				_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
-				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
+				if (_outboundScheduledResourcesCacher.GetForecastedTime(campaign) == null)
+				{
+					var dates = campaign.SpanningPeriod.DateCollection();
+					var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill))
+						.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
+					var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill))
+						.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
+					_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
+					_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
+				}
+			}
+		}
+
+		public void CheckAndUpdateCache(GanttPeriod period)
+		{
+			var campaigns = period == null
+				? _outboundCampaignRepository.LoadAll()
+				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+
+			foreach (var campaign in campaigns)
+			{
+				if (_outboundScheduledResourcesCacher.GetForecastedTime(campaign) == null)
+				{
+					LoadData(period);
+					break;
+				}
 			}
 		}
 	}

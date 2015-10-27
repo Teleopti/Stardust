@@ -288,5 +288,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 
 			result.Type.Should().Be.EqualTo(expectedType);
 		}
+
+		[Test]
+		public void ShouldUpdateCache()
+		{
+			var period = new GanttPeriod();
+			var listProvider = MockRepository.GenerateMock<ICampaignListProvider>();
+
+			var target = new OutboundController(null, null, null, null, null, null, listProvider, null);
+			target.UpdateCatch(period);
+
+			listProvider.AssertWasCalled(x=>x.CheckAndUpdateCache(period));
+		}
 	}
 }

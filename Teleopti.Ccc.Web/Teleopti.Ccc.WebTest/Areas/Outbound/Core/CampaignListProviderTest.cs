@@ -510,6 +510,57 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			
 		}
 
+		[Test]
+		public void ShouldResetCache()
+		{
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			var forcast = new Dictionary<DateOnly, TimeSpan> {{new DateOnly(2015,10,26), TimeSpan.Zero}};
+			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
+
+			target.ResetCache();
+			_outboundScheduledResourcesCacher.GetForecastedTime(campaign1).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldLoadDataWhenThereIsNewCampaign()
+		{
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			_outboundCampaignRepository.Add(campaign1);
+			var campaign2 = createCampaign("campaign2", new DateOnlyPeriod(2015, 11, 1, 2015, 12, 1), _userTimeZone);
+			_outboundCampaignRepository.Add(campaign2);
+			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
+			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
+			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+
+			target.CheckAndUpdateCache(new GanttPeriod()
+			{
+				StartDate = new DateOnly(2015,10,1),
+				EndDate = new DateOnly(2015,12,1)
+			});
+
+			scheduledResourcesProvider.AssertWasCalled(x => x.Load(null, new DateOnlyPeriod()), y => y.IgnoreArguments());
+		}		
+		
+		[Test]
+		public void ShouldNotLoadDataWhenThereIsNewCampaign()
+		{
+			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
+			_outboundCampaignRepository.Add(campaign1);
+			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
+			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
+			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+
+			target.CheckAndUpdateCache(new GanttPeriod()
+			{
+				StartDate = new DateOnly(2015,10,1),
+				EndDate = new DateOnly(2015,11,1)
+			});
+
+			scheduledResourcesProvider.AssertWasNotCalled(x => x.Load(null, new DateOnlyPeriod()), y => y.IgnoreArguments());
+		}
+
 		public IOutboundCampaign GetTestCampaign(int index)
 		{	
 			var today = DateOnly.Today;	
