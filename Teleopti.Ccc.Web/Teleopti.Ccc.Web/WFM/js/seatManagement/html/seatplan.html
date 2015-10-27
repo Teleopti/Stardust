@@ -9,11 +9,7 @@
 
 		<div class="col-sm-12 seatplan-calendar">
 
-			<div class="calendar-progress" ng-show="seatplan.isLoadingCalendar">
-				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-			</div>
-
-			<datepicker ng-hide="seatplan.isLoadingCalendar" ng-model="seatplan.selectedDate"
+			<datepicker ng-model="seatplan.selectedDate"
 						on-change-of-month="seatplan.onChangeOfMonth(date)"
 						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
 						custom-class="seatplan.getDayClass(date,mode)">
