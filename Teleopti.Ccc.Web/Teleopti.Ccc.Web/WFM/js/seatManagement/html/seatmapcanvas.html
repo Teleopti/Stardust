@@ -9,8 +9,9 @@
 </style>
 
 <div class="seatmap">
+	
 	<div class="seatmap-view-header material-depth-1" ng-if="vm.showOccupancy">
-
+		
 		<button class="wfm-btn return-button pull-left" ng-click="vm.toggle()">
 			<i class="mdi mdi-reply"></i>
 		</button>
@@ -22,7 +23,7 @@
 				{{vm.getDisplaySelectedDate()}}
 			</button>
 			<div class="date-picker">
-				<datepicker ng-show="vm.isDatePickerOpened" ng-model="vm.selectedDate"
+				<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
 							class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
 				</datepicker>
 			</div>
