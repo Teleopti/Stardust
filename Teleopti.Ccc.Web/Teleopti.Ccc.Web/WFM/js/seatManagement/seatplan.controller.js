@@ -109,10 +109,9 @@
 			if (vm.isLoadingCalendar) {
 				return;
 			}
-			var dateMoment = moment(date);
-			if (dateMoment.month() != vm.currentMonth) {
-				vm.loadMonthDetails(date);
-			}
+
+			vm.loadMonthDetails(date);
+			
 		};
 
 		vm.onSeatPlanStart = function () {
