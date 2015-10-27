@@ -127,12 +127,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _intradayStat;
 		}
 
-			public void FakeStatisticData(IQueueSource queueSource, List<IStatisticTask> statisticTaskList)
-			{
-				_statisticTaskDataPerQueueSource.Add(queueSource, statisticTaskList);
-			}
-		
-
 		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>(); 
 		public void AddIntradayStatistics(IList<IIntradayStatistics> intradayStat)
 		{

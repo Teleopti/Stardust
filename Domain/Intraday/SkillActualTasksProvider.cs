@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -16,50 +17,30 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_statisticRepository = statisticRepository;
 		}
 
-		public Dictionary<ISkill,IList<SkillTaskDetails>> GetActualTasks()
+		public IList<SkillTaskDetails> GetActualTasks()
 		{
-			var result = new Dictionary<ISkill, IList<SkillTaskDetails>>();
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var queueSourceCollection = new List<IQueueSource>();
-			foreach (var skill in skills)
+			var result = new  List<SkillTaskDetails>();
+			var intradayStatistics = _statisticRepository.LoadSkillStatisticForSpecificDates(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow));
+			foreach (var item in intradayStatistics)
 			{
-				foreach (var workload in skill.WorkloadCollection)
+				if (!result.Contains(new SkillTaskDetails() { SkillId = item.SkillId }))
 				{
-					queueSourceCollection.AddRange(workload.QueueSourceCollection);
-					//need to refactor this
-					result.Add(skill, new List<SkillTaskDetails>());
-					var statisticTasks = _statisticRepository.LoadSpecificDates(queueSourceCollection, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow));
-					//foreach (var statisticTask in statisticTasks)
-					//{
-					//	//check the resolution
-					//	result[skill].Add(new SkillTaskDetails()
-					//	{
-					//		Interval = new DateTimePeriod(statisticTask.Interval, statisticTask.Interval.AddMinutes(skill.DefaultResolution))
-					//	});
-					//}
+					result.Add(new SkillTaskDetails()
+					{
+						SkillId = item.SkillId,
+						SkillName = item.SkillName,
+						IntervalTasks =
+							intradayStatistics.Where(x => x.SkillId == item.SkillId)
+								.Select(x => new IntervalTasks() { Interval = new DateTimePeriod(x.Interval, x.Interval), Task = x.StatOfferedTasks }).ToList()
+					});
 				}
-				
 			}
 			return result;
 		}
-		
-		//public Dictionary<ISkill,IList<SkillTaskDetails>> GetActualTasks()
-		//{
-		//	var result = new Dictionary<ISkill, IList<SkillTaskDetails>>();
-		//	var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-		//	var queueSourceCollection = new List<IQueueSource>();
-		//	const string timeZoneId = "dummy timezone as this will be refactored and removed";
-		//	var intradayStatistic = _statisticRepository.LoadSkillStatisticForSpecificDates(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow), timeZoneId, TimeSpan.Zero);
-		//	foreach (var item in intradayStatistic)
-		//	{
-		//		if(result.ContainsKey(item.))
-		//	}
-		//	return result;
-		//}
 	}
 
 	public interface ISkillActualTasksProvider
 	{
-		Dictionary<ISkill,IList<SkillTaskDetails>> GetActualTasks();
+		IList<SkillTaskDetails> GetActualTasks();
 	}
 }

@@ -4,12 +4,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -19,9 +18,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public IntradaySkillStatusService Target;
 		public FakeStatisticRepository StatisticRepository;
-		
+
+		#region "Intraday service"
+		public IntradaySkillStatusService Target;
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -30,28 +30,113 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldListAllSkillsWithCalls()
+		public void ShouldReturnStatusForOneSkill()
 		{
 			var skillId = Guid.NewGuid();
-			var skill = SkillFactory.CreateSkill("Skill", TimeZoneInfo.Utc);
+			var skill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.Utc);
 			skill.SetId(skillId);
-			var models = new List<SkillTaskDetailsModel>
+			var forecastedData = new List<SkillTaskDetailsModel>
 			{
-				new SkillTaskDetailsModel
-				{
-					TotalTasks = 20,
-					SkillId = skillId,
-					Minimum = new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
-					Maximum = new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)
-				}
+				getSkillTaskDetailsModel(skillId, 7, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 9, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 11, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 7, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 10, 0, 0, DateTimeKind.Utc))
+
 			};
 			SkillRepository.Add(skill);
-			SkillDayRepository.AddFakeTemplateTaskModels(models);
-			Assert.True(true);
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),12,"Phone"),
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),15,"Phone"),
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),7,"Phone")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
 			var result = Target.GetSkillStatusModels();
-			result.Should().Not.Be.Null();
+			result.Count().Should().Be.EqualTo(1);
+			result.First().SkillName.Should().Be.EqualTo("Phone");
+			result.First().Measures.First().Value.Should().Be.EqualTo(11);
 		}
 
+		[Test]
+		public void ShouldReturnSortedSkillsBasedOnSeverity()
+		{
+			var phoneSkillId = Guid.NewGuid();
+			var phoneSkill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.Utc);
+			phoneSkill.SetId(phoneSkillId);
+			SkillRepository.Add(phoneSkill);
+
+			var chatSkillId = Guid.NewGuid();
+			var chatSkill = SkillFactory.CreateSkill("Chat", TimeZoneInfo.Utc);
+			chatSkill.SetId(chatSkillId);
+			SkillRepository.Add(chatSkill);
+
+			var forecastedData = new List<SkillTaskDetailsModel>
+			{
+				getSkillTaskDetailsModel(phoneSkillId, 7, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(phoneSkillId, 9, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 11, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(phoneSkillId, 7, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 10, 0, 0, DateTimeKind.Utc)),
+				
+				getSkillTaskDetailsModel(chatSkillId, 7, "Chat", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(chatSkillId, 12, "Chat", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 11, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(chatSkillId, 7, "Chat", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 10, 0, 0, DateTimeKind.Utc))
+
+			};
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(phoneSkillId,new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),12,"Phone"),
+				getIntradayStatistics(phoneSkillId,new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),15,"Phone"),
+				getIntradayStatistics(phoneSkillId,new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),7,"Phone"),
+				
+				getIntradayStatistics(chatSkillId,new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),12,"Chat"),
+				getIntradayStatistics(chatSkillId,new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),7,"Chat"),
+				getIntradayStatistics(chatSkillId,new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),7,"Chat")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
+			var result = Target.GetSkillStatusModels();
+			result.Count().Should().Be.EqualTo(2);
+			result.First().SkillName.Should().Be.EqualTo("Phone");
+			result.Second().SkillName.Should().Be.EqualTo("Chat");
+			result.First().Measures.First().Value.Should().Be.EqualTo(11);
+			result.Second().Measures.First().Value.Should().Be.EqualTo(10);
+		}
+
+		private static IntradayStatistics getIntradayStatistics(Guid skillId, DateTime start, int task, string skillName)
+		{
+			return new IntradayStatistics()
+			{
+				Interval = start,
+				SkillId = skillId,
+				SkillName = skillName,
+				StatOfferedTasks = task
+			};
+		}
+
+		private static SkillTaskDetailsModel getSkillTaskDetailsModel(Guid skillId, int task, String skillName, DateTime start, DateTime end)
+		{
+			return new SkillTaskDetailsModel
+			{
+				TotalTasks = task,
+				Name = skillName,
+				SkillId = skillId,
+				Minimum = start,
+				Maximum = end
+			};
+		}
+
+		#endregion
+		
 		#region "Forecasted Data Tests"
 		
 		public SkillForecastedTasksProvider TargetSkillForecastedTasksProvider;
@@ -142,59 +227,47 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnActualTaskForOneSkill()
 		{
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
-			skill1.SetId(Guid.NewGuid());
-			//var skillRepository = new FakeSkillRepository();
-			SkillRepository.Add(skill1);
-
-			//FakeStatisticRepository fakeStatisticRepository = new FakeStatisticRepository();
-			IStatisticTask statisticTask1 = new StatisticTask()
+			Guid skillId = Guid.NewGuid();
+			IIntradayStatistics intradayStatistic1 = new IntradayStatistics()
 			{
 				Interval = new DateTime(2015, 10, 22, 09, 00, 00, DateTimeKind.Utc),
-				StatAnsweredTasks = 10
+				StatOfferedTasks = 10,
+				SkillId = skillId
 			};
-			IStatisticTask statisticTask2 = new StatisticTask()
+			IIntradayStatistics intradayStatistic2 = new IntradayStatistics()
 			{
 				Interval = new DateTime(2015, 10, 22, 09, 15, 00, DateTimeKind.Utc),
-				StatAnsweredTasks = 15
+				StatOfferedTasks = 15,
+				SkillId = skillId
 			};
-			var statisticTaskList = new List<IStatisticTask>() { statisticTask1, statisticTask2 };
-			StatisticRepository.FakeStatisticData(skill1.WorkloadCollection.First().QueueSourceCollection.First(), statisticTaskList);
-			//var target = new SkillActualTasksProvider(skillRepository, StatisticRepository);
+			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>(){intradayStatistic1,intradayStatistic2}); 
 			var result = TargetSkillActualTasksProvider.GetActualTasks();
 			result.Count.Should().Be.EqualTo(1);
-			//result.First().Value.First().Task.Should().Be.EqualTo(10);
+			result.First().IntervalTasks.First().Task.Should().Be.EqualTo(10);
+			result.First().IntervalTasks.Second().Task.Should().Be.EqualTo(15);
 		}
 
 		[Test]
 		public void ShouldReturnActualTaskForTwoSkills()
 		{
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
-			var skill2 = SkillFactory.CreateSkillWithWorkloadAndSources();
-			//skill1.SetId(Guid.NewGuid());
-			var skillRepository = new FakeSkillRepository();
-			skillRepository.Add(skill1);
-			skillRepository.Add(skill2);
-
-			var fakeStatisticRepository = new FakeStatisticRepository();
-			IStatisticTask statisticTask1 = new StatisticTask()
+			IIntradayStatistics intradayStatistic1 = new IntradayStatistics()
 			{
 				Interval = new DateTime(2015, 10, 22, 09, 00, 00, DateTimeKind.Utc),
-				StatAnsweredTasks = 10
+				StatOfferedTasks = 10,
+				SkillId = Guid.NewGuid()
 			};
-			fakeStatisticRepository.FakeStatisticData(skill1.WorkloadCollection.First().QueueSourceCollection.First(), new List<IStatisticTask>() { statisticTask1 });
-
-			IStatisticTask statisticTask2 = new StatisticTask()
+			IIntradayStatistics intradayStatistic2 = new IntradayStatistics()
 			{
 				Interval = new DateTime(2015, 10, 22, 09, 15, 00, DateTimeKind.Utc),
-				StatAnsweredTasks = 15
+				StatOfferedTasks = 15,
+				SkillId = Guid.NewGuid()
 			};
-			fakeStatisticRepository.FakeStatisticData(skill1.WorkloadCollection.First().QueueSourceCollection.First(), new List<IStatisticTask>() { statisticTask2 });
-
-			var target = new SkillActualTasksProvider(skillRepository, fakeStatisticRepository);
-			var result = target.GetActualTasks();
-			result.Count.Should().Be.EqualTo(1);
-			//result.First().Value.First().Task.Should().Be.EqualTo(10);
+			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>() { intradayStatistic1, intradayStatistic2 }); 
+			//var target = new SkillActualTasksProvider(skillRepository, fakeStatisticRepository);
+			var result = TargetSkillActualTasksProvider.GetActualTasks();
+			result.Count.Should().Be.EqualTo(2);
+			result.First().IntervalTasks.First().Task.Should().Be.EqualTo(10);
+			result.Second().IntervalTasks.First().Task.Should().Be.EqualTo(15);
 		}
 
 		#endregion
