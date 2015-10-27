@@ -40,6 +40,10 @@
 	font-sixe:15px!important;
 }
 
+#tree-root > li > div > div > div > div > ul > li > div{
+	padding-left:50px;
+}
+
 .permissions-tree-switch{
 	text-align: right;
 }
@@ -61,7 +65,6 @@
 
 .tree-line{
 	overflow-y: hidden;
-	border-top: 1px solid #E0E0E0;
 }
 
 .inline-role-name{
