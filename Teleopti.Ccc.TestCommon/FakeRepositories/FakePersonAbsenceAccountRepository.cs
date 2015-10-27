@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -10,24 +12,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAbsenceAccountRepository : IPersonAbsenceAccountRepository
 	{
+
+		private readonly IList<IPersonAbsenceAccount> _absenceAccounts = new List<IPersonAbsenceAccount>();
+
 		public void Add(IPersonAbsenceAccount entity)
 		{
-			throw new NotImplementedException();
+			_absenceAccounts.Add (entity);
 		}
 
 		public void Remove(IPersonAbsenceAccount entity)
 		{
-			throw new NotImplementedException();
+			_absenceAccounts.Remove (entity);
 		}
 
 		public IPersonAbsenceAccount Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _absenceAccounts.SingleOrDefault (account => account.Id == id);
 		}
 
 		public IList<IPersonAbsenceAccount> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _absenceAccounts;
 		}
 
 		public IPersonAbsenceAccount Load(Guid id)
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IPersonAbsenceAccount> entityCollection)
 		{
-			throw new NotImplementedException();
+			entityCollection.ForEach (Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }

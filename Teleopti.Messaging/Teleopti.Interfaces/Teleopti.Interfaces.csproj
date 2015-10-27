@@ -145,6 +145,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
     <Compile Include="Domain\IScheduleChangedMessage.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
+    <Compile Include="Domain\IBusinessRulesForPersonAccountUpdate.cs" />
     <Compile Include="Domain\ICurrentBusinessUnit.cs" />
     <Compile Include="Domain\IDataSourceForTenant.cs" />
     <Compile Include="Domain\IExtractedRestrictionResult.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IOutboundCampaign.cs" />
     <Compile Include="Domain\ISeatBookingRequestAssembler.cs" />
+    <Compile Include="Domain\ISaveSchedulePartService.cs" />
     <Compile Include="Domain\ISkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IPersonSkillDayCreator.cs" />
@@ -723,6 +725,7 @@
     <Compile Include="Infrastructure\IIntervalLengthFetcher.cs" />
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
+    <Compile Include="Infrastructure\IScheduleDifferenceSaver.cs" />
     <Compile Include="Infrastructure\IUpgradeLog.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />

@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IScheduleDifferenceSaver
 	{

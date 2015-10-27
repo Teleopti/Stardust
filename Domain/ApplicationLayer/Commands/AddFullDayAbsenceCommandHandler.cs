@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -12,17 +9,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{
 		private readonly ICurrentScenario _scenario;
+		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly IProxyForId<IPerson> _personRepository;
 		private readonly IProxyForId<IAbsence> _absenceRepository;
-		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
+		
+		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, 
+			IProxyForId<IPerson> personRepository, 
+			IProxyForId<IAbsence> absenceRepository, 
+			ICurrentScenario scenario, 
+			IPersonAbsenceCreator personAbsenceCreator){
 
-		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, ICurrentScenario scenario)
-		{
 			_scenario = scenario;
+			_personAbsenceCreator = personAbsenceCreator;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
-			_personAbsenceRepository = personAbsenceRepository;
 			_scheduleRepository = scheduleRepository;
 		}
 
@@ -32,29 +33,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var absence = _absenceRepository.Load(command.AbsenceId);
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
 
-			var scheduleDays = getScheduleDaysForPeriod(period, person);
-
+			var scheduleRange = getScheduleRangeForPeriod (period, person);
+			var scheduleDays = scheduleRange.ScheduledDayCollection(period).ToList();
+			var scheduleDay = scheduleRange.ScheduledDay (new DateOnly(command.StartDate));
+			
 			var previousDay = scheduleDays.First();
 			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
 
-			var personAbsence = new PersonAbsence(_scenario.Current());
-			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
-
-			_personAbsenceRepository.Add(personAbsence);
+			_personAbsenceCreator.Create(absence, scheduleRange, scheduleDay, absenceTimePeriod, person, command.TrackedCommandInfo, true);
+			
 		}
-
-		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
+		
+		private IScheduleRange getScheduleRangeForPeriod (DateOnlyPeriod period, IPerson person)
 		{
-			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
-				person,
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				_scenario.Current());
+			var dictionary =  _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+					person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					period,
+					_scenario.Current());
 
-			var scheduleDays = dictionary[person].ScheduledDayCollection(period);
-			return scheduleDays;
+			return dictionary[person];
 		}
-
+		
 		private DateTimePeriod getDateTimePeriodForAbsence(IEnumerable<IScheduleDay> scheduleDaysInPeriod, IScheduleDay previousDay)
 		{
 			var firstDayDateTime = getDateTimePeriodForDay(scheduleDaysInPeriod.First());

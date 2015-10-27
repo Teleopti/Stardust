@@ -738,6 +738,7 @@
     <Compile Include="Scheduling\PublishPlanningPeriodTest.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRuleTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleTest.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverLaterTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverEarlierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />

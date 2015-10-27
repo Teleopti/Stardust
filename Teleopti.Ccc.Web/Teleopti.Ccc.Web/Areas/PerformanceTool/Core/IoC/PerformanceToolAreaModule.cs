@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC
 {

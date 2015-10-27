@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -6,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -39,10 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			var eventsPublisher = new FakeEventsPublisher();
 			var target = new EventsMessageSender(eventsPublisher);
 
-			var root = new PersonAbsence(new FakeCurrentScenario().Current());
-			var dateTimeperiod =
-				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime, new TrackedCommandInfo());
+			var absence = new Absence();
+			
+			var startDateTime = new DateTime(2015, 10, 1, 8, 0, 0, DateTimeKind.Utc);
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, startDateTime.AddHours(8)));
+
+			var root = new PersonAbsence(new Person(), new FakeCurrentScenario().Current(), absenceLayer);
+
+			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), null);
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
 			target.AfterFlush(roots);

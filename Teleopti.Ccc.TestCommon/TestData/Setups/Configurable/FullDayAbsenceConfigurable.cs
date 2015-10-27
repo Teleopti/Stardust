@@ -3,7 +3,11 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,8 +24,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
-
-			var handler = new AddFullDayAbsenceCommandHandler(new ScheduleRepository(currentUnitOfWork, new RepositoryFactory()), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario));
+			var scheduleRepository = new ScheduleRepository(currentUnitOfWork, new RepositoryFactory());
+			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
+			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository), personAbsenceAccountRepository);
+			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
+			var personAbsenceCreator = new PersonAbsenceCreator (scheduleDifferenceSaver, businessRulesForAccountUpdate);
+			var handler = new AddFullDayAbsenceCommandHandler(scheduleRepository, new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario),personAbsenceCreator);
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,

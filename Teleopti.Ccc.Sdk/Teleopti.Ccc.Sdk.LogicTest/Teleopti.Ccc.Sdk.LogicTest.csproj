@@ -282,7 +282,6 @@
     <Compile Include="Restrictions\PlanningTimeBankExtractorTest.cs" />
     <Compile Include="Restrictions\PreferenceNightRestCheckerTest.cs" />
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
-    <Compile Include="SaveSchedulePartServiceTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="TenantSdkTestAttribute.cs" />
   </ItemGroup>

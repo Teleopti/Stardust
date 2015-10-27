@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -59,8 +60,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 scheduleDay.CreateAndAddDayOff(dayOff);
 
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
-				_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-                   uow.PersistAll();
+
+				try{
+					_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
+					uow.PersistAll();
+				}
+				catch (BusinessRuleValidationException ex)
+				{
+					throw new FaultException(ex.Message);
+				}
+
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -61,8 +62,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				var scheduleTagEntity =
 					_scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
-				_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-				uow.PersistAll();
+				try
+				{
+					_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
+					uow.PersistAll();
+				}
+				catch (BusinessRuleValidationException ex)
+				{
+					throw new FaultException(ex.Message);
+				}
+
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
 		}

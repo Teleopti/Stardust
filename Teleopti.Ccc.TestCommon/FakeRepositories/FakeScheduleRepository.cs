@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeScheduleDataReadScheduleRepository : IScheduleRepository
+	public class FakeScheduleRepository : IScheduleRepository
 	{
 		public void InitRangeValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
 		{
@@ -19,9 +18,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_targetTimeHolder = targetTimeHolder;
 			_contractTimeHolder = contractTimeHolder;
 		}
-
-
-		private IEnumerable<IScheduleData> _data = new List<IScheduleData>();
+		
+		private IList<IPersistableScheduleData> _data = new List<IPersistableScheduleData>();
 		private int _targetScheduleDaysOff;
 		private int _scheduleDaysOff;
 		private TimeSpan _targetTimeHolder;
@@ -29,29 +27,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
-		public FakeScheduleDataReadScheduleRepository(params IScheduleData[] data)
-		{
-			_data = data;
-		}
-
 		public void Add(IPersistableScheduleData entity)
 		{
-			throw new NotImplementedException();
+			_data.Add (entity);
 		}
 
 		public void Remove(IPersistableScheduleData entity)
 		{
-			throw new NotImplementedException();
+			_data.Remove (entity);
 		}
 
 		public IPersistableScheduleData Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _data.SingleOrDefault(scheduleData => scheduleData.Id == id);
 		}
 
 		public IList<IPersistableScheduleData> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _data;
 		}
 
 		public IPersistableScheduleData Load(Guid id)
@@ -66,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IPersistableScheduleData> entityCollection)
 		{
-			entityCollection.ForEach (Add);
+			entityCollection.ForEach(Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -76,8 +69,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-		                                                                   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-		                                                                   DateTimePeriod dateTimePeriod, IScenario scenario)
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
@@ -93,9 +86,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
-		                                                                    IScheduleDictionaryLoadOptions
-			                                                                    scheduleDictionaryLoadOptions, DateOnlyPeriod period,
-		                                                                    IScenario scenario)
+			IScheduleDictionaryLoadOptions
+				scheduleDictionaryLoadOptions, DateOnlyPeriod period,
+			IScenario scenario)
 		{
 			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc);
 			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.ToArray());
@@ -107,14 +100,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,
-		                                                   IPersonProvider personsProvider,
-		                                                   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-		                                                   IEnumerable<IPerson> visiblePersons)
+			IPersonProvider personsProvider,
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			IEnumerable<IPerson> visiblePersons)
 		{
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
-			var  range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
-			var updatedRange =  range.UpdateCalcValues(_scheduleDaysOff, _contractTimeHolder);
+			var range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
+			var updatedRange = range.UpdateCalcValues(_scheduleDaysOff, _contractTimeHolder);
 			schedules.AddTestItem(visiblePersons.FirstOrDefault(), updatedRange);
 			return schedules;
 		}
@@ -123,12 +116,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public void Set(IEnumerable<IScheduleData> data)
-		{
-			_data = data;
-		}
-
 		
+
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -8,8 +9,10 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
+using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -63,7 +66,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
-			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();
+			
+			builder.RegisterType<PersonAbsenceCreator>().As<IPersonAbsenceCreator>();
+			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>();	
+			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>();
+			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>();
+			
+
 		}
 	}
 }

@@ -1,13 +1,13 @@
 ﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
+namespace Teleopti.Ccc.TestCommon
 {
-	public class ScheduleDifferenceSaver : IScheduleDifferenceSaver
+	public class FakeScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
 		private readonly IScheduleRepository _scheduleRepository;
 
-		public ScheduleDifferenceSaver(IScheduleRepository scheduleRepository)
+		public FakeScheduleDifferenceSaver(IScheduleRepository scheduleRepository)
 		{
 			_scheduleRepository = scheduleRepository;
 		}
@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.Value, true);
 						break;
 					case DifferenceStatus.Modified:
-						var unitOfWork = _scheduleRepository.UnitOfWork;
-						unitOfWork.Reassociate(scheduleChange.OriginalItem);
-						var merged = unitOfWork.Merge(scheduleChange.CurrentItem);
-						stateInMemoryUpdater.SolveConflictBecauseOfExternalUpdate(merged, true);
+
+						_scheduleRepository.Remove(scheduleChange.OriginalItem);
+						_scheduleRepository.Add(scheduleChange.CurrentItem);
+
+						stateInMemoryUpdater.SolveConflictBecauseOfExternalUpdate(scheduleChange.CurrentItem, true);
 						break;
 				}
 			}
 		}
 	}
-	
 }

@@ -169,6 +169,8 @@
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
+    <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\SaveSeatMapCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatMapCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommand.cs" />
@@ -451,6 +453,7 @@
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
+    <Compile Include="Common\BusinessRuleValidationException.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -660,8 +663,10 @@
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
+    <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="Scheduling\WebLegacy\IScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
@@ -991,7 +996,6 @@
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\INextPlanningPeriodProvider.cs" />
-    <Compile Include="Scheduling\IScheduleDifferenceSaver.cs" />
     <Compile Include="Scheduling\Legacy\Commands\AgentRestrictionsNoWorkShiftfFinder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />

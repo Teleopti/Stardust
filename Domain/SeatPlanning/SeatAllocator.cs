@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					shift.Book(firstUnallocatedSeat);
 				}
 			}
-		}
+		}	
 
 		private bool foundUnallocatedSet(ISeat firstUnallocatedSeat)
 		{

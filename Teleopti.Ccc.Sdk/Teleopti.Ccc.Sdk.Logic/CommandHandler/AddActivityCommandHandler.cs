@@ -68,8 +68,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 	            var scheduleTagEntity =
 		            _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto {Id = command.ScheduleTagId});
-	            _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
+	            
+				try{
+					_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
                     uow.PersistAll();
+				}
+				catch (BusinessRuleValidationException ex)
+				{
+					throw new FaultException(ex.Message);
+				}
+
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }

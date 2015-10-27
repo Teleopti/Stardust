@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class ScheduleDictionaryForTest : ScheduleDictionary
+	public class ScheduleDictionaryForTest : ScheduleDictionary, IReadOnlyScheduleDictionary
 	{
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
 			: this(scenario, new DateTimePeriod(cloneToUtc(date.Date), cloneToUtc(date.Date.AddHours(24)))) { }
@@ -120,6 +120,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private static DateTime cloneToUtc(DateTime dateTime)
 		{
 			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, DateTimeKind.Utc);
+		}
+
+		public void MakeEditable()
+		{
+			//throw new NotImplementedException();
 		}
 	}
 }
