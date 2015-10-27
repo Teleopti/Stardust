@@ -27,7 +27,8 @@
 			};
 
 			function selected() {
-				if ($scope.chart) return $scope.chart.selected();
+				if ($scope.chart)
+					return $scope.chart.selected();
 				return [];
 			}
 
@@ -69,8 +70,9 @@
 							vaht: '#9CCC65',
 							vacw: '#F488C8'
 						},
-						onclick: function () {
-							$scope.$apply();
+						onclick: function (chartPoint) {
+							if (chartPoint.id === 'vc')
+								$scope.$apply();
 						}
 					},
 					axis: {
