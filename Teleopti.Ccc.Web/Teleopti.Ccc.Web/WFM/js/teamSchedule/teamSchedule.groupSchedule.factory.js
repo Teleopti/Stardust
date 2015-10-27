@@ -5,9 +5,8 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 	function(currentUserInfo, shiftHelper, timeLine, personSchedule) {
 		var groupScheduleViewModel = {};
 
-		groupScheduleViewModel.Create = function (groupSchedules, queryDate, canvasSize) {
-			var baseDate = queryDate.startOf('day');
-			var scheduleTimeLine = timeLine.Create(groupSchedules, baseDate, canvasSize);
+		groupScheduleViewModel.Create = function (groupSchedules, queryDate) {
+			var scheduleTimeLine = timeLine.Create(groupSchedules, queryDate);
 
 			var schedules = [];
 			angular.forEach(groupSchedules, function(schedule) {

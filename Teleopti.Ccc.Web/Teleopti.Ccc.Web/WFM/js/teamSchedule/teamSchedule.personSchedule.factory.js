@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', 'TimeLineUnit', PersonSchedule]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
 
-	function PersonSchedule(currentUserInfo, timeLineUnit) {
+	function PersonSchedule(currentUserInfo) {
 		var personScheduleVm = {};
 
 		var shiftProjectionViewModel = function(projection, timeLine) {
@@ -57,10 +57,6 @@
 		var createProjections = function(projections, timeLine) {
 			var projectionVms = [];
 			angular.forEach(projections, function(projection) {
-				var unit = timeLineUnit;
-				unit.init(projection, timeLine);
-				projection.Offset = timeLine.Offset;
-				projection.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes();
 				projectionVms.push(new shiftProjectionViewModel(projection, timeLine));
 			});
 

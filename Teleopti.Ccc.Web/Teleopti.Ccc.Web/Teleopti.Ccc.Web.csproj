@@ -1278,6 +1278,8 @@
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.filters.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.personSchedule.factory.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.timeline.factory.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />

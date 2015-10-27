@@ -78,9 +78,10 @@
 			return hourPointVm;
 		};
 
-		timeLine.Create = function (groupSchedules, utcBaseDate) {
+		timeLine.Create = function (groupSchedules, utcQueryDate) {
 			var hourPoints = [];
 
+			var utcBaseDate = utcQueryDate.startOf("day");
 			var start = startMinutes(groupSchedules, utcBaseDate);
 			var end = endMinutes(groupSchedules, utcBaseDate);
 			var percentPerMinute = calculateLengthPercentPerMinute(start, end);
