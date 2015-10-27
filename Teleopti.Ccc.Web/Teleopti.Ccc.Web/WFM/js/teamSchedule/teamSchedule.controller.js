@@ -43,14 +43,13 @@
 		vm.loadSchedules = function () {
 			if (vm.selectedTeamId === "") return;
 
-			vm.canvasSize = angular.element($('#time-line-container'))[0].offsetWidth;
 			teamScheduleSvc.loadSchedules.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 				}).$promise
 				.then(function(data) {
 					vm.groupScheduleVm = groupScheduleFactory;
-					vm.groupScheduleVm.Create(data.Schedules, vm.scheduleDateMoment(), vm.canvasSize);
+					vm.groupScheduleVm.Create(data.Schedules, vm.scheduleDateMoment());
 				});
 		}
 

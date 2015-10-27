@@ -54,14 +54,12 @@
 			return shiftHelper.MinutesEndOfHour(end);
 		};
 
-		var calculatePixelsPerMinute = function (start, end, widthPixels) {
+		var calculateLengthPercentPerMinute = function (start, end) {
 			var lengthInMin = end - start;
-			if (lengthInMin > 0)
-				return widthPixels / lengthInMin;
-			return 0;
+			return lengthInMin > 0 ? 100 / lengthInMin : 0;
 		};
 
-		var hourPointViewModel = function (baseDate, minutes, start, pixelsPerMinute) {
+		var hourPointViewModel = function (baseDate, minutes, start, percentPerMinute) {
 			var time = ((baseDate == undefined)
 				? moment.tz(currentUserInfo.DefaultTimeZone)
 				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
@@ -69,35 +67,36 @@
 			var formattedTime = time.format("HH:mm");
 
 			var hourPointVm = {
-				Time: formattedTime,
-				Pixel: function () {
+				TimeLabel: formattedTime,
+				Position: function () {
 					var timeLineStartMinutes = minutes - start;
-					var pixels = timeLineStartMinutes * pixelsPerMinute;
-					return Math.round(pixels);
+					var position = timeLineStartMinutes * percentPerMinute;
+					return position;
 				}
 			}
-
+			
 			return hourPointVm;
 		};
 
-		timeLine.Create = function (groupSchedules, utcBaseDate, canvasSize) {
+		timeLine.Create = function (groupSchedules, utcBaseDate) {
 			var hourPoints = [];
 
 			var start = startMinutes(groupSchedules, utcBaseDate);
 			var end = endMinutes(groupSchedules, utcBaseDate);
-			var pixelsPerMinute = calculatePixelsPerMinute(start, end, canvasSize);
+			var percentPerMinute = calculateLengthPercentPerMinute(start, end);
 
 			var timePoint = start;
 			while (timePoint < end + 1) {
-				hourPoints.push(new hourPointViewModel(utcBaseDate, timePoint, start, pixelsPerMinute));
+				hourPoints.push(new hourPointViewModel(utcBaseDate, timePoint, start, percentPerMinute));
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
+
 			var timeLineVm = {
 				Offset: utcBaseDate,
 				StartMinute: start,
 				EndMinute: end,
 				HourPoints: hourPoints,
-				PixelsPerMinute: pixelsPerMinute
+				LengthPercentPerMinute: percentPerMinute
 			}
 			return timeLineVm;
 		}

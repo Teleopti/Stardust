@@ -3,7 +3,6 @@
 	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', 'TimeLineUnit', PersonSchedule]);
 
 	function PersonSchedule(currentUserInfo, timeLineUnit) {
-
 		var personScheduleVm = {};
 
 		var shiftProjectionViewModel = function(projection, timeLine) {
@@ -13,16 +12,16 @@
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
 			var shiftProjectionVm = {
-				StartPixels: function() {
+				StartPosition: function() {
 					var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
 					var start = displayStartTimeMinutes - timeLine.StartMinute;
-					var pixels = start * timeLine.PixelsPerMinute;
-					return Math.round(pixels);
+					var position = start * timeLine.LengthPercentPerMinute;
+					return position;
 				},
-				LengthPixels: function() {
+				Length: function() {
 					var lengthMinutes = startTimeMinutes < 0 ? projection.Minutes - (startTimeMinutes * -1) : projection.Minutes;
-					var pixels = lengthMinutes * timeLine.PixelsPerMinute;
-					return Math.round(pixels);
+					var position = lengthMinutes * timeLine.LengthPercentPerMinute;
+					return position;
 				},
 				Color: projection.Color,
 				Description: projection.Description
@@ -39,16 +38,16 @@
 			var displayStart = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
-				StartPixels: function() {
+				StartPosition: function () {
 					var start = displayStart - timeLine.StartMinute;
-					var pixels = start * timeLine.PixelsPerMinute;
-					return Math.round(pixels);
+					var position = start * timeLine.LengthPercentPerMinute;
+					return position;
 				},
-				LengthPixels: function() {
+				Length: function () {
 					var displayEnd = startTimeMinutes + dayOff.Minutes;
 					displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
-					var pixels = (displayEnd - displayStart) * timeLine.PixelsPerMinute;
-					return Math.round(pixels);
+					var position = (displayEnd - displayStart) * timeLine.LengthPercentPerMinute;
+					return position;
 				}
 			};
 
@@ -88,10 +87,9 @@
 				ShiftProjections: projectionVms,
 				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
 				DayOff: personSchedule.DayOff == undefined || personSchedule.DayOff == null ? undefined
-					: new dayOffViewModel(personSchedule.DayOff, timeLine)
+					: new dayOffViewModel(personSchedule.DayOff, timeLine),
+				Merge: merge
 			}
-
-			vm.Merge = merge;
 
 			return vm;
 		}
