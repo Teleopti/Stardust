@@ -18,6 +18,7 @@
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
 		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
+		var updatePeriodUrl = '../api/Outbound/Campaign/Navigation';
 
 		var periodStart = moment().subtract(1, "months").date(1);
 		var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days');
@@ -33,6 +34,16 @@
 			$http.post(updateThresholdUrl).success(function(data) {
 				if (successCb != null) successCb(data);
 			});
+		}
+
+		this.updatePeriod = function (successCb, errorCb) {
+			$http.put(updatePeriodUrl, visualizationPeriod)
+				.success(function (data) {
+					if (successCb != null) successCb(data);
+				})
+				.error(function (data) {
+					if (errorCb != null) errorCb(data);
+				});
 		}
 
 		this.updateThreshold = function (threshold, successCb, errorCb) {

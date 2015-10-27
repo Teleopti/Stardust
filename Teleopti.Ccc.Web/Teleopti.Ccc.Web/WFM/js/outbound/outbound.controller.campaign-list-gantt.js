@@ -116,11 +116,19 @@
 		function refreshGantt() {
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
-			$q.all([getGanttVisualization()]).then(function () {
+			$q.all([updatePeriod(),getGanttVisualization()]).then(function () {
 				getListCampaignsWithinPeriod(function () {
 					$scope.isRefreshingGantt = false;
 				});
 			});
+		}
+
+		function updatePeriod() {
+			var deferred = $q.defer();
+			outboundService.updatePeriod(function() {
+				deferred.resolve();
+			});
+			return deferred.promise;
 		}
 
 		function addThresholdChangeWatch() {
