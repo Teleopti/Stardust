@@ -2,7 +2,6 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h4 translate>Intraday</h4>
-			<p>See if you are on track or not.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -10,19 +9,15 @@
 			<form class="wfm-form">
 				<div class="form-input-wrap">
 					<label for="skill-select">Pick a skill:</label>
-					<select name="skill-select" id="skill-select" required="" onchange="this.form.submit()">
-						<option selected="selected">McLaren Honda Support</option>
-						<option>Williams Martini Racing Support</option>
-						<option>FIA Merch Sales Group</option>
-					</select>
+					<select id="skill-select" ng-model="selectedSkill" ng-change="skillChange(selectedSkill)" ng-options="skill.SkillName for skill in skillList" name="skill-select" required></select>
 					<noscript><input type="submit" value="Submit"></noscript>
 				</div>
 			</form>
 			<div class="role-nav material-depth-1 container-block">
-				<div class="wfm-block sub-header" translate>Calls</div>
+				<div class="wfm-block sub-header" translate>{{name}}</div>
 				<div class="wfm-block">
-					<p>Value: </p>
-					<p>Error description: </p>
+					<p>Value: {{value}}</p>
+					<p>{{stringValue}}</p>
 				</div>
 			</div>
 		</div>
