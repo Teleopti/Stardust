@@ -23,16 +23,16 @@
 			return next.format('M') !== momentDate.format('M');
 		};
 
-		this.getAllWeekendsInPeriod = function (period) {
-			var periodStart = period[0],
-				periodEnd = period[1];
+		this.getAllWeekendsInPeriod = function (period) {			
+			var periodStart = moment(period.PeriodStart),
+				periodEnd = moment(period.PeriodEnd);
 
 			var weekends = [];
 			if (periodStart.day() == 0) {				
-				weekends.push([
-					periodStart.clone(),
-					periodStart.clone()
-				]);
+				weekends.push({
+					WeekendStart: periodStart.clone(),
+					WeekendEnd: periodStart.clone()
+				});
 			}
 
 			var iterator = periodStart.clone().add(6 - periodStart.day(), 'day');
@@ -40,14 +40,19 @@
 				var weekendStart = iterator.clone(),
 					weekendEnd = iterator.clone().add(1, 'day');
 
-				weekends.push([
-					weekendStart,
-					(weekendEnd > periodEnd)? periodEnd: weekendEnd
-				]);
+				weekends.push({
+					WeekendStart: weekendStart,
+					WeekendEnd: (weekendEnd > periodEnd) ? periodEnd : weekendEnd
+				});
 
 				iterator.add(7, 'day');
 			}
-			return weekends;
+			return weekends.map(function(w) {
+				return {
+					WeekendStart: w.WeekendStart.toDate(),
+					WeekendEnd: w.WeekendEnd.toDate()
+				}
+			});
 		};
 
 	}

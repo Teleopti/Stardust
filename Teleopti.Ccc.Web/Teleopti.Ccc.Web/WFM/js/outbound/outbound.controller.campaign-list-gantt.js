@@ -34,102 +34,51 @@
 			}
 		});		
 
-		$scope.settings = { threshold: null };
+		$scope.settings = { threshold: null, periodStart: new Date() };
 
-		$scope.onChangeGanttDate = function () {
-			$q.all([setVisualizationPeriod(), setDefaultPeriod()]).then(function () {
-				refreshGantt();
-			});
-			};
 
-		$scope.viewOneMonthBefore = function () {
-			$q.all([visualizationPeriodPlusOneMonth(), defaultPeriodPlusOneMonth()]).then(function () {
-				refreshGantt();
-			});
-		}
+		$scope.viewOneMonthBefore = function() {
+			$scope.settings.periodStart = moment($scope.settings.periodStart).add(-1, 'month').toDate();
+		};
 
 		$scope.viewOneMonthAfter = function () {
-			$q.all([visualizationPeriodMinusOneMonth(), defaultPeriodMinusOneMonth()]).then(function() {
-				refreshGantt();
-			});
-		}
-
-		function defaultPeriodMinusOneMonth() {
-			var deferred = $q.defer();
-			outboundService.defaultPeriodMinusOneMonth(function () {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-
-		function visualizationPeriodMinusOneMonth() {
-			var deferred = $q.defer();
-			outboundService.visualizationPeriodMinusOneMonth(function () {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-
-		function defaultPeriodPlusOneMonth() {
-			var deferred = $q.defer();
-			outboundService.defaultPeriodPlusOneMonth(function () {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-
-		function visualizationPeriodPlusOneMonth() {
-			var deferred = $q.defer();
-			outboundService.visualizationPeriodPlusOneMonth(function() {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-
-		function setDefaultPeriod() {
-			var deferred = $q.defer();
-			outboundService.setDefaultPeriod($scope.settings.ganttStartDate,function() {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-
-		function setVisualizationPeriod() {
-			var deferred = $q.defer();
-			outboundService.setVisualizationPeriod($scope.settings.ganttStartDate,function() {
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
+			$scope.settings.periodStart = moment($scope.settings.periodStart).add(1, 'month').toDate();
+		};
 
 		function init() {
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
-			$q.all([getGanttVisualization(), loadWithinPeriod(), getThreshold()]).then(function() {
-				getListCampaignsWithinPeriod(function() {
+			$scope.timespans = getGanttShadedTimespans();
+			$q.all([reloadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function () {
+				updateCampaignStatus(function () {
 					$scope.isRefreshingGantt = false;
 					addThresholdChangeWatch();
+					addPeriodStartChangeWatch();
 				});
 			});
-		}
+		}		
 
 		function refreshGantt() {
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
-			$q.all([updatePeriod(),getGanttVisualization()]).then(function () {
-				getListCampaignsWithinPeriod(function () {
+			$scope.timespans = getGanttShadedTimespans();
+			
+			renderGanttChartPromise().then(function () {
+				updateCampaignStatus(function () {
 					$scope.isRefreshingGantt = false;
 				});
 			});
 		}
-
-		function updatePeriod() {
+		
+		function loadExtraScheduleDataPromise() {
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			var deferred = $q.defer();
-			outboundService.updatePeriod(function() {
+			outboundService.loadCampaignSchedule(ganttPeriod, function () {
 				deferred.resolve();
 			});
 			return deferred.promise;
 		}
+
 
 		function addThresholdChangeWatch() {
 			$scope.$watch(function () {
@@ -137,9 +86,9 @@
 			}, function (newValue, oldValue) {
 				if (newValue !== oldValue) {
 					var thresholdObj = { Value: newValue / 100, Type: 1 };
-					outboundService.updateThreshold(thresholdObj, function (data) {
-						getListCampaignsWithinPeriod(function () {
-							$scope.ganttData.forEach(function (dataRow, indx) {
+					outboundService.updateThreshold(thresholdObj, function () {
+						updateCampaignStatus(function () {
+							$scope.ganttData.forEach(function (dataRow) {
 								if (dataRow.expansion) {
 									$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
 								}
@@ -150,7 +99,16 @@
 			});
 		}
 
-		function getThreshold() {
+		function addPeriodStartChangeWatch() {
+			$scope.$watch(function () {
+				return $scope.settings.periodStart.getFullYear() + $scope.settings.periodStart.getMonth();
+			}, function () {
+				loadExtraScheduleDataPromise().then(refreshGantt);				
+			});
+		}
+
+
+		function getThresholdPromise() {
 			var deferred = $q.defer();
 			outboundService.getThreshold(function(data) {
 				$scope.settings.threshold = data.Value ? Math.round(data.Value * 100) : 0;
@@ -159,17 +117,19 @@
 			return deferred.promise;
 		}
 
-		function getListCampaignsWithinPeriod(cb) {
-			outboundService.listCampaignsWithinPeriod(function success(data) {
+		function updateCampaignStatus(cb) {
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
+			outboundService.listCampaignsWithinPeriod(ganttPeriod, function success(data) {
 				updateAllCampaignGanttDisplay(data);
 				$scope.ganttStatistics = data;			
 				if (cb) cb();
 			});
 		}
 
-		function loadWithinPeriod() {			
+		function reloadScheduleDataPromise() {			
 			var deferred = $q.defer();
-			outboundService.loadWithinPeriod(function handleSuccess() {
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
+			outboundService.reloadCampaignSchedules(ganttPeriod, function handleSuccess() {
 				deferred.resolve();				
 			});
 			return deferred.promise;
@@ -274,50 +234,52 @@
 			});
 		}
 		
-		$scope.timespans = [
-			{
-				name: "today", 
-				from: moment().format('YYYY-MM-DD'), 
-				to: moment().add(1, 'day').format('YYYY-MM-DD'),
-				classes: ['gantt-timespan-today']
-			}
-		];
+		function getGanttShadedTimespans() {
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);	
+			var weekends = miscService.getAllWeekendsInPeriod(ganttPeriod);
+			var timespans = [
+				{
+					name: "today",
+					from: moment().format('YYYY-MM-DD'),
+					to: moment().add(1, 'day').format('YYYY-MM-DD'),
+					classes: ['gantt-timespan-today']
+				}
+			];
 
-		var defaultPeriod = outboundService.getDefaultPeriod();
-		var weekends = miscService.getAllWeekendsInPeriod(defaultPeriod);
-	
-		angular.forEach(weekends, function(we) {
-			$scope.timespans.push({
-				from: (we[0].isSame(defaultPeriod[0])) ? we[0].clone().subtract(1, 'day').format('YYYY-MM-DD') : we[0].clone().format('YYYY-MM-DD'),
-				to: we[1].clone().add(1, 'day').format('YYYY-MM-DD')
+			angular.forEach(weekends, function (we) {
+				var weekend = {
+					WeekendStart: moment(we.WeekendStart),
+					WeekendEnd: moment(we.WeekendEnd)
+				};
+
+				timespans.push({
+					from: (weekend.WeekendStart.isSame(moment(ganttPeriod.PeriodStart))) ?
+						weekend.WeekendStart.clone().subtract(1, 'day').format('YYYY-MM-DD') :
+						weekend.WeekendStart.clone().format('YYYY-MM-DD'),
+					to: weekend.WeekendEnd.clone().add(1, 'day').format('YYYY-MM-DD')
+				});
 			});
-		});
 
+			return timespans;
+		}
+		
 
 		function setGanttOptions() {
-			var defaultPeriod = outboundService.getDefaultPeriod();
-			$scope.settings.ganttStartDate = defaultPeriod[0];
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
+			$scope.settings.ganttStartDate = ganttPeriod.PeriodStart;
 			return {
 				headers: ['month', 'week'],
-				fromDate: defaultPeriod[0],
-				toDate: defaultPeriod[1]				
+				fromDate: ganttPeriod.PeriodStart,
+				toDate: ganttPeriod.PeriodEnd				
 			};
 		}
 
-		function getGanttVisualization() {
-			var defaultPeriod = outboundService.getDefaultPeriod();
-			var ganttPeriod = {
-				StartDate: { Date: defaultPeriod[0] },
-				EndDate: { Date: defaultPeriod[1] }
-			};
-
-			var deferred = $q.defer();
-			
+		function renderGanttChartPromise() {
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
+			var deferred = $q.defer();			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
 				var ganttArr = [];
-				if (data) data.forEach(function (ele, ind) {
-					
-
+				if (data) data.forEach(function (ele, ind) {					
 					ganttArr[ind] = {};
 					ganttArr[ind].name = ele.Name;
 					ganttArr[ind].id = ele.Id;
@@ -374,18 +336,7 @@
 					return updateWarningInfo(dataRow, campaignSummary);
 				}
 			});
-		}
-		return {
-			init: init,
-			readIndex: readIndex,
-			getCommandCallback: getCommandCallback,
-			getGraphData: getGraphData,
-			setGanttOptions: setGanttOptions,
-			getGanttVisualization: getGanttVisualization,
-			updateGanttRowFromCampaignSummary: updateGanttRowFromCampaignSummary,
-			updateAllCampaignGanttDisplay: updateAllCampaignGanttDisplay,
-			updateSingleCampaignGanttDisplay: updateSingleCampaignGanttDisplay
-		}
+		}		
 	}
 
 })();

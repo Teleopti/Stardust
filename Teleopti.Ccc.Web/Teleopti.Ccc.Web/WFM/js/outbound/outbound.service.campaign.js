@@ -9,7 +9,7 @@
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
-		var postCampaignLoadUrl = '../api/Outbound/Campaign/Period/Load';
+		var reloadCampaignSchedulesUrl = '../api/Outbound/Campaign/Period/Load';
 		var editCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
 		var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
@@ -18,15 +18,7 @@
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
 		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
-		var updatePeriodUrl = '../api/Outbound/Campaign/Navigation';
-
-		var periodStart = moment().subtract(1, "months").date(1);
-		var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days');
-		var visualizationPeriod = {
-			StartDate: { Date: periodStart.format() },
-			EndDate: { Date: periodEnd.format() }
-		};
-		var defaultPeriod = [periodStart, periodEnd];
+		var loadCampaignScheduleUrl = '../api/Outbound/Campaign/Navigation';
 	
 		var self = this;
 
@@ -36,8 +28,8 @@
 			});
 		}
 
-		this.updatePeriod = function (successCb, errorCb) {
-			$http.put(updatePeriodUrl, visualizationPeriod)
+		this.loadCampaignSchedule = function (period, successCb, errorCb) {
+			$http.put(loadCampaignScheduleUrl, normalizePeriod(period))
 				.success(function (data) {
 					if (successCb != null) successCb(data);
 				})
@@ -56,52 +48,16 @@
 				});
 		}
 
-		self.visualizationPeriodPlusOneMonth = function(cb) {
-			visualizationPeriod.StartDate.Date = moment(visualizationPeriod.StartDate.Date).add(1, "months").date(1).format();
-			visualizationPeriod.EndDate.Date = moment(visualizationPeriod.EndDate.Date).add(2, "months").date(1).subtract(1, 'days').format();
-			if (cb) cb();
-		}
+		self.getGanttPeriod = function(periodStart) {
+			periodStart = periodStart ? moment(periodStart).clone() : moment().subtract(1, "months");
+			periodStart.date(1);
 
-		self.visualizationPeriodMinusOneMonth = function(cb) {
-			visualizationPeriod.StartDate.Date = moment(visualizationPeriod.StartDate.Date).subtract(1, "months").date(1).format();
-			visualizationPeriod.EndDate.Date = moment(visualizationPeriod.EndDate.Date).subtract(0, "months").date(1).subtract(1, 'days').format();
-			if (cb) cb();
-		}
-
-		self.setVisualizationPeriod = function(startDate,cb) {
-			if (startDate) {
-				visualizationPeriod.StartDate.Date = moment(startDate).date(1).format();
-				visualizationPeriod.EndDate.Date = moment(startDate).add(3, "months").date(1).subtract(1, 'days').format();
-				if (cb) cb();
+			var periodEnd = periodStart.clone().add(3, 'months').subtract(1, 'days');
+			return {
+				PeriodStart: periodStart.toDate(),
+				PeriodEnd: periodEnd.toDate()
 			}
-		}
-
-		self.getVisualizationPeriod = function() {
-			return visualizationPeriod;
-		}
-
-		self.defaultPeriodPlusOneMonth = function(cb) {
-			defaultPeriod[0] = moment(defaultPeriod[0]).add(1, "months").date(1);
-			defaultPeriod[1] = moment(defaultPeriod[1]).add(2, "months").date(1).subtract(1, 'days');
-			if (cb) cb();
-		}
-
-		self.defaultPeriodMinusOneMonth = function(cb) {
-			defaultPeriod[0] = moment(defaultPeriod[0]).subtract(1, "months").date(1);
-			defaultPeriod[1] = moment(defaultPeriod[1]).subtract(0, "months").date(1).subtract(1, 'days');
-			if (cb) cb();
-		}
-
-		self.setDefaultPeriod = function(startDate,cb) {
-			if (startDate) {
-				defaultPeriod = [moment(startDate).date(1), moment(startDate).add(3, "months").date(1).subtract(1, 'days')];
-				if (cb) cb();
-			}
-		}
-
-		self.getDefaultPeriod = function() {
-			return defaultPeriod;
-		}
+		};
 
 		this.load = function(successCb) {
 			$http.post(getCampaignLoadUrl).success(function(data) {
@@ -109,15 +65,14 @@
 			});
 		}
 
-		this.loadWithinPeriod = function(successCb) {
-			var period = self.getVisualizationPeriod();
-			$http.post(postCampaignLoadUrl, period).success(function(data) {
+		this.reloadCampaignSchedules = function(period, successCb) {			
+			$http.post(reloadCampaignSchedulesUrl, normalizePeriod(period)).success(function (data) {
 				if (successCb != null) successCb(data);
 			});
 		};
 
-		this.getGanttVisualization = function(filter, successCb, errorCb) {
-			$http.post(getGanttVisualizationUrl, filter).
+		this.getGanttVisualization = function (period, successCb, errorCb) {
+			$http.post(getGanttVisualizationUrl, normalizePeriod(period)).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);
@@ -136,9 +91,8 @@
 				});
 		};
 
-		this.getCampaignStatisticsWithinPeriod = function(filter, successCb, errorCb) {
-			var period = self.getVisualizationPeriod();
-			$http.post(getCampaignPeriodStatisticsUrl, period).
+		this.getCampaignStatisticsWithinPeriod = function(period, successCb, errorCb) {			
+			$http.post(getCampaignPeriodStatisticsUrl, normalizePeriod(period)).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);
@@ -181,9 +135,8 @@
 				});
 		};
 
-		this.listCampaignsWithinPeriod = function(successCb, errorCb) {
-			var period = self.getVisualizationPeriod();
-			$http.post(getPeriodCampaignsUrl, period).success(function (data) {
+		this.listCampaignsWithinPeriod = function(period, successCb, errorCb) {			
+			$http.post(getPeriodCampaignsUrl, normalizePeriod(period)).success(function (data) {
 					if (successCb != null)
 						successCb(data);
 				}).
@@ -234,6 +187,15 @@
 
 		this.createEmptyWorkingPeriod = createEmptyWorkingPeriod;
 		this.calculateCampaignPersonHour = calculateCampaignPersonHour;
+
+		function normalizePeriod(period) {
+			return {
+				StartDate: { Date: miscService.sendDateToServer(period.PeriodStart) },
+				EndDate: { Date: miscService.sendDateToServer(period.PeriodEnd) }
+			};
+		};
+
+
 
 		function calculateCampaignPersonHour(campaign) {
 			var Target = campaign.CallListLen * campaign.TargetRate / 100,

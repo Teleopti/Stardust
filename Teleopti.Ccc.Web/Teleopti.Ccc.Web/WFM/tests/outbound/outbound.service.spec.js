@@ -204,6 +204,22 @@ describe('OutboundService Test', function () {
 		expect(result.getHours()).toEqual(0);
 	});
 
+	it('misService get all weekends in period should work correctly', function() {
+		var period = {
+			PeriodStart: moment('2015-09-01').toDate(),
+			PeriodEnd: moment('2015-09-30').toDate()
+		};
+
+		var result = miscService.getAllWeekendsInPeriod(period);
+		expect(result.length).toEqual(4);
+
+		expect(moment(result[0].WeekendStart).format('YYYY-MM-DD')).toEqual('2015-09-05');
+		expect(moment(result[0].WeekendEnd).format('YYYY-MM-DD')).toEqual('2015-09-06');
+
+		expect(moment(result[3].WeekendStart).format('YYYY-MM-DD')).toEqual('2015-09-26');
+		expect(moment(result[3].WeekendEnd).format('YYYY-MM-DD')).toEqual('2015-09-27');
+	});
+
 
 	function presetCampaigns() {
 		return [
