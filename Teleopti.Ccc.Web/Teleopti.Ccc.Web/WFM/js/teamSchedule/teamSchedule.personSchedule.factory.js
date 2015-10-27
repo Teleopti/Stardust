@@ -36,21 +36,18 @@
 
 			var startTime = moment(dayOff.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
-			var dayOffStartMinutes = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
+			var displayStart = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
 				StartPixels: function() {
-					var start = dayOffStartMinutes - timeLine.StartMinute;
+					var start = displayStart - timeLine.StartMinute;
 					var pixels = start * timeLine.PixelsPerMinute;
 					return Math.round(pixels);
 				},
 				LengthPixels: function() {
-					var lengthMinutes = dayOff.Minutes;
-					if (timeLine.EndMinute < startTimeMinutes + lengthMinutes)
-						lengthMinutes = timeLine.EndMinute - dayOffStartMinutes;
-					if (startTimeMinutes < timeLine.StartMinute)
-						lengthMinutes = startTimeMinutes + lengthMinutes - timeLine.StartMinute;
-					var pixels = lengthMinutes * timeLine.PixelsPerMinute;
+					var displayEnd = startTimeMinutes + dayOff.Minutes;
+					displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
+					var pixels = (displayEnd - displayStart) * timeLine.PixelsPerMinute;
 					return Math.round(pixels);
 				}
 			};

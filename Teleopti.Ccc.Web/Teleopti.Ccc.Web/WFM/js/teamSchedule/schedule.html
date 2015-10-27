@@ -11,6 +11,23 @@
 		height: 12px;
 		z-index: 111;
 	}
+
+	.dayoff 
+	{
+		text-align: center;
+		top: -8px;
+		height: 36px;
+		background-size: 11px 11px;
+		background-image: 
+			linear-gradient(135deg,
+			transparent,
+			transparent 7px,
+			rgba(0,0,0,0.2) 8px,
+			transparent 8px,
+			transparent
+			);
+	}
+
 	.absolute {
 		position: absolute;
 	}
@@ -26,25 +43,24 @@
 	<table class="table table-hover">
 		<thead>
 			<tr class="person">
-				<th class="person-name person-name-column"></th>
+				<th class="person-name person-name-column" style="width: 15%"></th>
 				<th id="time-line-container"class="schedule schedule-column">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="relative">
 								<time-line data="vm.groupScheduleVm.TimeLine"></time-line>
-								<!--<person-schedule data="vm.Schedules" ng-repeat="vm.Persons"></person-schedule>-->
 							</div>
 						</div>
 					</div>
 				</th>
-				<th class="contract-time contract-time-title"><span xdata-bind="text: Resources.ContractTime"></span></th>
+				<th class="contract-time contract-time-title" style="width: 15%">
+					<span xdata-bind="text: Resources.ContractTime"></span>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules"></tr>
 		</tbody>
 	</table>
-
-		
 </div>
 

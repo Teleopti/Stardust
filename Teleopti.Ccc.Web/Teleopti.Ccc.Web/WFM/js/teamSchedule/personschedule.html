@@ -3,17 +3,21 @@
 		<div class="person-name nowrap" >{{person.Name}}</div>
 	</td>
 	<td class="schedule schedule-column">
-		<div class="relative time-line-for">
+		<div class="relative time-line-for" ng-if="person.ShiftProjections.length > 0">
 			<div class="shift" ng-repeat="projection in person.ShiftProjections">
 				<div class="layer absolute floatleft" style="height: 30px" ng-style="{
         left: projection.StartPixels() + 'px',
         width: projection.LengthPixels() + 'px',
         backgroundColor: projection.Color
     }">
-
 					<!--<span class="label label-default layer-description">{{projection.Description}}</span>-->
 				</div>
-
+			</div>
+		</div>
+		<div class="relative time-line-for" ng-if="person.DayOff != undefined">
+			<div class="dayoff absolute" ng-style="{left: person.DayOff.StartPixels() + 'px', width: person.DayOff.LengthPixels() + 'px' }">
+				<!--<span class="label label-default layer-description floatcenter">{{person.DayOff.DayOffName}}</span>-->
+				<span class="label label-default layer-description floatright">{{person.DayOff.DayOffName}}</span>
 			</div>
 		</div>
 	</td>

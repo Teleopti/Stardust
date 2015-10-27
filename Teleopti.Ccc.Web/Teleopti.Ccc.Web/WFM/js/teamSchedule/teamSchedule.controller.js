@@ -22,7 +22,5 @@
 					vm.groupScheduleVm.Create(data.Schedules, queryDate, vm.canvasSize);
 				});
 		}
-
-		
 	}
 }());
