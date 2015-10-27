@@ -17,9 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			 _intradaySkillStatusService = intradaySkillStatusService;
 		 }
 
-	    [HttpGet]
-	    [UnitOfWork]
-	    [Route("GetSkillStatus")]
+		 [HttpGet, Route("api/intraday/skillstatus"), Authorize, UnitOfWork]
 	    public virtual JsonResult<IEnumerable<SkillStatusModel>> GetSkillStatus()
 	    {
 		    return Json(_intradaySkillStatusService.GetSkillStatusModels());
