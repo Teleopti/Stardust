@@ -1,9 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_queue_load_intraday]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_fact_queue_load_intraday]
 GO
-
 --exec mart.etl_fact_queue_load_intraday @datasource_id=-2
-
 CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday]
 @datasource_id int,
 @is_delayed_job bit = 0
@@ -132,23 +130,27 @@ ELSE  --Single datasource_id
 		AND ds.datasource_id	= @datasource_id
 
 	SELECT
-		@target_date_id_utc = b.date_id,
-		@target_interval_id_utc = b.interval_id
+		@target_date_id_utc = bt.date_id,
+		@target_interval_id_utc = bt.interval_id
 	FROM  mart.dim_date d
-	INNER JOIN mart.bridge_time_zone b
-		ON d.date_id = b.local_date_id
-		AND b.time_zone_id=@time_zone_id
-		AND b.local_interval_id=@target_interval_local
+	INNER JOIN --in case duplicate due to DST-->standard time
+	(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
+	FROM mart.bridge_time_zone
+	WHERE time_zone_id=@time_zone_id
+	GROUP BY date_id,local_date_id,local_interval_id)bt 
+	ON d.date_id = bt.local_date_id
+	AND bt.local_interval_id=@target_interval_local
 	WHERE d.date_date=@target_date_local
 
-	--if missing intervals in bridge_time_zone, probably DST hour
+
+	--if missing intervals in bridge_time_zone, probably standard time-->DST hour
 	IF @target_date_id_utc IS NULL OR @target_interval_id_utc IS NULL
 	BEGIN
 		--try and go back some more
 		SELECT
 		@target_date_local		= date_from,
 		@target_interval_local	= interval_id
-		FROM [mart].[SubtractInterval](dateadd(dd,-1,@target_date_local),@target_interval_local,@intervals_back)
+		FROM [mart].[SubtractInterval](dateadd(dd,-1,@target_date_local),@target_interval_local,0)
 		
 		--and try set again
 		SELECT
@@ -249,7 +251,7 @@ ELSE  --Single datasource_id
 	DELETE #bridge_time_zone
 	WHERE date_id < @target_date_id_utc
 	and interval_id < @target_interval_id_utc
-
+	
 	-------------
 	-- Delete rows last known date_id and interval_id
 	-------------
@@ -277,8 +279,6 @@ ELSE  --Single datasource_id
 	WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
 	AND f.date_id=@target_date_id_utc
 	AND f.interval_id >= @target_interval_id_utc
-
-	
 
 	--	AND f.date_id>@target_date_id_utc
 

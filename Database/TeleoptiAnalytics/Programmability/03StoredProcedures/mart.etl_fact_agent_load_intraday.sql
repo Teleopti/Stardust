@@ -144,24 +144,27 @@ BEGIN  --Single datasource_id
 		AND ds.datasource_id	= @datasource_id
 
 	--Set date in utc
-	SELECT
-		@target_date_id_utc = b.date_id,
-		@target_interval_id_utc = b.interval_id
+SELECT
+		@target_date_id_utc = bt.date_id,
+		@target_interval_id_utc = bt.interval_id
 	FROM  mart.dim_date d
-	INNER JOIN mart.bridge_time_zone b
-		ON d.date_id = b.local_date_id
-		AND b.time_zone_id=@time_zone_id
-		AND b.local_interval_id=@target_interval_local
+	INNER JOIN --in case duplicate due to DST->standard time
+	(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
+	FROM mart.bridge_time_zone
+	WHERE time_zone_id=@time_zone_id
+	GROUP BY date_id,local_date_id,local_interval_id)bt 
+	ON d.date_id = bt.local_date_id
+	AND bt.local_interval_id=@target_interval_local
 	WHERE d.date_date=@target_date_local
 
-	--if missing intervals in bridge_time_zone, probably DST hour
+	--if missing intervals in bridge_time_zone, probably standard time->DST hour
 	IF @target_date_id_utc IS NULL OR @target_interval_id_utc IS NULL
 	BEGIN
 		--try and go back some more
 		SELECT
 		@target_date_local		= date_from,
 		@target_interval_local	= interval_id
-		FROM [mart].[SubtractInterval](dateadd(dd,-1,@target_date_local),@target_interval_local,@intervals_back)
+		FROM [mart].[SubtractInterval](dateadd(dd,-1,@target_date_local),@target_interval_local,0)
 		
 		--and try set again
 		SELECT
