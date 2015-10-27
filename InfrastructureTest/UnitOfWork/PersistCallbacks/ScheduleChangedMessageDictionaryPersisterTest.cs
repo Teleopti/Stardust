@@ -105,5 +105,27 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
 
+		[Test]
+		public void ShouldSendWithInitiatorIdWhenPersistingDictionaryWithChangedAndUnchangedScheduleDays()
+		{
+			InitiatorIdentifier.InitiatorId = Guid.NewGuid();
+			var person = Helper.NewPerson();
+			var person2 = Helper.NewPerson();
+			var schedules = Helper.MakeDictionary();
+			schedules[person]
+				.ScheduledDay("2015-10-19".Date())
+				.CreateAndAddActivity(
+					Helper.Activity(),
+					"2015-10-19 08:00 - 2015-10-19 17:00".Period())
+				.ModifyDictionary();
+			schedules[person2]
+				.ScheduledDay("2015-10-19".Date());
+
+			Target.Persist(schedules);
+
+			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
+				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
+		}
+
 	}
 }
