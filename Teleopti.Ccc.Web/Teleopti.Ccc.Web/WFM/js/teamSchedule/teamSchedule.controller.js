@@ -5,22 +5,60 @@
 
 	function TeamScheduleController(teamScheduleSvc, currentUserInfo, groupScheduleFactory) {
 		var vm = this;
-		var queryDate = moment(); //
-		var promiseForLoadingTeams = teamScheduleSvc.loadAllTeams.query({ date: new Date() }).$promise;
-		promiseForLoadingTeams.then(function(result) {
-			vm.Teams = result;
-		});
-		vm.selectedTeamId = '';
-		vm.scheduleDate = queryDate;
 
-		vm.selectedTeamChanged = function () {
+		vm.selectedTeamId = '';
+		vm.scheduleDate = new Date();
+		vm.scheduleDateMoment = function() {
+			return moment(vm.scheduleDate);
+		}
+
+		vm.dateOptions = {
+			formatYear: 'yyyy',
+			startingDay: 1
+		};
+
+		vm.format = 'yyyy/MM/dd';
+
+		vm.datePickerStatus = {
+			opened: false
+		};
+
+		vm.toggleCalendar = function () {
+			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
+		};
+
+		vm.scheduleDateChanged = function () {
+			vm.loadTeams();
+			vm.loadSchedules();
+		}
+
+		vm.loadTeams = function() {
+			teamScheduleSvc.loadAllTeams.query({
+				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
+			}).$promise.then(function(result) {
+				vm.Teams = result;
+			});
+		}
+
+		vm.loadSchedules = function () {
+			if (vm.selectedTeamId === "") return;
+
 			vm.canvasSize = angular.element($('#time-line-container'))[0].offsetWidth;
-			teamScheduleSvc.loadSchedules.query({ groupId: vm.selectedTeamId, date: queryDate.format("YYYY-MM-DD") }).$promise
-				.then(function (data) {
-					
+			teamScheduleSvc.loadSchedules.query({
+					groupId: vm.selectedTeamId,
+					date: vm.scheduleDateMoment().format("YYYY-MM-DD")
+				}).$promise
+				.then(function(data) {
 					vm.groupScheduleVm = groupScheduleFactory;
-					vm.groupScheduleVm.Create(data.Schedules, queryDate, vm.canvasSize);
+					vm.groupScheduleVm.Create(data.Schedules, vm.scheduleDateMoment(), vm.canvasSize);
 				});
 		}
+
+		vm.Init = function () {
+			vm.scheduleDate = new Date();
+			vm.loadTeams();
+		}
+
+		vm.Init();
 	}
 }());
