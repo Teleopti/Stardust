@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Caching;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
+	using TimeSeries = Dictionary<DateOnly, TimeSpan>;
+
 	class OutboundCampaignResourceCacheable
 	{
-		public Dictionary<DateOnly, TimeSpan> Schedules { get; set; }
-		public Dictionary<DateOnly, TimeSpan> Forecasts { get; set; }
+		public TimeSeries Schedules { get; set; }
+		public TimeSeries Forecasts { get; set; }
 	}
 
 	class OutboundCacheBody
@@ -26,7 +29,19 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public Dictionary<DateOnly, TimeSpan> GetScheduledTime(IOutboundCampaign campaign)
+		public IEnumerable<IOutboundCampaign> FilterNotCached(IEnumerable<IOutboundCampaign> campaigns)
+		{
+			lock (cacheLockObject)
+			{
+				var cacheBody = readFromCache();
+				if (cacheBody == null) return new List<IOutboundCampaign>();
+
+				return campaigns.Where(campaign => 
+					campaign.Id.HasValue && !cacheBody.OutboundCampaignResources.ContainsKey(campaign.Id.Value));						
+			}
+		}  
+
+		public TimeSeries GetScheduledTime(IOutboundCampaign campaign)
 		{			
 			lock (cacheLockObject)
 			{
@@ -37,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 		}
 
-		public Dictionary<DateOnly, TimeSpan> GetForecastedTime(IOutboundCampaign campaign)
+		public TimeSeries GetForecastedTime(IOutboundCampaign campaign)
 		{		
 			lock (cacheLockObject)
 			{
@@ -48,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 		}
 
-		public void SetScheduledTime(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> value)
+		public void SetScheduledTime(IOutboundCampaign campaign, TimeSeries value)
 		{
 			lock (cacheLockObject)
 			{
@@ -57,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}		
 		}
 
-		public void SetForecastedTime(IOutboundCampaign campaign, Dictionary<DateOnly, TimeSpan> value)
+		public void SetForecastedTime(IOutboundCampaign campaign,TimeSeries value)
 		{
 			lock (cacheLockObject)
 			{
@@ -74,8 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 		}
 
-		private void updateCacheBody(OutboundCacheBody body, Guid campaignId, Dictionary<DateOnly, TimeSpan> schedules,
-			Dictionary<DateOnly, TimeSpan> forecasts)
+		private void updateCacheBody(OutboundCacheBody body, Guid campaignId, TimeSeries schedules, TimeSeries forecasts)
 		{
 			if (body.OutboundCampaignResources.ContainsKey(campaignId))
 			{
@@ -93,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		}
 
 
-		private void writeToCache(Guid campaignId, Dictionary<DateOnly, TimeSpan> schedules, Dictionary<DateOnly, TimeSpan> forecasts )
+		private void writeToCache(Guid campaignId, TimeSeries schedules, TimeSeries forecasts )
 		{		
 			var cachePolicy = new CacheItemPolicy { SlidingExpiration = new TimeSpan(0, 60, 0) };
 			var cacheBody = readFromCache() ?? new OutboundCacheBody

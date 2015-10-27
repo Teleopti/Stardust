@@ -161,6 +161,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public DateOnly StartDate;
 		public DateOnly EndDate;
+
+		public DateOnlyPeriod ToDateOnlyPeriod()
+		{
+			return new DateOnlyPeriod(StartDate, EndDate);	
+		}
 	}
 
 	public class PeriodSummaryInfo

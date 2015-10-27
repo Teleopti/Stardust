@@ -29,19 +29,26 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}
 
-		public void LoadData(GanttPeriod peroid)
-		{
-			var campaigns = peroid == null
+		public void LoadData(GanttPeriod period)
+		{			
+
+			var campaigns = period == null
 				? _outboundCampaignRepository.LoadAll()
-				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(peroid));
+				: _outboundCampaignRepository.GetCampaigns(getExtendedDateTimePeriod(period));
+			if (campaigns.Count == 0) return;
+		
+			loadScheduleData(campaigns);
+		}
+
+		private void loadScheduleData(IList<IOutboundCampaign> campaigns)
+		{
 			if (campaigns.Count == 0) return;
 
-			var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
-			var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
-			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
+			// TODO: Discuss about the validity of this approach
+			var campaignPeriod = campaigns.Select(c => c.SpanningPeriod).Aggregate((ac, p) => ac.MaximumPeriod(p)).ToDateOnlyPeriod(TimeZoneInfo.Utc);
+			var maximumPeriod = new DateOnlyPeriod(campaignPeriod.StartDate.AddDays(-1), campaignPeriod.EndDate.AddDays(1));
 
-			_scheduledResourcesProvider.Load(campaigns, campaignPeriod);
-
+			_scheduledResourcesProvider.Load(campaigns, maximumPeriod);
 			updateCache(campaigns);
 		}
 
@@ -50,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundScheduledResourcesCacher.Reset();
 		}
 
+		// TODO: Remove this after refactoring.
 		public CampaignStatistics GetCampaignStatistics(GanttPeriod peroid)
 		{
 			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
@@ -72,12 +80,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			};
 		}
 
+		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status, GanttPeriod period)
 		{
 			if (status == CampaignStatus.None)
 			{
 				status = CampaignStatus.Done | CampaignStatus.Ongoing | CampaignStatus.Planned | CampaignStatus.Scheduled;
-			}
+			}			
 
 			switch (status)
 			{
@@ -136,6 +145,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			};
 		}
 
+		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListScheduledCampaign(GanttPeriod peroid)
 		{
 			var campaigns = peroid == null ? _outboundCampaignRepository.GetPlannedCampaigns()
@@ -161,8 +171,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Scheduled, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
+		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListPlannedCampaign(GanttPeriod peroid)
-		{
+		{						
 			var campaigns = peroid == null ? _outboundCampaignRepository.GetPlannedCampaigns()
 													 : _outboundCampaignRepository.GetPlannedCampaigns(getUtcPeroid(peroid));
 
@@ -186,6 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Planned, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
+		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListOngoingCampaign(GanttPeriod peroid)
 		{
 			if (peroid == null)
@@ -198,6 +210,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Ongoing, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
+		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListDoneCampaign(GanttPeriod peroid)
 		{
 			if (peroid == null)
@@ -217,7 +230,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
 		{
-			var campaigns = (period == null) ? _outboundCampaignRepository.LoadAll() : _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+			var campaignPeriod = period.ToDateOnlyPeriod();
+			var extendedPeriod = getExtendedDateTimePeriod(period);
+
+			var campaigns = _outboundCampaignRepository.GetCampaigns(extendedPeriod);
 
 			var ganttCampaigns = new List<GanttCampaignViewModel>();
 			foreach (var campaign in campaigns)
@@ -228,25 +244,48 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
 				var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
 
-				ganttCampaigns.Add(new GanttCampaignViewModel() { Id = (Guid)campaign.Id, Name = campaign.Name, StartDate = startDateAsUtc, EndDate = endDateAsUtc });
-			}
+				if (campaignPeriod.Contains(startDateAsUtc) || campaignPeriod.Contains(endDateAsUtc))
+				{
+					ganttCampaigns.Add(new GanttCampaignViewModel()
+					{
+						Id = (Guid) campaign.Id,
+						Name = campaign.Name,
+						StartDate = startDateAsUtc,
+						EndDate = endDateAsUtc
+					});
 
+				}
+			}
 			return ganttCampaigns;
 		}
 
+
+		private DateTimePeriod getExtendedDateTimePeriod(GanttPeriod period)
+		{
+			return new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1)).ToDateTimePeriod(TimeZoneInfo.Utc);
+		}
+
+		// TODO: Remove this after refactoring.
 		private DateTimePeriod getUtcPeroid(GanttPeriod period)
 		{
 			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1)).ToDateTimePeriod(_userTimeZone.TimeZone());
 		}
 
+		// TODO: Remove this after refactoring.
 		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status, IEnumerable<CampaignWarning> warnings)
 		{
+			var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
+			var endDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone);
+
+			var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
+			var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
+
 			return new CampaignSummary
 			{
 				Id = campaign.Id,
 				Name = campaign.Name,
-				StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
-				EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
+				StartDate = startDateAsUtc,
+				EndDate = endDateAsUtc,
 				Status = status,
 				WarningInfo = warnings
 			};
@@ -254,34 +293,32 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		private void updateCache(IEnumerable<IOutboundCampaign> campaigns)
 		{
-			foreach (var campaign in campaigns)
+			var notCachedCampaigns = _outboundScheduledResourcesCacher.FilterNotCached(campaigns).ToList();
+
+			foreach (var campaign in notCachedCampaigns)
 			{
-				if (_outboundScheduledResourcesCacher.GetForecastedTime(campaign) == null)
-				{
-					var dates = campaign.SpanningPeriod.DateCollection();
-					var schedules = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill))
-						.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
-					var forecasts = dates.ToDictionary(d => new DateOnly(d), d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill))
-						.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
-					_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
-					_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
-				}
+				var dates = campaign.SpanningPeriod.DateCollection();
+				var schedules = dates.ToDictionary(d => new DateOnly(d),
+					d => _scheduledResourcesProvider.GetScheduledTimeOnDate(new DateOnly(d), campaign.Skill))
+					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
+				var forecasts = dates.ToDictionary(d => new DateOnly(d),
+					d => _scheduledResourcesProvider.GetForecastedTimeOnDate(new DateOnly(d), campaign.Skill))
+					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
+				_outboundScheduledResourcesCacher.SetScheduledTime(campaign, schedules);
+				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
 			}
 		}
 
 		public void CheckAndUpdateCache(GanttPeriod period)
 		{
+			var extendedPeriod = getExtendedDateTimePeriod(period);
 			var campaigns = period == null
 				? _outboundCampaignRepository.LoadAll()
-				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+				: _outboundCampaignRepository.GetCampaigns(extendedPeriod);
 
-			foreach (var campaign in campaigns)
+			if (_outboundScheduledResourcesCacher.FilterNotCached(campaigns).ToList().Count > 0)
 			{
-				if (_outboundScheduledResourcesCacher.GetForecastedTime(campaign) == null)
-				{
-					LoadData(period);
-					break;
-				}
+				loadScheduleData(campaigns);
 			}
 		}
 	}

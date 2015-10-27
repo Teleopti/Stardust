@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -92,7 +93,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			target.LoadData(null);
 
 			var campaigns = _outboundCampaignRepository.LoadAll();
-			scheduledResourcesProvider.AssertWasCalled(x => x.Load(campaigns, getCampaignPeriod(campaigns)));
+			var period = getCampaignPeriod(campaigns);
+
+			scheduledResourcesProvider.AssertWasCalled(x => x.Load(
+				Arg<IList<IOutboundCampaign>>.List.ContainsAll(campaigns),
+				Arg<DateOnlyPeriod>.Matches( p => p.Contains(period))));								
 		}
 
 		[Test]

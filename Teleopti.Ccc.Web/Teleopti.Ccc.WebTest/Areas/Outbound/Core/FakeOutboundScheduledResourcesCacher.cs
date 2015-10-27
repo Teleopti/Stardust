@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -50,6 +51,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			campaignSchedules = new Dictionary<Guid, Dictionary<DateOnly, TimeSpan>>();
 			campaignForecasts = new Dictionary<Guid, Dictionary<DateOnly, TimeSpan>>();
+		}
+
+		public IEnumerable<IOutboundCampaign> FilterNotCached(IEnumerable<IOutboundCampaign> campaigns)
+		{
+			return campaigns.Where(campaign => campaign.Id.HasValue &&
+											   !campaignForecasts.ContainsKey(campaign.Id.Value) && 
+											   !campaignSchedules.ContainsKey(campaign.Id.Value));
 		}
 	}
 }
