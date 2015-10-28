@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -32,11 +30,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var absDifference = getAbsDifference(
 					taskDetails.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First(),
 					actualDetails);
-
+				//this is just for testing
+				var message = "Exceeds threshold";
+				if (absDifference > 100)
+				{
+					message = "Below threshold";
+				}
 				ret.Add(new SkillStatusModel
 				{
 					SkillName = item.SkillName,
-					Measures = new List<SkillStatusMeasure> { new SkillStatusMeasure { Name = "Calls", Value = absDifference, Severity = 1 } }
+					Measures = new List<SkillStatusMeasure> { new SkillStatusMeasure { Name = "Calls", Value = Math.Round(absDifference), Severity = 1 ,StringValue = message} }
 				});
 			}
 			int i = 1;
