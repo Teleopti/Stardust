@@ -1245,6 +1245,7 @@
     <Content Include="WFM\js\outbound\html\outbound.html" />
     <Content Include="WFM\js\outbound\html\phase-picker.tpl.html" />
     <Content Include="WFM\js\global\workinghourspicker\working-hours-picker.tpl.html" />
+    <Content Include="WFM\js\outbound\outbound.controller.campaign-create.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-commands-pane.js" />
     <Content Include="WFM\js\people\html\people-list.html" />
     <Content Include="WFM\js\people\html\people.html" />
@@ -1412,7 +1413,6 @@
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="WFM\css\_daterangepicker.scss" />
     <None Include="WFM\css\_forecasting.scss" />
-    <Content Include="WFM\js\outbound\outbound.controller.campaign-create..js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />
     <Content Include="WFM\js\outbound\outbound.directive.expandable.js" />
@@ -2133,7 +2133,6 @@
     <Content Include="WFM\css\_resourceplanner.scss" />
     <Content Include="WFM\css\_cardlist.scss" />
     <Content Include="WFM\css\_seatplan.scss" />
-    <Content Include="WFM\js\outbound\outbound.controller.campaign-production-plan.js" />
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />

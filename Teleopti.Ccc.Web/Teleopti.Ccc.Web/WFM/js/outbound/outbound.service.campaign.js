@@ -16,8 +16,16 @@
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
 		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
 		var loadCampaignScheduleUrl = '../api/Outbound/Campaign/Navigation';
+		var earlyCheckPermissionUrl = '../api/Outbound/permc';
 	
 		var self = this;
+
+		this.checkPermission = function(scope) {
+			return $http.get(earlyCheckPermissionUrl ).
+				error(function (e, h) {
+					if (h == 401) scope.$emit('unauthorized.outbound');
+				});
+		}
 
 		this.getThreshold = function (successCb) {
 			$http.post(updateThresholdUrl).success(function(data) {

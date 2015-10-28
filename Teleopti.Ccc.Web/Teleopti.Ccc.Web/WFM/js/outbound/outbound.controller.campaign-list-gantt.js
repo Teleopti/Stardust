@@ -28,7 +28,7 @@
 			return OutboundToggles.ready;
 		}, function(value) {
 			if (value) {
-				init();
+				outboundService.checkPermission($scope).then(init);
 				if (OutboundToggles.isNavigationEnabled()) $scope.isNavigationEnabled = true;
 			}
 		});		

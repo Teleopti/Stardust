@@ -1,8 +1,11 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.outbound').controller('OutboundDefaultCtrl', [
-		'$state', '$location', function($state, $location) {
+		'$scope', '$state', '$location', function($scope, $state, $location) {
 
+			$scope.$on('unauthorized.outbound', function() {
+				$location.path("/#");
+			});
 		}
 	]);
 })();

@@ -166,6 +166,12 @@ describe('OutboundCreateCtrl', function() {
 		this.getCampaign = function (campaignId, successCb, errorCb) {
 		};
 
+		this.checkPermission = function () {
+			return {
+				then: function(cb) { cb(); }
+			};
+		}
+
 		this.addCampaign = function (campaign, successCb, errorCb) {
 			campaigns.push(campaign);
 			successCb(campaign);

@@ -8,11 +8,12 @@
         ]);
 
     function createCtrl($scope, $state, outboundService, outboundNotificationService, viewUtilityService) {
-        init();
+	   
+		outboundService.checkPermission($scope).then(init);
+	  
         $scope.addCampaign = addCampaign;
         $scope.init = init;
         $scope.backToList = backToList;
-
 
         function addCampaign() {
             if (!$scope.isInputValid()) {

@@ -46,6 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_thresholdsSettingPersisterAndProvider = thresholdsSettingPersisterAndProvider;
 		}
 
+		[HttpGet, Route("api/Outbound/permc"), UnitOfWork]
+		public virtual IHttpActionResult EarlyCheckPermission()
+		{
+			return Ok();
+		}
+
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
 		public virtual IHttpActionResult CreateCampaign([FromBody]CampaignForm campaignForm)
 		{			

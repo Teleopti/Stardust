@@ -10,7 +10,8 @@
 
     function editCtrl($scope, $state, $stateParams, $timeout, outboundService, outboundNotificationService, viewUtilityService) {
 
-        init();
+    	outboundService.checkPermission($scope).then(init);
+
         var originalCampaign;
         var muteDirtyWorkingHoursWatcher;
 
