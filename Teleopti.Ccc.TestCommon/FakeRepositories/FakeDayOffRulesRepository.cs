@@ -56,9 +56,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}.MakeDefault_UseOnlyFromTest();
 		}
 
-		public DayOffRules DefaultSettings()
+		public void HasDefault(Action<DayOffRules> actionOnDefaultInstance)
 		{
-			return _workRuleSettings.Single(x => x.Default);
+			var defaultSettings = new DayOffRules
+			{
+				//should be same as default values in db script
+				DayOffsPerWeek = new MinMax<int>(1, 3),
+				ConsecutiveWorkdays = new MinMax<int>(2, 6),
+				ConsecutiveDayOffs = new MinMax<int>(1, 3)
+			}.MakeDefault_UseOnlyFromTest();
+			actionOnDefaultInstance(defaultSettings);
+			_workRuleSettings.Add(defaultSettings);
 		}
 	}
 }
