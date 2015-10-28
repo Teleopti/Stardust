@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					if (currentDefault != null)
 					{
 						base.Remove(Default());
+						Session.Flush();
 					}
 				}
 			}
