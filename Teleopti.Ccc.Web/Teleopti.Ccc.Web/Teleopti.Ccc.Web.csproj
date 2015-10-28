@@ -1415,6 +1415,7 @@
     <Content Include="WFM\tests\outbound\outbound.campaignSummary.controller.spec.js" />
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="WFM\css\_daterangepicker.scss" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />

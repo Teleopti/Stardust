@@ -3,6 +3,7 @@
 	'text!templates/realtimeadherenceagents/view.html',
 	'views/realtimeadherenceagents/vm',
 	'views/realtimeadherenceagents/subscriptions.adherenceagents',
+	'subscriptions.unsubscriber',
 	'errorview',
 	'ajax',
 	'resources',
@@ -14,6 +15,7 @@
 	view,
 	realTimeAdherenceViewModel,
 	subscriptions,
+	unsubscriber,
 	errorview,
 	ajax,
 	resources,
@@ -117,7 +119,7 @@
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_AdherenceDetails_34267);
 		},
 		dispose: function (options) {
-			subscriptions.unsubscribeAdherence();
+			unsubscriber.unsubscribeAdherence();
 		}
 	};
 });

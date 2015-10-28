@@ -4,6 +4,7 @@
 		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
 		'views/realtimeadherencesites/subscriptions.adherencesites',
+		'subscriptions.unsubscriber',
 		'errorview',
 		'ajax',
 		'resources'
@@ -13,6 +14,7 @@
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
+		unsubscriber,
 		errorview,
 		ajax,
 		resources
@@ -42,7 +44,7 @@
 			viewModel.load();
 		},
 		dispose: function (options) {
-			subscriptions.unsubscribeAdherence();
+			unsubscriber.unsubscribeAdherence();
 		}
 	};
 });

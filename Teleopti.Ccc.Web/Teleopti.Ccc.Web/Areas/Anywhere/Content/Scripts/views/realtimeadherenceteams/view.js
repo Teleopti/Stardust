@@ -4,6 +4,7 @@
 		'text!templates/realtimeadherenceteams/view.html',
 		'views/realtimeadherenceteams/vm',
 		'views/realtimeadherenceteams/subscriptions.adherenceteams',
+		'subscriptions.unsubscriber',
 		'ajax',
 		'resources'
 ], function (
@@ -12,6 +13,7 @@
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
+		unsubscriber,
 		ajax,
 		resources
 	) {
@@ -75,7 +77,7 @@
 			};
 		},
 		dispose : function(options) {
-			subscriptions.unsubscribeAdherence();
+			unsubscriber.unsubscribeAdherence();
 		}
 	};
 });
