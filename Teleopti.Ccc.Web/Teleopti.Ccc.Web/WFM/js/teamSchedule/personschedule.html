@@ -4,8 +4,8 @@
 	</td>
 	<td class="schedule schedule-column">
 		<div class="relative time-line-for" ng-if="person.ShiftProjections.length > 0">
-			<div class="shift" ng-repeat="projection in person.ShiftProjections">
-				<div class="layer absolute floatleft" 
+			<div class="shift">
+				<div class="layer absolute floatleft" ng-repeat="projection in person.ShiftProjections"
 					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}">
 					<!--<span class="label label-default layer-description">{{projection.Description}}</span>-->
 				</div>
