@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _workloadDayBase.Close();
             _workloadDayBase.MakeOpen24Hours();
-
+			
             Assert.AreEqual(0, _workloadDayBase.Tasks);
 
             _workloadDayBase.Tasks = 234;
@@ -958,6 +958,24 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayBase.Close();
             _workloadDayBase.Tasks = 1d;
         }
+
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void ShouldGiveExceptionWhenSettingOverrideTasksOnClosedDay()
+		{
+			_workloadDayBase.Close();
+			_workloadDayBase.OverrideTasks = 1d;
+		}
+
+	    [Test]
+	    public void ShouldSetOverrideTasks()
+	    {
+		    _workloadDayBase.OverrideTasks = 400d;
+			Assert.AreEqual(_workloadDayBase.OverrideTasks, 400d);
+		    Assert.AreEqual(_workloadDayBase.TotalTasks, 400d, 3);
+			Assert.AreEqual(_workloadDayBase.Parents.First().TotalTasks, 400d, 3);
+			
+	    }
 
         [Test]
         public void VerifySetEmailsWhenClosed()

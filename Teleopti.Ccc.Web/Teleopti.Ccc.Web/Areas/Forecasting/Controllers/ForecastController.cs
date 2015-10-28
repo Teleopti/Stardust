@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly ICampaignPersister _campaignPersister;
-		private readonly IManualChangePersister _manualChangePersister;
+		private readonly IOverrideTasksPersister _overrideTasksPersister;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IManualChangePersister manualChangePersister)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IOverrideTasksPersister overrideTasksPersister)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_campaignPersister = campaignPersister;
-			_manualChangePersister = manualChangePersister;
+			_overrideTasksPersister = overrideTasksPersister;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ManualChange")]
-		public virtual Task<ForecastResultViewModel> AddManualChange(ManualChangeInput input)
+		public virtual Task<ForecastResultViewModel> AddManualChange(OverrideTasksInput input)
 		{
 			var failedTask = Task.FromResult(new ForecastResultViewModel
 			{
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				var scenario = _scenarioRepository.Get(input.ScenarioId);
 				var workload = _workloadRepository.Get(input.WorkloadId);
-				_manualChangePersister.Persist(scenario, workload, input.Days, input.ManualChangeValue);
+				_overrideTasksPersister.Persist(scenario, workload, input.Days, input.OverrideTasks);
 				return Task.FromResult(new ForecastResultViewModel
 				{
 					Success = true
@@ -244,9 +244,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public int CampaignTasksPercent { get; set; }
 	}
 
-	public class ManualChangeInput : ModifyInput
+	public class OverrideTasksInput : ModifyInput
 	{
-		public int ManualChangeValue { get; set; }
+		public int OverrideTasks { get; set; }
 	}
 
 	public class ModifiedDay

@@ -107,6 +107,14 @@ namespace Teleopti.Ccc.Domain.Common
                 property.SetValue(owner, TimeSpan.FromTicks(averageTaskTimeTicks), null);
             }
         }
+
+		public static void DistributeOverrideTasks(double? newTotal, IEnumerable targets)
+		{
+			var typedTargets = targets.OfType<ITaskOwner>();
+			var sumOfCurrentValues = typedTargets.Sum(t => t.Tasks);
+
+			typedTargets.ForEach(t => t.OverrideTasks = (t.Tasks/sumOfCurrentValues)*newTotal);
+		}
     }
 
     /// <summary>

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     {
         private IWorkload _workload;
         private double _tasks;
+        private double? _overrideTasks;
         private double _totalTasks;
         private double _totalStatisticCalculatedTasks;
         private double _totalStatisticAnsweredTasks;
@@ -320,7 +321,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the average task time.
         /// </summary>
         /// <value>The average task time.</value>
@@ -1055,7 +1056,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
+		public virtual double? OverrideTasks
+	    {
+		    get { return _overrideTasks; }
+		    set
+		    {
+				checkOpen();
+				var currentState = _turnOffInternalRecalc;
+				_turnOffInternalRecalc = true;
+				ValueDistributor.DistributeOverrideTasks(value, _taskPeriodList);
+			    _overrideTasks = value;
+			    _turnOffInternalRecalc = currentState;
+				_recalculateDailyTasks();
+		    }
+	    }
+
+
+	    /// <summary>
         /// Gets or sets the campaign tasks.
         /// </summary>
         /// <value>The campaign tasks.</value>

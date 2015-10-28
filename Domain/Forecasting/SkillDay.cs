@@ -161,7 +161,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
+		public virtual double? OverrideTasks { get; set; }
+
+	    /// <summary>
         /// Gets the workload day collection.
         /// </summary>
         /// <value>The workload day collection.</value>

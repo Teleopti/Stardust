@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
     public class TemplateTaskPeriod : AggregateEntity, ITemplateTaskPeriod
     {
         private ITask _task;
+	    private double? _overrideTasks;
         private ICampaign _campaign = new Campaign();
         private double _aggregatedTasks;
         private IStatisticTask _statisticTask = new StatisticTask();
@@ -102,7 +103,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             get { return _period; }
         }
 
-		public virtual double? OverrideTasks { get; set; }
+	    public virtual double? OverrideTasks
+	    {
+		    get { return _overrideTasks; }
+		    set { _overrideTasks = value; }
+	    }
 
 	    /// <summary>
         /// Sets the number of tasks.

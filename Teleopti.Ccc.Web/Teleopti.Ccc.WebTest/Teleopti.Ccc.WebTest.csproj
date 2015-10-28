@@ -245,6 +245,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Forecasting\Controllers\CampaignPersisterTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\OverrideTasksPersisterTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactoryTest.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactoryTest.cs" />

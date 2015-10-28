@@ -232,14 +232,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldAddManualChange()
 		{
-			var input = new ManualChangeInput
+			var input = new OverrideTasksInput
 			{
 				Days = new[] {new ModifiedDay {Date = new DateTime()}},
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
-				ManualChangeValue = 50
+				OverrideTasks = 50
 			};
-			var manualChangePersister = MockRepository.GenerateMock<IManualChangePersister>();
+			var manualChangePersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var scenario = new Scenario("default");
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var result = target.AddManualChange(input);
 			result.Result.Success.Should().Be.True();
-			manualChangePersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.ManualChangeValue));
+			manualChangePersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks));
 		}
 	}
 }

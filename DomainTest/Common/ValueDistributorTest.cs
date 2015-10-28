@@ -30,7 +30,34 @@ namespace Teleopti.Ccc.DomainTest.Common
 			}   
         }
 
-        /// <summary>
+	    [Test]
+	    public void ShouldDistributeOverrideTasksTest()
+	    {
+			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+
+			const double newDailyOverrideTasks = 190d;
+
+			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets);
+
+			for (var i = 0; i < targets.Count; i++)
+			{
+				Assert.AreEqual(((i + 11) / 155d) * newDailyOverrideTasks, targets[i].OverrideTasks);
+			}
+	    }
+
+	    [Test]
+	    public void ShouldClearOverrideTasksTest()
+	    {
+			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			ValueDistributor.DistributeOverrideTasks(null, targets);
+
+			foreach (var target in targets)
+			{
+				Assert.IsNull(target.OverrideTasks);
+			}
+	    }
+
+	    /// <summary>
         /// Distributes the values even test.
         /// </summary>
         /// <remarks>
@@ -313,7 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Common
                 { 
                     Tasks = i + 11,
                     AverageAfterTaskTime = TimeSpan.FromSeconds(i + 1),
-                    AverageTaskTime = TimeSpan.FromSeconds(i + 6)
+                    AverageTaskTime = TimeSpan.FromSeconds(i + 6),
+					OverrideTasks = i + 12
                 };
                 targets.Add(target);
 			}
@@ -640,7 +668,9 @@ namespace Teleopti.Ccc.DomainTest.Common
                 }
             }
 
-            /// <summary>
+	        public double? OverrideTasks { get; set; }
+
+	        /// <summary>
             /// Gets or sets the campaign tasks.
             /// </summary>
             /// <value>The campaign tasks.</value>

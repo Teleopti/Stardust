@@ -52,7 +52,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double AggregatedTasks { get; set; }
 
-        /// <summary>
+
+	    /// <summary>
         /// Sets the number of tasks.
         /// </summary>
         /// <param name="numberOfTasks">The number of tasks.</param>

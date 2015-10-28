@@ -21,6 +21,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double TotalTasks { get; }
 
+		double? OverrideTasks { get; set; }
         /// <summary>
         /// Gets the total average after task time.
         /// </summary>

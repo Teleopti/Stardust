@@ -263,7 +263,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwnerDay.TotalTasks; }
         }
 
-        /// <summary>
+		public virtual double? OverrideTasks { get; set; }
+
+	    /// <summary>
         /// Gets the total average after task time.
         /// </summary>
         /// <value>The total average after task time.</value>
