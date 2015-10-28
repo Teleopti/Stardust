@@ -24,7 +24,7 @@ module.exports = function(config) {
 		'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
 		'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
 		'node_modules/moment/min/moment-with-locales.min.js',
-		'node_modules/moment-timezone/builds/moment-timezone.min.js',
+		'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
 		'node_modules/angular-moment/angular-moment.min.js',
 		'node_modules/angular-ui-indeterminate/dist/indeterminate.min.js',
 		'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',

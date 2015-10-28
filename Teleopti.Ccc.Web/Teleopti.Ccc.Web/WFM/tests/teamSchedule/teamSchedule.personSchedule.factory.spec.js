@@ -10,7 +10,7 @@ describe("PersonSchedule", function () {
 	// Setup the mock service in an anonymous module.
 	beforeEach(module(function($provide) {
 		$provide.value("CurrentUserInfoStub", {
-			DefaultTimeZone: "Utc/Utc"
+			DefaultTimeZone: "Etc/UTC"
 		});
 	}));
 

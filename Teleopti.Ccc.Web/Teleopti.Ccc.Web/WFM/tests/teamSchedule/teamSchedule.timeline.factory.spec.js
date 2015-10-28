@@ -13,7 +13,7 @@ describe("TimeLine", function () {
 		module(function ($provide) {
 			$provide.service('CurrentUserInfo', function () {
 				return {
-					DefaultTimeZone: "Utc/Utc",
+					DefaultTimeZone: "Etc/UTC",
 					DateFormatLocale: "en-GB"
 				};
 			});
@@ -30,7 +30,6 @@ describe("TimeLine", function () {
 
 	beforeEach(inject(function (TimeLine) {
 		target = TimeLine;
-		moment.locale("en-GB");
 	}));
 
 	it("Can get an instance of TimeLine factory", inject(function () {
