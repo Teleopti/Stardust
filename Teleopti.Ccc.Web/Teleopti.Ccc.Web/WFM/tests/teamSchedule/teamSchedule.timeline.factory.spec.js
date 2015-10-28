@@ -16,6 +16,7 @@ describe("TimeLine", function () {
 
 	beforeEach(inject(function(TimeLine) {
 		target = TimeLine;
+		moment.locale("en-GB");
 	}));
 
 	it("Can get an instance of TimeLine factory", inject(function () {
