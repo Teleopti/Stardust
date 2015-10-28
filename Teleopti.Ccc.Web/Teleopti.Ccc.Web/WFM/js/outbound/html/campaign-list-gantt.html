@@ -17,7 +17,7 @@
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
 				<input class="pointer" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart|amDateFormat: 'LL'}}" readonly />
 				<div class="wfm-datepicker-wrap gantt-datepicker" ng-show="showDatePicker">
-					<datepicker show-weeks="true" ng-model="settings.periodStart" class="wfm-datepicker" datepicker-mode="month" min-mode="month" ng-change="showDatePicker=false"></datepicker>
+					<datepicker show-weeks="true" ng-model="settings.periodStart" class="wfm-datepicker" min-mode="month" ng-change="showDatePicker=false"></datepicker>
 				</div>
 			</div>
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-right middle"></i></button>
