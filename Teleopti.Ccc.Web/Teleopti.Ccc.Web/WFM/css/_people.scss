@@ -22,7 +22,7 @@
 
 	padding: 10px;
 	cursor: pointer;
-	background-color: white;
+	background-color: $white;
 }
 
 .wfm-list, .ui-grid-menu-items {
@@ -34,7 +34,7 @@
 }
 
 .wfm-list label {
-	background-color: #99d6ff;
+	background-color: $blue-100;
 }
 
 .dropdown {
@@ -98,7 +98,7 @@
 	&:focus ~ label, &:valid ~ label {
 		font-size: 14px;
 		top: -25px;
-		color: #ec38a3;
+		color: $pink-500;
 	}
 }
 
@@ -176,7 +176,7 @@
 	top: -7rem;
     right: 0rem;
 	z-index: 100;
-	background-color: #EE8F7D;
+	background-color: $red-600;
 	color: #FFF;
 	display: block;
 	padding: 4px 0;
@@ -205,5 +205,5 @@
     margin: 3px;
     padding-bottom: 0px;
     padding-left: 0px;
-	color:#66C2FF;
+	color:$blue-300;
 }

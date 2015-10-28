@@ -97,7 +97,7 @@
 .floater-box{
   visibility: hidden;
   background:rgba(0,0,0,0.6);
-  color:white;
+  color:$white;
 	top: -1px;
 	width: 195px;
 	right: 0px;
@@ -113,7 +113,7 @@
 
 .resourceplanner-box:hover > .floater-box{
   visibility: visible;
-  color: white;
+  color: $white;
   opacity: 1;
 }
 
@@ -130,14 +130,14 @@
   background: #FC0!important;
 }
 .critUnderstaffed{
-  background: #EE8F7D!important;
+  background: $red-600!important;
 
 }
 .closed{
 background-color: #cacaca;
 }
 .overstaffed{
-  background: #99D6FF!important;
+  background: $blue-100!important;
 
 }
 .weekend{

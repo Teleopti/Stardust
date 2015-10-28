@@ -7,7 +7,7 @@ input[type=text],input[type=password],input[type=number]{
 .seatmap{
 	padding: 0;
 	z-index: 0;
-	position: absolute;	
+	position: absolute;
 	top: -10px;
 	right: -10px;
 	bottom: -10px;
@@ -27,12 +27,12 @@ input[type=text],input[type=password],input[type=number]{
 
 		.return-button:hover{
 			background:#0099ff!important;
-			color:#ffffff!important;
+			color:$white!important;
 		}
 
 		.wfm-btn-invis-primary:hover{
 			background:#0099ff;
-			color:#ffffff!important;
+			color:$white!important;
 		}
 
 		.wfm-fab{
@@ -41,11 +41,11 @@ input[type=text],input[type=password],input[type=number]{
 
 		.button-active{
 			background:#0099FF!important;
-			color:#ffffff!important;
+			color:$white!important;
 		}
 
 		.turn-off-datepicker{
-			width: 100%; 
+			width: 100%;
 			height: 40px;
 			z-index:-1;
 			position:absolute;
@@ -59,7 +59,7 @@ input[type=text],input[type=password],input[type=number]{
 
 .seatmap-view-datepicker{
 	.wfm-datepicker{
-		background:#ffffff;
+		background:$white;
 		position:absolute;
 		left:38px;
 		top:42px;
@@ -68,14 +68,14 @@ input[type=text],input[type=password],input[type=number]{
 }
 
 .location-breadcrumb{
-	background:#ffffff;
+	background:$white;
 	position: absolute;
 	height:34px;
 	top:40px;
 	left:0;
 	right:0;
 	z-index:1;
-	
+
 	div{
 		height:33px;
 		position:relative;
@@ -89,12 +89,12 @@ input[type=text],input[type=password],input[type=number]{
 	.breadcrumb-inverse a, .breadcrumb-inverse>.active {
 		color: #09F !important;
 		padding: 0px;
-		margin-left : 5px; 
+		margin-left : 5px;
 	}
 
 	.breadcrumb-inverse span {
 		position:relative;
-		margin-left : 5px; 
+		margin-left : 5px;
 	}
 
 }
@@ -167,7 +167,7 @@ a.mfb-component__button--main {
 	opacity: 1;
 	}
 }
-							
+
 .seatmap-canvas {
 	position: absolute;
 	top:41px;
@@ -181,8 +181,8 @@ a.mfb-component__button--main {
 }
 
 .seatmap-canvas .wfm-block{
-	width: 100%; 
-	margin: 0; 
+	width: 100%;
+	margin: 0;
 	padding:0 10px 0 10px;
 }
 
@@ -216,35 +216,35 @@ seatmap-editor{
 
 .cancel-changes{
 	position: absolute;
-	top: -21px; 
-	right: 90px; 
+	top: -21px;
+	right: 90px;
 	z-index: 2;
 }
 
 .mfb-menu-group{
-	top: -45px; 
-	right: 0px; 
+	top: -45px;
+	right: 0px;
 	z-index: 2;
 	position: absolute;
 }
 
 .seatmap-spinner{
-	position: absolute; 
-	left: 50%; 
-	top: 50%; 
-	margin-left: -32px; 
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -32px;
 	margin-top: -62px;
 }
 
 .seatmap-bottom-bar{
-	position: absolute; 
-	bottom: 0px; 
-	left: 0; 
+	position: absolute;
+	bottom: 0px;
+	left: 0;
 	right: 0;
 }
 
 .seatmap-bottom-bar md-slider{
-	width: 200px; 
+	width: 200px;
 	margin-left: 40px;
 }
 
@@ -256,11 +256,11 @@ seatmap-editor{
 }
 
 .seatmap-occupancy-detail {
-	background:#ffffff;
+	background:$white;
 	display: block;
 	min-height:120px;
 	max-height:500px;
-	background:#FFFFFF;
+	background:$white;
 	transition:all 0.35s ease-in-out;
 	border-top: 1px solid #e1e2e3;
 	overflow:hidden;
@@ -269,13 +269,13 @@ seatmap-editor{
 		position:absolute;
 		top:0;
 		right:0;
-		
+
 		.wfm-btn{
-			background:#ffffff;
+			background:$white;
 		}
-		
+
 		.wfm-btn:hover{
-			background:#f1f2f3;		
+			background:#f1f2f3;
 		}
 	}
 
@@ -295,7 +295,7 @@ seatmap-editor{
 	.pagination {
 		 margin: 5px 0px;
 	}
-	
+
 	.pagination li {
 		padding: 4px 8px 4px 8px;
 	}
@@ -311,9 +311,9 @@ seatmap-editor{
 		.seat-booking-item{
 			.booking-list-header{
 				position:relative;
-				background:#ffffff;
+				background:$white;
 				border-top:1px solid #e1e2e3;
-		
+
 				.wfm-btn{
 					margin:2px;
 					padding: 3px 12px;
@@ -325,7 +325,7 @@ seatmap-editor{
 					margin-top:-3px;
 				}
 			}
-	
+
 			.wfm-list{
 				max-height:166px;
 				overflow-y:auto;
@@ -336,9 +336,9 @@ seatmap-editor{
 			}
 		}
 	}
-	
+
 }
 
 .seatmap-seatbooking-previousday{
-	color:#a0a0a0; 
+	color:#a0a0a0;
 }

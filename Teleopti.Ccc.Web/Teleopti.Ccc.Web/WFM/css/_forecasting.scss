@@ -53,7 +53,7 @@
 	right: 40px;
 }
 .forecasting-chart-bar:hover {
-	color: white;
+	color: $white;
 }
 
 .forecasting-puzzle {
@@ -61,7 +61,7 @@
 	right: 80px;
 }
 .forecasting-puzzle:hover {
-	color: white;
+	color: $white;
 }
 
 .forecasting-view-day {
@@ -69,11 +69,11 @@
 	right: 120px;
 }
 .forecasting-view-day:hover {
-	color: white;
+	color: $white;
 }
 
 .forecasting-chart-bar-alert{
-	color:#ee8f7d;
+	color:$red-600;
 }
 
 .forecasting-chart{
@@ -132,8 +132,8 @@
 
 .formWarningInput{
 	opacity: 1 !important;
-	height: auto !important; 
-	color: #ffc285; 
+	height: auto !important;
+	color: $orange-400;
 }
 
 .forecast-result-chart-wrapper{

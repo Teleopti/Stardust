@@ -15,7 +15,7 @@ md-content {
 .wfm-card-unselected {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	
+
 	width: 90%;
 	margin-left: auto !important;
 	margin-right: auto !important;
@@ -66,6 +66,5 @@ wfm-card:last-child .wfm-card-selected {
 
 .wfm-card-content {
 	padding: 10px 16px;
-	background-color: white;
+	background-color: $white;
 }
-

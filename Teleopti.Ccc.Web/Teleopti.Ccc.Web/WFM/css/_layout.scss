@@ -4,7 +4,7 @@ html, body{
 
 .current-nav{
 	background-color:#003466;
-	color:white;
+	color:$white;
 }
 
 .navbar{
@@ -111,7 +111,7 @@ input::-ms-clear {
 }
 
 .nav-item-active, .nav-item-active > div{
-	background-color:#c2e085!important;
+	background-color:$green-100!important;
 	box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
 	//#036
 }
@@ -121,7 +121,7 @@ input::-ms-clear {
 	width:auto!important;
 	background:transparent;
 	border-bottom: 0 solid transparent!important;
-	color:white!important;
+	color:$white!important;
 	background: transparent;
 	-webkit-appearance: none!important;
 	-moz-appearance: none!important;
@@ -131,7 +131,7 @@ input::-ms-clear {
 	option{
 		cursor: pointer!important;
 		color:black!important;
-		background: white!important;
+		background: $white!important;
 	}
 }
 
@@ -191,7 +191,7 @@ input::-ms-clear {
 	.start-panel {
 		margin:0 5px;
 		display: inline-block;
-		background: white;
+		background: $white;
 	}
 
 	.start-tutorial{
@@ -212,7 +212,7 @@ input::-ms-clear {
 
 	.start-spacer-down {
 		margin-bottom: 15px;
-		background:white;
+		background:$white;
 	}
 
 	.start-blog-btn {
@@ -225,11 +225,11 @@ input::-ms-clear {
 			left: 0;
 			width: 100%;
 			height: 10vh;
-			background: white;
+			background: $white;
 			overflow: hidden;
 
 			@media screen and (min-width:0\0) {
-				background: #66C2FF;
+				background: $blue-300;
 			}
 		}
 

@@ -25,7 +25,7 @@
 
 .apply-list li:hover{
   border-left:transparent!important;
-  background-color: #F5F5F5!important;
+  background-color: $gray-100!important;
 }
 
 .apply-list-text{
@@ -34,7 +34,7 @@
 
 .list-mark{
 	padding:3px;
-	background:#C2E085;
+	background:$green-100;
 	border-radius:50%;
 	text-align:center;
 	font-sixe:15px!important;
@@ -58,7 +58,7 @@
 
 .dataHeader{
 	margin-top:15px;
-	background-color:white!important;
+	background-color:$white!important;
 	font-size: 18px;
 	border: none!important;
 }
@@ -109,7 +109,7 @@ p {
 }
 
 .wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
-	background-color: #66c2ff;
+	background-color: $blue-300;
 }
 .permission-filter-label{
 	margin:0!important;

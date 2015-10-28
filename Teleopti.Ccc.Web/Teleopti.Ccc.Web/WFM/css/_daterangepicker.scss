@@ -1,19 +1,19 @@
 ﻿.wfm-date-range-picker-wrap {
   .wrong-sign {
-    display: none; 
-    color: #ee8f7d ;
+    display: none;
+    color: $red-600 ;
   }
   .right-sign {
     display: none;
-    color: #c2e085;
+    color: $green-100;
   }
   .error-msg-container {
     display: none;
     margin-top: 10px;
   }
-  .ng-valid {		
+  .ng-valid {
     .right-sign {
-      display: block; 
+      display: block;
     }
   }
   .ng-invalid {
@@ -24,11 +24,11 @@
       display: block;
     }
     .wrong-sign {
-      display: block; 
-    }		
-  }	
+      display: block;
+    }
+  }
   .wfm-datepicker-wrap td.in-date-range button {
-    background-color: #c2e085;
+    background-color: $green-100;
   }
   .error-msg-container {
     display: none;
@@ -44,6 +44,6 @@
     width:18px;
   }
   .sub-header {
-    position: relative;    
+    position: relative;
   }
-}  
+}
