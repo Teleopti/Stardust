@@ -3,7 +3,7 @@
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
 	<div class="operation-container clearfix">
-		<div class="threshold-slider inline-block relative pull-left">
+		<div class="threshold-slider inline-block relative pull-right">
 			<div style="position: absolute; top: 0; left: 3px;">
 				{{settings.threshold}}%
 			</div>
@@ -11,8 +11,8 @@
 						  ng-model="settings.threshold"
 						  ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="gantt-travel-kit pull-left m-l-10  relative" ng-show="isNavigationEnabled">
-			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
+		<div class="pull-left relative" ng-show="isNavigationEnabled">
+			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0 m-l-0" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
 				<input class="pointer" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart|amDateFormat: 'LL'}}" readonly />
