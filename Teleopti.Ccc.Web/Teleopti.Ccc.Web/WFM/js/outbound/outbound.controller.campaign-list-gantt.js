@@ -72,6 +72,7 @@
 		}
 		
 		function loadExtraScheduleDataPromise() {
+			$scope.isRefreshingGantt = true;
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			var deferred = $q.defer();
 			outboundService.loadCampaignSchedule(ganttPeriod, function () {

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			lock (cacheLockObject)
 			{
 				var cacheBody = readFromCache();
-				if (cacheBody == null) return new List<IOutboundCampaign>();
+				if (cacheBody == null) return campaigns;
 
 				return campaigns.Where(campaign => 
 					campaign.Id.HasValue && !cacheBody.OutboundCampaignResources.ContainsKey(campaign.Id.Value));						
