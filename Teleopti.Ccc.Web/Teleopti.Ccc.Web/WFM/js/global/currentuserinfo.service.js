@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'pascalprecht.translate', 'ui.grid'])
+	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n'])
 		.service('AuthenticationRequests', ['$injector', function ($injector) {
 			var service = {};
 			
@@ -17,8 +17,8 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', 'amMoment', 'i18nService', '$sessionStorage', '$translate',
-			function (AuthenticationRequests, $q, angularMoment, i18nService, $sessionStorage, $translate) {
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService',
+			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService) {
 			var userName;
 			var defaultTimeZone;
 			var language;
@@ -55,7 +55,7 @@
 
 				context.success(function (data) {
 					timeout = Date.now() + 10000;
-					service.setLocales(data);
+					wfmI18nService.setLocales(data);
 					service.SetCurrentUserInfo(data); // remove ?
 					service.setBuid();
 					deferred.resolve(data);
@@ -67,31 +67,10 @@
 				return timeout > Date.now();
 			};
 
-			service.setLocales = function (data) {
-
-				// most calls should be done in a i18n module
-				$translate.use(data.Language);
-				angularMoment.changeLocale(data.DateFormatLocale);
-				// i18nService is for UI Grid localization.
-				// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).
-				// Need do some primary language checking.
-				var currentLang = "en";
-				var serverSideLang = data.Language.toLowerCase();
-				var dashIndex = serverSideLang.indexOf("-");
-				var primaryLang = dashIndex > -1 ? serverSideLang.substring(0, dashIndex) : serverSideLang;
-				var langs = i18nService.getAllLangs();
-				if (langs.indexOf(serverSideLang) > -1) {
-					currentLang = serverSideLang;
-				} else if (langs.indexOf(primaryLang) > -1) {
-					currentLang = primaryLang;
-				}
-				i18nService.setCurrentLang(currentLang);
-			};
-
 			service.setBuid = function () {
 				var buid = $sessionStorage.buid;
 				if (buid) {
-					AuthenticationRequests.setBuidOnHeaders(buid)
+					AuthenticationRequests.setBuidOnHeaders(buid);
 				}
 			};
 

@@ -3,18 +3,9 @@
 
 	describe('currentUserInfoService', function () {
 		var $httpBackend;
-		var angularMoment = { changeLocale: function () { } };
-		var i18nService = {
-			getAllLangs: function () { return []; },
-			setCurrentLang: function(){}
-		};
 
 		beforeEach(function () {
 			module('currentUserInfoService');
-			module(function ($provide) {
-				$provide.service('amMoment', function () { return angularMoment; });
-				$provide.service('i18nService', function () { return i18nService; });
-			});
 		});
 
 		beforeEach(inject(function (_$httpBackend_) {
@@ -74,17 +65,5 @@
 			});
 		});
 		
-		it('should set locales of the user ', function () {
-			inject(function (CurrentUserInfo) {
-				spyOn(angularMoment, 'changeLocale');
-				spyOn(i18nService, 'setCurrentLang');
-				var data = { Language: 'es', DateFormat: 'es', UserName: 'Ashley', DateFormatLocale: 'es' };
-
-				CurrentUserInfo.setLocales(data);
-
-				expect(angularMoment.changeLocale).toHaveBeenCalledWith('es');
-				expect(i18nService.setCurrentLang).toHaveBeenCalled();
-			});
-		});
 	});
 })();
