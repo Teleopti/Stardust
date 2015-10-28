@@ -276,10 +276,6 @@ item: Set Variable
   Variable=U2
   Value=-W"%MY_DB_WINGROUP%"
 end
-item: Set Variable
-  Variable=INTEGRATED
-  Value=1
-end
 item: Else Statement
 end
 item: Set Variable
@@ -299,6 +295,10 @@ end
 item: Set Variable
   Variable=SA2
   Value=-EE
+end
+item: Set Variable
+  Variable=INTEGRATED
+  Value=1
 end
 item: Else Statement
 end
