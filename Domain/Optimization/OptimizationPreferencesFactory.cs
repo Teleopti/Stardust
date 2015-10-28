@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public OptimizationPreferences Create()
 		{
-			var workrules = _dayOffRulesRepository.Default();
+			var defaultRules = _dayOffRulesRepository.Default();
 			return new OptimizationPreferences
 			{
 				DaysOff = new DaysOffPreferences
 				{
-					ConsecutiveDaysOffValue = workrules.ConsecutiveDayOffs,
+					ConsecutiveDaysOffValue = defaultRules.ConsecutiveDayOffs,
 					UseConsecutiveDaysOff = true,
-					ConsecutiveWorkdaysValue = workrules.ConsecutiveWorkdays,
+					ConsecutiveWorkdaysValue = defaultRules.ConsecutiveWorkdays,
 					UseConsecutiveWorkdays = true,
 					ConsiderWeekAfter = true,
 					ConsiderWeekBefore = true,
-					DaysOffPerWeekValue = workrules.DayOffsPerWeek,
+					DaysOffPerWeekValue = defaultRules.DayOffsPerWeek,
 					UseDaysOffPerWeek = true
 				},
 				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }

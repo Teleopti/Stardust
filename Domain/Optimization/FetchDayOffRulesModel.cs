@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public DayOffRulesModel FetchDefaultRules()
 		{
-			var setting = _dayOffRulesRepository.Default();
+			var defaultRules = _dayOffRulesRepository.Default();
 			return new DayOffRulesModel
 				{
-					MinConsecutiveWorkdays = setting.ConsecutiveWorkdays.Minimum,
-					MaxConsecutiveWorkdays = setting.ConsecutiveWorkdays.Maximum,
-					MinDayOffsPerWeek = setting.DayOffsPerWeek.Minimum,
-					MaxDayOffsPerWeek = setting.DayOffsPerWeek.Maximum,
-					MinConsecutiveDayOffs = setting.ConsecutiveDayOffs.Minimum,
-					MaxConsecutiveDayOffs = setting.ConsecutiveDayOffs.Maximum,
-					Id = setting.Id ?? Guid.Empty,
-					Default = setting.Default
+					MinConsecutiveWorkdays = defaultRules.ConsecutiveWorkdays.Minimum,
+					MaxConsecutiveWorkdays = defaultRules.ConsecutiveWorkdays.Maximum,
+					MinDayOffsPerWeek = defaultRules.DayOffsPerWeek.Minimum,
+					MaxDayOffsPerWeek = defaultRules.DayOffsPerWeek.Maximum,
+					MinConsecutiveDayOffs = defaultRules.ConsecutiveDayOffs.Minimum,
+					MaxConsecutiveDayOffs = defaultRules.ConsecutiveDayOffs.Maximum,
+					Id = defaultRules.Id ?? Guid.Empty,
+					Default = defaultRules.Default
 				};
 		}
 	}
