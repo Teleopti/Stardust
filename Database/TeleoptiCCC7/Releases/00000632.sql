@@ -25,8 +25,3 @@ add constraint FK_DayOffRules_BusinessUnit
 foreign key (BusinessUnit) references dbo.BusinessUnit
 
 
---insert into dbo.DayOffRules
---select newid(), '3f0886ab-7b25-4e95-856a-0d726edc2a67', getdate(), bu.Id, 1, 3, 2, 6, 1, 3, 1
---from dbo.BusinessUnit bu
---where bu.IsDeleted=0
-
