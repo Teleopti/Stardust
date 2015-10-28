@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.Flush();
 			rep.Add(lastDefault);
 			UnitOfWork.Flush();
-			rep.Default().ConsecutiveDayOffs
-				.Should().Be.EqualTo(lastDefault);
+			rep.Default().Should().Be.EqualTo(lastDefault);
 		}
 
 		[Test]
