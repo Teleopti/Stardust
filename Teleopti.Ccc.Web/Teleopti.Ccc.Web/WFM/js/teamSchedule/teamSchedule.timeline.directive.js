@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+	var timeLineCtrl = function() {
+		var vm = this;
+	}
 	var directive = function () {
 		return {
 			controller: 'TimeLineCtrl',
@@ -14,7 +17,8 @@
 		};
 	};
 	angular.module('wfm.teamSchedule')
-		.directive('timeLine', directive);
+		.directive('timeLine', directive)
+	.controller('TimeLineCtrl', timeLineCtrl);
 
 	function linkFunction(scope, element, attributes, controllers) {
 

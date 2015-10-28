@@ -1265,10 +1265,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\schedule.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.controller.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeline.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.factory.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.unit.factory.js" />
     <Content Include="WFM\js\teamSchedule\timeline.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
