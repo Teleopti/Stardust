@@ -30,20 +30,27 @@
 			return shiftProjectionVm;
 		}
 
-		var dayOffViewModel = function(dayOff, timeLine) {
-			if (!dayOff) dayOff = {}
+		var createDayOffViewModel = function (dayOff, timeLine) {
+			if (dayOff == undefined || dayOff == null) {
+				return undefined;
+			}
 
 			var startTime = moment(dayOff.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
+
+			if (startTimeMinutes > timeLine.EndMinute) {
+				return undefined;
+			}
+
 			var displayStart = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
-				StartPosition: function () {
+				StartPosition: function() {
 					var start = displayStart - timeLine.StartMinute;
 					var position = start * timeLine.LengthPercentPerMinute;
 					return position;
 				},
-				Length: function () {
+				Length: function() {
 					var displayEnd = startTimeMinutes + dayOff.Minutes;
 					displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
 					var position = (displayEnd - displayStart) * timeLine.LengthPercentPerMinute;
@@ -54,7 +61,11 @@
 			return dayOffVm;
 		}
 
-		var createProjections = function(projections, timeLine) {
+		var createProjections = function (projections, timeLine) {
+			if (projections == undefined || projections == null || projections.length === 0) {
+				return undefined;
+			}
+
 			var projectionVms = [];
 			angular.forEach(projections, function(projection) {
 				projectionVms.push(new shiftProjectionViewModel(projection, timeLine));
@@ -63,11 +74,14 @@
 			return projectionVms;
 		}
 
-		var merge = function (otherSchedule, timeLine) {
+		var merge = function(otherSchedule, timeLine) {
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
-			this.ShiftProjections = this.ShiftProjections.concat(otherProjections);
-			if (this.DayOff == undefined && otherSchedule.DayOff != undefined && otherSchedule.DayOff != null){
-				this.DayOff = new dayOffViewModel(otherSchedule.DayOff, timeLine);
+			this.Shifts.push({ Projections: otherProjections });
+
+			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine);
+
+			if (otherDayOffVm != undefined) {
+				this.DayOffs.push(otherDayOffVm);
 			}
 		}
 
@@ -75,15 +89,19 @@
 			if (!personSchedule) personSchedule = {};
 
 			var projectionVms = createProjections(personSchedule.Projection, timeLine);
+			var dayOffVm  = createDayOffViewModel(personSchedule.DayOff, timeLine);
 
 			var vm = {
 				PersonId: personSchedule.PersonId,
 				Name: personSchedule.Name,
 				Date: moment.tz(personSchedule.Date, currentUserInfo.DefaultTimeZone),
-				ShiftProjections: projectionVms,
+				Shifts: projectionVms == undefined ? [] : [
+					{
+						Projections: projectionVms
+					}
+				],
 				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
-				DayOff: personSchedule.DayOff == undefined || personSchedule.DayOff == null ? undefined
-					: new dayOffViewModel(personSchedule.DayOff, timeLine),
+				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge
 			}
 

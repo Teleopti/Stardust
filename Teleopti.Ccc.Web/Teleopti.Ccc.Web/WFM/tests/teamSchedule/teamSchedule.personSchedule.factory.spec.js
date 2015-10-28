@@ -52,7 +52,8 @@ describe("PersonSchedule", function () {
 					"Start": queryDate + " 10:00",
 					"Minutes": 360 // End = "2015-10-26 16:00"
 				}
-			]
+			],
+			DayOff: null
 		};
 
 		var personSchedule = target.Create(schedule, timeLine);
@@ -60,10 +61,13 @@ describe("PersonSchedule", function () {
 		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
 		expect(personSchedule.Name).toEqual(schedule.Name);
 		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(schedule.Date).format(dateTimeFormat));
-		expect(personSchedule.ShiftProjections.length).toEqual(schedule.Projection.length);
+
+		expect(personSchedule.Shifts.length).toEqual(1);
+		expect(personSchedule.DayOffs.length).toEqual(0);
 
 		var index = 0;
-		angular.forEach(personSchedule.ShiftProjections, function(projection) {
+		var shift = personSchedule.Shifts[0];
+		angular.forEach(shift.Projections, function (projection) {
 			var rawProjection = schedule.Projection[index];
 			expect(projection.Color).toEqual(rawProjection.Color);
 			expect(projection.Description).toEqual(rawProjection.Description);
@@ -111,9 +115,10 @@ describe("PersonSchedule", function () {
 		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
 		expect(personSchedule.Name).toEqual(schedule.Name);
 		expect(personSchedule.Date.format(dateTimeFormat)).toEqual(moment(schedule.Date).format(dateTimeFormat));
-		expect(personSchedule.ShiftProjections.length).toEqual(0);
+		expect(personSchedule.Shifts.length).toEqual(0);
+		expect(personSchedule.DayOffs.length).toEqual(1);
 		
-		var dayOff = personSchedule.DayOff;
+		var dayOff = personSchedule.DayOffs[0];
 		expect(dayOff).toBeDefined();
 		expect(dayOff.StartPosition()).toEqual(0);
 		expect(dayOff.Length()).toEqual((timeLine.EndMinute - timeLine.StartMinute) * timeLine.LengthPercentPerMinute);

@@ -3,20 +3,23 @@
 		<div class="person-name nowrap" >{{person.Name}}</div>
 	</td>
 	<td class="schedule schedule-column">
-		<div class="relative time-line-for" ng-if="person.ShiftProjections.length > 0">
-			<div class="shift">
-				<div class="layer absolute floatleft" ng-repeat="projection in person.ShiftProjections"
+		<div class="relative time-line-for" ng-if="person.Shifts.length > 0">
+			<div class="shift" ng-repeat="shift in person.Shifts">
+				<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
 					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}">
 					<!--<span class="label label-default layer-description">{{projection.Description}}</span>-->
 				</div>
 			</div>
 		</div>
-		<div class="relative time-line-for" ng-if="person.DayOff != undefined">
-			<div class="dayoff absolute" ng-style="{left: person.DayOff.StartPosition() + '%', width: person.DayOff.Length() + '%' }">
-				<!--<span class="label label-default layer-description floatcenter">{{person.DayOff.DayOffName}}</span>-->
-				<span class="label label-default layer-description floatright">{{person.DayOff.DayOffName}}</span>
-			</div>
-		</div>
+
+		<div class="relative time-line-for" ng-if="person.DayOffs.length > 0">
+			<span class="dayoff absolute"
+				  ng-repeat="dayOff in person.DayOffs"
+				  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%' }">
+				<!--<span class="label label-default layer-description floatcenter">{{dayOff.DayOffName}}</span>-->
+				<span class="label label-default layer-description floatright">{{dayOff.DayOffName}}</span>
+			</span>
+		</div>		
 	</td>
 	<td class="contract-time contract-time-column"></td>
 </tr>
