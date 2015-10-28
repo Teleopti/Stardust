@@ -2,7 +2,7 @@
 <div class="time-line">
 	<div class="relative">
 		<span ng-repeat="hourPoint in vm.times">
-			<span class="ruler absolute" ng-style="{left: (hourPoint.Position() + '%')}"></span>
+			<span class="ruler absolute" ng-style="{left: (hourPoint.Position() + '%'), height: vm.height + 'px'}"></span>
 			<span class="label label-info absolute" ng-style="{left: hourPoint.Position() + '%'}">{{ hourPoint.TimeLabel}}</span>
 		</span>
 	</div>

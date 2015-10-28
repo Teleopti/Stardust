@@ -4,8 +4,14 @@
 		border: 1px solid #ccc;
 	}
 
-	.team-schedule .time-line .ruler {
-		height: 100px;
+	.team-schedule .time-line {
+
+		z-index: 10;
+	}
+
+.team-schedule .time-line .ruler {
+
+		height: 100%;
 		width: 1px;
 		background-color: rgba(0,0,0,0.2);
 		z-index: 100;
@@ -56,7 +62,7 @@
 		position: absolute;
 	}
 </style>
-<div class="team-schedule" id="team-schedule">
+<div class="team-schedule">
 	Team schedule
 	<div>
 		<span class="col-sm-5 col-md-3 col-lg-3">
@@ -80,18 +86,12 @@
 			</span>
 		</span>
 	</div>
-	<table class="table table-hover">
+	<table class="table table-hover" id="team-schedule">
 		<thead>
 			<tr class="person">
 				<th class="person-name person-name-column" style="width: 15%"></th>
-				<th id="time-line-container"class="schedule schedule-column">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="relative">
-								<time-line times="vm.groupScheduleVm.TimeLine.HourPoints"></time-line>
-							</div>
-						</div>
-					</div>
+				<th id="time-line-container" class="schedule schedule-column">
+					<time-line times="vm.groupScheduleVm.TimeLine.HourPoints"></time-line>
 				</th>
 				<th class="contract-time contract-time-title" style="width: 15%">
 					<span xdata-bind="text: Resources.ContractTime"></span>

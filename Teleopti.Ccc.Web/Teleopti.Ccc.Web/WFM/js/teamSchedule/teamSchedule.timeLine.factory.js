@@ -64,7 +64,7 @@
 				? moment.tz(currentUserInfo.DefaultTimeZone)
 				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
 
-			var formattedTime = time.format("HH:mm");
+			var formattedTime = time.format('LT');
 
 			var hourPointVm = {
 				TimeLabel: formattedTime,
