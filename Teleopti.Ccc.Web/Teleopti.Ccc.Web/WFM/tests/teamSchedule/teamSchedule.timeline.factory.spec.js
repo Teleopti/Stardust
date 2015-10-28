@@ -8,13 +8,27 @@ describe("TimeLine", function () {
 	beforeEach(module("wfm.teamSchedule"));
 
 	// Setup the mock service in an anonymous module.
-	beforeEach(module(function ($provide) {
-		$provide.value("CurrentUserInfoStub", {
-			DefaultTimeZone: "Utc/Utc"
+	beforeEach(function () {
+		module('currentUserInfoService');
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return {
+					DefaultTimeZone: "Utc/Utc",
+					DateFormatLocale: "en-GB"
+				};
+			});
 		});
-	}));
+	});
 
-	beforeEach(inject(function(TimeLine) {
+	//Getting reference of the mocked service
+	var mockCurrentUserInfo;
+	beforeEach(inject(function(CurrentUserInfo) {
+		mockCurrentUserInfo = CurrentUserInfo;
+		moment.locale(mockCurrentUserInfo.DateFormatLocale);
+	}));
+	
+
+	beforeEach(inject(function (TimeLine) {
 		target = TimeLine;
 		moment.locale("en-GB");
 	}));
