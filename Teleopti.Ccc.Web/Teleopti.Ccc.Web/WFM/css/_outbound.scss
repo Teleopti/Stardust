@@ -4,6 +4,19 @@
 	.wfm-card-list-container {
 		max-height: none;
 	}
+	.enhanced-gantt-header{
+	    cursor:pointer;
+		transition: all .2s ease-in-out;
+	}
+	.enhanced-gantt-header:hover{
+	    background-color:#ececec;
+	}
+	.anti-enhanced-gantt-header{
+	    cursor:default !important;
+	}
+	.anti-enhanced-gantt-header:hover{
+	    background-color:#fff !important;
+	}
 	.outbound-back-btn{
 	    margin:0;
 		padding:0;

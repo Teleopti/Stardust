@@ -321,6 +321,7 @@
 		}
 
 		function updateWarningInfo(row, campaignSummary) {
+			row.ClassesEnhancedHeader = 'anti-enhanced-gantt-header';
 			row.campaign.WarningInfo = campaignSummary.WarningInfo;
 		}
 
