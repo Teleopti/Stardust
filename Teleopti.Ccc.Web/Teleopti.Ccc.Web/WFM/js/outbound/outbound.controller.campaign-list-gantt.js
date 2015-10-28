@@ -13,14 +13,16 @@
 			'outboundTranslationService',
 			'outboundChartService',
 			'outboundNotificationService',
+			'$sessionStorage',
 			campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, $q, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService) {
+	function campaignListGanttCtrl($scope, $filter, $q, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService, $sessionStorage) {
 
 		$scope.isInitFinished = false;
 		$scope.isLoadFinished = false;
 		$scope.isNavigationEnabled = false;
 		$scope.month = "month";
+		$scope.$storage = $sessionStorage;
 
 		$scope.$watch(function() {
 			return OutboundToggles.ready;
@@ -43,6 +45,7 @@
 		};
 
 		function init() {
+			if ($scope.$storage.visualizationPeriodStart) $scope.settings.periodStart = $scope.$storage.visualizationPeriodStart;
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
 			$scope.timespans = getGanttShadedTimespans();
@@ -101,6 +104,7 @@
 			$scope.$watch(function () {
 				return $scope.settings.periodStart.getFullYear() + $scope.settings.periodStart.getMonth();
 			}, function () {
+				$scope.$storage.visualizationPeriodStart = $scope.settings.periodStart;
 				loadExtraScheduleDataPromise().then(refreshGantt);				
 			});
 		}
