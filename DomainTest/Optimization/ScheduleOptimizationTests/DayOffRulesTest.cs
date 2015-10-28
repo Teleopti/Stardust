@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	[DomainTest]
-	public class WorkRuleSettingsTest
+	public class DayOffRulesTest
 	{
 		public ScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
