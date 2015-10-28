@@ -10,6 +10,7 @@
 			var siteIds = $stateParams.siteIds;
 			var teamIds = $stateParams.teamIds;
 			$scope.agents = [];
+			var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 
 			var setStatesInAgents = function(states) {
 				$scope.agents.forEach(function(agent) {
@@ -177,7 +178,7 @@
 			};
 
 			$scope.filterData = function() {
-				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText);
+				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 			};
 
 			$scope.changeScheduleUrl = function(teamId, personId) {

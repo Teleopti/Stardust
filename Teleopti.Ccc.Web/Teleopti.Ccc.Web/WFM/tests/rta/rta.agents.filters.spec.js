@@ -130,4 +130,42 @@ describe('RtaAgentsFilters', function() {
 		expect(filteredData.length).toEqual(1);
 		expect(filteredData[0].name).toEqual('Julian');
 	}));
+
+	it('should filter with the multiple keywords in different columns', inject(function($filter) {
+		var data = [{
+			name: 'Julian Feldman',
+			teamName: 'London'
+		}, {
+			name: 'Julian Glancy',
+			teamName: 'Students'
+		}, {
+			name: 'Kevin Glancy',
+			teamName: 'Students'
+		}, {
+			name: 'Kevin Glancer',
+			teamName: 'Students'
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, 'Ju Stu');
+
+		expect(filteredData.length).toEqual(1);
+		expect(filteredData[0].name).toEqual('Julian Glancy');
+		expect(filteredData[0].teamName).toEqual('Students');
+	}));
+
+	it('should filter on specified columns', inject(function($filter) {
+		var data = [{
+			name: 'Julian Feldman',
+			state: 'Phone',
+			teamId: '123',
+			siteId: '123',
+			personId: '123'
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, '123', ["name","state"]);
+
+		expect(filteredData.length).toEqual(0);
+	}));
 });
