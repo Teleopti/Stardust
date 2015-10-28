@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public DayOffRules Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _workRuleSettings.SingleOrDefault(x => x.Id == id);
 		}
 
 		public IList<DayOffRules> LoadAll()
