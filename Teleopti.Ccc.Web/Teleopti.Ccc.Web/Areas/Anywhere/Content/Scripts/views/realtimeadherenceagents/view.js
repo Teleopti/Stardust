@@ -40,9 +40,9 @@
 				viewModel.refreshAlarmTime();
 			}, 1000);
 
-			var loadStates = function (teamId) {
+			var loadStates = function(url) {
 				ajax.ajax({
-					url: "Agents/GetStates?teamId=" + teamId,
+					url: url,
 					error: function (jqXHR, textStatus, errorThrown) {
 						if (jqXHR.status == 403) {
 							errorview.display(resources.InsufficientPermission);
@@ -52,61 +52,96 @@
 						viewModel.fillAgentsStates(data);
 					}
 				});
+			}
+
+			var loadStatesForTeam = function(teamId) {
+				loadStates("Agents/GetStates?teamId=" + teamId);
 			};
 
-			var populateViewModel = function(teamId) {
+			var idsToUrl = function(idtype, ids) {
+				var idsUrl = "";
+				ids.forEach(function(id) {
+					idsUrl += idtype + "=" + id + "&";
+				});
+				idsUrl = idsUrl.substring(0, idsUrl.length - 1);
+				return idsUrl;
+			};
+
+			var loadStatesForSites = function(siteIds) {
+				idsToUrl("siteIds", siteIds);
+				loadStates("Agents/GetStatesForSites?" + sitesIdUrl);
+			};
+			var subscriptionDone = function () {
+				$('.realtimeadherenceagents').attr("data-subscription-done", " ");
+			};
+
+			var populate = function (agentsUrl,onSuccess) {
 				ajax.ajax({
-						url: "Agents/ForTeam?teamId=" + teamId,
-						error: function(jqXHR, textStatus, errorThrown) {
-							if (jqXHR.status == 403) {
-								errorview.display(resources.InsufficientPermission);
-							}
-						},
-						success: function(data) {
-							viewModel.fillAgents(data);
-							if (!resources.RTA_NewEventHangfireRTA_34333) {
-								loadStates(teamId);
-							}
+					url: agentsUrl,
+					error: function (jqXHR, textStatus, errorThrown) {
+						if (jqXHR.status == 403) {
+							errorview.display(resources.InsufficientPermission);
 						}
-					})
-					.done(function() {
-						ajax.ajax({
-							url: "Teams/GetBusinessUnitId?teamId=" + teamId,
-							success: function(businessUnitId) {
-								subscriptions.subscribeAdherence(function(notification) {
-										viewModel.updateFromNotification(notification);
-									},
-									businessUnitId,
-									teamId,
-									function() {
-										$('.realtimeadherenceagents').attr("data-subscription-done", " ");
-									},
-									true);
-							}
-						});
-					});
+					},
+					success: function (data) {
+						viewModel.fillAgents(data);
+						onSuccess();
+					}
+				})
+			};
+
+			var populateTeam = function(teamId) {
+				populate("Agents/ForTeam?teamId=" + teamId, function() {
+					if (!resources.RTA_NewEventHangfireRTA_34333) {
+						loadStatesForTeam(teamId);
+					}
+					subscriptions.subscribeAdherence(function(notification) {
+							viewModel.updateFromNotification(notification);
+						},
+						options.buid,
+						teamId,
+						subscriptionDone,
+						true);
+				});
+			};
+			var populateSites = function(siteIds) {
+				populate("Agents/ForSites?" + idsToUrl("siteIds", siteIds), function() {
+					subscriptions.subscribeForSitesAdherence(function(notification) {
+							viewModel.updateFromNotification(notification);
+						},
+						options.buid,
+						siteIds,
+						subscriptionDone,
+						true);
+				});
 			};
 
 			if (options.id === 'MultipleTeams') {
-				subscriptions.unsubscribeAdherence();
 				var teams = amplify.store('MultipleTeams');
-				for (var i = 0; i < teams.length; i++) {
-					populateViewModel(teams[i]);
+				if (!resources.RTA_NewEventHangfireRTA_34333) {
+					for (var i = 0; i < teams.length; i++) {
+						populateTeam(teams[i]);
+					}
 				}
 			} else if (options.id === 'MultipleSites') {
 				var sites = amplify.store('MultipleSites');
-				for (var site = 0; site < sites.length; site++) {
-					ajax.ajax({
-						url: "Teams/ForSite?siteId=" + sites[site],
-						success: function(data) {
-							for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
-								populateViewModel(data[teamInSite].Id);
+
+				if (!resources.RTA_NewEventHangfireRTA_34333) {
+					for (var site = 0; site < sites.length; site++) {
+						ajax.ajax({
+							url: "Teams/ForSite?siteId=" + sites[site],
+							success: function(data) {
+								for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
+									populateTeam(data[teamInSite].Id);
+								}
 							}
-						}
-					});
+						});
+					}
+				} else {
+					populateSites(sites);
 				}
 			} else {
-				populateViewModel(options.id);
+				populateTeam(options.id);
 			}
 
 			permissions.get().done(function (data) {
