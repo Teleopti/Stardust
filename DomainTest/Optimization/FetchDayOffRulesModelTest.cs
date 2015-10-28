@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -34,14 +33,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var curr = DayOffRules.CreateDefault().WithId();
 			DayOffRulesRepository.Add(curr);
-
+			
 			var defaultSettings = Target.FetchDefaultRules();
-			defaultSettings.MinDayOffsPerWeek.Should().Be.EqualTo(3);
-			defaultSettings.MaxDayOffsPerWeek.Should().Be.EqualTo(4);
+			defaultSettings.MinDayOffsPerWeek.Should().Be.EqualTo(1);
+			defaultSettings.MaxDayOffsPerWeek.Should().Be.EqualTo(3);
 			defaultSettings.MinConsecutiveDayOffs.Should().Be.EqualTo(1);
-			defaultSettings.MaxConsecutiveDayOffs.Should().Be.EqualTo(2);
+			defaultSettings.MaxConsecutiveDayOffs.Should().Be.EqualTo(3);
 			defaultSettings.MinConsecutiveWorkdays.Should().Be.EqualTo(2);
-			defaultSettings.MaxConsecutiveWorkdays.Should().Be.EqualTo(3);
+			defaultSettings.MaxConsecutiveWorkdays.Should().Be.EqualTo(6);
 			defaultSettings.Id.Should().Be.EqualTo(curr.Id);
 			defaultSettings.Default.Should().Be.True();
 		}
