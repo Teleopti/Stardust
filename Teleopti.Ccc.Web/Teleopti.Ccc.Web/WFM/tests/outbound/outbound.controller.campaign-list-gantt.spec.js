@@ -208,10 +208,6 @@
 			PhaseStatistics = d;
 		}
 
-		this.getCampaignStatistics = function(d, success) {
-			success(PhaseStatistics);
-		}
-
 		this.getCampaign = function(campaignId, successCb, errorCb) {
 		};
 
@@ -229,13 +225,6 @@
 		this.prepareCampaignSummary = function(summary) {
 			campaignSummaries.push(summary);
 		};
-
-		this.getCampaignSummary = function(id, cb) {
-			var ss = campaignSummaries.filter(function(s) {
-				return s.Id == id;
-			});
-			if (ss.length > 0) cb(ss[0]);
-		}
 	}
 
 	function fakeOutboundChartService() {

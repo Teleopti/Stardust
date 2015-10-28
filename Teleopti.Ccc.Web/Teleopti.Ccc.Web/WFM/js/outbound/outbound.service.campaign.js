@@ -8,12 +8,9 @@
 
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
-		var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
 		var reloadCampaignSchedulesUrl = '../api/Outbound/Campaign/Period/Load';
 		var editCampaignCommandUrl = '../api/Outbound/Campaign/';
-		var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
 		var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
-		var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
 		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
@@ -59,12 +56,6 @@
 			}
 		};
 
-		this.load = function(successCb) {
-			$http.post(getCampaignLoadUrl).success(function(data) {
-				if (successCb != null) successCb(data);
-			});
-		}
-
 		this.reloadCampaignSchedules = function(period, successCb) {			
 			$http.post(reloadCampaignSchedulesUrl, normalizePeriod(period)).success(function (data) {
 				if (successCb != null) successCb(data);
@@ -82,15 +73,6 @@
 				});
 		}
 
-		this.getCampaignStatistics = function(filter, successCb, errorCb) {
-			$http.post(getCampaignStatisticsUrl).success(function(data) {
-					if (successCb != null) successCb(data);
-				}).
-				error(function(data) {
-					if (errorCb != null) errorCb(data);
-				});
-		};
-
 		this.getCampaignStatisticsWithinPeriod = function(period, successCb, errorCb) {			
 			$http.post(getCampaignPeriodStatisticsUrl, normalizePeriod(period)).
 				success(function(data) {
@@ -102,30 +84,8 @@
 				});
 		}
 
-		this.getCampaignSummary = function(id, successCb, errorCb) {
-			$http.get(getFilteredCampaignsUrl + '/' + id).
-				success(function(data) {
-					if (successCb != null)
-						successCb(data);
-				}).
-				error(function(data) {
-					if (errorCb != null) errorCb(data);
-				});
-		};
-
 		this.getCampaignDetail = function (id, successCb, errorCb) {
 			$http.post(getCampaignDetailUrl, {CampaignId: id}).
-				success(function(data) {
-					if (successCb != null)
-						successCb(data);
-				}).
-				error(function(data) {
-					if (errorCb != null) errorCb(data);
-				});
-		};
-
-		this.listFilteredCampaigns = function(filter, successCb, errorCb) {
-			$http.post(getFilteredCampaignsUrl, filter).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);

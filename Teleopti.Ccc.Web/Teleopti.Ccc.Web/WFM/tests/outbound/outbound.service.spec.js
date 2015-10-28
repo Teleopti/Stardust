@@ -175,28 +175,6 @@ describe('OutboundService Test', function () {
 		});
 	});
 
-	it('should have expected phase stastistics', function () {
-		$httpBackend.when('POST', '../api/Outbound/Campaign/Statistics',
-			function() {
-				return true;
-			}).respond(200, JSON.stringify({ "Planned": 1, "PlannedWarning": 2, "Scheduled": 3, "ScheduledWarning": 4, "OnGoing": 5, "OnGoingWarning": 6, "Done": 7 }));
-
-		var result;
-		outboundService.getCampaignStatistics(null, function success(data) {
-			result = data;
-		});
-
-		$httpBackend.flush();
-
-		expect(result.Planned).toEqual(1);
-		expect(result.PlannedWarning).toEqual(2);
-		expect(result.Scheduled).toEqual(3);
-		expect(result.ScheduledWarning).toEqual(4);
-		expect(result.OnGoing).toEqual(5);
-		expect(result.OnGoingWarning).toEqual(6);
-		expect(result.Done).toEqual(7);
-	});
-
 	it('misService getDateFromServer should work correctly', function() {
 		var input = '2015-10-01Z';
 		var result = miscService.getDateFromServer(input);
