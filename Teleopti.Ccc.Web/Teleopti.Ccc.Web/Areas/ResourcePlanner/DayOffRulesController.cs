@@ -7,10 +7,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class DayOffRulesController : ApiController
 	{
 		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;
+		private readonly IDayOffRulesModelPersister _dayOffRulesModelPersister;
 
-		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel)
+		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel, IDayOffRulesModelPersister dayOffRulesModelPersister)
 		{
 			_fetchDayOffRulesModel = fetchDayOffRulesModel;
+			_dayOffRulesModelPersister = dayOffRulesModelPersister;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default"), Authorize]
@@ -18,5 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			return Ok(_fetchDayOffRulesModel.FetchDefaultRules());
 		}
+
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules"), Authorize]
+		public virtual IHttpActionResult Persist(DayOffRulesModel dayOffRulesModel)
+		{
+			_dayOffRulesModelPersister.Persist(dayOffRulesModel);
+			return Ok();
+		}
+
 	}
 }
