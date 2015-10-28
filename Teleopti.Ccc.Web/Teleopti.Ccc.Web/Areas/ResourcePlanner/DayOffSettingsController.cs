@@ -6,17 +6,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class DayOffSettingsController : ApiController
 	{
-		private readonly IFetchDayOffSettingsModel _fetchDayOffSettingsModel;
+		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;
 
-		public DayOffSettingsController(IFetchDayOffSettingsModel fetchDayOffSettingsModel)
+		public DayOffSettingsController(IFetchDayOffRulesModel fetchDayOffRulesModel)
 		{
-			_fetchDayOffSettingsModel = fetchDayOffSettingsModel;
+			_fetchDayOffRulesModel = fetchDayOffRulesModel;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffsettings"), Authorize]
-		public virtual IHttpActionResult GetAllDayOffSettings()
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default"), Authorize]
+		public virtual IHttpActionResult GetDefaultSettings()
 		{
-			return Ok(_fetchDayOffSettingsModel.FetchAll());
+			return Ok(_fetchDayOffRulesModel.FetchDefaultRules());
 		}
 	}
 }

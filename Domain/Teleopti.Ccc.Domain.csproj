@@ -635,8 +635,8 @@
     <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\DayOffSettingsModel.cs" />
-    <Compile Include="Optimization\FetchDayOffSettingsModel.cs" />
-    <Compile Include="Optimization\IFetchDayOffSettingsModel.cs" />
+    <Compile Include="Optimization\FetchDayOffRulesModel.cs" />
+    <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffSettingsRepository.cs" />
@@ -2523,7 +2523,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Optimization\DayOffSettings.hbm.xml" />
+    <EmbeddedResource Include="Optimization\DayOffSettings.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeatPlanning\SeatPlan.hbm.xml" />
     <EmbeddedResource Include="Scheduling\PlanningPeriod.hbm.xml" />
     <EmbeddedResource Include="Outbound\Campaign.hbm.xml">

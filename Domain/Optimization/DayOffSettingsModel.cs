@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffSettingsModel
-	{
-		public DayOffSettingsModel()
-		{
-			DayOffSettingModel=new List<DayOffSettingModel>();
-		}
-
-		public IList<DayOffSettingModel> DayOffSettingModel { get; set; }
-	}
-
 	public class DayOffSettingModel
 	{
 		public int MinDayOffsPerWeek { get; set; }

@@ -10,10 +10,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		private static readonly object addLocker = new object();
 		public override void Add(DayOffSettings root)
 		{
-			if(root.Default)
-				throw new ArgumentException("Cannot persist a new DayOffSetting set as default.");
+			if (root.Default && !root.Id.HasValue)
+			{
+				lock (addLocker)
+				{
+					var currentDefault = Default();
+					if (currentDefault != null)
+					{
+						base.Remove(Default());
+					}
+				}
+			}
 			base.Add(root);
 		}
 
@@ -22,6 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if(root.Default)
 				throw new ArgumentException("Cannot remove default DayOffSettings.");
 			base.Remove(root);
+		}
+
+		public DayOffSettings Default()
+		{
+			return Session.CreateQuery("select dor from DayOffSettings dor where defaultsettings=1").UniqueResult<DayOffSettings>();
 		}
 	}
 }

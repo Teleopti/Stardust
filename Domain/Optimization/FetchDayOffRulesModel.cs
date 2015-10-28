@@ -1,20 +1,20 @@
-﻿namespace Teleopti.Ccc.Domain.Optimization
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class FetchDayOffSettingsModel : IFetchDayOffSettingsModel
+	public class FetchDayOffRulesModel : IFetchDayOffRulesModel
 	{
 		private readonly IDayOffSettingsRepository _dayOffSettingsRepository;
 
-		public FetchDayOffSettingsModel(IDayOffSettingsRepository dayOffSettingsRepository)
+		public FetchDayOffRulesModel(IDayOffSettingsRepository dayOffSettingsRepository)
 		{
 			_dayOffSettingsRepository = dayOffSettingsRepository;
 		}
 
-		public DayOffSettingsModel FetchAll()
+		public DayOffSettingModel FetchDefaultRules()
 		{
-			var ret = new DayOffSettingsModel();
-			foreach (var setting in _dayOffSettingsRepository.LoadAll())
-			{
-				ret.DayOffSettingModel.Add(new DayOffSettingModel
+			var setting = _dayOffSettingsRepository.Default();
+			return new DayOffSettingModel
 				{
 					MinConsecutiveWorkdays = setting.ConsecutiveWorkdays.Minimum,
 					MaxConsecutiveWorkdays = setting.ConsecutiveWorkdays.Maximum,
@@ -22,11 +22,9 @@
 					MaxDayOffsPerWeek = setting.DayOffsPerWeek.Maximum,
 					MinConsecutiveDayOffs = setting.ConsecutiveDayOffs.Minimum,
 					MaxConsecutiveDayOffs = setting.ConsecutiveDayOffs.Maximum,
-					Id = setting.Id.Value,
+					Id = setting.Id ?? Guid.Empty,
 					Default = setting.Default
-				});
-			}
-			return ret;
+				};
 		}
 	}
 }

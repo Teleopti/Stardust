@@ -35,33 +35,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void DefaultSettingShouldBeIncluded()
+		public void CanAddMulitpleNonDefaults()
 		{
-			var defaultSettings = new DayOffSettingsRepository(CurrUnitOfWork).LoadAll().Single();
-			defaultSettings.Default.Should().Be.True();
-			defaultSettings.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(1, 3));
-			defaultSettings.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(1, 3));
-			defaultSettings.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(2, 6));
+			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
+			rep.Add(new DayOffSettings());
+			UnitOfWork.Flush();
+			rep.Add(new DayOffSettings());
+			UnitOfWork.Flush();
 		}
 
 		[Test]
-		public void CanNotAddAnotherDefaultSettings()
+		public void WhenAddingTwoDefaultSettingsLastWins()
 		{
-			var setting = new DayOffSettings
-			{
-				ConsecutiveDayOffs = new MinMax<int>(1, 2),
-				ConsecutiveWorkdays = new MinMax<int>(1, 2),
-				DayOffsPerWeek = new MinMax<int>(2, 3),
-			}.MakeDefault_UseOnlyFromTest();
-			Assert.Throws<ArgumentException>(() =>
-				new DayOffSettingsRepository(CurrUnitOfWork).Add(setting));
+			var expected = new MinMax<int>(2,2);
+			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
+			rep.Add(new DayOffSettings() {ConsecutiveDayOffs = new MinMax<int>(4,5)}.MakeDefault_UseOnlyFromTest());
+			UnitOfWork.Flush();
+			rep.Add(new DayOffSettings() { ConsecutiveDayOffs = expected }.MakeDefault_UseOnlyFromTest());
+			UnitOfWork.Flush();
+			rep.LoadAll().Single(x => x.Default).ConsecutiveDayOffs
+				.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
+		{
+			var dayOffSettings = new DayOffSettings().MakeDefault_UseOnlyFromTest();
+			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
+			rep.Add(dayOffSettings);
+			UnitOfWork.Flush();
+			Assert.DoesNotThrow(() => rep.Add(dayOffSettings));
 		}
 
 		[Test]
 		public void CanNotRemoveDefaultSetting()
 		{
 			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
-			var defaultSetting = rep.LoadAll().Single(x => x.Default);
+			var defaultSetting = new DayOffSettings().MakeDefault_UseOnlyFromTest();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
 		}
 	}

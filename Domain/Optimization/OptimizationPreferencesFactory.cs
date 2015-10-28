@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -15,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public OptimizationPreferences Create()
 		{
-			var workrules = _dayOffSettingsRepository.LoadAll().Single();
+			var workrules = _dayOffSettingsRepository.Default();
 			return new OptimizationPreferences
 			{
 				DaysOff = new DaysOffPreferences

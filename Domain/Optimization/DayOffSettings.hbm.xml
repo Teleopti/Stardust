@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Optimization"
                    default-access="field.camelcase-underscore">
 
-	<class name="DayOffSettings">
+	<class name="DayOffSettings" table="DayOffRules">
 		<id name="Id"
             type="guid"
 		  			access="nosetter.camelcase-underscore"
@@ -12,11 +12,13 @@
 			<generator class="guid.comb" />
 		</id>
 		<many-to-one name="UpdatedBy"
-                 class="Teleopti.Ccc.Domain.Common.Person"
-                 not-null="true"/>
+                 class="Teleopti.Ccc.Domain.Common.Person"/>
 		<property name="UpdatedOn"
-              type="UtcDateTime"
-              not-null="true" />
+              type="UtcDateTime"/>
+
+		<many-to-one name="BusinessUnit"
+			class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+			access="nosetter.camelcase-underscore"/>
 
 		<component name="DayOffsPerWeek" access="property">
 			<property name="Minimum" column="MinDayOffsPerWeek" />
@@ -31,5 +33,8 @@
 			<property name="Maximum" column="MaxConsecutiveDayOffs" />
 		</component>
 		<property name="Default" column="DefaultSettings" access="property"/>
+		
+		<filter name="businessUnitFilter"
+			condition=":businessUnitParameter = BusinessUnit" />
 	</class>
 </hibernate-mapping>

@@ -160,7 +160,6 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				{
 					ISession s = uowTemp.FetchSession();
 					s.CreateSQLQuery(@"delete from PersonWriteProtectionInfo").ExecuteUpdate();
-					s.CreateSQLQuery(@"delete from DayOffSettings").ExecuteUpdate();
 					IList<IAggregateRoot> leftInDb = s.CreateCriteria(typeof(IAggregateRoot))
 											  .List<IAggregateRoot>();
 					if (leftInDb.Count > 0)

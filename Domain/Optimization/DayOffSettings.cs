@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffSettings : AggregateRoot
+	public class DayOffSettings : NonversionedAggregateRootWithBusinessUnit
 	{
 		public virtual MinMax<int> DayOffsPerWeek { get; set; }
 		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }

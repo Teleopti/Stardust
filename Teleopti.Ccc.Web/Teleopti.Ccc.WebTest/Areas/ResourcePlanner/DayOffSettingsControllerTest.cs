@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void GetAllShouldReturnSameAsFetchModelService()
 		{
-			var model = new DayOffSettingsModel();
-			var fetchModel = MockRepository.GenerateMock<IFetchDayOffSettingsModel>();
-			fetchModel.Expect(x => x.FetchAll()).Return(model);
+			var model = new DayOffSettingModel();
+			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
+			fetchModel.Expect(x => x.FetchDefaultRules()).Return(model);
 			var target = new DayOffSettingsController(fetchModel);
-			target.GetAllDayOffSettings().OkContent<DayOffSettingsModel>()
+			target.GetDefaultSettings().OkContent<DayOffSettingModel>()
 				.Should().Be.SameInstanceAs(model);
 		}
 	}
