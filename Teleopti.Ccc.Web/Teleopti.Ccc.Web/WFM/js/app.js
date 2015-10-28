@@ -171,10 +171,10 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout', 'CurrentUserInfo','FakeDateTime',
-	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout, currentUserInfo, fakeDateTime) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo','FakeDateTime',
+	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, fakeDateTime) {
 		$rootScope.isAuthenticated = false;
-
+		
 		function broadcastEventOnToggle() {
 			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
 				$timeout(function() {
@@ -183,8 +183,7 @@ wfm.config([
 			});
 		}
 
-		var ab1 = new ABmetrics();
-		ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
+		
 
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 			if (!currentUserInfo.isConnected()){
@@ -194,43 +193,23 @@ wfm.config([
 				});
 			}
 		});
-
-		$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
-			ab1.sendPageView();
-			HelpService.updateState($state.current.name);
-		});
-
+		
 		broadcastEventOnToggle();
 
 		var startContext = currentUserInfo.initContext();
 		startContext.then(function (data) {
-			$rootScope.isAuthenticated = true;
-			wfm_cultureInfo_numberFormat = data.NumberFormat;
+			$rootScope.isAuthenticated = true; // could it be somewhere else than in rootscope ?
 			$translate.fallbackLanguage('en');
-			$translate.use(data.Language);
-			angularMoment.changeLocale(data.DateFormatLocale);
+			
+			wfm_cultureInfo_numberFormat = data.NumberFormat; // should be extracted in user service as well
 
-			currentUserInfo.SetCurrentUserInfo(data);
+			var ab1 = new ABmetrics();
+			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
+			$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+				ab1.sendPageView();
+				HelpService.updateState($state.current.name);
+			});
 
-			// i18nService is for UI Grid localization.
-			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).
-			// Need do some primary language checking.
-			var currentLang = "en";
-			var serverSideLang = data.Language.toLowerCase();
-			var dashIndex = serverSideLang.indexOf("-");
-			var primaryLang = dashIndex > -1 ? serverSideLang.substring(0, dashIndex) : serverSideLang;
-			var langs = i18nService.getAllLangs();
-			if (langs.indexOf(serverSideLang) > -1) {
-				currentLang = serverSideLang;
-			} else if (langs.indexOf(primaryLang) > -1) {
-				currentLang = primaryLang;
-			}
-			i18nService.setCurrentLang(currentLang);
-
-			var buid = $sessionStorage.buid;
-			if (buid) {
-				$http.defaults.headers.common['X-Business-Unit-Filter'] = buid;
-			}
 		});
 	}
 ]);

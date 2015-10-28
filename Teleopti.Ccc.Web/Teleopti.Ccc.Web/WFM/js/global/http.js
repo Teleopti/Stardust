@@ -2,10 +2,10 @@
 	'use strict';
 
 	angular
-        .module('wfm.http', [])
-        .factory('httpInterceptor', ['$q','growl', '$sessionStorage', httpInterceptor]);
+        .module('wfm.http', ['currentUserInfoService'])
+        .factory('httpInterceptor', ['$q', 'growl', 'CurrentUserInfo', httpInterceptor]);
 
-	function httpInterceptor($q, growl, $sessionStorage) {
+	function httpInterceptor($q, growl, CurrentUserInfo) {
 		var service = {
 			'responseError': reject
 		};
@@ -16,23 +16,12 @@
 				growl.error("<i class='mdi mdi-alert-octagon'></i> An error occured while contacting the server. This page will be refreshed.", {
 					ttl: 5000,
 					disableCountDown: true,
-					onclose: (function() {
-						if (window.location.hash) {
-							var d = new Date();
-							d.setTime(d.getTime() + (5 * 60 * 1000));
-							var expires = 'expires=' + d.toUTCString();
-							document.cookie = 'returnHash=WFM' + window.location.hash + '; ' + expires + '; path=/';
-						}
-
-						$sessionStorage.$reset();
-						window.location = 'Authentication';
-					})
+					onclose: CurrentUserInfo.resetContext
 				});
 				return $q.reject(rejection);
 			} else {
 				return rejection;
 			}
 		};
-		//return {};
 	}
 })();

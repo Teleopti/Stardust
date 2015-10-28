@@ -1,4 +1,4 @@
-﻿'use strict'
+﻿/*'use strict'
 
 describe('seatmap controller tests', function() {
 
@@ -25,6 +25,7 @@ describe('seatmap controller tests', function() {
 		controller = setUpController(_$controller_);
 		
 		$resource = _$resource_;
+		
 	}));
 
 	it('should display booking detail of selected seat', function () {
@@ -39,4 +40,4 @@ describe('seatmap controller tests', function() {
 			canvasUtils: seatMapCanvasUtilsService,
 		});
 	};
-});
+});*/

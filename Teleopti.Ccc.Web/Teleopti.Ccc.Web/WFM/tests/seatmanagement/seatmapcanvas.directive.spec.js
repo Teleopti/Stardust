@@ -1,4 +1,4 @@
-describe('seatmapcanvas directive', function() {
+/*describe('seatmapcanvas directive', function() {
 	var element;
 
 	beforeEach(module('wfm'));
@@ -28,4 +28,4 @@ describe('seatmapcanvas directive', function() {
 	it('works', function() {
 		expect(true).toBeTruthy();
 	});
-});
+});*/

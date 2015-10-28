@@ -3,12 +3,22 @@
 
 	describe('currentUserInfoService', function () {
 		var $httpBackend;
+		var angularMoment = { changeLocale: function () { } };
+		var i18nService = {
+			getAllLangs: function () { return []; },
+			setCurrentLang: function(){}
+		};
 
-		beforeEach(module('currentUserInfoService'));
+		beforeEach(function () {
+			module('currentUserInfoService');
+			module(function ($provide) {
+				$provide.service('amMoment', function () { return angularMoment; });
+				$provide.service('i18nService', function () { return i18nService; });
+			});
+		});
 
-		beforeEach(inject(function(_$httpBackend_) {
+		beforeEach(inject(function (_$httpBackend_) {
 			$httpBackend = _$httpBackend_;
-			
 		}));
 
 		it('should set the current user info', inject(function(CurrentUserInfo) {
@@ -64,17 +74,16 @@
 			});
 		});
 		
-		xit('should init the user context with global variables', function (done) {
+		it('should set locales of the user ', function () {
 			inject(function (CurrentUserInfo) {
-				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
+				spyOn(angularMoment, 'changeLocale');
+				spyOn(i18nService, 'setCurrentLang');
+				var data = { Language: 'es', DateFormat: 'es', UserName: 'Ashley', DateFormatLocale: 'es' };
 
-				CurrentUserInfo.initContext().then(function () {
-					var result = CurrentUserInfo.isConnected();
-					expect(result).toBe(true);
-					done();
-				});
-				$httpBackend.flush();
+				CurrentUserInfo.setLocales(data);
 
+				expect(angularMoment.changeLocale).toHaveBeenCalledWith('es');
+				expect(i18nService.setCurrentLang).toHaveBeenCalled();
 			});
 		});
 	});
