@@ -10,10 +10,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
 		public virtual bool Default { get; protected set; }
 
-		public virtual DayOffRules MakeDefault_UseOnlyFromTest()
+		public static DayOffRules CreateDefault()
 		{
-			Default = true;
-			return this;
+      return new DayOffRules
+			{
+				DayOffsPerWeek = new MinMax<int>(1, 3),
+				ConsecutiveDayOffs = new MinMax<int>(1, 3),
+				ConsecutiveWorkdays = new MinMax<int>(2, 6),
+				Default = true
+			};
 		}
 	}
 }

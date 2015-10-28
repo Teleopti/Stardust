@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -31,13 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldFetchCurrentDefaultSettings()
 		{
-			var curr = new DayOffRules
-			{
-				ConsecutiveDayOffs = new MinMax<int>(1, 2),
-				ConsecutiveWorkdays = new MinMax<int>(2, 3),
-				DayOffsPerWeek = new MinMax<int>(3, 4)
-			}.MakeDefault_UseOnlyFromTest();
-			curr.SetId(Guid.NewGuid());
+			var curr = DayOffRules.CreateDefault().WithId();
 			DayOffRulesRepository.Add(curr);
 
 			var defaultSettings = Target.FetchDefaultRules();

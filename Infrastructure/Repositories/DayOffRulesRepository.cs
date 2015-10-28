@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public DayOffRules Default()
 		{
-			return Session.CreateQuery("select dor from DayOffRules dor where defaultsettings=1").UniqueResult<DayOffRules>();
+			//TODO: this should be handled differently when views/workflow is more stable -> don't create implicitly here
+			//Also, when done, remove similar logic in repofake
+			var defaultSettingInDb =  Session.CreateQuery("select dor from DayOffRules dor where defaultsettings=1").UniqueResult<DayOffRules>();
+			return defaultSettingInDb ?? DayOffRules.CreateDefault();
 		}
 	}
 }

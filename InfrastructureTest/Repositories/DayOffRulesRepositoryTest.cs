@@ -47,20 +47,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void WhenAddingTwoDefaultSettingsLastWins()
 		{
-			var expected = new MinMax<int>(2,2);
 			var rep = new DayOffRulesRepository(CurrUnitOfWork);
-			rep.Add(new DayOffRules() {ConsecutiveDayOffs = new MinMax<int>(4,5)}.MakeDefault_UseOnlyFromTest());
+			var lastDefault = DayOffRules.CreateDefault();
+			rep.Add(DayOffRules.CreateDefault());
 			UnitOfWork.Flush();
-			rep.Add(new DayOffRules() { ConsecutiveDayOffs = expected }.MakeDefault_UseOnlyFromTest());
+			rep.Add(lastDefault);
 			UnitOfWork.Flush();
-			rep.LoadAll().Single(x => x.Default).ConsecutiveDayOffs
-				.Should().Be.EqualTo(expected);
+			rep.Default().ConsecutiveDayOffs
+				.Should().Be.EqualTo(lastDefault);
 		}
 
 		[Test]
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
-			var dayOffSettings = new DayOffRules().MakeDefault_UseOnlyFromTest();
+			var dayOffSettings = DayOffRules.CreateDefault();
 			var rep = new DayOffRulesRepository(CurrUnitOfWork);
 			rep.Add(dayOffSettings);
 			UnitOfWork.Flush();
@@ -71,8 +71,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void CanNotRemoveDefaultSetting()
 		{
 			var rep = new DayOffRulesRepository(CurrUnitOfWork);
-			var defaultSetting = new DayOffRules().MakeDefault_UseOnlyFromTest();
+			var defaultSetting = DayOffRules.CreateDefault();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
+		}
+
+		//TODO: this should be handled differently when views/workflow is more stable -> don't create implicitly here
+		[Test]
+		public void ShouldReturnDefaultValuesIfNotPresentInDb()
+		{
+			var defaultSetting = DayOffRules.CreateDefault();
+			var defaultInDb = new DayOffRulesRepository(CurrUnitOfWork).Default();
+
+			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
+			defaultInDb.ConsecutiveDayOffs.Should().Be.EqualTo(defaultSetting.ConsecutiveDayOffs);
+			defaultInDb.ConsecutiveWorkdays.Should().Be.EqualTo(defaultSetting.ConsecutiveWorkdays);
 		}
 	}
 }
