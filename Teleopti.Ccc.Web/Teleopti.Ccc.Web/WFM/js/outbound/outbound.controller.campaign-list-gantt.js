@@ -17,7 +17,7 @@
 
 	function campaignListGanttCtrl($scope, $filter, $q, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService) {
 
-		$scope.isGanttEnabled = false;
+		$scope.isInitFinished = false;
 		$scope.isLoadFinished = false;
 		$scope.isNavigationEnabled = false;
 		$scope.month = "month";
@@ -26,10 +26,7 @@
 			return OutboundToggles.ready;
 		}, function(value) {
 			if (value) {
-				if (OutboundToggles.isGanttEnabled()) {
-					$scope.isGanttEnabled = true;
-					init();
-				}
+				init();
 				if (OutboundToggles.isNavigationEnabled()) $scope.isNavigationEnabled = true;
 			}
 		});		
@@ -56,6 +53,7 @@
 					addPeriodStartChangeWatch();
 				});
 			});
+			$scope.isInitFinished = true;
 		}		
 
 		function refreshGantt() {

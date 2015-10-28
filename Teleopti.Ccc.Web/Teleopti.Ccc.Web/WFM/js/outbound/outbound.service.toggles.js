@@ -6,7 +6,6 @@
 		var self = this;
 
 		self.toggleNames = [
-			'Wfm_Outbound_Campaign_GanttChart_34259',
 			'Wfm_Outbound_Campaign_GanttChart_Navigation_34924'
 		];
 
@@ -21,10 +20,6 @@
 			}
 			self.ready = true;
 		});
-
-		self.isGanttEnabled = function() {
-			return self.ready && self.toggles['Wfm_Outbound_Campaign_GanttChart_34259'];
-		};
 
 		self.isNavigationEnabled = function() {
 			return self.ready && self.toggles['Wfm_Outbound_Campaign_GanttChart_Navigation_34924'];

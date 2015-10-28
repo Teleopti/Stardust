@@ -307,9 +307,6 @@ xdescribe('OutboundSummaryCtrl', function () {
 
 	function fakeOutboundToggles() {
 		this.ready = true;
-		this.isGanttEnabled = function() {
-			return false;
-		}
 	}
 });
 

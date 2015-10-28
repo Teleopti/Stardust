@@ -69,7 +69,6 @@ Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 WfmPeople_AdvancedSearch_32973 = true
 Wfm_Outbound_Campaign_32696 = RC
-Wfm_Outbound_Campaign_GanttChart_34259 = RC
 Wfm_Outbound_Campaign_GanttChart_Navigation_34924 = DEV
 SeatPlanner_Logon_32003 = RC
 Wfm_SeatPlan_SeatMapBookingView_32814 = RC

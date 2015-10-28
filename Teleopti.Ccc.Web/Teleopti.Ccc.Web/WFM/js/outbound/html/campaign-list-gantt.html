@@ -1,4 +1,4 @@
-﻿<div ng-if="isGanttEnabled">
+﻿<div ng-if="isInitFinished">
 	<div class="loading-gantt-section" ng-show="!isLoadFinished">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
@@ -8,11 +8,11 @@
 				{{settings.threshold}}%
 			</div>
 			<md-slider flex md-discrete min="0" max="100" aria-label="slider"
-					   ng-model="settings.threshold"
-					   ng-disabled="isRefreshingGantt"></md-slider>
+						  ng-model="settings.threshold"
+						  ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
 		<div class="gantt-travel-kit pull-left m-l-10  relative" ng-show="isNavigationEnabled">
-                        <button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
+			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm m-r-0" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
 				<input class="pointer" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart|amDateFormat: 'LL'}}" readonly />
@@ -24,15 +24,15 @@
 		</div>
 	</div>
 	<div class="spacer material-depth-1 outbound-gantt-chart relative"
-		 gantt
-		 data="ganttData"
-		 options="ganttOptions"
-		 from-date="ganttOptions.fromDate"
-		 to-date="ganttOptions.toDate"
-		 timespans="timespans"
-		 headers-formats="headerFormats"
-		 template-url="js/outbound/html/angular-gantt-custom.tpl.html"
-		 scrollfix="+10">
+		  gantt
+		  data="ganttData"
+		  options="ganttOptions"
+		  from-date="ganttOptions.fromDate"
+		  to-date="ganttOptions.toDate"
+		  timespans="timespans"
+		  headers-formats="headerFormats"
+		  template-url="js/outbound/html/angular-gantt-custom.tpl.html"
+		  scrollfix="+10">
 		<div ng-show="isRefreshingGantt" class="gantt-schedule-loader"><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>
 		<gantt-tooltips></gantt-tooltips>
 		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
