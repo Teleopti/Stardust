@@ -1,5 +1,5 @@
 ﻿'use strict';
-+xdescribe('OutboundSummaryCtrl', function() {
+describe('OutboundSummaryCtrl', function() {
 	var $q,
 		$rootScope,
 		$controller,
@@ -58,6 +58,7 @@
 
 	it('should draw gantt chart at the beginning', function() {
 		var test = setUpTarget();
+		
 		outboundService.setGanttVisualization({ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
 
 		expect(test.scope.ganttData).not.toBeDefined();
@@ -79,8 +80,8 @@
 		test.target.init();
 		test.target.updateAllCampaignGanttDisplay(toBeUpdated);
 
-		expect(test.scope.ganttData[0].color == '#C2E085');
-		expect(test.scope.ganttData[1].color == '#66C2FF');
+		expect(test.scope.ganttData[0].tasks[0].color).toEqual('#C2E085');
+		expect(test.scope.ganttData[1].tasks[0].color).toEqual('#66C2FF');
 	});
 
 	it('should extend the row when click and collapse when click again', function () {
@@ -166,6 +167,28 @@
 
 		var listCampaign = [];
 
+		var visualizationPeriod = {}
+
+		this.reloadCampaignSchedules=function(period, cb) {
+			if (cb) cb();
+		}
+
+		this.setGanttPeriod=function(period) {
+			visualizationPeriod = period;
+		}
+
+		this.getGanttPeriod=function() {
+			return visualizationPeriod;
+		}
+
+		this.setGanttVisualization = function (ganttV) {
+			ganttVisualization.push(ganttV);
+		}
+
+		this.getGanttVisualization = function (ganttPeriod, cb) {
+			cb(ganttVisualization);
+		}
+
 		this.setThreshold=function(threshold) {
 			thresholdObj = threshold;
 		}
@@ -190,13 +213,7 @@
 			cb(listCampaign);
 		}
 
-		this.setGanttVisualization = function (ganttV) {
-			ganttVisualization.push(ganttV);
-		}
-
-		this.getGanttVisualization = function (ganttPeriod, cb) {
-			cb(ganttVisualization);
-		}
+		
 
 		this.loadWithinPeriod = function() {}
 

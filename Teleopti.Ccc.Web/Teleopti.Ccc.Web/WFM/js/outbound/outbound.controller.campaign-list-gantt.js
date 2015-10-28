@@ -339,7 +339,12 @@
 					return updateWarningInfo(dataRow, campaignSummary);
 				}
 			});
-		}		
+		}
+
+		return {
+			init: init,
+			updateAllCampaignGanttDisplay:updateAllCampaignGanttDisplay
+	}
 	}
 
 })();
