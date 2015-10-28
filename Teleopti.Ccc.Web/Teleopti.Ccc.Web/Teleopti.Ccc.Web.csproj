@@ -1227,6 +1227,7 @@
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\js\global\fakedatetime.service.js" />
     <Content Include="WFM\js\global\http.js" />
+    <Content Include="WFM\js\global\i18n.service.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
@@ -1279,6 +1280,8 @@
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.filters.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\seatmapcanvas.directive.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\seatmapcontroller.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.personSchedule.factory.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.timeline.factory.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />

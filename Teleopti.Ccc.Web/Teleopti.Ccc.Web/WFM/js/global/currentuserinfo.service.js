@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'pascalprecht.translate'])
+	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'pascalprecht.translate', 'ui.grid'])
 		.service('AuthenticationRequests', ['$injector', function ($injector) {
 			var service = {};
 			
