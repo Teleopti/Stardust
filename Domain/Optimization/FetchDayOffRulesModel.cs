@@ -4,17 +4,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class FetchDayOffRulesModel : IFetchDayOffRulesModel
 	{
-		private readonly IDayOffSettingsRepository _dayOffSettingsRepository;
+		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 
-		public FetchDayOffRulesModel(IDayOffSettingsRepository dayOffSettingsRepository)
+		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository)
 		{
-			_dayOffSettingsRepository = dayOffSettingsRepository;
+			_dayOffRulesRepository = dayOffRulesRepository;
 		}
 
-		public DayOffSettingModel FetchDefaultRules()
+		public DayOffRulesModel FetchDefaultRules()
 		{
-			var setting = _dayOffSettingsRepository.Default();
-			return new DayOffSettingModel
+			var setting = _dayOffRulesRepository.Default();
+			return new DayOffRulesModel
 				{
 					MinConsecutiveWorkdays = setting.ConsecutiveWorkdays.Minimum,
 					MaxConsecutiveWorkdays = setting.ConsecutiveWorkdays.Maximum,

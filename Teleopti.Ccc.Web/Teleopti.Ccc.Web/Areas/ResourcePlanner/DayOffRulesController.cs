@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	public class DayOffSettingsController : ApiController
+	public class DayOffRulesController : ApiController
 	{
 		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;
 
-		public DayOffSettingsController(IFetchDayOffRulesModel fetchDayOffRulesModel)
+		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel)
 		{
 			_fetchDayOffRulesModel = fetchDayOffRulesModel;
 		}

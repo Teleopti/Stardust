@@ -7,47 +7,47 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeDayOffSettingsRepository : IDayOffSettingsRepository
+	public class FakeDayOffRulesRepository : IDayOffRulesRepository
 	{
-		private readonly IList<DayOffSettings> _workRuleSettings = new List<DayOffSettings>();
+		private readonly IList<DayOffRules> _workRuleSettings = new List<DayOffRules>();
 
-		public void Add(DayOffSettings root)
+		public void Add(DayOffRules root)
 		{
 			_workRuleSettings.Add(root);
 		}
 
-		public void Remove(DayOffSettings root)
+		public void Remove(DayOffRules root)
 		{
 			throw new NotImplementedException();
 		}
 
-		public DayOffSettings Get(Guid id)
+		public DayOffRules Get(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<DayOffSettings> LoadAll()
+		public IList<DayOffRules> LoadAll()
 		{
 			return _workRuleSettings.ToArray();
 		}
 
-		public DayOffSettings Load(Guid id)
+		public DayOffRules Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<DayOffSettings> entityCollection)
+		public void AddRange(IEnumerable<DayOffRules> entityCollection)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		public DayOffSettings Default()
+		public DayOffRules Default()
 		{
 			var curr = _workRuleSettings.SingleOrDefault(x => x.Default);
 			if (curr != null)
 				return curr;
-			return new DayOffSettings
+			return new DayOffRules
 			{
 				//should be same as default values in db script
 				DayOffsPerWeek = new MinMax<int>(1, 3),
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}.MakeDefault_UseOnlyFromTest();
 		}
 
-		public DayOffSettings DefaultSettings()
+		public DayOffRules DefaultSettings()
 		{
 			return _workRuleSettings.Single(x => x.Default);
 		}

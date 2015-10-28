@@ -228,7 +228,7 @@
     <Compile Include="Persisters\Schedules\FakePersistCallback.cs" />
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
-    <Compile Include="Repositories\DayOffSettingsRepositoryTest.cs" />
+    <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="ServiceBus\MessageSenderCreatorTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />

@@ -210,7 +210,7 @@
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
-    <Compile Include="FakeRepositories\FakeDayOffSettingsRepository.cs" />
+    <Compile Include="FakeRepositories\FakeDayOffRulesRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />

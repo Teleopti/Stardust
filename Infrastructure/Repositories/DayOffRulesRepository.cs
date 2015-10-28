@@ -4,14 +4,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class DayOffSettingsRepository : Repository<DayOffSettings>, IDayOffSettingsRepository
+	public class DayOffRulesRepository : Repository<DayOffRules>, IDayOffRulesRepository
 	{
-		public DayOffSettingsRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public DayOffRulesRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 
 		private static readonly object addLocker = new object();
-		public override void Add(DayOffSettings root)
+		public override void Add(DayOffRules root)
 		{
 			if (root.Default && !root.Id.HasValue)
 			{
@@ -27,16 +27,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			base.Add(root);
 		}
 
-		public override void Remove(DayOffSettings root)
+		public override void Remove(DayOffRules root)
 		{
 			if(root.Default)
-				throw new ArgumentException("Cannot remove default DayOffSettings.");
+				throw new ArgumentException("Cannot remove default DayOffRules.");
 			base.Remove(root);
 		}
 
-		public DayOffSettings Default()
+		public DayOffRules Default()
 		{
-			return Session.CreateQuery("select dor from DayOffSettings dor where defaultsettings=1").UniqueResult<DayOffSettings>();
+			return Session.CreateQuery("select dor from DayOffRules dor where defaultsettings=1").UniqueResult<DayOffRules>();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffSettingModel
+	public class DayOffRulesModel
 	{
 		public int MinDayOffsPerWeek { get; set; }
 		public int MaxDayOffsPerWeek { get; set; }

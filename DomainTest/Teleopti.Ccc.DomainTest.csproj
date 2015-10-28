@@ -506,7 +506,7 @@
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerTest.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\FetchDayOffSettingsModelTest.cs" />
+    <Compile Include="Optimization\FetchDayOffRulesModelTest.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\DailyBoostedSkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />

@@ -9,11 +9,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	public class DayOffSettingsRepositoryTest : RepositoryTest<DayOffSettings>
+	public class DayOffRulesRepositoryTest : RepositoryTest<DayOffRules>
 	{
-		protected override DayOffSettings CreateAggregateWithCorrectBusinessUnit()
+		protected override DayOffRules CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new DayOffSettings
+			return new DayOffRules
 			{
 				ConsecutiveDayOffs = new MinMax<int>(2,6),
 				DayOffsPerWeek = new MinMax<int>(4,6),
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 		}
 
-		protected override void VerifyAggregateGraphProperties(DayOffSettings loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(DayOffRules loadedAggregateFromDatabase)
 		{
 			var expected = CreateAggregateWithCorrectBusinessUnit();
 			loadedAggregateFromDatabase.DayOffsPerWeek.Should().Be.EqualTo(expected.DayOffsPerWeek);
@@ -29,18 +29,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.ConsecutiveWorkdays.Should().Be.EqualTo(expected.ConsecutiveWorkdays);
 		}
 
-		protected override Repository<DayOffSettings> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		protected override Repository<DayOffRules> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new DayOffSettingsRepository(currentUnitOfWork);
+			return new DayOffRulesRepository(currentUnitOfWork);
 		}
 
 		[Test]
 		public void CanAddMulitpleNonDefaults()
 		{
-			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
-			rep.Add(new DayOffSettings());
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			rep.Add(new DayOffRules());
 			UnitOfWork.Flush();
-			rep.Add(new DayOffSettings());
+			rep.Add(new DayOffRules());
 			UnitOfWork.Flush();
 		}
 
@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void WhenAddingTwoDefaultSettingsLastWins()
 		{
 			var expected = new MinMax<int>(2,2);
-			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
-			rep.Add(new DayOffSettings() {ConsecutiveDayOffs = new MinMax<int>(4,5)}.MakeDefault_UseOnlyFromTest());
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			rep.Add(new DayOffRules() {ConsecutiveDayOffs = new MinMax<int>(4,5)}.MakeDefault_UseOnlyFromTest());
 			UnitOfWork.Flush();
-			rep.Add(new DayOffSettings() { ConsecutiveDayOffs = expected }.MakeDefault_UseOnlyFromTest());
+			rep.Add(new DayOffRules() { ConsecutiveDayOffs = expected }.MakeDefault_UseOnlyFromTest());
 			UnitOfWork.Flush();
 			rep.LoadAll().Single(x => x.Default).ConsecutiveDayOffs
 				.Should().Be.EqualTo(expected);
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
-			var dayOffSettings = new DayOffSettings().MakeDefault_UseOnlyFromTest();
-			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
+			var dayOffSettings = new DayOffRules().MakeDefault_UseOnlyFromTest();
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
 			rep.Add(dayOffSettings);
 			UnitOfWork.Flush();
 			Assert.DoesNotThrow(() => rep.Add(dayOffSettings));
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanNotRemoveDefaultSetting()
 		{
-			var rep = new DayOffSettingsRepository(CurrUnitOfWork);
-			var defaultSetting = new DayOffSettings().MakeDefault_UseOnlyFromTest();
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var defaultSetting = new DayOffRules().MakeDefault_UseOnlyFromTest();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
 		}
 	}

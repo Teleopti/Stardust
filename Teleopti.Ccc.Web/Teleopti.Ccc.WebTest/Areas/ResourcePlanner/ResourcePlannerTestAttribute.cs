@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			system.UseTestDouble<FakeFixedStaffLoader>().For<IFixedStaffLoader>();
 			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
 			system.UseTestDouble<FakeClassicDaysOffOptimizationCommand>().For<IClassicDaysOffOptimizationCommand>();
-			system.UseTestDouble<FakeDayOffSettingsRepository>().For<IDayOffSettingsRepository>();
+			system.UseTestDouble<FakeDayOffRulesRepository>().For<IDayOffRulesRepository>();
 		}
 	}
 }

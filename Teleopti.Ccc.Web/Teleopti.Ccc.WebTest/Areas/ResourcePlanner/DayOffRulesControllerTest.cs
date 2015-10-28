@@ -7,16 +7,16 @@ using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class DayOffSettingsControllerTest
+	public class DayOffRulesControllerTest
 	{
 		[Test]
 		public void GetAllShouldReturnSameAsFetchModelService()
 		{
-			var model = new DayOffSettingModel();
+			var model = new DayOffRulesModel();
 			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
 			fetchModel.Expect(x => x.FetchDefaultRules()).Return(model);
-			var target = new DayOffSettingsController(fetchModel);
-			target.GetDefaultSettings().OkContent<DayOffSettingModel>()
+			var target = new DayOffRulesController(fetchModel);
+			target.GetDefaultSettings().OkContent<DayOffRulesModel>()
 				.Should().Be.SameInstanceAs(model);
 		}
 	}

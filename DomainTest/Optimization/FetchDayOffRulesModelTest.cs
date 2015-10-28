@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,10 +9,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class FetchDayOffSettingsModelTest
+	public class FetchDayOffRulesModelTest
 	{
 		public IFetchDayOffRulesModel Target;
-		public FakeDayOffSettingsRepository DayOffSettingsRepository;
+		public FakeDayOffRulesRepository DayOffRulesRepository;
 
 		[Test]
 		public void ShouldFetchDefaultSettingsIfNotExists()
@@ -32,14 +31,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldFetchCurrentDefaultSettings()
 		{
-			var curr = new DayOffSettings
+			var curr = new DayOffRules
 			{
 				ConsecutiveDayOffs = new MinMax<int>(1, 2),
 				ConsecutiveWorkdays = new MinMax<int>(2, 3),
 				DayOffsPerWeek = new MinMax<int>(3, 4)
 			}.MakeDefault_UseOnlyFromTest();
 			curr.SetId(Guid.NewGuid());
-			DayOffSettingsRepository.Add(curr);
+			DayOffRulesRepository.Add(curr);
 
 			var defaultSettings = Target.FetchDefaultRules();
 			defaultSettings.MinDayOffsPerWeek.Should().Be.EqualTo(3);

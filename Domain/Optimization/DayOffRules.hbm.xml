@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Optimization"
                    default-access="field.camelcase-underscore">
 
-	<class name="DayOffSettings" table="DayOffRules">
+	<class name="DayOffRules">
 		<id name="Id"
             type="guid"
 		  			access="nosetter.camelcase-underscore"

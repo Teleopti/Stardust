@@ -2,6 +2,6 @@
 {
 	public interface IFetchDayOffRulesModel
 	{
-		DayOffSettingModel FetchDefaultRules();
+		DayOffRulesModel FetchDefaultRules();
 	}
 }
