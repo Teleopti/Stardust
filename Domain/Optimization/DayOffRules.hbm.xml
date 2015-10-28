@@ -37,4 +37,8 @@
 		<filter name="businessUnitFilter"
 			condition=":businessUnitParameter = BusinessUnit" />
 	</class>
+
+	<query name="loadDefault">
+		select dor from DayOffRules dor where defaultsettings=1
+	</query>
 </hibernate-mapping>
