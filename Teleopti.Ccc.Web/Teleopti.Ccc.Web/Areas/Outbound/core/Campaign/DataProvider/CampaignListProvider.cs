@@ -31,10 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public void LoadData(GanttPeriod period)
 		{			
-
 			var campaigns = period == null
 				? _outboundCampaignRepository.LoadAll()
-				: _outboundCampaignRepository.GetCampaigns(getExtendedDateTimePeriod(period));
+				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 			if (campaigns.Count == 0) return;
 		
 			loadScheduleData(campaigns);
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			if (campaigns.Count == 0) return;
 
-			// TODO: Discuss about the validity of this approach
 			var campaignPeriod = campaigns.Select(c => c.SpanningPeriod).Aggregate((ac, p) => ac.MaximumPeriod(p)).ToDateOnlyPeriod(TimeZoneInfo.Utc);
 			var maximumPeriod = new DateOnlyPeriod(campaignPeriod.StartDate.AddDays(-1), campaignPeriod.EndDate.AddDays(1));
 
@@ -55,57 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public void ResetCache()
 		{
 			_outboundScheduledResourcesCacher.Reset();
-		}
-
-		// TODO: Remove this after refactoring.
-		public CampaignStatistics GetCampaignStatistics(GanttPeriod peroid)
-		{
-			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
-
-			var plannedCampaigns = ListPlannedCampaign(peroid).ToList();
-			var ongoingCampaigns = ListOngoingCampaign(peroid).ToList();
-			var ongoingWarningCampaigns = ongoingCampaigns.Where(campaignHasWarningPredicate).ToList();
-			var scheduledCampaigns = ListScheduledCampaign(peroid).ToList();
-			var scheduledWarningCampaigns = scheduledCampaigns.Where(campaignHasWarningPredicate).ToList();
-			var doneCampaigns = ListDoneCampaign(peroid).ToList();
-
-			return new CampaignStatistics()
-			{
-				Planned = plannedCampaigns.Count,
-				OnGoing = ongoingCampaigns.Count,
-				OnGoingWarning = ongoingWarningCampaigns.Count,
-				Scheduled = scheduledCampaigns.Count,
-				ScheduledWarning = scheduledWarningCampaigns.Count,
-				Done = doneCampaigns.Count
-			};
-		}
-
-		// TODO: Remove this after refactoring.
-		public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status, GanttPeriod period)
-		{
-			if (status == CampaignStatus.None)
-			{
-				status = CampaignStatus.Done | CampaignStatus.Ongoing | CampaignStatus.Planned | CampaignStatus.Scheduled;
-			}			
-
-			switch (status)
-			{
-				case CampaignStatus.Done:
-					return ListDoneCampaign(period);
-				case CampaignStatus.Scheduled:
-					return ListScheduledCampaign(period);
-				case CampaignStatus.Planned:
-					return ListPlannedCampaign(period);
-				case CampaignStatus.Ongoing:
-					return ListOngoingCampaign(period);
-				default:
-					var result = new List<CampaignSummary>();
-					foreach (var _status in _campaignListOrderProvider.GetCampaignListOrder().Where(_status => status.HasFlag(_status)))
-					{
-						result.AddRange(ListCampaign(_status, period));
-					}
-					return result;
-			}
 		}
 
 		public IEnumerable<PeriodCampaignSummaryViewModel> GetPeriodCampaignsSummary(GanttPeriod period)
@@ -145,7 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			};
 		}
 
-		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListScheduledCampaign(GanttPeriod peroid)
 		{
 			var campaigns = peroid == null ? _outboundCampaignRepository.GetPlannedCampaigns()
@@ -171,7 +117,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Scheduled, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
-		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListPlannedCampaign(GanttPeriod peroid)
 		{						
 			var campaigns = peroid == null ? _outboundCampaignRepository.GetPlannedCampaigns()
@@ -197,7 +142,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Planned, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
-		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListOngoingCampaign(GanttPeriod peroid)
 		{
 			if (peroid == null)
@@ -210,7 +154,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				assembleSummary(campaign, CampaignStatus.Ongoing, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
-		// TODO: Remove this after refactoring.
 		public IEnumerable<CampaignSummary> ListDoneCampaign(GanttPeriod peroid)
 		{
 			if (peroid == null)
@@ -223,17 +166,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 					assembleSummary(campaign, CampaignStatus.Done, _campaignWarningProvider.CheckCampaign(campaign)));
 		}
 
-		public CampaignSummary GetCampaignById(Guid Id)
-		{
-			return ListCampaign(CampaignStatus.None, null).FirstOrDefault(c => c.Id == Id);
-		}
-
 		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
 		{
-			var campaignPeriod = period.ToDateOnlyPeriod();
-			var extendedPeriod = getExtendedDateTimePeriod(period);
-
-			var campaigns = _outboundCampaignRepository.GetCampaigns(extendedPeriod);
+			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
 			var ganttCampaigns = new List<GanttCampaignViewModel>();
 			foreach (var campaign in campaigns)
@@ -244,34 +179,25 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
 				var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
 
-				if (campaignPeriod.Contains(startDateAsUtc) || campaignPeriod.Contains(endDateAsUtc))
+				ganttCampaigns.Add(new GanttCampaignViewModel()
 				{
-					ganttCampaigns.Add(new GanttCampaignViewModel()
-					{
-						Id = (Guid) campaign.Id,
-						Name = campaign.Name,
-						StartDate = startDateAsUtc,
-						EndDate = endDateAsUtc
-					});
-
-				}
+					Id = (Guid) campaign.Id,
+					Name = campaign.Name,
+					StartDate = startDateAsUtc,
+					EndDate = endDateAsUtc
+				});
 			}
 			return ganttCampaigns;
 		}
 
-
-		private DateTimePeriod getExtendedDateTimePeriod(GanttPeriod period)
-		{
-			return new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1)).ToDateTimePeriod(TimeZoneInfo.Utc);
-		}
-
-		// TODO: Remove this after refactoring.
 		private DateTimePeriod getUtcPeroid(GanttPeriod period)
 		{
-			return new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1)).ToDateTimePeriod(_userTimeZone.TimeZone());
+			var start = TimeZoneHelper.ConvertToUtc(period.StartDate.Date, _userTimeZone.TimeZone());
+			var end = TimeZoneHelper.ConvertToUtc(period.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59), _userTimeZone.TimeZone());
+
+			return new DateTimePeriod(start, end);
 		}
 
-		// TODO: Remove this after refactoring.
 		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status, IEnumerable<CampaignWarning> warnings)
 		{
 			var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
@@ -311,10 +237,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public void CheckAndUpdateCache(GanttPeriod period)
 		{
-			var extendedPeriod = getExtendedDateTimePeriod(period);
 			var campaigns = period == null
 				? _outboundCampaignRepository.LoadAll()
-				: _outboundCampaignRepository.GetCampaigns(extendedPeriod);
+				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
 			if (_outboundScheduledResourcesCacher.FilterNotCached(campaigns).ToList().Count > 0)
 			{

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -187,180 +186,53 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.ForEach(c => c.Name.Should().Not.Be.EqualTo("B"));
 		}
 
-		[Test]
-		public void ShouldListCampaignsByStatusOngoing()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Ongoing, null).ToList();
-			result.Count.Should().Be.EqualTo(1);
-			result.ForEach(c => c.Name.Should().Be.EqualTo("C"));
-		}
+		//[Test]
+		//public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
+		//{
+		//	setCampaigns();
+		//	_campaignWarningProvider.SetCampaignRuleCheckResponse(ongoingCampaign, new List<CampaignWarning>
+		//	{
+		//		new CampaignWarning()
+		//		{
+		//			TypeOfRule = typeof (CampaignOverstaffRule)
+		//		}
+		//	});
 
-		[Test]
-		public void ShouldListCampaignsByStatusDone()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Done, null).ToList();
-			result.Count.Should().Be.EqualTo(1);
-			result.ForEach(c => c.Name.Should().Be.EqualTo("D"));
-		}
+		//	var result = target.ListCampaign(CampaignStatus.Ongoing, null).ToList();
+		//	result.ForEach(c =>
+		//	{
+		//		var warnings = c.WarningInfo.ToList();
+		//		warnings.Should().Not.Be.Empty();
+		//		warnings.ForEach(w =>
+		//		{
+		//			w.TypeOfRule.Should().Be.EqualTo(typeof(CampaignOverstaffRule));
+		//		});
+		//	});
+		//}
 
-		[Test]
-		public void ShouldListCampaignsByStatusScheduled()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Scheduled, null).ToList();
-			result.Count.Should().Be.EqualTo(1);
-			result.ForEach(c => c.Name.Should().Be.EqualTo("B"));
-		}
+		//[Test]
+		//public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
+		//{
+		//	setCampaigns();
+		//	_campaignWarningProvider.SetCampaignRuleCheckResponse(scheduledCampaign, new List<CampaignWarning>
+		//	{
+		//		new CampaignWarning()
+		//		{
+		//			TypeOfRule = typeof (CampaignOverstaffRule)
+		//		}
+		//	});
 
-		[Test]
-		public void ShouldListCampaignsByStatusPlanned()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Planned, null).ToList();
-			result.Count.Should().Be.EqualTo(1);
-			result.ForEach(c => c.Name.Should().Be.EqualTo("A"));
-		}
-
-		[Test]
-		public void ShouldListAllCampaignsByStatusNone()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.None, null).ToList();
-			result.Count.Should().Be.EqualTo(4);
-		}
-
-		[Test]
-		public void ShouldListCampaignsByCompositeStatus()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled, null).ToList();
-
-			result.Count.Should().Be.EqualTo(2);
-			var expectedNames = new List<string> {"B", "D"};
-			result.ForEach(c => expectedNames.Should().Contain(c.Name));
-		}
-
-		[Test]
-		public void ShouldListAllCampaignsByAllStatus()
-		{
-			setCampaigns();
-			var result = target.ListCampaign(
-				CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing, null).ToList();
-
-			result.Count.Should().Be.EqualTo(4);
-		}
-
-		[Test]
-		public void ShouldListCampaignsWithGivenOrder()
-		{
-			setCampaigns();
-			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
-			{
-				CampaignStatus.Ongoing,
-				CampaignStatus.Planned,
-				CampaignStatus.Scheduled,
-				CampaignStatus.Done,
-			});
-
-			var result = target.ListCampaign(CampaignStatus.None, null);
-			result.Select(c => c.Name).Should().Have.SameSequenceAs(new List<string> {"C", "A", "B", "D"});
-		}
-
-
-		[Test]
-		public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
-		{
-			setCampaigns();
-			_campaignWarningProvider.SetCampaignRuleCheckResponse(ongoingCampaign, new List<CampaignWarning>
-			{
-				new CampaignWarning()
-				{
-					TypeOfRule = typeof (CampaignOverstaffRule)
-				}
-			});
-
-			var result = target.ListCampaign(CampaignStatus.Ongoing, null).ToList();
-			result.ForEach(c =>
-			{
-				var warnings = c.WarningInfo.ToList();
-				warnings.Should().Not.Be.Empty();
-				warnings.ForEach(w =>
-				{
-					w.TypeOfRule.Should().Be.EqualTo(typeof(CampaignOverstaffRule));
-				});
-			});
-		}
-
-		[Test]
-		public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
-		{
-			setCampaigns();
-			_campaignWarningProvider.SetCampaignRuleCheckResponse(scheduledCampaign, new List<CampaignWarning>
-			{
-				new CampaignWarning()
-				{
-					TypeOfRule = typeof (CampaignOverstaffRule)
-				}
-			});
-
-			var result = target.ListCampaign(CampaignStatus.Scheduled, null).ToList();
-			result.ForEach(c =>
-			{
-				var warnings = c.WarningInfo.ToList();
-				warnings.Should().Not.Be.Empty();
-				warnings.ForEach(w =>
-				{
-					w.TypeOfRule.Should().Be.EqualTo(typeof (CampaignOverstaffRule));
-				});
-			});
-		}
-
-		[Test]
-		public void ShouldReturnCorrectStatisticsWhenThereAreNoWarnings()
-		{
-			setCampaigns();
-			var result = target.GetCampaignStatistics(null);
-
-			result.Planned.Should().Be.EqualTo(1);
-			result.Scheduled.Should().Be.EqualTo(1);
-			result.OnGoing.Should().Be.EqualTo(1);
-			result.Done.Should().Be.EqualTo(1);
-			result.ScheduledWarning.Should().Be.EqualTo(0);
-			result.OnGoingWarning.Should().Be.EqualTo(0);
-		}		
-
-		[Test]
-		public void ShouldReturnCorrectStatisticsWhenThereAreWarnings()
-		{
-			setCampaigns();
-
-			_campaignWarningProvider.SetCampaignRuleCheckResponse(ongoingCampaign, new List<CampaignWarning>
-			{
-				new CampaignWarning()
-				{
-					TypeOfRule = typeof (CampaignOverstaffRule)
-				}
-			});
-
-			_campaignWarningProvider.SetCampaignRuleCheckResponse(scheduledCampaign, new List<CampaignWarning>
-			{
-				new CampaignWarning()
-				{
-					TypeOfRule = typeof (CampaignOverstaffRule)
-				}
-			});
-
-			var result = target.GetCampaignStatistics(null);
-
-			result.Planned.Should().Be.EqualTo(1);
-			result.Scheduled.Should().Be.EqualTo(1);
-			result.OnGoing.Should().Be.EqualTo(1);
-			result.Done.Should().Be.EqualTo(1);
-			result.ScheduledWarning.Should().Be.EqualTo(1);
-			result.OnGoingWarning.Should().Be.EqualTo(1);
-		}
+		//	var result = target.ListCampaign(CampaignStatus.Scheduled, null).ToList();
+		//	result.ForEach(c =>
+		//	{
+		//		var warnings = c.WarningInfo.ToList();
+		//		warnings.Should().Not.Be.Empty();
+		//		warnings.ForEach(w =>
+		//		{
+		//			w.TypeOfRule.Should().Be.EqualTo(typeof (CampaignOverstaffRule));
+		//		});
+		//	});
+		//}
 		
 		[Test]
 		public void ShouldGetAllCampaignsSummaryWithinPeriod()

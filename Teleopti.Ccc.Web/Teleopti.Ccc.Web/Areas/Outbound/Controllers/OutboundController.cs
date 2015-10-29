@@ -109,12 +109,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundCampaignPersister.RemoveCampaign(campaign);
 			return Ok();
 		}
-
-		[HttpPost, Route("api/Outbound/Campaign/Period/Statistics"), UnitOfWork]
-		public virtual CampaignStatistics GetStatistics([FromBody] GanttPeriod period)
-		{
-			return _campaignListProvider.GetCampaignStatistics(period);
-		}	
 		
 		[HttpPost, Route("api/Outbound/Campaign/Period/Load"), UnitOfWork]
 		public virtual bool LoadData([FromBody]GanttPeriod period)

@@ -10,7 +10,6 @@
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var reloadCampaignSchedulesUrl = '../api/Outbound/Campaign/Period/Load';
 		var editCampaignCommandUrl = '../api/Outbound/Campaign/';
-		var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
 		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
 		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
 		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
@@ -72,17 +71,6 @@
 
 		this.getGanttVisualization = function (period, successCb, errorCb) {
 			$http.post(getGanttVisualizationUrl, normalizePeriod(period)).
-				success(function(data) {
-					if (successCb != null)
-						successCb(data);
-				}).
-				error(function(data) {
-					if (errorCb != null) errorCb(data);
-				});
-		}
-
-		this.getCampaignStatisticsWithinPeriod = function(period, successCb, errorCb) {			
-			$http.post(getCampaignPeriodStatisticsUrl, normalizePeriod(period)).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);

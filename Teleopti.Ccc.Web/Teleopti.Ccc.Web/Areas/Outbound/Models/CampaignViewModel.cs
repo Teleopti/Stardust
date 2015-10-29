@@ -75,17 +75,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
 	}
 
-	public class CampaignStatistics
-	{
-		public int Planned;
-		public int PlannedWarning;
-		public int Scheduled;
-		public int ScheduledWarning;
-		public int OnGoing;
-		public int OnGoingWarning;
-		public int Done;
-	}
-
 	public class CampaignVisualizationViewModel
 	{
 		public IList<DateOnly> Dates;
@@ -140,11 +129,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public DateOnly StartDate;
 		public DateOnly EndDate;
-
-		public DateOnlyPeriod ToDateOnlyPeriod()
-		{
-			return new DateOnlyPeriod(StartDate, EndDate);	
-		}
 	}
 
 	public class PeriodSummaryInfo

@@ -122,20 +122,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			target.UpdateCampaign(new Guid(), campaignVM);
 			_outboundCampaignPersister.AssertWasCalled((x => x.Persist(campaignVM)));
 		}
-
-		[Test]
-		public void ShouldGetCampaignStatisticsWithPeriod()
-		{
-			var period = new GanttPeriod();
-			var campaignStatistic = new CampaignStatistics();
-			var listProvider = MockRepository.GenerateMock<ICampaignListProvider>();
-			listProvider.Stub(x => x.GetCampaignStatistics(period)).Return(campaignStatistic);
-			
-			var target = new OutboundController(null, null, null, null, null, listProvider, null);
-			var result = target.GetStatistics(period);
-
-			result.Should().Be.SameInstanceAs(campaignStatistic);
-		}	
 		
 		[Test]
 		public void ShouldGetCampainSummaryListWithPeriod()
