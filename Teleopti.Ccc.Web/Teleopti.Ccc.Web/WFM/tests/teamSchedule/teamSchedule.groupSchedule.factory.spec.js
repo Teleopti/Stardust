@@ -13,7 +13,8 @@ describe("GroupScheduleFactory", function () {
 		module(function ($provide) {
 			$provide.service('CurrentUserInfo', function () {
 				return {
-					DefaultTimeZone: "Europe/Berlin"
+					DefaultTimeZone: "Etc/UTC",
+					DateFormatLocale: "en-GB"
 				};
 			});
 		});
@@ -26,79 +27,204 @@ describe("GroupScheduleFactory", function () {
 		moment.locale(mockCurrentUserInfo.DateFormatLocale);
 	}));
 
-
 	beforeEach(inject(function (GroupScheduleFactory) {
 		target = GroupScheduleFactory;
 	}));
 
-	it("Can get an instance of TimeLine factory", inject(function () {
-		expect(target).toBeDefined();
-	}));
-/*
-	it("Can sort group schedule correctly", inject(function () {
-		var now = moment("2015-10-26 07:35:00");
+	it("Schdule Sorting - Schedule sort by start time", inject(function () {
+		var today = "2015-10-26";
+		var now = moment(today + " 07:35:00");
 
 		var schedules = [
 			{
-				"Date": "2015-10-26",
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 12:00",
-						"Minutes": 240
-					},
-					{
-						"Start": "2015-10-26 16:00",
-						"Minutes": 240 // End = "2015-10-26 20:00"
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": today + " 08:00",
+						"Minutes": 480
 					}
 				],
+				"IsFullDayAbsence": false,
 				"DayOff": null
 			},
 			{
-				"Date": "2015-10-27",
-				"Projection": [],
-				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": "2015-10-27 00:00",
-					"Minutes": 1440
-				}
-			},
-			{
-				"Date": "2015-10-26",
+				"PersonId": "221B-Baker-Watson",
+				"Name": "Dr. Watson",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 08:00",
-						"Minutes": 120
-					},
-					{
-						"Start": "2015-10-26 10:00",
-						"Minutes": 360 // End = "2015-10-26 16:00"
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": today + " 07:30",
+						"Minutes": 480
 					}
 				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			},
+			{
+				"PersonId": "221B-Sherlock",
+				"Name": "Sherlock Holmes",
+				"Date": today,
+				"Projection": [
+					{
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": today + " 08:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
 				"DayOff": null
 			}
 		];
 
-		var timeLine = target.Create(schedules, now);
+		var groupScheduleVm = target.Create(schedules, now);
 
-		var expectedStart = 480;
-		var expectedEnd = 1200;
-		var expectedHourPointsCount = 13;
+		var timeLine = groupScheduleVm.TimeLine;
+		expect(timeLine).toBeDefined();
 
-		expect(timeLine.Offset.format(dateTimeFormat)).toEqual(now.startOf("day").format(dateTimeFormat));
-		expect(timeLine.StartMinute).toEqual(expectedStart);
-		expect(timeLine.EndMinute).toEqual(expectedEnd);
-		expect(timeLine.LengthPercentPerMinute).toEqual(100 / (expectedEnd - expectedStart));
-
-		expect(timeLine.HourPoints.length).toEqual(expectedHourPointsCount);
-
-		var firstHourPoint = timeLine.HourPoints[0];
-		expect(firstHourPoint.TimeLabel).toEqual("08:00");
-		expect(firstHourPoint.Position()).toEqual(0);
-
-		var lastHourPoint = timeLine.HourPoints[expectedHourPointsCount - 1];
-		expect(lastHourPoint.TimeLabel).toEqual("20:00");
-		expect(lastHourPoint.Position()).toEqual(100);
+		var personSchedules = groupScheduleVm.Schedules;
+		expect(personSchedules.length).toEqual(3);
+		expect(personSchedules[0].Name).toEqual("Dr. Watson");
+		expect(personSchedules[1].Name).toEqual("Sherlock Holmes");
+		expect(personSchedules[2].Name).toEqual("SomeoneElse");
 	}));
-	*/
+
+	it("Schdule Sorting - Absence should before shift", inject(function () {
+		var today = "2015-10-26";
+		var now = moment(today + " 07:35:00");
+
+		var schedules = [
+			{
+				"PersonId": "221B-Sherlock",
+				"Name": "Sherlock Holmes",
+				"Date": today,
+				"Projection": [
+					{
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": today + " 07:30",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			},
+			{
+				"PersonId": "221B-Baker-Watson",
+				"Name": "Dr. Watson",
+				"Date": today,
+				"Projection": [
+				   {
+				   	"Color": "#1E90FF",
+				   	"Description": "AWOL",
+				   	"Start": today + " 07:00",
+				   	"Minutes": 480
+				   }
+				],
+				"IsFullDayAbsence": true,
+				"DayOff": null
+			}
+		];
+
+		var groupScheduleVm = target.Create(schedules, now);
+
+		var timeLine = groupScheduleVm.TimeLine;
+		expect(timeLine).toBeDefined();
+
+		var personSchedules = groupScheduleVm.Schedules;
+		expect(personSchedules.length).toEqual(2);
+		expect(personSchedules[0].Name).toEqual("Dr. Watson");
+		expect(personSchedules[1].Name).toEqual("Sherlock Holmes");
+	}));
+
+	it("Schdule Sorting - Shift should before dayoff", inject(function () {
+		var today = "2015-10-26";
+		var now = moment(today + " 07:35:00");
+
+		var schedules = [
+			{
+				"PersonId": "221B-Sherlock",
+				"Name": "Sherlock Holmes",
+				"Date": today,
+				"Projection": [],
+				"IsFullDayAbsence": false,
+				"DayOff":
+				{
+					"DayOffName": "Day off",
+					"Start": "2015-10-26 23:00",
+					"Minutes": 1440
+				}
+			},
+			{
+				"PersonId": "221B-Baker-Watson",
+				"Name": "Dr. Watson",
+				"Date": today,
+				"Projection": [
+				   {
+				   	"Color": "#1E90FF",
+				   	"Description": "Email",
+				   	"Start": today + " 07:00",
+				   	"Minutes": 480
+				   }
+				],
+				"IsFullDayAbsence": true,
+				"DayOff": null
+			}
+		];
+
+		var groupScheduleVm = target.Create(schedules, now);
+
+		var timeLine = groupScheduleVm.TimeLine;
+		expect(timeLine).toBeDefined();
+
+		var personSchedules = groupScheduleVm.Schedules;
+		expect(personSchedules.length).toEqual(2);
+		expect(personSchedules[0].Name).toEqual("Dr. Watson");
+		expect(personSchedules[1].Name).toEqual("Sherlock Holmes");
+	}));
+
+	it("Schdule Sorting - Dayoff should before empty schedule", inject(function () {
+		var today = "2015-10-26";
+		var now = moment(today + " 07:35:00");
+
+		var schedules = [
+			{
+				"PersonId": "221B-Sherlock",
+				"Name": "Sherlock Holmes",
+				"Date": today,
+				"Projection": [],
+				"IsFullDayAbsence": false,
+				"DayOff":
+				{
+					"DayOffName": "Day off",
+					"Start": "2015-10-26 23:00",
+					"Minutes": 1440
+				}
+			},
+			{
+				"PersonId": "221B-Baker-Watson",
+				"Name": "Dr. Watson",
+				"Date": today,
+				"Projection": [],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			}
+		];
+
+		var groupScheduleVm = target.Create(schedules, now);
+
+		var timeLine = groupScheduleVm.TimeLine;
+		expect(timeLine).toBeDefined();
+
+		var personSchedules = groupScheduleVm.Schedules;
+		expect(personSchedules.length).toEqual(2);
+		expect(personSchedules[0].Name).toEqual("Dr. Watson");
+		expect(personSchedules[1].Name).toEqual("Sherlock Holmes");
+	}));
 });

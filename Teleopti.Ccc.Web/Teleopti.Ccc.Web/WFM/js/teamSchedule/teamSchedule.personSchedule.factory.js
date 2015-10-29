@@ -3,7 +3,7 @@
 	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
 
 	function PersonSchedule(currentUserInfo) {
-		var personScheduleVm = {};
+		var personScheduleFactory = {};
 
 		var shiftProjectionViewModel = function(projection, timeLine) {
 			if (!projection) projection = {};
@@ -84,30 +84,57 @@
 				this.DayOffs.push(otherDayOffVm);
 			}
 		}
+		
+		var sortValue = function () {
+			if (this.Shifts.length === 0) {
+				if (this.DayOffs.length === 0) {
+					// Empty schedule at last
+					return 20000;
+				} else {
+					// DayOff after schedule
+					return 10000;
+				}
+			}
 
-		personScheduleVm.Create = function(personSchedule, timeLine) {
-			if (!personSchedule) personSchedule = {};
+			var shiftStart = -24*60;
+			angular.forEach(this.Shifts[0].Projections, function(projection) {
+				var projStart = projection.StartPosition();
+				if (shiftStart === -24 * 60 || projStart < shiftStart) {
+					shiftStart = projStart;
+				}
+			});
 
-			var projectionVms = createProjections(personSchedule.Projection, timeLine);
-			var dayOffVm  = createDayOffViewModel(personSchedule.DayOff, timeLine);
+			if (!this.IsFullDayAbsence) {
+				return 5000 + shiftStart;
+			}
 
-			var vm = {
-				PersonId: personSchedule.PersonId,
-				Name: personSchedule.Name,
-				Date: moment.tz(personSchedule.Date, currentUserInfo.DefaultTimeZone),
+			return shiftStart;
+		};
+
+		personScheduleFactory.Create = function(schedule, timeLine) {
+			if (!schedule) schedule = {};
+
+			var projectionVms = createProjections(schedule.Projection, timeLine);
+			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
+
+			var personSchedule = {
+				PersonId: schedule.PersonId,
+				Name: schedule.Name,
+				Date: moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone),
 				Shifts: projectionVms == undefined ? [] : [
 					{
 						Projections: projectionVms
 					}
 				],
-				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
+				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
-				Merge: merge
+				Merge: merge,
+				SortValue: sortValue
 			}
 
-			return vm;
+			return personSchedule;
 		}
 
-		return personScheduleVm;
+		return personScheduleFactory;
 	}
 }());

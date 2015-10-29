@@ -3,7 +3,7 @@
 	angular.module('wfm.teamSchedule').factory('TimeLine', ['CurrentUserInfo', 'ShiftHelper', TimeLine]);
 
 	function TimeLine(currentUserInfo, shiftHelper) {
-		var timeLine = {};
+		var timeLineFactory = {};
 
 		var startMinutes = function (groupSchedule, baseDate) {
 			var start = undefined;
@@ -78,7 +78,7 @@
 			return hourPointVm;
 		};
 
-		timeLine.Create = function (groupSchedules, utcQueryDate) {
+		timeLineFactory.Create = function (groupSchedules, utcQueryDate) {
 			var hourPoints = [];
 
 			var utcBaseDate = utcQueryDate.startOf("day");
@@ -92,16 +92,16 @@
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
 			}
 
-			var timeLineVm = {
+			var timeLine = {
 				Offset: utcBaseDate,
 				StartMinute: start,
 				EndMinute: end,
 				HourPoints: hourPoints,
 				LengthPercentPerMinute: percentPerMinute
 			}
-			return timeLineVm;
+			return timeLine;
 		}
 
-		return timeLine;
+		return timeLineFactory;
 	}
 }());

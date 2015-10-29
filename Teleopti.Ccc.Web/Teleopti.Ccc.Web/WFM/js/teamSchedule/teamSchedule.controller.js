@@ -40,7 +40,7 @@
 			});
 		}
 
-		vm.loadSchedules = function () {
+		vm.loadSchedules = function() {
 			if (vm.selectedTeamId === "") return;
 
 			teamScheduleSvc.loadSchedules.query({
@@ -48,10 +48,9 @@
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 				}).$promise
 				.then(function(data) {
-					vm.groupScheduleVm = groupScheduleFactory;
-					vm.groupScheduleVm.Create(data, vm.scheduleDateMoment());
-				vm.scheduleCount = data.length;
-			});
+					vm.groupScheduleVm = groupScheduleFactory.Create(data, vm.scheduleDateMoment());
+					vm.scheduleCount = data.length;
+				});
 		}
 
 		vm.Init = function () {
