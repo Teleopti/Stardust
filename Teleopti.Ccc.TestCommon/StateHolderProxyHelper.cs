@@ -106,6 +106,8 @@ namespace Teleopti.Ccc.TestCommon
             Expect.Call(stateMock.SessionScopeData)
                 .Return(sessionData)
                 .Repeat.Any();
+    		Expect.Call(stateMock.UserTimeZone)
+    			.Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Repeat.Any();
         }
 
         /// <summary>
