@@ -3,13 +3,14 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService','seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
 
 	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, growl, seatmapTranslator) {
 		var vm = this;
 
 		vm.selectedPeople = [];
 		vm.showPeopleSelection = false;
+		vm.hasOpenedPersonSelectionPanel = false;
 		vm.previousSelectedSeatIds = [];
 
 		vm.asignAgentsToSeats = function () {
@@ -17,7 +18,7 @@
 			seatPlanService.seatPlan.add({ StartDate: selectedDay, EndDate: selectedDay, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
 									.$promise.then(function (seatPlanResultMessage) {
 										onSeatPlanCompleted(seatPlanResultMessage);
-			});
+									});
 		};
 		vm.getDisplayTime = function (booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
@@ -30,6 +31,16 @@
 
 				onSuccessShowMessage(deleteSuccessMessage);
 			});
+		};
+
+		vm.showPersonSelectionPanel = function () {
+
+			if (vm.hasOpenedPersonSelectionPanel) {
+				vm.resetPersonSearch();
+			}
+
+			vm.showPeopleSelection = true;
+			vm.hasOpenedPersonSelectionPanel = true;
 		};
 
 		vm.getSeatBookingDetailClass = function (booking) {
@@ -57,7 +68,7 @@
 			else {
 				onSuccessShowMessage(seatPlanResultDetailMessage);
 			}
-			
+
 			vm.refreshSeatMap();
 		};
 
@@ -67,7 +78,7 @@
 				var object = e.target;
 
 				var objIsGroup = (object.get('type') == 'group');
-				
+
 				object.hasRotatingPoint = false;
 				object.hasControls = false;
 				if (objIsGroup) {

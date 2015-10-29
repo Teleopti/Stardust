@@ -5,7 +5,8 @@
 		return {
 			controller: "PeopleStartCtrl",
 			scope: {
-				selectedPeopleList: '=selectedPeople'
+				selectedPeopleList: '=selectedPeople',
+				reset : '='
 			},
 			templateUrl: 'js/people/html/people-list.html',
 			link: function (scope, element, attrs) {
@@ -14,6 +15,9 @@
 				scope.gridOptions.enableColumnMenus = false;
 				scope.dynamicColumnLoaded = true;
 				scope.gridOptions.exporterMenuCsv = false;
+
+				scope.reset = scope.resetSearch;
+
 				scope.gridOptions.columnDefs = [
 					{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
 					{ displayName: 'LastName', field: 'LastName', headerCellFilter: 'translate', sort: { direction: uiGridConstants.ASC, priority: 0 }, minWidth: 100 },

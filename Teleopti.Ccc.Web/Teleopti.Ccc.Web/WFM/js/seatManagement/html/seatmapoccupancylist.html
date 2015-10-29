@@ -1,6 +1,6 @@
 ﻿<div class="seatmap-occupancy-detail" ng-show="vm.occupancyDetails">
 
-	<div class="seatbooking-operations-add" ng-click="vm.showPeopleSelection = true;" ng-if="!vm.showPeopleSelection">
+	<div class="seatbooking-operations-add" ng-click="vm.showPersonSelectionPanel()" ng-if="!vm.showPeopleSelection">
 		<button class="wfm-btn wfm-btn-invis-primary add-agents">Add</button>
 	</div>
 
@@ -9,7 +9,7 @@
 		<button class="wfm-btn wfm-btn-invis-primary assign-agents" ng-click="vm.asignAgentsToSeats()">Assign</button>
 	</div>
 
-	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople"></people-selection-list>
+	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" reset="vm.resetPersonSearch"></people-selection-list>
 
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
 		<div class="seat-booking-item" ng-repeat="detail in vm.occupancyDetails">
