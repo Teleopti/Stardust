@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
 		{
-			var loggedOnPersonsTimezone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+			var loggedOnPersonsTimezone = StateHolderReader.Instance.StateReader.UserTimeZone;
 
 			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(sourceShiftPeriod.LocalStartDateTime);
 			var targetIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(targetShiftPeriod.LocalStartDateTime);

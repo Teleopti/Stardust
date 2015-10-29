@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _personTime.BalanceIn = TimeSpan.FromHours(100);
             _person = PersonFactory.CreatePerson("First", "Last");
             _person.PermissionInformation.SetDefaultTimeZone(
-                StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+								StateHolderReader.Instance.StateReader.UserTimeZone);
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2005, 1, 1), TeamFactory.CreateSimpleTeam());
             _person.AddPersonPeriod(_personPeriod);
             _eventAggregator = new EventAggregator();

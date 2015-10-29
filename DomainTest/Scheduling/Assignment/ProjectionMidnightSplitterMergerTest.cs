@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[SetUp]
 		public void Setup()
 		{
-			var userZone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+			var userZone = StateHolderReader.Instance.StateReader.UserTimeZone;
 			tzDiffTime = userZone.BaseUtcOffset;
 			target = new ProjectionMidnightSplitterMerger(userZone);
             activity = ActivityFactory.CreateActivity("f");

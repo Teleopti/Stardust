@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Win.Reporting
                 if (reportTimeZoneSelector1.Visible)
                     return reportTimeZoneSelector1.TimeZone();
 
-                return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+                return StateHolderReader.Instance.StateReader.UserTimeZone;
             }
 
         }

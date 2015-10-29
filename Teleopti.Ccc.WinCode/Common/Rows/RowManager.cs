@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
         /// </remarks>
         public virtual TimeZoneInfo TimeZoneInfo
         {
-            get { return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone; }
+            get { return StateHolderReader.Instance.StateReader.UserTimeZone; }
         }
 
         /// <summary>

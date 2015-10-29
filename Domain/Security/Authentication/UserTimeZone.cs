@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
@@ -12,7 +13,12 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public TimeZoneInfo TimeZone()
+		public static IUserTimeZone Make()
+		{
+			return new UserTimeZone(new LoggedOnUser(null, new CurrentTeleoptiPrincipal()));
+		}
+
+		public TimeZoneInfo TimeZone()     
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			return currentUser==null ? 

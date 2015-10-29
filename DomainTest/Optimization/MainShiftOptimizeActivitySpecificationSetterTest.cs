@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			optimizerActivitiesPreferences.AllowAlterBetween = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(36));
 			optimizerActivitiesPreferences.SetDoNotMoveActivities(new List<IActivity>());
 
-			minShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, _mainShift, DateOnly.MinValue, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+			minShiftOptimizeActivitySpecification = new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, _mainShift, DateOnly.MinValue, StateHolderReader.Instance.StateReader.UserTimeZone);
 
 			Assert.AreEqual(typeof(MainShiftOptimizeActivitiesSpecification), minShiftOptimizeActivitySpecification.GetType());
 		}

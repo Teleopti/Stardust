@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.MainShiftOptimizeActivitySpecification =
 				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
-															 StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+															 StateHolderReader.Instance.StateReader.UserTimeZone);
 
 		}
 

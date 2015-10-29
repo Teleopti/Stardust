@@ -454,9 +454,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyLocalDateTimesWorks()
         {
             DateTime expectedLocalStart =
-                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
+                TimeZoneInfo.ConvertTimeFromUtc(_start, StateHolderReader.Instance.StateReader.UserTimeZone);
             DateTime expectedLocalEnd =
-                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
+                TimeZoneInfo.ConvertTimeFromUtc(_end, StateHolderReader.Instance.StateReader.UserTimeZone);
 
             Assert.AreEqual(expectedLocalStart, _period.LocalStartDateTime);
             Assert.AreEqual(expectedLocalEnd, _period.LocalEndDateTime);
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyDateTimeLocalWorks()
         {
-            TimeZoneInfo timeZoneInfo = StateHolder.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.UserTimeZone;
             DateTime expectedLocalStart =
                 TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)timeZoneInfo);
             DateTime expectedLocalEnd =

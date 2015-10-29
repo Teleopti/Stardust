@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             {
                 ExplorerView.ExplorerPresenter.VisualizePresenter.LoadModel(
                     ExplorerView.ExplorerPresenter.Model.SelectedDate.Value,
-                    StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+										StateHolderReader.Instance.StateReader.UserTimeZone);
                 gcProjection.RowCount = 1;// ExplorerView.ExplorerPresenter.VisualizePresenter.ModelCollection.Count;
                 gcProjection.ColCount = 1;
             }

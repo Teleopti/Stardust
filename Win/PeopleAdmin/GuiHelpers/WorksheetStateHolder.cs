@@ -126,8 +126,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 															"<" + UserTexts.Resources.LastName + ">")
 										};
 			newPerson.PermissionInformation.SetDefaultTimeZone(
-					 StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
-			//filteredPeopleHolder.PersonCollection.Insert(rowIndex, newPerson);
+					 StateHolderReader.Instance.StateReader.UserTimeZone);
 			filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, newPerson);
 
 			filteredPeopleHolder.MarkForInsert(newPerson);
@@ -181,10 +180,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			{
 				IPerson person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(
-					 StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+					 StateHolderReader.Instance.StateReader.UserTimeZone);
 				persons.Add(person);
 
-				//filteredPeopleHolder.PersonCollection.Insert(rowIndex, person);
 				filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, person);
 
 				filteredPeopleHolder.MarkForInsert(person);

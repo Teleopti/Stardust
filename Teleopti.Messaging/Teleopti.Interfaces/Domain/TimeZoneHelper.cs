@@ -100,7 +100,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static TimeZoneInfo CurrentSessionTimeZone
 		{
-			get { return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone; }
+			get { return StateHolderReader.Instance.StateReader.UserTimeZone; }
 		}
 
 		/// <summary>

@@ -6,9 +6,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class SessionData : ISessionData
 	{
-		public TimeZoneInfo TimeZone
-		{
-			get { return TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone; }
-		}
 	}
 }

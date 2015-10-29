@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			wpfShiftEditor1.AddActivity += wpfShiftEditorAddActivity;
 			wpfShiftEditor1.AddOvertime += wpfShiftEditorAddOvertime;
 			wpfShiftEditor1.AddPersonalShift += wpfShiftEditorAddPersonalShift;
-			wpfShiftEditor1.SetTimeZone(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+			wpfShiftEditor1.SetTimeZone(StateHolderReader.Instance.StateReader.UserTimeZone);
 			dayLayerView1.UpdateShiftEditor += dayLayerView1UpdateShiftEditor;
 			notesEditor1.NotesChanged += notesEditor1NotesChanged;
 			notesEditor1.PublicNotesChanged += notesEditor1NotesChanged;

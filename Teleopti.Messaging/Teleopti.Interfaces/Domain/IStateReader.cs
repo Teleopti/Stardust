@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
@@ -21,11 +22,13 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The session data.</value>
         ISessionData SessionScopeData { get; }
 
-        /// <summary>
-        /// Gets the application scope data.
-        /// </summary>
-        /// <value>The application scope data.</value>
-        IApplicationData ApplicationScopeData { get; }
+		TimeZoneInfo UserTimeZone { get; }
+
+		/// <summary>
+		/// Gets the application scope data.
+		/// </summary>
+		/// <value>The application scope data.</value>
+		IApplicationData ApplicationScopeData { get; }
 
         /// <summary>
         /// Clears data kept for logged in session/user.

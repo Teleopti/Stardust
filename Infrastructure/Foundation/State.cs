@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -65,5 +66,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// Clears data kept for logged in session/user
         /// </summary>
         public abstract void ClearSession();
-    }
+
+		public TimeZoneInfo UserTimeZone
+		{
+			get { return TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone; }
+		}
+	}
 }

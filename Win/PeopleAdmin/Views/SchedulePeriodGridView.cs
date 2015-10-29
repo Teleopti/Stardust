@@ -1721,7 +1721,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 					if (schedulePeriodPrevious == null || schedulePeriodPrevious.RealDateTo() != previousPeriodEndDate) continue;
 
-					var timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+					var timeZoneInfo = StateHolderReader.Instance.StateReader.UserTimeZone;
 					var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(schedulePeriodPrevious.DateFrom.Date, previousPeriodEndDate.Date, timeZoneInfo);
 					var dateOnlyPeriod = new DateOnlyPeriod(schedulePeriodPrevious.DateFrom, previousPeriodEndDate);
 					var schedulerStateHolder = new SchedulerStateHolder(defaultScenario, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, timeZoneInfo), new List<IPerson> { selectedPerson }, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());

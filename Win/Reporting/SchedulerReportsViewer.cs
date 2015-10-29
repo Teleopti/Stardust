@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					var settingDataRepository = new RepositoryFactory().CreateGlobalSettingDataRepository(unitOfWork);
 					var commonNameDescriptionSetting = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
-					ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone, commonNameDescriptionSetting);
+					ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data, StateHolderReader.Instance.StateReader.UserTimeZone, commonNameDescriptionSetting);
 				}
 			}
 			
