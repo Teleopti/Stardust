@@ -4,11 +4,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator
 {
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly ICurrentScenario _scenario;
 		private readonly IJsonSerializer _serializer;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly HttpClient _httpClient;
 
 		public SimulatedSchedulingScreen(
@@ -27,13 +31,15 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			ICurrentDataSource dataSource,
 			ICurrentBusinessUnit businessUnit,
 			ICurrentScenario scenario,
-			IJsonSerializer serializer)
+			IJsonSerializer serializer,
+			IMessageBrokerComposite messageBroker)
 		{
 			_url = url;
 			_dataSource = dataSource;
 			_businessUnit = businessUnit;
 			_scenario = scenario;
 			_serializer = serializer;
+			_messageBroker = messageBroker;
 			_httpClient = new HttpClient();
 		}
 
@@ -99,6 +105,26 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			});
 
+//			var subscription = new Subscription
+//			{
+//				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
+//				DomainType = domainObjectType.Name,
+//				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
+//				DomainReferenceType =
+//(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
+//				LowerBoundary = Subscription.DateToString(startDate),
+//				UpperBoundary = Subscription.DateToString(endDate),
+//				DataSource = datasource,
+//				BusinessUnitId = Subscription.IdToString(businessUnitId),
+//				Base64BinaryData = base64BinaryData,
+//				MailboxId = mailbox ? Guid.NewGuid().ToString() : null
+//			};
+
+			addSubscription(new Subscription
+			{
+
+			});
+
 		}
 
 		private void addMailbox(Subscription subscription)
@@ -131,6 +157,16 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception("GET failed! " + result.StatusCode);
 			return await result.Content.ReadAsStringAsync();
+		}
+
+		private void addSubscription(Subscription subscription)
+		{
+			_messageBroker.RegisterSubscription(subscription, callback);
+		}
+
+		private void callback(object sender, EventMessageArgs e)
+		{
+			Console.WriteLine(_number + " callbacked");
 		}
 	}
 

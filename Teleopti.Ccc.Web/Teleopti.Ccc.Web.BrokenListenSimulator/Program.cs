@@ -3,7 +3,9 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -38,8 +40,9 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			currentScenario.FakeScenario(scenario);
 
 			var builder = new ContainerBuilder();
-			var toggleManager = new FakeToggleManager();
-			builder.RegisterModule(CommonModule.ForTest(toggleManager));
+			var iocArgs = new IocArgs(new ConfigReader()) { MessageBrokerListeningEnabled = true, ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory) };
+			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
 			builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
 			builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
