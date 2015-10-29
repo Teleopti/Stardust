@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
@@ -16,40 +15,33 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.SeatPlanner)]
 	public class SeatPlanController : ApiController
 	{
-
-		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISeatPlanProvider _seatPlanProvider;
+		private readonly ISeatPlanner _seatPlanner;
 		private readonly ISeatBookingReportProvider _seatBookingReportProvider;
 		private readonly ISeatOccupancyProvider _seatOccupancyProvider;
+		private readonly ISeatPlanPersister _seatPlanPerister;
 
-		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser,
-									ISeatPlanProvider seatPlanProvider, ISeatBookingReportProvider seatBookingReportProvider,
-									ISeatOccupancyProvider seatOccupancyProvider)
+		public SeatPlanController(ISeatPlanProvider seatPlanProvider,
+									ISeatPlanner seatPlanner,
+									ISeatBookingReportProvider seatBookingReportProvider,
+									ISeatOccupancyProvider seatOccupancyProvider,
+									ISeatPlanPersister seatPlanPerister)
 		{
-			_commandDispatcher = commandDispatcher;
-			_loggedOnUser = loggedOnUser;
+
 			_seatPlanProvider = seatPlanProvider;
+			_seatPlanner = seatPlanner;
 			_seatBookingReportProvider = seatBookingReportProvider;
 			_seatOccupancyProvider = seatOccupancyProvider;
+			_seatPlanPerister = seatPlanPerister;
 		}
 
 		[HttpPost, Route("api/SeatPlanner/SeatPlan"), UnitOfWork]
 		public virtual IHttpActionResult Add([FromBody]AddSeatPlanCommand command)
 		{
-			executeCommand(command);
+			var seatPlanningPeriod = new DateOnlyPeriod (new DateOnly (command.StartDate), new DateOnly (command.EndDate));
+			var result = _seatPlanner.Plan(command.Locations, command.Teams, seatPlanningPeriod, command.SeatIds, command.PersonIds);
 
-			return Created(Request.RequestUri, new { });
-		}
-
-		private void executeCommand (ITrackableCommand command)
-		{
-			if (command.TrackedCommandInfo != null)
-			{
-				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
-			}
-
-			_commandDispatcher.Execute (command);
+			return Created(Request.RequestUri, result );
 		}
 
 		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
@@ -79,11 +71,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[HttpDelete, Route("api/SeatPlanner/Occupancy"), UnitOfWork]
 		public virtual IHttpActionResult Delete(Guid Id)
 		{
-			executeCommand (new DeleteSeatBookingCommand() { SeatBookingId = Id });
-
+			_seatPlanPerister.RemoveSeatBooking (Id);
 			return Ok();
 		}
-		
+
 	}
 
 	public class OccupancyListParameters
@@ -94,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		}
 
 		public DateOnly DateOnly { get; set; }
-		public IList<Guid> SeatIds{ get; set; }
+		public IList<Guid> SeatIds { get; set; }
 
 	}
 

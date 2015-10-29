@@ -600,9 +600,7 @@
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchTermParser.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
-    <Compile Include="Areas\SeatPlanner\Controllers\SeatMapCommandController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapController.cs" />
-    <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanCommandController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatBookingReportProvider.cs" />

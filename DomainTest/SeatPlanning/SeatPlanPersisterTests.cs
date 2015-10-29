@@ -1,17 +1,16 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	[TestFixture]
-	internal class DeleteSeatBookingCommandHandlerTest
+	internal class SeatPlanPersisterTests
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatPlanRepository _seatPlanRepository;
@@ -38,14 +37,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_seatBookingRepository.Add (existingSeatBooking);
 		}
 
-		private void executeDeleteCommand(Guid seatBookingId)
+		private Guid setupSeatBooking()
 		{
-			var deleteSeatBookingCommandHandler =
-				new DeleteSeatBookingCommandHandler(new SeatPlanPersister(_seatBookingRepository, _seatPlanRepository));
-			deleteSeatBookingCommandHandler.Handle(new DeleteSeatBookingCommand()
-			{
-				SeatBookingId = seatBookingId
-			});
+			var seat = new Seat("Seat One", 1);
+			var seatBookingId = Guid.NewGuid();
+
+			var startDateTime = new DateTime(2015, 03, 02, 08, 00, 00);
+			var endDateTime = new DateTime(2015, 03, 02, 17, 00, 00);
+			addSeatBooking(new Person(), startDateTime, endDateTime, seat, seatBookingId);
+			return seatBookingId;
+		}
+
+
+		private void removeSeatBooking(Guid seatBookingId)
+		{
+			new SeatPlanPersister(_seatBookingRepository, _seatPlanRepository).RemoveSeatBooking (seatBookingId);
 		}
 
 		#endregion
@@ -55,21 +61,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var seatBookingId = setupSeatBooking();
 
-			executeDeleteCommand(seatBookingId);
+			removeSeatBooking(seatBookingId);
 
 			Assert.IsFalse(_seatBookingRepository.Any());
 
-		}
-
-		private Guid setupSeatBooking()
-		{
-			var seat = new Seat ("Seat One", 1);
-			var seatBookingId = Guid.NewGuid();
-
-			var startDateTime = new DateTime (2015, 03, 02, 08, 00, 00);
-			var endDateTime = new DateTime (2015, 03, 02, 17, 00, 00);
-			addSeatBooking (new Person(), startDateTime, endDateTime, seat, seatBookingId);
-			return seatBookingId;
 		}
 
 		[Test]
@@ -84,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_seatPlanRepository.Add(new SeatPlan() { Date = new DateOnly(startDateTime), Status = SeatPlanStatus.Ok });
 
-			executeDeleteCommand(seatBookingId);
+			removeSeatBooking(seatBookingId);
 
 			Assert.IsFalse(_seatPlanRepository.Any());
 

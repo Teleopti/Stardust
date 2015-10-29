@@ -23333,6 +23333,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempted {0} seat bookings, {1} succeeded and {2} failed.  There were {3} unscheduled agent days.
+        /// </summary>
+        public static string SeatPlanResultDetailMessage {
+            get {
+                return ResourceManager.GetString("SeatPlanResultDetailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some agents could not be allocated seats on this day.
         /// </summary>
         public static string SeatPlanStatusError {

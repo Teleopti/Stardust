@@ -13515,4 +13515,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Modify Skill</value>
     <comment>"Modify Skill" used in permission</comment>
   </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>Attempted {0} seat bookings, {1} succeeded and {2} failed.  There were {3} unscheduled agent days</value>
+    <comment>Used to display the result of a seat plan.</comment>
+  </data>
 </root>

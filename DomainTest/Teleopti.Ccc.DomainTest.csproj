@@ -186,8 +186,8 @@
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AddSeatPlanCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\DeleteSeatBookingCommandHandlerTest.cs" />
+    <Compile Include="SeatPlanning\SeatPlannerTests.cs" />
+    <Compile Include="SeatPlanning\SeatPlanPersisterTests.cs" />
     <Compile Include="ApplicationLayer\FakePersonAbsenceWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />

@@ -44,17 +44,42 @@
 			else {
 
 				vm.onSeatPlanStart();
-				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
-					onSuccessAddSeatPlan(seatPlanTranslatorFactory.TranslatedStrings["SeatPlanSubmittedOK"]);
-					vm.processingSeatPlan = false;
-					vm.onSeatPlanComplete();
+				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (seatPlanResultMessage) {
+					onAddSeatPlanCompleted(seatPlanResultMessage);
+
 				});
 
 			}
 		};
+		
+		function onAddSeatPlanCompleted(seatPlanResultMessage) {
+
+			var seatPlanResultDetailMessage = seatPlanTranslatorFactory.TranslatedStrings['SeatPlanResultDetailMessage']
+						.replace('{0}', seatPlanResultMessage.NumberOfBookingRequests)
+						.replace('{1}', seatPlanResultMessage.RequestsGranted)
+						.replace('{2}', seatPlanResultMessage.RequestsDenied)
+						.replace('{3}', seatPlanResultMessage.NumberOfUnscheduledAgentDays);
+
+			if (seatPlanResultMessage.RequestsDenied > 0) {
+				onWarningAddSeatPlan(seatPlanResultDetailMessage);
+			}
+			else {
+				onSuccessAddSeatPlan(seatPlanResultDetailMessage);
+			}
+
+			vm.processingSeatPlan = false;
+			vm.onSeatPlanComplete();
+		};
 
 		function onSuccessAddSeatPlan(message) {
 			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
+				ttl: 5000,
+				disableCountDown: true
+			});
+		};
+
+		function onWarningAddSeatPlan(message) {
+			growl.warning("<i class='mdi mdi-alert'></i> " + message + ".", {
 				ttl: 5000,
 				disableCountDown: true
 			});

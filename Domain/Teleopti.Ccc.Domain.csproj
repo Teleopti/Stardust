@@ -167,8 +167,6 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommand.cs" />
-    <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\SaveSeatMapCommand.cs" />
@@ -678,6 +676,7 @@
     <Compile Include="SeatPlanning\SeatLevelAllocator.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="SeatPlanning\SeatPlannerHelper.cs" />
+    <Compile Include="SeatPlanning\SeatPlanningResult.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersister.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmOutboundLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOption.cs" />

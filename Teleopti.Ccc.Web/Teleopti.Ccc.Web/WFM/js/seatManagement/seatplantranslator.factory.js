@@ -20,9 +20,11 @@
 		setupTranslatedString("SeatCountTitle");
 		setupTranslatedString("AgentCountTitle");
 		setupTranslatedString("TeamsOrLocationsAreUnselected");
-		setupTranslatedString("SeatPlanSubmittedOK");
+		//setupTranslatedString("SeatPlanSubmittedOK");
 		setupTranslatedString("DayOff");
 		setupTranslatedString("FullDayAbsence");
+		setupTranslatedString("SeatPlanResultDetailMessage");
+		
 
 		return {
 			TranslatedStrings: translatedStrings

@@ -15,9 +15,9 @@
 		vm.asignAgentsToSeats = function () {
 			var selectedDay = moment(vm.scheduleDate).format("YYYY-MM-DD");
 			seatPlanService.seatPlan.add({ StartDate: selectedDay, EndDate: selectedDay, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
-									.$promise.then(function () {
-										vm.refreshSeatMap();
-									});
+									.$promise.then(function (seatPlanResultMessage) {
+										onSeatPlanCompleted(seatPlanResultMessage);
+			});
 		};
 		vm.getDisplayTime = function (booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
@@ -28,7 +28,7 @@
 				vm.refreshSeatMap();
 				var deleteSuccessMessage = seatmapTranslator.TranslatedStrings['SeatBookingDeletedSuccessfully'].replace('{0}', booking.SeatName).replace('{1}', booking.FirstName + ' ' + booking.LastName);
 
-				onSuccessDeleteSeatBooking(deleteSuccessMessage);
+				onSuccessShowMessage(deleteSuccessMessage);
 			});
 		};
 
@@ -41,6 +41,24 @@
 			}
 
 			return '';
+		};
+
+		function onSeatPlanCompleted(seatPlanResultMessage) {
+
+			var seatPlanResultDetailMessage = seatmapTranslator.TranslatedStrings['SeatPlanResultDetailMessage']
+						.replace('{0}', seatPlanResultMessage.NumberOfBookingRequests)
+						.replace('{1}', seatPlanResultMessage.RequestsGranted)
+						.replace('{2}', seatPlanResultMessage.RequestsDenied)
+						.replace('{3}', seatPlanResultMessage.NumberOfUnscheduledAgentDays);
+
+			if (seatPlanResultMessage.RequestsDenied > 0) {
+				onWarningShowMessage(seatPlanResultDetailMessage);
+			}
+			else {
+				onSuccessShowMessage(seatPlanResultDetailMessage);
+			}
+			
+			vm.refreshSeatMap();
 		};
 
 		function setupObjectSelectionHandlers() {
@@ -178,13 +196,19 @@
 		}
 
 
-		function onSuccessDeleteSeatBooking(message) {
+		function onSuccessShowMessage(message) {
 			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
 				ttl: 5000,
 				disableCountDown: true
 			});
 		};
 
+		function onWarningShowMessage(message) {
+			growl.warning("<i class='mdi mdi-alert'></i> " + message + ".", {
+				ttl: 5000,
+				disableCountDown: true
+			});
+		};
 
 		vm.init = function () {
 			setupObjectSelectionHandlers();

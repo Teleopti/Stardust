@@ -17,6 +17,7 @@
 		};
 
 		setupTranslatedString("SeatBookingDeletedSuccessfully");
+		setupTranslatedString("SeatPlanResultDetailMessage");
 
 		return {
 			TranslatedStrings: translatedStrings

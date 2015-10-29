@@ -6,5 +6,6 @@ namespace Teleopti.Interfaces.Domain
 	{
 		IList<ITeamGroupedBooking> TeamGroupedBookings { get; set; }
 		IList<ISeatBooking> ExistingSeatBookings { get; set; }
+		int NumberOfUnscheduledAgentDays { get; set; }
 	}
 }

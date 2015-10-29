@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly ICurrentScenario _scenario;
 		private IList<ITeamGroupedBooking> _bookingsWithDateAndTeam;
 		private IList<ISeatBooking> _existingSeatBookings;
+		private int _numberOfUnscheduledAgentDays;
 
 		public SeatBookingRequestAssembler(IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository, ICurrentScenario scenario)
 		{
@@ -23,8 +24,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_scenario = scenario;
 		}
 
-		public ISeatBookingRequestParameters AssembleAndGroupSeatBookingRequests(IList<IPerson> people, DateOnlyPeriod period)
+		public ISeatBookingRequestParameters CreateSeatBookingRequests(IList<IPerson> people, DateOnlyPeriod period)
 		{
+			_numberOfUnscheduledAgentDays = 0;
 			_bookingsWithDateAndTeam = new List<ITeamGroupedBooking>();
 
 			var bookingPeriodWithSurroundingDays = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
@@ -35,20 +37,22 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			 return new SeatBookingRequestParameters()
 			 {
 				 ExistingSeatBookings =  _existingSeatBookings,
-				 TeamGroupedBookings = _bookingsWithDateAndTeam
+				 TeamGroupedBookings = _bookingsWithDateAndTeam,
+				 NumberOfUnscheduledAgentDays = _numberOfUnscheduledAgentDays
 			 };
 		}
-
 		
-
 		private void groupNewBookings(DateOnlyPeriod period, IList<IPerson> people)
 		{
 			var schedulesForPeople = getScheduleDaysForPeriod(period, people, _scenario.Current());
 			foreach (var person in people)
 			{
-				var scheduleDays = getScheduleDaysToPlanSeats(schedulesForPeople[person].ScheduledDayCollection(period));
+				var scheduleDays = getScheduleDaysToPlanSeats(schedulesForPeople[person].ScheduledDayCollection(period)).ToArray();
 				scheduleDays.ForEach (day => findOrCreateSeatBooking(day, person));
+				_numberOfUnscheduledAgentDays += period.DayCount() - scheduleDays.Count();
+
 			}
+			
 		}
 
 		private IEnumerable<IScheduleDay> getScheduleDaysToPlanSeats(IEnumerable<IScheduleDay> scheduleDays)
@@ -111,5 +115,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		public IList<ITeamGroupedBooking> TeamGroupedBookings { get; set; }
 		public IList<ISeatBooking> ExistingSeatBookings { get; set; }
+		public int NumberOfUnscheduledAgentDays { get; set; }
 	}
 }
