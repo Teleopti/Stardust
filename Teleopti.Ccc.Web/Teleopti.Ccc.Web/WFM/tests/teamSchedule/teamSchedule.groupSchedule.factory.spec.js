@@ -31,7 +31,7 @@ describe("GroupScheduleFactory", function () {
 		target = GroupScheduleFactory;
 	}));
 
-	it("Schdule Sorting - Schedule sort by start time", inject(function () {
+	it("Schdule Sorting - Schedule sort by start time then name", inject(function () {
 		var today = "2015-10-26";
 		var now = moment(today + " 07:35:00");
 
@@ -39,6 +39,21 @@ describe("GroupScheduleFactory", function () {
 			{
 				"PersonId": "221B-Baker-SomeoneElse",
 				"Name": "SomeoneElse",
+				"Date": today,
+				"Projection": [
+					{
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": today + " 07:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			},
+			{
+				"PersonId": "221B-Sherlock",
+				"Name": "Sherlock Holmes",
 				"Date": today,
 				"Projection": [
 					{
@@ -54,21 +69,6 @@ describe("GroupScheduleFactory", function () {
 			{
 				"PersonId": "221B-Baker-Watson",
 				"Name": "Dr. Watson",
-				"Date": today,
-				"Projection": [
-					{
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": today + " 07:30",
-						"Minutes": 480
-					}
-				],
-				"IsFullDayAbsence": false,
-				"DayOff": null
-			},
-			{
-				"PersonId": "221B-Sherlock",
-				"Name": "Sherlock Holmes",
 				"Date": today,
 				"Projection": [
 					{
@@ -90,9 +90,9 @@ describe("GroupScheduleFactory", function () {
 
 		var personSchedules = groupScheduleVm.Schedules;
 		expect(personSchedules.length).toEqual(3);
-		expect(personSchedules[0].Name).toEqual("Dr. Watson");
-		expect(personSchedules[1].Name).toEqual("Sherlock Holmes");
-		expect(personSchedules[2].Name).toEqual("SomeoneElse");
+		expect(personSchedules[0].Name).toEqual("SomeoneElse");
+		expect(personSchedules[1].Name).toEqual("Dr. Watson");
+		expect(personSchedules[2].Name).toEqual("Sherlock Holmes");
 	}));
 
 	it("Schdule Sorting - Absence should before shift", inject(function () {

@@ -76,7 +76,9 @@
 
 		var merge = function(otherSchedule, timeLine) {
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
-			this.Shifts.push({ Projections: otherProjections });
+			if (otherProjections != undefined) {
+				this.Shifts.push({ Projections: otherProjections });
+			}
 
 			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine);
 
