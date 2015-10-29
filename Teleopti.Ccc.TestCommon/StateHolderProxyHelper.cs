@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.TestCommon
 
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 			ISessionData sessData = new SessionData();
-			sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
 			SetStateReaderExpectations(stateMock, appData, sessData);
 
@@ -146,7 +145,6 @@ namespace Teleopti.Ccc.TestCommon
 
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 			ISessionData sessData = new SessionData();
-			sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			return sessData;
 		}
 

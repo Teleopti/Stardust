@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void Setup()
 		{
 			_loggedOnPersonTimeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = _loggedOnPersonTimeZoneInfo;
 			_mockRepository = new MockRepository();
 			_authorizationService = _mockRepository.StrictMock<IPrincipalAuthorization>();
 			_swapRawService = new SwapRawService(_authorizationService);
@@ -914,7 +913,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			// viewing from a person in moskow time zone
 			_loggedOnPersonTimeZoneInfo = TimeZoneInfoFactory.MoskowTimeZoneInfo();
-			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = _loggedOnPersonTimeZoneInfo;
 
 			_personOne = PersonFactory.CreatePerson(new Name("personOne", "InStockholmTimeZone"), TimeZoneInfoFactory.StockholmTimeZoneInfo());
 

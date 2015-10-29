@@ -381,7 +381,6 @@
     <Compile Include="Foundation\RootChangeInfoTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Foundation\SessionDataTest.cs" />
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionFactoryTest.cs" />
