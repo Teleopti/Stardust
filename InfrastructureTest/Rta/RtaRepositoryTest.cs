@@ -88,12 +88,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state1 = new AgentStateReadModelForTest { SiteId = siteId1, PersonId = personId1 };
 			var state2 = new AgentStateReadModelForTest { SiteId = siteId2, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = personId3};
-			var dbWritter = new DatabaseWriter(new FakeConnectionStrings());
-            dbWritter.PersistActualAgentReadModel(state1);
-			dbWritter.PersistActualAgentReadModel(state2);
-			dbWritter.PersistActualAgentReadModel(state3);
+			var dbWriter = new DatabaseWriter(new FakeConnectionStrings());
+            dbWriter.PersistActualAgentReadModel(state1);
+			dbWriter.PersistActualAgentReadModel(state2);
+			dbWriter.PersistActualAgentReadModel(state3);
 
 			var result = target.LoadForSites(new[] {siteId1, siteId2});
+
+			result.Count().Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldLoadAgentStatesByTeamIds()
+		{
+			var teamId1= Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest { TeamId = teamId1, PersonId = personId1 };
+			var state2 = new AgentStateReadModelForTest { TeamId = teamId2, PersonId = personId2};
+			var state3 = new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = personId3};
+			var dbWriter = new DatabaseWriter(new FakeConnectionStrings());
+            dbWriter.PersistActualAgentReadModel(state1);
+			dbWriter.PersistActualAgentReadModel(state2);
+			dbWriter.PersistActualAgentReadModel(state3);
+
+			var result = target.LoadForTeams(new[] {teamId1, teamId2});
 
 			result.Count().Should().Be(2);
 		}

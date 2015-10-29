@@ -87,5 +87,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().AlarmColor.Should().Be("#000000");
 			agentState.Single().TimeInState.Should().Be(30 * 60);
 		}
+
+		[Test]
+		public void ShouldGetAgentStateModelForTeam()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				State = "state",
+				StateStart = "2015-10-22 08:00".Utc(),
+				Scheduled = "phone",
+				ScheduledNext = "lunch",
+				NextStart = "2015-10-22 09:00".Utc(),
+				AlarmName = "in adherence",
+				AlarmStart = "2015-10-22 08:00".Utc(),
+				Color = 0
+			});
+			Now.Is("2015-10-22 08:30".Utc());
+
+			var agentState = Target.ForTeams(new[] { teamId });
+
+			agentState.Single().PersonId.Should().Be(personId);
+			agentState.Single().State.Should().Be("state");
+			agentState.Single().StateStart.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Single().Activity.Should().Be("phone");
+			agentState.Single().NextActivity.Should().Be("lunch");
+			agentState.Single().NextActivityStartTime.Should().Be("2015-10-22 09:00".Utc());
+			agentState.Single().Alarm.Should().Be("in adherence");
+			agentState.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Single().AlarmColor.Should().Be("#000000");
+			agentState.Single().TimeInState.Should().Be(30 * 60);
+		}
 	}
 }

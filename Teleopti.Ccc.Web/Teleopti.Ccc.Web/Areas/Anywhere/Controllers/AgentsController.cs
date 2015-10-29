@@ -129,9 +129,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWorkAction, HttpGet]
+		public JsonResult ForTeams(Guid[] teamIds)
+		{
+			return Json(_getAgents.ForTeams(teamIds), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetStatesForSites(Guid[] siteIds)
 		{
 			return Json(_getAgentsStates.ForSites(siteIds), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetStatesForTeams(Guid[] teamIds)
+		{
+			return Json(_getAgentsStates.ForTeams(teamIds), JsonRequestBehavior.AllowGet);
 		}
 	}
 

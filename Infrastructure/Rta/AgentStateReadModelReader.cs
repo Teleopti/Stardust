@@ -148,6 +148,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
+		{
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT 
+						PlatformTypeId,
+						BusinessUnitId,
+						StateCode,
+						StateId,
+						State,
+						ScheduledId,
+						Scheduled,
+						ScheduledNextId,
+						ScheduledNext,
+						ReceivedTime,
+						Color,
+						AlarmId,
+						AlarmName,
+						StateStart,
+						NextStart,
+						BatchId,
+						OriginalDataSourceId,
+						AlarmStart,
+						PersonId,
+						StaffingEffect,
+						Adherence,
+						TeamId,
+						SiteId 
+					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
+					.SetParameterList("teamIds", teamIds)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+		}
+
 		private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);

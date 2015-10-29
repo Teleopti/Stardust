@@ -50,6 +50,14 @@ namespace Teleopti.Ccc.TestCommon
 				select m).ToArray();
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
+		{
+			return (from t in teamIds
+					from m in _data.Values
+					where t == m.TeamId
+					select m).ToArray();
+		}
+
 		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			return (from s in _data.Values

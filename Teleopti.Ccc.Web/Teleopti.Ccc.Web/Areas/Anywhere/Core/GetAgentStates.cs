@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public interface IGetAgentStates
 	{
 		IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds);
+		IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds);
 	}
 
 	public class GetAgentStates : IGetAgentStates
@@ -25,8 +26,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds)
 		{
-			var states = _agentStateReadModelReader.LoadForSites(siteIds);
+			return mapping(_agentStateReadModelReader.LoadForSites(siteIds));
+		}
 
+		public IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds)
+		{
+			return mapping(_agentStateReadModelReader.LoadForTeams(teamIds));
+		}
+
+		private IEnumerable<AgentStateViewModel> mapping(IEnumerable<AgentStateReadModel> states)
+		{
 			return states.Select(x => new AgentStateViewModel
 			{
 				PersonId = x.PersonId,
@@ -38,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStart,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
-				TimeInState = x.StateStart.HasValue ? (int) (_now.UtcDateTime() - x.StateStart.Value).TotalSeconds : 0
+				TimeInState = x.StateStart.HasValue ? (int)(_now.UtcDateTime() - x.StateStart.Value).TotalSeconds : 0
 			});
 		}
 	}
