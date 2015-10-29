@@ -5,17 +5,73 @@
 			<p>Create and manage the different planning periods</p>
 		</div>
 	</div>
-	
+
 	<button ng-click="startNextPlanningPeriod()" class="wfm-btn wfm-btn-primary">Start next <i class="mdi mdi-plus"></i></button>
-	
+<div class="wfm-options">
+	<form name="form" class="wfm-form" novalidate>
+ 	<div class="form-input-wrap">
+
+	<div class="wfm-options" layout layout-wrap>
+		<div class="wfm-option-label" flex="100">
+			<p>Days of per week</p>
+		</div>
+		<div class="wfm-option" flex="20">
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinDayOffsPerWeek" name="MinDayOffsPerWeek"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+		    </div>
+		</div>
+		<div class="wfm-option" flex="20">
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+		    </div>
+		</div>
+		<div class="wfm-option-label" flex="100">
+		<p>Consecutive days off</p>
+		</div>
+		<div class="wfm-option" flex="20">
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+			</div>
+		</div>
+		<div class="wfm-option" flex="20">
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+			</div>
+		</div>
+		<div class="wfm-option-label" flex="100">
+		<p>Consecutive work days</p>
+		</div>
+		<div class="wfm-option" flex="20">
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+			</div>
+		</div>
+		<div class="wfm-option" flex="20">
+
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
+			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
+			</div>
+		</div>
+	</div>
+ </div>
+ </form>
+
+</div>
+
 	<div class="card-group">
-		<div class="wfm-card" ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
+		<div class="wfm-card" ng-class="{'wfm-card-disabled':isbroken}"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
 			<p>
 				<!--{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i style="vertical-align: middle;" title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>-->
 				{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>
 			</p>
 		</div>
-		
+
 
 	</div>
 </div>

@@ -52,6 +52,26 @@
 			box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
 		 }
 	 }
+	 .wfm-card-disabled {
+		 display: block;
+		 width: auto;
+		 /*width:24%;*/
+		 float: left;
+		 min-width: 10rem;
+		 min-height: 150px;
+		 box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+		 margin: 5px;
+		 cursor:pointer;
+		 padding: 10px;
+		 background-color:gray;
+		 transition:0.2s all ease-in-out;
+
+		 &:hover{
+		 //material depth 2
+			cursor: not-allowed;
+
+		 }
+	 }
 
 	.wfm-search-li {
 		 margin-left: -10px
@@ -132,6 +152,9 @@
 .critUnderstaffed{
   background: $red-600!important;
 
+}
+.wfm-options{
+	padding-left: 5px;
 }
 .closed{
 background-color: #cacaca;

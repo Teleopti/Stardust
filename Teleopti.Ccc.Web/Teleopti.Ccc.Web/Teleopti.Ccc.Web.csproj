@@ -1464,6 +1464,7 @@
     <Content Include="WFM\tests\permissions\permissions.roledatacontroller.spec.js" />
     <Content Include="WFM\tests\permissions\roles.service.spec.js" />
     <Content Include="WFM\tests\resourceplanner\resourceplanner.report.controller.spec.js" />
+    <Content Include="WFM\tests\resourceplanner\resourceplanner.controller.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatplan.controller.spec.js" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
