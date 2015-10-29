@@ -241,12 +241,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 	public class CampaignInput : ModifyInput
 	{
-		public int CampaignTasksPercent { get; set; }
+		public double CampaignTasksPercent { get; set; }
 	}
 
 	public class OverrideTasksInput : ModifyInput
 	{
-		public int OverrideTasks { get; set; }
+		public double OverrideTasks { get; set; }
 	}
 
 	public class ModifiedDay

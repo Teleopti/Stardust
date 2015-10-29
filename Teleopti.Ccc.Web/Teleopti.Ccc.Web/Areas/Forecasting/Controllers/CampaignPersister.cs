@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_futureData = futureData;
 		}
 
-		public void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, int campaignTasksPercent)
+		public void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, double campaignTasksPercent)
 		{
 			var min = days.Min(x => x.Date);
 			var max = days.Max(x => x.Date);
