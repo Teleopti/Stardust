@@ -50,7 +50,7 @@ describe('ResourcePlannerCtrl', function () {
 		scope.validateInput(node)
 		scope.$digest();
 
-        expect(scope.isbroken).toBe(false);
+        expect(scope.isValid).toBe(true);
 
 	}));
     it('should recive input and invalidate it', inject(function($controller) {
@@ -65,7 +65,7 @@ describe('ResourcePlannerCtrl', function () {
 		scope.validateInput(node)
 		scope.$digest();
 
-        expect(scope.isbroken).toBe(true);
-
+        expect(scope.isValid).toBe(false);
     }))
+
 });

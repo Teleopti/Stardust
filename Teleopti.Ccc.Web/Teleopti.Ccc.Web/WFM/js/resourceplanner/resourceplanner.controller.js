@@ -8,39 +8,31 @@
 					$scope.dayoffRules = result;
 					$scope.optionForm.rules = result
 				});
-				$scope.isbroken = false;
+				$scope.isValid = true;
 				$scope.optionForm = {};
 
 				//refactor me
 				var workruleComposer = function(data){
-					if ($scope.isbroken === true) return;
+					if ($scope.isValid === false) return;
 					data.Default = true;
 					data.Id = $scope.dayoffRules.Id
 					ResourcePlannerSvrc.saveDayoffRules.update(data);
 				};
 
 				$scope.validateInput = function(node){
-					//refactor me
-					for (var i = 0; i < Object.keys(node).length; i++) {
-							if (node.MinConsecutiveDayOffs > node.MaxConsecutiveDayOffs) {
-								$scope.isbroken = true;
-							}
-							else if (node.MinConsecutiveWorkdays > node.MaxConsecutiveWorkdays) {
-								$scope.isbroken = true;
-							}
-							else if (node.MinDayOffsPerWeek > node.MaxDayOffsPerWeek) {
-								$scope.isbroken = true;
-							}
-							else {
-								$scope.isbroken = false;
-							}
-
+					if (node.MinConsecutiveDayOffs > node.MaxConsecutiveDayOffs ||
+						node.MinConsecutiveWorkdays > node.MaxConsecutiveWorkdays ||
+						node.MinDayOffsPerWeek > node.MaxDayOffsPerWeek) {
+						$scope.isValid = false;
+					}
+					else {
+						$scope.isValid = true;
 					}
 					workruleComposer(node);
 
 				};
 				$scope.selectedPlanningPeriod = function(p) {
-					if ($scope.isbroken === true) return;
+					if ($scope.isValid === false) return;
 					$state.go('resourceplanner.planningperiod', { id: p.Id });
 				};
 				$scope.startNextPlanningPeriod = function() {
