@@ -63,6 +63,9 @@
       </component>
 
     </component>
+		<property name="OverrideTasks"
+				  type="Double"
+				  not-null="false" />
   </class>
 </hibernate-mapping>
 

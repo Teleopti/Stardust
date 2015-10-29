@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon;
@@ -668,6 +669,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 
 			_target.AverageAfterTaskTime = TimeSpan.FromHours(-2);
 			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageAfterTaskTime);
+		}
+
+		[Test]
+		public void ShouldOverrideTasks()
+		{
+			_target.SetTasks(100);
+			_target.OverrideTasks = 200d;
+
+			_target.TotalTasks.Should().Be.EqualTo(200d);
+		}
+
+		[Test]
+		public void ShouldOverrideCampaign()
+		{
+			_target.SetTasks(100);
+			_target.CampaignTasks = new Percent(0.2);
+			_target.OverrideTasks = 200d;
+
+			_target.TotalTasks.Should().Be.EqualTo(200d);
+		}
+
+		[Test]
+		public void ShouldOverrideWithZero()
+		{
+			_target.SetTasks(100);
+			_target.OverrideTasks = 0d;
+
+			_target.TotalTasks.Should().Be.EqualTo(0d);
 		}
     }
 }

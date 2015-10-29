@@ -239,7 +239,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
+	    public double? OverrideTasks { get; set; }
+
+	    /// <summary>
         /// Gets or sets the type of task owner period.
         /// </summary>
         /// <value>The type of task owner period.</value>

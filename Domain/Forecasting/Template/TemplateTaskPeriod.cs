@@ -102,7 +102,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             get { return _period; }
         }
 
-        /// <summary>
+		public virtual double? OverrideTasks { get; set; }
+
+	    /// <summary>
         /// Sets the number of tasks.
         /// </summary>
         /// <param name="numberOfTasks">The number of tasks.</param>
@@ -424,7 +426,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         /// </remarks>
         public virtual double TotalTasks
         {
-            get { return _task.Tasks * (1d + _campaign.CampaignTasksPercent.Value); }
+	        get
+	        {
+		        if (OverrideTasks.HasValue)
+			        return OverrideTasks.Value;
+		        return _task.Tasks * (1d + _campaign.CampaignTasksPercent.Value);
+	        }
         }
 
         /// <summary>
