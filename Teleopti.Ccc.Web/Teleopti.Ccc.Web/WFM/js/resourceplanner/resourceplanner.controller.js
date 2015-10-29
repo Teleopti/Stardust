@@ -40,6 +40,7 @@
 
 				};
 				$scope.selectedPlanningPeriod = function(p) {
+					if ($scope.isbroken === true) return;
 					$state.go('resourceplanner.planningperiod', { id: p.Id });
 				};
 				$scope.startNextPlanningPeriod = function() {
