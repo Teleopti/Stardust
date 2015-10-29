@@ -126,7 +126,7 @@
 					min: -100
 				};
 
-				var getCampaignDays = function (workload) {
+				var getModifyDays = function (workload) {
 					var tempsum = 0;
 					$scope.campaignDays = [];
 					angular.forEach(workload.selectedDays(), function (value) {
@@ -138,7 +138,7 @@
 					$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
 				};
 
-$scope.modalModifyLaunch = false;
+				$scope.modalModifyLaunch = false;
 				$scope.displayModifyModal = function (workload) {
 
 					if ($scope.disableModify(workload)) {
@@ -215,7 +215,7 @@ $scope.modalModifyLaunch = false;
 						});
 				};
 
-				
+
 				$scope.disableModify = function (workload) {
 					if ($scope.isForecastRunning) {
 						return true;
@@ -276,7 +276,7 @@ $scope.modalModifyLaunch = false;
 					workload.IsFailed = false;
 					$http.post("../api/Forecasting/ManualChange", JSON.stringify(
 						{
-							Days: campaignDays,
+							Days: $scope.campaignDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
 							ManualChangeValue: $scope.modalModifyInfo.manualChangeValue
