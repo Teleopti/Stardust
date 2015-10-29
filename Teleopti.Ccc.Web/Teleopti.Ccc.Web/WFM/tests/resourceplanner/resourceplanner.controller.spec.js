@@ -39,33 +39,86 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
-	it('should recive valid input', inject(function($controller) {
-        var scope = $rootScope.$new();
-		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+	it('should validate correct input', inject(function($controller) {
+		var scope = setupScope($controller);
+
 		var node = {
 			MinConsecutiveDayOffs:1,
-			MaxConsecutiveDayOffs:2
-			};
-			scope.dayoffRules = {Id:0};
+			MaxConsecutiveDayOffs:1,
+			MinConsecutiveWorkdays:3,
+			MaxConsecutiveWorkdays:4,
+			MinDayOffsPerWeek:5,
+			MaxDayOffsPerWeek:5
+		};
+		scope.dayoffRules = {Id:0};
 		scope.validateInput(node)
 		scope.$digest();
 
         expect(scope.isValid).toBe(true);
-
 	}));
-    it('should recive input and invalidate it', inject(function($controller) {
-        var scope = $rootScope.$new();
 
-        $controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+    it('should be invalid if MaxConsecutiveDayOffs is smaller than MinConsecutiveDayOffs', inject(function($controller) {
+		var scope = setupScope($controller);
+
 		var node = {
 			MinConsecutiveDayOffs:2,
-			MaxConsecutiveDayOffs:1
+			MaxConsecutiveDayOffs:1,
+			MinConsecutiveWorkdays:3,
+			MaxConsecutiveWorkdays:4,
+			MinDayOffsPerWeek:5,
+			MaxDayOffsPerWeek:6
 			};
 
 		scope.validateInput(node)
 		scope.$digest();
 
         expect(scope.isValid).toBe(false);
-    }))
+    }));
+	it('should be invalid if MaxConsecutiveWorkdays is smaller than MinConsecutiveWorkdays', inject(function($controller) {
+		var scope = setupScope($controller);
 
+		var node = {
+			MinConsecutiveDayOffs:2,
+			MaxConsecutiveDayOffs:2,
+			MinConsecutiveWorkdays:3,
+			MaxConsecutiveWorkdays:1,
+			MinDayOffsPerWeek:5,
+			MaxDayOffsPerWeek:6
+			};
+
+		scope.validateInput(node)
+		scope.$digest();
+
+        expect(scope.isValid).toBe(false);
+    }));
+
+	it('should be invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function($controller) {
+		var scope = setupScope($controller);
+
+		var node = {
+			MinConsecutiveDayOffs:2,
+			MaxConsecutiveDayOffs:2,
+			MinConsecutiveWorkdays:3,
+			MaxConsecutiveWorkdays:5,
+			MinDayOffsPerWeek:5,
+			MaxDayOffsPerWeek:4
+			};
+
+		scope.validateInput(node)
+		scope.$digest();
+
+        expect(scope.isValid).toBe(false);
+    }));
+
+	it('should be invalid until filled', inject(function($controller){
+		var scope = setupScope($controller);
+
+		expect(scope.isValid).toBe(false);
+	}));
+
+	var setupScope = function($controller){
+		var scope = $rootScope.$new();
+		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+		return scope;
+	}
 });

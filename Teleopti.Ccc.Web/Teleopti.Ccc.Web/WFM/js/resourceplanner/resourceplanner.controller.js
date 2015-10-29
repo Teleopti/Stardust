@@ -8,7 +8,7 @@
 					$scope.dayoffRules = result;
 					$scope.optionForm.rules = result
 				});
-				$scope.isValid = true;
+				$scope.isValid = false;
 				$scope.optionForm = {};
 
 				//refactor me
