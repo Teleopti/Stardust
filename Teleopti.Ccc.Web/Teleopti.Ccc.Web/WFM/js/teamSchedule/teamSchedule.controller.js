@@ -50,7 +50,8 @@
 				.then(function(data) {
 					vm.groupScheduleVm = groupScheduleFactory;
 					vm.groupScheduleVm.Create(data, vm.scheduleDateMoment());
-				});
+				vm.scheduleCount = data.length;
+			});
 		}
 
 		vm.Init = function () {

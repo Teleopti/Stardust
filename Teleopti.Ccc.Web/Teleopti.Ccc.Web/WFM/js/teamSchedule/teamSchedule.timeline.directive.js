@@ -3,11 +3,12 @@
 (function () {
 	var timeLineCtrl = function ($scope) {
 		var vm = this;
+		vm.height = 0;
 		$scope.$watch(function () {
-			return angular.element($('#team-schedule'))[0].offsetHeight;
+			return vm.scheduleCount;
 		}, function (newValue) {
 			if (newValue > 0) {
-				vm.height = newValue;
+				vm.height = 38 * (vm.scheduleCount) + 17; //tr height * count + th height
 			}
 		});
 		
@@ -20,6 +21,7 @@
 			templateUrl: "js/teamSchedule/timeline.html",
 			scope: {
 				times: '=?',
+				scheduleCount: '=?'
 			},
 			linkFunction: linkFunction
 		};
@@ -28,7 +30,7 @@
 		.directive('timeLine', directive)
 	.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
 
-	function linkFunction(scope, element, attributes, controllers) {
+	function linkFunction(scope, element, attributes, vm) {
 
 	};
 }());
