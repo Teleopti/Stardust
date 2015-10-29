@@ -17,16 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		Done = 8
 	}
 
-	public class CampaignSummary
-	{
-		public Guid? Id;
-		public string Name;
-		public DateOnly StartDate;
-		public DateOnly EndDate;
-		public CampaignStatus Status;
-		public IEnumerable<CampaignWarning> WarningInfo;
-	}
-
 	public class OutboundWarningViewModel
 	{
 		public string TypeOfRule { get; set; }
