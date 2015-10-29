@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Core.Data;
@@ -42,26 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 			Threshold = response.Threshold;
 			ThresholdType = response.WarningThresholdType;
 			TargetValue = response.TargetValue;		
-		}
-	}
-
-	public class CampaignSummaryViewModel
-	{
-		public Guid? Id;
-		public string Name;
-		public DateOnly StartDate;
-		public DateOnly EndDate;
-		public CampaignStatus Status;
-		public IEnumerable<OutboundWarningViewModel> WarningInfo;
-
-		public CampaignSummaryViewModel(CampaignSummary campaign)
-		{
-			Id = campaign.Id;
-			Name = campaign.Name;
-			StartDate = campaign.StartDate;
-			EndDate = campaign.EndDate;
-			Status = campaign.Status;
-			WarningInfo = campaign.WarningInfo.Select(w => new OutboundWarningViewModel(w));
 		}
 	}
 

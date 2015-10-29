@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
-using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Filters;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
 		private readonly IActivityProvider _activityProvider;
-		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
 		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
 		private readonly ICampaignListProvider _campaignListProvider;
 		private readonly ISettingsPersisterAndProvider<OutboundThresholdSettings> _thresholdsSettingPersisterAndProvider;
@@ -33,14 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 
 		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IActivityProvider activityProvider, 
-			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, 
-			ICampaignListProvider campaignListProvider, ISettingsPersisterAndProvider<OutboundThresholdSettings> thresholdsSettingPersisterAndProvider)
+			ICampaignVisualizationProvider campaignVisualizationProvider, ICampaignListProvider campaignListProvider, 
+			ISettingsPersisterAndProvider<OutboundThresholdSettings> thresholdsSettingPersisterAndProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			_activityProvider = activityProvider;
-		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
 			_campaignVisualizationProvider = campaignVisualizationProvider;
 			_campaignListProvider = campaignListProvider;
 			_thresholdsSettingPersisterAndProvider = thresholdsSettingPersisterAndProvider;
@@ -58,13 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var campaignVm = _outboundCampaignPersister.Persist(campaignForm);
 
             return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
-		}
-
-		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
-		public virtual List<CampaignSummaryViewModel> GetCamapigns([FromBody]CampaignStatus flag)
-		{
-		    return _campaignSummaryViewModelFactory.GetCampaignSummaryList(flag, null);
-		}			
+		}		
 		
 		[HttpPost, Route("api/Outbound/Period/Campaigns"), UnitOfWork]
 		public virtual IEnumerable<PeriodCampaignSummaryViewModel> GetCamapigns([FromBody]GanttPeriod peroid)
@@ -119,25 +110,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return Ok();
 		}
 
-		[HttpPost, Route("api/Outbound/Campaign/Statistics"), UnitOfWork]
-		public virtual CampaignStatistics GetStatistics()
-		{
-			return _campaignListProvider.GetCampaignStatistics(null);
-		}
-
 		[HttpPost, Route("api/Outbound/Campaign/Period/Statistics"), UnitOfWork]
 		public virtual CampaignStatistics GetStatistics([FromBody] GanttPeriod period)
 		{
 			return _campaignListProvider.GetCampaignStatistics(period);
-		}		
-		
-		[HttpPost, Route("api/Outbound/Campaign/Load"), UnitOfWork]
-		public virtual bool LoadData()
-		{
-			_campaignListProvider.ResetCache();
-			_campaignListProvider.LoadData(null);
-			return true;
-		}		
+		}	
 		
 		[HttpPost, Route("api/Outbound/Campaign/Period/Load"), UnitOfWork]
 		public virtual bool LoadData([FromBody]GanttPeriod period)
@@ -173,13 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			_outboundCampaignPersister.RemoveManualProductionPlan(manualPlan);
 			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
-		}
-
-		[HttpGet, Route("api/Outbound/Campaigns/{Id}"), UnitOfWork]
-		public virtual CampaignSummaryViewModel GetCampaignById(Guid Id)
-		{
-			return _campaignSummaryViewModelFactory.GetCampaignSummary(Id);
-		}		
+		}	
 		
 		[HttpPost, Route("api/Outbound/Campaign/Detail"), UnitOfWork]
 		public virtual PeriodCampaignSummaryViewModel GetCampaignSummary([FromBody]SummaryForm form)

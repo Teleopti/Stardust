@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
-using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -77,21 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 
 			}
 		}
-
-		[Test]
-		public void ShouldResolveCampaignSummaryViewModelFactory()
-		{
-			using (var ioc = _containerBuilder.Build())
-			{
-				using (var scope = ioc.BeginLifetimeScope(_requestTag))
-				{
-					var factory = scope.Resolve<ICampaignSummaryViewModelFactory>();
-					factory.Should().Not.Be.Null();
-				}
-			}
-		}
-
-		//IOutboundCampaignPersister
+		
 		[Test]
 		public void ShouldResolveOutboundCampaignPersister()
 		{
@@ -104,7 +89,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 				}
 			}
 		}
-
 
 		[Test]
 		public void ShouldResolveOutboundSkillCreator()
@@ -125,6 +109,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 								 .Should().Not.Be.Null();
 			}
 		}
-
 	}
 }

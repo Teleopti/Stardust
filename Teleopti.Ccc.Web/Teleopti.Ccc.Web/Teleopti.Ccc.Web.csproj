@@ -512,8 +512,6 @@
     <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignOverstaffRule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignUnderServiceLevelRule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Rules\CampaignWarningCheckRule.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\CampaignSummaryViewModelFactory.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\ICampaignSummaryViewModelFactory.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignForm.cs" />

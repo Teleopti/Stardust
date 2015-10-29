@@ -6,7 +6,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
-using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 {
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 
 
 			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerRequest();
-			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().InstancePerRequest();
 			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().InstancePerRequest();
 			builder.RegisterType<OutboundThresholdSettingsPersistorAndProvider>().As<ISettingsPersisterAndProvider<OutboundThresholdSettings>>().InstancePerRequest();		
 		}
