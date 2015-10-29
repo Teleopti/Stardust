@@ -9,6 +9,10 @@
 			var startTime = moment(projection.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
+			if (startTimeMinutes > timeLine.EndMinute) {
+				return undefined;
+			}
+
 			var shiftProjectionVm = {
 				StartPosition: function() {
 					var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
