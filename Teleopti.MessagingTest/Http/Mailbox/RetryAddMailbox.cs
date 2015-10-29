@@ -15,7 +15,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	[TestFixture]
 	[MessagingTest]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
-	public class RetryTest
+	public class RetryPopMessages
 	{
 		public IMessageListener Target;
 		public FakeHttpServer Server;
@@ -23,13 +23,46 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public ISystemCheck SystemCheck;
 
 		[Test]
-		public void ShouldRetryToAddMailboxIfServerFails()
+		public void ShouldRetryIfServerFails()
+		{
+			var wasEventHandlerCalled = false;
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+			Time.Passes("30".Seconds());
+			Server.Down();
+
+			Time.Passes("30".Seconds());
+			Server.IsHappy();
+			Server.Has(new TestMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Time.Passes("60".Seconds());
+
+			wasEventHandlerCalled.Should().Be.True();
+		}
+	}
+
+	[TestFixture]
+	[MessagingTest]
+	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
+	public class RetryAddMailbox
+	{
+		public IMessageListener Target;
+		public FakeHttpServer Server;
+		public FakeTime Time;
+		public ISystemCheck SystemCheck;
+
+		[Test]
+		public void ShouldRetryIfServerFails()
 		{
 			var wasEventHandlerCalled = false;
 			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
-			Server.Succeeds();
+			Server.IsHappy();
 
 			Server.Has(new TestMessage
 			{
@@ -44,22 +77,24 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryAddingMailboxBasedOnTimerIfServerFails()
+		public void ShouldRetryEveryMinuteIfServerFails()
 		{
 			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Server.Requests.Clear();
+
 			Time.Passes("60".Seconds());
 
-			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(2);
+			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldRetryAddingMailboxBasedOnTimerForTwoSubscriptionsIfServerFails()
+		public void ShouldRetryEveryMinuteForTwoSubscriptionsIfServerFails()
 		{
 			Server.GivesError(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
-			Server.Succeeds();
+			Server.IsHappy();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 
@@ -67,13 +102,13 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryToAddMailboxIfNoConnection()
+		public void ShouldRetryIfNoConnection()
 		{
 			var wasEventHandlerCalled = false;
 			Server.Down();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
-			Server.Succeeds();
+			Server.IsHappy();
 
 			Server.Has(new TestMessage
 			{
@@ -87,5 +122,38 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			wasEventHandlerCalled.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldRetryIfServerIsSlow()
+		{
+			var wasEventHandlerCalled = false;
+			Server.IsSlow();
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+			Server.IsHappy();
+
+			Server.Has(new TestMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Time.Passes("120".Seconds());
+
+			wasEventHandlerCalled.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotRetryOthersIfOneFails()
+		{
+			Server.IsSlow();
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Server.Requests.Clear();
+
+            Time.Passes("60".Seconds());
+
+			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
+		}
 	}
 }

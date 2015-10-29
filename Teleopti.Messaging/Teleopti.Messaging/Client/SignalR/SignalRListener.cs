@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_eventHandlers.Add(subscription, eventMessageHandler, false);
+			_eventHandlers.Add(subscription, eventMessageHandler);
 			_client.Call("AddSubscription", subscription);
 		}
 

@@ -14,17 +14,15 @@ namespace Teleopti.Messaging.Client
 		public class SubscriptionInfo
 		{
 			public Subscription Subscription { get; set; }
-			public bool MailboxAdded { get; set; }
 			public EventHandler<EventMessageArgs> Callback { get; set; }
 		}
 
-		public void Add(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler, bool mailboxAdded)
+		public void Add(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			_subscriptions.Add(new SubscriptionInfo
 			{
 				Subscription = subscription,
 				Callback = eventMessageHandler,
-				MailboxAdded = mailboxAdded
 			});
 		}
 

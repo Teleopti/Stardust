@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.Http;
@@ -54,12 +55,17 @@ namespace Teleopti.MessagingTest
 			Throws(new AggregateException(new HttpRequestException()));
 		}
 
+		public void IsSlow()
+		{
+			Throws(new AggregateException(new TaskCanceledException()));
+		}
+
 		public void GivesError(HttpStatusCode httpCode)
 		{
 			Throws(new HttpRequestException());
 		}
-
-		public void Succeeds()
+		
+		public void IsHappy()
 		{
 			Throws(null);
 		}
@@ -68,6 +74,5 @@ namespace Teleopti.MessagingTest
 		{
 			_exception = type;
 		}
-
 	}
 }

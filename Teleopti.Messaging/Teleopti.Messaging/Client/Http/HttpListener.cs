@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces;
@@ -18,79 +19,96 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IJsonDeserializer _jsonDeserializer;
 		private readonly ITime _time;
 		private readonly HttpClientM _client;
-	    private readonly IMessageBrokerUrl _url;
-	    private object _timer;
+		private readonly IMessageBrokerUrl _url;
+		private object _timer;
 		private readonly TimeSpan _interval;
+		private DateTime _nextPollTime;
+		private bool _isPolling;
+		private bool _isAlive = true;
 
 		public HttpListener(
-			IJsonDeserializer jsonDeserializer, 
-			ITime time, 
-			IConfigReader config, 
+			IJsonDeserializer jsonDeserializer,
+			ITime time,
+			IConfigReader config,
 			HttpClientM client,
-            IMessageBrokerUrl url)
+			IMessageBrokerUrl url)
 		{
 			_eventHandlers = new EventHandlers();
 			_jsonDeserializer = jsonDeserializer;
-			_time = time; 
-			_interval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 60));
+			_time = time;
+			_interval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 120));
 			_client = client;
-		    _url = url;
+			_url = url;
 		}
-		
+
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-		    if (string.IsNullOrEmpty(_url.Url))
-		        return;
+			if (string.IsNullOrEmpty(_url.Url))
+				return;
 
 			if (_timer == null)
 			{
-				_timer = _time.StartTimer(timer, null, _interval, _interval);
+				_timer = _time.StartTimer(timer, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
+				planForNextPoll();
 			}
-				
-			var mailboxAdded = tryAddMailbox(subscription);
-			_eventHandlers.Add(subscription, eventMessageHandler, mailboxAdded);
+
+			if (_isAlive)
+			{
+				if (!tryAddMailbox(subscription))
+					_isAlive = false;
+			}
+			_eventHandlers.Add(subscription, eventMessageHandler);
+		}
+
+		private void planForNextPoll()
+		{
+			_nextPollTime = _time.UtcDateTime().Add(_interval);
 		}
 
 		private void timer(object state)
 		{
-			_eventHandlers.All().ForEach(e =>
-			{
-				if (!e.MailboxAdded)
-					e.MailboxAdded = tryAddMailbox(e.Subscription);
-				if (!e.MailboxAdded)
-					return;
+			if (_time.UtcDateTime() < _nextPollTime)
+				return;
+			if (_isPolling)
+				return;
+			_isPolling = true;
+			var success = _isAlive;
+
+            foreach (var e in _eventHandlers.All())
+            {
+				if (!_isAlive)
+					success = tryAddMailbox(e.Subscription);
+	            if (!success)
+		            break;
 
 				string content = null;
-				ignoreHttpRequestExceptions(() =>
+				success = tryServerRequest(() =>
 				{
 					content = _client.GetOrThrow("MessageBroker/PopMessages/" + e.Subscription.MailboxId);
 				});
-				// safe to assume that no content means an error? Im not so sure, but keeping the behavior
-				if (content == null)
-				{
-					e.MailboxAdded = false;
-					return;
-				}
+				if (!success)
+					break;
 
 				var messages = _jsonDeserializer.DeserializeObject<Message[]>(content);
 				messages.ForEach(m => _eventHandlers.CallHandlers(m));
-			});
+			}
+
+			_isAlive = success;
+			planForNextPoll();
+			_isPolling = false;
 		}
 
 		private bool tryAddMailbox(Subscription subscription)
 		{
-			var result = false;
-			ignoreHttpRequestExceptions(() =>
+			return tryServerRequest(() =>
 			{
 				_client.PostOrThrow("MessageBroker/AddMailbox", subscription);
-				result = true;
 			});
-			return result;
 		}
 
 		public bool IsAlive()
 		{
-			return _eventHandlers.All().All(x => x.MailboxAdded);
+			return _isAlive;
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -104,19 +122,23 @@ namespace Teleopti.Messaging.Client.Http
 				_time.DisposeTimer(_timer);
 		}
 
-		private void ignoreHttpRequestExceptions(Action action)
+		private bool tryServerRequest(Action action)
 		{
 			try
 			{
 				action();
+				return true;
 			}
 			catch (HttpRequestException)
 			{
+				return false;
 			}
 			catch (AggregateException e)
 			{
 				if (e.InnerException.GetType() == typeof(HttpRequestException))
-					return;
+					return false;
+				if (e.InnerException.GetType() == typeof(TaskCanceledException))
+					return false;
 				throw;
 			}
 		}
