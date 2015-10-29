@@ -1278,6 +1278,7 @@
     <Content Include="WFM\tests\rta\rta.agents.filters.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapcanvas.directive.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapcontroller.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.groupSchedule.factory.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.personSchedule.factory.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.timeline.factory.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />

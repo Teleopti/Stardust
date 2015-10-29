@@ -7,7 +7,7 @@
 			<div class="shift" ng-repeat="shift in person.Shifts">
 				<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
 					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}">
-					<!--<span class="label label-default layer-description">{{projection.Description}}</span>-->
+					<md-tooltip>{{projection.Description}}</md-tooltip>
 				</div>
 			</div>
 		</div>
@@ -16,8 +16,7 @@
 			<span class="dayoff absolute"
 				  ng-repeat="dayOff in person.DayOffs"
 				  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%' }">
-				<!--<span class="label label-default layer-description floatcenter">{{dayOff.DayOffName}}</span>-->
-				<span class="label label-default layer-description floatright">{{dayOff.DayOffName}}</span>
+				<md-tooltip>{{dayOff.DayOffName}}</md-tooltip>
 			</span>
 		</div>		
 	</td>
