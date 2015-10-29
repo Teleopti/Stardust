@@ -14,7 +14,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		IDataSourceContainer SelectedDataSourceContainer { get; }
 		bool SetBusinessUnit(IBusinessUnit businessUnit);
 		bool SelectDataSourceContainer(string dataSourceName);
-		void LogOff();
 		void RefreshTenantList(bool usedInService);
 	}
 }

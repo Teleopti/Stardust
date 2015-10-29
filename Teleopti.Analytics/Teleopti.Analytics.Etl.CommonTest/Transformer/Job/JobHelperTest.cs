@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -61,7 +60,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		[Test]
 		public void VerifyLogOffRaptorAndDispose()
 		{
-			_logOnHelper.Stub(x => x.LogOff());
 			_logOnHelper.Stub(x => x.Dispose());
 			
 			_target.LogOffTeleoptiCccDomain();

@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Authentication;
-using NHibernate.Util;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -79,7 +78,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
-			_logonService.LogOff();
 			if (_choosenDb != null)
 			{
 				if (_logonService.LogOn(_choosenDb, businessUnit))
@@ -138,21 +136,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		protected virtual void ReleaseManagedResources()
 		{
-			if (_logonService != null)
-			{
-				_logonService.LogOff();
-				_logonService = null;
-			}
+			_logonService = null;
 			if (_buList != null)
 			{
 				_buList.Clear();
 				_buList = null;
 			}
-		}
-
-		public void LogOff()
-		{
-			_logonService.LogOff();
 		}
 
 		public void RefreshTenantList(bool usedInService)

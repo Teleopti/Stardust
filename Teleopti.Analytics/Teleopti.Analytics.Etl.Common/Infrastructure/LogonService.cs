@@ -53,11 +53,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return true;
 		}
 
-		internal void LogOff()
-		{
-			_logOnOff.LogOff();
-		}
-
 		public void Warning(string warning)
 		{
 			Warning(warning, "");

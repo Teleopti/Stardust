@@ -16,13 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     	}
 
     	/// <summary>
-        /// Logs off the system.
-        /// </summary>
-        public void LogOff()
-        {
-        }
-
-    	/// <summary>
     	/// Logs on the system.
     	/// </summary>
     	/// <param name="dataSource">The uow factory.</param>

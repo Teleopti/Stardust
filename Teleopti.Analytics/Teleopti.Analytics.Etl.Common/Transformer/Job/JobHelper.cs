@@ -98,7 +98,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public void LogOffTeleoptiCccDomain()
 		{
-			_logHelp.LogOff();
 			_repository = null;
 		}
 

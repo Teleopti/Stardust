@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 	public interface ILogOnOff
 	{
 		/// <summary>
-		/// Logs off the system.
-		/// </summary>
-		void LogOff();
-
-		/// <summary>
 		/// Logs on the system.
 		/// </summary>
 		/// <param name="dataSource">The uow factory.</param>

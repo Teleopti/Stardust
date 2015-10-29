@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			if (Logger.IsInfoEnabled)
 				Logger.Info("Message processing completed, logging off from domain", arg2);
-
-			_logOnOff.LogOff();
 		}
 
 		bool transport_MessageArrived(Rhino.ServiceBus.Impl.CurrentMessageInformation arg)
