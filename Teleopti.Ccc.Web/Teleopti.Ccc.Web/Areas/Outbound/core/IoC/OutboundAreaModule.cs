@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().InstancePerRequest();
 
 			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().InstancePerRequest();
-			builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
-
 
 			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().InstancePerRequest();
 			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().InstancePerRequest();

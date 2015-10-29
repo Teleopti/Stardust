@@ -361,7 +361,6 @@
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
-    <Compile Include="Core\Common\DataProvider\FakeOutboundCampaignListOrderProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeCampaignWarningProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakePreferenceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />

@@ -14,17 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
 		private readonly ICampaignWarningProvider _campaignWarningProvider;
-		private readonly ICampaignListOrderProvider _campaignListOrderProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 
 		public CampaignListProvider(IOutboundCampaignRepository outboundCampaignRepository, IOutboundScheduledResourcesProvider scheduledResourcesProvider, 
-			ICampaignWarningProvider campaignWarningProvider, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone, IOutboundScheduledResourcesCacher outboundScheduledResourcesCacher)
+			ICampaignWarningProvider campaignWarningProvider, IUserTimeZone userTimeZone, IOutboundScheduledResourcesCacher outboundScheduledResourcesCacher)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_scheduledResourcesProvider = scheduledResourcesProvider;
 			_campaignWarningProvider = campaignWarningProvider;
-			_campaignListOrderProvider = campaignListOrderProvider;
 			_userTimeZone = userTimeZone;
 			_outboundScheduledResourcesCacher = outboundScheduledResourcesCacher;
 		}

@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeCampaignRepository _outboundCampaignRepository;
 		private FakeScheduleResourceProvider _scheduledResourcesProvider;
 		private FakeCampaignWarningProvider _campaignWarningProvider;
-		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
 		private FakeOutboundScheduledResourcesCacher _outboundScheduledResourcesCacher;
 		private IUserTimeZone _userTimeZone;
 
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(2), "", ""));
 			_outboundCampaignRepository = new FakeCampaignRepository();
-			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
 			_campaignWarningProvider = new FakeCampaignWarningProvider();
 			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
@@ -53,15 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			scheduledCampaign = GetTestCampaign(1);
 			ongoingCampaign = GetTestCampaign(2);
 
-			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
-			{
-				CampaignStatus.Ongoing,
-				CampaignStatus.Done,
-				CampaignStatus.Planned,
-				CampaignStatus.Scheduled
-			});
-
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
 		}
 
 		[Test]
@@ -87,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			setCampaigns();
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, _userTimeZone, _outboundScheduledResourcesCacher);
 
 			target.LoadData(null);
 
@@ -408,7 +398,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
 			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
 
 			target.CheckAndUpdateCache(new GanttPeriod()
 			{
@@ -427,7 +417,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var forcast = new Dictionary<DateOnly, TimeSpan> { { new DateOnly(2015,10,26), TimeSpan.Zero } };
 			_outboundScheduledResourcesCacher.SetForecastedTime(campaign1, forcast);
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _campaignListOrderProvider, _userTimeZone, _outboundScheduledResourcesCacher);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, _campaignWarningProvider, _userTimeZone, _outboundScheduledResourcesCacher);
 
 			target.CheckAndUpdateCache(new GanttPeriod()
 			{

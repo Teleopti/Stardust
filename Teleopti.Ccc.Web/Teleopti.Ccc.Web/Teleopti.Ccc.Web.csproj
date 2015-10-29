@@ -499,9 +499,7 @@
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignVisualizationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignVisualizationProvider.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListOrderProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListProvider.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignListOrderProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignListProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IProductionReplanHelper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
