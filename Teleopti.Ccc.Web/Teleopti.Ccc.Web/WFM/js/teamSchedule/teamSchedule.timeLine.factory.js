@@ -63,7 +63,7 @@
 			return lengthInMin > 0 ? 100 / lengthInMin : 0;
 		};
 
-		var hourPointViewModel = function (baseDate, minutes, start, percentPerMinute) {
+		var hourPointViewModel = function (baseDate, minutes, start, percentPerMinute, isLabelHidden) {
 			var time = ((baseDate == undefined)
 				? moment.tz(currentUserInfo.DefaultTimeZone)
 				: moment.tz(baseDate, currentUserInfo.DefaultTimeZone)).startOf('day').add(minutes, 'minutes');
@@ -72,6 +72,7 @@
 
 			var hourPointVm = {
 				TimeLabel: formattedTime,
+				IsLabelVisible: !isLabelHidden,
 				Position: function () {
 					var timeLineStartMinutes = minutes - start;
 					var position = timeLineStartMinutes * percentPerMinute;
@@ -89,11 +90,13 @@
 			var start = startMinutes(groupSchedules, utcBaseDate);
 			var end = endMinutes(groupSchedules, utcBaseDate);
 			var percentPerMinute = calculateLengthPercentPerMinute(start, end);
-
+			var isLabelVisibleEvenly = percentPerMinute < 0.1 ? true : false;
 			var timePoint = start;
+			var isLabelHidden = false;
 			while (timePoint < end + 1) {
-				hourPoints.push(new hourPointViewModel(utcBaseDate, timePoint, start, percentPerMinute));
+				hourPoints.push(new hourPointViewModel(utcBaseDate, timePoint, start, percentPerMinute, isLabelHidden && isLabelVisibleEvenly));
 				timePoint = shiftHelper.MinutesAddHours(timePoint, 1);
+				isLabelHidden = !isLabelHidden;
 			}
 
 			var timeLine = {
