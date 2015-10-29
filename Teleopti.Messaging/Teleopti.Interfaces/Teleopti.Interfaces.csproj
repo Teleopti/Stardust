@@ -753,7 +753,6 @@
     <Compile Include="Domain\ISkillDayTemplate.cs" />
     <Compile Include="Domain\ISkillRestrictionSet.cs" />
     <Compile Include="Domain\ISkillType.cs" />
-    <Compile Include="Domain\IStateHolderReader.cs" />
     <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\IStatisticTask.cs" />
     <Compile Include="Domain\ITask.cs" />

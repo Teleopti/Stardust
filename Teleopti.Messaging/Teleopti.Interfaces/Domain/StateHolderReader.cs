@@ -8,7 +8,7 @@ namespace Teleopti.Interfaces.Domain
     /// <remarks>
     /// Tested from StateHolderTest in infrastructuretest
     /// </remarks>
-    public abstract class StateHolderReader : IStateHolderReader
+    public abstract class StateHolderReader
     {
         private static StateHolderReader _instanceInternal;
 
