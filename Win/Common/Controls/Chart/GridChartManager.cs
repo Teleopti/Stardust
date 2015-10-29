@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         private readonly bool _andThenToHours;
         private bool _allowNegativeValues;
 
-        public GridChartManager(ChartControl chartControl, bool timeSpanAsMinutes, bool andThenToHours, bool allowNegativeValues)
+	    public GridChartManager(ChartControl chartControl, bool timeSpanAsMinutes, bool andThenToHours, bool allowNegativeValues)
         {
             _chartControl = chartControl;
             _timeSpanAsMinutes = timeSpanAsMinutes;
@@ -529,24 +530,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         /// </remarks>
         public static void SetChartToolTip(ChartRegion chartRegion, ChartControl chartControl)
         {
-            if (chartRegion.IsChartPoint)
-            {
-                LabelModel labelModel =
-                    chartControl.Series[chartRegion.SeriesIndex].XAxis.LabelsImpl as LabelModel;
-                if (chartRegion.PointIndex >= chartControl.Series[chartRegion.SeriesIndex].Points.Count)
-                    return;
-
-                if (labelModel != null)
-                {
-                    string toolTip = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
-                                                   labelModel.GetToolTipLabelAt(chartRegion.PointIndex + 1).Text
-                                                   ,
-                                                   Math.Round(
-                                                       chartControl.Series[chartRegion.SeriesIndex].Points[
-                                                           chartRegion.PointIndex].YValues[0], 2));
-                    chartRegion.ToolTip = toolTip;
-                }
-            }
+			new ChartManager().SetChartToolTip(chartRegion, chartControl);
         }
 
 

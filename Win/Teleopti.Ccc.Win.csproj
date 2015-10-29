@@ -2056,7 +2056,6 @@
     <Compile Include="Forecasting\Forms\PickColorControl.Designer.cs">
       <DependentUpon>PickColorControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\Chart\LabelModel.cs" />
     <Compile Include="Forecasting\Forms\SkillPages\SkillThresholds.cs">
       <SubType>UserControl</SubType>
     </Compile>

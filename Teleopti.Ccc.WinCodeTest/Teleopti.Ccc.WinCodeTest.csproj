@@ -257,6 +257,7 @@
     <Compile Include="Budgeting\SaveBudgetDaysTest.cs" />
     <Compile Include="Budgeting\ClosedBudgetDayResolverTest.cs" />
     <Compile Include="Budgeting\VisibleBudgetDaysTest.cs" />
+    <Compile Include="Common\Chart\ChartManagerTest.cs" />
     <Compile Include="Common\Chart\ChartSeriesSettingTest.cs" />
     <Compile Include="Common\Chart\ChartSettingsTest.cs" />
     <Compile Include="Common\Clipboard\ClipboardSpecialPresenterTest.cs" />

@@ -1,6 +1,6 @@
 using Syncfusion.Windows.Forms.Chart;
 
-namespace Teleopti.Ccc.Win.Common.Controls.Chart
+namespace Teleopti.Ccc.WinCode.Common.Chart
 {
     public class LabelModel : IChartAxisLabelModel
     {

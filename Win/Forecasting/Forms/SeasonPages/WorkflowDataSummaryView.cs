@@ -13,6 +13,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
+using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;

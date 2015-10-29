@@ -299,6 +299,8 @@
     <Compile Include="Budgeting\Views\IEditShrinkageForm.cs" />
     <Compile Include="Budgeting\ViewType.cs" />
     <Compile Include="Common\AbsenceLayerViewModel.cs" />
+    <Compile Include="Common\Chart\ChartManager.cs" />
+    <Compile Include="Common\Chart\LabelModel.cs" />
     <Compile Include="Common\Clipboard\ClipboardSpecialPresenter.cs" />
     <Compile Include="Common\Clipboard\IClipboardSpecialView.cs" />
     <Compile Include="Common\Clipboard\SpecialPasteBehaviour.cs" />
