@@ -67,10 +67,6 @@
 				return idsUrl;
 			};
 
-			var loadStatesForSites = function(siteIds) {
-				idsToUrl("siteIds", siteIds);
-				loadStates("Agents/GetStatesForSites?" + sitesIdUrl);
-			};
 			var subscriptionDone = function () {
 				$('.realtimeadherenceagents').attr("data-subscription-done", " ");
 			};
@@ -78,16 +74,16 @@
 			var populate = function (agentsUrl,onSuccess) {
 				ajax.ajax({
 					url: agentsUrl,
-					error: function (jqXHR, textStatus, errorThrown) {
+					error: function(jqXHR, textStatus, errorThrown) {
 						if (jqXHR.status == 403) {
 							errorview.display(resources.InsufficientPermission);
 						}
 					},
-					success: function (data) {
+					success: function(data) {
 						viewModel.fillAgents(data);
 						onSuccess();
 					}
-				})
+				});
 			};
 
 			var populateTeam = function(teamId) {
@@ -115,6 +111,17 @@
 						true);
 				});
 			};
+			var populateTeams = function(teamIds) {
+				populate("Agents/ForTeams?" + idsToUrl("teamIds", teamIds), function () {
+					subscriptions.subscribeForTeamsAdherence(function(notification) {
+							viewModel.updateFromNotification(notification);
+						},
+						options.buid,
+						teamIds,
+						subscriptionDone,
+						true);
+				});
+			};
 
 			if (options.id === 'MultipleTeams') {
 				var teams = amplify.store('MultipleTeams');
@@ -122,10 +129,11 @@
 					for (var i = 0; i < teams.length; i++) {
 						populateTeam(teams[i]);
 					}
+				} else {
+					populateTeams(teams);
 				}
 			} else if (options.id === 'MultipleSites') {
 				var sites = amplify.store('MultipleSites');
-
 				if (!resources.RTA_NewEventHangfireRTA_34333) {
 					for (var site = 0; site < sites.length; site++) {
 						ajax.ajax({

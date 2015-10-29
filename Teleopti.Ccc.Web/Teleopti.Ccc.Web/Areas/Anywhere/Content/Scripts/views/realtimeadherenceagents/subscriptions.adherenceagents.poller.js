@@ -60,30 +60,47 @@ define([
 		});
 	};
 
+	var loadForTeams = function(callback, businessUnitId, teamIds) {
+		ajax.ajax({
+			headers: { 'X-Business-Unit-Filter': businessUnitId },
+			url: "Agents/GetStatesForTeams?" + idsToUrl("teamIds", teamIds),
+			success: function(data) {
+				callback(mapAsNotification(data));
+			}
+		});
+	};
+
+	var configPoller = function(action) {
+		setTimeout(action, 100);
+		var poller = setInterval(action, 5000);
+
+		agentAdherencePollers.push(poller);
+	};
+
 	return {
 		subscribeAdherence: function (callback, businessUnitId, teamId, subscriptionDone) {
-
 			var poll = function() {
 				loadForTeam(callback, businessUnitId, teamId);
 			}
-
-			setTimeout(poll, 100);
-			var poller = setInterval(poll, 2000);
-
-			agentAdherencePollers.push(poller);
+			configPoller(poll);
 			subscriptionDone();
 		},
 
 		subscribeForSitesAdherence: function (callback, businessUnitId, siteIds, subscriptionDone) {
-
 			var poll = function () {
 				loadForSites(callback, businessUnitId, siteIds);
 			}
 
-			setTimeout(poll, 100);
-			var poller = setInterval(poll, 2000);
+			configPoller(poll);
+			subscriptionDone();
+		},
 
-			agentAdherencePollers.push(poller);
+		subscribeForTeamsAdherence: function (callback, businessUnitId, teamIds, subscriptionDone) {
+			var poll = function () {
+				loadForTeams(callback, businessUnitId, teamIds);
+			}
+
+			configPoller(poll);
 			subscriptionDone();
 		},
 
