@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				);
 			var dataSource = dataSourcesFactory.Create(DatabaseHandler.DataSourceSettings(argument.DestinationConnectionString), "");
 			
-			var state = new StateNewVersion();
+			var state = new State();
 			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null);
 			state.SetApplicationData(applicationData);
 			StateHolder.Initialize(state);

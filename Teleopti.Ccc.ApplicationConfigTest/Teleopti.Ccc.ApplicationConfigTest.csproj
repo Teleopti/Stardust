@@ -104,7 +104,6 @@
     </Compile>
     <Compile Include="Common\DatabaseHandlerTest.cs" />
     <Compile Include="Common\ProgramHelperTest.cs" />
-    <Compile Include="Common\StateNewVersionTest.cs" />
     <Compile Include="Creators\AbsenceCreatorTest.cs" />
     <Compile Include="Creators\ActivityCreatorTest.cs" />
     <Compile Include="Creators\ContractCreatorTest.cs" />

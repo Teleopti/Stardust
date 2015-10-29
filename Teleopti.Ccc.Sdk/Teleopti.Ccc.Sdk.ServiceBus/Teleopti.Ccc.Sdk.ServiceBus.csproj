@@ -270,7 +270,6 @@
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="DataSourceFactory.cs" />
     <Compile Include="ApplicationLogOnMessageModule.cs" />
-    <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// </summary>
         public void LogOff()
         {
-            StateHolder.Instance.State.ClearSession();
         }
 
     	/// <summary>
@@ -35,9 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IBusinessUnit businessUnit)
     	{
     		_currentPrincipalContext.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
-
-    		var sessionData = new SessionData();
-    		StateHolder.Instance.State.SetSessionData(sessionData);
     	}
     }
 }

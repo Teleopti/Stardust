@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IdentityModel.Claims;
 using System.Linq;
 using System.Reflection;
 using Rhino.Mocks;
@@ -10,10 +9,8 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.SignalR;
@@ -43,8 +40,8 @@ namespace Teleopti.Ccc.TestCommon
 			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
 			var applicationData = new ApplicationData(appSettings, signalBroker, null);
-			var sessionData = CreateSessionData(person, dataSource, businessUnit, principalContext);
-			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
+			CreateSessionData(person, dataSource, businessUnit, principalContext);
+			var state = new FakeState { ApplicationScopeData = applicationData, IsLoggedIn = true };
 			ClearAndSetStateHolder(state);
 		}
 
@@ -86,25 +83,21 @@ namespace Teleopti.Ccc.TestCommon
 			principalContext.SetCurrentPrincipal(loggedOnPerson, logonDataSource, businessUnit);
 
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-			ISessionData sessData = new SessionData();
 
-			SetStateReaderExpectations(stateMock, appData, sessData);
+			SetStateReaderExpectations(stateMock, appData);
 
 			ClearAndSetStateHolder(stateMock);
 			mocks.Replay(stateMock);
 		}
 
 
-    	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
+    	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData)
         {
             Expect.Call(stateMock.IsLoggedIn)
                 .Return(true)
                 .Repeat.Any();
             Expect.Call(stateMock.ApplicationScopeData)
                 .Return(applicationData)
-                .Repeat.Any();
-            Expect.Call(stateMock.SessionScopeData)
-                .Return(sessionData)
                 .Repeat.Any();
     		Expect.Call(stateMock.UserTimeZone)
     			.Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Repeat.Any();
@@ -128,16 +121,16 @@ namespace Teleopti.Ccc.TestCommon
             return applicationData;
         }
 
-		public static ISessionData CreateSessionData(
+		public static void CreateSessionData(
 			IPerson loggedOnPerson,
 			IDataSource dataSource,
 			IBusinessUnit businessUnit
 			)
 		{
-			return CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 		}
 
-		public static ISessionData CreateSessionData(
+		public static void CreateSessionData(
 			IPerson loggedOnPerson,
 			IDataSource dataSource,
 			IBusinessUnit businessUnit,
@@ -146,8 +139,6 @@ namespace Teleopti.Ccc.TestCommon
 			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
 
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-			ISessionData sessData = new SessionData();
-			return sessData;
 		}
 
         public static IPerson CreateLoggedOnPerson()

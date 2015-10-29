@@ -1,5 +1,4 @@
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -8,12 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// </summary>
     public interface IState : IStateReader
     {
-        /// <summary>
-        /// Sets the session data.
-        /// </summary>
-        /// <param name="sessionData">The session data.</param>
-        void SetSessionData(ISessionData sessionData);
-
         /// <summary>
         /// Sets the application data.
         /// </summary>

@@ -141,7 +141,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Common\DatabaseHandler.cs" />
     <Compile Include="Creators\ApplicationRoleCreator.cs" />
-    <Compile Include="Common\StateNewVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// In normal cases use this instead of implementing IState
     /// and override the session behaviour.
     /// </summary>
-    public abstract class State : IState
+    public class State : IState
     {
         private IApplicationData _applicationScopeData;
 
@@ -47,25 +46,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         {
             get { return _applicationScopeData; }
         }
-
-
-        /// <summary>
-        /// Sets the session data.
-        /// </summary>
-        /// <param name="sessionData">The sess data.</param>
-        public abstract void SetSessionData(ISessionData sessionData);
-
-        /// <summary>
-        /// Gets the session data for logged on user.
-        /// </summary>
-        /// <value>The session data.</value>
-        public abstract ISessionData SessionScopeData { get; }
-
-
-        /// <summary>
-        /// Clears data kept for logged in session/user
-        /// </summary>
-        public abstract void ClearSession();
 
 		public TimeZoneInfo UserTimeZone
 		{

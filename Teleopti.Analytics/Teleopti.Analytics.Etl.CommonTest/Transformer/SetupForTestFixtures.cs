@@ -6,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using BusinessUnitFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.BusinessUnitFactory;
 
@@ -20,7 +19,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
         internal MockRepository mocks;
         private IState stateMock;
         private static IApplicationData applicationData;
-        private static ISessionData sessionData;
 
         [SetUp]
         public void SetupForAll()
@@ -34,9 +32,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 	        var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 					applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-						sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, _bu);
+						StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, _bu);
 
-            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
+            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 
             mocks.ReplayAll();                      

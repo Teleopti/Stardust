@@ -1033,7 +1033,6 @@
     <Compile Include="Scheduling\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="Scheduling\WorkShiftContainsMasterActivitySpecification.cs" />
-    <Compile Include="Services\StateManager.cs" />
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\GamificationSettingView.cs" />
     <Compile Include="Settings\PageHelper.cs" />

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				_lazy = new Lazy<IDataSourceForTenant>(() =>
 				{
-					initializeApplication.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+					initializeApplication.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 					//////////TODO: Remove this code when bus no longer has to "loop" tenants/datasources later (DataSourceForTenant.DoOnAllTenants_AvoidUsingThis)/////
 					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())

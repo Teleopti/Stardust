@@ -456,7 +456,6 @@
     <Compile Include="Foundation\NotifyMessageBroker.cs" />
     <Compile Include="Foundation\OptimisticLockException.cs" />
     <Compile Include="Foundation\RootChangeInfo.cs" />
-    <Compile Include="Foundation\SessionData.cs" />
     <Compile Include="Foundation\State.cs" />
     <Compile Include="Foundation\StateHolder.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverter.cs" />

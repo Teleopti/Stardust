@@ -1,21 +1,16 @@
 #region Imports
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 #endregion
 
@@ -30,7 +25,6 @@ namespace Teleopti.Ccc.WinCodeTest
         private MockRepository mocks;
         private IPerson loggedOnPerson;
         private ApplicationData applicationData;
-        internal static ISessionData SessionData;
 
         /// <summary>
         /// Runs before any test.
@@ -48,11 +42,11 @@ namespace Teleopti.Ccc.WinCodeTest
 
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 						applicationData = new ApplicationData(appSettings, mocks.StrictMock<IMessageBrokerComposite>(), null);
-            SessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+            StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             IState stateMock = mocks.StrictMock<IState>();
 
-            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, SessionData);
+            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
             mocks.ReplayAll();
         }

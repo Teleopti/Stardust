@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest
 						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+            StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
+            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 
             mocks.ReplayAll();

@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -16,12 +15,6 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool IsLoggedIn { get; }
 
-        /// <summary>
-        /// Gets the session data for logged on person.
-        /// </summary>
-        /// <value>The session data.</value>
-        ISessionData SessionScopeData { get; }
-
 		TimeZoneInfo UserTimeZone { get; }
 
 		/// <summary>
@@ -29,11 +22,5 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <value>The application scope data.</value>
 		IApplicationData ApplicationScopeData { get; }
-
-        /// <summary>
-        /// Clears data kept for logged in session/user.
-        /// Normally called when logging off
-        /// </summary>
-        void ClearSession();
     }
 }

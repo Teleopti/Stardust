@@ -480,7 +480,6 @@
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
-    <Compile Include="UsedInTestState.cs" />
     <Compile Include="Web\FakeHttpContext.cs" />
     <Compile Include="Web\FakeHttpRequest.cs" />
     <Compile Include="Web\FakeHttpResponse.cs" />

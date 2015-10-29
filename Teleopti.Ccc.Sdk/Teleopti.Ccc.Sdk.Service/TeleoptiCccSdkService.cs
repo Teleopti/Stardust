@@ -368,7 +368,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				var personCache = new PersonCache();
 				personCache.Remove(teleoptiAuthPolicy.PersonContainer);
 			}
-			StateHolder.Instance.StateReader.ClearSession();
 		}
 
 		/// <summary>

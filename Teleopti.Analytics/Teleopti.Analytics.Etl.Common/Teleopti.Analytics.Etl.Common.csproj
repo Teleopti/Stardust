@@ -175,7 +175,6 @@
     <Compile Include="Infrastructure\RaptorRepository.cs" />
     <Compile Include="Infrastructure\Repository.cs" />
     <Compile Include="Infrastructure\ScheduleTransformerException.cs" />
-    <Compile Include="Infrastructure\StateManager.cs" />
     <Compile Include="Infrastructure\TenantHolder.cs" />
     <Compile Include="Infrastructure\TenantName.cs" />
     <Compile Include="Infrastructure\ThreadPool.cs" />

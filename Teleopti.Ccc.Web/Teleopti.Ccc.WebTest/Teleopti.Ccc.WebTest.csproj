@@ -606,7 +606,6 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactoryTest.cs" />
     <Compile Include="Core\TimeOfDayModelBinderTest.cs" />
-    <Compile Include="Core\WebStateTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorDisabledAjaxJsonTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorDisabledTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorEnabledAjaxTest.cs" />

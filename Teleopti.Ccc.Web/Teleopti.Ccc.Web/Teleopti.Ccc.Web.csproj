@@ -1099,7 +1099,6 @@
     <Compile Include="Core\Startup\InitializeApplication\IPhysicalApplicationPath.cs" />
     <Compile Include="Core\Startup\InitializeApplication\ISettings.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PhysicalApplicationPath.cs" />
-    <Compile Include="Core\Startup\InitializeApplication\WebState.cs" />
     <Compile Include="Core\Startup\VerifyLicense\VerifyLicenseModule.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DatePickerGlobalizationViewModel.cs" />

@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 	{
 		internal static IPerson loggedOnPerson;
 		internal static IApplicationData ApplicationData;
-		private static ISessionData sessionData;
 		internal static IDataSource DataSource;
 
 		[SetUp]
@@ -57,14 +56,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ApplicationData = new ApplicationData(appSettings, MessageBrokerContainerDontUse.CompositeClient(), null);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
-			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(
 				new FakeState
 				{
 					IsLoggedIn = true, 
-					ApplicationScopeData = ApplicationData, 
-					SessionScopeData = sessionData
+					ApplicationScopeData = ApplicationData
 				});
 
 			persistLoggedOnPerson();

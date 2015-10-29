@@ -3,17 +3,12 @@ using System.Web;
 using System.Web.Caching;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
     public class SdkState : State
     {
         private const string ApplicationDataKey = "applicationData";
-        
-        public override void SetSessionData(ISessionData sessionData)
-        {
-        }
 
         public override void SetApplicationData(IApplicationData applicationData)
         {
@@ -28,15 +23,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                 var result = HttpRuntime.Cache.Get(ApplicationDataKey) as IApplicationData;
                 return result ?? base.ApplicationScopeData;
             }
-        }
-
-        public override void ClearSession()
-        {
-        }
-
-        public override ISessionData SessionScopeData
-        {
-            get { return new SessionData(); }
         }
     }
 }

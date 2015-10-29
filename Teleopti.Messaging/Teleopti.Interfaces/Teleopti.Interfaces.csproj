@@ -815,7 +815,6 @@
     <Compile Include="Infrastructure\IInitiatorIdentifier.cs" />
     <Compile Include="Infrastructure\ISeatBookingReportCommand.cs" />
     <Compile Include="Infrastructure\ISeatBookingReportModel.cs" />
-    <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\IUpdateCrossDatabaseView.cs" />
     <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var initializer = new InitializeApplication(messageBroker);
 
-			initializer.Start(new StateManager(), passwordPolicyService, appSettings, true);
+			initializer.Start(new State(), passwordPolicyService, appSettings, true);
 		}
 	}
 }
