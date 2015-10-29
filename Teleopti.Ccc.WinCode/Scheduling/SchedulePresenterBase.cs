@@ -562,7 +562,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         #endregion
 
 
-				protected void FilterSchedulePart(IScheduleDay schedulePart)
+		protected void FilterSchedulePart(IScheduleDay schedulePart)
         {
             if (_schedulePartFilter == SchedulePartFilter.Meetings)
             {

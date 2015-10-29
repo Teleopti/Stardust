@@ -200,22 +200,30 @@ namespace Teleopti.Ccc.Win.Scheduling
             ViewGrid.Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
 
             _grid.EndUpdate();
-
             _grid.Refresh();
-
             _grid.Model.ScrollCellInView(GridRangeInfo.Col(_grid.CurrentCell.ColIndex), GridScrollCurrentCellReason.MoveTo);
-            if (IsOverviewColumnsHidden)
-            {
-                GridRangeInfo nameColumnRangeInfo = GridRangeInfo.Col((int)ColumnType.RowHeaderColumn);
-                _grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
-            }
-            else
-            {
-                _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols((int)ColumnType.RowHeaderColumn, (int)ColumnType.StartScheduleColumns - 1));
-            }
+            
+			ResizeGridColumnsToFit();
         }
 
-        /// <summary>
+		/// <summary>
+		/// Resize the scheduler view grid columns so that the contains fit.
+		/// </summary>
+	    public void ResizeGridColumnsToFit()
+	    {
+		    if (IsOverviewColumnsHidden)
+		    {
+			    GridRangeInfo nameColumnRangeInfo = GridRangeInfo.Col((int) ColumnType.RowHeaderColumn);
+			    _grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
+		    }
+		    else
+		    {
+			    _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols((int) ColumnType.RowHeaderColumn,
+				    (int) ColumnType.StartScheduleColumns - 1));
+		    }
+	    }
+
+	    /// <summary>
         /// Get big cell font
         /// </summary>
         public Font CellFontBig
@@ -294,6 +302,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             return true;
         }
+
         private void sortColumn(int column)
         {
             // Cancel edit
