@@ -30,6 +30,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
+using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (e.KeyCode == Keys.M && e.Shift && e.Alt)
 			{
-				StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
+				TestMode.Micke = true;
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
 			{

@@ -23,7 +23,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				_timeZone = value;
 			}
 		}
-
-		public bool MickeMode { get; set; }
 	}
 }

@@ -653,9 +653,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.M && e.Alt && e.Shift)
 			{
-				StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = !StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
-				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
-				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
+				TestMode.Micke = !TestMode.Micke;
+				toolStripMenuItemFindMatching.Visible = TestMode.Micke;
+				toolStripMenuItemFindMatching2.Visible = TestMode.Micke;
 				Refresh();
 				drawSkillGrid();
 			}
@@ -690,7 +690,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (e.KeyCode == Keys.Q && e.Control && e.Shift)
 			{
-				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				if (TestMode.Micke)
 				{
 					using (var agentSkillExplorer = new AgentSkillExplorer())
 					{
@@ -905,7 +905,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			disableAllExceptCancelInRibbon();
 			
 
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+			if (TestMode.Micke)
 			{
 				toolStripMenuItemFindMatching2.Visible = true;
 				toolStripMenuItemFindMatching.Visible = true;
@@ -4495,7 +4495,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (selectedSkillGridControl is SkillFullPeriodGridControl)
 				{
-					if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+					if (TestMode.Micke)
 					{
 						positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
 						TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];

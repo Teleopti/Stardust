@@ -2720,6 +2720,7 @@
     <Compile Include="SmartParts\Payroll\StatusWorkingView.xaml.cs">
       <DependentUpon>StatusWorkingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TestMode.cs" />
     <EmbeddedResource Include="Backlog\AddActualBacklogView.resx">
       <DependentUpon>AddActualBacklogView.cs</DependentUpon>
     </EmbeddedResource>

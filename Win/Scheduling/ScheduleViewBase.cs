@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	{
     		get
     		{
-				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				if (TestMode.Micke)
 					return true;
 
     			return _isOverviewColumnsHidden;
