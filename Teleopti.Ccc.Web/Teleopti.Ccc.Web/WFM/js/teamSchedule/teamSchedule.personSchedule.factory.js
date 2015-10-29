@@ -3,8 +3,6 @@
 	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
 
 	function PersonSchedule(currentUserInfo) {
-		var personScheduleFactory = {};
-
 		var shiftProjectionViewModel = function(projection, timeLine) {
 			if (!projection) projection = {};
 
@@ -106,14 +104,14 @@
 				}
 			});
 
-			if (!this.IsFullDayAbsence) {
+			if (this.IsFullDayAbsence) {
 				return 5000 + shiftStart;
 			}
 
 			return shiftStart;
 		};
 
-		personScheduleFactory.Create = function(schedule, timeLine) {
+		var create = function(schedule, timeLine) {
 			if (!schedule) schedule = {};
 
 			var projectionVms = createProjections(schedule.Projection, timeLine);
@@ -137,6 +135,9 @@
 			return personSchedule;
 		}
 
+		var personScheduleFactory = {
+			Create: create
+		};
 		return personScheduleFactory;
 	}
 }());
