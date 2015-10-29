@@ -326,13 +326,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		 public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+		 public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		 {
 			 IList<SkillTaskDetailsModel> taskDetails = new List<SkillTaskDetailsModel>();
 			 taskDetails = Session.GetNamedQuery("SkillTaskDetails")
 				 .SetEntity("scenario", scenario)
-				 .SetDateTime("startDate", period.StartDate.Date)
-				 .SetDateTime("endDate", (period.EndDate.Date.AddDays(1).AddSeconds(-1)))
+				 .SetDateTime("startDate", period.StartDateTime.Date)
+				 .SetDateTime("endDate", period.EndDateTime)
 				 .SetString("longTermKey", TemplateReference.LongtermTemplateKey)
 				 .SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillTaskDetailsModel)))
 				 .List<SkillTaskDetailsModel>();

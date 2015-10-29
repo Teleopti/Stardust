@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
+		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				IQuery query = createSkillIntervalStatisticQuery(uow, period);
+				IQuery query = createSkillIntervalStatisticQuery(uow, date);
 				query.SetTimeout(1200);
 				return query.SetResultTransformer(Transformers.AliasToBean(typeof(IntradayStatistics))).List<IIntradayStatistics>();
 			}
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}
 
-		private IQuery createSkillIntervalStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date)
+		private IQuery createSkillIntervalStatisticQuery(IStatelessUnitOfWork uow, DateOnly date)
 		{
 			return session(uow).CreateSQLQuery("exec mart.IntradaySkillStatistics @DateFrom=:DateFrom, @DateTo=:DateTo")
 				.AddScalar("SkillId", NHibernateUtil.Guid)
@@ -220,8 +220,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("StatOverflowOutTasks", NHibernateUtil.Double)
 				.AddScalar("StatOverflowInTasks", NHibernateUtil.Double)
 				.SetReadOnly(true)
-				.SetString("DateFrom", date.StartDateTime.ToString(CultureInfo.InvariantCulture))
-				.SetString("DateTo", date.EndDateTime.ToString(CultureInfo.InvariantCulture))
+				.SetDateTime("DateFrom", date.Date)
+				.SetDateTime("DateTo", date.Date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}
 
@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public double StatAnsweredTasks { get; set; }
 		public double StatOfferedTasks { get; set; }
 		public double StatAbandonedTasks { get; set; }
-		public int StatAbandonedShortTasks { get; set; }
+		public double StatAbandonedShortTasks { get; set; }
 		public double StatAbandonedTasksWithinSL { get; set; }
 		public double StatOverflowOutTasks { get; set; }
 		public double StatOverflowInTasks { get; set; }

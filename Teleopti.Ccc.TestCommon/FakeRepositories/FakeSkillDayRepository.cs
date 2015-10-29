@@ -92,9 +92,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.ToList();
 		}
 
-		public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+		public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
-			return _skillTaskDetailsModels;
+			return _skillTaskDetailsModels.Where(x=>x.Minimum >= period.StartDateTime && x.Minimum <=period.EndDateTime );
 		}
 
 		public void AddFakeTemplateTaskModels(IEnumerable<SkillTaskDetailsModel> skillTaskDetailsModels)

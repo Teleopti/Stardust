@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		double StatAnsweredTasks { get; set; }
 		double StatOfferedTasks { get; set; }
 		double StatAbandonedTasks { get; set; }
-		int StatAbandonedShortTasks { get; set; }
+		double StatAbandonedShortTasks { get; set; }
 		double StatAbandonedTasksWithinSL { get; set; }
 		double StatOverflowOutTasks { get; set; }
 		double StatOverflowInTasks { get; set; }

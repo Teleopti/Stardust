@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			 PersistAndRemoveFromUnitOfWork(skillDay);
 			 PersistAndRemoveFromUnitOfWork(skillDayLocal);
 
-			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)), new[] { _skill, skill }, _scenario).ToList();
+			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateTimePeriod(_date, _date), new[] { _skill, skill }, _scenario).ToList();
 			 skillToTaskDetails.Count.Should().Be.EqualTo(40);
 			 skillToTaskDetails.First().TotalTasks.Should().Be.EqualTo(7.7);
 		 }
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				  new List<IWorkloadDay> { workloadDay1, workloadDay2 }, skillDataPeriods);
 
 			 PersistAndRemoveFromUnitOfWork(skillDay);
-			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)), new[] { _skill, skill }, _scenario).ToList();
+			 var skillToTaskDetails = skillDayRepository.GetSkillsTasksDetails(new DateTimePeriod(_date, _date), new[] { _skill, skill }, _scenario).ToList();
 			 skillToTaskDetails.Count.Should().Be.EqualTo(20);
 			 skillToTaskDetails.First().TotalTasks.Should().Be.EqualTo(18.2);
 		 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		 [UnitOfWork, HttpGet, Route("api/intraday/skillstatus"), Authorize]
 		 public virtual IHttpActionResult GetSkillStatus()
 	    {
-		    return Ok(_intradaySkillStatusService.GetSkillStatusModels());
+			 return Ok(_intradaySkillStatusService.GetSkillStatusModels(DateTime.UtcNow));
 	    }
     }
 }

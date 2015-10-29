@@ -69,8 +69,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
         ICollection<ISkillDay> FindRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario);
 
-	    IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateOnlyPeriod period, IList<ISkill> skills,
-		    IScenario scenario);
+	    IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
     }
 
 	//refactor this PBI 35176

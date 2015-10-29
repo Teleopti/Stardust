@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IList<SkillTaskDetails> GetActualTasks()
 		{
 			var result = new  List<SkillTaskDetails>();
-			var intradayStatistics = _statisticRepository.LoadSkillStatisticForSpecificDates(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow));
+			var intradayStatistics = _statisticRepository.LoadSkillStatisticForSpecificDates(DateOnly.Today);
 			foreach (var item in intradayStatistics)
 			{
 				if (!result.Contains(new SkillTaskDetails() { SkillId = item.SkillId }))
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 						SkillName = item.SkillName,
 						IntervalTasks =
 							intradayStatistics.Where(x => x.SkillId == item.SkillId)
-								.Select(x => new IntervalTasks() { Interval = new DateTimePeriod((x.Interval), x.Interval), Task = x.StatOfferedTasks }).ToList()
+								.Select(x => new IntervalTasks() { IntervalStart =x.Interval, Task = x.StatOfferedTasks }).ToList()
 					});
 				}
 			}

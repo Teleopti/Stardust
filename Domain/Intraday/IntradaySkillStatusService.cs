@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -15,40 +17,50 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillActualTasksDetailProvider = skillActualTasksDetailProvider;
 		}
 
-		public IEnumerable<SkillStatusModel> GetSkillStatusModels()
+		public IEnumerable<SkillStatusModel> GetSkillStatusModels(DateTime now)
 		{
-			var ret = new List<SkillStatusModel>();
-			var taskDetails = _skillForecastedTasksProvider.GetForecastedTasks();
+			var taskDetails = _skillForecastedTasksProvider.GetForecastedTasks(now);
 			var actualTasks = _skillActualTasksDetailProvider.GetActualTasks();
-		
-			foreach (var item in taskDetails)
+			var ret = taskDetails.Select(task => new SkillStatusModel()
 			{
-				var filteredActualTasks = actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks);
-				var actualDetails = new List<IntervalTasks>();
-				if (filteredActualTasks.Any())
-					actualDetails = filteredActualTasks.First();
+				Measures = new List<SkillStatusMeasure>()
+				{
+					new SkillStatusMeasure()
+					{
+						Name = "Calls", StringValue = "No actual data found.", Severity = 0, Value = 0, LatestDate = DateTime.MinValue
+					}
+				},
+				Severity = 0, SkillName = task.SkillName
+			}).ToList();
+
+			foreach (var item in actualTasks)
+			{
+				var filteredTaskDetails = taskDetails.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks);
+				var taskDetail = new List<IntervalTasks>();
+				if (filteredTaskDetails.Any())
+					taskDetail = filteredTaskDetails.First();
 				var absDifference = getAbsDifference(
-					taskDetails.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First(),
-					actualDetails);
-				//this is just for testing
-				var message = "Exceeds threshold";
-				if (absDifference > 100)
+					taskDetail, actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First());
+
+				foreach (var skillStatus in ret)
 				{
-					message = "Below threshold";
+					if (skillStatus.SkillName == item.SkillName)
+					{
+						var lastestDataDate = actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks.Max(z => z.IntervalStart)).First();
+						skillStatus.Measures = new List<SkillStatusMeasure>
+						{
+							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(absDifference), Severity = 1, StringValue = message, LatestDate = lastestDataDate }
+						};
+					}
 				}
-				ret.Add(new SkillStatusModel
-				{
-					SkillName = item.SkillName,
-					Measures = new List<SkillStatusMeasure> { new SkillStatusMeasure { Name = "Calls", Value = Math.Round(absDifference), Severity = 1 ,StringValue = message} }
-				});
 			}
 			int i = 1;
-			return  ret.OrderBy(x => x.Measures[0].Severity).Select(x => new SkillStatusModel()
+			return ret.OrderBy(x => x.Measures[0].Severity).Select(x => new SkillStatusModel()
 			{
 				SkillName = x.SkillName,
 				Measures = x.Measures,
 				Severity = i++
-			}).OrderByDescending(y=>y.Severity);
+			}).OrderByDescending(y => y.Severity);
 		}
 
 		private double getAbsDifference(IEnumerable<IntervalTasks> forecastedTasks, List<IntervalTasks> actualDetails)
@@ -58,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				var actualTask = 0.0;
 				var actualTaskOnInterval =
-					actualDetails.FirstOrDefault(x => x.Interval.StartDateTime.Equals(forecastedItem.Interval.StartDateTime));
+					actualDetails.FirstOrDefault(x => x.IntervalStart.Equals(forecastedItem.IntervalStart));
 
 				if (actualTaskOnInterval != null)
 					actualTask = actualTaskOnInterval.Task;
@@ -69,3 +81,4 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 	}
 }
+					{

@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
+		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
 		{
 			return _intradayStat;
 		}

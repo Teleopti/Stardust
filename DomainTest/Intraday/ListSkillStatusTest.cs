@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			StatisticRepository.AddIntradayStatistics(actualData);
 
-			var result = Target.GetSkillStatusModels();
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc));
 			result.Count().Should().Be.EqualTo(1);
 			result.First().SkillName.Should().Be.EqualTo("Phone");
 			result.First().Measures.First().Value.Should().Be.EqualTo(11);
@@ -72,19 +72,19 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				getSkillTaskDetailsModel(skillId, 7, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
 					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(skillId, 9, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 11, 21, 11, 0, 0, DateTimeKind.Utc)),
+					new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(skillId, 7, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 12, 21, 12, 0, 0, DateTimeKind.Utc))
+					new DateTime(2015, 10, 21, 12, 0, 0, DateTimeKind.Utc))
 
 			};
 			SkillRepository.Add(skill);
 			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
 			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>());
 
-			var result = Target.GetSkillStatusModels();
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 12, 0, 0, DateTimeKind.Utc));
 			result.Count().Should().Be.EqualTo(1);
 			result.First().SkillName.Should().Be.EqualTo("Phone");
-			result.First().Measures.First().Value.Should().Be.EqualTo(23);
+			result.First().Measures.First().Value.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -105,16 +105,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				getSkillTaskDetailsModel(phoneSkillId, 7, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
 					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(phoneSkillId, 9, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 11, 21, 10, 0, 0, DateTimeKind.Utc)),
+					new DateTime(2015, 11, 21, 11, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(phoneSkillId, 7, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 12, 21, 10, 0, 0, DateTimeKind.Utc)),
+					new DateTime(2015, 12, 21, 12, 0, 0, DateTimeKind.Utc)),
 				
 				getSkillTaskDetailsModel(chatSkillId, 7, "Chat", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
 					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(chatSkillId, 12, "Chat", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 11, 21, 10, 0, 0, DateTimeKind.Utc)),
+					new DateTime(2015, 11, 21, 11, 0, 0, DateTimeKind.Utc)),
 				getSkillTaskDetailsModel(chatSkillId, 7, "Chat", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
-					new DateTime(2015, 12, 21, 10, 0, 0, DateTimeKind.Utc))
+					new DateTime(2015, 12, 21, 12, 0, 0, DateTimeKind.Utc))
 
 			};
 			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
@@ -130,12 +130,74 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 			StatisticRepository.AddIntradayStatistics(actualData);
 
-			var result = Target.GetSkillStatusModels();
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc));
 			result.Count().Should().Be.EqualTo(2);
 			result.First().SkillName.Should().Be.EqualTo("Chat");
 			result.Second().SkillName.Should().Be.EqualTo("Phone");
 			result.First().Measures.First().Value.Should().Be.EqualTo(12);
 			result.Second().Measures.First().Value.Should().Be.EqualTo(11);
+		}
+
+		[Test]
+		public void ShouldReturnDataThatIsUptillTheIntervalOfActualData()
+		{
+			var skillId = Guid.NewGuid();
+			var skill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.Utc);
+			skill.SetId(skillId);
+			var forecastedData = new List<SkillTaskDetailsModel>
+			{
+				getSkillTaskDetailsModel(skillId, 5, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 12, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 11, 21, 11, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 13, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 12, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 10, "Phone", new DateTime(2015, 10, 21, 12, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 13, 0, 0, DateTimeKind.Utc))
+
+			};
+			SkillRepository.Add(skill);
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),5,"Phone"),
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),15,"Phone")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc));
+			result.First().Measures.First().Value.Should().Be.EqualTo(14);
+		}
+
+		[Test]
+		public void ShouldReturnTheLatestDateOfActualData()
+		{
+			var skillId = Guid.NewGuid();
+			var skill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.Utc);
+			skill.SetId(skillId);
+			var forecastedData = new List<SkillTaskDetailsModel>
+			{
+				getSkillTaskDetailsModel(skillId, 5, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 12, "Phone", new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 11, 21, 11, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 13, "Phone", new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 12, 0, 0, DateTimeKind.Utc)),
+				getSkillTaskDetailsModel(skillId, 10, "Phone", new DateTime(2015, 10, 21, 12, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 12, 21, 13, 0, 0, DateTimeKind.Utc))
+
+			};
+			SkillRepository.Add(skill);
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc),5,"Phone"),
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc),15,"Phone")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 12, 0, 0, DateTimeKind.Utc));
+			result.First().Measures.First().LatestDate.Should().Be.EqualTo(new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc));
 		}
 
 		private static IntradayStatistics getIntradayStatistics(Guid skillId, DateTime start, int task, string skillName)
@@ -183,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				createFakeTasks(skill2.Id.Value, 5, 0.5)
 			};
 			SkillDayRepository.AddFakeTemplateTaskModels(skillTaskDetailsModels);
-			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks();
+			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks(new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc));
 			result.Count.Should().Be.EqualTo(2);
 		}
 
@@ -205,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 			SkillDayRepository.AddFakeTemplateTaskModels(skillTaskDetailsModels);
-			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks();
+			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks(new DateTime(2015, 10, 21, 9, 0, 0,DateTimeKind.Utc));
 			result.Count.Should().Be.EqualTo(1);
 		}
 
@@ -227,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				createFakeTasks(skill2.Id.Value, 5, 0.5)
 			};
 			SkillDayRepository.AddFakeTemplateTaskModels(skillTaskDetailsModels);
-			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks();
+			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks(new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc));
 
 			result.First().IntervalTasks.Count.Should().Be.EqualTo(3);
 			result.Second().IntervalTasks.Count.Should().Be.EqualTo(2);
@@ -250,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				createFakeTasks(skill2.Id.Value,10,0.25)
 			};
 			SkillDayRepository.AddFakeTemplateTaskModels(skillTaskDetailsModels);
-			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks();
+			var result = TargetSkillForecastedTasksProvider.GetForecastedTasks(new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc));
 
 			result.First().IntervalTasks.First().Task.Should().Be.EqualTo(7.5);
 			result.Second().IntervalTasks.First().Task.Should().Be.EqualTo(12.5);

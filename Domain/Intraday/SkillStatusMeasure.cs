@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.Intraday
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class SkillStatusMeasure
 	{
@@ -6,5 +8,6 @@
 		public double Value { get; set; }
 		public string StringValue { get; set; }
 		public int Severity { get; set; }
+		public DateTime LatestDate { get; set; }
 	}
 }

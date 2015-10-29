@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    throw new NotImplementedException();
 	    }
 
-	    public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period)
+	    public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
 	    {
 		    throw new NotImplementedException();
 	    }

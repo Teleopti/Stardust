@@ -46,6 +46,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
 
-		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateTimePeriod period);
+		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);
 	}
 }

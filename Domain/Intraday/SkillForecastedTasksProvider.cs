@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			//can this be different?
 		}
 
-		public IList<SkillTaskDetails> GetForecastedTasks()
+		public IList<SkillTaskDetails> GetForecastedTasks(DateTime now)
 		{
 			var allSkills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var skillToTaskData =  _skillDayRepository.GetSkillsTasksDetails(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), allSkills.ToList(),
+			//should be uptill now
+			var skillToTaskData = _skillDayRepository.GetSkillsTasksDetails(new DateTimePeriod(now.Date, now), allSkills.ToList(),
 				_scenarioRepository.LoadDefaultScenario()).ToList();
 			var result = new List<SkillTaskDetails>();
 			foreach (var item in skillToTaskData)
@@ -40,9 +41,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.Select(x => new IntervalTasks()
 								{
 									//should use timezone helper
-									Interval =
-										new DateTimePeriod( new DateTime(x.Minimum.Year,x.Minimum.Month,x.Minimum.Day,x.Minimum.Hour,x.Minimum.Minute,x.Minimum.Second,DateTimeKind.Utc),
-											new DateTime(x.Maximum.Year, x.Maximum.Month, x.Maximum.Day, x.Maximum.Hour, x.Maximum.Minute, x.Maximum.Second, DateTimeKind.Utc)),
+									IntervalStart = x.Minimum,
 									Task = x.TotalTasks
 								}).ToList()
 					});
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface ISkillForecastedTasksProvider
 	{
-		IList<SkillTaskDetails> GetForecastedTasks();
+		IList<SkillTaskDetails> GetForecastedTasks(DateTime now);
 	}
 
 	public class SkillTaskDetails : IEquatable<SkillTaskDetails>
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public class IntervalTasks
 	{
-		public DateTimePeriod Interval { get; set; }
+		public DateTime IntervalStart { get; set; }
 		public double Task { get; set; }
 	}
 }
