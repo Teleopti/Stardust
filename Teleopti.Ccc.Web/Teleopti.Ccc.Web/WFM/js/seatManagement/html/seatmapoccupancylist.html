@@ -9,7 +9,7 @@
 		<button class="wfm-btn wfm-btn-invis-primary assign-agents" ng-click="vm.asignAgentsToSeats()">Assign</button>
 	</div>
 
-	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" reset="vm.resetPersonSearch"></people-selection-list>
+	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" clear-selected-people="vm.resetPersonSearch"></people-selection-list>
 
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
 		<div class="seat-booking-item" ng-repeat="detail in vm.occupancyDetails">

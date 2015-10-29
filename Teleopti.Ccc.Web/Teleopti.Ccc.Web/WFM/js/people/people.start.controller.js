@@ -392,13 +392,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 		return $scope.keyword;
 	};
-
-	$scope.resetSearch = function () {
-		$scope.clearCart();
-		$scope.keyword = '';
-		getPage();
-	}
-
+	
 	$scope.getVisiblePageNumbers = function (start, end) {
 		var displayPageCount = 5;
 		var ret = [];

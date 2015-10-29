@@ -6,7 +6,7 @@
 			controller: "PeopleStartCtrl",
 			scope: {
 				selectedPeopleList: '=selectedPeople',
-				reset : '='
+				clearSelectedPeople : '='
 			},
 			templateUrl: 'js/people/html/people-list.html',
 			link: function (scope, element, attrs) {
@@ -16,7 +16,7 @@
 				scope.dynamicColumnLoaded = true;
 				scope.gridOptions.exporterMenuCsv = false;
 
-				scope.reset = scope.resetSearch;
+				scope.clearSelectedPeople = scope.clearCart;
 
 				scope.gridOptions.columnDefs = [
 					{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
