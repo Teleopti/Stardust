@@ -147,7 +147,7 @@
 					$scope.modalModifyLaunch = true;
 					getModifyDays(workload);
 					$scope.modalModifyInfo.campaignPercentage = 0;
-					$scope.modalModifyInfo.manualChangeValue = 0;
+					$scope.modalModifyInfo.overrideTasks = 0;
 					$scope.modalModifyInfo.selectedWorkload = workload;
 					$scope.modalModifyInfo.selectedScenario = workload.Scenario;
 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
@@ -201,12 +201,10 @@
 									day.vcampaign = 5;
 								}
 								if (i == 1) {
-									day.vmanual = 5;
+									day.voverrideTasks = 5;
 								}
 							}
 							workload.Refresh(data.Days);
-
-
 							workload.forecastResultLoaded = true;
 						}).
 						error(function (data, status, headers, config) {
@@ -264,7 +262,7 @@
 						});
 				};
 
-				$scope.applyManualChange = function () {
+				$scope.applyOverrideTasks = function () {
 					if ($scope.disableApplyModification()) {
 						return;
 					}
@@ -274,12 +272,12 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/ManualChange", JSON.stringify(
+					$http.post("../api/Forecasting/OverrideTasks", JSON.stringify(
 						{
 							Days: $scope.campaignDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
-							ManualChangeValue: $scope.modalModifyInfo.manualChangeValue
+							OverrideTasks: $scope.modalModifyInfo.overrideTasks
 						}))
 						.success(function (data, status, headers, config) {
 							if (data.Success) {

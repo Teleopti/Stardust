@@ -158,7 +158,7 @@
  opacity: 0;
 }
 
-.c3-circles-vmanual > .c3-circle{
+.c3-circles-voverrideTasks > .c3-circle{
  stroke:purple!important;
  stroke-width: 3!important;
  fill:purple!important;
@@ -166,7 +166,7 @@
  cy:70!important;
 }
 
-.c3-lines-vmanual{
+.c3-lines-voverrideTasks{
  opacity: 0;
 }
 
@@ -176,7 +176,7 @@
 	visability:hidden;
 }
 
-.c3-legend-item-vmanual, .c3-tooltip-name-vmanual{
+.c3-legend-item-voverrideTasks, .c3-tooltip-name-voverrideTasks{
 	display:none;
 	visability:hidden;
 }

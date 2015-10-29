@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I select to do a manual change")]
 		public void WhenISelectToDoAManualChange()
 		{
-			Browser.Interactions.Click(".forecast-manual-change-button");
+			Browser.Interactions.Click(".forecast-override-tasks-button");
 		}
 
 		[When(@"I enter '(.*)' calls per day")]
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I apply the manual change")]
 		public void WhenIApplyTheManualChange()
 		{
-			Browser.Interactions.Click(".forecast-apply-manual-change-button");
+			Browser.Interactions.Click(".forecast-apply-override-tasks-button");
 		}
 		
 		[When(@"I should see that the total calls for the first day has doubled")]

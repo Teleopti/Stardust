@@ -185,8 +185,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/ManualChange")]
-		public virtual Task<ForecastResultViewModel> AddManualChange(OverrideTasksInput input)
+		[UnitOfWork, HttpPost, Route("api/Forecasting/OverrideTasks")]
+		public virtual Task<ForecastResultViewModel> OverrideTasks(OverrideTasksInput input)
 		{
 			var failedTask = Task.FromResult(new ForecastResultViewModel
 			{

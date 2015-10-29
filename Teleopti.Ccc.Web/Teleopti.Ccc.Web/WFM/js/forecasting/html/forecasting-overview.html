@@ -48,7 +48,7 @@
 							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 						</div>
 						<div ng-show="workload.forecastResultLoaded" class="wfm-block forecast-result-chart-wrapper">
-							<forecast-result-chart chart-id="workload.ChartId" chart-data="workload.ResultChartData" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" number-of-selected="workload.numberOfSelected"></forecast-result-chart>
+							<forecast-result-chart chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays"></forecast-result-chart>
 						</div>
 
 						<div class="modal-footer">
@@ -66,7 +66,7 @@
 									</md-tooltip>
 								</a>
 								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload)">
-									Campaign <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
+									Modify <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
 									<md-tooltip>
 										Select days in chart before modifying
 									</md-tooltip>
@@ -141,12 +141,12 @@
 					Modify
 				</div>
 				<div class="modal-inner-content">
-					<div ng-hide="addCampaign || addManual">
-						<h4>Select manual change or campaign to modify the <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalModifyInfo.selectedScenario.Name}}. </b></h4>
+					<div ng-hide="addCampaign || overrideTasks">
+						<h4>Select override calls or campaign to modify the <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalModifyInfo.selectedScenario.Name}}. </b></h4>
 						<br />
-						<label class="forecast-manual-change-button" for="addManualToggle" style="font-weight: normal;">
-							<input type="checkbox" ng-model="addManual" id="addManualToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">Manual change</span>
+						<label class="forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
+							<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
+							<span class="wfm-btn wfm-btn-invis-default">Override Calls</span>
 						</label>
 
 						<label class="forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
@@ -162,20 +162,20 @@
 							</aside>
 						</div>
 					</div>
-					<div ng-show="addManual && !addCampaign">
+					<div ng-show="overrideTasks && !addCampaign">
 						<form name="form" class="wfm-form" novalidate>
-							<h4>Manual change</h4>
+							<h4>Override Calls</h4>
 							<dl>
-								<p>Manual change of the forecasted values. Changes made here will be saved until they are cleared.</p>
+								<p>Override the forecasted calls. Changes made here will be saved until they are cleared.</p>
 								<dd>
 									<div class="form-input-wrap skill-service-level-seconds">
-										<label for="manualChangeInputId">
+										<label for="overrideTasksInputId">
 											Calls/day
-											<input type="number" ng-model="modalModifyInfo.manualChangeValue" name="manualChangeInput" required="" id="manualChangeInputId" min="0" />
+											<input type="number" ng-model="modalModifyInfo.overrideTasks" name="overrideTasksInput" required="" id="overrideTasksInputId" min="0" />
 										</label>
-										<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.manualChangeInput.$touched">
-											<div class="form-input-message" ng-class="{formInvalidInput:form.manualChangeInput.$error.required}">Seconds are required</div>
-											<div class="form-input-message" ng-class="{formInvalidInput:form.manualChangeInput.$error.min}">Negative values are not allowed</div>
+										<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+											<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">Seconds are required</div>
+											<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">Negative values are not allowed</div>
 										</div>
 									</div>
 								</dd>
@@ -186,13 +186,13 @@
 							<div class="modal-footer">
 								<aside>
 									<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-									<a class="wfm-btn wfm-btn-invis-primary forecast-apply-manual-change-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyManualChange(); addManual=false">{{ 'Apply' | translate }}</a>
+									<a class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyOverrideTasks(); overrideTasks=false">{{ 'Apply' | translate }}</a>
 								</aside>
 							</div>
 						</form>
 					</div>
 
-					<div ng-show="!addManual && addCampaign">
+					<div ng-show="!overrideTasks && addCampaign">
 						<div class="wfm-block">
 							<h4>Campaign</h4>
 							<p>Define a percentage for expected increase or decrease</p>

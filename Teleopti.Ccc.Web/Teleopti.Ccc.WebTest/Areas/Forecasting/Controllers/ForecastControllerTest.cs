@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Return(workload);
 			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, manualChangePersister);
 
-			var result = target.AddManualChange(input);
+			var result = target.OverrideTasks(input);
 			result.Result.Success.Should().Be.True();
 			manualChangePersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks));
 		}
