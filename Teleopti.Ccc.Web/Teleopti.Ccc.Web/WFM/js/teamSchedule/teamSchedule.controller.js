@@ -49,7 +49,7 @@
 				}).$promise
 				.then(function(data) {
 					vm.groupScheduleVm = groupScheduleFactory.Create(data, vm.scheduleDateMoment());
-					vm.scheduleCount = data.length;
+					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
 		}
 
