@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				if (filteredTaskDetails.Any())
 					taskDetail = filteredTaskDetails.First();
 				var absDifference = getAbsDifference(
-					taskDetail, actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First());
+					taskDetail.Where(x=>x.IntervalStart <= item.IntervalTasks.Max(u=>u.IntervalStart) ), actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First());
 				//this is just for testing
 				var message = "Below threshold";
 				if (absDifference > 100)
@@ -81,6 +81,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 					actualTask = actualTaskOnInterval.Task;
 
 				result += Math.Abs(forecastedItem.Task - actualTask);
+			}
+			return result;
+		}
+
+		private double getAbsDifference2(IEnumerable<IntervalTasks> forecastedTasks, List<IntervalTasks> actualDetails)
+		{
+			var result = 0.0;
+			foreach (var actualDetail in actualDetails)
+			{
+				var forecastedTask = 0.0;
+				var forecastedTaskOnInterval =
+					forecastedTasks.FirstOrDefault(x => x.IntervalStart.Equals(actualDetail.IntervalStart));
+
+				if (forecastedTaskOnInterval != null)
+					forecastedTask = forecastedTaskOnInterval.Task;
+
+				result += Math.Abs(actualDetail.Task - forecastedTask);
 			}
 			return result;
 		}
