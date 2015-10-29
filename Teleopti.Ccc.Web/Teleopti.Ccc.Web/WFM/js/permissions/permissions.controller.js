@@ -7,7 +7,7 @@
 				$scope.list = [];
 				$scope.roleName = null;
 				$scope.roleDetails = 'functionsAvailable';
-				
+
 				$scope.functionsFlat = [];
 				$scope.dataFlat = [];
 				$scope.selectedRole = Roles.selectedRole;
@@ -23,7 +23,7 @@
 				$scope.$watch(function () { return Roles.selectedRole; },
 			   function (newSelectedRole) {
 			   	if (!newSelectedRole.Id) return;
-			  
+
 			   	$scope.builtInCheck = newSelectedRole.BuiltIn;
 			   }
 		   );
@@ -49,9 +49,7 @@
 				};
 
 				$scope.removeRole = function(role) {
-					if (confirm('Are you sure you want to delete this?')) {
 						Roles.removeRole(role);
-					}
 				};
 
 				$scope.updateRole = function(role) {
@@ -64,7 +62,7 @@
 						Permissions.manageRole.update({ Id: role.Id, newDescription: tempName });
 						role.DescriptionText = tempName;
 					}
-					role.editing = false; 
+					role.editing = false;
 				};
 
 				$scope.showRole = function (role) {
@@ -105,7 +103,7 @@
 
 				Roles.refresh().$promise.then(function (result) {
 					$scope.roles = result;
-					
+
 					if ($stateParams.id != null) { //FIXME is it needed?
 						for (var i = 0; i < result.length; i++) {
 							if ($stateParams.id == result[i].Id) {
@@ -121,6 +119,3 @@
 		]
 	);
 })();
-
-
-
