@@ -20,6 +20,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.lang = i18nService.getCurrentLang();
 	$scope.isImportUsersEnabled = false;
 	$scope.isAdjustSkillEnabled = false;
+	$scope.isSelectionMode = false;
 	$scope.showImportPanel = false;
 	$scope.selectedCount = function () {
 		return $scope.selectedPeopleList.length;
@@ -62,7 +63,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.rowSelectionEnabled = function () {
-		return $scope.isAdjustSkillEnabled;
+		return $scope.isAdjustSkillEnabled || $scope.isSelectionMode;
 	};
 
 	$scope.dynamicColumnLoaded = false;
