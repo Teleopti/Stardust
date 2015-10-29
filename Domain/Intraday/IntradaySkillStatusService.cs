@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var absDifference = getAbsDifference(
 					taskDetail, actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First());
 				//this is just for testing
-				var message = "Exceeds threshold";
+				var message = "Below threshold";
 				if (absDifference > 100)
 				{
-					message = "Below threshold";
+					message = "Exceeds threshold";
 				}
 				foreach (var skillStatus in ret)
 				{
