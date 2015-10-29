@@ -1276,6 +1276,7 @@
     <Compile Include="Shifts\Presenters\NavigationPresenter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Shifts\Presenters\ShiftInClip.cs" />
     <Compile Include="Shifts\Presenters\VisualizePresenter.cs">
       <SubType>Code</SubType>
     </Compile>

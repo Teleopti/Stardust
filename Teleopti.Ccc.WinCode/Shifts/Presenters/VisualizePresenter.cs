@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             }
 
             if (list.Count > 0)
-                StateHolderReader.Instance.StateReader.SessionScopeData.Clip = list[rowIndex - 1].WorkShift.Clone();
+				ShiftInClip.Data = list[rowIndex - 1].WorkShift.EntityClone();
         }
 
         private IList<ReadOnlyCollection<VisualPayloadInfo>> getVisualLayers(IEnumerable<IWorkShiftVisualLayerInfo> projections)

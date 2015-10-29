@@ -10,6 +10,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Shifts.Presenters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
@@ -297,7 +298,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
         public override void PasteShiftFromShifts()
         {
-            var workShift = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
+            var workShift = ShiftInClip.Data;
             if (workShift == null)
                 return;
             if (_workShiftContainsMasterActivity.IsSatisfiedBy(workShift))

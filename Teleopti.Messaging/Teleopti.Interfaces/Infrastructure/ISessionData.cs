@@ -12,8 +12,6 @@ namespace Teleopti.Interfaces.Infrastructure
 
 		bool MickeMode { get; set; }
 
-		object Clip { get; set; }
-
 		AuthenticationTypeOption AuthenticationTypeOption { get; set; }
 	}
 }

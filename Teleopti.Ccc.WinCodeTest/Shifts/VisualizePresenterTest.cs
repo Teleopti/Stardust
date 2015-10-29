@@ -125,10 +125,10 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             }
             using (_mock.Playback())
             {
-                StateHolderReader.Instance.StateReader.SessionScopeData.Clip = null;
+				ShiftInClip.Data = null;
 				_target.LoadModelCollection(callback);
                 _target.CopyWorkShiftToSessionDataClip(1);
-                IWorkShift result = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
+                IWorkShift result = ShiftInClip.Data;
                 Assert.IsNotNull(result);
             }
         }
@@ -145,10 +145,10 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             }
             using (_mock.Playback())
             {
-                StateHolderReader.Instance.StateReader.SessionScopeData.Clip = null;
+				ShiftInClip.Data = null;
 				_target.LoadModelCollection(callback);
                 _target.CopyWorkShiftToSessionDataClip(0);
-                IWorkShift result = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
+                IWorkShift result = ShiftInClip.Data;
                 Assert.IsNull(result);
             }
         }
