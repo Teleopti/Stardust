@@ -4,6 +4,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.PerformanceManager
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Win.PerformanceManager
 		private void toolStripNewReport_Click(object sender, EventArgs e)
         {
             var forceFormsLogin = "true";
-            if (StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
+            if (LogonPresenter.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";
 
             var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.ToString();

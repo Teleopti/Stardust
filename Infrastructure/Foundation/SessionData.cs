@@ -25,7 +25,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		public bool MickeMode { get; set; }
-
-		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
 	}
 }

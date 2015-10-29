@@ -255,7 +255,10 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
-			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _model.AuthenticationType;
+			AuthenticationTypeOption = _model.AuthenticationType;
 		}
+
+		//moved from ISessionData. Should be some object instead of static data, but just keep same behavior
+		public static AuthenticationTypeOption AuthenticationTypeOption { get; private set; }
 	}
 }
