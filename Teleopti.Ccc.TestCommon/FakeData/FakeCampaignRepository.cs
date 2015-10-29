@@ -53,40 +53,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		public IList<IOutboundCampaign> GetPlannedCampaigns()
-		{
-			return
-				_campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate.Date > DateOnly.Today.Date)
-					.ToList();
-		}
-
-		public IList<IOutboundCampaign> GetDoneCampaigns()
-		{
-			return
-				_campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate.Date < DateOnly.Today.Date)
-					.ToList();
-		}
-
-		public IList<IOutboundCampaign> GetOnGoingCampaigns()
-		{
-			return _campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).Contains(DateOnly.Today)).ToList();
-		}
-
-		public IList<IOutboundCampaign> GetPlannedCampaigns(DateTimePeriod period)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IOutboundCampaign> GetDoneCampaigns(DateTimePeriod period)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IOutboundCampaign> GetOnGoingCampaigns(DateTimePeriod period)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
 		{
 			return _campaigns.Where(campaign => period.ContainsPart(campaign.SpanningPeriod)).ToList();
