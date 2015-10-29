@@ -18,7 +18,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	public class SystemCheckTest
 	{
 		public IMessageListener Target;
-		public FakeHttpServer Server;
+		public MessageBrokerServerBridge Server;
 		public FakeTime Time;
 		public SystemCheckerValidator SystemCheck;
 		
@@ -60,7 +60,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		public void ShouldBeOk()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,

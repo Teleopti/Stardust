@@ -17,18 +17,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		{
 			var mailboxId = Guid.NewGuid().ToString();
 			var businessUnitId = Guid.NewGuid().ToString();
-			Broker.AddMailbox(new Subscription
+			var subscription = new Subscription
 			{
 				BusinessUnitId = businessUnitId,
-				MailboxId = mailboxId
-			});
+			};
+			Broker.PopMessages(subscription.Route(), mailboxId);
 
 			Broker.NotifyClients(new Message
 			{
 				BusinessUnitId = businessUnitId
 			});
 
-			var messages = Broker.PopMessages(mailboxId);
+			var messages = Broker.PopMessages(subscription.Route(), mailboxId);
 			messages.Should().Have.Count.EqualTo(1);
 		}
 
@@ -38,11 +38,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		{
 			var mailboxId = Guid.NewGuid().ToString();
 			var businessUnitId = Guid.NewGuid().ToString();
-			Broker.AddMailbox(new Subscription
+			var subscription = new Subscription
 			{
 				BusinessUnitId = businessUnitId,
 				MailboxId = mailboxId
-			});
+			};
+			Broker.PopMessages(subscription.Route(), mailboxId);
 
 			Broker.NotifyClients(new Message
 			{
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				BusinessUnitId = businessUnitId
 			});
 
-			var messages = Broker.PopMessages(mailboxId);
+			var messages = Broker.PopMessages(subscription.Route(), mailboxId);
 			messages.Should().Have.Count.EqualTo(2);
 		}
 	}

@@ -243,6 +243,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkState.cs" />
+    <Compile Include="MessageBroker\Extensions.cs" />
     <Compile Include="MessageBroker\MailboxRepository.cs" />
     <Compile Include="MessageBroker\Scheduling\IScheduleMessageSubscriber.cs" />
     <Compile Include="MessageBroker\Scheduling\MailboxSubscriber.cs" />

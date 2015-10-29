@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldAddMailbox()
 		{
-			var subscription = new Subscription {MailboxId = Guid.NewGuid().ToString()};
+			var subscription = new Subscription();
 
-			Server.AddMailbox(subscription);
+			Server.PopMessages(subscription.Route(), Guid.NewGuid().ToString());
 
 			Mailboxes.PersistedLast.Route.Should().Be(subscription.Route());
 		}
@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldAddMailboxWithId()
 		{
-			var id = Guid.NewGuid();
-			var subscription = new Subscription {MailboxId = id.ToString()};
+			var mailboxId = Guid.NewGuid();
+			var subscription = new Subscription();
 
-			Server.AddMailbox(subscription);
+			Server.PopMessages(subscription.Route(), mailboxId.ToString());
 
-			Mailboxes.PersistedLast.Id.Should().Be(id);
+			Mailboxes.PersistedLast.Id.Should().Be(mailboxId);
 		}
 
 		[Test]
@@ -52,10 +52,9 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var mailbox = new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
-			Server.AddMailbox(mailbox);
+			Server.PopMessages(mailbox.Route(), Guid.NewGuid().ToString());
 			var notification = new Message
 			{
 				BusinessUnitId = mailbox.BusinessUnitId
@@ -73,16 +72,14 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			var mailbox2Id = Guid.NewGuid();
 			var mailbox1 = new Subscription
 			{
-				MailboxId = mailbox1Id.ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
 			var mailbox2 = new Subscription
 			{
-				MailboxId = mailbox2Id.ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
-			Server.AddMailbox(mailbox1);
-			Server.AddMailbox(mailbox2);
+			Server.PopMessages(mailbox1.Route(), mailbox1Id.ToString());
+			Server.PopMessages(mailbox2.Route(), mailbox2Id.ToString());
 			var notification = new Message
 			{
 				BusinessUnitId = mailbox2.BusinessUnitId
@@ -90,19 +87,20 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).PopAllMessages().Should().Have.Count.EqualTo(0);
+			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).PopAllMessages().Should().Be.Empty();
 			Mailboxes.Data.Single(x => x.Id.Equals(mailbox2Id)).PopAllMessages().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
 		}
 
 		[Test]
 		public void ShouldReturnMessagesFromMailbox()
 		{
-			var subscription = new Subscription {MailboxId = Guid.NewGuid().ToString()};
-			Server.AddMailbox(subscription);
+			var subscription = new Subscription();
+			var mailboxId = Guid.NewGuid();
+			Server.PopMessages(subscription.Route(), mailboxId.ToString());
 			var notification = new Message();
 			Server.NotifyClients(notification);
 
-			var messages = Server.PopMessages(subscription.MailboxId);
+			var messages = Server.PopMessages(subscription.Route(), mailboxId.ToString());
 
 			messages.Should().Have.Count.EqualTo(1);
 		}
@@ -110,22 +108,23 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPopMessagesFromMailbox()
 		{
-			var subscription = new Subscription {MailboxId = Guid.NewGuid().ToString()};
-			Server.AddMailbox(subscription);
+			var subscription = new Subscription();
+			var mailboxId = Guid.NewGuid();
+			Server.PopMessages(subscription.Route(), mailboxId.ToString());
 			var notification = new Message();
 			Server.NotifyClients(notification);
 
-			Server.PopMessages(subscription.MailboxId);
-			var messages = Server.PopMessages(subscription.MailboxId);
+			Server.PopMessages(subscription.Route(), mailboxId.ToString());
+			var messages = Server.PopMessages(subscription.Route(), mailboxId.ToString());
 
 			messages.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenPoppingFromNonExistingMailbox()
+		public void ShouldReturnEmptyArrayWhenPoppingFromNonExistingMailbox()
 		{
-			Server.PopMessages(Guid.NewGuid().ToString())
-				.Should().Be.Null();
+			Server.PopMessages(new Subscription().Route(), Guid.NewGuid().ToString())
+				.Should().Be.Empty();
 		}
 
 		[Test]
@@ -133,10 +132,9 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var mailbox = new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
-			Server.AddMailbox(mailbox);
+			Server.PopMessages(mailbox.Route(), Guid.NewGuid().ToString());
 			var notification = new Message
 			{
 				BusinessUnitId = mailbox.BusinessUnitId

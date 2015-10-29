@@ -18,7 +18,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	public class SubscriptionsTest
 	{
 		public IMessageListener Client;
-		public FakeHttpServer Server;
+		public MessageBrokerServerBridge Server;
 		public FakeTime Time;
 		public ISystemCheck SystemCheck;
 		
@@ -28,7 +28,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			var wasEventHandlerCalled = false;
 			Client.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -39,15 +39,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
 			wasEventHandlerCalled.Should().Be.True();
 		}
-
-		[Test]
-		public void ShouldOnlyCallServerForSubscriptionOnce()
-		{
-			Client.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true);
-			Time.Passes("15".Minutes());
-			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
-		}
-
+		
 		private bool wasCalled_pleaseForgiveMeForSharingState;
 		private void EventMessageHandler(object o, EventMessageArgs eventMessageArgs)
 		{
@@ -61,7 +53,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Client.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
 			Client.UnregisterSubscription(EventMessageHandler);
 
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -80,7 +72,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		{
 			wasCalled_pleaseForgiveMeForSharingState = false;
 			Client.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), true, true);
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -92,7 +84,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			wasCalled_pleaseForgiveMeForSharingState = false;
 
 			Client.UnregisterSubscription(EventMessageHandler);
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,

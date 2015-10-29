@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			Now.Is("2015-06-26 08:00");
 			Server.NotifyClients(new Message());
-			Mailboxes.PurgeWasCalled.Should().Be.False();
+			Mailboxes.PurgeWasCalled.Should().Be.True();
+			Mailboxes.PurgeWasCalled = false;
 
 			Now.Is("2015-06-26 08:04:59");
 			Server.NotifyClients(new Message());
@@ -53,19 +55,30 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		}
 
 		[Test]
-		public void ShouldPurgeMailboxes()
+		public void ShouldPurgeMailboxesNotPoppedWithin30Minutes()
 		{
 			Now.Is("2015-06-26 08:00");
-			Server.AddMailbox(new Subscription
-			{
-				MailboxId = Guid.NewGuid().ToString()
-			});
+			Server.PopMessages(new Subscription().Route(), Guid.NewGuid().ToString());
 
 			Now.Is("2015-06-26 08:31");
-
 			Server.NotifyClients(new Message());
 
 			Mailboxes.Data.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldMaybeNotDeleteMailboxWhenLineIsQuiet()
+		{
+			var mailboxId = Guid.NewGuid().ToString();
+			Now.Is("2015-06-26 08:00");
+			Server.PopMessages(new Subscription().Route(), mailboxId);
+			Now.Is("2015-06-26 08:28");
+			Server.PopMessages(new Subscription().Route(), mailboxId);
+
+			Now.Is("2015-06-26 08:31");
+			Server.NotifyClients(new Message());
+
+			Mailboxes.Data.Single().Messages.Should().Not.Be.Empty();
 		}
 	}
 }

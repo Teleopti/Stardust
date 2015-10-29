@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		private readonly INow _now;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
-		private readonly int _expirationInterval;
+		private readonly TimeSpan _expirationInterval;
 		private DateTime _nextPurge;
 
 		public MessageBrokerServer(
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
 			IMailboxRepository mailboxRepository,
-			IConfigReader configuration,
+			IConfigReader config,
 			INow now)
 		{
 			_actionScheduler = actionScheduler;
@@ -36,10 +35,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_mailboxRepository = mailboxRepository;
 			_now = now;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
-
-			if (configuration == null ||
-				!int.TryParse(configuration.AppConfig("MessageBrokerMailboxExpirationInSeconds"), out _expirationInterval))
-				_expirationInterval = 900;
+			_expirationInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxExpirationInSeconds", 900));
 		}
 
 		public string AddSubscription(Subscription subscription, string connectionId)
@@ -65,32 +61,34 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
 		}
-
+		
 		[MessageBrokerUnitOfWork]
-		public virtual void AddMailbox(Subscription subscription)
-		{
-			purgeSometimes();
-			_mailboxRepository.Persist(new Mailbox
-			{
-				Route = subscription.Route(),
-				Id = Guid.Parse(subscription.MailboxId),
-				ExpiresAt = _now.UtcDateTime().AddSeconds(_expirationInterval)
-			});
-		}
-
-		[MessageBrokerUnitOfWork]
-		public virtual IEnumerable<Message> PopMessages(string mailboxId)
+		public virtual IEnumerable<Message> PopMessages(string route, string mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
-			if (mailbox == null) return null;
-			var result = mailbox.PopAllMessages();
-			var updateExpiration = _now.UtcDateTime().AddSeconds(_expirationInterval*0.5) >= mailbox.ExpiresAt;
-			if (updateExpiration || result.Any())
+			if (mailbox == null)
 			{
-				mailbox.ExpiresAt = _now.UtcDateTime().AddSeconds(_expirationInterval);
+				_mailboxRepository.Persist(new Mailbox
+				{
+					Route = route,
+					Id = Guid.Parse(mailboxId),
+					ExpiresAt = _now.UtcDateTime().Add(_expirationInterval)
+				});
+				return Enumerable.Empty<Message>();
+			}
+
+			var messages = mailbox.PopAllMessages();
+			var updateExpirationAt = mailbox.ExpiresAt.Subtract(new TimeSpan(_expirationInterval.Ticks / 2));
+
+			var update = _now.UtcDateTime() >= updateExpirationAt || messages.Any();
+
+            if (update)
+			{
+				mailbox.ExpiresAt = _now.UtcDateTime().Add(_expirationInterval);
 				_mailboxRepository.Persist(mailbox);
 			}
-			return result;
+
+			return messages;
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -121,16 +119,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 		private void purgeSometimes()
 		{
-			if (_nextPurge == DateTime.MinValue)
-			{
-				_nextPurge = _now.UtcDateTime().AddMinutes(5);
-				return;
-			}
-			if (_now.UtcDateTime() >= _nextPurge)
-			{
-				_nextPurge = _now.UtcDateTime().AddMinutes(5); // INTE INte fel = INTE RÄTT	 = Fel
-				_mailboxRepository.Purge();
-			}
+			if (_now.UtcDateTime() < _nextPurge) return;
+			_nextPurge = _now.UtcDateTime().AddMinutes(5); 
+			_mailboxRepository.Purge();
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Message> notifications)

@@ -43,11 +43,14 @@
     <Compile Include="Http\HttpSenderTest.cs" />
     <Compile Include="Http\Mailbox\EmptyConnectionStringTest.cs" />
     <Compile Include="Http\Mailbox\ITestType.cs" />
+    <Compile Include="Http\Mailbox\RetryPopMessagesTest.cs" />
+    <Compile Include="MessageBrokerServerBridge.cs" />
     <Compile Include="MessagingTestAttribute.cs" />
-    <Compile Include="Http\Mailbox\RetryAddMailbox.cs" />
+    <Compile Include="Http\Mailbox\RetryAddMailboxTest.cs" />
     <Compile Include="Http\Mailbox\SystemCheckTest.cs" />
     <Compile Include="Http\Mailbox\SubscriptionsTest.cs" />
     <Compile Include="Http\Mailbox\TestMessage.cs" />
+    <Compile Include="RequestInfo.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />
@@ -117,6 +120,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.SetGuid("Id", model.Id)
 				.SetString("Route", model.Route)
 				.SetParameter("Notifications", _serializer.SerializeObject(model.Messages), NHibernateUtil.StringClob)
-				.SetParameter("ExpiresAt", model.ExpiresAt)
+				.SetParameter("ExpiresAt", model.ExpiresAt.NullIfMinValue())
 				.ExecuteUpdate();
 		}
 
@@ -127,5 +127,4 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		}
 
 	}
-
 }

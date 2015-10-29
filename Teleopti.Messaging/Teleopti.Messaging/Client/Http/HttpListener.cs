@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
@@ -54,9 +53,10 @@ namespace Teleopti.Messaging.Client.Http
 
 			if (_isAlive)
 			{
-				if (!tryAddMailbox(subscription))
+				if (!tryPop(subscription, null))
 					_isAlive = false;
 			}
+
 			_eventHandlers.Add(subscription, eventMessageHandler);
 		}
 
@@ -72,20 +72,12 @@ namespace Teleopti.Messaging.Client.Http
 			if (_isPolling)
 				return;
 			_isPolling = true;
-			var success = _isAlive;
+			var success = true;
 
             foreach (var e in _eventHandlers.All())
             {
-				if (!_isAlive)
-					success = tryAddMailbox(e.Subscription);
-	            if (!success)
-		            break;
-
 				string content = null;
-				success = tryServerRequest(() =>
-				{
-					content = _client.GetOrThrow("MessageBroker/PopMessages/" + e.Subscription.MailboxId);
-				});
+	            success = tryPop(e.Subscription, s => content = s);
 				if (!success)
 					break;
 
@@ -98,14 +90,16 @@ namespace Teleopti.Messaging.Client.Http
 			_isPolling = false;
 		}
 
-		private bool tryAddMailbox(Subscription subscription)
+		private bool tryPop(Subscription subscription, Action<string> content)
 		{
 			return tryServerRequest(() =>
 			{
-				_client.PostOrThrow("MessageBroker/AddMailbox", subscription);
+				var c = _client.GetOrThrow("MessageBroker/PopMessages/?route=" + subscription.Route() + "&id=" + subscription.MailboxId);
+				if (content != null)
+					content(c);
 			});
 		}
-
+		
 		public bool IsAlive()
 		{
 			return _isAlive;

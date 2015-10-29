@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.Domain;
@@ -29,16 +28,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var existing = Data.SingleOrDefault(x => x.Id.Equals(mailbox.Id));
 			if (existing != null)
 				Data.Remove(existing);
-			Data.Add(JsonConvert.DeserializeObject<Mailbox>(JsonConvert.SerializeObject(mailbox, new JsonSerializerSettings
-			{
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			})));
+			Data.Add(mailbox.CopyBySerialization());
 		}
 
 		public Mailbox Load(Guid id)
 		{
-			return Data
-				.SingleOrDefault(x => x.Id.Equals(id));
+			return Data.SingleOrDefault(x => x.Id.Equals(id)).CopyBySerialization();
 		}
 		
 		public IEnumerable<Mailbox> Load(string[] routes)
@@ -46,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return (
 				from m in Data
 				where routes.Contains(m.Route)
-				select m
+				select m.CopyBySerialization()
 				).ToArray();
 		}
 

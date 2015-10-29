@@ -15,7 +15,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	{
 		public IMessageListener Target;
 		public FakeUrl Url;
-		public FakeHttpServer Server;
+		public MessageBrokerServerBridge Server;
 		
 		[Test]
 		public void ShouldNotCreatMailboxWhenEmptyConnectionString()

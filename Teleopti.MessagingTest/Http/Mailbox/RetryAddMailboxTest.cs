@@ -15,43 +15,10 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	[TestFixture]
 	[MessagingTest]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
-	public class RetryPopMessages
+	public class RetryAddMailboxTest
 	{
 		public IMessageListener Target;
-		public FakeHttpServer Server;
-		public FakeTime Time;
-		public ISystemCheck SystemCheck;
-
-		[Test]
-		public void ShouldRetryIfServerFails()
-		{
-			var wasEventHandlerCalled = false;
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
-			Time.Passes("30".Seconds());
-			Server.Down();
-
-			Time.Passes("30".Seconds());
-			Server.IsHappy();
-			Server.Has(new TestMessage
-			{
-				BusinessUnitId = Guid.Empty.ToString(),
-				DataSource = string.Empty,
-				DomainQualifiedType = "ITestType",
-				DomainType = "ITestType",
-			});
-			Time.Passes("60".Seconds());
-
-			wasEventHandlerCalled.Should().Be.True();
-		}
-	}
-
-	[TestFixture]
-	[MessagingTest]
-	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
-	public class RetryAddMailbox
-	{
-		public IMessageListener Target;
-		public FakeHttpServer Server;
+		public MessageBrokerServerBridge Server;
 		public FakeTime Time;
 		public ISystemCheck SystemCheck;
 
@@ -63,8 +30,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 			Server.IsHappy();
+			Time.Passes("60".Seconds());
 
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -77,31 +45,6 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldRetryEveryMinuteIfServerFails()
-		{
-			Server.GivesError(HttpStatusCode.ServiceUnavailable);
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
-			Server.Requests.Clear();
-
-			Time.Passes("60".Seconds());
-
-			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldRetryEveryMinuteForTwoSubscriptionsIfServerFails()
-		{
-			Server.GivesError(HttpStatusCode.ServiceUnavailable);
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
-			Time.Passes("30".Seconds());
-			Server.IsHappy();
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
-			Time.Passes("30".Seconds());
-
-			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(3);
-		}
-
-		[Test]
 		public void ShouldRetryIfNoConnection()
 		{
 			var wasEventHandlerCalled = false;
@@ -110,7 +53,8 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Time.Passes("60".Seconds());
 			Server.IsHappy();
 
-			Server.Has(new TestMessage
+			Time.Passes("60".Seconds());
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -130,8 +74,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 			Server.IsHappy();
+			Time.Passes("60".Seconds());
 
-			Server.Has(new TestMessage
+			Server.Receives(new TestMessage
 			{
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
@@ -153,7 +98,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
             Time.Passes("60".Seconds());
 
-			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(1);
+			Server.Requests.Should().Have.Count.EqualTo(1);
 		}
 	}
 }

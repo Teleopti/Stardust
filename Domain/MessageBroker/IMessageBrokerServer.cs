@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		string AddSubscription(Subscription subscription, string connectionId);
 		void RemoveSubscription(string route, string connectionId);
 
-		void AddMailbox(Subscription subscription);
-		IEnumerable<Message> PopMessages(string mailboxId);
+		IEnumerable<Message> PopMessages(string route, string mailboxId);
 
 		void NotifyClients(Message message);
 		void NotifyClientsMultiple(IEnumerable<Message> notifications);

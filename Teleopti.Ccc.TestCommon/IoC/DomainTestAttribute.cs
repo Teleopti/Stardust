@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
@@ -54,6 +55,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAllBusinessUnitsUnitOfWorkAspect>().For<IAllBusinessUnitsUnitOfWorkAspect>();
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
+			//
+
+			// Messaging ztuff 
+			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
+			//system.UseTestDouble<ActionImmediate>().For<IActionScheduler>();
+			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
 
 			// Permission stuff

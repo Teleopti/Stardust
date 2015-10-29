@@ -1,28 +1,19 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.MessageBroker;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
-	public class MessageBrokerServerTestAttribute : IoCTestAttribute
+	public class MessageBrokerServerTestAttribute : DomainTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
-
-			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
-			system.UseTestDouble(new ActionImmediate()).For<IActionScheduler>();
+			base.Setup(system, configuration);
 
 			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
 			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
-
-			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 		}
 	}
 }
