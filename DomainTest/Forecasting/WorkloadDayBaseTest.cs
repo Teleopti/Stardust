@@ -973,8 +973,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		    _workloadDayBase.OverrideTasks = 400d;
 			Assert.AreEqual(_workloadDayBase.OverrideTasks, 400d);
 		    Assert.AreEqual(_workloadDayBase.TotalTasks, 400d, 3);
-			Assert.AreEqual(_workloadDayBase.Parents.First().TotalTasks, 400d, 3);
-			
 	    }
 
         [Test]
