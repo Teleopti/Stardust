@@ -25,12 +25,9 @@
 				};
 
 				var validateInput= function(node){
-					if (node.MinConsecutiveDayOffs > node.MaxConsecutiveDayOffs ||
-						node.MinConsecutiveWorkdays > node.MaxConsecutiveWorkdays ||
-						node.MinDayOffsPerWeek > node.MaxDayOffsPerWeek) {
-						return false;
-					}
-					return true;
+					return node.MinConsecutiveDayOffs <= node.MaxConsecutiveDayOffs &&
+						node.MinConsecutiveWorkdays <= node.MaxConsecutiveWorkdays &&
+						node.MinDayOffsPerWeek <= node.MaxDayOffsPerWeek;
 				}
 
 				$scope.validateInputAndSend = function(node){

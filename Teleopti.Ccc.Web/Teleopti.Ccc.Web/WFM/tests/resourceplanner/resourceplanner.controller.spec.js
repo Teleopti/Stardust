@@ -7,7 +7,6 @@ describe('ResourcePlannerCtrl', function () {
 
 	beforeEach(module('wfm'));
 
-
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -51,7 +50,7 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:5
 		};
-		scope.validateInputAndSend(node)
+		scope.validateInputAndSend(node);
         expect(scope.isValid).toBe(true);
 	}));
 
@@ -66,7 +65,7 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:6
 			};
-		scope.validateInputAndSend(node)
+		scope.validateInputAndSend(node);
         expect(scope.isValid).toBe(false);
     }));
 
@@ -82,8 +81,8 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:6
 			};
 
-			scope.validateInputAndSend(node)
-	        expect(scope.isValid).toBe(false);
+		scope.validateInputAndSend(node);
+		expect(scope.isValid).toBe(false);
     }));
 
 	it('should be invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function($controller) {
@@ -98,8 +97,8 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:4
 			};
 
-			scope.validateInputAndSend(node)
-	        expect(scope.isValid).toBe(false);
+		scope.validateInputAndSend(node);
+		expect(scope.isValid).toBe(false);
     }));
 
 	it('should be invalid until filled', inject(function($controller){
