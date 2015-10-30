@@ -56,29 +56,55 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		if (daylightSavingAdjustment != null) {
 			var daylightSavingStart = moment(daylightSavingAdjustment.StartDateTime);
 			var daylightSavingEnd = moment(daylightSavingAdjustment.EndDateTime);
-			if (time <= daylightSavingEnd && time >= daylightSavingStart) {
-				return true;
+			var period = { start: daylightSavingStart, end: daylightSavingEnd };
+
+			if (daylightSavingStart < daylightSavingEnd) {
+				return _isTheTimeWithinThePeriod(time, period);
+			} else {
+				return _isTheTimeBeyondThePeriod(time, period);
 			}
 		}
 		return false;
 	};
 
+	function _isTheTimeWithinThePeriod(time, period) {
+		return period.start <= time && time <= period.end;
+	};
+
+	function _isTheTimeBeyondThePeriod(time, period) {
+		return time <= period.end || period.start <= time;
+	};
+
+	function getTeleoptiUtcMomentTimeForScenarioTest() {
+		var teleoptiTimeString = moment(Date.prototype.getTeleoptiTime());
+		var utcToken = '.196Z';
+		return moment(teleoptiTimeString.format('YYYY-MM-DD') + 'T' + teleoptiTimeString.format('HH:mm:SS') + utcToken);
+	}
+
 	function _startUpTimeIndicator() {
 		setInterval(function () {
-			var currentDateTime = moment().utc().add(baseUtcOffsetInMinutes, 'minutes');
+
+			var currentDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
+								? getTeleoptiUtcMomentTimeForScenarioTest().utc().add(baseUtcOffsetInMinutes, 'minutes')
+								: moment().utc().add(baseUtcOffsetInMinutes, 'minutes');
+
+
 			if (_shouldApplyDaylightSavingAdjustment(currentDateTime)) {
 				currentDateTime.add(daylightSavingAdjustment.AdjustmentOffsetInMinutes, 'minutes');
 			}
+
 			if (timeIndicatorDateTime == undefined || currentDateTime.minutes() != timeIndicatorDateTime.minutes()) {
 				timeIndicatorDateTime = currentDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
+
 		}, 1000);
 	};
 
 	function _initTimeIndicator() {
 		_startUpTimeIndicator();
 	};
+
 	function getDateFormat() {
 		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? "DD/MM/YYYY" : Teleopti.MyTimeWeb.Common.DateFormat;
 	};
@@ -110,7 +136,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 
 		self.selectedDate = ko.observable(moment().startOf('day'));
-		
+
 		self.requestViewModel = ko.observable();
 
 		self.initialRequestDay = ko.observable();

@@ -148,7 +148,7 @@ namespace Teleopti.Interfaces.Domain
 
 		private static bool adjustmentIsApplicable(int inYear, TimeZoneInfo.AdjustmentRule adjust)
 		{
-			return (adjust.DateStart.Year <= inYear && adjust.DateEnd.Year >= DateTime.MaxValue.Year);
+			return (adjust.DateStart.Year <= inYear && inYear <= adjust.DateEnd.Year);
 		}
 
 		private static DateTime getTransitionDate(TimeZoneInfo timeZoneInfo, TimeZoneInfo.TransitionTime transitionTime, int year)
@@ -187,6 +187,8 @@ namespace Teleopti.Interfaces.Domain
 			{
 				transitionDay -= 7;
 			}
+
+
 
 			return ConvertToUtc(new DateTime(
 				year,
