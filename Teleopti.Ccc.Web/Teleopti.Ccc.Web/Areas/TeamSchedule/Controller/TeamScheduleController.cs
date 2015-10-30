@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
@@ -17,9 +18,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/Group")]
-		public virtual JsonResult<IEnumerable<GroupScheduleShiftViewModel>> GroupSchedule(Guid groupId, DateTime date)
+		public virtual JsonResult<PagingGroupScheduleShiftViewModel> GroupSchedule(Guid groupId, DateTime date,
+			int pageSize, int currentPageIndex)
 		{
-			return Json(_groupScheduleViewModelFactory.CreateViewModel(groupId, date));
+			int totalPage;
+			var schedules =
+				_groupScheduleViewModelFactory.LoadSchedulesWithPaging(groupId, date, pageSize, currentPageIndex, out totalPage).ToList();
+			var result = new PagingGroupScheduleShiftViewModel
+			{
+				GroupSchedule = schedules,
+				TotalPages = totalPage
+			};
+			return Json(result);
 		}
+	}
+
+	public class PagingGroupScheduleShiftViewModel
+	{
+		public IEnumerable<GroupScheduleShiftViewModel> GroupSchedule { get; set; }
+		public int TotalPages { get; set; }
 	}
 }

@@ -1,25 +1,27 @@
-﻿'use strict';
+﻿"use strict";
 
-angular.module('teamScheduleService', ['ngResource']).service('TeamSchedule', [
-	'$resource', '$http', function($resource, $http) {
-		this.loadAllTeams = $resource('../api/GroupPage/AllTeams', {
+angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
+	"$resource", function($resource) {
+		this.loadAllTeams = $resource("../api/GroupPage/AllTeams", {
 			date: "@queryDate"
 		}, {
 			query: {
-				method: 'GET',
+				method: "GET",
 				params: {},
 				isArray: true
 			}
 		});
 
-		this.loadSchedules = $resource('../api/TeamSchedule/Group', {
+		this.loadSchedules = $resource("../api/TeamSchedule/Group", {
 			groupId: "@groupId",
-			date: "@queryDate"
+			date: "@queryDate",
+			pageSize: "@pageSize",
+			currentPageIndex: "@currentPageIndex"
 		}, {
 			query: {
-				method: 'GET',
+				method: "GET",
 				params: {},
-				isArray: true
+				isArray: false
 			}
 		});
 	}
