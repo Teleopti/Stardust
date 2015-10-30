@@ -96,5 +96,10 @@ Scenario: Do not show the time indicator after passing end of timeline
 	And I should see the time indicator at time '2030-03-12 12:15'
 	When the time is '2030-03-12 12:16'
 	Then I should not see the time indicator
-
 	
+Scenario: Show the time indicator at correct time for Brasilia
+	Given I have the role 'Full access to mytime'
+	And I am located in Brasilia
+	When the utc time is '2016-02-03 08:00'
+	And I view my week schedule for date '2016-02-03'
+	Then I should see the time indicator at time '2016-02-03 06:00'

@@ -456,6 +456,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			DataMaker.Person(userName).Apply(new StockholmTimeZone());
 		}
 
+		[Given(@"'?(I)'? am located in Brasilia")]
+		public void GivenIAmLocatedInBrasilia(string userName)
+		{
+			DataMaker.Person(userName).Apply(new BrasilianTimeZone());
+		}
+
+
 		[Given(@"I have an existing text request")]
 		public void GivenIHaveAnExistingTextRequest()
 		{

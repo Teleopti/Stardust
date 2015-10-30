@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Time;
+using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
@@ -176,5 +177,42 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime utcEndDateTime = DateTime.UtcNow.AddHours(1);
             TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(utcStartDateTime, utcEndDateTime, null);
         }
+
+
+
+	    [Test]
+	    public void MakeSureGetDaylightChangesIfThereAreSomeForTheYear()
+	    {
+		    var timezoneInfoList = TimeZoneInfo.GetSystemTimeZones();
+		    foreach (var timeZoneInfo in timezoneInfoList)
+		    {
+			    if (timeZoneInfo.SupportsDaylightSavingTime && timeZoneInfo.IsDaylightSavingTime(DateTime.UtcNow))
+			    {
+				    TimeZoneHelper.GetDaylightChanges(timeZoneInfo, DateTime.UtcNow.Year).Should().Not.Be(null);
+			    }
+		    }
+	    }
+
+
+	    [Test]
+	    public void VerifyGetDaylightChangesReturnCorrectDayLightTime()
+	    {
+
+			var swedenTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var brasiliaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+			var thisYear = 2015;
+
+			var swedenDaylightSavingTimeRule = TimeZoneHelper.GetDaylightChanges(swedenTimeZone, thisYear);
+			swedenDaylightSavingTimeRule.Start.Should().Be(new DateTime(2015, 3, 29, 1, 00, 00));
+			swedenDaylightSavingTimeRule.End.Should().Be(new DateTime(2015, 10, 25, 2, 00, 00));
+			swedenDaylightSavingTimeRule.Delta.Should().Be(TimeSpan.FromHours(1));
+
+			var brasiliaDaylightSavingTimeRule = TimeZoneHelper.GetDaylightChanges(brasiliaTimeZone, thisYear);
+			brasiliaDaylightSavingTimeRule.Start.Should().Be(new DateTime(2015, 10, 18, 2, 59, 59));
+			brasiliaDaylightSavingTimeRule.End.Should().Be(new DateTime(2015, 2, 22, 2, 59, 59));
+			brasiliaDaylightSavingTimeRule.Delta.Should().Be(TimeSpan.FromHours(1));
+	    }
+
+
     }
 }
