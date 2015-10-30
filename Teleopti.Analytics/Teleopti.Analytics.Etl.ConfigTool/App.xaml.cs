@@ -28,15 +28,15 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"]));
 
-			//if (!configurationHandler.IsConfigurationValid)
-			//{
-			//	var startupConfigurationView = new StartupConfigurationView(configurationHandler);
-			//	if (startupConfigurationView.ShowDialog() == DialogResult.Cancel)
-			//	{
-			//		Current.Shutdown();
-			//		return;
-			//	}
-			//}
+			if (!configurationHandler.IsConfigurationValid)
+			{
+				var startupConfigurationView = new StartupConfigurationView(configurationHandler);
+				if (startupConfigurationView.ShowDialog() == DialogResult.Cancel)
+				{
+					Current.Shutdown();
+					return;
+				}
+			}
 
 			if (configurationHandler.BaseConfiguration.CultureId != null)
 				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
