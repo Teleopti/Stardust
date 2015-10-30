@@ -286,44 +286,6 @@
 		margin-right:-10px;
 	}
 
-	.seatplan-report-paging {
-		height:32px;
-		background:$white;
-		color: #0099ff;
-		vertical-align: middle;
-		clear:both;
-		cursor:default!important;
-
-		.mdi{
-			padding:7px;
-		}
-
-		.mdi:hover{
-			color:$white;
-			background:#0099FF;
-		}
-
-		.noclick:hover{
-			color:inherit;
-			background:inherit;
-		}
-
-		.current-page{
-			min-width:32px;
-			text-align:center;
-			margin-left:0px;
-		}
-
-		span{
-			min-width:110px;
-			margin-left:5px;
-			display: inline-block;
-			text-align: left;
-			margin-top: 4px;
-			vertical-align: top;
-		}
-	}
-
 	.seatplan-report-date-validation{
 
 		right:10px;
@@ -338,7 +300,6 @@
 		}
 	}
 }
-
 
 .container-to-print-report{
 	overflow:visible!important;

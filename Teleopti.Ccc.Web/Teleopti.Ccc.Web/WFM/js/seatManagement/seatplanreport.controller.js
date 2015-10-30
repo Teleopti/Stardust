@@ -11,7 +11,7 @@
 		vm.temp = {};
 		vm.isDatePickerOpened = true;
 		vm.reportTake = 34;
-		
+
 		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = options.isLoadingReportToDisplay;
 			var seatBookingReportParams = {
@@ -28,7 +28,7 @@
 			});
 		};
 
-		vm.dateFilterIsValid = function() {
+		vm.dateFilterIsValid = function () {
 			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
 		};
 
@@ -39,7 +39,7 @@
 			} else {
 				reloadCachedFilterValuesAfterCancel();
 			}
-			
+
 			vm.isFilterOpened = !vm.isFilterOpened;
 		}
 
@@ -50,11 +50,11 @@
 
 		};
 
-		vm.cancelFilter = function() {
+		vm.cancelFilter = function () {
 			vm.isFilterOpened = false;
 			reloadCachedFilterValuesAfterCancel();
 		};
-		
+
 
 		vm.applyFilter = function () {
 
@@ -63,7 +63,7 @@
 			}
 
 			vm.isFilterOpened = false;
-			
+
 			vm.getSeatBookings({
 				skip: vm.page,
 				take: vm.reportTake,
@@ -72,6 +72,59 @@
 			});
 			vm.currentPage = 1;
 		};
+
+		vm.firstPage = function () {
+			vm.paging(1);
+		};
+
+		vm.previousPage = function () {
+			vm.paging(vm.currentPage - 1);
+		};
+
+		vm.getVisiblePages = function (start, end) {
+			var displayPageCount = 5;
+			var ret = [];
+			if (!end) {
+				end = start;
+				start = 1;
+			}
+
+			var leftBoundary = start;
+			var rightBoundary = end;
+			if (end - start >= displayPageCount) {
+				var currentPage = vm.currentPage;
+
+				if (currentPage < displayPageCount - 1) {
+					leftBoundary = 1;
+					rightBoundary = displayPageCount;
+				} else if (end - currentPage < 3) {
+					leftBoundary = end - displayPageCount + 1;
+					rightBoundary = end;
+				} else {
+					leftBoundary = currentPage - Math.floor(displayPageCount / 2) > 1 ? currentPage - Math.floor(displayPageCount / 2) : 1;
+					rightBoundary = currentPage + Math.floor(displayPageCount / 2) > end ? end : currentPage + Math.floor(displayPageCount / 2);
+				}
+			}
+
+			for (var i = leftBoundary; i <= rightBoundary ; i++) {
+				ret.push(i);
+			}
+
+			return ret;
+		};
+		
+		vm.seekPage = function (page) {
+			vm.paging(page);
+		};
+
+		vm.nextPage = function () {
+			vm.paging(vm.currentPage + 1);
+		};
+
+		vm.lastPage = function () {
+			vm.paging(vm.totalPages);
+		};
+
 
 		vm.paging = function (goToPage) {
 
