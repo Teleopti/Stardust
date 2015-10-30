@@ -1,20 +1,85 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using System.Collections.Generic;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 {
 	[Binding]
 	public class OutboundCampaignStepDefinitions
 	{
-		[Then(@"I should see '(.*)' in campaign list")]
-		public void ThenIShouldSeeInCampaignList(string campaignName)
+
+		[When(@"I set the starting month for viewing period to '(.*)'")]
+		public void WhenISetTheStartingMonthForViewingPeriodTo(DateTime startingMonth)
 		{
-			Browser.Interactions.AssertAnyContains(".campaign-list", campaignName);
+			Browser.Interactions.FillScopeValues(".outbound-summary", new Dictionary<string, string>
+			{
+				{"settings.periodStart" , string.Format("new Date('{0}')", startingMonth.ToShortDateString())} 
+			});
+		}
+
+		[Then(@"I should see the gantt chart")]
+		public void ThenIShouldSeeTheGanttChart()
+		{
+			Browser.Interactions.AssertExists(".outbound-gantt-chart");
+		}
+
+		[When(@"I can see '(.*)' in campaign list")]
+		public void WhenICanSeeInCampaignList(string campaignName)
+		{
+			Browser.Interactions.AssertAnyContains(".outbound-gantt-chart", campaignName);
 		}
 
 
+		[Then(@"I should see '(.*)' in campaign list")]
+		public void ThenIShouldSeeInCampaignList(string campaignName)
+		{
+			Browser.Interactions.AssertAnyContains(".outbound-gantt-chart", campaignName);
+		}
+
+		[Then(@"I should not see '(.*)' in campaign list")]
+		public void ThenIShouldNotSeeInCampaignList(string campaignName)
+		{
+			Browser.Interactions.AssertNoContains(".outbound-gantt-chart", ".outbound-gantt-chart", campaignName);
+		}
+
+		[When(@"I click at campaign name tag '(.*)'")]
+		public void WhenIClickAtCampaignNameTag(string campaignName)
+		{
+			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", "false",
+				() => { Browser.Interactions.ClickContaining(".campaign-visualization-toggle", campaignName); });			
+		}
+	
+		[Then(@"I should see the backlog visualization of '(.*)'")]
+		public void ThenIShouldSeeTheBacklogVisualizationOf(string campaignName)
+		{
+			Browser.Interactions.AssertExists("campaign-chart");
+		}
+
+		[Then(@"I should see the new campaign form")]
+		[When(@"I see the new campaign form")]
+		public void ThenIShouldSeeTheNewCampaignForm()
+		{
+			Browser.Interactions.AssertExists("campaign-create");
+		}
+
+		[When(@"I complete the campaign details with")]
+		public void WhenICompleteTheCampaignDetailsWith(Table table)
+		{
+			var instance = new OutboundCampaignConfigurable();
+			table.FillInstance(instance);			
+		}
+
+		[When(@"I submit to create the campaign")]
+		public void WhenISubmitToCreateTheCampaign()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+	
 		[Then(@"I should see campaign details with")]
 		public void ThenIShouldSeeCampaignDetailsWith(Table table)
 		{
@@ -62,12 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.ClickContaining(".modal-box a", "AGREE");
 		}
 
-		[Then(@"I should not see '(.*)' in campaign list")]
-		public void ThenIShouldNotSeeInCampaignList(string campaignName)
-		{
-			Browser.Interactions.AssertNoContains(".campaign-list li", ".campaign-list li", campaignName);
-		}
-
+	
 
 	}
 }

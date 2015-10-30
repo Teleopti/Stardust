@@ -1,4 +1,5 @@
-﻿Feature: OutboundCampaignBasicOperations
+﻿@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
+Feature: OutboundCampaignBasicOperations
 	In order to plan outbound campaigns
 	As a resource planner
 	I want to perform basic operations for outbound campaigns
@@ -19,63 +20,63 @@ Background:
 	And there is a campaign with 
 	| Field      | Value        |
 	| Name       | Campaign1    |
-	| Start Date | 2015-05-01   |
-	| End Date   | 2015-05-30   |
+	| Start Date | 2015-7-01   |
+	| End Date   | 2015-7-07   |
 	| Skill      | Direct Sales |
 	And there is a campaign with
 	| Field      | Value        |
 	| Name       | Campaign2    |
-	| Start Date | 2015-04-01   |
-	| End Date   | 2015-04-30   |
+	| Start Date | 2015-8-01   |
+	| End Date   | 2015-8-07   |
 	| Skill      | Direct Sales |
-	And the time is '2015-04-22'
-
-@ignore
-Scenario: List all active campaigns
-	When I view outbound
-	Then I should see 'Campaign1' in campaign list
-	And I should see 'Campaign2' in campaign list
-
-@ignore
-Scenario: View selected campaign
-	When I view campaign 'Campaign1'
-	Then I should see campaign details with 
+	And there is a campaign with
 	| Field      | Value        |
-	| Name       | Campaign1    |
-	| Start Date | 2015-05-01   |
-	| End Date   | 2015-05-30   |
+	| Name       | Campaign3    |
+	| Start Date | 2015-9-01   |
+	| End Date   | 2015-9-07   |
+	| Skill      | Direct Sales |
+	And there is a campaign with
+	| Field      | Value        |
+	| Name       | Campaign4    |
+	| Start Date | 2015-10-01   |
+	| End Date   | 2015-10-07   |
+	| Skill      | Direct Sales |
+	And there is a campaign with
+	| Field      | Value        |
+	| Name       | Campaign5    |
+	| Start Date | 2015-11-01   |
+	| End Date   | 2015-11-07   |
+	| Skill      | Direct Sales |
 
-@ignore
-Scenario: Edit selected campaign
-	When I view campaign 'Campaign1'
-	And I change the campaign name to 'Campaign1+'
-	And I change the campaign start date to '21' of the same month
-	Then I should see campaign details with
-	| Field      | Value      |
-	| Name       | Campaign1+ |
-	| Start Date | 2015-05-21 |
-	| End Date   | 2015-05-30 |
 
-@ignore
-Scenario: Delete selected campaign
-	When I view outbound
-	And I delete 'Campaign1' from campaign list
-	Then I should not see 'Campaign1' in campaign list
+Scenario: Display Gantt chart for showing the campaigns
+When I view outbound
+Then I should see the gantt chart
 
-@ignore
-Scenario: Add new working period to campaign
-	When I view campaign 'Campaign1'
-	And I submit new working period with start time '01:01' and end time '22:02'
-	Then I should see working period in the list with start time '01:01 ' and end time '22:02'
+@OnlyRunIfEnabled('Wfm_Outbound_Campaign_GanttChart_Navigation_34924')
+Scenario: List campaigns in three months
+When I view outbound
+And I set the starting month for viewing period to '2015-08-01'
+Then I should see 'Campaign2' in campaign list
+And I should see 'Campaign3' in campaign list
+And I should see 'Campaign4' in campaign list
+And I should not see 'Campaign1' in campaign list
+And I should not see 'Campaign5' in campaign list
 
-@ignore
-@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
-Scenario: Create a new campaign
-Given I view outbound
-When I create a campaign with 
-| Field      | Value      |
-| Name       | MyCampaign |
-| Start Date | 2015-05-21 |
-| End Date   | 2015-05-30 |
-And I save this campaign
-Then I should see campaign 'MyCampaign' in campaign list
+@OnlyRunIfEnabled('Wfm_Outbound_Campaign_GanttChart_Navigation_34924')
+Scenario: Navigate in gantt chart by month
+When I view outbound
+And I set the starting month for viewing period to '2015-09-01'
+And I can see 'Campaign4' in campaign list
+And I set the starting month for viewing period to '2015-07-01'
+Then I should see 'Campaign1' in campaign list
+And I should not see 'Campaign4' in campaign list
+
+
+Scenario: Visualize campaign backlog
+When I view outbound
+And I set the starting month for viewing period to '2015-09-01'
+And I can see 'Campaign4' in campaign list
+And I click at campaign name tag 'Campaign4'
+Then I should see the backlog visualization of 'Campaign4'
+ 

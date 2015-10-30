@@ -595,6 +595,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToOutbound();
 		}
 
+		[When(@"I view the outbound campaign creation page")]
+		public void WhenIViewTheOutboundCampaignCreationPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToOutboundCampaignCreation();
+		}
+
+
 		[When(@"I view campaign '(.*)'")]
 		public void WhenIViewCampaign(string campaginName)
 		{

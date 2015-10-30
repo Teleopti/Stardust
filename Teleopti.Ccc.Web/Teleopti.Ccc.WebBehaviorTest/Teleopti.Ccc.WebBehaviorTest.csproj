@@ -208,6 +208,7 @@
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Bindings\TestRun.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />

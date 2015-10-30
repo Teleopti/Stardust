@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -16,28 +18,68 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public string Skill { get; set; }
+		public int CallListLen { get; set; }
+		public int TargetRate { get; set; }
+		public int ConnectRate { get; set; }
+		public int RightPartyConnectRate { get; set; }
+		public int ConnectAverageHandlingTime { get; set; }
+		public int RightPartyAverageHandlingTime { get; set; }
+		public int UnproductiveTime { get; set; }
+		public string OpeningHourStart { get; set; }
+		public string OpeningHourEnd { get; set; }
+
+		public OutboundCampaignConfigurable()
+		{
+			CallListLen = 100;
+			TargetRate = 50;
+			ConnectRate = 20;
+			RightPartyConnectRate = 20;
+			ConnectAverageHandlingTime = 30;
+			RightPartyAverageHandlingTime = 120;
+			UnproductiveTime = 30;
+		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var skillRepository = new SkillRepository(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == Skill);
 
+			var startDateUtc = TimeZoneHelper.ConvertToUtc(StartDate, skill.TimeZone);
+			var endDateUtc = TimeZoneHelper.ConvertToUtc(EndDate, skill.TimeZone);		
+
 			Campaign = new Campaign()
 			{
 				Name = Name,
-				CallListLen = 100,
-				TargetRate = 50,
+				CallListLen = CallListLen,
+				TargetRate = TargetRate,
 				Skill = skill,
-				ConnectRate = 20,
-				RightPartyConnectRate = 20,
-				ConnectAverageHandlingTime = 30,
-				RightPartyAverageHandlingTime = 120,
-				UnproductiveTime = 30,
-				SpanningPeriod = new DateTimePeriod(new DateTime(StartDate.Year, StartDate.Month, StartDate.Day), new DateTime(EndDate.Year, EndDate.Month, EndDate.Day))
+				ConnectRate = ConnectRate,
+				RightPartyConnectRate = RightPartyConnectRate,
+				ConnectAverageHandlingTime = ConnectAverageHandlingTime,
+				RightPartyAverageHandlingTime = RightPartyAverageHandlingTime,
+				UnproductiveTime = UnproductiveTime,
+				SpanningPeriod = new DateTimePeriod(startDateUtc, endDateUtc) 					
 			};
+
+			TimeSpan openingHourStart, openingHourEnd;
+
+			if (TimeSpan.TryParse(OpeningHourStart, out openingHourStart) &&
+				TimeSpan.TryParse(OpeningHourEnd, out openingHourEnd))
+			{
+				Campaign.WorkingHours = new Dictionary<DayOfWeek, TimePeriod>
+				{
+					{DayOfWeek.Monday, new TimePeriod(openingHourStart, openingHourEnd) },
+					{DayOfWeek.Tuesday, new TimePeriod(openingHourStart, openingHourEnd) },
+					{DayOfWeek.Wednesday, new TimePeriod(openingHourStart, openingHourEnd) },
+					{DayOfWeek.Thursday, new TimePeriod(openingHourStart, openingHourEnd) },
+					{DayOfWeek.Friday, new TimePeriod(openingHourStart, openingHourEnd) },
+				};
+			}
 
 			new OutboundCampaignRepository(currentUnitOfWork).Add(Campaign);
 		}
+
+		
 
 	}
 }
