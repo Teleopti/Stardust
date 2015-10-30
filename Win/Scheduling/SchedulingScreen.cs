@@ -1018,13 +1018,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_cachedPersonsFilterView != null && _cachedPersonsFilterView.Disposing == false)
 				_cachedPersonsFilterView.Dispose();
 
-			if (checkIfUserWantsToSaveUnsavedData() == -1)
-				e.Cancel = true;
-
 			if (!e.Cancel)
 			{
 				Cursor.Current = Cursors.WaitCursor;
-
+				closingInProgress = true;
 				try
 				{
 					saveAllChartSetting();
