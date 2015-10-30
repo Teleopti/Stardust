@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.businessunits', ['ngResource', 'ngStorage'])
+	angular.module('wfm.businessunits')
 		.controller('BusinessUnitsCtrl', [
-			'$scope', '$resource', '$http', '$filter', '$state', '$sessionStorage', '$window',
-			function ($scope, $resource, $http, $filter, $state, $sessionStorage, $window) {
+			'$scope', '$resource', '$http', '$filter', '$state', '$sessionStorage', '$window', 'BusinessUnitsService',
+			function ($scope, $resource, $http, $filter, $state, $sessionStorage, $window, BusinessUnitsService) {
 
 				$scope.show = false;
 
@@ -12,26 +12,22 @@
 				};
 
 				$scope.changeBusinessUnit = function (selectedBu) {
-					$sessionStorage.buid = selectedBu.Id;
+					BusinessUnitsService.setBusinessUnit(selectedBu.Id);
 					$window.location.reload();
 				};
 				
-				var getBusinessUnits = $resource('../BusinessUnit', {}, {
-					get: { method: 'GET', params: {}, isArray: true }
-				});
+				
 
 				$scope.loadBusinessUnits = function() {
-					getBusinessUnits.get().$promise.then(function (result) {
+					BusinessUnitsService.getAllBusinessUnits().then(function (result) {
 						$scope.data.businessUnits = result;
 						$scope.show = (result.length > 1);
-						var buid = $sessionStorage.buid;
+						var buid = BusinessUnitsService.getBusinessUnitFromSessionStorage();
 						if (buid) {
 							var businessUnit = $filter('filter')(result, function (d) { return d.Id === buid; })[0];
 							$scope.data.selectedBu = businessUnit;
-							$http.defaults.headers.common['X-Business-Unit-Filter'] = businessUnit.Id;
 						} else {
 							$scope.data.selectedBu = result[0];
-							$sessionStorage.buid = result[0].Id;
 						}
 					});
 				};

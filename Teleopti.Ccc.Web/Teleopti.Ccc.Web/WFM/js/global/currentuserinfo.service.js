@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n'])
+	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n', 'wfm.businessunits'])
 		.service('AuthenticationRequests', ['$injector', function ($injector) {
 			var service = {};
 			
@@ -10,15 +10,10 @@
 				return $http.get('../api/Global/User/CurrentUser');
 			};
 
-			service.setBuidOnHeaders = function (buid) {
-				var $http = $injector.get('$http');
-				$http.defaults.headers.common['X-Business-Unit-Filter'] = buid; //should call http module
-			};
-
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService',
-			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService) {
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService',
+			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService) {
 			var userName;
 			var defaultTimeZone;
 			var language;
@@ -56,8 +51,8 @@
 				context.success(function (data) {
 					timeout = Date.now() + 10000;
 					wfmI18nService.setLocales(data);
-					service.SetCurrentUserInfo(data); // remove ?
-					service.setBuid();
+					service.SetCurrentUserInfo(data);
+					BusinessUnitsService.initBusinessUnit();
 					deferred.resolve(data);
 				});
 				return deferred.promise; 
@@ -65,13 +60,6 @@
 
 			service.isConnected = function () {
 				return timeout > Date.now();
-			};
-
-			service.setBuid = function () {
-				var buid = $sessionStorage.buid;
-				if (buid) {
-					AuthenticationRequests.setBuidOnHeaders(buid);
-				}
 			};
 
 			service.resetContext = function () {

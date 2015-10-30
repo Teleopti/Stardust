@@ -3,8 +3,7 @@
 
     describe('RolesFunctionsService', function() {
         var $q,
-            $filter,
-            $httpBackend;
+            $filter;
 
         var mockPermissionsService = {
             applicationFunctions: {
@@ -56,21 +55,15 @@
         };
 
         beforeEach(function () {
-            module('wfm');
+            module('wfm.permissions');
             module(function ($provide) {
                 $provide.service('PermissionsService', function () { return mockPermissionsService; });
             });
         });
 
-        beforeEach(inject(function (_$httpBackend_, _$q_, _$filter_) {
+        beforeEach(inject(function (_$q_, _$filter_) {
             $q = _$q_;
             $filter = _$filter_;
-            $httpBackend = _$httpBackend_;
-            $httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
-            $httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en' });
-            $httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en' });
-            $httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
-            $httpBackend.expectGET("html/main.html").respond(200);
         }));
 
 
@@ -83,9 +76,7 @@
                 };
 
                 RolesFunctionsService.functionsDisplayed = [node];
-             RolesFunctionsService.selectAllFunctions(role);
-
-                $httpBackend.flush();
+				RolesFunctionsService.selectAllFunctions(role);
 
                 expect(node.selected).toBe(true);
                 expect(node.ChildFunctions[0].selected).toBe(true);
@@ -114,8 +105,6 @@
                   }];
 
                 RolesFunctionsService.parseFunctions(allFunctionsAvailable,functionsAvailableForARole, nmbFunctionsTotal, allSelected);
-
-                $httpBackend.flush();
 
                 expect(allFunctionsAvailable[0].selected).toBe(true);
                 expect(allFunctionsAvailable[0].ChildFunctions[0].selected).toBe(true);

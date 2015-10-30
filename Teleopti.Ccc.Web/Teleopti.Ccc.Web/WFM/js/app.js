@@ -183,8 +183,6 @@ wfm.config([
 			});
 		}
 
-		
-
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 			if (!currentUserInfo.isConnected()){
 				event.preventDefault();

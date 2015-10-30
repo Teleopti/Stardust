@@ -1220,6 +1220,8 @@
     <Content Include="WFM\js\forecasting\html\skill-create.html" />
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
+    <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
+    <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\global\fakedatetime.service.js" />
     <Content Include="WFM\js\global\http.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
@@ -1376,7 +1378,7 @@
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
-    <Content Include="WFM\js\global\businessunits.controller.js" />
+    <Content Include="WFM\js\global\businessunits\businessunits.controller.js" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcard.directive.js" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcard.html" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.directive.js" />
