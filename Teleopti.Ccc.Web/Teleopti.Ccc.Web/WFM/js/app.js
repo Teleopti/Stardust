@@ -135,33 +135,35 @@ wfm.config([
 		}).state('seatMap', {
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
-		}).state('rta-sites', {
-			url: '/rta/sites',
+		}).state('rta', {
+			url: '/rta',
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl',
 		}).state('rta-teams', {
-			url: '/rta/site/:siteId',
+			url: '/rta/teams/:siteId',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl'
 		}).state('rta-agents', {
-			url: '/rta/site/:siteId/team/:teamId',
+			url: '/rta/agents/:siteId/:teamId',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
-		}).state('rta-agents-selected', {
-			url: '/rta/agentes/?teamIds',
+		}).state('rta-agents-teams', {
+			url: '/rta/agents/?teamIds',
 			templateUrl: 'js/rta/rta-agents.html',
-			controller: 'RtaAgentsCtrl',
+			controller: 'RtaAgentsForTeamsCtrl',
 			params: {teamIds: {array:true}}
-		}).state('rta-agents-sites-selected', {
+		}).state('rta-agents-sites', {
 			url: '/rta/agents/?siteIds',
 			templateUrl: 'js/rta/rta-agents.html',
-			controller: 'RtaAgentsCtrl',
+			controller: 'RtaAgentsForSitesCtrl',
 			params: {siteIds: {array:true}}
 		}).state('personSchedule', {
 			url: '/teamSchedule',
 			templateUrl: 'js/teamSchedule/schedule.html',
 			controller: 'TeamScheduleCtrl as vm'
 		});
+
+
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
@@ -172,7 +174,7 @@ wfm.config([
 	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo','FakeDateTime',
 	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, fakeDateTime) {
 		$rootScope.isAuthenticated = false;
-		
+
 		function broadcastEventOnToggle() {
 			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
 				$timeout(function() {
@@ -180,6 +182,8 @@ wfm.config([
 				}, 500);
 			});
 		}
+
+
 
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 			if (!currentUserInfo.isConnected()){
@@ -189,14 +193,14 @@ wfm.config([
 				});
 			}
 		});
-		
+
 		broadcastEventOnToggle();
 
 		var startContext = currentUserInfo.initContext();
 		startContext.then(function (data) {
 			$rootScope.isAuthenticated = true; // could it be somewhere else than in rootscope ?
 			$translate.fallbackLanguage('en');
-			
+
 			wfm_cultureInfo_numberFormat = data.NumberFormat; // should be extracted in user service as well
 
 			var ab1 = new ABmetrics();
