@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IInitializeApplication
 	{
-		void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker);
+		void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings);
 	}
 }

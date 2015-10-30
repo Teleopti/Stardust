@@ -92,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private void initializeStateHolder()
 		{
 			var application = new InitializeApplication(null);
-			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
+			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_logonService =

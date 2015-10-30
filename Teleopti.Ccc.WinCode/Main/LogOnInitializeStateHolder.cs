@@ -29,7 +29,9 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var initializer = new InitializeApplication(messageBroker);
 
-			initializer.Start(new State(), passwordPolicyService, appSettings, true);
+			var state = new State();
+			initializer.Start(state, passwordPolicyService, appSettings);
+			new InitializeMessageBroker(state.ApplicationScopeData.Messaging).Start(appSettings);
 		}
 	}
 }

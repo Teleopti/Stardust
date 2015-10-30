@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			var passwordPolicyPath = System.IO.Path.Combine(_physicalApplicationPath.Get(), _settings.ConfigurationFilesPath());
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				_initializeApplication.Start(new State(), new LoadPasswordPolicyService(passwordPolicyPath), ConfigurationManager.AppSettings.ToDictionary(), false);
+				_initializeApplication.Start(new State(), new LoadPasswordPolicyService(passwordPolicyPath), ConfigurationManager.AppSettings.ToDictionary());
 
 				//remove this and ctor dependencies when tenants are handled correctly in RTA
 				if (!_toggleMananager.IsEnabled(Toggles.RTA_MultiTenancy_32539))

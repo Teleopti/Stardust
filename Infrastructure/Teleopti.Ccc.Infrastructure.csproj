@@ -223,6 +223,7 @@
     <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
     <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
     <Compile Include="Foundation\HttpRequestTrue.cs" />
+    <Compile Include="Foundation\InitializeMessageBroker.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
