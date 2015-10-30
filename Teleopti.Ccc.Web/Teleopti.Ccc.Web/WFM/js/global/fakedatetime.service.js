@@ -7,7 +7,7 @@ angular.module('fakeDateTimeService', []).service('FakeDateTime', [function() {
 		function mirrorDateProperties(target, source) {
 			if (source.now) {
 				target.now = function now() {
-					return target.clock.now;
+					return new Date(fyear, fmonth, fdate, fhour, fminute, fsecond).now();
 				};
 			} else {
 				delete target.now;
