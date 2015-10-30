@@ -34,5 +34,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// </summary>
 		[DataMember(Order = 2, IsRequired = false)]
 		public Guid? ScheduleTagId { get; set; }
+
+		[DataMember(Order = 3, IsRequired = false)]
+	    public Guid? AbsenceId { get; set; }
     }
 }

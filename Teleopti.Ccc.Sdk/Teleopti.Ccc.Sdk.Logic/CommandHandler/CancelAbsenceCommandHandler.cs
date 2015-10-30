@@ -60,6 +60,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var absences = scheduleDay.PersonAbsenceCollection(true);
 				foreach (var personAbsence in absences)
 				{
+					if (command.AbsenceId.HasValue)
+					{
+						if (personAbsence.Layer.Payload.Id != command.AbsenceId)
+							continue;
+					}
 					var splitPeriods = personAbsence.Split(dateTimePeriod);
 					if (splitPeriods.Count > 0 || dateTimePeriod.Contains(personAbsence.Layer.Period))
 					{
