@@ -11,9 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -77,10 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 			using (mocks.Record())
 			{
-				Expect.On(stateMock)
-					.Call(stateMock.IsLoggedIn)
-					.Return(false)
-					.Repeat.Any();
 				createSessionMock(factoryMock, Guid.Empty);
 				Expect.Call(stateMock.ApplicationScopeData)
 					.Return(SetupFixtureForAssembly.ApplicationData)
@@ -194,10 +188,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 			using (mocks.Record())
 			{
-				Expect.On(stateMock)
-					.Call(stateMock.IsLoggedIn)
-					.Return(false)
-					.Repeat.Any();
 				var session = createSessionMock(factoryMock, Guid.Empty);
 				Expect.On(session)
 					.Call(session.BeginTransaction())

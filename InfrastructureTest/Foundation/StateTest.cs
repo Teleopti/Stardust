@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
@@ -50,22 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             target.SetApplicationData(appData);
             Assert.AreSame(appData, target.ApplicationScopeData);
             mocks.VerifyAll();
-        }
-
-        /// <summary>
-        /// Verifies the logged in true.
-        /// </summary>
-        [Test]
-        public void VerifyLoggedInTrue()
-        {
-            using(mocks.Record())
-            {
-                Expect.Call(target.IsLoggedIn).CallOriginalMethod(OriginalCallOptions.CreateExpectation);
-            }
-            using(mocks.Playback())
-            {
-                Assert.IsTrue(target.IsLoggedIn);
-            }
         }
 
         /// <summary>

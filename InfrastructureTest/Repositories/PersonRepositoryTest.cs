@@ -575,10 +575,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			MockRepository mocks = new MockRepository();
 			IState stateMockTemp = mocks.StrictMock<IState>();
 			StateHolderProxyHelper.ClearAndInitializeStateHolder(stateMockTemp);
-			Expect.On(stateMockTemp)
-				.Call(stateMockTemp.IsLoggedIn)
-				.Return(false)
-				.Repeat.Any();
 			mocks.ReplayAll();
 			justForTest justForTest1 = new justForTest(UnitOfWork);
 			Assert.IsNotNull(justForTest1.InternalSession);
