@@ -28,6 +28,10 @@
 
 			if (start === undefined)
 				return shiftHelper.MinutesForHourOfDay(8);
+			if (start > 60 && (start % 60 == 0)) {
+				start = shiftHelper.MinutesAddHours(start, -1);
+			}
+				
 
 			return shiftHelper.MinutesStartOfHour(start);
 		};
@@ -54,6 +58,9 @@
 
 			if (end === undefined)
 				return shiftHelper.MinutesForHourOfDay(16);
+			if (end % 60 == 0) {
+				end = shiftHelper.MinutesAddHours(end, 1);
+			}
 
 			return shiftHelper.MinutesEndOfHour(end);
 		};
