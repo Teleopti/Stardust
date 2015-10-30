@@ -96,11 +96,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			return new CampaignStatusViewModel()
 			{
+				CampaignSummary = new CampaignSummaryViewModel()
+				{
 				Id = (Guid)campaign.Id,
 				Name = campaign.Name,
+					StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
+					EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate
+				},
 				IsScheduled = isScheduled,
-				StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
-				EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
 				WarningInfo = warningViewModel
 			};
 		}

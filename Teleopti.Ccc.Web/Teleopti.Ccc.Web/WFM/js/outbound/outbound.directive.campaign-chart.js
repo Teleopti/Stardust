@@ -237,9 +237,9 @@
 			}
 
 			function _setChartOption_verticalLines() {
-				var endDate = new moment($scope.campaign.EndDate.Date),
+				var endDate = new moment($scope.campaign.CampaignSummary.EndDate.Date),
 					todayDate = new moment(),
-					startDate = new moment($scope.campaign.StartDate.Date);
+					startDate = new moment($scope.campaign.CampaignSummary.StartDate.Date);
 
 				var hints = [];
 
