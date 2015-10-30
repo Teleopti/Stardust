@@ -9,13 +9,22 @@
 				$scope.skillList = result;
 				$scope.selectedSkill = $scope.skillList[0];
 				$scope.skillChange($scope.selectedSkill);
-				$scope.time = new Date();
 			});
 
 			$scope.skillChange = function (skill) {
 				$scope.name = skill.Measures[0].Name;
 				$scope.value = skill.Measures[0].Value;
 				$scope.stringValue = skill.Measures[0].StringValue;
+				if (skill.Measures[0].LatestDate = new Date()) {
+					$scope.latestDate = "--:--:--";
+				} else {
+					$scope.latestDate = skill.Measures[0].LatestDate;
+				}
+				if ($scope.value == 0) {
+					$scope.value = "-";
+				} else {
+					$scope.value = skill.Measures[0].Value;
+				}
 			}
 			
 			$scope.reload = setInterval(function () {
@@ -26,11 +35,11 @@
 							if (resultItem.SkillName == skillItem.SkillName) {
 								skillItem.Severity = resultItem.Severity;
 								skillItem.Measures = resultItem.Measures;
+								skillItem.LatestDate = resultItem.LatestDate;
 							}
 						});
 					});
 				});
-				$scope.time = new Date();
 			}, 60000);
 		}
 	]);
