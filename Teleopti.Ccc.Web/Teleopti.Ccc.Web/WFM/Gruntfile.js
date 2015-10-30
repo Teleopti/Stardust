@@ -60,6 +60,9 @@
 			},
 			unit: {
 			},
+			dev:{
+				singleRun:false
+			},
 			continuous: {
 				reporters: 'teamcity'
 			}
@@ -108,7 +111,7 @@
 				src: ['html/**/*.html', 'js/**/*.html'],
 				dest: 'dist/templates.js',
 				options: {
-					standalone: true	
+					standalone: true
 				}
 			}
 		}
