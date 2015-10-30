@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 
             _drawing = drawingBehavior;
             _drawSmartPart = drawSmartPart;
-            if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-                _monthNames =
-                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.AbbreviatedMonthNames;
+            _monthNames = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.AbbreviatedMonthNames;
 
             InitializeDrawingGrid();
         }

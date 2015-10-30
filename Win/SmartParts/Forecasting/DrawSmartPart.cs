@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
             if (drawProperties == null) throw new ArgumentNullException("drawProperties");
             if (periods == null) throw new ArgumentNullException("periods");
 
-            if (periods.Count > 0 && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
+            if (periods.Count > 0)
             {
                 var startDate = period.StartDate;
                 Calendar calendar = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
             if (mouseX >= drawPositionAndWidth.ProgressStartPosition) return toolTipInfo;
 
             string lastUpdated = string.Empty;
-            if (entityUpdateInformation.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
+            if (entityUpdateInformation.LastUpdate.HasValue)
                 lastUpdated = entityUpdateInformation.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
             lastUpdated = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LastUpdated, lastUpdated);
             string lastChangedByName = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.ChangedBy,

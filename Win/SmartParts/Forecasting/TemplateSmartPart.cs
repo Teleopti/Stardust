@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 				 EntityUpdateInformation workloadDetail = _workloadDetails[i - 2];
 
 				 string updatedOn = string.Empty;
-				 if (workloadDetail.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
+				 if (workloadDetail.LastUpdate.HasValue)
 					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 				 
 				 string updatedBy = string.Empty;

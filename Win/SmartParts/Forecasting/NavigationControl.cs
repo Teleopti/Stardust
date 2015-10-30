@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
 
         private void NavigationControl_Load(object sender, EventArgs e)
         {
-            if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-            {
+
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _previousDate = DateOnly.Today;
@@ -58,33 +57,26 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date,1));
                 _nextDate = new DateOnly(culture.Calendar.AddDays(_nextDate.Date, -1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
-            }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-            {
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date,1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, 1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
                 RaiseValueChanged();
-            }
         }
 
         private void buttonPrevious_Click(object sender, EventArgs e)
         {
-            if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-            {
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date, -1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, -1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
                 RaiseValueChanged();
-            }
         }
 
         private void RaiseValueChanged()

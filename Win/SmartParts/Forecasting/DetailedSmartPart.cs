@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Win.SmartParts.Forecasting
             if (_lastUpdatedByText != null)
             {
                 string lastUpdated = string.Empty;
-                if (_lastUpdatedByText.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
+                if (_lastUpdatedByText.LastUpdate.HasValue)
                     lastUpdated = _lastUpdatedByText.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
                 labelLastUpdated.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LastUpdated, lastUpdated);
