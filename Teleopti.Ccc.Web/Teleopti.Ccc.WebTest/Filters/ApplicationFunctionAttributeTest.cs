@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 	public class ApplicationFunctionAttributeTest
 	{
 		[Test]
-		public void ShouldReturnJsonWithAjaxRequestWhenNoPermission()
+		public void ShouldSetErrorPartialViewWithAjaxRequestWhenNoPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var target = new ApplicationFunctionAttribute("Test") {PermissionProvider = permissionProvider};
@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			var result = filterTester.InvokeFilter(target);
 
-			result.Should().Be.OfType<JsonResult>();
+			result.Should().Be.OfType<ViewResult>();
+			var viewResult = result as ViewResult;
+			viewResult.ViewName.Should().Be("ErrorPartial");
 		}
 
 		[Test]
