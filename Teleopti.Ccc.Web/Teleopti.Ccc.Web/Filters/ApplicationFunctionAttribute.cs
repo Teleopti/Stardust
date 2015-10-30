@@ -66,47 +66,27 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public override void OnAuthorization(AuthorizationContext filterContext)
 		{
-			const string noAccess = "No access";
-
-			if (_applicationFunctionPaths == null || _applicationFunctionPaths.Length <= 0)
+			if (_applicationFunctionPaths != null && _applicationFunctionPaths.Length>0)
 			{
-				return;
-			}
+				var havePermission =
+					_applicationFunctionPaths.Any(
+						applicationFunctionPath => PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath));
 
-			var havePermission =
-			 _applicationFunctionPaths.Any(
-			  applicationFunctionPath => PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath));
-
-			if (havePermission)
-			{
-				return;
-			}
-
-			if (filterContext.HttpContext.Request.IsAjaxRequest())
-			{
-				filterContext.Result = new JsonResult
+				if (!havePermission)
 				{
-					Data = new
+					var isAjaxRequest = filterContext.HttpContext.Request.IsAjaxRequest();
+					var viewResult = new ViewResult
 					{
-						Message = noAccess
-					},
-					JsonRequestBehavior = JsonRequestBehavior.AllowGet
-				};
+						ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel
+						{
+							Message = "No access"
+						}),
+						ViewName = isAjaxRequest ? "ErrorPartial" : "Error"
+					};
+					filterContext.Result = viewResult;
+				}
 			}
-			else
-			{
-				var viewResult = new ViewResult
-				{
-					ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel
-					{
-						Message = noAccess
-					}),
-					ViewName = "Error"
-				};
-				filterContext.Result = viewResult;
-
-				base.OnAuthorization(filterContext);
-			}
+			base.OnAuthorization(filterContext);
 		}
 
 		protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
