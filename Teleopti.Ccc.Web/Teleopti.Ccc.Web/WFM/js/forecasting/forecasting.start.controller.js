@@ -119,18 +119,18 @@
 					return ($scope.sumOfCallsForSelectedDays * ($scope.modalModifyInfo.campaignPercentage + 100) / 100).toFixed(1);
 				};
 
-				$scope.campaignDays = [];
+				$scope.modifyDays = [];
 				$scope.sumOfCallsForSelectedDays = 0;
 				$scope.campaignPercentageConst = {
 					max: 1000,
 					min: -100
 				};
 
-				var getModifyDays = function (workload) {
+				var buildModifyDays = function (workload) {
 					var tempsum = 0;
-					$scope.campaignDays = [];
+					$scope.modifyDays = [];
 					angular.forEach(workload.selectedDays(), function (value) {
-						$scope.campaignDays.push({
+						$scope.modifyDays.push({
 							date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
 						});
 						tempsum += value.value;
@@ -145,7 +145,7 @@
 						return;
 					}
 					$scope.modalModifyLaunch = true;
-					getModifyDays(workload);
+					buildModifyDays(workload);
 					$scope.modalModifyInfo.campaignPercentage = 0;
 					$scope.modalModifyInfo.overrideTasks = 0;
 					$scope.modalModifyInfo.selectedWorkload = workload;
@@ -231,9 +231,9 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/AddCampaign", JSON.stringify(
+					$http.post("../api/Forecasting/Campaign", JSON.stringify(
 						{
-							Days: $scope.campaignDays,
+							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
 							CampaignTasksPercent: $scope.modalModifyInfo.campaignPercentage
@@ -274,7 +274,7 @@
 					workload.IsFailed = false;
 					$http.post("../api/Forecasting/OverrideTasks", JSON.stringify(
 						{
-							Days: $scope.campaignDays,
+							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
 							OverrideTasks: $scope.modalModifyInfo.overrideTasks

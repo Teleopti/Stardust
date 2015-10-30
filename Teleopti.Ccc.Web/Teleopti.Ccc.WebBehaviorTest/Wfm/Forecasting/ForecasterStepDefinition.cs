@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-add-campaign-button");
 		}
 
-		[When(@"I select to do a manual change")]
-		public void WhenISelectToDoAManualChange()
+		[When(@"I select to do override calls")]
+		public void WhenISelectToDoOverrideCalls()
 		{
 			Browser.Interactions.Click(".forecast-override-tasks-button");
 		}
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".forecast-manual-change-input", calls);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#overrideTasksInputId", calls);
 		}
 
 		[When(@"I increase the calls by (.*) percent")]
@@ -241,8 +241,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-apply-campaign-button");
 		}
 
-		[When(@"I apply the manual change")]
-		public void WhenIApplyTheManualChange()
+		[When(@"I apply the override calls")]
+		public void WhenIApplyTheOverrideCalls()
 		{
 			Browser.Interactions.Click(".forecast-apply-override-tasks-button");
 		}

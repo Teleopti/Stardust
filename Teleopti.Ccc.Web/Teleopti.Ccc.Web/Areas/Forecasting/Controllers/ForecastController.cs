@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/AddCampaign")]
+		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
 		public virtual Task<ForecastResultViewModel> AddCampaign(CampaignInput input)
 		{
 			var failedTask = Task.FromResult(new ForecastResultViewModel
