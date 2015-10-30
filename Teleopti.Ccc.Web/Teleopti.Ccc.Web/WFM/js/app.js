@@ -1,7 +1,5 @@
 'use strict';
 
-var wfm_cultureInfo_numberFormat;
-
 var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.bootstrap',
 	'ui.tree',
@@ -161,8 +159,6 @@ wfm.config([
 			controller: 'TeamScheduleCtrl as vm'
 		});
 
-
-
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
@@ -181,8 +177,6 @@ wfm.config([
 			});
 		}
 
-
-
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 			if (!currentUserInfo.isConnected()){
 				event.preventDefault();
@@ -199,8 +193,6 @@ wfm.config([
 			$rootScope.isAuthenticated = true; // could it be somewhere else than in rootscope ?
 			$translate.fallbackLanguage('en');
 
-			wfm_cultureInfo_numberFormat = data.NumberFormat; // should be extracted in user service as well
-
 			var ab1 = new ABmetrics();
 			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
 			$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
@@ -211,3 +203,5 @@ wfm.config([
 		});
 	}
 ]);
+
+

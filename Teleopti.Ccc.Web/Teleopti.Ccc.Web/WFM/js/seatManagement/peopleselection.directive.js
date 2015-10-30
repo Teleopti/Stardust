@@ -29,3 +29,4 @@
 
 	angular.module('wfm.people').directive("peopleSelectionList", ['uiGridConstants', peopleSelectionList]);
 })();
+	

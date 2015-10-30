@@ -22,6 +22,7 @@ module.exports = function(config) {
 		'node_modules/angular-sanitize/angular-sanitize.min.js',
 		'node_modules/angular-translate/dist/angular-translate.min.js',
 		'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
+		'node_modules/angular-dynamic-locale/tmhDynamicLocale.min.js',
 		'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
 		'node_modules/moment/min/moment-with-locales.min.js',
 		'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',

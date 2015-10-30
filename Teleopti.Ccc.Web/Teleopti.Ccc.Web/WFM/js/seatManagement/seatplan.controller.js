@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams', 'Toggle'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams', 'Toggle','$filter'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params, toggleService) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params, toggleService, filter) {
 
 		var vm = this;
 
@@ -29,12 +29,18 @@
 			});
 		};
 
+		var getServiceSafeDate = function(dateMoment) {
+
+			return dateMoment.locale('en').format("YYYY-MM-DD");
+		};
+
 		vm.getPreviousMonthStart = function (dateMoment) {
-			return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
+			return getServiceSafeDate(dateMoment.subtract(1, 'months').startOf('month'));
 		};
 
 		vm.getNextMonthEnd = function (dateMoment) {
-			return moment(dateMoment).add(1, 'months').endOf('month').format("YYYY-MM-DD");
+
+			return getServiceSafeDate(dateMoment.add(1, 'months').endOf('month'));
 		};
 
 		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
@@ -50,6 +56,7 @@
 				vm.seatPlanStatus[key] = result;
 			});
 		};
+
 
 		vm.loadMonthDetails = function (date) {
 			var dateMoment = moment(date);
@@ -111,7 +118,7 @@
 			}
 
 			vm.loadMonthDetails(date);
-			
+
 		};
 
 		vm.onSeatPlanStart = function () {
@@ -122,7 +129,7 @@
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
-		vm.showReport = function (period,teams, locations) {
+		vm.showReport = function (period, teams, locations) {
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
 			vm.reportSelectedTeams = teams;

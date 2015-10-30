@@ -22,7 +22,8 @@
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 			</button>
-			<h3>{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
+			
+			<h3>{{seatplan.selectedDate | date : "fullDate"}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{seatplan.getToDayInfo()}}</p>
 			
@@ -31,10 +32,12 @@
 					ng-if="seatplan.showOccupancyView">
 				{{'ViewSeatBookings' | translate}}
 			</button>
+
 		</div>
 
 		<div class="col-sm-12">
-			<h3 class="planning-period-title">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.getSelectedMonthName()}} {{seatplan.selectedDate.year()}}</h3>
+			
+			<h3 class="planning-period-title">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.selectedDate | date : "MMMM" }}</h3>
 
 			<md-divider md-insert></md-divider>
 

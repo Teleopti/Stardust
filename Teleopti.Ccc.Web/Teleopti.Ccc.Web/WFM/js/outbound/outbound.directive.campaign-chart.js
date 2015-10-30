@@ -268,7 +268,9 @@
 
 						name = nameFormat(d[i].name);
 						value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
-						var valueAsString = value.toString().replace(".", wfm_cultureInfo_numberFormat.currencyDecimalSeparator);
+						var valueAsString = $filter('number')(value);
+						
+
 						bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 
 						text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";

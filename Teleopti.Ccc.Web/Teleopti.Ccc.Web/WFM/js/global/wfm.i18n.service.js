@@ -2,10 +2,10 @@
 	'use strict';
 
 	angular
-        .module('wfm.i18n', ['ui.grid', 'pascalprecht.translate'])
-        .service('wfmI18nService', ['i18nService','$translate', 'amMoment', wfmI18nService]);
+        .module('wfm.i18n', ['ui.grid', 'pascalprecht.translate', 'tmh.dynamicLocale'])
+        .service('wfmI18nService', ['i18nService', '$translate', 'amMoment', 'tmhDynamicLocale', wfmI18nService ]);
 
-	function wfmI18nService(i18nService, $translate, angularMoment) {
+	function wfmI18nService(i18nService, $translate, angularMoment, dynamicLocaleService) {
 		var service = {}
 		service.setLocales = setLocales;
 		return service;
@@ -13,6 +13,8 @@
 		function setLocales(data) {
 			$translate.use(data.Language);
 			angularMoment.changeLocale(data.DateFormatLocale);
+			dynamicLocaleService.set(data.DateFormatLocale);
+
 			// i18nService is for UI Grid localization.
 			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).
 			// Need do some primary language checking.
@@ -29,5 +31,11 @@
 			i18nService.setCurrentLang(currentLang);
 		};
 		
-	}
+	};
+
+	wfm.config(["tmhDynamicLocaleProvider", function (tmhDynamicLocaleProvider) {
+		tmhDynamicLocaleProvider.localeLocationPattern('node_modules/angular-i18n/angular-locale_{{locale}}.js');
+	//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+	}]);
+	
 })();
