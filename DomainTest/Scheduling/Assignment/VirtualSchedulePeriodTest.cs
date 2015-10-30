@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,14 +18,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private DateOnly _dateOnly;
         private ISchedulePeriod _schedulePeriod;
         private IPersonPeriod _personPeriod;
-        private IList<ISchedulePeriod> _schedulePeriods;
         private IPersonContract _personContract;
         private IContractSchedule _contractSchedule;
         private ITeam _team;
         private ISite _site;
         private IVirtualSchedulePeriodSplitChecker _splitChecker;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+        [SetUp]
         public void Setup()
         {
             _person = new Person();
@@ -52,9 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _schedulePeriod.Extra = TimeSpan.FromHours(7);
             _schedulePeriod.Seasonality = new Percent(0.5);
 
-            _schedulePeriod.SetParent(_person);
-
-            _schedulePeriods = new List<ISchedulePeriod> { _schedulePeriod };
             _team = new Team();
             _site = new Site("Site");
             _site.AddTeam(_team);
@@ -62,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _personPeriod = new PersonPeriod(_dateOnly, _personContract, _team);
             IRuleSetBag ruleSetBag = new RuleSetBag();
             _personPeriod.RuleSetBag = ruleSetBag;
-            _person.ActivatePerson(new MockRepository().StrictMock<IPersonAccountUpdater>());
             _person.AddPersonPeriod(_personPeriod);
             _person.AddSchedulePeriod(_schedulePeriod);
 
@@ -130,23 +121,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(TimeSpan.Zero, _target.AverageWorkTimePerDay);
         }
 
-        [Test]
-        public void CanGetEmptyListOfShiftCategoryLimitationsWhenNoSchedulePeriod()
-        {
-            var mocks = new MockRepository();
-            _person = mocks.StrictMock<IPerson>();
-            using (mocks.Record())
-            {
-                Expect.Call(_person.PersonSchedulePeriodCollection).Return(new List<ISchedulePeriod>()).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                _target = new VirtualSchedulePeriod(_person, _dateOnly, _splitChecker);
-                Assert.IsTrue(_target.ShiftCategoryLimitationCollection().Count == 0);
-            }
-        }
+	    [Test]
+	    public void CanGetEmptyListOfShiftCategoryLimitationsWhenNoSchedulePeriod()
+	    {
+		    _person.RemoveAllSchedulePeriods();
 
-        [Test]
+		    _target = new VirtualSchedulePeriod(_person, _dateOnly, _splitChecker);
+		    Assert.IsTrue(_target.ShiftCategoryLimitationCollection().Count == 0);
+	    }
+
+	    [Test]
         public void CanGetZeroTimeSpanForAverageWorkTimeWhenPersonPeriodIsNull()
         {
             _person.RemoveAllPersonPeriods();
@@ -161,7 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var dateOnly = new DateOnly(2009, 2, 16);
 
             ISchedulePeriod schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 4);
-            schedulePeriod.SetParent(_person);
             _person.AddSchedulePeriod(schedulePeriod);
 
             _target = new VirtualSchedulePeriod(_person, _dateOnly, _splitChecker);
@@ -170,307 +153,173 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
         }
 
-        [Test]
-        public void PersonTerminationConflictsWithLastConvertsVirtualToDaily()
-        {
-            // the one before was supposed to end 2009-03-01
-            var mocks = new MockRepository();
-            var dateOnly = new DateOnly(2009, 2, 16);
-            var person = mocks.StrictMock<IPerson>();
+	    [Test]
+	    public void PersonTerminationConflictsWithLastConvertsVirtualToDaily()
+	    {
+		    // the one before was supposed to end 2009-03-01
+		    _person.TerminatePerson(new DateOnly(2009, 2, 16),new PersonAccountUpdaterDummy());
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            _schedulePeriod.SetParent(person);
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(dateOnly).Repeat.AtLeastOnce();
-                Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
-                Expect.Call(person.Period(new DateOnly())).IgnoreArguments().Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-                Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, _dateOnly, splitChecker);
-                Assert.AreEqual(new DateOnly(2009, 2, 16), _target.DateOnlyPeriod.EndDate);
-                Assert.AreEqual(15, _target.Number);
-                Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-                Assert.AreEqual(4, _target.DaysOff());
-                Assert.AreEqual(11, _target.Workdays());
-                Assert.That(_target.BalanceIn, Is.EqualTo(TimeSpan.FromMinutes(165)));
-                Assert.That(_target.BalanceOut, Is.EqualTo(TimeSpan.FromMinutes(198)));
-                Assert.That(_target.Extra, Is.EqualTo(TimeSpan.FromMinutes(231)));
-                Assert.That(_target.Seasonality, Is.EqualTo(new Percent(0.5)));
-            }
-        }
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, _dateOnly, splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 16), _target.DateOnlyPeriod.EndDate);
+		    Assert.AreEqual(15, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+		    Assert.AreEqual(4, _target.DaysOff());
+		    Assert.AreEqual(11, _target.Workdays());
+		    Assert.That(_target.BalanceIn, Is.EqualTo(TimeSpan.FromMinutes(300)));
+		    Assert.That(_target.BalanceOut, Is.EqualTo(TimeSpan.FromMinutes(360)));
+		    Assert.That(_target.Extra, Is.EqualTo(TimeSpan.FromMinutes(420)));
+		    Assert.That(_target.Seasonality, Is.EqualTo(new Percent(0.5)));
+	    }
 
-        [Test]
-        public void FirstPersonPeriodIncurrentSchedulePeriodConvertsVirtualToDaily()
-        {
-            var mocks = new MockRepository();
-            var dateOnly = new DateOnly(2009, 2, 16);
-            IPersonPeriod firstPersonPeriod = new PersonPeriod(dateOnly, _personContract, new Team());
+	    [Test]
+	    public void FirstPersonPeriodIncurrentSchedulePeriodConvertsVirtualToDaily()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 16);
+		    IPersonPeriod firstPersonPeriod = new PersonPeriod(dateOnly, _personContract, new Team());
 
-            var person = mocks.StrictMock<IPerson>();
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+		    _person.RemoveAllPersonPeriods();
+		    _person.AddPersonPeriod(firstPersonPeriod);
 
-            _schedulePeriod.SetParent(person);
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, new DateOnly(2009, 2, 20), splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 16), _target.DateOnlyPeriod.StartDate);
+		    Assert.AreEqual(new DateOnly(2009, 3, 1), _target.DateOnlyPeriod.EndDate);
+		    Assert.AreEqual(14, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+		    Assert.AreEqual(4, _target.DaysOff());
+		    Assert.AreEqual(10, _target.Workdays());
+	    }
 
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(new DateOnly(2009, 2, 20))).Return(firstPersonPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(new DateOnly(2009, 02, 16))).Return(firstPersonPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(person.NextPeriod(firstPersonPeriod)).Return(null);
-                Expect.Call(person.PreviousPeriod(firstPersonPeriod)).Return(null);
-                Expect.Call(person.SchedulePeriodStartDate(dateOnly))
-                      .Return(dateOnly).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, new DateOnly(2009, 2, 20), splitChecker);
-                Assert.AreEqual(new DateOnly(2009, 2, 16), _target.DateOnlyPeriod.StartDate);
-                Assert.AreEqual(new DateOnly(2009, 3, 1), _target.DateOnlyPeriod.EndDate);
-                Assert.AreEqual(14, _target.Number);
-                Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-                Assert.AreEqual(4, _target.DaysOff());
-                Assert.AreEqual(10, _target.Workdays());
-            }
-        }
+	    [Test]
+	    public void NextPersonPeriodIncurrentSchedulePeriodConvertsVirtualToDaily()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 16);
 
-        [Test]
-        public void NextPersonPeriodIncurrentSchedulePeriodConvertsVirtualToDaily()
-        {
-            var mocks = new MockRepository();
-            var dateOnly = new DateOnly(2009, 2, 16);
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            var person = mocks.StrictMock<IPerson>();
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
-            _schedulePeriod.SetParent(person);
+		    var contract = new Contract("con");
+		    var partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
+		    var personContract = new PersonContract(contract, partTime, _contractSchedule);
+		    var nextPersonPeriod = new PersonPeriod(dateOnly, personContract, new Team());
 
-            var contract = new Contract("con");
-            var partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
-            var personContract = new PersonContract(contract, partTime, _contractSchedule);
-            var nextPersonPeriod = new PersonPeriod(dateOnly, personContract, new Team());
+		    _person.AddPersonPeriod(nextPersonPeriod);
 
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(person.NextPeriod(_personPeriod)).Return(nextPersonPeriod);
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, _dateOnly, splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 15), _target.DateOnlyPeriod.EndDate);
+		    Assert.AreEqual(14, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+		    Assert.AreEqual(4, _target.DaysOff());
+		    Assert.AreEqual(10, _target.Workdays());
+	    }
 
-                Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
+	    [Test]
+	    public void ConfirmTerminalDateNewPersonPeriodNewSchedulePeriodAllConflictingIsHandledCorrect()
+	    {
+		    // the one before was supposed to end 2009-03-01
+		    var terminalDateOnly = new DateOnly(2009, 2, 16);
+		    var nextSchedulePeriodDateOnly = new DateOnly(2009, 2, 15);
+		    var nextPersonPeriodDateOnly = new DateOnly(2009, 2, 14);
 
-                Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, _dateOnly, splitChecker);
-                Assert.AreEqual(new DateOnly(2009, 2, 15), _target.DateOnlyPeriod.EndDate);
-                Assert.AreEqual(14, _target.Number);
-                Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-                Assert.AreEqual(4, _target.DaysOff());
-                Assert.AreEqual(10, _target.Workdays());
-            }
-        }
+		    ISchedulePeriod schedulePeriod = new SchedulePeriod(nextSchedulePeriodDateOnly, SchedulePeriodType.Week, 4);
+		    _person.AddSchedulePeriod(schedulePeriod);
 
-        [Test]
-        public void ConfirmTerminalDateNewPersonPeriodNewSchedulePeriodAllConflictingIsHandledCorrect()
-        {
-            // the one before was supposed to end 2009-03-01
-            var mocks = new MockRepository();
-            var terminalDateOnly = new DateOnly(2009, 2, 16);
-            var nextSchedulePeriodDateOnly = new DateOnly(2009, 2, 15);
-            var nextPersonPeriodDateOnly = new DateOnly(2009, 2, 14);
-            var person = mocks.StrictMock<IPerson>();
+		    var contract = new Contract("con");
+		    var partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
+		    var personContract = new PersonContract(contract, partTime, _contractSchedule);
+		    var nextPersonPeriod = new PersonPeriod(nextPersonPeriodDateOnly, personContract, new Team());
+			_person.AddPersonPeriod(nextPersonPeriod);
 
-            _schedulePeriod.SetParent(person);
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			_person.TerminatePerson(terminalDateOnly,new PersonAccountUpdaterDummy());
 
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(nextSchedulePeriodDateOnly, SchedulePeriodType.Week, 4);
-            schedulePeriod.SetParent(person);
-            _schedulePeriods.Add(schedulePeriod);
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, _dateOnly, splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 13), _target.DateOnlyPeriod.EndDate);
+		    Assert.AreEqual(12, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+		    Assert.AreEqual(2, _target.DaysOff());
+		    Assert.AreEqual(10, _target.Workdays());
+	    }
 
-            var contract = new Contract("con");
-            var partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
-            var personContract = new PersonContract(contract, partTime, _contractSchedule);
-            var nextPersonPeriod = new PersonPeriod(nextPersonPeriodDateOnly, personContract, new Team());
+	    [Test]
+	    public void NotValidPeriodReturnZeroOnDaysOffAndWorkdays()
+	    {
+		    ISchedulePeriod schedulePeriod = new SchedulePeriod(_dateOnly, SchedulePeriodType.Day, 9);
+		    _person.RemoveAllSchedulePeriods();
+		    _person.RemoveAllPersonPeriods();
+		    _person.AddSchedulePeriod(schedulePeriod);
 
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, _dateOnly, splitChecker);
+		    Assert.IsFalse(_target.IsValid);
+		    Assert.AreEqual(0, _target.DaysOff());
+	    }
 
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(_dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(terminalDateOnly).Repeat.AtLeastOnce();
-                Expect.Call(person.NextPeriod(_personPeriod)).Return(nextPersonPeriod);
-                Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-                Expect.Call(person.SchedulePeriodStartDate(_dateOnly)).Return(_dateOnly).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, _dateOnly, splitChecker);
-                Assert.AreEqual(new DateOnly(2009, 2, 13), _target.DateOnlyPeriod.EndDate);
-                Assert.AreEqual(12, _target.Number);
-                Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-                Assert.AreEqual(2, _target.DaysOff());
-                Assert.AreEqual(10, _target.Workdays());
-            }
-        }
+	    [Test]
+	    public void VerifyRolledDaySchedule()
+	    {
+		    //22:e ska ge 20-28
+		    var requestedDateOnly = new DateOnly(2009, 2, 22);
 
-        [Test]
-        public void NotValidPeriodReturnZeroOnDaysOffAndWorkdays()
-        {
-            var mocks = new MockRepository();
-            var person = mocks.StrictMock<IPerson>();
+		    ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Day, 9);
+		    schedulePeriod.SetParent(_person);
+		    _person.RemoveAllSchedulePeriods();
+		    _person.AddSchedulePeriod(schedulePeriod);
 
-            _schedulePeriod.SetParent(person);
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(_dateOnly, SchedulePeriodType.Day, 9);
-            schedulePeriod.SetParent(person);
-            _schedulePeriods.Clear();
-            _schedulePeriods.Add(schedulePeriod);
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, requestedDateOnly, splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 20), _target.DateOnlyPeriod.StartDate);
+		    Assert.AreEqual(new DateOnly(2009, 2, 28), _target.DateOnlyPeriod.EndDate);
+		    Assert.AreEqual(9, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
+		    Assert.AreEqual(3, _target.DaysOff());
+		    Assert.AreEqual(6, _target.Workdays());
+	    }
 
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions);
-                Expect.Call(person.Period(_dateOnly)).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, _dateOnly, splitChecker);
-                Assert.IsFalse(_target.IsValid);
-                Assert.AreEqual(0, _target.DaysOff());
-            }
-        }
+	    [Test]
+	    public void SchedulePeriodStartsInsidePersonPeriodIsCorrect()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 20);
+		    var dateOnly2 = new DateOnly(2009, 02, 15);
 
-        [Test]
-        public void VerifyRolledDaySchedule()
-        {
-            //22:e ska ge 20-28
-            var mocks = new MockRepository();
-            var requestedDateOnly = new DateOnly(2009, 2, 22);
-            var person = mocks.StrictMock<IPerson>();
-            var personPeriod = mocks.StrictMock<IPersonPeriod>();
+		    _person.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            _schedulePeriod.SetParent(person);
+		    _schedulePeriod = new SchedulePeriod(dateOnly2, SchedulePeriodType.Week, 4);
+		    _person.RemoveAllSchedulePeriods();
+		    _person.AddSchedulePeriod(_schedulePeriod);
 
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Day, 9);
-            schedulePeriod.SetParent(person);
-            _schedulePeriods.Clear();
-            _schedulePeriods.Add(schedulePeriod);
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, dateOnly, splitChecker);
+		    Assert.AreEqual(new DateOnly(2009, 2, 15), _target.DateOnlyPeriod.StartDate);
+		    Assert.AreEqual(4, _target.Number);
+		    Assert.AreEqual(SchedulePeriodType.Week, _target.PeriodType);
+		    Assert.AreEqual(8, _target.DaysOff());
+		    Assert.AreEqual(20, _target.Workdays());
+	    }
 
-        	using (mocks.Record())
-        	{
-        		Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-        		Expect.Call(person.Period(requestedDateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-        		Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-        		Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-        		Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
-        		Expect.Call(person.Period(new DateOnly(2009, 02, 20))).Return(personPeriod).Repeat.AtLeastOnce();
-        		Expect.Call(personPeriod.PersonContract).Return(_personContract);
-        		Expect.Call(person.SchedulePeriodStartDate(new DateOnly(2009, 02, 20))).Return(_dateOnly).Repeat.AtLeastOnce();
+	    [Test]
+	    public void SchedulePeriodStartsInsidePersonPeriodAndTryingToGetOneEarlierReturnsInvalidPeriod()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 2);
 
-        		Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-        	}
-			using (mocks.Playback())
-			{
-				var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-				_target = new VirtualSchedulePeriod(person, requestedDateOnly, splitChecker);
-				Assert.AreEqual(new DateOnly(2009, 2, 20), _target.DateOnlyPeriod.StartDate);
-				Assert.AreEqual(new DateOnly(2009, 2, 28), _target.DateOnlyPeriod.EndDate);
-				Assert.AreEqual(9, _target.Number);
-				Assert.AreEqual(SchedulePeriodType.Day, _target.PeriodType);
-				Assert.AreEqual(3, _target.DaysOff());
-				Assert.AreEqual(6, _target.Workdays());
-			}
-        }
+		    _schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 15), SchedulePeriodType.Week, 4);
+		    _person.RemoveAllSchedulePeriods();
+		    _person.AddSchedulePeriod(_schedulePeriod);
 
-        [Test]
-        public void SchedulePeriodStartsInsidePersonPeriodIsCorrect()
-        {
-            var mocks = new MockRepository();
-            var dateOnly = new DateOnly(2009, 2, 20);
-        	var dateOnly2 = new DateOnly(2009, 02, 15);
+		    var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+		    _target = new VirtualSchedulePeriod(_person, dateOnly, splitChecker);
+		    Assert.IsFalse((_target.IsValid));
+	    }
 
-            var person = mocks.StrictMock<IPerson>();
-
-            _schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 15), SchedulePeriodType.Week, 4);
-            _schedulePeriod.SetParent(person);
-            _schedulePeriods.Clear();
-            _schedulePeriods.Add(_schedulePeriod);
-            var permissions = new PermissionInformation(person);
-            permissions.SetCulture(new CultureInfo("sv-SE"));
-
-            using (mocks.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissions).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(dateOnly)).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.Period(new DateOnly(2009, 02, 15))).Return(_personPeriod).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(person.NextPeriod(_personPeriod)).Return(null);
-                Expect.Call(person.SchedulePeriodStartDate(dateOnly2)).Return(dateOnly2).Repeat.AtLeastOnce();
-                Expect.Call(person.PreviousPeriod(_personPeriod)).Return(null);
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, dateOnly, splitChecker);
-                Assert.AreEqual(new DateOnly(2009, 2, 15), _target.DateOnlyPeriod.StartDate);
-                Assert.AreEqual(4, _target.Number);
-                Assert.AreEqual(SchedulePeriodType.Week, _target.PeriodType);
-                Assert.AreEqual(8, _target.DaysOff());
-                Assert.AreEqual(20, _target.Workdays());
-            }
-        }
-
-        [Test]
-        public void SchedulePeriodStartsInsidePersonPeriodAndTryingToGetOneEarlierReturnsInvalidPeriod()
-        {
-            var mocks = new MockRepository();
-            var dateOnly = new DateOnly(2009, 2, 2);
-            var person = mocks.StrictMock<IPerson>();
-
-            _schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 15), SchedulePeriodType.Week, 4);
-            _schedulePeriod.SetParent(person);
-            _schedulePeriods.Clear();
-            _schedulePeriods.Add(_schedulePeriod);
-
-            using (mocks.Record())
-            {
-                Expect.Call(person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-            }
-            using (mocks.Playback())
-            {
-                var splitChecker = new VirtualSchedulePeriodSplitChecker(person);
-                _target = new VirtualSchedulePeriod(person, dateOnly, splitChecker);
-                Assert.IsFalse((_target.IsValid));
-            }
-        }
-
-        [Test]
+	    [Test]
         public void VerifyNotEqualsIfOtherType()
         {
             var testObj = new object();
@@ -522,71 +371,40 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.That(_target.PartTimePercentage, Is.Not.Null);
         }
 
-        [Test]
-        public void CanGetStartDateTimePeriodForWeekSchedulePeriod()
-        {
-            var mocks = new MockRepository();
-            var schedulePeriod = mocks.StrictMock<ISchedulePeriod>();
-            var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
-            using (mocks.Record())
-            {
-                Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
-                Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Week);
-                Expect.Call(schedulePeriod.Number).Return(4);
-            }
-            using (mocks.Playback())
-            {
+	    [Test]
+	    public void CanGetStartDateTimePeriodForWeekSchedulePeriod()
+	    {
+		    var schedulePeriod = new SchedulePeriod(new DateOnly(2010, 9, 27), SchedulePeriodType.Week, 4);
+		    var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
 
-                var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
-                Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
-                Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 24)));
-            }
-        }
+		    var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
+		    Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
+		    Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 24)));
+	    }
 
-        [Test]
-        public void CanGetStartDateTimePeriodForMonthSchedulePeriod()
-        {
-            var mocks = new MockRepository();
-            var schedulePeriod = mocks.StrictMock<ISchedulePeriod>();
-            var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
+	    [Test]
+	    public void CanGetStartDateTimePeriodForMonthSchedulePeriod()
+	    {
+		    var schedulePeriod = new SchedulePeriod(new DateOnly(2010, 9, 27), SchedulePeriodType.Month, 1);
+		    var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
 
-            using (mocks.Record())
-            {
-                Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
-                Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Month);
-                Expect.Call(schedulePeriod.Number).Return(1);
-            }
-            using (mocks.Playback())
-            {
+		    var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
+		    Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
+		    Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 26)));
+	    }
 
-                var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
-                Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
-                Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 26)));
-            }
-        }
+	    [Test]
+	    public void CanGetStartDateTimePeriodForDaySchedulePeriod()
+	    {
+		    var schedulePeriod = new SchedulePeriod(new DateOnly(2010, 9, 27), SchedulePeriodType.Day, 30);
+		    var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
 
-        [Test]
-        public void CanGetStartDateTimePeriodForDaySchedulePeriod()
-        {
-            var mocks = new MockRepository();
-            var schedulePeriod = mocks.StrictMock<ISchedulePeriod>();
-            var cultureInfo = CultureInfo.GetCultureInfo("sv-SE");
+		    var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
+		    Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
+		    Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 26)));
+	    }
 
-            using (mocks.Record())
-            {
-                Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
-                Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
-                Expect.Call(schedulePeriod.Number).Return(30);
-            }
-            using (mocks.Playback())
-            {
-                var ret = VirtualSchedulePeriod.GetOriginalStartPeriodForType(schedulePeriod, cultureInfo);
-                Assert.That(ret.StartDate, Is.EqualTo(new DateOnly(2010, 9, 27)));
-                Assert.That(ret.EndDate, Is.EqualTo(new DateOnly(2010, 10, 26)));
-            }
-        }
-
-        [Test]
+	    [Test]
         public void NoIntersectionWithOriginalShouldReturnZeroPercent()
         {
             var originalPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 31);

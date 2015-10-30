@@ -539,7 +539,6 @@
     <Compile Include="Domain\IAvailableData.cs" />
     <Compile Include="Domain\IBusinessRuleResponse.cs" />
     <Compile Include="Domain\IBusinessUnit.cs" />
-    <Compile Include="Domain\IBusinessUnitHierarchyEntity.cs" />
     <Compile Include="Domain\ICampaign.cs" />
     <Compile Include="Domain\IChangeInfo.cs" />
     <Compile Include="Domain\IChildSkill.cs" />

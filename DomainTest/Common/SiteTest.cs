@@ -135,14 +135,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(teamCount - 1, site.TeamCollection.Count);
         }
         
-        [Test]
-        public void VerifyPersonsInHierarchy()
-        {
-            ICollection<IPerson> candidates = new List<IPerson>();
-            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
-            _target.PersonsInHierarchy(candidates, dateTime);
-        }
-
 		[Test]
 		public void ShouldHaveANullableMaxSeatsProperty()
 		{
