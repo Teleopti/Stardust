@@ -1008,7 +1008,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (closingInProgress && e.CloseReason == CloseReason.UserClosing)
 				e.Cancel = true;
-			closingInProgress = true;
+			
+			if (checkIfUserWantsToSaveUnsavedData() == -1)
+				e.Cancel = true;
 
 			cancelAllBackgroundWorkers();
 
