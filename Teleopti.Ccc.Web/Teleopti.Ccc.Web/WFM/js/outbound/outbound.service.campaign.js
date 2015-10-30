@@ -7,14 +7,13 @@
 	function outboundService($filter, $http, miscService) {
 
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
-		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
-		var reloadCampaignSchedulesUrl = '../api/Outbound/Campaign/Period/Load';
-		var editCampaignCommandUrl = '../api/Outbound/Campaign/';
-		var getPeriodCampaignsUrl = '../api/Outbound/Period/Campaigns';
-		var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
-		var getCampaignDetailUrl = "../api/Outbound/Campaign/Detail";
+		var maintainCampaignUrl = '../api/Outbound/Campaign/';
+		var loadCampaignSchedulesUrl = '../api/Outbound/Campaign/Load';
+		var getCampaignsStatusUrl = '../api/Outbound/Campaigns/Status';
+		var getCampaignStatusUrl = "../api/Outbound/Campaign/Status";
+		var getCampaignsUrl = '../api/Outbound/Campaigns';
 		var updateThresholdUrl = '../api/Outbound/Campaign/ThresholdsSetting';
-		var loadCampaignScheduleUrl = '../api/Outbound/Campaign/Navigation';
+		var updateCampaignScheduleUrl = '../api/Outbound/Campaign/Update/Schedule';
 		var earlyCheckPermissionUrl = '../api/Outbound/permc';
 	
 		var self = this;
@@ -32,8 +31,8 @@
 			});
 		}
 
-		this.loadCampaignSchedule = function (period, successCb, errorCb) {
-			$http.put(loadCampaignScheduleUrl, normalizePeriod(period))
+		this.updateCampaignSchedule = function (period, successCb, errorCb) {
+			$http.put(updateCampaignScheduleUrl, normalizePeriod(period))
 				.success(function (data) {
 					if (successCb != null) successCb(data);
 				})
@@ -63,14 +62,14 @@
 			}
 		};
 
-		this.reloadCampaignSchedules = function(period, successCb) {			
-			$http.post(reloadCampaignSchedulesUrl, normalizePeriod(period)).success(function (data) {
+		this.loadCampaignSchedules = function(period, successCb) {			
+			$http.post(loadCampaignSchedulesUrl, normalizePeriod(period)).success(function (data) {
 				if (successCb != null) successCb(data);
 			});
 		};
 
-		this.getGanttVisualization = function (period, successCb, errorCb) {
-			$http.post(getGanttVisualizationUrl, normalizePeriod(period)).
+		this.getCampaigns = function (period, successCb, errorCb) {
+			$http.post(getCampaignsUrl, normalizePeriod(period)).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);
@@ -80,8 +79,8 @@
 				});
 		}
 
-		this.getCampaignDetail = function (id, successCb, errorCb) {
-			$http.post(getCampaignDetailUrl, {CampaignId: id}).
+		this.getCampaignStatus = function (id, successCb, errorCb) {
+			$http.post(getCampaignStatusUrl, { CampaignId: id }).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);
@@ -91,8 +90,8 @@
 				});
 		};
 
-		this.listCampaignsWithinPeriod = function(period, successCb, errorCb) {			
-			$http.post(getPeriodCampaignsUrl, normalizePeriod(period)).success(function (data) {
+		this.listCampaigns = function(period, successCb, errorCb) {			
+			$http.post(getCampaignsStatusUrl, normalizePeriod(period)).success(function (data) {
 					if (successCb != null)
 						successCb(data);
 				}).
@@ -102,7 +101,7 @@
 		};
 
 		this.getCampaign = function(campaignId, successCb, errorCb) {
-			$http.get(getCampaignCommandUrl + campaignId).
+			$http.get(maintainCampaignUrl + campaignId).
 				success(function(data) {
 					if (successCb != null) successCb(denormalizeCampaign(data));
 				}).
@@ -122,7 +121,7 @@
 		};
 
 		this.editCampaign = function(campaign, successCb, errorCb) {
-			$http.put(editCampaignCommandUrl + campaign.Id, normalizeCampaign(campaign))
+			$http.put(maintainCampaignUrl + campaign.Id, normalizeCampaign(campaign))
 				.success(function(data) {
 					if (successCb != null) successCb(data);
 				})
@@ -132,7 +131,7 @@
 		};
 
 		this.removeCampaign = function(campaign, successCb, errorCb) {
-			$http.delete(getCampaignCommandUrl + campaign.Id)
+			$http.delete(maintainCampaignUrl + campaign.Id)
 				.success(function(data) {
 					if (successCb != null) successCb(data);
 				})

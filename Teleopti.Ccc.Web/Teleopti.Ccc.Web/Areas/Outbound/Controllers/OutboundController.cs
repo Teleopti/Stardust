@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
             return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
 		}		
 		
-		[HttpPost, Route("api/Outbound/Period/Campaigns"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaigns/Status"), UnitOfWork]
 		public virtual IEnumerable<CampaignStatusViewModel> GetCamapignsStatus([FromBody]GanttPeriod peroid)
 		{
 			return _campaignListProvider.GetCampaignsStatus(peroid);
 		}		
 		
-		[HttpPost, Route("api/Outbound/Gantt/Campaigns"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
 		public virtual IEnumerable<CampaignSummaryViewModel> GetCampaigns([FromBody]GanttPeriod peroid)
 		{
 			return _campaignListProvider.GetCampaigns(peroid);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return Ok();
 		}
 		
-		[HttpPost, Route("api/Outbound/Campaign/Period/Load"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaign/Load"), UnitOfWork]
 		public virtual bool LoadData([FromBody]GanttPeriod period)
 		{
 			_campaignListProvider.ResetCache();
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
 		}	
 		
-		[HttpPost, Route("api/Outbound/Campaign/Detail"), UnitOfWork]
+		[HttpPost, Route("api/Outbound/Campaign/Status"), UnitOfWork]
 		public virtual CampaignStatusViewModel GetCampaignStatus([FromBody]SummaryForm form)
 		{
 			return _campaignListProvider.GetCampaignStatus(form.CampaignId);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			};
 		}
 
-		[HttpPut, Route("api/Outbound/Campaign/Navigation"), UnitOfWork]
+		[HttpPut, Route("api/Outbound/Campaign/Update/Schedule"), UnitOfWork]
 		public virtual bool UpdateCache(GanttPeriod period)
 		{
 			_campaignListProvider.CheckAndUpdateCache(period);

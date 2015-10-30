@@ -169,7 +169,7 @@ describe('OutboundSummaryCtrl', function() {
 
 		var visualizationPeriod = {}
 
-		this.reloadCampaignSchedules=function(period, cb) {
+		this.loadCampaignSchedules=function(period, cb) {
 			if (cb) cb();
 		}
 
@@ -185,7 +185,7 @@ describe('OutboundSummaryCtrl', function() {
 			ganttVisualization.push(ganttV);
 		}
 
-		this.getGanttVisualization = function (ganttPeriod, cb) {
+		this.getCampaigns = function (ganttPeriod, cb) {
 			cb(ganttVisualization);
 		}
 
@@ -201,7 +201,7 @@ describe('OutboundSummaryCtrl', function() {
 			campaignDetail = campaignD;
 		}
 
-		this.getCampaignDetail=function(id, cb) {
+		this.getCampaignStatus=function(id, cb) {
 			cb(campaignDetail);
 		}
 
@@ -209,7 +209,7 @@ describe('OutboundSummaryCtrl', function() {
 			listCampaign.push(listCampaigns);
 		}
 
-		this.listCampaignsWithinPeriod=function(cb) {
+		this.listCampaigns=function(cb) {
 			cb(listCampaign);
 		}
 

@@ -49,7 +49,7 @@
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
 			$scope.timespans = getGanttShadedTimespans();
-			$q.all([reloadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function () {
+			$q.all([loadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function () {
 				updateCampaignStatus(function () {
 					$scope.isRefreshingGantt = false;
 					addThresholdChangeWatch();
@@ -75,7 +75,7 @@
 			$scope.isRefreshingGantt = true;
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			var deferred = $q.defer();
-			outboundService.loadCampaignSchedule(ganttPeriod, function () {
+			outboundService.updateCampaignSchedule(ganttPeriod, function () {
 				deferred.resolve();
 			});
 			return deferred.promise;
@@ -122,17 +122,17 @@
 
 		function updateCampaignStatus(cb) {
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
-			outboundService.listCampaignsWithinPeriod(ganttPeriod, function success(data) {
+			outboundService.listCampaigns(ganttPeriod, function success(data) {
 				updateAllCampaignGanttDisplay(data);
 				$scope.ganttStatistics = data;			
 				if (cb) cb();
 			});
 		}
 
-		function reloadScheduleDataPromise() {			
+		function loadScheduleDataPromise() {			
 			var deferred = $q.defer();
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
-			outboundService.reloadCampaignSchedules(ganttPeriod, function handleSuccess() {
+			outboundService.loadCampaignSchedules(ganttPeriod, function handleSuccess() {
 				deferred.resolve();				
 			});
 			return deferred.promise;
@@ -223,7 +223,7 @@
 		}
 
 		function getGraphData(campaign, done) {		
-			outboundService.getCampaignDetail(campaign.Id, function (_campaign) {
+			outboundService.getCampaignStatus(campaign.Id, function (_campaign) {
 				angular.extend(campaign, _campaign);
 				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
 					campaign.graphData = data;
@@ -280,7 +280,7 @@
 		function renderGanttChartPromise() {
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			var deferred = $q.defer();			
-			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
+			outboundService.getCampaigns(ganttPeriod, function success(data) {
 				var ganttArr = [];
 				if (data) data.forEach(function (ele, ind) {					
 					ganttArr[ind] = {};
