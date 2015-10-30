@@ -4,11 +4,14 @@
 		.controller('ResourcePlannerCtrl', [
 			'$scope', '$state', 'ResourcePlannerSvrc', 'PlanningPeriodNewSvrc', function($scope, $state, ResourcePlannerSvrc, PlanningPeriodNewSvrc) {
 				$scope.planningPeriods = ResourcePlannerSvrc.getPlanningPeriod.query();
+				$scope.isValid = false;
 				ResourcePlannerSvrc.getDayoffRules.query().$promise.then(function (result){
 					$scope.dayoffRules = result;
-					$scope.optionForm.rules = result
+					$scope.optionForm.rules = result;
+
+					$scope.isValid = true;
 				});
-				$scope.isValid = false;
+
 				$scope.optionForm = {};
 
 				//refactor me
