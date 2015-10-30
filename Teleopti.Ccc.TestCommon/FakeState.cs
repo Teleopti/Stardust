@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeState : IState
 	{
-		public bool IsLoggedIn { get; set; }
 		public TimeZoneInfo UserTimeZone { get { return TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone; } }
 		public IApplicationData ApplicationScopeData { get; set; }
 

@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -21,21 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         public virtual void SetApplicationData(IApplicationData applicationData)
         {
             _applicationScopeData = applicationData;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the user is logged in or not.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if logged in; otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool IsLoggedIn
-        {
-            get
-            {
-                var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-                return (principal!=null && principal.Identity.IsAuthenticated);
-            }
         }
 
         /// <summary>

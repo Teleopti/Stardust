@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
 			var applicationData = new ApplicationData(appSettings, signalBroker, null);
 			CreateSessionData(person, dataSource, businessUnit, principalContext);
-			var state = new FakeState { ApplicationScopeData = applicationData, IsLoggedIn = true };
+			var state = new FakeState { ApplicationScopeData = applicationData};
 			ClearAndSetStateHolder(state);
 		}
 
@@ -93,9 +93,6 @@ namespace Teleopti.Ccc.TestCommon
 
     	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData)
         {
-            Expect.Call(stateMock.IsLoggedIn)
-                .Return(true)
-                .Repeat.Any();
             Expect.Call(stateMock.ApplicationScopeData)
                 .Return(applicationData)
                 .Repeat.Any();

@@ -58,12 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(
-				new FakeState
-				{
-					IsLoggedIn = true, 
-					ApplicationScopeData = ApplicationData
-				});
+			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState{ApplicationScopeData = ApplicationData});
 
 			persistLoggedOnPerson();
 			persistBusinessUnit();

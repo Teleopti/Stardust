@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			//TODO: tenant, but this is obsolete so it is no problem
 			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
 			return (principal != null && principal.Identity.IsAuthenticated)
-					 && new LicenseCache().Get("") != null);
+					 && new LicenseCache().Get("") != null;
 		}
 
 		#endregion
