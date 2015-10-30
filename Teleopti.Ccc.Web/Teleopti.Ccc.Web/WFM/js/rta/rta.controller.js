@@ -45,7 +45,8 @@
 				};
 
 				$scope.openSelectedSites = function() {
-					$state.go('rta-agents-sites-selected', {
+					if(selectedSiteIds.length === 0)return;
+					$state.go('rta-agents-sites', {
 						siteIds: selectedSiteIds
 					});
 				};

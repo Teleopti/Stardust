@@ -1,15 +1,15 @@
-(function() {
-	'use strict';
+(function() {﻿
+	'use strict';﻿﻿
 
-	angular
-		.module('wfm.rta')
-		.controller('RtaAgentsCtrl', [
+	angular﻿
+		.module('wfm.rta')﻿
+		.controller('RtaAgentsForTeamsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaOrganizationService', 'RtaService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaOrganizationService, RtaService) {
 
-				$scope.agents = [];
 				var siteId = $stateParams.siteId;
-				var teamId = $stateParams.teamId;
+				var teamIds = $stateParams.teamIds;
+				$scope.agents = [];
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 
 				$scope.goBackToRoot = function() {
@@ -71,15 +71,6 @@
 					});
 				};
 
-				var updateStates = function() {
-					RtaService.getStates.query({
-							teamId: teamId
-						}).$promise
-						.then(function(states) {
-							setStatesInAgents(states);
-						});
-				};
-
 				var updateStatesForTeams = function() {
 					RtaService.getStatesForTeams.query({
 						teamIds: teamIds
@@ -95,21 +86,22 @@
 						$scope.filterData();
 				};
 
-				RtaService.getAgents.query({
-						teamId: teamId
-					}).$promise
-					.then(function(agents) {
-						$scope.agents = agents;
-						$scope.siteName = agents[0].SiteName;
-						$scope.teamName = agents[0].TeamName;
-					})
-					.then(updateStates)
-					.then(updateGrid);
+				if (teamIds) {
+					RtaService.getAgentsForTeams.query({
+							teamIds: teamIds
+						}).$promise
+						.then(function(agents) {
+							$scope.agents = agents;
+							$scope.siteName = "Multiple Sites";
+							$scope.teamName = "Multiple Teams";
+						}).then(updateStatesForTeams)
+						.then(updateGrid);
 
-				$interval(function() {
-					updateStates();
-					updateGrid();
-				}, 5000);
+					$interval(function() {
+						updateStatesForTeams();
+						updateGrid();
+					}, 5000);
+				}
 
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
@@ -160,15 +152,7 @@
 					}],
 					data: $scope.agents
 				};
-			
-			$scope.$watch(
-				function(){return $sessionStorage.buid;},
-				function(newValue, oldValue) {
-					if (newValue !== oldValue) {
-						$scope.goBackToRoot();
-					}
-				}
-			);
+
 			}
-		]);
-})();
+		]);﻿
+})();﻿

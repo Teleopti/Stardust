@@ -1,9 +1,8 @@
-﻿
 (function() {
+
 	'use strict';
 
-	angular.module('RtaService', ['ngResource']).service('RtaService', [
-		'$resource',
+	angular.module('RtaService', ['ngResource']).service('RtaService', ['$resource',
 		function($resource) {
 
 			this.getAgents = $resource('../Agents/ForTeam?teamId=:teamId', {
@@ -45,26 +44,26 @@
 					isArray: true
 				}
 			});
-			//
-			// this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
-			// 	query: {
-			// 		method: 'GET',
-			// 		params: {
-			// 			teamIds: []
-			// 		},
-			// 		isArray: true
-			// 	}
-			// });
-			//
-			// this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
-			// 	query: {
-			// 		method: 'GET',
-			// 		params: {
-			// 			teamIds: []
-			// 		},
-			// 		isArray: true
-			// 	}
-			// });
+
+			this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						teamIds: []
+					},
+					isArray: true
+				}
+			});
+
+			this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
+				query: {
+					method: 'GET',
+					params: {
+						teamIds: []
+					},
+					isArray: true
+				}
+			});
 
 			this.getSites = $resource('../Sites', {}, {
 				query: {
@@ -80,16 +79,6 @@
 				query: {
 					method: 'GET',
 					params: {},
-					isArray: true
-				}
-			});
-
-			this.getTeamsForSelectedSites = $resource('../Teams/ForSites', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						siteIds: []
-					},
 					isArray: true
 				}
 			});

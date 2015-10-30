@@ -1,16 +1,16 @@
-(function() {
-	'use strict';
+(function() {﻿
+	'use strict';﻿﻿
 
-	angular
-		.module('wfm.rta')
-		.controller('RtaAgentsCtrl', [
+	angular﻿
+		.module('wfm.rta')﻿
+		.controller('RtaAgentsForSitesCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaOrganizationService', 'RtaService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaOrganizationService, RtaService) {
 
-				$scope.agents = [];
 				var siteId = $stateParams.siteId;
-				var teamId = $stateParams.teamId;
+				var siteIds = $stateParams.siteIds;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
+				$scope.agents = [];
 
 				$scope.goBackToRoot = function() {
 					$state.go('rta');
@@ -71,18 +71,9 @@
 					});
 				};
 
-				var updateStates = function() {
-					RtaService.getStates.query({
-							teamId: teamId
-						}).$promise
-						.then(function(states) {
-							setStatesInAgents(states);
-						});
-				};
-
-				var updateStatesForTeams = function() {
-					RtaService.getStatesForTeams.query({
-						teamIds: teamIds
+				var updateStatesForSites = function() {
+					RtaService.getStatesForSites.query({
+						siteIds: siteIds
 					}).$promise.then(function(states) {
 						setStatesInAgents(states);
 					})
@@ -95,19 +86,19 @@
 						$scope.filterData();
 				};
 
-				RtaService.getAgents.query({
-						teamId: teamId
+				RtaService.getAgentsForSites.query({
+						siteIds: siteIds
 					}).$promise
 					.then(function(agents) {
 						$scope.agents = agents;
-						$scope.siteName = agents[0].SiteName;
-						$scope.teamName = agents[0].TeamName;
+						$scope.siteName = "Multiple Sites";
+						$scope.teamName = "Multiple Teams";
 					})
-					.then(updateStates)
+					.then(updateStatesForSites)
 					.then(updateGrid);
 
 				$interval(function() {
-					updateStates();
+					updateStatesForSites();
 					updateGrid();
 				}, 5000);
 
@@ -160,15 +151,7 @@
 					}],
 					data: $scope.agents
 				};
-			
-			$scope.$watch(
-				function(){return $sessionStorage.buid;},
-				function(newValue, oldValue) {
-					if (newValue !== oldValue) {
-						$scope.goBackToRoot();
-					}
-				}
-			);
+
 			}
-		]);
+		]);﻿
 })();

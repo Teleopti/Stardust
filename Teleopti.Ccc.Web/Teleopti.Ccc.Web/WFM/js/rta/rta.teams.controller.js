@@ -48,7 +48,8 @@
 			};
 
 			$scope.openSelectedTeams = function() {
-				$state.go('rta-agents-selected', {
+				if(selectedTeamIds.length === 0)return;
+				$state.go('rta-agents-teams', {
 					teamIds: selectedTeamIds
 				});
 			};
@@ -61,7 +62,7 @@
 			};
 
 			$scope.goBack = function() {
-				$state.go('rta-sites');
+				$state.go('rta');
 			};
 
 			$scope.$watch(

@@ -16,7 +16,7 @@ describe('RtaTeamsCtrl', function() {
 	var teams = [];
 	var rtaSvrc = {};
 
-	beforeEach(module('wfm'));
+	beforeEach(module('wfm.rta'));
 
 	beforeEach(function() {
 		stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
@@ -74,19 +74,6 @@ describe('RtaTeamsCtrl', function() {
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
 		$sessionStorage = _$sessionStorage_;
-
-		$httpBackend.expectGET("html/main.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
-		$httpBackend.whenGET("html/forecasting/forecasting-overview.html").respond(200);
-
-		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, {
-			Language: "en",
-			DateFormat: "something"
-		});
-		$httpBackend.whenGET("../BusinessUnit").respond(200, [{ Id: '1' }]);
-		$httpBackend.whenGET("js/rta/rta-sites.html").respond(200);
-		// $httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, '');
-
 
 		rtaSvrc.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {
 			siteId: '@siteId'
@@ -240,7 +227,7 @@ describe('RtaTeamsCtrl', function() {
 
 		scope.goBack();
 
-		expect($state.go).toHaveBeenCalledWith('rta-sites');
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
 	it('should go to agents for multiple teams', function() {
@@ -256,7 +243,7 @@ describe('RtaTeamsCtrl', function() {
 		scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
 		scope.openSelectedTeams();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-selected', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents-teams', {
 			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
 				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 			]
@@ -266,16 +253,19 @@ describe('RtaTeamsCtrl', function() {
 	it('should go to agents after deselecting team', function() {
 		teams = [{
 			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
+		}, {
+			Id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 		}];
 		createController();
 		spyOn($state, 'go');
 
 		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
+		scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
 		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
 		scope.openSelectedTeams();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-selected', {
-			teamIds: []
+		expect($state.go).toHaveBeenCalledWith('rta-agents-teams', {
+			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
 		});
 	});
 
@@ -305,6 +295,6 @@ describe('RtaTeamsCtrl', function() {
 		spyOn($state, 'go');
 		scope.$digest();
 
-		expect($state.go).toHaveBeenCalledWith('rta-sites');
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 });

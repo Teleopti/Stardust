@@ -13,7 +13,7 @@ describe('RtaCtrl', function() {
 	var siteAdherence = [];
 	var rtaSvrc = {};
 
-	beforeEach(module('wfm'));
+	beforeEach(module('wfm.rta'));
 
 	beforeEach(function() {
 		sites = [{
@@ -57,17 +57,6 @@ describe('RtaCtrl', function() {
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.expectGET("html/main.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
-		$httpBackend.whenGET("html/forecasting/forecasting-overview.html").respond(200);
-
-		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, {
-			Language: "en",
-			DateFormat: "something"
-		});
-		$httpBackend.whenGET("../BusinessUnit").respond(200, [{ Id: '1' }]);
-		//$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, '');
-		$httpBackend.whenGET("js/rta/rta-sites.html").respond(200);
 		rtaSvrc.getSites = $resource('../Sites', {}, {
 			query: {
 				method: 'GET',
@@ -173,7 +162,7 @@ describe('RtaCtrl', function() {
 		scope.toggleSelection("6a21c802-7a34-4917-8dfd-9b5e015ab461");
 		scope.openSelectedSites();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-sites-selected', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents-sites', {
 			siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c',
 				"6a21c802-7a34-4917-8dfd-9b5e015ab461"
 			]
@@ -183,16 +172,19 @@ describe('RtaCtrl', function() {
 	it('should go to agents after deselecting site', function() {
 		sites = [{
 			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+		}, {
+			Id: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
 		}];
 		createController();
 		spyOn($state, 'go');
 
 		scope.toggleSelection("d970a45a-90ff-4111-bfe1-9b5e015ab45c");
+		scope.toggleSelection("6a21c802-7a34-4917-8dfd-9b5e015ab461");
 		scope.toggleSelection("d970a45a-90ff-4111-bfe1-9b5e015ab45c");
 		scope.openSelectedSites();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-sites-selected', {
-			siteIds: []
+		expect($state.go).toHaveBeenCalledWith('rta-agents-sites', {
+			siteIds: ["6a21c802-7a34-4917-8dfd-9b5e015ab461"]
 		});
 	});
 
