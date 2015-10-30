@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundScheduledResourcesCacher.Reset();
 		}
 
-		public IEnumerable<PeriodCampaignSummaryViewModel> GetPeriodCampaignsSummary(GanttPeriod period)
+		public IEnumerable<CampaignStatusViewModel> GetCampaignsStatus(GanttPeriod period)
 		{
 			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
-			return campaigns.Select(campaign => GetCampaignSummary((Guid) campaign.Id)).ToList();
+			return campaigns.Select(campaign => GetCampaignStatus((Guid) campaign.Id)).ToList();
 		}
 
-		public PeriodCampaignSummaryViewModel GetCampaignSummary(Guid id)
+		public CampaignStatusViewModel GetCampaignStatus(Guid id)
 		{
 			var campaign = _outboundCampaignRepository.Get(id);
 			if (campaign == null) return null;
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				isScheduled = schedules.Keys.Any(d => schedules[d] > TimeSpan.Zero);
 			}
 
-			return new PeriodCampaignSummaryViewModel()
+			return new CampaignStatusViewModel()
 			{
 				Id = (Guid)campaign.Id,
 				Name = campaign.Name,
@@ -105,11 +105,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			};
 		}
 
-		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
+		public IEnumerable<CampaignSummaryViewModel> GetCampaigns(GanttPeriod period)
 		{
 			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
-			var ganttCampaigns = new List<GanttCampaignViewModel>();
+			var ganttCampaigns = new List<CampaignSummaryViewModel>();
 			foreach (var campaign in campaigns)
 			{
 				var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
 				var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
 
-				ganttCampaigns.Add(new GanttCampaignViewModel()
+				ganttCampaigns.Add(new CampaignSummaryViewModel()
 				{
 					Id = (Guid) campaign.Id,
 					Name = campaign.Name,

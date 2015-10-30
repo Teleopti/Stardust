@@ -38,7 +38,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 	}
-	public class PeriodCampaignSummaryViewModel
+
+	public class CampaignSummaryViewModel
+	{
+		public Guid Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+	}
+
+	public class CampaignStatusViewModel
 	{
 		public Guid Id;
 		public string Name;
@@ -105,14 +114,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 		public IEnumerable<DateOnly> Dates;
-	}
-
-	public class GanttCampaignViewModel
-	{
-		public Guid Id;
-		public string Name;
-		public DateOnly StartDate;
-		public DateOnly EndDate;
 	}
 
 	public class GanttPeriod

@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}		
 		
 		[HttpPost, Route("api/Outbound/Period/Campaigns"), UnitOfWork]
-		public virtual IEnumerable<PeriodCampaignSummaryViewModel> GetCamapigns([FromBody]GanttPeriod peroid)
+		public virtual IEnumerable<CampaignStatusViewModel> GetCamapignsStatus([FromBody]GanttPeriod peroid)
 		{
-			return _campaignListProvider.GetPeriodCampaignsSummary(peroid);
+			return _campaignListProvider.GetCampaignsStatus(peroid);
 		}		
 		
 		[HttpPost, Route("api/Outbound/Gantt/Campaigns"), UnitOfWork]
-		public virtual IEnumerable<GanttCampaignViewModel> GanttGetCampaigns([FromBody]GanttPeriod peroid)
+		public virtual IEnumerable<CampaignSummaryViewModel> GetCampaigns([FromBody]GanttPeriod peroid)
 		{
 			return _campaignListProvider.GetCampaigns(peroid);
 		}
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}	
 		
 		[HttpPost, Route("api/Outbound/Campaign/Detail"), UnitOfWork]
-		public virtual PeriodCampaignSummaryViewModel GetCampaignSummary([FromBody]SummaryForm form)
+		public virtual CampaignStatusViewModel GetCampaignStatus([FromBody]SummaryForm form)
 		{
-			return _campaignListProvider.GetCampaignSummary(form.CampaignId);
+			return _campaignListProvider.GetCampaignStatus(form.CampaignId);
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Replan/{Id}"), UnitOfWork]

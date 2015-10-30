@@ -124,15 +124,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		}
 		
 		[Test]
-		public void ShouldGetCampainSummaryListWithPeriod()
+		public void ShouldGetCampainStatusList()
 		{
 			var period = new GanttPeriod();
 			var listProvider = MockRepository.GenerateMock<ICampaignListProvider>();
 
 			var target = new OutboundController(null, null, null, null, null, listProvider, null);
-			target.GetCamapigns(period);
+			target.GetCamapignsStatus(period);
 
-			listProvider.AssertWasCalled(x => x.GetPeriodCampaignsSummary(period));
+			listProvider.AssertWasCalled(x => x.GetCampaignsStatus(period));
 		}
 
 		[Test]
@@ -199,15 +199,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		}
 
 		[Test]
-		public void ShouldGetGanttCampaigns()
+		public void ShouldGetCampaignsSummary()
 		{
-			var expectedResult = new List<GanttCampaignViewModel>();
+			var expectedResult = new List<CampaignSummaryViewModel>();
 			var peroid = new GanttPeriod();
 			var campaignListProvider = MockRepository.GenerateMock<ICampaignListProvider>();
 			campaignListProvider.Stub(x => x.GetCampaigns(peroid)).Return(expectedResult);
 
 			var target = new OutboundController(null, null, null, null, null, campaignListProvider, null);
-			var result = target.GanttGetCampaigns(peroid);
+			var result = target.GetCampaigns(peroid);
 
 			result.Should().Be.SameInstanceAs(expectedResult);
 		}

@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);
+			var result = target.GetCampaignsStatus(period);
 			result.Count().Should().Be.EqualTo(2);
 		}
 
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);
+			var result = target.GetCampaignsStatus(period);
 			result.First().Id.Should().Be.EqualTo(campaign.Id);
 		}		
 		
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);
+			var result = target.GetCampaignsStatus(period);
 			result.First().Name.Should().Be.EqualTo("campaign");
 		}		
 		
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);
+			var result = target.GetCampaignsStatus(period);
 			result.First().StartDate.Should().Be.EqualTo(new DateOnly(2015, 10, 1));		
 		}		
 		
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);
+			var result = target.GetCampaignsStatus(period);
 			result.First().EndDate.Should().Be.EqualTo(new DateOnly(2015, 11, 1));				
 		}
 
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);				
+			var result = target.GetCampaignsStatus(period);				
 			result.First().IsScheduled.Should().Be.True();
 		}		
 		
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period);		
+			var result = target.GetCampaignsStatus(period);		
 			result.First().IsScheduled.Should().Be.False();
 		}		
 		
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2015, 12, 31)
 			};
 
-			var result = target.GetPeriodCampaignsSummary(period).ToList();
+			var result = target.GetCampaignsStatus(period).ToList();
 			result.First().WarningInfo.ToList().Count.Should().Be.EqualTo(1);
 
 			var warning = result.First().WarningInfo.First();
