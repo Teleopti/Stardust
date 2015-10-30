@@ -51,9 +51,8 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:5
 		};
-		var result = scope.validateInput(node);
-
-        expect(result).toBe(true);
+		scope.validateInputAndSend(node)
+        expect(scope.isValid).toBe(true);
 	}));
 
     it('should be invalid if MaxConsecutiveDayOffs is smaller than MinConsecutiveDayOffs', inject(function($controller) {
@@ -67,8 +66,8 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:6
 			};
-		var result = scope.validateInput(node)
-        expect(result).toBe(false);
+		scope.validateInputAndSend(node)
+        expect(scope.isValid).toBe(false);
     }));
 
 	it('should be invalid if MaxConsecutiveWorkdays is smaller than MinConsecutiveWorkdays', inject(function($controller) {
@@ -83,9 +82,8 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:6
 			};
 
-		var result = scope.validateInput(node)
-
-        expect(result).toBe(false);
+			scope.validateInputAndSend(node)
+	        expect(scope.isValid).toBe(false);
     }));
 
 	it('should be invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function($controller) {
@@ -100,19 +98,20 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:4
 			};
 
-		var result = scope.validateInput(node);
-
-        expect(result).toBe(false);
+			scope.validateInputAndSend(node)
+	        expect(scope.isValid).toBe(false);
     }));
 
 	it('should be invalid until filled', inject(function($controller){
-		var scope = setupScope($controller);
+		var scope = $rootScope.$new();
+		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
 
 		expect(scope.isValid).toBe(false);
 	}));
 
 	it('should be valid after loaded', inject(function($controller){
-		var scope = setupScope($controller);
+		var scope = $rootScope.$new();
+		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
 
 		scope.$digest();
 
@@ -158,6 +157,7 @@ describe('ResourcePlannerCtrl', function () {
 	var setupScope = function($controller){
 		var scope = $rootScope.$new();
 		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+		scope.$digest();
 		return scope;
 	}
 });

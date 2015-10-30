@@ -21,21 +21,17 @@
 					ResourcePlannerSvrc.saveDayoffRules.update(data);
 				};
 
-				$scope.validateInput= function(node){
-					var valid = false;
+				var validateInput= function(node){
 					if (node.MinConsecutiveDayOffs > node.MaxConsecutiveDayOffs ||
 						node.MinConsecutiveWorkdays > node.MaxConsecutiveWorkdays ||
 						node.MinDayOffsPerWeek > node.MaxDayOffsPerWeek) {
-						valid = false;
+						return false;
 					}
-					else {
-						valid = true;
-					}
-					return valid;
+					return true;
 				}
 
 				$scope.validateInputAndSend = function(node){
-					$scope.isValid = $scope.validateInput(node);
+					$scope.isValid = validateInput(node);
 					workruleComposer(node);
 
 				};
