@@ -380,7 +380,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			//also wrong if multidb
 			//TODO: tenant, but this is obsolete so it is no problem
-			return (StateHolderReader.Instance.StateReader.IsLoggedIn
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			return (principal != null && principal.Identity.IsAuthenticated)
 					 && new LicenseCache().Get("") != null);
 		}
 
