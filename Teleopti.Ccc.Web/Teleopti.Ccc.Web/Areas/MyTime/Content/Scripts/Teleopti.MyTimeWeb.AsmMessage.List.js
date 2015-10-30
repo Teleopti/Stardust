@@ -264,8 +264,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				if (data.HasWorkflowControlSet) {
 					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638')) vm.isAnonymous(data.MiscSetting.AnonymousTrading);
 				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
 			}
 		});
 	}
