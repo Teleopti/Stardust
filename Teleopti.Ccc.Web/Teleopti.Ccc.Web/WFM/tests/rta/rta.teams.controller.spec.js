@@ -82,6 +82,8 @@ describe('RtaTeamsCtrl', function() {
 			Language: "en",
 			DateFormat: "something"
 		});
+		$httpBackend.whenGET("../BusinessUnit").respond(200, [{ Id: '1' }]);
+		$httpBackend.whenGET("js/rta/rta-sites.html").respond(200);
 		// $httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, '');
 

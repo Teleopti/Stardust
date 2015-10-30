@@ -84,11 +84,13 @@ describe('RtaAgentsCtrl', function() {
 		$httpBackend.whenGET("html/forecasting/forecasting.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
 		$httpBackend.whenGET("html/forecasting/forecasting-overview.html").respond(200);
 		$httpBackend.whenGET("html/main.html").respond(200);
+		$httpBackend.whenGET("js/rta/rta-sites.html").respond(200);
 
 		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, {
 			Language: "en",
 			DateFormat: "something"
 		});
+		$httpBackend.whenGET("../BusinessUnit").respond(200, [{ Id: '1' }]);
 		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, '');
 
 		rtaSvrc.getAgents = $resource('../Agents/ForTeam?teamId=:teamId', {
