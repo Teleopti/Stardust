@@ -7,6 +7,7 @@ describe('RtaTeamsCtrl', function() {
 		$controller,
 		$resource,
 		$state,
+		$sessionStorage,
 		scope;
 
 	var stateParams = {};
@@ -63,7 +64,7 @@ describe('RtaTeamsCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_,_$sessionStorage_) {
 		$controller = _$controller_;
 		scope = _$rootScope_.$new();
 		$q = _$q_;
@@ -72,6 +73,7 @@ describe('RtaTeamsCtrl', function() {
 		$resource = _$resource_;
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
+		$sessionStorage = _$sessionStorage_;
 
 		$httpBackend.expectGET("html/main.html").respond(200, 'mock'); // work around for ui-router bug with mocked states
 		$httpBackend.whenGET("html/forecasting/forecasting-overview.html").respond(200);
@@ -291,5 +293,16 @@ describe('RtaTeamsCtrl', function() {
 		createController();
 
 		expect(scope.siteName).toEqual("Stores");
+	});
+
+	it('should go back to sites when business unit is changed', function() {
+		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+
+		createController();
+		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+		spyOn($state, 'go');
+		scope.$digest();
+
+		expect($state.go).toHaveBeenCalledWith('rta-sites');
 	});
 });

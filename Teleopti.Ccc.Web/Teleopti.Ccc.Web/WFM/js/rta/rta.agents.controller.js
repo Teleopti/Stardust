@@ -234,6 +234,15 @@
 				}],
 				data: $scope.agents
 			};
+			
+			$scope.$watch(
+				function(){return $sessionStorage.buid;},
+				function(newValue, oldValue) {
+					if (newValue !== oldValue) {
+						$scope.goBackToRoot();
+					}
+				}
+			);
 		}
 	]);
 })();

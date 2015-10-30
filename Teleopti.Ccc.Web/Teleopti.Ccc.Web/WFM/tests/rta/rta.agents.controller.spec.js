@@ -591,4 +591,14 @@ describe('RtaAgentsCtrl', function() {
 		.toEqual("/Anywhere#teamschedule/928dd0bc-bf40-412e-b970-9b5e015aadea/34590a63-6331-4921-bc9f-9b5e015ab495/11610fe4-0130-4568-97de-9b5e015b2564/20151028");
 	});
 
+	it('should go back to sites when business unit is changed', function() {
+		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+
+		createController();
+		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+		spyOn($state, 'go');
+		scope.$digest();
+
+		expect($state.go).toHaveBeenCalledWith('rta-sites');
+	});
 });
