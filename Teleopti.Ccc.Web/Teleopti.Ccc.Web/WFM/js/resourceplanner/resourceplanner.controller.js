@@ -5,10 +5,13 @@
 			'$scope', '$state', 'ResourcePlannerSvrc', 'PlanningPeriodNewSvrc', function($scope, $state, ResourcePlannerSvrc, PlanningPeriodNewSvrc) {
 				$scope.planningPeriods = ResourcePlannerSvrc.getPlanningPeriod.query();
 				$scope.isValid = false;
+				$scope.isEnabled = false;
+
 				ResourcePlannerSvrc.getDayoffRules.query().$promise.then(function (result){
 					$scope.dayoffRules = result;
 					$scope.optionForm.rules = result;
 					$scope.isValid = true;
+					$scope.isEnabled = true;
 				});
 
 				$scope.optionForm = {};

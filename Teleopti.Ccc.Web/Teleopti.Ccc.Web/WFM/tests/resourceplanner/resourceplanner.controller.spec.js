@@ -153,6 +153,19 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(mockResourceplannerSvrc.saveDayoffRules.update).not.toHaveBeenCalledWith();
 	}));
+	it('should not enable user input if service is not called', inject(function($controller){
+		var scope = $rootScope.$new();
+		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+
+		expect(scope.isEnabled).toBe(false);
+	}));
+	it('should enable user input if service is successfully called', inject(function($controller){
+		var scope = $rootScope.$new();
+		$controller('ResourcePlannerCtrl', {$scope:scope,ResourcePlannerSvrc:mockResourceplannerSvrc});
+		scope.$digest();
+
+		expect(scope.isEnabled).toBe(true);
+	}));
 
 	var setupScope = function($controller){
 		var scope = $rootScope.$new();
