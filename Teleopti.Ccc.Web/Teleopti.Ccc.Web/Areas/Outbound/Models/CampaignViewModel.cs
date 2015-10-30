@@ -49,7 +49,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 
 	public class CampaignStatusViewModel
 	{
-		public CampaignSummaryViewModel CampaignSummary;
+		public Guid Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
 		public bool IsScheduled;
 		public IEnumerable<OutboundWarningViewModel> WarningInfo;
 	}

@@ -209,7 +209,7 @@ describe('OutboundSummaryCtrl', function() {
 			listCampaign.push(listCampaigns);
 		}
 
-		this.updateCampaignsStatus=function(cb) {
+		this.listCampaigns=function(cb) {
 			cb(listCampaign);
 		}
 

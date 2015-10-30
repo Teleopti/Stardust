@@ -122,7 +122,7 @@
 
 		function updateCampaignStatus(cb) {
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
-			outboundService.updateCampaignsStatus(ganttPeriod, function success(data) {
+			outboundService.listCampaigns(ganttPeriod, function success(data) {
 				updateAllCampaignGanttDisplay(data);
 				$scope.ganttStatistics = data;			
 				if (cb) cb();
@@ -223,15 +223,15 @@
 		}
 
 		function getGraphData(campaign, done) {		
-			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
-				angular.extend(campaign, campaignStatus);
+			outboundService.getCampaignStatus(campaign.Id, function (_campaign) {
+				angular.extend(campaign, _campaign);
 				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
 					campaign.graphData = data;
 					campaign.rawManualPlan = manualPlan;
 					campaign.isManualBacklog = backlog;
 					campaign.translations = translations;
 					campaign.closedDays = closedDays;
-					updateSingleCampaignGanttDisplay(campaignStatus);
+					updateSingleCampaignGanttDisplay(_campaign);
 					if (done) done();					
 				});
 			});
@@ -266,6 +266,7 @@
 			return timespans;
 		}
 		
+
 		function setGanttOptions() {
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			$scope.settings.periodStart = ganttPeriod.PeriodStart;
@@ -306,10 +307,10 @@
 			return deferred.promise;
 		}
 
-		function updateGanttRowFromCampaignStatus(row, campaignStatus) {
+		function updateGanttRowFromCampaignSummary(row, campaignSummary) {
 			row.campaignNameClass = null;
-			row.tasks[0].color = campaignStatus.IsScheduled ? '#C2E085' : '#66C2FF';
-			campaignStatus.WarningInfo.forEach(function (warning) {
+			row.tasks[0].color = campaignSummary.IsScheduled ? '#C2E085' : '#66C2FF';
+			campaignSummary.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'CampaignUnderSLA') {
 					row.campaignNameClass = 'campaign-late';
 				}
@@ -324,19 +325,19 @@
 			row.campaign.WarningInfo = campaignSummary.WarningInfo;
 		}
 
-		function updateAllCampaignGanttDisplay(campaignStatusList) {
-			campaignStatusList.forEach(function (campaignStatus) {
-				updateSingleCampaignGanttDisplay(campaignStatus);
+		function updateAllCampaignGanttDisplay(campaignSummaryList) {
+			campaignSummaryList.forEach(function(campaignSummary) {
+				updateSingleCampaignGanttDisplay(campaignSummary);
 			});
 		}
 
-		function updateSingleCampaignGanttDisplay(campaignStatus) {
+		function updateSingleCampaignGanttDisplay(campaignSummary) {
 			$scope.ganttData.forEach(function (dataRow, indx) {
-				if (campaignStatus.CampaignSummary.Id == dataRow.id) {
-					return updateGanttRowFromCampaignStatus(dataRow, campaignStatus);
+				if (campaignSummary.Id == dataRow.id) {
+					return updateGanttRowFromCampaignSummary(dataRow, campaignSummary);
 				}
-				if (campaignStatus.CampaignSummary.Id + '_expanded' == dataRow.id) {
-					return updateWarningInfo(dataRow, campaignStatus);
+				if (campaignSummary.Id + '_expanded' == dataRow.id) {
+					return updateWarningInfo(dataRow, campaignSummary);
 				}
 			});
 		}
