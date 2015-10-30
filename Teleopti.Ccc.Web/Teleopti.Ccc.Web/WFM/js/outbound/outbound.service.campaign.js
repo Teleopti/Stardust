@@ -90,7 +90,7 @@
 				});
 		};
 
-		this.listCampaigns = function(period, successCb, errorCb) {			
+		this.updateCampaignsStatus = function(period, successCb, errorCb) {			
 			$http.post(getCampaignsStatusUrl, normalizePeriod(period)).success(function (data) {
 					if (successCb != null)
 						successCb(data);

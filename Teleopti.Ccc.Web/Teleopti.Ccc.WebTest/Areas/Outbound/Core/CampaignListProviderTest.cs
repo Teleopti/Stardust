@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 
 			var result = target.GetCampaignsStatus(period);
-			result.First().Id.Should().Be.EqualTo(campaign.Id);
+			result.First().CampaignSummary.Id.Should().Be.EqualTo(campaign.Id);
 		}		
 		
 		[Test]
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 
 			var result = target.GetCampaignsStatus(period);
-			result.First().Name.Should().Be.EqualTo("campaign");
+			result.First().CampaignSummary.Name.Should().Be.EqualTo("campaign");
 		}		
 		
 		[Test]
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 
 			var result = target.GetCampaignsStatus(period);
-			result.First().StartDate.Should().Be.EqualTo(new DateOnly(2015, 10, 1));		
+			result.First().CampaignSummary.StartDate.Should().Be.EqualTo(new DateOnly(2015, 10, 1));		
 		}		
 		
 		[Test]
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 
 			var result = target.GetCampaignsStatus(period);
-			result.First().EndDate.Should().Be.EqualTo(new DateOnly(2015, 11, 1));				
+			result.First().CampaignSummary.EndDate.Should().Be.EqualTo(new DateOnly(2015, 11, 1));				
 		}
 
 		[Test]
