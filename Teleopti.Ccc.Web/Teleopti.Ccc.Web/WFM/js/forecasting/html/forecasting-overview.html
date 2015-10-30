@@ -163,7 +163,7 @@
 						</div>
 					</div>
 					<div ng-show="overrideTasks && !addCampaign">
-						<form name="form" class="wfm-form" novalidate>
+						<form name="form" class="wfm-form" novalidate ng-submit="applyOverrideTasks(form.$valid);">
 							<h4>Override Calls</h4>
 							<dl>
 								<p>Override the forecasted calls. Changes made here will be saved until they are cleared.</p>
@@ -186,7 +186,7 @@
 							<div class="modal-footer">
 								<aside>
 									<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-									<a class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyOverrideTasks(); overrideTasks=false">{{ 'Apply' | translate }}</a>
+									<button type="submit" class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}">{{ 'Apply' | translate }}</button>
 								</aside>
 							</div>
 						</form>

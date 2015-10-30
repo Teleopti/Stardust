@@ -262,12 +262,13 @@
 						});
 				};
 
-				$scope.applyOverrideTasks = function () {
-					if ($scope.disableApplyModification()) {
+				$scope.applyOverrideTasks = function (isFormValid) {
+					if (!isFormValid || $scope.disableApplyModification()) {
 						return;
 					}
 					$scope.modalModifyLaunch = false;
 					$scope.isForecastRunning = true;
+					$scope.overrideTasks = false;
 					var workload = $scope.modalModifyInfo.selectedWorkload;
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;

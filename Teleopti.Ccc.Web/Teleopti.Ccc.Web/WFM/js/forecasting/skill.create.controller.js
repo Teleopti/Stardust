@@ -73,8 +73,8 @@
 					}
 				}
 
-				$scope.createSkill = function (formValid) {
-					if (!formValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
+				$scope.createSkill = function (isFormValid) {
+					if (!isFormValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
 						if ($scope.hideQueueInvalidMessage)
 							$scope.queueSelected = false;
 						growl.warning("<i class='mdi mdi-alert'></i> Could not apply. See issues above.", {
