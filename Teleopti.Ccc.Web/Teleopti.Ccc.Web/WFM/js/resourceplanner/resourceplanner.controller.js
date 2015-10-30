@@ -8,7 +8,6 @@
 				ResourcePlannerSvrc.getDayoffRules.query().$promise.then(function (result){
 					$scope.dayoffRules = result;
 					$scope.optionForm.rules = result;
-
 					$scope.isValid = true;
 				});
 
@@ -22,15 +21,21 @@
 					ResourcePlannerSvrc.saveDayoffRules.update(data);
 				};
 
-				$scope.validateInput = function(node){
+				$scope.validateInput= function(node){
+					var valid = false;
 					if (node.MinConsecutiveDayOffs > node.MaxConsecutiveDayOffs ||
 						node.MinConsecutiveWorkdays > node.MaxConsecutiveWorkdays ||
 						node.MinDayOffsPerWeek > node.MaxDayOffsPerWeek) {
-						$scope.isValid = false;
+						valid = false;
 					}
 					else {
-						$scope.isValid = true;
+						valid = true;
 					}
+					return valid;
+				}
+
+				$scope.validateInputAndSend = function(node){
+					$scope.isValid = $scope.validateInput(node);
 					workruleComposer(node);
 
 				};

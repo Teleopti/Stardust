@@ -26,7 +26,7 @@ describe('ResourcePlannerCtrl', function () {
 		getDayoffRules:{
 			query: function() {
 				var deferred = $q.defer();
-				deferred.resolve();
+				deferred.resolve({Id:0, Default:true});
 				return { $promise: deferred.promise};
 			}
 		},
@@ -51,10 +51,9 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:5
 		};
-		scope.dayoffRules = {Id:0};
-		scope.validateInput(node)
+		var result = scope.validateInput(node);
 
-        expect(scope.isValid).toBe(true);
+        expect(result).toBe(true);
 	}));
 
     it('should be invalid if MaxConsecutiveDayOffs is smaller than MinConsecutiveDayOffs', inject(function($controller) {
@@ -68,12 +67,10 @@ describe('ResourcePlannerCtrl', function () {
 			MinDayOffsPerWeek:5,
 			MaxDayOffsPerWeek:6
 			};
-
-		scope.validateInput(node)
-
-
-        expect(scope.isValid).toBe(false);
+		var result = scope.validateInput(node)
+        expect(result).toBe(false);
     }));
+
 	it('should be invalid if MaxConsecutiveWorkdays is smaller than MinConsecutiveWorkdays', inject(function($controller) {
 		var scope = setupScope($controller);
 
@@ -86,9 +83,9 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:6
 			};
 
-		scope.validateInput(node)
+		var result = scope.validateInput(node)
 
-        expect(scope.isValid).toBe(false);
+        expect(result).toBe(false);
     }));
 
 	it('should be invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function($controller) {
@@ -103,9 +100,9 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek:4
 			};
 
-		scope.validateInput(node);
+		var result = scope.validateInput(node);
 
-        expect(scope.isValid).toBe(false);
+        expect(result).toBe(false);
     }));
 
 	it('should be invalid until filled', inject(function($controller){
@@ -113,6 +110,7 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.isValid).toBe(false);
 	}));
+
 	it('should be valid after loaded', inject(function($controller){
 		var scope = setupScope($controller);
 
@@ -121,6 +119,41 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValid).toBe(true);
 	}));
 
+	it('should save model when valid', inject(function($controller){
+		spyOn(mockResourceplannerSvrc.saveDayoffRules, 'update');
+		var scope = setupScope($controller);
+		scope.$digest();
+
+		var node = {
+			MinConsecutiveDayOffs:1,
+			MaxConsecutiveDayOffs:1,
+			MinConsecutiveWorkdays:3,
+			MaxConsecutiveWorkdays:4,
+			MinDayOffsPerWeek:5,
+			MaxDayOffsPerWeek:5
+		};
+		scope.validateInputAndSend(node);
+
+		expect(mockResourceplannerSvrc.saveDayoffRules.update).toHaveBeenCalledWith(node);
+	}));
+
+	it('should not save model when invalid', inject(function($controller){
+		spyOn(mockResourceplannerSvrc.saveDayoffRules, 'update');
+		var scope = setupScope($controller);
+
+		var node = {
+			MinConsecutiveDayOffs:2,
+			MaxConsecutiveDayOffs:1,
+			MinConsecutiveWorkdays:17,
+			MaxConsecutiveWorkdays:4,
+			MinDayOffsPerWeek:24,
+			MaxDayOffsPerWeek:5
+		};
+
+		scope.validateInputAndSend(node);
+
+		expect(mockResourceplannerSvrc.saveDayoffRules.update).not.toHaveBeenCalledWith();
+	}));
 
 	var setupScope = function($controller){
 		var scope = $rootScope.$new();
