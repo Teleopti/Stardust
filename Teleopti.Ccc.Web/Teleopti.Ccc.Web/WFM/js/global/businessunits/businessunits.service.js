@@ -11,7 +11,7 @@
 			setBusinessUnitInSessionStorage: setBusinessUnitInSessionStorage,
 			getBusinessUnitFromSessionStorage: getBusinessUnitFromSessionStorage,
 			setBusinessUnitInHeaders: setBusinessUnitInHeaders,
-			initBusinessUnit: init
+			initBusinessUnit: initBusinessUnit
 	};
 		
 		var getBusinessUnits = $resource('../BusinessUnit', {}, {
@@ -20,7 +20,7 @@
 
 		var allBusinessUnits = [];
 
-		function init() {
+		function initBusinessUnit() {
 			var buid = getBusinessUnitFromSessionStorage();
 			getAllBusinessUnits().then(function(result) {
 				if (!buid) {
@@ -33,16 +33,20 @@
 
 		function getAllBusinessUnits() {
 			var deferred = $q.defer();
-			getBusinessUnits.get().$promise.then(function (result) {
-				allBusinessUnits = result;
-				deferred.resolve(result);
-			});
+			if (!allBusinessUnits.length) {
+				getBusinessUnits.get().$promise.then(function(result) {
+					allBusinessUnits = result;
+					deferred.resolve(result);
+				});
+			} else {
+				deferred.resolve(allBusinessUnits);
+			}
 			return deferred.promise;
 		};
 
 		function setBusinessUnit(buid) {
 			setBusinessUnitInSessionStorage(buid);
-			setBusinessUnitInHeaders();
+			setBusinessUnitInHeaders(buid);
 		};
 
 		function setBusinessUnitInSessionStorage(buid) {
