@@ -41,11 +41,11 @@
 			};
 
 			var updateStatesForSites = function() {
-				RtaService.getStatesForSites.query({
-					siteIds: siteIds
-				}).$promise.then(function(states) {
-					setStatesInAgents(states);
-				})
+			    RtaService.getStatesForSites.query({
+			        siteIds: siteIds
+			    }).$promise.then(function(states) {
+			        setStatesInAgents(states);
+			    });
 			};
 
 			// var updateStatesForTeams = function() {
@@ -56,9 +56,9 @@
 			// 	})
 			// };
 
-			var updateStatesForTeams = function(teamId) {
+			var updateStatesForTeams = function(updateTeamId) {
 				RtaService.getStates.query({
-					teamId: teamId
+					teamId: updateTeamId
 				}).$promise.then(function(states) {
 					setStatesInAgents(states);
 				});
@@ -106,24 +106,24 @@
 			}
 
 			if (teamIds) {
-				teamIds.forEach(function(teamId) {
+				teamIds.forEach(function(updateTeamId) {
 					RtaService.getAgents.query({
-							teamId: teamId
+					    teamId: updateTeamId
 						}).$promise
 						.then(function(agents) {
 							agents.forEach(function(a) {
-								$scope.agents.push(a)
+							    $scope.agents.push(a);
 							});
 							return agents[0].TeamId;
 						})
-						.then(function(teamId) {
-							updateStatesForTeams(teamId)
-						})
+						.then(function(innerTeamId) {
+					        updateStatesForTeams(innerTeamId);
+					    })
 						.then(updateGrid);
 				});
 				$interval(function() {
-					teamIds.forEach(function(teamId) {
-						updateStatesForTeams(teamId);
+					teamIds.forEach(function(updateTeamId) {
+					    updateStatesForTeams(updateTeamId);
 					});
 					updateGrid();
 				}, 5000);
@@ -181,8 +181,8 @@
 				$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 			};
 
-			$scope.changeScheduleUrl = function(teamId, personId) {
-				return "/Anywhere#teamschedule/" + $sessionStorage.buid + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
+			$scope.changeScheduleUrl = function(gotoTeamId, personId) {
+			    return "/Anywhere#teamschedule/" + $sessionStorage.buid + "/" + gotoTeamId + "/" + personId + "/" + moment().format("YYYYMMDD");
 			};
 
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
