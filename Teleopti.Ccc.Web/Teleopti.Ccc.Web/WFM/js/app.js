@@ -163,8 +163,6 @@ wfm.config([
 			controller: 'TeamScheduleCtrl as vm'
 		});
 
-
-
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
