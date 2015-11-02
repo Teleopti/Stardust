@@ -1001,15 +1001,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			saver.Save();
 		}
 
-		private bool closingInProgress;
-
 		private void schedulingScreenFormClosing(object sender, FormClosingEventArgs e)
 		{
-
-			if (closingInProgress && e.CloseReason == CloseReason.UserClosing)
-				e.Cancel = true;
-			closingInProgress = true;
-
 			cancelAllBackgroundWorkers();
 
 			if (_forceClose || _schedulerState == null)
@@ -1314,7 +1307,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void cancelBackgroundWorker(BackgroundWorker worker)
 		{
-			if (worker.IsBusy && !worker.CancellationPending)
+			if (worker.IsBusy)
 			{
 				worker.CancelAsync();
 				while (worker.IsBusy)
@@ -2404,7 +2397,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Cancelled)
 			{
 				backgroundWorkerLoadData.Dispose();
-				//Close();
+				Close();
 				return;
 			}
 
