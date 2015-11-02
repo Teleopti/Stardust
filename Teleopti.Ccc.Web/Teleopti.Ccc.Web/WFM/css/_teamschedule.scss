@@ -1,0 +1,56 @@
+﻿	.team-schedule .time-line {
+
+		z-index: 10;
+	}
+
+	.team-schedule .time-line .ruler {
+		height: 100%;
+		width: 1px;
+		background-color: rgba(0,0,0,0.2);
+		z-index: 10;
+	}
+
+	.team-schedule .time-line .label {
+		font-size: xx-small;
+		height: 12px;
+		z-index: 111;
+		margin-left: -23px;
+	}
+
+	.team-schedule .shift .layer {
+		z-index: 10;
+		height: 22px;
+		text-align: center;
+	}
+
+	.team-schedule .shift .layer:first-of-type
+	{
+		-webkit-border-radius: 4px 0px 0px 4px;
+		   -moz-border-radius: 4px 0px 0px 4px;
+				border-radius: 4px 0px 0px 4px;
+	}
+	.team-schedule .shift .layer:last-of-type
+	{
+		-webkit-border-radius: 0px 4px 4px 0px;
+		   -moz-border-radius: 0px 4px 4px 0px;
+				border-radius: 0px 4px 4px 0px;
+	}
+	.team-schedule .shift .layer:only-child
+	{
+		-webkit-border-radius: 4px 4px 4px 4px;
+		   -moz-border-radius: 4px 4px 4px 4px;
+				border-radius: 4px 4px 4px 4px;
+	}
+
+	.team-schedule .dayoff {
+		text-align: center;
+		top: -8px;
+		height: 36px;
+		padding: 7px;
+		background-size: 11px 11px;
+		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+	}
+
+	.absolute {
+		position: absolute;
+	}

@@ -2144,6 +2144,7 @@
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
     <Content Include="WFM\css\_timerangepicker.scss" />
+    <Content Include="WFM\css\_teamschedule.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
