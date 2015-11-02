@@ -224,6 +224,10 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
 			}
 		}
+
+		if (!$scope.gridApi.selection.getSelectedRows().length) {
+			$scope.gridApi.grid.selection.selectAll = false;
+		}
 	};
 
 	$scope.clearCart = function () {
