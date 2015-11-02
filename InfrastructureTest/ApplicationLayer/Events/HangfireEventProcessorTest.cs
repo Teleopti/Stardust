@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData, IDataSourceForTenant>();
+			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData>();
+			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
 
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();

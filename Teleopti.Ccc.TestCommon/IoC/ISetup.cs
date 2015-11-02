@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void For<T>();
 		void For<T1, T2>();
 		void For<T1, T2, T3>();
+		void For<T1, T2, T3, T4>();
 		void For<T1, T2, T3, T4, T5, T6, T7>();
 	}
 
@@ -108,6 +109,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 		}
 
+		public void For<T1, T2, T3, T4>()
+		{
+		}
+
 		public void For<T1, T2, T3, T4, T5, T6, T7>()
 		{
 		}
@@ -142,7 +147,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 	}
 
-	public class TestDoubleFor<TTestDouble> : ITestDoubleFor where TTestDouble : class 
+	public class TestDoubleFor<TTestDouble> : ITestDoubleFor where TTestDouble : class
 	{
 		private readonly ContainerBuilder _builder;
 		private readonly TestDoubles _testDoubles;
@@ -154,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_testDoubles = testDoubles;
 			_instance = instance;
 		}
-		
+
 		public void For<T>()
 		{
 			register(typeof(T));
@@ -168,6 +173,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void For<T1, T2, T3>()
 		{
 			register(typeof(T1), typeof(T2), typeof(T3));
+		}
+
+		public void For<T1, T2, T3, T4>()
+		{
+			register(typeof(T1), typeof(T2), typeof(T3), typeof(T4));
 		}
 
 		public void For<T1, T2, T3, T4, T5, T6, T7>()
@@ -191,6 +201,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					.SingleInstance()
 					.AsSelf()
 					.As(asTypes)
+					.ExternallyOwned()
 					.OnActivated(c =>
 					{
 						registration.Action = b =>
@@ -215,7 +226,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					.RegisterInstance(_instance)
 					.SingleInstance()
 					.AsSelf()
-					.As(asTypes);
+					.As(asTypes)
+					.ExternallyOwned()
+					;
 			}
 		}
 

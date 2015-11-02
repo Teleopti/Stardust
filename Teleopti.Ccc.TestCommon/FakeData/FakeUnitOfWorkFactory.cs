@@ -6,11 +6,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeUnitOfWorkFactory : IUnitOfWorkFactory
 	{
-		public void Dispose()
-		{
-			throw new NotImplementedException();
-		}
-
 		public string Name { get; set; }
 		public long? NumberOfLiveUnitOfWorks { get; set; }
 		public IAuditSetter AuditSetting { get; set; }
@@ -40,5 +35,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new FakeUnitOfWork();
 		}
+
+		public void Dispose()
+		{
+		}
+
 	}
 }

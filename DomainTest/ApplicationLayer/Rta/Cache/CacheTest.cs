@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 {
-	[IoCTest]
+	[DomainTest]
 	[TestFixture]
 	public class CacheTest : ISetup
 	{

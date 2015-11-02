@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,48 +11,43 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeApplicationData : ICurrentApplicationData, IApplicationData, IDataSourceForTenant
+	public class FakeApplicationData : ICurrentApplicationData, IApplicationData
 	{
-		private IEnumerable<IDataSource> _registeredDataSources = new IDataSource[] { };
+		private readonly DataSourceForTenant _dataSourceForTenant;
+
+		public FakeApplicationData(DataSourceForTenant dataSourceForTenant)
+		{
+			_dataSourceForTenant = dataSourceForTenant;
+		}
 
 		public virtual IEnumerable<IDataSource> RegisteredDataSources
 		{
-			get { return _registeredDataSources; }
-			set { _registeredDataSources = value.ToArray(); }
+			get
+			{
+				var values = new List<IDataSource>();
+				_dataSourceForTenant.DoOnAllTenants_AvoidUsingThis(d =>
+				{
+					values.Add(d);
+				});
+				return values;
+			}
+			set
+			{
+				value.ForEach(x =>
+				{
+					_dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(x);
+				});
+			}
 		}
 
 		public void Dispose()
 		{
 		}
 
-		public IDataSource Tenant(string tenantName)
-		{
-			return RegisteredDataSources.SingleOrDefault(x => x.DataSourceName.Equals(tenantName));
-		}
-
 		public IMessageBrokerComposite Messaging { get; private set; }
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
-
-		public void MakeSureDataSourceExists(
-			string tenantName, 
-			string applicationConnectionString, 
-			string analyticsConnectionString,
-			IDictionary<string, string> applicationNhibConfiguration)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
-		{
-			RegisteredDataSources.ForEach(actionOnTenant);
-		}
-
-		public void RemoveDataSource(string tenantName)
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		public IApplicationData Current()
 		{
 			return this;
@@ -62,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
 
-		public FakeApplicationDataWithTestDatasource(Func<IDataSourcesFactory> dataSourcesFactory)
+		public FakeApplicationDataWithTestDatasource(Func<IDataSourcesFactory> dataSourcesFactory, DataSourceForTenant dataSourceForTenant) : base(dataSourceForTenant)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 		}

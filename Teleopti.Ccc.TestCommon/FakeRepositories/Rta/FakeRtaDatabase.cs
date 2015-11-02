@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
 		public readonly FakeAdherencePercentageReadModelPersister AdherencePercentageReadModelPersister;
+		private readonly DataSourceForTenant _dataSourceForTenant;
 
 		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
@@ -89,7 +91,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeTeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister,
 			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
 			FakeAdherenceDetailsReadModelPersister adherenceDetailsReadModelPersister,
-			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister
+			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister,
+			DataSourceForTenant dataSourceForTenant
 			)
 		{
 			_config = config;
@@ -103,6 +106,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			SiteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
 			AdherenceDetailsReadModelPersister = adherenceDetailsReadModelPersister;
 			AdherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
+			_dataSourceForTenant = dataSourceForTenant;
 			WithBusinessUnit(Guid.NewGuid());
 			WithDefaultsFromState(new ExternalUserStateForTest());
 			WithTenant("default", ConfiguredKeyAuthenticator.LegacyAuthenticationKey);
@@ -140,13 +144,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IFakeDataBuilder WithTenant(string name, string key)
 		{
-			var dataSource = new FakeDataSource(name);
-			dataSource.Application = new FakeUnitOfWorkFactory {ConnectionString = _config.ConnectionString("RtaApplication") };
-			ApplicationData.RegisteredDataSources =
-				new IDataSource[] {dataSource }
-					.Union(ApplicationData.RegisteredDataSources)
-					.Randomize()
-					.ToArray();
+			// only required without multi-tenancy I think...
+			// because then the rta requires all tenants to be loaded at startup to find the datasource from a connection string
+			var dataSource = new FakeDataSource(name)
+			{
+				Application = new FakeUnitOfWorkFactory
+				{
+					Name = name,
+					ConnectionString = _config.ConnectionString("RtaApplication")
+				}
+			};
+			_dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			Tenants.Has(new Infrastructure.MultiTenancy.Server.Tenant(name) {RtaKey = key});
 			return this;
 		}

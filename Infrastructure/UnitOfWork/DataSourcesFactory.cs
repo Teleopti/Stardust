@@ -38,38 +38,30 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_messageBroker = messageBroker ?? (() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging);
 		}
 
-		public IDataSource Create(string applicationDataSourceName, string applicationConnectionString, string statisticConnectionString)
+		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
 		{
-			var settings = new Dictionary<string, string>
-			{
-				{
-					Environment.ConnectionString,
-					applicationConnectionString
-				},
-				{
-					Environment.SessionFactoryName,
-					applicationDataSourceName
-				}
-			};
-			return createDataSource(settings, statisticConnectionString);
+			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		public IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString)
+		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString)
 		{
-			return createDataSource(settings, statisticConnectionString);
+			var applicationNhibConfiguration = new Dictionary<string, string>();
+			applicationNhibConfiguration[Environment.SessionFactoryName] = tenantName;
+			applicationNhibConfiguration[Environment.ConnectionString] = applicationConnectionString;
+			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		public IDataSource Create(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
+		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
 			applicationNhibConfiguration[Environment.SessionFactoryName] = tenantName;
 			applicationNhibConfiguration[Environment.ConnectionString] = applicationConnectionString;
-			return createDataSource(applicationNhibConfiguration, analyticsConnectionString);
+			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString)
+		private IDataSource createDataSource(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
-			var appConfig = createApplicationConfiguration(settings);
+			var appConfig = createApplicationConfiguration(applicationNhibConfiguration);
 			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
 			var sessionFactory = buildSessionFactory(appConfig);
 			var appFactory = new NHibernateUnitOfWorkFactory(

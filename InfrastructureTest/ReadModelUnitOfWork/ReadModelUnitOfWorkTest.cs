@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<ICurrentApplicationData, IDataSourceForTenant>();
+			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<ICurrentApplicationData>();
+			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 	}
 

@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IDisposable OnThisThreadUse(string tenant)
 		{
+			if (tenant == null)
+				return OnThisThreadUse(null as IDataSource);
 			return OnThisThreadUse(_dataSourceForTenant.Tenant(tenant));
 		}
 	}

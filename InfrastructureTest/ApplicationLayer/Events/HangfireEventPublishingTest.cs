@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData>();
+			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
 
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();

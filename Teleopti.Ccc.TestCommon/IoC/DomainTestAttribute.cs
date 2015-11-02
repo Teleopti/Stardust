@@ -11,9 +11,12 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,11 +41,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			fakePrincipal(system);
 
-			// Tenant stuff
+			// Tenant (and datasource) stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
+			system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName>();
+			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
+			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			//
 
 			// Outbound stuff

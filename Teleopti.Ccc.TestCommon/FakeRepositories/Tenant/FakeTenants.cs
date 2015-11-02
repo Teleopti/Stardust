@@ -3,10 +3,11 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 {
-	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants
+	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName
 	{
 		private readonly List<Infrastructure.MultiTenancy.Server.Tenant> _data = new List<Infrastructure.MultiTenancy.Server.Tenant>();
 
@@ -37,6 +38,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 		public IEnumerable<Infrastructure.MultiTenancy.Server.Tenant> Tenants()
 		{
 			return _data.ToArray();
+		}
+
+		Infrastructure.MultiTenancy.Server.Tenant IFindTenantByName.Find(string name)
+		{
+			return _data.Single(x => x.Name == name);
 		}
 	}
 }

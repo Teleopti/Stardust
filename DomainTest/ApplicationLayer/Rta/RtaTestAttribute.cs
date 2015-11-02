@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			base.Setup(system, configuration);
 
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData>();
 		}
 		
 	}
