@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					if (skillStatus.SkillName == item.SkillName)
 					{
-						var lastestDataDate = actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks.Max(z => z.IntervalStart)).First();
+						var lastestDataDate = item.IntervalTasks.Max(u => u.IntervalStart);
 						skillStatus.Measures = new List<SkillStatusMeasure>
 						{
 							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(absDifference), Severity = 1, StringValue = message, LatestDate = lastestDataDate }
@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				Severity = i++
 			}).OrderByDescending(y => y.Severity);
 		}
-
 		private double getAbsDifference(IEnumerable<IntervalTasks> forecastedTasks, List<IntervalTasks> actualDetails)
 		{
 			var result = 0.0;
@@ -81,23 +80,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 					actualTask = actualTaskOnInterval.Task;
 
 				result += Math.Abs(forecastedItem.Task - actualTask);
-			}
-			return result;
-		}
-
-		private double getAbsDifference2(IEnumerable<IntervalTasks> forecastedTasks, List<IntervalTasks> actualDetails)
-		{
-			var result = 0.0;
-			foreach (var actualDetail in actualDetails)
-			{
-				var forecastedTask = 0.0;
-				var forecastedTaskOnInterval =
-					forecastedTasks.FirstOrDefault(x => x.IntervalStart.Equals(actualDetail.IntervalStart));
-
-				if (forecastedTaskOnInterval != null)
-					forecastedTask = forecastedTaskOnInterval.Task;
-
-				result += Math.Abs(actualDetail.Task - forecastedTask);
 			}
 			return result;
 		}

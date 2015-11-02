@@ -623,6 +623,7 @@
     <Compile Include="Intraday\SkillForecastedTasksProvider.cs" />
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
+    <Compile Include="Intraday\SkillTaskDetails.cs" />
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
     <Compile Include="Config\ConfigOverrider.cs" />
     <Compile Include="Config\ConfigReader.cs" />

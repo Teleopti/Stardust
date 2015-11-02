@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IList<SkillTaskDetails> GetForecastedTasks(DateTime now)
 		{
 			var allSkills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			//should be uptill now
 			var skillToTaskData = _skillDayRepository.GetSkillsTasksDetails(new DateTimePeriod(now.Date, now), allSkills.ToList(),
 				_scenarioRepository.LoadDefaultScenario()).ToList();
 			var result = new List<SkillTaskDetails>();
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 							skillToTaskData.Where(x => x.SkillId == item.SkillId)
 								.Select(x => new IntervalTasks()
 								{
-									//should use timezone helper
 									IntervalStart = x.Minimum,
 									Task = x.TotalTasks
 								}).ToList()
@@ -50,29 +48,5 @@ namespace Teleopti.Ccc.Domain.Intraday
 			
 			return result;
 		}
-	}
-
-	public interface ISkillForecastedTasksProvider
-	{
-		IList<SkillTaskDetails> GetForecastedTasks(DateTime now);
-	}
-
-	public class SkillTaskDetails : IEquatable<SkillTaskDetails>
-	{
-		public Guid SkillId { get; set; }
-		public string SkillName { get; set; }
-		public List<IntervalTasks> IntervalTasks { get; set; }
-
-		public bool Equals(SkillTaskDetails other)
-		{
-			return SkillId==other.SkillId;
-		}
-
-	}
-
-	public class IntervalTasks
-	{
-		public DateTime IntervalStart { get; set; }
-		public double Task { get; set; }
 	}
 }
