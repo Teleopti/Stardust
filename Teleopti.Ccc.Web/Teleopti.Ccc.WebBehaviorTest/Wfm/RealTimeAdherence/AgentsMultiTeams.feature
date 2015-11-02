@@ -29,6 +29,7 @@ Scenario: Should be able to see agents for multiple sites
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
 
+@ignore
 Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
