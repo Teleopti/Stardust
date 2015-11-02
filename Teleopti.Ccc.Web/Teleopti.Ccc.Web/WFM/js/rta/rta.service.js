@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	angular.module('RtaService', ['ngResource']).service('RtaService', ['$resource',
+	angular.module('wfm.rta').service('RtaService', ['$resource',
 		function($resource) {
 
 			this.getAgents = $resource('../Agents/ForTeam?teamId=:teamId', {

@@ -163,15 +163,6 @@ describe('RtaAgentsForSitesCtrl', function() {
 		expect(scope.agents[0].State).toEqual("In Call");
 		expect(scope.agents[1].State).toEqual("Ready");
 	});
-	
-	it('should go back to sites', function() {
-		createController();
-		spyOn($state, 'go');
-
-		scope.goBackToRoot();
-
-		expect($state.go).toHaveBeenCalledWith('rta');
-	});
 
 	it('should set states to agents for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
@@ -230,35 +221,6 @@ describe('RtaAgentsForSitesCtrl', function() {
 		expect(scope.agents[1].TimeInState).toEqual(15473);
 	});
 
-	it('should display in correct time format', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		states = [{
-			"StateStart": "\/Date(1429254905000)\/",
-			"NextActivityStartTime": "\/Date(1432109700000)\/",
-			"AlarmStart": "\/Date(1432105910000)\/"
-		}];
-
-		var baseTime = new Date('2015-04-17');
-		jasmine.clock().mockDate(baseTime);
-
-		createController();
-
-		expect(scope.format(scope.agents[0].StateStart)).toEqual("07:15");
-		expect(scope.format(scope.agents[0].NextActivityStartTime)).toEqual("2015-05-20 08:15:00");
-		expect(scope.format(scope.agents[0].AlarmStart)).toEqual("2015-05-20 07:11:50");
-	});
-
-	it('should display in correct time duration format', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		states = [{
-			"TimeInState": 15473
-		}];
-
-		createController();
-
-		expect(scope.formatDuration(scope.agents[0].TimeInState)).toEqual("4:17:53");
-	});
-
 	it('should filter agent name with agentFilter', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
 		agents = [{
@@ -276,20 +238,14 @@ describe('RtaAgentsForSitesCtrl', function() {
 		expect(scope.gridOptions.data[0].Name).toEqual("Ashley Andeen");
 	});
 
-	it('should get change schedule url for agent', function() {
+	it('should go back to sites when business unit is changed', function() {
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		}];
-		var fakeDate = new Date('2015-10-28');
-		jasmine.clock().mockDate(fakeDate);
 
 		createController();
+		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+		spyOn($state, 'go');
+		scope.$digest();
 
-		expect(scope.changeScheduleUrl("34590a63-6331-4921-bc9f-9b5e015ab495", "11610fe4-0130-4568-97de-9b5e015b2564"))
-			.toEqual("/Anywhere#teamschedule/928dd0bc-bf40-412e-b970-9b5e015aadea/34590a63-6331-4921-bc9f-9b5e015ab495/11610fe4-0130-4568-97de-9b5e015b2564/20151028");
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
-
 });

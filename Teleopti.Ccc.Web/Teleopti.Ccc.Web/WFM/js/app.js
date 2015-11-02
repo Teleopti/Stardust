@@ -22,7 +22,6 @@ var wfm = angular.module('wfm', [
 	'fakeDateTimeService',
 	'toggleService',
 	'outboundServiceModule',
-	'RtaService',
 	'wfm.http',
 	'wfm.permissions',
 	'wfm.people',
