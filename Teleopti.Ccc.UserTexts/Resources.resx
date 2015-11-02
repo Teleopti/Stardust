@@ -13519,4 +13519,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Attempted {0} seat bookings, {1} succeeded and {2} failed.  There were {3} unscheduled agent days</value>
     <comment>Used to display the result of a seat plan.</comment>
   </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Seasonality</value>
+    <comment>Handle fluctuation that extends over more than one schedule period</comment>
+  </data>
 </root>

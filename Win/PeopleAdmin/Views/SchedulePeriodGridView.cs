@@ -610,7 +610,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			_childGridSeasonalityColumn =
 				 new PercentageCellColumnForSchedulePeriod<SchedulePeriodChildModel>
-				("Seasonality", "Seasonality");
+				("Seasonality", UserTexts.Resources.Seasonality);
 			_childGridSeasonalityColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridColumns.Add(_childGridSeasonalityColumn);
 

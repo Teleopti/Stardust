@@ -23252,6 +23252,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seasonality.
+        /// </summary>
+        public static string Seasonality {
+            get {
+                return ResourceManager.GetString("Seasonality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seasonality and trends data range.
         /// </summary>
         public static string SeasonalityDataRange {
