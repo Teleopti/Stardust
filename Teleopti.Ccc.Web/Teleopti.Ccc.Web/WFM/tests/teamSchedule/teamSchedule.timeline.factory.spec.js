@@ -32,49 +32,48 @@ describe("TimeLine", function () {
 		target = TimeLine;
 	}));
 
-	it("Can get an instance of TimeLine factory", inject(function () {
-		expect(target).toBeDefined();
-	}));
-
 	it("should display 1 extra hour line when schedule starts or end at hour point", inject(function () {
-		var now = moment("2015-10-26 07:35:00");
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
 
 		var schedules = [
 			{
-				"Date": "2015-10-26",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 12:00",
+						"Start": today + " 12:00",
 						"Minutes": 240
 					},
 					{
-						"Start": "2015-10-26 16:00",
+						"Start": today + " 16:00",
 						"Minutes": 240 // End = "2015-10-26 20:00"
 					}
 				],
 				"DayOff": null
 			},
 			{
-				"Date": "2015-10-26",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 08:00",
+						"Start": today + " 08:00",
 						"Minutes": 120
 					},
 					{
-						"Start": "2015-10-26 10:00",
+						"Start": today + " 10:00",
 						"Minutes": 360 // End = "2015-10-26 16:00"
 					}
 				],
 				"DayOff": null
 			},
 			{
-				"Date": "2015-10-27",
+				"Date": tomorrow,
 				"Projection": [],
 				"DayOff":
 				{
 					"DayOffName": "Day off",
-					"Start": "2015-10-27 00:00",
+					"Start": tomorrow + " 00:00",
 					"Minutes": 1440
 				}
 			}
@@ -101,45 +100,49 @@ describe("TimeLine", function () {
 		expect(lastHourPoint.TimeLabel).toEqual("21:00");
 		expect(lastHourPoint.Position()).toEqual(100);
 	}));
+
 	it("should display same whole hour line as the start or end time when schedule starts or ends not at hour point", inject(function () {
-		var now = moment("2015-10-26 07:35:00");
+		var today = "2015-10-26";
+		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
+
+		var now = moment(today + " 07:35:00");
 
 		var schedules = [
 			{
-				"Date": "2015-10-26",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 12:00",
+						"Start": today + " 12:00",
 						"Minutes": 240
 					},
 					{
-						"Start": "2015-10-26 16:00",
-						"Minutes": 250 // End = "2015-10-26 20:00"
+						"Start": today + " 16:00",
+						"Minutes": 250 // End = "2015-10-26 20:10"
 					}
 				],
 				"DayOff": null
 			},
 			{
-				"Date": "2015-10-26",
+				"Date": today,
 				"Projection": [
 					{
-						"Start": "2015-10-26 07:30",
-						"Minutes": 120
+						"Start": today + " 07:30",
+						"Minutes": 120 // End = "2015-10-26 09:30"
 					},
 					{
-						"Start": "2015-10-26 10:00",
+						"Start": today + " 10:00",
 						"Minutes": 360 // End = "2015-10-26 16:00"
 					}
 				],
 				"DayOff": null
 			},
 			{
-				"Date": "2015-10-27",
+				"Date": tomorrow,
 				"Projection": [],
 				"DayOff":
 				{
 					"DayOffName": "Day off",
-					"Start": "2015-10-27 00:00",
+					"Start": tomorrow + " 00:00",
 					"Minutes": 1440
 				}
 			}
