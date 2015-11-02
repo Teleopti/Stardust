@@ -1001,8 +1001,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			saver.Save();
 		}
 
+		private bool formClosingInProgress;
 		private void schedulingScreenFormClosing(object sender, FormClosingEventArgs e)
 		{
+			if (formClosingInProgress)
+			{
+				e.Cancel = true;
+				return;
+			}
+
+			formClosingInProgress = true;
+
 			cancelAllBackgroundWorkers();
 
 			if (_forceClose || _schedulerState == null)
@@ -1012,7 +1021,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_cachedPersonsFilterView.Dispose();
 
 			if (checkIfUserWantsToSaveUnsavedData() == -1)
+			{
 				e.Cancel = true;
+				formClosingInProgress = false;
+			}
+			
 
 			if (!e.Cancel)
 			{
