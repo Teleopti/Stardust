@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _grid.CellModels.Add(GridCellModelConstants.CellTypeNumericCell, new NumericCellModel(_grid.Model));
             _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesCell, new TimeSpanDurationCellModel(_grid.Model));
             _grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(_grid.Model){AllowEmptyCell = true});
+			_grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(_grid.Model));
 
             var percentCellModel = new PercentCellModel(_grid.Model) {MinMax = new MinMax<double>(-1, 1)};
             _grid.CellModels.Add(GridCellModelConstants.CellTypePercentCell, percentCellModel);

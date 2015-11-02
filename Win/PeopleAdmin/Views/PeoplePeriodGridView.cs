@@ -23,8 +23,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
-	public class PeoplePeriodGridView : DropDownGridViewBase
+	public class PeoplePeriodGridView : GridViewBase
 	{
+		private const int defaultGridInCellColumnIndex = 2;
+		private const int defaultParentChildGridMappingValue = 2;
+		private const int defaultParentGridLastColumnIndex = 0;
+		private const int defaultPushButtonColumnIndex = 1;
+		private const int defaultTotalHiddenColumnsInParentGrid = 1;
+		private const int defaultRowHeightValue = 20;
+		private const int defaultRenderingAddValue = 2;
+		private const int defaultColumnWidthAddValueInGrids = 10;
+		private const int defaultRowIndex = 1;
+
 		private Rectangle cellButtonRect;
 
 	    private ToolStripMenuItem _addNewPersonPeriodMenuItem;
@@ -73,22 +83,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			get { return ViewType.PeoplePeriodView; }
 		}
 
-		public override int ParentGridLastColumnIndex
+		public int ParentGridLastColumnIndex
 		{
 			get
 			{
-				return _gridColumns.Count - TotalHiddenColumnsInParentGrid;
+				return _gridColumns.Count - defaultTotalHiddenColumnsInParentGrid;
 			}
 		}
 
-		private int CurrentRowIndex
+		private int currentRowIndex
 		{
 			get { return Grid.CurrentCell.RowIndex - PeopleAdminConstants.GridCurrentRowIndexMapValue; }
 		}
 
-		private PersonPeriodModel CurrentPersonPeriodView
+		private PersonPeriodModel currentPersonPeriodView
 		{
-			get { return FilteredPeopleHolder.PersonPeriodGridViewCollection[CurrentRowIndex]; }
+			get { return FilteredPeopleHolder.PersonPeriodGridViewCollection[currentRowIndex]; }
 		}
 
 		internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
@@ -117,7 +127,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		internal override void CellButtonClicked(GridCellButtonClickedEventArgs e)
 		{
-			if (e.ColIndex == PushButtonColumnIndex)
+			if (e.ColIndex == defaultPushButtonColumnIndex)
 			{
 				// Load child grid when push button clicked.
 				LoadChildGrid(e.RowIndex);
@@ -134,23 +144,31 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
+		public static int DefaultRowHeight
+		{
+			get
+			{
+				return defaultRowHeightValue;
+			}
+		}
+
 		internal override void SelectedDateChange(object sender, EventArgs e)
 		{
 			// Colleps all expanded rows
 			for (int rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				GridRangeInfo gridInfo = GridRangeInfo.Cells(rowIndex + PeopleAdminConstants.GridCollectionMapValue,
-					GridInCellColumnIndex, rowIndex + PeopleAdminConstants.GridCollectionMapValue, ParentGridLastColumnIndex);
+					defaultGridInCellColumnIndex, rowIndex + PeopleAdminConstants.GridCollectionMapValue, ParentGridLastColumnIndex);
 
 				if (FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex].ExpandState)
 				{
 					FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex].ExpandState = false;
 
 					// Get child grid and dispose it
-					GridControl gridControl = Grid[rowIndex + PeopleAdminConstants.GridCollectionMapValue, GridInCellColumnIndex].
+					GridControl gridControl = Grid[rowIndex + PeopleAdminConstants.GridCollectionMapValue, defaultGridInCellColumnIndex].
 						Control as GridControl;
 					FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex].GridControl = null;
-					RemoveChildGrid(gridControl, gridInfo);
+					removeChildGrid(gridControl, gridInfo);
 
 					Grid.RowHeights[rowIndex + PeopleAdminConstants.GridCollectionMapValue] = DefaultRowHeight;
 				}
@@ -214,9 +232,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						length = top + rangeInfo.Height - 1;
 						RowCount += rangeInfo.Height;
 						break;
-
-					default:
-						break;
 				}
 
 				// Fixes for the Bug 4948
@@ -234,7 +249,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						// Child Value Set
 						else
 						{
-							AddChildPersonPeriodList(list, gridDataList, i);
+							addChildPersonPeriodList(list, gridDataList, i);
 						}
 					}
 				}
@@ -242,7 +257,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					(FilteredPeopleHolder.PersonPeriodGridViewCollection[rangeInfo.Top - PeopleAdminConstants.GridCollectionMapValue]
 					.ExpandState))
 				{
-					AddChildPersonPeriodList(list, gridDataList, rangeInfo.Top - PeopleAdminConstants.GridCollectionMapValue);
+					addChildPersonPeriodList(list, gridDataList, rangeInfo.Top - PeopleAdminConstants.GridCollectionMapValue);
 				}
 				else if (top > 0)
 					for (int index = top - 1; index < length; index++)
@@ -265,7 +280,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 																		  <IPersonPeriodModel>(gridDataList));	
 		}
 
-		private void AddChildPersonPeriodList(IList<IPersonPeriod> list, IList<IPersonPeriodModel> gridDataList, int index)
+		private void addChildPersonPeriodList(IList<IPersonPeriod> list, IList<IPersonPeriodModel> gridDataList, int index)
 		{
 			var grid = FilteredPeopleHolder.PersonPeriodGridViewCollection[index].GridControl;
 
@@ -283,6 +298,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 		}
+
+		public bool CanCopyChildRow { get; set; }
+
+		public bool CanCopyRow { get; set; }
 
 		internal override void ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
 		{
@@ -305,7 +324,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					foreach (IPersonPeriod period in selectedPerson.PersonPeriodCollection)
 					{
 						// add perticular period into the selected person period collection.
-						AddPersonPeriodToSelectedPersonPeriodCollection(period);
+						addPersonPeriodToSelectedPersonPeriodCollection(period);
 					}
 				}
 			}
@@ -319,70 +338,78 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		}
 
-		void ParentColumn_CellChanged(object sender, ColumnCellChangedEventArgs<PersonPeriodModel> e)
+		void parentColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonPeriodModel> e)
 		{
 			e.DataItem.CanBold = true;
 			PeopleAdminHelper.InvalidateGridRange(e.SaveCellInfoEventArgs.RowIndex, _gridColumns.Count, Grid);
 		}
 
-		void TeamColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
+		void teamColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.SiteTeamAdapterCollection.OrderBy(a=>a.Team.SiteAndTeam).ToList());
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.SiteTeamAdapterCollection.OrderBy(a=>a.Team.SiteAndTeam).ToList());
 		}
 
 		void ContractColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, PeopleWorksheet.StateHolder.ContractCollection);
+			setBoldProperty(e);
+			setDataSource(e, PeopleWorksheet.StateHolder.ContractCollection);
 		}
 
 		void ContractScheduleColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, PeopleWorksheet.StateHolder.ContractScheduleCollection);
+			setBoldProperty(e);
+			setDataSource(e, PeopleWorksheet.StateHolder.ContractScheduleCollection);
 		}
 
 		void PartTimePercentageColumn_CellDisplayChanged(object sender,
 			ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, PeopleWorksheet.StateHolder.PartTimePercentageCollection);
+			setBoldProperty(e);
+			setDataSource(e, PeopleWorksheet.StateHolder.PartTimePercentageCollection);
 		}
 
-		void RuleSetBagColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
+		void ruleSetBagColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
 		}
 
-		internal override void ChildGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
+		public virtual int ParentChildGridMappingValue
+		{
+			get
+			{
+				return defaultParentChildGridMappingValue;
+			}
+		}
+
+		internal void ChildGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
 		{
 			// This is solution for child resizing and navaigtion rendering issues.Add value 2 to match parent and 
 			// Child columns
 			PeopleAdminHelper.CreateColWidthForChildGrid(e, ValidColumn(e.Index), ParentGridLastColumnIndex,
-														 RenderingAddValue,
+														 defaultRenderingAddValue,
 														 Grid.ColWidths[e.Index + ParentChildGridMappingValue]);
 		}
 
-		internal override void ChildGridQueryRowHeight(object sender, GridRowColSizeEventArgs e)
+		internal void ChildGridQueryRowHeight(object sender, GridRowColSizeEventArgs e)
 		{
 			PeopleAdminHelper.CreateRowHeightForChildGrid(e);
 		}
 
-		internal override void ChildGridQueryColCount(object sender, GridRowColCountEventArgs e)
+		internal void ChildGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
 			PeopleAdminHelper.CreateColumnCountForChildGrid(e, _childGridColumns.Count -
 															   PeopleAdminConstants.GridColumnCountMappingValue);
 		}
 
-		internal override void ChildGridQueryRowCount(object sender, GridRowColCountEventArgs e)
+		internal void ChildGridQueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
 			var personPeriodChildCollection = ((GridControl)sender).Tag as ReadOnlyCollection<PersonPeriodChildModel>;
 			PeopleAdminHelper.CreateRowCountForChildGrid(e, personPeriodChildCollection);
 		}
 
-		internal override void ChildGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		internal void ChildGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			var gridControl = ((GridControl)sender);
 
@@ -396,10 +423,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					_childGridColumns[e.ColIndex].GetCellInfo(e, personPeriodChildCollection);
 				}
 			}
-			base.ChildGridQueryCellInfo(sender, e);
+
+			if (e.Style.HasPasswordChar) return;
+			e.Style.CellTipText = e.Style.FormattedText;
 		}
 
-		internal override void ChildGridQuerySaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		internal void ChildGridQuerySaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 		    var grid =(GridControl) sender;
 			var personPeriodChildCollection = grid.Tag as ReadOnlyCollection<PersonPeriodChildModel>;
@@ -413,7 +442,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		internal override void ChildGridClipboardCanCopy(object sender, GridCutPasteEventArgs e)
+		internal void ChildGridClipboardCanCopy(object sender, GridCutPasteEventArgs e)
 		{
 			_selectedPersonPeriodCollection.Clear();
 			CanCopyRow = false;
@@ -433,13 +462,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						CanCopyChildRow = true;
 						GridRangeInfoList gridRangeInfoList = grid.Model.SelectedRanges;
 
-						HandleChildGridCanCopy(personPeriodChildCollection, gridRangeInfoList);
+						handleChildGridCanCopy(personPeriodChildCollection, gridRangeInfoList);
 					}
 				}
 			}
 		}
 
-		internal override void ChildGridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		internal void ChildGridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			var grid = sender as GridControl;
 
@@ -482,9 +511,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 									length = top + rangeInfo.Height - 1;
 									RowCount += rangeInfo.Height;
 									break;
-
-								default:
-									break;
 							}
 
 							#endregion
@@ -516,7 +542,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 																				 <IPersonPeriodModel>
 																				 (gridDataList));
 
-						InvalidateTabPages();
+						invalidateTabPages();
 					}
 				}
 			}
@@ -529,7 +555,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				e.QueryCellInfoEventArg.Style.Font.Bold = true;
 		}
 
-		void ChildColumn_CellChanged(object sender, ColumnCellChangedEventArgs<PersonPeriodChildModel> e)
+		void childColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonPeriodChildModel> e)
 		{
 			e.DataItem.CanBold = true;
 
@@ -540,80 +566,82 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			PeopleAdminHelper.InvalidateGridRange(e.SaveCellInfoEventArgs.RowIndex, _childGridColumns.Count, grid);
 		}
 
-		static void ChildGridContractColumn_CellDisplayChanged(object sender,
+		static void childGridContractColumnCellDisplayChanged(object sender,
 			ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
+			setBoldProperty(e);
 
-			SetDataSource(e, PeopleWorksheet.StateHolder.ContractCollection);
+			setDataSource(e, PeopleWorksheet.StateHolder.ContractCollection);
 			//Grid.ResetVolatileData();
 		}
 
-		void ChildGridTeamColumn_CellDisplayChanged(object sender,
+		void childGridTeamColumnCellDisplayChanged(object sender,
 			ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.SiteTeamAdapterCollection);
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.SiteTeamAdapterCollection);
 		}
 
-		static void ChildGridContractScheduleColumn_CellDisplayChanged(object sender,
+		static void childGridContractScheduleColumnCellDisplayChanged(object sender,
 		  ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, PeopleWorksheet.StateHolder.ContractScheduleCollection);
+			setBoldProperty(e);
+			setDataSource(e, PeopleWorksheet.StateHolder.ContractScheduleCollection);
 		}
 
-		static void ChildGridPartTimePercentageColumn_CellDisplayChanged(object sender,
+		static void childGridPartTimePercentageColumnCellDisplayChanged(object sender,
 		   ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, PeopleWorksheet.StateHolder.PartTimePercentageCollection);
+			setBoldProperty(e);
+			setDataSource(e, PeopleWorksheet.StateHolder.PartTimePercentageCollection);
 		}
 
-		void ChildGridRuleSetBagColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs
+		void childGridRuleSetBagColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs
 			<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
 		}
 
 		public PeoplePeriodGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder) :
 			base(grid, filteredPeopleHolder)
 		{
-			InitCellModels(grid);
-			Grid.HorizontalScroll += Grid_HorizontalScroll;
+			initCellModels(grid);
+			Grid.HorizontalScroll += gridHorizontalScroll;
 		}
 
-		void Grid_HorizontalScroll(object sender, ScrollEventArgs e)
+		void gridHorizontalScroll(object sender, ScrollEventArgs e)
 		{
 			PrepareView();
 		}
 
-		private void InitCellModels(GridControl grid)
+		private void initCellModels(GridControl grid)
 		{
 			Grid.CellModels.Add(GridCellModelConstants.CellTypeGridInCell, new GridInCellModel(Grid.Model));
 			var cellModel = new GridDropDownMonthCalendarAdvCellModel(grid.Model);
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
 			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCellModel))
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
 		}
 
-		private bool IsValidRow()
+		private bool isValidRow()
 		{
 			return Grid.CurrentCell.RowIndex > PeopleAdminConstants.GridHeaderIndex;
 		}
 
-		private bool IsCurrentRowExpanded()
+		private bool isCurrentRowExpanded()
 		{
-			return IsValidRow() && CurrentPersonPeriodView.ExpandState;
+			return isValidRow() && currentPersonPeriodView.ExpandState;
 		}
 
-		private int GetColumnIndex()
+		private int getColumnIndex()
 		{
 			int columnIndex;
-			if (IsCurrentRowExpanded())
+			if (isCurrentRowExpanded())
 			{
-				columnIndex = CurrentPersonPeriodView.GridControl.CurrentCell.ColIndex +
+				columnIndex = currentPersonPeriodView.GridControl.CurrentCell.ColIndex +
 							  PeopleAdminConstants.GridCurrentCellColumnAddValue;
 			}
 			else
@@ -633,13 +661,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	        return Grid.CurrentCell.ColIndex;
 	    }
 
-		private void SortPeoplePeriodData(bool isAscending)
+		private void sortPeoplePeriodData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
 			var personcollection = new List<PersonPeriodModel>(
 				FilteredPeopleHolder.PersonPeriodGridViewCollection);
 
-			var columnIndex = GetColumnIndex();
+			var columnIndex = getColumnIndex();
 
 			// Gets the sort column to sort
 			var sortColumn = _gridColumns[columnIndex].BindingProperty;
@@ -681,7 +709,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void CreateChildGridHeader()
+		private void createChildGridHeader()
 		{
 			// Grid must have a Header column
 			_childRowHeaderColumn = new RowHeaderColumn<PersonPeriodChildModel>();
@@ -692,7 +720,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			_childGridPeriodDateColumn = new EditableDateOnlyColumnForPeriodGrids<PersonPeriodChildModel>
 				("PeriodDate", Resources.Date);
-			_childGridPeriodDateColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridPeriodDateColumn.CellChanged += childColumnCellChanged;
 			_childGridPeriodDateColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridColumns.Add(_childGridPeriodDateColumn);
 
@@ -700,27 +728,27 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				SiteTeamModel>
 				("SiteTeam", Resources.SiteTeam, FilteredPeopleHolder.SiteTeamAdapterCollection,
 				 "Description");
-			_childGridTeamColumn.CellChanged += ChildColumn_CellChanged;
-			_childGridTeamColumn.CellDisplayChanged += ChildGridTeamColumn_CellDisplayChanged;
+			_childGridTeamColumn.CellChanged += childColumnCellChanged;
+			_childGridTeamColumn.CellDisplayChanged += childGridTeamColumnCellDisplayChanged;
 			_childGridColumns.Add(_childGridTeamColumn);
 
 			_childGridSkillColumn = new ReadOnlySkillDescriptionColumn<PersonPeriodChildModel>
 				("PersonSkills", Resources.PersonSkill);
 			_childGridSkillColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
-			_childGridSkillColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridSkillColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridSkillColumn);
 
 			_childGridExternalLogOnColumn = new ReadOnlyCollectionColumn<PersonPeriodChildModel>
 				("ExternalLogOnNames", Resources.ExternalLogOn);
 			_childGridExternalLogOnColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
-			_childGridExternalLogOnColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridExternalLogOnColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridExternalLogOnColumn);
 
 			_childGridContractColumn = new DropDownColumnForPeriodGrids<PersonPeriodChildModel, IContract>
 				("Contract", Resources.Contract, PeopleWorksheet.StateHolder.ContractCollection,
 				 "Description", typeof(Contract));
-			_childGridContractColumn.CellDisplayChanged += ChildGridContractColumn_CellDisplayChanged;
-			_childGridContractColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridContractColumn.CellDisplayChanged += childGridContractColumnCellDisplayChanged;
+			_childGridContractColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridContractColumn);
 
 			_childGridContractScheduleColumn = new DropDownColumnForPeriodGrids<PersonPeriodChildModel,
@@ -728,48 +756,48 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 								   PeopleWorksheet.StateHolder.ContractScheduleCollection, "Description",
 														  typeof(ContractSchedule));
 			_childGridContractScheduleColumn.CellDisplayChanged +=
-									 ChildGridContractScheduleColumn_CellDisplayChanged;
-			_childGridContractScheduleColumn.CellChanged += ChildColumn_CellChanged;
+									 childGridContractScheduleColumnCellDisplayChanged;
+			_childGridContractScheduleColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridContractScheduleColumn);
 
 			_childGridPartTimePercentageColumn = new DropDownColumnForPeriodGrids<PersonPeriodChildModel,
 				IPartTimePercentage>("PartTimePercentage", Resources.PartTimePercentageLower,
 									 PeopleWorksheet.StateHolder.PartTimePercentageCollection, "Description",
 									 typeof(PartTimePercentage));
-			_childGridPartTimePercentageColumn.CellDisplayChanged += ChildGridPartTimePercentageColumn_CellDisplayChanged;
-			_childGridPartTimePercentageColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridPartTimePercentageColumn.CellDisplayChanged += childGridPartTimePercentageColumnCellDisplayChanged;
+			_childGridPartTimePercentageColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridPartTimePercentageColumn);
 
 			_childGridRuleSetBagColumn = new DropDownColumnForPeriodGrids<PersonPeriodChildModel,
 				IRuleSetBag>("RuleSetBag", Resources.RuleSetBag,
 							 FilteredPeopleHolder.RuleSetBagCollection, "Description", typeof(RuleSetBag));
-			_childGridRuleSetBagColumn.CellDisplayChanged += ChildGridRuleSetBagColumn_CellDisplayChanged;
+			_childGridRuleSetBagColumn.CellDisplayChanged += childGridRuleSetBagColumnCellDisplayChanged;
 
-			_childGridRuleSetBagColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridRuleSetBagColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridRuleSetBagColumn);
 
 			_childGridBudgetGroupColumn = new DropDownColumnForPeriodGrids<PersonPeriodChildModel,
 				IBudgetGroup>("BudgetGroup", Resources.Budgets,
 							 FilteredPeopleHolder.BudgetGroupCollection, "Name", typeof(BudgetGroup));
-			_childGridBudgetGroupColumn.CellDisplayChanged += ChildGridBudgetGroupColumn_CellDisplayChanged;
+			_childGridBudgetGroupColumn.CellDisplayChanged += childGridBudgetGroupColumnCellDisplayChanged;
 
-			_childGridBudgetGroupColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridBudgetGroupColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridBudgetGroupColumn);
 
 			_childGridNoteColumn = new EditableTextColumnForPeriodGrids<PersonPeriodChildModel>
 			   ("Note", PeopleAdminConstants.GridNoteColumnWidth, Resources.Note);
 			_childGridNoteColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
-			_childGridNoteColumn.CellChanged += ChildColumn_CellChanged;
+			_childGridNoteColumn.CellChanged += childColumnCellChanged;
 			_childGridColumns.Add(_childGridNoteColumn);
 		}
 
-		private void ChildGridBudgetGroupColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
+		private void childGridBudgetGroupColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodChildModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.BudgetGroupCollection);
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.BudgetGroupCollection);
 		}
 
-		private void CreateParentGridHeaders()
+		private void createParentGridHeaders()
 		{
 			_gridColumns.Add(new RowHeaderColumn<PersonPeriodModel>());
 
@@ -788,15 +816,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_periodDateColumn = new EditableDateOnlyColumnForPeriodGrids<PersonPeriodModel>("PeriodDate",
 																									  Resources.Date);
 			_periodDateColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
-			_periodDateColumn.CellChanged += ParentColumn_CellChanged;
+			_periodDateColumn.CellChanged += parentColumnCellChanged;
 			_periodDateColumn.ColumnComparer = new PersonPeriodDateComparer();
 			_gridColumns.Add(_periodDateColumn);
 
 			_teamColumn = new DropDownColumnForPeriodGrids<PersonPeriodModel,
 				SiteTeamModel>("SiteTeam", Resources.SiteTeam, FilteredPeopleHolder.SiteTeamAdapterCollection,
 																								  "Description");
-			_teamColumn.CellDisplayChanged += TeamColumn_CellDisplayChanged;
-			_teamColumn.CellChanged += ParentColumn_CellChanged;
+			_teamColumn.CellDisplayChanged += teamColumnCellDisplayChanged;
+			_teamColumn.CellChanged += parentColumnCellChanged;
 			_teamColumn.ColumnComparer = new PersonPeriodTeamComparer();
 			_gridColumns.Add(_teamColumn);
 
@@ -804,14 +832,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 																						Resources.PersonSkill
 																						   );
 			_skillColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
-			_skillColumn.CellChanged += ParentColumn_CellChanged;
+			_skillColumn.CellChanged += parentColumnCellChanged;
 			_skillColumn.ColumnComparer = new PersonPeriodPersonSkillComparer();
 			_gridColumns.Add(_skillColumn);
 
 			_externalLogOnColumn = new ReadOnlyCollectionColumn<PersonPeriodModel>
 				("ExternalLogOnNames", Resources.ExternalLogOn);
 			_externalLogOnColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
-			_externalLogOnColumn.CellChanged += ParentColumn_CellChanged;
+			_externalLogOnColumn.CellChanged += parentColumnCellChanged;
 			_externalLogOnColumn.ColumnComparer = new PersonPeriodExternalLogOnNameComparer();
 			_gridColumns.Add(_externalLogOnColumn);
 
@@ -824,7 +852,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 																									   "Description",
 																									   typeof(Contract));
 			_contractColumn.ColumnComparer = new PersonPeriodContractComparer();
-			_contractColumn.CellChanged += ParentColumn_CellChanged;
+			_contractColumn.CellChanged += parentColumnCellChanged;
 			_contractColumn.CellDisplayChanged += ContractColumn_CellDisplayChanged;
 			_gridColumns.Add(_contractColumn);
 
@@ -833,7 +861,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 								   PeopleWorksheet.StateHolder.ContractScheduleCollection, "Description",
 								   typeof(ContractSchedule));
 			_contractScheduleColumn.ColumnComparer = new PersonPeriodContractScheduleComparer();
-			_contractScheduleColumn.CellChanged += ParentColumn_CellChanged;
+			_contractScheduleColumn.CellChanged += parentColumnCellChanged;
 			_contractScheduleColumn.CellDisplayChanged += ContractScheduleColumn_CellDisplayChanged;
 			_gridColumns.Add(_contractScheduleColumn);
 
@@ -842,7 +870,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 									 PeopleWorksheet.StateHolder.PartTimePercentageCollection, "Description",
 									 typeof(PartTimePercentage));
 			_partTimePercentageColumn.CellDisplayChanged += PartTimePercentageColumn_CellDisplayChanged;
-			_partTimePercentageColumn.CellChanged += ParentColumn_CellChanged;
+			_partTimePercentageColumn.CellChanged += parentColumnCellChanged;
 			_partTimePercentageColumn.ColumnComparer = new PersonPeriodPartTimePercentageComparer();
 			_gridColumns.Add(_partTimePercentageColumn);
 
@@ -850,34 +878,34 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				("RuleSetBag", Resources.RuleSetBag, FilteredPeopleHolder.RuleSetBagCollection,
 				 "Description", typeof(RuleSetBag));
 			_ruleSetBagColumn.ColumnComparer = new PersonPeriodRuleSetBagComparer();
-			_ruleSetBagColumn.CellDisplayChanged += RuleSetBagColumn_CellDisplayChanged;
-			_ruleSetBagColumn.CellChanged += ParentColumn_CellChanged;
+			_ruleSetBagColumn.CellDisplayChanged += ruleSetBagColumnCellDisplayChanged;
+			_ruleSetBagColumn.CellChanged += parentColumnCellChanged;
 			_gridColumns.Add(_ruleSetBagColumn);
 
 			_budgetGroupColumn = new DropDownColumnForPeriodGrids<PersonPeriodModel, IBudgetGroup>
 				("BudgetGroup", Resources.BudgetGroup, FilteredPeopleHolder.BudgetGroupCollection,
 				 "Name", typeof(BudgetGroup));
 			_budgetGroupColumn.ColumnComparer = new PersonPeriodBudgetGroupComparer();
-			_budgetGroupColumn.CellDisplayChanged += BudgetGroupColumn_CellDisplayChanged;
-			_budgetGroupColumn.CellChanged += ParentColumn_CellChanged;
+			_budgetGroupColumn.CellDisplayChanged += budgetGroupColumnCellDisplayChanged;
+			_budgetGroupColumn.CellChanged += parentColumnCellChanged;
 			_gridColumns.Add(_budgetGroupColumn);
 
 			_noteColumn = new EditableTextColumnForPeriodGrids<PersonPeriodModel>("Note",
 																 PeopleAdminConstants.GridNoteColumnWidth,
 																						  Resources.Note);
 			_noteColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
-			_noteColumn.CellChanged += ParentColumn_CellChanged;
+			_noteColumn.CellChanged += parentColumnCellChanged;
 
 			_gridColumns.Add(_noteColumn);
 		}
 
-		private void BudgetGroupColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
+		private void budgetGroupColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonPeriodModel> e)
 		{
-			SetBoldProperty(e);
-			SetDataSource(e, FilteredPeopleHolder.BudgetGroupCollection);
+			setBoldProperty(e);
+			setDataSource(e, FilteredPeopleHolder.BudgetGroupCollection);
 		}
 
-		private void RemoveChildGrid(GridControlBase childGrid, GridRangeInfo gridRange)
+		private void removeChildGrid(GridControlBase childGrid, GridRangeInfo gridRange)
 		{
 			// Remove covered range and remove grid form control collection
 			Grid.CoveredRanges.Remove(gridRange);
@@ -888,11 +916,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		{
 			if (Grid.Model.CurrentCellInfo != null)
 			{
-				InsertPersonPeriod();
+				insertPersonPeriod();
 			}
 		}
 
-		private void AddPersonPeriodToSelectedPersonPeriodCollection(IPersonPeriod personPeriod)
+		private void addPersonPeriodToSelectedPersonPeriodCollection(IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("personPeriod", personPeriod);
 
@@ -902,7 +930,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void InsertPersonPeriod()
+		private void insertPersonPeriod()
 		{
 			var gridRangeInfoList = Grid.Model.SelectedRanges;
 
@@ -948,13 +976,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						 FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex - PeopleAdminConstants.GridCollectionMapValue].
 							 GridControl;
 
-				GetChildPersonPeriods(rowIndex, grid);
+				getChildPersonPeriods(rowIndex, grid);
 
 
 				if (FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex - PeopleAdminConstants.GridCollectionMapValue]
 					.ExpandState)
 				{
-					AddPersonPeriodToChildGrid(rowIndex);
+					addPersonPeriodToChildGrid(rowIndex);
 				}
 				else
 				{
@@ -967,9 +995,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void AddPersonPeriodToChildGrid(int rowIndex)
+		private void addPersonPeriodToChildGrid(int rowIndex)
 		{
-			var childGrid = Grid[rowIndex, GridInCellColumnIndex].Control as CellEmbeddedGrid;
+			var childGrid = Grid[rowIndex, defaultGridInCellColumnIndex].Control as CellEmbeddedGrid;
 
 			if (childGrid != null)
 			{
@@ -987,12 +1015,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
+		public void SetOutOfFocusFromCurrentCell()
+		{
+			int index = (Grid.Model.CurrentCellInfo == null) ? defaultRowIndex :
+															   Grid.Model.CurrentCellInfo.RowIndex;
+			Grid.CurrentCell.MoveTo(index, defaultParentGridLastColumnIndex);
+			Grid.Selections.Clear(false);
+		}
+
 		private void LoadChildGrid(int rowIndex)
 		{
 			if (rowIndex != PeopleAdminConstants.GridHeaderIndex)
 			{
 				// Set grid range for covered ranged
-				GridRangeInfo gridInfo = GridRangeInfo.Cells(rowIndex, GridInCellColumnIndex, rowIndex,
+				GridRangeInfo gridInfo = GridRangeInfo.Cells(rowIndex, defaultGridInCellColumnIndex, rowIndex,
 															 ParentGridLastColumnIndex);
 
 				// Set out of focus form current cell.This helps  to fire save cell info in child grid.
@@ -1008,11 +1044,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex -
 						PeopleAdminConstants.GridCollectionMapValue].GridControl;
 
-					GetChildPersonPeriods(rowIndex, grid);
+					getChildPersonPeriods(rowIndex, grid);
 
-					LoadChildGrid(rowIndex, GridInCellColumnIndex, gridInfo);
+					LoadChildGrid(rowIndex, defaultGridInCellColumnIndex, gridInfo);
 
-					Grid.CurrentCell.MoveTo(rowIndex, GridInCellColumnIndex, GridSetCurrentCellOptions.SetFocus);
+					Grid.CurrentCell.MoveTo(rowIndex, defaultGridInCellColumnIndex, GridSetCurrentCellOptions.SetFocus);
 				}
 				else
 				{
@@ -1020,8 +1056,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						PeopleAdminConstants.GridCollectionMapValue].ExpandState = false;
 
 					// Get child grid and dispose it
-					GridControl gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
-					RemoveChildGrid(gridControl, gridInfo);
+					GridControl gridControl = Grid[rowIndex, defaultGridInCellColumnIndex].Control as GridControl;
+					removeChildGrid(gridControl, gridInfo);
 
 					Grid.RowHeights[rowIndex] = DefaultRowHeight;
 					FilteredPeopleHolder.GetParentPersonPeriodWhenUpdated(rowIndex -
@@ -1031,7 +1067,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void GetChildPersonPeriods(int rowIndex, GridControlBase grid)
+		private void getChildPersonPeriods(int rowIndex, GridControlBase grid)
 		{
 			if (grid != null)
 			{
@@ -1047,9 +1083,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void RemoveChild(int rowIndex, bool isDeleteAll)
+		private void removeChild(int rowIndex, bool isDeleteAll)
 		{
-			var childGrid = Grid[rowIndex, GridInCellColumnIndex].Control as CellEmbeddedGrid;
+			var childGrid = Grid[rowIndex, defaultGridInCellColumnIndex].Control as CellEmbeddedGrid;
 			if (childGrid != null)
 			{
 				if (isDeleteAll)
@@ -1102,7 +1138,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 
 				if (childGrid.RowCount == 0)
-					Grid.RowHeights[rowIndex] = DefaultRowHeight + RenderingAddValue;
+					Grid.RowHeights[rowIndex] = DefaultRowHeight + defaultRenderingAddValue;
 
 
 				IPerson person = FilteredPeopleHolder.FilteredPersonCollection[rowIndex - 1];
@@ -1115,8 +1151,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						.GridControl = null;
 
 					// Get child grid and dispose it
-					var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
-					RemoveChildGrid(gridControl, gridInfo);
+					var gridControl = Grid[rowIndex, defaultGridInCellColumnIndex].Control as GridControl;
+					removeChildGrid(gridControl, gridInfo);
 
 					Grid.RowHeights[rowIndex] = DefaultRowHeight;
 
@@ -1133,7 +1169,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					childGrid.RowCount = periodCollection.Count;
 					childGrid.Invalidate();
 
-					Grid.RowHeights[rowIndex] = childGrid.RowCount * DefaultRowHeight + RenderingAddValue;
+					Grid.RowHeights[rowIndex] = childGrid.RowCount * DefaultRowHeight + defaultRenderingAddValue;
 
 				}
 			}
@@ -1168,8 +1204,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					GridControl = null;
 
 				// Dispose child grid and set default row height
-				var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
-				RemoveChildGrid(gridControl, gridInfo);
+				var gridControl = Grid[rowIndex, defaultGridInCellColumnIndex].Control as GridControl;
+				removeChildGrid(gridControl, gridInfo);
 				Grid.RowHeights[rowIndex] = DefaultRowHeight;
 
 				// Get person period when updated and invalidate range
@@ -1178,7 +1214,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void CopyAllPersonPeriods(int rowIndex)
+		private void copyAllPersonPeriods(int rowIndex)
 		{
 			if (rowIndex >= PeopleAdminConstants.GridHeaderIndex)
 			{
@@ -1195,7 +1231,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						{
 							if (!personPaste.PersonPeriodCollection.Contains(personPeriod))
 							{
-								ValidateAndAddPersonPeriod(personPaste, personPeriod);
+								validateAndAddPersonPeriod(personPaste, personPeriod);
 							}
 						}
 					}
@@ -1204,19 +1240,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					{
 						foreach (IPersonPeriod period in _selectedPersonPeriodCollection)
 						{
-							ValidateAndAddPersonPeriod(personPaste, period);
+							validateAndAddPersonPeriod(personPaste, period);
 						}
 					}
 
 					if (isParent)
-						RefreshParentGridRange(rowIndex);
+						refreshParentGridRange(rowIndex);
 					else
-						RefreshChildGrid(rowIndex);
+						refreshChildGrid(rowIndex);
 				}
 			}
 		}
 		 
-		private static void ValidateAndAddPersonPeriod(IPerson personPaste, IPersonPeriod personPeriod)
+		private static void validateAndAddPersonPeriod(IPerson personPaste, IPersonPeriod personPeriod)
 		{
 			IPersonPeriod period = personPeriod.NoneEntityClone();
 
@@ -1230,18 +1266,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			personPaste.AddPersonPeriod(period);
 		} 
 
-		private void RefreshParentGridRange(int index)
+		private void refreshParentGridRange(int index)
 		{
 			FilteredPeopleHolder.GetParentPersonPeriodWhenUpdated(index);
 			Grid.InvalidateRange(GridRangeInfo.Cells(index + PeopleAdminConstants.GridCollectionMapValue,
 				PeopleAdminConstants.GridInvalidateRowLeftValue, index + PeopleAdminConstants.GridCollectionMapValue, ParentGridLastColumnIndex));
 		}
 		 
-		private void RefreshChildGrid(int index)
+		private void refreshChildGrid(int index)
 		{
 			PeopleWorksheet.StateHolder.GetChildPersonPeriods(index, FilteredPeopleHolder);
 
-			var childGrid = Grid[index + PeopleAdminConstants.GridCollectionMapValue, GridInCellColumnIndex].Control
+			var childGrid = Grid[index + PeopleAdminConstants.GridCollectionMapValue, defaultGridInCellColumnIndex].Control
 				as CellEmbeddedGrid;
 
 			if (childGrid != null)
@@ -1256,17 +1292,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 				Grid.RowHeights[index + PeopleAdminConstants.GridCollectionMapValue] =
 					PeopleWorksheet.StateHolder.PersonPeriodChildGridData.Count * DefaultRowHeight +
-					RenderingAddValue;
+					defaultRenderingAddValue;
 
 				childGrid.Refresh();
 			}
 		}
 		 
-		private void DeleteWhenRangeSelected(GridRangeInfo gridRangeInfo)
+		private void deleteWhenRangeSelected(GridRangeInfo gridRangeInfo)
 		{
 			if (gridRangeInfo.Height == PeopleAdminConstants.GridRangeInFOHeightValue)
 			{
-				DeletePersonPeriod(gridRangeInfo.Top, gridRangeInfo.IsRows);
+				deletePersonPeriod(gridRangeInfo.Top, gridRangeInfo.IsRows);
 			}
 			else
 			{
@@ -1274,19 +1310,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				{
 					if (row != PeopleAdminConstants.GridHeaderIndex)
 					{
-						DeletePersonPeriod(row, gridRangeInfo.IsRows);
+						deletePersonPeriod(row, gridRangeInfo.IsRows);
 					}
 				}
 			}
 		}
 		 
-		private void DeletePersonPeriod(int index, bool isRows)
+		private void deletePersonPeriod(int index, bool isRows)
 		{
 			if (FilteredPeopleHolder.PersonPeriodGridViewCollection[index -
 																	PeopleAdminConstants.GridCurrentRowIndexMapValue].ExpandState)
 			{
 				// Remove child for child grid
-				RemoveChild(index, isRows);
+				removeChild(index, isRows);
 			}
 			else
 			{
@@ -1305,7 +1341,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 		 
-		private void DeleteWhenAllSelected()
+		private void deleteWhenAllSelected()
 		{
 			// This scenario is used for when user is selecting entire grid using button give top in 
 			// that grid.
@@ -1313,7 +1349,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			{
 				if (FilteredPeopleHolder.PersonPeriodGridViewCollection[i - PeopleAdminConstants.GridCollectionMapValue].ExpandState)
 				{
-					RemoveChild(i, true);
+					removeChild(i, true);
 				}
 				else
 				{
@@ -1325,7 +1361,29 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 		}
-		 
+
+		public DropDownGridCreator GridCreator { get; private set; }
+
+		internal virtual void ChildGridClipboardPaste(object sender, GridCutPasteEventArgs e)
+		{
+		}
+
+		public virtual void BindDropDownGridEvents()
+		{
+			// Create Drop Down grid creator for child grid creation
+			GridCreator = new DropDownGridCreator();
+
+			GridCreator.DropDownGridQueryCellInfo += ChildGridQueryCellInfo;
+			GridCreator.DropDownGridQueryRowCount += ChildGridQueryRowCount;
+			GridCreator.DropDownGridQueryColCount += ChildGridQueryColCount;
+			GridCreator.DropDownGridQueryRowHeight += ChildGridQueryRowHeight;
+			GridCreator.DropDownGridQueryColWidth += ChildGridQueryColWidth;
+			GridCreator.DropDownGridQuerySaveCellInfo += ChildGridQuerySaveCellInfo;
+			GridCreator.DropDownGridSelectionChanged += ChildGridSelectionChanged;
+			GridCreator.DropDownGridClipboardCanCopy += ChildGridClipboardCanCopy;
+			GridCreator.DropDownGridClipboardPaste += ChildGridClipboardPaste;
+		}
+
 		private void LoadChildGrid(int rowIndex, int columnIndex, GridRangeInfo gridInfo)
 		{
 			BindDropDownGridEvents();
@@ -1336,7 +1394,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 								PeopleWorksheet.StateHolder.CurrentChildName);
 		}
 		 
-		private void InvalidateTabPages()
+		private void invalidateTabPages()
 		{
 			foreach (TabPageAdv tab in FilteredPeopleHolder.TabControlPeopleAdmin.TabPages)
 			{
@@ -1346,7 +1404,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 		 
-		private void HandleChildGridCanCopy(ReadOnlyCollection<PersonPeriodChildModel>
+		private void handleChildGridCanCopy(ReadOnlyCollection<PersonPeriodChildModel>
 			personPeriodChildCollection, GridRangeInfoList gridRangeInfoList)
 		{
 			for (int index = gridRangeInfoList.Count; index > 0; index--)
@@ -1358,7 +1416,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					IPersonPeriod personPeriod = personPeriodChildCollection[gridRangeInfo.Top -
 						PeopleAdminConstants.GridCollectionMapValue].ContainedEntity;
 
-					AddPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
+					addPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
 				}
 				else
 				{
@@ -1367,19 +1425,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						IPersonPeriod personPeriod = personPeriodChildCollection[row - PeopleAdminConstants.GridCollectionMapValue].
 							ContainedEntity;
 
-						AddPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
+						addPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
 					}
 				}
 			}
 		}
 		 
-		private static void SetBoldProperty<T>(ColumnCellDisplayChangedEventArgs<T> e) where T : IPersonPeriodModel
+		private static void setBoldProperty<T>(ColumnCellDisplayChangedEventArgs<T> e) where T : IPersonPeriodModel
 		{
 			if (e.DataItem.CanBold)
 				e.QueryCellInfoEventArg.Style.Font.Bold = true;
 		}
 		 
-		private static void SetDataSource<T>(ColumnCellDisplayChangedEventArgs<T> e, object datasource)
+		private static void setDataSource<T>(ColumnCellDisplayChangedEventArgs<T> e, object datasource)
 			where T : IPersonPeriodModel
 		{
 
@@ -1392,20 +1450,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		public override void Sort(bool isAscending)
 		{
 			// Sorts the people period data and invalidate view
-			SortPeoplePeriodData(isAscending);
+			sortPeoplePeriodData(isAscending);
 			Invalidate();
 		}
 		 
 		internal override void CreateHeaders()
 		{
-			CreateParentGridHeaders();
-			CreateChildGridHeader();
+			createParentGridHeaders();
+			createChildGridHeader();
 
 			// Hide column which is used as a container for grid in cell implementation 
 			int pushButtonCol = _gridColumns.IndexOf(_pushButtonColumn);
 			Grid.Cols.Hidden[pushButtonCol + PeopleAdminConstants.GridCollectionMapValue] = true;
 		}
-		 
+
 		internal override void PrepareView()
 		{
 			ColCount = _gridColumns.Count;
@@ -1422,7 +1480,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			int length = _gridColumns.Count;
 			for (int index = 0; index < length; index++)
 			{
-				Grid.ColWidths[index] = _gridColumns[index].PreferredWidth + DefaultColumnWidthAddValue;
+				Grid.ColWidths[index] = _gridColumns[index].PreferredWidth + defaultColumnWidthAddValueInGrids;
 			}
             Grid.ColWidths[0] = _gridColumns[0].PreferredWidth;
 		}
@@ -1477,11 +1535,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 					if (gridRangeInfo.IsTable)
 					{
-						DeleteWhenAllSelected();
+						deleteWhenAllSelected();
 					}
 					else
 					{
-						DeleteWhenRangeSelected(gridRangeInfo);
+						deleteWhenRangeSelected(gridRangeInfo);
 					}
 				}
 			}
@@ -1503,7 +1561,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						// that grid.
 						for (int i = 1; i <= Grid.RowCount; i++)
 						{
-							CopyAllPersonPeriods(i - PeopleAdminConstants.GridCollectionMapValue);
+							copyAllPersonPeriods(i - PeopleAdminConstants.GridCollectionMapValue);
 						}
 					}
 
@@ -1511,13 +1569,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					{
 						if (gridRangeInfo.Height == PeopleAdminConstants.GridRangeInFOHeightValue)
 						{
-							CopyAllPersonPeriods(gridRangeInfo.Top - PeopleAdminConstants.GridCurrentRowIndexMapValue);
+							copyAllPersonPeriods(gridRangeInfo.Top - PeopleAdminConstants.GridCurrentRowIndexMapValue);
 						}
 						else
 						{
 							for (int row = gridRangeInfo.Top; row <= gridRangeInfo.Bottom; row++)
 							{
-								CopyAllPersonPeriods(row - PeopleAdminConstants.GridCollectionMapValue);
+								copyAllPersonPeriods(row - PeopleAdminConstants.GridCollectionMapValue);
 							}
 						}
 					}
@@ -1551,7 +1609,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 						foreach (PersonPeriod period in selectedPerson.PersonPeriodCollection)
 						{
-							AddPersonPeriodToSelectedPersonPeriodCollection(period);
+							addPersonPeriodToSelectedPersonPeriodCollection(period);
 						}
 					}
 					else
@@ -1559,17 +1617,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						CanCopyChildRow = true;
 
 						// child copy processings
-						GridControl grid = Grid[Grid.CurrentCell.RowIndex, GridInCellColumnIndex].Control
+						GridControl grid = Grid[Grid.CurrentCell.RowIndex, defaultGridInCellColumnIndex].Control
 							as GridControl;
 
-						CopyPersonPeriodFromChildGrid(grid);
+						copyPersonPeriodFromChildGrid(grid);
 					}
 
 				}
 			}
 		}
 
-		private void CopyPersonPeriodFromChildGrid(GridControl grid)
+		private void copyPersonPeriodFromChildGrid(GridControl grid)
 		{
 			if (grid != null)
 			{
@@ -1588,7 +1646,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 							IPersonPeriod personPeriod = personPeriodChildCollection
 								[gridRangeInfo.Top - PeopleAdminConstants.GridCurrentRowIndexMapValue].ContainedEntity;
 
-							AddPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
+							addPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
 						}
 						else
 						{
@@ -1597,7 +1655,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 								IPersonPeriod personPeriod = personPeriodChildCollection[row -
 									PeopleAdminConstants.GridCollectionMapValue].ContainedEntity;
 
-								AddPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
+								addPersonPeriodToSelectedPersonPeriodCollection(personPeriod);
 							}
 						}
 					}
@@ -1627,13 +1685,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 			else
 			{
-				selectedPersons = GetSelectedPersonsInGrd();
+				selectedPersons = getSelectedPersonsInGrd();
 			}
 
 			return selectedPersons;
 		}
 
-		private IList<IPerson> GetSelectedPersonsInGrd()
+		private IList<IPerson> getSelectedPersonsInGrd()
 		{
 			IList<IPerson> selectedPersons = new List<IPerson>();
 
@@ -1689,7 +1747,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			for (int rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
 			{
 				GridRangeInfo gridInfo =
-					GridRangeInfo.Cells(rowIndex + PeopleAdminConstants.GridCollectionMapValue, GridInCellColumnIndex,
+					GridRangeInfo.Cells(rowIndex + PeopleAdminConstants.GridCollectionMapValue, defaultGridInCellColumnIndex,
 					rowIndex + PeopleAdminConstants.GridCollectionMapValue, ParentGridLastColumnIndex);
 
 				if (FilteredPeopleHolder.PersonPeriodGridViewCollection.Count == rowIndex) break;
@@ -1699,10 +1757,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex].ExpandState = false;
 
 					// Get child grid and dispose it
-					var gridControl = Grid[rowIndex + PeopleAdminConstants.GridCollectionMapValue, GridInCellColumnIndex]
+					var gridControl = Grid[rowIndex + PeopleAdminConstants.GridCollectionMapValue, defaultGridInCellColumnIndex]
 						.Control as GridControl;
 					FilteredPeopleHolder.PersonPeriodGridViewCollection[rowIndex].GridControl = null;
-					RemoveChildGrid(gridControl, gridInfo);
+					removeChildGrid(gridControl, gridInfo);
 					Grid.RowHeights[rowIndex + PeopleAdminConstants.GridCollectionMapValue] = DefaultRowHeight;
 				}
 			}

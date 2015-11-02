@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Windows.Forms.VisualStyles;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
@@ -13,10 +14,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		{
 		}
 
+		public bool Sorted { get; set; }
+
 		public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
 			var renderer = new GridComboBoxCellRenderer(control, this);
-			((GridComboBoxListBoxPart) renderer.ListBoxPart).DropDownRows = 25;
+			((GridComboBoxListBoxPart) renderer.ListBoxPart).DropDownRows = 30;
+			renderer.ListBoxPart.Sorted = Sorted;
 			return renderer;
 		}
 	}

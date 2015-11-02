@@ -10,9 +10,9 @@ using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 {
-    internal class DropDownColumnForPeriodGrids<TData, TItems> : ColumnBase<TData>
-    {
-        private readonly string _valueMember;
+	internal class DropDownColumnForSchedulePeriodGrids<TData, TItems> : ColumnBase<TData>
+	{
+		 private readonly string _valueMember;
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private readonly string _headerText;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         private readonly Type _baseClass;
         private readonly bool _allowNullValue = true;
 
-        public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+        public DropDownColumnForSchedulePeriodGrids(string bindingProperty, string headerText,
                                             IEnumerable<TItems> comboItems,
                                             string displayMember)
             : base(bindingProperty, 150)
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             GridStyleInfoStore.CellValueProperty.IsCloneable = false;
         }
 
-        public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+        public DropDownColumnForSchedulePeriodGrids(string bindingProperty, string headerText,
                                             IEnumerable<TItems> comboItems,
                                             string displayMember, Type baseClass)
             : this(bindingProperty, headerText, comboItems, displayMember)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             _baseClass = baseClass;
         }
 
-        public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
+        public DropDownColumnForSchedulePeriodGrids(string bindingProperty, string headerText,
                                             IEnumerable<TItems> comboItems,
                                             string displayMember, string valueMember, Type baseClass)
             : this(bindingProperty, headerText, comboItems, displayMember, baseClass)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             _valueMember = valueMember;
         }
 
-        public DropDownColumnForPeriodGrids(string bindingProperty, string headerText, IEnumerable<TItems> comboItems,
+		public DropDownColumnForSchedulePeriodGrids(string bindingProperty, string headerText, IEnumerable<TItems> comboItems,
                                             string displayMember, bool allwoNullValue)
             : this(bindingProperty, headerText, comboItems, displayMember)
         {
@@ -102,12 +102,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 TData dataItem = dataItems[e.RowIndex - 1];
 
-				e.Style.CellType = GridCellModelConstants.CellTypeDropDownCellModel;
-	            ((DropDownCellModel) e.Style.CellModel).Sorted = true;
-                e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
-				//e.Style.DataSource = null;
-				e.Style.DisplayMember = _displayMember;
+				e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
 				e.Style.DataSource = _comboItems;
+				e.Style.DisplayMember = _displayMember;
+                e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
 				
 
                 if (!string.IsNullOrEmpty(_valueMember))
@@ -116,7 +114,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 }
 
                 OnCellDisplayChanged(dataItem, e);
-				e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);	
+                e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);
+				
 
                 PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e);
             }
@@ -165,5 +164,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                 OnCellChanged(dataItem, e);
             }
         }
-    }
+	}
 }
