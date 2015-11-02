@@ -148,12 +148,12 @@ wfm.config([
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsCtrl'
 		}).state('rta-agents-teams', {
-			url: '/rta/agents/?teamIds',
+			url: '/rta/agents-teams/?teamIds',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsForTeamsCtrl',
 			params: {teamIds: {array:true}}
 		}).state('rta-agents-sites', {
-			url: '/rta/agents/?siteIds',
+			url: '/rta/agents-sites/?siteIds',
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsForSitesCtrl',
 			params: {siteIds: {array:true}}

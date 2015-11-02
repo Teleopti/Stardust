@@ -7,19 +7,12 @@
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaOrganizationService', 'RtaService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaOrganizationService, RtaService) {
 
-				var siteId = $stateParams.siteId;
 				var teamIds = $stateParams.teamIds;
 				$scope.agents = [];
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 
 				$scope.goBackToRoot = function() {
 					$state.go('rta');
-				};
-
-				$scope.goBack = function() {
-					$state.go('rta-teams', {
-						siteId: siteId
-					});
 				};
 
 				$scope.format = function(time) {
@@ -86,22 +79,21 @@
 						$scope.filterData();
 				};
 
-				if (teamIds) {
-					RtaService.getAgentsForTeams.query({
-							teamIds: teamIds
-						}).$promise
-						.then(function(agents) {
-							$scope.agents = agents;
-							$scope.siteName = "Multiple Sites";
-							$scope.teamName = "Multiple Teams";
-						}).then(updateStatesForTeams)
-						.then(updateGrid);
+				RtaService.getAgentsForTeams.query({
+						teamIds: teamIds
+					}).$promise
+					.then(function(agents) {
+						$scope.agents = agents;
+						$scope.siteName = "Multiple Sites";
+						$scope.teamName = "Multiple Teams";
+					}).then(updateStatesForTeams)
+					.then(updateGrid);
 
-					$interval(function() {
-						updateStatesForTeams();
-						updateGrid();
-					}, 5000);
-				}
+				$interval(function() {
+					updateStatesForTeams();
+					updateGrid();
+				}, 5000);
+
 
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';

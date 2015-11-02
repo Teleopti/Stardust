@@ -7,19 +7,12 @@
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaOrganizationService', 'RtaService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaOrganizationService, RtaService) {
 
-				var siteId = $stateParams.siteId;
 				var siteIds = $stateParams.siteIds;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 				$scope.agents = [];
 
 				$scope.goBackToRoot = function() {
 					$state.go('rta');
-				};
-
-				$scope.goBack = function() {
-					$state.go('rta-teams', {
-						siteId: siteId
-					});
 				};
 
 				$scope.format = function(time) {
