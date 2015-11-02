@@ -10,7 +10,7 @@
 			if (newValue > 0) {
 				var headerHeight = 17; //angular.element($("#time-line-container"))[0].offsetHeight
 				var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
-				var rowHeight = 38;
+				var rowHeight = 32;
 				vm.height = rowHeight * (vm.scheduleCount) + headerHeight + labelHeight;
 			}
 		});
