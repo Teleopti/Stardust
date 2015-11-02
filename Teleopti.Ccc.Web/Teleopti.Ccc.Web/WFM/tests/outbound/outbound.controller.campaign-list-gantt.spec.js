@@ -74,8 +74,8 @@ describe('OutboundSummaryCtrl', function() {
 		expect(test.scope.ganttData).not.toBeDefined();
 
 		var toBeUpdated = [
-			{ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' }, IsScheduled: true, WarningInfo: [] },
-			{ Id: 2, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' }, IsScheduled: false, WarningInfo: [] }
+			{ CampaignSummary: { Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } }, IsScheduled: true, WarningInfo: [] },
+			{ CampaignSummary: { Id: 2, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } }, IsScheduled: false, WarningInfo: [] }
 		];
 		test.target.init();
 		test.target.updateAllCampaignGanttDisplay(toBeUpdated);
@@ -86,8 +86,9 @@ describe('OutboundSummaryCtrl', function() {
 
 	it('should extend the row when click and collapse when click again', function () {
 		var test = setUpTarget();
-		var campaign = { Id: 1, id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } };
+		var campaign = { Id: 1, id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' }  };
 		outboundService.setGanttVisualization(campaign);
+		outboundService.setCampaignStatus({ CampaignSummary: { Id: 1 }, WarningInfo: [] });
 		
 
 		expect(test.scope.ganttData).not.toBeDefined();
@@ -105,15 +106,16 @@ describe('OutboundSummaryCtrl', function() {
 
 	it('should draw c3 chart when click the gantt chart', function () {
 		var test = setUpTarget();
-		var campaign = { Id: 1, id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } };
+		var campaign = { Id: 1, id:1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } };
 		var campaignVisualization = {
 			Dates: [new Date('2015-09-23'), new Date('2015-09-24')],
 			Plans: [3, 3],
 			ManualPlan: [true, false]
 		};
 		outboundService.setGanttVisualization(campaign);
-		outboundService.setCampaignDetail({ Id: 1, WarningInfo: [] });
+		outboundService.setCampaignStatus({ CampaignSummary: { Id: 1 }, WarningInfo: [] });
 		outboundChartService.setCampaignVisualization(1, campaignVisualization);
+		outboundService.setCampaignsStatus({ CampaignSummary: { Id: 1 } });
 
 		expect(test.scope.ganttData).not.toBeDefined();
 
@@ -197,7 +199,7 @@ describe('OutboundSummaryCtrl', function() {
 			cb(thresholdObj);
 		};
 
-		this.setCampaignDetail=function(campaignD) {
+		this.setCampaignStatus=function(campaignD) {
 			campaignDetail = campaignD;
 		}
 
@@ -205,14 +207,13 @@ describe('OutboundSummaryCtrl', function() {
 			cb(campaignDetail);
 		}
 
-		this.setListCampaignsWithinPeriod = function (listCampaigns) {
+		this.setCampaignsStatus = function (listCampaigns) {
 			listCampaign.push(listCampaigns);
 		}
 
 		this.updateCampaignsStatus=function(cb) {
 			cb(listCampaign);
 		}
-
 		
 
 		this.loadWithinPeriod = function() {}

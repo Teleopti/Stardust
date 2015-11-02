@@ -7,16 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 {
-	[Flags]
-	public enum CampaignStatus
-	{
-		None = 0,
-		Planned = 1,
-		Scheduled = 2,
-		Ongoing = 4,
-		Done = 8
-	}
-
 	public class OutboundWarningViewModel
 	{
 		public string TypeOfRule { get; set; }
@@ -117,12 +107,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public DateOnly StartDate;
 		public DateOnly EndDate;
-	}
-
-	public class PeriodSummaryInfo
-	{
-		public CampaignStatus Status;
-		public GanttPeriod Period;
 	}
 
 	public class ThresholdSettingForm
