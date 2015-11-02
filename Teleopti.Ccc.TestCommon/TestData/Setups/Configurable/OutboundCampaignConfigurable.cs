@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				ConnectAverageHandlingTime = ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = RightPartyAverageHandlingTime,
 				UnproductiveTime = UnproductiveTime,
-				SpanningPeriod = new DateTimePeriod(startDateUtc, endDateUtc) 					
+				SpanningPeriod = new DateTimePeriod(startDateUtc, endDateUtc),
+				BelongsToPeriod = new DateOnlyPeriod(new DateOnly(StartDate), new DateOnly(EndDate))
 			};
 
 			TimeSpan openingHourStart, openingHourEnd;
