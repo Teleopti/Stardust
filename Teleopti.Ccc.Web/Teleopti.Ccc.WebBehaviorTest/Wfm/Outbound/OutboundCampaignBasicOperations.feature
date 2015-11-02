@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
+﻿@ignore
+@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
 Feature: OutboundCampaignBasicOperations
 	In order to plan outbound campaigns
 	As a resource planner
