@@ -19,7 +19,6 @@ var externalModules = angular.module('externalModules', ['ui.router',
 var wfm = angular.module('wfm', [
 	'externalModules',
 	'currentUserInfoService',
-	'fakeDateTimeService',
 	'toggleService',
 	'outboundServiceModule',
 	'wfm.http',
@@ -170,8 +169,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo','FakeDateTime',
-	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, fakeDateTime) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo',
+	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo) {
 		$rootScope.isAuthenticated = false;
 
 		function broadcastEventOnToggle() {
