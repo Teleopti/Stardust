@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new WaitUntilHangfireQueueIsProcessed());
 			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
-			_interceptors.Add(u => u.Contains("/wfm/#/rta"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
 			_interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
 		}
