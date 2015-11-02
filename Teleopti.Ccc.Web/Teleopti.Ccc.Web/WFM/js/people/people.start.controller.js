@@ -22,6 +22,9 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.isAdjustSkillEnabled = false;
 	$scope.isSelectionMode = false;
 	$scope.showImportPanel = false;
+	$scope.getCurrentPageSelectedRowsLength = function () {
+		return $scope.gridOptions.data.length;
+	}
 	$scope.selectedCount = function () {
 		return $scope.selectedPeopleList.length;
 	};
@@ -82,7 +85,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.selectedPeopleList = $stateParams.selectedPeopleIds !== undefined ? $stateParams.selectedPeopleIds : [];
-	
+
 	$scope.gridOptions = {
 		enableFullRowSelection: false,
 		enableRowHeaderSelection: false,
@@ -112,36 +115,35 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false, minWidth: 100 }
 		],
 		gridMenuTitleFilter: $translate,
-		exporterAllDataFn: function() {
-			return loadAllResults(function(result) {
-					$scope.gridOptions.data = result.People;
+		exporterAllDataFn: function () {
+			return loadAllResults(function (result) {
+				$scope.gridOptions.data = result.People;
 
-					angular.forEach($scope.gridOptions.data, function(person) {
-						angular.forEach(person.OptionalColumnValues, function(val) {
-							person[val.Key] = val.Value;
-						});
+				angular.forEach($scope.gridOptions.data, function (person) {
+					angular.forEach(person.OptionalColumnValues, function (val) {
+						person[val.Key] = val.Value;
 					});
+				});
 
-					angular.forEach(result.OptionalColumns, function(col) {
-						var isFound = false;
-						angular.forEach($scope.gridOptions.columnDefs, function(colDef) {
-							if (colDef.field === col) {
-								isFound = true;
-								return;
-							}
-						});
-						if (!isFound) {
-							$scope.gridOptions.columnDefs.push({
-								displayName: col,
-								field: col,
-								headerCellFilter: 'translate',
-								enableSorting: false,
-								minWidth: 100
-							});
+				angular.forEach(result.OptionalColumns, function (col) {
+					var isFound = false;
+					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
+						if (colDef.field === col) {
+							isFound = true;
 						}
 					});
-				})
-				.then(function() {
+					if (!isFound) {
+						$scope.gridOptions.columnDefs.push({
+							displayName: col,
+							field: col,
+							headerCellFilter: 'translate',
+							enableSorting: false,
+							minWidth: 100
+						});
+					}
+				});
+			})
+				.then(function () {
 					getPage();
 				});
 		},
@@ -170,7 +172,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	var getSelectedPeople = function () {
 		return $scope.selectedPeopleList;
-	}
+	};
 
 	$scope.gotoCartView = function (commandTag) {
 		$state.go("people.selection", {
@@ -192,7 +194,8 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			}
 		});
 
-		var allRowsInCurrentPageSelected = $scope.gridApi.selection.getSelectedRows().length === $scope.gridOptions.data.length;
+		var allRowsInCurrentPageSelected = $scope.gridApi.selection.getSelectedRows().length === $scope.getCurrentPageSelectedRowsLength();
+		var allRowsSelected = $scope.selectedCount() === $scope.callBackResultLength;
 
 		if (allRowsInCurrentPageSelected) {
 			$scope.gridApi.selection.selectAllRows();
@@ -200,8 +203,8 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			$scope.gridApi.grid.selection.selectAll = false;
 		}
 
-		$scope.selectAllVisible = $scope.totalPages > 1 && allRowsInCurrentPageSelected;
-	}
+		$scope.selectAllVisible = $scope.totalPages > 1 && allRowsInCurrentPageSelected && !allRowsSelected;
+	};
 
 	$scope.selectAllMatch = function () {
 		loadAllResults(function (result) {
@@ -211,22 +214,22 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			});
 			$scope.selectAllVisible = false;
 		});
-	}
+	};
 
 	var setPeopleSelectionStatus = function () {
-		for (var i = 0; i < $scope.gridOptions.data.length; i++) {
+		for (var i = 0; i < $scope.getCurrentPageSelectedRowsLength() ; i++) {
 			var personId = $scope.gridOptions.data[i].PersonId;
 			if ($scope.selectedPeopleList.indexOf(personId) > -1) {
 				$scope.gridApi.grid.modifyRows($scope.gridOptions.data);
 				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
 			}
 		}
-	}
+	};
 
 	$scope.clearCart = function () {
 		$scope.selectedPeopleList = [];
 		$scope.gridApi.selection.clearSelectedRows();
-	}
+	};
 
 	$scope.toggleRowSelectable = function () {
 		$scope.gridOptions.enableFullRowSelection = $scope.rowSelectionEnabled();
@@ -259,7 +262,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
 			var column = paginationOptions.sortColumns[i];
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
-		};
+		}
 
 		if (sortColumnList !== "") {
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
@@ -273,7 +276,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
 			$scope.gridOptions.data = result.People;
-			$scope.gridOptions.paginationCurrentPage = $scope.currentPageIndex
+			$scope.gridOptions.paginationCurrentPage = $scope.currentPageIndex;
 			angular.forEach($scope.searchResult, function (person) {
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
@@ -287,7 +290,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
 						if (colDef.field === col) {
 							isFound = true;
-							return;
 						}
 					});
 					if (!isFound) {
@@ -312,7 +314,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			$scope.searchKeywordChanged = false;
 			$scope.gridOptions.totalItems = result.TotalPages * paginationOptions.pageSize;
 		});
-	};
+	}
 
 	var allSearchTypes = [
 		"FirstName",
@@ -369,7 +371,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
 			var column = paginationOptions.sortColumns[i];
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
-		};
+		}
 
 		if (sortColumnList !== "") {
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
@@ -382,17 +384,18 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
 			successCallback(result);
+			$scope.callBackResultLength = result.People.length;
 		}
 		);
-	}
+	};
 
 	$scope.defautKeyword = function () {
-		if ($scope.keyword === '' && $scope.gridOptions.data !== undefined && $scope.gridOptions.data.length > 0) {
+		if ($scope.keyword === '' && $scope.gridOptions.data !== undefined && $scope.getCurrentPageSelectedRowsLength() > 0) {
 			return "\"" + $scope.gridOptions.data[0].Team.replace("/", "\" \"") + "\"";
 		}
 		return $scope.keyword;
 	};
-	
+
 	$scope.getVisiblePageNumbers = function (start, end) {
 		var displayPageCount = 5;
 		var ret = [];
@@ -478,7 +481,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		$scope.keyword = keyword;
 
 		getPage();
-	}
+	};
 
 	var promisesForDataInitialization = [];
 	var promiseForAdvancedSearchToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
@@ -504,4 +507,4 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		$scope.dataInitialized = true;
 		$scope.searchKeyword();
 	});
-};
+}
