@@ -2,19 +2,19 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class OptimizationPreferencesFactory
+	public class OptimizationPreferencesProviderCreator
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 
-		public OptimizationPreferencesFactory(IDayOffRulesRepository dayOffRulesRepository)
+		public OptimizationPreferencesProviderCreator(IDayOffRulesRepository dayOffRulesRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 		}
 
-		public OptimizationPreferences Create()
+		public IOptimizationPreferencesProvider Create()
 		{
 			var defaultRules = _dayOffRulesRepository.Default();
-			return new OptimizationPreferences
+			var optimizationPreferences = new OptimizationPreferences
 			{
 				DaysOff = new DaysOffPreferences
 				{
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				},
 				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true }
 			};
+			return new FixedOptimizationPreferencesProvider(optimizationPreferences);
 		} 
 	}
 }

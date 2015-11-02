@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>().SingleInstance();
-			builder.RegisterType<OptimizationPreferencesFactory>().SingleInstance();
+			builder.RegisterType<OptimizationPreferencesProviderCreator>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
