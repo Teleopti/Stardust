@@ -80,6 +80,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			new OutboundCampaignRepository(currentUnitOfWork).Add(Campaign);
 		}
 
+		public string GetWorkingHoursString()
+		{
+			var openingHourStart = string.Format("new Date((new Date()).toDateString() + ' {0}')", OpeningHourStart);
+			var openingHourEnd = string.Format("new Date((new Date()).toDateString() + ' {0}')", OpeningHourEnd);
+			var selectionArray = (from DayOfWeek day in Enum.GetValues(typeof (DayOfWeek)) select string.Format(" {{ WeekDay: {0}, Checked: true  }} ", (int)day)).ToArray();
+			var selections = String.Format("[ {0} ]",  String.Join(", ", selectionArray));
+			return String.Format("[{{ StartTime: {0}, EndTime: {1}, WeekDaySelections: {2} }}]", openingHourStart,
+				openingHourEnd, selections);
+
+
+		}
 		
 
 	}

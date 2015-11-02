@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class BrowserInteractionsAngularExtensions
 	{
-		public static void FillScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values)
+		public static void SetScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values)
 		{			
 			var assignments = values.Select(kvp => "scope." + kvp.Key + " = " + kvp.Value + "; ").Aggregate((acc, v) => acc + v);
 			var script = scopeByQuerySelector(selector) +
@@ -22,21 +25,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		public static void WaitScopeCondition(this IBrowserInteractions interactions, string selector, string name,
 			string value, Action actionThen)
 		{
-			var ts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+			var ts = new CancellationTokenSource(Timeouts.Timeout);
 			var token = ts.Token;
 
 			var condition = "scope." + name + " == " + value;
 			var script = scopeByQuerySelector(selector) +						 
 						 " return " + condition + "; ";
 
-			interactions.Javascript(waitForAngular(selector, script));
+			var readerName = getTmpName(name);
+			interactions.Javascript(waitForAngular(selector, script, readerName));
 
 			Func<bool> checker = () =>
 			{
 				Boolean parsed;
-				string checkReturn = scopeByQuerySelector(selector) + " return scope.$runJavascriptResult; ";
+				string checkReturn = scopeByQuerySelector(selector) + string.Format(" return scope.$result{0}; ", readerName);
 
-				var result = interactions.Javascript(checkReturn);
+				var result = interactions.Javascript(checkReturn);				
 				if (Boolean.TryParse(result, out parsed))
 				{
 					return parsed;
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			{
 				while (!checker())
 				{
-					await Task.Delay(TimeSpan.FromSeconds(1), token);
+					await Task.Delay(Timeouts.Poll, token);
 					token.ThrowIfCancellationRequested();
 				}
 			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
@@ -62,6 +66,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			
 			actionThen();						
 		}
+
+		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint)
+		{
+			var query = scopeByQuerySelector(selector) + string.Format(" return scope.{0}; ", name);
+			EventualAssert.That(() =>
+			{
+				var result = interactions.Javascript(query);				
+				return result;
+			}, constraint, () => "Failed to assert scope value " + name, new SeleniumExceptionCatcher());
+		}
+
 
 		private static string elementByQuerySelector(string selector)
 		{
@@ -78,13 +93,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			return string.Format("var runner = {0}.injector().get('$timeout'); ", elementByQuerySelector(selector));
 		}
 		
-		private static string waitForAngular(string selector, string next)
+		private static string waitForAngular(string selector, string next, string readerName)
 		{
 			return scopeByQuerySelector(selector)
-				   + " scope.$runJavascriptResult = null; "
+				   + string.Format(" scope.$result{0} = null; ", readerName)
 				   + string.Format("var bser = {0}.injector().get('$browser'); ", elementByQuerySelector(selector))
-				   + string.Format("var cb = function() {{ scope.$runJavascriptResult = (function(){{ {0} }})(); }}; ", next)
+				   + string.Format("var cb = function() {{ scope.$result{0} = (function(){{ {1} }})(); }}; ", readerName, next)
 				   + "bser.notifyWhenNoOutstandingRequests(cb); ";
+		}
+
+		private static string getTmpName(string input)
+		{			
+			var output = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input));
+			Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+			return rgx.Replace(output, "");
 		}
 
 

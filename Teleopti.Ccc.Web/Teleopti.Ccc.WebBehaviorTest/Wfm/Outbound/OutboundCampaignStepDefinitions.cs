@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 {
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I set the starting month for viewing period to '(.*)'")]
 		public void WhenISetTheStartingMonthForViewingPeriodTo(DateTime startingMonth)
 		{
-			Browser.Interactions.FillScopeValues(".outbound-summary", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".outbound-summary", new Dictionary<string, string>
 			{
 				{"settings.periodStart" , string.Format("new Date('{0}')", startingMonth.ToShortDateString())} 
 			});
@@ -63,18 +65,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I see the new campaign form")]
 		public void ThenIShouldSeeTheNewCampaignForm()
 		{
-			Browser.Interactions.AssertExists("campaign-create");
+			Browser.Interactions.AssertExists(".campaign-create");
 		}
 
-		[When(@"I complete the campaign details with")]
-		public void WhenICompleteTheCampaignDetailsWith(Table table)
-		{
+		[When(@"I submit the campaign form with the campaign detail")]
+		public void WhenISubmitTheCampaignFormWithTheCampaignDetail(Table table)
+		{			
 			var instance = new OutboundCampaignConfigurable();
-			table.FillInstance(instance);			
+			table.FillInstance(instance);
+
+			Browser.Interactions.SetScopeValues(".campaign-create", new Dictionary<string, string>
+			{
+				{ "campaign.Name" , string.Format("\"{0}\"", instance.Name)},
+ 				{ "campaign.Activity", string.Format("\"{0}\"", instance.Name) },
+				{ "campaign.CallListLen", instance.CallListLen.ToString() },
+				{ "campaign.TargetRate", instance.TargetRate.ToString() },
+				{ "campaign.ConnectRate", instance.ConnectRate.ToString() },
+				{ "campaign.RightPartyConnectRate", instance.RightPartyConnectRate.ToString() },
+				{ "campaign.ConnectAverageHandlingTime", instance.ConnectAverageHandlingTime.ToString() },
+				{ "campaign.RightPartyAverageHandlingTime", instance.RightPartyAverageHandlingTime.ToString() },
+				{ "campaign.UnproductiveTime", instance.UnproductiveTime.ToString() },
+				{ "campaign.StartDate.Date", string.Format("new Date('{0}')", instance.StartDate)},
+				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },
+				{ "campaign.WorkingHours", instance.GetWorkingHoursString()},
+				{ "preventAutomaticRedirect", "true"}
+			});
+		
+			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", "true", () => 
+					Browser.Interactions.Click(".form-submit"));							
 		}
 
-		[When(@"I submit to create the campaign")]
-		public void WhenISubmitToCreateTheCampaign()
+		[When(@"after the creation I goto the campaign list page")]
+		public void WhenAfterTheCreationIGotoTheCampaignListPage()
+		{
+			Browser.Interactions.AssertScopeValue(".campaign-create", "campaign.Name", Is.Null.Or.Empty);
+			Navigation.GoToOutbound();
+		}
+
+		[When(@"I submit the form to create the campaign")]
+		public void WhenISubmitTheFormToCreateTheCampaign()
 		{
 			ScenarioContext.Current.Pending();
 		}
@@ -127,6 +156,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.ClickContaining(".modal-box a", "AGREE");
 		}
 
+
+
+
+		
 	
 
 	}

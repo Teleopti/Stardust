@@ -80,3 +80,25 @@ And I can see 'Campaign4' in campaign list
 And I click at campaign name tag 'Campaign4'
 Then I should see the backlog visualization of 'Campaign4'
  
+
+Scenario: Create a campaign
+When I view the outbound campaign creation page 
+And I see the new campaign form
+And I submit the campaign form with the campaign detail
+| Field                             | Value       |
+| Name                              | NewCampaign |
+| Start Date                        | 2015-12-01  |
+| End Date                          | 2016-01-30  |
+| Call List Len                     | 5555        |
+| Target Rate                       | 55          |
+| Connect Rate                      | 55          |
+| Right Party Connect Rate          | 55          |
+| Connect Average Handling Time     | 55          |
+| Right Party Average Handling Time | 555         |
+| Unproductive Time                 | 55          |
+| Opening Hour Start                | 08:00       |
+| Opening Hour End                  | 16:00       |
+And after the creation I goto the campaign list page
+And I set the starting month for viewing period to '2016-01-01'
+Then I should see 'NewCampaign' in campaign list
+

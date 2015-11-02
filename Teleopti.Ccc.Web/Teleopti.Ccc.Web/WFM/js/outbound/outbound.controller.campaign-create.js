@@ -11,6 +11,7 @@
 	   
 		outboundService.checkPermission($scope).then(init);
 	  
+		$scope.preventAutomaticRedirect = false;
         $scope.addCampaign = addCampaign;
         $scope.init = init;
         $scope.backToList = backToList;
@@ -26,7 +27,7 @@
             outboundService.addCampaign($scope.campaign, function (campaign) {
                 outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
                 init();
-                show(campaign);
+                if (!$scope.preventAutomaticRedirect) show(campaign);
             }, function (error) {
                 outboundNotificationService.notifyCampaignCreationFailure(error);
             });
@@ -40,7 +41,7 @@
                 WorkingHours: []
             };
 
-            $scope.isCreating = false;
+            $scope.isCreating = false;	        
 
             viewUtilityService.expandAllSections($scope);
             viewUtilityService.registerCampaignForms($scope);
