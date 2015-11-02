@@ -124,4 +124,7 @@
     <value>Päivitä</value>
     <comment>Refresh</comment>
   </data>
+  <data name="AgentScheduleMessenger" xml:space="preserve">
+    <value>Teleopti WFM Agent Schedule Messenger</value>
+  </data>
 </root>
