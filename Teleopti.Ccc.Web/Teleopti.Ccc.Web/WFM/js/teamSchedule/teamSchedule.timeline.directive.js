@@ -8,10 +8,12 @@
 			return vm.scheduleCount;
 		}, function (newValue) {
 			if (newValue > 0) {
-				vm.height = 38 * (vm.scheduleCount) + 17; //tr height * count + th height
+				var headerHeight = 17; //angular.element($("#time-line-container"))[0].offsetHeight
+				var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
+				var rowHeight = 38;
+				vm.height = rowHeight * (vm.scheduleCount) + headerHeight + labelHeight;
 			}
 		});
-		
 	}
 	var directive = function () {
 		return {
@@ -28,9 +30,8 @@
 	};
 	angular.module('wfm.teamSchedule')
 		.directive('timeLine', directive)
-	.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
+		.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
 
 	function linkFunction(scope, element, attributes, vm) {
-
 	};
 }());
