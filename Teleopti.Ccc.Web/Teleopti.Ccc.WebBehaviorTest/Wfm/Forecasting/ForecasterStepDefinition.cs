@@ -224,7 +224,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#overrideTasksInputId", calls);
+			Browser.Interactions.FillWith("#overrideTasksInputId", calls);
+			Browser.Interactions.AssertInputValue("#overrideTasksInputId", calls);
 		}
 
 		[When(@"I increase the calls by (.*) percent")]
@@ -266,11 +267,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
-					string.Format(
-					"var numberOfCalls = parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-					"return (numberOfCalls=={0}) + '  ' + numberOfCalls';"
-					, calls)
-				, "true");
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"return v1;"
+				, calls);
 		}
 
 

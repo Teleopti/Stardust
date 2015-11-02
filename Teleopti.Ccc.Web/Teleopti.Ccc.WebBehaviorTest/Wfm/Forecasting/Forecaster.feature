@@ -101,7 +101,6 @@ Scenario: Create new skill
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
 
-@Ignore
 Scenario: Override the forecasted calls for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
