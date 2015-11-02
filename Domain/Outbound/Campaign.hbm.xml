@@ -77,6 +77,13 @@
 				<property name="Minimum" column="StartDate" not-null="true" type="UtcDateTime"/>
 				<property name="Maximum" column="EndDate" not-null="true" type="UtcDateTime"/>
 			</component>
+		</component>		
+		
+		<component name="BelongsToPeriod" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
+			<component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces" name="period" access="field">
+				<property name="Minimum" column="BelongsToStartDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+				<property name="Maximum" column="BelongsToEndDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+			</component>
 		</component>
 		
     <map name="_manualProductionPlanDays" table="OutboundCampaignManualProductionTime" access="field" cascade="all-delete-orphan" lazy="false">

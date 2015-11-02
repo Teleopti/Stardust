@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				ConnectAverageHandlingTime = 30,
 				RightPartyAverageHandlingTime = 120,
 				UnproductiveTime = 30,
-				SpanningPeriod = new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc))
+				SpanningPeriod = new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)),
+				BelongsToPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue)
 			};
 
 			return campaign;
@@ -196,6 +197,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 
 			loadedCampaign.SpanningPeriod.Should().Be.EqualTo(expectedPeriod);
+		}		
+		
+		[Test]
+		public void ShouldPersistBelongsToPeriod()
+		{
+			var expectedPeriod = new DateOnlyPeriod(2015, 6, 18, 2015, 7, 18);
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.BelongsToPeriod = expectedPeriod;
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.BelongsToPeriod.Should().Be.EqualTo(expectedPeriod);
 		}
 
 		[Test]

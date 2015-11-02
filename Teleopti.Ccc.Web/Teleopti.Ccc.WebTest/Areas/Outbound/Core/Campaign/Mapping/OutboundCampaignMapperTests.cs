@@ -165,7 +165,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var result = target.Map(_campaignViewModel);
 
 			result.SpanningPeriod.EndDateTime.Day.Should().Be.EqualTo(20);
-		}		
+		}
+
+		[Test]
+		public void ShouldMapBelongsToPeriod()
+		{
+			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
+			_campaignViewModel.StartDate = new DateOnly(2015, 4, 13);
+			_campaignViewModel.EndDate = new DateOnly(2015, 4, 20);
+
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
+			var result = target.Map(_campaignViewModel);
+
+			result.BelongsToPeriod.Should().Be.EqualTo(new DateOnlyPeriod(_campaignViewModel.StartDate, _campaignViewModel.EndDate));
+		}
 		
 		[Test]
 		public void ShouldMapWorkingHours()

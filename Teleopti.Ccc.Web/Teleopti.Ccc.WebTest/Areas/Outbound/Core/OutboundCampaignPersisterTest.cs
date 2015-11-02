@@ -169,6 +169,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var startDateTime = new DateTime(_campaignInput.StartDate.Year, _campaignInput.StartDate.Month, _campaignInput.StartDate.Day, 0,0,0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(_campaignInput.EndDate.Year, _campaignInput.EndDate.Month, _campaignInput.EndDate.Day, 23,59,59, DateTimeKind.Utc);
 			campaigns[0].SpanningPeriod.Should().Be.EqualTo(new DateTimePeriod(startDateTime, endDateTime));
+		}		
+		
+		[Test]
+		public void ShouldSetBelongsToPeriod()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+
+			campaigns[0].BelongsToPeriod.Should().Be.EqualTo(new DateOnlyPeriod(_campaignInput.StartDate, _campaignInput.EndDate));
 		}
 
 		[Test]

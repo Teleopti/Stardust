@@ -27,6 +27,7 @@ namespace Teleopti.Interfaces.Domain
         IDictionary<DayOfWeek, TimePeriod> WorkingHours { get; set; }
 
 		  DateTimePeriod SpanningPeriod { get; set; }
+		  DateOnlyPeriod BelongsToPeriod { get; set; }
 
         int CampaignTasks();
 

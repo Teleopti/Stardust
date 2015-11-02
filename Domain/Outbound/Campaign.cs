@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-    public class Campaign : NonversionedAggregateRootWithBusinessUnit, IOutboundCampaign
+	public class Campaign : NonversionedAggregateRootWithBusinessUnit, IOutboundCampaign
 	{
 		private string _name;
 		private ISkill _skill;
@@ -17,12 +17,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private int _rightPartyAverageHandlingTime;
 		private int _unproductiveTime;
 		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>();
-		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
+		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>();
 		private bool _isDeleted;
 		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 		private DateTimePeriod _spanningPeriod;
+		private DateOnlyPeriod _belongsToPeriod;
 
-		public virtual string Name 
+		public virtual string Name
 		{
 			get { return _name; }
 			set { _name = value; }
@@ -90,6 +91,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _spanningPeriod = value; }
 		}
 
+		public virtual DateOnlyPeriod BelongsToPeriod
+		{
+			get { return _belongsToPeriod; }
+			set { _belongsToPeriod = value; }
+		}
+
 		public virtual int CampaignTasks()
 		{
 			if (RightPartyConnectRate == 0)
@@ -102,11 +109,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 		{
 			var target = CallListLen*TargetRate/100.0;
 			var rightPartyTotalHandlingTime = target*(RightPartyAverageHandlingTime + UnproductiveTime);
-			var wrongPartyTotalHandlingTime = (target/RightPartyConnectRate*100 - target)*(ConnectAverageHandlingTime+UnproductiveTime);
-			var manualConnectingTime = (target*100*100/(ConnectRate*RightPartyConnectRate) - target/RightPartyConnectRate*100)*UnproductiveTime;
-			var personHours = (double)(rightPartyTotalHandlingTime + wrongPartyTotalHandlingTime + manualConnectingTime)/60/60;
+			var wrongPartyTotalHandlingTime = (target/RightPartyConnectRate*100 - target)*
+														 (ConnectAverageHandlingTime + UnproductiveTime);
+			var manualConnectingTime = (target*100*100/(ConnectRate*RightPartyConnectRate) - target/RightPartyConnectRate*100)*
+												UnproductiveTime;
+			var personHours = (double) (rightPartyTotalHandlingTime + wrongPartyTotalHandlingTime + manualConnectingTime)/60/60;
 
-			return TimeSpan.FromHours(personHours / CampaignTasks());
+			return TimeSpan.FromHours(personHours/CampaignTasks());
 		}
 
 		public virtual bool IsDeleted
@@ -123,9 +132,9 @@ namespace Teleopti.Ccc.Domain.Outbound
 		{
 			TimeSpan? manualTime = null;
 			TimeSpan value;
-			if(_manualProductionPlanDays.TryGetValue(date, out value))
+			if (_manualProductionPlanDays.TryGetValue(date, out value))
 				manualTime = value;
-				
+
 			return manualTime;
 		}
 
@@ -173,21 +182,21 @@ namespace Teleopti.Ccc.Domain.Outbound
 			return time;
 		}
 
-	    public virtual object Clone()
-	    {
-		    return EntityClone();
-	    }
+		public virtual object Clone()
+		{
+			return EntityClone();
+		}
 
-	    public virtual IOutboundCampaign NoneEntityClone()
-	    {
-			 Campaign retobj = (Campaign)MemberwiseClone();
-			 retobj.SetId(null);
-			 retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
-			 foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
-			 {
-				 TimePeriod template = keyValuePair.Value;
-				 retobj._workingHours.Add(keyValuePair.Key, template);
-			 }
+		public virtual IOutboundCampaign NoneEntityClone()
+		{
+			Campaign retobj = (Campaign) MemberwiseClone();
+			retobj.SetId(null);
+			retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+			foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
+			{
+				TimePeriod template = keyValuePair.Value;
+				retobj._workingHours.Add(keyValuePair.Key, template);
+			}
 			retobj._skill = Skill.NoneEntityClone();
 			var workloads = Skill.WorkloadCollection;
 			foreach (var workload in workloads)
@@ -195,27 +204,27 @@ namespace Teleopti.Ccc.Domain.Outbound
 				retobj._skill.AddWorkload(workload.NoneEntityClone());
 			}
 
-			 return retobj;
-	    }
+			return retobj;
+		}
 
-	    public virtual IOutboundCampaign EntityClone()
-	    {
-		    Campaign retobj = (Campaign) MemberwiseClone();
-		    retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
-		    foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
-		    {
-			    TimePeriod template = keyValuePair.Value;
-			    retobj._workingHours.Add(keyValuePair.Key, template);
-		    }
+		public virtual IOutboundCampaign EntityClone()
+		{
+			Campaign retobj = (Campaign) MemberwiseClone();
+			retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+			foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
+			{
+				TimePeriod template = keyValuePair.Value;
+				retobj._workingHours.Add(keyValuePair.Key, template);
+			}
 
-		    retobj._skill = Skill.EntityClone();
-		    var workloads = Skill.WorkloadCollection;
-		    foreach (var workload in workloads)
-		    {
-			    retobj._skill.AddWorkload(workload.EntityClone());
-		    }
+			retobj._skill = Skill.EntityClone();
+			var workloads = Skill.WorkloadCollection;
+			foreach (var workload in workloads)
+			{
+				retobj._skill.AddWorkload(workload.EntityClone());
+			}
 
-		    return retobj;
-	    }
+			return retobj;
+		}
 	}
 }

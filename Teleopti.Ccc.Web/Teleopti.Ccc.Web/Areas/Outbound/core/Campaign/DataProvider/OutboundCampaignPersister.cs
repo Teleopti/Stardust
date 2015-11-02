@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				ConnectAverageHandlingTime = form.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = form.RightPartyAverageHandlingTime,
 				UnproductiveTime = form.UnproductiveTime,
+				BelongsToPeriod = new DateOnlyPeriod(form.StartDate, form.EndDate)
 			};
 
 			if (form.WorkingHours != null)

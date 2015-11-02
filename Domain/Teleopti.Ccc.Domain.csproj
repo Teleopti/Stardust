@@ -2412,7 +2412,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WorkflowControl\AbsenceRequestOpenPeriod.hbm.xml" />
+    <EmbeddedResource Include="WorkflowControl\AbsenceRequestOpenPeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WorkflowControl\AbsenceRequestOpenDatePeriod.hbm.xml" />
     <EmbeddedResource Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.hbm.xml" />
   </ItemGroup>
