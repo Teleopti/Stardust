@@ -469,17 +469,6 @@
 				}
 			};
 
-			function ungroupObjects(canvas, group) {
-
-				var items = group._objects;
-				// translate the group-relative coordinates to canvas relative ones
-				group._restoreObjectsState();
-				canvas.remove(group);
-				for (var i = 0; i < items.length; i++) {
-					canvas.add(items[i]);
-				}
-			};
-
 			function deepUnGroup(canvas, group) {
 				ungroupObjects(canvas, group);
 				group._objects.forEach(function (childItem) {

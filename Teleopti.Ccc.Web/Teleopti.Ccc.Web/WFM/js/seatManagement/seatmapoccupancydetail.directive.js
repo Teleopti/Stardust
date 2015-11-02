@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory', '$stateParams'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory'];
 
 	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, growl, seatmapTranslator) {
 		var vm = this;
@@ -88,7 +88,6 @@
 					if (seats.length > 0) {
 						loadOccupancyForSeats(seats);
 					}
-
 				} else {
 					if (object.get('type') == 'seat') {
 						loadOccupancyForSeats([object]);
@@ -100,6 +99,12 @@
 
 			canvas().on('object:selected', function (e) {
 				onObjectSelection(e);
+			});
+
+			canvas().on('selection:created', function (e) {
+				if (e.e && e.e.shiftKey) {
+					onObjectSelection(e);
+				}
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
