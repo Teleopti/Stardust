@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
+		public IList<IOutboundCampaign> GetCampaigns(DateOnlyPeriod period)
 		{
 			return Session.CreateCriteria<Campaign>()
 				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
-					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime)))
+					.Add(Restrictions.Ge("BelongsToPeriod.period.Maximum", period.StartDate))
+					.Add(Restrictions.Le("BelongsToPeriod.period.Minimum", period.EndDate)))
 				.AddOrder(Order.Asc("Name"))
 				.List<IOutboundCampaign>();
 		}

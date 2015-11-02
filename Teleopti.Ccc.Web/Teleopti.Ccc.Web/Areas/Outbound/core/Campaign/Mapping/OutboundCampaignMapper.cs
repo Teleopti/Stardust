@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Infrastructure.Repositories;
+﻿using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -27,10 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				timezone = campaign.Skill.TimeZone;
 			}
 
-	      var startDateTime = new DateTime(campaignViewModel.StartDate.Year, campaignViewModel.StartDate.Month, campaignViewModel.StartDate.Day);
-			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime, timezone);
-			var endDateTime = new DateTime(campaignViewModel.EndDate.Year, campaignViewModel.EndDate.Month, campaignViewModel.EndDate.Day, 23, 59, 59);
-			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime, timezone);
+			var startDateTime = TimeZoneHelper.ConvertToUtc(campaignViewModel.StartDate.Date, timezone);
+			var endDateTime = TimeZoneHelper.ConvertToUtc(campaignViewModel.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59), timezone);
+
 			campaign.Name = campaignViewModel.Name;
 			campaign.CallListLen = campaignViewModel.CallListLen;
 			campaign.TargetRate = campaignViewModel.TargetRate;

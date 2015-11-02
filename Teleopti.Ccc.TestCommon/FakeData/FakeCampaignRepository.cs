@@ -52,10 +52,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-
-		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
+		public IList<IOutboundCampaign> GetCampaigns(DateOnlyPeriod period)
 		{
-			return _campaigns.Where(campaign => period.ContainsPart(campaign.SpanningPeriod)).ToList();
+			return _campaigns.Where(campaign => period.Contains(campaign.BelongsToPeriod)).ToList();
 		}
 	}
 }

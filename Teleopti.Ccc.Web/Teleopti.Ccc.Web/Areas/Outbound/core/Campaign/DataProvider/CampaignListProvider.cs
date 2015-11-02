@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			var campaigns = period == null
 				? _outboundCampaignRepository.LoadAll()
-				: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+				: _outboundCampaignRepository.GetCampaigns(new DateOnlyPeriod(period.StartDate, period.EndDate));
 
 			return campaigns;
 		}
@@ -57,9 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (campaigns.Count == 0) return;
 
 			var campaignPeriod = campaigns.Select(c => c.SpanningPeriod).Aggregate((ac, p) => ac.MaximumPeriod(p)).ToDateOnlyPeriod(TimeZoneInfo.Utc);
-			var maximumPeriod = new DateOnlyPeriod(campaignPeriod.StartDate.AddDays(-1), campaignPeriod.EndDate.AddDays(1));
 
-			_scheduledResourcesProvider.Load(campaigns, maximumPeriod);
+			_scheduledResourcesProvider.Load(campaigns, campaignPeriod);
 			updateCache(campaigns);
 		}
 
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IEnumerable<CampaignStatusViewModel> GetCampaignsStatus(GanttPeriod period)
 		{
-			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+			var campaigns = _outboundCampaignRepository.GetCampaigns(new DateOnlyPeriod(period.StartDate, period.EndDate));
 
 			return campaigns.Select(campaign => GetCampaignStatus((Guid) campaign.Id)).ToList();
 		}
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IEnumerable<CampaignSummaryViewModel> GetCampaigns(GanttPeriod period)
 		{
-			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+			var campaigns = _outboundCampaignRepository.GetCampaigns(new DateOnlyPeriod(period.StartDate, period.EndDate));
 
 			var ganttCampaigns = new List<CampaignSummaryViewModel>();
 			foreach (var campaign in campaigns)
@@ -130,14 +129,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				});
 			}
 			return ganttCampaigns;
-		}
-
-		private DateTimePeriod getUtcPeroid(GanttPeriod period)
-		{
-			var start = TimeZoneHelper.ConvertToUtc(period.StartDate.Date, _userTimeZone.TimeZone());
-			var end = TimeZoneHelper.ConvertToUtc(period.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59), _userTimeZone.TimeZone());
-
-			return new DateTimePeriod(start, end);
 		}
 
 		private void updateCache(IEnumerable<IOutboundCampaign> campaigns)

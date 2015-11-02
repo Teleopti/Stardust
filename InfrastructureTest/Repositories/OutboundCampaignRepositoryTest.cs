@@ -271,8 +271,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createCampaignWithName("a");
 
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
 
 			result[0].Name.Should().Be.EqualTo("a");
 			result[1].Name.Should().Be.EqualTo("b");
@@ -286,8 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 			deleteCampaign(repository, deletedCamapign);
 
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
 
 			result[0].Id.Should().Be.EqualTo(campaign2.Id);
 		}
@@ -295,11 +293,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetCampaignStartEarlierThanPeriod()
 		{
-			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), 
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var campaign = createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-5).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(-5), DateOnly.Today.AddDays(20)));
 
 			result[0].Id.Should().Be.EqualTo(campaign.Id);
 		}
@@ -307,11 +303,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetCampaignEndLaterThanPeriod()
 		{
-			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var campaign = createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-15).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(-15), DateOnly.Today.AddDays(5)));
 
 			result[0].Id.Should().Be.EqualTo(campaign.Id);
 		}		
@@ -319,11 +313,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetCampaignWithinPeriod()
 		{
-			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var campaign = createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(-20), DateOnly.Today.AddDays(20)));
 
 			result[0].Id.Should().Be.EqualTo(campaign.Id);
 		}			
@@ -331,11 +323,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetCampaignOverCrossPeriod()
 		{
-			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var campaign = createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-5).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(-5), DateOnly.Today.AddDays(5)));
 
 			result[0].Id.Should().Be.EqualTo(campaign.Id);
 		}		
@@ -343,11 +333,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotGetCampaignCampleteEarlierThanPeriod()
 		{
-			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(30).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(20), DateOnly.Today.AddDays(30)));
 
 			result.Count.Should().Be.EqualTo(0);
 		}		
@@ -355,11 +343,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotGetCampaignStartLaterThanPeriod()
 		{
-			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
-																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			createCampaignWithBelongsToPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc),
-																					  new DateTime(DateTime.Today.AddDays(-15).Ticks, DateTimeKind.Utc)));
+			var result = repository.GetCampaigns(new DateOnlyPeriod(DateOnly.Today.AddDays(-20), DateOnly.Today.AddDays(-15)));
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -370,10 +356,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(campaign);
 		}
 
-      private IOutboundCampaign createCampaignWithSpanningPeriod(DateTimePeriod period)
+      private IOutboundCampaign createCampaignWithBelongsToPeriod(DateOnlyPeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
-			campaign.SpanningPeriod = period;
+			campaign.BelongsToPeriod = period;
 
 			PersistAndRemoveFromUnitOfWork(campaign);
 			return campaign;

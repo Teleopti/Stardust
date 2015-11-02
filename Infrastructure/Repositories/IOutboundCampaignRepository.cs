@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public interface IOutboundCampaignRepository : IRepository<IOutboundCampaign>
 	{
-		IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period);
+		IList<IOutboundCampaign> GetCampaigns(DateOnlyPeriod period);
 	}
 }

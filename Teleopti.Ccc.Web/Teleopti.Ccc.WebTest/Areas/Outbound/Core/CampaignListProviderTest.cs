@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 		
 		[Test]
-		public void ShouldGetAllCampaignsSummaryWithinPeriod()
+		public void ShouldGetAllCampaignsStatus()
 		{
 			var campaign1 = createCampaign("campaign1", new DateOnlyPeriod(2015, 10, 1, 2015, 11, 1), _userTimeZone);
 			_outboundCampaignRepository.Add(campaign1);
@@ -340,6 +340,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			{
 				Name = name,
 				SpanningPeriod = period.ToDateTimePeriod(userTimeZone.TimeZone()),
+				BelongsToPeriod = period,
 				Skill = SkillFactory.CreateSkill(name, userTimeZone.TimeZone())
 			};
 
