@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -202,12 +201,12 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public void ExtractAllScheduleData(IScheduleExtractor extractor)
         {
-			Parallel.ForEach(_dictionary.Values, scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, scheduleRange.Period));
+			_dictionary.Values.ForEach(scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, scheduleRange.Period));
         }
 
         public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
         {
-            Parallel.ForEach(_dictionary.Values, scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, period));
+            _dictionary.Values.ForEach(scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, period));
         }
 
         protected virtual IEnumerable<IBusinessRuleResponse> CheckIfCanModify(Dictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRules)
