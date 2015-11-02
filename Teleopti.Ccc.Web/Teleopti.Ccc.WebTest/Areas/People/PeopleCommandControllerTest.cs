@@ -208,22 +208,44 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var personSkillInNewPeriod = newCreatedPeriod.PersonSkillCollection.Single();
 			personSkillInNewPeriod.Skill.Id.Should().Be.EqualTo(phoneSkillId);
-			personSkillInNewPeriod.Active.Should().Be.EqualTo(true);
+			personSkillInNewPeriod.Active.Should().Be.EqualTo(false);
 			personSkillInNewPeriod.SkillPercentage.Should().Be.EqualTo(new Percent(phoneProficiency));
 		}
 
 		[Test]
 		public void ShouldNotCreatePersonPeriodWhenCurrentOneStartFromGivenDate()
 		{
+			const double phoneProficiency = 0.42;
+			const double emailProficiency = 0.84;
+
 			var date = new DateTime(2015, 8, 20);
-			var person = prepareData(date);
+			var phoneSkill = SkillFactory.CreateSkillWithId("phone");
+			var phoneSkillId = phoneSkill.Id.GetValueOrDefault();
+			SkillRepository.Add(phoneSkill);
+
+			var emailSkill = SkillFactory.CreateSkillWithId("Email");
+			SkillRepository.Add(emailSkill);
+
+			var personSkills = new[]
+			{
+				new PersonSkill(phoneSkill, new Percent(phoneProficiency))
+				{
+					Active = false
+				},
+				new PersonSkill(emailSkill, new Percent(emailProficiency))
+				{
+					Active = true
+				}
+			};
+			var person = prepareData(date, personSkills);
 			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People = new List<SkillUpdateCommandInputModel>
 				{
 					new SkillUpdateCommandInputModel
 					{
-						PersonId = person.Id.GetValueOrDefault()
+						PersonId = person.Id.GetValueOrDefault(),
+						SkillIdList = new []{phoneSkillId}
 					}
 				},
 				Date = date
@@ -231,6 +253,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
 			updatedPerson.PersonPeriodCollection.First().StartDate.Date.Should().Be.EqualTo(date);
+
+			var updatedSkill = updatedPerson.PersonPeriodCollection.First().PersonSkillCollection.Single();
+			updatedSkill.SkillPercentage.Should().Be.EqualTo(new Percent(phoneProficiency));
+			updatedSkill.Active.Should().Be.EqualTo(false);
 		}
 
 		[Test]

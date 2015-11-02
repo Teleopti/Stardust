@@ -76,9 +76,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					updatedCount++;
 					continue;
 				}
+				var currentSkillCollection = currentPeriod.PersonSkillCollection;
 				person.ResetPersonSkills(currentPeriod);
 
-				updatePeriodWithSkill(person, inputSkills, currentPeriod);
+				updatePeriodWithSkill(person, inputSkills, currentPeriod, currentSkillCollection);
 				updatedCount++;
 			}
 
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				var skill = _skillRepository.Get(skillId);
 				var personSkill = new PersonSkill(skill, proficiency)
 				{
-					Active = true
+					Active = currentSkill == null || currentSkill.Active
 				};
 
 				person.AddSkill(personSkill, period);
