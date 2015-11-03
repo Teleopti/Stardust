@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		public static void RegisterModule()
 		{
-			DynamicModuleUtility.RegisterModule(typeof(ApplicationStartModule));
+			DynamicModuleUtility.RegisterModule(typeof (ApplicationStartModule));
 		}
 
 		public static Exception ErrorAtStartup { get; set; }
@@ -45,16 +45,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					.GetService<IRequestContextInitializer>()
 					;
 
-
-
 				requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
-				
+
 			};
 
 			if (HasStartupError)
-				application.BeginRequest += onEveryRequest;
-
-
+				application.BeginRequest += mayThrowStartupException;
 		}
 
 		private bool onlyUseGregorianCalendar(HttpContext context)
@@ -66,15 +62,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return Boolean.Parse(useGregorianCalendar);
 		}
 
-		private void onEveryRequest(object sender, EventArgs e)
+		private void mayThrowStartupException(object sender, EventArgs e)
 		{
-			if (HasStartupError)
-			{
-				var startupException = new ApplicationException("Failure on start up", ErrorAtStartup);
-				PreserveStack.ForInnerOf(startupException);
-				
-throw startupException;
-			}
+			if (!HasStartupError) return;
+			var startupException = new ApplicationException("Failure on start up", ErrorAtStartup);
+			PreserveStack.ForInnerOf(startupException);
+			throw startupException;
 		}
 	}
 }
