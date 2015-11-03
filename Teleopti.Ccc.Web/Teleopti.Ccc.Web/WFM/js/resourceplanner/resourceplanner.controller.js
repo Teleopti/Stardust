@@ -16,7 +16,6 @@
 
 				$scope.optionForm = {};
 
-				//refactor me
 				var workruleComposer = function(data){
 					if ($scope.isValid === false) return;
 					data.Default = true;
