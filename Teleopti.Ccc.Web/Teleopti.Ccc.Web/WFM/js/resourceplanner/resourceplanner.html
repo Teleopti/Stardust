@@ -16,13 +16,13 @@
 			<p>Days of per week</p>
 		</div>
 		<div class="wfm-option" flex="20">
-			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinDayOffsPerWeek" name="MinDayOffsPerWeek"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinDayOffsPerWeek" name="MinDayOffsPerWeek"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 		    </div>
 		</div>
 		<div class="wfm-option" flex="20">
-			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 		    </div>
@@ -31,13 +31,13 @@
 		<p>Consecutive days off</p>
 		</div>
 		<div class="wfm-option" flex="20">
-			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 			</div>
 		</div>
 		<div class="wfm-option" flex="20">
-			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 			</div>
@@ -46,14 +46,14 @@
 		<p>Consecutive work days</p>
 		</div>
 		<div class="wfm-option" flex="20">
-			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label  for="nameId">Min: <input type="number" ng-model="optionForm.rules.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 			</div>
 		</div>
 		<div class="wfm-option" flex="20">
 
-			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInput(optionForm.rules)"></label>
+			<label for="nameId">Max: <input type="number" ng-model="optionForm.rules.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
 			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
 			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">input a value</div>
 			</div>
