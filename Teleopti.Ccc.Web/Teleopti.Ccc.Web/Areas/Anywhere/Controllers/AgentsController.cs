@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -122,14 +123,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForSites(Guid[] siteIds)
+		[UnitOfWork, HttpGet]
+		public virtual JsonResult ForSites(Guid[] siteIds)
 		{
 			return Json(_getAgents.ForSites(siteIds), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForTeams(Guid[] teamIds)
+		[UnitOfWork, HttpGet]
+		public virtual JsonResult ForTeams(Guid[] teamIds)
 		{
 			return Json(_getAgents.ForTeams(teamIds), JsonRequestBehavior.AllowGet);
 		}
