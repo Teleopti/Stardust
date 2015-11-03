@@ -70,8 +70,7 @@
 					}).$promise
 					.then(function(agents) {
 						$scope.agents = agents;
-						$scope.siteName = "Multiple Sites";
-						$scope.teamName = "Multiple Teams";
+						$scope.multipleSitesName = "Multiple Sites";
 					})
 					.then(updateStatesForSites)
 					.then(updateGrid);
