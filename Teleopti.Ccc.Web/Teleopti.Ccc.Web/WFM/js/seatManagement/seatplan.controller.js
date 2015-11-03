@@ -35,12 +35,12 @@
 		};
 
 		vm.getPreviousMonthStart = function (dateMoment) {
-			return getServiceSafeDate(dateMoment.subtract(1, 'months').startOf('month'));
+			return getServiceSafeDate(moment(dateMoment).subtract(1, 'months').startOf('month'));
 		};
 
 		vm.getNextMonthEnd = function (dateMoment) {
 
-			return getServiceSafeDate(dateMoment.add(1, 'months').endOf('month'));
+			return getServiceSafeDate(moment(dateMoment).add(1, 'months').endOf('month'));
 		};
 
 		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
