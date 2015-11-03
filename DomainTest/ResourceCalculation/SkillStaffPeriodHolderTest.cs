@@ -350,9 +350,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyAggregatedPropertiesAreSet()
         {
+			var skill1 = SkillFactory.CreateSkill("skill1");
+			skill1.DefaultResolution = 15;
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			skill2.DefaultResolution = 60;
+
             MockRepository mocks = new MockRepository();
-            ISkill skill1 = mocks.StrictMock<ISkill>();
-            ISkill skill2 = mocks.StrictMock<ISkill>();
             IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
             ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
             IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
@@ -374,16 +377,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
 
             IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 } };
-            StaffingThresholds tresholds = new StaffingThresholds();
-
+            
             using (mocks.Record())
             {
-                Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
-                Expect.Call(skill2.DefaultResolution).Return(15).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-                Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
             }
 
             using (mocks.Playback())
@@ -744,5 +743,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(forecastValue, staffPeriod.Payload.ForecastedIncomingDemand);
 			}
 		}
+
+		[Test]
+	    public void ShouldHandleEstimatedServiceLevelShrinkageWhenHandleAggregate()
+		{
+			var mock = new MockRepository();
+			var estimatedServiceLevel = new Percent(0.7);
+			var estimatedServiceLevelShrinkage = new Percent(0.5);
+			var skillStaffPeriod = mock.StrictMock<ISkillStaffPeriod>();
+			var skillDay = mock.StrictMock<ISkillDay>();
+			var skillStaff = new SkillStaff(new Task(5, TimeSpan.FromSeconds(40), TimeSpan.FromSeconds(20)), ServiceAgreement.DefaultValues());
+			var aggregateSkillStaffPeriod = (IAggregateSkillStaffPeriod)SkillStaffPeriodFactory.CreateSkillStaffPeriod();
+			var kvp = new KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>>(new DateTimePeriod(2015, 1, 1, 2015, 1, 1), new List<ISkillStaffPeriod>());
+			var skill = SkillFactory.CreateSkill("skill");
+
+
+			using (mock.Record())
+			{
+				Expect.Call(skillStaffPeriod.FStaff).Return(0.0);
+				Expect.Call(skillStaffPeriod.CalculatedResource).Return(0.0);
+				Expect.Call(skillStaffPeriod.Payload).Return(skillStaff).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod.EstimatedServiceLevel).Return(estimatedServiceLevel);
+				Expect.Call(skillStaffPeriod.EstimatedServiceLevelShrinkage).Return(estimatedServiceLevelShrinkage);
+				Expect.Call(skillStaffPeriod.CalculatedLoggedOn).Return(0);
+				Expect.Call(skillStaffPeriod.SkillDay).Return(skillDay);
+				Expect.Call(skillDay.Skill).Return(skill);
+				Expect.Call(skillStaffPeriod.RelativeDifference).Return(0.0).Repeat.AtLeastOnce();
+			}
+
+			using (mock.Playback())
+			{
+				SkillStaffPeriodHolder.HandleAggregate(kvp, null, skillStaffPeriod, aggregateSkillStaffPeriod);
+				Assert.AreEqual(estimatedServiceLevelShrinkage, aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevelShrinkage);	
+			}	
+	    }
     }
 }

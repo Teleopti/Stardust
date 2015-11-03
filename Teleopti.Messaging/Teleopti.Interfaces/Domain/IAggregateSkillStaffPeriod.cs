@@ -71,6 +71,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         Percent AggregatedEstimatedServiceLevel { get; set; }
 
+		Percent AggregatedEstimatedServiceLevelShrinkage { get; set; }
+
         /// <summary>
         /// Gets or sets the aggregated forecasted incoming demand.
         /// </summary>

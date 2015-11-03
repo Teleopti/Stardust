@@ -2019,6 +2019,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         }
 
+		[Test]
+		public void VerifyCombineAggregatedEstimatedServiceLevelShrinkage()
+		{
+			ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+			ISkillStaffPeriod target3 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
+			IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
+			IAggregateSkillStaffPeriod aggregateSkillStaffPeriod3 = (IAggregateSkillStaffPeriod)target3;
+			_aggregateSkillStaffPeriod.IsAggregate = true;
+			aggregateSkillStaffPeriod2.IsAggregate = true;
+			aggregateSkillStaffPeriod3.IsAggregate = true;
+			_aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand = 100;
+			aggregateSkillStaffPeriod2.AggregatedForecastedIncomingDemand = 50;
+			aggregateSkillStaffPeriod3.AggregatedForecastedIncomingDemand = 10;
+			aggregateSkillStaffPeriod2.AggregatedEstimatedServiceLevelShrinkage = new Percent(1);
+			aggregateSkillStaffPeriod3.AggregatedEstimatedServiceLevelShrinkage = new Percent(0);
+			_aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevelShrinkage = new Percent(0.5);
+			_aggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(aggregateSkillStaffPeriod2);
+
+			Assert.AreEqual(new Percent(0.66666666667).Value, _aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevelShrinkage.Value, 0.00001);
+			_aggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(aggregateSkillStaffPeriod3);
+
+			Assert.AreEqual(new Percent(0.625).Value, _aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevelShrinkage.Value, 0.00001);
+
+		}
+
         [Test]
         public void VerifyCombineStaffingThreshold()
         {

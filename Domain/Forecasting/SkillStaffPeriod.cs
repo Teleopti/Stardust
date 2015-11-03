@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
                     if (_isAggregate)
-                        return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevel;
+						return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevelShrinkage;
 
 					if (!_estimatedServiceLevelShrinkage.HasValue)
 						CalculateEstimatedServiceLevel();
@@ -776,6 +776,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _aggregatedFStaff += aggregateSkillStaffPeriod.AggregatedFStaff;
                 _aggregatedCalculatedResources += aggregateSkillStaffPeriod.AggregatedCalculatedResource;
                 AggregatedEstimatedServiceLevel = CombineEstimatedServiceLevel(aggregateSkillStaffPeriod);
+	            AggregatedEstimatedServiceLevelShrinkage = CombineEstimatedServiceLevelShrinkage(aggregateSkillStaffPeriod);
                 AggregatedForecastedIncomingDemand += aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand;
                 AggregatedMinMaxStaffAlarm = combineMinMaxStaffAlarm(aggregateSkillStaffPeriod);
                 AggregatedStaffingThreshold = combineStaffingTreshold(aggregateSkillStaffPeriod);
@@ -824,6 +825,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return new Percent(value / demand);
         }
 
+		private Percent CombineEstimatedServiceLevelShrinkage(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
+		{
+			double value = (AggregatedForecastedIncomingDemand * AggregatedEstimatedServiceLevelShrinkage.Value) +
+				(aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand * aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevelShrinkage.Value);
+			double demand = AggregatedForecastedIncomingDemand +
+							aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand;
+			if (demand == 0)
+				return new Percent(1);
+			return new Percent(value / demand);
+		}
+
         double IAggregateSkillStaffPeriod.AggregatedCalculatedResource
         {
             get { return _aggregatedCalculatedResources; }
@@ -831,6 +843,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
 	    public Percent AggregatedEstimatedServiceLevel { get; set; }
+	    public Percent AggregatedEstimatedServiceLevelShrinkage { get; set; }
 
 	    public double AggregatedForecastedIncomingDemand { get; set; }
 

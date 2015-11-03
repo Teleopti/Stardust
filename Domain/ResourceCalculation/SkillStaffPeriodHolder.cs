@@ -375,6 +375,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             asAgg.AggregatedCalculatedResource = staffPeriod.CalculatedResource;
             asAgg.AggregatedForecastedIncomingDemand = staffPeriod.Payload.ForecastedIncomingDemand;
             asAgg.AggregatedEstimatedServiceLevel = staffPeriod.EstimatedServiceLevel;
+	        asAgg.AggregatedEstimatedServiceLevelShrinkage = staffPeriod.EstimatedServiceLevelShrinkage;
             if (staffPeriod.Payload.SkillPersonData.MinimumPersons > staffPeriod.CalculatedLoggedOn)
                 asAgg.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.MinStaffBroken;
             if (staffPeriod.Payload.SkillPersonData.MaximumPersons > 0 && staffPeriod.Payload.SkillPersonData.MaximumPersons < staffPeriod.CalculatedLoggedOn)
