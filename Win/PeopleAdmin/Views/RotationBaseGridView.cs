@@ -727,6 +727,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void Init()
 		{
 			Grid.CellModels.Add("GridInCell", new GridInCellModel(Grid.Model));
+			Grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(Grid.Model));
 			Grid.CurrentCellChanged += ParentGridCurrentCellChanged;
 			Grid.CurrentCellShowingDropDown += ParentGridCurrentCellShowingDropDown;
 		}
