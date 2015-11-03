@@ -10,6 +10,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<CommandHandlersModule>();
 
 			builder.RegisterModule(new SchedulingCommonModule(_configuration));
-		
+
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();
@@ -124,10 +126,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
-			builder.RegisterType<SessionSpecificForIdentityProviderDataProvider>().As<ISessionSpecificForIdentityProviderDataProvider>();
+			builder.RegisterType<SessionSpecificForIdentityProviderDataProvider>()
+				.As<ISessionSpecificForIdentityProviderDataProvider>();
 			builder.RegisterType<SessionAuthenticationModule>().As<ISessionAuthenticationModule>();
-			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
-			builder.RegisterType<DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings>().As<ISessionSpecificCookieForIdentityProviderDataProviderSettings>();
+			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>()
+				.As<ISessionSpecificCookieDataProviderSettings>();
+			builder.RegisterType<DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings>()
+				.As<ISessionSpecificCookieForIdentityProviderDataProviderSettings>();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 			builder.RegisterType<AreaWithPermissionPathProvider>().As<IAreaWithPermissionPathProvider>();
@@ -158,7 +163,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
-            builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
+			builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
+
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)
