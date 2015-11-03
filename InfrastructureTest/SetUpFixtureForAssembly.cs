@@ -51,9 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
-			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
-
-			ApplicationData = new ApplicationData(appSettings, MessageBrokerContainerDontUse.CompositeClient(), null);
+			ApplicationData = new ApplicationData(appSettings, null, null);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);

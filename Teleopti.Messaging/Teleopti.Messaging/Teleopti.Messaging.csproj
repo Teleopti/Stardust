@@ -161,7 +161,6 @@
     <Compile Include="Exceptions\NotInterfaceTypeException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Client\MessageBrokerContainerDontUse.cs" />
     <Compile Include="Client\SignalR\SignalRSender.cs" />
     <Compile Include="Client\Composite\DoNotSend.cs" />
     <Compile Include="Client\SignalR\IStateAccessor.cs" />

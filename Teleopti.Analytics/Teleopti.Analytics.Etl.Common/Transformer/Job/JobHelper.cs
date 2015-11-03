@@ -7,12 +7,10 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Client.SignalR;
-using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
+using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -20,7 +18,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 	{
 		private IRaptorRepository _repository;
 		private ILogOnHelper _logHelp;
-		private ISignalRClient _messageClient;
 		private IMessageSender _messageSender;
 
 		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
@@ -28,20 +25,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			UsedInService = usedInService;
 			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, usedInService);
-			MessageBrokerContainerDontUse.Configure(
-				ConfigurationManager.AppSettings["MessageBroker"],
-				new IConnectionKeepAliveStrategy[] {},
-				null,
-				new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
-			_messageSender = MessageBrokerContainerDontUse.Sender();
-			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
+			var url = new MutableUrl ();
+			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
+			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));
 		}
 
 		public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)
 		{
 			_repository = repository;
 			_logHelp = logOnHelper;
-			_messageClient = messageClient;
 			_messageSender = messageSender;
 		}
 
@@ -59,12 +51,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			get { return _repository; }
 		}
-
-		public ISignalRClient MessageClient
-		{
-			get { return _messageClient; }
-		}
-
+		
 		public IMessageSender MessageSender
 		{
 			get { return _messageSender; }
@@ -126,7 +113,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			if (_logHelp != null)
 				_logHelp.Dispose();
 			_logHelp = null;
-			_messageClient = null;
 			_messageSender = null;
 		}
 
