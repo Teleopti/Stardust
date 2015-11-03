@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPeople)]
 	public class PeopleSearchController : ApiController
 	{
 		private readonly IPeopleSearchProvider _searchProvider;

@@ -6,12 +6,15 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
 	public class PlanningPeriodController : ApiController
 	{
 		private readonly INextPlanningPeriodProvider _nextPlanningPeriodProvider;

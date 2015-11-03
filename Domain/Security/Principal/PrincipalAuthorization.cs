@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private bool CheckPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
 		{
+			if (_teleoptiPrincipal.Current() == null) return false;
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
 				functionPath);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
