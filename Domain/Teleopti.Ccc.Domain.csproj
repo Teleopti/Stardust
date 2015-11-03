@@ -637,11 +637,9 @@
     <Compile Include="Optimization\DayOffRulesMapper.cs" />
     <Compile Include="Optimization\DayOffRulesModel.cs" />
     <Compile Include="Optimization\FetchDayOffRulesModel.cs" />
-    <Compile Include="Optimization\FixedOptimizationPreferencesProvider.cs" />
     <Compile Include="Optimization\IDayOffRulesModelPersister.cs" />
     <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
-    <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesProviderCreator.cs" />
+    <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IDayOffRulesRepository.cs" />
     <Compile Include="Optimization\ScheduleOptimization.cs" />
