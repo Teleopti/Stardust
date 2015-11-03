@@ -197,12 +197,6 @@
 							for (var i = 0; i < data.Days.length; i++) {
 								var day = data.Days[i];
 								day.date = new Date(Date.parse(day.date));
-								if (i == 0) {
-									day.vcampaign = 5;
-								}
-								if (i == 1) {
-									day.voverrideTasks = 5;
-								}
 							}
 							workload.Refresh(data.Days);
 							workload.forecastResultLoaded = true;
