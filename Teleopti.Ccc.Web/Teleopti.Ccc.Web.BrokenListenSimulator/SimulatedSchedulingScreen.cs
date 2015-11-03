@@ -52,15 +52,61 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			return _url.Url.TrimEnd('/') + "/" + call;
 		}
 
-		public void Simulate(int number, string brokerUrl, DateTime startDate, DateTime endDate)
+		public void Simulate(int client, int screen, string brokerUrl, DateTime startDate, DateTime endDate)
 		{
-			_number = "#" + number;
-			_url.Configure(brokerUrl);
+			_number = "#" + client + "/" + screen;
 
-			addMailbox(new Subscription
+			//addMailbox(new Subscription
+			//{
+			//	MailboxId = Guid.NewGuid().ToString(),
+			//	DomainType = typeof(IScheduleChangedMessage).Name,
+			//	DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
+			//	DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
+			//	LowerBoundary = Subscription.DateToString(startDate),
+			//	UpperBoundary = Subscription.DateToString(endDate),
+			//	DataSource = _dataSource.CurrentName(),
+			//	BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+			//});
+
+			//addMailbox(new Subscription
+			//{
+			//	MailboxId = Guid.NewGuid().ToString(),
+			//	DomainType = typeof(IPersistableScheduleData).Name,
+			//	DomainReferenceId = null,
+			//	DomainReferenceType = null,
+			//	LowerBoundary = Subscription.DateToString(startDate),
+			//	UpperBoundary = Subscription.DateToString(endDate),
+			//	DataSource = _dataSource.CurrentName(),
+			//	BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+			//});
+
+			//addMailbox(new Subscription
+			//{
+			//	MailboxId = Guid.NewGuid().ToString(),
+			//	DomainType = typeof(IMeeting).Name,
+			//	DomainReferenceId = null,
+			//	DomainReferenceType = null,
+			//	LowerBoundary = Subscription.DateToString(Consts.MinDate),
+			//	UpperBoundary = Subscription.DateToString(Consts.MaxDate),
+			//	DataSource = _dataSource.CurrentName(),
+			//	BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+			//});
+
+			//addMailbox(new Subscription
+			//{
+			//	MailboxId = Guid.NewGuid().ToString(),
+			//	DomainType = typeof(IPersonRequest).Name,
+			//	DomainReferenceId = null,
+			//	DomainReferenceType = null,
+			//	LowerBoundary = Subscription.DateToString(Consts.MinDate),
+			//	UpperBoundary = Subscription.DateToString(Consts.MaxDate),
+			//	DataSource = _dataSource.CurrentName(),
+			//	BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
+			//});
+
+			addSubscription(new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
-				DomainType = typeof(IScheduleChangedMessage).Name,
+				DomainType = typeof(IScheduleChangedEvent).Name,
 				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
 				DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
@@ -69,9 +115,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			});
 
-			addMailbox(new Subscription
+			addSubscription(new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IPersistableScheduleData).Name,
 				DomainReferenceId = null,
 				DomainReferenceType = null,
@@ -81,9 +126,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			});
 
-			addMailbox(new Subscription
+			addSubscription(new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IMeeting).Name,
 				DomainReferenceId = null,
 				DomainReferenceType = null,
@@ -93,9 +137,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			});
 
-			addMailbox(new Subscription
+			addSubscription(new Subscription
 			{
-				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IPersonRequest).Name,
 				DomainReferenceId = null,
 				DomainReferenceType = null,
@@ -104,27 +147,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				DataSource = _dataSource.CurrentName(),
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 			});
-
-//			var subscription = new Subscription
-//			{
-//				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
-//				DomainType = domainObjectType.Name,
-//				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
-//				DomainReferenceType =
-//(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
-//				LowerBoundary = Subscription.DateToString(startDate),
-//				UpperBoundary = Subscription.DateToString(endDate),
-//				DataSource = datasource,
-//				BusinessUnitId = Subscription.IdToString(businessUnitId),
-//				Base64BinaryData = base64BinaryData,
-//				MailboxId = mailbox ? Guid.NewGuid().ToString() : null
-//			};
-
-			addSubscription(new Subscription
-			{
-
-			});
-
 		}
 
 		private void addMailbox(Subscription subscription)
