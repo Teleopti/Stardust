@@ -1,9 +1,11 @@
+using System;
 using System.Linq;
 using System.Web.Http.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Filters
 {
+	[CLSCompliant(false)] 
 	public class ApplicationFunctionApiAttribute : System.Web.Http.AuthorizeAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;
