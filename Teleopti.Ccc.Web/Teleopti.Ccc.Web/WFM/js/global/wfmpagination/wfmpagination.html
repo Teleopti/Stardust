@@ -1,0 +1,32 @@
+﻿<div class="pagination pull-right" ng-if="vm.totalPages > 0">
+	<ul>
+		<li class=" pagination-item" ng-class="{disabled: vm.currentPageIndex == 1 || vm.totalPages == 0}">
+			<a href="" ng-click="vm.gotoPage(1)">
+				<i class="mdi mdi-skip-previous"></i>
+			</a>
+		</li>
+
+		<li class="pagination-item" ng-class="{disabled: vm.currentPageIndex == 1 || vm.totalPages == 0}">
+			<a href="" ng-click="vm.gotoPage(vm.currentPageIndex - 1)">
+				<i class="mdi mdi-chevron-left"></i>
+			</a>
+		</li>
+
+		<li class="pagination-item" ng-repeat="n in vm.getVisiblePageNumbers()"
+			ng-class="{active: n == vm.currentPageIndex}" ng-click="vm.gotoPage(n)">
+			<a href="" ng-bind="n"></a>
+		</li>
+
+		<li class="pagination-item" ng-class="{disabled: vm.currentPageIndex == vm.totalPages || vm.totalPages == 0}">
+			<a href="" ng-click="vm.gotoPage(vm.currentPageIndex + 1)">
+				<i class="mdi mdi-chevron-right"></i>
+			</a>
+		</li>
+
+		<li class="pagination-item" ng-class="{disabled: vm.currentPageIndex == vm.totalPages || vm.totalPages == 0}">
+			<a href="" ng-click="vm.gotoPage(vm.totalPages)">
+				<i class="mdi mdi-skip-next"></i>
+			</a>
+		</li>
+	</ul>
+</div>
