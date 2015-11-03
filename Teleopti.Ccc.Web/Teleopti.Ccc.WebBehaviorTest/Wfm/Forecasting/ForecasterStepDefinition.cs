@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"return v1;"
+				"return Math.round(v1);"
 				, calls);
 		}
 
