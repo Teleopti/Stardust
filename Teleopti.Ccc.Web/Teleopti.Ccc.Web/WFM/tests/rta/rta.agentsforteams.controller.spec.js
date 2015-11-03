@@ -246,4 +246,22 @@ describe('RtaAgentsForTeamsCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
+
+	it('should stop polling when page is about to destroy', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
+		agents = [{
+			Name: "Ashley Andeen",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}, {
+			Name: "Charley Caper",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}];
+		createController();
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		scope.$emit('$destroy');
+		$interval.flush(5000);
+		$httpBackend.verifyNoOutstandingRequest();
+	});
 });

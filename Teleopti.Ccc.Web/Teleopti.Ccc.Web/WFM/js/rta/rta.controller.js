@@ -23,11 +23,16 @@
 						return RtaService.getAdherenceForAllSites.query().$promise;
 					}).then(function(siteAdherence) {
 						updateAdherence(siteAdherence);
-						$interval(function() {
-							RtaService.getAdherenceForAllSites.query()
-								.$promise.then(updateAdherence);
-						}, 5000);
 					});
+
+				var polling = $interval(function() {
+					RtaService.getAdherenceForAllSites.query()
+						.$promise.then(updateAdherence);
+				}, 5000);
+
+				$scope.$on('$destroy', function() {
+					$interval.cancel(polling);
+				});
 
 				$scope.onSiteSelect = function(site) {
 					$state.go('rta-teams', {
@@ -45,7 +50,7 @@
 				};
 
 				$scope.openSelectedSites = function() {
-					if(selectedSiteIds.length === 0)return;
+					if (selectedSiteIds.length === 0) return;
 					$state.go('rta-agents-sites', {
 						siteIds: selectedSiteIds
 					});

@@ -64,7 +64,7 @@ describe('RtaTeamsCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_,_$sessionStorage_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_) {
 		$controller = _$controller_;
 		scope = _$rootScope_.$new();
 		$q = _$q_;
@@ -203,6 +203,16 @@ describe('RtaTeamsCtrl', function() {
 		$httpBackend.flush();
 
 		expect(scope.teams[0].OutOfAdherence).toEqual(3);
+	});
+
+	it('should stop polling when page is about to destroy', function() {
+		createController();
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		scope.$emit('$destroy');
+		$interval.flush(5000);
+		$httpBackend.verifyNoOutstandingRequest();
 	});
 
 	it('should go to agents', function() {

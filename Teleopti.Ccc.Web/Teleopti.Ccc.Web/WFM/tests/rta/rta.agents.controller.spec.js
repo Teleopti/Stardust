@@ -250,4 +250,18 @@ describe('RtaAgentsCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
+
+	it('should stop polling when page is about to destroy', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}];
+		createController();
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		scope.$emit('$destroy');
+		$interval.flush(5000);
+		$httpBackend.verifyNoOutstandingRequest();
+	});
 });

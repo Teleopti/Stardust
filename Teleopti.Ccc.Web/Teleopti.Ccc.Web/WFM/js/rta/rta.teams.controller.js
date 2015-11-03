@@ -19,7 +19,9 @@
 				})
 			};
 
-			RtaService.getTeams.query({siteId: siteId})
+			RtaService.getTeams.query({
+					siteId: siteId
+				})
 				.$promise.then(function(teams) {
 					$scope.teams = teams;
 					return RtaService.getAdherenceForTeamsOnSite.query({
@@ -27,12 +29,17 @@
 					}).$promise;
 				}).then(function(teamAdherence) {
 					updateAdherence(teamAdherence);
-					$interval(function() {
-						RtaService.getAdherenceForTeamsOnSite.query({
-							siteId: siteId
-						}).$promise.then(updateAdherence);
-					}, 5000);
 				});
+
+			var polling = $interval(function() {
+				RtaService.getAdherenceForTeamsOnSite.query({
+					siteId: siteId
+				}).$promise.then(updateAdherence);
+			}, 5000);
+
+			$scope.$on('$destroy', function() {
+				$interval.cancel(polling);
+			});
 
 			RtaOrganizationService.getSiteName(siteId).then(function(name) {
 				$scope.siteName = name;
@@ -48,7 +55,7 @@
 			};
 
 			$scope.openSelectedTeams = function() {
-				if(selectedTeamIds.length === 0)return;
+				if (selectedTeamIds.length === 0) return;
 				$state.go('rta-agents-teams', {
 					teamIds: selectedTeamIds
 				});
@@ -66,7 +73,9 @@
 			};
 
 			$scope.$watch(
-				function(){return $sessionStorage.buid;},
+				function() {
+					return $sessionStorage.buid;
+				},
 				function(newValue, oldValue) {
 					if (newValue !== oldValue) {
 						$scope.goBack();

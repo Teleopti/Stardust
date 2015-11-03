@@ -88,10 +88,14 @@
 					.then(updateStates)
 					.then(updateGrid);
 
-				$interval(function() {
+				var polling = $interval(function() {
 					updateStates();
 					updateGrid();
 				}, 5000);
+
+				$scope.$on('$destroy', function(){
+					$interval.cancel(polling);
+				});
 
 				$scope.$watch(
 					function() {

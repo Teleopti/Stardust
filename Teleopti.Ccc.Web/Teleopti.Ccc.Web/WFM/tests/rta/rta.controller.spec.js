@@ -122,7 +122,6 @@ describe('RtaCtrl', function() {
 		expect(scope.sites[1].OutOfAdherence).toEqual(5);
 	});
 
-
 	it('should update adhernce', function() {
 		siteAdherence[0].OutOfAdherence = 1;
 		createController();
@@ -132,6 +131,16 @@ describe('RtaCtrl', function() {
 		$httpBackend.flush();
 
 		expect(scope.sites[0].OutOfAdherence).toEqual(3);
+	});
+
+	it('should stop polling when page is about to destroy', function() {
+		createController();
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		scope.$emit('$destroy');
+		$interval.flush(5000);
+		$httpBackend.verifyNoOutstandingRequest();
 	});
 
 	it('should go to teams', function() {

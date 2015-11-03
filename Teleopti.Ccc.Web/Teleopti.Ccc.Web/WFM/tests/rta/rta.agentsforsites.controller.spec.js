@@ -248,4 +248,22 @@ describe('RtaAgentsForSitesCtrl', function() {
 
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
+
+	it('should stop polling when page is about to destroy', function() {
+		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+		agents = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+		}, {
+			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+		}];
+		createController();
+		$interval.flush(5000);
+		$httpBackend.flush();
+
+		scope.$emit('$destroy');
+		$interval.flush(5000);
+		$httpBackend.verifyNoOutstandingRequest();
+	});
 });
