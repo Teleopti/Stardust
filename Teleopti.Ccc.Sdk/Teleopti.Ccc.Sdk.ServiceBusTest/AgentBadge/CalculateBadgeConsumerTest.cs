@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private INow now;
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
+		private IRunningEtlJobChecker etlJobChecker;
 		private IToggleManager toggleManager;
 		private IAgentBadgeWithRankCalculator badgeWithRankCalculator;
 		private IGlobalSettingDataRepository globalSettingRep;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			personRepository.Stub(
 				x => x.FindPeopleInOrganization(new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9)), false))
-				.Return(new List<IPerson> {new Person()});
+				.Return(new List<IPerson> { new Person() });
 
 			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();
 
@@ -69,20 +70,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_businessUnitId = new Guid();
 			// Mock badge calculator
 			calculator = MockRepository.GenerateMock<IAgentBadgeCalculator>();
-			calculator.Stub(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"), _businessUnitId))
+			calculator.Stub(
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"), _businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
 			calculator.Stub(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
-				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting("test"), _businessUnitId))
+				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting("test"),
+				_businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
-			calculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"), _businessUnitId))
+			calculator.Stub(
+				x =>
+					x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"),
+						_businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
 
 			// Mock badge with rank calculator
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
 
-			target = new CalculateBadgeConsumer(serviceBus, teamSettingsRepository, 
-				msgRepository, unitOfWorkFactory, calculator, badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, toggleManager, globalSettingRep,personRepository);
+			etlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
+			etlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(false);
 
+			target = new CalculateBadgeConsumer(serviceBus, teamSettingsRepository, msgRepository, unitOfWorkFactory, calculator,
+				badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, etlJobChecker, toggleManager,
+				globalSettingRep, personRepository);
 		}
 
 		[Test]
@@ -106,13 +115,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
 
-			var persons = new List<IPerson> {new Person()};
+			var persons = new List<IPerson> { new Person() };
 			personRepository.Stub(
-				x => x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
+				x =>
+					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
 				.Return(persons);
 
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] {new TeamGamificationSetting {Team = team, GamificationSetting = newSetting}});
+				.Return(new[] { new TeamGamificationSetting { Team = team, GamificationSetting = newSetting } });
 
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
@@ -120,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimeZoneCode = timezone.Id,
 				CalculationDate = calculationDate
 			};
-		
+
 			target.Consume(message);
 
 			calculator.AssertWasNotCalled(
@@ -144,10 +154,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
+								   && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
-		
+
 		[Test]
 		public void ShouldNotCalculateBadgeWhenAppliedSettingIsDeleted()
 		{
@@ -170,13 +180,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
 
-			var persons = new List<IPerson> {new Person()};
+			var persons = new List<IPerson> { new Person() };
 			personRepository.Stub(
-				x => x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
+				x =>
+					x.FindPeopleBelongTeam(team, new DateOnlyPeriod(new DateOnly(today).AddDays(-1), new DateOnly(today.AddDays(1)))))
 				.Return(persons);
 
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] {new TeamGamificationSetting {Team = team, GamificationSetting = deletedSetting}});
+				.Return(new[] { new TeamGamificationSetting { Team = team, GamificationSetting = deletedSetting } });
 
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
@@ -184,7 +195,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimeZoneCode = timezone.Id,
 				CalculationDate = calculationDate
 			};
-		
+
 			target.Consume(message);
 
 			calculator.AssertWasNotCalled(
@@ -208,7 +219,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
+								   && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
 
@@ -260,13 +271,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
+								   && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
 
-	
-	
-	[Test]
+		[Test]
 		public void ShouldNotCalculateBadgeWhenNoBadgeTypeEnableForAppliedSetting()
 		{
 			var timezone = TimeZoneInfo.Utc;
@@ -317,7 +326,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
+								   && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
 	}
