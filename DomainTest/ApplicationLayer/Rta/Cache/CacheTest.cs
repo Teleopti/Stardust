@@ -4,9 +4,9 @@ using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -19,14 +19,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 	{
 		public OuterService Service;
 		public CachedServiceImpl CachedService;
-		public FakeApplicationData ApplicationData;
+		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
 		public IMbCacheFactory Cache;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<NoCurrentIdentity>().For<ICurrentIdentity>();
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
 			system.AddModule(new TestModule(configuration));
 		}
 
@@ -102,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 		[Test]
 		public void ShouldCache()
 		{
-			IDataSource datasource1 = new FakeDataSource("1");
-			ApplicationData.RegisteredDataSources = new[] {datasource1};
+			var datasource1 = new FakeDataSource("1");
+			DataSources.Has(datasource1);
 
 			using (DataSource.OnThisThreadUse(datasource1))
 			{
@@ -119,7 +118,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 		{
 			IDataSource datasource1 = new FakeDataSource("1");
 			IDataSource datasource2 = new FakeDataSource("2");
-			ApplicationData.RegisteredDataSources = new[] {datasource1, datasource2};
+			DataSources.Has(datasource1);
+			DataSources.Has(datasource2);
 
 			using (DataSource.OnThisThreadUse(datasource1))
 				Service.GetDataSourceName().Should().Be("1");
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
 		public void ShouldInvalidateForAllDataSources()
 		{
 			IDataSource datasource1 = new FakeDataSource("1");
-			ApplicationData.RegisteredDataSources = new[] { datasource1 };
+			DataSources.Has(datasource1);
 
 			using (DataSource.OnThisThreadUse(datasource1))
 				Service.GetDataSourceName().Should().Be("1");

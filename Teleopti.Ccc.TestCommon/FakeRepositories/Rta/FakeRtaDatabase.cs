@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
 		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
 		public readonly FakeTenants Tenants;
-		public readonly FakeApplicationData ApplicationData;
 		public readonly FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModelPersister;
 		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
@@ -87,7 +86,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
 			FakeTenants tenants,
-			FakeApplicationData applicationData,
 			FakeTeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister,
 			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
 			FakeAdherenceDetailsReadModelPersister adherenceDetailsReadModelPersister,
@@ -101,7 +99,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
 			Tenants = tenants;
-			ApplicationData = applicationData;
 			TeamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
 			SiteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
 			AdherenceDetailsReadModelPersister = adherenceDetailsReadModelPersister;

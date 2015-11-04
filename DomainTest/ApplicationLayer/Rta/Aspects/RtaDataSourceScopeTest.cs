@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 	public class RtaDataSourceScopeTest : ISetup
 	{
 		public AspectedService TheService;
-		public FakeApplicationData ApplicationData;
+		public FakeDataSourceForTenant DataSources;
 		public FakeTenants Tenants;
 		public ICurrentDataSource DataSource;
 
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldSetCurrentDatasource()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] {expected};
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant") {RtaKey = "key"});
 
 			TheService.Does(new Input {AuthenticationKey = "key"});
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldResetCurrentDatasource()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant") { RtaKey = "key" });
 
 			TheService.Does(new Input { AuthenticationKey = "key" });
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldNotSetCurrentDatasourceForInvalidKey()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant") { RtaKey = "key" });
 
 			TheService.Does(new Input { AuthenticationKey = "wrong" });
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldSetCurrentDatasourceFromEnumerableInput()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant") { RtaKey = "key" });
 
 			TheService.Does(new[] {new Input {AuthenticationKey = "key"}}.Union(new Input[] {}));
@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldSetCurrentDatasourceFromGenericType()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant") { RtaKey = "key" });
 
 			TheService.Does(new GenericInput<object> {AuthenticationKey = "key"});
@@ -127,13 +127,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldFindTenantWhenAuthenticationKeyIsSentInWrongEncoding()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] {expected};
-			Tenants.Has(new Tenant("tenant") {RtaKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey});
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
+			Tenants.Has(new Tenant("tenant") {RtaKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey});
 
 			TheService.Does(new Input
 			{
-				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+				AuthenticationKey = ConfiguredKeyAuthenticator.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			});
 
 			TheService.RanWithDataSource.Should().Be(expected);
@@ -143,8 +143,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldSetCurrentDatasourceFromTenantProperty()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant"));
 
 			TheService.Does(new InputWithTenant { Tenant = "tenant" });
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldSetCurrentDatasourceFromTenantStringParameter()
 		{
-			IDataSource expected = new FakeDataSource("tenant");
-			ApplicationData.RegisteredDataSources = new[] { expected };
+			var expected = new FakeDataSource("tenant");
+			DataSources.Has(expected);
 			Tenants.Has(new Tenant("tenant"));
 
 			TheService.Does("tenant");
