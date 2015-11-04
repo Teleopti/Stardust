@@ -67,6 +67,18 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			}
 			_unitOfWork.Current().PersistAll();
 		}
+
+		public int ThrowDivideByZeroException()
+		{
+			var zero = 0;
+			var number = 1;
+			return number/zero;
+		}
+
+		public void ThrowException()
+		{
+			throw new Exception("Testing");
+		}
 	}
 
 	public class LocalHostAccessAttribute : AuthorizeAttribute
