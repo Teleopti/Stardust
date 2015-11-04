@@ -5,20 +5,20 @@
 })();
 
 (function () {
-	var WfmPaginationCtrl = function () {
+	var WfmPaginationCtrl = function ($scope) {
 		var vm = this;
-		vm.currentPageIndex = 1;
-		vm.gotoPage = function(pageIndex) {
-			vm.currentPageIndex = pageIndex;
+		vm.gotoPage = function (pageIndex) {
+			vm.paginationOptions.pageNumber = pageIndex;
 			if (vm.getDataForPageCallback !=undefined)
 				vm.getDataForPageCallback(pageIndex);
 		};
+
 		vm.getVisiblePageNumbers = function (start, end) {
 			var displayPageCount = 5;
 			var ret = [];
 
 			if (!start) {
-				start = vm.totalPages;
+				start = vm.paginationOptions.totalPages;
 			}
 
 			if (!end) {
@@ -29,7 +29,7 @@
 			var leftBoundary = start;
 			var rightBoundary = end;
 			if (end - start >= displayPageCount) {
-				var index = vm.currentPageIndex;
+				var index = vm.paginationOptions.pageNumber;
 
 				if (index < displayPageCount - 1) {
 					leftBoundary = 1;
@@ -57,17 +57,17 @@
 			bindToController: true,
 			templateUrl: "js/global/wfmpagination/wfmpagination.html",
 			scope: {
-				totalPages: '=?',
-				currentPageIndex: '=?',
+				paginationOptions: '=?',
 				getDataForPageCallback: '=?'
 			},
-			linkFunction: linkFunction
+			link: linkFunction
 		};
 	};
 	angular.module('wfm.pagination')
 		.directive('wfmPagination', directive)
 		.controller('WfmPaginationCtrl', ['$scope', WfmPaginationCtrl]);
 
-	function linkFunction(scope, element, attributes, vm) {
+	function linkFunction(scope, elem, attrs, vm) {
+
 	};
 }());

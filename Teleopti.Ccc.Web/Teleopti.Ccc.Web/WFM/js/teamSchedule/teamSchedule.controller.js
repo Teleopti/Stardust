@@ -16,7 +16,7 @@
 			formatYear: 'yyyy',
 			startingDay: 1
 		};
-
+		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
 		vm.format = 'yyyy/MM/dd';
 
 		vm.datePickerStatus = {
@@ -27,16 +27,18 @@
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
 
-		vm.selectedTeamIdChanged = function() {
-			vm.loadSchedules(1);
+		vm.selectedTeamIdChanged = function () {
+			vm.paginationOptions.pageNumber = 1;
+			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
 		vm.scheduleDateChanged = function () {
 			vm.loadTeams();
-			vm.loadSchedules(1);
+			vm.paginationOptions.pageNumber = 1;
+			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
-		vm.totalPages = 0;
+		
 
 		vm.loadTeams = function () {
 			teamScheduleSvc.loadAllTeams.query({
@@ -48,14 +50,14 @@
 
 		vm.loadSchedules = function (currentPageIndex) {
 			if (vm.selectedTeamId === "") return;
-
+			vm.paginationOptions.pageNumber = currentPageIndex;
 			teamScheduleSvc.loadSchedules.query({
 				groupId: vm.selectedTeamId,
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				pageSize: 18,
 				currentPageIndex: currentPageIndex
 			}).$promise.then(function (result) {
-				vm.totalPages = result.TotalPages;
+				vm.paginationOptions.totalPages = result.TotalPages;
 				vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 				vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 			});
