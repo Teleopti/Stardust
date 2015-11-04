@@ -19,7 +19,10 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 
 CD "%ROOTDIR%"
 
+SET INSTANCE=%1
+if "%1" == "" (
 SET /P INSTANCE=Your SQL Server instance: 
+)
 
 CHOICE /C yn /M "Do you want to use WinAuth?"
 IF %ERRORLEVEL% EQU 1 SET /a WinAuth=1
@@ -29,9 +32,27 @@ IF %ERRORLEVEL% EQU 2 SET /a WinAuth=0
 IF %WinAuth% equ 1 Call :WinAuth
 IF %WinAuth% equ 0 Call :SQLAuth
 
+SET DATABASEAPP=%2
+if "%2" == "" (
 SET /P DATABASEAPP=Application database name to patch:
+)
+
+SET DATABASEANAL=%3
+if "%3" == "" (
 SET /P DATABASEANAL=Analytics database name to patch:
+)
+
+SET DATABASEAGG=%4
+if "%4" == "" (
 SET /P DATABASEAGG=Agg database name to patch:
+)
+
+ECHO.
+ECHO SQL Server instance:   %INSTANCE%
+ECHO Application database:  %DATABASEAPP%
+ECHO Analytics database:    %DATABASEANAL%
+ECHO Agg database:          %DATABASEAGG%
+ECHO.
 
 ::Build Teleopti.Support.Security.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
