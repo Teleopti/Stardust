@@ -28,6 +28,7 @@ Background:
 		| Field                 | Value        |
 		| Name                  | Seat Planner |
 		| Access to seatplanner | True         |
+		| Access to people   | true        |
 		| Access to everyone    | true         |
 	And there is a seat in root location with
 		| Field    | Value |
@@ -87,24 +88,18 @@ Scenario: be able to delete seat booking for the first seat
 	And I press seat map booking view button
 	Then I delete the first record under the seat booking details
 
-@OnlyRunIfEnabled('WfmPeople_AdvancedSearch_32973')
-@OnlyRunIfEnabled('WfmPeople_AdjustSkill_34138')
 Scenario: be able to open people search list
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I click add agents to seat button
 	Then I should see people search list
 
-@OnlyRunIfEnabled('WfmPeople_AdvancedSearch_32973')
-@OnlyRunIfEnabled('WfmPeople_AdjustSkill_34138')
 Scenario: the action button of people is invisible
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	And I click add agents to seat button
 	Then I should not see the action buttons of people
 
-@OnlyRunIfEnabled('WfmPeople_AdvancedSearch_32973')
-@OnlyRunIfEnabled('WfmPeople_AdjustSkill_34138')
 Scenario: be able to close people list
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
@@ -112,8 +107,6 @@ Scenario: be able to close people list
 	And I click cancel button after open people search list
 	Then I should not see people search list
 
-@OnlyRunIfEnabled('WfmPeople_AdvancedSearch_32973')
-@OnlyRunIfEnabled('WfmPeople_AdjustSkill_34138')
 Scenario: be able to assign agent to selected seat
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
