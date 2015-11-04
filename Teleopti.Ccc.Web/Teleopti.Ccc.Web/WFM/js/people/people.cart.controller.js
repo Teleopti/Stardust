@@ -23,6 +23,16 @@
 			formatYear: 'yyyy',
 			startingDay: 1
 		};
+		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
+
+		$scope.$watch(function () {
+			if (vm.gridApi)
+				return vm.gridApi.pagination.getTotalPages();
+			return undefined;
+		}, function (newVal) {
+			if (newVal)
+				vm.paginationOptions.totalPages = newVal;
+		});
 
 		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 		vm.format = vm.formats[1];
@@ -119,7 +129,6 @@
 			paginationPageSizes: [20, 60, 100],
 			paginationPageSize: 20,
 			columnDefs: basicColumnDefs,
-
 			data: 'vm.availablePeople'
 
 		};
@@ -131,6 +140,7 @@
 				'</div>';
 			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });
 		}
+
 		vm.removePerson = function (person) {
 			var personIndex = vm.selectedPeopleIds.indexOf(person.PersonId);
 			if (personIndex > -1) {
@@ -143,37 +153,6 @@
 				}
 			}
 		}
-		vm.getVisiblePageNumbers = function (start, end) {
-			var displayPageCount = 5;
-			var ret = [];
-			if (!end) {
-				end = start;
-				start = 1;
-			}
-
-			var leftBoundary = start;
-			var rightBoundary = end;
-			if (end - start >= displayPageCount) {
-				var currentPageIndex = vm.gridOptions.paginationCurrentPage;
-
-				if (currentPageIndex < displayPageCount - 1) {
-					leftBoundary = 1;
-					rightBoundary = displayPageCount;
-				} else if (end - currentPageIndex < 3) {
-					leftBoundary = end - displayPageCount + 1;
-					rightBoundary = end;
-				} else {
-					leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
-					rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
-				}
-			}
-
-			for (var i = leftBoundary; i <= rightBoundary ; i++) {
-				ret.push(i);
-			}
-
-			return ret;
-		};
 
 		vm.updateResult = { Success: false };
 		vm.updatePeopleWithSkills = function () {

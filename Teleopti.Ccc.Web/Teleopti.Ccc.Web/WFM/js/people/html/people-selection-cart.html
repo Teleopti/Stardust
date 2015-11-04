@@ -99,31 +99,8 @@
 			<i class='mdi mdi-alert-octagon'></i>
 			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}
 		</div>
-		<div class="pagination pull-right" aria-hidden="false">
-			<ul>
-				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == 1 || vm.gridApi.pagination.getTotalPages() == 0}">
-					<a href="" ng-click="vm.gridApi.pagination.previousPage()">
-						<i class="mdi mdi-chevron-left">
-							<md-tooltip>{{'RepViewerPreviousPage'| translate}}</md-tooltip>
-						</i>
-					</a>
-				</li>
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.gridApi.pagination.seek"></wfm-pagination>
 
-				<li class="pagination-item" ng-repeat="n in vm.getVisiblePageNumbers(vm.gridApi.pagination.getTotalPages())"
-					ng-class="{active: n == vm.gridOptions.paginationCurrentPage}"
-					ng-click="vm.gridApi.pagination.seek(n)">
-					<a href="" ng-bind="n"></a>
-				</li>
-
-				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == vm.gridApi.pagination.getTotalPages() || vm.gridApi.pagination.getTotalPages() == 0}">
-					<a href="" ng-click="vm.gridApi.pagination.nextPage()">
-						<i class="mdi mdi-chevron-right">
-							<md-tooltip>{{'RepViewerNextPage'| translate}}</md-tooltip>
-						</i>
-					</a>
-				</li>
-			</ul>
-		</div>
 	</div>
 
 </div>
