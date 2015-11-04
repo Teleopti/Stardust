@@ -182,8 +182,8 @@
             </div>
             <div layout="row" layout-align="center">
 	            <button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()"><span translate>Reset</span></button>
-	            <button class="wfm-btn material-depth-1" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
-	            <button class="wfm-btn material-depth-1 wfm-btn-primary" ng-click="removeCampaign()"><span translate>Remove</span></button>
+	            <button class="wfm-btn material-depth-1 form-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
+	            <button class="wfm-btn material-depth-1 wfm-btn-primary trigger-campaign-delete" ng-click="removeCampaign()"><span translate>Remove</span></button>
 
             </div>
         </div>
@@ -201,7 +201,7 @@
 					<div class="modal-footer">
 						<aside>
 							<a ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default"><span translate>Cancel</span></a>
-							<a ng-click="remove()" class="wfm-btn wfm-btn-invis-primary"><span translate>Ok</span></a>
+							<a ng-click="remove()" class="wfm-btn wfm-btn-invis-primary confirm-delete"><span translate>Ok</span></a>
 						</aside>
 					</div>
 				</div>

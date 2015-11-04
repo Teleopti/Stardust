@@ -18,10 +18,10 @@
         $scope.init = init;
         $scope.editCampaign = editCampaign;
         $scope.reset = reset;
-	     $scope.remove = remove;
-	     $scope.backToList = backToList;
-	     $scope.showRemoveCampaignConfirmDialog = false;
-	     $scope.removeCampaign = removeCampaign;
+	    $scope.remove = remove;
+	    $scope.backToList = backToList;
+	    $scope.showRemoveCampaignConfirmDialog = false;
+	    $scope.removeCampaign = removeCampaign;
 		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 
         function editCampaign() {

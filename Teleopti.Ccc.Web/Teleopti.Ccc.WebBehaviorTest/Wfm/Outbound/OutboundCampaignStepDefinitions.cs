@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I click at campaign name tag '(.*)'")]
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
-			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", "false",
+			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", Is.EqualTo("false"),
 				() => { Browser.Interactions.ClickContaining(".campaign-visualization-toggle", campaignName); });			
 		}
 	
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "campaign.WorkingHours", instance.GetWorkingHoursString()},
 				{ "preventAutomaticRedirect", "true"}
 			});
-		
-			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", "true", () => 
+
+			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", Is.EqualTo("true"), () => 
 					Browser.Interactions.Click(".form-submit"));							
 		}
 
@@ -99,68 +99,84 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		public void WhenAfterTheCreationIGotoTheCampaignListPage()
 		{
 			Browser.Interactions.AssertScopeValue(".campaign-create", "campaign.Name", Is.Null.Or.Empty);
+			Browser.Interactions.AssertScopeValue(".campaign-create", "isCreating", Is.EqualTo("false"));
 			Navigation.GoToOutbound();
 		}
 
-		[When(@"I submit the form to create the campaign")]
-		public void WhenISubmitTheFormToCreateTheCampaign()
+		[When(@"I confirm to delete the campaign")]
+		public void WhenIConfirmToDeleteTheCampaign()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isCampaignLoaded()", Is.EqualTo("true"), () =>
+			{
+				Browser.Interactions.Click(".trigger-campaign-delete");
+				Browser.Interactions.Click(".modal-box .confirm-delete");
+			});							
 		}
 
-	
-		[Then(@"I should see campaign details with")]
-		public void ThenIShouldSeeCampaignDetailsWith(Table table)
+		[When(@"after that I am redirected to the campaign list page")]
+		public void WhenAfterThatIAmRedirectedToTheCampaignListPage()
 		{
-			var whatISee = table.CreateInstance<OutboundCampaignConfigurable>();		
-			Browser.Interactions.AssertInputValue(".campaign-details #name", whatISee.Name);	
-			Browser.Interactions.AssertFirstContains(".campaign-details .campaign-startdate", whatISee.StartDate.ToString("MMM d, yyyy"));
-			Browser.Interactions.AssertFirstContains(".campaign-details .campaign-enddate", whatISee.EndDate.ToString("MMM d, yyyy"));
+			Browser.Interactions.AssertExists(".outbound-gantt-chart");
 		}
 
-		[When(@"I submit new working period with start time '(.*)' and end time '(.*)'")]
-		public void WhenISubmitNewWorkingPeriodWithStartTimeAndEndTime(string startTime, string endTime)
+		[When(@"I see the edit campaign form")]
+		public void WhenISeeTheEditCampaignForm()
 		{
-			Browser.Interactions.FillWith("input[name='NewTimeRangeStart']", startTime);
-			Browser.Interactions.FillWith("input[name='NewTimeRangeEnd']", endTime);
-			Browser.Interactions.Click(".new-working-period-submit");
+			Browser.Interactions.AssertExists(".campaign-edit");
 		}
 
-		[Then(@"I should see working period in the list with start time '(.*)' and end time '(.*)'")]
-		public void ThenIShouldSeeWorkingPeriodInTheListWithStartTimeAndEndTime(string startTime, string endTime)
+		[When(@"I change the campaign period to")]
+		public void WhenIChangeTheCampaignPeriodTo(Table table)
 		{
-			Browser.Interactions.AssertAnyContains(".campaign-working-hours li span", startTime);
-			Browser.Interactions.AssertAnyContains(".campaign-working-hours li span", endTime);
+			var instance = new OutboundCampaignConfigurable();
+			table.FillInstance(instance);
 
+			Browser.Interactions.SetScopeValues(".campaign-edit", new Dictionary<string, string>
+			{				
+				{ "campaign.StartDate.Date", string.Format("new Date('{0}')", instance.StartDate)},
+				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },	
+				{ "campaignSpanningPeriodForm.$pristine", "false" }
+			});
+
+			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isInputValid()", Is.EqualTo("true"), () =>
+					Browser.Interactions.Click(".form-submit"));	
 		}
 
-		[When(@"I change the campaign name to '(.*)'")]
-		public void WhenIChangeTheCampaignNameTo(string campaignName)
+		[When(@"after the update is done I goto the campaign list page")]
+		public void WhenAfterTheUpdateIsDoneIGotoTheCampaignListPage()
 		{
-			Browser.Interactions.FillWith(".campaign-details #name", campaignName);
-			Browser.Interactions.PressEnter(".campaign-details #name");
-		}
-
-		[When(@"I change the campaign start date to '(.*)' of the same month")]
-		public void WhenIChangeTheCampaignStartDateToOfTheSameMonth(string day)
-		{
-			Browser.Interactions.ClickContaining(".campaign-startdate button", day);
-		}
-
-		[When(@"I delete '(.*)' from campaign list")]
-		public void WhenIDeleteFromCampaignList(string campaignName)
-		{
-			Browser.Interactions.HoverOver(".campaign-list li", campaignName);
-			Browser.Interactions.HoverOver(".campaign-list li .delete-campaign-toggle");
-			Browser.Interactions.Click(".campaign-list .delete-campaign-toggle");
-			Browser.Interactions.ClickContaining(".modal-box a", "AGREE");
-		}
-
-
-
-
+			Browser.Interactions.AssertScopeValue(".campaign-edit", "campaignSpanningPeriodForm.$pristine", Is.EqualTo("true"));
+			Navigation.GoToOutbound();			
+		}		
 		
-	
 
+		[When(@"I have created campaign with")]
+		public void WhenIHaveCreatedCampaignWith(Table table)
+		{			
+			TestControllerMethods.Logon();
+			Navigation.GoToOutboundCampaignCreation();
+			ThenIShouldSeeTheNewCampaignForm();
+			WhenISubmitTheCampaignFormWithTheCampaignDetail(table);
+			WhenAfterTheCreationIGotoTheCampaignListPage();
+		}
+
+		[When(@"I view the backlog chart of the campaign created with")]
+		public void WhenIViewTheBacklogChartOfTheCampaignCreatedWith(Table table)
+		{
+			var instance = new OutboundCampaignConfigurable();
+			table.FillInstance(instance);
+			WhenIHaveCreatedCampaignWith(table);
+			WhenISetTheStartingMonthForViewingPeriodTo(instance.StartDate);
+			WhenIClickAtCampaignNameTag(instance.Name);
+			Browser.Interactions.AssertExists("campaign-chart");
+		}
+
+		[When(@"I view the detail of the campaign created with")]
+		public void WhenIViewTheDetailOfTheCampaignCreatedWith(Table table)
+		{
+			WhenIViewTheBacklogChartOfTheCampaignCreatedWith(table);
+			Browser.Interactions.Click(".btn-goto-edit-campaign");
+		}
+	
 	}
 }

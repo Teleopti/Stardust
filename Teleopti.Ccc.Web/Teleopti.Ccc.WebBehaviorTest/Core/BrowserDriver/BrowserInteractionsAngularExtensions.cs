@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 
@@ -23,56 +21,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		}
 
 		public static void WaitScopeCondition(this IBrowserInteractions interactions, string selector, string name,
-			string value, Action actionThen)
+			Constraint constraint, Action actionThen)
 		{
-			var ts = new CancellationTokenSource(Timeouts.Timeout);
-			var token = ts.Token;
-
-			var condition = "scope." + name + " == " + value;
-			var script = scopeByQuerySelector(selector) +						 
-						 " return " + condition + "; ";
-
-			var readerName = getTmpName(name);
-			interactions.Javascript(waitForAngular(selector, script, readerName));
-
-			Func<bool> checker = () =>
-			{
-				Boolean parsed;
-				string checkReturn = scopeByQuerySelector(selector) + string.Format(" return scope.$result{0}; ", readerName);
-
-				var result = interactions.Javascript(checkReturn);				
-				if (Boolean.TryParse(result, out parsed))
-				{
-					return parsed;
-				}
-				return false;
-			};
-
-			var task = Task.Factory.StartNew(async () =>
-			{
-				while (!checker())
-				{
-					await Task.Delay(Timeouts.Poll, token);
-					token.ThrowIfCancellationRequested();
-				}
-			}, token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
-
-			task.Wait(token);
-
-			if (task.IsFaulted || task.IsCanceled)
-			{
-				Assert.Fail("Failed to meet condition: " + name + " - " + value);
-			}
-			
+			AssertScopeValue(interactions, selector, name, constraint);			
 			actionThen();						
 		}
 
 		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint)
 		{
-			var query = scopeByQuerySelector(selector) + string.Format(" return scope.{0}; ", name);
+			var script = string.Format(scopeByQuerySelector(selector) + " return scope.{0}; ", name);
+
+			var readerName = getTmpName(name);
+
+			interactions.Javascript(waitForAngular(selector, script, readerName));
+
 			EventualAssert.That(() =>
 			{
-				var result = interactions.Javascript(query);				
+				var query = scopeByQuerySelector(selector) + string.Format(" return scope.$result{0}; ", readerName);
+				var result = interactions.Javascript(query);
+				if (result != null) result = result.ToLower();
+				
 				return result;
 			}, constraint, () => "Failed to assert scope value " + name, new SeleniumExceptionCatcher());
 		}
@@ -104,7 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		private static string getTmpName(string input)
 		{			
-			var output = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input));
+			var output = Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
 			Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 			return rgx.Replace(output, "");
 		}

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 
 		public void RemoveSkill(ISkill skill)
 		{
-			_workloadRepository.Remove(skill.WorkloadCollection.First());
+			if (!skill.WorkloadCollection.IsNullOrEmpty()) _workloadRepository.Remove(skill.WorkloadCollection.First());
 			_skillRepository.Remove(skill);
 		}
 	}
