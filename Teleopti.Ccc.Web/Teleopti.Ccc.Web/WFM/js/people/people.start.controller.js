@@ -222,11 +222,10 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			if ($scope.selectedPeopleList.indexOf(personId) > -1) {
 				$scope.gridApi.grid.modifyRows($scope.gridOptions.data);
 				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
+				if (!$scope.gridApi.selection.getSelectedRows().length) {
+					$scope.gridApi.grid.selection.selectAll = false;
+				}
 			}
-		}
-
-		if (!$scope.gridApi.selection.getSelectedRows().length) {
-			$scope.gridApi.grid.selection.selectAll = false;
 		}
 	};
 
