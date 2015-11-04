@@ -1,4 +1,4 @@
-﻿@ignore
+﻿
 Feature: View adherence in hawaii call center
 	In order to improve hawaii agents adherence 
 	As a real time analyst
@@ -47,10 +47,11 @@ Scenario: Should see adherence percentage when call center is in Hawaii
 	And the utc time is '2014-10-07 01:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the utc time is '2014-10-07 05:00:00'
-	And I view real time adherence view for team 'Red'
+	And I view real time adherence for agents on team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence details when call center is in Hawaii
 	Given I am located in Hawaii
