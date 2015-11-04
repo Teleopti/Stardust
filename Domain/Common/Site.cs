@@ -39,6 +39,19 @@ namespace Teleopti.Ccc.Domain.Common
             _description = new Description(name);
         }
 
+        /// <summary>
+        /// Collects all the persons in the candidates that are on the Site.
+        /// </summary>
+        /// <value></value>
+        /// <returns>All persons on the site.</returns>
+        [SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.CompareTo(System.String)")]
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
+        {
+            List<IPerson> personInTeamCollection = new List<IPerson>(candidates).FindAll(new PersonBelongsToTeamSpecification(period, _teamCollection).IsSatisfiedBy);
+            personInTeamCollection.Sort(delegate(IPerson p1, IPerson p2) { return p1.Name.ToString(NameOrderOption.LastNameFirstName).CompareTo(p2.Name.ToString(NameOrderOption.LastNameFirstName)); });
+            return new ReadOnlyCollection<IPerson>(personInTeamCollection);
+        }
+
 		public virtual ISkill MaxSeatSkill
 		{
 			get { return _maxSeatSkill; }

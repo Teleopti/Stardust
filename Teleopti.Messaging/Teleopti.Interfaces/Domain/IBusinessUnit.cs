@@ -6,8 +6,10 @@ namespace Teleopti.Interfaces.Domain
     /// BusinessUnit
     /// </summary>
     public interface IBusinessUnit : IAggregateRoot, 
+                                        IBusinessUnitHierarchyEntity,
                                         IChangeInfo
     {
+        
         /// <summary>
         /// Set/Get for description
         /// </summary>     
@@ -31,6 +33,12 @@ namespace Teleopti.Interfaces.Domain
         ReadOnlyCollection<ISite> SiteCollection { get; }
 
         /// <summary>
+        /// Get the Teams that are is the BusinessUnit.
+        /// </summary>
+        /// <value>The team collection.</value>
+        ReadOnlyCollection<ITeam> TeamCollection();
+
+        /// <summary>
         /// Adds a Site.
         /// </summary>
         /// <param name="site">The site.</param>
@@ -41,5 +49,12 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="site">The site.</param>
         void RemoveSite(ISite site);
+
+        /// <summary>
+        /// Finds the Site that param Team belongs to.
+        /// </summary>
+        /// <param name="searchedTeam">The team.</param>
+        /// <returns></returns>
+        ISite FindTeamSite(IEntity searchedTeam);
     }
 }

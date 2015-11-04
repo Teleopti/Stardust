@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,6 +15,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         private ISite _site;
         private bool _isDeleted;
         private IScorecard _scorecard;
+
+        [SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.CompareTo(System.String)")]
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
+        {
+            List<IPerson> personInTeamCollection = new List<IPerson>(candidates)
+                .FindAll(new PersonBelongsToTeamSpecification(period, this).IsSatisfiedBy);
+            personInTeamCollection.Sort(
+	            (p1, p2) =>
+	            p1.Name.ToString(NameOrderOption.LastNameFirstName)
+	              .CompareTo(p2.Name.ToString(NameOrderOption.LastNameFirstName)));
+            return new ReadOnlyCollection<IPerson>(personInTeamCollection);
+        }
 
         public virtual bool IsChoosable
         {

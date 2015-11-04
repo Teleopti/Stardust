@@ -28,8 +28,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
         {
             IBusinessUnit businessUnitGraph = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
             businessUnitGraph.SetId(Guid.NewGuid());
-            _team1 = businessUnitGraph.SiteCollection[0].TeamCollection[0];
-			_team2 = businessUnitGraph.SiteCollection[0].TeamCollection[1];
+            _team1 = businessUnitGraph.TeamCollection()[0];
+            _team2 = businessUnitGraph.TeamCollection()[1];
             _team1.SetId(Guid.NewGuid());
             _team2.SetId(Guid.NewGuid());
             _person = PersonFactory.CreatePerson("Johnnie", "Begood");

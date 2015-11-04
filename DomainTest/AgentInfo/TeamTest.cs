@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -76,6 +78,30 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             _target.Site = site;
             string expectedResult = string.Concat(site.Description.Name, "/", _target.Description.Name);
             Assert.AreEqual(expectedResult, _target.SiteAndTeam);
+        }
+
+        [Test]
+        public void VerifyPersonsInHierarchy()
+        {
+            ICollection<IPerson> candidates = new List<IPerson>();
+
+            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
+            IPerson person = PersonFactory.CreatePerson("Ola", "Håkansson");
+            IPerson person2 = PersonFactory.CreatePerson("Roger", "Kratz");
+            IPerson person3 = PersonFactory.CreatePerson("Ann", "Andersson");
+            IPersonContract personContract = PersonContractFactory.CreatePersonContract();
+
+            IPersonPeriod per = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, _target);
+            person.AddPersonPeriod(per);
+            person2.AddPersonPeriod(per);
+            person3.AddPersonPeriod(per);
+
+            candidates.Add(person);
+            candidates.Add(person2);
+            candidates.Add(person3);
+            ReadOnlyCollection<IPerson> lst = _target.PersonsInHierarchy(candidates, dateTime);
+
+            Assert.IsNotNull(lst);
         }
     }
 }

@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public TimeSpan CalculateTargetTime()
 		{
-			var virtualSchedulePeriod = _person.VirtualSchedulePeriod(_dateOnlyPeriod.StartDate);
+            var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
+			var virtualSchedulePeriod = 
+                new VirtualSchedulePeriod(_person, _dateOnlyPeriod.StartDate, splitChecker);
             var fullWeekOuterWeekPeriodCreator = 
                 new FullWeekOuterWeekPeriodCreator(_dateOnlyPeriod, _person);
 			var matrix = 

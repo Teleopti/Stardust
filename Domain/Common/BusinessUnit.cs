@@ -31,6 +31,26 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
     	/// <summary>
+        /// Collects all the persons in the candidates that are in the Business Unit.
+        /// </summary>
+        /// <value></value>
+        /// <returns>All persons in the business unit.</returns>
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
+        {
+            IList<IPerson> personsOnSite = new List<IPerson>();
+            foreach (ISite site in _siteCollection)
+            {
+                ReadOnlyCollection<IPerson> personOnSite = site.PersonsInHierarchy(candidates, period);
+                foreach (IPerson person in personOnSite)
+                {
+                    if (!personsOnSite.Contains(person))
+                        personsOnSite.Add(person);
+                }
+            }
+            return new ReadOnlyCollection<IPerson>(personsOnSite);
+        }
+
+    	/// <summary>
         /// Set/Get for description
         /// </summary>     
         public virtual Description Description
@@ -86,6 +106,15 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
         /// <summary>
+        /// Get the Teams that are is the BusinessUnit.
+        /// </summary>
+        /// <value>The team collection.</value>
+        public virtual ReadOnlyCollection<ITeam> TeamCollection()
+        {
+        	return new ReadOnlyCollection<ITeam>(SiteCollection.SelectMany(s => s.TeamCollection).ToList());
+        }
+
+        /// <summary>
         /// Adds a Site.
         /// </summary>
         /// <param name="site">The site.</param>
@@ -107,6 +136,24 @@ namespace Teleopti.Ccc.Domain.Common
         {
             InParameter.NotNull("site", site);
             _siteCollection.Remove(site);
+        }
+
+        /// <summary>
+        /// Finds the Site that param Team belongs to.
+        /// </summary>
+        /// <param name="searchedTeam">The team.</param>
+        /// <returns></returns>
+        public virtual ISite FindTeamSite(IEntity searchedTeam)
+        {
+            foreach (ISite site in SiteCollection)
+            {
+                foreach (ITeam team in site.TeamCollection)
+                {
+                    if (team.Equals(searchedTeam))
+                        return site;
+                }
+            }
+            return null;
         }
 
     	public virtual void SetDeleted()

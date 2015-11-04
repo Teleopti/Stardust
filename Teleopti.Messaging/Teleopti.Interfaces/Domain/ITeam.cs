@@ -3,7 +3,8 @@
     /// <summary>
     /// Class for team
     /// </summary>
-    public interface ITeam : IAggregateRoot
+    public interface ITeam : IAggregateRoot, 
+                             IBusinessUnitHierarchyEntity
     {
         /// <summary>
         /// Gets or sets the description.

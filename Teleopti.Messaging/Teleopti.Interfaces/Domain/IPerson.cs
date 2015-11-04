@@ -8,6 +8,7 @@ namespace Teleopti.Interfaces.Domain
     /// Represent any person in the system
     /// </summary>
     public interface IPerson : IAggregateRoot, 
+                                IBusinessUnitHierarchyEntity,
                                 IChangeInfo
     {
         /// <summary>
@@ -137,6 +138,13 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="timePeriod"></param>
         /// <returns></returns>
         IList<ISchedulePeriod> PersonSchedulePeriods(DateOnlyPeriod timePeriod);
+
+		/// <summary>
+		/// Gets the physical SchedulePeriods within a period
+		/// </summary>
+		/// <param name="period"></param>
+		/// <returns></returns>
+    	IList<ISchedulePeriod> PhysicalSchedulePeriods(DateOnlyPeriod period);
 
         /// <summary>
         /// Gets the next period. Returns null if provided period is the last period
@@ -277,7 +285,6 @@ namespace Teleopti.Interfaces.Domain
 		 void ResetExternalLogOn(IPersonPeriod personPeriod);
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 	    bool IsTerminated();
-	    PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
     }
 
 	public struct PersonWorkDay

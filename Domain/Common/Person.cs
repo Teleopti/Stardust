@@ -53,6 +53,14 @@ namespace Teleopti.Ccc.Domain.Common
             return per == null ? null : per.Team;
         }
 
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
+        {
+            IList<IPerson> ret = new List<IPerson>();
+            if (candidates.Contains(this))
+                ret.Add(this);
+            return new ReadOnlyCollection<IPerson>(ret);
+        }
+
 		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = null;
@@ -562,8 +570,11 @@ namespace Teleopti.Ccc.Domain.Common
             if (isTerminated(dateOnly))
                 return period;
 
+            TimeSpan minVal = TimeSpan.MaxValue;
+
             //get list with periods where startdate is less than inparam date
-            IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly).ToArray();
+            IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly
+                || (s.DateFrom.Date == dateOnly.Date)).ToList();
 
             //find period
             foreach (ISchedulePeriod p in periods)
@@ -573,9 +584,13 @@ namespace Teleopti.Ccc.Domain.Common
                     // Latest period is startdate equal to given date.
                     return p;
                 }
-            
-                if (period == null || period.DateFrom < p.DateFrom)
+                //get diff between inpara and startdate
+                TimeSpan diff = dateOnly.Subtract(p.DateFrom);
+
+                //check against smallest diff and check that inparam is greater than startdate
+                if (diff < minVal && diff.TotalMinutes >= 0)
                 {
+                    minVal = diff;
                     period = p;
                 }
             }
@@ -611,19 +626,29 @@ namespace Teleopti.Ccc.Domain.Common
             if (isTerminated(timePeriod.StartDate))
                 return retList;
 
+            TimeSpan minVal = TimeSpan.MaxValue;
+
             //get list with periods where startdate is less than inparam end date
             var periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= timePeriod.EndDate);
             ISchedulePeriod period = null;
 
             foreach (ISchedulePeriod p in periods)
             {
+                //get all that are contained
                 if (timePeriod.Contains(p.DateFrom))
                 {
                     retList.Add(p);
                 }
 
-                if (period == null || period.DateFrom > p.DateFrom)
+                //get the first period
+                //get diff between inpara and startdate
+               // TimeSpan diff = timePeriod.StartDateTime.Subtract(p.DateFrom);
+				TimeSpan diff = timePeriod.StartDate.Date.Subtract(p.DateFrom.Date);
+
+                //check against smallest diff and check that inparam is greater than startdate
+                if (diff < minVal && diff.TotalMinutes >= 0)
                 {
+                    minVal = diff;
                     period = p;
                 }
             }
@@ -636,6 +661,23 @@ namespace Teleopti.Ccc.Domain.Common
 
             return retList.OrderBy(s => s.DateFrom.Date).ToList();
         }
+
+		public virtual IList<ISchedulePeriod> PhysicalSchedulePeriods(DateOnlyPeriod period)
+		{
+			IList<ISchedulePeriod> retList = new List<ISchedulePeriod>();
+
+			foreach (var schedulePeriod in PersonSchedulePeriodCollection)
+			{
+				var from = schedulePeriod.DateFrom;
+				var to = schedulePeriod.RealDateTo();
+				var physicalPeriod = new DateOnlyPeriod(from, to);
+
+				if(period.Intersection(physicalPeriod) != null)
+					retList.Add(schedulePeriod);
+			}
+
+			return retList.OrderBy(s => s.DateFrom.Date).ToList();
+		}
 
         public virtual IPersonPeriod NextPeriod(IPersonPeriod period)
         {
@@ -703,15 +745,10 @@ namespace Teleopti.Ccc.Domain.Common
     	}
 
 	    public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
-	    {
-		    return innerVirtualSchedulePeriod(Period(dateOnly), SchedulePeriod(dateOnly), dateOnly);
-	    }
-
-	    private IVirtualSchedulePeriod innerVirtualSchedulePeriod(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly date)
-	    {
-			var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
-			return new VirtualSchedulePeriod(this, date, personPeriod, schedulePeriod, splitChecker);
-	    }
+        {
+            var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
+            return new VirtualSchedulePeriod(this, dateOnly, splitChecker);
+        }
 
         public virtual IAvailabilityRestriction GetPersonAvailabilityDayRestriction(IEnumerable<IPersonAvailability> personRestrictions, DateOnly currentDate)
         {
@@ -747,7 +784,7 @@ namespace Teleopti.Ccc.Domain.Common
                         if (period.EndDate >= today)
                             period = new DateOnlyPeriod(period.StartDate, today);
 
-                        days += period.DayCount();
+                        days += (int)period.EndDate.Date.Subtract(period.StartDate.Date).TotalDays;
                     }
                 }
 
@@ -840,68 +877,34 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-	    public virtual PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period)
-	    {
-		    var personPeriods = PersonPeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.StartDate, p.EndDate()), p});
-		    var schedulePeriods = PersonSchedulePeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.DateFrom, p.RealDateTo()), p});
-		    var days = period.DayCollection();
-
-		    return days.Select(
-				    d =>
-					    new
-					    {
-						    Day = d,
-						    PersonPeriod = personPeriods.FirstOrDefault(p => p.Period.Contains(d))
-					    })
-				    .Select(
-					    m =>
-					    {
-							var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
-							return new PersonWorkDay(m.Day,
-								calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day),
-								m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
-								m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
-								isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
-					    }).ToArray();
-	    }
-
-	    private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
-	    {
-			var schedulePeriodStartDate = SchedulePeriodStartDate(day);
-		    return contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, day);
-	    }
-
-	    private TimeSpan calculateAverageWorkTime(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly day)
-	    {
-			var averageWorkTimePerDay = TimeSpan.Zero;
-			var contract = personPeriod.PersonContract.Contract;
-			switch (contract.WorkTimeSource)
-			{
-				case WorkTimeSource.FromContract:
-					averageWorkTimePerDay = contract.WorkTime.AvgWorkTimePerDay;
-					break;
-				case WorkTimeSource.FromSchedulePeriod:
-					var virtualSchedulePeriod = innerVirtualSchedulePeriod(personPeriod, schedulePeriod, day);
-					averageWorkTimePerDay = schedulePeriod == null
-						? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
-						: virtualSchedulePeriod.AverageWorkTimePerDay;
-					break;
-			}
-		    return averageWorkTimePerDay;
-	    }
-
-	    public virtual PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly)
+		public virtual PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly)
         {
             var personPeriod = Period(dateOnly);
             if (personPeriod == null) return new PersonWorkDay(dateOnly);
 
+			var averageWorkTimePerDay = TimeSpan.Zero;
 			var contract = personPeriod.PersonContract.Contract;
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule;
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage;
-		    return new PersonWorkDay(dateOnly, calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly),
+            switch (contract.WorkTimeSource)
+            {
+                case WorkTimeSource.FromContract:
+		            averageWorkTimePerDay = contract.WorkTime.AvgWorkTimePerDay;
+					break;
+                case WorkTimeSource.FromSchedulePeriod:
+                    {
+                        var schedulePeriod = VirtualSchedulePeriod(dateOnly);
+	                    averageWorkTimePerDay = schedulePeriod == null
+		                    ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
+		                    : schedulePeriod.AverageWorkTimePerDay;
+						break;
+                    }
+            }
+			var schedulePeriodStartDate = SchedulePeriodStartDate(dateOnly);
+			return new PersonWorkDay(dateOnly, averageWorkTimePerDay,
 				contract.WorkTimeSource,
 				partTimePercentage != null ? partTimePercentage.Percentage : new Percent(1d),
-				isWorkDay(contractSchedule,dateOnly));
+				contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, dateOnly));
         }
 
 		public override int GetHashCode()
@@ -909,4 +912,5 @@ namespace Teleopti.Ccc.Domain.Common
 			return base.GetHashCode() ^ 431;
 		}
     }
+
 }

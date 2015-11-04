@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -472,6 +473,34 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsNull(_target.SchedulePeriod(new DateOnly(2005, 1, 2)));
         }
 
+		[Test]
+		public void ShouldReturnListWithPhysicalSchedulePeriods()
+		{
+			var period1 = new SchedulePeriod(new DateOnly(2011, 1, 3), SchedulePeriodType.Week, 4);
+			var period2 = new SchedulePeriod(new DateOnly(2011, 1, 31), SchedulePeriodType.Week, 4);
+			var period3 = new SchedulePeriod(new DateOnly(2011, 2, 28), SchedulePeriodType.Week, 4);
+		
+			_target.AddSchedulePeriod(period1);
+			_target.AddSchedulePeriod(period2);
+			_target.AddSchedulePeriod(period3);
+
+			var searchPeriod1 = new DateOnlyPeriod(new DateOnly(2011, 1, 1), new DateOnly(2011, 7, 1));
+			var schedulePeriods1 = _target.PhysicalSchedulePeriods(searchPeriod1);
+			Assert.AreEqual(3, schedulePeriods1.Count);
+
+			var searchPeriod2 = new DateOnlyPeriod(new DateOnly(2011, 2, 1), new DateOnly(2011, 3, 1));
+			var schedulePeriods2 = _target.PhysicalSchedulePeriods(searchPeriod2);
+			Assert.AreEqual(2, schedulePeriods2.Count);
+
+			var searchPeriod3 = new DateOnlyPeriod(new DateOnly(2011, 3, 1), new DateOnly(2011, 3, 27));
+			var schedulePeriods3 = _target.PhysicalSchedulePeriods(searchPeriod3);
+			Assert.AreEqual(1, schedulePeriods3.Count);
+
+			var searchPeriod4 = new DateOnlyPeriod(new DateOnly(2011, 7, 1), new DateOnly(2011, 7, 27));
+			var schedulePeriods4 = _target.PhysicalSchedulePeriods(searchPeriod4);
+			Assert.AreEqual(0, schedulePeriods4.Count);
+		}
+
         /// <summary>
         /// Verifies the person period collection is locked.
         /// </summary>
@@ -503,6 +532,23 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             Assert.IsFalse(_target.IsAgent(date.AddDays(-1)));
             Assert.IsTrue(_target.IsAgent(date.AddDays(1)));
+        }
+
+        [Test]
+        public void VerifyPersonsInHierarchy()
+        {
+            ICollection<IPerson> candidates = new List<IPerson>();
+            candidates.Add(PersonFactory.CreatePerson("PersonA"));
+            candidates.Add(PersonFactory.CreatePerson("PersonB"));
+            candidates.Add(PersonFactory.CreatePerson("PersonC"));
+
+            ReadOnlyCollection<IPerson> persons = _target.PersonsInHierarchy(candidates, new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1));
+            Assert.AreEqual(0, persons.Count);
+
+            candidates.Add(_target);
+            persons = _target.PersonsInHierarchy(candidates, new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1));
+            Assert.AreEqual(1, persons.Count);
+            Assert.AreEqual(_target, persons[0]);
         }
 
         [Test]
@@ -694,7 +740,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			MockRepository mocks = new MockRepository();
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
-            
+            var scenario = mocks.DynamicMock<IScenario>();
+
 			using (mocks.Record())
 			{
 				Expect.Call(() => personAccountUpdater.Update(_target))

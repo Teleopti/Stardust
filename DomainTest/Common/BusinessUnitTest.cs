@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -142,6 +145,76 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.RemoveSite(null);
         }
 
+        /// <summary>
+        /// Verifies the team collection property.
+        /// </summary>
+        [Test]
+        public void VerifyTeamCollectionProperty()
+        {
+            Team team2 = TeamFactory.CreateSimpleTeam("Team 2");
+            Team team3 = TeamFactory.CreateSimpleTeam("Team 3");
+            Team team4 = TeamFactory.CreateSimpleTeam("Team 4");
+            Site site1 = SiteFactory.CreateSiteWithOneTeam("Team 1");
+            Site site2 = SiteFactory.CreateSimpleSite();
+            site2.AddTeam(team2);
+            site2.AddTeam(team3);
+            site2.AddTeam(team4);
+
+            _target.AddSite(site1);
+            _target.AddSite(site2);
+
+            ReadOnlyCollection<ITeam> resultList = _target.TeamCollection();
+
+            Assert.AreEqual(4, resultList.Count);
+            Assert.AreSame(team4, resultList[resultList.Count - 1]);
+        }
+
+        /// <summary>
+        /// Verifies the site can be found from team.
+        /// </summary>
+        [Test]
+        public void VerifySiteCanBeFoundFromTeam()
+        {
+            BusinessUnit bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+            Team team2 = TeamFactory.CreateSimpleTeam("Team 2");
+            bu.SiteCollection[1].AddTeam(team2);
+            Assert.IsTrue(bu.FindTeamSite(team2).Equals(bu.SiteCollection[1]));
+        }
+
+        /// <summary>
+        /// Verifies the find team site returns null if site not found.
+        /// </summary>
+        [Test]
+        public void VerifyFindTeamSiteReturnsNullIfSiteNotFound()
+        {
+            BusinessUnit bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+            Team team2 = TeamFactory.CreateSimpleTeam("Team 2");
+            bu.SiteCollection[1].AddTeam(team2);
+            Team team3 = TeamFactory.CreateSimpleTeam("Team 3");
+            Assert.IsNull(bu.FindTeamSite(team3));
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyPersonsInHierarchy()
+        {
+            var dateTime = new DateOnlyPeriod(2000, 1, 1, 2002, 1, 1);
+            BusinessUnit bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+            Person person = new Person();
+            Contract contract = new Contract("dummy");
+            PartTimePercentage partTimePercentage = new PartTimePercentage("dummy");
+            ContractSchedule contractSchedule = new ContractSchedule("dummy");
+            IPersonContract personContract = new PersonContract(contract, partTimePercentage,contractSchedule);
+
+            IPersonPeriod per = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, bu.SiteCollection[0].TeamCollection[0]);
+            person.AddPersonPeriod(per);
+
+            ICollection<IPerson> candidates = new List<IPerson>();
+            candidates.Add(person);
+            ReadOnlyCollection<IPerson> lst = bu.PersonsInHierarchy(candidates, dateTime);
+
+            Assert.IsNotNull(lst);
+        }
+
         [Test]
         public void VerifyCanUseNameProperties()
         {
@@ -152,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual("TBU",_target.ShortName);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyRemoveSiteFromBusinessUnit()
         {
             BusinessUnit bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
