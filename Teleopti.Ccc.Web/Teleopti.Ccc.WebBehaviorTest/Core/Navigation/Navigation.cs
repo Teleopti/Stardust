@@ -20,16 +20,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => true, new ApplicationStartupTimeout());
 			_interceptors.Add(u => u == "", new BustCache());
 			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
+
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new WaitUntilHangfireQueueIsProcessed());
-			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
-			_interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
 			_interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
+			_interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
+
+			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new WaitUntilHangfireQueueIsProcessed());
+			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
+			_interceptors.Add(u => u.Contains("/wfm/#/rta"), new WaitUntilHangfireQueueIsProcessed());
 		}
 
 		public static void ReapplyFakeTime()
