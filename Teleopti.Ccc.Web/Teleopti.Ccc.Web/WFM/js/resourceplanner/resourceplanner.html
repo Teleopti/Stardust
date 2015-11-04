@@ -6,7 +6,7 @@
 		</div>
 	</div>
 
-	<button ng-click="startNextPlanningPeriod()" class="wfm-btn wfm-btn-primary">Start next <i class="mdi mdi-plus"></i></button>
+	<button ng-click="startNextPlanningPeriod()" class="wfm-btn wfm-btn-primary" ng-class="{'wfm-btn-primary-disabled':!isValid}"ng-disabled="!isValid">Start next <i class="mdi mdi-plus"></i></button>
 <div class="wfm-options" ng-show="isEnabled">
 	<form name="form" class="wfm-form" novalidate>
  	<div class="form-input-wrap">
