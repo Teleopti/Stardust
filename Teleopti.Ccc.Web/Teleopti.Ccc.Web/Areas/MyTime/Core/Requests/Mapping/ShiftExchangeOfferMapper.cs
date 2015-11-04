@@ -20,22 +20,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_scheduleProvider = scheduleProvider;
 		}
 
-		public IPersonRequest Map (ShiftExchangeOfferForm form, IPersonRequest personRequest)
+		public IPersonRequest Map(ShiftExchangeOfferForm form, IPersonRequest personRequest)
 		{
 			_currentPerson = _loggedOnUser.CurrentUser();
 			var offer = personRequest.Request as ShiftExchangeOffer;
-			if (offer!=null)
+			if (offer != null)
 			{
-				mapOffer(form, personRequest, offer.Status);	
+				mapOffer(form, personRequest, offer.Status);
 			}
 			return personRequest;
 		}
 
-		public IPersonRequest Map (ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
+		public IPersonRequest Map(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
 		{
 			_currentPerson = _loggedOnUser.CurrentUser();
 			IPersonRequest ret = new PersonRequest(_currentPerson);
-			mapOffer (form, ret, status);
+			mapOffer(form, ret, status);
 			ret.Subject = UserTexts.Resources.ShiftExchangeAnnouncement;
 			ret.TrySetMessage("");
 			return ret;
@@ -50,8 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			};
 			var schedule = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date), options);
 
-			var timePeriod = (form.WishShiftType == (int)ShiftExchangeLookingForDay.WorkingShift) ? createOptionalDateTimePeriod(form, date) : null;
-			var dayFilterCriteria = new ScheduleDayFilterCriteria((ShiftExchangeLookingForDay) form.WishShiftType, timePeriod);
+			var timePeriod = (form.WishShiftType == (int) ShiftExchangeLookingForDay.WorkingShift)
+				? createOptionalDateTimePeriod(form, date)
+				: null;
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(form.WishShiftType, timePeriod);
 			var criteria = new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), dayFilterCriteria);
 			var offer = new ShiftExchangeOffer(schedule.First(), criteria, status);
 			request.Request = offer;
