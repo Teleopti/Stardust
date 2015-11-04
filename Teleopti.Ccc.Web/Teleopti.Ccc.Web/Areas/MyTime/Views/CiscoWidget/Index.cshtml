@@ -1,1 +1,57 @@
-﻿<h1 >CiscoWidget</h1>
+﻿<style>
+.relative {
+	position: relative;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.logo-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -74px;
+	margin-top: -30px;
+}
+
+.img-container {
+	height: 60px;
+	width: 148px;
+}
+
+.img-container img {
+	height: 100%;
+	width: auto;
+}
+
+.mytime-chart-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -34px;
+	margin-left: -206px;
+}
+
+</style>
+
+
+<div class="teleopti-container">
+	<div class="relative inline-block" style="width: 200px; height: 68px;">
+		<div class="logo-container">
+			<div class="img-container">
+				<img src="@Url.Content("~/Areas/MyTime/Content/Images/logo.png")" alt="logo"/>
+			</div>
+		</div>
+	</div>
+	<div class="relative inline-block" style="height: 68px; width: 412px;">
+		<div class="mytime-chart-container">
+			<div class="mytime-chart">
+				@Html.Partial("../Asm/Index")
+			</div>
+		</div>
+	</div>
+	<div class="teleopti-dashboard inline-block">
+		@*@Html.Partial("../MyReport/MyReportPartial")*@
+	</div>
+</div>
