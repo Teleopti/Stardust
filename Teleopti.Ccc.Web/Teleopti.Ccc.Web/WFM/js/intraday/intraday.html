@@ -8,14 +8,14 @@
 		<div class="col-md-4">
 			<form class="wfm-form">
 				<div class="form-input-wrap">
-					<label for="skill-select">Pick a skill:</label>
+					<label for="skill-select">Select skill:</label>
 					<select id="skill-select" ng-model="selectedSkill" ng-change="skillChange(selectedSkill)" ng-options="skill.SkillName for skill in skillList" name="skill-select" required></select>
 					<noscript><input type="submit" value="Submit"></noscript>
 				</div>
 			</form>
 		</div>
 		<div class="col-md-8 text-align-right">
-			<p>Latest aquired date: {{latestDate | date:'HH:mm:ss'}}</p>
+			<p>Latest acquired date: {{latestDate | date:'HH:mm:ss'}}</p>
 		</div>
 	</div>
 	<div class="row">
