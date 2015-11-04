@@ -170,4 +170,62 @@ And after the update is done I goto the campaign list page
 And I set the starting month for viewing period to '2016-10-01'
 Then I should see 'NewCampaign' in campaign list 
 
+Scenario: Manually update workplan
+When I view the backlog chart of the campaign created with 
+| Field                             | Value       |
+| Name                              | NewCampaign |
+| Start Date                        | 2015-12-01  |
+| End Date                          | 2016-01-30  |
+| Call List Len                     | 5555        |
+| Target Rate                       | 55          |
+| Connect Rate                      | 55          |
+| Right Party Connect Rate          | 55          |
+| Connect Average Handling Time     | 55          |
+| Right Party Average Handling Time | 555         |
+| Unproductive Time                 | 55          |
+| Opening Hour Start                | 08:00       |
+| Opening Hour End                  | 16:00       |
+And I select all the dates from '2015-12-01' to '2016-01-30'
+And I set the manual production plan to '0'
+Then I should see all planned person hours to be '0'
 
+Scenario: Replan campaign after manual update
+When I view the backlog chart of the campaign created with 
+| Field                             | Value       |
+| Name                              | NewCampaign |
+| Start Date                        | 2015-12-01  |
+| End Date                          | 2016-01-30  |
+| Call List Len                     | 5555        |
+| Target Rate                       | 55          |
+| Connect Rate                      | 55          |
+| Right Party Connect Rate          | 55          |
+| Connect Average Handling Time     | 55          |
+| Right Party Average Handling Time | 555         |
+| Unproductive Time                 | 55          |
+| Opening Hour Start                | 08:00       |
+| Opening Hour End                  | 16:00       |
+And I select all the dates from '2015-12-01' to '2015-12-15'
+And I set the manual production plan to '0'
+And I see that the campaign is not done after the end date
+And I replan the campaign
+Then I should see the campaign is done after the end date
+
+Scenario: Manually update backlog
+When I view the backlog chart of the campaign created with 
+| Field                             | Value       |
+| Name                              | NewCampaign |
+| Start Date                        | 2015-12-01  |
+| End Date                          | 2016-01-30  |
+| Call List Len                     | 5555        |
+| Target Rate                       | 55          |
+| Connect Rate                      | 55          |
+| Right Party Connect Rate          | 55          |
+| Connect Average Handling Time     | 55          |
+| Right Party Average Handling Time | 555         |
+| Unproductive Time                 | 55          |
+| Opening Hour Start                | 08:00       |
+| Opening Hour End                  | 16:00       |
+And I select all the dates from '2015-12-15' to '2015-12-16'
+And I set the manual backlog to '0'
+Then I should see the campaign is done after the end date
+And the campaign is overstaffed

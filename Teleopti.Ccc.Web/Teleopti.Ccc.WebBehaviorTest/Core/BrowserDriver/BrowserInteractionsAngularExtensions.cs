@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class BrowserInteractionsAngularExtensions
 	{
-		public static void SetScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values)
+		public static void SetScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values, bool useIsolateScope = false)
 		{			
 			var assignments = values.Select(kvp => "scope." + kvp.Key + " = " + kvp.Value + "; ").Aggregate((acc, v) => acc + v);
-			var script = scopeByQuerySelector(selector) +
+			var script = scopeByQuerySelector(selector, useIsolateScope) +
 						 runnerByQuerySelector(selector) +
 						 "runner(function() {" + assignments + " });";
 
@@ -21,27 +21,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		}
 
 		public static void WaitScopeCondition(this IBrowserInteractions interactions, string selector, string name,
-			Constraint constraint, Action actionThen)
+			Constraint constraint, Action actionThen, bool useIsolateScope = false)
 		{
-			AssertScopeValue(interactions, selector, name, constraint);			
+			AssertScopeValue(interactions, selector, name, constraint, useIsolateScope);			
 			actionThen();						
 		}
 
-		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint)
+		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint, bool useIsolateScope = false)
 		{
-			var script = string.Format(scopeByQuerySelector(selector) + " return scope.{0}; ", name);
-
+			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
-
-			interactions.Javascript(waitForAngular(selector, script, readerName));
-
+			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));		
 			EventualAssert.That(() =>
 			{
-				var query = scopeByQuerySelector(selector) + string.Format(" return scope.$result{0}; ", readerName);
+				var query = scopeByQuerySelector(selector, useIsolateScope) + string.Format(" return scope.$result{0}; ", readerName);
 				var result = interactions.Javascript(query);
-				if (result != null) result = result.ToLower();
-				
+				if (result != null)	result = result.ToLower();	
+				Console.Out.WriteLine(">>> " + result + " - " + name);					
 				return result;
+
 			}, constraint, () => "Failed to assert scope value " + name, new SeleniumExceptionCatcher());
 		}
 
@@ -51,23 +49,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			return string.Format("angular.element(document.querySelector('{0}'))", selector);
 		}
 
-		private static string scopeByQuerySelector(string selector)
+		private static string scopeByQuerySelector(string selector, bool useIsolateScope)
 		{
-			return string.Format("var scope = {0}.scope(); ", elementByQuerySelector(selector));
+			return string.Format("var scope = {0}.{1}(); ", elementByQuerySelector(selector), useIsolateScope?"isolateScope":"scope");
 		}
 
 		private static string runnerByQuerySelector(string selector)
 		{
 			return string.Format("var runner = {0}.injector().get('$timeout'); ", elementByQuerySelector(selector));
 		}
-		
-		private static string waitForAngular(string selector, string next, string readerName)
+
+		private static string repeaterByQuerySelector(string selector)
 		{
-			return scopeByQuerySelector(selector)
-				   + string.Format(" scope.$result{0} = null; ", readerName)
+			return string.Format("var repeat = {0}.injector().get('$interval'); ", elementByQuerySelector(selector));
+		}
+
+		private static string waitForAngular(string selector, string next, string readerName, bool useIsolateScope)
+		{
+			return scopeByQuerySelector(selector, useIsolateScope)
+				   + runnerByQuerySelector(selector)
+				   + repeaterByQuerySelector(selector)
 				   + string.Format("var bser = {0}.injector().get('$browser'); ", elementByQuerySelector(selector))
-				   + string.Format("var cb = function() {{ scope.$result{0} = (function(){{ {1} }})(); }}; ", readerName, next)
-				   + "bser.notifyWhenNoOutstandingRequests(cb); ";
+				   + string.Format( "var setv = function() {{ scope.$result{0} = (function(){{ {1} }})(); }}; ", readerName, next)
+				   + "var cb = function() { repeat(setv, 500, 60); }; "
+				   + "bser.notifyWhenNoOutstandingRequests(cb); "
+				   + string.Format("runner(function() {{ scope.$result{0} = null; }}); ", readerName);
 		}
 
 		private static string getTmpName(string input)

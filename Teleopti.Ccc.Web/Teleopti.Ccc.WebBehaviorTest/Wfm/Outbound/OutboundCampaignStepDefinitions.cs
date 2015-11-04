@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 {
@@ -177,6 +179,93 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			WhenIViewTheBacklogChartOfTheCampaignCreatedWith(table);
 			Browser.Interactions.Click(".btn-goto-edit-campaign");
 		}
-	
+
+		[When(@"I select all the dates from '(.*)' to '(.*)'")]
+		public void WhenISelectAllTheDatesFromTo(string startDate, string endDate)
+		{
+			var dateTimePeriod = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Parse(startDate), DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Parse(endDate), DateTimeKind.Utc));
+
+			var dates = dateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Local).DayCollection().Select(d => "'" + d.ToShortDateString() + "'");
+			var datesString = string.Join(", ", dates);
+
+			Browser.Interactions.SetScopeValues("div[id^=Chart]", new Dictionary<string, string>
+			{
+				{"campaign.selectedDates" , "[" + datesString + "]" } 
+			});
+		}
+
+		[When(@"I set the manual production plan to '(.*)'")]
+		public void WhenISetTheManualProductionPlanTo(int planValue)
+		{
+			Browser.Interactions.SetScopeValues("campaign-commands-pane", new Dictionary<string, string>
+			{
+				{"manualPlanSwitch", "true"},
+				{"manualPlanInput" , planValue.ToString() } 
+			}, true);
+
+			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualProductionPlan()", Is.EqualTo("true"),
+				() => {
+					Browser.Interactions.Click(".btn-save-plan");
+				}, true);
+		}
+
+
+		[Then(@"I should see all planned person hours to be '(.*)'")]
+		public void ThenIShouldSeeAllPlannedPersonHoursToBe(int planValue)
+		{
+			var check = string.Format("function(x) {{ return !angular.isNumber(x) ||  x == {0}; }}", planValue);
+			var target = string.Format("campaign.graphData.unscheduledPlans.every({0})", check);
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));
+		}
+
+		[When(@"I see that the campaign is not done after the end date")]
+		public void WhenISeeThatTheCampaignIsNotDoneAfterTheEndDate()
+		{
+			var target = string.Format("campaign.graphData.rawBacklogs.slice(-1)[0] > {0}", getZeroValidationTolerance());
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));			
+		}
+
+		[When(@"I replan the campaign")]
+		public void WhenIReplanTheCampaign()
+		{
+			Browser.Interactions.Click(".btn-replan");			
+		}
+
+		[Then(@"I should see the campaign is done after the end date")]
+		public void ThenIShouldSeeTheCampaignIsDoneAfterTheEndDate()
+		{
+			var target = string.Format("campaign.graphData.rawBacklogs.slice(-1)[0] < {0}", getZeroValidationTolerance());
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", target, Is.EqualTo("true"));
+		}
+
+		[When(@"I set the manual backlog to '(.*)'")]
+		public void WhenISetTheManualBacklogTo(int backlogValue)
+		{
+			Browser.Interactions.SetScopeValues("campaign-commands-pane", new Dictionary<string, string>
+			{
+				{"manualBacklogSwitch", "true"},
+				{"manualBacklogInput" , backlogValue.ToString() } 
+			}, true);
+
+			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", Is.EqualTo("true"),
+				() =>
+				{
+					Browser.Interactions.Click(".btn-save-backlog");
+				}, true);
+		}
+
+		[Then(@"the campaign is overstaffed")]
+		public void ThenTheCampaignIsOverstaffed()
+		{
+			Browser.Interactions.AssertScopeValue("div[id^=Chart]", "campaign.WarningInfo[0].TypeOfRule", Is.EqualTo("campaignoverstaff"));
+		}
+
+
+
+		private int getZeroValidationTolerance()
+		{
+			return 5;
+		}
+
 	}
 }
