@@ -13,6 +13,7 @@ describe('RtaAgentsForSitesCtrl', function() {
 	var stateParams = {};
 	var agents = [];
 	var states = [];
+	var adherence = {};
 	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
@@ -57,6 +58,11 @@ describe('RtaAgentsForSitesCtrl', function() {
 			AlarmColor: "#FF0000",
 			TimeInState: 15473
 		}];
+
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
 	});
 
 	beforeEach(function() {
@@ -81,6 +87,16 @@ describe('RtaAgentsForSitesCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
+		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
+			personId: '@personId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false
+			}
+		});
+
 		rtaSvrc.getAgentsForSites = $resource('../Agents/ForSites', {}, {
 			query: {
 				method: 'GET',
@@ -101,6 +117,8 @@ describe('RtaAgentsForSitesCtrl', function() {
 			}
 		});
 
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+			.respond(200, adherence);
 		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, agents);
 		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
@@ -265,6 +283,24 @@ describe('RtaAgentsForSitesCtrl', function() {
 		scope.$emit('$destroy');
 		$interval.flush(5000);
 		$httpBackend.verifyNoOutstandingRequest();
+	});
+
+	it('should get adherence percentage for agent when clicked', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+		}];
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
+
+		createController();
+		scope.getAdherenceForAgent(agents[0].PersonId);
+		$httpBackend.flush();
+
+		expect(scope.adherence.AdherencePercent).toEqual(99);
+		expect(scope.adherence.LastTimestamp).toEqual("16:34");
 	});
 
 	it('should not go back to sites overview when business unit is not initialized yet', function() {

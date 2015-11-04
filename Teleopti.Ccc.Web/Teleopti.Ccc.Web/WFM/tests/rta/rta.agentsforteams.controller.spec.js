@@ -13,6 +13,7 @@ describe('RtaAgentsForTeamsCtrl', function() {
 	var stateParams = {};
 	var agents = [];
 	var states = [];
+	var adherence = {};
 	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
@@ -57,6 +58,11 @@ describe('RtaAgentsForTeamsCtrl', function() {
 			AlarmColor: "#FF0000",
 			TimeInState: 15473
 		}];
+
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
 	});
 
 	beforeEach(function() {
@@ -81,6 +87,16 @@ describe('RtaAgentsForTeamsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
+		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
+			personId: '@personId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false
+			}
+		});
+
 		rtaSvrc.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
 			query: {
 				method: 'GET',
@@ -100,7 +116,9 @@ describe('RtaAgentsForTeamsCtrl', function() {
 				isArray: true
 			}
 		});
-
+		
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+			.respond(200, adherence);
 		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(200, agents);
 		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
@@ -263,6 +281,24 @@ describe('RtaAgentsForTeamsCtrl', function() {
 		scope.$emit('$destroy');
 		$interval.flush(5000);
 		$httpBackend.verifyNoOutstandingRequest();
+	});
+
+	it('should get adherence percentage for agent when clicked', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+		}];
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
+
+		createController();
+		scope.getAdherenceForAgent(agents[0].PersonId);
+		$httpBackend.flush();
+
+		expect(scope.adherence.AdherencePercent).toEqual(99);
+		expect(scope.adherence.LastTimestamp).toEqual("16:34");
 	});
 
 	it('should not go back to sites overview when business unit is not initialized yet', function() {
