@@ -204,7 +204,7 @@ XCOPY "%DBPath%\%AppRar%" "%RarFolder%\" /D /Y > "%LogFolder%\NumberOfFiles.txt"
 
 ::unRar only if new
 findstr /C:"0 File(s) copied" "%LogFolder%\NumberOfFiles.txt"
-if %errorlevel% EQU 0 if exist %TELEOPTICCC_BAKFILE% (
+if %errorlevel% EQU 0 if exist TELEOPTICCC_BAKFILE (
 ECHO No need to un-rar. File is the same
 ping 127.0.0.1 -n 3 > NUL
 ) ELSE (
