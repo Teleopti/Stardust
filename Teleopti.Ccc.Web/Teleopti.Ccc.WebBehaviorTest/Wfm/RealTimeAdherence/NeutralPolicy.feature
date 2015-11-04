@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Real time adherence with neutral alarms
+﻿Feature: Real time adherence with neutral alarms
 	In order to improve adherence with neutral alarm occured
 	As a real time analyst
 	I want to see correct adherence value
@@ -49,7 +48,7 @@ Scenario: Should adherence percentage with neutral adherence
 	And the time is '2015-03-02 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'SomeCode' on datasource 6
 	And the time is '2015-03-02 10:00:00'
-	And I view real time adherence view for team 'Red'
+	And I view real time adherence for agents on team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
 
