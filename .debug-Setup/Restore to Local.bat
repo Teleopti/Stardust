@@ -185,8 +185,15 @@ IF ERRORLEVEL 1 SET /A LOADSTAT=1
 IF ERRORLEVEL 2 SET /A LOADSTAT=0
 
 :Start
+
 ECHO.
 ECHO ------
+
+::Customer database backup files
+SET TELEOPTIANALYTICS_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiAnalytics.BAK
+SET TELEOPTIAGG_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiCCCAgg.BAK
+SET TELEOPTICCC_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiCCC7.BAK
+
 ECHO Refresh .rar-file(s) ...
 ECHO. > "%LogFolder%\NumberOfFiles.txt"
 
@@ -197,13 +204,14 @@ XCOPY "%DBPath%\%AppRar%" "%RarFolder%\" /D /Y > "%LogFolder%\NumberOfFiles.txt"
 
 ::unRar only if new
 findstr /C:"0 File(s) copied" "%LogFolder%\NumberOfFiles.txt"
-if %errorlevel% EQU 0 (
+if %errorlevel% EQU 0 if exist TELEOPTICCC_BAKFILE (
 ECHO No need to un-rar. File is the same
 ping 127.0.0.1 -n 3 > NUL
 ) ELSE (
 ECHO Unrar file: "%RarFolder%\%AppRar%" ...
 %UNRAR% "%RarFolder%\%AppRar%"
 )
+
 ::Check if stat databases changed
 ECHO. > "%LogFolder%\NumberOfFiles.txt"
 
@@ -234,11 +242,6 @@ ECHO ------
 ECHO.
 
 :SkipStat
-::Restore Customer databases
-SET TELEOPTIANALYTICS_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiAnalytics.BAK
-SET TELEOPTIAGG_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiCCCAgg.BAK
-SET TELEOPTICCC_BAKFILE=%RARFOLDER%\%CUSTOMER%_TeleoptiCCC7.BAK
-
 SET TELEOPTIANALYTICS=%Branch%_%Customer%_TeleoptiAnalytics
 SET TELEOPTIAGG=%Branch%_%Customer%_TeleoptiCCCAgg
 SET TELEOPTICCC=%Branch%_%Customer%_TeleoptiCCC7
