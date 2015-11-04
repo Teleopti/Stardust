@@ -13,6 +13,7 @@ describe('RtaAgentsCtrl', function() {
 	var stateParams = {};
 	var agents = [];
 	var states = [];
+	var adherence = {};
 	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
@@ -39,6 +40,12 @@ describe('RtaAgentsCtrl', function() {
 			AlarmColor: "#00FF00",
 			TimeInState: 15473
 		}];
+
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
+
 	});
 
 	beforeEach(function() {
@@ -63,6 +70,16 @@ describe('RtaAgentsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
+		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
+			personId: '@personId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false
+			}
+		});
+
 		rtaSvrc.getAgents = $resource('../Agents/ForTeam?teamId=:teamId', {
 			teamId: '@teamId'
 		}, {
@@ -82,7 +99,8 @@ describe('RtaAgentsCtrl', function() {
 				isArray: true
 			}
 		});
-
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+			.respond(200, adherence);
 		$httpBackend.whenGET("../Agents/ForTeam?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(200, agents);
 		$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
@@ -249,6 +267,24 @@ describe('RtaAgentsCtrl', function() {
 		scope.$digest();
 
 		expect($state.go).toHaveBeenCalledWith('rta');
+	});
+
+	it('should get adherence percentage for agent when clicked', function(){
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+		}];
+		adherence = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
+
+		createController();
+	  scope.getAdherenceForAgent(agents[0].PersonId);
+		$httpBackend.flush();
+
+		expect(scope.adherence.AdherencePercent).toEqual(99);
+	 	expect(scope.adherence.LastTimestamp).toEqual("16:34");
 	});
 
 	it('should stop polling when page is about to destroy', function() {

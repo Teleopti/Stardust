@@ -1,91 +1,88 @@
-﻿.rta-header{
-  margin-bottom:10px;
+.rta-header {
+				margin-bottom: 10px;
 }
-
 .rta-search {
-	padding: 10px 0;
-
-    input {
-      width: 15%!important;
-      height: 23px;
-  }
+				padding: 10px 0;
+				input {
+								width: 15%!important;
+								height: 23px;
+				}
 }
-
-
-.rta-config{
-	display: inline-flex;
+.rta-config {
+				display: inline-flex;
 }
-
-.rta-list-item{
-	padding:1%;
-	margin-top:10px;
-	cursor: pointer;
-
-	&:hover{
-	transition: background 0.5s linear 0s;
-	background-color:rgba(0,0,0,.06)!important;
-	}
+.rta-list-item {
+				padding: 1%;
+				margin-top: 10px;
+				cursor: pointer;
+				&:hover {
+								transition: background 0.5s linear 0s;
+								background-color: rgba(0,0,0,.06)!important;
+				}
 }
-
-.rta-stats{
-    justify-content: space-between;
+.rta-stats {
+				justify-content: space-between;
 }
-
 .rta-nav-link {
-	cursor: pointer;
+				cursor: pointer;
 }
-
-.rta-list{
-  display: inline-flex;
-  max-width: 47%;
-  margin:5px;
+.rta-list {
+				display: inline-flex;
+				max-width: 47%;
+				margin: 5px;
 }
-
-.rta-grid{
-  display: inline-flex;
-  max-width: 30%;
-  margin:5px;
-  min-height: 110px;
+.rta-grid {
+				display: inline-flex;
+				max-width: 30%;
+				margin: 5px;
+				min-height: 110px;
 }
-
-.site-name{
-  font-size: 20px;
-  margin-left: 30px;
-  font-weight: bolder;
+.site-name {
+				font-size: 20px;
+				margin-left: 30px;
+				font-weight: bolder;
 }
-
-.rta-stats{
-  display:inline-flex;
-  width:100%;
+.rta-stats {
+				display: inline-flex;
+				width: 100%;
 }
-
-.rta-stats .wfm-checkbox{
-  width:auto!important;
+.rta-stats .wfm-checkbox {
+				width: auto!important;
 }
-
-.rta-trigger-area{
-  width:100%;
+.rta-trigger-area {
+				width: 100%;
 }
-
-.site-data{
-  margin-top: 10px;
-  width:100%;
+.site-data {
+				margin-top: 10px;
+				width: 100%;
 }
-
-.agent-row{
-  cursor: pointer;
+.agent-row {
+				cursor: pointer;
 }
-
-@media only screen and (max-width: 700px), only screen and (max-device-width: 700px) {
-  .rta-list, .rtaGrid {
-    max-width: 100%!important;
-  }
+.testclass {
+				margin-bottom: 50px;
 }
-
-@media only screen and (min-width: 1620px), only screen and (min-device-width: 1620px) {
-  .rtaGrid{
-    display: inline-flex;
-    max-width: 225px!important;
-    margin:5px;
-  }
+.agent-menu {
+				position: absolute;
+				margin-top: 30px;
+        padding:1%;
+				width: 100%;
+}
+.agent-menu > a {
+        margin-right: 5%;
+}
+@media only screen and (max-width: 700px),
+only screen and (max-device-width: 700px) {
+				.rta-list,
+				.rtaGrid {
+								max-width: 100%!important;
+				}
+}
+@media only screen and (min-width: 1620px),
+only screen and (min-device-width: 1620px) {
+				.rtaGrid {
+								display: inline-flex;
+								max-width: 225px!important;
+								margin: 5px;
+				}
 }

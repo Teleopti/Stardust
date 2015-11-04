@@ -4,14 +4,27 @@
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService','FakeTimeService',
-			function ($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService',
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService) {
 				var siteId = $stateParams.siteId;
 				var teamId = $stateParams.teamId;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
+				$scope.adherence = {};
+				$scope.adherencePercent = null;
+				$scope.timeStamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
 
+				$scope.getAdherenceForAgent = function(personId) {
+					RtaService.forToday.query({
+							personId: personId
+						}).$promise
+						.then(function(data) {
+							$scope.adherence = data;
+							$scope.adherencePercent = data.AdherencePercent;
+							$scope.timeStamp = data.LastTimestamp;
+						});
+				};
 				$scope.goBackToRoot = function() {
 					RtaRouteService.goToSites();
 				};
@@ -60,14 +73,6 @@
 						.then(function(states) {
 							setStatesInAgents(states);
 						});
-				};
-
-				var updateStatesForTeams = function() {
-					RtaService.getStatesForTeams.query({
-						teamIds: teamIds
-					}).$promise.then(function(states) {
-						setStatesInAgents(states);
-					})
 				};
 
 				var updateGrid = function() {

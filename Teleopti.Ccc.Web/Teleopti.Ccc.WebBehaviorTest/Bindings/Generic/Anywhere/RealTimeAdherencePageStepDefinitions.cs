@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
-		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, int adherence)
+		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, string adherence)
 		{
-			const string selector = ".historical-adherence:contains('{0}')";
+			const string selector = ".historical-adherence";
 
-			Browser.Interactions.AssertExistsUsingJQuery(selector, adherence);
+			Browser.Interactions.AssertAnyContains(selector, adherence);
 		}
 
 		[Then(@"I should see daily adherence for '(.*)' is (.*)%")]

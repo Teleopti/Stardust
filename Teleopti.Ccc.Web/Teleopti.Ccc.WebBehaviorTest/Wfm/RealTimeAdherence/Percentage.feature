@@ -1,4 +1,4 @@
-﻿@ignore
+﻿
 Feature: Real time adherence percentage
 	In order to ...
 	As a real time analyst
@@ -45,6 +45,6 @@ Scenario: Should be able to see adherence percentage from agent state overview
 	And the time is '2014-10-06 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the time is '2014-10-06 12:00:00'
-	And I view real time adherence view for team 'Red'
+	And I view real time adherence for agents on team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%

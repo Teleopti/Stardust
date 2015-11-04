@@ -100,6 +100,16 @@
 					isArray: true
 				}
 			});
+
+			this.forToday = $resource('../Adherence/ForToday?personId=:personId', {
+				personId: '@personId'
+			}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: false
+				}
+			});
 		}
 	]);
 })();
