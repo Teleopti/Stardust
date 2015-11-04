@@ -62,41 +62,7 @@
 	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
-
-		<div class="pagination pull-right" aria-hidden="false">
-			<ul>
-				<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1 || totalPages == 0}">
-					<a href="" ng-click="gridApi.pagination.seek(1)">
-						<i class="mdi mdi-chevron-double-left"></i>
-					</a>
-				</li>
-
-				<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1 || totalPages == 0}">
-					<a href="" ng-click="gridApi.pagination.previousPage()">
-						<i class="mdi mdi-chevron-left"></i>
-					</a>
-				</li>
-
-				<li class="pagination-item" ng-repeat="n in getVisiblePageNumbers(totalPages)"
-					ng-class="{active: n == currentPageIndex}"
-					ng-click="gridApi.pagination.seek(n)">
-					<a href="" ng-bind="n"></a>
-				</li>
-
-				<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages || totalPages == 0}">
-					<a href="" ng-click="gridApi.pagination.nextPage()">
-						<i class="mdi mdi-chevron-right"></i>
-					</a>
-				</li>
-
-				<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages || totalPages == 0}">
-					<a href="" ng-click="gridApi.pagination.seek(totalPages)">
-						<i class="mdi mdi-chevron-double-right"></i>
-					</a>
-				</li>
-			</ul>
-		</div>
-
+		<wfm-pagination pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
 		
 	</div>
 

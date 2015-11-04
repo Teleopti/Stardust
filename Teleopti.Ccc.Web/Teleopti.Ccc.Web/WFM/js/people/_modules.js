@@ -8,6 +8,7 @@
 		'ng-mfb',
 		'ngMaterial',
 		'ngFileUpload',
-		'ui.indeterminate'
+		'ui.indeterminate',
+		'wfm.pagination'
 	]);
 })();

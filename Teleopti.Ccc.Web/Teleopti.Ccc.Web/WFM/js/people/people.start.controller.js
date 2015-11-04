@@ -12,8 +12,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = $stateParams.currentKeyword != undefined ? $stateParams.currentKeyword : "";
-	$scope.totalPages = 0;
-	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
 	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
@@ -73,9 +71,10 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	var stateParamsPagination = $stateParams.paginationOptions != undefined ? $stateParams.paginationOptions : {};
 
-	var paginationOptions = {
+	$scope.paginationOptions = {
 		pageNumber: stateParamsPagination.pageNumber != undefined ? stateParamsPagination.pageNumber : 1,
 		pageSize: stateParamsPagination.pageSize != undefined ? stateParamsPagination.pageSize : 20,
+		totalPages:0,
 		sortColumns: stateParamsPagination.sortColumns != undefined ? stateParamsPagination.sortColumns : [
 			{
 				ColumnName: "LastName",
@@ -144,7 +143,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				});
 			})
 				.then(function () {
-					getPage();
+					getPage(1);
 				});
 		},
 		paginationPageSize: 20,
@@ -153,10 +152,9 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		onRegisterApi: function (gridApi) {
 			$scope.gridApi = gridApi;
 			gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-				$scope.currentPageIndex = newPage;
-				paginationOptions.pageNumber = newPage;
-				paginationOptions.pageSize = pageSize;
-				getPage();
+				$scope.paginationOptions.pageNumber = newPage;
+				$scope.paginationOptions.pageSize = pageSize;
+				getPage(newPage);
 			});
 			gridApi.selection.on.rowSelectionChanged($scope, function (row) {
 				selectPeople([row]);
@@ -179,7 +177,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			selectedPeopleIds: getSelectedPeople(),
 			commandTag: commandTag,
 			currentKeyword: $scope.keyword,
-			paginationOptions: paginationOptions
+			paginationOptions: $scope.paginationOptions
 		});
 	};
 
@@ -203,7 +201,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			$scope.gridApi.grid.selection.selectAll = false;
 		}
 
-		$scope.selectAllVisible = $scope.totalPages > 1 && allRowsInCurrentPageSelected && !allRowsSelected;
+		$scope.selectAllVisible = $scope.paginationOptions.totalPages > 1 && allRowsInCurrentPageSelected && !allRowsSelected;
 	};
 
 	$scope.selectAllMatch = function () {
@@ -240,13 +238,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.sortChanged = function (grid, sortColumns) {
-		paginationOptions.sortColumns = [];
+		$scope.paginationOptions.sortColumns = [];
 
 		for (var i = 0; i < sortColumns.length; i++) {
 			var sortColumnName = sortColumns[i].name;
 			for (var j = 0; j < $scope.gridOptions.columnDefs.length; j++) {
 				if (sortColumnName === $scope.gridOptions.columnDefs[j].name) {
-					paginationOptions.sortColumns.push({
+					$scope.paginationOptions.sortColumns.push({
 						ColumnName: sortColumnName,
 						SortASC: sortColumns[i].sort.direction === uiGridConstants.ASC
 					});
@@ -255,15 +253,17 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			}
 		}
 
-		getPage();
+		getPage(1);
 	};
-
-	function getPage() {
-		$scope.currentPageIndex = $scope.searchKeywordChanged ? 1 : paginationOptions.pageNumber;
+	$scope.getPageData = function (pageIndex) {
+		$scope.gridApi.pagination.seek(pageIndex);
+	} 
+	function getPage(pageIndex) {
+		$scope.paginationOptions.pageNumber = $scope.searchKeywordChanged ? 1 : pageIndex;
 
 		var sortColumnList = "";
-		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
-			var column = paginationOptions.sortColumns[i];
+		for (var i = 0; i < $scope.paginationOptions.sortColumns.length; i++) {
+			var column = $scope.paginationOptions.sortColumns[i];
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		}
 
@@ -273,13 +273,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 		peopleSvc.search.query({
 			keyword: $scope.keyword,
-			pageSize: paginationOptions.pageSize,
-			currentPageIndex: $scope.currentPageIndex,
+			pageSize: $scope.paginationOptions.pageSize,
+			currentPageIndex: $scope.paginationOptions.pageNumber,
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
 			$scope.gridOptions.data = result.People;
-			$scope.gridOptions.paginationCurrentPage = $scope.currentPageIndex;
+			$scope.gridOptions.paginationCurrentPage = $scope.paginationOptions.pageNumber;
 			angular.forEach($scope.searchResult, function (person) {
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
@@ -312,10 +312,10 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			}
 			setPeopleSelectionStatus();
 			$scope.optionalColumns = result.OptionalColumns;
-			$scope.totalPages = result.TotalPages;
+			$scope.paginationOptions.totalPages = result.TotalPages;
 			$scope.keyword = $scope.defautKeyword();
 			$scope.searchKeywordChanged = false;
-			$scope.gridOptions.totalItems = result.TotalPages * paginationOptions.pageSize;
+			$scope.gridOptions.totalItems = result.TotalPages * $scope.paginationOptions.pageSize;
 		});
 	}
 
@@ -366,13 +366,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.searchKeyword = function () {
-		getPage();
+		getPage($scope.paginationOptions.pageNumber);
 	};
 
 	var loadAllResults = function (successCallback) {
 		var sortColumnList = "";
-		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
-			var column = paginationOptions.sortColumns[i];
+		for (var i = 0; i < $scope.paginationOptions.sortColumns.length; i++) {
+			var column = $scope.paginationOptions.sortColumns[i];
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		}
 
@@ -397,57 +397,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			return "\"" + $scope.gridOptions.data[0].Team.replace("/", "\" \"") + "\"";
 		}
 		return $scope.keyword;
-	};
-
-	$scope.getVisiblePageNumbers = function (start, end) {
-		var displayPageCount = 5;
-		var ret = [];
-		if (!end) {
-			end = start;
-			start = 1;
-		}
-
-		var leftBoundary = start;
-		var rightBoundary = end;
-		if (end - start >= displayPageCount) {
-			var currentPageIndex = $scope.currentPageIndex;
-
-			if (currentPageIndex < displayPageCount - 1) {
-				leftBoundary = 1;
-				rightBoundary = displayPageCount;
-			} else if (end - currentPageIndex < 3) {
-				leftBoundary = end - displayPageCount + 1;
-				rightBoundary = end;
-			} else {
-				leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
-				rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
-			}
-		}
-
-		for (var i = leftBoundary; i <= rightBoundary ; i++) {
-			ret.push(i);
-		}
-
-		return ret;
-	};
-
-	$scope.prevPage = function () {
-		if ($scope.currentPageIndex > 1) {
-			$scope.currentPageIndex--;
-			$scope.searchKeyword();
-		}
-	};
-
-	$scope.nextPage = function () {
-		if ($scope.currentPageIndex < $scope.totalPages) {
-			$scope.currentPageIndex++;
-			$scope.searchKeyword();
-		}
-	};
-
-	$scope.setPage = function () {
-		$scope.currentPageIndex = this.n;
-		$scope.searchKeyword();
 	};
 
 	$scope.showAdvancedSearchOption = false;
@@ -483,7 +432,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 		$scope.keyword = keyword;
 
-		getPage();
+		getPage($scope.paginationOptions.pageNumber);
 	};
 
 	var promisesForDataInitialization = [];
