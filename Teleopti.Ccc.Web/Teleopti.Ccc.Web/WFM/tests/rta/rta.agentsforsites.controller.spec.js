@@ -266,4 +266,15 @@ describe('RtaAgentsForSitesCtrl', function() {
 		$interval.flush(5000);
 		$httpBackend.verifyNoOutstandingRequest();
 	});
+
+	it('should not go back to sites overview when business unit is not initialized yet', function() {
+		$sessionStorage.buid = undefined;
+
+		createController();
+		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+		spyOn($state, 'go');
+		scope.$digest();
+
+		expect($state.go).not.toHaveBeenCalledWith('rta');
+	});
 });

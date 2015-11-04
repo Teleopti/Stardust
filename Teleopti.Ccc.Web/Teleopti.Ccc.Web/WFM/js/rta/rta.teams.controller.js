@@ -77,7 +77,7 @@
 					return $sessionStorage.buid;
 				},
 				function(newValue, oldValue) {
-					if (newValue !== oldValue) {
+					if (oldValue !== undefined && newValue !== oldValue) {
 						$scope.goBack();
 					}
 				}
