@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				{
 					_loadAllTenants.Tenants().ForEach(dsConf =>
 					{
-						_dataSourceForTenant.MakeSureDataSourceExists(dsConf.Name,
+						_dataSourceForTenant.MakeSureDataSourceCreated(dsConf.Name,
 							dsConf.DataSourceConfiguration.ApplicationConnectionString,
 							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);

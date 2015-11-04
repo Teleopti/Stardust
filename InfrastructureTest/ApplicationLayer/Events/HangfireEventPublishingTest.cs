@@ -26,14 +26,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
-		public FakeApplicationDataWithTestDatasource ApplicationData;
+		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
-			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData>();
-			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
+			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public void ShouldPassTenant()
 		{
 			var dataSource = new FakeDataSource {DataSourceName = RandomName.Make()};
-			ApplicationData.RegisteredDataSources = new[] {dataSource };
+			DataSources.Has(dataSource);
 
 			using (DataSource.OnThisThreadUse(dataSource))
 				Target.Publish(new HangfireTestEvent());

@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
+			if (applicationNhibConfiguration == null)
+				applicationNhibConfiguration = new Dictionary<string, string>();
 			applicationNhibConfiguration[Environment.SessionFactoryName] = tenantName;
 			applicationNhibConfiguration[Environment.ConnectionString] = applicationConnectionString;
 			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
@@ -60,6 +62,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private IDataSource createDataSource(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
 		{
+			if (applicationNhibConfiguration == null)
+				applicationNhibConfiguration = new Dictionary<string, string>();
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(applicationNhibConfiguration);
 			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];

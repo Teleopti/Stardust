@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				var loadAllTenants = new LoadAllTenants(tenantUnitOfWorkManager);
 				loadAllTenants.Tenants().ForEach(dsConf =>
 				{
-					container.Resolve<IDataSourceForTenant>().MakeSureDataSourceExists(dsConf.Name,
+					container.Resolve<IDataSourceForTenant>().MakeSureDataSourceCreated(dsConf.Name,
 						dsConf.DataSourceConfiguration.ApplicationConnectionString,
 						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);

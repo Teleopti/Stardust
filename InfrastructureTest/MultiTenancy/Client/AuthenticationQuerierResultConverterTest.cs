@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb, ApplicationConnectionString = appConnString})
 				});
 			result.Success.Should().Be.True();
-			dataSourceForTenant.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appConnString, analyticsdb, appdb));
+			dataSourceForTenant.AssertWasCalled(x => x.MakeSureDataSourceCreated(tenantName, appConnString, analyticsdb, appdb));
 		}
 
 		[Test]
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dataSource = new FakeDataSource{Application = uowFactory, DataSourceName = RandomName.Make()};
-			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
-			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, null);
+			dataSourceForTenant.Has(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
 			var dataSource = new FakeDataSource {DataSourceName = RandomName.Make()};
-			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
-			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, null);
+			dataSourceForTenant.Has(dataSource);
 
 			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUnauthorizedUserDoesntMatter);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
 			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
-			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
-			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, null);
+			dataSourceForTenant.Has(dataSource);
 			var tenantPassword = RandomName.Make();
 
 			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => dataSourceForTenant, loadUnauthorizedUserDoesntMatter);
@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dataSource = new FakeDataSource { Application = uowFactory, DataSourceName = RandomName.Make()};
-			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
-			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, null);
+			dataSourceForTenant.Has(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today.AddDays(-1), new PersonAccountUpdaterDummy());
@@ -150,8 +150,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var personId = Guid.NewGuid();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dataSource = new FakeDataSource { Application = uowFactory, DataSourceName = RandomName.Make() };
-			var dataSourceForTenant = new DataSourceForTenant(null, null, null);
-			dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, null);
+			dataSourceForTenant.Has(dataSource);
 			var loadUser = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today, new PersonAccountUpdaterDummy());

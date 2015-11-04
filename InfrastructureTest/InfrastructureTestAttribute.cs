@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Autofac;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,6 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private IDisposable _messageSenderScope;
 		public FakeMessageSender MessageSender;
 		public IDataSourceForTenant DataSourceForTenant;
-		public IDataSourcesFactory DataSourcesFactory;
 
 		protected override FakeConfigReader Config()
 		{
@@ -53,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.AddService(TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests));
 			system.UseTestDouble<FakeConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-			system.UseTestDouble<FakeMessageSender>().For<Interfaces.MessageBroker.Client.IMessageSender>(); // Does not fake all message senders, just adds one to the list
+			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 		}
 
@@ -61,9 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.BeforeTest();
 
-			var nonFakedDataSourceForTenant = DataSourceForTenant as DataSourceForTenant;
-			if (nonFakedDataSourceForTenant != null)
-				nonFakedDataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(DataSourcesFactory.Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null));
+			DataSourceForTenant.MakeSureDataSourceCreated("App", ConnectionStringHelper.ConnectionStringUsedInTests, null, null);
 
 			MessageSender.AllNotifications.Clear();
 

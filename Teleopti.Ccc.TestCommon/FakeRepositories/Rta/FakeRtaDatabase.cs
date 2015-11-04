@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
 		public readonly FakeAdherencePercentageReadModelPersister AdherencePercentageReadModelPersister;
-		private readonly DataSourceForTenant _dataSourceForTenant;
+		private readonly FakeDataSourceForTenant _dataSourceForTenant;
 
 		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
 			FakeAdherenceDetailsReadModelPersister adherenceDetailsReadModelPersister,
 			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister,
-			DataSourceForTenant dataSourceForTenant
+			FakeDataSourceForTenant dataSourceForTenant
 			)
 		{
 			_config = config;
@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			// only required without multi-tenancy I think...
 			// because then the rta requires all tenants to be loaded at startup to find the datasource from a connection string
+
 			var dataSource = new FakeDataSource(name)
 			{
 				Application = new FakeUnitOfWorkFactory
@@ -154,7 +155,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					ConnectionString = _config.ConnectionString("RtaApplication")
 				}
 			};
-			_dataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			_dataSourceForTenant.Has(dataSource);
+
 			Tenants.Has(new Infrastructure.MultiTenancy.Server.Tenant(name) {RtaKey = key});
 			return this;
 		}

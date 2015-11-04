@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			dataSourcesFactory.Expect(x => x.Create(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf)).Return(dataSource);
 			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), new FindTenantByNameWithEnsuredTransactionFake());
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
-			target.MakeSureDataSourceExists(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf);
+			target.MakeSureDataSourceCreated(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 		}
 
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var appNhibConf = new Dictionary<string, string>();
 			var statisticConnString = RandomName.Make();
 			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
-			var target = new DataSourceForTenant(dataSourcesFactory, null, null);
-			target.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var target = new FakeDataSourceForTenant(dataSourcesFactory, null, null);
+			target.Has(dataSource);
 
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 			dataSourcesFactory.AssertWasNotCalled(x => x.Create(appNhibConf, statisticConnString));
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null, null, null);
-			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
+			var target = new FakeDataSourceForTenant(null, null, null);
+			target.Has(ds);
 			target.Tenant(dsName).Should().Be.SameInstanceAs(ds);
 		}
 
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
-			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
+			var target = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
+			target.Has(ds);
 			target.Tenant("something else").Should().Be.Null();
 		}
 
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
-			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
+			var target = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
+			target.Has(ds);
 			target.RemoveDataSource(dsName);
 			target.Tenant(dsName).Should().Be.Null();
 		}
@@ -101,9 +101,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			ds1.Expect(x => x.DataSourceName).Return(RandomName.Make());
 			var ds2 = MockRepository.GenerateMock<IDataSource>();
 			ds2.Expect(x => x.DataSourceName).Return(RandomName.Make());
-			var target = new DataSourceForTenant(null, null, null);
-			target.MakeSureDataSourceExists_UseOnlyFromTests(ds1);
-			target.MakeSureDataSourceExists_UseOnlyFromTests(ds2);
+			var target = new FakeDataSourceForTenant(null, null, null);
+			target.Has(ds1);
+			target.Has(ds2);
 
 			target.DoOnAllTenants_AvoidUsingThis(tenant => tenant.ResetStatistic());
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var setLicenseActivator = MockRepository.GenerateMock<ISetLicenseActivator>();
 
 			var target = new DataSourceForTenant(dataSourcesFactory, setLicenseActivator, null);
-			target.MakeSureDataSourceExists(RandomName.Make(), null, null, new Dictionary<string, string>());
+			target.MakeSureDataSourceCreated(RandomName.Make(), null, null, new Dictionary<string, string>());
 
 			setLicenseActivator.AssertWasCalled(x => x.Execute(dataSource));
 		}

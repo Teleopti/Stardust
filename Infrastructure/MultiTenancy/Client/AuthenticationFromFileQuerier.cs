@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var dataSourceForTenant = _dataSourceForTenant();
 			var result = JsonConvert.DeserializeObject<AuthenticationInternalQuerierResult>(json);
-			dataSourceForTenant.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationConnectionString, result.DataSourceConfiguration.AnalyticsConnectionString, new Dictionary<string, string>());
+			dataSourceForTenant.MakeSureDataSourceCreated(result.Tenant, result.DataSourceConfiguration.ApplicationConnectionString, result.DataSourceConfiguration.AnalyticsConnectionString, new Dictionary<string, string>());
 			var datasource = dataSourceForTenant.Tenant(result.Tenant);
 			var ret = new AuthenticationQuerierResult
 			{

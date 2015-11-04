@@ -25,12 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
 		public IHangfireEventProcessor Target;
-		public FakeApplicationDataWithTestDatasource ApplicationData;
+		public FakeDataSourceForTenant DataSources;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<IApplicationData>();
-			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
+			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldSetCurrentDataSourceFromJob()
 		{
-			ApplicationData.RegisteredDataSources = new[] {new FakeDataSource {DataSourceName = "tenant" } };
+			DataSources.Has(new FakeDataSource { DataSourceName = "tenant" });
 
 			Target.Process(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
 

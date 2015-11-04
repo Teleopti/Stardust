@@ -7,21 +7,41 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
+	public class FakeDataSourceForTenant : DataSourceForTenant
+	{
+		public FakeDataSourceForTenant(
+			IDataSourcesFactory dataSourcesFactory,
+			ISetLicenseActivator setLicenseActivator,
+			IFindTenantByNameWithEnsuredTransaction findTenantByNameWithEnsuredTransaction
+			) : base(
+				dataSourcesFactory,
+				setLicenseActivator,
+				findTenantByNameWithEnsuredTransaction)
+		{
+		}
+
+		public void Has(IDataSource datasource)
+		{
+			DataSources[datasource.DataSourceName] = datasource;
+		}
+	}
+
 	public class DataSourceForTenant : IDataSourceForTenant
 	{
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly ISetLicenseActivator _setLicenseActivator;
 		private readonly IFindTenantByNameWithEnsuredTransaction _findTenantByNameWithEnsuredTransaction;
-		private readonly IDictionary<string, IDataSource> _registeredDataSources;
+		protected readonly IDictionary<string, IDataSource> DataSources;
 
-		public DataSourceForTenant(IDataSourcesFactory dataSourcesFactory, 
-														ISetLicenseActivator setLicenseActivator, 
-														IFindTenantByNameWithEnsuredTransaction findTenantByNameWithEnsuredTransaction)
+		public DataSourceForTenant(
+			IDataSourcesFactory dataSourcesFactory,
+			ISetLicenseActivator setLicenseActivator,
+			IFindTenantByNameWithEnsuredTransaction findTenantByNameWithEnsuredTransaction)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_setLicenseActivator = setLicenseActivator;
 			_findTenantByNameWithEnsuredTransaction = findTenantByNameWithEnsuredTransaction;
-			_registeredDataSources = new Dictionary<string, IDataSource>();
+			DataSources = new Dictionary<string, IDataSource>();
 		}
 
 		public IDataSource Tenant(string tenantName)
@@ -32,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			var notYetParsedTenant = _findTenantByNameWithEnsuredTransaction.Find(tenantName);
 			if (notYetParsedTenant != null)
 			{
-				MakeSureDataSourceExists(notYetParsedTenant.Name,
+				MakeSureDataSourceCreated(notYetParsedTenant.Name,
 					notYetParsedTenant.DataSourceConfiguration.ApplicationConnectionString,
 					notYetParsedTenant.DataSourceConfiguration.AnalyticsConnectionString,
 					notYetParsedTenant.DataSourceConfiguration.ApplicationNHibernateConfig);
@@ -43,11 +63,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private IDataSource findTenant(string tenantName)
 		{
 			IDataSource found;
-			return _registeredDataSources.TryGetValue(tenantName, out found) ? found : null;
+			return DataSources.TryGetValue(tenantName, out found) ? found : null;
 		}
 
 		private readonly object dataSourceListLocker = new object();
-		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
+		public void MakeSureDataSourceCreated(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
 			if (findTenant(tenantName) != null)
 				return;
@@ -58,26 +78,22 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 				var newDataSource = _dataSourcesFactory.Create(tenantName, applicationConnectionString, analyticsConnectionString, applicationNhibConfiguration);
 				_setLicenseActivator.Execute(newDataSource);
-				_registeredDataSources[tenantName] = newDataSource;
+				DataSources[tenantName] = newDataSource;
 			}
 		}
 
 		public void RemoveDataSource(string tenantName)
 		{
+			// shouldnt this dispose?
 			lock (dataSourceListLocker)
 			{
-				_registeredDataSources.Remove(tenantName);
+				DataSources.Remove(tenantName);
 			}
-		}
-
-		public void MakeSureDataSourceExists_UseOnlyFromTests(IDataSource datasource)
-		{
-			_registeredDataSources[datasource.DataSourceName] = datasource;
 		}
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{
-			foreach (var dataSource in _registeredDataSources.Values)
+			foreach (var dataSource in DataSources.Values)
 			{
 				actionOnTenant(dataSource);
 			}
@@ -85,11 +101,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		public void Dispose()
 		{
-			foreach (var dataSource in _registeredDataSources.Values)
+			foreach (var dataSource in DataSources.Values)
 			{
 				dataSource.Dispose();
 			}
-			_registeredDataSources.Clear();
+			DataSources.Clear();
 		}
 	}
 }

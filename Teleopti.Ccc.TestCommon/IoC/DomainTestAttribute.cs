@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			system.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName>();
-			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
+			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			//
 

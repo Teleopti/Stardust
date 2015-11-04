@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 					{
 
-						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceExists(dsConf.Name,
+						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceCreated(dsConf.Name,
 							dsConf.DataSourceConfiguration.ApplicationConnectionString,
 							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig));

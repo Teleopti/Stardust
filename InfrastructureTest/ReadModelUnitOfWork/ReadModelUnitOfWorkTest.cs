@@ -5,20 +5,17 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
@@ -34,8 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeApplicationDataWithTestDatasource>().For<ICurrentApplicationData>();
-			system.UseTestDouble<DataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 	}
 
@@ -50,7 +45,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public FakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
-		public FakeApplicationDataWithTestDatasource ApplicationData;
 		public FakeConfigReader ConfigReader;
 		public IDataSourceScope DataSource;
 
