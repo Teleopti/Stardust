@@ -77,9 +77,10 @@ input[type=text],input[type=password],input[type=number]{
 	z-index:1;
 
 	div{
-		height:33px;
-		position:relative;
-		padding-top:10px;
+		height: 34px;
+		position: relative;
+		padding-top: 10px;
+		background: $white;
 	}
 
 	.breadcrumb-inverse{
@@ -174,13 +175,18 @@ a.mfb-component__button--main {
 	left:0;
 	right:0;
 	bottom:0;
+
+
+	md-backdrop.md-sidenav-backdrop{
+		display:none;
+	}
 }
 
 .seatmap-canvas-edit-mode{
 	top:34px;
 }
 
-.seatmap-canvas .wfm-block{
+.wfm-block{
 	width: 100%;
 	margin: 0;
 	padding:0 10px 0 10px;
@@ -304,88 +310,146 @@ seatmap-editor{
 	background:-moz-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
 }
 
-.seatmap-occupancy-detail {
+seatmap-occupancy-detail{
+	top: 40px;
+	bottom: 0;
+	position: absolute;
+	right: 0;
+	left: 0;
+}
+
+.seatmap-right-panel{
 	background:$white;
 	display: block;
-	min-height:120px;
-	max-height:500px;
-	background:$white;
-	transition:all 0.35s ease-in-out;
-	border-top: 1px solid #e1e2e3;
+	transition:all 0.35s ease-in-out;	
 	overflow:hidden;
+	width:30%;
+	min-width:380px;
+	position: absolute;
+	border-left:1px solid #e1e2e3;
+	right: 0;
+	top: 1px;
+	bottom: 0;
 
-	.seatbooking-operations-add, .seatbooking-operations-cancel {
-		position:absolute;
-		top:0;
-		right:0;
+	.seatmap-occupancy-detail {
+		top: 0;
+		bottom: 0;
+		position: absolute;
+		right: 0;
+		left: 0;
 
-		.wfm-btn{
-			background:$white;
-		}
+		.seatbooking-operations-add, .seatbooking-operations-cancel {
+			position:absolute;
+			top:3px;
+			height:40px;
+			width:100%;
+			border-bottom:1px solid #e1e2e3;
 
-		.wfm-btn:hover{
-			background:#f1f2f3;
-		}
-	}
-
-	.people-search{
-		padding-top: 5px;
-		padding-bottom: 3px;
-	}
-
-	.select-all-dialog{
-		margin:0;
-	}
-
-	.big-table-wrapper{
-		box-shadow: none;
-	}
-
-	.pagination {
-		 margin: 5px 0px;
-	}
-
-	.pagination li {
-		padding: 4px 8px 4px 8px;
-	}
-
-	.people-list.grid {
-		height: 100%;
-	}
-
-	.seat-booking-list{
-		max-height:250px;
-		overflow-y:auto;
-
-		.seat-booking-item{
-			.booking-list-header{
-				position:relative;
-				background:$white;
-				border-top:1px solid #e1e2e3;
-
-				.wfm-btn{
-					margin:2px;
-					padding: 3px 12px;
-					text-transform: none;
-				}
-
-				.pull-right{
-					height:100%;
-					margin-top:-3px;
-				}
+			.wfm-btn{
+				height: 100%;
+				padding: 5px 10px;
+				margin: 0;
+				background: $white;
 			}
 
+			.wfm-btn:hover{
+				background:#f1f2f3;
+			}
+		}
+
+		people-selection-list{
+			top: 40px;
+			bottom: 0;
+			position: absolute;
+			right: 0;
+			left: 0;
+		}
+	
+		people-selection-list>div{
+			top: 0;
+			bottom: 120px;
+			position: absolute;
+			right: 0;
+			left: 0;
+
+			.people-search{
+				padding-top: 5px;
+				padding-bottom: 3px;
+			}
+
+			.col-md-4{
+				width:100%;		
+			}
+	
+			.select-all-dialog{
+				margin:0;
+				transition: all 0.35s;
+				-moz-transition: all 0.35s;
+				-webkit-transition: all 0.35s;
+				-o-transition: all 0.35s; 
+			}
+
+			.big-table-wrapper{
+				height:100%;
+				box-shadow: none;
+				position: relative;
+				transition: all 0.35s;
+				-moz-transition: all 0.35s;
+				-webkit-transition: all 0.35s;
+				-o-transition: all 0.35s; 
+			}
+
+			.pagination {
+				 margin: 5px 0px;
+			}
+
+			.pagination li {
+				padding: 4px 8px 4px 8px;
+			}
+
+			.people-list.grid {
+				height: 100%;
+			}
+		}
+
+		.seat-booking-list{
+			overflow:auto;
+			position:absolute;
+			top:40px;
+			right:0;
+			left:0;
+
 			.wfm-list{
-				max-height:166px;
 				overflow-y:auto;
 			}
 
+			.wfm-list li{
+				border-top:1px solid rgba(0,0,0,0.06);								
+				border-bottom:1px solid rgba(0,0,0,0.06);								
+			}
+			
+			.seat-booking-seatname{
+				width:20%;
+				overflow:hidden;
+			}
+	
+			.seat-booking-item{
+				margin-left:20%;
+			}
+
+			.seat-booking-item.first-seat-booking{
+				margin-left:0;	
+			}
+	
 			span{
 				max-width:100%;
 			}
+
+			.default-cursor{
+				cursor:default;
+			}
 		}
 	}
-
 }
 
 .seatmap-seatbooking-previousday{

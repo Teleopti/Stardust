@@ -5,8 +5,10 @@
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 		
-	
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout', '$mdDialog'];
+seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout', '$mdDialog'];
+
+
+
 
 	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout, $mdDialog) {
 

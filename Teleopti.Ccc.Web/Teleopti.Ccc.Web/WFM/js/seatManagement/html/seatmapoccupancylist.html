@@ -1,40 +1,34 @@
-﻿<div class="seatmap-occupancy-detail" ng-show="vm.occupancyDetails">
-
-	<div class="seatbooking-operations-add" ng-click="vm.showPersonSelectionPanel()" ng-if="!vm.showPeopleSelection">
-		<button class="wfm-btn wfm-btn-invis-primary add-agents">Add</button>
+﻿<div class="seatmap-occupancy-detail">
+	<div class="seatbooking-operations-add" ng-if="!vm.showPeopleSelection && vm.occupancyDetails">
+		<button class="wfm-btn wfm-btn-invis-primary add-agents pull-right" ng-click="vm.showPersonSelectionPanel()">Add</button>
 	</div>
 
-	<div class="seatbooking-operations-cancel" ng-click="vm.showPeopleSelection = false;" ng-if="vm.showPeopleSelection">
-		<button class="wfm-btn wfm-btn-invis-primary cancel-operation">Cancel</button>
-		<button class="wfm-btn wfm-btn-invis-primary assign-agents" ng-click="vm.asignAgentsToSeats()">Assign</button>
+	<div class="seatbooking-operations-cancel" ng-if="vm.showPeopleSelection">
+		<button class="wfm-btn wfm-btn-invis-primary assign-agents pull-right" ng-click="vm.asignAgentsToSeats();vm.showPeopleSelection = false;">Assign</button>
+		<button class="wfm-btn wfm-btn-invis-primary cancel-operation pull-right" ng-click="vm.showPeopleSelection = false;">Cancel</button>
 	</div>
+
+	<h3 ng-show="!vm.occupancyDetails">{{'NoSeatSelected' | translate}}</h3>
 
 	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" clear-selected-people="vm.resetPersonSearch"></people-selection-list>
 
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
-		<div class="seat-booking-item" ng-repeat="detail in vm.occupancyDetails">
-			<div class="booking-list-header">
-				Seat: {{detail.SeatName}}
-			</div>
+		<ul class="wfm-list" ng-repeat="detail in vm.occupancyDetails">
+			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
+				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">Seat {{detail.SeatName}}:</span>
 
-			<ul class="wfm-list">
-				<li class="active" ng-repeat="booking in detail.Occupancies">
+				<span ng-if="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking':$index==0}">
+					{{vm.getDisplayTime(booking)}}
+					&nbsp;&nbsp;{{booking.FirstName}}
+					&nbsp;{{booking.LastName}}
+				</span>
 
-					<span class="list-item-container" ng-if="!booking.IsEmpty" ng-class="vm.getSeatBookingDetailClass(booking)">
-						{{vm.getDisplayTime(booking)}}
-						&nbsp;&nbsp;{{booking.FirstName}}
-						&nbsp;{{booking.LastName}}
-					</span>
+				<span ng-if="booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking':$index==0}">{{'SeatHasNoBookings'|translate}}</span>
 
-					<span class="list-item-container" ng-if="booking.IsEmpty">{{'SeatHasNoBookings'|translate}}</span>
-
-					<div class="wfm-leave-behind wfm-leave-behind-1" ng-if="!booking.IsEmpty">
-						<span ng-click="vm.deleteSeatBooking(booking)"><i class="mdi mdi-delete"></i></span>
-					</div>
-
-				</li>
-			</ul>
-		</div>
+				<div class="wfm-leave-behind wfm-leave-behind-1" ng-if="!booking.IsEmpty">
+					<span ng-click="vm.deleteSeatBooking(booking)"><i class="mdi mdi-delete"></i></span>
+				</div>
+			</li>
+		</ul>
 	</div>
-
 </div>
