@@ -58,9 +58,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
 					 .SingleInstance();
 			}
-
-			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().As<IMessageSendersScope>().SingleInstance();
 		}
 	}
 }
