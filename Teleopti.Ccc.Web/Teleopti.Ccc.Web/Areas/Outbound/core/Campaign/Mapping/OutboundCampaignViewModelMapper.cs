@@ -15,12 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() { WeekDay = workingHour.Key, StartTime = workingHour.Value.StartTime, EndTime = workingHour.Value.EndTime });
 
-			var startDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone);
-			var endDateTime = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone);
+			var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(campaign.BelongsToPeriod.StartDate.Date, DateTimeKind.Utc));
+			var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(campaign.BelongsToPeriod.EndDate.Date, DateTimeKind.Utc));
 
-			var startDateAsUtc = new DateOnly(DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc));
-			var endDateAsUtc = new DateOnly(DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc));
-		
 			var campaignVm = new CampaignViewModel
 			{
 				Id = campaign.Id,
