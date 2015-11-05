@@ -243,6 +243,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tenants.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\CiscoFinesse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CiscoFinesse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\CiscoFinesseStepDefination.cs" />
     <Compile Include="Wfm\Forecasting\Forecaster.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1062,6 +1068,10 @@
     <None Include="MultiTenancy\Tenants.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Tenants.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\CiscoFinesse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CiscoFinesse.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Forecasting\Forecaster.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

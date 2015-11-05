@@ -481,5 +481,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId);
 		}
+
+		public static void GotoPageCiscoFinesse()
+		{
+			GoToPage("MyTime/CiscoWidget");
+		}
 	}
 }
