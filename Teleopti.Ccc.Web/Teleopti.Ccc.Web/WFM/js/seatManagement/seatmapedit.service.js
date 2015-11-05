@@ -11,9 +11,10 @@ angular.module('wfm.seatMap')
 			addSeat: addSeat,
 			remove: remove,
 			addText: addText,
+			copy: copy,
+			paste: paste,
 			flip: flip,
 			addLocation:addLocation,
-			onKeyDownHandler: onKeyDownHandler,
 			save: save,
 			group: groupActiveObjects,
 			ungroup: ungroupActiveObjects,
@@ -30,40 +31,7 @@ angular.module('wfm.seatMap')
 			spaceActiveGroupHorizontal: spaceActiveGroupHorizontal
 		};
 
-		function onKeyDownHandler(canvas, event) {
-			//event.preventDefault();
-			var key = window.event ? window.event.keyCode : event.keyCode;
-
-			switch (key) {
-				case 67: // Ctrl+C
-					if (event.ctrlKey) {
-						preventDefaultEvent(event);
-						copy(canvas);
-					}
-					break;
-				case 86: // Ctrl+V
-					if (event.ctrlKey) {
-						preventDefaultEvent(event);
-						paste(canvas);
-					}
-					break;
-				case 45: // insert
-					addSeat(canvas, false);
-					break;
-				case 46: // delete
-					remove(canvas);
-					break;
-				default:
-					break;
-			}
-		};
-
-		function preventDefaultEvent(event) {
-			// ie <11 doesnt have e.preventDefault();
-			if (event.preventDefault) event.preventDefault();
-			event.returnValue = false;
-		};
-
+		
 		function copy(canvas) {
 			if (utils.hasActiveGroup(canvas)) {
 				// selected separate objects

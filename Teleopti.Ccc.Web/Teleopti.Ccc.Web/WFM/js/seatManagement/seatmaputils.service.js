@@ -464,9 +464,15 @@
 				// translate the group-relative coordinates to canvas relative ones
 				group._restoreObjectsState();
 				canvas.remove(group);
+
+				canvas.discardActiveObject();
+
 				for (var i = 0; i < items.length; i++) {
 					canvas.add(items[i]);
 				}
+
+				canvas.renderAll();
+
 			};
 
 			function deepUnGroup(canvas, group) {

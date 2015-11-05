@@ -12,7 +12,7 @@ input[type=text],input[type=password],input[type=number]{
 	right: -10px;
 	bottom: -10px;
 	left: -10px;
-
+	
 	.seatmap-view-header{
 		height: 41px;
 		position:relative;
@@ -70,8 +70,8 @@ input[type=text],input[type=password],input[type=number]{
 .location-breadcrumb{
 	background:$white;
 	position: absolute;
-	height:34px;
-	top:40px;
+	height:40px;
+	top:50px;
 	left:0;
 	right:0;
 	z-index:1;
@@ -177,7 +177,7 @@ a.mfb-component__button--main {
 }
 
 .seatmap-canvas-edit-mode{
-	top:44px;
+	top:34px;
 }
 
 .seatmap-canvas .wfm-block{
@@ -207,11 +207,60 @@ seatmap-editor{
 }
 
 #seatmap-toolbar{
-	padding-left:5px;
+	padding-left:0px;
 
 	.wfm-btn{
 		margin-top:2px;
 	}
+
+	md-toolbar {
+		min-height: 40px !important;
+		margin-bottom: 5px;
+	}
+
+	.md-menu-toolbar {
+		background-color: #f1f1f1 !important;
+	}
+
+	md-menu-bar {
+		padding: 0 !important;
+		
+	}
+
+	md-menu-item button{
+		text-align: left;  /*IE fix*/
+	}
+
+	.menu-icon {
+		position: absolute;
+		padding: 0;
+		width: 24px;
+		top: 10px;
+		left: 24px;
+	}
+
+
+	.group-icon {
+		position: relative;
+		top: -1px;
+		width: 18px;
+		height: 19px;
+		background: url(../js/SeatManagement/Images/group.svg);
+	}
+
+	.ungroup-icon {
+		position: relative;
+		top: -1px;
+		width: 18px;
+		height: 19px;
+		background: url(../js/SeatManagement/Images/ungroup.svg);
+	}
+
+	.save-icon-unsaved-changes{
+		background-color : Green !important;
+	}
+
+
 }
 
 .cancel-changes{

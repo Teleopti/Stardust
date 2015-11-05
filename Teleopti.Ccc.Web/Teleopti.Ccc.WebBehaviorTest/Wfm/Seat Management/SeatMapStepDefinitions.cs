@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using System.ComponentModel;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Navigation = Teleopti.Ccc.WebBehaviorTest.Bindings.NavigationStepDefinitions;
@@ -9,17 +10,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 	class SeatMapStepDefinitions
 	{
 
-		[When(@"I edit the seat map")]
-		public void WhenIEditTheSeatMap()
-		{
-
-			Browser.Interactions.Click (".mfb-component__main-icon--active");
-		}
-
 		[When(@"I create a seat")]
 		public void WhenICreateASeat()
 		{
-			Browser.Interactions.Click(".mdi-plus");
+			Browser.Interactions.Click("#menuFile");
+			Browser.Interactions.Click("#menuFileAdd");
+			Browser.Interactions.Click("#menuFileAddSeat");
 		}
 		
 		[Then(@"I should see a seat in the seat map")]
@@ -34,11 +30,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[When(@"I create a location")]
 		public void WhenICreateALocation()
 		{
-			Browser.Interactions.ClickUsingJQuery(".mdi-tab-unselected");
+			Browser.Interactions.Click("#menuFile");
+			Browser.Interactions.Click("#menuFileAdd");
+			Browser.Interactions.Click("#menuFileAddLocation");
+
 			Browser.Interactions.FillWith("#locationName","Wibble");
 			Browser.Interactions.Click("#okButton");
 		}
 
+		
 		[Then(@"I should see a location in the seat map")]
 		public void ThenIShouldSeeALocationInTheSeatMap()
 		{
@@ -50,10 +50,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 
 		public void AssertCanvasUtilityFunctionResultContains (string function, string expectedResult )
 		{
-			var javascript = @"var injector = angular.element(document.getElementsByClassName('ng-scope')[0]).injector(); " +
-			                 @"var utils= injector.get('seatMapCanvasUtilsService');" +
-			                 @"var canvas = document.getElementById('c').fabric; " +
-							 function;
+			var javascript =	@"var scopeElement = angular.element(document.getElementsByClassName('ng-scope')[0]); " +	
+								@"var canvasElement = angular.element(document.getElementsByClassName('upper-canvas')[0]); "+
+								@"var injector = scopeElement.injector(); " +
+								@"var vm = canvasElement.scope().vm; " +
+								@"var utils= injector.get('seatMapCanvasUtilsService');" +
+								@"var canvas = vm.getCanvas();" +
+								function;
 			
 			Browser.Interactions.AssertJavascriptResultContains (javascript, expectedResult);
 		}

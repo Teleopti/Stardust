@@ -4,10 +4,11 @@
 
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
+		
+	
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout', '$mdDialog'];
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
-
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout, $mdDialog) {
 
 		var vm = this;
 		vm.isInEditMode = false;
@@ -25,9 +26,9 @@
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 
 		var canvas = new fabric.CanvasWithViewport('c');
-		init();
+		//init();
 
-		function init() {
+		vm.init = function () {
 			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {
 				if (e.preventDefault) e.preventDefault();
 				e.returnValue = false;
@@ -51,7 +52,8 @@
 
 			createDocumentListeners();
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+
 		};
 
 		vm.getDisplaySelectedDate = function () {
@@ -76,16 +78,13 @@
 		vm.resize = resize;
 
 		vm.handleBreadcrumbClick = function (id) {
-
-			if (vm.isInEditMode) return;
 			vm.isLoading = true;
-
-			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		vm.refreshSeatMap = function () {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
 		};
 
@@ -120,18 +119,16 @@
 		function setupObjectTypeDoubleClickHandler(objectType, callback) {
 			canvasUtils.getObjectsByType(canvas, objectType).forEach(function (object) {
 				object.on('object:dblclick', function (e) {
-					if (!vm.isInEditMode) {
-						if (object != null) {
-							callback(object);
-						}
-					};
+					if (object != null) {
+						callback(object);
+					}
 				});
 			});
 		};
 
 		function loadSeatMapOnLocationClick(location) {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function resetOnLoad(data) {
@@ -142,6 +139,7 @@
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
+				vm.loadedData = data.SeatMapJsonData;
 			}
 
 			resetZoom();

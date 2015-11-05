@@ -1,22 +1,164 @@
-﻿<div ng-if="!vm.readonly">
+﻿
+<div>
 	<div id="seatmap-toolbar">
+		<div>
+			<md-toolbar class="md-menu-toolbar">
+				<div layout="row">
+					<div>
+						<md-menu-bar>
+							<md-menu>
+								<button ng-click="$mdOpenMenu()" id="menuFile">
+									File
+								</button>
+								<md-menu-content>
 
-		<div ng-show="vm.isInEditMode">
+									<md-menu-item>
+										<md-menu>
+											<md-button ng-click="$mdOpenMenu()" id="menuFileAdd">Add</md-button>
+											<md-menu-content>
+												<md-menu-item class="md-indent">
+													<md-button ng-click="vm.addSeat()" id="menuFileAddSeat">
+														<i class="mdi mdi-chair-school menu-icon"></i>
+														Seat
+														<span class="md-alt-text">{{ 'A-S' | keyboardShortcut }}</span>
+													</md-button>
+												</md-menu-item>
+												<md-menu-item class="md-indent">
+													<md-button ng-click="vm.addLocation()" id="menuFileAddLocation">
+														<i class="mdi mdi-tab-unselected menu-icon"></i>
+														Location...
+														<span class="md-alt-text">{{ 'A-L' | keyboardShortcut }}</span>
+													</md-button>
+												</md-menu-item>
+												<md-menu-item class="md-indent">
+													<md-button ng-click="vm.addImage()">
+														<i class="mdi mdi-file-image menu-icon"></i>
+														Image...
+														<span class="md-alt-text">{{ 'A-I' | keyboardShortcut }}</span>
+													</md-button>
+												</md-menu-item>
+												<md-menu-item class="md-indent">
+													<md-button ng-click="vm.addText()">
+														<i class="mdi mdi-tooltip-text menu-icon"></i>
+														Text
+														<span class="md-alt-text">{{ 'A-T' | keyboardShortcut }}</span>
+													</md-button>
+												</md-menu-item>
+											</md-menu-content>
+										</md-menu>
+									</md-menu-item>
+									
+									<md-menu-divider></md-menu-divider>
 
-			<button class="wfm-btn wfm-btn-default" ng-click="vm.delete()">
-				<i class="mdi small mdi-close "></i>
+									<md-menu-item>
+										<md-button ng-click="vm.setBackgroundImage()">
+											Set Background Image...
+										</md-button>
+									</md-menu-item>
+									
+									<md-menu-item>
+										<md-button ng-click="vm.clearBackgroundImage()">
+											Clear Background Image
+										</md-button>
+									</md-menu-item>
+									
+									<md-menu-divider></md-menu-divider>
+
+									<md-menu-item>
+										<md-button ng-click="vm.save()" ng-disabled="!vm.hasChanges()">
+											Save
+											<span class="md-alt-text">Ctrl+S</span>
+										</md-button>
+									</md-menu-item>
+									
+
+								</md-menu-content>
+							</md-menu>
+							<md-menu>
+								<button ng-click="$mdOpenMenu()">
+									Edit
+								</button>
+								<md-menu-content>
+									
+									<md-menu-item class="md-indent">
+										<md-button ng-click="vm.refreshSeatMap()" ng-disabled="!vm.hasChanges()">
+											<i class="mdi mdi-undo menu-icon"></i>
+											Undo and revert to last Save
+										</md-button>
+									</md-menu-item>
+
+									<md-menu-divider></md-menu-divider>
+
+									<md-menu-item class="md-indent">
+										<md-button ng-click="vm.delete()" ng-disabled="!vm.hasObjectSelected()">
+											<i class="mdi mdi-delete menu-icon"></i>
+											Delete
+											<span class="md-alt-text">DEL</span>
+										</md-button>
+									</md-menu-item>
+
+									<md-menu-item class="md-indent">
+										<md-button ng-click="vm.delete()" ng-disabled="!vm.hasObjectSelected()">
+											<i class="mdi mdi-content-cut menu-icon"></i>
+											Cut
+											<span class="md-alt-text">{{ 'M-O' | keyboardShortcut }}</span>
+
+										</md-button>
+									</md-menu-item>
+									<md-menu-item class="md-indent">
+										<md-button ng-click="vm.copy()" ng-disabled="!vm.hasObjectSelected()">
+											<i class="mdi mdi-content-copy menu-icon"></i>
+											Copy
+											<span class="md-alt-text">{{ 'M-C' | keyboardShortcut }}</span>
+										</md-button>
+
+									</md-menu-item>
+									<md-menu-item class="md-indent">
+
+										<md-button ng-click="vm.paste()" >
+											<i class="mdi mdi-content-paste menu-icon"></i>
+											Paste
+											<span class="md-alt-text">{{ 'M-V' | keyboardShortcut }}</span>
+										</md-button>
+									</md-menu-item>
+									<md-menu-divider></md-menu-divider>
+									<md-menu-item class="md-indent">
+										<md-button ng-click="vm.showProperties()" ng-disabled="!vm.hasObjectSelected()">
+											<i class="mdi mdi-pencil menu-icon"></i>
+											Properties...
+											<span class="md-alt-text">{{ 'A-P' | keyboardShortcut }}</span>
+										</md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+						</md-menu-bar>
+					</div>
+				</div>
+			</md-toolbar>
+		</div>
+
+		<div>
+			
+			<button class="wfm-btn wfm-btn-primary" ng-click="vm.save()" ng-class="{'wfm-btn-primary-disabled': !vm.hasChanges()}">
+				<i class="mdi small mdi-content-save"></i>
 				<md-tooltip>
-					Delete Selected Items
+					Save
 				</md-tooltip>
 			</button>
+
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.group()">
-				<i class="mdi small mdi-airplane "></i>
+
+				<div class="mdi group-icon">
+					<i class="mdi small "></i>
+				</div>
 				<md-tooltip>
 					Group Selected Items
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.ungroup()">
-				<i class="mdi small mdi-television "></i>
+				<div class="mdi ungroup-icon">
+					<i class="mdi small "></i>
+				</div>
 				<md-tooltip>
 					Ungroup Items
 				</md-tooltip>
@@ -101,32 +243,7 @@
 			</button>
 		</div>
 	</div>
-	
-	<div class="seatmap-right-toobar" ng-class="{'top-adjust':(vm.isInEditMode)}">
-		<nav mfb-menu position="{{vm.chosen.position}}" effect="{{vm.chosen.effect}}" class="mfb-menu-group"
-			 active-icon="mdi-check" resting-icon="mdi-pencil"
-			 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-			 callback="vm.editButtonClick()"
-			 label=""
-			 resting-label="Edit Seat Map"
-			 active-label="Save Seat Map"
-			 toggling-method="{{vm.chosen.method}}" menu-state="vm.menuState">
-			<button mfb-button icon="{{button.icon}}" ng-click="vm.floatingButtonClick(button.action)"
-					label="{{button.label}}" ng-repeat="button in vm.buttons"></button>
-		</nav>
 
-		<div class="cancel-changes">
-			<button ng-show="vm.isInEditMode" class="mfb-component__button--main mfb-button-warning" ng-click="vm.toggleEditMode()">
-				<i class="mdi mdi-close" aria-hidden="true"></i>
-				<md-tooltip>
-					Cancel Changes
-				</md-tooltip>
-			</button>
-		</div>
-
-	</div>
-	
-	
 	<div class="modal-box">
 		<div ng-cloak ng-show="vm.showLocationDialog">
 			<div class="modalbg">

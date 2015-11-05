@@ -12,7 +12,6 @@
 	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, growl) {
 
 		var vm = this;
-		vm.isInEditMode = false;
 		vm.newLocationName = '';
 		vm.showLocationDialog = false;
 		vm.showFileDialog = false;
@@ -44,6 +43,10 @@
 			vm.fileCallbackFunction = vm.setChosenBackgroundImage;
 		};
 
+		vm.clearBackgroundImage = function () {
+			vm.setChosenBackgroundImage(null);
+		};
+		
 		vm.setChosenBackgroundImage = function (image) {
 			var imagePreviewElement = document.getElementById('image-preview');
 			vm.showFileDialog = false;
@@ -66,6 +69,19 @@
 
 		vm.addText = function () {
 			editor.addText(canvas(), 'Double click here to edit text');
+		}
+		
+		vm.copy = function () {
+			editor.copy(canvas());
+		};
+
+		vm.paste = function () {
+			editor.paste(canvas());
+		};
+
+		vm.cut = function () {
+			editor.copy(canvas());
+			editor.remove(canvas());
 		}
 
 		vm.group = function () {
@@ -120,27 +136,6 @@
 			editor.spaceActiveGroupHorizontal(canvas());
 		};
 
-		vm.editButtonClick = function () {
-			if (vm.isInEditMode) {
-				vm.save();
-				return;
-			}
-			vm.toggleEditMode();
-		}
-
-		vm.toggleEditMode = function () {
-			vm.isInEditMode = !vm.isInEditMode;
-			vm.parentVm.isInEditMode = vm.isInEditMode;
-
-			utils.setSelectionMode(canvas(), vm.isInEditMode);
-			if (!vm.isInEditMode) {
-				vm.menuState = 'closed';
-				refreshSeatMap();
-			} 
-			
-			utils.resize(canvas());
-		};
-
 		vm.delete = function () {
 			editor.remove(canvas());
 		};
@@ -148,42 +143,22 @@
 		vm.flip = function (horizontal) {
 			editor.flip(canvas(), horizontal);
 		}
+
+		vm.showProperties = function() {
+			editor.flip(canvas(), true);
+		}
+
+		vm.hasObjectSelected = function () {
+			return (canvas().getActiveObject() || canvas().getActiveGroup()) != null;
+		}
+
+		vm.hasChanges = function() {
+
+			return vm.parentVm.loadedData != JSON.stringify(canvas());
+		}
 		
-		vm.menuState = 'closed';
-
-		vm.floatingButtonClick = function (action) {
-			action();
-		};
-
-		vm.chosen = {
-			effect: 'slidein-spring',
-			position: 'tr',
-			method: 'click'
-		};
-
-		vm.buttons = [{
-			label: 'Add Seat',
-			icon: 'mdi-plus',
-			action: vm.addSeat
-		}, {
-			label: 'Add Location',
-			icon: 'mdi-tab-unselected',
-			action: vm.addLocation
-		}, {
-			label: 'Add Image',
-			icon: 'mdi-file-image',
-			action: vm.addImage
-		}, {
-			label: 'Add Text',
-			icon: ' mdi-tooltip-text',
-			action: vm.addText
-		}, {
-			label: 'Set background',
-			icon: 'mdi-file-image-box',
-			action: vm.setBackgroundImage
-		}];
-
-		function refreshSeatMap() {
+		vm.refreshSeatMap = function() {
+			
 			vm.parentVm.refreshSeatMap();
 		};
 
@@ -196,14 +171,93 @@
 		};
 
 		function onKeyDownHandler(event) {
-			if (vm.isInEditMode) {
-				editor.onKeyDownHandler(canvas(), event);
-			}
-
+			performKeyDownAction(canvas(), event);
+		};
+		
+		function preventDefaultEvent(event) {
+			// ie <11 doesnt have e.preventDefault();
+			if (event.preventDefault) event.preventDefault();
+			event.returnValue = false;
 		};
 
+		function performKeyDownAction(canvas, event) {
+			//event.preventDefault();
+			var key = window.event ? window.event.keyCode : event.keyCode;
+
+			switch (key) {
+				case 45: // insert
+					vm.addSeat();
+					break;
+				case 46: // delete
+					vm.delete();
+					break;
+				case 67: // Ctrl+C
+					if (event.ctrlKey) {
+						preventDefaultEvent(event);
+						vm.copy();
+					}
+					break;
+
+				case 73: // I
+					if (event.altKey) {
+						$scope.$apply(vm.addImage());
+					}
+					break;
+
+				case 76: // L
+					if (event.altKey) {
+						$scope.$apply(vm.addLocation());
+					}
+					break;
+
+				case 80: // P
+					if (event.altKey) {
+						preventDefaultEvent(event);
+						$scope.$apply(vm.showProperties());
+					}
+					break;
+
+				case 86: // Ctrl+V
+					if (event.ctrlKey) {
+						preventDefaultEvent(event);
+						vm.paste();
+					}
+					break;
+
+				case 83:
+					//Cntrl+S
+					if (event.ctrlKey) {
+						preventDefaultEvent(event);
+						saveData();
+					}
+					if (event.altKey) {
+						preventDefaultEvent(event);
+						vm.addSeat();
+					}
+					break;
+
+				case 84: //T
+					if (event.altKey) {
+						preventDefaultEvent(event);
+						vm.addText();
+					}
+					break;
+				
+				case 88: //X
+					if (event.ctrlKey) {
+						preventDefaultEvent(event);
+						vm.cut();
+					}
+
+					break;
+				default:
+					break;
+			}
+		};
+
+
 		function saveData() {
-			vm.isLoading = true;
+			vm.parentVm.isLoading = true;
 
 			var data = {
 				SeatMapData: JSON.stringify(canvas()),
@@ -222,8 +276,7 @@
 				disableCountDown: true
 			});
 
-			vm.toggleEditMode();
-			refreshSeatMap();
+			vm.refreshSeatMap();
 		};
 	
 	};

@@ -19,7 +19,11 @@
 
 	function linkFunction(scope, element, attributes, vm) {
 		vm.showEditor = 'edit' in attributes;
+		vm.isInEditMode = 'edit' in attributes;
+
 		vm.showOccupancy = 'occupancy' in attributes;
+
+		vm.init();
 	};
 
 	angular.module('wfm.seatMap')

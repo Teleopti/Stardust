@@ -20,7 +20,6 @@
 		var vm = controllers[0];
 		var parentVm = controllers[1];
 		vm.parentVm = parentVm;
-
 	};
 
 }());
