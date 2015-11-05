@@ -50,10 +50,10 @@
 			$scope.ganttOptions = setGanttOptions();
 			$scope.timespans = getGanttShadedTimespans();
 			$q.all([loadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function () {
-				updateCampaignStatus(function () {
-					$scope.isRefreshingGantt = false;
+				updateCampaignStatus(function () {					
 					addThresholdChangeWatch();
 					addPeriodStartChangeWatch();
+					$scope.isRefreshingGantt = false;
 				});
 			});
 			$scope.isInitFinished = true;
@@ -138,6 +138,10 @@
 			return deferred.promise;
 		}
 		
+		function isLastDayOfGanttPeriod(momentDate) {
+			
+		}
+
 		$scope.headerFormats = {
 			month: 'MMMM',
 			week: function (column) {				

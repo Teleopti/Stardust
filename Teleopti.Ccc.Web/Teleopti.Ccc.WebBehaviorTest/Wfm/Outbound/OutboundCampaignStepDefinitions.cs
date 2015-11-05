@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -54,7 +55,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
 			Browser.Interactions.WaitScopeCondition(".outbound-summary", "isRefreshingGantt", Is.EqualTo("false"),
-				() => { Browser.Interactions.ClickContaining(".campaign-visualization-toggle", campaignName); });			
+				() =>
+				{			
+					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
+				});			
 		}
 	
 		[Then(@"I should see the backlog visualization of '(.*)'")]
@@ -93,8 +97,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "preventAutomaticRedirect", "true"}
 			});
 
-			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", Is.EqualTo("true"), () => 
-					Browser.Interactions.Click(".form-submit"));							
+			Browser.Interactions.WaitScopeCondition(".campaign-create", "isInputValid()", Is.EqualTo("true"), () =>
+
+					Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary"));							
 		}
 
 		[When(@"after the creation I goto the campaign list page")]
@@ -110,8 +115,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		{
 			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isCampaignLoaded()", Is.EqualTo("true"), () =>
 			{
-				Browser.Interactions.Click(".trigger-campaign-delete");
-				Browser.Interactions.Click(".modal-box .confirm-delete");
+				Browser.Interactions.ClickVisibleOnly(".trigger-campaign-delete");
+				Browser.Interactions.ClickVisibleOnly(".modal-box .confirm-delete");
 			});							
 		}
 
@@ -141,7 +146,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			});
 
 			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isInputValid()", Is.EqualTo("true"), () =>
-					Browser.Interactions.Click(".form-submit"));	
+					Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary"));	
 		}
 
 		[When(@"after the update is done I goto the campaign list page")]
@@ -177,7 +182,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		public void WhenIViewTheDetailOfTheCampaignCreatedWith(Table table)
 		{
 			WhenIViewTheBacklogChartOfTheCampaignCreatedWith(table);
-			Browser.Interactions.Click(".btn-goto-edit-campaign");
+			Browser.Interactions.ClickVisibleOnly(".btn-goto-edit-campaign");
 		}
 
 		[When(@"I select all the dates from '(.*)' to '(.*)'")]
@@ -205,7 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 
 			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualProductionPlan()", Is.EqualTo("true"),
 				() => {
-					Browser.Interactions.Click(".btn-save-plan");
+					Browser.Interactions.ClickVisibleOnly(".btn-save-plan");
 				}, true);
 		}
 
@@ -228,7 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I replan the campaign")]
 		public void WhenIReplanTheCampaign()
 		{
-			Browser.Interactions.Click(".btn-replan");			
+			Browser.Interactions.ClickVisibleOnly(".btn-replan");			
 		}
 
 		[Then(@"I should see the campaign is done after the end date")]
@@ -250,7 +255,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.WaitScopeCondition("campaign-commands-pane", "validManualBacklog()", Is.EqualTo("true"),
 				() =>
 				{
-					Browser.Interactions.Click(".btn-save-backlog");
+					Browser.Interactions.ClickVisibleOnly(".btn-save-backlog");
 				}, true);
 		}
 

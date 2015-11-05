@@ -67,13 +67,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		private static string waitForAngular(string selector, string next, string readerName, bool useIsolateScope)
 		{
 			return scopeByQuerySelector(selector, useIsolateScope)
-				   + runnerByQuerySelector(selector)
-				   + repeaterByQuerySelector(selector)
-				   + string.Format("var bser = {0}.injector().get('$browser'); ", elementByQuerySelector(selector))
-				   + string.Format( "var setv = function() {{ scope.$result{0} = (function(){{ {1} }})(); }}; ", readerName, next)
-				   + "var cb = function() { repeat(setv, 500, 60); }; "
-				   + "bser.notifyWhenNoOutstandingRequests(cb); "
-				   + string.Format("runner(function() {{ scope.$result{0} = null; }}); ", readerName);
+				   + runnerByQuerySelector(selector)				
+				   + string.Format("var evaluator = function(){{ {0} }}; ", next)
+				   + string.Format("var setv = function(v) {{ scope.$result{0} = v; }}; ", readerName)
+				   + string.Format("runner(function() {{ scope.$result{0} = null; scope.$watch(evaluator, function(v) {{ setv(v); }}); }}); ", readerName);			
 		}
 
 		private static string getTmpName(string input)

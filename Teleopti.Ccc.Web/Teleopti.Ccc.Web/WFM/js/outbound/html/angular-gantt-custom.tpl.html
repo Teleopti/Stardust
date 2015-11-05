@@ -146,7 +146,7 @@
 	</script>
 	<!-- Task content template -->
 	<script type="text/ng-template" id="template/ganttTaskContent.tmpl.html">
-		<div class="gantt-task-content campaign-visualization-toggle" unselectable="on" ng-click="scope.campaignClicked($event, row.model, task.model)"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
+		<div class="gantt-task-content" ng-class="{'campaign-visualization-toggle' : !scope.isRefreshingGantt}" unselectable="on" ng-click="scope.campaignClicked($event, row.model, task.model)"><span unselectable="on" gantt-bind-compile-html="getTaskContent()" /></div>
 	</script>
 
 	<!-- Row background template -->
@@ -231,7 +231,7 @@
 					<div gantt-vertical-scroll-receiver>
 						<div class="gantt-table-row" ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id" ng-controller="TableColumnRowController"  >
 							<div gantt-row-label class="gantt-row-label gantt-row-height enhanced-gantt-header" ng-class="row.model.ClassesEnhancedHeader" ng-style="{'height': row.model.height}">
-								<div class="gantt-valign-container campaign-visualization-toggle" ng-click="scope.campaignClicked($event, row.model, task.model)">
+								<div class="gantt-valign-container" ng-class="{'campaign-visualization-toggle' : !scope.isRefreshingGantt}" ng-click="scope.campaignClicked($event, row.model, task.model)">
 									<div class="gantt-valign-content" ng-class="{'gantt-row-expansion' : row.model.expansion}">
 										<span class="gantt-label-text" ng-class="row.model.campaignNameClass" gantt-bind-compile-html="getRowContent()"></span>
 									</div>
