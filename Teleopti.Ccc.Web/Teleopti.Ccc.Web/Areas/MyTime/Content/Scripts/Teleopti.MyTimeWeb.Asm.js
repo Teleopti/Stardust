@@ -44,7 +44,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	};
 
 	function asmViewModel(yesterday) {
-		
 		var self = this;
 		self.intervalPointer = null;
 
@@ -180,7 +179,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
 		vm = new asmViewModel(yesterDayFromNow);
-		ko.applyBindings(vm);
+		var elementToBind = $('.asm-outer-canvas')[0];
+		ko.applyBindings(vm, elementToBind);
 		vm.loadViewModel();
 	}
 
