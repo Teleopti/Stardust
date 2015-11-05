@@ -106,7 +106,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 	    public virtual double? OverrideTasks
 	    {
 		    get { return _overrideTasks; }
-		    set { _overrideTasks = value; }
+		    set
+		    {
+			    _overrideTasks = value;
+					OnTasksChanged();
+		    }
 	    }
 
 	    /// <summary>

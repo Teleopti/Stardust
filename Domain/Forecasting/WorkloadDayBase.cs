@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _tasks = _taskPeriodList.Sum(t => t.Tasks);
                 _totalTasks = _taskPeriodList.Sum(t => t.TotalTasks);
                 _turnOffInternalRecalc = false;
-
+								_overrideTasks = _taskPeriodList.All(x => x.OverrideTasks.Equals(null)) ? null : _taskPeriodList.Sum(t => t.OverrideTasks);
                 //Inform parent about my changed value!
                 if (_initialized) OnTasksChanged();
             }
@@ -1056,18 +1056,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-		public virtual double? OverrideTasks
+	    public virtual double? OverrideTasks
 	    {
 		    get { return _overrideTasks; }
 		    set
 		    {
-				checkOpen();
-				var currentState = _turnOffInternalRecalc;
-				_turnOffInternalRecalc = true;
-				ValueDistributor.DistributeOverrideTasks(value, _taskPeriodList);
+			    checkOpen();
+			    var currentState = _turnOffInternalRecalc;
+			    _turnOffInternalRecalc = true;
+			    ValueDistributor.DistributeOverrideTasks(value, _taskPeriodList);
 			    _overrideTasks = value;
 			    _turnOffInternalRecalc = currentState;
-				_recalculateDailyTasks();
+
+					_recalculateDailyTasks();
+					_recalculateDailyAverageTimes();
+					_recalculateDailyCampaignTasks();
+					_recalculateDailyAverageCampaignTimes();
+
+					OnTasksChanged();
 		    }
 	    }
 
