@@ -36,7 +36,6 @@ angular.module('wfm.seatPlan')
 			}
 		);
 
-
 		return seatPlanService;
 
 	}]);
