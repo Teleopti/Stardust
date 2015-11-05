@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
                                 IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests);
 
-        IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId);
+		IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleRepository scheduleRepository);
 
         IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
 

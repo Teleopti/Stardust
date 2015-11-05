@@ -295,6 +295,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyRequestUpdateFromBroker()
         {
             IPersonRequestRepository personRequestRepository = mocks.StrictMock<IPersonRequestRepository>();
+			var scheduleRepository = mocks.StrictMock<IScheduleRepository>();
             IPerson person1 = PersonFactory.CreatePerson();
 
             IPersonRequest personRequest = new PersonRequest(person1);
@@ -310,7 +311,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (mocks.Playback())
             {
                 personRequest.Changed = true;
-                IPersonRequest updatedRequest = target.RequestUpdateFromBroker(personRequestRepository,personRequest.Id.Value);
+				IPersonRequest updatedRequest = target.RequestUpdateFromBroker(personRequestRepository, personRequest.Id.Value, scheduleRepository);
                 Assert.AreSame(personRequest, updatedRequest);
             }
             Assert.IsFalse(personRequest.Changed);
@@ -321,6 +322,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyRequestUpdateFromBrokerIfNotPresent()
         {
             IPersonRequestRepository personRequestRepository = mocks.StrictMock<IPersonRequestRepository>();
+			var scheduleRepository = mocks.StrictMock<IScheduleRepository>();
             IPerson person1 = PersonFactory.CreatePerson();
 
             IPersonRequest personRequest = new PersonRequest(person1);
@@ -334,7 +336,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (mocks.Playback())
             {
                 personRequest.Changed = true;
-                IPersonRequest updatedRequest = target.RequestUpdateFromBroker(personRequestRepository, personRequest.Id.Value);
+				IPersonRequest updatedRequest = target.RequestUpdateFromBroker(personRequestRepository, personRequest.Id.Value, scheduleRepository);
                 Assert.IsNull(updatedRequest);
             }
             Assert.IsTrue(personRequest.Changed);

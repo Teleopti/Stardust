@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
@@ -353,8 +355,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_filteredAgents = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 		}
 
-		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)
+		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleRepository scheduleRepository)
 		{
+			
 			IPersonRequest updatedRequest = null;
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				updatedRequest = personRequestRepository.Find(personRequestId);
@@ -363,6 +366,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				if (!SchedulingResultState.PersonsInOrganization.Contains(updatedRequest.Person)) //Do not try to update persons that are not loaded in scheduler
 					return null;
+
+				updatePersonAccountFromBroker(scheduleRepository, updatedRequest);
 
 				var shiftTradeRequestReferredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 				var shiftTradeRequestOkByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
@@ -380,6 +385,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			return updatedRequest;
+		}
+
+		private void updatePersonAccountFromBroker(IScheduleRepository scheduleRepository, IPersonRequest updatedRequest)
+		{
+			var absenceRequest = updatedRequest.Request as IAbsenceRequest;
+			if (absenceRequest != null && (updatedRequest.IsApproved || updatedRequest.IsAutoAproved))
+			{				
+				var period = absenceRequest.Period;
+				if (Schedules.Period.VisiblePeriod.Contains(period))
+					return;
+
+				var person = absenceRequest.Person;
+				IPersonAccountCollection personAbsenceAccounts;
+				if (!SchedulingResultState.AllPersonAccounts.TryGetValue(person, out personAbsenceAccounts))
+					return;
+
+				var absence = absenceRequest.Absence;
+				foreach (IPersonAbsenceAccount personAbsenceAccount in personAbsenceAccounts)
+				{
+					if (personAbsenceAccount.Absence != absence)
+						continue;
+
+					foreach (var account in personAbsenceAccount.AccountCollection())
+					{
+						if (account.StartDate > person.TerminalDate)
+							continue;
+
+						account.CalculateUsed(scheduleRepository, Schedules.Scenario);
+						var range = (IValidateScheduleRange) Schedules[person];
+						range.ValidateBusinessRules(NewBusinessRuleCollection.MinimumAndPersonAccount(SchedulingResultState));
+					}
+				}
+			}
 		}
 
 		public IPersonRequest RequestDeleteFromBroker(Guid personRequestId)

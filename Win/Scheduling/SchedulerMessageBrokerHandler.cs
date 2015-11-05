@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)
 		{
-			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(UnitOfWorkFactory.Current), message.DomainObjectId);
+			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(UnitOfWorkFactory.Current), message.DomainObjectId, new ScheduleRepository(UnitOfWorkFactory.Current));
 		}
 
 		private void NotifySchedulesUpdated()

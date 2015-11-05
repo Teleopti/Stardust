@@ -5982,6 +5982,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				refreshEntitiesUsingMessageBroker();
 				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
 				RecalculateResources();
+				updateShiftEditor();
+				var selectedSchedules = _scheduleView.SelectedSchedules();
+				updateSelectionInfo(selectedSchedules);
 			}
 			catch (CouldNotCreateTransactionException dataSourceException)
 			{
