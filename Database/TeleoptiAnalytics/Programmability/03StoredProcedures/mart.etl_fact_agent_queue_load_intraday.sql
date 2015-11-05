@@ -26,6 +26,11 @@ SET @mart_detail_id = 3 --Agent Queue Data in mart
 if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
 	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_agent_queue_load'
 
+IF (@datasource_id=-1)--no available datasource
+BEGIN
+	SELECT 'No datasource available'
+	RETURN 0
+END
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object
 --------------------------------------------------------------------------

@@ -17,6 +17,11 @@ SET @detail_id = 1 --Queue data
 if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETLo
 	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_queue_load'
 
+IF (@datasource_id=-1)--no available datasource
+BEGIN
+	SELECT 'No datasource available'
+	RETURN 0
+END
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object
 --------------------------------------------------------------------------
@@ -87,13 +92,12 @@ ELSE  --Single datasource_id
 	FROM [mart].[etl_job_intraday_settings] ds WITH (TABLOCKX) --Block any other process from even reading this data. Wait until ETL is done processing!
 	WHERE datasource_id = @datasource_id
 	AND detail_id = @detail_id
-
 	--if any "go back number of intervals"
 	SELECT
 		@target_date_local		= date_from,
 		@target_interval_local	= interval_id
 	FROM [mart].[SubtractInterval](@target_date_local,@target_interval_local,@intervals_back)
-
+	
 	if (select @internal) = 0
 		select
 			@source_date_id_utc		= b.date_id,
@@ -163,7 +167,7 @@ ELSE  --Single datasource_id
 			AND b.local_interval_id=@target_interval_local
 		WHERE d.date_date=@target_date_local
 	END
-
+	
 	--If Mart is ahead of Agg, bail out
 	IF (@target_date_id_utc-@source_date_id_utc>0
 		AND
@@ -215,7 +219,7 @@ ELSE  --Single datasource_id
 			AND d.date_date = @source_date_local
 		END
 	END
-
+	
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
 
