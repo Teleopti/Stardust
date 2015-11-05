@@ -25,7 +25,6 @@ angular.module('wfm.seatPlan')
 			get: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {}, Skip: {}, Take: {} }, isArray: false }
 		});
 
-
 		seatPlanService.seatPlans = $resource('../api/SeatPlanner/SeatPlan?startDate=:startDate&endDate=:endDate', {},
 			{
 				startDate: "@startDate",
