@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			IList<IScheduleDay> selectedSchedules)
+			IList<IScheduleDay> selectedSchedules,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 
 			_backgroundWorker = backgroundWorker;
@@ -151,13 +152,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
 					allMatrixes, rollbackServiceWithResourceCalculation,
-					schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
+					schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 
 			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime && _toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
 			{
 				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 				optimizationPreferences.General.OptimizationStepDaysOff = false;
-				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes, rollbackServiceWithResourceCalculation, 
+										schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 				optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
 			}
 
@@ -254,7 +256,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			ISchedulingOptions schedulingOptions,
 			ITeamInfoFactory teamInfoFactory,
-			IResourceCalculateDelayer resourceCalculateDelayer)
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
@@ -313,7 +316,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulePartModifyAndRollbackService,
 				schedulingOptions,
 				resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState);
+				_schedulerStateHolder().SchedulingResultState,
+				dayOffOptimizationPreferenceProvider);
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

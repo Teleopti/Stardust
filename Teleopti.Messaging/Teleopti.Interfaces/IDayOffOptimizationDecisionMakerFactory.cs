@@ -8,14 +8,9 @@ namespace Teleopti.Interfaces
 	/// </summary>
 	public interface IDayOffOptimizationDecisionMakerFactory
 	{
-		/// <summary>
-		/// Create the decision makers
-		/// </summary>
-		/// <param name="scheduleMatrixArray"></param>
-		/// <param name="optimizerPreferences"></param>
-		/// <returns></returns>
 		IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
-			IOptimizationPreferences optimizerPreferences);
+			IOptimizationPreferences optimizerPreferences,
+			IDaysOffPreferences daysOffPreferences);
 	}
 }

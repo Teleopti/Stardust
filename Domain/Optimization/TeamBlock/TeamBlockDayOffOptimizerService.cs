@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                     IOptimizationPreferences optimizationPreferences,
 		                     ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                     IResourceCalculateDelayer resourceCalculateDelayer,
-		                     ISchedulingResultStateHolder schedulingResultStateHolder);
+		                     ISchedulingResultStateHolder schedulingResultStateHolder,
+							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -90,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider
 			)
 		{
 			// create a list of all teamInfos
@@ -129,7 +131,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					                                            resourceCalculateDelayer, schedulingResultStateHolder, ()=>
 					                                            {
 						                                            cancelMe = true;
-					                                            });
+					                                            },
+																dayOffOptimizationPreferenceProvider);
 				}
 				else
 				{
@@ -139,7 +142,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 																			   resourceCalculateDelayer, schedulingResultStateHolder, () =>
 																			   {
 																				   cancelMe = true;
-																			   });
+																			   },
+																			   dayOffOptimizationPreferenceProvider);
 				}
 
 				if (cancelMe)
@@ -164,7 +168,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return new CancelSignal();
 		}
 
-		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction)
+		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
+																			List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, 
+																			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, 
+																			Action cancelAction,
+																			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
@@ -188,10 +196,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						}
 						rollbackService.ClearModificationCollection();
 
+						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
 						bool checkPeriodValue;
 						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 						                               resourceCalculateDelayer,
 													   schedulingResultStateHolder,
+													   dayOffOptimizationPreference,
 													   out checkPeriodValue);
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -220,7 +231,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 			
-		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction)
+		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, 
+																List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, 
+																ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction, 
+																IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
@@ -239,10 +253,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					{
 						rollbackService.ClearModificationCollection();
 
+						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
 						bool checkPeriodValue;
 						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 						                         resourceCalculateDelayer,
 						                         schedulingResultStateHolder,
+												 dayOffOptimizationPreference,
 												 out checkPeriodValue);
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -305,15 +322,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return !failed;
 		}
 
-		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
-		                              ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
-		                              ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
-		                              IResourceCalculateDelayer resourceCalculateDelayer,
+		private bool runOneMatrixOnly(	IOptimizationPreferences optimizationPreferences,
+										ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
+										ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
+										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
+										IDaysOffPreferences daysOffPreferences,
 										out bool checkPeriodValue)
 		{
 
-			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix);
+			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix, daysOffPreferences);
 			if (movedDaysOff == null)
 			{
 				checkPeriodValue = true;
@@ -411,9 +429,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                        ITeamInfo teamInfo,
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								ISchedulingResultStateHolder schedulingResultStateHolder,
+								IDaysOffPreferences daysOffPreferences,
 								out bool checkPeriodValue)
 		{
-			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix);
+			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix, daysOffPreferences);
 			if (movedDaysOff == null)
 			{
 				checkPeriodValue = true;
@@ -482,13 +501,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 
-		private movedDaysOff affectedDaysOff(IOptimizationPreferences optimizationPreferences, IScheduleMatrixPro matrix)
+		private movedDaysOff affectedDaysOff(IOptimizationPreferences optimizationPreferences, IScheduleMatrixPro matrix, IDaysOffPreferences daysOffPreferences)
 		{
 			bool considerWeekBefore = optimizationPreferences.DaysOff.ConsiderWeekBefore;
 			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
 			ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
 			                                                                             matrix);
-			ILockableBitArray resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences);
+			ILockableBitArray resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences);
 
 			if (resultingArray.Equals(originalArray))
 				return null;

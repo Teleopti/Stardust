@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
-			IDaysOffPreferences daysOffPreferences);
+			IDaysOffPreferences daysOffPreferences,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class OptimizationCommand : IOptimizationCommand
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
-			IDaysOffPreferences daysOffPreferences)
+			IDaysOffPreferences daysOffPreferences,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			setThreadCulture();
 			bool lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 						{
 							_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
-								rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules);
+								rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules, dayOffOptimizationPreferenceProvider);
 
 							break;
 						}

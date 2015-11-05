@@ -1137,7 +1137,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
-							OptimizationMethod = OptimizationMethod.Optimize
+							OptimizationMethod = OptimizationMethod.Optimize,
+							DaysOffPreferences = _optimizationPreferences.DaysOff
 						};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
@@ -3437,11 +3438,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var optimizationCommand = _container.Resolve<IOptimizationCommand>();
+			var dayOffOptimizationPreferenceProviderCreator = _container.Resolve<DayOffOptimizationPreferenceProviderCreator>();
+			var dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProviderCreator.Create(argument.DaysOffPreferences);
+
 			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 				_schedulerState,
 				argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
 				_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState,
-				argument.DaysOffPreferences);
+				argument.DaysOffPreferences,
+				dayOffOptimizationPreferenceProvider);
 		}
 
 		private void checkPastePermissions()

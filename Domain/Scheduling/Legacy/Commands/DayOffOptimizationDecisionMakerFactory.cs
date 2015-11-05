@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		public IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
-			IOptimizationPreferences optimizerPreferences)
+			IOptimizationPreferences optimizerPreferences,
+			IDaysOffPreferences daysOffPreferences)
 		{
-			var daysOffPreferences = optimizerPreferences.DaysOff;
+			//var daysOffPreferences = optimizerPreferences.DaysOff;
 			IList<IDayOffLegalStateValidator> legalStateValidators =
 				 createLegalStateValidators(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
 

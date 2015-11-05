@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -9,6 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
 			IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions,
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules);
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 }

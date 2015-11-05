@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IDayOffDecisionMaker _dayOffDecisionMaker;
 		private ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
 		private IList<double?> _dataExtractorValues;
+		private IDaysOffPreferences _daysOffPreferences;
 
 		[SetUp]
 		public void Setup()
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_optimizationPreferences = new OptimizationPreferences();
 			_dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
 			_dayOffDecisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
+			_daysOffPreferences = new DaysOffPreferences();
 			
 			_dataExtractorValues = new List<double?>();
 		}
@@ -48,9 +50,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_originalArray = new LockableBitArray(2, false, false, null);
 			_originalArray.Set(0, true);
 			_workingArray = (ILockableBitArray)_originalArray.Clone();
-			_optimizationPreferences.DaysOff.ConsiderWeekBefore = false;
-			_optimizationPreferences.DaysOff.ConsiderWeekAfter = false;
+			_daysOffPreferences.ConsiderWeekBefore = false;
+			_daysOffPreferences.ConsiderWeekAfter = false;
 			_optimizationPreferences.Extra.UseTeamBlockOption = true;
+
 			using (_mocks.Record())
 			{
 				tryFindMoveMocks(false);
@@ -58,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences);
+				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsNotNull(result);
 			}
 		}
@@ -69,8 +72,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_originalArray = new LockableBitArray(2, false, false, null);
 			_originalArray.Set(0, true);
 			_workingArray = (ILockableBitArray)_originalArray.Clone();
-			_optimizationPreferences.DaysOff.ConsiderWeekBefore = false;
-			_optimizationPreferences.DaysOff.ConsiderWeekAfter = false;
+			_daysOffPreferences.ConsiderWeekBefore = false;
+			_daysOffPreferences.ConsiderWeekAfter = false;
 			_optimizationPreferences.Extra.UseTeamBlockOption = true;
 			using (_mocks.Record())
 			{
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences);
+				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsNotNull(result);
 			}
 		}
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_matrix,
 																								  _optimizationPreferences.Advanced))
 					  .Return(_dataExtractor);
-			Expect.Call(_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(_originalArray, _optimizationPreferences))
+			Expect.Call(_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(_originalArray, _optimizationPreferences, _daysOffPreferences))
 				  .Return(new List<IDayOffDecisionMaker> { _dayOffDecisionMaker });
 
 			
