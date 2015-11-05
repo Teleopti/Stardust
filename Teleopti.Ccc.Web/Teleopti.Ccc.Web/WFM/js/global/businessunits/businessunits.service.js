@@ -13,7 +13,7 @@
 			setBusinessUnitInHeaders: setBusinessUnitInHeaders,
 			initBusinessUnit: initBusinessUnit
 	};
-		
+
 		var getBusinessUnits = $resource('../BusinessUnit', {}, {
 			get: { method: 'GET', params: {}, isArray: true }
 		});
@@ -22,12 +22,13 @@
 
 		function initBusinessUnit() {
 			var buid = getBusinessUnitFromSessionStorage();
+			setBusinessUnitInHeaders(buid);
 			getAllBusinessUnits().then(function(result) {
 				if (!buid) {
 					buid = result[0].Id;
-				} 
+				}
 				setBusinessUnit(buid);
-				
+
 			});
 		};
 
