@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
 
+	    private IDaysOffPreferences _daysOffPreferences;
+
         [SetUp]
         public void Setup()
         {
@@ -51,6 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay4 = _mocks.StrictMock<IScheduleDay>();
 
+			_daysOffPreferences = new DaysOffPreferences();
+
         }
 
         [Test]
@@ -59,7 +63,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _restrictionChecker,
                 _optimizationPreferences,
-                _originalStateContainer);
+                _originalStateContainer,
+				_daysOffPreferences);
             Assert.IsNotNull(_target);
         }
 
@@ -80,7 +85,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
@@ -101,7 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.PreferencesOverLimit == 0);
 
@@ -123,7 +130,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.PreferencesOverLimit == 0);
             }
@@ -138,7 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _restrictionChecker,
                 _optimizationPreferences,
-                _originalStateContainer);
+                _originalStateContainer,
+				_daysOffPreferences);
             var result = _target.OverLimitsCounts(_matrix);
 			Assert.IsTrue(result.PreferencesOverLimit == 0);
         }
@@ -164,7 +173,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
@@ -195,7 +205,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
@@ -216,7 +227,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
@@ -237,7 +249,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.MustHavesOverLimit == 0);
             }
@@ -252,7 +265,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _restrictionChecker,
                 _optimizationPreferences,
-                _originalStateContainer);
+                _originalStateContainer,
+				_daysOffPreferences);
             var result = _target.OverLimitsCounts(_matrix);
 			Assert.IsTrue(result.MustHavesOverLimit == 0);
         }
@@ -278,7 +292,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
@@ -309,7 +324,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.RotationsOverLimit == 0);
             }
@@ -330,7 +346,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
@@ -351,7 +368,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.RotationsOverLimit == 0);
             }
@@ -371,7 +389,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
@@ -398,7 +417,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
@@ -428,7 +448,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
@@ -449,7 +470,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
@@ -470,7 +492,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.AvailabilitiesOverLimit == 0);
             }
@@ -490,7 +513,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
@@ -517,7 +541,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
@@ -547,7 +572,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
@@ -568,7 +594,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
@@ -589,7 +616,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.StudentAvailabilitiesOverLimit == 0);
             }
@@ -609,7 +637,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
@@ -635,7 +664,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _restrictionChecker,
                     _optimizationPreferences,
-                    _originalStateContainer);
+                    _originalStateContainer,
+					_daysOffPreferences);
                 var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
@@ -653,8 +683,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
             _optimizationPreferences.Shifts.KeepShifts = true;
             _optimizationPreferences.Shifts.KeepShiftsValue = 1;
-			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
-			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+			_daysOffPreferences.UseKeepExistingDaysOff = true;
+			_daysOffPreferences.KeepExistingDaysOffValue = 1;
 
 			using (_mocks.Record())
 			{
@@ -669,7 +699,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				ret = _target.MoveMaxDaysOverLimit();
 			}
@@ -695,7 +726,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				ret = _target.MoveMaxDaysOverLimit();
 			}
@@ -706,8 +738,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void MoveMaxDaysOverLimitShouldReturnTrueIfDaysOffOverLimit()
 		{
-			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
-			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+			_daysOffPreferences.UseKeepExistingDaysOff = true;
+			_daysOffPreferences.KeepExistingDaysOffValue = 1;
 
 			using (_mocks.Record())
 			{
@@ -721,7 +753,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				ret = _target.MoveMaxDaysOverLimit();
 			}
@@ -755,7 +788,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				var last = new OverLimitResults(1, 2, 3, 4, 0);
 				ret = _target.HasOverLimitIncreased(last, _matrix);
@@ -790,7 +824,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				var last = new OverLimitResults(0, 1, 2, 3, 0);
 				ret = _target.HasOverLimitIncreased(last, _matrix);
@@ -823,7 +858,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_target = new OptimizationOverLimitByRestrictionDecider(
 					_restrictionChecker,
 					_optimizationPreferences,
-					_originalStateContainer);
+					_originalStateContainer,
+					_daysOffPreferences);
 
 				ret = _target.OverLimitsCounts(_matrix);
 			}

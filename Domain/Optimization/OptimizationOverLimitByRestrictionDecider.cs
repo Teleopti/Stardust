@@ -14,17 +14,20 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
 	    private readonly IOptimizationPreferences _optimizationPreferences;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider; 
+	    private readonly IDaysOffPreferences _daysOffPreferences;
+	    private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider; 
 
         public OptimizationOverLimitByRestrictionDecider(
             ICheckerRestriction restrictionChecker,
             IOptimizationPreferences optimizationPreferences,
-            IScheduleMatrixOriginalStateContainer originalStateContainer
+            IScheduleMatrixOriginalStateContainer originalStateContainer,
+			IDaysOffPreferences daysOffPreferences
             )
         {
 	        _optimizationPreferences = optimizationPreferences;
             _originalStateContainer = originalStateContainer;
-            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(restrictionChecker);
+	        _daysOffPreferences = daysOffPreferences;
+	        _restrictionOverLimitDecider = new RestrictionOverLimitDecider(restrictionChecker);
         }
 
 	 
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (_optimizationPreferences.Shifts.KeepShifts && _optimizationPreferences.Shifts.KeepShiftsValue > 1 - _originalStateContainer.ChangedWorkShiftsPercent())
                 return true;
 
-			if (_optimizationPreferences.DaysOff.UseKeepExistingDaysOff && _optimizationPreferences.DaysOff.KeepExistingDaysOffValue > 1 - _originalStateContainer.ChangedDayOffsPercent())
+			if (_daysOffPreferences.UseKeepExistingDaysOff && _daysOffPreferences.KeepExistingDaysOffValue > 1 - _originalStateContainer.ChangedDayOffsPercent())
                 return true;
 
             return false;

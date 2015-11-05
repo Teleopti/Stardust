@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 		}
 
 		/// <summary>
@@ -72,7 +76,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 
 				var restrictionChecker = new RestrictionChecker();
-				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, _optimizerPreferences, scheduleMatrixContainer);
+
+				var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
+
+				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, _optimizerPreferences, scheduleMatrixContainer, dayOffOptimizationPreference);
 				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();

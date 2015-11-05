@@ -320,9 +320,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffTemplate dayOffTemplate,
 			bool reschedule,
 			ISchedulingOptions schedulingOptions,
-			IDaysOffPreferences daysOffPreferences);
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
-		void ReOptimize(IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions);
+		void ReOptimize(IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod);
 	}

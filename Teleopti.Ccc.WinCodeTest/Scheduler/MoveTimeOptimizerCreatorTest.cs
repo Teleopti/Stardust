@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -31,6 +33,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+		private IPerson _person;
+		private IScheduleDayPro _scheduleDayPro1;
+		private IScheduleDayPro _scheduleDayPro2;
+
 
 		[SetUp]
 		public void Setup()
@@ -53,6 +60,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
+
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(new DaysOffPreferences());
+			_person = new Person();
+			_scheduleDayPro1 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1);
+			_scheduleDayPro2 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix2);
+
 			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
 												   _workShiftOriginalStateContainerList,
 												   _decisionMaker,
@@ -62,7 +75,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _schedulingResultStateHolder,
 												   _effectiveRestrictionCreator,
 												   _minWeekWorkTimeRule,
-												   _resourceOptimizationHelper);
+												   _resourceOptimizationHelper,
+												   _dayOffOptimizationPreferenceProvider);
 		}
 
 		[Test]
@@ -86,6 +100,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_matrix2.SchedulingStateHolder)
 					.Return(_schedulingResultStateHolder)
 					.Repeat.Any();
+
+				Expect.Call(_matrix1.Person).Return(_person);
+				Expect.Call(_matrix1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1}));
+
+				Expect.Call(_matrix2.Person).Return(_person);
+				Expect.Call(_matrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro2 }));
 			}
 			using (_mocks.Playback())
 			{

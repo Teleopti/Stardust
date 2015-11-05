@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				resourceCalculateDelayer);
 
 			var restrictionChecker = new RestrictionChecker();
-			var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer);
+			var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer, daysOffPreferences);
 			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =

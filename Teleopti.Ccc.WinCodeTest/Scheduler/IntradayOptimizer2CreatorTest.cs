@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -35,6 +36,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+
+		private IScheduleDayPro _scheduleDayPro;
+		private IPerson _person;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -60,6 +66,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(new DaysOffPreferences());
+
+			_scheduleDayPro = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1 );
+
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
 			                                        _decisionMaker,
@@ -72,7 +82,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _skillIntervalDataAggregator,
 												   _effectiveRestrictionCreator,
 												   _minWeekWorkTimeRule,
-												   _resourceOptimizationHelper);
+												   _resourceOptimizationHelper,
+												   _dayOffOptimizationPreferenceProvider);
 		}
 
 		[Test]
@@ -84,6 +95,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					.Return(_matrix1);
 				Expect.Call(_matrixContainer2.ScheduleMatrix)
 					.Return(_matrix2);
+
+				Expect.Call(_matrix1.Person).Return(_person);
+				Expect.Call(_matrix2.Person).Return(_person);
+				Expect.Call(_matrix1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+				Expect.Call(_matrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{

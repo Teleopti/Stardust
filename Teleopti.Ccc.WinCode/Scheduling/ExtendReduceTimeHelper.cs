@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod,
-			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax)
+			IList<IScheduleMatrixOriginalStateContainer> originalStateListForMoveMax,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (backgroundWorker.CancellationPending)
 				return;
@@ -97,7 +98,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
 				
 				ICheckerRestriction restrictionChecker = new RestrictionChecker();
-				IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
+
+				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
+
+				IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i], dayOffOptimizationPreference);
 
 				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
 

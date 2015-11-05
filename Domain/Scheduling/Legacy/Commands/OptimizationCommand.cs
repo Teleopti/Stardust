@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 						backgroundWorker, displayList[0], false,
 						optimizerOriginalPreferences.SchedulingOptions,
-						daysOffPreferences);
+						dayOffOptimizationPreferenceProvider);
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						}
 
 						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
-						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
+						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions, dayOffOptimizationPreferenceProvider);
 
 						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 						runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes, selectedPersons,
