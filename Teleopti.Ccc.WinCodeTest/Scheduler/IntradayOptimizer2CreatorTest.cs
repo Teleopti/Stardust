@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 
 			_scheduleDayPro = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1 );
+			_person = new Person();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
