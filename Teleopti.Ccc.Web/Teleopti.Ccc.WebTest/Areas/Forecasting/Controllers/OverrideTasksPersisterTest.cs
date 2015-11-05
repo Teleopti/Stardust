@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var dateOnly = new DateOnly();
 			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly);
 			workloadDay.MakeOpen24Hours();
+			workloadDay.Tasks = 100d;
 			var skillDays = new[] { new SkillDay() };
 			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					Date = dateOnly.Date
 				}
 			}, 300);
-			workloadDay.OverrideTasks.Should().Be.EqualTo(300d);
+			Math.Round(workloadDay.OverrideTasks.Value, 2).Should().Be.EqualTo(300d);
 		}
 	}
 }

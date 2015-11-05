@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					item.date = taskOwner.CurrentDate.Date;
 					item.vh = taskOwner.TotalStatisticCalculatedTasks;
 					item.vacw = taskOwner.TotalStatisticAverageAfterTaskTime.TotalSeconds;
-					item.vaht = taskOwner.TotalStatisticAverageTaskTime.TotalSeconds;
+					item.vtt = taskOwner.TotalStatisticAverageTaskTime.TotalSeconds;
 					data.Add(taskOwner.CurrentDate, item);
 				}
 				foreach (var dayResult in methodAccuracy.MeasureResult)

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				day.date = workloadDay.CurrentDate.Date;
 				day.vc = workloadDay.Tasks;
 				day.vtc = workloadDay.TotalTasks;
-				day.vaht = workloadDay.AverageTaskTime.TotalSeconds;
+				day.vtt = workloadDay.AverageTaskTime.TotalSeconds;
 				day.vacw = workloadDay.AverageAfterTaskTime.TotalSeconds;
 				
 				if (workloadDay.OverrideTasks.HasValue)

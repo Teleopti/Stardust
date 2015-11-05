@@ -42,10 +42,10 @@
 						keys: {
 							// x: 'name', // it's possible to specify 'x' when category axis
 							x: 'date',
-							value: ['vtc', 'vc', 'vaht', 'vacw', 'vcampaign', 'voverride']
+							value: ['vtc', 'vc', 'vtt', 'vacw', 'vcampaign', 'voverride']
 						},
 						axes: {
-							vaht: 'y2',
+							vtt: 'y2',
 							vacw: 'y2'
 						},
 						selection: {
@@ -53,7 +53,7 @@
 							grouped: true,
 							draggable: true,
 							isselectable: function (chartPoint) {
-								if (chartPoint.id === 'vacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vaht' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
+								if (chartPoint.id === 'vacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vtt' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
 									return false;
 								return true;
 							}
@@ -61,7 +61,7 @@
 						names: {
 							vtc: 'Total Calls <',
 							vc: 'Calls <',
-							vaht: 'Talk time >',
+							vtt: 'Talk time >',
 							vacw: 'ACW >',
 							voverride: 'Forecasted value(s) overridden',
 							vcampaign: 'Part of a campaign'
@@ -69,7 +69,7 @@
 						colors: {
 							vtc: '#0099FF',
 							vc: '#99D6FF',
-							vaht: '#9CCC65',
+							vtt: '#9CCC65',
 							vacw: '#F488C8',
 							vcampaign: 'tomato',
 							voverride: 'purple'

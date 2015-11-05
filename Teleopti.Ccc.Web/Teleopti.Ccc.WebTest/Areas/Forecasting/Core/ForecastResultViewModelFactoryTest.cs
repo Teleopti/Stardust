@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			((object)firstDay.date).Should().Be.EqualTo(_theDate.Date);
 			(Math.Round((double) firstDay.vc, 1)).Should().Be.EqualTo(Math.Round(8.1d, 1));
 			(Math.Round((double) firstDay.vtc, 1)).Should().Be.EqualTo(Math.Round(8.1d, 1));
-			((double)firstDay.vaht).Should().Be.EqualTo(100d);
+			((double)firstDay.vtt).Should().Be.EqualTo(100d);
 			((double)firstDay.vacw).Should().Be.EqualTo(200d);
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			((double) firstDay.vcampaign).Should().Be.EqualTo(50d);
+			(Math.Round((double) firstDay.vcampaign, 2)).Should().Be.EqualTo(50d);
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			((double)firstDay.voverride).Should().Be.EqualTo(500d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(500d);
 		}
 
 		[Test, ExpectedException(typeof(RuntimeBinderException))]
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			((double)firstDay.voverride).Should().Be.EqualTo(400d);
-			((double)firstDay.vcampaign).Should().Be.EqualTo(75d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(400d);
+			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(75d);
 		}
 
 		private void stubForecastDataForOneDay(double numberOfTasks, TimeSpan taskTime, TimeSpan afterTaskTime, Percent campaignTasks, double? overrideTasks)
