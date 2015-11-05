@@ -4,7 +4,6 @@ Feature: View adherence in hawaii call center
 	As a real time analyst
 	I want to see adherence things
 
-@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage when call center is in Hawaii
 	Given I am located in Hawaii

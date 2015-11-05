@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				NextActivityStartTime = x.NextStart,
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStart,
-				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
 				TimeInState = x.StateStart.HasValue ? (int)(_now.UtcDateTime() - x.StateStart.Value).TotalSeconds : 0
 			});
 		}

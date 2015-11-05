@@ -121,5 +121,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().AlarmColor.Should().Be("#000000");
 			agentState.Single().TimeInState.Should().Be(30 * 60);
 		}
+
+		[Test]
+		public void ShouldHaveWhiteAsDefaultColor()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				TeamId = teamId
+			});
+
+			var agentState = Target.ForTeams(new[] { teamId });
+
+			agentState.Single().AlarmColor.Should().Be("#FFFFFF");
+		}
 	}
 }
