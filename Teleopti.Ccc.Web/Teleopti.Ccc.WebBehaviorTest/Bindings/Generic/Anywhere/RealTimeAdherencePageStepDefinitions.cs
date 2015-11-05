@@ -126,25 +126,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see daily adherence for '(.*)' is (.*)%")]
-		public void ThenIShouldSeeDailyAdherenceForIs(string person, int adherence)
+		public void ThenIShouldSeeDailyAdherenceForIs(string person, string adherence)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".agent-name:contains('{0}')", person);
-			Browser.Interactions.AssertExistsUsingJQuery(".daily-percent:contains('{0}')", adherence);
+			Browser.Interactions.AssertAnyContains(".agent-name", person);
+			Browser.Interactions.AssertAnyContains(".daily-percent", adherence);
 		}
 
 		[Then(@"I should see '(.*)' with adherence of (.*)%")]
-		public void ThenIShouldSeeWithAdherenceOf(string activity, int adherence)
+		public void ThenIShouldSeeWithAdherenceOf(string activity, string adherence)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".activity-name:contains('{0}')", activity);
-			Browser.Interactions.AssertExistsUsingJQuery(".adherence-percent:contains('{0}')", adherence);
+			Browser.Interactions.AssertAnyContains(".activity-name", activity);
+			Browser.Interactions.AssertAnyContains(".adherence-percent", adherence);
 		}
 
 		[Then(@"I should see '(.*)' without adherence")]
 		public void ThenIShouldSeeWithoutAdherence(string activity)
 		{
 			const string noAdherence = "-";
-			Browser.Interactions.AssertExistsUsingJQuery(".activity-name:contains('{0}')", activity);
-			Browser.Interactions.AssertExistsUsingJQuery(".adherence-percent:contains('{0}')", noAdherence);
+			Browser.Interactions.AssertAnyContains(".activity-name", activity);
+			Browser.Interactions.AssertAnyContains(".adherence-percent", noAdherence);
 		}
 
 		[When(@"I click the site checkbox for '(.*)'")]

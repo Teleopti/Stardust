@@ -16,6 +16,11 @@
 			this.urlForChangingSchedule = function(businessUnitId, teamId, personId) {
 				return "/Anywhere#teamschedule/" + businessUnitId + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
 			};
+
+			this.urlForAgentDetails = function(personId) {
+				return "/wfm/#/rta/agent-details/" + personId;
+			};
+
 		}
 	]);
 })();

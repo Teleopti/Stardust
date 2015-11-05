@@ -46,6 +46,9 @@
 				$scope.changeScheduleUrl = function(teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
 				};
+				$scope.agentDetailsUrl = function(personId) {
+					return RtaRouteService.urlForAgentDetails(personId);
+				};
 
 				var setStatesInAgents = function(states) {
 					$scope.agents.forEach(function(agent) {

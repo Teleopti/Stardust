@@ -62,26 +62,6 @@ describe('RtaOrganizationService', function() {
 			}
 		},
 
-		getTeamsForSelectedSites: {
-			query: function() {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve([{
-					"Id": "e5f968d7-6f6d-407c-81d5-9b5e015ab495",
-					"Name": "Students",
-					"NumberOfAgents": 7,
-					"SiteId": "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-				}, {
-					"Id": "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495",
-					"Name": "Team 1",
-					"NumberOfAgents": 11,
-					"SiteId": "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-				}]);
-				return {
-					$promise: queryDeferred.promise
-				};
-			}
-		},
-
 		getAdherenceForAllSites: {
 			query: function() {
 				var queryDeferred = $q.defer();

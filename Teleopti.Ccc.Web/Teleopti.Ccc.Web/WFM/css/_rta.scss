@@ -65,12 +65,44 @@
 .agent-menu {
 				position: absolute;
 				margin-top: 30px;
-        padding:1%;
+				padding: 1%;
 				width: 100%;
 }
 .agent-menu > a {
-        margin-right: 5%;
+				margin-right: 5%;
 }
+
+///////////rta-agent-details///////////////
+.rta-agent-details {
+				height: 100%;
+}
+.rta-agent-details-header {
+				border-bottom: 1px solid;
+				display: inline-flex;
+				width: 100%;
+}
+.rta-agent-details-total {
+			margin-left: 78%;
+}
+.rta-agent-details-body {
+				height: 250px;
+}
+.rta-agent-details-planned {
+				text-align: center;
+				border-bottom: 1px solid;
+}
+.rta-agent-details-real {
+				text-align: center;
+				border-bottom: 1px solid;
+}
+.planned-stats {
+				text-align: center;
+}
+.real-stats {
+				text-align: center;
+}
+
+
 @media only screen and (max-width: 700px),
 only screen and (max-device-width: 700px) {
 				.rta-list,

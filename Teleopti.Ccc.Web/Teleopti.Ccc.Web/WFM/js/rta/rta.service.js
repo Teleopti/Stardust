@@ -110,6 +110,26 @@
 					isArray: false
 				}
 			});
+
+			this.getPersonDetails = $resource('../Agents/PersonDetails?personId=:personId', {
+				personId: '@personId'
+			}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: false
+				}
+			});
+
+			this.getAdherenceDetails = $resource('../Adherence/ForDetails?personId=:personId', {
+				personId: '@personId'
+			}, {
+				query: {
+					method: 'GET',
+					params: {},
+					isArray: true
+				}
+			});
 		}
 	]);
 })();

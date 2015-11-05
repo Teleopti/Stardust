@@ -431,6 +431,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereRealTimeManageAdherenceOverview(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId);
 		}
 
+		[When(@"I view agent details view for agent '(.*)'")]
+		public void WhenIViewAgentDetailsViewForAgent(string name)
+		{
+			TestControllerMethods.Logon();
+			var personId = DataMaker.Person(name).Person.Id.Value;
+			Navigation.GoToAgentDetails(personId);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{

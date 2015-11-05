@@ -24,7 +24,7 @@
 
 	   	service.getTeamName = function (teamId) {
 				var deferred = $q.defer();
-				service.teams = service.teams || RtaService.getTeamsForSelectedSites.query();
+				service.teams = service.teams;
 				service.teams.$promise.then(function(data){
 					var teamName = null;
 					var result = $filter('filter')(data, { Id: teamId });

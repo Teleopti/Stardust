@@ -153,6 +153,10 @@ wfm.config([
 			templateUrl: 'js/rta/rta-agents.html',
 			controller: 'RtaAgentsForSitesCtrl',
 			params: {siteIds: {array:true}}
+		}).state('rta-agent-details', {
+			url: '/rta/agent-details/:personId',
+			templateUrl: 'js/rta/rta-agent-details.html',
+			controller: 'RtaAgentDetailsCtrl'
 		}).state('personSchedule', {
 			url: '/teamSchedule',
 			templateUrl: 'js/teamSchedule/schedule.html',
@@ -203,5 +207,3 @@ wfm.config([
 		});
 	}
 ]);
-
-
