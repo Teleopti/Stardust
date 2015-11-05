@@ -1277,7 +1277,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeline.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeLine.factory.js" />
     <Content Include="WFM\js\teamSchedule\timeline.html" />
-    <Content Include="WFM\js\global\wfmpagination\wfmpagination.html" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
     <Content Include="WFM\tests\global\currentuserinfo.service.spec.js" />
     <Content Include="WFM\tests\global\wfm.i18n.service.spec.js" />
