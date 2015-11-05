@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				
 				if (workloadDay.OverrideTasks.HasValue)
 					day.voverride = workloadDay.OverrideTasks.Value;
-				else if (workloadDay.CampaignTasks.Value > 0d)
+				else if (Math.Abs(workloadDay.CampaignTasks.Value) > 0)
 					day.vcampaign = workloadDay.CampaignTasks.Value;
 
 				days.Add(day);

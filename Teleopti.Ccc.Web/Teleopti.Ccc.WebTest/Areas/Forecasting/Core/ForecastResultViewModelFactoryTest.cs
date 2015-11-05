@@ -59,6 +59,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 		}
 
 		[Test]
+		public void ShouldCreateViewModelWithNegativeCampaign()
+		{
+			stubForecastDataForOneDay(8.1d, new TimeSpan(0, 0, 100), new TimeSpan(0, 0, 200), new Percent(-50), null);
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(-50d);
+		}
+
+		[Test]
 		public void ShouldCreateViewModelWithOverride()
 		{
 			stubForecastDataForOneDay(8.1d, new TimeSpan(0, 0, 100), new TimeSpan(0, 0, 200), new Percent(0), 500d);
