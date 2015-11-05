@@ -175,7 +175,7 @@
 			return vm.parentVm.getCanvas();
 		};
 
-		function selectSeat() {
+		vm.selectSeat = function() {
 			if (vm.previousSelectedSeatIds.length > 0) {
 				if (vm.previousSelectedSeatIds.length == 1) {
 					var seat = utils.getSeatObjectById(canvas(), vm.previousSelectedSeatIds[0]);
@@ -227,7 +227,7 @@
 			canvas().on('seatmaplocation:loaded', function (e) {
 				utils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas());
 				utils.showSeatBooking(canvas(), e.data.Seats);
-				selectSeat();
+				vm.selectSeat();
 			});
 		}
 

@@ -30,7 +30,8 @@
 				showSeatBooking: showSeatBooking,
 				loadOccupancyDetailsForSeats: loadOccupancyDetailsForSeats,
 				selectGroupOfObjects: selectGroupOfObjects,
-				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected
+				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected,
+				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest
 			};
 
 			function setupCanvas(canvas) {
@@ -519,6 +520,13 @@
 			}
 
 
+			function selectMultipleSeatsForScenarioTest(canvas, seatNumber) {
+				var seatmapOccupancyScope = angular.element(document.getElementsByClassName('seatmap-occupancy-detail')).scope();
+				getObjectsByType(canvas, 'seat').slice(0, seatNumber).forEach(function (seat) {
+					seatmapOccupancyScope.vm.previousSelectedSeatIds.push(seat.id);
+				});
+				seatmapOccupancyScope.vm.selectSeat();
+			}
 
 			return utils;
 		}]);

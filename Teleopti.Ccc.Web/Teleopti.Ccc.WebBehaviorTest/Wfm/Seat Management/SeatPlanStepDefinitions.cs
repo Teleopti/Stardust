@@ -39,6 +39,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			DataMaker.Data().Apply(table.CreateInstance<SeatConfigurable>());
 		}
 
+		[Given(@"there are '(.*)' more seats at root location")]
+		public void GivenThereAreMoreSeatsAtRootLocation(int seatNumber)
+		{
+			DataMaker.Data().Apply(new SeatConfigurable(seatNumber));
+		}
+
+
 		[Given(@"there is a seat booking for me")]
 		public void GivenThereIsASeatBookingForMe(Table table)
 		{

@@ -114,3 +114,24 @@ Scenario: be able to assign agent to selected seat
 	And I select agent 'I' from search list
 	And I click assign button
 	Then I should see 'I' in the result of seat plan
+
+Scenario: be able to select multiple seats
+	Given there are '3' more seats at root location
+	When I view Seat plan on "2015-01-01"
+	And I press seat map booking view button
+	And I select first '2' seats
+	Then I should see occupancy detail of two seats in occupancy detail panel
+
+Scenario: be able to delete seatBooking from multiple selection
+	Given there is a seat booking for me
+		| Field         | Value            |
+		| BelongsToDate | 2015-01-01       |
+		| StartDateTime | 2015-01-01 8:00  |
+		| EndDateTime   | 2015-01-01 16:00 |
+		| SeatName      | 1                |
+	And there are '2' more seats at root location
+	When I view Seat plan on "2015-01-01"
+	And I press seat map booking view button
+	And I select first '2' seats
+	Then I delete the first record under the seat booking details
+	And I should not see any seat booking details

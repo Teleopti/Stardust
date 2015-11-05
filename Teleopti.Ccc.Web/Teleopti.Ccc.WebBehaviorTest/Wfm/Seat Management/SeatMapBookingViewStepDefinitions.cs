@@ -101,5 +101,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			Browser.Interactions.AssertAnyContains(".seatmap-occupancy-detail", agent);
 		}
 
+		[When(@"I select first '(.*)' seats")]
+		public void WhenISelectFirstSeats(int seatNumber)
+		{
+			Browser.Interactions.AssertExists(".seat-booking-list");
+
+			var selectSeats = @"utils.selectMultipleSeatsForScenarioTest(canvas," + seatNumber + ")";
+
+			executedJavascript(selectSeats);
+		}
+
+
+		[Then(@"I should see occupancy detail of two seats in occupancy detail panel")]
+		public void ThenIShouldSeeOccupancyDetailOfTwoSeatsInOccupancyDetailPanel()
+		{
+			Browser.Interactions.AssertExists(".seat-booking-list");
+			Browser.Interactions.AssertAnyContains(".seat-booking-list", "Seat: 1");
+			Browser.Interactions.AssertAnyContains(".seat-booking-list", "Seat: 2");
+		}
+
+		[Then(@"I should see occupancy detail of three seats in occupancy detail panel")]
+		public void ThenIShouldSeeOccupancyDetailOfThreeSeatsInOccupancyDetailPanel()
+		{
+			Browser.Interactions.AssertExists(".seat-booking-list");
+			Browser.Interactions.AssertAnyContains(".seat-booking-list", "Seat: 1");
+			Browser.Interactions.AssertAnyContains(".seat-booking-list", "Seat: 2");
+			Browser.Interactions.AssertAnyContains(".seat-booking-list", "Seat: 3");
+		}
+
+
+		[Then(@"I should not see any seat booking details")]
+		public void ThenIShouldNotSeeAnySeatBookingDetails()
+		{
+			Browser.Interactions.AssertExists(".seat-booking-list");
+			Browser.Interactions.AssertNoContains(".seat-booking-list", ".seat-booking-item", "I");
+		}
+
+
+		private void executedJavascript(string function)
+		{
+			var javascript = @"var injector = angular.element(document.getElementsByClassName('ng-scope')[0]).injector(); " +
+							 @"var utils = injector.get('seatMapCanvasUtilsService');" +
+							 @"var canvas = angular.element(document.getElementsByClassName('seatmap')).scope().vm.getCanvas();;" +
+							 function;
+			Browser.Interactions.Javascript(javascript);
+		}
+		
 	}
 }
