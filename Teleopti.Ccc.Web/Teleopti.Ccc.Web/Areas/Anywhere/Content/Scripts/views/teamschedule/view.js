@@ -6,6 +6,7 @@ define([
 		'moment',
 		'subscriptions.groupschedule',
 		'subscriptions.staffingmetrics',
+		'subscriptions.unsubscriber',
 		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
@@ -23,6 +24,7 @@ define([
 		momentX,
 		groupschedulesubscriptions,
 		staffingmetricssubscriptions,
+		unsubscriber,
 		helpers,
 		teamScheduleViewModel,
 		personViewModel,
@@ -221,6 +223,7 @@ define([
 		},
 
 		dispose: function (options) {
+			unsubscriber.unsubscribeAdherence();
 			groupschedulesubscriptions.unsubscribeGroupSchedule();
 			staffingmetricssubscriptions.unsubscribeDailyStaffingMetrics();
 			$(".datepicker.dropdown-menu").remove();

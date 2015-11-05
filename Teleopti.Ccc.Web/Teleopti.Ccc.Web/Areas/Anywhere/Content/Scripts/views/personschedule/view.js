@@ -4,6 +4,7 @@ define([
 		'views/personschedule/vm',
 		'subscriptions.personschedule',
 		'subscriptions.groupschedule',
+		'subscriptions.unsubscriber',
 		'helpers',
 		'text!templates/personschedule/view.html',
 		'resizeevent',
@@ -13,6 +14,7 @@ define([
 		personScheduleViewModel,
 		personsubscriptions,
 		groupsubscriptions,
+		unsubscriber,
 		helpers,
 		view,
 		resize,
@@ -80,6 +82,7 @@ define([
 		},
 
 		dispose: function (options) {
+			unsubscriber.unsubscribeAdherence();
 			personsubscriptions.unsubscribePersonSchedule();
 			$(".datepicker.dropdown-menu").remove();
 		},
