@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IClassicDaysOffOptimizationCommand
 	{
-		void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker);
+		void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
+					ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
+					IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class ClassicDaysOffOptimizationCommand : IClassicDaysOffOptimizationCommand
@@ -73,7 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
-		public void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker)
+		public void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
+							ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
+							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			
 			
@@ -101,12 +105,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer = matrixOriginalStateContainerListForDayOffOptimization[index];
 				IScheduleMatrixPro matrix = matrixOriginalStateContainerListForDayOffOptimization[index].ScheduleMatrix;
+
+				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
 				IScheduleResultDataExtractor personalSkillsDataExtractor =
 					dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
 				IPeriodValueCalculator localPeriodValueCalculator =
 					_optimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
 				IDayOffOptimizerContainer optimizerContainer =
-					createOptimizer(matrix, optimizationPreferences.DaysOff, optimizationPreferences,
+					createOptimizer(matrix, dayOffOptimizationPreference, optimizationPreferences,
 						rollbackService, schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate, _scheduleService, localPeriodValueCalculator,
 						rollbackServiceDayOffConflict, matrixOriginalStateContainer, dataExtractorProvider, () => schedulerStateHolder.SchedulingResultState);
 

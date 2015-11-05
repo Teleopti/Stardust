@@ -633,6 +633,9 @@
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
+    <Compile Include="Optimization\DayOffOptimizationPreferenceProvider.cs" />
+    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderCreator.cs" />
+    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderWeb.cs" />
     <Compile Include="Optimization\DayOffRulesPersister.cs" />
     <Compile Include="Optimization\DayOffRulesMapper.cs" />
     <Compile Include="Optimization\DayOffRulesModel.cs" />

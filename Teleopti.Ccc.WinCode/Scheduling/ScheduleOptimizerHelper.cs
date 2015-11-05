@@ -135,8 +135,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void classicDaysOffOptimization(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
 		{
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+			var dayOffOptimizationPreferenceProviderCreator = _container.Resolve<DayOffOptimizationPreferenceProviderCreator>();
+			var dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProviderCreator.Create(optimizerPreferences.DaysOff);
 			var classicDaysOffOptimizationCommand = _container.Resolve<IClassicDaysOffOptimizationCommand>();
-			classicDaysOffOptimizationCommand.Execute(scheduleDays, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper);
+			classicDaysOffOptimizationCommand.Execute(scheduleDays, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper, dayOffOptimizationPreferenceProvider);
 		}
 	
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,

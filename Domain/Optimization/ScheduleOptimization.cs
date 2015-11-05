@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
+		private readonly DayOffOptimizationPreferenceProviderCreator _dayOffOptimizationPreferenceProviderCreator;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 	IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 	IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
-	WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory)
+	WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
+	DayOffOptimizationPreferenceProviderCreator dayOffOptimizationPreferenceProviderCreator)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningPeriodRepository = planningPeriodRepository;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
+			_dayOffOptimizationPreferenceProviderCreator = dayOffOptimizationPreferenceProviderCreator;
 		}
 
 		public OptimizationResultModel Execute(Guid planningPeriodId)
@@ -60,7 +63,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
-      _classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderCreator.Create(null);
+			
+			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
 			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople);
 

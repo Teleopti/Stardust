@@ -322,6 +322,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
+			builder.RegisterType<DayOffOptimizationPreferenceProviderCreator>().AsSelf().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
