@@ -628,6 +628,7 @@
     <Compile Include="Config\ConfigOverrider.cs" />
     <Compile Include="Config\ConfigReader.cs" />
     <Compile Include="Config\IConfigReader.cs" />
+    <Compile Include="MessageBroker\MessageBrokerTracer.cs" />
     <Compile Include="MultiTenancy\ICountTenants.cs" />
     <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />

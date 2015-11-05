@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
 		private readonly TimeSpan _expirationInterval;
 		private DateTime _nextPurge;
+	    private readonly MessageBrokerTracer _tracer = new MessageBrokerTracer();
 
-		public MessageBrokerServer(
+	    public MessageBrokerServer(
 			IActionScheduler actionScheduler,
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
@@ -50,7 +51,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 			_signalR.AddConnectionToGroup(RouteToGroupName(route), connectionId);
 
-			return route;
+			_tracer.SubscriptionAdded(subscription, connectionId);
+
+            return route;
 		}
 
 		public void RemoveSubscription(string route, string connectionId)
@@ -115,7 +118,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 				var r = route;
 				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, message));
 			}
-		}
+
+			_tracer.ClientsNotified(message);
+        }
 
 		private void purgeSometimes()
 		{
