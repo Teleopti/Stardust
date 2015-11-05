@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			//var daysOffPreferences = optimizerPreferences.DaysOff;
 			IList<IDayOffLegalStateValidator> legalStateValidators =
-				 createLegalStateValidators(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
+				 createLegalStateValidators(scheduleMatrixArray, daysOffPreferences);
 
 			IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
-				createLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, optimizerPreferences);
+				createLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, daysOffPreferences);
 
 			IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays();
 			ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static IList<IDayOffLegalStateValidator> createLegalStateValidators(
 		   ILockableBitArray bitArray,
-		   IDaysOffPreferences dayOffPreferences,
-		   IOptimizationPreferences optimizerPreferences)
+		   IDaysOffPreferences dayOffPreferences)
 		{
 			MinMax<int> periodArea = bitArray.PeriodArea;
 			if (!dayOffPreferences.ConsiderWeekBefore)
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
 			IDayOffLegalStateValidatorListCreator validatorListCreator =
 				new DayOffOptimizationLegalStateValidatorListCreator
-					(optimizerPreferences.DaysOff,
+					(dayOffPreferences,
 					 weekendDays,
 					 bitArray.ToLongBitArray(),
 					 periodArea);
@@ -75,14 +74,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static IList<IDayOffLegalStateValidator> createLegalStateValidatorsToKeepWeekendNumbers(
 			ILockableBitArray bitArray,
-			IOptimizationPreferences optimizerPreferences)
+			IDaysOffPreferences daysOffPreferences)
 		{
 			MinMax<int> periodArea = bitArray.PeriodArea;
-			if (!optimizerPreferences.DaysOff.ConsiderWeekBefore)
+			if (!daysOffPreferences.ConsiderWeekBefore)
 				periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
 			IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
 			IDayOffLegalStateValidatorListCreator validatorListCreator =
-				new DayOffOptimizationWeekendLegalStateValidatorListCreator(optimizerPreferences.DaysOff,
+				new DayOffOptimizationWeekendLegalStateValidatorListCreator(daysOffPreferences,
 					 weekendDays,
 					 periodArea);
 
