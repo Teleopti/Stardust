@@ -511,6 +511,7 @@
 
 			function selectMultipleSeatsForScenarioTest(canvas, seatNumber) {
 				var seatmapOccupancyScope = angular.element(document.getElementsByClassName('seatmap-occupancy-detail')).scope();
+				seatmapOccupancyScope.vm.previousSelectedSeatIds = [];
 				getObjectsByType(canvas, 'seat').slice(0, seatNumber).forEach(function (seat) {
 					seatmapOccupancyScope.vm.previousSelectedSeatIds.push(seat.id);
 				});

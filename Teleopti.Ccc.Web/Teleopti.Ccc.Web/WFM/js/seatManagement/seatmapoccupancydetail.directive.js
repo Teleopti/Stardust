@@ -102,6 +102,7 @@
 			});
 
 			canvas().on('selection:created', function (e) {
+				// handle shift clicking event to select multiple seats only
 				if (e.e && e.e.shiftKey) {
 					onObjectSelection(e);
 				}
