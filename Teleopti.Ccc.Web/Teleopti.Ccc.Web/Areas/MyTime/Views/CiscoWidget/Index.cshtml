@@ -66,6 +66,9 @@
 		Teleopti.MyTimeWeb.MyReport.MyReportPartialInit();
 	});
 </script>
+
+
+
 <div class="teleopti-container m-t-10">
 	<div class="relative pull-left m-t-10" style="width: 200px; height: 68px;">
 		<div class="logo-container">
@@ -74,14 +77,21 @@
 			</div>
 		</div>
 	</div>
-	<div class="relative pull-left m-t-10" style="height: 68px; width: 412px;">
-		<div class="mytime-chart-container">
-			<div class="mytime-chart" id="CiscoFinesse-asm-module">
-				@Html.Partial("../Asm/Index")
+	@if (ViewBag.HasAsmPermission)
+	{
+		<div class="relative pull-left m-t-10" style="height: 68px; width: 412px;">
+			<div class="mytime-chart-container">
+				<div class="mytime-chart" id="CiscoFinesse-asm-module">
+					@Html.Partial("../Asm/Index")
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="teleopti-dashboard report-ciscofix pull-left" style="height: 68px; width: 412px;" id="CiscoFinesse-myReport-module">
-		@Html.Partial("../MyReport/MyReportPartial")
-	</div>
+	}
+	@if (ViewBag.HasMyReportPermission)
+	{
+		<div class="teleopti-dashboard report-ciscofix pull-left" style="height: 68px; width: 412px;" id="CiscoFinesse-myReport-module">
+			@Html.Partial("../MyReport/MyReportPartial")
+		</div>
+	}
+	
 </div>

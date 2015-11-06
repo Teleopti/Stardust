@@ -3,6 +3,8 @@ using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 {
@@ -14,11 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 		private readonly IDetailedAdherenceMapper _detailedAdherenceMapper;
 	    private readonly IQueueMetricsForDayQuery _queueMetricsForDayQuery;
 	    private readonly IQueueMetricsMapper _queueMetricsMapper;
+		private readonly IPermissionProvider _permissionProvider;
 
 	    public MyReportViewModelFactory(IDailyMetricsForDayQuery dailyMetricsRepository,
 	        IDetailedAdherenceForDayQuery detailedAdherenceRepository, IDailyMetricsMapper dailyMetricsMapper,
 	        IDetailedAdherenceMapper detailedAdherenceMapper,IQueueMetricsForDayQuery queueMetricsForDayQuery,
-            IQueueMetricsMapper queueMetricsMapper)
+			IQueueMetricsMapper queueMetricsMapper, IPermissionProvider permissionProvider)
 	    {
 	        _dailyMetricsRepository = dailyMetricsRepository;
 	        _detailedAdherenceRepository = detailedAdherenceRepository;
@@ -26,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 	        _detailedAdherenceMapper = detailedAdherenceMapper;
 	        _queueMetricsForDayQuery = queueMetricsForDayQuery;
 	        _queueMetricsMapper = queueMetricsMapper;
+		    _permissionProvider = permissionProvider;
 	    }
 
 	    public DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly)
@@ -46,5 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
             var data = _queueMetricsForDayQuery.Execute(dateOnly);
             return _queueMetricsMapper.Map(data);
         }
+
+		public bool HasMyReportPermission()
+		{
+			return _permissionProvider.HasApplicationFunctionPermission(
+				DefinedRaptorApplicationFunctionPaths.MyReportWeb);
+		}
 	}
 }

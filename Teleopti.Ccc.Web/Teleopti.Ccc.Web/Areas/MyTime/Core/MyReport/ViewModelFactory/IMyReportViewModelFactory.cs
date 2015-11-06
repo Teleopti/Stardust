@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 		DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly);
 		DetailedAdherenceViewModel CreateDetailedAherenceViewModel(DateOnly dateOnly);
         ICollection<QueueMetricsViewModel> CreateQueueMetricsViewModel(DateOnly dateOnly);
+		bool HasMyReportPermission();
 	}
 }
