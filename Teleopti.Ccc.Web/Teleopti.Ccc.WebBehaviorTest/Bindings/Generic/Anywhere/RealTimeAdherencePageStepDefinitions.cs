@@ -117,6 +117,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
 		}
 
+		[Then(@"I can '(.*)' in agent menu")]
+		public void ThenICanInAgentMenu(CssClass cssClass)
+		{
+			Browser.Interactions.AssertExists(string.Format(".{0}", cssClass.Name));
+		}
+		
 		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
 		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, string adherence)
 		{

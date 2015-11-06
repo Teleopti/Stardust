@@ -4,7 +4,6 @@ Feature: Real time adherence change schedule
 	As a real time analyst
 	I want to see ...
 
-@ignore
 Scenario: Should be able to change schedule from agent state overview
 	Given  the time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
@@ -37,6 +36,4 @@ Scenario: Should be able to change schedule from agent state overview
 	When I view real time adherence for agents on team 'Red'
 	And the time is '2014-09-09 12:45:00'
 	And I click agent state of 'Pierre Baldi'
-	And I click 'change schedule' in agent menu
-	Then I should see schedule for 'Pierre Baldi'
-	And I should see schedule menu
+	Then I can 'change schedule' in agent menu
