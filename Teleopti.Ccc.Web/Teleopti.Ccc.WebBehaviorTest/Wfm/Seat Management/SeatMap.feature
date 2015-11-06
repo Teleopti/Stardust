@@ -2,6 +2,7 @@
 	As a seat planner
 	I want to manage locations and seats
 
+@ignore
 Scenario: create a seat
 	Given I have a role with
 		| Field                 | Value        |
@@ -11,6 +12,7 @@ Scenario: create a seat
 	And I create a seat
 	Then I should see a seat in the seat map
 
+@ignore
 Scenario: create a location
 	Given I have a role with
 		| Field                 | Value        |
