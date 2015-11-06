@@ -22,18 +22,18 @@
 					}).$promise
 					.then(function(adherence) {
 						$scope.adherence = adherence;
-            $scope.adherencePercent = adherence[0].AdherencePercent;
-            $scope.activityName = adherence[0].Name;
-            $scope.startTime = adherence[0].StartTime;
-            $scope.actualStartTime = adherence[0].ActualStartTime;
+						$scope.adherencePercent = adherence[0].AdherencePercent;
+						$scope.activityName = adherence[0].Name;
+						$scope.startTime = adherence[0].StartTime;
+						$scope.actualStartTime = adherence[0].ActualStartTime;
 					});
 
-          RtaService.forToday.query({
-              personId: personId
-            }).$promise
-            .then(function(data) {
-              $scope.dailyTotal = data.AdherencePercent;
-            });
+				RtaService.forToday.query({
+						personId: personId
+					}).$promise
+					.then(function(data) {
+						$scope.dailyTotal = data.AdherencePercent;
+					});
 			}
 		]);
 })();

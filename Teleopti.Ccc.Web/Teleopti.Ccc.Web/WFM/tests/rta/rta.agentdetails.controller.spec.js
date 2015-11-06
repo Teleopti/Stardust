@@ -14,6 +14,7 @@ describe('RtaAgentDetailsCtrl', function() {
 	var rtaSvrc = {};
 	var personDetails = {};
 	var activityAdherence = [];
+	var dailyPercent = {};
 
 	beforeEach(module('wfm.rta'));
 
@@ -29,6 +30,11 @@ describe('RtaAgentDetailsCtrl', function() {
 			TimeInAdherence: "00:30:00",
 			TimeOutOfAdherence: "01:30:00"
 		}];
+
+		dailyPercent = {
+			AdherencePercent: 99,
+			LastTimestamp: "16:34"
+		};
 	});
 
 	beforeEach(function() {
@@ -73,10 +79,22 @@ describe('RtaAgentDetailsCtrl', function() {
 			}
 		});
 
+		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
+			personId: '@personId'
+		}, {
+			query: {
+				method: 'GET',
+				params: {},
+				isArray: false
+			}
+		});
+
 		$httpBackend.whenGET("../Agents/PersonDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, personDetails);
 		$httpBackend.whenGET("../Adherence/ForDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, activityAdherence);
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+			.respond(200, dailyPercent);
 	}));
 
 	var createController = function() {
@@ -95,10 +113,10 @@ describe('RtaAgentDetailsCtrl', function() {
 
 		createController();
 
-		expect(scope.Name).toEqual("Ashley Andeen");
+		expect(scope.name).toEqual("Ashley Andeen");
 	});
 
-	fit('should get details for agent', function() {
+	it('should get details for agent', function() {
 		stateParams.personId = "11610fe4-0130-4568-97de-9b5e015b2564";
 		activityAdherence = [{
 			Name: "Phone",
@@ -116,6 +134,4 @@ describe('RtaAgentDetailsCtrl', function() {
 		expect(scope.adherence[0].TimeInAdherence).toEqual("00:30:00");
 		expect(scope.adherence[0].TimeOutOfAdherence).toEqual("01:30:00");
 	});
-
-
 });
