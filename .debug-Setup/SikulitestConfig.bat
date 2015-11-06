@@ -32,7 +32,7 @@ echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shel
 ECHO RC>"c:\nhib\Toggles.txt"
 
 ECHO Set WFM path in Tenant table ...
-SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql"
+SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql" -v CCC7DB="%CCC7DB%" AnalyticsDB="%AnalyticsDB%"
 
 ECHO fix config files ...
 cd %ROOTDIR%\.debug-setup\
