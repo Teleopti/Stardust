@@ -1,4 +1,5 @@
-﻿Feature: Real time adherence details
+﻿@ignore
+Feature: Real time adherence details
 	In order to easier check realtime/historical adherence details for agents
 	As a real time analyst
 	I want to see whom and when was adhered and not adhered to the schedule
