@@ -10,29 +10,54 @@
 					<span class="daily-percent">Daily Total: {{dailyTotal}}%</span>
 				</div>
       </div>
-			<div class="row rta-agent-details-body">
+			<div class="row rta-agent-details-header">
+				<div class="col-md-6">
+						<p class="text-center">Planned</p>
+						<div class="row">
+							<div class="col-md-6 planned-stats">
+								<span>Activity</span>
+							</div>
+							<div class="col-md-6 planned-stats">
+								<span>Start</span>
+							</div>
+						</div>
+				</div>
+				<div class="col-md-6">
+					<p class="text-center">Actual</p>
+					<div class="row">
+						<div class="col-md-6 planned-stats">
+							<span>Start</span>
+						</div>
+						<div class="col-md-6 planned-stats">
+							<span>Adherence</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row " ng-repeat="detail in adherence">
 				<div class="col-lg-6 rta-agent-details-planned">
-					<span>Planned</span>
 					<div class="col-lg-12">
 						<div class="col-lg-6 planned-stats">
-							<span class="activity-name">Activity: {{activityName}}</span>
+							<span class="activity-name">{{detail.Name}}</span>
 						</div>
             <div class="col-lg-6 planned-stats">
-						<span>Start: {{startTime}}</span>
+						<span>{{detail.StartTime}}</span>
           </div>
 					</div>
 				</div>
 				<div class="col-lg-6 rta-agent-details-real">
-					<span>Verklig</span>
 					<div class="col-lg-12">
             <div class="col-lg-6 real-stats">
-						  <span>Start: {{actualStartTime}}</span>
+						  <span>{{detail.ActualStartTime}}</span>
             </div>
             <div class="col-lg-6 real-stats">
-						  <span class="adherence-percent">Schedule: {{adherencePercent}}%</span>
+						  <span ng-if="detail.AdherencePercent === null" class="adherence-percent">-</span>
+							<span ng-if="detail.AdherencePercent !== null" class="adherence-percent">{{detail.AdherencePercent}}%</span>
             </div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	</div>
