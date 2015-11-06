@@ -35,7 +35,15 @@ describe('RtaRouteService', function() {
 	});
 
 	it('should get agent details url', function() {
-		expect(target.urlForAgentDetails("11610fe4-0130-4568-97de-9b5e015b2564"))
-		.toEqual("/wfm/#/rta/agent-details/11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(target.urlForAgentDetails('11610fe4-0130-4568-97de-9b5e015b2564'))
+		.toEqual('/wfm/#/rta/agent-details/11610fe4-0130-4568-97de-9b5e015b2564');
+	});
+
+	it('should get sites overview url', function() {
+		expect(target.urlForSites()).toEqual('/wfm/#/rta');
+	});
+
+	it('should get teams overview url', function() {
+		expect(target.urlForTeams('d970a45a-90ff-4111-bfe1-9b5e015ab45c')).toEqual('/wfm/#/rta/teams/d970a45a-90ff-4111-bfe1-9b5e015ab45c');
 	});
 });

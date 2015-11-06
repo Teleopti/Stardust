@@ -3,8 +3,8 @@
 	'use strict';
 
 	angular.module('wfm.rta').controller('RtaTeamsCtrl', [
-		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage',
-		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage) {
+		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService',
+		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService) {
 
 			var siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
@@ -68,8 +68,8 @@
 				});
 			};
 
-			$scope.goBack = function() {
-				$state.go('rta');
+			$scope.goBackWithUrl = function() {
+				return RtaRouteService.urlForSites();
 			};
 
 			$scope.$watch(
@@ -78,7 +78,7 @@
 				},
 				function(newValue, oldValue) {
 					if (oldValue !== undefined && newValue !== oldValue) {
-						$scope.goBack();
+							RtaRouteService.goToSites();
 					}
 				}
 			);

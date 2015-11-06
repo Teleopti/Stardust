@@ -21,6 +21,14 @@
 				return "/wfm/#/rta/agent-details/" + personId;
 			};
 
+			this.urlForSites = function(){
+				return '/wfm/#/rta';
+			};
+
+			this.urlForTeams = function(siteId){
+				return '/wfm/#/rta/teams/' + siteId;
+			};
+
 		}
 	]);
 })();

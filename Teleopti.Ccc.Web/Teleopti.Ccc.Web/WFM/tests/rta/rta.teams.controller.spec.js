@@ -231,15 +231,6 @@ describe('RtaTeamsCtrl', function() {
 		});
 	});
 
-	it('should go back to sites', function() {
-		createController();
-		spyOn($state, 'go');
-
-		scope.goBack();
-
-		expect($state.go).toHaveBeenCalledWith('rta');
-	});
-
 	it('should go to agents for multiple teams', function() {
 		teams = [{
 			Id: "2d45a50e-db48-41db-b771-a53000ef6565"

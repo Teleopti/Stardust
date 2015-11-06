@@ -1,5 +1,4 @@
-﻿
-Feature: Real time adherence percentage
+﻿Feature: Real time adherence percentage
 	In order to ...
 	As a real time analyst
 	I want to see ...

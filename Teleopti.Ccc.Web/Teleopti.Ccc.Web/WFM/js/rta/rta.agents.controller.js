@@ -25,11 +25,11 @@
 							$scope.timeStamp = data.LastTimestamp;
 						});
 				};
-				$scope.goBackToRoot = function() {
-					RtaRouteService.goToSites();
+				$scope.goBackToRootWithUrl = function() {
+					return RtaRouteService.urlForSites();
 				};
-				$scope.goBack = function() {
-					RtaRouteService.goToTeams(siteId);
+				$scope.goBackToTeamsWithUrl = function() {
+					return RtaRouteService.urlForTeams(siteId);
 				};
 				$scope.format = function(time) {
 					return RtaFormatService.formatDateTime(time);
@@ -111,7 +111,7 @@
 					},
 					function(newValue, oldValue) {
 						if (oldValue !== undefined && newValue !== oldValue) {
-							$scope.goBackToRoot();
+							RtaRouteService.goToSites();
 						}
 					}
 				);

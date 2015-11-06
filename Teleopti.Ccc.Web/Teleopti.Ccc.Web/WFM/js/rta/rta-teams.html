@@ -2,7 +2,7 @@
         <div class="rta-header">
             <h3>Teams</h3>
             <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
-            <span ng-click="goBack()"><a class="rta-nav-link">Real Time Adherence</a></span> / <span>{{siteName}}</span>
+            <a href="{{goBackWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{siteName}}</span>
         </div>
         <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5}">
             <div class="rta-stats team">
