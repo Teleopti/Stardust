@@ -212,6 +212,7 @@ And I see that the campaign is not done after the end date
 And I replan the campaign
 Then I should see the campaign is done after the end date
 
+@ignore
 Scenario: Manually update backlog
 When I view the backlog chart of the campaign created with 
 | Field                             | Value       |
