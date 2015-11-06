@@ -32,7 +32,6 @@ Scenario: Should display sites of a selected business unit
 	And I change to business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
 
-@ignore
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
 	Given I have a role with
 	| Field                                  | Value             |
