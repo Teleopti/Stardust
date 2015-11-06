@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public interface ISmartDayOffBackToLegalStateService
     {
-        IList<IDayOffBackToLegalStateSolver> BuildSolverList(ILockableBitArray bitArray);
+		IList<IDayOffBackToLegalStateSolver> BuildSolverList(ILockableBitArray bitArray, IDaysOffPreferences daysOffPreferences);
 
         bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations);
 

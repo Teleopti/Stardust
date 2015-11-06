@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
-												  _optimizationPreferences, _dayOffsToGiveAway)).Return(null);
+												  _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider)).Return(null);
 			    Expect.Call(()=> _rollbackService.ClearModificationCollection());
 			}
 			using (_mocks.Playback())
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
 			Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
 			Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
-			                                  _optimizationPreferences, _dayOffsToGiveAway)).Return(_daysToSwap);
+			                                  _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider)).Return(_daysToSwap);
 			Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(seniorToHaveDayOffScheduleDay);
 			Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(juniorToRemoveDayOffScheduleDay);
 			Expect.Call(_range1.ScheduledDay(_dateBefore)).Return(seniorGiveDayOffScheduleDay);

@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
 
 
-				if (!removeIllegalDayOffs(workingBitArray))
+				if (!removeIllegalDayOffs(workingBitArray, _daysOffPreferences))
 				{
 					writeToLogBackToLegalStateFailed();
 					return false;
@@ -269,10 +269,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             _logWriter.LogInfo(loginfo);
         }
 
-        private bool removeIllegalDayOffs(ILockableBitArray workingBitArray)
+        private bool removeIllegalDayOffs(ILockableBitArray workingBitArray, IDaysOffPreferences daysOffPreferences)
         {
             //get back to legal state, if needed
-            return _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray), 100);
+            return _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray, daysOffPreferences), 100);
         }
 
         private dayOffOptimizerMoveDaysResult executeDayOffMovesInMatrix(

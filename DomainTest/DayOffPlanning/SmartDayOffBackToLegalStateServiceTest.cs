@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _daysOffPreferences.UseFullWeekendsOff = true;
             _functions = _mocks.StrictMock<IDayOffBackToLegalStateFunctions>();
         	_decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
-            _target = new SmartDayOffBackToLegalStateService(_functions, _daysOffPreferences, _maxIterations, _decisionMaker);
+            _target = new SmartDayOffBackToLegalStateService(_functions, _maxIterations, _decisionMaker);
         }
 
         [Test]
         public void VerifyCanGetListOfSolversIncorrectRunOrder()
         {
             LockableBitArray array = createBitArray();
-            IList<IDayOffBackToLegalStateSolver> solvers = _target.BuildSolverList(array);
+            IList<IDayOffBackToLegalStateSolver> solvers = _target.BuildSolverList(array, _daysOffPreferences);
             Assert.AreEqual(6, solvers.Count);
             Assert.AreEqual(typeof(FreeWeekendSolver), solvers[0].GetType());
             Assert.AreEqual(typeof(FreeWeekendDaySolver), solvers[1].GetType());
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Assert.AreEqual(typeof(ConsecutiveWorkdaysSolver), solvers[4].GetType());
             Assert.AreEqual(typeof(TuiCaseSolver), solvers[5].GetType());
         	_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 5);
-			solvers = _target.BuildSolverList(array);
+			solvers = _target.BuildSolverList(array, _daysOffPreferences);
 			Assert.AreEqual(7, solvers.Count);
 			Assert.AreEqual(typeof(FiveConsecutiveWorkdaysSolver), solvers[6].GetType());
         }

@@ -252,7 +252,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				foreach (ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer in solverContainers)
 				{
-					backToLegalStateSolverContainer.Execute();
+					var matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
+					var dayOffOptimizePreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person,matrix.EffectivePeriodDays.First().Day);
+
+					backToLegalStateSolverContainer.Execute(dayOffOptimizePreference);
+
 					//create list to send to bruteforce
 					if (!backToLegalStateSolverContainer.Result)
 					{

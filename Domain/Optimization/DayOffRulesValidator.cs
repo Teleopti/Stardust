@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffRulesValidator
 	{
-		bool Validate(ILockableBitArray bitArray, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ILockableBitArray bitArray, IOptimizationPreferences optimizationPreferences, IDaysOffPreferences daysOffPreferences);
 	}
 
 	public class DayOffRulesValidator : IDayOffRulesValidator
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_daysOffLegalStateValidatorsFactory = daysOffLegalStateValidatorsFactory;
 		}
 
-		public bool Validate(ILockableBitArray array, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ILockableBitArray array, IOptimizationPreferences optimizationPreferences, IDaysOffPreferences daysOffPreferences)
 		{
-			var validatorList = _daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, optimizationPreferences);
+			var validatorList = _daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, optimizationPreferences, daysOffPreferences);
 			BitArray longBitArray = array.ToLongBitArray();
 			int offset = 0;
 			if (array.PeriodArea.Minimum < 7)

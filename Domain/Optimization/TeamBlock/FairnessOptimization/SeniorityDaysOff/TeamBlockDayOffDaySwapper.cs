@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
             _cancel = false;
             var swapResult = trySwapAndValidate(dateOnly, teamBlockSenior, teamBlockJunior, rollbackService,
-		                                        scheduleDictionary, optimizationPreferences, dayOffsToGiveAway);
+		                                        scheduleDictionary, optimizationPreferences, dayOffsToGiveAway, dayOffOptimizationPreferenceProvider);
             if (swapResult && !validate(teamBlockSenior,teamBlockJunior,optimizationPreferences, dayOffOptimizationPreferenceProvider ))
             {
                 rollbackService.Rollback();
@@ -52,11 +52,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		}
 
         private bool trySwapAndValidate(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
-                            ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway)
+                            ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, 
+							IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway,
+							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
             var totalModifyList = new List<IScheduleDay>();
             var daysToSwap = _teamBlockDayOffDaySwapDecisionMaker.Decide(dateOnly, teamBlockSenior, teamBlockJunior, scheduleDictionary,
-                                                        optimizationPreferences, dayOffsToGiveAway);
+                                                        optimizationPreferences, dayOffsToGiveAway, dayOffOptimizationPreferenceProvider);
             if (daysToSwap == null)
                 return false;
             var teamBlockSeniorGroupMembers = teamBlockSenior.TeamInfo.GroupMembers.ToList();

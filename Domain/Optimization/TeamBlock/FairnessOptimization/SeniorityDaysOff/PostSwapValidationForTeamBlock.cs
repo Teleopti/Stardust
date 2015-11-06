@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
-            if (!_seniorityTeamBlockSwapValidator.Validate(teamBlockInfo, optimizationPreferences))
+            if (!_seniorityTeamBlockSwapValidator.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
                 return false;
 
 	        if (!_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))

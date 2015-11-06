@@ -9,7 +9,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public interface ITeamBlockDayOffDaySwapDecisionMaker : ICancellable
 	{
 		IPossibleSwappableDays Decide(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
-		                                                   IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway);
+		                                                   IScheduleDictionary scheduleDictionary, 
+															IOptimizationPreferences optimizationPreferences, 
+															IList<DateOnly> dayOffsToGiveAway,
+															IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class TeamBlockDayOffDaySwapDecisionMaker : ITeamBlockDayOffDaySwapDecisionMaker
@@ -29,12 +32,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 											 ITeamBlockInfo teamBlockJunior,
 		                                     IScheduleDictionary scheduleDictionary,
 		                                     IOptimizationPreferences optimizationPreferences,
-		                                     IList<DateOnly> dayOffsToGiveAway)
+		                                     IList<DateOnly> dayOffsToGiveAway,
+												IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var teamBlockSeniorGroupMembers = teamBlockSenior.TeamInfo.GroupMembers.ToList();
 			var teamBlockJuniorGroupMembers = teamBlockJunior.TeamInfo.GroupMembers.ToList();
-			bool considerWeekBefore = optimizationPreferences.DaysOff.ConsiderWeekBefore;
-			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
+
+			
 			for (int i = 0; i < teamBlockSeniorGroupMembers.Count(); i++)
 			{
 				if (_cancel) return null;
@@ -47,12 +51,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				var daySenior = seniorScheduleRange.ScheduledDay(dateOnly);
 				var dayJunior = juniorScheduleRange.ScheduledDay(dateOnly);
 
+				var dayOffOptimizePreferenceSenior = dayOffOptimizationPreferenceProvider.ForAgent(personSenior, dateOnly);
+				var dayOffOptimizePreferenceJunior = dayOffOptimizationPreferenceProvider.ForAgent(personJunior, dateOnly);
+
+				var considerWeekBeforeSenior = dayOffOptimizePreferenceSenior.ConsiderWeekBefore;
+				var considerWeekAfterSenior = dayOffOptimizePreferenceSenior.ConsiderWeekAfter;
+
+				var considerWeekBeforeJunior = dayOffOptimizePreferenceJunior.ConsiderWeekBefore;
+				var considerWeekAfterJunior = dayOffOptimizePreferenceJunior.ConsiderWeekAfter;
+
 				if (isOnlyJuniorHasDayOff(daySenior, dayJunior))
 				{
-					var mostValuableDayIndexOfSenior = getIndexFromMatrix(dateOnly, seniorMatrix, considerWeekBefore, considerWeekAfter);
-					var mostValuableDayIndexOfJunior = getIndexFromMatrix(dateOnly, juniorMatrix, considerWeekBefore, considerWeekAfter);
-					var workingSeniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,seniorMatrix);
-					var workingJuniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,juniorMatrix);
+					var mostValuableDayIndexOfSenior = getIndexFromMatrix(dateOnly, seniorMatrix, considerWeekBeforeSenior, considerWeekAfterSenior);
+					var mostValuableDayIndexOfJunior = getIndexFromMatrix(dateOnly, juniorMatrix, considerWeekBeforeJunior, considerWeekAfterJunior);
+					var workingSeniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBeforeSenior, considerWeekAfterSenior, seniorMatrix);
+					var workingJuniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBeforeJunior, considerWeekAfterJunior, juniorMatrix);
 					var isLocked = workingSeniorBitArray.IsLocked(mostValuableDayIndexOfSenior, true) || workingJuniorBitArray.IsLocked(mostValuableDayIndexOfJunior, true);
 
 					if (!isLocked)
@@ -71,8 +84,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 							{
 								var giveAwayDayOffSeniorBitArray = (ILockableBitArray) workingSeniorBitArray.Clone();
 								var acceptDayOffJuniorBitArray = (ILockableBitArray) workingJuniorBitArray.Clone();
-								var giveAwayDayOffDayIndexOfSenior = getIndexFromMatrix(dayOffDay, seniorMatrix, considerWeekBefore,considerWeekAfter);
-								var acceptDayOffDayIndexOfJunior = getIndexFromMatrix(dayOffDay, juniorMatrix, considerWeekBefore,considerWeekAfter);
+								var giveAwayDayOffDayIndexOfSenior = getIndexFromMatrix(dayOffDay, seniorMatrix, considerWeekBeforeSenior, considerWeekAfterSenior);
+								var acceptDayOffDayIndexOfJunior = getIndexFromMatrix(dayOffDay, juniorMatrix, considerWeekBeforeJunior, considerWeekAfterJunior);
 								isLocked = giveAwayDayOffSeniorBitArray.IsLocked(giveAwayDayOffDayIndexOfSenior, true) || acceptDayOffJuniorBitArray.IsLocked(acceptDayOffDayIndexOfJunior, true);
 
 								if (!isLocked)
@@ -80,8 +93,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 									giveAwayDayOffSeniorBitArray.Set(giveAwayDayOffDayIndexOfSenior, false);
 									acceptDayOffJuniorBitArray.Set(acceptDayOffDayIndexOfJunior, true);
 
-									if (_dayOffRulesValidator.Validate(giveAwayDayOffSeniorBitArray, optimizationPreferences) &&
-									    _dayOffRulesValidator.Validate(acceptDayOffJuniorBitArray, optimizationPreferences))
+									if (_dayOffRulesValidator.Validate(giveAwayDayOffSeniorBitArray, optimizationPreferences, dayOffOptimizePreferenceSenior) &&
+									    _dayOffRulesValidator.Validate(acceptDayOffJuniorBitArray, optimizationPreferences, dayOffOptimizePreferenceJunior))
 									{
 										return new PossibleSwappableDays
 											{

@@ -9,22 +9,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
 			ILockableBitArray bitArray,
-			IOptimizationPreferences optimizerPreferences);
+			IOptimizationPreferences optimizerPreferences,
+			IDaysOffPreferences daysOffPreferences);
 	}
 
 	public class DaysOffLegalStateValidatorsFactory : IDaysOffLegalStateValidatorsFactory
 	{
 		public IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
 		   ILockableBitArray bitArray,
-		   IOptimizationPreferences optimizerPreferences)
+		   IOptimizationPreferences optimizerPreferences,
+			IDaysOffPreferences daysOffPreferences)
 		{
 			MinMax<int> periodArea = bitArray.PeriodArea;
-			if (!optimizerPreferences.DaysOff.ConsiderWeekBefore)
+			if (!daysOffPreferences.ConsiderWeekBefore)
 				periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
 			IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
 			IDayOffLegalStateValidatorListCreator validatorListCreator =
 				new DayOffOptimizationLegalStateValidatorListCreator
-					(optimizerPreferences.DaysOff,
+					(daysOffPreferences,
 					 weekendDays,
 					 bitArray.ToLongBitArray(),
 					 periodArea);

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ISeniorityTeamBlockSwapValidator
 	{
-		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class SeniorityTeamBlockSwapValidator : ISeniorityTeamBlockSwapValidator
@@ -32,14 +32,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_matrixConverter = matrixConverter;
 		}
 
-		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var matrixesToCheck = teamBlockInfo.MatrixesForGroupAndBlock().ToList();
 
 			foreach (var matrix in matrixesToCheck)
 			{
-				var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekAfter);
-				bool valid = _dayOffRulesValidator.Validate(array, optimizationPreferences);
+				var dayOffOptimizePreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
+				var array = _matrixConverter.Convert(matrix, dayOffOptimizePreference.ConsiderWeekBefore, dayOffOptimizePreference.ConsiderWeekAfter);
+				bool valid = _dayOffRulesValidator.Validate(array, optimizationPreferences, dayOffOptimizePreference);
 				if (!valid)
 					return false;
 			}

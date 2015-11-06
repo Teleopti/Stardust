@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _bitArray; }
         }
 
-        public void Execute()
+        public void Execute(IDaysOffPreferences daysOffPreferences)
         {
-            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray), 20);
+            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray, daysOffPreferences), 20);
         }
 
         public IList<string> FailedSolverDescriptionKeys

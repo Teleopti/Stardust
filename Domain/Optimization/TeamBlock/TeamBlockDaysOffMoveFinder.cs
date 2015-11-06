@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var workingBitArray = (ILockableBitArray)originalArray.Clone();
 				if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
 				{
-					if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray), 100))
+					if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray, daysOffPreferences), 100))
 						continue;
 
 					if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				// DayOffBackToLegal if decisionMaker did something wrong
-				if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray), 100))
+				if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray, daysOffPreferences), 100))
 					continue;
 
 				return workingBitArray;

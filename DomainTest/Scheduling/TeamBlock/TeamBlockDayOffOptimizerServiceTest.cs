@@ -168,15 +168,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_matrix.Person).Return(_person ) ;
 				Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson("test") ) ;
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
-					_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore,
+					_daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray);
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,
-					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					_daysOffPreferences.ConsiderWeekBefore))
 					.IgnoreArguments()
 					.Return(new List<DateOnly> { DateOnly.MinValue });
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,
-					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					_daysOffPreferences.ConsiderWeekBefore))
 					.IgnoreArguments()
 					.Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1))).IgnoreArguments()  ;
@@ -240,15 +240,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_matrix.Person).Return(_person).Repeat.Twice();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
-					_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore,
+					_daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray);
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,
-					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					_daysOffPreferences.ConsiderWeekBefore))
 					.IgnoreArguments()
 					.Return(new List<DateOnly> {DateOnly.MinValue});
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,
-					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					_daysOffPreferences.ConsiderWeekBefore))
 					.IgnoreArguments()
 					.Return(new List<DateOnly> {DateOnly.MinValue.AddDays(1)});
 				Expect.Call(() =>_teamDayOffModifier.RemoveDayOffForMember(_rollbackService,_person,DateOnly.MinValue.AddDays(1)));
@@ -570,12 +570,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore,_daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_originalArray);
 
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,_optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,_optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,_daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,_daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
@@ -611,11 +611,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
 
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
@@ -655,10 +655,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
@@ -692,10 +692,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences, _daysOffPreferences)).Return(_workingArray);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,_daysOffPreferences.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() => _teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate)).IgnoreArguments();
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
@@ -724,8 +724,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		private void runOneMatrixMocks(bool failOnRestrictionOverLimitValidator, bool failOnRescheduling, bool failOnNoMoveFound, bool failOnMinWorkTimPerWeek, bool failOnShiftCategoryLimitation)
 		{
-			Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
-																	   _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix))
+			Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_daysOffPreferences.ConsiderWeekBefore,
+																	   _daysOffPreferences.ConsiderWeekAfter, _matrix))
 					  .Return(_originalArray);
 
 			ILockableBitArray arrayToReturn = _workingArray;
@@ -740,11 +740,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
 			Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,
-			                                                         _optimizationPreferences.DaysOff.ConsiderWeekBefore))
+			                                                         _daysOffPreferences.ConsiderWeekBefore))
 			      .IgnoreArguments()
 			      .Return(new List<DateOnly> {DateOnly.MinValue});
 			Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,
-			                                                           _optimizationPreferences.DaysOff.ConsiderWeekBefore))
+			                                                           _daysOffPreferences.ConsiderWeekBefore))
 			      .IgnoreArguments()
 				  .Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 

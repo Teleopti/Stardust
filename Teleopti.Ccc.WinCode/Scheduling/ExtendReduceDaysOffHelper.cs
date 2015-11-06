@@ -96,11 +96,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
 
+				var dayOffOptimizePreference = dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
+
 				IExtendReduceDaysOffDecisionMaker decisionMaker = new ExtendReduceDaysOffDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
-				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(scheduleMatrixPro, optimizerPreferences.DaysOff.ConsiderWeekBefore, optimizerPreferences.DaysOff.ConsiderWeekAfter);
+				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(scheduleMatrixPro, dayOffOptimizePreference.ConsiderWeekBefore, dayOffOptimizePreference.ConsiderWeekAfter);
 				var daysOffLegalStateValidatorsFactory = _container.Resolve<IDaysOffLegalStateValidatorsFactory>();
 				var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(bitArray,
-					optimizerPreferences);
+					optimizerPreferences, dayOffOptimizePreference);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true);
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =

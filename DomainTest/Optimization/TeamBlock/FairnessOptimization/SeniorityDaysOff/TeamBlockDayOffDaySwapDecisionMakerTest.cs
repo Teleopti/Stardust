@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private LockableBitArray _juniorBitArray;
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayPro _scheduleDayPro2;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		[SetUp]
 		public void Setup()
@@ -86,7 +88,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_juniorBitArray = new LockableBitArray(21, true, true, null);
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-			
+
+			_daysOffPreferences = new DaysOffPreferences() {ConsiderWeekBefore = true, ConsiderWeekAfter = true};
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);	
 		}
 
 		[Test]
@@ -101,7 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences,
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}
 		}
@@ -118,7 +124,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences, 
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}
 		}
@@ -136,7 +144,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences, 
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}	
 		}
@@ -154,7 +164,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+										_scheduleDictionary, _optimizationPreferences, 
+										_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}
 		}
@@ -174,7 +186,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences, 
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}	
 		}
@@ -194,7 +208,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences, 
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
 			}
 		}
@@ -225,13 +241,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(scheduleDayJuniorToAccept);
 				Expect.Call(scheduleDaySeniorToGiveAway.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(scheduleDayJuniorToAccept.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfSenior, _optimizationPreferences)).IgnoreArguments().Return(true);
-				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfJunior, _optimizationPreferences)).IgnoreArguments().Return(true);
+				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfSenior, _optimizationPreferences, _daysOffPreferences)).IgnoreArguments().Return(true);
+				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfJunior, _optimizationPreferences, _daysOffPreferences)).IgnoreArguments().Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, 
+											_optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.That(result.DateForSeniorDayOff, Is.EqualTo(_dateOnly));
 				Assert.That(result.DateForRemovingSeniorDayOff, Is.EqualTo(_dateBefore));
 			}
@@ -263,14 +280,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(scheduleDayJuniorToAccept);
 				Expect.Call(scheduleDaySeniorToGiveAway.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(scheduleDayJuniorToAccept.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfSenior, _optimizationPreferences)).IgnoreArguments().Return(true);
-				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfJunior, _optimizationPreferences)).IgnoreArguments().Return(false);
+				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfSenior, _optimizationPreferences, _daysOffPreferences)).IgnoreArguments().Return(true);
+				Expect.Call(_dayOffRulesValidator.Validate(clonedBitArrayOfJunior, _optimizationPreferences, _daysOffPreferences)).IgnoreArguments().Return(false);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, 
+											_scheduleDictionary, _optimizationPreferences, 
+											_dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsNull(result);
+
 			}
 		}
 
@@ -279,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			_target.Cancel();
 			var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
-			                            _optimizationPreferences, _dayOffsToGiveAway);
+			                            _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 			Assert.IsNull(result);
 		}
 

@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IOptimizationPreferences _optimizationPreferences;
 		private IDayOffLegalStateValidator _dayOffLegalStateValidator;
 		private IList<IDayOffLegalStateValidator> _dayOffLegalStateValidators;
+		private IDaysOffPreferences _daysOffPreferences;
 
 		[SetUp]
 		public void Setup()
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_optimizationPreferences = new OptimizationPreferences();
 			_dayOffLegalStateValidator = _mocks.StrictMock<IDayOffLegalStateValidator>();
 			_dayOffLegalStateValidators = new List<IDayOffLegalStateValidator>{_dayOffLegalStateValidator};
+			_daysOffPreferences = new DaysOffPreferences();
 		}
 
 		[Test]
@@ -38,14 +40,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())
 			{
-				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences))
+				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences, _daysOffPreferences))
 				      .Return(_dayOffLegalStateValidators);
 				Expect.Call(_dayOffLegalStateValidator.IsValid(longBitArray, 14)).Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(array, _optimizationPreferences);
+				var result = _target.Validate(array, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -58,14 +60,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())
 			{
-				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences))
+				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences, _daysOffPreferences))
 					  .Return(_dayOffLegalStateValidators);
 				Expect.Call(_dayOffLegalStateValidator.IsValid(longBitArray, 14)).Return(false);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(array, _optimizationPreferences);
+				var result = _target.Validate(array, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsFalse(result);
 			}
 		}

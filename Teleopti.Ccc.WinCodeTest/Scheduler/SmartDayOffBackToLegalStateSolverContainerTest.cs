@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
         private IScheduleMatrixOriginalStateContainer _scheduleMatrixOriginalStateContainer;
         private ILockableBitArray _bitArray;
+	    private IDaysOffPreferences _daysOffPreferences;
 
         [SetUp]
         public void Setup()
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleMatrixOriginalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _bitArray = new LockableBitArray(5, false, false, null);
             _target = new SmartDayOffBackToLegalStateSolverContainer(_scheduleMatrixOriginalStateContainer, _bitArray, _smartDayOffBackToLegalStateService);
+			_daysOffPreferences = new DaysOffPreferences();
         }
 
         [Test]
@@ -37,13 +40,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             solverList.Add(solver);
             using (_mocks.Record())
             {
-                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_bitArray)).Return(solverList).Repeat.Once();
+                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_bitArray, _daysOffPreferences)).Return(solverList).Repeat.Once();
                 Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 20)).Return(true).Repeat.Once();
                 Expect.Call(_scheduleMatrixOriginalStateContainer.ScheduleMatrix).Return(_matrix).Repeat.Any();
                 Expect.Call(_smartDayOffBackToLegalStateService.FailedSolverDescriptionKeys).Return(new List<string>()).
                     Repeat.Any();
             }
-            _target.Execute();
+            _target.Execute(_daysOffPreferences);
             Assert.AreSame(_matrix, _target.MatrixOriginalStateContainer.ScheduleMatrix);
             Assert.IsTrue(_target.Result);
             Assert.AreEqual(5, _target.BitArray.Count);

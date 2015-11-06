@@ -507,8 +507,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private movedDaysOff affectedDaysOff(IOptimizationPreferences optimizationPreferences, IScheduleMatrixPro matrix, IDaysOffPreferences daysOffPreferences)
 		{
-			bool considerWeekBefore = optimizationPreferences.DaysOff.ConsiderWeekBefore;
-			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
+			bool considerWeekBefore = daysOffPreferences.ConsiderWeekBefore;
+			bool considerWeekAfter = daysOffPreferences.ConsiderWeekAfter;
 			ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
 			                                                                             matrix);
 			ILockableBitArray resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences, daysOffPreferences);

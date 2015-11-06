@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 
 			_optimizationPreferences.Shifts.KeepShifts = false;
-			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = false;
+			_daysOffPreferences.UseKeepExistingDaysOff = false;
 			bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
 			Assert.IsTrue(result);
 		}

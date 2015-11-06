@@ -34,6 +34,6 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Executes this instance.
         /// </summary>
-        void Execute();
+        void Execute(IDaysOffPreferences daysOffPreferences);
     }
 }

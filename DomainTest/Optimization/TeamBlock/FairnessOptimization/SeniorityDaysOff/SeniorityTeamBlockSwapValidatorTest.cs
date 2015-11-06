@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -32,6 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private DateOnlyPeriod _period;
 		private IScheduleMatrixLockableBitArrayConverterEx _matrixCoverter;
 		private LockableBitArray _bitArray;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+		private IScheduleDayPro _scheduleDayPro;
 
 		[SetUp]
 		public void Setup()
@@ -53,6 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_period = new DateOnlyPeriod(2014,1,31,2014,2,1);
 			_bitArray = new LockableBitArray(21, true, true, null);
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_scheduleDayPro = new ScheduleDayPro(_period.StartDate, _matrix);
 		}
 
 		[Test]
@@ -61,12 +68,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				commonMocks();
-				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences)).Return(false);
+				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences, _daysOffPreferences)).Return(false);
+
+				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -78,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				commonMocks();
 
-				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences)).Return(true);
+				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
@@ -91,11 +101,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions))
 				      .Return(false);
+
+				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -107,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				commonMocks();
 
-				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences)).Return(true);
+				Expect.Call(_dayOffRulesValidator.Validate(_bitArray, _optimizationPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
@@ -120,11 +133,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions))
 					  .Return(true);
+
+				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -132,8 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private void commonMocks()
 		{
 			Expect.Call(_teamBlockInfo.MatrixesForGroupAndBlock()).Return(new[] { _matrix });
-			Expect.Call(_matrixCoverter.Convert(_matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore,
-			                                    _optimizationPreferences.DaysOff.ConsiderWeekAfter)).Return(_bitArray);
+			Expect.Call(_matrixCoverter.Convert(_matrix, _daysOffPreferences.ConsiderWeekBefore,
+			                                    _daysOffPreferences.ConsiderWeekAfter)).Return(_bitArray);
 			
 		}
 

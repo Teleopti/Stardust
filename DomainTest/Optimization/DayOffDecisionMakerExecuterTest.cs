@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true).Repeat.Once();
                 Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
                     .Return(new List<DateOnly>());
-                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().Return(null).Repeat.Once();
+                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences)).IgnoreArguments().Return(null).Repeat.Once();
                 Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
                     .Return(true).Repeat.Once();
                 Expect.Call(_scheduleMatrix.Person)
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true)).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix, schedulingOptions, _rollbackService)).Return(true).Repeat.Once();
 				Expect.Call(_workShiftBackToLegalStateService.RemovedDays).Return(new List<DateOnly>());
-				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().Return(null).Repeat.Once();
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences)).IgnoreArguments().Return(null).Repeat.Once();
 				Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments().Return(true).Repeat.Once();
 				Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.Any();
 				Expect.Call(_scheduleMatrix.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(_scheduleDayPro).Repeat.AtLeastOnce();
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var dateOnlyPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
             var dateOnly = new DateOnly();
 
-            Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().Return(null).Repeat.Once();
+            Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences)).IgnoreArguments().Return(null).Repeat.Once();
             Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments().Return(true).Repeat.Once();
             Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.Any();
             Expect.Call(_scheduleMatrix.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(_scheduleDayPro).Repeat.AtLeastOnce();
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.Twice();
 
 				//days off back to legal in array
-				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove))
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences))
 					.Return(null).Repeat.Once();
 				Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
 					.Return(true).Repeat.Once();
@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.AtLeastOnce();
 
 				//days off back to legal in array
-				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove))
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences))
 					.Return(null).Repeat.Once();
 				Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
 					.Return(true).Repeat.Once();
@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(part).Repeat.Twice();
 
 				//days off back to legal in array
-				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove))
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove, _daysOffPreferences))
 					.Return(null).Repeat.Once();
 				Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
 					.Return(true).Repeat.Once();

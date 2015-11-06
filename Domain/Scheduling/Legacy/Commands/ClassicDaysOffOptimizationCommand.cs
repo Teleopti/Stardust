@@ -172,7 +172,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService =
 				new SmartDayOffBackToLegalStateService(
 					_dayOffBackToLegalStateFunctions,
-					daysOffPreferences,
 					25,
 					_dayOffDecisionMaker);
 
