@@ -26,15 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForSites(string[] siteIds)
-		{
-			var teamModels = new List<TeamViewModel>();
-			siteIds.ForEach(x => teamModels.AddRange(_getTeamAdherence.ForSite(x)));
-			return Json(teamModels, JsonRequestBehavior.AllowGet);
-		}
-
-
-		[UnitOfWorkAction, HttpGet]
 		public virtual JsonResult GetOutOfAdherence(string teamId)
 		{
 			return Json(_getTeamAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);

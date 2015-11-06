@@ -115,44 +115,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			result.Single(x => x.Id == team1.ToString()).OutOfAdherence.Should().Be(1);
 			result.Single(x => x.Id == team2.ToString()).OutOfAdherence.Should().Be(2);
 		}
-
-		[Test]
-		public void ShouldGetMultipleTeamsForSites()
-		{
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var site1 = new Site("site1").WithId();
-			site1.AddTeam(
-					new Team {Description = new Description("team1")}
-						.WithId(teamId1));
-			var site2 = new Site("site2").WithId();
-			site2.AddTeam(
-					new Team {Description = new Description("team2")}
-						.WithId(teamId2));
-			SiteRepository.Has(site1);
-			SiteRepository.Has(site2);
-
-			var result = Target.ForSites(new[] { site1.Id.ToString(), site2.Id.ToString() }).Data as IEnumerable<TeamViewModel>;
-
-			result.Single(x => x.Id == teamId1.ToString()).Name.Should().Be("team1");
-			result.Single(x => x.Id == teamId1.ToString()).SiteId.Should().Be(site1.Id.ToString());
-			result.Single(x => x.Id == teamId2.ToString()).Name.Should().Be("team2");
-			result.Single(x => x.Id == teamId2.ToString()).SiteId.Should().Be(site2.Id.ToString());
-		}
-
-		[Test]
-		public void ShouldGetNumberOfAgentsForMultipleTeamsOnSites()
-		{
-			var team = new Team { Description = new Description("team1") }.WithId();
-			var site = new Site("site1").WithId();
-			site.AddTeam(team);
-			
-			SiteRepository.Has(site);
-			NumberOfAgentsInTeam.Has(team, 3);
-
-			var result = Target.ForSites(new[] { site.Id.ToString() }).Data as IEnumerable<TeamViewModel>;
-
-			result.Single(x => x.Id == team.Id.ToString()).NumberOfAgents.Should().Be(3);
-		}
 	}
 }
