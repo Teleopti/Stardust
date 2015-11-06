@@ -5,7 +5,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
-	class CiscoFinesseStepDefination
+	class CiscoFinesseStepDefinition
 	{
 		[When(@"I accesse teleopti page through Cisco Finesse portal")]
 		public void WhenIAccesseTeleoptiPageThroughCiscoFinessePortal()
@@ -26,5 +26,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("#CiscoFinesse-asm-module");
 		}
 
+		[Then(@"I should see MyReport module")]
+		public void ThenIShouldSeeMyReportModule()
+		{
+			Browser.Interactions.AssertExists("#CiscoFinesse-myReport-module");
+		}
 	}
 }
