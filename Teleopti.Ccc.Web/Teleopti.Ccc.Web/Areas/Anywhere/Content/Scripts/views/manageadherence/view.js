@@ -2,11 +2,13 @@
 		'knockout',
 		'text!templates/manageadherence/view.html',
 		'views/manageadherence/vm',
+		'subscriptions.unsubscriber',
 		'errorview'
 ], function (
 		ko,
 		view,
 		manageAdherenceViewModel,
+		unsubscriber,
 		errorview
 	) {
 	var viewModel;
@@ -22,6 +24,9 @@
 			ko.applyBindings(viewModel, options.bindingElement);
 			viewModel.setViewOptions(options);
 			viewModel.load();
+		},
+		dispose: function (options) {
+			unsubscriber.unsubscribeAdherence();
 		}
 	};
 });
