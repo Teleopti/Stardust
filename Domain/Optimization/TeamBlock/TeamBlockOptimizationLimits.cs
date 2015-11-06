@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockOptimizationLimits
 	{
-		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences);
-		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 		bool ValidateMinWorkTimePerWeek(ITeamBlockInfo teamBlockInfo);
 		bool ValidateMinWorkTimePerWeek(ITeamInfo teamInfo);
 	}
@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 		}
 
-		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			return _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences);
+			return _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 
-		public bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			return _teamBlockRestrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences);
+			return _teamBlockRestrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 
 		public bool ValidateMinWorkTimePerWeek(ITeamBlockInfo teamBlockInfo)

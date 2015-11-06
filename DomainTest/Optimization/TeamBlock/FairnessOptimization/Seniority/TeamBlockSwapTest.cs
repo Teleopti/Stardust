@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -32,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private IOptimizationPreferences _optimizationPreferences;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		[SetUp]
 		public void SetUp()
@@ -56,6 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_optimizationPreferences = MockRepository.GenerateMock<IOptimizationPreferences>();
 			_target = new TeamBlockSwap(_swapServiceNew, _teamBlockSwapValidator, _teamBlockSwapDayValidator,
 				_teamBlockOptimizationLimits, _teamBlockShiftCategoryLimitationValidator);
+
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 		}
 
 		[Test]
@@ -68,15 +74,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_swapServiceNew.Stub(x => x.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).IgnoreArguments().Return(swappedList);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
 
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo1)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo2)).Return(true);
 
 			_teamBlockShiftCategoryLimitationValidator.Stub(x => x.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(true);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 
 			Assert.IsTrue(result);
 		}
@@ -91,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_swapServiceNew.Stub(x => x.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).IgnoreArguments().Return(swappedList);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse> {_businessRuleResponse});
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 
 			Assert.IsFalse(result);
 			_modifyAndRollbackService.AssertWasCalled(x => x.Rollback());
@@ -106,10 +112,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockSwapDayValidator.Stub(x => x.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).IgnoreArguments().Return(true);
 			_swapServiceNew.Stub(x => x.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).IgnoreArguments().Return(swappedList);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 
 			Assert.IsFalse(result);
 			_modifyAndRollbackService.AssertWasCalled(x => x.Rollback());
@@ -124,13 +130,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockSwapDayValidator.Stub(x => x.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).IgnoreArguments().Return(true);
 			_swapServiceNew.Stub(x => x.Swap(new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 }, _scheduleDictionary)).IgnoreArguments().Return(swappedList);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo1)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo2)).Return(false);
 			_teamBlockShiftCategoryLimitationValidator.Stub(x => x.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(true);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 
 			Assert.IsFalse(result);
 			_modifyAndRollbackService.AssertWasCalled(x => x.Rollback());
@@ -145,15 +151,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockSwapDayValidator.Stub(x => x.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).IgnoreArguments().Return(true);
 			_swapServiceNew.Stub(x => x.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).IgnoreArguments().Return(swappedList);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo1)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo2)).Return(true);
 
 			_teamBlockShiftCategoryLimitationValidator.Stub(x => x.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(false);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 			Assert.IsFalse(result);
 			_modifyAndRollbackService.AssertWasCalled(x => x.Rollback());
 		}
@@ -163,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			_teamBlockSwapValidator.Stub(x => x.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(false);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 			Assert.IsFalse(result);
 		}
 
@@ -173,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockSwapValidator.Stub(x => x.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 			_teamBlockSwapDayValidator.Stub(x => x.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).IgnoreArguments().Return(false);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,_dateOnlyPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 
 			Assert.IsFalse(result);
 		}
@@ -185,15 +191,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			_teamBlockSwapValidator.Stub(x => x.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 			_modifyAndRollbackService.Stub(x => x.ModifyParts(new List<IScheduleDay>())).Return(new List<IBusinessRuleResponse>());
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo1)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo2)).Return(true);
 
 			_teamBlockShiftCategoryLimitationValidator.Stub(x => x.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(true);
 
-			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,selectedPeriod, _optimizationPreferences);
+			var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary,selectedPeriod, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 			Assert.IsTrue(result);
 		}
 	}

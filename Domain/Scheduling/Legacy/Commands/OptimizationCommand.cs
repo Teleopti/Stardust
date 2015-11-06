@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 						allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 						runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes, selectedPersons,
-							rollbackService, resourceCalculateDelayer, backgroundWorker);
+							rollbackService, resourceCalculateDelayer, backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 						break;
 					}
@@ -158,12 +158,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
-		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker)
+		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, 
+										IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
+										IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker, 
+										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var singleAgentEntry = GroupPageLight.SingleAgentGroup(String.Empty);
 			optimizationPreferences.Extra.TeamGroupPage = singleAgentEntry;
 			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
-			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);
+			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, 
+											selectedPeriod, allMatrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 

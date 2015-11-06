@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                     ISchedulePartModifyAndRollbackService rollbackService,
-		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences);
+		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class SeniorityTeamBlockSwapper : ISeniorityTeamBlockSwapper
@@ -30,10 +30,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		public bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                            ISchedulePartModifyAndRollbackService rollbackService,
-		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
+									IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			bool success = trySwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary,
-			                                  optimizationPreferences);
+			                                  optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			if (!success)
 			{
 				rollbackService.Rollback();
@@ -45,21 +46,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		private bool trySwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                                ISchedulePartModifyAndRollbackService rollbackService,
-		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
+										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
 				return false;
 
-		    return validate(mostSeniorTeamBlock,blockToSwapWith,optimizationPreferences );
+		    return validate(mostSeniorTeamBlock,blockToSwapWith,optimizationPreferences, dayOffOptimizationPreferenceProvider );
 		}
 
-        private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences)
+        private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
 
-            if (!_postSwapValidationForTeamBlock.Validate(mostSeniorTeamBlock, optimizationPreferences))
+            if (!_postSwapValidationForTeamBlock.Validate(mostSeniorTeamBlock, optimizationPreferences, dayOffOptimizationPreferenceProvider))
                 return false;
 
-            if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences))
+            if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences, dayOffOptimizationPreferenceProvider))
                 return false;
 
 	        if (!_teamBlockShiftCategoryLimitationValidator.Validate(mostSeniorTeamBlock, blockToSwapWith,

@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private int _reportedProgress;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		[SetUp]
 		public void Setup()
@@ -60,6 +62,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_reportedProgress = 0;
+
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
@@ -97,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(0.5).Repeat.Twice();
 				Expect.Call(
@@ -108,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 			}
 		}
 
@@ -143,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 			}
 		}
 
@@ -190,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 			}
 		}
 
@@ -228,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
@@ -239,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 			}
 		}
 
@@ -276,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
@@ -288,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 			}
 		}
 
@@ -320,7 +325,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 				_target.ReportProgress -= targetReportProgress;
 			}
 		}
@@ -351,7 +356,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,_schedulePartModifyAndRollbackService, 
+							_resourceCalculateDelayer,	_schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 				_target.ReportProgress -= targetReportProgress2;
 			}
 		}
@@ -387,7 +393,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
 					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					new ShiftNudgeDirective())).IgnoreArguments().Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(
@@ -398,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				_target.ReportProgress += targetReportProgressNotSuccessful;
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences, _schedulePartModifyAndRollbackService,
-					_resourceCalculateDelayer, _schedulingResultStateHolder);
+					_resourceCalculateDelayer, _schedulingResultStateHolder, _dayOffOptimizationPreferenceProvider);
 				_target.ReportProgress -= targetReportProgressNotSuccessful;
 				Assert.AreEqual(2, _reportedProgress);
 			}

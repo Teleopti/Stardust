@@ -218,7 +218,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					nightRestWhiteSpotSolverService,
 					_schedulingOptionsCreator,
 					mainShiftOptimizeActivitySpecificationSetter,
-					dayOffOptimizerPreMoveResultPredictor);
+					dayOffOptimizerPreMoveResultPredictor,
+					daysOffPreferences);
 
 			IDayOffOptimizerContainer optimizerContainer =
 				new DayOffOptimizerContainer(_bitArrayConverter,

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
-			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions);
+			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 	}
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var cancel = false;
 			foreach (var person in selectedPersons)
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 									rollbackService, resourceCalculateDelayer,
 									schedulingResultStateHolder, selectedPeriod, 
 									selectedPersons, optimizationPreferences, 
-									schedulingOptions);
+									schedulingOptions, dayOffOptimizationPreferenceProvider);
 
 								if (success)
 								{

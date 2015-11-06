@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
     	private IPersonAssignment _personAssignment;
 	    private OverLimitResults _lastOverLimitCounts;
+	    private IDaysOffPreferences _daysOffPreferences;
 
 	    [SetUp]
         public void Setup()
@@ -59,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
             _optimizerPreferences = new OptimizationPreferences();
-            _optimizerPreferences.DaysOff.ConsiderWeekBefore = false;
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 	        _lastOverLimitCounts = new OverLimitResults(0, 0, 0, 0, 0);
 		    _optimizationLimits = _mocks.StrictMock<IOptimizationLimits>();
+		    _daysOffPreferences = new DaysOffPreferences() {ConsiderWeekBefore = false};
         }
 
 
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 setExpectationsForSettingOriginalShiftCategory();
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.3);
             }
 
@@ -261,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(() => _scheduleMatrix.LockPeriod(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1))));
 				
 				setExpectationsForSettingOriginalShiftCategory();
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.3);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.3);
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.4);
 			}
 
@@ -346,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
 
             	Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
             }
 
             bool result;
@@ -438,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 setExpectationsForSettingOriginalShiftCategory();
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.3);
             }
 
@@ -594,7 +595,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				setExpectationsForSettingOriginalShiftCategory();
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.3);
 			}
 
@@ -722,7 +723,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				setExpectationsForSettingOriginalShiftCategory();
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
 			}
 
 			bool result;
@@ -849,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				setExpectationsForSettingOriginalShiftCategory();
 				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.CurrentValue(_scheduleMatrix)).Return(0.5);
-				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _optimizerPreferences.DaysOff)).Return(0.4);
+				Expect.Call(_dayOffOptimizerPreMoveResultPredictor.PredictedValue(_scheduleMatrix, bitArrayAfterMove, bitArrayBeforeMove, _daysOffPreferences)).Return(0.4);
 			}
 
 			bool result;
@@ -885,7 +886,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _nightRestWhiteSpotSolverService,
                                       _schedulingOptionsCreator,
 									  mainShiftOptimizeActivitySpecificationSetter,
-									  _dayOffOptimizerPreMoveResultPredictor
+									  _dayOffOptimizerPreMoveResultPredictor,
+									  _daysOffPreferences
                                       );
         }
     }

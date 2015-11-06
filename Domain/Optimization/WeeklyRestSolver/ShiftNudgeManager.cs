@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions);
+			ISchedulingOptions schedulingOptions,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer);
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-			ISchedulingOptions schedulingOptions)
+			ISchedulingOptions schedulingOptions,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (optimizationPreferences != null)
 				schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -165,8 +167,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool rightOk = true;
 			if (optimizationPreferences != null)
 			{
-				leftOk = _teamBlockOptimizationLimits.Validate(leftTeamBlock, optimizationPreferences);
-				rightOk = _teamBlockOptimizationLimits.Validate(rightTeamBlock, optimizationPreferences);
+				leftOk = _teamBlockOptimizationLimits.Validate(leftTeamBlock, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+				rightOk = _teamBlockOptimizationLimits.Validate(rightTeamBlock, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			}
 			if (!(leftOk && rightOk))
 			{

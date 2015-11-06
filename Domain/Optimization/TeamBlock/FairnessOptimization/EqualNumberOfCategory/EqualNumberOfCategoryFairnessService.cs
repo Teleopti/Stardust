@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IEqualNumberOfCategoryFairnessService
 	{
-		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences);
+		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
+					ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
+		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, 
+						ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList).ToList();
 			if (!personListForTotalDistribution.Any())
@@ -91,14 +93,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			while (moveFound)
 			{
 				var workingBlocks = new List<ITeamBlockInfo>(originalBlocks);
-				moveFound = runOneLoop(scheduleDictionary, rollbackService, _teamBlockOptimizationLimits, optimizationPreferences, workingBlocks, totalDistribution, totalBlockCount);
+				moveFound = runOneLoop(scheduleDictionary, rollbackService, _teamBlockOptimizationLimits, optimizationPreferences, 
+									workingBlocks, totalDistribution, totalBlockCount, dayOffOptimizationPreferenceProvider);
 			}
 		}
 
 		private bool runOneLoop(IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 		                        ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 		                        IOptimizationPreferences optimizationPreferences, IList<ITeamBlockInfo> blocksToWorkWith,
-		                        IDistributionSummary totalDistribution, double totalBlockCount)
+		                        IDistributionSummary totalDistribution, double totalBlockCount,
+								IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var cancelMe = false;
 			bool moveFound = false;
@@ -130,8 +134,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				                                         scheduleDictionary);
 				if (success)
 				{
-					var firstBlockOk = teamBlockOptimizationLimits.Validate(teamBlockToWorkWith, optimizationPreferences);
-					var secondBlockOk = teamBlockOptimizationLimits.Validate(selectedTeamBlock, optimizationPreferences);
+					var firstBlockOk = teamBlockOptimizationLimits.Validate(teamBlockToWorkWith, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+					var secondBlockOk = teamBlockOptimizationLimits.Validate(selectedTeamBlock, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 
 					if (!(firstBlockOk && secondBlockOk))
 					{

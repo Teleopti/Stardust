@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
     	private readonly IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
-    	private readonly ILogWriter _logWriter;
+	    private readonly IDaysOffPreferences _daysOffPreferences;
+	    private readonly ILogWriter _logWriter;
 
         public DayOffDecisionMakerExecuter(
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-			IDayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor
+			IDayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
+			IDaysOffPreferences daysOffPreferences
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -71,8 +73,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulingOptionsCreator = schedulingOptionsCreator;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         	_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
+	        _daysOffPreferences = daysOffPreferences;
 
-        	_logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
+	        _logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -91,7 +94,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
         	schedulingOptions.UseCustomTargetTime = _originalStateContainer.OriginalWorkTime();
-            IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
+
+            var daysOffPreferences = _daysOffPreferences;
+
             var changesTracker = new LockableBitArrayChangesTracker();
 			IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 			double oldValue;

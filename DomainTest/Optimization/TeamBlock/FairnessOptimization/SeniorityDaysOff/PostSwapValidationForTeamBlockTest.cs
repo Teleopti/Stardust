@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private ITeamBlockInfo _teamBlockInfo;
         private ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 	    private ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
+	    private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+	    private IDaysOffPreferences _daysOffPreferences;
 
         [SetUp]
         public void Setup()
@@ -23,6 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _teamBlockInfo = MockRepository.GenerateMock<ITeamBlockInfo>();
             _seniorityTeamBlockSwapValidator = MockRepository.GenerateMock<ISeniorityTeamBlockSwapValidator>();
 	        _teamBlockOptimizationLimits = MockRepository.GenerateMock<ITeamBlockOptimizationLimits>();
+			
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 
 			_target = new PostSwapValidationForTeamBlock(_seniorityTeamBlockSwapValidator, _teamBlockOptimizationLimits);
         }
@@ -32,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         {
             _seniorityTeamBlockSwapValidator.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences)).IgnoreArguments().Return(false);
                 
-			Assert.IsFalse(_target.Validate(_teamBlockInfo,_optimizationPreferences));
+			Assert.IsFalse(_target.Validate(_teamBlockInfo,_optimizationPreferences, _dayOffOptimizationPreferenceProvider));
         }
 
 	    [Test]
@@ -41,11 +47,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		    _seniorityTeamBlockSwapValidator.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences))
 			    .IgnoreArguments()
 			    .Return(true);
-		    _teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences))
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider))
 			    .IgnoreArguments()
 			    .Return(false);
 
-		    Assert.IsFalse(_target.Validate(_teamBlockInfo, _optimizationPreferences));
+			Assert.IsFalse(_target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider));
 	    }
 
 	    [Test]
@@ -54,22 +60,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		    _seniorityTeamBlockSwapValidator.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences))
 			    .IgnoreArguments()
 			    .Return(true);
-		    _teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences))
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider))
 			    .IgnoreArguments()
 			    .Return(true);
 		    _teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo)).Return(true);
 
-		    Assert.IsTrue(_target.Validate(_teamBlockInfo, _optimizationPreferences));
+			Assert.IsTrue(_target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider));
 	    }
 
 	    [Test]
 	    public void ShouldReturnFalseWhenMinWorkTimePerWeekFails()
 	    {
 		    _seniorityTeamBlockSwapValidator.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences)).IgnoreArguments().Return(true);
-		    _teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences)).IgnoreArguments().Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).IgnoreArguments().Return(true);
 		    _teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo)).Return(false);
 
-		    Assert.IsFalse(_target.Validate(_teamBlockInfo, _optimizationPreferences));
+			Assert.IsFalse(_target.Validate(_teamBlockInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider));
 	    }
     }
 }

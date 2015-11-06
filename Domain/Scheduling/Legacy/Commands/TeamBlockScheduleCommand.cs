@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
 			IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
-			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, allVisibleMatrixes, _backgroundWorker);
+				selectedPeriod, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 
 			return workShiftFinderResultHolder;
 		}

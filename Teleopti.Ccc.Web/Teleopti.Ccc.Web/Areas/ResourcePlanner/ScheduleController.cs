@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
 					var fixedStaffSchedulingService = _fixedStaffSchedulingService();
 					fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
-
+					
 					_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 					{
 						UseAvailability = true,
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						TagToUseOnScheduling = NullScheduleTag.Instance
 					}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
 						_requiredScheduleHelper(),
-						new OptimizationPreferences(), false);
+						new OptimizationPreferences(), false, new DayOffOptimizationPreferenceProviderWeb(new DaysOffPreferences()));
 					fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 				}
 

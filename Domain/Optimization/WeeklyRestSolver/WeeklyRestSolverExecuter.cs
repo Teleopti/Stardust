@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
-		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IList<IScheduleDay> scheduleDays, IList<IPerson> people)
+		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IList<IScheduleDay> scheduleDays, IList<IPerson> people, 
+							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var matrixes = _matrixListFactory.CreateMatrixList(scheduleDays, period);
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions,
-				optimizationPreferences, people, rollbackService, resourceCalcDelayer, period, matrixes, new NoBackgroundWorker());
+				optimizationPreferences, people, rollbackService, resourceCalcDelayer, period, matrixes, new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

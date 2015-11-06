@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRestrictionOverLimitValidator
 	{
-		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences);
-		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class TeamBlockRestrictionOverLimitValidator : ITeamBlockRestrictionOverLimitValidator
@@ -25,22 +25,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			return validateMatrixes(teamInfo.MatrixesForGroup(), optimizationPreferences);
+			return validateMatrixes(teamInfo.MatrixesForGroup(), optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			return validateMatrixes(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences);
+			return validateMatrixes(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 
-		private bool validateMatrixes(IEnumerable<IScheduleMatrixPro> matrixes, IOptimizationPreferences optimizationPreferences)
+		private bool validateMatrixes(IEnumerable<IScheduleMatrixPro> matrixes, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			foreach (var matrix in matrixes)
 			{
-				if (!_maxMovedDaysOverLimitValidator.ValidateMatrix(matrix, optimizationPreferences))
+				var dayOffOptimizePreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
+
+				if (!_maxMovedDaysOverLimitValidator.ValidateMatrix(matrix, optimizationPreferences, dayOffOptimizePreference))
 					return false;
 
 				if (preferencesOverLimit(matrix, optimizationPreferences))

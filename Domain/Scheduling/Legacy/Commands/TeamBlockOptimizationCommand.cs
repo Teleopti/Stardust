@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
 				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
-					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator);
+					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator, dayOffOptimizationPreferenceProvider);
 
 			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 			{
@@ -185,20 +185,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation,
-					optimizationPreferences);
+					optimizationPreferences, dayOffOptimizationPreferenceProvider);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 				_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences,
-					_schedulerStateHolder().SchedulingResultState.SeniorityWorkDayRanks);
+					_schedulerStateHolder().SchedulingResultState.SeniorityWorkDayRanks, dayOffOptimizationPreferenceProvider);
 				_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 
 				_teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons,
 					schedulingOptions, _schedulerStateHolder().CommonStateHolder.ShiftCategories.ToList(),
-					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences, true);
+					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences, true, dayOffOptimizationPreferenceProvider);
 
 				_teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 			}
@@ -212,12 +212,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 				rollbackServiceWithResourceCalculation, allMatrixes,
-				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
+				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
 
 			//run twice to se if it will solve the problem detected by sikuli tests
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 				rollbackServiceWithResourceCalculation, allMatrixes,
-				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
+				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
 
 		}
 
@@ -243,10 +243,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizationPreferences,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService,
 			IList<IScheduleMatrixPro> allMatrixes,
-			ISchedulingOptions schedulingOptions)
+			ISchedulingOptions schedulingOptions,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService,
-				resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker);
+				resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
@@ -326,7 +327,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IScheduleMatrixPro> allMatrixes,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockGenerator teamBlockGenerator)
+			ITeamBlockGenerator teamBlockGenerator,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
 				new TeamBlockIntradayOptimizationService(
@@ -351,7 +353,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				optimizationPreferences,
 				schedulePartModifyAndRollbackService,
 				resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState);
+				_schedulerStateHolder().SchedulingResultState,
+				dayOffOptimizationPreferenceProvider);
 			teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

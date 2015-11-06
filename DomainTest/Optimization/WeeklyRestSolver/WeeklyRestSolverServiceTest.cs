@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private IPersonWeekViolatingWeeklyRestSpecification _personWeekViolatingWeeklyRestSpecification;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 		[SetUp]
 		public void Setup()
@@ -91,6 +93,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_scheduleDayList = new List<IScheduleDay>() {_scheduleDay1};
 			_personWeekList = new List<PersonWeek>() {_personWeek1};
 			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 
 		}
 
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 			_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 				_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList, _optimizationPreferences,
-				_schedulingOptions);
+				_schedulingOptions, _dayOffOptimizationPreferenceProvider);
 		}
 
 		[Test]
@@ -122,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -159,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
-					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(false);
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider)).Return(false);
 				Expect.Call(() => _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
 					dayOffDate, _rollbackService, _selectedPeriod, _matrix1, _optimizationPreferences));
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
@@ -174,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -197,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_scheduleRange1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
-					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(0);
 				Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
@@ -219,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -242,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_scheduleRange1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
-					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
@@ -264,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -287,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_scheduleRange1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
-					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
@@ -308,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -334,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_scheduleRange1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
-					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(0);
 
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week, new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
@@ -344,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}
@@ -375,7 +379,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				_target.ResolvingWeek += targetWeekScheduledScheduled;
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 				_target.ResolvingWeek -= targetWeekScheduledScheduled;
 			}
 		}
@@ -401,7 +405,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mock.Playback())
 			{
 				_target.ResolvingWeek += targetWeekScheduledScheduled2;
-				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,_optimizationPreferences, _schedulingOptions);
+				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,_resourceCalculateDelayer, 
+								_schedulingResultStateHolder, _allPersonMatrixList,
+								_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 				_target.ResolvingWeek -= targetWeekScheduledScheduled2;
 			}
 		}
@@ -437,7 +443,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
 					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
-					_optimizationPreferences, _schedulingOptions);
+					_optimizationPreferences, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			}
 
 		}

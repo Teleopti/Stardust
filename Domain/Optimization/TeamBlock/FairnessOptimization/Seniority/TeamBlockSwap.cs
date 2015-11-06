@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ITeamBlockSwap
 	{
-		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences);
+		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, 
+					DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class TeamBlockSwap : ITeamBlockSwap
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
-		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
+		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, 
+						DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (!_teamBlockSwapValidator.ValidateCanSwap(teamBlockInfo1, teamBlockInfo2)) return false;
 			var scheduleDays1 = extractScheduleDays(teamBlockInfo1, scheduleDictionary, selectedPeriod).ToList();
@@ -62,8 +64,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				return false;
 			}
 
-			var firstBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo1, optimizationPreferences);
-			var secondBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo2, optimizationPreferences);
+			var firstBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo1, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			var secondBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo2, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 
 			if (!(firstBlockOk && secondBlockOk))
 			{

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleDay _currentScheduleDay;
 		private IScheduleDay _originalScheduleDay;
+		private IDaysOffPreferences _daysOffPreferences;
 
 
 		[SetUp]
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_originalScheduleDay = _mocks.StrictMock<IScheduleDay>();
 
 			_target = new MaxMovedDaysOverLimitValidator(_scheduleDayEquator);
+			_daysOffPreferences = new DaysOffPreferences();
 			
 		}
 
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			_optimizationPreferences.Shifts.KeepShifts = false;
 			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = false;
-			bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+			bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
 			Assert.IsTrue(result);
 		}
 
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+				bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+				bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var optimizerPrefrences = _optimizationPreferences;
             optimizerPrefrences.Shifts.KeepShifts = true;
             optimizerPrefrences.Shifts.KeepShiftsValue = 0;
-            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = false;
+            _daysOffPreferences.UseKeepExistingDaysOff = false;
 
             using (_mocks.Record())
             {
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
                 Assert.IsTrue(result);
             }
         }
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
 
             var optimizerPrefrences = _optimizationPreferences;
-            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = true;
+            _daysOffPreferences.UseKeepExistingDaysOff = true;
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             using (_mocks.Record())
             {
@@ -151,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
                 Assert.IsTrue(result);
             }
         }
@@ -161,8 +163,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
 
             var optimizerPrefrences = _optimizationPreferences;
-            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = true;
-            optimizerPrefrences.DaysOff.KeepExistingDaysOffValue = 50;
+            _daysOffPreferences.UseKeepExistingDaysOff = true;
+            _daysOffPreferences.KeepExistingDaysOffValue = 50;
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             using (_mocks.Record())
             {
@@ -174,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences, _daysOffPreferences);
                 Assert.IsFalse(result);
             }
         }

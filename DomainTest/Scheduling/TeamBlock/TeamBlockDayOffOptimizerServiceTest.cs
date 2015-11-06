@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(true);
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(true);
@@ -584,7 +584,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions,_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions)).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(false);
 
@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions)).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(true);
 
@@ -771,7 +771,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 			Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
-			Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences)).Return(!failOnRestrictionOverLimitValidator);
+			Expect.Call(_teamBlockOptimizationLimits.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(!failOnRestrictionOverLimitValidator);
 
 
 			if (failOnRestrictionOverLimitValidator)

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IPostSwapValidationForTeamBlock
     {
-        bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences);
+        bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
     }
 
     public class PostSwapValidationForTeamBlock : IPostSwapValidationForTeamBlock
@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
         }
 
-        public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
+        public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
             if (!_seniorityTeamBlockSwapValidator.Validate(teamBlockInfo, optimizationPreferences))
                 return false;
 
-	        if (!_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
+	        if (!_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 		        return false;
 
 	        if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockInfo))

@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
-						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
+						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences, dayOffOptimizationPreferenceProvider);
 						continuedStep = true;
 					}
 				}
@@ -477,7 +477,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
+			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, 
+			IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
@@ -487,17 +488,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 				schedulingOptions, _schedulerStateHolder().Schedules, rollbackService,
-				optimizationPreferences);
+				optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 			var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
 			teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, _stateHolder().SeniorityWorkDayRanks);
+				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, _stateHolder().SeniorityWorkDayRanks, dayOffOptimizationPreferenceProvider);
 			teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder().ShiftCategories.ToList(), _schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true);
+			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder().ShiftCategories.ToList(), 
+																_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true, dayOffOptimizationPreferenceProvider);
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

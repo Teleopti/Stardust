@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreferenceProvider);
 
 			_persister.Persist(_schedulerStateHolder().Schedules);
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -22,6 +23,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private TeamInfo _teamInfo;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
+		private IPerson _groupMember;
+		private IScheduleDayPro _scheduleDayPro;
 
 		[SetUp]
 		public void Setup()
@@ -31,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_restrictionOverLimitDecider = _mocks.StrictMock<IRestrictionOverLimitDecider>();
 			_optimizerPreferences = new OptimizationPreferences();
 			_target = new TeamBlockRestrictionOverLimitValidator(_restrictionOverLimitDecider, _maxMovedDaysOverLimitValidator);
-			IPerson groupMember = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
-			Group group = new Group(new List<IPerson> { groupMember }, "hej");
+			_groupMember = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			Group group = new Group(new List<IPerson> { _groupMember }, "hej");
 			IList<IList<IScheduleMatrixPro>> matrixes = new List<IList<IScheduleMatrixPro>>();
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
@@ -41,6 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo,
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_scheduleDayPro = new ScheduleDayPro(new DateOnly(2015, 1, 1),  _scheduleMatrixPro1);
 		}
 
 		[Test]
@@ -50,12 +58,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences))
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences))
 				      .Return(false);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -65,12 +76,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences))
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences))
 				      .Return(false);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -82,11 +96,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -99,11 +116,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -118,12 +138,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(0.8), _scheduleMatrixPro1)).Return(new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -137,13 +160,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(0.8), _scheduleMatrixPro1))
 				      .Return(new BrokenRestrictionsInfo(new List<DateOnly> {new DateOnly()}, new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -156,11 +182,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -174,12 +203,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.MustHavesOverLimit(new Percent(0.8), _scheduleMatrixPro1)).Return(new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -193,13 +225,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.MustHavesOverLimit(new Percent(0.8), _scheduleMatrixPro1))
 				      .Return(new BrokenRestrictionsInfo(new List<DateOnly> {new DateOnly()}, new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -212,11 +247,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -230,12 +268,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.RotationOverLimit(new Percent(0.8), _scheduleMatrixPro1)).Return(new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -249,13 +290,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.RotationOverLimit(new Percent(0.8), _scheduleMatrixPro1))
 				      .Return(new BrokenRestrictionsInfo(new List<DateOnly> {new DateOnly()}, new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -268,11 +312,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -286,12 +333,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(0.8), _scheduleMatrixPro1)).Return(new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -305,13 +355,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(0.8), _scheduleMatrixPro1))
 				      .Return(new BrokenRestrictionsInfo(new List<DateOnly> {new DateOnly()}, new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -324,11 +377,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -342,12 +398,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(0.8), _scheduleMatrixPro1)).Return(new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -361,13 +420,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
-				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences)).Return(true);
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences, _daysOffPreferences)).Return(true);
 				Expect.Call(_restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(0.8), _scheduleMatrixPro1))
 				      .Return(new BrokenRestrictionsInfo(new List<DateOnly> {new DateOnly()}, new Percent(0.8)));
+
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_groupMember);
+				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}

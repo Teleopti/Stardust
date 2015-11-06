@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public interface ITeamBlockDayOffDaySwapper : ICancellable
 	{
 		bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
-					 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAwa);
+					 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, 
+					IList<DateOnly> dayOffsToGiveAwa, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class TeamBlockDayOffDaySwapper : ITeamBlockDayOffDaySwapper
@@ -35,12 +36,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		}
 
 		public bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
-							ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway)
+							ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, 
+							IList<DateOnly> dayOffsToGiveAway, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
             _cancel = false;
             var swapResult = trySwapAndValidate(dateOnly, teamBlockSenior, teamBlockJunior, rollbackService,
 		                                        scheduleDictionary, optimizationPreferences, dayOffsToGiveAway);
-            if (swapResult && !validate(teamBlockSenior,teamBlockJunior,optimizationPreferences ))
+            if (swapResult && !validate(teamBlockSenior,teamBlockJunior,optimizationPreferences, dayOffOptimizationPreferenceProvider ))
             {
                 rollbackService.Rollback();
                 return false;
@@ -96,13 +98,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			return contractTimeJunior.Equals(contractTimeSenior);
 		}
 
-        private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences)
+        private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences, 
+							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
         {
 
-            if (!_postSwapValidationForTeamBlock.Validate(mostSeniorTeamBlock, optimizationPreferences))
+            if (!_postSwapValidationForTeamBlock.Validate(mostSeniorTeamBlock, optimizationPreferences, dayOffOptimizationPreferenceProvider))
                 return false;
 
-            if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences))
+            if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences, dayOffOptimizationPreferenceProvider))
                 return false;
 
 			if (!_teamBlockShiftCategoryLimitationValidator.Validate(mostSeniorTeamBlock, blockToSwapWith,

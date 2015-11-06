@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockSeniorityFairnessOptimizationService
     {
-        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111);
+        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
+					IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
+					IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 		    IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
-		    IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111)
+		    IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 	    {
 
 		    var notSwapped = 0;
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 					    if (
 						    !_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,
-							    scheduleDictionary, selectedPeriod, optimizationPreferences))
+							    scheduleDictionary, selectedPeriod, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 					    {
 						    unSuccessfulSwaps.Add(teamBlockInfoHighSeniority);
 						    continue;

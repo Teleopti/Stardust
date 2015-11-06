@@ -203,6 +203,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						                               resourceCalculateDelayer,
 													   schedulingResultStateHolder,
 													   dayOffOptimizationPreference,
+													   dayOffOptimizationPreferenceProvider,
 													   out checkPeriodValue);
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -260,6 +261,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						                         resourceCalculateDelayer,
 						                         schedulingResultStateHolder,
 												 dayOffOptimizationPreference,
+												 dayOffOptimizationPreferenceProvider,
 												 out checkPeriodValue);
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -328,6 +330,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
 										IDaysOffPreferences daysOffPreferences,
+										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 										out bool checkPeriodValue)
 		{
 
@@ -370,7 +373,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
 				movedDaysOff.RemovedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
 			
-			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences))
+			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
@@ -430,6 +433,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								ISchedulingResultStateHolder schedulingResultStateHolder,
 								IDaysOffPreferences daysOffPreferences,
+								IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 								out bool checkPeriodValue)
 		{
 			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix, daysOffPreferences);
@@ -468,7 +472,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var isMaxSeatRuleViolated = movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
 										movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x.AddDays(1), schedulingOptions));
 			
-			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences))
+			if (isMaxSeatRuleViolated || !_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);

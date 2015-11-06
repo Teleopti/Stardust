@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -43,6 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IProjectionService _projectionService2;
 		private IVisualLayerCollection _visualLayerCollection1;
 		private IVisualLayerCollection _visualLayerCollection2;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 	    [SetUp]
 		public void Setup()
@@ -88,6 +91,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		    _projectionService2 = _mocks.StrictMock<IProjectionService>();
 		    _visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
 		    _visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
+
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 		}
 
 		[Test]
@@ -102,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
-											 _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+											 _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -131,10 +137,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse>());
-                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoSenior, _optimizationPreferences))
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoSenior, _optimizationPreferences, _dayOffOptimizationPreferenceProvider))
                       .IgnoreArguments()
                       .Return(true);
-                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoJunior, _optimizationPreferences))
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoJunior, _optimizationPreferences, _dayOffOptimizationPreferenceProvider))
                           .IgnoreArguments()
                           .Return(true);
 				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfoSenior, _teamBlockInfoJunior,
@@ -143,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
-				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}
 		}
@@ -182,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
-				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}
@@ -212,7 +218,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, 
+											_scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway, _dayOffOptimizationPreferenceProvider);
 				Assert.IsFalse(result);
 			}
 		}

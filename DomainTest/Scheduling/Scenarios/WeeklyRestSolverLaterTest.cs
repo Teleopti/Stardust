@@ -49,7 +49,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -80,7 +83,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -110,7 +116,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -139,7 +148,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -167,7 +179,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -192,7 +207,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -217,7 +235,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -245,7 +266,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -271,7 +295,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -298,7 +325,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
 			};
 
-			executeTarget(new[] { agent }, optimizationPref);
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
 			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate)
 				.PersonAssignment()
@@ -307,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				.Should().Be.EqualTo(new DateTime(weekPeriod.StartDate.Year, weekPeriod.StartDate.Month, weekPeriod.StartDate.Day, 8, 0, 0, DateTimeKind.Utc));
 		}
 
-		private void executeTarget(IList<IPerson> agents, OptimizationPreferences optimizationPreferences)
+		private void executeTarget(IList<IPerson> agents, OptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var date = new DateOnly(2015, 09, 30);
 			var selectedPeriod = new DateOnlyPeriod(date, date);
@@ -348,7 +378,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					),
 				selectedPeriod,
 				matrixlist,
-				new NoBackgroundWorker()
+				new NoBackgroundWorker(),
+				dayOffOptimizationPreferenceProvider
 				);
 		}
 

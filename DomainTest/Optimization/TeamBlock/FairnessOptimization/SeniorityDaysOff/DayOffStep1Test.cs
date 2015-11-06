@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private ISeniorTeamBlockLocator _seniorTeamBlockLocator;
         private ISeniorityCalculatorForTeamBlock _seniorityCalculatorForTeamBlock;
 	    private IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
+	    private IDaysOffPreferences _daysOffPreferences;
+	    private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 
 
         [SetUp]
@@ -95,7 +97,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _seniorityValueDic = new Dictionary<ITeamBlockInfo, double>();
             _seniorTeamInfo = _mocks.StrictMock<ITeamInfo>();
             _juniorTeamInfo = _mocks.StrictMock<ITeamInfo>();
-
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
         }
 
         [Test]
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                                                                                            _seniorityValueDic))
                       .IgnoreArguments().Return(_juniorTeamBlock);
                 Expect.Call(_seniorityTeamBlockSwapper.SwapAndValidate(_seniorTeamBlock, _juniorTeamBlock, _rollbackService,
-                                                                       _scheduleDictionary, _optimizationPreferences)).Return(true);
+                                                                       _scheduleDictionary, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
                 Expect.Call(_seniorTeamBlock.TeamInfo).Return(_seniorTeamInfo);
                 Expect.Call(_seniorTeamInfo.Name).Return("Senior");
 
@@ -144,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mocks.Playback())
             {
                 _target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary,
-                                _weekDayValueDic, _optimizationPreferences);
+                                _weekDayValueDic, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
             }
         }
 
@@ -169,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                                                                                            _seniorityValueDic))
                       .IgnoreArguments().Return(_juniorTeamBlock);
                 Expect.Call(_seniorityTeamBlockSwapper.SwapAndValidate(_seniorTeamBlock, _juniorTeamBlock, _rollbackService,
-                                                                       _scheduleDictionary, _optimizationPreferences)).Return(true);
+                                                                       _scheduleDictionary, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
                 Expect.Call(_seniorTeamBlock.TeamInfo).Return(_seniorTeamInfo);
                 Expect.Call(_seniorTeamInfo.Name).Return("Senior");
 
@@ -179,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             {
                 _target.BlockSwapped += _target_BlockSwapped;
                 _target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons,  _rollbackService,_scheduleDictionary ,
-                                _weekDayValueDic,_optimizationPreferences);
+                                _weekDayValueDic,_optimizationPreferences, _dayOffOptimizationPreferenceProvider);
                 _target.BlockSwapped -= _target_BlockSwapped;
             }
         }
@@ -200,7 +203,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 				////inner loop success
 				Expect.Call(_teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(_teamBlocksFirstLoop,_seniorityValueDic)).IgnoreArguments().Return(_juniorTeamBlock);
-				Expect.Call(_seniorityTeamBlockSwapper.SwapAndValidate(_seniorTeamBlock, _juniorTeamBlock, _rollbackService,_scheduleDictionary, _optimizationPreferences)).Return(true);
+				Expect.Call(_seniorityTeamBlockSwapper.SwapAndValidate(_seniorTeamBlock, _juniorTeamBlock, _rollbackService,
+																		_scheduleDictionary, _optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_seniorTeamBlock.TeamInfo).Return(_seniorTeamInfo);
 				Expect.Call(_seniorTeamInfo.Name).Return("Senior");
 
@@ -209,7 +213,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				_target.BlockSwapped += _target_BlockSwapped2;
-				_target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary,_weekDayValueDic, _optimizationPreferences);
+				_target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, 
+									_scheduleDictionary,_weekDayValueDic, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				_target.BlockSwapped -= _target_BlockSwapped2;
 			}
 		}
@@ -238,7 +243,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				_target.BlockSwapped += _target_BlockSwapped2;
-				_target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary, _weekDayValueDic, _optimizationPreferences);
+				_target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, 
+									_scheduleDictionary, _weekDayValueDic, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				_target.BlockSwapped -= _target_BlockSwapped2;
 			}    
 	    }

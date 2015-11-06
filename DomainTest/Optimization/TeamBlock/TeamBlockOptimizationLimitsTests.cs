@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IScheduleDay _scheduleDay;
 		private IList<IScheduleMatrixPro> _matrixList;
 		private IBusinessRuleResponse _businessRuleResponse;
+		private IDaysOffPreferences _daysOffPreferences;
+		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		
 		[SetUp]
 		public void SetUp()
@@ -48,6 +51,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_matrixList = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
 			_businessRuleResponse = _mock.StrictMock<IBusinessRuleResponse>();
+			_daysOffPreferences = new DaysOffPreferences();
+			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
 		}
 
 		[Test]
@@ -55,12 +60,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo, _optimizationPreferences,_dayOffOptimizationPreferenceProvider)).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences);
+				var result = _target.Validate(_teamBlockInfo, _optimizationPreferences,_dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}		
 		}
@@ -70,12 +75,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences,_dayOffOptimizationPreferenceProvider)).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Validate(_teamInfo, _optimizationPreferences);
+				var result = _target.Validate(_teamInfo, _optimizationPreferences, _dayOffOptimizationPreferenceProvider);
 				Assert.IsTrue(result);
 			}	
 		}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -31,7 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
+						IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker,
+						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 
 			_groupPersonBuilderWrapper.Reset();
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			weeklyRestSolverService.ResolvingWeek += onResolvingWeek;
 			weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
 				rollbackService, resourceCalculateDelayer, _schedulerStateHolder().SchedulingResultState, allVisibleMatrixes,
-				optimizationPreferences, schedulingOptions);
+				optimizationPreferences, schedulingOptions, dayOffOptimizationPreferenceProvider);
 			weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
 		}
 	}
