@@ -3,11 +3,13 @@
 
 	angular.module('wfm.workinghourspicker', ['wfm.timerangepicker']);
 
-	angular.module('wfm.workinghourspicker').service('workingHoursService', [
-		function() {
+	angular.module('wfm.workinghourspicker').service('workingHoursService', ['$locale',
+		function ($locale) {
 			this.createEmptyWorkingPeriod = function(startTime, endTime) {
 				var weekdaySelections = [];
 				var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
+				// ToDo: Verify the first day of week from $locale.
+				//	$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK;
 
 				for (var i = 0; i < 7; i++) {
 					var curDow = (startDow + i) % 7;
@@ -20,8 +22,8 @@
 	]);
 
     angular.module('wfm.workinghourspicker').directive('workingHoursPicker', [
-        '$q', '$translate', '$filter', 'workingHoursService',
-		function ($q, $translate, $filter, workingHoursPickerService) {
+        '$q', '$translate', '$filter', '$locale',  'workingHoursService',
+		function ($q, $translate, $filter, $locale, workingHoursPickerService) {
 		    return {
 		        restrict: 'E',
 		        scope: {
@@ -80,9 +82,11 @@
 			        var startTimeMoment = moment(startTime),
 				        endTimeMoment = moment(endTime);
 			        if (startTimeMoment.isSame(endTimeMoment, 'day')) {
-				        return startTimeMoment.format('LT') + ' - ' + endTimeMoment.format('LT');
+				        return $filter('date')(startTime, $locale.DATETIME_FORMATS.shortTime) + ' - ' +
+					        $filter('date')(endTime, $locale.DATETIME_FORMATS.shortTime);				       
 			        } else {
-			        	return startTimeMoment.format('LT') + ' - ' + endTimeMoment.format('LT') + ' +1';
+			        	return $filter('date')(startTime, $locale.DATETIME_FORMATS.shortTime) + ' - ' +
+						   $filter('date')(endTime, $locale.DATETIME_FORMATS.shortTime) + ' +1';			        	
 			        }
 				}
 		    }

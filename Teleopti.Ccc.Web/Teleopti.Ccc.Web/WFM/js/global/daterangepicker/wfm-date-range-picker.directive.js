@@ -104,7 +104,7 @@
 		return "<div class=\"wfm-block clearfix\" ng-class=\"{ 'ng-valid': !isInvalid(), 'ng-invalid': isInvalid(), 'ng-invalid-order': isInvalid('order'), 'ng-invalid-empty': isInvalid('empty')}\">" +
           "    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
           "      <div class=\"sub-header\">" +
-          "	<span translate>From</span> <strong>{{ startDate | amDateFormat: \"LL\" }}</strong>" +
+          "	<span translate>From</span> <strong>{{ startDate | date: \"longDate\" }}</strong>" +
           "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
           "	  <i class=\"mdi mdi-check success right-sign \"></i>" +
           "	  <i class=\"mdi mdi-close danger wrong-sign\"></i>" +
@@ -114,7 +114,7 @@
           "    </div>" +
           "    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
           "      <div class=\"sub-header\">" +
-          "	<span translate>To</span> <strong>{{ endDate | amDateFormat: \"LL\" }}</strong>" +
+          "	<span translate>To</span> <strong>{{ endDate | date: \"longDate\" }}</strong>" +
           "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
           "	  <i class=\"mdi mdi-check success right-sign \"></i>" +
           "	  <i class=\"mdi mdi-close danger wrong-sign\"></i>" +
