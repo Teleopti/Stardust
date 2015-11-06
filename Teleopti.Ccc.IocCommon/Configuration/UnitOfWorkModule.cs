@@ -35,11 +35,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
+			builder.RegisterType<CurrentPersistCallbacks>()
+				.As<ICurrentPersistCallbacks>()
+				.SingleInstance();
+
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
 			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
-			 .As<ICurrentPersistCallbacks>()
-			 .As<IMessageSendersScope>()
-			 .SingleInstance();
+				.As<IMessageSendersScope>()
+				.SingleInstance();
 
 			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
