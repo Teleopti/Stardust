@@ -170,6 +170,7 @@ And after the update is done I goto the campaign list page
 And I set the starting month for viewing period to '2016-10-01'
 Then I should see 'NewCampaign' in campaign list 
 
+@ignore
 Scenario: Manually update workplan
 When I view the backlog chart of the campaign created with 
 | Field                             | Value       |
@@ -189,6 +190,7 @@ And I select all the dates from '2015-12-01' to '2016-01-30'
 And I set the manual production plan to '0'
 Then I should see all planned person hours to be '0'
 
+@ignore
 Scenario: Replan campaign after manual update
 When I view the backlog chart of the campaign created with 
 | Field                             | Value       |
