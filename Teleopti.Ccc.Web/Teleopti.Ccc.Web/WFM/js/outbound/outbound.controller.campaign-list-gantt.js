@@ -138,15 +138,16 @@
 			return deferred.promise;
 		}
 		
-		function isLastDayOfGanttPeriod(momentDate) {
-			
+		function isLastDayOfGanttPeriod(momentDate) {			
+			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
+			return momentDate.format("YYYY-MM-DD") == moment(ganttPeriod.PeriodEnd).format("YYYY-MM-DD");
 		}
 
 		$scope.headerFormats = {
 			month: 'MMMM',
 			week: function (column) {				
 				return '<div class="week-days-header">'
-				+ '<div class="week-start-day">' + (miscService.isLastDayOfMonth(column.date) ? '' : column.date.format('D')) + '</div>'
+				+ '<div class="week-start-day">' + (miscService.isLastDayOfMonth(column.date) && isLastDayOfGanttPeriod(column.date) ? '' : column.date.format('D')) + '</div>'
 				+ '<div></div>'
 				+ '<div class="week-end-day">'  + '</div>'
 				+ '</div>';
