@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Domain.Optimization
+﻿namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
@@ -11,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffRulesRepository = dayOffRulesRepository;
 		}
 
-		public IDayOffOptimizationPreferenceProvider Create(IDaysOffPreferences daysOffPreferences)
+		public IDayOffOptimizationPreferenceProvider Create()
 		{
 			var defaultRules = _dayOffRulesRepository.Default();
 

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(null);
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			
 			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
