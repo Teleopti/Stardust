@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_filterForTeamBlockInSelection = _mock.StrictMock<IFilterForTeamBlockInSelection>();
 			_optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 			_target = new TeamBlockSeniorityFairnessOptimizationService(_constructTeamBlock, _determineTeamBlockPriority, _teamBlockPeriodValidator, _teamBlockSeniorityValidator, _teamBlockSwap, _filterForTeamBlockInSelection);
 		}
 

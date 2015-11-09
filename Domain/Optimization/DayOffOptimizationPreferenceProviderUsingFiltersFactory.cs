@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationPreferenceProviderCreator
+	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 
-		public DayOffOptimizationPreferenceProviderCreator(IDayOffRulesRepository dayOffRulesRepository)
+		public DayOffOptimizationPreferenceProviderUsingFiltersFactory(IDayOffRulesRepository dayOffRulesRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 		}
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				UseDaysOffPerWeek = true
 			};
 
-			return new DayOffOptimizationPreferenceProviderWeb(preferences);
+			return new DayOffOptimizationPreferenceProviderUsingFilters(preferences);
 		} 
 	}
 }

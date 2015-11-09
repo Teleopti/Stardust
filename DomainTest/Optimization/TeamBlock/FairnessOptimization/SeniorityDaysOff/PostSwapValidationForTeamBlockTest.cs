@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 	        _teamBlockOptimizationLimits = MockRepository.GenerateMock<ITeamBlockOptimizationLimits>();
 			
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 
 			_target = new PostSwapValidationForTeamBlock(_seniorityTeamBlockSwapValidator, _teamBlockOptimizationLimits);
         }

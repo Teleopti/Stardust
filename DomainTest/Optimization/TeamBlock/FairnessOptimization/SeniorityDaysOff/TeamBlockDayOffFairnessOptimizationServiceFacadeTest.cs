@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 	        _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption);
 			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
         }
 
         [Test]

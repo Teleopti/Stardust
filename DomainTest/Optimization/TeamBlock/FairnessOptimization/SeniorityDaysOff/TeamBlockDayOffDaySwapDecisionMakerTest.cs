@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 
 			_daysOffPreferences = new DaysOffPreferences() {ConsiderWeekBefore = true, ConsiderWeekAfter = true};
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);	
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);	
 		}
 
 		[Test]

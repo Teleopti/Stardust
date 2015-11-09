@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_rightScheduleDay = ScheduleDayFactory.Create(_selectedPeriod.StartDate, _person);
 			_optimizationPreferences = new OptimizationPreferences();
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 		}
 
 		[Test]

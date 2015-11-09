@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new [] {agent}, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			};
 
 			var dayOffPreferences = new DaysOffPreferences();
-			var dayOffOptimzationPreferenceProvider = new DayOffOptimizationPreferenceProvider(dayOffPreferences);
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
 
 			executeTarget(new[] { agent }, optimizationPref, dayOffOptimzationPreferenceProvider);
 

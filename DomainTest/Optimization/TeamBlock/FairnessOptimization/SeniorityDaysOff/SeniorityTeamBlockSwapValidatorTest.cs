@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_period = new DateOnlyPeriod(2014,1,31,2014,2,1);
 			_bitArray = new LockableBitArray(21, true, true, null);
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 			_scheduleDayPro = new ScheduleDayPro(_period.StartDate, _matrix);
 		}
 

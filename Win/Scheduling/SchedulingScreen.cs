@@ -3136,7 +3136,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				var scheduleCommand = _container.Resolve<IScheduleCommand>();
-				var dayOffOptimizePreferenceProvider = new DayOffOptimizationPreferenceProvider(_optimizationPreferences.DaysOff);
+				var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_optimizationPreferences.DaysOff);
 
 				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling),
 					_schedulerState,
@@ -3440,7 +3440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var optimizationCommand = _container.Resolve<IOptimizationCommand>();
-			var dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
+			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
 
 			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
 				_schedulerState,

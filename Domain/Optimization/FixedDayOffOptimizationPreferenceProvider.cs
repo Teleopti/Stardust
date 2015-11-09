@@ -2,16 +2,11 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IDayOffOptimizationPreferenceProvider
-	{
-		IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly);
-	}
-
-	public class DayOffOptimizationPreferenceProvider : IDayOffOptimizationPreferenceProvider
+	public class FixedDayOffOptimizationPreferenceProvider : IDayOffOptimizationPreferenceProvider
 	{
 		private readonly IDaysOffPreferences _daysOffPreferences;
 
-		public DayOffOptimizationPreferenceProvider(IDaysOffPreferences daysOffPreferences)
+		public FixedDayOffOptimizationPreferenceProvider(IDaysOffPreferences daysOffPreferences)
 		{
 			_daysOffPreferences = daysOffPreferences;
 		}

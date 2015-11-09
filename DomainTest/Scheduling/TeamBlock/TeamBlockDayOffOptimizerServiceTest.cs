@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 			_scheduleDayPro = new ScheduleDayPro(new DateOnly(2015,1,1), _matrix);
 		}
 

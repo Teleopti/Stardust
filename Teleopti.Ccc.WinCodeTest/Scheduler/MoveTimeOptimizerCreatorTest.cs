@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(new DaysOffPreferences());
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 			_person = new Person();
 			_scheduleDayPro1 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1);
 			_scheduleDayPro2 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix2);

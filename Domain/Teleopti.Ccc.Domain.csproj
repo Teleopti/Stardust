@@ -634,13 +634,14 @@
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
-    <Compile Include="Optimization\DayOffOptimizationPreferenceProvider.cs" />
-    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderCreator.cs" />
-    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderWeb.cs" />
+    <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
+    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
+    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
     <Compile Include="Optimization\DayOffRulesPersister.cs" />
     <Compile Include="Optimization\DayOffRulesMapper.cs" />
     <Compile Include="Optimization\DayOffRulesModel.cs" />
     <Compile Include="Optimization\FetchDayOffRulesModel.cs" />
+    <Compile Include="Optimization\IDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\IDayOffRulesModelPersister.cs" />
     <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
     <Compile Include="Optimization\OptimizationPreferencesFactory.cs" />

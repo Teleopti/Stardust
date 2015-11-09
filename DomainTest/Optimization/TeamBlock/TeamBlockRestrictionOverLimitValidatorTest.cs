@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 			_scheduleDayPro = new ScheduleDayPro(new DateOnly(2015, 1, 1),  _scheduleMatrixPro1);
 		}
 

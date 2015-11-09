@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_personWeekList = new List<PersonWeek>() {_personWeek1};
 			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 			_daysOffPreferences = new DaysOffPreferences();
-			_dayOffOptimizationPreferenceProvider = new DayOffOptimizationPreferenceProvider(_daysOffPreferences);
+			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 
 		}
 
