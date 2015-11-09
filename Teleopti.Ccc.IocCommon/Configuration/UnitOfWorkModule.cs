@@ -37,10 +37,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentPersistCallbacks>()
 				.As<ICurrentPersistCallbacks>()
-				.SingleInstance();
-
-			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
 				.As<IMessageSendersScope>()
 				.SingleInstance();
 
