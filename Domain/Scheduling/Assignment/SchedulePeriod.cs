@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -524,32 +525,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return period.DayCount() - _daysOff.Value;
 			}
 
-			int workDays = 0;
-
-			var dayCollection = period.DayCollection();
-			var periods = CurrentPerson.PersonPeriods(period);
-			var index = 0;
-			foreach (var personPeriod in periods)
-			{
-				var endDate = personPeriod.EndDate();
-				if (personPeriod.PersonContract == null)
-				{
-					index = dayCollection.IndexOf(endDate.AddDays(1));
-					continue;
-				}
-				for (; index < dayCollection.Count; index++)
-				{
-					var currentDate = dayCollection[index];
-					if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, currentDate))
-						workDays++;
-					if (endDate == currentDate)
-					{
-						break;
-					}
-				}
-			}
-		
-			return workDays;
+			var dayDetails = CurrentPerson.AverageWorkTimes(period);
+			return dayDetails.Count(d => d.IsWorkDay);
 		}
 
 		private int getDaysOffForChineseMonth(DateOnly startDate)

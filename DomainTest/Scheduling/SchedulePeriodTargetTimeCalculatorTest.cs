@@ -141,6 +141,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
+		public void ShouldHandleUnevenDistributionOfPeriodsForAgent()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2009,6,29));
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015,9,8)));
+			
+			var personContract = person.Period(new DateOnly(2015, 9, 8)).PersonContract;
+			personContract.ContractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+
+			person.Period(new DateOnly(2009, 6, 29)).PersonContract = personContract;
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2015, 8, 31),
+				SchedulePeriodType.Week, 4));
+
+			var matrix = ScheduleMatrixProFactory.Create(new DateOnlyPeriod(2015, 8, 31, 2015, 9, 27), person);
+			var result = target.TargetTime(matrix);
+
+			result.Should().Be(TimeSpan.FromHours(160));
+		}
+
+		[Test]
 		public void ShouldIncludePreferenceAbsenceInTargetTimeWhenEmploymentTypeIsFixedStaffDayWorkTime()
 		{
 			var contract = ContractFactory.CreateContract("Contract");
@@ -190,6 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			result.Should().Be(TimeSpan.FromHours(8));
 		}
+
 		private void CommonMocks(double seasonality)
         {
             _matrix.Stub(x => x.SchedulePeriod).Return(_schedulePeriod);

@@ -235,21 +235,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private void setMinMaxData(bool calculateLegalState)
 		{
-			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
-						  new SchedulePeriodTargetTimeCalculator(); //Out
-
-			var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
-
-			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-				 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
-
-			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
-			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
-				 new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
-														 schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
 			//TODO kan plockas från AutoFac istället
 			if (calculateLegalState)
 			{
+				ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
+							  new SchedulePeriodTargetTimeCalculator(); //Out
+
+				var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
+
+				IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
+					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
+
+				IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
+				IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
+					 new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
+															 schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
+
 				_periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
 				_weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
 			}

@@ -857,6 +857,7 @@ namespace Teleopti.Ccc.Domain.Common
 					    m =>
 					    {
 							var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
+							if (m.PersonPeriod == null) return new PersonWorkDay(m.Day);
 							return new PersonWorkDay(m.Day,
 								calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day),
 								m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,

@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulePeriodTargetTimeCalculator : ISchedulePeriodTargetTimeCalculator
     {
-
         public TimePeriod TargetWithTolerance(IScheduleMatrixPro matrix)
         {
 			if (matrix == null) throw new ArgumentNullException("matrix");
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return from d in effectivePeriodDays select d.DaySchedulePart();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var contract = virtualSchedulePeriod.Contract;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return target;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var contract = virtualSchedulePeriod.Contract;
@@ -62,8 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			return ApplyTolerance(contract, target);
 		}
-
-
 
 		private static TimeSpan PeriodTarget(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
@@ -95,8 +90,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			return periodTarget;
 		}
-
-
 
 		private static TimeSpan ApplySeasonality(IVirtualSchedulePeriod virtualSchedulePeriod, TimeSpan target)
 		{

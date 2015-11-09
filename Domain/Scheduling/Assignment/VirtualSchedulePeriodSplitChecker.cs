@@ -68,6 +68,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return startDate;
             }
 
+	        if (previousPeriod.PersonContract == null || personPeriod.PersonContract == null)
+	        {
+		        return startDate;
+	        }
+
             if(previousPeriod.PersonContract.ContractSchedule == personPeriod.PersonContract.ContractSchedule && 
                 previousPeriod.PersonContract.Contract == personPeriod.PersonContract.Contract &&
                 previousPeriod.PersonContract.PartTimePercentage == personPeriod.PersonContract.PartTimePercentage)

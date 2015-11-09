@@ -620,8 +620,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyCheckLoadedAndScheduledPeriodTargetTime()
         {
-            var personContract = _mockRep.StrictMock<IPersonContract>();
-
             _baseDateTime = new DateOnly(2009, 6, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(_baseDateTime, _baseDateTime.AddDays(6));
             var person = PersonFactory.CreatePersonWithPersonPeriod(_baseDateTime,Enumerable.Empty<ISkill>());
@@ -634,12 +632,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                      };
 
             person.AddSchedulePeriod(schedulePeriod);
-	        personPeriod.PersonContract = personContract;
+	        personPeriod.PersonContract = new PersonContract(_contract,
+		        PartTimePercentageFactory.CreatePartTimePercentage("Full time"),
+		        ContractScheduleFactory.CreateWorkingWeekContractSchedule());
 
-            using (_mockRep.Record())
-            {
-                Expect.Call(personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
-            }
+	        using (_mockRep.Record())
+	        {
+	        }
             using (_mockRep.Playback())
             {
                 person.AddPersonPeriod(personPeriod);
@@ -652,7 +651,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 schedulePeriod.ResetAverageWorkTimePerDay();
                 Assert.IsTrue(ViewBaseHelper.CheckOverrideTargetTimeLoadedAndScheduledPeriod(person, dateOnlyPeriod));
             }
-            
         }
 
         [Test]

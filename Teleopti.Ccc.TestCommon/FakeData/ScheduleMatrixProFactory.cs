@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             scheduleDictionary.AddTestItem(person, range);
             stateHolder.Schedules = scheduleDictionary;
 
-            return Create(period, stateHolder, person, null);
+            return Create(period, stateHolder, person, person.VirtualSchedulePeriod(period.StartDate));
         }
 
         public static ScheduleMatrixPro Create(DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, IPerson person, IVirtualSchedulePeriod schedulePeriod)
