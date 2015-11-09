@@ -29,21 +29,3 @@ Scenario: Add a function to a role
 	And I select a role 'RoleA'
 	And I select the first permission
 	Then I should see the first permission selected in the list
-
-@ignore
-Scenario: Add a team to a role
-	Given I have a role with
-		| Field                                 | Value             |
-		| Name                                  | Resource Planner  |
-		| Access to permissions			        | True              |
-	And there is a role with
-		| Field                                 | Value             |
-		| Name                                  | RoleA				|
-		| Description		                    | RoleA				|
-		| Access to permissions			        | True              |
-	When I view Permissions
-	And I select a role 'RoleA'
-	And I go to data tab
-	And I select team 'Preferences'
-	And I connect as Role A
-	Then I should have access only to Preferences in People
