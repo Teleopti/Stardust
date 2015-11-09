@@ -3,6 +3,15 @@
 	$(function() {
 		Teleopti.MyTimeWeb.MyReport.MyReportPartialInit();
 	});
+	var settings = {
+		baseUrl: '@Url.Content("~/MyTime#")'
+	}
+	function gotoMyTime() {
+		window.open(settings.baseUrl);
+	}
+	function gotoMyReport() {
+		window.open(settings.baseUrl + 'MyReport/Index');
+	}
 </script>
 
 <div class="cisco-widget">
@@ -15,9 +24,9 @@
 	</div>
 	@if (ViewBag.HasAsmPermission)
 	{
-		<div class="relative pull-left" style="height: 68px; width: 412px; margin-right: 10px;">
+		<div class="relative pull-left" style="height: 68px; width: 412px; margin-right: 10px; cursor: pointer;">
 			<div class="mytime-chart-container">
-				<div class="mytime-chart" id="CiscoFinesse-asm-module">
+				<div class="mytime-chart" id="CiscoFinesse-asm-module" onclick="gotoMyTime()">
 					@Html.Partial("../Asm/Index")
 				</div>
 			</div>
@@ -25,7 +34,7 @@
 	}
 	@if (ViewBag.HasMyReportPermission)
 	{
-		<div class="teleopti-dashboard report-ciscofix pull-left" style="height: 68px; width: 500px;" id="CiscoFinesse-myReport-module">
+		<div class="teleopti-dashboard report-ciscofix pull-left" style="height: 68px; width: 500px; cursor: pointer;" id="CiscoFinesse-myReport-module" onclick="gotoMyReport()">
 			@Html.Partial("../MyReport/MyReportPartial")
 		</div>
 	}
