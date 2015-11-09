@@ -176,30 +176,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				input.StateCode = newStateCode;
 			}
 		}
-
-		private int closeSnapshot(ExternalUserStateInputModel input)
-		{
-			input.StateCode = "CCC Logged out";
-			input.PlatformTypeId = Guid.Empty.ToString();
-			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
-			var agentsNotAlreadyLoggedOut = from a in missingAgents
-											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
-											where !state.IsLogOutState
-											select a;
-
-			foreach (var agent in agentsNotAlreadyLoggedOut)
-				process(
-					input,
-					new PersonOrganizationData
-					{
-						PersonId = agent.PersonId,
-						BusinessUnitId = agent.BusinessUnitId
-					});
-
-
-			return 1;
-		}
-
+		
 		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
 			IEnumerable<ResolvedPerson> personWithBusinessUnits;
@@ -224,7 +201,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			return 1;
 		}
-		
+
+		private int closeSnapshot(ExternalUserStateInputModel input)
+		{
+			input.StateCode = "CCC Logged out";
+			input.PlatformTypeId = Guid.Empty.ToString();
+			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var agentsNotAlreadyLoggedOut = from a in missingAgents
+											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
+											where !state.IsLogOutState
+											select a;
+
+			foreach (var agent in agentsNotAlreadyLoggedOut)
+				process(
+					input,
+					new PersonOrganizationData
+					{
+						PersonId = agent.PersonId,
+						BusinessUnitId = agent.BusinessUnitId
+					});
+
+
+			return 1;
+		}
+
 		[InfoLog]
 		[RtaDataSourceScope]
 		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)

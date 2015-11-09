@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
 				;
-			
+
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
 			{
@@ -60,9 +60,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.StateCode.Should().Be("CCC Logged out");
 		}
 
-
 		[Test]
-		public void ShouldOnlyLogOutPersonsInSnapshotConnectedToPlatform()
+		public void ShouldOnlyLogOutPersonsNotInSnapshotFromSameSource()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -107,6 +106,92 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		public void ShouldLogOutPersonNotInSnapshotWhenPreviousWasRecievedAsSingleStates()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithSource("source1")
+				.WithUser("usercode1", "source1", Guid.NewGuid())
+				.WithUser("usercode2", "source1", personId)
+				.WithAlarm("statecode1", Guid.Empty)
+				;
+			Now.Is("2014-10-20 10:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode1",
+				SourceId = "source1",
+				StateCode = "statecode1"
+			});
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode2",
+				SourceId = "source1",
+				StateCode = "statecode1",
+			});
+			Sender.AllNotifications.Clear();
+
+			Target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				{
+					UserCode = "usercode1",
+					SourceId = "source1",
+					StateCode = "statecode1"
+				}
+			});
+
+			Sender.NotificationsOfType<AgentStateReadModel>()
+				.Select(x => x.DeseralizeActualAgentState())
+				.Single(x => x.PersonId == personId)
+				.StateCode.Should().Be("CCC Logged out");
+		}
+
+		[Test]
+		public void ShouldOnlyLogOutPersonsInSnapshotFromSameSourceWhenPreviousWasRecievedAsSingleStates()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithSource("source1")
+				.WithUser("usercode1", "source1", Guid.NewGuid())
+				.WithSource("source2")
+				.WithUser("usercode2", "source2", personId)
+				.WithAlarm("statecode1", Guid.Empty)
+				;
+			Now.Is("2014-10-20 10:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode1",
+				SourceId = "source1",
+				StateCode = "statecode1"
+			});
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode2",
+				SourceId = "source2",
+				StateCode = "statecode1",
+			});
+
+			Target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				{
+					UserCode = "usercode1",
+					SourceId = "source1",
+					StateCode = "statecode1"
+				}
+			});
+
+			Sender.NotificationsOfType<AgentStateReadModel>()
+				.Select(x => x.DeseralizeActualAgentState())
+				.Single(x => x.PersonId == personId)
+				.StateCode.Should().Be("statecode1");
+		}
+
+		[Test]
 		public void ShouldNotLogOutAlreadyLoggedOutAgents()
 		{
 			var personId = Guid.NewGuid();
@@ -115,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
 				.WithAlarm("statecode2", Guid.Empty, true);
-			
+
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
 			{
@@ -152,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var platformTypeId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest {PlatformTypeId = platformTypeId.ToString()})
+				.WithDefaultsFromState(new ExternalUserStateForTest { PlatformTypeId = platformTypeId.ToString() })
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)

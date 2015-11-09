@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithTenant(string name, string key);
 		IFakeDataBuilder WithSource(string sourceId);
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
-		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
+		IFakeDataBuilder WithUser(string userCode, Guid personId, string source, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId, bool isDeleted = false);
 		IFakeDataBuilder WithDefaultStateGroup();
@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
 		public readonly FakeAdherencePercentageReadModelPersister AdherencePercentageReadModelPersister;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
+		private static Random datasourceRandom = new Random();
 
 		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			if (_datasources.Any(x => x.Key == sourceId))
 				return this;
-			_datasources.Add(new KeyValuePair<string, int>(sourceId, 0));
+			_datasources.Add(new KeyValuePair<string, int>(sourceId, datasourceRandom.Next(0, 1000)));
 			return this;
 		}
 
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		public IFakeDataBuilder WithUser(string userCode, Guid personId, string source, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
 			if (businessUnitId.HasValue)
 				WithBusinessUnit(businessUnitId.Value);
@@ -187,7 +188,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (!teamId.HasValue) teamId = Guid.NewGuid();
 			if (!siteId.HasValue) siteId = Guid.NewGuid();
 
-			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
+			var dataSource = _datasources.Last().Value;
+			if (_datasources.Any(x => x.Key == source))
+				dataSource = _datasources.Single(x => x.Key == source).Value;
+
+
+			var lookupKey = string.Format("{0}|{1}", dataSource, userCode).ToUpper(); //putting this logic here is just WRONG
 			_externalLogOns.Add(
 				new KeyValuePair<string, IEnumerable<ResolvedPerson>>(
 					lookupKey, new[]
@@ -382,17 +388,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode)
 		{
-			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null);
+			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, Guid personId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
+			return fakeDataBuilder.WithUser(userCode, personId, null, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, Guid personId, Guid businessUnitId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, businessUnitId, null, null);
+			return fakeDataBuilder.WithUser(userCode, personId, null, businessUnitId, null, null);
+		}
+		
+		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, string source, Guid personId)
+		{
+			return fakeDataBuilder.WithUser(userCode, personId, source, null, null, null);
+		}
+
+		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		{
+			return fakeDataBuilder.WithUser(userCode, personId, null, businessUnitId, teamId, siteId);
 		}
 
 		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, string start, string end)
@@ -454,6 +470,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, adherence, null);
 		}
+
 	}
 
 }
