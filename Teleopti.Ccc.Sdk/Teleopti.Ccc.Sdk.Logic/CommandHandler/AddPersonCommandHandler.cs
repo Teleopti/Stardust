@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					var workflowControlSet = _workflowControlSetRepository.Get(command.WorkflowControlSetId.Value);
 					person.WorkflowControlSet = workflowControlSet;
 				}
-				person.Note = command.Note;
+				if (!string.IsNullOrEmpty(command.Note))
+					person.Note = command.Note;
 				if (command.IsDeleted)
 					((IDeleteTag)person).SetDeleted();
 

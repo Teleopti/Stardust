@@ -791,12 +791,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			if (result.AffectedId != null)
 			{
 				personDto.Id = result.AffectedId;
-				foreach (var personPeriodDto in personDto.PersonPeriodCollection)
+				if (personDto.PersonPeriodCollection != null)
 				{
-					AddPersonPeriod(personDto, personPeriodDto);
+					foreach (var personPeriodDto in personDto.PersonPeriodCollection)
+					{
+						AddPersonPeriod(personDto, personPeriodDto);
+					}
 				}
 			}
-			
 		}
 		public void UpdatePerson(PersonDto personDto)
 		{
