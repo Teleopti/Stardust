@@ -96,6 +96,9 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		enableGridMenu: true,
 		useExternalSorting: true,
 		enableColumnResizing: true,
+		enableHorizontalScrollbar: function() {
+			return columnDefs.length + $scope.optionalColumns > 8 ? true : false;
+		},
 		columnDefs: [
 			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
 			{
