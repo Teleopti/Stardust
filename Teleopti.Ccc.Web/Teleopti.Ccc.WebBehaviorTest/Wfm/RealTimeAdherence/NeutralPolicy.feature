@@ -51,7 +51,7 @@ Scenario: Should adherence percentage with neutral adherence
 	And I view real time adherence for agents on team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
-@ignore
+
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: Should see adherence details with neutral adherence
 	Given there is an activity named 'Phone'
