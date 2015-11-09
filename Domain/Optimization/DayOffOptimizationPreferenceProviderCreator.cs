@@ -13,10 +13,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IDayOffOptimizationPreferenceProvider Create(IDaysOffPreferences daysOffPreferences)
 		{
-
-			if(daysOffPreferences != null)
-				return new DayOffOptimizationPreferenceProvider(daysOffPreferences);
-
 			var defaultRules = _dayOffRulesRepository.Default();
 
 			var preferences = new DaysOffPreferences
