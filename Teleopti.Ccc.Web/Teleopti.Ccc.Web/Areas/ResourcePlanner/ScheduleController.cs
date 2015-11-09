@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						TagToUseOnScheduling = NullScheduleTag.Instance
 					}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
 						_requiredScheduleHelper(),
-						new OptimizationPreferences(), false, new DayOffOptimizationPreferenceProviderUsingFilters(new DaysOffPreferences()));
+						new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 					fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 				}
 
