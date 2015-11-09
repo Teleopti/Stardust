@@ -248,7 +248,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CiscoFinesse.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\CiscoFinesseStepDefination.cs" />
+    <Compile Include="MyTime\CiscoFinesseStepDefinition.cs" />
     <Compile Include="Wfm\Forecasting\Forecaster.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

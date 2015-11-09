@@ -1215,6 +1215,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="WFM\js\forecasting\html\forecasting-result-chart.html" />
