@@ -743,33 +743,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual("00:00", timeText);
         }
 
-		[Test]
-		public void ShouldMakeClaesSConfused()
-		{
-			try
-			{
-				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
-				if (Environment.UserInteractive)
-					Process.Start(fileInfo.FullName);
-			}
-			catch
-			{}
-		}
-	
-    	private IPersonAssignment CreatePersonAssignment()
-        {
-					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));
-            var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
-            var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
-            var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
-            var period = new DateTimePeriod(start, end);
-            mainShift.LayerCollection.Add(new EditableShiftLayer(ActivityFactory.CreateActivity("activity"), period));
-            new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
+	    private IPersonAssignment CreatePersonAssignment()
+	    {
+		    IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario,
+			    new DateOnly(2008, 11, 1));
+		    var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
+		    var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
+		    var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
+		    var period = new DateTimePeriod(start, end);
+		    mainShift.LayerCollection.Add(new EditableShiftLayer(ActivityFactory.CreateActivity("activity"), period));
+		    new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
-            return personAssignment;
-        }
+		    return personAssignment;
+	    }
 
-        private IPersonAbsence CreatePersonAbsence()
+	    private IPersonAbsence CreatePersonAbsence()
         {
             IPersonAbsence personAbsence = new PersonAbsence(PersonFactory.CreatePerson(), _scenario, new AbsenceLayer(AbsenceFactory.CreateAbsence("test"), new DateTimePeriod(2008, 11, 24, 2008, 11, 24)));
             personAbsence.Layer.Payload.Description = new Description("description");
