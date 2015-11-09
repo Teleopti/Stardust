@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.WorkflowControl;

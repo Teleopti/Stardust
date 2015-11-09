@@ -150,6 +150,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             return ret;
         }
-
     }
 }
