@@ -5,6 +5,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.Domain.Infrastructure;
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -21,7 +22,9 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Messaging.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
+
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
@@ -36,12 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public void BeforeTestSuite()
 		{
 			var builder = new ContainerBuilder();
-			var iocArgs = new IocArgs(new ConfigReader())
-			{
-				FeatureToggle = "http://notinuse"
-			};
-			var iocConfiguration = new IocConfiguration(iocArgs, new FalseToggleManager());
-			builder.RegisterModule(new CommonModule(iocConfiguration));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			var container = builder.Build();
 
