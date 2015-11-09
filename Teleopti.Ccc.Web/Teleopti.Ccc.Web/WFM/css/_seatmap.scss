@@ -4,6 +4,48 @@ input[type=text],input[type=password],input[type=number]{
 	line-height:1;
 }
 
+.fadein {
+	animation: fadeIn 1.3s 1;
+	-webkit-animation: fadeIn 1.3s 1;
+}
+
+@keyframes fromTop {
+	0% {
+	transform: translateY(-250px);
+	}
+	100% {
+	transform: translateY(0);
+	}
+}
+@-webkit-keyframes fromTop {
+	0% {
+	transform: translateY(-250px);
+	}
+	100% {
+	transform: translateY(0);
+	}
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+	opacity: 0;
+	}
+
+	100% {
+	opacity: 1;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+	opacity: 0;
+	}
+
+	100% {
+	opacity: 1;
+	}
+}
+
 .seatmap{
 	padding: 0;
 	z-index: 0;
@@ -12,48 +54,38 @@ input[type=text],input[type=password],input[type=number]{
 	right: -10px;
 	bottom: -10px;
 	left: -10px;
-	
-	.seatmap-view-header{
-		height: 41px;
-		position:relative;
-		z-index:2;
+	overflow:hidden;
+}
 
-		.wfm-btn{
-			height:100%;
-			margin:0px;
-			border-radius:0px;
-			text-transform:none;
-		}
+.seatmap-view-header{
+	height: 41px;
+	position:relative;
+	z-index:2;
 
-		.return-button:hover{
-			background:#0099ff!important;
-			color:$white!important;
-		}
+	.wfm-btn{
+		height:100%;
+		margin:0px;
+		border-radius:0px;
+		text-transform:none;
+	}
 
-		.wfm-btn-invis-primary:hover{
-			background:#0099ff;
-			color:$white!important;
-		}
+	.return-button:hover{
+		background:#0099ff!important;
+		color:$white!important;
+	}
 
-		.wfm-fab{
-			transition-duration:0s;
-		}
+	.wfm-btn-invis-primary:hover{
+		background:#0099ff;
+		color:$white!important;
+	}
 
-		.button-active{
-			background:#0099FF!important;
-			color:$white!important;
-		}
+	.wfm-fab{
+		transition-duration:0s;
+	}
 
-		.turn-off-datepicker{
-			width: 100%;
-			height: 40px;
-			z-index:-1;
-			position:absolute;
-			display:inline-block;
-			left:0;
-			top:0;
-			background:transparent;
-		}
+	.button-active{
+		background:#0099FF!important;
+		color:$white!important;
 	}
 }
 
@@ -67,19 +99,30 @@ input[type=text],input[type=password],input[type=number]{
 	}
 }
 
+.turn-off-datepicker{
+	width: 100%;
+	height: 40px;
+	z-index:-1;
+	position:absolute;
+	display:inline-block;
+	left:0;
+	top:0;
+	background:transparent;
+}
+
 .location-breadcrumb{
 	background:$white;
 	position: absolute;
 	height:40px;
-	top:50px;
+	top:40px;
 	left:0;
 	right:0;
 	z-index:1;
 
 	div{
-		height: 34px;
+		height: 40px;
 		position: relative;
-		padding-top: 10px;
+		padding-top: 14px;
 		background: $white;
 	}
 
@@ -127,75 +170,28 @@ a.mfb-component__button--main {
 	-webkit-animation: fromTop 1.3s 1;
 }
 
-.fadein {
-	animation: fadeIn 1.3s 1;
-	-webkit-animation: fadeIn 1.3s 1;
-}
-
-@keyframes fromTop {
-	0% {
-	transform: translateY(-250px);
-	}
-	100% {
-	transform: translateY(0);
-	}
-}
-@-webkit-keyframes fromTop {
-	0% {
-	transform: translateY(-250px);
-	}
-	100% {
-	transform: translateY(0);
-	}
-}
-
-@-webkit-keyframes fadeIn {
-	0% {
-	opacity: 0;
-	}
-
-	100% {
-	opacity: 1;
-	}
-}
-
-@keyframes fadeIn {
-	0% {
-	opacity: 0;
-	}
-
-	100% {
-	opacity: 1;
-	}
-}
-
 .seatmap-canvas {
-	position: absolute;
-	top:41px;
-	left:0;
-	right:0;
-	bottom:0;
-
+	position:absolute;
+	top:42px;
+	bottom:0px;
+	overflow:hidden;
 
 	md-backdrop.md-sidenav-backdrop{
 		display:none;
-	}
-}
-
-.seatmap-canvas-edit-mode{
-	top:34px;
+	}	
 }
 
 .wfm-block{
 	width: 100%;
 	margin: 0;
-	padding:0 10px 0 10px;
+	padding:0px 10px 0px 10px;
+	position:relative;
 }
 
 seatmap-editor{
-	position:absolute;
-	width:100%;
 	z-index:100;
+	background:$white;
+	border-bottom:1px solid #e1e2e3;
 }
 
 .seatmap-right-toobar{
@@ -226,6 +222,7 @@ seatmap-editor{
 
 	.md-menu-toolbar {
 		background-color: #f1f1f1 !important;
+		margin-top:2px;
 	}
 
 	md-menu-bar {
@@ -244,7 +241,6 @@ seatmap-editor{
 		top: 10px;
 		left: 24px;
 	}
-
 
 	.group-icon {
 		position: relative;
@@ -265,22 +261,6 @@ seatmap-editor{
 	.save-icon-unsaved-changes{
 		background-color : Green !important;
 	}
-
-
-}
-
-.cancel-changes{
-	position: absolute;
-	top: -21px;
-	right: 90px;
-	z-index: 2;
-}
-
-.mfb-menu-group{
-	top: -45px;
-	right: 0px;
-	z-index: 2;
-	position: absolute;
 }
 
 .seatmap-spinner{
@@ -293,21 +273,32 @@ seatmap-editor{
 
 .seatmap-bottom-bar{
 	position: absolute;
-	bottom: 0px;
+	bottom: 0;
 	left: 0;
 	right: 0;
+	
+	md-slider{
+		width: 200px;
+		margin-left: 40px;
+	}
 }
 
-.seatmap-bottom-bar md-slider{
-	width: 200px;
-	margin-left: 40px;
-}
-
-.seatmap-zoom-bar{
-	background:linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
-	background:-webkit-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
-	background:-o-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
-	background:-moz-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.6));
+.seatmap-right-panel{
+	background:$white;
+	display: block;
+	overflow:hidden;
+	width:30%;
+	min-width:380px;
+	border-left:1px solid #e1e2e3;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom:0;
+	z-index:101;
+	
+	.sidenav-header{
+		padding:9px 5px!important;
+	}
 }
 
 seatmap-occupancy-detail{
@@ -318,137 +309,123 @@ seatmap-occupancy-detail{
 	left: 0;
 }
 
-.seatmap-right-panel{
-	background:$white;
-	display: block;
-	transition:all 0.35s ease-in-out;	
-	overflow:hidden;
-	width:30%;
-	min-width:380px;
-	position: absolute;
-	border-left:1px solid #e1e2e3;
-	right: 0;
-	top: 1px;
+.seatbooking-operations-add, .seatbooking-operations-cancel {
+	position:absolute;
+	top:3px;
+	height:40px;
+	width:100%;
+	border-bottom:1px solid #e1e2e3;
+
+	.wfm-btn{
+		height: 100%;
+		padding: 5px 10px;
+		margin: 0;
+		background: $white;
+	}
+
+	.wfm-btn:hover{
+		background:#f1f2f3;
+	}
+}
+
+people-selection-list{
+	top: 40px;
 	bottom: 0;
-
-	.seatmap-occupancy-detail {
-		top: 0;
-		bottom: 0;
-		position: absolute;
-		right: 0;
-		left: 0;
-
-		.seatbooking-operations-add, .seatbooking-operations-cancel {
-			position:absolute;
-			top:3px;
-			height:40px;
-			width:100%;
-			border-bottom:1px solid #e1e2e3;
-
-			.wfm-btn{
-				height: 100%;
-				padding: 5px 10px;
-				margin: 0;
-				background: $white;
-			}
-
-			.wfm-btn:hover{
-				background:#f1f2f3;
-			}
-		}
-
-		people-selection-list{
-			top: 40px;
-			bottom: 0;
-			position: absolute;
-			right: 0;
-			left: 0;
-		}
+	position: absolute;
+	right: 0;
+	left: 0;
+}
 	
-		people-selection-list>div{
-			top: 0;
-			bottom: 120px;
-			position: absolute;
-			right: 0;
-			left: 0;
+people-selection-list>div{
+	top: 0;
+	bottom: 120px;
+	position: absolute;
+	right: 0;
+	left: 0;
 
-			.people-search{
-				padding-top: 5px;
-				padding-bottom: 3px;
-			}
+	.people-search{
+		padding-top: 5px;
+		padding-bottom: 3px;
+	}
 
-			.col-md-4{
-				width:100%;		
-			}
+	.col-md-4{
+		width:100%;		
+	}
 	
-			.select-all-dialog{
-				margin:0;
-				transition: all 0.35s;
-				-moz-transition: all 0.35s;
-				-webkit-transition: all 0.35s;
-				-o-transition: all 0.35s; 
-			}
+	.select-all-dialog{
+		margin:0;
+		transition: all 0.35s;
+		-moz-transition: all 0.35s;
+		-webkit-transition: all 0.35s;
+		-o-transition: all 0.35s; 
+	}
 
-			.big-table-wrapper{
-				height:100%;
-				box-shadow: none;
-				position: relative;
-				transition: all 0.35s;
-				-moz-transition: all 0.35s;
-				-webkit-transition: all 0.35s;
-				-o-transition: all 0.35s; 
-			}
+	.big-table-wrapper{
+		height:100%;
+		box-shadow: none;
+		position: relative;
+		transition: all 0.35s;
+		-moz-transition: all 0.35s;
+		-webkit-transition: all 0.35s;
+		-o-transition: all 0.35s; 
+	}
 
-			.pagination {
-				 margin: 5px 0px;
-			}
+	.pagination {
+			margin: 5px 0px;
+	}
 
-			.pagination li {
-				padding: 4px 8px 4px 8px;
-			}
+	.pagination li {
+		padding: 4px 8px 4px 8px;
+	}
 
-			.people-list.grid {
-				height: 100%;
-			}
-		}
+	.people-list.grid {
+		height: 100%;
+	}
+}
 
-		.seat-booking-list{
-			overflow:auto;
-			position:absolute;
-			top:40px;
-			right:0;
-			left:0;
+.seatmap-occupancy-detail {
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	right: 0;
+	left: 0;
+}
 
-			.wfm-list{
-				overflow-y:auto;
-			}
+.seat-booking-list{
+	overflow:auto;
+	position:absolute;
+	top:40px;
+	right:0;
+	left:0;
 
-			.wfm-list li{
-				border-top:1px solid rgba(0,0,0,0.06);								
-				border-bottom:1px solid rgba(0,0,0,0.06);								
-			}
+	.wfm-list{
+		overflow-y:auto;
+	}
+
+	.wfm-list li{
+		border-top:1px solid rgba(0,0,0,0.06);								
+		border-bottom:1px solid rgba(0,0,0,0.06);								
+	}
 			
-			.seat-booking-seatname{
-				width:20%;
-				overflow:hidden;
-			}
+	.seat-booking-seatname{
+		width:20%;
+		overflow:hidden;
+	}
 	
-			.seat-booking-item{
-				margin-left:20%;
-			}
+	.seat-booking-item{
+		margin-left:20%;
+	}
 
-			.seat-booking-item.first-seat-booking{
-				margin-left:0;	
-			}
+	.seat-booking-item.first-seat-booking{
+		margin-left:0;	
+	}
 	
-			span{
-				max-width:100%;
-			}
+	span{
+		max-width:100%;
+	}
 
-			.default-cursor{
-				cursor:default;
-			}
-		}
+	.default-cursor{
+		cursor:default;
 	}
 }
 

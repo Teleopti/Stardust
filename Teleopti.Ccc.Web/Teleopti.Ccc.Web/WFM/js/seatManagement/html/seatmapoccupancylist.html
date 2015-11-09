@@ -14,10 +14,11 @@
 
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
 		<ul class="wfm-list" ng-repeat="detail in vm.occupancyDetails">
+			
 			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
 				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">Seat {{detail.SeatName}}:</span>
 
-				<span ng-if="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="{'first-seat-booking':$index==0}">
+				<span ng-if="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="[{'first-seat-booking':$index==0},vm.getSeatBookingDetailClass(booking)]">
 					{{vm.getDisplayTime(booking)}}
 					&nbsp;&nbsp;{{booking.FirstName}}
 					&nbsp;{{booking.LastName}}

@@ -1,4 +1,3 @@
-﻿\
 <style type="text/css">
 	#materialcontainer > div[ui-view] {
 		height: 100%;
@@ -42,15 +41,24 @@
 		<md-divider ng-if="!vm.isLoading"></md-divider>
 	</div>
 
-	<div class="seatmap-canvas" ng-class="{'seatmap-canvas-edit-mode':(vm.showEditor)}" ng-click="vm.isDatePickerOpened = false">
-
+	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false">
+		
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
 		<div class="wfm-block" ng-click="vm.toggleRightPanel()">
+
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
+
 			<div ng-show="vm.isLoading" class="seatmap-spinner">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
+
+			<seatmap-right-panel>
+
+				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
+
+			</seatmap-right-panel>
+
 			<div class="seatmap-bottom-bar">
 				<div class="seatmap-zoom-bar">
 					<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
@@ -60,15 +68,6 @@
 				</div>
 			</div>
 		</div>
-
-		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel seatmap-right-panel" md-component-id="right-panel">
-			<div class="sidenav-header">{{'RightPanel'|translate}}</div>
-
-			<seat-roles></seat-roles>
-
-
-			<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()"></seatmap-occupancy-detail>
-		</md-sidenav>
 
 	</div>
 </div>

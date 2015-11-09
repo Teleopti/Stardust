@@ -20,7 +20,7 @@
 
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
-		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
+		<NpmSetServerCmd>"$(NpmCmd)" set registry https://registry.npm.taobao.org </NpmSetServerCmd>
 
 		<!-- NPM dedupe command -->
 		<NpmDedupeCmd>"$(NpmCmd)" dedupe</NpmDedupeCmd>

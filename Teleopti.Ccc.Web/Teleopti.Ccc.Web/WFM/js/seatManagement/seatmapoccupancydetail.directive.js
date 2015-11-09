@@ -99,13 +99,14 @@
 
 			canvas().on('object:selected', function (e) {
 				onObjectSelection(e);
+				vm.rightPanelVm.openRightPanel();
 			});
 
 			canvas().on('selection:created', function (e) {
-				// handle shift clicking event to select multiple seats only
 				if (e.e && e.e.shiftKey) {
 					onObjectSelection(e);
 				}
+				vm.rightPanelVm.openRightPanel();
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
@@ -127,6 +128,7 @@
 					vm.occupancyDetails = undefined;
 					vm.previousSelectedSeatIds = [];
 				}
+				vm.rightPanelVm.closeRightPanel();
 			});
 
 		};
@@ -204,14 +206,13 @@
 
 				var seat = utils.getSeatObject(canvas(), true);
 
-				if (seat != null) {
+				if (seat != null) {	
 					canvas().setActiveObject(seat);
 				} else {
 					vm.occupancyDetails = undefined;
 				}
 			}
 		}
-
 
 		function onSuccessShowMessage(message) {
 			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
@@ -245,11 +246,10 @@
 (function () {
 	angular.module('wfm.seatMap').directive('seatmapOccupancyDetail', seatmapOccupancyDetailDirective);
 
-
 	function linkFunction(scope, element, attributes, controllers) {
 		var vm = controllers[0];
-		var parentVm = controllers[1];
-		vm.parentVm = parentVm;
+		vm.parentVm = controllers[1];
+		vm.rightPanelVm = controllers[2];		
 		vm.init();
 	};
 
@@ -258,7 +258,7 @@
 			controller: 'SeatMapOccupancyCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			require: ['seatmapOccupancyDetail', '^seatmapCanvas'],
+			require: ['seatmapOccupancyDetail', '^seatmapCanvas', '^seatmapRightPanel'],
 			scope: {
 				scheduleDate: '=',
 				refreshSeatMap: '&'

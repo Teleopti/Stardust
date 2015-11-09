@@ -14,7 +14,7 @@
 				setSelectionMode: setSelectionMode,
 				getFirstObjectOfTypeFromCanvasObject: getFirstObjectOfTypeFromCanvasObject,
 				getObjectsOfTypeFromGroup: getObjectsOfTypeFromGroup,
-				getSeatObjectById : getSeatObjectById,
+				getSeatObjectById: getSeatObjectById,
 				getSeatObject: getSeatObject,
 				getObjectsByType: getObjectsByType,
 				getLocations: getLocations,
@@ -45,9 +45,9 @@
 			};
 
 			function doResize(canvas) {
-				var viewPortHeight = $(document)[0].documentElement.clientHeight;
+				var viewPortHeight = $('.seatmap').height();
 				var width = $('[ui-view]')[0].clientWidth - 0;
-				var heightReduction = 130; // no reliable element to base this off
+				var heightReduction = $('#seatmap-toolbar').height() + $('.location-breadcrumb').height() + 4;
 
 				canvas.setHeight((viewPortHeight - heightReduction));
 				canvas.setWidth(width);
@@ -74,38 +74,34 @@
 				});
 			};
 
-			function setSelectionMode(canvas, isEditMode, canSelect) {
+			function setSelectionMode(canvas, canSelect) {
 
 				var canvasObjects = canvas.getObjects();
 				canvas.deactivateAllWithDispatch().renderAll();
 
-
-				if (!canSelect && !isEditMode) {
+				if (!canSelect) {
 					canvas.selection = false;
 					for (var idx in canvasObjects) {
-
 						canvasObjects[idx].selectable = false;
-
 					}
 					return;
 				}
-				
+
 				canvas.selection = true;
 				for (var idx in canvasObjects) {
 					if (canvasObjects[idx].type == 'location') {
-						canvasObjects[idx].selectable = isEditMode;
+						canvasObjects[idx].selectable = false;
 					} else {
 						canvasObjects[idx].selectable = true;
 					}
-					canvasObjects[idx].hasBorders = true; 
-					canvasObjects[idx].lockRotation = !isEditMode;
-					canvasObjects[idx].lockScalingX = canvasObjects[idx].lockScalingY = !isEditMode;
-					canvasObjects[idx].lockMovementX = canvasObjects[idx].lockMovementY = !isEditMode;
-					canvasObjects[idx].hasControls = isEditMode;
-					
+					canvasObjects[idx].hasBorders = true;
+					canvasObjects[idx].lockRotation = false;
+					canvasObjects[idx].lockScalingX = false;
+					canvasObjects[idx].lockMovementX = true;
+					canvasObjects[idx].lockMovementY = true;
+					canvasObjects[idx].hasControls = false;
 				}
 			}
-
 
 			function getObjectsByType(canvas, type) {
 
@@ -239,7 +235,7 @@
 
 					if (selectTopLeftSeat) {
 						return seatObjects[getTopLeftSeat(canvas)];
-					}else {
+					} else {
 						return seatObjects[0];
 					}
 				}
@@ -247,12 +243,12 @@
 			};
 
 			function getSeatObjectById(canvas, id) {
-				
+
 				var seatObjects = getObjectsByType(canvas, 'seat');
 				if (seatObjects.length > 0) {
 					for (var i in seatObjects) {
 						var seat = seatObjects[i];
-				
+
 						if (seat.id == id) {
 							return seat;
 						}
@@ -360,7 +356,8 @@
 							seatPriority = allSeats[loadedSeat].priority;
 						}
 					}
-					setSelectionMode(canvas, allowEdit, canSelect);
+					if(!allowEdit)
+						setSelectionMode(canvas, canSelect);
 					data.seatPriority = seatPriority;
 					callbackSuccess(data);
 				});
@@ -494,7 +491,7 @@
 					deepUnGroup(canvas, group);
 				});
 
-				setSelectionMode(canvas, false, true);
+				setSelectionMode(canvas, true);
 			};
 
 
