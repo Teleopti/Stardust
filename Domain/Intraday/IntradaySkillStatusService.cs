@@ -35,15 +35,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var item in actualTasks)
 			{
-				var filteredTaskDetails = taskDetails.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks);
-				var taskDetail = new List<IntervalTasks>();
-				if (filteredTaskDetails.Any())
-					taskDetail = filteredTaskDetails.First();
-				var absDifference = getAbsDifference(
-					taskDetail.Where(x=>x.IntervalStart <= item.IntervalTasks.Max(u=>u.IntervalStart) ), actualTasks.Where(x => x.SkillId == item.SkillId).Select(y => y.IntervalTasks).First());
-				//this is just for testing
+				var maxIntervalForSkill = item.IntervalTasks.Max(x => x.IntervalStart);
+				var forecastedData = taskDetails.Where(s => s.SkillId == item.SkillId);
+				var forecastedSum = 0.0;
+				var actualSum = item.IntervalTasks.Sum(interval => interval.Task);
+				if (forecastedData.Any())
+				{
+					forecastedSum =  forecastedData.First().IntervalTasks.Where(interval => interval.IntervalStart <= maxIntervalForSkill).Sum(t => t.Task);
+				}
+				var relativeDifference = forecastedSum - actualSum;
 				var message = "Below threshold";
-				if (absDifference > 100)
+				if (relativeDifference > -100)
 				{
 					message = "Exceeds threshold";
 				}
@@ -51,10 +53,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					if (skillStatus.SkillName == item.SkillName)
 					{
-						var lastestDataDate = item.IntervalTasks.Max(u => u.IntervalStart);
+						//var lastestDataDate = item.IntervalTasks.Max(u => u.IntervalStart);
 						skillStatus.Measures = new List<SkillStatusMeasure>
 						{
-							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(absDifference), Severity = 1, StringValue = message, LatestDate = lastestDataDate }
+							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(relativeDifference), Severity = 1, StringValue = message, LatestDate = maxIntervalForSkill,ActualCalls = actualSum,ForecastedCalls = forecastedSum}
 						};
 					}
 				}
@@ -66,22 +68,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				Measures = x.Measures,
 				Severity = i++
 			}).OrderByDescending(y => y.Severity);
-		}
-		private double getAbsDifference(IEnumerable<IntervalTasks> forecastedTasks, List<IntervalTasks> actualDetails)
-		{
-			var result = 0.0;
-			foreach (var forecastedItem in forecastedTasks)
-			{
-				var actualTask = 0.0;
-				var actualTaskOnInterval =
-					actualDetails.FirstOrDefault(x => x.IntervalStart.Equals(forecastedItem.IntervalStart));
-
-				if (actualTaskOnInterval != null)
-					actualTask = actualTaskOnInterval.Task;
-
-				result += Math.Abs(forecastedItem.Task - actualTask);
-			}
-			return result;
 		}
 	}
 }
