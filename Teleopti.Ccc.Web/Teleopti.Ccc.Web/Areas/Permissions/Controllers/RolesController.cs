@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
-    [ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
+    [ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions)]
     public class RolesController : ApiController
     {
         private const string GivenDescriptionIsInvalidErrorMessage = "The given description is invalid. It can contain at most 255 characters.";

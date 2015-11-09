@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions)]
 	public class OrganizationSelectionController : ApiController
 	{
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
