@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.OnActivated(e => CurrentBusinessUnit.SetInstanceFromContainer(e.Instance))
 				.OnRelease(e => CurrentBusinessUnit.SetInstanceFromContainer(null));
 			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
-
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();

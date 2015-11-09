@@ -2,15 +2,14 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.ServiceBus
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	public class MessageSenderCreatorTest
+	public class CurrentPersistCallbacksTest
 	{
 		[Test]
 		public void ShouldCreateMessageSenderCollection()
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ServiceBus
 			var messageSender = new FakeMessageSender();
 			var serializer = new NewtonsoftJsonSerializer();
 			var initiatorIdentifier = new FakeCurrentInitiatorIdentifier();
-			var creator = new MessageSenderCreator(serviceBusSender, toggleManager, messageSender, serializer,
+			var allCallbacks = new CurrentPersistCallbacks(serviceBusSender, toggleManager, messageSender, serializer,
 				initiatorIdentifier);
 
 			var senderTypes = new[]
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ServiceBus
 				typeof (ScheduleChangedMessageSender)
 			};
 
-			var senders = creator.Create().Current().ToList();
+			var senders = allCallbacks.Current().ToList();
 			Assert.AreEqual(senders.Count, senderTypes.Length);
 
 			var allSenderExists = senderTypes.All(type => senders.Any(x => x.GetType() == type));

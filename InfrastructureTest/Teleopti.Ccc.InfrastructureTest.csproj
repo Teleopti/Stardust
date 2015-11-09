@@ -230,7 +230,7 @@
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
-    <Compile Include="ServiceBus\MessageSenderCreatorTest.cs" />
+    <Compile Include="UnitOfWork\CurrentPersistCallbacksTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
