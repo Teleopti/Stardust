@@ -6,7 +6,6 @@ namespace Teleopti.Interfaces.Domain
     /// Class for UnitCollection
     /// </summary>
     public interface ISite : IAggregateRoot, 
-                                IBusinessUnitHierarchyEntity,
                                 IBelongsToBusinessUnit
     {
 		/// <summary>

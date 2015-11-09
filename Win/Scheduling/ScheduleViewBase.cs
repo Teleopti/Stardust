@@ -941,10 +941,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        /// <summary>
-        /// calculate the width of column headers
-        /// </summary>
-        /// <returns></returns>
         public int CalculateColHeadersWidth()
         {
             int width = 0;
@@ -967,7 +963,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 
         }
 
-        //get the local selected date
         public virtual DateOnly SelectedDateLocal()
         {
             DateOnly tag;
@@ -992,8 +987,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 int row = clipHandler.AnchorRow + clip.RowOffset;
                 int col = clipHandler.AnchorColumn + clip.ColOffset;
 
-                IScheduleDay scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
-
+                var scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
                 if(scheduleRange.SignificantPart() != SchedulePartView.None)
                     schedulesForDelete.Add(scheduleRange);
             }
@@ -1010,23 +1004,16 @@ namespace Teleopti.Ccc.Win.Scheduling
                 int row = clipHandler.AnchorRow + clip.RowOffset;
                 int col = clipHandler.AnchorColumn + clip.ColOffset;
 
-                IScheduleDay scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
-
+                var scheduleRange = (IScheduleDay)_grid.Model[row, col].CellValue;
                 if (deleteOption.OvertimeAvailability)
                     schedulesForDelete.Add(scheduleRange);
                 else if (scheduleRange.SignificantPart() != SchedulePartView.None )
                     schedulesForDelete.Add(scheduleRange);
-                 
-
             }
 
             return schedulesForDelete;
         }
 
-        /// <summary>
-        /// Gets a list with selected schedules for current column
-        /// </summary>
-        /// <returns></returns>
         public IList<IScheduleDay> CurrentColumnSelectedSchedules()
         {
             GridRangeInfoList rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
@@ -1043,14 +1030,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return selectedSchedules;
         }
 
-        /// <summary>
-        /// Gets a list of the current selected schedules.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-26
-        /// </remarks>
         public IList<IScheduleDay> SelectedSchedules()
         {
             GridRangeInfoList rangeList = GridHelper.GetGridSelectedRanges(_grid, true);
@@ -1070,7 +1049,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return selectedSchedules;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public IList<IList<IScheduleDay>> SelectedSchedulesPerEqualTwoRanges()
 		{
 			var gridRangeInfoList = GridHelper.GetGridSelectedRanges(_grid, true);
@@ -1110,13 +1088,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (lockDictionary != null && lockDictionary.Count != 0 && !lockedDates.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly))
 					lockedDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-
 			}
 
 			return lockedDates;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public IDictionary<IPerson, IList<DateOnly>> LockedDatesOnPerson(IGridlockManager gridlockManager)
 		{
 			if(gridlockManager == null)
@@ -1193,7 +1169,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 TheGrid.Selections.Clear(true);
                 TheGrid.CurrentCell.Activate(minRow, minCol, GridSetCurrentCellOptions.SetFocus);
                 TheGrid.Selections.ChangeSelection(info, info, true);
-                //TheGrid.CurrentCell.MoveTo(minRow, minCol, GridSetCurrentCellOptions.None);
                 TheGrid.CurrentCell.MoveTo(minRow, minCol, GridSetCurrentCellOptions.ScrollInView);
             }
             else
@@ -1337,18 +1312,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 retCol = col + (int)days.TotalDays;
             }
 
-
-            //for (int col = (int)ColumnType.StartScheduleColumns; col <= _grid.ColCount; col++)
-            //{
-            //    IScheduleDay scheduleDay = _grid.Model[ColHeaders + 1, col].CellValue as IScheduleDay;
-            //    if (scheduleDay != null &&
-            //        scheduleDay.Period.Contains(date))
-            //    {
-            //        retCol = col;
-            //        break;
-            //    }
-            //}
-
             return retCol;
         }
 
@@ -1426,25 +1389,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return _handleBusinessRuleResponse; }
         }
 
-        /// <summary>
-        /// Gets the grid.
-        /// </summary>
-        /// <value>The grid.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-12-04    
-        /// /// </remarks>
         public GridControl TheGrid
         {
             get { return _grid; }
         }
 
-        /// <summary>
-        /// Refresh range on Person, Period
-        /// </summary>
-        /// <param name="person"></param>
-        /// <param name="period"></param>
         public void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period)
         {
             //thread stuff

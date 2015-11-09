@@ -301,11 +301,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return DateOnly.MinValue;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		public virtual int GetWorkdays()
 		{
-			DateOnlyPeriod period = _schedulePeriodRangeCalculator.PeriodForType(_dateFrom,new SchedulePeriodForRangeCalculation{Culture = CurrentPerson.PermissionInformation.Culture(),Number = _number,PeriodType = _periodType,StartDate = _dateFrom}); 
-			return getWorkDaysForPeriod(period.StartDate, period.EndDate);
+			var period = _schedulePeriodRangeCalculator.PeriodForType(_dateFrom,new SchedulePeriodForRangeCalculation{Culture = CurrentPerson.PermissionInformation.Culture(),Number = _number,PeriodType = _periodType,StartDate = _dateFrom}); 
+			return getWorkDaysForPeriod(period);
 		}
 
 		public virtual ReadOnlyCollection<IShiftCategoryLimitation> ShiftCategoryLimitationCollection()
@@ -426,12 +425,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// </remarks>
 		public virtual IPersonPeriod GetPersonPeriod()
 		{
-			IList<IPersonPeriod> personPeriods = new List<IPersonPeriod>();
 			DateOnlyPeriod? datePeriod = getSchedulePeriod();
 
-			if (datePeriod.HasValue)
-				personPeriods = CurrentPerson.PersonPeriods(datePeriod.Value);
-			return (personPeriods.Count > 0) ? personPeriods[0] : null;
+			return datePeriod.HasValue ? CurrentPerson.Period(datePeriod.Value.StartDate) : null;
 		}
 
 		/// <summary>
@@ -513,41 +509,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return null;
 		}
 
-		private int getWorkDaysForPeriod(DateOnly startDate, DateOnly endDate)
+		private int getWorkDaysForPeriod(DateOnlyPeriod period)
 		{
-			int workDays = 0;
+			if (CurrentPerson == null) return 0;
 
-			if(PeriodType == SchedulePeriodType.ChineseMonth)
+			if (PeriodType == SchedulePeriodType.ChineseMonth)
 			{
-				int daysOff = getDaysOffForChineseMonth(startDate);
-				return (int)endDate.Subtract(startDate).TotalDays + 1 - daysOff;
+				int daysOff = getDaysOffForChineseMonth(period.StartDate);
+				return period.DayCount() - daysOff;
 			}
 
 			if (_daysOff.HasValue) // if days off are overriden
 			{
-				return (int)endDate.Subtract(startDate).TotalDays + 1 - _daysOff.Value;
+				return period.DayCount() - _daysOff.Value;
 			}
 
-			while (startDate <= endDate)
+			int workDays = 0;
+
+			var dayCollection = period.DayCollection();
+			var periods = CurrentPerson.PersonPeriods(period);
+			var index = 0;
+			foreach (var personPeriod in periods)
 			{
-				if (CurrentPerson != null)
+				var endDate = personPeriod.EndDate();
+				if (personPeriod.PersonContract == null)
 				{
-					IPersonPeriod personPeriod = CurrentPerson.Period(startDate);
-					if (personPeriod != null)
+					index = dayCollection.IndexOf(endDate.AddDays(1));
+					continue;
+				}
+				for (; index < dayCollection.Count; index++)
+				{
+					var currentDate = dayCollection[index];
+					if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, currentDate))
+						workDays++;
+					if (endDate == currentDate)
 					{
-						if (personPeriod.PersonContract != null)
-						{
-							if (personPeriod.PersonContract.ContractSchedule != null)
-							{
-								if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, startDate))
-									workDays++;
-							}
-						}
+						break;
 					}
 				}
-				startDate = startDate.AddDays(1);
 			}
-
+		
 			return workDays;
 		}
 
