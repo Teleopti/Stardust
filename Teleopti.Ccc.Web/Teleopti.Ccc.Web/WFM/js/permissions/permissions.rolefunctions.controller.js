@@ -90,7 +90,9 @@
 					functionNode.selected = true;
 					decreaseParentNumberOfSelectedNodes(node);
 					toggleParentNode(node);
-					RolesFunctionsService.selectFunction($scope.functionNodes, $scope.selectedRole);
+					RolesFunctionsService.selectFunction($scope.functionNodes, $scope.selectedRole).then(function(){
+						$scope.functionNodes = [];
+					});
 				}
 			};
 

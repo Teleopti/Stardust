@@ -14,7 +14,6 @@
 				$scope.selectedDataToggle = false;
 				$scope.unselectedDataToggle = false;
 				$scope.roles = [];
-
 				$scope.tempName = "";
 
 				$scope.editing = false;
@@ -35,9 +34,7 @@
 				        $scope.showRole($scope.roles[0]);
 				    });
 				};
-				$scope.test = function (string) {
-					console.log('blur');
-				};
+
 				$scope.reset = function() {
 					$scope.roleName = "";
 				};
@@ -54,7 +51,6 @@
 
 				$scope.updateRole = function(role) {
 					Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
-
 				};
 
 				$scope.submitRole = function(role, tempName){
