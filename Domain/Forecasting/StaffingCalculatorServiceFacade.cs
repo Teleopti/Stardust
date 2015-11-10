@@ -7,8 +7,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class StaffingCalculatorServiceFacade : IStaffingCalculatorServiceFacade
 	{
-		private readonly IStaffingCalculatorService _secretService = new StaffingCalculatorService();
-		private readonly ServiceLevelAchivedOcc _serviceLevelAchivedOcc = new ServiceLevelAchivedOcc();
+		private readonly IStaffingCalculatorService _secretService;
+		private readonly ServiceLevelAchivedOcc _serviceLevelAchivedOcc;
+
+		public StaffingCalculatorServiceFacade()
+		{
+			_secretService = new StaffingCalculatorService();
+			_serviceLevelAchivedOcc = new ServiceLevelAchivedOcc(new TeleoptiCallCapacity(_secretService),  _secretService);
+		}
 
 		public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
 		{
