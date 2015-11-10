@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-		public void AddFilter(IFilter filter)
+		public virtual void AddFilter(IFilter filter)
 		{
 			_filters.Add(filter);
 		}
 
-		public bool IsValidForAgent(IPerson person, DateOnly dateOnly)
+		public virtual bool IsValidForAgent(IPerson person, DateOnly dateOnly)
 		{
 			return Default || _filters.Any(filter => filter.IsValidFor(person, dateOnly));
 		}
