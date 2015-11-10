@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -164,7 +165,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
 			builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
 
-			builder.RegisterType<CurrentPersistCallbacks>()
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
 				.As<ICurrentPersistCallbacks>()
 				.SingleInstance();
 		}

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static void registerDataSourcesFactoryDependencies(ContainerBuilder builder)
 		{
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
-			builder.RegisterType<CurrentPersistCallbacks>().As<ICurrentPersistCallbacks>().SingleInstance();
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.Register(c => DataSourceConfigurationSetter.ForServiceBus())
 				.As<IDataSourceConfigurationSetter>()

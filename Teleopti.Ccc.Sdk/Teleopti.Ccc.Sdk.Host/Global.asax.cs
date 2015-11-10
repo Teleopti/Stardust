@@ -24,6 +24,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -143,9 +144,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		private static void registerDataSourcesFactory(ContainerBuilder builder)
 		{
-			builder.RegisterType<CurrentPersistCallbacks>()
-				.As<ICurrentPersistCallbacks>()
-				.SingleInstance();
+			builder.RegisterType<MessageSenderCreator>().SingleInstance();
+			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentPersistCallbacks>().SingleInstance();
 
 			builder.Register(c => new DataSourcesFactory(
 				new EnversConfiguration(),
