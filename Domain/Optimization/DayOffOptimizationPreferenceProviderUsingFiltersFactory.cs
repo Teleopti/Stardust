@@ -11,21 +11,7 @@
 
 		public IDayOffOptimizationPreferenceProvider Create()
 		{
-			var defaultRules = _dayOffRulesRepository.Default();
-
-			var preferences = new DaysOffPreferences
-			{
-				ConsecutiveDaysOffValue = defaultRules.ConsecutiveDayOffs,
-				UseConsecutiveDaysOff = true,
-				ConsecutiveWorkdaysValue = defaultRules.ConsecutiveWorkdays,
-				UseConsecutiveWorkdays = true,
-				ConsiderWeekAfter = true,
-				ConsiderWeekBefore = true,
-				DaysOffPerWeekValue = defaultRules.DayOffsPerWeek,
-				UseDaysOffPerWeek = true
-			};
-
-			return new DayOffOptimizationPreferenceProviderUsingFilters(preferences);
+			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAll());
 		} 
 	}
 }

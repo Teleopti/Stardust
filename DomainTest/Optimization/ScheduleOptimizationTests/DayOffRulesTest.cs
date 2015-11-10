@@ -203,7 +203,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
-		[Ignore("PBI 35380")]
 		public void ShouldUseDifferentDayOffRulesForDifferentFiltersWhenOneIsIncorrect()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -223,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			agentWithExplicitFilter.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var dayOffRules = new DayOffRules { DayOffsPerWeek = new MinMax<int>(5,6)};
-			dayOffRules.Add(new ContractFilter(contractInFilter));
+			dayOffRules.AddFilter(new ContractFilter(contractInFilter));
 			DayOffRulesRepository.Add(dayOffRules);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,

@@ -1,20 +1,41 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFilters : IDayOffOptimizationPreferenceProvider
 	{
-		private readonly IDaysOffPreferences _daysOffPreferences;
+		private readonly IEnumerable<DayOffRules> _dayOffRules;
 
-		public DayOffOptimizationPreferenceProviderUsingFilters(IDaysOffPreferences daysOffPreferences)
+		public DayOffOptimizationPreferenceProviderUsingFilters(IEnumerable<DayOffRules> dayOffRules)
 		{
-			_daysOffPreferences = daysOffPreferences;
+			_dayOffRules = dayOffRules;
 		}
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			//not impl correctly yet - should handle filters
-			return _daysOffPreferences;	
+			foreach (var dayOffRule in _dayOffRules.Where(dayOffRule => dayOffRule.IsValidForAgent(person, dateOnly)))
+			{
+				return mapToDayOffPrefences(dayOffRule);
+			}
+
+			return mapToDayOffPrefences(DayOffRules.CreateDefault());
+		}
+
+		private static DaysOffPreferences mapToDayOffPrefences(DayOffRules dayOffRules)
+		{
+			return new DaysOffPreferences
+			{
+				ConsecutiveDaysOffValue = dayOffRules.ConsecutiveDayOffs,
+				UseConsecutiveDaysOff = true,
+				ConsecutiveWorkdaysValue = dayOffRules.ConsecutiveWorkdays,
+				UseConsecutiveWorkdays = true,
+				ConsiderWeekAfter = true,
+				ConsiderWeekBefore = true,
+				DaysOffPerWeekValue = dayOffRules.DayOffsPerWeek,
+				UseDaysOffPerWeek = true
+			};
 		}
 	}
 }
