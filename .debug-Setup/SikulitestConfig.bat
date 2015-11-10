@@ -40,6 +40,7 @@ call FixMyConfig.bat %CCC7DB% %AnalyticsDB% %configuration%
 
 ECHO Restart iis express ...
 cd %ROOTDIR%\.debug-setup\iisexpress\
+ren SikuliApplicationhost.config.txt SikuliApplicationhost.config
 call RestartIISExpress.bat
 
 ENDLOCAL
