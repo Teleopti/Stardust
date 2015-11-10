@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[SetUp]
 		public void Setup()
 		{
-			target = new RegisterGlobalFiltersTask(null,null, null);
+			target = new RegisterGlobalFiltersTask(null,null, null, null);
 			GlobalFilters.Filters.Clear();
 		}
 
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				.Should().Have.SameValuesAs(new[]
 				               	{
 				               		typeof(TeleoptiPrincipalAuthorizeAttribute),
-				               		typeof(AjaxHandleErrorAttribute)
+				               		typeof(AjaxHandleErrorAttribute),
+									typeof(Log4NetMvCLogger)
 				               	});
 		}
 	}

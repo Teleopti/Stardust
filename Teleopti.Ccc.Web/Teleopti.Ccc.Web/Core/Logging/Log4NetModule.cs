@@ -9,12 +9,28 @@ namespace Teleopti.Ccc.Web.Core.Logging
 {
 	public class Log4NetModule : IHttpModule
 	{
-		private static bool _applicationStarted;
+		public const string LogMessageException = "Log4NetModule caught an unhandled exception";
+		public const string LogMessage404 = "A 404 occurred";
 		private static readonly object _applicationStartLock = new object();
+		private static bool _applicationStarted;
+		private readonly Action _configureLogging;
+		private readonly Func<Exception> _getServerError;
+		private readonly Log4NetLogger _log4NetLogger;
 
-		public void Dispose()
+		public Log4NetModule()
+			: this(configureLogging,
+				() => HttpContext.Current.Server.GetLastError(), 
+				new Log4NetLogger(LogManager.GetLogger(typeof(Log4NetModule))))
 		{
 		}
+
+		public Log4NetModule(Action configureLogging, Func<Exception> getServerError, Log4NetLogger log4NetLogger)
+		{
+			_configureLogging = configureLogging;
+			_getServerError = getServerError;
+			_log4NetLogger = log4NetLogger;
+		}
+
 
 		public void Init(HttpApplication application)
 		{
@@ -33,15 +49,12 @@ namespace Teleopti.Ccc.Web.Core.Logging
 			// this will run on every HttpApplication initialization in the application pool
 			OnInit(application);
 		}
-
-		private readonly ILog _logger;
-		private readonly Action _configureLogging;
-		private readonly Func<Exception> _getServerError;
-		public const string LogMessageException = "Log4NetModule caught an unhandled exception";
-		public const string LogMessage404 = "A 404 occurred";
-
-		public Log4NetModule() : this(LogManager.GetLogger(typeof(Log4NetModule)), configureLogging, () => HttpContext.Current.Server.GetLastError()) { }
-
+		
+		public void OnStart(HttpApplication application)
+		{
+			_configureLogging.Invoke();
+		}
+		
 		private static void configureLogging()
 		{
 			var logName = "WebApps";
@@ -64,41 +77,16 @@ namespace Teleopti.Ccc.Web.Core.Logging
 
 			XmlConfigurator.Configure();
 		}
-
-		public Log4NetModule(ILog logger, Action configureLogging, Func<Exception> getServerError)
-		{
-			_logger = logger;
-			_configureLogging = configureLogging;
-			_getServerError = getServerError;
-		}
-
-		public void OnStart(HttpApplication application)
-		{
-			_configureLogging.Invoke();
-		}
-
+		
 		public void OnInit(HttpApplication application)
 		{
 			application.Error += Application_Error;
 		}
 
-		public void Application_Error(object sender, EventArgs e) { LogException(_getServerError.Invoke()); }
-
-		private void LogException(Exception exception)
+		public void Application_Error(object sender, EventArgs e) { _log4NetLogger.LogException(_getServerError.Invoke()); }
+		
+		public void Dispose()
 		{
-			var innerMostException = GetInnerMostException(exception);
-
-			if (innerMostException is HttpException && ((HttpException) innerMostException).GetHttpCode() == 404)
-				_logger.Warn(LogMessage404, innerMostException);
-			else
-				_logger.Error(LogMessageException, innerMostException);
-		}
-
-		private static Exception GetInnerMostException(Exception exception)
-		{
-			while (exception.InnerException != null)
-				exception = exception.InnerException;
-			return exception;
 		}
 	}
 }

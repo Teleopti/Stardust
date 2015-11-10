@@ -11,6 +11,7 @@ using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
+using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
 
@@ -22,12 +23,14 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private readonly IErrorMessageProvider _errorMessageProvider;
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly IIdentityProviderProvider _identityProviderProvider;
+		private readonly Log4NetLogger _log4NetLogger;
 
-		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider)
+		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider, Log4NetLogger log4NetLogger)
 		{
 			_errorMessageProvider = errorMessageProvider;
 			_authenticationModule = authenticationModule;
 			_identityProviderProvider = identityProviderProvider;
+			_log4NetLogger = log4NetLogger;
 		}
 
 		public Task Execute(IAppBuilder application)
@@ -38,6 +41,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
+			filters.Add(new Log4NetMvCLogger(_log4NetLogger));
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, new List<Type>
 			{

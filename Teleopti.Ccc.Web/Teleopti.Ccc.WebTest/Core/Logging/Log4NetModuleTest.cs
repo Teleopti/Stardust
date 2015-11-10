@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		{
 			var configured = false;
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
-			var target = new Log4NetModule(null, () =>
+			var target = new Log4NetModule(() =>
 			{
 				configured = true;
-			}, null);
+			}, null, null);
 
 			target.Init(httpApplication);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		public void ShouldRegisterEventHandler()
 		{
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
-			var target = new Log4NetModule(null, () => { }, null);
+			var target = new Log4NetModule(() => { }, null, null);
 
 			target.Init(httpApplication);
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		{
 			var exception = new Exception();
 			var logger = MockRepository.GenerateMock<ILog>();
-			var target = new Log4NetModule(logger, null, () => exception);
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
 
 			target.Application_Error(null, null);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		{
 			var exception = new Exception(null, new Exception(null, new Exception()));
 			var logger = MockRepository.GenerateMock<ILog>();
-			var target = new Log4NetModule(logger, null, () => exception);
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
 
 			target.Application_Error(null, null);
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		{
 			var exception = new HttpException(404, null);
 			var logger = MockRepository.GenerateMock<ILog>();
-			var target = new Log4NetModule(logger, null, () => exception);
+			var target = new Log4NetModule(null, () => exception, new Log4NetLogger(logger));
 
 			target.Application_Error(null, null);
 

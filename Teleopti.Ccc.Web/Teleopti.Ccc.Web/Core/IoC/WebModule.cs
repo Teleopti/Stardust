@@ -36,6 +36,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Hangfire;
+using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -151,6 +152,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<ResourceVersion>().As<IResourceVersion>();
 			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
+			builder.RegisterType<Log4NetLogger>().AsSelf();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();
 			builder.RegisterType<DefaultScenarioScheduleProvider>().As<IScheduleProvider>();
 			builder.RegisterType<DefaultScenarioForStudentAvailabilityScheduleProvider>()
