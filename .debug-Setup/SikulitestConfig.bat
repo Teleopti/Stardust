@@ -39,11 +39,8 @@ cd %ROOTDIR%\.debug-setup\
 call FixMyConfig.bat %CCC7DB% %AnalyticsDB% %configuration%
 
 ECHO Restart iis express ...
-timeout 5
-taskkill /F /IM iisexpress.exe
-timeout 5
-cd "c:\Program Files\IIS Express\"
-start iisexpress /AppPool:Clr4IntegratedAppPool
+cd %ROOTDIR%\.debug-setup\iisexpress\
+call RestartIISExpress.bat
 
 ENDLOCAL
 GOTO:EOF
