@@ -179,31 +179,27 @@ wfm.config([
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
-		}
+		};
 
-		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
-			if (!currentUserInfo.isConnected()){
-				event.preventDefault();
-				currentUserInfo.initContext().then(function () {
-					$state.go(next, toParams);
+		function refreshContext(event, next, toParams) {
+			currentUserInfo.initContext().then(function () {
+				$rootScope.isAuthenticated = true; 
+				$translate.fallbackLanguage('en');
+
+				$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+					HelpService.updateState($state.current.name);
 				});
-			}
-		});
+				$state.go(next, toParams);
+			});
+		};
 
 		broadcastEventOnToggle();
 
-		var startContext = currentUserInfo.initContext();
-		startContext.then(function (data) {
-			$rootScope.isAuthenticated = true; // could it be somewhere else than in rootscope ?
-			$translate.fallbackLanguage('en');
-
-			var ab1 = new ABmetrics();
-			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
-			$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
-				ab1.sendPageView();
-				HelpService.updateState($state.current.name);
-			});
-
+		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+			if (!currentUserInfo.isConnected()) {
+				event.preventDefault();
+				refreshContext(event, next, toParams);
+			}
 		});
 	}
 ]);

@@ -12,7 +12,7 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService',
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 
 			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService) {
 				var userName;
 				var defaultTimeZone;
@@ -48,8 +48,8 @@
 					context.success(function (data) {
 						timeout = Date.now() + 10000;
 						wfmI18nService.setLocales(data);
-					service.SetCurrentUserInfo(data);
-					BusinessUnitsService.initBusinessUnit();
+						service.SetCurrentUserInfo(data);
+						BusinessUnitsService.initBusinessUnit();
 						deferred.resolve(data);
 					});
 					return deferred.promise;
@@ -67,9 +67,8 @@
 						document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
 					}
 					timeout = Date.now();
-
 					$sessionStorage.$reset();
-					window.location = 'Authentication';
+					window.location.href = 'Authentication';
 				};
 
 				return service;
