@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using log4net;
 using NHibernate.Connection;
@@ -19,8 +20,14 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
     public class TeleoptiDriverConnectionProvider : DriverConnectionProvider
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TeleoptiDriverConnectionProvider));
+		private Action _delayAction = ()=>Thread.Sleep(TimeSpan.FromSeconds(3));
 
         public const int NumberOfRetries = 3;
+
+	    public void SetDelayAction(Action delayAction)
+	    {
+		    _delayAction = delayAction;
+	    }
 
         public override IDbConnection GetConnection()
         {
@@ -38,6 +45,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 						  SqlConnection.ClearAllPools();
                     if (counter >= NumberOfRetries)
                         throw new DataSourceException("Failed to get connection (" + counter + ").", e);
+
+	                _delayAction();
                 }
             } while (true);
         }
