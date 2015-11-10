@@ -106,5 +106,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveDayOffs);
 		}
+
+		[Test]
+		public void ShouldUseExplicitFilterWhenDefaultFilterExists()
+		{
+			DayOffRulesRepository.Add(DayOffRules.CreateDefault());
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var dayOffRules = new DayOffRules { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
+			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
+			DayOffRulesRepository.Add(dayOffRules);
+			
+			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+				.Should().Be.EqualTo(new MinMax<int>(6, 7));
+		}
 	}
 }

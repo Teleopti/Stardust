@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool IsValidForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return _filters.Any(filter => filter.IsValidFor(person, dateOnly));
+			return Default || _filters.Any(filter => filter.IsValidFor(person, dateOnly));
 		}
 	}
 }
