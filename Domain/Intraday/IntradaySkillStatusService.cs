@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					new SkillStatusMeasure()
 					{
-						Name = "Calls", StringValue = "No actual data found.", Severity = 0, Value = 0, LatestDate = DateTime.MinValue
+						Name = "Calls", StringValue = "No actual data found", Severity = 0, Value = 0, LatestDate = DateTime.MinValue
 					}
 				},
 				Severity = 0, SkillName = task.SkillName
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 				var relativeDifference = forecastedSum - actualSum;
 				var message = "Below threshold";
-				if (relativeDifference > -100)
+				if (relativeDifference < -100)
 				{
 					message = "Exceeds threshold";
 				}
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					if (skillStatus.SkillName == item.SkillName)
 					{
-						//var lastestDataDate = item.IntervalTasks.Max(u => u.IntervalStart);
 						skillStatus.Measures = new List<SkillStatusMeasure>
 						{
 							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(relativeDifference), Severity = 1, StringValue = message, LatestDate = maxIntervalForSkill,ActualCalls = actualSum,ForecastedCalls = Math.Round(forecastedSum)}
