@@ -1,13 +1,7 @@
 .rta-header {
 				margin-bottom: 10px;
 }
-.rta-search {
-				padding: 10px 0;
-				input {
-								width: 15%!important;
-								height: 23px;
-				}
-}
+
 .rta-config {
 				display: inline-flex;
 }
@@ -17,9 +11,14 @@
 				cursor: pointer;
 				&:hover {
 								transition: background 0.5s linear 0s;
-								background-color: rgba(0,0,0,.06)!important;
+								background-color: $green-100!important;
 				}
 }
+
+.checked{
+		background-color: $green-100!important;
+}
+
 .rta-stats {
 				justify-content: space-between;
 }
@@ -56,6 +55,18 @@
 				margin-top: 10px;
 				width: 100%;
 }
+///////////rta-agents///////////////////////
+.rta-agents-input{
+			  display: inline-flex;
+			  width:100%;
+}
+.rta-search {
+				padding: 10px 0;
+				input {
+								width: 15%!important;
+								height: 23px;
+				}
+}
 .agent-row {
 				cursor: pointer;
 }
@@ -65,12 +76,14 @@
 .agent-menu {
 				position: absolute;
 				margin-top: 30px;
-				padding: 5px;
+				padding: 15px;
 				width: 100%;
 }
 .agent-menu > a {
 				margin-right: 5%;
 }
+
+///////////End of rta-agents///////////////////////
 
 ///////////rta-agent-details///////////////
 .rta-agent-details {
@@ -82,7 +95,7 @@
 				width: 100%;
 }
 .rta-agent-details-total {
-			margin-left: 78%;
+				margin-left: 78%;
 }
 .rta-agent-details-planned {
 				text-align: center;

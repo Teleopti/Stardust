@@ -1,12 +1,62 @@
-﻿<div class="row">
+<div class="row">
     <div class="col-lg-12">
 		<h3>Agents</h3>
 		<div ng-if="siteName && teamName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <a href="{{goBackToTeamsWithUrl()}}"class="rta-nav-link">{{siteName}}</a> / <span>{{teamName}}</span></div>
 		<div ng-if="multipleSitesName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleSitesName}}</span></div>
 		<div ng-if="multipleTeamsName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleTeamsName}}</span></div>
+      <div class="rta-agents-input">
         <div class="input-prepend rta-search">
-        <i class="mdi mdi-magnify"></i>
-        <input type="text" placeholder="{{'Search'|translate}}..." ng-model="filterText" ng-change="filterData()">
+          <i class="mdi mdi-magnify"></i>
+          <input type="text" placeholder="{{'Search'|translate}}..." ng-model="filterText" ng-change="filterData()">
+        </div>
+        <div ng-cloak class="modal-box">
+	<button ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-primary">Options</button>
+	<div ng-cloak ng-show="modalLaunch1">
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Real time adherence options
+				</div>
+				<div class="modal-inner-content">
+          <div class="wfm-checkbox">
+	<input type="checkbox" id="check1" checked="true"/>
+	<label for="check1">
+		<span class="wfm-checkbox-toggle"></span>
+		<span class="wfm-checkbox-label">isAlarm</span>
+	</label>
+</div>
+<div class="wfm-checkbox">
+	<input type="checkbox" id="check2" />
+	<label for="check2">
+		<span class="wfm-checkbox-toggle"></span>
+		<span class="wfm-checkbox-label">Show only agents out of adherence</span>
+	</label>
+</div>
+<div class="wfm-checkbox">
+	<input type="checkbox" id="check3" />
+	<label for="check3">
+		<span class="wfm-checkbox-toggle"></span>
+		<span class="wfm-checkbox-label">Show agents with heighest proper alarm time</span>
+	</label>
+</div>
+<div class="wfm-checkbox">
+	<input type="checkbox" id="check4" />
+	<label for="check4">
+		<span class="wfm-checkbox-toggle"></span>
+		<span class="wfm-checkbox-label">Show all agents</span>
+	</label>
+</div>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-invis-default">Cancel</a>
+						<a ng-click="modalLaunch1 = !modalLaunch1"  class="wfm-btn wfm-btn-invis-primary">Accept</a>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
       </div>
     <div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
     </div>
