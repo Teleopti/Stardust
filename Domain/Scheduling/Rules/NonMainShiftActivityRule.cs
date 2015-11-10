@@ -101,6 +101,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isOverSchedule(DateTimePeriod period, IList<IShiftLayer> layers)
 		{
+			if (layers.Count == 0) return true;
+
 			var maxPeriod = new DateTimePeriod( layers.Min(p => p.Period.StartDateTime) , layers.Max(p=>p.Period.EndDateTime));
 			if (period.EndDateTime <= maxPeriod.StartDateTime || period.StartDateTime >= maxPeriod.EndDateTime) return true;
 
