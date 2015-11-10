@@ -1,5 +1,7 @@
+SET THISDIR=%~dp0\
+SET IISExpressStartFolder="c:\Program Files\IIS Express\"
 timeout 3
-cd "c:\Program Files\IIS Express\"
+cd %IISExpressStartFolder%
 taskkill /F /IM iisexpress.exe
 timeout 3
-start iisexpress /config:c:\temp\IISExpress\SikuliApplicationhost.config /AppPool:Clr4IntegratedAppPool
+start iisexpress /config:%THISDIR%SikuliApplicationhost.config /AppPool:Clr4IntegratedAppPool
