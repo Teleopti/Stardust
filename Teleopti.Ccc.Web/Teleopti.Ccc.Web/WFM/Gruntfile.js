@@ -87,6 +87,70 @@
 				}
 			}
 		},
+		concat: {
+			distJs: {
+				src: [
+				'node_modules/angular/angular.min.js',
+				'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+				'node_modules/angular-resource/angular-resource.min.js',
+				'node_modules/angular-sanitize/angular-sanitize.min.js',
+				'node_modules/angular-translate/dist/angular-translate.min.js',
+				'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
+				'node_modules/angular-dynamic-locale/tmhDynamicLocale.min.js',
+				'node_modules/moment/min/moment-with-locales.min.js',
+				'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
+				'node_modules/angular-moment/angular-moment.min.js',
+				'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
+				'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
+				'node_modules/angular-ui-grid/ui-grid.min.js',
+				'node_modules/angular-ui-indeterminate/dist/indeterminate.min.js',
+				'node_modules/ngstorage/ngStorage.min.js',
+				'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
+				'node_modules/angular-aria/angular-aria.min.js',
+				'node_modules/angular-animate/angular-animate.min.js',
+				'node_modules/angular-gantt/assets/angular-gantt.js',
+				'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
+				'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
+				'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
+				'node_modules/filesaver.js/FileSaver.min.js',
+				'node_modules/jquery/dist/jquery.min.js',
+				'node_modules/ms-signalr-client/jquery.signalr-2.2.0.min.js',
+				'node_modules/angular-signalr-hub/signalr-hub.min.js',
+				'vendor/hammerjs/hammer.min.js',
+				'node_modules/angular-material/angular-material.min.js',
+				'js/ABmetrics.min.js',
+				'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
+				'vendor/angular-growl.js',
+				'vendor/fabricjs/fabric.min.js',
+				'vendor/fabricjs/fabricjs_viewport.js',
+				'vendor/ng-mfb/mfb.directive.js',
+				'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
+				'vendor/d3/d3.min.js',
+				'vendor/c3/c3.min.js',
+				'vendor/c3/c3-angular.min.js',
+				'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
+				'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
+				'vendor/uigrid.directive.ext.js'
+				],
+				dest: 'dist/modules.js',
+		    },
+			distCss: {
+				src: [
+					'node_modules/bootstrap/dist/css/bootstrap.min.css',
+					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
+					'node_modules/angular-ui-grid/ui-grid.min.css',
+					'node_modules/angular-material/angular-material.min.css',
+					'vendor/c3/c3.min.css',
+					'vendor/ng-mfb/mfb.css',
+					'node_modules/angular-gantt/assets/angular-gantt.css',
+					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
+					'node_modules/teleopti-styleguide/css/main.min.css'
+				],
+				dest: 'dist/modules.css',
+			},
+		},
 
 		uglify: {
 			dist: {
@@ -125,14 +189,16 @@
 	grunt.loadNpmTasks('grunt-iisexpress');
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 
 	// Default task(s).
-	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('default', ['dist','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
-	grunt.registerTask('devTest',['ngtemplates','karma:dev']);
+	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['dist','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
+
 
 };
