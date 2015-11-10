@@ -18,15 +18,15 @@
 			};
 
 			this.urlForAgentDetails = function(personId) {
-				return "/wfm/#/rta/agent-details/" + personId;
+				return "#/rta/agent-details/" + personId;
 			};
 
 			this.urlForSites = function(){
-				return '/wfm/#/rta';
+				return '#/rta';
 			};
 
 			this.urlForTeams = function(siteId){
-				return '/wfm/#/rta/teams/' + siteId;
+				return '#/rta/teams/' + siteId;
 			};
 
 		}
