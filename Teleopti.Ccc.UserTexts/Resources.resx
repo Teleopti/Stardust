@@ -13523,4 +13523,96 @@ Reduce the complexity to use these shifts.</value>
     <value>Seasonality</value>
     <comment>Handle fluctuation that extends over more than one schedule period</comment>
   </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Clear Background Image</value>
+    <comment>Used in Seat Map menu "Clear Background Image"</comment>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+    <comment>Used in Seat Map menu "Add-&gt; Image"</comment>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Seat</value>
+    <comment>Used in Seat Map menu "Add-&gt; Seat"</comment>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Set Background Image</value>
+    <comment>Used in Seat Map menu "Set Background Image"</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+    <comment>Used in Seat Map menu "Add-&gt; Text"</comment>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Align Bottom</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Align Left</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Align Right</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Align Top</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Bring to Front</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+    <comment>Create</comment>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Dismiss</value>
+    <comment>Dismiss</comment>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Flip Selected Items Horizontally</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>Flip Selected Items Vertically</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Group Selected Items</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Move Back</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Move Forwards</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Rotate</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Send to Back</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Space Selected Items Horizontally</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Space Selected Items Vertically</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
+  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
+    <value>Undo changes and revert to last save</value>
+    <comment>Used in the seat map editor</comment>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Ungroup Items</value>
+    <comment>Used in the seat map editor toolbar (tooltip)</comment>
+  </data>
 </root>

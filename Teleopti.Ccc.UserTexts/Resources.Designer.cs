@@ -1826,6 +1826,42 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align Bottom.
+        /// </summary>
+        public static string AlignBottom {
+            get {
+                return ResourceManager.GetString("AlignBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align Left.
+        /// </summary>
+        public static string AlignLeft {
+            get {
+                return ResourceManager.GetString("AlignLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align Right.
+        /// </summary>
+        public static string AlignRight {
+            get {
+                return ResourceManager.GetString("AlignRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align Top.
+        /// </summary>
+        public static string AlignTop {
+            get {
+                return ResourceManager.GetString("AlignTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string All {
@@ -3648,6 +3684,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bring to Front.
+        /// </summary>
+        public static string BringToFront {
+            get {
+                return ResourceManager.GetString("BringToFront", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Browse.
         /// </summary>
         public static string Browse {
@@ -5156,6 +5201,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Background Image.
+        /// </summary>
+        public static string ClearBackgroundImage {
+            get {
+                return ResourceManager.GetString("ClearBackgroundImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clip  Absence.
         /// </summary>
         public static string ClipAbsence {
@@ -5945,6 +5999,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Count {
             get {
                 return ResourceManager.GetString("Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
             }
         }
         
@@ -7794,6 +7857,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DifferencePercent {
             get {
                 return ResourceManager.GetString("DifferencePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismiss.
+        /// </summary>
+        public static string Dismiss {
+            get {
+                return ResourceManager.GetString("Dismiss", resourceCulture);
             }
         }
         
@@ -10004,6 +10076,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flip Selected Items Horizontally.
+        /// </summary>
+        public static string FlipItemHorizontally {
+            get {
+                return ResourceManager.GetString("FlipItemHorizontally", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flip Selected Items Vertically.
+        /// </summary>
+        public static string FlipItemVertically {
+            get {
+                return ResourceManager.GetString("FlipItemVertically", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Follow up.
         /// </summary>
         public static string FollowUp {
@@ -10958,6 +11048,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Group Selected Items.
+        /// </summary>
+        public static string GroupSelectedItems {
+            get {
+                return ResourceManager.GetString("GroupSelectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group states.
         /// </summary>
         public static string GroupStates {
@@ -11350,6 +11449,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IllegalTimeInput {
             get {
                 return ResourceManager.GetString("IllegalTimeInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        public static string Image {
+            get {
+                return ResourceManager.GetString("Image", resourceCulture);
             }
         }
         
@@ -14812,6 +14920,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Back.
+        /// </summary>
+        public static string MoveBack {
+            get {
+                return ResourceManager.GetString("MoveBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimize:.
         /// </summary>
         public static string MoveColon {
@@ -14844,6 +14961,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MoveEndOneIntervalLater {
             get {
                 return ResourceManager.GetString("MoveEndOneIntervalLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Forwards.
+        /// </summary>
+        public static string MoveForwards {
+            get {
+                return ResourceManager.GetString("MoveForwards", resourceCulture);
             }
         }
         
@@ -22135,6 +22261,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rotate.
+        /// </summary>
+        public static string Rotate {
+            get {
+                return ResourceManager.GetString("Rotate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotation.
         /// </summary>
         public static string Rotation {
@@ -23270,6 +23405,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seat.
+        /// </summary>
+        public static string Seat {
+            get {
+                return ResourceManager.GetString("Seat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The booking of seat	{0}  for {1} was deleted.
         /// </summary>
         public static string SeatBookingDeletedSuccessfully {
@@ -24023,6 +24167,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send to Back.
+        /// </summary>
+        public static string SendToBack {
+            get {
+                return ResourceManager.GetString("SendToBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seniority.
         /// </summary>
         public static string Seniority {
@@ -24190,6 +24343,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetAsDefaultStateGroup {
             get {
                 return ResourceManager.GetString("SetAsDefaultStateGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Background Image.
+        /// </summary>
+        public static string SetBackgroundImage {
+            get {
+                return ResourceManager.GetString("SetBackgroundImage", resourceCulture);
             }
         }
         
@@ -25898,6 +26060,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Space Selected Items Horizontally.
+        /// </summary>
+        public static string SpaceHorizontally {
+            get {
+                return ResourceManager.GetString("SpaceHorizontally", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Space Selected Items Vertically.
+        /// </summary>
+        public static string SpaceVertically {
+            get {
+                return ResourceManager.GetString("SpaceVertically", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Special events.
         /// </summary>
         public static string SpecialEvents {
@@ -27141,6 +27321,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Answer.
         /// </summary>
         public static string TextAnswer {
@@ -28222,6 +28411,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Undo changes and revert to last save.
+        /// </summary>
+        public static string UndoChangesAndRevertToLastSave {
+            get {
+                return ResourceManager.GetString("UndoChangesAndRevertToLastSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedules deleted.
         /// </summary>
         public static string UndoRedoDeleteSchedules {
@@ -28263,6 +28461,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UndoRedoScheduling {
             get {
                 return ResourceManager.GetString("UndoRedoScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ungroup Items.
+        /// </summary>
+        public static string UngroupItems {
+            get {
+                return ResourceManager.GetString("UngroupItems", resourceCulture);
             }
         }
         

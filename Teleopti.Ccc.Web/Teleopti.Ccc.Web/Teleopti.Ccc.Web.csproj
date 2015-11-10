@@ -1266,7 +1266,6 @@
     <Content Include="WFM\js\rta\rta.route.service.js" />
     <Content Include="WFM\js\seatManagement\html\rightpanel.html" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
-    <Content Include="WFM\js\seatManagement\keyboardshortcut.filter.js" />
     <Content Include="WFM\js\seatManagement\peopleselection.directive.js" />
     <Content Include="WFM\js\seatManagement\rightpanel.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />

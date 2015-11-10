@@ -8,40 +8,42 @@
 						<md-menu-bar>
 							<md-menu>
 								<button ng-click="$mdOpenMenu()" id="menuFile">
-									File
+									{{'FileProperCase' | translate}}
 								</button>
 								<md-menu-content>
 
 									<md-menu-item>
 										<md-menu>
-											<md-button ng-click="$mdOpenMenu()" id="menuFileAdd">Add</md-button>
+											<md-button ng-click="$mdOpenMenu()" id="menuFileAdd">{{'Add' | translate}}</md-button>
 											<md-menu-content>
 												<md-menu-item class="md-indent">
 													<md-button ng-click="vm.addSeat()" id="menuFileAddSeat">
 														<i class="mdi mdi-chair-school menu-icon"></i>
-														Seat
-														<!--<span class="md-alt-text">{{ 'A-S' | keyboardShortcut }}</span>-->
+														{{'Seat' | translate}}
+														<span class="md-alt-text">Alt + S</span>
+														
 													</md-button>
 												</md-menu-item>
 												<md-menu-item class="md-indent">
 													<md-button ng-click="vm.addLocation()" id="menuFileAddLocation">
 														<i class="mdi mdi-tab-unselected menu-icon"></i>
-														Location...
-														<!--<span class="md-alt-text">{{ 'A-L' | keyboardShortcut }}</span>-->
+														{{'Location' |translate}}...
+														<span class="md-alt-text">Alt + L</span>
 													</md-button>
 												</md-menu-item>
 												<md-menu-item class="md-indent">
 													<md-button ng-click="vm.addImage()">
 														<i class="mdi mdi-file-image menu-icon"></i>
-														Image...
-														<!--<span class="md-alt-text">{{ 'A-I' | keyboardShortcut }}</span>-->
+														{{'Image' | translate}}...
+														<span class="md-alt-text">Alt + I</span>
+														
 													</md-button>
 												</md-menu-item>
 												<md-menu-item class="md-indent">
 													<md-button ng-click="vm.addText()">
 														<i class="mdi mdi-tooltip-text menu-icon"></i>
-														Text
-														<!--<span class="md-alt-text">{{ 'A-T' | keyboardShortcut }}</span>-->
+														{{'Text' | translate}}
+														<span class="md-alt-text">Alt + T</span>
 													</md-button>
 												</md-menu-item>
 											</md-menu-content>
@@ -52,13 +54,13 @@
 
 									<md-menu-item>
 										<md-button ng-click="vm.setBackgroundImage()">
-											Set Background Image...
+											{{'SetBackgroundImage' | translate}}...
 										</md-button>
 									</md-menu-item>
 									
 									<md-menu-item>
 										<md-button ng-click="vm.clearBackgroundImage()">
-											Clear Background Image
+											{{'ClearBackgroundImage' | translate}}
 										</md-button>
 									</md-menu-item>
 									
@@ -66,7 +68,7 @@
 
 									<md-menu-item>
 										<md-button ng-click="vm.save()" ng-disabled="!vm.hasChanges()">
-											Save
+											{{'Save' | translate}}
 											<span class="md-alt-text">Ctrl+S</span>
 										</md-button>
 									</md-menu-item>
@@ -76,14 +78,14 @@
 							</md-menu>
 							<md-menu>
 								<button ng-click="$mdOpenMenu()">
-									Edit
+									{{'Edit' | translate}}
 								</button>
 								<md-menu-content>
 									
 									<md-menu-item class="md-indent">
 										<md-button ng-click="vm.refreshSeatMap()" ng-disabled="!vm.hasChanges()">
 											<i class="mdi mdi-undo menu-icon"></i>
-											Undo and revert to last Save
+											{{'UndoChangesAndRevertToLastSave' | translate}}
 										</md-button>
 									</md-menu-item>
 
@@ -92,24 +94,16 @@
 									<md-menu-item class="md-indent">
 										<md-button ng-click="vm.delete()" ng-disabled="!vm.hasObjectSelected()">
 											<i class="mdi mdi-delete menu-icon"></i>
-											Delete
+											{{'Delete' | translate}}
 											<span class="md-alt-text">DEL</span>
 										</md-button>
 									</md-menu-item>
 
 									<md-menu-item class="md-indent">
-										<md-button ng-click="vm.delete()" ng-disabled="!vm.hasObjectSelected()">
-											<i class="mdi mdi-content-cut menu-icon"></i>
-											Cut
-											<span class="md-alt-text"><!--{{ 'M-O' | keyboardShortcut }}--></span>
-
-										</md-button>
-									</md-menu-item>
-									<md-menu-item class="md-indent">
 										<md-button ng-click="vm.copy()" ng-disabled="!vm.hasObjectSelected()">
 											<i class="mdi mdi-content-copy menu-icon"></i>
-											Copy
-											<span class="md-alt-text"><!--{{ 'M-C' | keyboardShortcut }}--></span>
+											{{'Copy' | translate}}
+											<span class="md-alt-text">Ctrl + C</span>
 										</md-button>
 
 									</md-menu-item>
@@ -117,16 +111,16 @@
 
 										<md-button ng-click="vm.paste()" >
 											<i class="mdi mdi-content-paste menu-icon"></i>
-											Paste
-											<!--<span class="md-alt-text">{{ 'M-V' | keyboardShortcut }}</span>-->
+											{{'Paste' | translate}}
+											<span class="md-alt-text">Ctrl + V</span>
 										</md-button>
 									</md-menu-item>
 									<md-menu-divider></md-menu-divider>
 									<md-menu-item class="md-indent">
 										<md-button ng-click="vm.showProperties()" ng-disabled="!vm.hasObjectSelected()">
 											<i class="mdi mdi-pencil menu-icon"></i>
-											Properties...
-											<!--<span class="md-alt-text">{{ 'A-P' | keyboardShortcut }}</span>-->
+											{{'Properties' | translate}}...
+											<span class="md-alt-text">Alt + P</span>
 										</md-button>
 									</md-menu-item>
 								</md-menu-content>
@@ -142,7 +136,7 @@
 			<button class="wfm-btn wfm-btn-primary" ng-click="vm.save()" ng-class="{'wfm-btn-primary-disabled': !vm.hasChanges()}">
 				<i class="mdi small mdi-content-save"></i>
 				<md-tooltip>
-					Save
+					{{'Save' | translate}}
 				</md-tooltip>
 			</button>
 
@@ -152,7 +146,7 @@
 					<i class="mdi small "></i>
 				</div>
 				<md-tooltip>
-					Group Selected Items
+					{{'GroupSelectedItems' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.ungroup()">
@@ -160,85 +154,85 @@
 					<i class="mdi small "></i>
 				</div>
 				<md-tooltip>
-					Ungroup Items
+					{{'UngroupItems' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.sendToBack()">
 				<i class="mdi small mdi-arrange-send-to-back"></i>
 				<md-tooltip>
-					Send to Back
+					{{'SendToBack' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.sendBackward()">
 				<i class="mdi small mdi-arrange-send-backward "></i>
 				<md-tooltip>
-					Move Back
+					{{'MoveBack' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.bringForward()">
 				<i class="mdi small mdi-arrange-bring-forward"></i>
 				<md-tooltip>
-					Move Forwards
+					{{'MoveForwards' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.bringToFront()">
 				<i class="mdi small mdi-arrange-bring-to-front "></i>
 				<md-tooltip>
-					Bring to Front
+					{{'BringToFront' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignLeft()">
 				<i class="mdi small mdi-format-align-left"></i>
 				<md-tooltip>
-					Align Left
+					{{'AlignLeft' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignRight()">
 				<i class="mdi small mdi-format-align-right "></i>
 				<md-tooltip>
-					Align Right
+					{{'AlignRight' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignTop()">
 				<i class="mdi small mdi-format-align-left" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 				<md-tooltip>
-					Align Top
+					{{'AlignTop' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignBottom()">
 				<i class="mdi small mdi-format-align-right" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 				<md-tooltip>
-					Align Bottom
+					{{'AlignBottom' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.rotate45()">
 				<i class="mdi small mdi-rotate-right"></i>
 				<md-tooltip>
-					Rotate
+					{{'Rotate' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupVertical()">
 				<i class="mdi small  mdi-unfold-more"></i>
 				<md-tooltip>
-					Space Vertically
+					{{'SpaceVertically' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupHorizontal()">
 				<i class="mdi small  mdi-unfold-more" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 				<md-tooltip>
-					Space Horizontally
+					{{'SpaceHorizontally' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.flip(true)">
 				<i class="mdi small mdi-swap-horizontal"></i>
 				<md-tooltip>
-					Flip Horizontally
+					{{'FlipItemHorizontally' | translate}}
 				</md-tooltip>
 			</button>
 			<button class="wfm-btn wfm-btn-default" ng-click="vm.flip(false)">
 				<i class="mdi small mdi-swap-vertical"></i>
 				<md-tooltip>
-					Flip Vertically
+					{{'FlipItemVertically' | translate}}
 				</md-tooltip>
 			</button>
 		</div>
@@ -253,13 +247,13 @@
 					</div>
 					<div class="modal-inner-content">
 						<br />
-						<input type="text" id="locationName" ng-model="vm.newLocationName" placeholder="Name..." />
+						<input type="text" id="locationName" ng-model="vm.newLocationName" placeholder="{{'Name' | translate}}..." />
 						<br />
 					</div>
 					<div class="modal-footer">
 						<aside>
-							<a ng-click="vm.showLocationDialog = false" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
-							<a id="okButton" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addNamedLocation()">CREATE</a>
+							<a ng-click="vm.showLocationDialog = false" class="wfm-btn wfm-btn-invis-primary">{{'Dismiss' | translate}}</a>
+							<a id="okButton" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addNamedLocation()">{{'Create' | translate}}</a>
 						</aside>
 					</div>
 				</div>
