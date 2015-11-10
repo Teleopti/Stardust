@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.WebTest.Filters
 	[TestFixture]
 	public class AsyncTaskAttributeTest
 	{
-
 		private static void SetupDependencyResolver()
 		{
 			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
@@ -25,14 +24,14 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldExecuteTaskMethod()
 		{
-			var taskInvoked = new ManualResetEvent(false);
+			var taskInvoked = new ManualResetEventSlim(false);
 			SetupDependencyResolver();
 			var target = new AsyncTaskAttribute();
 			var filterTester = new FilterTester();
 			filterTester.UseController(new TestTaskController(c => taskInvoked.Set()));
 
 			filterTester.InvokeFilter(target);
-			var invoked = taskInvoked.WaitOne(TimeSpan.FromMinutes(1));
+			var invoked = taskInvoked.Wait(TimeSpan.FromMinutes(1));
 
 			invoked.Should().Be.True();
 		}
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldPutTaskInAsyncManagersParameters()
 		{
-			var taskInvoked = new ManualResetEvent(false);
+			var taskInvoked = new ManualResetEventSlim(false);
 			SetupDependencyResolver();
 			var target = new AsyncTaskAttribute();
 			var filterTester = new FilterTester();
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.UseController(controller);
 
 			filterTester.InvokeFilter(target);
-			var invoked = taskInvoked.WaitOne(TimeSpan.FromMinutes(1));
+			var invoked = taskInvoked.Wait(TimeSpan.FromMinutes(1));
 
 			invoked.Should().Be.True();
 			controller.AsyncManager.Parameters.Any(x => x.Key == "task").Should().Be.True();
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldCopyThreadCulture()
 		{
-			var taskInvoked = new ManualResetEvent(false);
+			var taskInvoked = new ManualResetEventSlim(false);
 			CultureInfo threadCulture = null;
 			CultureInfo threadUICulture = null;
 			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-GB");
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			                                                  	}));
 
 			filterTester.InvokeFilter(target);
-			taskInvoked.WaitOne();
+			taskInvoked.Wait();
 
 			threadCulture.Should().Be(CultureInfo.GetCultureInfo("en-GB"));
 			threadUICulture.Should().Be(CultureInfo.GetCultureInfo("fi-FI"));
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldCopyThreadPrincipal()
 		{
-			var taskInvoked = new ManualResetEvent(false);
+			var taskInvoked = new ManualResetEventSlim(false);
 			// this is actually done automatically. the same does not apply for culture though.
 			IPrincipal actual = null;
 			var expected = new TestPrincipal();
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			                                                  	}));
 
 			filterTester.InvokeFilter(target);
-			taskInvoked.WaitOne();
+			taskInvoked.Wait();
 
 			actual.Should().Be(expected);
 		}

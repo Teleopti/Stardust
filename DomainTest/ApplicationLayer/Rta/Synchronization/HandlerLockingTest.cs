@@ -1,17 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Context.SimulateRestart();
 			var initializeTask = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
 
-			Handler.EnteredHandler.WaitOne(TimeSpan.FromSeconds(1));
+			Handler.EnteredHandler.Wait(TimeSpan.FromSeconds(1));
 			var hangfireTask = Task.Factory.StartNew(() =>
 			{
 				using (DistributedLock.LockForTypeOf(Handler))
@@ -72,13 +69,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			IHandleEvent<PersonStateChangedEvent>,
 			IInitializeble
 		{
-			public ManualResetEvent EnteredHandler = new ManualResetEvent(false);
-			public ManualResetEvent ExitHandler = new ManualResetEvent(false);
+			public ManualResetEventSlim EnteredHandler = new ManualResetEventSlim(false);
+			public ManualResetEventSlim ExitHandler = new ManualResetEventSlim(false);
 
 			public void Handle(PersonStateChangedEvent @event)
 			{
 				EnteredHandler.Set();
-				ExitHandler.WaitOne();
+				ExitHandler.Wait();
 			}
 
 			public bool Initialized()

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
     {
         private AsyncCallback _asyncCallback;
         private object _state;
-        private ManualResetEvent _manualResetEvent;
+        private ManualResetEventSlim _manualResetEvent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncResult"/> class.
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         {
             _asyncCallback = callback;
             _state = state;
-            _manualResetEvent = new ManualResetEvent(false);
+            _manualResetEvent = new ManualResetEventSlim(false);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         /// </summary>
         public virtual void OnCompleted()
         {
-            if(!_manualResetEvent.SafeWaitHandle.IsClosed)
+            if(!_manualResetEvent.WaitHandle.SafeWaitHandle.IsClosed)
                 _manualResetEvent.Set();
             if (_asyncCallback != null)
             {
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         {
             get
             {
-                return _manualResetEvent;
+                return _manualResetEvent.WaitHandle;
             }
         }
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         {
             get
             {
-                return _manualResetEvent.WaitOne(0, false);
+                return _manualResetEvent.IsSet;
             }
         }
         #endregion IAsyncResult Members
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             {
                 if (disposing)
                 {
-                    _manualResetEvent.Close();
+                    _manualResetEvent.Dispose();
                     _manualResetEvent = null;
                     _state = null;
                     _asyncCallback = null;

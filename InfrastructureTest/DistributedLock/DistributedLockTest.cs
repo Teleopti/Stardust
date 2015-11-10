@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Test]
 		public void ShouldNotRunInParallelWhenLocked()
 		{
-			var oneRunning = new ManualResetEvent(false);
-			var twoRunning = new ManualResetEvent(false);
+			var oneRunning = new ManualResetEventSlim(false);
+			var twoRunning = new ManualResetEventSlim(false);
 			var twoRanWhileOneWasRunning = true;
 
 			var one = onAnotherThread(() =>
@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					oneRunning.Set();
-					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
+					twoRanWhileOneWasRunning = twoRunning.Wait(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			var two = onAnotherThread(() =>
 			{
-				oneRunning.WaitOne(TimeSpan.FromSeconds(1));
+				oneRunning.Wait(TimeSpan.FromSeconds(1));
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					twoRunning.Set();
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Test]
 		public void ShouldNotRunInParallelWhenLockedOnProxy()
 		{
-			var oneRunning = new ManualResetEvent(false);
-			var twoRunning = new ManualResetEvent(false);
+			var oneRunning = new ManualResetEventSlim(false);
+			var twoRunning = new ManualResetEventSlim(false);
 			var twoRanWhileOneWasRunning = true;
 
 			var one = onAnotherThread(() =>
@@ -64,12 +64,12 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(Lock1Proxy))
 				{
 					oneRunning.Set();
-					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
+					twoRanWhileOneWasRunning = twoRunning.Wait(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			var two = onAnotherThread(() =>
 			{
-				oneRunning.WaitOne(TimeSpan.FromSeconds(1));
+				oneRunning.Wait(TimeSpan.FromSeconds(1));
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					twoRunning.Set();
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Test]
 		public void ShouldCreateLockForEachType()
 		{
-			var oneRunning = new ManualResetEvent(false);
-			var twoRunning = new ManualResetEvent(false);
+			var oneRunning = new ManualResetEventSlim(false);
+			var twoRunning = new ManualResetEventSlim(false);
 			var twoRanWhileOneWasRunning = false;
 			var oneRanWhileTwoWasRunning = false;
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					oneRunning.Set();
-					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
+					twoRanWhileOneWasRunning = twoRunning.Wait(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			var two = onAnotherThread(() =>
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock2()))
 				{
 					twoRunning.Set();
-					oneRanWhileTwoWasRunning = oneRunning.WaitOne(TimeSpan.FromMilliseconds(500));
+					oneRanWhileTwoWasRunning = oneRunning.Wait(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			one.Join();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Setting("DistributedLockTimeout", 100)]
 		public void ShouldNotRunOnTimeout()
 		{
-			var isLocking = new ManualResetEvent(false);
+			var isLocking = new ManualResetEventSlim(false);
 			var ran = false;
 
 			var locking = onAnotherThread(() =>
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			});
 			var timingout = onAnotherThread(() =>
 			{
-				isLocking.WaitOne(TimeSpan.FromMilliseconds(500));
+				isLocking.Wait(TimeSpan.FromMilliseconds(500));
 				using (Target.LockForTypeOf(new Lock1()))
 					ran = true;
 			});
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Setting("DistributedLockTimeout", 100)]
 		public void ShouldThrowOnTimeout()
 		{
-			var isLocking = new ManualResetEvent(false);
+			var isLocking = new ManualResetEventSlim(false);
 
 			var locking = onAnotherThread(() =>
 			{
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			Exception exception = null;
 			var timingout = onAnotherThread(() =>
 			{
-				isLocking.WaitOne(TimeSpan.FromMilliseconds(500));
+				isLocking.Wait(TimeSpan.FromMilliseconds(500));
 				try
 				{
 					using (Target.LockForTypeOf(new Lock1()))

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win
         private string _body;
         private RecipientCollection _recipientCollection;
         private ArrayList _files;
-        private ManualResetEvent _manualResetEvent;
+        private ManualResetEventSlim _manualResetEvent;
 
         #endregion Member Variables
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win
         {
             _files = new ArrayList();
             _recipientCollection = new RecipientCollection();
-            _manualResetEvent = new ManualResetEvent(false);
+            _manualResetEvent = new ManualResetEventSlim(false);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
             // only return when the new thread has built it's interop representation
-            _manualResetEvent.WaitOne();
+            _manualResetEvent.Wait();
             _manualResetEvent.Reset();
         }
 
