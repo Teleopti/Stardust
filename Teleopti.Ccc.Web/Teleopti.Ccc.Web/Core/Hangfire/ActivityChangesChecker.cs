@@ -5,7 +5,6 @@ using System.Threading;
 using Hangfire.Server;
 using Hangfire.SqlServer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
@@ -34,6 +33,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly RtaTenants _tenants;
+		private TimeSpan _timeout = TimeSpan.FromMinutes(1);
 
 		public ActivityChangesChecker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta, 
@@ -46,12 +46,15 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 
 		public void Execute(CancellationToken cancellationToken)
 		{
+			if (_timeout.Equals(TimeSpan.MaxValue))
+				return;
 			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
-			cancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
+			cancellationToken.WaitHandle.WaitOne(_timeout);
 		}
 
 		public void ExecuteForTest()
 		{
+			_timeout = TimeSpan.MaxValue;
 			_tenants.ForAllTenants(t => _rta.CheckForActivityChanges(t));
 		}
 	}
