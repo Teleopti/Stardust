@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -263,7 +264,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwnerDay.TotalTasks; }
         }
 
-		public virtual double? OverrideTasks { get; set; }
+	    public virtual double? OverrideTasks
+	    {
+		    get { return null; }
+	    }	
+
+	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+	    {
+		    throw new NotImplementedException();
+	    }
 
 	    /// <summary>
         /// Gets the total average after task time.

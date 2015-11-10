@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			foreach (var workloadDay in days.Select(day => workloadDays.Single(x => x.CurrentDate == new DateOnly(day.Date))).Where(workloadDay => workloadDay.OpenForWork.IsOpen))
 			{
-				workloadDay.OverrideTasks = overrideTasks;
+				workloadDay.SetOverrideTasks(overrideTasks, null); 
 			}
 		}
 	}

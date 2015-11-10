@@ -105,12 +105,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 
 	    public virtual double? OverrideTasks
 	    {
-		    get { return _overrideTasks; }
-		    set
-		    {
-			    _overrideTasks = value;
-					OnTasksChanged();
-		    }
+		    get { return _overrideTasks; }		  
 	    }
 
 	    /// <summary>
@@ -644,7 +639,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             throw new NotImplementedException();
         }
 
-        /// <summary>
+	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+	    {
+			_overrideTasks = task;
+			OnTasksChanged();
+	    }
+
+	    /// <summary>
         /// Gets the total average after task time.
         /// </summary>
         /// <value>The total average after task time.</value>

@@ -964,13 +964,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void ShouldGiveExceptionWhenSettingOverrideTasksOnClosedDay()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.OverrideTasks = 1d;
+			_workloadDayBase.SetOverrideTasks(1d, null);
 		}
 
 		[Test]
 		public void ShouldSetOverrideTasks()
 		{
-			_workloadDayBase.OverrideTasks = 400d;
+			_workloadDayBase.SetOverrideTasks(400d, null);
 			Assert.AreEqual(Math.Round(_workloadDayBase.OverrideTasks.Value, 2), 400d);
 			Assert.AreEqual(_workloadDayBase.TotalTasks, 400d, 3);
 		}
@@ -978,7 +978,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void ShouldClearOverrideTasksWhenClosingDay()
 		{
-			_workloadDayBase.OverrideTasks = 400d;
+			_workloadDayBase.SetOverrideTasks(400d, null);
 			_workloadDayBase.Close();
 			Assert.AreEqual(null, _workloadDayBase.OverrideTasks);
 		}

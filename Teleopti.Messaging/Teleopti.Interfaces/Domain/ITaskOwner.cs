@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -21,7 +22,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double TotalTasks { get; }
 
-		double? OverrideTasks { get; set; }
+		double? OverrideTasks { get; }
+
+	    void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern);
+
         /// <summary>
         /// Gets the total average after task time.
         /// </summary>

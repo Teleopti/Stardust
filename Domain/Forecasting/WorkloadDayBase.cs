@@ -1059,22 +1059,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public virtual double? OverrideTasks
 	    {
 		    get { return _overrideTasks; }
-		    set
-		    {
-			    checkOpen();
-			    var currentState = _turnOffInternalRecalc;
-			    _turnOffInternalRecalc = true;
-			    ValueDistributor.DistributeOverrideTasks(value, _taskPeriodList);
-			    _overrideTasks = value;
-			    _turnOffInternalRecalc = currentState;
-
-					_recalculateDailyTasks();
-					_recalculateDailyAverageTimes();
-					_recalculateDailyCampaignTasks();
-					_recalculateDailyAverageCampaignTimes();
-
-					OnTasksChanged();
-		    }
 	    }
 
 
@@ -1632,6 +1616,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (!_workload.Equals(workload)) throw new ArgumentException("It must be an other instance of the same workload.");
             _workload = workload;
         }
+		
+	    public virtual void SetOverrideTasks(double? tasks, IEnumerable<ITaskOwner> pattern)
+	    {
+		    checkOpen();
+		    var currentState = _turnOffInternalRecalc;
+		    _turnOffInternalRecalc = true;
+			ValueDistributor.DistributeOverrideTasks(tasks, _taskPeriodList, pattern);
+		    _overrideTasks = tasks;
+		    _turnOffInternalRecalc = currentState;
+
+		    _recalculateDailyTasks();
+		    _recalculateDailyAverageTimes();
+		    _recalculateDailyCampaignTasks();
+		    _recalculateDailyAverageCampaignTimes();
+
+		    OnTasksChanged();
+	    }
     }
 
     public class LocalPeriodCache

@@ -161,7 +161,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-		public virtual double? OverrideTasks { get; set; }
+	    public virtual double? OverrideTasks
+	    {
+		    get { return null; }
+	    }
 
 	    /// <summary>
         /// Gets the workload day collection.
@@ -896,9 +899,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
         #endregion
 
-        #region ITaskOwner Members
+        #region ITaskOwner Members	   
 
-        /// <summary>
+		public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    /// <summary>
         /// Gets the total average after task time.
         /// </summary>
         /// <value>The total average after task time.</value>

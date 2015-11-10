@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 		public void ShouldOverrideTasks()
 		{
 			_target.SetTasks(100);
-			_target.OverrideTasks = 200d;
+			_target.SetOverrideTasks( 200d, null );
 
 			_target.TotalTasks.Should().Be.EqualTo(200d);
 		}
@@ -685,7 +685,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 		{
 			_target.SetTasks(100);
 			_target.CampaignTasks = new Percent(0.2);
-			_target.OverrideTasks = 200d;
+			_target.SetOverrideTasks(200d, null);
 
 			_target.TotalTasks.Should().Be.EqualTo(200d);
 		}
@@ -694,7 +694,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 		public void ShouldOverrideWithZero()
 		{
 			_target.SetTasks(100);
-			_target.OverrideTasks = 0d;
+			_target.SetOverrideTasks(0d, null);
 
 			_target.TotalTasks.Should().Be.EqualTo(0d);
 		}

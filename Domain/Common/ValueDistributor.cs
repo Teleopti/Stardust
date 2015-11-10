@@ -108,12 +108,34 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-		public static void DistributeOverrideTasks(double? newTotal, IEnumerable targets)
+		public static void DistributeOverrideTasks(double? newTotal, IEnumerable<ITaskOwner> targets, IEnumerable<IForecastingTarget> intradayCallPattern)
 		{
 			var typedTargets = targets.OfType<ITaskOwner>();
-			var sumOfCurrentValues = typedTargets.Sum(t => t.Tasks);
+			var dailyTasks = typedTargets.Sum(t => t.Tasks);
+			if (Math.Floor(dailyTasks) > 0)
+			{
+				typedTargets.ForEach(t => t.SetOverrideTasks((t.Tasks / dailyTasks) * newTotal, null));
+			}
+			else
+			{
+				if (intradayCallPattern != null)
+				{					
 
-			typedTargets.ForEach(t => t.OverrideTasks = (t.Tasks/sumOfCurrentValues)*newTotal);
+					var intradayCallPatternArray = intradayCallPattern.ToArray();
+					int i = 0;
+					var patternTasks = intradayCallPatternArray.Sum(t => t.Tasks);
+					typedTargets.ForEach(t =>
+					{
+						t.SetOverrideTasks((intradayCallPatternArray[i].Tasks / patternTasks) * newTotal, null);
+						i++;
+					});
+
+				}
+				else
+				{
+					typedTargets.ForEach(t => t.SetOverrideTasks((newTotal / targets.ToList().Count), null));
+				}
+			}
 		}
     }
 

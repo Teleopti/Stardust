@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
+using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -37,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			const double newDailyOverrideTasks = 190d;
 
-			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets);
+			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets, null);
 
 			for (var i = 0; i < targets.Count; i++)
 			{
@@ -49,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldClearOverrideTasksTest()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-			ValueDistributor.DistributeOverrideTasks(null, targets);
+			ValueDistributor.DistributeOverrideTasks(null, targets, null);
 
 			foreach (var target in targets)
 			{
@@ -57,6 +61,36 @@ namespace Teleopti.Ccc.DomainTest.Common
 			}
 		}
 
+		[Test]
+		public void ShouldDistributeOverrideTasksByPatternWhenZeroForecast()
+		{
+			const double newDailyOverrideTasks = 190d; 
+			IList<TestDistributionTarget> targets = GetZeroDistributionTargetsForTest();
+			IList<TestDistributionTarget> pattern = GetDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets, pattern);
+
+			for (var i = 0; i < targets.Count; i++)
+			{
+				Assert.AreEqual(((i + 11) / 155d) * newDailyOverrideTasks, targets[i].OverrideTasks);
+			}
+		}
+
+		private IList<TestDistributionTarget> GetZeroDistributionTargetsForTest()
+		{
+			IList<TestDistributionTarget> targets = new List<TestDistributionTarget>();
+			for (int i = 0; i < 10; i++)
+			{
+				var target = new TestDistributionTarget()
+				{
+					Tasks = 0
+				};
+				targets.Add(target);
+			}
+
+			return targets;
+		}
+		
 		/// <summary>
 		/// Distributes the values even test.
 		/// </summary>
@@ -340,8 +374,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 				{
 					Tasks = i + 11,
 					AverageAfterTaskTime = TimeSpan.FromSeconds(i + 1),
-					AverageTaskTime = TimeSpan.FromSeconds(i + 6),
-					OverrideTasks = i + 12
+					AverageTaskTime = TimeSpan.FromSeconds(i + 6)
 				};
 				targets.Add(target);
 			}
@@ -626,6 +659,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 				throw new NotImplementedException();
 			}
 
+			public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+			{
+				_overrideTasks = task;
+			}
+
 			/// <summary>
 			/// Gets the total average after task time.
 			/// </summary>
@@ -668,7 +706,14 @@ namespace Teleopti.Ccc.DomainTest.Common
 				}
 			}
 
-			public double? OverrideTasks { get; set; }
+			private double? _overrideTasks;
+			public double? OverrideTasks
+			{
+				get
+				{
+					return _overrideTasks;
+				}
+			}
 
 			/// <summary>
 			/// Gets or sets the campaign tasks.

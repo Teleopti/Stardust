@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-	    public double? OverrideTasks { get; set; }
+	    public double? OverrideTasks { get; private set; }
 
 	    /// <summary>
         /// Gets or sets the type of task owner period.
@@ -978,7 +978,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
+	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    /// <summary>
         /// Gets the total average after task time.
         /// </summary>
         /// <value>The total average after task time.</value>

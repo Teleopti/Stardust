@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			workloadDay1.AverageTaskTime = taskTime;
 			workloadDay1.AverageAfterTaskTime = afterTaskTime;
 			workloadDay1.CampaignTasks = campaignTasks;
-			workloadDay1.OverrideTasks = overrideTasks;
+			workloadDay1.SetOverrideTasks(overrideTasks, null);
 
 			_futureData.Stub(x => x.Fetch(_workload, skillDays, _futurePeriod)).Return(new[] { workloadDay1 });
 		}
