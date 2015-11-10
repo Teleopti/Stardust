@@ -5,7 +5,7 @@
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
-		<label for="ManualPlanInput" translate>ManualPlan</label>
+		<label for="ManualPlanInput" translate>ManualPlan</label><span> ({{ selectedDates.length }})</span>
 		<input id="ManualPlanInput"
 			   type="text"
 			   ng-model="manualPlanInput"
@@ -33,7 +33,7 @@
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
-		<label for="ActualBacklogInput" translate>AddBacklog</label>
+		<label for="ActualBacklogInput" translate>AddBacklog</label><span> ({{ selectedDates.length }})</span>
 		<input id="ActualBacklogInput"
 			   type="text"
 			   ng-model="manualBacklogInput"

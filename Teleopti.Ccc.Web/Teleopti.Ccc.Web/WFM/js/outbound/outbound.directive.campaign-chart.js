@@ -7,7 +7,8 @@
 		return {
 			controller: ['$scope', '$element',  campaignChartCtrl],
 			template: '<div id="Chart_{{campaign.Id}}"></div>' +
-				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>',
+				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>' +
+				'<div class="clear-button"><i class="mdi mdi-block-helper pull-right toggle-handle" ng-click="clearSelectedDates()"><md-tooltip>Clear chart selection</md-tooltip></i></div>',
 			scope: {
 				'campaign': '=',				
 				'dictionary': '='
@@ -37,6 +38,12 @@
 				"C: " + $scope.dictionary['ClosedDay'],
 				"B: " + $scope.dictionary['AddBacklog']
 			];
+
+			$scope.clearSelectedDates = function() {
+				$scope.campaign.selectedDates = [];
+				$scope.campaign.selectedDatesClosed = [];
+				$scope.graph.unselect(['Progress']);
+			};
 
 			function graphSelectionChanged() {
 				var selectedData = $scope.graph.selected().filter(function(p) {
