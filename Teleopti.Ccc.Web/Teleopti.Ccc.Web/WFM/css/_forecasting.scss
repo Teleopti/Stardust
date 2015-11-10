@@ -40,7 +40,7 @@
 .workload-spinner{
 	position: absolute;
 	right: 9%;
-	margin-top: -43px;
+	margin-top: -68px;
 }
 
 .workload-indicator{
@@ -189,3 +189,6 @@
  opacity: 0;
 }
 
+.mini-spinner {
+     transform: scale(0.2)!important;
+}
