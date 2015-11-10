@@ -28,6 +28,7 @@ Scenario: Access from RTA
 	And I choose to continue
 	Then The message tool should be opened in a new window
 
+@ignore
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message
 	Given there is a site named 'Paris'
@@ -59,6 +60,7 @@ Scenario: Send message
 	 | Pierre Baldi  |
 	 | Ashley Andeen |
 
+@ignore
 #It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
 @OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
