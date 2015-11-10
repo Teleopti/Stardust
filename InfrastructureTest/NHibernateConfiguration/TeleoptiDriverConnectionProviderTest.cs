@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             mocks = new MockRepository();
             nhibDriver = mocks.StrictMock<IDriver>();
             target = new TeleoptiDriverConnectionProvider();
-	        target.SetDelayAction(() => { });
+	        target.SetDelayAction(i => { });
             setDriverToTargetByReflection();
         }
 

@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
 				if (url.Contains("/test/")) return;
 				if (url.Contains("/content/")) return;
+				if (url.Contains("/signalr/ping")) return;
 				if (url.Contains("/js/")) return;
 				if (url.Contains("/css/")) return;
 				if (url.Contains("/html/")) return;

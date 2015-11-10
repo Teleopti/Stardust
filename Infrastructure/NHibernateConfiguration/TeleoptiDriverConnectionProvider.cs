@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
     public class TeleoptiDriverConnectionProvider : DriverConnectionProvider
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TeleoptiDriverConnectionProvider));
-		private Action _delayAction = ()=>Thread.Sleep(TimeSpan.FromSeconds(3));
+		private Action<int> _delayAction = retry =>Thread.Sleep(TimeSpan.FromSeconds(retry*retry));
 
         public const int NumberOfRetries = 3;
 
-	    public void SetDelayAction(Action delayAction)
+	    public void SetDelayAction(Action<int> delayAction)
 	    {
 		    _delayAction = delayAction;
 	    }
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
                     if (counter >= NumberOfRetries)
                         throw new DataSourceException("Failed to get connection (" + counter + ").", e);
 
-	                _delayAction();
+	                _delayAction(counter);
                 }
             } while (true);
         }
