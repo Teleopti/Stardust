@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var originalTasks = Tasks;
 			var originalAverageTaskTime = AverageTaskTime;
 			var originalAfterTaskTime = AverageAfterTaskTime;
+			var origianlOverrideTasks = OverrideTasks;
 
 			Close();
 			var template = (IWorkloadDayTemplate)Workload.GetTemplateAt(TemplateTarget.Workload, (int)CurrentDate.DayOfWeek);
@@ -148,8 +149,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				Tasks = originalTasks;
 				AverageTaskTime = originalAverageTaskTime;
 				AverageAfterTaskTime = originalAfterTaskTime;
+				SetOverrideTasks(origianlOverrideTasks, sortedTemplateTaskPeriods);
 
-				if (Math.Abs(Tasks) < 0.0001)
+				if (Math.Abs(Tasks) < 0.0001 && (!OverrideTasks.HasValue || Math.Abs(OverrideTasks.Value) < 0.0001))
 				{
 					AverageTaskTime = TimeSpan.Zero;
 					AverageAfterTaskTime = TimeSpan.Zero;
