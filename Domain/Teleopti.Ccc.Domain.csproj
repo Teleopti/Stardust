@@ -637,6 +637,7 @@
     <Compile Include="Optimization\Filters\ContractFilter.cs" />
     <Compile Include="Optimization\Filters\IFilter.cs" />
     <Compile Include="Optimization\Filters\SiteFilter.cs" />
+    <Compile Include="Optimization\Filters\TeamFilter.cs" />
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
