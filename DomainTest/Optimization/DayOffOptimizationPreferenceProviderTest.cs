@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900,1,1));
 			agent.Period(new DateOnly(2000,1,1)).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
 
-
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).DaysOffPerWeekValue
 				.Should().Be.EqualTo(new MinMax<int>(19, 20));
 		}
@@ -58,6 +57,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveWorkdays);
+		}
+
+		[Test]
+		public void ShouldReturnRulesForSiteFilter()
+		{
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var dayOffRules = new DayOffRules { ConsecutiveWorkdays = new MinMax<int>(5, 7) };
+			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000,1,1)).Team.Site));
+			DayOffRulesRepository.Add(dayOffRules);
+		
+			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+				.Should().Be.EqualTo(new MinMax<int>(5, 7));
+		}
+
+		[Test]
+		public void ShouldNotReturnRulesForSiteFilterIfAgentHaveNoPersonPeriod()
+		{
+			var dayOffRules = new DayOffRules { DayOffsPerWeek = new MinMax<int>(19, 20) };
+			dayOffRules.AddFilter(new SiteFilter(new Site("_")));
+			DayOffRulesRepository.Add(dayOffRules);
+			var agent = new Person();
+
+			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveDayOffs);
 		}
 	}
 }
