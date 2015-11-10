@@ -87,6 +87,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _personAssignments.Single(pa => pa.Date == dateOnly);
 		}
 
+		public IPersonAssignment GetSingle(DateOnly dateOnly, IPerson agent)
+		{
+			return _personAssignments.Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
+		}
+
 		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod)
 		{
 			foreach (var date in period.DayCollection())

@@ -634,6 +634,7 @@
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
+    <Compile Include="Optimization\Filters\ContractFilter.cs" />
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />

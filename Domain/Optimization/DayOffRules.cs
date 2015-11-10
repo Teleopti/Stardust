@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -19,6 +20,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ConsecutiveWorkdays = new MinMax<int>(2, 6),
 				Default = true
 			};
+		}
+
+		public void Add(ContractFilter contractFilter)
+		{
 		}
 	}
 }

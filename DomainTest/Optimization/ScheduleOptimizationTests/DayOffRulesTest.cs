@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -196,6 +200,50 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff().Should().Not.Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff().Should().Not.Be.Null();
+		}
+
+		[Test]
+		[Ignore("PBI 35380")]
+		public void ShouldUseDifferentDayOffRulesForDifferentFiltersWhenOneIsIncorrect()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(1);
+			var contractInFilter = new Contract("_");
+			var agentWithValidDefaultFilter = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var agentWithExplicitFilter = PersonRepository.Has(contractInFilter, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			agentWithValidDefaultFilter.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
+			agentWithExplicitFilter.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
+
+			var dayOffRules = new DayOffRules { DayOffsPerWeek = new MinMax<int>(5,6)};
+			dayOffRules.Add(new ContractFilter(contractInFilter));
+			DayOffRulesRepository.Add(dayOffRules);
+
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				TimeSpan.FromHours(20), 
+				TimeSpan.FromHours(1), //expected
+				TimeSpan.FromHours(5), 
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(20),
+				TimeSpan.FromHours(20),
+				TimeSpan.FromHours(25)) 
+				);
+			PersonAssignmentRepository.Has(agentWithValidDefaultFilter, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agentWithExplicitFilter, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).DayOff().Should().Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).DayOff().Should().Not.Be.Null();
 		}
 	}
 }
