@@ -197,6 +197,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 		var allRowsInCurrentPageSelected = $scope.gridApi.selection.getSelectedRows().length === $scope.getCurrentPageSelectedRowsLength();
 		var allRowsSelected = $scope.selectedCount() === $scope.callBackResultLength;
+		var rowInCurrentPageSelected = $scope.getCurrentPageSelectedRowsLength() > 0;
 
 		if (allRowsInCurrentPageSelected) {
 			$scope.gridApi.selection.selectAllRows();
@@ -204,7 +205,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			$scope.gridApi.grid.selection.selectAll = false;
 		}
 
-		$scope.selectAllVisible = $scope.paginationOptions.totalPages > 1 && allRowsInCurrentPageSelected && !allRowsSelected;
+		$scope.selectAllVisible = $scope.paginationOptions.totalPages > 1 && rowInCurrentPageSelected && !allRowsSelected;
 	};
 
 	$scope.selectAllMatch = function () {
@@ -213,11 +214,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				if ($scope.selectedPeopleList.indexOf(person.PersonId) === -1)
 					$scope.selectedPeopleList.push(person.PersonId);
 			});
+			setPeopleSelectionStatus();
 			$scope.selectAllVisible = false;
+
 		});
 	};
 
-	var setPeopleSelectionStatus = function () {
+	function setPeopleSelectionStatus() {
 		for (var i = 0; i < $scope.getCurrentPageSelectedRowsLength() ; i++) {
 			var personId = $scope.gridOptions.data[i].PersonId;
 			if ($scope.selectedPeopleList.indexOf(personId) > -1) {
