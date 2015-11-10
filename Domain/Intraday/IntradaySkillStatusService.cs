@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 						//var lastestDataDate = item.IntervalTasks.Max(u => u.IntervalStart);
 						skillStatus.Measures = new List<SkillStatusMeasure>
 						{
-							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(relativeDifference), Severity = 1, StringValue = message, LatestDate = maxIntervalForSkill,ActualCalls = actualSum,ForecastedCalls = forecastedSum}
+							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(relativeDifference), Severity = 1, StringValue = message, LatestDate = maxIntervalForSkill,ActualCalls = actualSum,ForecastedCalls = Math.Round(forecastedSum)}
 						};
 					}
 				}
