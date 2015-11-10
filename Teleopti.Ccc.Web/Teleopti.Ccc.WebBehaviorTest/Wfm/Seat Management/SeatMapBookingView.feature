@@ -115,6 +115,7 @@ Scenario: be able to assign agent to selected seat
 	And I click assign button
 	Then I should see 'I' in the result of seat plan
 
+@ignore
 Scenario: be able to select multiple seats
 	Given there are '3' more seats at root location
 	When I view Seat plan on "2015-01-01"
@@ -122,6 +123,7 @@ Scenario: be able to select multiple seats
 	And I select first '2' seats
 	Then I should see occupancy detail of two seats in occupancy detail panel
 
+@ignore
 Scenario: be able to delete seatBooking from multiple selection
 	Given there is a seat booking for me
 		| Field         | Value            |
