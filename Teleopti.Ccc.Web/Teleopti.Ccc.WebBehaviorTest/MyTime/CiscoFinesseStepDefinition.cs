@@ -26,10 +26,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("#CiscoFinesse-asm-module");
 		}
 
+		[Then(@"I should not see Asm module")]
+		public void ThenIShouldNotSeeAsmModule()
+		{
+			Browser.Interactions.AssertNotExists(".cisco-widget", "#CiscoFinesse-asm-module");
+		}
+
 		[Then(@"I should see MyReport module")]
 		public void ThenIShouldSeeMyReportModule()
 		{
 			Browser.Interactions.AssertExists("#CiscoFinesse-myReport-module");
+		}
+		[Then(@"I should not see MyReport module")]
+		public void ThenIShouldNotSeeMyReportModule()
+		{
+			Browser.Interactions.AssertNotExists(".cisco-widget", "#CiscoFinesse-myReport-module");
 		}
 	}
 }
