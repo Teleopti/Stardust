@@ -1044,6 +1044,7 @@
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Filters\AuthenticationFailureResult.cs" />
     <Compile Include="Filters\AuthenticationModule.cs" />
+    <Compile Include="Filters\AuthorizeTeleoptiAttribute.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
     <Compile Include="Filters\HttpAuthenticationChallengeContextExtensions.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />

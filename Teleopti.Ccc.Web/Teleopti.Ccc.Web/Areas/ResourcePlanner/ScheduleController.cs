@@ -12,8 +12,8 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
+		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), AuthorizeTeleopti, UnitOfWork]
 		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
 		{
 			var token = _actionThrottler.Block(ThrottledAction.Scheduling);

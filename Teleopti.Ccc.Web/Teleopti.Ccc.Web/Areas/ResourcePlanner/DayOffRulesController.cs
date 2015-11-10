@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -15,13 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffRulesModelPersister = dayOffRulesModelPersister;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default"), Authorize]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default"), AuthorizeTeleopti]
 		public virtual IHttpActionResult GetDefaultSettings()
 		{
 			return Ok(_fetchDayOffRulesModel.FetchDefaultRules());
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules"), Authorize]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules"), AuthorizeTeleopti]
 		public virtual IHttpActionResult Persist(DayOffRulesModel dayOffRulesModel)
 		{
 			_dayOffRulesModelPersister.Persist(dayOffRulesModel);

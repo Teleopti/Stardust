@@ -1,10 +1,13 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
 using System.Web.Http.Controllers;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 
@@ -48,15 +51,15 @@ namespace Teleopti.Ccc.WebTest.Filters
 					new CustomHttpActionDescriptorForTest(new HttpControllerDescriptor {ControllerType = typeof (object)}));
 
 			var before = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("Authenticated"), new[] { "Admin" });
+			Thread.CurrentPrincipal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("hej",null,null,null), PersonFactory.CreatePerson());
 			target.OnAuthorization(httpActionContext);
 
 			httpActionContext.Response.IsSuccessStatusCode.Should().Be.False();
 			Thread.CurrentPrincipal = before;
 		}
 
-		[Test, Ignore("Robin will have a look at this")]
-		public void ShouldPassThroughWhenPermission()
+		[Test]
+		public void ShouldDenyWhenOnlyGenericPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var target = new ApplicationFunctionApiAttribute("Test") { PermissionProvider = permissionProvider };
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("Authenticated"), new []{"Admin"});
 			target.OnAuthorization(httpActionContext);
 
-			httpActionContext.Response.Should().Be.Null();
+			httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Unauthorized);
 			Thread.CurrentPrincipal = before;
 		}
 	}

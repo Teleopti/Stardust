@@ -5,8 +5,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)] 
-	public class ApplicationFunctionApiAttribute : System.Web.Http.AuthorizeAttribute
+	[CLSCompliant(false)]
+	public class ApplicationFunctionApiAttribute : AuthorizeTeleoptiAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;
 
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Filters
 		public ApplicationFunctionApiAttribute(string applicationFunctionPath1, string applicationFunctionPath2) : this(new []{applicationFunctionPath1,applicationFunctionPath2})
 		{
 		}
-
 
 		public IPermissionProvider PermissionProvider { get; set; }
 

@@ -1,4 +1,5 @@
 using System.Web.Http;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_actionThrottler = actionThrottler;
 		}
 
-		[HttpGet, Route("api/Status/{actionName}"), Authorize]
+		[HttpGet, Route("api/Status/{actionName}"), AuthorizeTeleopti]
 		public dynamic Status(string actionName)
 		{
 			return new { IsRunning = _actionThrottler.IsBlocked(actionName) };

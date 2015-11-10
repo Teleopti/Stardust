@@ -2,12 +2,13 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class LanguageController : ApiController
 	{
-		[Route("api/Global/Language"), HttpGet, Authorize]
+		[Route("api/Global/Language"), HttpGet, AuthorizeTeleopti]
 		public object Language([FromUri]string lang)
 		{
 			var culture = CultureInfo.GetCultureInfoByIetfLanguageTag(lang);

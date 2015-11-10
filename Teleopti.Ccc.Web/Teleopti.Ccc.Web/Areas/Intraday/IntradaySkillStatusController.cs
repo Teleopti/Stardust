@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
@@ -18,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			 _intradaySkillStatusService = intradaySkillStatusService;
 		 }
 
-		 [UnitOfWork, HttpGet, Route("api/intraday/skillstatus"), Authorize]
+		 [UnitOfWork, HttpGet, Route("api/intraday/skillstatus"), AuthorizeTeleopti]
 		 public virtual IHttpActionResult GetSkillStatus()
 	    {
 			 return Ok(_intradaySkillStatusService.GetSkillStatusModels(DateTime.UtcNow));
