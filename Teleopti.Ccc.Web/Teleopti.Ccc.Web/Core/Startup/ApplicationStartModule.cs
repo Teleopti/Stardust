@@ -38,7 +38,15 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				if (HasStartupError) return;
 
 				// exclude TestController from principal stuff
-				if (HttpContext.Current.Request.Url.AbsolutePath.Contains("/Test/")) return;
+				var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
+				if (url.Contains("/test/")) return;
+				if (url.Contains("/content/")) return;
+				if (url.Contains("/signalr/")) return;
+				if (url.Contains("/signalr/")) return;
+				if (url.Contains("/js/")) return;
+				if (url.Contains("/css/")) return;
+				if (url.Contains("/html/")) return;
+				if (url.Contains("/vendor/")) return;
 
 				var requestContextInitializer = DependencyResolver
 					.Current
