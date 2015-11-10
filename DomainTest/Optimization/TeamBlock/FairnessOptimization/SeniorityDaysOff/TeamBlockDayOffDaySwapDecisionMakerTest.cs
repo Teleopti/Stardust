@@ -56,11 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_target = new TeamBlockDayOffDaySwapDecisionMaker(_lockableBitArrayFactory, _dayOffRulesValidator);
 
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			_optimizationPreferences = new OptimizationPreferences
-				{
-					DaysOff = {ConsiderWeekBefore = true, ConsiderWeekAfter = true}
-				};
-
+			_optimizationPreferences = new OptimizationPreferences();
+	
 			_personSenior = PersonFactory.CreatePerson();
 			_personJunior = PersonFactory.CreatePerson();
 			_groupSenior = new Group(new List<IPerson> { _personSenior }, "Senior");

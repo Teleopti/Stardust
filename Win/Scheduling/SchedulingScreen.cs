@@ -210,6 +210,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
 		private Form _mainWindow;
 		private bool _cancelButtonPressed;
+		private IDaysOffPreferences _daysOffPreferences;
 
 		#region Constructors
 
@@ -396,6 +397,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			};
 			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
+			_daysOffPreferences = _container.Resolve<IDaysOffPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
 			_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
@@ -1131,14 +1133,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_schedulerState.CommonStateHolder.ActiveScheduleTags,
 						_schedulerState.CommonStateHolder.ActiveActivities,
 						SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
-						_scheduleView.AllSelectedPersons(), _container.Resolve<IToggleManager>()))
+						_scheduleView.AllSelectedPersons(), _container.Resolve<IToggleManager>(), _daysOffPreferences))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
 							OptimizationMethod = OptimizationMethod.Optimize,
-							DaysOffPreferences = _optimizationPreferences.DaysOff
+							DaysOffPreferences = _daysOffPreferences
 						};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
@@ -3136,7 +3138,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				var scheduleCommand = _container.Resolve<IScheduleCommand>();
-				var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_optimizationPreferences.DaysOff);
+				var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
 
 				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling),
 					_schedulerState,

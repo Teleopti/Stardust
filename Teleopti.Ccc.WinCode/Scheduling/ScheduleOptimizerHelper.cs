@@ -139,7 +139,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void classicDaysOffOptimization(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
 		{
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(optimizerPreferences.DaysOff);
+			var dayOffOptimzePreferences = _container.Resolve<IDaysOffPreferences>();
+			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffOptimzePreferences);
 			var classicDaysOffOptimizationCommand = _container.Resolve<IClassicDaysOffOptimizationCommand>();
 			classicDaysOffOptimizationCommand.Execute(scheduleDays, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper, dayOffOptimizationPreferenceProvider);
 		}

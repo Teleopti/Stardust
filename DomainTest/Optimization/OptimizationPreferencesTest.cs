@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldAllSubSettingsBeInitializedInConstructor()
 		{
 			Assert.IsNotNull(_target.General);
-			Assert.IsNotNull(_target.DaysOff);
 			Assert.IsNotNull(_target.Extra);
 			Assert.IsNotNull(_target.Advanced);
 			Assert.IsNotNull(_target.Rescheduling);

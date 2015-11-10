@@ -15,12 +15,6 @@ namespace Teleopti.Interfaces.Domain
         IGeneralPreferences General { get; set; }
 
         /// <summary>
-        /// Gets or sets the days off user preferences.
-        /// </summary>
-        /// <value>The days off.</value>
-        IDaysOffPreferences DaysOff { get; set; }
-
-        /// <summary>
         /// Gets or sets the extra user preferences.
         /// </summary>
         /// <value>The extra.</value>

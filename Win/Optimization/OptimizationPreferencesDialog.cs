@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Win.Optimization
 	{
 		private readonly IEventAggregator _eventAggregator;
 		public IOptimizationPreferences Preferences { get; private set; }
+		public IDaysOffPreferences DaysOffPreferences { get; private set; }
 
 		private GeneralPreferencesPersonalSettings _defaultGeneralPreferences;
 		private DaysOffPreferencesPersonalSettings _defaultDaysOffPreferences;
@@ -51,10 +52,12 @@ namespace Teleopti.Ccc.Win.Optimization
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
-			IToggleManager toggleManager)
+			IToggleManager toggleManager,
+			IDaysOffPreferences daysOffPreferences)
 			: this()
 		{
 			Preferences = preferences;
+			DaysOffPreferences = daysOffPreferences;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = _groupPages;
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		{
 			loadPersonalSettings();
 			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator, _toggleManager);
-			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
+			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
 			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
@@ -125,7 +128,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			}
 			if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
-			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
+			_defaultDaysOffPreferences.MapTo(DaysOffPreferences);
 			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages, _groupPagesForTeamBlockPer);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
 			_defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		{
 			if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapFrom(Preferences.General);
-			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
+			_defaultDaysOffPreferences.MapFrom(DaysOffPreferences);
 			_defaultExtraPreferences.MapFrom(Preferences.Extra);
 			_defaultAdvancedPreferences.MapFrom(Preferences.Advanced);
 			_defaultshiftsPreferences.MapFrom(Preferences.Shifts);
@@ -201,7 +204,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				savePersonalSettings();
-				if (Preferences.Shifts.KeepShifts || Preferences.DaysOff.UseKeepExistingDaysOff)
+				if (Preferences.Shifts.KeepShifts || DaysOffPreferences.UseKeepExistingDaysOff)
 				{
 					var clonedRanges = new Dictionary<IPerson, IScheduleRange>();
 					foreach (var selectedPerson in _selectedPersons)

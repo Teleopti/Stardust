@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public OptimizationPreferences()
 		{
 			General = new GeneralPreferences();
-			DaysOff = new DaysOffPreferences();
 			Extra = new ExtraPreferences();
 			Advanced = new AdvancedPreferences();
 			Rescheduling = new ReschedulingPreferences();
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public IGeneralPreferences General { get; set; }
-		public IDaysOffPreferences DaysOff { get; set; }
 		public IExtraPreferences Extra { get; set; }
 		public IAdvancedPreferences Advanced { get; set; }
 		public IReschedulingPreferences Rescheduling { get; set; }
