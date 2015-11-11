@@ -80,13 +80,13 @@ WfmForecast_QueueStatistics_32572 = true
 WfmForecast_ResultView_33605 = true
 WfmForecast_MethodsComparisonView_33610 = true
 WfmForecast_IntradayPatternView_33069 = true
-WfmForecast_CreateSkill_34591 = RC
+WfmForecast_CreateSkill_34591 = true
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = RC
-RTA_MultiTenancy_32539 = RC
+RTA_MultiTenancy_32539 = true
 WfmPeople_AdjustSkill_34138 = RC
-ResourcePlanner_WeeklyRestSolver_35043 = RC
+ResourcePlanner_WeeklyRestSolver_35043 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = RC
 
