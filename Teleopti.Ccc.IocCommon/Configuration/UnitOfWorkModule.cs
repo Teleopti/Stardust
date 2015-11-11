@@ -1,13 +1,16 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -34,11 +37,29 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
-			builder.RegisterType<MessageSenderCreator>().SingleInstance();
-			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
-				.As<ICurrentPersistCallbacks>()
-				.As<IMessageSendersScope>()
-				.SingleInstance();
+			#region All implementation of IPersistCallback
+			var businessUnit = CurrentBusinessUnit.Make();
+			builder.RegisterType<ClearEvents>().As<IBeforeSendEvents>();
+			builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
+			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
+			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
+			builder.RegisterType<GroupPageChangedBusMessageSender>().As<IPersistCallback>();
+			builder.Register(
+				c => new PersonCollectionChangedEventPublisherForTeamOrSite(c.Resolve<IEventPopulatingPublisher>(), businessUnit))
+				.As<IPersistCallback>();
+			builder.Register(c => new PersonCollectionChangedEventPublisher(c.Resolve<IEventPopulatingPublisher>(), businessUnit))
+				.As<IPersistCallback>();
+			builder.RegisterType<PersonPeriodChangedBusMessagePublisher>().As<IPersistCallback>();
+
+			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+			{
+				builder.Register(c => new ScheduleChangedMessageSender(c.Resolve<IMessageSender>(), CurrentDataSource.Make(),
+					businessUnit, c.Resolve<IJsonSerializer>(), c.Resolve<ICurrentInitiatorIdentifier>())).As<IPersistCallback>();
+			}
+
+			builder.RegisterType<CurrentPersistCallbacks>().As<ICurrentPersistCallbacks>().As<IMessageSendersScope>();
+			#endregion
+
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
 				.OnActivated(e => CurrentBusinessUnit.SetInstanceFromContainer(e.Instance))
 				.OnRelease(e => CurrentBusinessUnit.SetInstanceFromContainer(null));

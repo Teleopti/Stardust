@@ -2,9 +2,9 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void Setup()
 		{
 			builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterType<TrueToggleManager>().As<IToggleManager>();
+			var toggleManager = new FakeToggleManager();
+			toggleManager.Enable(Toggles.MessageBroker_SchedulingScreenMailbox_32733);
+			builder.RegisterModule(CommonModule.ForTest(toggleManager));
 			container = builder.Build();
 		}
 

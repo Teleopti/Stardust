@@ -390,7 +390,6 @@
     <Compile Include="Rta\IConnectionStrings.cs" />
     <Compile Include="Rta\AgentStateReadModelReader.cs" />
     <Compile Include="Rta\SqlDataReaderExtensions.cs" />
-    <Compile Include="ServiceBus\MessageSenderCreator.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
