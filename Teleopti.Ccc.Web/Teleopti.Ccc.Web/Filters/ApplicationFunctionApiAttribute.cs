@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public ApplicationFunctionApiAttribute() : this(new string[] { }) { }
 
-		private  ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths)
+		private  ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths) : base(null)
 		{
 			_applicationFunctionPaths = applicationFunctionPaths;
 		}

@@ -393,6 +393,7 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
+    <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
@@ -510,6 +511,7 @@
     <Compile Include="Filters\ApplicationFunctionAnywhereAttributeTest.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttributeTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
+    <Compile Include="Filters\AuthorizeTeleoptiAttributeTest.cs" />
     <Compile Include="Filters\CustomHttpActionDescriptorForTest.cs" />
     <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttributeTest.cs" />

@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffRulesModelPersister = dayOffRulesModelPersister;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default"), AuthorizeTeleopti]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/default")]
 		public virtual IHttpActionResult GetDefaultSettings()
 		{
 			return Ok(_fetchDayOffRulesModel.FetchDefaultRules());
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules"), AuthorizeTeleopti]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules")]
 		public virtual IHttpActionResult Persist(DayOffRulesModel dayOffRulesModel)
 		{
 			_dayOffRulesModelPersister.Persist(dayOffRulesModel);

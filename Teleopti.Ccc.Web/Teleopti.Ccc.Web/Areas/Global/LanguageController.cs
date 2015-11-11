@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class LanguageController : ApiController
 	{
-		[Route("api/Global/Language"), HttpGet, AuthorizeTeleopti]
+		[Route("api/Global/Language"), HttpGet]
 		public object Language([FromUri]string lang)
 		{
 			var culture = CultureInfo.GetCultureInfoByIetfLanguageTag(lang);

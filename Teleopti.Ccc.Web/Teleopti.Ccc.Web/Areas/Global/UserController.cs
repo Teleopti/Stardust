@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
-		[Route("api/Global/User/CurrentUser"), HttpGet, AuthorizeTeleopti]
+		[Route("api/Global/User/CurrentUser"), HttpGet]
 		public object CurrentUser()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();

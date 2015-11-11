@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_now = now;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod"), AuthorizeTeleopti]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
 		public virtual IHttpActionResult GetAllPlanningPeriods()
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange"), AuthorizeTeleopti]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange")]
 		public virtual IHttpActionResult GetAllPlanningPeriods(DateTime startDate, DateTime endDate)
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}"), AuthorizeTeleopti]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return _missingForecastProvider.GetMissingForecast(planningPeriodRange);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions"), AuthorizeTeleopti]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							}));
 		}
 
-		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}"), AuthorizeTeleopti]
+		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}")]
 		public virtual IHttpActionResult ChangeRange(Guid id, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod"), AuthorizeTeleopti]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod()
 		{
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/publish"), AuthorizeTeleopti]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/publish")]
 		public virtual IHttpActionResult Publish(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(planningPeriodId);

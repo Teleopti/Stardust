@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var registerAreas = MockRepository.GenerateMock<IRegisterAreas>();
 			var globalConfiguration = MockRepository.GenerateMock<IGlobalConfiguration>();
-			var target = new RegisterRoutesTask(r => r.Clear(), registerAreas, globalConfiguration, null);
+			var target = new RegisterRoutesTask(r => r.Clear(), registerAreas, globalConfiguration);
 			target.Execute(null);
 
 			registerAreas.AssertWasCalled(x => x.Execute());
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldRouteDefaultToMenuIndex()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>(), null).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>()).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/");
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldIgnoreFilesInContentFolder()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>(), null).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>()).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			httpContext.Expect(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Content/Script/AnyFile");
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldMapAuthenticationRequestToStartArea()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>(), null).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null, MockRepository.GenerateMock<IGlobalConfiguration>()).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Authentication");

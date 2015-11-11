@@ -7,9 +7,12 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
+using System.Web.Http;
+using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Rhino.Mocks;
+using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
 
 namespace Teleopti.Ccc.WebTest.Filters
 {
@@ -150,6 +153,12 @@ namespace Teleopti.Ccc.WebTest.Filters
 			ControllerContext ControllerContext { get; }
 		}
 
+		public interface ITestApiController
+		{
+			IHttpActionResult DummyAction();
+			HttpControllerContext ControllerContext { get; }
+		}
+
 		public class TestController : Controller, ITestController
 		{
 			private readonly Func<ActionResult> _controllerAction;
@@ -157,6 +166,15 @@ namespace Teleopti.Ccc.WebTest.Filters
 			public TestController(Func<ActionResult> controllerAction) { _controllerAction = controllerAction; }
 
 			public ActionResult DummyAction() { return _controllerAction.Invoke(); }
+		}
+
+		public class TestApiController : ApiController, ITestApiController
+		{
+			private readonly Func<IHttpActionResult> _controllerAction;
+
+			public TestApiController(Func<IHttpActionResult> controllerAction) { _controllerAction = controllerAction; }
+
+			public IHttpActionResult DummyAction() { return _controllerAction.Invoke(); }
 		}
 
 		#endregion

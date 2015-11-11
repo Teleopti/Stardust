@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), AuthorizeTeleopti, UnitOfWork]
+		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), UnitOfWork]
 		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
 		{
 			var token = _actionThrottler.Block(ThrottledAction.Scheduling);

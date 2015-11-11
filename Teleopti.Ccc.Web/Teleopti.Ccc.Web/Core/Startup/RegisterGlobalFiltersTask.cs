@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public Task Execute(IAppBuilder application)
 		{
 			registerGlobalFilters(GlobalFilters.Filters);
-			return null;
+			return Task.FromResult(false);
 		}
 
 		private void registerGlobalFilters(GlobalFilterCollection filters)

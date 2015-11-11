@@ -26,12 +26,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public string Realm { get; set; }
 
-		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider)
-			: this(authenticationModule, identityProviderProvider, null)
-		{
-		}
-
-		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider, IEnumerable<Type> excludeControllerTypes)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider, IEnumerable<Type> excludeControllerTypes = null)
 		{
 			_authenticationModule = authenticationModule;
 			_identityProviderProvider = identityProviderProvider;

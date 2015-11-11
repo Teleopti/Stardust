@@ -993,6 +993,7 @@
     <Compile Include="Core\Startup\IRegisterAreas.cs" />
     <Compile Include="Core\Startup\RegisterArea.cs" />
     <Compile Include="Core\Startup\RegisterAreas.cs" />
+    <Compile Include="Core\Startup\RegisterGlobalApiFiltersTask.cs" />
     <Compile Include="Core\Startup\Startup.cs" />
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />

@@ -8,6 +8,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using IAuthenticationModule = Teleopti.Ccc.Web.Filters.IAuthenticationModule;
+using RedirectToRouteResult = System.Web.Mvc.RedirectToRouteResult;
 
 namespace Teleopti.Ccc.WebTest.Filters
 {
