@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void ShouldCallDenormalizerOnPersist()
+		public void ShouldCallDenormalizerOnPersistAfterCommit()
 		{
 			ITransaction tx = mocks.DynamicMock<ITransaction>();
 			ISessionImplementor sessImpl = mocks.StrictMock<ISessionImplementor>();
@@ -374,6 +374,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				Expect.On(session)
 					.Call(session.BeginTransaction())
 					.Return(tx);
+				Expect.Call(tx.Commit);
 
 				Expect.Call(() => messageSender.AfterFlush(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				

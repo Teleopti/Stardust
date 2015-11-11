@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				invokeCallbacks(modifiedRoots);
+				
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -181,6 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
+			invokeCallbacks(modifiedRoots);
 			notifyBroker(initiator, modifiedRoots);
 			return modifiedRoots;
 		}
