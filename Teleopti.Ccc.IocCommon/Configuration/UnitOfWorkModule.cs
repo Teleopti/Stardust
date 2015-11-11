@@ -1,7 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -35,23 +34,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WithUnitOfWork>().SingleInstance();
 
-			builder.RegisterType<CurrentPersistCallbacks>()
-				.As<ICurrentPersistCallbacks>()
-				.SingleInstance();
-
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
 			builder.Register(c => c.Resolve<MessageSenderCreator>().Create())
+				.As<ICurrentPersistCallbacks>()
 				.As<IMessageSendersScope>()
 				.SingleInstance();
-
-			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>().SingleInstance();
-			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<ScheduleChangedMessageSender>().As<IPersistCallback>().AsSelf().SingleInstance();
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
 				.OnActivated(e => CurrentBusinessUnit.SetInstanceFromContainer(e.Instance))
 				.OnRelease(e => CurrentBusinessUnit.SetInstanceFromContainer(null));
 			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
-
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();

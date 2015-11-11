@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.ServiceBus;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -15,14 +16,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ServiceBus
 		[Test]
 		public void ShouldCreateMessageSenderCollection()
 		{
-			var serviceBusSender = new FakeServiceBusSender();
 			var toggleManager = new FakeToggleManager();
+			var messageSender = new FakeMessageSender();
+			var messagePopulatingServiceBusSender = new MessagePopulatingServiceBusSender(null, null);
+			var eventPopulatingPublisher = new EventPopulatingPublisher(null, null);
 			toggleManager.Enable(Toggles.MessageBroker_SchedulingScreenMailbox_32733);
 
-			var messageSender = new FakeMessageSender();
 			var serializer = new NewtonsoftJsonSerializer();
 			var initiatorIdentifier = new FakeCurrentInitiatorIdentifier();
-			var creator = new MessageSenderCreator(serviceBusSender, toggleManager, messageSender, serializer,
+			var creator = new MessageSenderCreator(
+				toggleManager,
+				messageSender,
+				messagePopulatingServiceBusSender,
+				eventPopulatingPublisher,
+				serializer,
 				initiatorIdentifier);
 
 			var senderTypes = new[]
