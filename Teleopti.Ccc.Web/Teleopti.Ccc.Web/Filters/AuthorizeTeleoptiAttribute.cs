@@ -20,10 +20,13 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override bool IsAuthorized(HttpActionContext actionContext)
 		{
-			var controllerType = actionContext.ControllerContext.Controller.GetType();
-			var controllerIsExcluded = _excludeControllerTypes.Any(t => t == controllerType || controllerType.IsSubclassOf(t));
-			if (controllerIsExcluded)
-				return true;
+			if (_excludeControllerTypes.Count() != 0)
+			{
+				var controllerType = actionContext.ControllerContext.Controller.GetType();
+				var controllerIsExcluded = _excludeControllerTypes.Any(t => t == controllerType || controllerType.IsSubclassOf(t));
+				if (controllerIsExcluded)
+					return true;
+			}
 			return Thread.CurrentPrincipal is ITeleoptiPrincipal && base.IsAuthorized(actionContext);
 		}
 	}
