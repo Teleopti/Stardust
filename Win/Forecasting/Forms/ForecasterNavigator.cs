@@ -1404,7 +1404,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 									message.JobId = jobResult.Id.GetValueOrDefault();
 									uow.PersistAll();
 								}
-								
+
+								_messageSender.Send(message, true);
 								try
 								{
 									pages.SaveSettings();
