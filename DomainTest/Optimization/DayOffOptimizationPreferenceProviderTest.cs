@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -160,6 +161,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
+		}
+
+		[Test]
+		public void ShouldBeNoDuplicateFilters()
+		{
+			var contract = new Contract("_");
+			var dayOffRules = new DayOffRules();
+			dayOffRules.AddFilter(new ContractFilter(contract));
+			dayOffRules.AddFilter(new ContractFilter(contract));
+
+			dayOffRules.Filters.Count().Should().Be.EqualTo(1);
 		}
 	}
 }

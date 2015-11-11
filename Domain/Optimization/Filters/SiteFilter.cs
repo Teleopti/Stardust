@@ -1,23 +1,28 @@
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
 {
-	public class SiteFilter : IFilter
+	public class SiteFilter : AggregateEntity, IFilter
 	{
-		private readonly ISite _site;
+		protected SiteFilter()
+		{
+		}
 
 		public SiteFilter(ISite site)
 		{
-			_site = site;
+			Site = site;
 		}
 
-		public bool IsValidFor(IPerson person, DateOnly dateOnly)
+		public virtual ISite Site { get; protected set; }
+
+		public virtual bool IsValidFor(IPerson person, DateOnly dateOnly)
 		{
 			var personPeriod = person.Period(dateOnly);
-			return personPeriod != null && person.Period(dateOnly).Team.Site.Equals(_site);
+			return personPeriod != null && person.Period(dateOnly).Team.Site.Equals(Site);
 		}
 
-		public string FilterType
+		public virtual string FilterType
 		{
 			get { return "organization"; }
 		}

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffRules : NonversionedAggregateRootWithBusinessUnit
 	{
-		private readonly IList<IFilter> _filters = new List<IFilter>();
+		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		public virtual MinMax<int> DayOffsPerWeek { get; set; }
 		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
@@ -26,8 +25,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
+		public virtual IEnumerable<IFilter> Filters
+		{
+			get { return _filters; }
+		}
+
 		public virtual void AddFilter(IFilter filter)
 		{
+			filter.SetParent(this);
 			_filters.Add(filter);
 		}
 

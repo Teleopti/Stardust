@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Optimization.Filters">
+
+	<class name="TeamFilter">
+		<id name="Id"
+            type="guid"
+		  			access="nosetter.camelcase-underscore"
+            unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+		<many-to-one name="Team"
+			class="Teleopti.Ccc.Domain.AgentInfo.Team"/>
+	</class>
+</hibernate-mapping>

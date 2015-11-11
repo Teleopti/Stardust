@@ -1,23 +1,28 @@
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
 {
-	public class TeamFilter : IFilter
+	public class TeamFilter : AggregateEntity, IFilter
 	{
-		private readonly ITeam _team;
+		protected TeamFilter()
+		{
+		}
 
 		public TeamFilter(ITeam team)
 		{
-			_team = team;
+			Team = team;
 		}
 
-		public bool IsValidFor(IPerson person, DateOnly dateOnly)
+		public virtual ITeam Team { get; protected set; }
+
+		public virtual bool IsValidFor(IPerson person, DateOnly dateOnly)
 		{
 			var personPeriod = person.Period(dateOnly);
-			return personPeriod != null && person.Period(dateOnly).Team.Equals(_team);
+			return personPeriod != null && person.Period(dateOnly).Team.Equals(Team);
 		}
 
-		public string FilterType
+		public virtual string FilterType
 		{
 			get { return "organization"; }
 		}

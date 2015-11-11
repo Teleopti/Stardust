@@ -1,23 +1,28 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
 {
-	public class ContractFilter : IFilter
+	public class ContractFilter : AggregateEntity, IFilter
 	{
-		private readonly IContract _contract;
+		protected ContractFilter()
+		{
+		}
 
 		public ContractFilter(IContract contract)
 		{
-			_contract = contract;
+			Contract = contract;
 		}
 
-		public bool IsValidFor(IPerson person, DateOnly dateOnly)
+		public virtual IContract Contract { get; protected set; }
+
+		public virtual bool IsValidFor(IPerson person, DateOnly dateOnly)
 		{
 			var personPeriod = person.Period(dateOnly);
-			return personPeriod != null && person.Period(dateOnly).PersonContract.Contract.Equals(_contract);
+			return personPeriod != null && person.Period(dateOnly).PersonContract.Contract.Equals(Contract);
 		}
 
-		public string FilterType
+		public virtual string FilterType
 		{
 			get { return "contract"; }
 		}

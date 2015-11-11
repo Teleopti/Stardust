@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -83,6 +87,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
 			defaultInDb.ConsecutiveDayOffs.Should().Be.EqualTo(defaultSetting.ConsecutiveDayOffs);
 			defaultInDb.ConsecutiveWorkdays.Should().Be.EqualTo(defaultSetting.ConsecutiveWorkdays);
+		}
+
+		[Test]
+		public void ShouldPersistAndFetchContractFilters()
+		{
+			var contract = new Contract("_");
+			var contractFilter = new ContractFilter(contract);
+			var dayOffRules = new DayOffRules();
+			dayOffRules.AddFilter(contractFilter);
+
+			PersistAndRemoveFromUnitOfWork(contract);
+			PersistAndRemoveFromUnitOfWork(dayOffRules);
+
+			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+
+			dayOffRulesInDb.Filters.Single()
+				.Should().Be.EqualTo(contractFilter);
+		}
+
+		[Test]
+		public void ShouldPersistAndFetchTeamFilter()
+		{
+			var site = new Site("_");
+			var team = new Team {Site = site, Description = new Description("_")};
+			var teamFilter = new TeamFilter(team);
+			var dayOffRules = new DayOffRules();
+			dayOffRules.AddFilter(teamFilter);
+
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(team);
+			PersistAndRemoveFromUnitOfWork(dayOffRules);
+
+			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+
+			dayOffRulesInDb.Filters.Single()
+				.Should().Be.EqualTo(teamFilter);
+		}
+
+		[Test]
+		public void ShouldPersistAndFetchSiteFilter()
+		{
+			var site = new Site("_");
+			var siteFilter = new SiteFilter(site);
+			var dayOffRules = new DayOffRules();
+			dayOffRules.AddFilter(siteFilter);
+
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(dayOffRules);
+
+			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+
+			dayOffRulesInDb.Filters.Single()
+				.Should().Be.EqualTo(siteFilter);
 		}
 	}
 }

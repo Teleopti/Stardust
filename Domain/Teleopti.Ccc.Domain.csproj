@@ -2537,6 +2537,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Optimization\Filters\TeamFilter.hbm.xml" />
+    <EmbeddedResource Include="Optimization\Filters\SiteFilter.hbm.xml" />
+    <EmbeddedResource Include="Optimization\Filters\ContractFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\DayOffRules.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
