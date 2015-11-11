@@ -16,5 +16,10 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 			var personPeriod = person.Period(dateOnly);
 			return personPeriod != null && person.Period(dateOnly).PersonContract.Contract.Equals(_contract);
 		}
+
+		public string FilterType
+		{
+			get { return "contract"; }
+		}
 	}
 }

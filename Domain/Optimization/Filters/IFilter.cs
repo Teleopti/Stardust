@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 	public interface IFilter
 	{
 		bool IsValidFor(IPerson person, DateOnly dateOnly);
+		string FilterType { get; }
 	}
 }

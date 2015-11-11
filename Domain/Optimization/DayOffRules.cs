@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual bool IsValidForAgent(IPerson person, DateOnly dateOnly)
 		{
-			var validFilterTypes = new Dictionary<Type, bool>();
+			var validFilterTypes = new Dictionary<string, bool>();
 			foreach (var filter in _filters)
 			{
-				var filterType = filter.GetType();
+				var filterType = filter.FilterType;
 				bool currFilterValue;
 				if(validFilterTypes.TryGetValue(filterType, out currFilterValue) && currFilterValue)
 					continue;
