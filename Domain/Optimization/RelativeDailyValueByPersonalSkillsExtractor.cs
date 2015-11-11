@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -107,22 +108,31 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var aggregatedByPeriodSkillIntervalDataList =
 				_skillIntervalDataAggregator.AggregateSkillIntervalData(nestedList);
-           
-            bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
-            bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
-			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntervalDataList, useMinPersonnel, useMaxPersonnel);
+			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntervalDataList);
 	        return resultingList;
         }
 
-		private static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
+		private static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList)
         {
 			return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();
         }
 
         private IEnumerable<ISkill> extractPersonalSkillList(DateOnly scheduleDate)
         {
-            return _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection.Select(s => s.Skill).ToList();
+			var returnList = new List<ISkill>();
+
+			foreach (var personSkill in _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection)
+	        {
+		        if(!personSkill.Active)
+					continue;
+
+				if(((IDeleteTag)personSkill.Skill).IsDeleted)
+					continue;
+		        
+		        returnList.Add(personSkill.Skill);
+	        }
+            return returnList;
         }
     }
 }
