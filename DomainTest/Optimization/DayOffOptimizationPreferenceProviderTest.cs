@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -122,39 +121,32 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		[Ignore]
-		public void ShouldAndTeamAndContract()
+		public void ShouldDoAndOperationBetweenDifferentFilters()
 		{
-			var contractOnAgent = new Contract("_");
-			var contractToFilterOn = new Contract("_");
+			var contractNotOnAgent = new Contract("_");
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1));
-			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(contractOnAgent, new PartTimePercentage("_"), new ContractSchedule("_"));
+			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_"));
 			var dayOffRules = new DayOffRules { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
-			dayOffRules.AddFilter(new ContractFilter(contractToFilterOn));
+			dayOffRules.AddFilter(new ContractFilter(contractNotOnAgent));
 
 			DayOffRulesRepository.Add(dayOffRules);
 
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
-				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveDayOffs);	
+				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveWorkdays);	
 		}
 
 		[Test]
-		[Ignore]
-		public void ShouldAndSiteAndContract()
+		public void ShouldDoOrOperationWithinSameFilter()
 		{
-			var contractOnAgent = new Contract("_");
-			var contractToFilterOn = new Contract("_");
-			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1));
-			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(contractOnAgent, new PartTimePercentage("_"), new ContractSchedule("_"));
-			var dayOffRules = new DayOffRules { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
-			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
-			dayOffRules.AddFilter(new ContractFilter(contractToFilterOn));
-
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var dayOffRules = new DayOffRules { ConsecutiveWorkdays = new MinMax<int>(1, 2) };
+			dayOffRules.AddFilter(new TeamFilter(new Team()));
+			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			DayOffRulesRepository.Add(dayOffRules);
 
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
-				.Should().Be.EqualTo(DayOffRules.CreateDefault().ConsecutiveDayOffs);
+				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
 	}
 }

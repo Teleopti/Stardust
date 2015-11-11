@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -32,7 +33,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual bool IsValidForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return Default || _filters.Any(filter => filter.IsValidFor(person, dateOnly));
+			var validFilterTypes = new Dictionary<Type, bool>();
+			foreach (var filter in _filters)
+			{
+				var filterType = filter.GetType();
+				bool currFilterValue;
+				if(validFilterTypes.TryGetValue(filterType, out currFilterValue) && currFilterValue)
+					continue;
+
+				validFilterTypes[filterType] = filter.IsValidFor(person, dateOnly);
+      }
+
+			return validFilterTypes.Keys.All(key => validFilterTypes[key]);
 		}
 	}
 }
