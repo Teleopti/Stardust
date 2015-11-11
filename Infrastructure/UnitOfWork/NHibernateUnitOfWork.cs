@@ -160,7 +160,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					_transaction.Dispose();
 					_transaction = null;
 				}
-				invokeCallbacks(modifiedRoots);
 			}
 			catch (TooManyActiveAgentsException exception)
 			{
