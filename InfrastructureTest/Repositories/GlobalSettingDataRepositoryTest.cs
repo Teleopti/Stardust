@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Security.Principal;
+using System.Threading;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -112,6 +118,50 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(result.GetType().Equals(typeof(testData2)));
             Assert.AreEqual(14, result.Data);
         }
+
+		  [Test]
+		  public void SaveGlobalSettingForTwoBU()
+		  {
+			  var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			  var personRepository = new PersonRepository( new ThisUnitOfWork(UnitOfWork));
+			  const string key = "SMS";
+
+			  var businessUnit1 = BusinessUnitFactory.CreateSimpleBusinessUnit("BU1");
+			  var loggedOnPerson = PersonFactory.CreatePerson("person for bu1");
+			  personRepository.Add(loggedOnPerson);
+			  businessUnitRepository.Add(businessUnit1);
+			  changeBusinessUnit(businessUnit1, loggedOnPerson);
+			  var testData1 = new testData {Data = 123};
+			  testData forBu1 = rep.FindValueByKey(key, testData1);
+			  rep.PersistSettingValue(key, forBu1);
+			 
+			  
+			  Session.Flush();
+			  Session.Clear();
+			  Assert.AreEqual(123, rep.FindValueByKey(key, testData1).Data);
+
+			  var businessUnit2 = BusinessUnitFactory.CreateSimpleBusinessUnit("BU2");
+			  businessUnitRepository.Add(businessUnit2);
+			  loggedOnPerson = PersonFactory.CreatePerson("person for bu2");
+			  personRepository.Add(loggedOnPerson);
+			  changeBusinessUnit(businessUnit2, loggedOnPerson);
+			  var testData2 = new testData { Data = 456 };
+			  testData forBu2 = rep.FindValueByKey(key, testData2);
+			  rep.PersistSettingValue(key, forBu2);
+			  Session.Flush();
+			  Session.Clear();
+			  Assert.AreEqual(456, rep.FindValueByKey(key, testData2).Data);
+		  }
+
+	    private void changeBusinessUnit(IBusinessUnit businessUnit,IPerson person)
+	    {
+			 var dataSource = MockRepository.GenerateMock<IDataSource>();
+			 var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent());
+			 //var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+			 var principalForTest = new TeleoptiPrincipal(identity, person);
+			 Thread.CurrentPrincipal = new TeleoptiPrincipal(identity, person);
+			 ((TeleoptiPrincipal)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(principalForTest);
+	    }
 
         private static testData dummyValue()
         {

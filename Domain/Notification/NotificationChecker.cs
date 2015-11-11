@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
 	public class NotificationChecker : INotificationChecker
 	{
-		private readonly ICurrentUnitOfWork _unitOfWorkFactory;
-		private readonly IRepositoryFactory _repositoryFactory;
-		private SmsSettings _setting;
+		private readonly IGlobalSettingDataRepository _settingDataRepository;
 
-		public NotificationChecker(ICurrentUnitOfWork unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		public NotificationChecker(IGlobalSettingDataRepository settingDataRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-			_repositoryFactory = repositoryFactory;
+			_settingDataRepository = settingDataRepository;
 		}
 
 		private SmsSettings notificationSetting()
 		{
-			if (_setting != null)
-				return _setting;
-			var uow = _unitOfWorkFactory.Current();
-			return _setting = _repositoryFactory.CreateGlobalSettingDataRepository(uow)
+			return _settingDataRepository
 				.FindValueByKey("SmsSettings", new SmsSettings());
 		}
 
@@ -33,33 +27,35 @@ namespace Teleopti.Ccc.Domain.Notification
 			return notificationSetting().NotificationSelection;
 		}
 
-		public string EmailSender
+		public NotificationLookup Lookup()
 		{
-			get
-			{
-				return notificationSetting().EmailFrom;
-			}
+			return new NotificationLookup(notificationSetting());
+		}
+	}
+
+	public class NotificationLookup
+	{
+		private readonly SmsSettings _settings;
+
+		public NotificationLookup(SmsSettings settings)
+		{
+			_settings = settings;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-	        MessageId = "0")]
-	    public string SmsMobileNumber(IPerson person)
-	    {
-	        // get wich optional column to use
+		public string EmailSender
+		{
+			get { return _settings.EmailFrom; }
+		}
 
-			if (notificationSetting().OptionalColumnId.Equals(Guid.Empty)) // no column set
-	            return "";
-	        // get a value if one
-	        foreach (
-	            var optionalColumnValue in
-	                person.OptionalColumnValueCollection.Where(
-						optionalColumnValue => optionalColumnValue.Parent.Id.Equals(notificationSetting().OptionalColumnId)))
-	        {
-	            return optionalColumnValue.Description;
-	        }
+		public string SmsMobileNumber(IPerson person)
+		{
+			if (_settings.OptionalColumnId.Equals(Guid.Empty)) return string.Empty;
 
-	        //no value
-	        return "";
-	    }
+			var result =
+				person.OptionalColumnValueCollection.FirstOrDefault(
+					optionalColumnValue => optionalColumnValue.Parent.Id.Equals(_settings.OptionalColumnId)) ?? new OptionalColumnValue(string.Empty);
+			
+			return result.Description;
+		}
 	}
 }

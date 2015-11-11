@@ -27,13 +27,14 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			if (sender != null)
 			{
-				var emailSender = _notificationChecker.EmailSender;
+				var lookup = _notificationChecker.Lookup();
+				var emailSender = lookup.EmailSender;
 				foreach (var person in persons)
 				{
 					sender.SendNotification(messages, new NotificationHeader
 					{
 						EmailSender = emailSender,
-						MobileNumber = _notificationChecker.SmsMobileNumber(person),
+						MobileNumber = lookup.SmsMobileNumber(person),
 						EmailReceiver = person.Email,
 						PersonName = person.Name.ToString()
 					});

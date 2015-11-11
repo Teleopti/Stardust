@@ -1,180 +1,126 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
 	[TestFixture]
 	public class NotificationCheckerTest
 	{
-		private MockRepository _mocks;
-		private ICurrentUnitOfWork _unitOfWorkFactory;
-		private IRepositoryFactory _repositoryFactory;
+		private IGlobalSettingDataRepository _settingRepository;
 		private NotificationChecker _target;
 		private IPerson _person;
-		private ISettingDataRepository _rep;
-		private IUnitOfWork _uow;
-		private IToggleManager _toggleManager;
+		private IOptionalColumn _optionalColumn;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWork>();
-			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
-			_toggleManager = _mocks.StrictMock<IToggleManager>();
-			_target = new NotificationChecker(_unitOfWorkFactory, _repositoryFactory);
-			_uow = _mocks.StrictMock<IUnitOfWork>();
-			_rep = _mocks.StrictMock<ISettingDataRepository>();
-			_person = _mocks.StrictMock<IPerson>();
+			_settingRepository = new FakeGlobalSettingDataRepository();
+			_target = new NotificationChecker(_settingRepository);
+			_person = PersonFactory.CreatePerson();
+			_optionalColumn = new OptionalColumn("Phone Number");
+			_optionalColumn.SetId(Guid.NewGuid());
 		}
 
 		[Test]
 		public void ShouldReturnEmptyIfNoColumnDefinedForSms()
 		{
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var no = _target.SmsMobileNumber(_person);
+			var no = _target.Lookup().SmsMobileNumber(_person);
 			Assert.That(no,Is.Empty);
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnEmptyIfNoOptionalValuesForSms()
 		{
 			var settings = new SmsSettings{OptionalColumnId = Guid.NewGuid()};
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
-			Expect.Call(_person.OptionalColumnValueCollection).Return(
-				new ReadOnlyCollection<IOptionalColumnValue>(new List<IOptionalColumnValue>()));
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var no = _target.SmsMobileNumber(_person);
+			_settingRepository.PersistSettingValue("SmsSettings", settings);
+
+			var no = _target.Lookup().SmsMobileNumber(_person);
 			Assert.That(no, Is.Empty);
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnEmptyIfNoOptionalValueMatchesForSms()
 		{
-			var parent = _mocks.StrictMock<IEntity>();
-			var val = _mocks.StrictMock<IOptionalColumnValue>();
-			
-			var settings = new SmsSettings { OptionalColumnId = Guid.NewGuid() };
-            Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
-			Expect.Call(_person.OptionalColumnValueCollection).Return(
-				new ReadOnlyCollection<IOptionalColumnValue>(new List<IOptionalColumnValue>{val}));
-			Expect.Call(val.Parent).Return(parent);
-			Expect.Call(parent.Id).Return(Guid.NewGuid());
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var no = _target.SmsMobileNumber(_person);
+			var wrongOptionalColumn = new OptionalColumn("Shoe size");
+			wrongOptionalColumn.SetId(Guid.NewGuid());
+
+			_person.AddOptionalColumnValue(new OptionalColumnValue("46"), wrongOptionalColumn);
+
+			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
+			_settingRepository.PersistSettingValue("SmsSettings", settings);
+
+			var no = _target.Lookup().SmsMobileNumber(_person);
 			Assert.That(no, Is.Empty);
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnValueWhenColumnMatchesForSms()
 		{
-			var parent = _mocks.StrictMock<IEntity>();
-			var val = _mocks.StrictMock<IOptionalColumnValue>();
-			var id = Guid.NewGuid();
-			var settings = new SmsSettings { OptionalColumnId = id };
-            Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
-			Expect.Call(_person.OptionalColumnValueCollection).Return(
-				new ReadOnlyCollection<IOptionalColumnValue>(new List<IOptionalColumnValue> { val }));
-			Expect.Call(val.Parent).Return(parent);
-			Expect.Call(parent.Id).Return(id);
-			Expect.Call(val.Description).Return("123456789");
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var no = _target.SmsMobileNumber(_person);
-			Assert.That(no, Is.EqualTo("123456789"));
-			_mocks.VerifyAll();
+			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
+			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
+			_settingRepository.PersistSettingValue("SmsSettings", settings);
+
+			var no = _target.Lookup().SmsMobileNumber(_person);
+			Assert.That(no, Is.EqualTo("+461234657"));
 		}
 
 		[Test]
 		public void ShouldHaveSmsAsDefaultNotificationType()
 		{
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
 			Assert.That(_target.NotificationType(), Is.EqualTo(NotificationType.Sms));
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldHaveEmailNotificationType()
 		{
 			var emailSetting = new SmsSettings { NotificationSelection = NotificationType.Email };
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
+			_settingRepository.PersistSettingValue("SmsSettings", emailSetting);
+			
 			var type = _target.NotificationType();
 			Assert.That(type, Is.EqualTo(emailSetting.NotificationSelection));
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldHaveDefaultEmailFromAddress()
 		{
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			Assert.That(_target.EmailSender, Is.EqualTo("no-reply@teleopti.com"));
-			_mocks.VerifyAll();
+			Assert.That(_target.Lookup().EmailSender, Is.EqualTo("no-reply@teleopti.com"));
 		}
 
 		[Test]
 		public void ShouldGetEmailSender()
 		{
 			var emailSetting = new SmsSettings {NotificationSelection = NotificationType.Email, EmailFrom = "ashley@andeen.com"};
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var sender = _target.EmailSender;
+			_settingRepository.PersistSettingValue("SmsSettings", emailSetting);
+
+			var sender = _target.Lookup().EmailSender;
 			Assert.That(sender, Is.EqualTo(emailSetting.EmailFrom));
-			_mocks.VerifyAll();
 		}
 
 		[Test]
-		public void ShouldCallRepositoryOnlyOnce()
+		public void ShouldReturnValueWhenUpdatedColumnMatchesForSms()
 		{
-			var emailSetting = new SmsSettings { NotificationSelection = NotificationType.Email, EmailFrom = "ashley@andeen.com" };
-			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow).Repeat.Once();
-			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep).Repeat.Once();
-			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments().Repeat.Once();
-			Expect.Call(_uow.Dispose).Repeat.Never();
-			_mocks.ReplayAll();
-			var type = _target.NotificationType();
-			var sender = _target.EmailSender;
-			Assert.That(type, Is.EqualTo(emailSetting.NotificationSelection));
-			Assert.That(sender, Is.EqualTo(emailSetting.EmailFrom));
-			_mocks.VerifyAll();
+			var newOptionalColumn = new OptionalColumn("Mobile Phone");
+			newOptionalColumn.SetId(Guid.NewGuid());
+
+			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
+			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234658"), newOptionalColumn);
+
+			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
+			_settingRepository.PersistSettingValue("SmsSettings", settings);
+
+			var no = _target.Lookup().SmsMobileNumber(_person);
+
+			settings = new SmsSettings { OptionalColumnId = newOptionalColumn.Id.GetValueOrDefault() };
+			_settingRepository.PersistSettingValue("SmsSettings", settings);
+
+			Assert.That(_target.Lookup().SmsMobileNumber(_person), Is.Not.EqualTo(no));
 		}
 	}
 }

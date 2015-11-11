@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -15,16 +17,16 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var notificationSenderFactory = MockRepository.GenerateMock<INotificationSenderFactory>();
 			var notificationSender = MockRepository.GenerateMock<INotificationSender>();
 			var notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
-			notificationChecker.Stub(x => x.EmailSender).Return("sender@teleopti.com");
+			notificationChecker.Stub(x => x.Lookup()).Return(new NotificationLookup(new SmsSettings{EmailFrom = "sender@teleopti.com", OptionalColumnId = Guid.Empty}));
+
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
-			notificationChecker.Stub(x => x.SmsMobileNumber(person)).Return("0709218001");
 			var notificationHeader = new NotificationHeader
 			{
 				EmailReceiver = person.Email,
-				EmailSender = notificationChecker.EmailSender,
-				MobileNumber = notificationChecker.SmsMobileNumber(person),
+				EmailSender = "sender@teleopti.com",
+				MobileNumber = string.Empty,
 				PersonName = person.Name.ToString()
 			};
 
@@ -42,29 +44,28 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var notificationSenderFactory = MockRepository.GenerateMock<INotificationSenderFactory>();
 			var notificationSender = MockRepository.GenerateMock<INotificationSender>();
 			var notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
-			notificationChecker.Stub(x => x.EmailSender).Return("sender@teleopti.com");
+			notificationChecker.Stub(x => x.Lookup()).Return(new NotificationLookup(new SmsSettings { EmailFrom = "sender@teleopti.com", OptionalColumnId = Guid.Empty }));
+
 			var messages = new NotificationMessage();
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
 			person1.Email = "aa@teleopti.com";
-			notificationChecker.Stub(x => x.SmsMobileNumber(person1)).Return("0709218001");
-
+			
 			var person2 = PersonFactory.CreatePersonWithGuid("b", "b");
 			person2.Email = "bb@teleopti.com";
-			notificationChecker.Stub(x => x.SmsMobileNumber(person2)).Return("0709218002");
-
+			
 			var notificationHeader1 = new NotificationHeader
 			{
 				EmailReceiver = person1.Email,
-				EmailSender = notificationChecker.EmailSender,
-				MobileNumber = notificationChecker.SmsMobileNumber(person1),
+				EmailSender = "sender@teleopti.com",
+				MobileNumber = string.Empty,
 				PersonName = person1.Name.ToString()
 			};
 
 			var notificationHeader2 = new NotificationHeader
 			{
 				EmailReceiver = person2.Email,
-				EmailSender = notificationChecker.EmailSender,
-				MobileNumber = notificationChecker.SmsMobileNumber(person2),
+				EmailSender = "sender@teleopti.com",
+				MobileNumber = string.Empty,
 				PersonName = person2.Name.ToString()
 			};
 
