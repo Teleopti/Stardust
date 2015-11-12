@@ -1,4 +1,22 @@
-﻿@media (min-width: 992px) {
+﻿.measure {
+	width: 85%;
+}
+
+.value {
+	width: 15%;
+	text-align: right;
+}
+
+.info-row {
+	display: inline-flex;
+	width: 100%;
+}
+
+.text-align-right {
+	text-align: right;
+}
+
+@media (min-width: 992px) {
 	.text-align-right {
 		text-align: right;
 	}

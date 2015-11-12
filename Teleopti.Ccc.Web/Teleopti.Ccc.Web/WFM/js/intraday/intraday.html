@@ -15,17 +15,29 @@
 			</form>
 		</div>
 		<div class="col-md-8 text-align-right">
-			<p>Latest acquired date: {{latestDate | date:'HH:mm:ss'}}</p>
+			<p>Latest acquired date: {{ format(latestDate) }}</p>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<div class="role-nav material-depth-1 container-block">
-				<div class="wfm-block sub-header" translate>{{name}}</div>
-				<div class="wfm-block row">
-					<div class="col-md-8">Value: </div>
-					<div class="col-md-4">{{value}}</div>
-					<div class="col-md-12">{{stringValue}}</div>
+			<div class="material-depth-1">
+				<div class="sub-header" translate>{{name}}</div>
+				<div class="wfm-block">
+					<div class="info-row">
+						<div class="measure">Offered calls: </div>
+						<div class="value">{{offeredCalls}}</div>
+					</div>
+					<div class="info-row">
+						<div class="measure">Forecasted calls: </div>
+						<div class="value">{{forecastedCalls}}</div>
+					</div>
+					<div class="info-row">
+						<div class="measure">Relative difference: </div>
+						<div class="value">{{value}}</div>
+					</div>
+					<div class="info-row">
+						<div class="text-danger">{{stringValue}}</div>
+					</div>
 				</div>
 			</div>
 		</div>
