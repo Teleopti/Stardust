@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -33,8 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedContractName = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "contract";
-			var contract = new Contract(expectedContractName + RandomName.Make());
-			contract.SetId(expectedGuid);
+			var contract = new Contract(expectedContractName + RandomName.Make()).WithId(expectedGuid);
 			ContractRepository.Add(contract);
 
 			var result = Target.Search(expectedContractName).Single();
@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedTeamName = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "team";
-			var team = new Team {Description = new Description(expectedTeamName)};
-			team.SetId(expectedGuid);
+			var team = new Team {Description = new Description(expectedTeamName)}.WithId(expectedGuid);
 			TeamRepository.Add(team);
 
 			var result = Target.Search(expectedTeamName).Single();
@@ -67,8 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedSiteName = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "site";
-			var site = new Site(expectedSiteName);
-			site.SetId(expectedGuid);
+			var site = new Site(expectedSiteName).WithId(expectedGuid);
 			SiteRepository.Add(site);
 
 			var result = Target.Search(expectedSiteName).Single();
