@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -211,16 +212,40 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// </summary>
 	    public void ResizeGridColumnsToFit()
 	    {
-		    if (IsOverviewColumnsHidden)
-		    {
-			    GridRangeInfo nameColumnRangeInfo = GridRangeInfo.Col((int) ColumnType.RowHeaderColumn);
-			    _grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
-		    }
-		    else
-		    {
-			    _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols((int) ColumnType.RowHeaderColumn,
-				    (int) ColumnType.StartScheduleColumns - 1));
-		    }
+			GridRangeInfo nameColumnRangeInfo = GridRangeInfo.Col((int)ColumnType.RowHeaderColumn);
+			_grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
+
+		    if (!IsOverviewColumnsHidden)
+				setOverviewColumnsWidth();
+	    }
+
+	    private void setOverviewColumnsWidth()
+	    {
+			var graphics = _grid.Model.GetGraphicsProvider().Graphics;
+
+			setOverviewColumnWidth(graphics, ColumnType.TargetContractTimeColumn, "TotalTimeCell");
+			setOverviewColumnWidth(graphics, ColumnType.TargetDayOffColumn, "TotalDayOffCell");
+			setOverviewColumnWidth(graphics, ColumnType.CurrentContractTimeColumn, "TotalTimeCell");
+			setOverviewColumnWidth(graphics, ColumnType.CurrentDayOffColumn, "TotalDayOffCell");
+
+			graphics.Dispose();
+	    }
+
+	    private void setOverviewColumnWidth(Graphics graphics, ColumnType columnType, string celltype)
+	    {
+			const int margin = 3;
+			const int overviewHeaderRow = 1;
+			const int overviewCellRow = 2;
+
+			var gridStyleInfo = _grid[overviewHeaderRow, (int)columnType];
+			var headerSize = gridStyleInfo.CellModel.CalculatePreferredCellSize(graphics, overviewHeaderRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
+
+			gridStyleInfo = _grid[overviewCellRow, (int)columnType];
+			gridStyleInfo.CellType = celltype;
+			var cellSize = gridStyleInfo.CellModel.CalculatePreferredCellSize(graphics, overviewCellRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
+
+			var largestSize = headerSize.Width > cellSize.Width ? headerSize : cellSize;
+			_grid.Model.ColWidths[(int)columnType] = largestSize.Width + margin;
 	    }
 
 	    /// <summary>
@@ -483,7 +508,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         internal void CreateCellModels()
         {
             if (!ViewGrid.CellModels.ContainsKey("TotalDayOffCell"))
-                ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0});
+                ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0, MaxValue = 999});
             if (!ViewGrid.CellModels.ContainsKey("TotalTimeCell"))
                 ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionWeekHeaderViewCellModel"))

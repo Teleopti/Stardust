@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
@@ -56,5 +57,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             return false;
         }
+
+	    public override Size CalculatePreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
+	    {
+		    var currentValue = style.CellValue;
+		    style.CellValue = TimeSpan.FromHours(9999);
+		    var size = base.CalculatePreferredCellSize(g, rowIndex, colIndex, style, queryBounds);
+		    style.CellValue = currentValue;
+		    return size;
+	    }
     }
 }

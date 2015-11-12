@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
@@ -14,12 +15,20 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         protected NumericReadOnlyCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+			MinValue = double.MinValue;
+			MaxValue = double.MaxValue;
         }
 
         public NumericReadOnlyCellModel(GridModel grid)
             : base(grid)
         {
+			MinValue = double.MinValue;
+			MaxValue = double.MaxValue;
         }
+
+		public double MaxValue { get; set; }
+
+		public double MinValue { get; set; }
 
         public int NumberOfDecimals
         {
@@ -75,6 +84,18 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             Trace.WriteLine("GetObjectData called");
             base.GetObjectData(info, context);
         }
+
+		public override Size CalculatePreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
+		{
+			if(Math.Abs(MaxValue - double.MaxValue) < 0.1)
+				return base.CalculatePreferredCellSize(g, rowIndex, colIndex, style, queryBounds);
+
+			var currentValue = style.CellValue;
+			style.CellValue = MaxValue;
+			var size = base.CalculatePreferredCellSize(g, rowIndex, colIndex, style, queryBounds);
+			style.CellValue = currentValue;
+			return size;
+		}
     }
 
     /// <summary>
