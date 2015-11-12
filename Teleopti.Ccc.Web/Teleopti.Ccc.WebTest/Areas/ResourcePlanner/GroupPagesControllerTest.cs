@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebTest.Areas.Anywhere;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class FilterControllerTest
+	public class GroupPagesControllerTest
 	{
 		[Test]
 		public void ShouldGetPermittedFilters()
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var pageId = Guid.NewGuid();
 			
 			var target =
-				new FilterController(
+				new GroupPagesController(
 					new FakeGroupingReadOnlyRepository(
 						new List<ReadOnlyGroupPage> {new ReadOnlyGroupPage {PageId = pageId, PageName = "Sysselsättningsgrad"}},
 						new List<ReadOnlyGroupDetail>
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var pageId = Guid.NewGuid();
 
 			var target =
-				new FilterController(
+				new GroupPagesController(
 					new FakeGroupingReadOnlyRepository(
 						new List<ReadOnlyGroupPage> { new ReadOnlyGroupPage { PageId = pageId, PageName = "Sysselsättningsgrad" } },
 						new List<ReadOnlyGroupDetail>
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var pageId = Guid.NewGuid();
 
 			var target =
-				new FilterController(
+				new GroupPagesController(
 					new FakeGroupingReadOnlyRepository(
 						new List<ReadOnlyGroupPage> { new ReadOnlyGroupPage { PageId = pageId, PageName = "xxMain" } },
 						new List<ReadOnlyGroupDetail>

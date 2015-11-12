@@ -300,7 +300,7 @@
     <Compile Include="Areas\ResourcePlanner\DayOffRulesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\FakePlanningPeriod.cs" />
-    <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\GroupPagesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />

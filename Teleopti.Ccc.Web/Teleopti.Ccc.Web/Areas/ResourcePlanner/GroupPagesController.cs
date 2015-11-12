@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	public class FilterController : ApiController
+	public class GroupPagesController : ApiController
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public FilterController(IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
+		public GroupPagesController(IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_permissionProvider = permissionProvider;
