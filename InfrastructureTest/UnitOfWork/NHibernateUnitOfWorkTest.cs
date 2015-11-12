@@ -5,7 +5,6 @@ using NHibernate.Context;
 using NHibernate.Engine;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -13,9 +12,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
@@ -321,6 +318,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				session.Flush();
 				interceptor.Iteration = InterceptorIteration.UpdateRoots;
 				session.Flush();
+				tx.Commit();
+				tx.Dispose();
+				Expect.On(session).Call(session.BeginTransaction()).Return(tx);
 				tx.Commit();
 				tx.Dispose();
 				Expect.Call(messageBroker.IsAlive).Return(true);

@@ -153,13 +153,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
+				
+				commitInnerTransaction();
+				
+				mightStartTransaction();
 				invokeCallbacks(modifiedRoots);
-				if (Transaction.Current == null)
-				{
-					_transaction.Commit();
-					_transaction.Dispose();
-					_transaction = null;
-				}
+				commitInnerTransaction();
 			}
 			catch (TooManyActiveAgentsException exception)
 			{
@@ -181,9 +180,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
-			
 			notifyBroker(initiator, modifiedRoots);
 			return modifiedRoots;
+		}
+
+		private void commitInnerTransaction()
+		{
+			if (Transaction.Current == null)
+			{
+				_transaction.Commit();
+				_transaction.Dispose();
+				_transaction = null;
+			}
 		}
 
 		private void invokeCallbacks(IEnumerable<IRootChangeInfo> modifiedRoots)
