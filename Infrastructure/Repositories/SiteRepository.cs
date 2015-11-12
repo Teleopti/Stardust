@@ -37,8 +37,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<ISite> FindSitesStartWith(string searchString)
 	    {
-		    //TODO fix later
-		    return Enumerable.Empty<ISite>();
-	    }
+			return Session.CreateCriteria<Site>()
+				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+				.List<ISite>();
+		}
     }
 }

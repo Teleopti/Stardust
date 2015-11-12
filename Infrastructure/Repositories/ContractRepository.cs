@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<IContract> FindContractsStartWith(string searchString)
 	    {
-		    return Session.CreateCriteria<IContract>()
+		    return Session.CreateCriteria<Contract>()
 			    .Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
 			    .List<IContract>();
 	    }

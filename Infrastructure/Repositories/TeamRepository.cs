@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<ITeam> FindTeamsStartWith(string searchString)
 	    {
-			return Session.CreateCriteria<ITeam>()
+			return Session.CreateCriteria<Team>()
 				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
 				.List<ITeam>();
 		}

@@ -1,8 +1,10 @@
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -64,5 +66,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISite site = new Site("test");
             Assert.AreEqual("test",site.Description.Name);
         }
-    }
+
+		[Test]
+		public void ShouldFindSiteStartingWith()
+		{
+			var name = RandomName.Make();
+			var site = new Site(name + RandomName.Make());
+			PersistAndRemoveFromUnitOfWork(site);
+
+			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name);
+
+			loaded.Should().Have.SameValuesAs(site);
+		}
+
+		[Test]
+		public void ShouldMissSiteStartingWith()
+		{
+			var site = new Site(RandomName.Make());
+			PersistAndRemoveFromUnitOfWork(site);
+
+			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make());
+
+			loaded.Should().Be.Empty();
+		}
+	}
 }
