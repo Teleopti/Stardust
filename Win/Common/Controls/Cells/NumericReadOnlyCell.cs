@@ -8,7 +8,7 @@ using System;
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
     [Serializable]
-    public class NumericReadOnlyCellModel : GridStaticCellModel, INumericCellModelWithDecimals
+	public class NumericReadOnlyCellModel : GridStaticCellModel, INumericCellModelWithDecimals, ICustomPreferredCellSize
     {
         private int _numDecimals;
 
@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             base.GetObjectData(info, context);
         }
 
-		public override Size CalculatePreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
-		{
-			if(Math.Abs(MaxValue - double.MaxValue) < 0.1)
+		public Size CustomPreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
+	    {
+			if (Math.Abs(MaxValue - double.MaxValue) < 0.1)
 				return base.CalculatePreferredCellSize(g, rowIndex, colIndex, style, queryBounds);
 
 			var currentValue = style.CellValue;
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			var size = base.CalculatePreferredCellSize(g, rowIndex, colIndex, style, queryBounds);
 			style.CellValue = currentValue;
 			return size;
-		}
+	    }
     }
 
     /// <summary>

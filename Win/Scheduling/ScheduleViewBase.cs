@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			gridStyleInfo = _grid[overviewCellRow, (int)columnType];
 			gridStyleInfo.CellType = celltype;
-			var cellSize = gridStyleInfo.CellModel.CalculatePreferredCellSize(graphics, overviewCellRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
+			var cellSize = ((ICustomPreferredCellSize)gridStyleInfo.CellModel).CustomPreferredCellSize(graphics, overviewCellRow, (int)columnType, gridStyleInfo, GridQueryBounds.Width);
 
 			var largestSize = headerSize.Width > cellSize.Width ? headerSize : cellSize;
 			_grid.Model.ColWidths[(int)columnType] = largestSize.Width + margin;

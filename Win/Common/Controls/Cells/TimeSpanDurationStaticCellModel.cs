@@ -8,8 +8,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
+	public interface ICustomPreferredCellSize
+	{
+		Size CustomPreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds);
+	}
+
     [Serializable]
-    public class TimeSpanDurationStaticCellModel : GridStaticCellModel
+    public class TimeSpanDurationStaticCellModel : GridStaticCellModel, ICustomPreferredCellSize
     {
         protected TimeSpanDurationStaticCellModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -58,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return false;
         }
 
-	    public override Size CalculatePreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
+		public Size CustomPreferredCellSize(Graphics g, int rowIndex, int colIndex, GridStyleInfo style, GridQueryBounds queryBounds)
 	    {
 		    var currentValue = style.CellValue;
 		    style.CellValue = TimeSpan.FromHours(9999);
