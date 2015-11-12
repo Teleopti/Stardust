@@ -212,13 +212,21 @@ And I see that the campaign is not done after the end date
 And I replan the campaign
 Then I should see the campaign is done after the end date
 
-@ignore
+
 Scenario: Manually update backlog
-When I view the backlog chart of the campaign created with 
+Given there is an activity with
+	| Field | Value     |
+	| Name  | NewCampaign |
+And there is a skill with
+	| Field    | Value     |
+	| Name     | NewCampaign |
+	| Activity | NewCampaign |
+And I have created a campaign with
 | Field                             | Value       |
 | Name                              | NewCampaign |
 | Start Date                        | 2015-12-01  |
-| End Date                          | 2016-01-30  |
+| End Date                          | 2015-12-14  |
+| Skill                             | NewCampaign |
 | Call List Len                     | 5555        |
 | Target Rate                       | 55          |
 | Connect Rate                      | 55          |
@@ -228,7 +236,11 @@ When I view the backlog chart of the campaign created with
 | Unproductive Time                 | 55          |
 | Opening Hour Start                | 08:00       |
 | Opening Hour End                  | 16:00       |
-And I select all the dates from '2015-12-15' to '2015-12-16'
+And I am viewing outbounds page
+And I set the starting month for viewing period to '2015-12-01'
+When I click at campaign name tag 'NewCampaign'
+And I should see the backlog visualization of 'NewCampaign'
+And I select all the dates from '2015-12-07' to '2015-12-08'
 And I set the manual backlog to '0'
 Then I should see the campaign is done after the end date
 And the campaign is overstaffed

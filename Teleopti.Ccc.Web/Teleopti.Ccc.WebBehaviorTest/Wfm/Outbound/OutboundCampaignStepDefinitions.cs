@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -9,6 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 	{
 
 		[When(@"I set the starting month for viewing period to '(.*)'")]
+		[Given(@"I set the starting month for viewing period to '(.*)'")]
 		public void WhenISetTheStartingMonthForViewingPeriodTo(DateTime startingMonth)
 		{
 			Browser.Interactions.SetScopeValues(".outbound-summary", new Dictionary<string, string>
@@ -58,10 +59,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				() =>
 				{			
 					Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
-				});			
+				});
 		}
 	
 		[Then(@"I should see the backlog visualization of '(.*)'")]
+		[When(@"I should see the backlog visualization of '(.*)'")]
 		public void ThenIShouldSeeTheBacklogVisualizationOf(string campaignName)
 		{
 			Browser.Interactions.AssertExists("campaign-chart");
@@ -154,8 +156,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		{
 			Browser.Interactions.AssertScopeValue(".campaign-edit", "campaignSpanningPeriodForm.$pristine", Is.EqualTo("true"));
 			Navigation.GoToOutbound();			
-		}		
-		
+		}
+
+		[Given(@"I have created a campaign with")]
+		public void GivenIHaveCreatedACampaignWith(Table table)
+		{
+			DataMaker.ApplyFromTable<OutboundCampaignConfigurable>(table);
+		}
+
+		[Given(@"I am viewing outbounds page")]
+		public void GivenIAmViewingOutPage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToOutbound();
+		}
+
 
 		[When(@"I have created campaign with")]
 		public void WhenIHaveCreatedCampaignWith(Table table)
