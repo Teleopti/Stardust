@@ -79,8 +79,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<ITeam> FindTeamsStartWith(string searchString)
 	    {
-		    //TODO: impl later
-		    return Enumerable.Empty<ITeam>();
-	    }
+			return Session.CreateCriteria<ITeam>()
+				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+				.List<ITeam>();
+		}
     }
 }

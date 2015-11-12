@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Kpi;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -103,7 +103,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(LazyLoadingManager.IsInitialized(teams.First().Site), Is.True);
 		}
 
-        protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+
+		[Test]
+		public void ShouldFindTeamStartingWith()
+		{
+			var name = RandomName.Make();
+			var team = new Team {Description = new Description(name + RandomName.Make()), Site=teamSite};
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name);
+
+			loaded.Should().Have.SameValuesAs(team);
+		}
+
+		[Test]
+		public void ShouldMissTeamStartingWith()
+		{
+			var team = new Team { Description = new Description(RandomName.Make()), Site = teamSite };
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make());
+
+			loaded.Should().Be.Empty();
+		}
+
+
+		protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new TeamRepository(currentUnitOfWork);
         }
