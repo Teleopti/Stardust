@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseCreator
 	{
 		private readonly DatabaseFolder _databaseFolder;
-		private readonly SqlConnection _connection;
+		private readonly ExecuteSql _executeSql;
 
-		public DatabaseCreator(DatabaseFolder databaseFolder, SqlConnection connection)
+		public DatabaseCreator(DatabaseFolder databaseFolder, ExecuteSql executeSql)
 		{
 			_databaseFolder = databaseFolder;
-			_connection = connection;
+			_executeSql = executeSql;
 		}
 
 		public void CreateDatabase(DatabaseType type, string name)
@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			CreateDatabaseByScriptFile(scriptFile, type, name);
 		}
 
-		public   void ApplyAzureStartDDL(DatabaseType type)
+		public void ApplyAzureStartDDL(DatabaseType type)
 		{
 			string databaseTypeName = type.ToString();
          var scriptFile = ScriptFilePath(type, _databaseFolder.AzureCreateScriptsPath()).Replace(databaseTypeName + ".sql", databaseTypeName + ".00000329.sql");
 			
 			var script = ReadScriptFile(scriptFile);
-			new SqlBatchExecutor(_connection, new MyLogger()).ExecuteBatchSql(script);
+			_executeSql.ExecuteNonQuery(script,Timeouts.CommandTimeout);
 		}
 
 		private string ScriptFilePath(DatabaseType type, string path)
@@ -84,10 +84,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void ExecuteScript(string script)
 		{
-			using (var sqlCommand = new SqlCommand(script, _connection) { CommandTimeout = Timeouts.CommandTimeout })
-			{
-				sqlCommand.ExecuteNonQuery();
-			}
+			_executeSql.ExecuteNonQuery(script,Timeouts.CommandTimeout);
 		}
 
 		private IniFile IniFile(DatabaseType type)
@@ -96,20 +93,11 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 	}
 
-	public class MyLogger : IUpgradeLog //, IDisposable
+	public class MyLogger : IUpgradeLog
 	{
-		//private readonly TextWriter _logFile;
-
-		//public MyLogger()
-		//{
-		//	//var nowDateTime = DateTime.Now;
-		//	//_logfile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
-		//}
-
 		public void Write(string message)
 		{
 			Console.Out.WriteLine(message);
-			//gFile.WriteLine(message);
 		}
 
 		public void Write(string message, string level)
@@ -119,10 +107,6 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Dispose()
 		{
-		//	if (_logFile == null)
-		//		return;
-		//	_logFile.Close();
-		//	_logFile.Dispose();
 		}
 	}
 }
