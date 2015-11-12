@@ -77,5 +77,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			result.Id.Should().Be.EqualTo(expectedGuid);
 			result.FilterType.Should().Be.EqualTo(expectedType);
 		}
+
+		[Test]
+		public void EmptySearchStringShouldGiveNoResult()
+		{
+			var site = new Site(RandomName.Make());
+			site.SetId(Guid.NewGuid());
+			SiteRepository.Add(site);
+
+			Target.Search(string.Empty)
+				.Should().Be.Empty();
+		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
@@ -19,6 +20,9 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public IEnumerable<FindFilterResult> Search(string searchString)
 		{
+			if (searchString.IsEmpty())
+				return Enumerable.Empty<FindFilterResult>();
+
 			var contractHits = _contractRepository.FindContractsStartWith(searchString)
 				.Select(contract => new FindFilterResult {FilterType = "contract", Id = contract.Id.Value, Name = contract.Description.Name});
 			var teamHits = _teamRepository.FindTeamsStartWith(searchString)
