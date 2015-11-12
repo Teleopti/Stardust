@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<IContract> FindContractsStartWith(string searchString)
 	    {
-		    //TODO
-		    return Enumerable.Empty<IContract>();
+		    return Session.CreateCriteria<IContract>()
+			    .Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+			    .List<IContract>();
 	    }
     }
 }

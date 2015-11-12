@@ -7,8 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -86,11 +85,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedContracts.First().MultiplicatorDefinitionSetCollection));
         }
 
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
-        protected override void VerifyAggregateGraphProperties(IContract loadedAggregateFromDatabase)
+		[Test]
+	  public void ShouldFindContractsStartingWith()
+		{
+			var name = RandomName.Make();
+			var contract = new Contract(name + RandomName.Make());
+			PersistAndRemoveFromUnitOfWork(contract);
+
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name);
+
+			loadedContracts.Should().Have.SameValuesAs(contract);
+		}
+
+		[Test]
+		public void ShouldMissContractsStartingWith()
+		{
+			var contract = new Contract(RandomName.Make());
+			PersistAndRemoveFromUnitOfWork(contract);
+
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make());
+
+			loadedContracts.Should().Be.Empty();
+		}
+
+		/// <summary>
+		/// Verifies the aggregate graph properties.
+		/// </summary>
+		/// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+		protected override void VerifyAggregateGraphProperties(IContract loadedAggregateFromDatabase)
         {
             IContract org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
