@@ -576,6 +576,7 @@
     <Compile Include="Areas\Global\BlockToken.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
+    <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
