@@ -635,6 +635,8 @@
     <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\Filters\ContractFilter.cs" />
+    <Compile Include="Optimization\Filters\FindFilter.cs" />
+    <Compile Include="Optimization\Filters\FindFilterResult.cs" />
     <Compile Include="Optimization\Filters\IFilter.cs" />
     <Compile Include="Optimization\Filters\SiteFilter.cs" />
     <Compile Include="Optimization\Filters\TeamFilter.cs" />

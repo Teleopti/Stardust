@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IContract root)
 		{
-			throw new NotImplementedException();
+			_contracts.Add(root);
 		}
 
 		public void Remove(IContract root)
@@ -50,6 +50,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<IContract> FindAllContractByDescription()
 		{
 			return _contracts.OrderBy(x => x.Description).ToArray();
+		}
+
+		public IEnumerable<IContract> FindContractsStartWith(string searchString)
+		{
+			return _contracts.Where(x => x.Description.Name.StartsWith(searchString));
 		}
 	}
 }

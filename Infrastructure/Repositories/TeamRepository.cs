@@ -76,5 +76,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
             return result;
         }
+
+	    public IEnumerable<ITeam> FindTeamsStartWith(string searchString)
+	    {
+		    //TODO: impl later
+		    return Enumerable.Empty<ITeam>();
+	    }
     }
 }

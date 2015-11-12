@@ -56,5 +56,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public IEnumerable<ISite> FindSitesStartWith(string searchString)
+		{
+			return _data.Where(x => x.Description.Name.StartsWith(searchString));
+		}
 	}
 }

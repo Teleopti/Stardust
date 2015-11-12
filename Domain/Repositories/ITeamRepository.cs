@@ -11,20 +11,14 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface ITeamRepository : IRepository<ITeam>
 	{
 
-		#region Properties - Instance Member
-
-		#endregion
-
-		#region Methods - Instance Member
-
 		ICollection<ITeam> FindAllTeamByDescription();
 
 		ICollection<ITeam> FindTeamByDescriptionName(string name);
 
 		ICollection<ITeam> FindTeams (IEnumerable<Guid> teamId);
 
-		#endregion
 
+		IEnumerable<ITeam> FindTeamsStartWith(string searchString);
 	}
 
 }

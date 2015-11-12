@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
@@ -33,5 +34,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                      .List<ISite>();
             return retList;
         }
+
+	    public IEnumerable<ISite> FindSitesStartWith(string searchString)
+	    {
+		    //TODO fix later
+		    return Enumerable.Empty<ISite>();
+	    }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -45,5 +46,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return retList;
         }
+
+	    public IEnumerable<IContract> FindContractsStartWith(string searchString)
+	    {
+		    //TODO
+		    return Enumerable.Empty<IContract>();
+	    }
     }
 }

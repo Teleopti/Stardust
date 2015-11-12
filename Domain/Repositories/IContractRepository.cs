@@ -21,5 +21,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created date: 2008-03-14
         /// </remarks>
         ICollection<IContract> FindAllContractByDescription();
+
+	    IEnumerable<IContract> FindContractsStartWith(string searchString);
     }
 }
