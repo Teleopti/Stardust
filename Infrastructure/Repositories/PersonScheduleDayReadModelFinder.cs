@@ -85,6 +85,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return res;
 		}
 
+		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTime scheduleDate, DateTimePeriod period,
+			IEnumerable<Guid> personIds, Paging paging)
+		{
+			const string sql
+				= "EXEC [ReadModel].[LoadPersonScheduleIncludeOverNightShift] "
+				  + "@PersonIds = :PersonIds,"
+				  + "@scheduleDate = :ScheduleDate,"
+				  + "@dateStart = :DateStart,"
+				  + "@dateEnd = :DateEnd,"
+				  + "@skip = :Skip,"
+				  + "@take = :Take";
+			var result = _unitOfWork.Session().CreateSQLQuery(sql)
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("TeamId", NHibernateUtil.Guid)
+				.AddScalar("SiteId", NHibernateUtil.Guid)
+				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("Start", NHibernateUtil.DateTime)
+				.AddScalar("End", NHibernateUtil.DateTime)
+				.AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
+				.SetParameter("PersonIds", string.Join(",", personIds), NHibernateUtil.StringClob)
+				.SetDateTime("ScheduleDate", scheduleDate)
+				.SetDateTime("DateStart", period.StartDateTime)
+				.SetDateTime("DateEnd", period.EndDateTime)
+				.SetInt32("Skip", paging.Skip)
+				.SetInt32("Take", paging.Take)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+				.SetReadOnly(true)
+				.List<PersonScheduleDayReadModel>();
+			return result;
+		}
+
 		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
 		{
 			const string sql

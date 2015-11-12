@@ -8,12 +8,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-
-
 	class FakePersonScheduleDayReadModelFinder : IPersonScheduleDayReadModelFinder
 	{
-
-		private IPersonRepository _personRepository;
+		private readonly IPersonRepository _personRepository;
 
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 
@@ -58,6 +55,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTime scheduleDate, DateTimePeriod period, IEnumerable<Guid> personIds, Paging paging)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
 		{
 			throw new NotImplementedException();
@@ -69,8 +71,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			var assignments = _personAssignmentRepository.LoadAll()
 				.Where(a => personIdList.Contains(a.Person.Id.Value) && date == a.Date)
-				.Where(a => filterInfo == null || filterInfo.StartTimes == null ||!filterInfo.StartTimes.Any() || filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
-				.Where(a => filterInfo == null || filterInfo.EndTimes == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime))).ToList();
+				.Where(
+					a =>
+						filterInfo == null || filterInfo.StartTimes == null || !filterInfo.StartTimes.Any() ||
+						filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
+				.Where(
+					a =>
+						filterInfo == null || filterInfo.EndTimes == null || !filterInfo.EndTimes.Any() ||
+						filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime))).ToList();
 			var persons = _personRepository.LoadAll();
 
 
@@ -129,16 +137,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			});
 		}
 
-
 		private bool timeFilterHasValue(TimeFilterInfo filter)
 		{
 			if (filter.IsWorkingDay)
 			{
 				if ((filter.StartTimes != null && filter.StartTimes.Any()) ||
-				    (filter.EndTimes != null && filter.EndTimes.Any()))
+					(filter.EndTimes != null && filter.EndTimes.Any()))
 				{
 					return true;
-				} 				
+				}
 			}
 
 			return !(filter.IsWorkingDay && filter.IsDayOff && filter.IsEmptyDay);
