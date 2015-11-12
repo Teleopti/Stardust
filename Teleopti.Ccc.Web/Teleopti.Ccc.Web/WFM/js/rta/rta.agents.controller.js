@@ -14,7 +14,25 @@
 				$scope.timeStamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
+				$scope.selectAgent = RtaGridService.selectAgent;
+				$scope.isSelected = RtaGridService.isSelected;
+				$scope.format = RtaFormatService.formatDateTime;
+				$scope.formatDuration = RtaFormatService.formatDuration;
+				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
+				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
+				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
+				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteId);
 
+				$scope.$watch(
+					function() {
+						return $sessionStorage.buid;
+					},
+					function(newValue, oldValue) {
+						if (oldValue !== undefined && newValue !== oldValue) {
+							RtaRouteService.goToSites();
+						}
+					}
+				);
 				$scope.getAdherenceForAgent = function(personId) {
 					RtaService.forToday.query({
 							personId: personId
@@ -24,21 +42,6 @@
 							$scope.adherencePercent = data.AdherencePercent;
 							$scope.timeStamp = data.LastTimestamp;
 						});
-				};
-				$scope.goBackToRootWithUrl = function() {
-					return RtaRouteService.urlForSites();
-				};
-				$scope.goBackToTeamsWithUrl = function() {
-					return RtaRouteService.urlForTeams(siteId);
-				};
-				$scope.format = function(time) {
-					return RtaFormatService.formatDateTime(time);
-				};
-				$scope.formatDuration = function(duration) {
-					return RtaFormatService.formatDuration(duration);
-				};
-				$scope.hexToRgb = function(hex) {
-					return RtaFormatService.formatHexToRgb(hex);
 				};
 				$scope.filterData = function() {
 					$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
@@ -101,20 +104,9 @@
 					updateGrid();
 				}, 5000);
 
-				$scope.$on('$destroy', function(){
+				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);
 				});
-
-				$scope.$watch(
-					function() {
-						return $sessionStorage.buid;
-					},
-					function(newValue, oldValue) {
-						if (oldValue !== undefined && newValue !== oldValue) {
-							RtaRouteService.goToSites();
-						}
-					}
-				);
 			}
 		]);
 })();

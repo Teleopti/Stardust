@@ -9,6 +9,14 @@
 				$scope.name = "";
 				$scope.adherence = [];
 
+				$scope.goBackToAgents = function() {
+					window.history.back();
+				};
+
+				$scope.isEmptyHistory = function() {
+						return window.history.length === 1;
+				};
+
 				RtaService.getPersonDetails.query({
 						personId: personId
 					}).$promise

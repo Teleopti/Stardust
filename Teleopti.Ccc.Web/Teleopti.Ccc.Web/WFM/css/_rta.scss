@@ -15,10 +15,27 @@
 				}
 }
 
-.checked{
-		background-color: $green-100!important;
+.good{
+			background-color: $green-100!important;
+			&:hover {
+							transition: background 0.5s linear 0s;
+							background-color: $green-400 !important;
+			}
 }
-
+.warning{
+	background-color: $orange-400  !important;
+	&:hover {
+					transition: background 0.5s linear 0s;
+					background-color: $orange-600!important;
+	}
+}
+.danger{
+	background-color: $red-600 !important;
+	&:hover {
+					transition: background 0.5s linear 0s;
+					background-color: #e55539!important;
+	}
+}
 .rta-stats {
 				justify-content: space-between;
 }
@@ -74,6 +91,7 @@
 				margin-bottom: 50px;
 }
 .agent-menu {
+				background-color: $gray012;
 				position: absolute;
 				margin-top: 30px;
 				padding: 15px;

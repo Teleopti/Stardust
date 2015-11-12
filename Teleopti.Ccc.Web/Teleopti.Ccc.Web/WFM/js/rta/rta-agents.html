@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-12">
 		<h3>Agents</h3>
-		<div ng-if="siteName && teamName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <a href="{{goBackToTeamsWithUrl()}}"class="rta-nav-link">{{siteName}}</a> / <span>{{teamName}}</span></div>
+		<div ng-if="siteName && teamName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <a href="{{goBackToTeamsWithUrl}}"class="rta-nav-link">{{siteName}}</a> / <span>{{teamName}}</span></div>
 		<div ng-if="multipleSitesName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleSitesName}}</span></div>
 		<div ng-if="multipleTeamsName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleTeamsName}}</span></div>
       <div class="rta-agents-input">
@@ -36,7 +36,7 @@
 	<input type="checkbox" id="check3" />
 	<label for="check3">
 		<span class="wfm-checkbox-toggle"></span>
-		<span class="wfm-checkbox-label">Show agents with heighest proper alarm time</span>
+		<span class="wfm-checkbox-label">Show agents with highest proper alarm time</span>
 	</label>
 </div>
 <div class="wfm-checkbox">

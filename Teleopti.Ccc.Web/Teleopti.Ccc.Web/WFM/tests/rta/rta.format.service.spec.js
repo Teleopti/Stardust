@@ -29,4 +29,10 @@ describe('RtaFormatService', function() {
 	it('should format hex color', function() {
 		expect(target.formatHexToRgb("#00FF00")).toEqual("rgba(0, 255, 0, 0.6)");
 	});
+
+	it('should not format an empty string', function() {
+		expect(target.formatDateTime("")).toEqual("");
+		expect(target.formatDateTime(null)).toEqual("");
+		expect(target.formatDateTime(undefined)).toEqual("");
+	});
 });
