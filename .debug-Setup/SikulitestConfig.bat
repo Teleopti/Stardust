@@ -35,12 +35,11 @@ ECHO Set WFM path in Tenant table ...
 SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-Setup\database\tsql\SetPath.sql" -v CCC7DB="%CCC7DB%" AnalyticsDB="%AnalyticsDB%"
 
 ECHO fix config files ...
-cd %ROOTDIR%\.debug-setup\
+cd %ROOTDIR%\.debug-setup
 call FixMyConfig.bat %CCC7DB% %AnalyticsDB% %configuration%
 
 ECHO Restart iis express ...
-cd %ROOTDIR%\.debug-setup\iisexpress\
-ren SikuliApplicationhost.config.txt SikuliApplicationhost.config
+cd %ROOTDIR%\.debug-setup\iisexpress
 call RestartIISExpress.bat
 
 ENDLOCAL
