@@ -14,6 +14,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
 		public virtual bool Default { get; protected set; }
 
+		public DayOffRules()
+		{
+			Name = string.Empty;
+		}
+
 		public static DayOffRules CreateDefault()
 		{
       return new DayOffRules
@@ -29,6 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			get { return _filters; }
 		}
+
+		public virtual string Name { get; set; }
 
 		public virtual void AddFilter(IFilter filter)
 		{

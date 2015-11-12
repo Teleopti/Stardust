@@ -33,6 +33,7 @@
 			<property name="Maximum" column="MaxConsecutiveDayOffs" />
 		</component>
 		<property name="Default" column="DefaultSettings" access="property"/>
+    <property name="Name" access="property"/>
 
 		<set name="Filters" table="DayOffRulesFilters" cascade="all-delete-orphan">
 			<key column="DayOffRules" />

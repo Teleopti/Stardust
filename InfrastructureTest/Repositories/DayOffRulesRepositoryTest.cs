@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -140,6 +141,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			dayOffRulesInDb.Filters.Single()
 				.Should().Be.EqualTo(siteFilter);
+		}
+
+		[Test]
+		public void ShouldPersistAndFetchRuleName()
+		{
+			var dayOffRules = new DayOffRules();
+			var name = RandomName.Make();
+			dayOffRules.Name = name;
+			
+			PersistAndRemoveFromUnitOfWork(dayOffRules);
+
+			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+
+			dayOffRulesInDb.Name
+				.Should().Be.EqualTo(name);	
 		}
 	}
 }
