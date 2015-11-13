@@ -1233,6 +1233,7 @@
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />
+    <Content Include="WFM\js\rta\rta-agents_properalarm_prototype.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />

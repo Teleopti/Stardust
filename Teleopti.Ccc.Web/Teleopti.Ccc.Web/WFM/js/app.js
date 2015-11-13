@@ -36,12 +36,19 @@ var wfm = angular.module('wfm', [
 	'wfm.start',
 	'wfm.businessunits',
 	'wfm.teamSchedule',
-    'wfm.intraday'
+	'wfm.intraday'
 ]);
 
+var toggles = {
+	Wfm_RTA_ProperAlarm_34975: false
+};
+
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider',
+	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {
+
 		$urlRouterProvider.otherwise("/#");
+
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html'
@@ -50,11 +57,16 @@ wfm.config([
 			templateUrl: 'js/forecasting/html/forecasting.html',
 			controller: 'ForecastingDefaultCtrl'
 		}).state('forecasting.start', {
-			params: { workloadId: undefined },
+			params: {
+				workloadId: undefined
+			},
 			templateUrl: 'js/forecasting/html/forecasting-overview.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting.advanced', {
-			params: { workloadId: {}, workloadName: {} },
+			params: {
+				workloadId: {},
+				workloadName: {}
+			},
 			templateUrl: 'js/forecasting/html/forecasting-advanced.html',
 			controller: 'ForecastingAdvancedCtrl'
 		}).state('forecasting.skillcreate', {
@@ -62,11 +74,17 @@ wfm.config([
 			templateUrl: 'js/forecasting/html/skill-create.html',
 			controller: 'ForecastingSkillCreateCtrl'
 		}).state('forecasting-method', {
-			params: { workloadId: {}, period: {} },
+			params: {
+				workloadId: {},
+				period: {}
+			},
 			templateUrl: 'js/forecasting/html/forecasting-method.html',
 			controller: 'ForecastingMethodCtrl'
 		}).state('forecasting-intraday', {
-			params: { workloadId: {}, period: {} },
+			params: {
+				workloadId: {},
+				period: {}
+			},
 			templateUrl: 'js/forecasting/html/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
@@ -78,17 +96,21 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
-			params: { result: {},interResult: [],planningperiod:{} },
+			params: {
+				result: {},
+				interResult: [],
+				planningperiod: {}
+			},
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
-		    url: '/permissions',
+			url: '/permissions',
 			templateUrl: 'js/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('intraday', {
-		    url: '/intraday',
-		    templateUrl: 'js/intraday/intraday.html',
-		    controller: 'IntradayCtrl'
+			url: '/intraday',
+			templateUrl: 'js/intraday/intraday.html',
+			controller: 'IntradayCtrl'
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'js/outbound/html/outbound.html',
@@ -114,14 +136,23 @@ wfm.config([
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
 			url: '/people',
-			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
+			params: {
+				selectedPeopleIds: [],
+				currentKeyword: '',
+				paginationOptions: {}
+			},
 			templateUrl: 'js/people/html/people.html',
 			controller: 'PeopleDefaultCtrl'
 		}).state('people.start', {
 			templateUrl: 'js/people/html/people-list.html',
 			controller: 'PeopleStartCtrl'
 		}).state('people.selection', {
-			params: { selectedPeopleIds: [], commandTag: {}, currentKeyword: '', paginationOptions: {} },
+			params: {
+				selectedPeopleIds: [],
+				commandTag: {},
+				currentKeyword: '',
+				paginationOptions: {}
+			},
 			templateUrl: 'js/people/html/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		}).state('seatPlan', {
@@ -131,7 +162,18 @@ wfm.config([
 		}).state('seatMap', {
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
-		}).state('rta', {
+		}).state('personSchedule', {
+			url: '/teamSchedule',
+			templateUrl: 'js/teamSchedule/schedule.html',
+			controller: 'TeamScheduleCtrl as vm'
+		});
+
+		var rtaAgentsTemplate = function(elem, attr) {
+			if (toggles.Wfm_RTA_ProperAlarm_34975)
+				return 'js/rta/rta-agents_properalarm_prototype.html';
+			return 'js/rta/rta-agents.html';
+		};
+		$stateProvider.state('rta', {
 			url: '/rta',
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl',
@@ -141,26 +183,30 @@ wfm.config([
 			controller: 'RtaTeamsCtrl'
 		}).state('rta-agents', {
 			url: '/rta/agents/:siteId/:teamId',
-			templateUrl: 'js/rta/rta-agents.html',
+			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsCtrl'
 		}).state('rta-agents-teams', {
 			url: '/rta/agents-teams/?teamIds',
-			templateUrl: 'js/rta/rta-agents.html',
+			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsForTeamsCtrl',
-			params: {teamIds: {array:true}}
+			params: {
+				teamIds: {
+					array: true
+				}
+			}
 		}).state('rta-agents-sites', {
 			url: '/rta/agents-sites/?siteIds',
-			templateUrl: 'js/rta/rta-agents.html',
+			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsForSitesCtrl',
-			params: {siteIds: {array:true}}
+			params: {
+				siteIds: {
+					array: true
+				}
+			}
 		}).state('rta-agent-details', {
 			url: '/rta/agent-details/:personId',
 			templateUrl: 'js/rta/rta-agent-details.html',
 			controller: 'RtaAgentDetailsCtrl'
-		}).state('personSchedule', {
-			url: '/teamSchedule',
-			templateUrl: 'js/teamSchedule/schedule.html',
-			controller: 'TeamScheduleCtrl as vm'
 		});
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
@@ -169,37 +215,51 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo',
-	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q',
+	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q) {
 		$rootScope.isAuthenticated = false;
 
-		function broadcastEventOnToggle() {
+		(function broadcastEventOnToggle() {
 			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
 				$timeout(function() {
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
-		};
+		})();
 
 		function refreshContext(event, next, toParams) {
-			currentUserInfo.initContext().then(function () {
-				$rootScope.isAuthenticated = true; 
+			currentUserInfo.initContext().then(function() {
+				$rootScope.isAuthenticated = true;
 				$translate.fallbackLanguage('en');
 
-				$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+				$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
 					HelpService.updateState($state.current.name);
 				});
 				$state.go(next, toParams);
 			});
 		};
 
-		broadcastEventOnToggle();
+		// refact 3rd duplication as always please
+		var togglesLoaded = $q.all([
+			toggleService.toggle('Wfm_RTA_ProperAlarm_34975').then(function(value) {
+				toggles.Wfm_RTA_ProperAlarm_34975 = value
+			})
+		]);
 
-		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
 				refreshContext(event, next, toParams);
+				return;
+			}
+			if (!togglesLoaded.$$state.status) {
+				event.preventDefault();
+				togglesLoaded.then(function() {
+					$state.go(next, toParams);
+				})
+				return;
 			}
 		});
 	}
+
 ]);

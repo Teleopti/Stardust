@@ -83,6 +83,7 @@
 		WfmForecast_CreateSkill_34591,
 		WfmPermission_ReplaceOldPermission_34671,
 		Wfm_RTA_34621,
+		Wfm_RTA_ProperAlarm_34975,
         WfmIntraday_MonitorActualvsForecasted_35176,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,

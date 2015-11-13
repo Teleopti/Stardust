@@ -2,7 +2,9 @@
 
 angular.module('toggleService', ['ngResource']).service('Toggle', [
 	'$resource', function($resource) {
-		this.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
+		var that = this;
+
+		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
 		{
 			toggle: "@toggle"
 		}, {
@@ -12,5 +14,10 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 				isArray: false
 			}
 		});
+
+		that.toggle = function(toggle, callback) {
+			return that.isFeatureEnabled.query({ toggle: toggle }).$promise;
+		};
+
 	}
 ]);
