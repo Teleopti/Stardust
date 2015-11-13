@@ -1,6 +1,3 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadPersonScheduleIncludeOverNightShift]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [ReadModel].[LoadPersonScheduleIncludeOverNightShift]
-GO
 -- =============================================
 -- Author: Xinfeng
 -- Create date: 2015-11-12
