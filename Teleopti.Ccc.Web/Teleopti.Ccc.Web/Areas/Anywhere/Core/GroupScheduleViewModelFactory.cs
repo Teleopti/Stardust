@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -49,22 +48,24 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
 				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToList();
 
+			totalPage = (int)Math.Ceiling((double)people.Count/pageSize);
+
+			var skipCount = pageSize*(currentPageIndex - 1);
+			people = people
+				.OrderBy(x => _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(x))
+				.Skip(skipCount)
+				.Take(pageSize)
+				.ToList();
+
 			var peopleCanSeeConfidentialAbsencesFor =
 				_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 
-			totalPage = (int)Math.Ceiling((double)people.Count/pageSize);
-
-			var paging = new Paging
-			{
-				Skip = (currentPageIndex - 1) * pageSize,
-				Take = pageSize
-			};
-			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor, paging);
+			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor);
 		}
 
 		private IEnumerable<GroupScheduleShiftViewModel> getScheduleViewModel(DateTime dateInUserTimeZone,
-			IEnumerable<IPerson> people, IEnumerable<IPerson> peopleCanSeeConfidentialAbsencesFor, Paging paging = null)
+			IEnumerable<IPerson> people, IEnumerable<IPerson> peopleCanSeeConfidentialAbsencesFor)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
@@ -87,29 +88,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(periodLengthInHour));
 
 			var allPeople = people.ToList();
-
-			IEnumerable<PersonScheduleDayReadModel> schedules = null;
-			if (allPeople.Any())
-			{
-				schedules = paging == null
-					? _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod,
-						allPeople.Select(x => x.Id.GetValueOrDefault()))
-					: _personScheduleDayReadModelRepository.ForPeople(dateTimeInUtc.Date, dateTimePeriod,
-						allPeople.Select(x => x.Id.GetValueOrDefault()), paging);
-			}
-
-			schedules = schedules ?? new List<PersonScheduleDayReadModel>();
-
-			var canSeeUnpublishedSchedules =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-
+			var emptyReadModel = new PersonScheduleDayReadModel[] {};
 			var data = new GroupScheduleData
 			{
 				Date = dateTimeInUtc,
 				CommonAgentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings,
 				UserTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone(),
-				Schedules = schedules,
-				CanSeeUnpublishedSchedules = canSeeUnpublishedSchedules,
+				Schedules =
+					allPeople.Any()
+						? _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod,
+							allPeople.Select(x => x.Id.GetValueOrDefault()).ToArray()) ?? emptyReadModel
+						: emptyReadModel,
+				CanSeeUnpublishedSchedules =
+					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
 				CanSeeConfidentialAbsencesFor = peopleCanSeeConfidentialAbsencesFor,
 				CanSeePersons = allPeople
 			};
