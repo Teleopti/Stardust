@@ -11,6 +11,7 @@
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
+				$scope.filterText = "";
 				$scope.timestamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
@@ -46,9 +47,21 @@
 						});
 					}
 				};
-				$scope.filterData = function() {
-					$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
+
+				$scope.filteredData = [];
+				$scope.gridOptions.data = 'filteredData';
+
+				var filterData = function() {
+					if ($scope.filterText === undefined)
+						$scope.filteredData = $scope.agents;
+					else
+						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
+					if ($scope.agentsInAlarm)
+						$scope.filteredData = $filter('agentFilter')($scope.filteredData, 'Out Adherence', propertiesForFiltering);
 				};
+
+				$scope.$watchGroup(['filterText', 'agents', 'agentsInAlarm'], filterData);
+
 				$scope.changeScheduleUrl = function(teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
 				};
@@ -84,13 +97,6 @@
 						});
 				};
 
-				var updateGrid = function() {
-					if ($scope.filterText === undefined)
-						$scope.gridOptions.data = $scope.agents;
-					else
-						$scope.filterData();
-				};
-
 				RtaService.getAgents.query({
 						teamId: teamId
 					}).$promise
@@ -99,12 +105,10 @@
 						$scope.siteName = agents[0].SiteName;
 						$scope.teamName = agents[0].TeamName;
 					})
-					.then(updateStates)
-					.then(updateGrid);
+					.then(updateStates);
 
 				var polling = $interval(function() {
 					updateStates();
-					updateGrid();
 				}, 5000);
 
 				$scope.$on('$destroy', function() {
