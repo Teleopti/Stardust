@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			if(isAzure)
 				sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}'", login, password);
-			_executeMaster.ExecuteNonQuery(sql);
+			_executeMaster.ExecuteTransactionlessNonQuery(sql);
 		}
 
 		public void AddPermissions(string login)
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DBManager.Library
 	EXEC sp_addrolemember @rolename=N'db_datareader', @membername=[{0}]
 
 	GRANT EXECUTE TO db_executor", login);
-			_execute.ExecuteNonQuery(sql);
+			_execute.ExecuteTransactionlessNonQuery(sql);
 		}
 
 		public bool DbUserExist(string sqlLogin)

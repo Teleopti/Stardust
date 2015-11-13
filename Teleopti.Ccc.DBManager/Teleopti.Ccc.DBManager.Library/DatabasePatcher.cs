@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private  bool azureLoginExist(string sqlLogin)
 		{
 			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
-			var exec = new ExecuteSql(_connection, Logger);
+			var exec = new ExecuteSql(_masterConnection, Logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
