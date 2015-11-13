@@ -264,6 +264,10 @@ namespace Teleopti.Support.Tool.Controls
 
 				AppendText("Database update finished successfully to version " + _currentVersion);
 			}
+			catch (SqlException e)
+			{
+				AppendText(e.Message);
+			}
 			catch (ApplicationException e)
 			{
 				AppendText(e.Message);

@@ -3,73 +3,76 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseHelper
 	{
+		private const string MasterDatabaseName = "master";
+
+		private readonly ExecuteSql _executeMaster;
+		private readonly ExecuteSql _execute;
+
 		public DatabaseHelper(string connectionString, DatabaseType databaseType)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
 			Logger = new NullLog();
+
+			_executeMaster = new ExecuteSql(()=>openConnection(true), Logger);
+			_execute = new ExecuteSql(()=>openConnection(), Logger);
       }
 
 		public IUpgradeLog Logger { set; get; }
 		public string ConnectionString { get; private set; }
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
+		public ExecuteSql Executor { get { return _execute; } }
 
 		public string DbManagerFolderPath { get; set; }
+
 		public bool Exists()
 		{
-			var databaseId = executeScalarOnMaster("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
-			return databaseId > 0;
+			return
+				Convert.ToBoolean(_executeMaster.ExecuteScalar("SELECT database_id FROM sys.databases WHERE Name = @databaseName",
+					parameters: new Dictionary<string, object> {{"@databaseName", DatabaseName}}));
 		}
 
 		public void CreateByDbManager()
 		{
 			dropIfExists();
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			using (var conn = openConnection(true))
-			{
-				var creator = new DatabaseCreator(databaseFolder, conn);
-				creator.CreateDatabase(DatabaseType, DatabaseName);
-			}
-			using (var conn = openConnection())
-			{
-				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
-				databaseVersionInformation.CreateTable();
-			}
+
+			var creator = new DatabaseCreator(databaseFolder, _executeMaster);
+			creator.CreateDatabase(DatabaseType, DatabaseName);
+
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			databaseVersionInformation.CreateTable();
 		}
 
 		public void CreateInAzureByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			using (var conn = openConnection(true))
-			{
-				var creator = new DatabaseCreator(databaseFolder, conn);
-				creator.CreateAzureDatabase(DatabaseType, DatabaseName);
-			}
-			using (var conn = openConnection())
-			{
-				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
-				databaseVersionInformation.CreateTable();
 
-				var creator = new DatabaseCreator(databaseFolder, conn);
-				creator.ApplyAzureStartDDL(DatabaseType);
-			}
+			var creator = new DatabaseCreator(databaseFolder, _executeMaster);
+			creator.CreateAzureDatabase(DatabaseType, DatabaseName);
+
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			databaseVersionInformation.CreateTable();
+
+			creator = new DatabaseCreator(databaseFolder, _execute);
+			creator.ApplyAzureStartDDL(DatabaseType);
 		}
+
 		public bool LoginExists(string login, bool isAzure)
 		{
-			var sql = string.Format(@"SELECT 1 FROM syslogins WHERE name = '{0}'", login);
+			var sql = "SELECT 1 FROM syslogins WHERE name = @login";
 			if(isAzure)
-				sql = string.Format(@"SELECT 1 FROM master.sys.sql_logins WHERE name = '{0}'", login);
-			var result = executeScalarOnMaster(sql, 0);
-			return result > 0;
+				sql = "SELECT 1 FROM master.sys.sql_logins WHERE name = @login";
+			var result = _executeMaster.ExecuteScalar(sql,parameters:new Dictionary<string, object>{{"@login",login}});
+			return Convert.ToBoolean(result);
 		}
 
 		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
@@ -78,7 +81,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				CreateLogin(login, password, isAzure);
 				var sql = string.Format("DROP LOGIN [{0}]", login);
-				executeNonQueryOnMaster(sql);
+				_executeMaster.ExecuteNonQuery(sql);
 				message = "";
 				return true;
 			}
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			if(isAzure)
 				sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}'", login, password);
-			executeNonQueryOnMaster(sql);
+			_executeMaster.ExecuteNonQuery(sql);
 		}
 
 		public void AddPermissions(string login)
@@ -111,36 +114,35 @@ namespace Teleopti.Ccc.DBManager.Library
 			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
 			if(DbUserExist(login))
 				sql = string.Format( @"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
-			executeNonQuery(sql);
+			_execute.ExecuteNonQuery(sql);
 			
 			sql = string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
-	EXEC sp_addrolemember @rolename='db_datawriter', @membername=[{0}]
-	EXEC sp_addrolemember @rolename='db_datareader', @membername=[{0}]
+	EXEC sp_addrolemember @rolename=N'db_datawriter', @membername=[{0}]
+	EXEC sp_addrolemember @rolename=N'db_datareader', @membername=[{0}]
 
 	GRANT EXECUTE TO db_executor", login);
-			executeNonQuery(sql);
+			_execute.ExecuteNonQuery(sql);
 		}
 
 		public bool DbUserExist(string sqlLogin)
 		{
-			var sql = string.Format(@"SELECT 1 FROM sys.sysusers WHERE name = '{0}'", sqlLogin);
-			var result = executeScalar(sql, 0);
-			return result > 0;
+			const string sql = "SELECT 1 FROM sys.sysusers WHERE name = @login";
+			var result = _execute.ExecuteScalar(sql, parameters:new Dictionary<string, object>{{"@login",sqlLogin}});
+			return Convert.ToBoolean(result);
 		}
 
 		public bool HasCreateDbPermission(bool isAzure)
 		{
 			if (isAzure)
 			{
-				System.Diagnostics.Debug.Write("check create DB perm");
 				var dbName = Guid.NewGuid().ToString();
 				try
 				{
-					ExecuteSql("CREATE DATABASE [" + dbName + "]");
-					ExecuteSql("DROP DATABASE [" + dbName + "]");
+					_execute.ExecuteNonQuery("CREATE DATABASE [" + dbName + "]");
+					_execute.ExecuteNonQuery("DROP DATABASE [" + dbName + "]");
 					return true;
 				}
 				catch (Exception)
@@ -149,22 +151,20 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			
-			return executeScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')", 0) > 0;
+			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 		
 		public bool HasCreateViewAndLoginPermission(bool isAzure)
 		{
 			if (isAzure)
 			{
-				System.Diagnostics.Debug.Write("check create view perm");
 				var pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
 				var createSql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD = N'{1}'", login, pwd);
 				try
 				{
-					ExecuteSql(createSql);
-					ExecuteSql("DROP LOGIN [" + login + "]");
+					_execute.ExecuteNonQuery(createSql);
+					_execute.ExecuteNonQuery("DROP LOGIN [" + login + "]");
 					return true;
 				}
 				catch (Exception)
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					return false;
 				}
 			}
-			return executeScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')", 0) > 0;
+			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
 		}
 		public void AddSuperUser(Guid personId, string firstName, string lastName)
 		{
@@ -181,35 +181,33 @@ namespace Teleopti.Ccc.DBManager.Library
 VALUES('{2}', 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67',  GETUTCDATE(), '', '', '', '{0}', '{1}', 'UTC', 0, 1)
 INSERT INTO PersonInApplicationRole
 SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName, lastName, personId);
-			executeNonQuery(sql);
+			_execute.ExecuteNonQuery(sql);
 		}
 
 		public void AddBusinessUnit(string name)
 		{
 			var sql = string.Format(@"INSERT INTO BusinessUnit
 SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', null, 0", name);
-			executeNonQuery(sql);
+			_execute.ExecuteNonQuery(sql);
 		}
 		public void CleanByAnalyticsProcedure()
 		{
-			executeNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
+			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
 		}
 
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			using (var conn = openConnection())
-			{
-				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
-				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
-				var schemaCreator = new DatabaseSchemaCreator(
-					databaseVersionInformation,
-					schemaVersionInformation,
-					conn,
-					databaseFolder,
-					Logger);
-				schemaCreator.Create(DatabaseType);
-			}
+
+			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
+			var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
+			var schemaCreator = new DatabaseSchemaCreator(
+				databaseVersionInformation,
+				schemaVersionInformation,
+				_execute,
+				databaseFolder,
+				Logger);
+			schemaCreator.Create(DatabaseType);
 		}
 
 		public Backup BackupByFileCopy(string name)
@@ -267,19 +265,11 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			public string Backup { get; set; }
 		}
 
-		public void ExecuteSql(string sql)
-		{
-			executeNonQuery(sql);
-		}
-
 		public int DatabaseVersion()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			using (var conn = openConnection())
-			{
-				var versionInfo = new DatabaseVersionInformation(databaseFolder, conn);
-				return versionInfo.GetDatabaseVersion();
-			}
+			var versionInfo = new DatabaseVersionInformation(databaseFolder, _execute);
+			return versionInfo.GetDatabaseVersion();
 		}
 
 		public int SchemaVersion()
@@ -305,12 +295,12 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		private void setOffline()
 		{
-			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
+			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
 		}
 
 		private void setOnline()
 		{
-			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName);
+			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
 		}
 
 		private void dropIfExists()
@@ -318,8 +308,8 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			if (!Exists()) return;
 
 			setOnline(); // if dropping a database that is offline, the file on disk will remain!
-			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName);
-			executeNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
+			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
+			_executeMaster.ExecuteNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
 		}
 
 		private string executeShellCommandOnServer(string command)
@@ -359,53 +349,12 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			}
 		}
 
-		private void executeNonQuery(string sql, params object[] args)
-		{
-			using (var conn = openConnection())
-			{
-				using (var command = conn.CreateCommand())
-				{
-					command.CommandText = string.Format(sql, args);
-					command.ExecuteNonQuery();
-				}				
-			}
-		}
-
-		private void executeNonQueryOnMaster(string sql, params object[] args)
-		{
-			using (var conn = openConnection(true))
-			{
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = string.Format(sql, args);
-					cmd.ExecuteNonQuery();
-				}
-			}
-		}
-
-		private T executeScalarOnMaster<T>(string sql, T nullValue, params object[] args)
-		{
-			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = "master" };
-			using (var conn = new SqlConnection(connectionStringBuilder.ConnectionString))
-			{
-				conn.Open();
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = string.Format(sql, args);
-					var value = cmd.ExecuteScalar();
-					if (value == null)
-						return nullValue;
-					return (T)value;
-				}
-			}
-		}
-
 		private SqlConnection openConnection(bool masterDb = false)
 		{
 			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
 			if (masterDb)
 			{
-				connectionStringBuilder.InitialCatalog = "master";
+				connectionStringBuilder.InitialCatalog = MasterDatabaseName;
 			}
 			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
 			conn.Open();
@@ -420,25 +369,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			if (DatabaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[log_object]') ";
 			
-         return executeScalar(sql, 0) > 0;
+         return Convert.ToBoolean(_execute.ExecuteScalar(sql));
 		}
-
-		private T executeScalar<T>(string sql, T nullValue, params object[] args)
-		{
-			using (var conn = new SqlConnection(ConnectionString))
-			{
-				conn.Open();
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = string.Format(sql, args);
-					var value = cmd.ExecuteScalar();
-					if (value == null)
-						return nullValue;
-					return (T)value;
-				}
-			}
-		}
-
-		
 	}
 }
