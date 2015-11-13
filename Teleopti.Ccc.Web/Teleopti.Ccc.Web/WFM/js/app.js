@@ -18,7 +18,6 @@ var wfm = angular.module('wfm', [
 	'externalModules',
 	'currentUserInfoService',
 	'toggleService',
-	'outboundServiceModule',
 	'wfm.http',
 	'wfm.permissions',
 	'wfm.people',

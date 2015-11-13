@@ -5,14 +5,16 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend,
 		mockResourceplannerSvrc
 
-	beforeEach(module('wfm'));
+		beforeEach(function(){
+			module('wfm.resourceplanner');
+			module('externalModules');
+		});
+
 
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 
 		mockResourceplannerSvrc = {
 			getPlanningPeriod:{

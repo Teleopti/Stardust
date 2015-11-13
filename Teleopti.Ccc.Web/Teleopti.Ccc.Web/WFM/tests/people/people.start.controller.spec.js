@@ -5,15 +5,15 @@ describe("PeopleStartCtrl", function() {
 		$httpBackend;
 	var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill", currentKeyword: '', paginationOptions: {} };
 
-	beforeEach(module('wfm'));
+	beforeEach(function(){
+		module('wfm.people');
+		module('externalModules');
+	});
 
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-		
 	}));
 
 	var mockUpload = {};
@@ -59,9 +59,9 @@ describe("PeopleStartCtrl", function() {
 
 	it("should show agent by search function", inject(function($controller) {
 		var scope = $rootScope.$new();
-		
+
 		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
-		
+
 		scope.keyword = "ashley";
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
@@ -77,7 +77,7 @@ describe("PeopleStartCtrl", function() {
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
 		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
-		
+
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
 
@@ -87,13 +87,13 @@ describe("PeopleStartCtrl", function() {
 	it("should show agent by search with option", inject(function($controller) {
 		var scope = $rootScope.$new();
 		$controller("PeopleStartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
-		
+
 
 		scope.advancedSearchForm = {
 			FirstName: "Ashley Smith",
 			Organization: "London Shenzhen"
 		};
-			
+
 		scope.advancedSearch();
 		scope.$digest(); // this is needed to resolve the promise
 
@@ -121,11 +121,11 @@ describe("PeopleStartCtrl", function() {
 		expect(scope.advancedSearchForm.FirstName).toEqual("Ashley Smith");
 		expect(scope.advancedSearchForm.Organization).toEqual("London Shenzhen");
 
-		scope.keyword = "FirstName: John King"; 
+		scope.keyword = "FirstName: John King";
 		scope.validateSearchKeywordChanged();
 
 		expect(scope.advancedSearchForm.FirstName).toEqual("John King");
 		expect(scope.advancedSearchForm.Organization).toEqual(undefined);
 	}));
-	
+
 });

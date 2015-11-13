@@ -6,16 +6,15 @@ describe('SeatPlanCtrl', function () {
 		$rootScope,
 		$httpBackend;
 
-	beforeEach(function() {
-		module('wfm');
-	});
+		beforeEach(function() {
+			module('wfm.seatPlan');
+			module('externalModules');
+		});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 
@@ -50,7 +49,7 @@ describe('SeatPlanCtrl', function () {
 			}
 		}
 	};
-	
+
 	it('returns the correct class for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
@@ -61,12 +60,12 @@ describe('SeatPlanCtrl', function () {
 
 		expect(dayClass).toEqual('seatplan-status-error');
 	}));
-	
+
 	it('returns the correct info for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
-		
+
 		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 

@@ -8,8 +8,10 @@ describe('OutboundCreateCtrl', function() {
 		outboundNotificationService
 	;
 
-	beforeEach(function () {		
-		module('wfm');
+	beforeEach(function () {
+		module('wfm.outbound');
+		module('externalModules');
+		module('wfm.notice');
 
 		outboundService = new fakeOutboundService();
 		stateService = new fakeStateService();
@@ -18,27 +20,24 @@ describe('OutboundCreateCtrl', function() {
 			$provide.service('outboundService', function () {
 				return outboundService;
 			});
-			
+
 			$provide.service('$state', function () {
 				return stateService;
-			});			
-		});	
+			});
+		});
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _outboundNotificationService_) {
-		
+
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		var $httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		outboundNotificationService = _outboundNotificationService_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-
 	}));
 
 
-	it('Name should be empty to start with', function() {	
+	it('Name should be empty to start with', function() {
 		var test = setUpTarget();
 		expect(test.scope.campaign.Name).not.toBeDefined();
 
@@ -200,8 +199,3 @@ describe('OutboundCreateCtrl', function() {
 		campaign.WorkingHours = [workingHour];
 	}
 });
-
-
-
-
-

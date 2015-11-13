@@ -4,14 +4,15 @@ describe('NotificationsCtrl', function () {
 	    $rootScope,
 	    $httpBackend;
 
-	beforeEach(module('wfm'));
+	beforeEach(function () {
+		module('wfm.notifications');
+		module('externalModules');
+	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 	var mockNotificationService = {
@@ -25,7 +26,7 @@ describe('NotificationsCtrl', function () {
 		}
 	};
 
-	
+
 	it('not null', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
@@ -35,9 +36,9 @@ describe('NotificationsCtrl', function () {
 
 	it('contains atleast 5 notifications', inject( function ($controller) {
 		var scope = $rootScope.$new();
-		
+
 		$controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
-		scope.$digest(); 
+		scope.$digest();
 		expect(scope.notificationResult.length).toEqual(5);
 	}));
 });

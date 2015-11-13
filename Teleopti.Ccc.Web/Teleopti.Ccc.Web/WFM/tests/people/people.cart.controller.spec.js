@@ -6,15 +6,19 @@ describe("PeopleCartCtrl", function () {
 		$httpBackend,
 		controller;
 
-	beforeEach(module('wfm'));
+	beforeEach(function(){
+		module('wfm');
+		module('externalModules');
+	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		controller = setUpController(_$controller_);
+		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
+ 	$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=Wfm_RTA_ProperAlarm_34975").respond(200, 'mock');
 	}));
 
 	var mockToggleService = {

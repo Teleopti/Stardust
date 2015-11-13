@@ -64,7 +64,8 @@ describe('PermissionsCtrl', function () {
 	};
 
 	beforeEach(function () {
-		module('wfm');
+		module('wfm.permissions');
+		module('externalModules');
 		module(function ($provide) {
 			$provide.service('PermissionsService', function() { return mockPermissionsService; });
 		});
@@ -74,10 +75,8 @@ describe('PermissionsCtrl', function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
-	
+
 
 	it('creates a role in the list', inject(function($controller) {
 		var scope = $rootScope.$new();
@@ -86,9 +85,9 @@ describe('PermissionsCtrl', function () {
 
 		scope.roleName = 'name';
 		scope.createRole();
-		scope.$digest(); 
-		
-		expect(scope.roles.length).toEqual(2); 
+		scope.$digest();
+
+		expect(scope.roles.length).toEqual(2);
 	}));
 
 	it('permission is loaded without roles', inject(function ($controller) {
@@ -97,7 +96,7 @@ describe('PermissionsCtrl', function () {
 		rolesList = [];
 		$controller('PermissionsCtrl', { $scope: scope, PermissionsService: mockPermissionsService });
 
-		scope.$digest(); 
+		scope.$digest();
 
 		expect(scope.roles.length).toEqual(0);
 	}));
