@@ -14,6 +14,10 @@ html, body{
   right: 0;
 }
 
+.caps{
+	text-transform: capitalize;
+}
+
 .md-ripple-container{
 	visibility: hidden;
 }
@@ -255,3 +259,28 @@ input::-ms-clear {
 			transform: scale(0);
 		}
 	}
+
+/*nav-context-menu*/
+.navbar-right{font-size: 14px!important;
+
+input[type=text]{line-height: initial!important;}
+}
+
+.nav-context-menu:focus{
+	box-shadow: none!important;
+}
+
+#lefttoogle > div{
+position: fixed;
+    top: -69px;
+    z-index: 9999;
+    left: 10px;
+    background: transparent;
+    box-shadow: none;
+    color:white;
+    font-size:250%;
+}
+
+.brand{
+	margin-left:35px;
+}
