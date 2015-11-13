@@ -177,8 +177,6 @@
     </Compile>
     <Compile Include="PerformanceManager\Helper\AuthorizationHelper.cs" />
     <Compile Include="PerformanceManager\Helper\DatabaseAccess.cs" />
-    <Compile Include="PerformanceManager\Helper\DatabaseHelperFunctions.cs" />
-    <Compile Include="PerformanceManager\Helper\IDatabaseAccess.cs" />
     <Compile Include="PerformanceManager\KeepAlive.aspx.cs">
       <DependentUpon>KeepAlive.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

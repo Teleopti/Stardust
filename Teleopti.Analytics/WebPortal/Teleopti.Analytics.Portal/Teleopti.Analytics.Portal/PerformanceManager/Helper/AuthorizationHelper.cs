@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Web;
 using System.Web.Configuration;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
@@ -17,14 +16,9 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			if (currentuser == null)
 				return PermissionLevel.None;
 
-			IList<SqlParameter> parameters = new List<SqlParameter>
-												 {
-													 new SqlParameter("person_id", currentuser)
-												 };
-
-			return (PermissionLevel)
-			DatabaseHelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.pm_user_check", parameters,
-										  connectionString);
+			var parameters = new Dictionary<string, object>{{ "person_id", currentuser}};
+			var databaseAccess = new DatabaseAccess(CommandType.StoredProcedure, "mart.pm_user_check", connectionString);
+			return (PermissionLevel) databaseAccess.ExecuteScalar(parameters);
 		}
 
 		public static bool IsAuthenticationConfigurationValid()
