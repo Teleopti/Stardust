@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 				personPreferenceDayOccupation.HasDayOff = personAssignment.DayOff() != null;
 
-				if (!personPreferenceDayOccupation.HasDayOff)
+				if (!personPreferenceDayOccupation.HasDayOff && personAssignment.MainActivities().Any())
 				{
 					personPreferenceDayOccupation.HasShift = true;
 

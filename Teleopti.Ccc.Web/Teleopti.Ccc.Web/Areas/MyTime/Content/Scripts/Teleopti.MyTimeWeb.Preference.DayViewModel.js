@@ -241,7 +241,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.MakeNightRestViolationObjs = function () {
 		if (!toggleShowNightViolation) return [];
 		var nightRestViolationObjs = [];
-		if (self.NightRestViolationSwitch()==true) {
+		if (self.NightRestViolationSwitch()) {
 			if (self.HasNightRestViolationToPreviousDay()) {
 				var dateMoment = moment(self.RawDate());
 				var nightRestViolationObj = {};

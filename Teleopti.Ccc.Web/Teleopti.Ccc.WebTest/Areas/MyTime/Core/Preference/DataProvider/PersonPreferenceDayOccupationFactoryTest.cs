@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var date1 = new DateOnly(2029, 1, 1);
 			var date2 = new DateOnly(2029, 1, 3);
 			var date3 = new DateOnly(2029, 1, 5);
+			var date4 = new DateOnly(2029, 1, 7);
 
 			person = PersonFactory.CreatePersonWithGuid("a", "a");
 			var schedule = ScheduleDayFactory.Create(date1, person);
+			var schedule2 = ScheduleDayFactory.Create(date2, person);
 			var schedule3 = ScheduleDayFactory.Create(date3, person);
 			var bag = new RuleSetBag();
 			var provider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
@@ -41,7 +43,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var pa1 = new PersonAssignment(schedule.Person, schedule.Scenario, date1);
 			pa1.AddActivity(new Activity("d"), assignmentPeriod);
 			schedule.Add(pa1);
-			var scheduleProvider = new FakeScheduleProvider(schedule, schedule3);
+
+			var pa2 = new PersonAssignment(schedule2.Person, schedule2.Scenario, date2);
+			schedule2.Add(pa2);
+			var scheduleProvider = new FakeScheduleProvider(schedule,schedule2, schedule3);
 
 			var preferenceRestriction1 = new PreferenceRestriction
 			{
@@ -58,8 +63,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var preferenceDay2 = new PreferenceDay(person, date2, preferenceRestriction1);
 			var preferenceDay3 = new PreferenceDay(person, date3, preferenceRestriction3);
+			var preferenceDay4 = new PreferenceDay(person, date4, preferenceRestriction1);
 
-			var personPreferenceProvider = new FakePreferenceProvider(preferenceDay2, preferenceDay3);
+			var personPreferenceProvider = new FakePreferenceProvider(preferenceDay2, preferenceDay3, preferenceDay4);
 
 			var userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 
@@ -111,9 +117,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnCorrectOccupationWithPreference()
+		public void ShouldReturnCorrectOccupationWithPreferenceWhenEmptySchedule()
 		{
 			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 3));
+
+			occupation.HasShift.Should().Be.EqualTo(false);
+			occupation.HasPreference.Should().Be.EqualTo(true);
+			occupation.StartTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+			occupation.StartTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(11, 0, 0));
+
+			occupation.EndTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(15, 0, 0));
+			occupation.EndTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(16, 0, 0));
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOccupationWithPreferenceWhenNoSchedule()
+		{
+			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 7));
 
 			occupation.HasShift.Should().Be.EqualTo(false);
 			occupation.HasPreference.Should().Be.EqualTo(true);
