@@ -2,29 +2,25 @@
 using System.Globalization;
 using System.Reflection;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager
 {
     class Program
     {
-    	private static IUpgradeLog _logger;
-		
         static int Main(string[] args)
         {
+			var logger = new FileLogger();
             try
             {
-				_logger = new FileLogger();
-
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string versionNumber = version.ToString();
-               
-                logWrite("Teleopti Database Manager version " + versionNumber);
-				logWrite("Was called with args: " + string.Join(" ", args));
+
+				logger.Write("Teleopti Database Manager version " + versionNumber);
+				logger.Write("Was called with args: " + string.Join(" ", args));
 				if (args.Length > 0 && args.Length < 20)
                 {
                     var commandLineArgument = new CommandLineArgument(args);
-					var patcher = new DatabasePatcher(_logger);
+					var patcher = new DatabasePatcher(logger);
 	                patcher.Run(commandLineArgument);
                 }
                 else
@@ -49,19 +45,14 @@ namespace Teleopti.Ccc.DBManager
             }
             catch (Exception e)
             {
-                logWrite("An error occurred:");
-                logWrite(e.ToString());
+				logger.Write("An error occurred:");
+				logger.Write(e.ToString());
                 return -1;
             }
             finally
             {
-                _logger.Dispose();
+				logger.Dispose();
             }
         }
-
-		private static void logWrite(string s)
-		{
-			_logger.Write(s);
-		}
 	}
 }
