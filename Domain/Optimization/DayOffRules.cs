@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual void AddFilter(IFilter filter)
 		{
-			filter.SetParent(this);
 			_filters.Add(filter);
 		}
 

@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
 {
-	public class SiteFilter : AggregateEntity, IFilter
+	public class SiteFilter : Entity, IFilter
 	{
 		protected SiteFilter()
 		{

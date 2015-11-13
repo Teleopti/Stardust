@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
     /// <summary>
-    /// Base class for all entities except aggregate roots.
+    /// Base class for bidirectional entities.
     /// </summary>
     public abstract class AggregateEntity : Entity, IAggregateEntity
     {

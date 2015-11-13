@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 	/// <summary>
 	/// Base class for all entities.
-	/// Don't use this explicitly, use AggregateEntity or AggregateRoot instead!
 	/// </summary>
 	public abstract class Entity : IEntity
 	{
