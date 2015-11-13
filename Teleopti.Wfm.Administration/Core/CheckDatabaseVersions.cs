@@ -18,25 +18,24 @@ namespace Teleopti.Wfm.Administration.Core
 			var result = new VersionResultModel { AppVersionOk = false };
 			try
 			{
-				var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), new ExecuteSql(() =>
+				var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+				using (var sqlConn = new SqlConnection(builder.ConnectionString))
 				{
-					var conn =
-						new SqlConnection(
-							new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-								.ConnectionString);
-					conn.Open();
-					return conn;
-				}, new NullLog()));
-				result.HeadVersion = versionInfo.GetDatabaseVersion();
+					sqlConn.Open();
 
-				var importVersionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()),
-					new ExecuteSql(() =>
-					{
-						var conn = new SqlConnection(new SqlConnectionStringBuilder(appConnectionString).ConnectionString);
-						conn.Open();
-						return conn;
-					}, new NullLog()));
-				result.ImportAppVersion = importVersionInfo.GetDatabaseVersion();
+					var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
+					result.HeadVersion = versionInfo.GetDatabaseVersion();
+                    sqlConn.Close();
+				}
+
+				builder = new SqlConnectionStringBuilder(appConnectionString);
+				using (var sqlConn = new SqlConnection(builder.ConnectionString))
+				{
+					sqlConn.Open();
+					var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
+					result.ImportAppVersion = versionInfo.GetDatabaseVersion();
+					sqlConn.Close();
+				}
 
 				result.AppVersionOk = result.HeadVersion.Equals(result.ImportAppVersion);
 			}

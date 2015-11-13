@@ -1,16 +1,22 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseVersionInformation
 	{
 		private readonly DatabaseFolder _databaseFolder;
-		private readonly ExecuteSql _executeSql;
+		private readonly SqlConnection _connection;
 
-		public DatabaseVersionInformation(DatabaseFolder databaseFolder, ExecuteSql executeSql)
+		public DatabaseVersionInformation(DatabaseFolder databaseFolder, SqlConnection connection)
 		{
 			_databaseFolder = databaseFolder;
-			_executeSql = executeSql;
+			_connection = connection;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
@@ -19,13 +25,19 @@ namespace Teleopti.Ccc.DBManager.Library
 			var path = _databaseFolder.CreateScriptsPath();
 			var scriptFile = Path.Combine(path, "CreateDatabaseVersion.sql");
 			var script = File.ReadAllText(scriptFile);
-
-			_executeSql.ExecuteNonQuery(script);
+			using (var sqlCommand = new SqlCommand(script, _connection))
+			{
+				sqlCommand.ExecuteNonQuery();
+			}
 		}
 
 		public int GetDatabaseVersion()
 		{
-			return _executeSql.ExecuteScalar("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]");
+			using (var sqlCommand = new SqlCommand("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]", _connection))
+			{
+				return (int)sqlCommand.ExecuteScalar();
+			}
 		}
+
 	}
 }

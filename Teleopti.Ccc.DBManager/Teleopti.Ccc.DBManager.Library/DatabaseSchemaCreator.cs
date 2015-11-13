@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,16 +11,16 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly DatabaseVersionInformation _versionInformation;
 		private readonly SchemaVersionInformation _schemaVersionInformation;
-		private readonly ExecuteSql _executeSql;
+		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly IUpgradeLog _logger;
 		private const int buildNumberWhenTrunkDisappeared = 500;
 
-		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, ExecuteSql executeSql, DatabaseFolder databaseFolder, IUpgradeLog logger)
+		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, IUpgradeLog logger)
 		{
 			_versionInformation = versionInformation;
 			_schemaVersionInformation = schemaVersionInformation;
-			_executeSql = executeSql;
+			_sqlConnection = sqlConnection;
 			_databaseFolder = databaseFolder;
 			_logger = logger;
 		}
@@ -32,15 +30,16 @@ namespace Teleopti.Ccc.DBManager.Library
 			applyReleases(databaseType);
 			applyProgrammability(databaseType);
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
-				_executeSql.ExecuteCustom(c => new HangfireSchemaCreator().ApplyHangfire(c));
+				new HangfireSchemaCreator().ApplyHangfire(_sqlConnection);
 			addInstallLogRow();
 		}
 
 		private void addInstallLogRow()
 		{
-			const string sql = "insert into databaseversion_installlog (databaseversion, codeversion) values (@dbversion, @codeversion)";
+			const string sql = "insert into databaseversion_installlog (databaseversion, codeversion) values ({0}, '{1}')";
 			var latestDatabaseBuildNumber = _versionInformation.GetDatabaseVersion();
-			_executeSql.ExecuteNonQuery(sql, Timeouts.CommandTimeout, new Dictionary<string, object>{{"@dbversion", latestDatabaseBuildNumber}, { "@codeversion", codeVersion()}});
+			new SqlBatchExecutor(_sqlConnection, _logger)
+				.ExecuteBatchSql(string.Format(sql, latestDatabaseBuildNumber, codeVersion()));
 		}
 
 		private string codeVersion()
@@ -67,21 +66,19 @@ namespace Teleopti.Ccc.DBManager.Library
 										orderby number
 			                            select new {file = f, number};
 
-			string dbVersionSql = Environment.NewLine + "GO" + Environment.NewLine + "INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@buildnumber,@systemversion)";
-						
 			foreach (var scriptFile in applicableScriptFiles)
 			{
 				try
 				{
 					_logger.Write("Applying Release " + scriptFile.number + "...");
 					var sql = File.ReadAllText(scriptFile.file.FullName);
+					new SqlBatchExecutor(_sqlConnection, _logger)
+						.ExecuteBatchSql(sql);
 					if (scriptFile.number >= buildNumberWhenTrunkDisappeared)
 					{
-						_executeSql.ExecuteNonQuery(sql + dbVersionSql, Timeouts.CommandTimeout, new Dictionary<string, object>{{"@buildnumber",scriptFile.number},{"@systemversion",codeVersion()}});
-					}
-					else
-					{
-						_executeSql.ExecuteNonQuery(sql, Timeouts.CommandTimeout);
+						const string dbVersionSql = "INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES ({0},'{1}')";
+						new SqlBatchExecutor(_sqlConnection, _logger)
+							.ExecuteBatchSql(string.Format(dbVersionSql, scriptFile.number, codeVersion()));
 					}
 				}
 				catch (SqlException exception)
@@ -106,9 +103,11 @@ namespace Teleopti.Ccc.DBManager.Library
 				foreach (var scriptFile in scriptFiles)
 				{
 					var sql = File.ReadAllText(scriptFile.FullName);
-					_executeSql.ExecuteNonQuery(sql,Timeouts.CommandTimeout);
+					new SqlBatchExecutor(_sqlConnection, _logger)
+						.ExecuteBatchSql(sql);
 				}
 			}
 		}
+
 	}
 }

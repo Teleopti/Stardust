@@ -52,9 +52,8 @@ namespace Teleopti.Ccc.TestCommon
 			exceptionToConsole(
 				() =>
 				{
-					var databaseHelper = ccc7();
-					databaseHelper.Executor.ExecuteNonQuery("delete from auditing.Auditsetting");
-					databaseHelper.Executor.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ", 0)");
+					ccc7().ExecuteSql("delete from auditing.Auditsetting");
+					ccc7().ExecuteSql("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ", 0)");
 				},
 				"Failed to persist audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
@@ -92,11 +91,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
 		{
-			var databaseHelper = ccc7();
-			databaseHelper.Executor.ExecuteNonQuery("update tenant.tenant set name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
-				parameters:new Dictionary<string, object>{{"@name",name},{"@app", databaseHelper.ConnectionString},{"@analytics", analytics().ConnectionString}});
+			ccc7().ExecuteSql(string.Format("update tenant.tenant set name = '{0}', applicationconnectionstring = '{1}', analyticsconnectionstring = '{2}'",
+				name, ccc7().ConnectionString, analytics().ConnectionString));
 		}
-
+		
 		private static void setupAnalytics()
 		{
 			if (tryRestoreDatabase(analytics(), 0))
@@ -225,7 +223,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			//would be better if dbmanager was called, but don't have the time right now....
 			exceptionToConsole(
-				() => ccc7().Executor.ExecuteNonQuery("exec [dbo].[MergePersonAssignments]"),
+				() => ccc7().ExecuteSql("exec [dbo].[MergePersonAssignments]"),
 				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}

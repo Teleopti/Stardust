@@ -80,7 +80,6 @@
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DatabaseVersionInformation.cs" />
     <Compile Include="DbManagerFolder.cs" />
-    <Compile Include="ExecuteSql.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="HangfireSchemaCreator.cs" />
@@ -88,7 +87,7 @@
     <Compile Include="NotExecutableScriptException.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="SchemaVersionInformation.cs" />
-    <Compile Include="SqlTransientErrorChecker.cs" />
+    <Compile Include="SqlBatchExecutor.cs" />
     <Compile Include="Timeouts.cs" />
   </ItemGroup>
   <ItemGroup>
