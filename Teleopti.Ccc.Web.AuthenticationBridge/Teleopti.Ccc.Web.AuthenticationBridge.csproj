@@ -51,13 +51,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AuthBridge">
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.31\lib\net40\AuthBridge.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.33\lib\net40\AuthBridge.dll</HintPath>
     </Reference>
     <Reference Include="AuthBridge.Web">
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.31\lib\net40\AuthBridge.Web.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.33\lib\net40\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine">
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.31\lib\net40\ClaimsPolicyEngine.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.33\lib\net40\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
