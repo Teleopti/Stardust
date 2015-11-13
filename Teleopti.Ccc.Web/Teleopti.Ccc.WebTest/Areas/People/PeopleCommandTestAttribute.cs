@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<IContract> FindContractsStartWith(string searchString)
+		public IEnumerable<IContract> FindContractsStartWith(string searchString, int itemsLeftToLoad)
 		{
 			throw new NotImplementedException();
 		}

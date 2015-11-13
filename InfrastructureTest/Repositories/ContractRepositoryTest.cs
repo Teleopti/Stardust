@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var contract = new Contract(name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name);
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name, 10);
 
 			loadedContracts.Should().Have.SameValuesAs(contract);
 		}
@@ -103,9 +103,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var contract = new Contract(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make());
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make(), 10);
 
 			loadedContracts.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyFetchMaxNumberOfItems()
+		{
+				const int maxHits = 2;
+				var name = RandomName.Make();
+			PersistAndRemoveFromUnitOfWork(new Contract(name));
+			PersistAndRemoveFromUnitOfWork(new Contract(name));
+			PersistAndRemoveFromUnitOfWork(new Contract(name));
+
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name, maxHits);
+
+			loadedContracts.Count().Should().Be.EqualTo(maxHits);
+		}
+
+		[Test]
+		public void ShouldNotMakeSearchCallIfMaxItemsIsZero()
+		{
+			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
+
+			new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make(), 0);
+
+			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
+			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
 
 		/// <summary>

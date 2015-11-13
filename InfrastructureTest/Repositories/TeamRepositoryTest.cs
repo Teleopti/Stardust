@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = new Team {Description = new Description(name + RandomName.Make()), Site=teamSite};
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name);
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name, 20);
 
 			loaded.Should().Have.SameValuesAs(team);
 		}
@@ -122,9 +122,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = new Team { Description = new Description(RandomName.Make()), Site = teamSite };
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make());
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyFetchMaxNumberOfItems()
+		{
+			const int maxHits = 2;
+			var name = RandomName.Make();
+			PersistAndRemoveFromUnitOfWork(new Team {Description = new Description(name), Site = teamSite});
+			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
+			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
+
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name, maxHits);
+
+			loaded.Count().Should().Be.EqualTo(maxHits);
+		}
+
+		[Test]
+		public void ShouldNotMakeSearchCallIfMaxItemsIsZero()
+		{
+			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
+
+			new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make(), 0);
+
+			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
+			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
 
 

@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _contracts.OrderBy(x => x.Description).ToArray();
 		}
 
-		public IEnumerable<IContract> FindContractsStartWith(string searchString)
+		public IEnumerable<IContract> FindContractsStartWith(string searchString, int itemsLeftToLoad)
 		{
-			return _contracts.Where(x => x.Description.Name.StartsWith(searchString));
+			return _contracts.Where(x => x.Description.Name.StartsWith(searchString)).Take(itemsLeftToLoad);
 		}
 	}
 }

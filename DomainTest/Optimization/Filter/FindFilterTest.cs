@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		[Test]
 		public void ShouldGiveEmptyResult()
 		{
-			Target.Search(RandomName.Make())
+			Target.Search(RandomName.Make(), 10)
 				.Should().Be.Empty();
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var contract = new Contract(expectedContractName + RandomName.Make()).WithId(expectedGuid);
 			ContractRepository.Add(contract);
 
-			var result = Target.Search(expectedContractName).Single();
+			var result = Target.Search(expectedContractName, 10).Single();
 
 			result.Name.Should().StartWith(expectedContractName);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var team = new Team {Description = new Description(expectedTeamName)}.WithId(expectedGuid);
 			TeamRepository.Add(team);
 
-			var result = Target.Search(expectedTeamName).Single();
+			var result = Target.Search(expectedTeamName, 10).Single();
 
 			result.Name.Should().StartWith(expectedTeamName);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var site = new Site(expectedSiteName).WithId(expectedGuid);
 			SiteRepository.Add(site);
 
-			var result = Target.Search(expectedSiteName).Single();
+			var result = Target.Search(expectedSiteName, 10).Single();
 
 			result.Name.Should().StartWith(expectedSiteName);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -79,12 +79,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		[Test]
 		public void EmptySearchStringShouldGiveNoResult()
 		{
-			var site = new Site(RandomName.Make());
-			site.SetId(Guid.NewGuid());
+			var site = new Site(RandomName.Make()).WithId();
 			SiteRepository.Add(site);
 
-			Target.Search(string.Empty)
+			Target.Search(string.Empty, 10)
 				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyFetchMaxHits()
+		{
+			const int maxHits = 3;
+			var name = RandomName.Make();
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			TeamRepository.Add(new Team {Description = new Description(name + RandomName.Make()) }.WithId());
+			TeamRepository.Add(new Team {Description = new Description(name + RandomName.Make()) }.WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+
+			Target.Search(name, maxHits).Count()
+				.Should().Be.EqualTo(maxHits);
 		}
 	}
 }

@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_findFilter = findFilter;
 		}
 
-		[HttpGet, Route("api/filters/{searchString}"), UnitOfWork]
-		public virtual IHttpActionResult FindFilters(string searchString)
+		[HttpGet, Route("api/filters/{searchString}/{maxHits}"), UnitOfWork]
+		public virtual IHttpActionResult FindFilters(string searchString, int maxHits)
 		{
-			return Ok(_findFilter.Search(searchString));
+			return Ok(_findFilter.Search(searchString, maxHits));
 		}
   }
 }

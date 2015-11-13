@@ -18,16 +18,19 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 			_siteRepository = siteRepository;
 		}
 
-		public IEnumerable<FindFilterResult> Search(string searchString)
+		public IEnumerable<FindFilterResult> Search(string searchString, int maxHits)
 		{
 			if (searchString.IsEmpty())
 				return Enumerable.Empty<FindFilterResult>();
 
-			var contractHits = _contractRepository.FindContractsStartWith(searchString)
+			var itemsLeftToLoad = maxHits;
+			var contractHits = _contractRepository.FindContractsStartWith(searchString, itemsLeftToLoad)
 				.Select(contract => new FindFilterResult {FilterType = "contract", Id = contract.Id.Value, Name = contract.Description.Name});
-			var teamHits = _teamRepository.FindTeamsStartWith(searchString)
+			itemsLeftToLoad = itemsLeftToLoad - contractHits.Count();
+			var teamHits = _teamRepository.FindTeamsStartWith(searchString, itemsLeftToLoad)
 				.Select(team => new FindFilterResult {FilterType = "team", Id = team.Id.Value, Name = team.Description.Name});
-			var siteHits = _siteRepository.FindSitesStartWith(searchString)
+			itemsLeftToLoad = itemsLeftToLoad - teamHits.Count();
+			var siteHits = _siteRepository.FindSitesStartWith(searchString, itemsLeftToLoad)
 				.Select(site => new FindFilterResult { FilterType = "site", Id = site.Id.Value, Name = site.Description.Name });
 
 			return contractHits.Union(teamHits).Union(siteHits);

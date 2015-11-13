@@ -35,10 +35,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-	    public IEnumerable<ISite> FindSitesStartWith(string searchString)
+	    public IEnumerable<ISite> FindSitesStartWith(string searchString, int maxHits)
 	    {
+		    if (maxHits < 1)
+			    return Enumerable.Empty<ISite>();
+
 			return Session.CreateCriteria<Site>()
 				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+				.SetMaxResults(maxHits)
 				.List<ISite>();
 		}
     }

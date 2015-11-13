@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site(name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name);
+			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name, 20);
 
 			loaded.Should().Have.SameValuesAs(site);
 		}
@@ -85,9 +85,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = new Site(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make());
+			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyFetchMaxNumberOfItems()
+		{
+			const int maxHits = 2;
+			var name = RandomName.Make();
+			PersistAndRemoveFromUnitOfWork(new Site(name));
+			PersistAndRemoveFromUnitOfWork(new Site(name));
+			PersistAndRemoveFromUnitOfWork(new Site(name));
+
+			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name, maxHits);
+
+			loaded.Count().Should().Be.EqualTo(maxHits);
+		}
+
+		[Test]
+		public void ShouldNotMakeSearchCallIfMaxItemsIsZero()
+		{
+			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
+
+			new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make(), 0);
+
+			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
+			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
 	}
 }
