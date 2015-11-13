@@ -13,7 +13,9 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -146,6 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
 
+
 			createAndSaveReadModel((Guid) per2.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
 			createAndSaveReadModel((Guid) per3.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
 
@@ -182,8 +185,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
 
+
 			createAndSaveReadModel((Guid)per2.Id, (Guid)team.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
 			createAndSaveReadModel((Guid)per3.Id, (Guid)team.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+
 
 			var timeFilterInfo = new TimeFilterInfo() { IsDayOff = false, IsWorkingDay = true, IsEmptyDay = false };
 
@@ -193,6 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
 			Assert.That(scheduleReadModels.Count, Is.EqualTo(2));			
 		}
+
 
 		[Test]
 		public void ShouldSaveAndLoadReadModelForPerson()
@@ -205,6 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29), 10);
+
 				var ret = _target.ForPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
 
 				Assert.That(ret.Count(), Is.EqualTo(1));
@@ -227,8 +234,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var ret = _target.ForPeople(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
-					new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), new []{personId1, personId2});
+				var ret = _target.ForPeople(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc), new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), new []{personId1, personId2});
 				Assert.That(ret.Count(), Is.EqualTo(2));
 			}
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -239,86 +245,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		[Test]
-		public void ShouldLoadReadModelWithOverNighShiftForPeopleInProperOrder()
-		{
-			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-
-			ISite site = SiteFactory.CreateSimpleSite("test site");
-			PersistAndRemoveFromUnitOfWork(site);
-			ITeam team = TeamFactory.CreateSimpleTeam();
-			team.Site = site;
-			team.Description = new Description("test team");
-			PersistAndRemoveFromUnitOfWork(team);
-
-			var teamId = team.Id.Value;
-			var businessUnitId = site.BusinessUnit.Id.Value;
-
-			var per1 = PersonFactory.CreatePerson("Agent1", "a");
-			var per2 = PersonFactory.CreatePerson("Agent2", "b");
-
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
-			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
-
-			PersistAndRemoveFromUnitOfWork(per1);
-			PersistAndRemoveFromUnitOfWork(per2);
-
-			var personId1 = per1.Id.Value;
-			var personId2 = per2.Id.Value;
-
-			// These 2 schedule should not be get
-			createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2015, 11, 10, 07, 00, 00), 8);
-			createAndSaveReadModel(personId2, teamId, businessUnitId, new DateTime(2015, 11, 10, 10, 00, 00), 8);
-
-			// The over night shift which will be retrieved
-			createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2015, 11, 11, 20, 00, 00), 8);
-			createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2015, 11, 12, 07, 00, 00), 8);
-			createAndSaveReadModel(personId2, teamId, businessUnitId, new DateTime(2015, 11, 12, 10, 00, 00), 8);
-
-			// These 2 schedule should not be get
-			createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2015, 11, 13, 07, 00, 00), 8);
-			createAndSaveReadModel(personId2, teamId, businessUnitId, new DateTime(2015, 11, 13, 10, 00, 00), 8);
-
-			var datePeriod = new DateTimePeriod(
-				new DateTime(2015, 11, 12, 00, 00, 00, DateTimeKind.Utc),
-				new DateTime(2015, 11, 13, 00, 00, 00, DateTimeKind.Utc));
-			var personIds = new[] {personId1, personId2};
-			var paging = new Paging {Skip = 0, Take = 2};
-
-			var schedules =
-				_target.ForPeople(new DateTime(2015, 11, 12), datePeriod, personIds, paging).ToList();
-			Assert.That(schedules.Count, Is.EqualTo(3));
-
-			Assert.That(schedules[0].PersonId, Is.EqualTo(personId1));
-			Assert.That(schedules[0].BelongsToDate.Date, Is.EqualTo(new DateTime(2015, 11, 12)));
-
-			Assert.That(schedules[1].PersonId, Is.EqualTo(personId2));
-			Assert.That(schedules[1].BelongsToDate.Date, Is.EqualTo(new DateTime(2015, 11, 12)));
-
-			Assert.That(schedules[2].PersonId, Is.EqualTo(personId1));
-			Assert.That(schedules[2].BelongsToDate.Date, Is.EqualTo(new DateTime(2015, 11, 11)));
-
-			clearReadModel(personId1, businessUnitId,
-				new DateOnlyPeriod(new DateOnly(new DateTime(2015, 11, 10)), new DateOnly(2015, 11, 13)));
-			clearReadModel(personId2, businessUnitId,
-				new DateOnlyPeriod(new DateOnly(new DateTime(2015, 11, 10)), new DateOnly(2015, 11, 13)));
-		}
-
 		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)
 		{
-			clearReadModel(personId, businessUnitId, new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)));
-		}
-
-		private void clearReadModel(Guid personId, Guid businessUnitId, DateOnlyPeriod period)
-		{
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-				MockRepository.GenerateMock<IMessageBrokerComposite>(), MockRepository.GenerateMock<ICurrentDataSource>());
+																	MockRepository.GenerateMock<IMessageBrokerComposite>(),
+																	MockRepository.GenerateMock<ICurrentDataSource>());
 
-			persister.UpdateReadModels(period, personId, businessUnitId, null, false);
+			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
 
-		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date,
-			int shiftStartHour, int? shiftEndHour = null)
+		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date, int shiftStartHour, int? shiftEndHour = null)
 		{
 			var model = new PersonScheduleDayReadModel
 			{
@@ -339,10 +275,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				// empty schedule, no start and end time.
 			}
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-				MockRepository.GenerateMock<IMessageBrokerComposite>(), MockRepository.GenerateMock<ICurrentDataSource>());
+																	MockRepository.GenerateMock<IMessageBrokerComposite>(),
+																	MockRepository.GenerateMock<ICurrentDataSource>());
 
-			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId,
-				new[] {model}, false);
+			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
 		}
 		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
 		{
@@ -360,3 +296,4 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 	}
 }
+
