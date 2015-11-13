@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
+using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
@@ -14,7 +15,7 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			base.Setup(system, configuration);
 
-			system.AddModule(new WfmAdminModule());
+			system.AddModule(new WfmAdminModule(new ConsoleLogger()));
 
 			var service = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			system.AddService(service);

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 	}
 
-	public class MyLogger : IUpgradeLog
+	public class ConsoleLogger : IUpgradeLog
 	{
 		public void Write(string message)
 		{

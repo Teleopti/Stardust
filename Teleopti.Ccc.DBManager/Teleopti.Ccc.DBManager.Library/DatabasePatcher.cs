@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private const string AzureEdition = "SQL Azure";
 		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
-		public IUpgradeLog Logger = new MyLogger();
+		public IUpgradeLog Logger = new FileLogger();
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
 		private readonly Func<SqlConnection> _masterConnection;
-		private Func<SqlConnection> _connection;
+		private readonly Func<SqlConnection> _connection;
 
 		public DatabasePatcher()
 		{
@@ -203,36 +203,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		private void logWrite(string s, string level = "DEBUG")
 		{
 			Logger.Write(s, level);
-		}
-
-		public class MyLogger : IUpgradeLog
-		{
-			private readonly TextWriter _logFile;
-
-			public MyLogger()
-			{
-				var nowDateTime = DateTime.Now;
-				_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManagerLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
-			}
-
-			public void Write(string message)
-			{
-				Console.Out.WriteLine(message);
-				_logFile.WriteLine(message);
-			}
-
-			public void Write(string message, string level)
-			{
-				Write(message);
-			}
-
-			public void Dispose()
-			{
-				if (_logFile == null)
-					return;
-				_logFile.Close();
-				_logFile.Dispose();
-			}
 		}
 
 		private void applyAzureStartDdl(string databaseTypeName)
@@ -457,6 +427,36 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			return (string.Compare(stringA, stringB, true,
 				 CultureInfo.CurrentCulture) == 0);
+		}
+	}
+
+	public class FileLogger : IUpgradeLog
+	{
+		private readonly TextWriter _logFile;
+
+		public FileLogger()
+		{
+			var nowDateTime = DateTime.Now;
+			_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManagerLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+		}
+
+		public void Write(string message)
+		{
+			Console.Out.WriteLine(message);
+			_logFile.WriteLine(message);
+		}
+
+		public void Write(string message, string level)
+		{
+			Write(message);
+		}
+
+		public void Dispose()
+		{
+			if (_logFile == null)
+				return;
+			_logFile.Close();
+			_logFile.Dispose();
 		}
 	}
 }

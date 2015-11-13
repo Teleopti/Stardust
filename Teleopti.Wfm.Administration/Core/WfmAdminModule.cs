@@ -21,9 +21,26 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class WfmAdminModule : Module
 	{
+		private readonly IUpgradeLog _upgradeLog;
+
+		public WfmAdminModule() : this(null)
+		{
+		}
+
+		public WfmAdminModule(IUpgradeLog upgradeLog)
+		{
+			_upgradeLog = upgradeLog;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			var iocConf = new IocConfiguration(new IocArgs(new ConfigReader()), new FalseToggleManager());
+
+			var databasePatcher = new DatabasePatcher();
+			if (_upgradeLog != null)
+			{
+				databasePatcher.Logger = _upgradeLog;
+			}
 
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
@@ -43,7 +60,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<DeleteTenant>().SingleInstance();
 			builder.RegisterType<UpdateCrossDatabaseView>().SingleInstance();
 			builder.RegisterType<DatabaseUpgrader>().SingleInstance();
-			builder.RegisterType<DatabasePatcher>().SingleInstance();
+			builder.RegisterInstance(databasePatcher);
 			builder.RegisterType<TenantUpgrader>().SingleInstance();
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			
