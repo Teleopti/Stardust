@@ -11,25 +11,23 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 	public class DistributedLockAcquirer : IDistributedLockAcquirer
 	{
 		private readonly IConfigReader _configReader;
-		private readonly IConnectionStrings _connectionStrings;
+		private readonly Func<SqlConnection> _connection;
 
 		public DistributedLockAcquirer(IConfigReader configReader, IConnectionStrings connectionStrings)
 		{
 			_configReader = configReader;
-			_connectionStrings = connectionStrings;
+			_connection = () =>
+			{
+				var conn = new SqlConnection(connectionStrings.Application());
+				conn.Open();
+				return conn;
+			};
 		}
 
 		public IDisposable LockForTypeOf(object lockObject)
 		{
-			var connection = new SqlConnection(_connectionStrings.Application());
-			connection.Open();
-			var @lock = new SqlServerDistributedLock(ProxyUtil.GetUnproxiedType(lockObject).Name, timeout(), connection);
-			return new GenericDisposable(() =>
-			{
-				@lock.Dispose();
-				connection.Close();
-				connection.Dispose();
-			});
+			var @lock = new SqlServerDistributedLock(ProxyUtil.GetUnproxiedType(lockObject).Name, timeout(), _connection);
+			return new GenericDisposable(@lock.Dispose);
 		}
 
 		private TimeSpan timeout()

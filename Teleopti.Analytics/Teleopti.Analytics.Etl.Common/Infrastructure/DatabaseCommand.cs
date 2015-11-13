@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
@@ -15,6 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private readonly CommandType _commandType;
 		private readonly string _connString;
 		private readonly IList<SqlParameter> _procParam;
+		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 
 		public DatabaseCommand(CommandType commandType, string commandText, string connectionString)
 		{
@@ -40,7 +42,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				using (var dataAdapter = new SqlDataAdapter())
 				{
-					using (var conn = grabConnection())
+					_executor.Run(grabConnection, conn =>
 					{
 						using (var tran = OpenTransaction(conn))
 						{
@@ -52,61 +54,61 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 								dataAdapter.Fill(ds);
 								tran.Commit();
 							}
-
-							return ds;
 						}
-					}
+					});
 				}
+				return ds;
 			}
 		}
 
 		public int ExecuteNonQuery()
 		{
-			using (var conn = grabConnection())
+			int number = default(int);
+			_executor.Run(grabConnection, conn =>
 			{
 				using (var tran = OpenTransaction(conn))
 				{
 					using (var command = SetCommand(tran))
 					{
 						setParams(command);
-						int number = command.ExecuteNonQuery();
+						number = command.ExecuteNonQuery();
 						tran.Commit();
-
-						return number;
 					}
 				}
-			}
+			}); 
+			return number;
 		}
 
 		public object ExecuteScalar()
 		{
-			using (var conn = grabConnection())
+			object retVal = default(object);
+			_executor.Run(grabConnection, conn =>
 			{
 				using (var tran = OpenTransaction(conn))
 				{
 					using (var command = SetCommand(tran))
 					{
 						setParams(command);
-						object retVal = command.ExecuteScalar();
+						retVal = command.ExecuteScalar();
 						tran.Commit();
-
-						return retVal;
 					}
 				}
-			}
+			});
+			return retVal;
 		}
 
 		public int ExecuteNonQueryMaintenance()
 		{
-			using (var conn = grabConnection())
+			int number = default (int);
+			_executor.Run(grabConnection, conn =>
 			{
 				using (var command = SetCommandMaintenance(conn))
 				{
 					setParams(command);
-					var number = command.ExecuteNonQuery();
-					return number;
+					number = command.ExecuteNonQuery();
 				}
-			}
+			});
+			return number;
 		}
 
 		protected virtual SqlCommand SetCommandMaintenance(SqlConnection conn)

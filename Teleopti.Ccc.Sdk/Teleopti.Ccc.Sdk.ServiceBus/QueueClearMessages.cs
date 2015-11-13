@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -7,15 +8,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		public static void ClearMessages(string connectionString, string queueName)
 		{
-			using (var connection = new SqlConnection(connectionString))
-			using (var command = connection.CreateCommand())
+			var executor = new CloudSafeSqlExecute();
+			executor.Run(() =>
 			{
+				var connection = new SqlConnection(connectionString);
 				connection.Open();
-				command.CommandText = "Queue.CustomClearMessages";
-				command.CommandType = CommandType.StoredProcedure;
-				command.Parameters.AddWithValue("@QueueName", queueName);
-				command.ExecuteNonQuery();
-			}
+				return connection;
+			}, connection =>
+			{
+				using (var command = connection.CreateCommand())
+				{
+					command.CommandText = "Queue.CustomClearMessages";
+					command.CommandType = CommandType.StoredProcedure;
+					command.Parameters.AddWithValue("@QueueName", queueName);
+					command.ExecuteNonQuery();
+				}
+			});
 		}
 	}
 }

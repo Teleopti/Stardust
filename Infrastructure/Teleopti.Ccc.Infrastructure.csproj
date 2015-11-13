@@ -534,6 +534,7 @@
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
+    <Compile Include="Util\CloudSafeSqlExecute.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\UnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
@@ -666,6 +667,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="Util\MemoryCounter.cs" />
+    <Compile Include="Util\SqlTransientErrorChecker.cs" />
     <Compile Include="Util\StringHelper.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\QueueMetricsForDayResult.cs" />

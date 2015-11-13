@@ -4,31 +4,37 @@ using System.Data.SqlClient;
 using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class EtlJobLock: IEtlJobLock
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (EtlJobLock));
-		private readonly string _connectionString;
 		private Timer timer;
+		private readonly Func<SqlConnection> _connection;
+		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 		const string insertStatement = "INSERT INTO mart.sys_etl_running_lock (computer_name,start_time,job_name,is_started_by_service,lock_until) VALUES (@computer_name,@start_time,@job_name,@is_started_by_service,DATEADD(mi,1,GETUTCDATE()))";
 		const string updateStatement = "UPDATE mart.sys_etl_running_lock SET lock_until=DATEADD(mi,1,GETUTCDATE())";
 		const string deleteStatement = "DELETE FROM mart.sys_etl_running_lock";
 		
 		public EtlJobLock(string connectionString)
 		{
-			_connectionString = connectionString;
+			_connection = () =>
+			{
+				var conn = new SqlConnection(connectionString);
+				conn.Open();
+				return conn;
+			};
 		}
 
 		public void CreateLock(string jobName, bool isStartByService)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			_executor.Run(_connection, conn =>
 			{
-				sqlConnection.Open();
-				SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+				SqlTransaction sqlTransaction = conn.BeginTransaction();
 
-				SqlCommand sqlCommand = sqlConnection.CreateCommand();
+				SqlCommand sqlCommand = conn.CreateCommand();
 				sqlCommand.Transaction = sqlTransaction;
 
 				string computerName = Environment.MachineName;
@@ -42,7 +48,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				sqlCommand.ExecuteNonQuery();
 
 				sqlTransaction.Commit();
-			}
+			});
 
 			timer = new Timer(lockForAnotherMinute,null,TimeSpan.FromSeconds(45),TimeSpan.FromMinutes(1));
 		}
@@ -52,12 +58,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			try
 			{
-				using (var sqlConnection = new SqlConnection(_connectionString))
+				_executor.Run(_connection, conn =>
 				{
-					sqlConnection.Open();
-					SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+					SqlTransaction sqlTransaction = conn.BeginTransaction();
 
-					SqlCommand sqlCommand = sqlConnection.CreateCommand();
+					SqlCommand sqlCommand = conn.CreateCommand();
 					sqlCommand.Transaction = sqlTransaction;
 
 					sqlCommand.CommandType = CommandType.Text;
@@ -65,7 +70,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					sqlCommand.ExecuteNonQuery();
 
 					sqlTransaction.Commit();
-				}
+				});
 			}
 			catch (Exception exception)
 			{
@@ -98,12 +103,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			try
 			{
-				using (var sqlConnection = new SqlConnection(_connectionString))
+				_executor.Run(_connection, conn =>
 				{
-					sqlConnection.Open();
-					SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+					SqlTransaction sqlTransaction = conn.BeginTransaction();
 
-					SqlCommand sqlCommand = sqlConnection.CreateCommand();
+					SqlCommand sqlCommand = conn.CreateCommand();
 					sqlCommand.Transaction = sqlTransaction;
 
 					sqlCommand.CommandType = CommandType.Text;
@@ -111,7 +115,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					sqlCommand.ExecuteNonQuery();
 
 					sqlTransaction.Commit();
-				}
+				});
 			}
 			catch (Exception)
 			{
