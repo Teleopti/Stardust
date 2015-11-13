@@ -10,7 +10,8 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<WsiFiles Include="$(SourceDir)\Wise\**\*.wsi" />
+		<WsiToEXE Include="$(SourceDir)\Wise\**\ccc7_forecast.wsi" />
+		<WsiToMSI Include="$(SourceDir)\Wise\**\ccc7_client.wsi;$(SourceDir)\Wise\**\ccc7_server.wsi" />
 		<WseFiles Include="$(SourceDir)\Wise\**\*.wse" />
 	</ItemGroup>
 
@@ -25,18 +26,22 @@
 	</Target>
 	
 	<Target Name="SetVersionOnWsis">
-		<Exec Command='cscript "$(SourceDir)\Wise\setProductVersion.vbs" "%(WsiFiles.FullPath)" $(CCCVersion)' />
+		<Exec Command='cscript "$(SourceDir)\Wise\setProductVersion.vbs" "%(WsiToEXE.FullPath)" $(CCCVersion)' />
 	</Target>
 	
 	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
 		<Exec Command='"$(WseCompiler)" /c "%(WseFiles.FullPath)"' />
 	</Target>
 	
-	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;SetVersionOnWsis">
-		<Exec Command='"$(WsiCompiler)" /c "%(WsiFiles.FullPath)"' />
+	<Target Name="CompileWsiToEXE" DependsOnTargets="MountK;SetVersionOnWsis">
+		<Exec Command='"$(WsiCompiler)" /c "%(WsiToEXE.FullPath)"' />
 	</Target>
 	
-	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiFiles;" AfterTargets="UnmountK">
+	<Target Name="CompileWsiToMSI" DependsOnTargets="MountK;SetVersionOnWsis">
+		<Exec Command='"$(WsiCompiler)" /c "%(WsiToMSI.FullPath)"' />
+	</Target>
+	
+	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiToEXE;CompileWsiToMSI;" AfterTargets="UnmountK">
 		<!--<CallTargets="MalwareScan;CallJenkinsForDeployment" />-->
 	</Target>
 </Project>
