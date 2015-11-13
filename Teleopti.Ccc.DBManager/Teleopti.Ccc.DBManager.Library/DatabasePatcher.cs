@@ -19,14 +19,15 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private const string AzureEdition = "SQL Azure";
 		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
-		public IUpgradeLog Logger = new FileLogger();
+		private IUpgradeLog _logger;
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
 		private readonly Func<SqlConnection> _masterConnection;
 		private readonly Func<SqlConnection> _connection;
 
-		public DatabasePatcher()
+		public DatabasePatcher(IUpgradeLog upgradeLog)
 		{
+			_logger = upgradeLog;
 			_masterConnection = () => connectAndOpen(_commandLineArgument.ConnectionStringToMaster);
 			_connection = () => connectAndOpen(_commandLineArgument.ConnectionString);
 		}
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				//Does the db exist?
 				if (databaseExists())
 				{
-					_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder,new ExecuteSql(_connection, Logger));
+					_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder,new ExecuteSql(_connection, _logger));
 
 					//if we are not db_owner, bail out
 					if (!isDbOwner())
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.DBManager.Library
 							}
 
 							var dbCreator = new DatabaseSchemaCreator(_databaseVersionInformation,
-								_schemaVersionInformation, new ExecuteSql(_connection,Logger), _databaseFolder, Logger);
+								_schemaVersionInformation, new ExecuteSql(_connection,_logger), _databaseFolder, _logger);
 							dbCreator.Create(_commandLineArgument.TargetDatabaseType);
 						}
 						else
@@ -191,7 +192,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			finally
 			{
-				Logger.Dispose();
+				_logger.Dispose();
 			}
 		}
 
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void logWrite(string s, string level = "DEBUG")
 		{
-			Logger.Write(s, level);
+			_logger.Write(s, level);
 		}
 
 		private void applyAzureStartDdl(string databaseTypeName)
@@ -218,7 +219,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				sql = sqlTextReader.ReadToEnd();
 			}
 
-			var executor = new ExecuteSql(_connection, Logger);
+			var executor = new ExecuteSql(_connection, _logger);
 			executor.ExecuteNonQuery(sql,Timeouts.CommandTimeout);
 		}
 
@@ -227,63 +228,63 @@ namespace Teleopti.Ccc.DBManager.Library
 		private bool versionTableExists()
 		{
 			const string sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'DatabaseVersion'";
-			var executor = new ExecuteSql(_connection, Logger);
+			var executor = new ExecuteSql(_connection, _logger);
 			return Convert.ToBoolean(executor.ExecuteScalar(sql));
 		}
 
 		private bool databaseExists()
 		{
 			const string sql = "SELECT COUNT(*) AS DBExists FROM sys.databases WHERE [name]=@database_name";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@database_name", _commandLineArgument.DatabaseName } }));
 		}
 
 		private  bool isAzure()
 		{
 			const string sql = "IF (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) = @azure_edition SELECT 1 ELSE SELECT 0";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@azure_edition", AzureEdition}}));
 		}
 
 		private  bool isDbOwner()
 		{
 			const string sql = "select IS_MEMBER ('db_owner')";
-			var exec = new ExecuteSql(_connection, Logger);
+			var exec = new ExecuteSql(_connection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql));
 		}
 
 		private  bool isSrvSecurityAdmin()
 		{
 			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='ALTER ANY LOGIN'";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql));
 		}
 
 		private  bool isSrvDbCreator()
 		{
 			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='CREATE ANY DATABASE'";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql));
 		}
 
 		private  bool verifyWinGroup(string winNtGroup)
 		{
 			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = @WinNTGroup";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@WinNTGroup", winNtGroup } }));
 		}
 
 		private  bool dbUserExist(string sqlLogin)
 		{
 			const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
-			var exec = new ExecuteSql(_connection, Logger);
+			var exec = new ExecuteSql(_connection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
 		private  bool azureLoginExist(string sqlLogin)
 		{
 			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
@@ -291,7 +292,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			logWrite("Creating database " + databaseName + "...");
 
-			var creator = new DatabaseCreator(_databaseFolder, new ExecuteSql(_masterConnection,Logger));
+			var creator = new DatabaseCreator(_databaseFolder, new ExecuteSql(_masterConnection,_logger));
 			if (_isAzure)
 				creator.CreateAzureDatabase(databaseType, databaseName);
 			else
@@ -362,7 +363,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			var exec = new ExecuteSql(_masterConnection, Logger);
+			var exec = new ExecuteSql(_masterConnection, _logger);
 			exec.ExecuteNonQuery(sql);
 			
 			logWrite("Created login!");
@@ -385,7 +386,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			else
 				relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"sp_change_users_login 'Update_One', '{0}', '{0}'", user);
 
-			var exec = new ExecuteSql(_connection, Logger);
+			var exec = new ExecuteSql(_connection, _logger);
 			if (dbUserExist(user))
 			{
 				logWrite("DB user already exist, re-link ...");
@@ -427,6 +428,11 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			return (string.Compare(stringA, stringB, true,
 				 CultureInfo.CurrentCulture) == 0);
+		}
+
+		public void SetLogger(IUpgradeLog logger)
+		{
+			_logger = logger;
 		}
 	}
 

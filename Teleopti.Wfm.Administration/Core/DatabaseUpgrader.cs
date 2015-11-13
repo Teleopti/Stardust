@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.Core
 				PermissionMode = permissionMode,
 				UseIntegratedSecurity = useIntegratedSecurity
 			};
-			_databasePatcher.Logger = new TenantLogger(tenant);
+			_databasePatcher.SetLogger(new TenantLogger(tenant));
          return _databasePatcher.Run(commands);
 
 		}

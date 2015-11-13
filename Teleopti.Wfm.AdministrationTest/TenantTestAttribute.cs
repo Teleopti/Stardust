@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -15,7 +16,8 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			base.Setup(system, configuration);
 
-			system.AddModule(new WfmAdminModule(new ConsoleLogger()));
+			system.AddModule(new WfmAdminModule());
+			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 
 			var service = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			system.AddService(service);
@@ -30,8 +32,8 @@ namespace Teleopti.Wfm.AdministrationTest
 	{
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 
-		private string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
-		private string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
+		private const string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
+		private const string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
 
 		public SqlConnectionStringBuilder TestTenantConnection()
 		{
