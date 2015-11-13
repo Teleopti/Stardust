@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.DBManager.Library
 							foreach (var statement in statements)
 							{
 								command.CommandText = statement;
-								result = (int)command.ExecuteScalar();
+								command.CommandType = CommandType.Text;
+								result = (int)(command.ExecuteScalar() ?? default(int));
 							}
 							
 							transaction.Commit();
@@ -67,6 +69,23 @@ namespace Teleopti.Ccc.DBManager.Library
 			},0);
 
 			return result;
+		}
+
+		public void ExecuteTransactionlessNonQuery(string sql, int timeout = 30)
+		{
+			handleWithRetry(sql, s =>
+			{
+				using (var connection = _openConnection())
+				{
+					using (var command = connection.CreateCommand())
+					{
+						command.CommandType = CommandType.Text;
+						command.CommandTimeout = timeout;
+						command.CommandText = sql;
+						command.ExecuteNonQuery();
+					}
+				}
+			}, 0);
 		}
 
 		public void ExecuteNonQuery(string sql, int timeout = 30, IDictionary<string, object> parameters = null)
@@ -86,15 +105,20 @@ namespace Teleopti.Ccc.DBManager.Library
 						using (var command = connection.CreateCommand())
 						{
 							command.Transaction = transaction;
-							foreach (var parameter in parameters)
-							{
-								command.Parameters.AddWithValue(parameter.Key, parameter.Value);
-							}
 							command.CommandTimeout = timeout;
 
 							foreach (var statement in statements)
 							{
+								command.Parameters.Clear();
+								foreach (var parameter in parameters)
+								{
+									if (statement.Contains(parameter.Key))
+									{
+										command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+									}
+								}
 								command.CommandText = statement;
+								command.CommandType = CommandType.Text;
 								command.ExecuteNonQuery();
 							}
 							

@@ -78,31 +78,33 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void setupCcc7(string name)
 		{
-			if (tryRestoreDatabase(ccc7(), 0))
+			var databaseHelper = ccc7();
+			if (tryRestoreDatabase(databaseHelper, 0))
 			{
 				update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
 				return;
 			}
-			createDatabase(ccc7());
+			createDatabase(databaseHelper);
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
-			backupDatabase(ccc7(), 0);
+			backupDatabase(databaseHelper, 0);
 		}
 
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
 		{
 			var databaseHelper = ccc7();
 			databaseHelper.Executor.ExecuteNonQuery("update tenant.tenant set name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
-				parameters:new Dictionary<string, object>{{"@name",name},{"@app", databaseHelper.ConnectionString},{"@analytics", analytics().ConnectionString}});
+				parameters:new Dictionary<string, object>{{"@name",name ?? string.Empty},{"@app", databaseHelper.ConnectionString},{"@analytics", analytics().ConnectionString}});
 		}
 
 		private static void setupAnalytics()
 		{
-			if (tryRestoreDatabase(analytics(), 0))
+			var databaseHelper = analytics();
+			if (tryRestoreDatabase(databaseHelper, 0))
 				return;
-			createDatabase(analytics());
-			backupDatabase(analytics(), 0);
+			createDatabase(databaseHelper);
+			backupDatabase(databaseHelper, 0);
 		}
 
 		private static void createDatabase(DatabaseHelper database)

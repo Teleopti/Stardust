@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				CreateLogin(login, password, isAzure);
 				var sql = string.Format("DROP LOGIN [{0}]", login);
-				_executeMaster.ExecuteNonQuery(sql);
+				_executeMaster.ExecuteTransactionlessNonQuery(sql);
 				message = "";
 				return true;
 			}
@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.DBManager.Library
 				var dbName = Guid.NewGuid().ToString();
 				try
 				{
-					_execute.ExecuteNonQuery("CREATE DATABASE [" + dbName + "]");
-					_execute.ExecuteNonQuery("DROP DATABASE [" + dbName + "]");
+					_execute.ExecuteTransactionlessNonQuery("CREATE DATABASE [" + dbName + "]");
+					_execute.ExecuteTransactionlessNonQuery("DROP DATABASE [" + dbName + "]");
 					return true;
 				}
 				catch (Exception)
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.DBManager.Library
 				var createSql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD = N'{1}'", login, pwd);
 				try
 				{
-					_execute.ExecuteNonQuery(createSql);
-					_execute.ExecuteNonQuery("DROP LOGIN [" + login + "]");
+					_execute.ExecuteTransactionlessNonQuery(createSql);
+					_execute.ExecuteTransactionlessNonQuery("DROP LOGIN [" + login + "]");
 					return true;
 				}
 				catch (Exception)
@@ -295,12 +295,12 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		private void setOffline()
 		{
-			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
 		}
 
 		private void setOnline()
 		{
-			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
 		}
 
 		private void dropIfExists()
@@ -308,13 +308,14 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			if (!Exists()) return;
 
 			setOnline(); // if dropping a database that is offline, the file on disk will remain!
-			_executeMaster.ExecuteNonQuery(string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
-			_executeMaster.ExecuteNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
 		}
 
 		private string executeShellCommandOnServer(string command)
 		{
-			using (var conn = openConnection(true))
+			var result = string.Empty;
+			_executeMaster.ExecuteCustom(conn =>
 			{
 				using (var cmd = conn.CreateCommand())
 				{
@@ -343,10 +344,11 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 					using (var reader = cmd.ExecuteReader())
 					{
 						reader.Read();
-						return reader.GetString(0);
+						result = reader.GetString(0);
 					}
 				}
-			}
+			});
+			return result;
 		}
 
 		private SqlConnection openConnection(bool masterDb = false)

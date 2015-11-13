@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DBManager.Library
          var scriptFile = ScriptFilePath(type, _databaseFolder.AzureCreateScriptsPath()).Replace(databaseTypeName + ".sql", databaseTypeName + ".00000329.sql");
 			
 			var script = ReadScriptFile(scriptFile);
-			_executeSql.ExecuteNonQuery(script,Timeouts.CommandTimeout);
+			_executeSql.ExecuteTransactionlessNonQuery(script,Timeouts.CommandTimeout);
 		}
 
 		private string ScriptFilePath(DatabaseType type, string path)
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				var script = ReadScriptFile(scriptFile);
 				script = ReplaceScriptTags(script, type, name);
-				ExecuteScript(script);
+				_executeSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 			}
 			catch (SqlException exception)
 			{
@@ -79,12 +79,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 
 			return script;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private void ExecuteScript(string script)
-		{
-			_executeSql.ExecuteNonQuery(script,Timeouts.CommandTimeout);
 		}
 
 		private IniFile IniFile(DatabaseType type)
