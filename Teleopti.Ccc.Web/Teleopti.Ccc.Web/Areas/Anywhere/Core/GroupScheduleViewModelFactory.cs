@@ -60,11 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Skip = (currentPageIndex - 1) * pageSize,
 				Take = pageSize
 			};
-			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor, paging);
+			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor, paging, true);
 		}
 
 		private IEnumerable<GroupScheduleShiftViewModel> getScheduleViewModel(DateTime dateInUserTimeZone,
-			IEnumerable<IPerson> people, IEnumerable<IPerson> peopleCanSeeConfidentialAbsencesFor, Paging paging = null)
+			IEnumerable<IPerson> people, IEnumerable<IPerson> peopleCanSeeConfidentialAbsencesFor, Paging paging = null,
+			bool getPeopleInResultOnly = false)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
@@ -86,16 +87,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(periodLengthInHour));
 
-			var allPeople = people.ToList();
-
+			var peopleCanSee = people.ToList();
 			IEnumerable<PersonScheduleDayReadModel> schedules = null;
-			if (allPeople.Any())
+			if (peopleCanSee.Any())
 			{
 				schedules = paging == null
 					? _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod,
-						allPeople.Select(x => x.Id.GetValueOrDefault()))
+						peopleCanSee.Select(x => x.Id.GetValueOrDefault()))
 					: _personScheduleDayReadModelRepository.ForPeople(dateTimeInUtc.Date, dateTimePeriod,
-						allPeople.Select(x => x.Id.GetValueOrDefault()), paging);
+						peopleCanSee.Select(x => x.Id.GetValueOrDefault()), paging);
+
+				if (getPeopleInResultOnly)
+				{
+					peopleCanSee =
+						peopleCanSee.Where(x => schedules.Any(s => s.PersonId == x.Id.GetValueOrDefault())).ToList();
+				}
 			}
 
 			schedules = schedules ?? new List<PersonScheduleDayReadModel>();
@@ -111,7 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Schedules = schedules,
 				CanSeeUnpublishedSchedules = canSeeUnpublishedSchedules,
 				CanSeeConfidentialAbsencesFor = peopleCanSeeConfidentialAbsencesFor,
-				CanSeePersons = allPeople
+				CanSeePersons = peopleCanSee
 			};
 			return _mapper.Map(data);
 		}
