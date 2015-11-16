@@ -145,7 +145,7 @@ And after that I am redirected to the campaign list page
 And I set the starting month for viewing period to '2015-09-01'
 Then I should not see 'Campaign4' in campaign list 
 
-
+@ignore
 Scenario: Edit a campaign
 When I view the detail of the campaign created with 
 | Field                             | Value       |
