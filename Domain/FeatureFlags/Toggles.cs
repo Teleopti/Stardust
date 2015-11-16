@@ -89,6 +89,7 @@
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
+		WfmTeamSchedule_NoReadModel_35609
 		// ReSharper restore InconsistentNaming
 	}
 }

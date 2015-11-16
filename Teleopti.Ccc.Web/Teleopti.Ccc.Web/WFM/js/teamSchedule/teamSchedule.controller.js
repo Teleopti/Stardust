@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory','Toggle', TeamScheduleController]);
 
-	function TeamScheduleController(teamScheduleSvc, currentUserInfo, groupScheduleFactory) {
+	function TeamScheduleController(teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
 		var vm = this;
 
 		vm.selectedTeamId = '';
@@ -22,7 +22,7 @@
 		vm.datePickerStatus = {
 			opened: false
 		};
-
+		vm.isFromReadModel = true;
 		vm.toggleCalendar = function () {
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
@@ -65,6 +65,9 @@
 
 		vm.Init = function () {
 			vm.scheduleDate = new Date();
+			toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' }).$promise.then(function(result) {
+				vm.isFromReadModel = result;
+			});
 			vm.loadTeams();
 		}
 
