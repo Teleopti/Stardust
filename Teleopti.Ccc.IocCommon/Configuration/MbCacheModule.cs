@@ -5,7 +5,7 @@ using MbCache.ProxyImpl.LinFu;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class MbCacheModule : Module
+	internal class	MbCacheModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				var cacheBuilder = new CacheBuilder(c.Resolve<LinFuProxyFactory>())
 					.SetCacheKey(c.Resolve<TeleoptiCacheKey>())
-					;
+					.AddEventListener(new MbCacheLog4NetListener());
 				_configuration.Cache().Build(c, cacheBuilder);
 				return cacheBuilder;
 			}).SingleInstance();
