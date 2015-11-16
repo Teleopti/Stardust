@@ -57,8 +57,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// use a scenario tag here for enableMyTimeMessageBroker if required
 			Navigation.Navigation.GoToPage(string.Format(CultureInfo.InvariantCulture,
 				"Test/BeforeScenario?enableMyTimeMessageBroker={0}&defaultProvider={1}&usePasswordPolicy={2}", useBroker, defaultProvider, usePolicy));
-
-			Browser.Interactions.Javascript("sessionStorage.clear();");
 		}
 
 		/// <summary>

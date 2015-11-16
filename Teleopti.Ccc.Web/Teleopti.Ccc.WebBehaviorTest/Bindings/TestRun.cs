@@ -43,6 +43,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
+			Browser.Interactions.Javascript("sessionStorage.clear();");
+			
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
