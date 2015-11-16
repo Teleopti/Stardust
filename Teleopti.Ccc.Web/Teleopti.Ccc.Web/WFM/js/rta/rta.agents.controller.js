@@ -34,6 +34,7 @@
 					}
 				);
 				$scope.getAdherenceForAgent = function(personId) {
+					if(!$scope.isSelected(personId)){
 					RtaService.forToday.query({
 							personId: personId
 						}).$promise
@@ -42,6 +43,7 @@
 							$scope.adherencePercent = data.AdherencePercent;
 							$scope.timeStamp = data.LastTimestamp;
 						});
+					}
 				};
 				$scope.filterData = function() {
 					$scope.gridOptions.data = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
