@@ -84,10 +84,11 @@
 		WfmPermission_ReplaceOldPermission_34671,
 		Wfm_RTA_34621,
 		Wfm_RTA_ProperAlarm_34975,
-        WfmIntraday_MonitorActualvsForecasted_35176,
+		WfmIntraday_MonitorActualvsForecasted_35176,
+		WfmTeamSchedule_NoReadModel_35609,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
-		ResourcePlanner_WeeklyRestSolver_35043,        
+		ResourcePlanner_WeeklyRestSolver_35043,
 		// ReSharper restore InconsistentNaming
 	}
 }
