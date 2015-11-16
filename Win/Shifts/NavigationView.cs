@@ -271,7 +271,14 @@ namespace Teleopti.Ccc.Win.Shifts
 				_defaultTreeView.Name = "treeViewBag";
 			}
 			if (from.Contains(_defaultTreeView))
-				from.Controls.Remove(_defaultTreeView);
+			{
+				try
+				{
+					from.Controls.Remove(_defaultTreeView);
+				}
+				catch (ArgumentNullException )
+				{}
+			}
 			to.Controls.Add(_defaultTreeView);
 
 			_defaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
