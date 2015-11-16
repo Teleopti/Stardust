@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Web.Configuration;
 using System.Web.Mvc;
 
@@ -14,8 +15,7 @@ namespace Teleopti.Ccc.Web.Core.Logging
 		{
 			Order = 0;
 			_log4NetLogger = log4NetLogger;
-			var configuration = WebConfigurationManager.OpenWebConfiguration("/");
-			var customErrorsSection = (CustomErrorsSection)configuration.GetSection("system.web/customErrors");
+			var customErrorsSection = (CustomErrorsSection)ConfigurationManager.GetSection("system.web/customErrors");
 			customErrorsIsDisabledAndSomethingElseWillWriteToTheEventLog = customErrorsSection.Mode == CustomErrorsMode.Off;
 		}
 
