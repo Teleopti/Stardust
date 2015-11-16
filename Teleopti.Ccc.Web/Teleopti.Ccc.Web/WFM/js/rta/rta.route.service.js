@@ -14,7 +14,7 @@
 			};
 
 			this.urlForChangingSchedule = function(businessUnitId, teamId, personId) {
-				return "/Anywhere#teamschedule/" + businessUnitId + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
+				return "../Anywhere#teamschedule/" + businessUnitId + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
 			};
 
 			this.urlForAgentDetails = function(personId) {

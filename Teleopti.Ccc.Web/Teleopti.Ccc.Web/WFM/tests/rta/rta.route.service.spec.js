@@ -31,7 +31,7 @@ describe('RtaRouteService', function() {
 		jasmine.clock().mockDate(today);
 
 		expect(target.urlForChangingSchedule("928dd0bc-bf40-412e-b970-9b5e015aadea", "34590a63-6331-4921-bc9f-9b5e015ab495", "11610fe4-0130-4568-97de-9b5e015b2564"))
-			.toEqual("/Anywhere#teamschedule/928dd0bc-bf40-412e-b970-9b5e015aadea/34590a63-6331-4921-bc9f-9b5e015ab495/11610fe4-0130-4568-97de-9b5e015b2564/20151102");
+			.toEqual("../Anywhere#teamschedule/928dd0bc-bf40-412e-b970-9b5e015aadea/34590a63-6331-4921-bc9f-9b5e015ab495/11610fe4-0130-4568-97de-9b5e015b2564/20151102");
 	});
 
 	it('should get agent details url', function() {
