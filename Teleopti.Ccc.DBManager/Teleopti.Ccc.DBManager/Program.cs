@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DBManager
                 {
                     var commandLineArgument = new CommandLineArgument(args);
 					var patcher = new DatabasePatcher(logger);
-	                patcher.Run(commandLineArgument);
+	                return patcher.Run(commandLineArgument);
                 }
                 else
                 {
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DBManager
                     Console.Out.WriteLine("-W[Local windows Group] Will create a Windows Group that the application will use when running. . Mandatory while using -C or -R");
                     Console.Out.WriteLine("-B[Business Unit]");
                     Console.Out.WriteLine("-F Path to where dbmanager runs from");
+	                return 0;
                 }
-                return 0;
             }
             catch (Exception e)
             {
