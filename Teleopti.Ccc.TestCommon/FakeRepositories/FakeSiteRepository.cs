@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<ISite> FindSitesStartWith(string searchString, int maxHits)
+		public IEnumerable<ISite> FindSitesContain(string searchString, int maxHits)
 		{
-			return _data.Where(x => x.Description.Name.StartsWith(searchString)).Take(maxHits);
+			return _data.Where(x => x.Description.Name.Contains(searchString)).Take(maxHits);
 		}
 	}
 }

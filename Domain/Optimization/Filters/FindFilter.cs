@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 			var teamHits = _teamRepository.FindTeamsContain(searchString, itemsLeftToLoad)
 				.Select(team => new FindFilterResult {FilterType = "team", Id = team.Id.Value, Name = team.Description.Name});
 			itemsLeftToLoad = itemsLeftToLoad - teamHits.Count();
-			var siteHits = _siteRepository.FindSitesStartWith(searchString, itemsLeftToLoad)
+			var siteHits = _siteRepository.FindSitesContain(searchString, itemsLeftToLoad)
 				.Select(site => new FindFilterResult { FilterType = "site", Id = site.Id.Value, Name = site.Description.Name });
 
 			return contractHits.Union(teamHits).Union(siteHits);

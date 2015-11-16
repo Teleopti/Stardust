@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "site";
-			var site = new Site(searchString).WithId(expectedGuid);
+			var site = new Site(RandomName.Make() + searchString + RandomName.Make()).WithId(expectedGuid);
 			SiteRepository.Add(site);
 
 			var result = Target.Search(searchString, 10).Single();
 
-			result.Name.Should().StartWith(searchString);
+			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
 			result.FilterType.Should().Be.EqualTo(expectedType);
 		}

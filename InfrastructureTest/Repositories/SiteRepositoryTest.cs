@@ -68,24 +68,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-		public void ShouldFindSiteStartingWith()
+		public void ShouldFindSiteContains()
 		{
 			var name = RandomName.Make();
-			var site = new Site(name + RandomName.Make());
+			var site = new Site(RandomName.Make() + name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name, 20);
+			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(name, 20);
 
 			loaded.Should().Have.SameValuesAs(site);
 		}
 
 		[Test]
-		public void ShouldMissSiteStartingWith()
+		public void ShouldMissSiteContains()
 		{
 			var site = new Site(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(site);
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make(), 20);
+			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
 		}
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Site(name));
 			PersistAndRemoveFromUnitOfWork(new Site(name));
 
-			var loaded = new SiteRepository(UnitOfWork).FindSitesStartWith(name, maxHits);
+			var loaded = new SiteRepository(UnitOfWork).FindSitesContain(name, maxHits);
 
 			loaded.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-			new SiteRepository(UnitOfWork).FindSitesStartWith(RandomName.Make(), 0);
+			new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 0);
 
 			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
