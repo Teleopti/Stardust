@@ -1233,6 +1233,7 @@
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
+    <Content Include="WFM\js\rta\grid.template.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />

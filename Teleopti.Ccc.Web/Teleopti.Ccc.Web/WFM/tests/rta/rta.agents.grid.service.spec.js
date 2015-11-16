@@ -34,6 +34,7 @@ describe('RtaGridService', function() {
 	});
 
 	it('should not display last updated timestamp when there is no updates', function() {
+		expect(target.showLastUpdate('')).toEqual(false);
 		expect(target.showLastUpdate(null)).toEqual(false);
 	});
 
