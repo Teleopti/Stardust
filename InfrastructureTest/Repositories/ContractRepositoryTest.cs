@@ -86,24 +86,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-	  public void ShouldFindContractsStartingWith()
+	  public void ShouldFindContractsContain()
 		{
 			var name = RandomName.Make();
-			var contract = new Contract(name + RandomName.Make());
+			var contract = new Contract(RandomName.Make() + name + RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name, 10);
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(name, 10);
 
 			loadedContracts.Should().Have.SameValuesAs(contract);
 		}
 
 		[Test]
-		public void ShouldMissContractsStartingWith()
+		public void ShouldMissContractsContain()
 		{
 			var contract = new Contract(RandomName.Make());
 			PersistAndRemoveFromUnitOfWork(contract);
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make(), 10);
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(RandomName.Make(), 10);
 
 			loadedContracts.Should().Be.Empty();
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Contract(name));
 			PersistAndRemoveFromUnitOfWork(new Contract(name));
 
-			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsStartWith(name, maxHits);
+			var loadedContracts = new ContractRepository(UnitOfWork).FindContractsContain(name, maxHits);
 
 			loadedContracts.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-			new ContractRepository(UnitOfWork).FindContractsStartWith(RandomName.Make(), 0);
+			new ContractRepository(UnitOfWork).FindContractsContain(RandomName.Make(), 0);
 
 			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
