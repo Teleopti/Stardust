@@ -10,11 +10,13 @@
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
-				$scope.timeStamp = "";
+				$scope.timestamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
 				$scope.selectAgent = RtaGridService.selectAgent;
 				$scope.isSelected = RtaGridService.isSelected;
+				$scope.showAdherence = RtaGridService.showAdherence;
+				$scope.showLastUpdate = RtaGridService.showLastUpdate;
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
@@ -39,7 +41,7 @@
 						.then(function(data) {
 							$scope.adherence = data;
 							$scope.adherencePercent = data.AdherencePercent;
-							$scope.timeStamp = data.LastTimestamp;
+							$scope.timestamp = data.LastTimestamp;
 						});
 				};
 				$scope.filterData = function() {

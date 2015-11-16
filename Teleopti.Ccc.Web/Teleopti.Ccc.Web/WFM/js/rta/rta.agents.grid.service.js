@@ -9,6 +9,12 @@
 			this.isSelected = function(personId) {
 				return selectedPersonId === personId;
 			};
+			this.showAdherence = function(adherence) {
+				return adherence !== null;
+			};
+			this.showLastUpdate = function(timestamp) {
+				return timestamp !== null;
+			};
 			this.createAgentsGridOptions = function() {
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
@@ -22,9 +28,9 @@
 				+ '</div>'
 				+ '<div ng-show="grid.appScope.isSelected(row.entity.PersonId)">'
 				+ '<div class="agent-menu historical-adherence" layout="row">'
-				+ '<a flex href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId,row.entity.PersonId)}}" class="change-schedule"><span class="mdi mdi-pencil"></span>Change schedule</a>'
-				+ '<a flex href="{{grid.appScope.agentDetailsUrl(row.entity.PersonId)}}">Adherence: {{grid.appScope.adherencePercent}}% </a>'
-				+ '<div flex style="color:#333333;">Latest updated: {{grid.appScope.timeStamp}}</div> '
+				+ '<div flex><a href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId,row.entity.PersonId)}}" class="change-schedule"><span class="mdi mdi-pencil"></span>Change schedule</a></div>'
+				+ '<div flex><a ng-show="grid.appScope.showAdherence(grid.appScope.adherencePercent)" href="{{grid.appScope.agentDetailsUrl(row.entity.PersonId)}}">Adherence: {{grid.appScope.adherencePercent}}% </a></div>'
+				+ '<div flex ng-show="grid.appScope.showLastUpdate(grid.appScope.timestamp)" style="color:#333333;">Latest updated: {{grid.appScope.timestamp}}</div> '
 				+ '</div>';
 
 				 return{
