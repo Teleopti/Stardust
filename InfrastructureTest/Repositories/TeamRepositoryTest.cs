@@ -105,24 +105,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
 		[Test]
-		public void ShouldFindTeamStartingWith()
+		public void ShouldFindTeamContain()
 		{
 			var name = RandomName.Make();
-			var team = new Team {Description = new Description(name + RandomName.Make()), Site=teamSite};
+			var team = new Team {Description = new Description(RandomName.Make() + name + RandomName.Make()), Site=teamSite};
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name, 20);
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, 20);
 
 			loaded.Should().Have.SameValuesAs(team);
 		}
 
 		[Test]
-		public void ShouldMissTeamStartingWith()
+		public void ShouldMissTeamContain()
 		{
 			var team = new Team { Description = new Description(RandomName.Make()), Site = teamSite };
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make(), 20);
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(RandomName.Make(), 20);
 
 			loaded.Should().Be.Empty();
 		}
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
 			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
 
-			var loaded = new TeamRepository(UnitOfWork).FindTeamsStartWith(name, maxHits);
+			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, maxHits);
 
 			loaded.Count().Should().Be.EqualTo(maxHits);
 		}
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-			new TeamRepository(UnitOfWork).FindTeamsStartWith(RandomName.Make(), 0);
+			new TeamRepository(UnitOfWork).FindTeamsContain(RandomName.Make(), 0);
 
 			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);

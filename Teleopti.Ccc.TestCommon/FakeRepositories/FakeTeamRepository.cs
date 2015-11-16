@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _teams.Where (team => teamId.Contains ( team.Id.Value)).ToList();
 		}
 
-		public IEnumerable<ITeam> FindTeamsStartWith(string searchString, int maxHits)
+		public IEnumerable<ITeam> FindTeamsContain(string searchString, int maxHits)
 		{
-			return _teams.Where(x => x.Description.Name.StartsWith(searchString)).Take(maxHits);
+			return _teams.Where(x => x.Description.Name.Contains(searchString)).Take(maxHits);
 		}
 
 		public IEnumerator<ITeam> GetEnumerator()

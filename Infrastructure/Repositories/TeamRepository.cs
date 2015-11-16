@@ -77,13 +77,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return result;
         }
 
-	    public IEnumerable<ITeam> FindTeamsStartWith(string searchString, int maxHits)
+	    public IEnumerable<ITeam> FindTeamsContain(string searchString, int maxHits)
 	    {
 		    if (maxHits < 1)
 			    return Enumerable.Empty<ITeam>();
 
 			return Session.CreateCriteria<Team>()
-				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+				.Add(Restrictions.Like("Description.Name", searchString, MatchMode.Anywhere))
 				.SetMaxResults(maxHits)
 				.List<ITeam>();
 		}

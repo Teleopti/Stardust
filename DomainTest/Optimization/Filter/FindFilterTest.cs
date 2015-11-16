@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "team";
-			var team = new Team { Description = new Description(searchString + RandomName.Make()) }.WithId(expectedGuid);
+			var team = new Team { Description = new Description(RandomName.Make() + searchString + RandomName.Make()) }.WithId(expectedGuid);
 			TeamRepository.Add(team);
 
 			var result = Target.Search(searchString, 10).Single();
 
-			result.Name.Should().StartWith(searchString);
+			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
 			result.FilterType.Should().Be.EqualTo(expectedType);
 		}

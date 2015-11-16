@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<ITeam> FindTeams (IEnumerable<Guid> teamId);
 
 
-		IEnumerable<ITeam> FindTeamsStartWith(string searchString, int maxHits);
+		IEnumerable<ITeam> FindTeamsContain(string searchString, int maxHits);
 	}
 
 }
