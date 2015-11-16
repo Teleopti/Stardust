@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var expectedContractName = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
 			const string expectedType = "contract";
-			var contract = new Contract(expectedContractName + RandomName.Make()).WithId(expectedGuid);
+			var contract = new Contract(RandomName.Make() + expectedContractName + RandomName.Make()).WithId(expectedGuid);
 			ContractRepository.Add(contract);
 
 			var result = Target.Search(expectedContractName, 10).Single();
 
-			result.Name.Should().StartWith(expectedContractName);
+			result.Name.Should().Contain(expectedContractName);
 			result.Id.Should().Be.EqualTo(expectedGuid);
 			result.FilterType.Should().Be.EqualTo(expectedType);
 		}

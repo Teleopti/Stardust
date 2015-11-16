@@ -22,6 +22,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         ICollection<IContract> FindAllContractByDescription();
 
-	    IEnumerable<IContract> FindContractsStartWith(string searchString, int maxHits);
+	    IEnumerable<IContract> FindContractsContain(string searchString, int maxHits);
     }
 }

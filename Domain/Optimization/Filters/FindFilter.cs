@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 				return Enumerable.Empty<FindFilterResult>();
 
 			var itemsLeftToLoad = maxHits;
-			var contractHits = _contractRepository.FindContractsStartWith(searchString, itemsLeftToLoad)
+			var contractHits = _contractRepository.FindContractsContain(searchString, itemsLeftToLoad)
 				.Select(contract => new FindFilterResult {FilterType = "contract", Id = contract.Id.Value, Name = contract.Description.Name});
 			itemsLeftToLoad = itemsLeftToLoad - contractHits.Count();
 			var teamHits = _teamRepository.FindTeamsStartWith(searchString, itemsLeftToLoad)

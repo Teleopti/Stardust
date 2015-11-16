@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-	    public IEnumerable<IContract> FindContractsStartWith(string searchString, int maxHits)
+		public IEnumerable<IContract> FindContractsContain(string searchString, int maxHits)
 	    {
 		    if (maxHits < 1)
 			    return Enumerable.Empty<IContract>();
 
 		    return Session.CreateCriteria<Contract>()
-			    .Add(Restrictions.Like("Description.Name", searchString, MatchMode.Start))
+			    .Add(Restrictions.Like("Description.Name", searchString, MatchMode.Anywhere))
 					.SetMaxResults(maxHits)
 			    .List<IContract>();
 	    }
