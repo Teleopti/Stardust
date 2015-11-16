@@ -1232,6 +1232,9 @@
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
+    <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
+    <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.js" />
+    <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />
     <Content Include="WFM\js\rta\rta-agents_properalarm_prototype.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
@@ -1297,6 +1300,7 @@
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
+    <Content Include="WFM\tests\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.filters.spec.js" />

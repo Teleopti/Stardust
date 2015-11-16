@@ -90,6 +90,10 @@ wfm.config([
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourcePlannerCtrl'
+		}).state('resourceplanner.filter', {
+			url: '/ruleset',
+			templateUrl: 'js/resourceplanner/resourceplanner-filters.html',
+			controller: 'ResourceplannerFilterCtrl'
 		}).state('resourceplanner.planningperiod', {
 			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
