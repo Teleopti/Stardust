@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("Authenticated"), new []{"Admin"});
 			target.OnAuthorization(httpActionContext);
 
-			httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Unauthorized);
+			httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
 			Thread.CurrentPrincipal = before;
 		}
 	}
