@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
@@ -47,5 +49,15 @@ namespace Teleopti.Ccc.Web.Filters
 			}
 			return true;
 		}
+
+		protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
+		{
+			if (actionContext == null)
+			{
+				throw new ArgumentNullException("actionContext");
+			}
+			actionContext.Response = actionContext.ControllerContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, UserTexts.Resources.NotAllowed);
+		} 
+
 	}
 }

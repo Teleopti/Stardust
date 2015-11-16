@@ -16948,6 +16948,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not allowed!.
+        /// </summary>
+        public static string NotAllowed {
+            get {
+                return ResourceManager.GetString("NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is not allowed to move a work shift to another day, create a new instead.
         /// </summary>
         public static string NotAllowedMoveOfAssignmentToOtherDate {

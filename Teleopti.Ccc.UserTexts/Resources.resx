@@ -13615,4 +13615,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Ungroup Items</value>
     <comment>Used in the seat map editor toolbar (tooltip)</comment>
   </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>Not allowed!</value>
+    <comment>This messaeg is shown in web when a user try to open a module on which he is not authorized. This is the http response.</comment>
+  </data>
 </root>
