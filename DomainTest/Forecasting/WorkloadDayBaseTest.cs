@@ -456,7 +456,28 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(TimeSpan.FromSeconds(200), _workloadDayBase.AverageAfterTaskTime);
 
 			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(400);
-			Assert.AreEqual(TimeSpan.FromSeconds(240), _workloadDayBase.SortedTaskPeriodList[0].Task.AverageAfterTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(240), _workloadDayBase.SortedTaskPeriodList[0].AverageAfterTaskTime);
+		}
+
+		[Test]
+		public void VerifyChangingOverrideAverageTaskTimeDistributesToPeriods()
+		{
+			_workloadDayBase.Close();
+			_workloadDayBase.MakeOpen24Hours();
+
+			double tasks1 = 100;
+			double tasks2 = 200;
+
+			_workloadDayBase.SortedTaskPeriodList[0].SetTasks(tasks1);
+			_workloadDayBase.SortedTaskPeriodList[0].OverrideAverageTaskTime = TimeSpan.FromSeconds(120);
+
+			_workloadDayBase.SortedTaskPeriodList[1].SetTasks(tasks2);
+			_workloadDayBase.SortedTaskPeriodList[1].OverrideAverageTaskTime = TimeSpan.FromSeconds(240);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(200), _workloadDayBase.OverrideAverageTaskTime);
+
+			_workloadDayBase.OverrideAverageTaskTime = TimeSpan.FromSeconds(400);
+			Assert.AreEqual(TimeSpan.FromSeconds(240), _workloadDayBase.SortedTaskPeriodList[0].OverrideAverageTaskTime);
 		}
 
 		[Test]

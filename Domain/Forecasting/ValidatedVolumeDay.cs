@@ -267,7 +267,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public virtual double? OverrideTasks
 	    {
 		    get { return null; }
-	    }	
+	    }
+
+		public virtual TimeSpan? OverrideAverageTaskTime { get; set; }
+		public virtual TimeSpan? OverrideAverageAfterTaskTime { get; set; }
 
 	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
 	    {

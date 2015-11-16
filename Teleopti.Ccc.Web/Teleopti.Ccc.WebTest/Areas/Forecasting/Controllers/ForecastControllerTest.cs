@@ -230,16 +230,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldAddManualChange()
+		public void ShouldAddOverrideForecastedValues()
 		{
 			var input = new OverrideTasksInput
 			{
 				Days = new[] {new ModifiedDay {Date = new DateTime()}},
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
-				OverrideTasks = 50
+				OverrideTasks = 50,
+				OverrideTalkTime = 20,
+				OverrideAfterCallWork = 25,
+				IgnoreOverrideTasks = false,
+				IgnoreOverrideTalkTime = false,
+				IgnoreOverrideAfterCallWork = false
 			};
-			var manualChangePersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
+			var overrideTasksPersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var scenario = new Scenario("default");
@@ -247,11 +252,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
 			workloadRepository.Stub(x => x.Get(input.WorkloadId))
 				.Return(workload);
-			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, manualChangePersister);
+			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister);
 
 			var result = target.OverrideTasks(input);
 			result.Result.Success.Should().Be.True();
-			manualChangePersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks));
+
+			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks, TimeSpan.FromSeconds(input.OverrideTalkTime), TimeSpan.FromSeconds(input.OverrideAfterCallWork)));
+		}
+
+		[Test]
+		public void ShouldIgnoreOverrideForecastedValues()
+		{
+			var input = new OverrideTasksInput
+			{
+				Days = new[] { new ModifiedDay { Date = new DateTime() } },
+				ScenarioId = Guid.NewGuid(),
+				WorkloadId = Guid.NewGuid(),
+				OverrideTasks = 50,
+				OverrideTalkTime = 20,
+				OverrideAfterCallWork = 25,
+				IgnoreOverrideTasks = true,
+				IgnoreOverrideTalkTime = true,
+				IgnoreOverrideAfterCallWork = true
+			};
+			var overrideTasksPersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var scenario = new Scenario("default");
+			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
+			workloadRepository.Stub(x => x.Get(input.WorkloadId))
+				.Return(workload);
+			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister);
+
+			var result = target.OverrideTasks(input);
+			result.Result.Success.Should().Be.True();
+			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, null, null, null));
 		}
 	}
 }

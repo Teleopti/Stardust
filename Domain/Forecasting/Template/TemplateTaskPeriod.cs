@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         private double _aggregatedTasks;
         private IStatisticTask _statisticTask = new StatisticTask();
         private readonly DateTimePeriod _period;
-        private static readonly TimeSpan MaxTime = TimeSpan.FromHours(100);
+	    private TimeSpan? _overrideAverageTaskTime;
+	    private TimeSpan? _overrideAverageAfterTaskTime;
+	    private static readonly TimeSpan MaxTime = TimeSpan.FromHours(100);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateTaskPeriod"/> class.
@@ -108,15 +110,36 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 		    get { return _overrideTasks; }		  
 	    }
 
+	    public virtual TimeSpan? OverrideAverageTaskTime
+	    {
+		    get { return _overrideAverageTaskTime; }
+		    set
+		    {
+			    _overrideAverageTaskTime = value;
+				OnAverageTaskTimesChanged();
+		    }
+	    }
+
+	    public virtual TimeSpan? OverrideAverageAfterTaskTime
+	    {
+		    get { return _overrideAverageAfterTaskTime; }
+		    set
+		    {
+			    _overrideAverageAfterTaskTime = value;
+				OnAverageTaskTimesChanged();
+		    }
+	    }
+
+
 	    /// <summary>
-        /// Sets the number of tasks.
-        /// </summary>
-        /// <param name="numberOfTasks">The number of tasks.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 5.12.2007
-        /// </remarks>
-        public virtual void SetTasks(double numberOfTasks)
+	    /// Sets the number of tasks.
+	    /// </summary>
+	    /// <param name="numberOfTasks">The number of tasks.</param>
+	    /// <remarks>
+	    /// Created by: micke
+	    /// Created date: 5.12.2007
+	    /// </remarks>
+	    public virtual void SetTasks(double numberOfTasks)
         {
             ITask oldTask = new Task(_task.Tasks,_task.AverageTaskTime,_task.AverageAfterTaskTime);
             _task = new Task(numberOfTasks, _task.AverageTaskTime, _task.AverageAfterTaskTime);
@@ -646,21 +669,25 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 	    }
 
 	    /// <summary>
-        /// Gets the total average after task time.
-        /// </summary>
-        /// <value>The total average after task time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public virtual TimeSpan TotalAverageAfterTaskTime
-        {
-            get { return TimeSpan.FromTicks(
-                (long)(_task.AverageAfterTaskTime.Ticks * (1d + _campaign.CampaignAfterTaskTimePercent.Value)));
-            }
-        }
+	    /// Gets the total average after task time.
+	    /// </summary>
+	    /// <value>The total average after task time.</value>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-03-04
+	    /// </remarks>
+	    public virtual TimeSpan TotalAverageAfterTaskTime
+	    {
+		    get
+		    {
+				if (OverrideAverageAfterTaskTime.HasValue)
+					return OverrideAverageAfterTaskTime.Value;
+			    return TimeSpan.FromTicks(
+				    (long) (_task.AverageAfterTaskTime.Ticks*(1d + _campaign.CampaignAfterTaskTimePercent.Value)));
+		    }
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Gets the total average task time.
         /// </summary>
         /// <value>The total average task time.</value>
@@ -672,6 +699,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         {
             get
             {
+	            if (OverrideAverageTaskTime.HasValue)
+		            return OverrideAverageTaskTime.Value;		            
+	            
                 return TimeSpan.FromTicks(
                     (long)(_task.AverageTaskTime.Ticks * (1d + _campaign.CampaignTaskTimePercent.Value)));
             }

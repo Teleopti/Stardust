@@ -42,8 +42,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private DateOnly _currentDate;
         private IQueueStatisticsProvider _queueStatisticsProvider;
 	    private bool _useSkewedDistribution;
+	    private TimeSpan? _overrideAverageTaskTime;
+	    private TimeSpan? _overrideAverageAfterTaskTime;
 
-        /// <summary>
+	    /// <summary>
         /// Creates the specified workload day
         /// </summary>
         /// <param name="workloadDate">The workload date.</param>
@@ -353,9 +355,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (averageTaskTimeTicks == 0) averageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
                 ValueDistributor.DistributeTaskTimes(
                     ((double)value.Ticks / averageTaskTimeTicks),
-                    value, _taskPeriodList,
+                    value, 
+					_taskPeriodList,
                     TaskFieldToDistribute.AverageTaskTime,
-                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, value.Ticks);
+                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, 
+					value.Ticks);
                 _turnOffInternalRecalc = currentState;
 
                 _averageTaskTime = value;
@@ -628,15 +632,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
 							(_taskPeriodList.Sum(t => t.AverageTaskTime.Ticks*t.Tasks)/_tasks));
 						_averageAfterTaskTime = TimeSpan.FromTicks((long)
 							(_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks*t.Tasks)/_tasks));
+
+	                var overridePeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+
+					_overrideAverageTaskTime = overridePeriodList.Any()
+						? (TimeSpan?)TimeSpan.FromTicks((long)(overridePeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
 					}
 					else
 					{
 						recalculateDailyAverageTimesWhenZeroTasks();
 					}
+						: null;
+
 					_totalAverageTaskTime = TimeSpan.FromTicks((long)
 							(_taskPeriodList.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
 					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 						(_taskPeriodList.Sum(t => t.TotalAverageAfterTaskTime.Ticks * t.TotalTasks) / _totalTasks));
+					//_overrideTasks = _taskPeriodList.All(x => x.OverrideTasks.Equals(null)) ? null : _taskPeriodList.Sum(t => t.OverrideTasks);
+					
 				}
 				else
 				{
@@ -1091,16 +1104,53 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    get { return _overrideTasks; }
 	    }
 
+	    public virtual TimeSpan? OverrideAverageTaskTime
+	    {
+		    get { return _overrideAverageTaskTime; }
+		    set
+		    {
+				checkOpen();
+
+				bool currentState = _turnOffInternalRecalc;
+				_turnOffInternalRecalc = true;
+
+				//end fix
+				long overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
+				if (overrideAverageTaskTimeTicks == 0) overrideAverageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
+				ValueDistributor.DistributeTaskTimes(
+					((double)value.Value.Ticks / overrideAverageTaskTimeTicks),
+					value.Value,
+					_taskPeriodList,
+					TaskFieldToDistribute.OverrideAverageTaskTime,
+					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType,
+					value.Value.Ticks);
+				_turnOffInternalRecalc = currentState;
+
+				_overrideAverageTaskTime = value;
+
+				_recalculateDailyAverageTimes();
+				_recalculateDailyAverageCampaignTimes();
+
+				OnAverageTaskTimesChanged();
+								
+		    }
+	    }
+
+	    public virtual TimeSpan? OverrideAverageAfterTaskTime
+	    {
+		    get { return _overrideAverageAfterTaskTime; }
+		    set { _overrideAverageAfterTaskTime = value; }
+	    }
 
 	    /// <summary>
-        /// Gets or sets the campaign tasks.
-        /// </summary>
-        /// <value>The campaign tasks.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public virtual Percent CampaignTasks
+	    /// Gets or sets the campaign tasks.
+	    /// </summary>
+	    /// <value>The campaign tasks.</value>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-03-04
+	    /// </remarks>
+	    public virtual Percent CampaignTasks
         {
             get
             {

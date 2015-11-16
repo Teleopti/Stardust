@@ -202,7 +202,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				var scenario = _scenarioRepository.Get(input.ScenarioId);
 				var workload = _workloadRepository.Get(input.WorkloadId);
-				_overrideTasksPersister.Persist(scenario, workload, input.Days, input.OverrideTasks);
+				_overrideTasksPersister.Persist(scenario, workload, input.Days, 
+					input.IgnoreOverrideTasks ? null : (double?)input.OverrideTasks,
+					input.IgnoreOverrideTalkTime ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideTalkTime),
+					input.IgnoreOverrideAfterCallWork ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideAfterCallWork));
 				return Task.FromResult(new ForecastResultViewModel
 				{
 					Success = true
@@ -247,6 +250,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	public class OverrideTasksInput : ModifyInput
 	{
 		public double OverrideTasks { get; set; }
+		public double OverrideTalkTime { get; set; }
+		public double OverrideAfterCallWork { get; set; }
+		public bool IgnoreOverrideTasks { get; set; }
+		public bool IgnoreOverrideTalkTime { get; set; }
+		public bool IgnoreOverrideAfterCallWork { get; set; }
 	}
 
 	public class ModifiedDay

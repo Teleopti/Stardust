@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2007-12-13
 		/// </remarks>
 		[Test]
-		public void DistributeValuesByPercentTest()
+		public void DistributeValuesByPercent()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void ShouldDistributeOverrideTasksTest()
+		public void ShouldDistributeOverrideTasks()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void ShouldClearOverrideTasksTest()
+		public void ShouldClearOverrideTasks()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 			ValueDistributor.DistributeOverrideTasks(null, targets, null);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2007-12-13
 		/// </remarks>
 		[Test]
-		public void DistributeValuesEvenTest()
+		public void DistributeValuesEvenly()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2007-12-17
 		/// </remarks>
 		[Test]
-		public void DistributeTaskTimesWithInvalidClassAsTargetTest()
+		public void DistributeTaskTimesWithInvalidClassAsTarget()
 		{
 			IList<Color> targets = new List<Color>();
 			targets.Add(Color.White);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2007-12-13
 		/// </remarks>
 		[Test]
-		public void DistributeValuesWithInvalidClassAsTargetTest()
+		public void DistributeValuesWithInvalidClassAsTarget()
 		{
 			IList<Color> targets = new List<Color>();
 			targets.Add(Color.White);
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2008-01-07
 		/// </remarks>
 		[Test]
-		public void DistributeValuesWithZeroTasksTest()
+		public void DistributeValuesWithZeroTasks()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 			foreach (TestDistributionTarget testDistributionTarget in targets)
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created date: 2008-01-07
 		/// </remarks>
 		[Test]
-		public void DistributeValuesWithOneZeroTaskTest()
+		public void DistributeValuesWithOneZeroTask()
 		{
 			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
 			targets[8].Tasks = 0;
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			IList<TestDistributionTarget> targets = new List<TestDistributionTarget>();
 			for (int i = 0; i < 10; i++)
 			{
-				TestDistributionTarget target = new TestDistributionTarget()
+				var target = new TestDistributionTarget()
 				{
 					Tasks = i + 11,
 					AverageAfterTaskTime = TimeSpan.FromSeconds(i + 1),
@@ -683,6 +683,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 				throw new NotImplementedException();
 			}
 
+			public TimeSpan? OverrideAverageAfterTaskTime { get; set; }
+
 			public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
 			{
 				_overrideTasks = task;
@@ -738,6 +740,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 					return _overrideTasks;
 				}
 			}
+
+			public TimeSpan? OverrideAverageTaskTime { get; set; }
 
 			/// <summary>
 			/// Gets or sets the campaign tasks.

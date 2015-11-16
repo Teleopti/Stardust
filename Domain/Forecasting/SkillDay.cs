@@ -166,6 +166,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    get { return null; }
 	    }
 
+	    public virtual TimeSpan? OverrideAverageTaskTime { get; set; }
+	    public virtual TimeSpan? OverrideAverageAfterTaskTime { get; set; }
+
+	  
+
 	    /// <summary>
         /// Gets the workload day collection.
         /// </summary>

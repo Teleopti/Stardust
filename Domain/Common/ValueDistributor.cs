@@ -92,7 +92,14 @@ namespace Teleopti.Ccc.Domain.Common
 			PropertyInfo property = typeof(IForecastingTarget).GetProperty(taskFieldToDistribute.ToString());
 			foreach (IForecastingTarget owner in typedTargets)
             {
-                long averageTaskTimeTicks = ((TimeSpan)property.GetValue(owner, null)).Ticks;
+				var propertyValue = property.GetValue(owner, null);
+	            if (propertyValue == null)
+	            {
+					property.SetValue(owner, null, null);
+		            continue;
+	            }
+
+				long averageTaskTimeTicks = ((TimeSpan)propertyValue).Ticks;
                 if (distributionType == DistributionType.ByPercent)
                 {
                     if (averageTaskTimeTicks == 0)
@@ -155,13 +162,9 @@ namespace Teleopti.Ccc.Domain.Common
     /// </summary>
     public enum TaskFieldToDistribute
     {
-        /// <summary>
-        /// Average task time
-        /// </summary>
         AverageTaskTime,
-        /// <summary>
-        /// Average after task time
-        /// </summary>
-        AverageAfterTaskTime
+        AverageAfterTaskTime,
+		OverrideAverageTaskTime,
+		OverrideAverageAfterTaskTime
     }
 }

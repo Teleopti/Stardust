@@ -7,11 +7,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -71,8 +69,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						WorkloadDay workloadDay = new WorkloadDay();
 						workloadDay.Create(new DateOnly(_date), _workload, openHourPeriods);
 						workloadDay.Tasks = 7 * 20;
-						workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
+						workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22); 
 						workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
+						workloadDay.SetOverrideTasks(10*20, null);
+						workloadDay.OverrideAverageTaskTime = TimeSpan.FromSeconds(60);
+						workloadDay.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(120);
 
 						IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 						skillDataPeriods.Add(
@@ -107,6 +108,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						Assert.AreEqual(skillDay.WorkloadDayCollection.Count, loadedAggregateFromDatabase.WorkloadDayCollection.Count);
 						Assert.AreEqual(skillDay.WorkloadDayCollection[0].AverageTaskTime, loadedAggregateFromDatabase.WorkloadDayCollection[0].AverageTaskTime);
 						Assert.AreEqual(skillDay.WorkloadDayCollection[0].TotalTasks, loadedAggregateFromDatabase.WorkloadDayCollection[0].TotalTasks);
+						Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideTasks, loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideTasks);
+						Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageTaskTime, loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageTaskTime);
+						Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageAfterTaskTime, loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageAfterTaskTime);
 				}
 
 				/// <summary>

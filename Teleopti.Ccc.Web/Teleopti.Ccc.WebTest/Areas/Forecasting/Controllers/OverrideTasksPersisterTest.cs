@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	public class OverrideTasksPersisterTest
 	{
 		[Test]
-		public void ShouldPersistADayThatHasCalls()
+		public void ShouldPersistADayThatHasOverrideValues()
 		{
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var scenario = new Scenario("scenario1");
@@ -36,14 +36,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			var target = new OverrideTasksPersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
 			workloadDay.OverrideTasks.Should().Be.EqualTo(null);
+
+			const double overrideTasks = 300d;
+			var overrideTalkTime = TimeSpan.FromSeconds(20);
+			var overrideAfterCallWork = TimeSpan.FromSeconds(30);
+
 			target.Persist(scenario, workload, new[]
 			{
 				new ModifiedDay
 				{
 					Date = dateOnly.Date
 				}
-			}, 300);
-			Math.Round(workloadDay.OverrideTasks.Value, 2).Should().Be.EqualTo(300d);
+			}, overrideTasks, overrideTalkTime, overrideAfterCallWork);
+
+			Math.Round(workloadDay.OverrideTasks.Value, 2).Should().Be.EqualTo(overrideTasks);
+			workloadDay.OverrideAverageTaskTime.Value.Should().Be.EqualTo(overrideTalkTime);
+			workloadDay.OverrideAverageAfterTaskTime.Value.Should().Be.EqualTo(overrideAfterCallWork);
 			historicalPeriodProvider.AssertWasNotCalled(x=>x.AvailableIntradayTemplatePeriod(workload));
 			intradayForecaster.AssertWasNotCalled(x=>x.CalculatePattern(Arg<IWorkload>.Is.Anything, Arg<DateOnlyPeriod>.Is.Anything));
 		}
@@ -77,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				{
 					Date = dateOnly.Date
 				}
-			}, 300);
+			}, 300, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(30));
 			workloadDay.AssertWasCalled(x => x.SetOverrideTasks(300d, null));
 			intradayForecaster.AssertWasNotCalled(x => x.CalculatePattern(Arg<IWorkload>.Is.Anything, Arg<DateOnlyPeriod>.Is.Anything));
 		}
@@ -118,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				{
 					Date = dateOnly.Date
 				}
-			}, 300);
+			}, 300, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(30));
 
 			workloadDay.AssertWasCalled(x => x.SetOverrideTasks(300d, mondayPattern));
 

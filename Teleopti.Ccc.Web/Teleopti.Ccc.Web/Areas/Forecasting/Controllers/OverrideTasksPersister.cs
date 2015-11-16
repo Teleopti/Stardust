@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, double overrideTasks)
+		public void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, double? overrideTasks, TimeSpan? overrideTalkTime, TimeSpan? overrideAfterCallWork)
 		{
 			var min = days.Min(x => x.Date);
 			var max = days.Max(x => x.Date);
@@ -52,7 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				{
 					workloadDay.SetOverrideTasks(overrideTasks, weekdayPattern); 
 				}
+				workloadDay.OverrideAverageTaskTime = overrideTalkTime;
+				workloadDay.OverrideAverageAfterTaskTime = overrideAfterCallWork;
+
+
 			}
 		}
+
 	}
 }

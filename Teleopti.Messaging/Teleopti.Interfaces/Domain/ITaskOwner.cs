@@ -24,6 +24,10 @@ namespace Teleopti.Interfaces.Domain
 
 		double? OverrideTasks { get; }
 
+		TimeSpan? OverrideAverageTaskTime { get; set; }
+
+		TimeSpan? OverrideAverageAfterTaskTime { get; set; }
+
 	    void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern);
 
         /// <summary>

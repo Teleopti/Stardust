@@ -698,5 +698,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 
 			_target.TotalTasks.Should().Be.EqualTo(0d);
 		}
+
+	     [Test]
+	     public void ShouldOverrideAverageTaskTime()
+	     {
+		     _target.AverageTaskTime = TimeSpan.FromSeconds(100);
+			 _target.TotalAverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(100));
+			 _target.OverrideAverageTaskTime = TimeSpan.FromSeconds(200);
+			 _target.TotalAverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(200));
+
+	     }
+
+		 [Test]
+		 public void ShouldOverrideAverageAfterTaskTime()
+		 {
+			 _target.AverageAfterTaskTime = TimeSpan.FromSeconds(100);
+			 _target.TotalAverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(100));
+			 _target.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200);
+			 _target.TotalAverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(200));
+
+		 }
+
     }
 }

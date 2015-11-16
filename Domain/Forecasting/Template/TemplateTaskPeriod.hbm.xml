@@ -66,6 +66,12 @@
 		<property name="OverrideTasks"
 				  type="Double"
 				  not-null="false" />
+		<property name="OverrideAverageTaskTime"
+				  type="TimeSpan"
+				  not-null="false" />
+		<property name="OverrideAverageAfterTaskTime"
+				  type="TimeSpan"
+				  not-null="false" />
   </class>
 </hibernate-mapping>
 

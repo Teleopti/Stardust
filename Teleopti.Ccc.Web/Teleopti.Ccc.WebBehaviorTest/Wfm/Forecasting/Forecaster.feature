@@ -104,7 +104,7 @@ Scenario: Create new skill
 	Then I should see the new skill 'NewSkill1' in the list
 
 @ignore
-Scenario: Override the forecasted calls for one day
+Scenario: Override only forecasted calls for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
 	And I use default forecast period and forecast for one workload
@@ -115,3 +115,20 @@ Scenario: Override the forecasted calls for one day
 	And I enter '500' calls per day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
+
+	
+Scenario: Override the forecasted values for one day
+	Given I am viewing forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	When I select the first day in the forecast chart
+	And I select to modify the forecast
+	And I select to do override calls
+	And I enter '500' calls per day
+	And I enter '100' seconds talk time
+	And I enter '50' seconds after call work
+	And I apply the override calls
+	Then I should see that the total calls for the first day is '500'
+	And I should see that the total talk time for the first day is '100'
+	And I should see that the total after call work for the first day is '50'
