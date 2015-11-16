@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 				var startSpan = new TimeSpan(Presenter.Explorer.Model.ShiftStartTime.Hours, 0, 0);
 				if (Presenter.Explorer.Model.IsRightToLeft)
 				{
-					startHour = Presenter.Explorer.Model.ShiftEndTime.Hours;
+					startHour = Presenter.Explorer.Model.ShiftEndTime.Add(TimeSpan.FromHours(1)).Hours;
 					if (startHour == 0)
 						startHour = 11;
 					startSpan = new TimeSpan(startHour, 0, 0);
