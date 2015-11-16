@@ -10,8 +10,7 @@
 
 			this.formatDateTime = function (time) {
 				if (time === null || time === undefined || time === '') return '--:--:--';
-				console.log(time);
-				var momentTime = moment.utc(time);
+				var momentTime = moment(time);
 				if (momentTime.format("YYYY") > moment("1970").format("YYYY")) {
 					return momentTime.format('HH:mm:ss');
 				} else {

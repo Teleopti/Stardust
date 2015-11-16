@@ -15,28 +15,28 @@
 			</form>
 		</div>
 		<div class="col-md-8 text-align-right">
-			<p>Latest acquired date: {{ format(latestDate) }}</p>
+			<p>Latest acquired date: {{format(selectedSkill.Measures[0].LatestDate)}}</p>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
 			<div class="material-depth-1">
-				<div class="sub-header" translate>{{name}}</div>
+				<div class="sub-header" translate>{{selectedSkill.SkillName}}</div>
 				<div class="wfm-block">
 					<div class="info-row">
 						<div class="measure">Offered calls: </div>
-						<div class="value">{{offeredCalls}}</div>
+						<div class="value">{{selectedSkill.Measures[0].ActualCalls}}</div>
 					</div>
 					<div class="info-row">
 						<div class="measure">Forecasted calls: </div>
-						<div class="value">{{forecastedCalls}}</div>
+						<div class="value">{{selectedSkill.Measures[0].ForecastedCalls}}</div>
 					</div>
 					<div class="info-row">
 						<div class="measure">Relative difference: </div>
-						<div class="value">{{value}}</div>
+						<div class="value">{{selectedSkill.Measures[0].Value}}</div>
 					</div>
 					<div class="info-row">
-						<div class="text-danger">{{stringValue}}</div>
+						<div class="text-danger">{{selectedSkill.Measures[0].StringValue}}</div>
 					</div>
 				</div>
 			</div>
