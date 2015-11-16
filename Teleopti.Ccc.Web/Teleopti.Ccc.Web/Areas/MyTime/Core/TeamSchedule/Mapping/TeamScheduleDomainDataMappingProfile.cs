@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private readonly Func<IMappingEngine> _mapper;
 		private readonly Func<ISchedulePersonProvider> _personProvider;
 		private readonly Func<IScheduleProvider> _scheduleProvider;
-		private readonly Func<ITeamScheduleProjectionProvider> _projectionProvider;
+		private readonly Func<ITeamScheduleProjectionForMTWProvider> _projectionProvider;
 		private readonly Func<IUserTimeZone> _userTimeZone;
 
-		public TeamScheduleDomainDataMappingProfile(Func<IMappingEngine> mapper, Func<ISchedulePersonProvider> personProvider, Func<IScheduleProvider> scheduleProvider, Func<ITeamScheduleProjectionProvider> projectionProvider, Func<IUserTimeZone> userTimeZone)
+		public TeamScheduleDomainDataMappingProfile(Func<IMappingEngine> mapper, Func<ISchedulePersonProvider> personProvider, Func<IScheduleProvider> scheduleProvider, Func<ITeamScheduleProjectionForMTWProvider> projectionProvider, Func<IUserTimeZone> userTimeZone)
 		{
 			_mapper = mapper;
 			_personProvider = personProvider;

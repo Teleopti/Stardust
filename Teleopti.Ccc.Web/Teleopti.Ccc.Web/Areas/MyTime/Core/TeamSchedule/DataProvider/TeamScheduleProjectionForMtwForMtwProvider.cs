@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-	public class TeamScheduleProjectionProvider : ITeamScheduleProjectionProvider
+	public class TeamScheduleProjectionForMtwForMtwProvider : ITeamScheduleProjectionForMTWProvider
 	{
 		public const int AbsenceFullDayExtraDays = 5;
 		public const int DayOffExtraDays = 10;
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		private readonly IProjectionProvider _projectionProvider;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider)
+		public TeamScheduleProjectionForMtwForMtwProvider(IProjectionProvider projectionProvider)
 		{
 			_projectionProvider = projectionProvider;
 		}

@@ -477,7 +477,7 @@
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionForMTWProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />

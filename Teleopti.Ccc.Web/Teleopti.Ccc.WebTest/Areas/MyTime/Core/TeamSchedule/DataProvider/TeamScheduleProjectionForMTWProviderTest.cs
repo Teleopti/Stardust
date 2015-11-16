@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
 	[TestFixture]
-	public class TeamScheduleProjectionProviderTest
+	public class TeamScheduleProjectionForMTWProviderTest
 	{
 		private readonly TimeZoneInfo timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 		private IPrincipal principalBefore;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var target = new TeamScheduleProjectionProvider(projectionProvider);
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(projectionProvider);
 
 			var result = target.Projection(scheduleDay);
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var target = new TeamScheduleProjectionProvider(projectionProvider);
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(projectionProvider);
 
 			var result = target.Projection(scheduleDay);
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var target = new TeamScheduleProjectionProvider(projectionProvider);
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(projectionProvider);
 
 			var result = target.Projection(scheduleDay);
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, dayOff);
 
-			var target = new TeamScheduleProjectionProvider(MockRepository.GenerateMock<IProjectionProvider>());
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(MockRepository.GenerateMock<IProjectionProvider>());
 
 			var result = target.Projection(scheduleDay);
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var target = new TeamScheduleProjectionProvider(projectionProvider);
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(projectionProvider);
 
 			var result = target.Projection(scheduleDay);
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		{
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
 
-			var target = new TeamScheduleProjectionProvider(new ProjectionProvider());
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);
 
 			result.SortDate.Should().Be.EqualTo(scheduleDay.ProjectionService().CreateProjection().Period().Value.StartDateTime);
@@ -156,11 +156,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
 			scheduleDay.Add(new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2001,1,1,2001,1,2))));
 
-			var target = new TeamScheduleProjectionProvider(new ProjectionProvider());
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);
 
 			result.SortDate.Should().Be.EqualTo(
-				scheduleDay.ProjectionService().CreateProjection().Period().Value.StartDateTime.AddDays(TeamScheduleProjectionProvider.AbsenceFullDayExtraDays));
+				scheduleDay.ProjectionService().CreateProjection().Period().Value.StartDateTime.AddDays(TeamScheduleProjectionForMtwForMtwProvider.AbsenceFullDayExtraDays));
 		}
 
 		[Test]
@@ -169,20 +169,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithoutMainShift();
 			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, new DateOnly(2001,1,1), new DayOffTemplate()));
 
-			var target = new TeamScheduleProjectionProvider(new ProjectionProvider());
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);
 
-			result.SortDate.Should().Be.EqualTo(scheduleDay.Period.StartDateTime.AddDays(TeamScheduleProjectionProvider.DayOffExtraDays));
+			result.SortDate.Should().Be.EqualTo(scheduleDay.Period.StartDateTime.AddDays(TeamScheduleProjectionForMtwForMtwProvider.DayOffExtraDays));
 		}
 
 		[Test]
 		public void ShouldSetCorrectSortDateIfEmptyDay()
 		{
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithoutMainShift();
-			var target = new TeamScheduleProjectionProvider(new ProjectionProvider());
+			var target = new TeamScheduleProjectionForMtwForMtwProvider(new ProjectionProvider());
 			var result = target.Projection(scheduleDay);
 			result.SortDate.Should().Be.EqualTo(
-				scheduleDay.Period.StartDateTime.AddDays(TeamScheduleProjectionProvider.EmptyExtraDays));
+				scheduleDay.Period.StartDateTime.AddDays(TeamScheduleProjectionForMtwForMtwProvider.EmptyExtraDays));
 		}
 
 		[TearDown]

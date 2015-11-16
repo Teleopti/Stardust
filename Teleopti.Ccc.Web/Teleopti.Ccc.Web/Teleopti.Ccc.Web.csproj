@@ -1020,9 +1020,9 @@
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtension.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseHtmlHelper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ITeamProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamScheduleProjectionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamScheduleProjectionForMTWProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionForMtwForMtwProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjection.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingProfile.cs" />
