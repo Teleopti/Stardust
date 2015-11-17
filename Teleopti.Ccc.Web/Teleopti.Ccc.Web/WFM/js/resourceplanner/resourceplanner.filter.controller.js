@@ -33,7 +33,10 @@
 					}
 				);
 				$scope.isValid = function () {
-					return false;
+					return $scope.isValidDayOffsPerWeek() &&
+						$scope.isValidConsecDaysOff() &&
+						$scope.isValidConsecDaysOff() &&
+						$scope.isValidFilters();
 				}
 
 				$scope.isValidDayOffsPerWeek = function () {
@@ -48,13 +51,31 @@
 					return $scope.consecWorkDays.MinConsecWorkDays <= $scope.consecWorkDays.MaxConsecWorkDays;
 				}
 
+				$scope.isValidFilters = function () {
+					return $scope.selectedResults.length > 0;
+				}
+
 				$scope.selectResultItem = function (item) {
 					$scope.selectedResults.push(item);
 				}
 
-
 				$scope.moreResultsExists = function () {
 					return $scope.results.length >= $scope.maxHits;
+				}
+
+				$scope.persist = function () {
+					if ($scope.isValid()) {
+						ResourcePlannerFilterSrvc.persist.save(
+						{
+							name: $scope.name,
+							dayOffsPerWeek: $scope.dayOffsPerWeek,
+							consecDaysOff: $scope.consecDaysOff,
+							consecWorkDays: $scope.consecWorkDays,
+							selectedResults: $scope.selectedResults
+						});
+						return true;
+					}
+					return false;
 				}
 			}
 		]);

@@ -257,6 +257,56 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidConsecWorkDays()).toBe(true);
 	}));
 
+	it('should be invalid if no selected result', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		
+		expect(scope.isValid()).toBe(false);
+		expect(scope.isValidFilters()).toBe(false);
+	}));
+
+
+	it('should be valid if at least one selected result', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.selectedResults = [{}];
+
+		expect(scope.isValidFilters()).toBe(true);
+	}));
+
+	it('should be able to save the dayoffrule', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var sentData;
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		scope.name = 'asdfasdf';
+		scope.selectedResults = [{ id: '1' }];
+
+		$httpBackend.when('POST', '../api/filters',
+				function (postData) {
+					sentData = JSON.parse(postData);
+					return true;
+				}).respond(200, true);
+
+		var result = scope.persist();
+		$httpBackend.flush();
+
+		expect(sentData.name).toEqual(scope.name);
+		expect(sentData.dayOffsPerWeek).toEqual(scope.dayOffsPerWeek);
+		expect(sentData.consecDaysOff).toEqual(scope.consecDaysOff);
+		expect(sentData.consecWorkDays).toEqual(scope.consecWorkDays);
+		expect(sentData.selectedResults).toEqual(scope.selectedResults);
+		expect(result).toEqual(true);
+	}));
+
+	it('should return falseif persist when invalid', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.persist()).toEqual(false);
+	}));
+
 
 	var filterUrl = function (searchString, maxHits) {
 		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;

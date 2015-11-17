@@ -4,7 +4,10 @@
 		.service('ResourcePlannerFilterSrvc', [
 		'$resource', function ($resource) {
             this.getData = $resource('../api/filters?searchString=:searchString&maxHits=:maxHits', { searchString : "@searchString", maxHits : "@maxHits"}, {
-                query: { method: 'GET', params: {}, isArray: true },
+                query: { method: 'GET', params: {}, isArray: true }
+            });
+            this.persist = $resource('../api/filters', { }, {
+            	save: { method: 'POST', params: {}}
             });
 		}
 ])
