@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var helper = new DatabaseHelper(builder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			helper.CreateByDbManager();
 
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password", false);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password", new SqlVersion(12,false));
 
 			var builderAnal = TestPolutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;

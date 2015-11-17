@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DBManager.Library
                         break;
                     case "-C":
                         _willCreateNewDatabase = true;
-                        _permissionMode = true;
                         _patchMode = true;
                         break;
                     case "-B":
@@ -64,6 +63,7 @@ namespace Teleopti.Ccc.DBManager.Library
                         _patchMode = true;
                         break;
                     case "-L":
+						_permissionMode = true;
                         string[] userpwd = switchValue.Split(':');
                         if (userpwd.Length == 2)
                         {
@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.DBManager.Library
                         }
                         break;
                     case "-W":
+						_permissionMode = true;
                         _appUserName = switchValue;
                         _isWindowsGroupName = true;
                         break;

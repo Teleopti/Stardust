@@ -11,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.Controllers
@@ -68,23 +67,27 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var checkName = _tenantExists.Check(model.Tenant);
 			if (!checkName.Success)
 				return Json(new TenantResultModel { Message = checkName.Message, Success = false });
-			
-			var checkCreate = checkCreateDbInternal(createLoginConnectionString(model));
+
+			var connectionToNewDb = createLoginConnectionString(model);
+			var appDbConnectionString = createAppDbConnectionString(model);
+			var analyticsDbConnectionString = createAnalyticsDbConnectionString(model);
+			var checkCreate = checkCreateDbInternal(connectionToNewDb);
 			if (!checkCreate.Success)
 				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
 			var dbPath = _dbPathProvider.GetDbPath();
 
-			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.AppUser, model.AppPassword, isAzure());
-			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure(), model.Tenant);
-			_databaseHelperWrapper.AddBusinessUnit(createAppDbConnectionString(model), model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure(), model.Tenant);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure(), model.Tenant);
+			var version = _databaseHelperWrapper.Version(connectionToNewDb);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
+			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, version, model.Tenant);
+			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
+			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, version, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, version, model.Tenant);
 
-			if (isAzure())
-				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");
+			if (version.IsAzure)
+				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");
 			else
-				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAgg");
+				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAgg");
 
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
@@ -194,10 +197,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure()))
+			var version = _databaseHelperWrapper.Version(connectionString);
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, version))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure()))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, version))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
@@ -214,7 +218,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private TenantResultModel checkLoginInternal(CreateTenantModel model)
 		{
 			if (string.IsNullOrEmpty(model.AppUser) || string.IsNullOrEmpty(model.AppPassword))
-				new TenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
+				return new TenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
 
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
@@ -224,7 +228,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			};
 			try
 			{
-				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure()))
+				var version = _databaseHelperWrapper.Version(builder.ConnectionString);
+				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, version))
 				{
 					return
 					new TenantResultModel
@@ -233,8 +238,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 						Message = "The login already exists you must create a new one."
 					};
 				}
-				var message = "";
-				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure(), out message))
+				string message;
+				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, version, out message))
 				{
 					return
 					new TenantResultModel
@@ -362,12 +367,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
 			return new TenantResultModel { Success = true, Message = "Created new user." };
-		}
-
-		private bool isAzure()
-		{
-			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 

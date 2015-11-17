@@ -88,7 +88,9 @@
     <Compile Include="NotExecutableScriptException.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="SchemaVersionInformation.cs" />
+    <Compile Include="ServerVersionHelper.cs" />
     <Compile Include="SqlTransientErrorChecker.cs" />
+    <Compile Include="SqlVersion.cs" />
     <Compile Include="Timeouts.cs" />
   </ItemGroup>
   <ItemGroup>

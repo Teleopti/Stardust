@@ -62,14 +62,15 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", false);
+			var sqlVersion = new SqlVersion(12,false);
+			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion);
 			connStringBuilder.InitialCatalog = "master";
 			using (var conn = new SqlConnection(connStringBuilder.ConnectionString))
 			{
 				conn.Open();
 				using (var cmd = conn.CreateCommand())
 				{
-					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, false))
+					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, sqlVersion))
 					{
 						cmd.CommandText = string.Format("DROP LOGIN [{0}]", appUser);
 						cmd.ExecuteNonQuery();
@@ -89,7 +90,7 @@ namespace Teleopti.Wfm.AdministrationTest
 						"dbcreatorperson");
 					cmd.ExecuteNonQuery();
 
-					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, false))
+					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, sqlVersion))
 					{
 						cmd.CommandText = string.Format("DROP LOGIN [{0}]", appUser);
 						cmd.ExecuteNonQuery();

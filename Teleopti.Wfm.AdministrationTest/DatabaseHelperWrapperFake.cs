@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return new DbCheckResultModel {Exists = true};
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, SqlVersion sqlVersion, string tenant)
 		{
 		}
 
@@ -24,34 +24,38 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 		}
 
-		public bool LoginExists(string connectionToNewDb, string login, bool isAzure)
+		public bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion)
 		{
 			return false;
 		}
 
-		public void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure)
+		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion)
 		{
 		}
 
-		public bool HasCreateDbPermission(string connectionString, bool isAzure)
-		{
-			return true;
-		}
-
-		public bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure)
+		public bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion)
 		{
 			return true;
 		}
 
-		public bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message)
+		public bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion sqlVersion)
+		{
+			return true;
+		}
+
+		public bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message)
 		{
 			message = "";
 			return true;
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login)
 		{
-			
+		}
+
+		public SqlVersion Version(string connectionToNewDb)
+		{
+			return new SqlVersion(12,false);
 		}
 	}
 }

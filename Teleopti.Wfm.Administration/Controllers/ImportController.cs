@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -89,7 +86,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!result.Exists)
 				return Json(result);
 
-			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString,type,model.UserName,isAzure());
+			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString,type,model.UserName);
 			//check so it works now
 			appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.Database, UserID = model.UserName, Password = model.Password };
 			return Json(_databaseHelperWrapper.Exists(appBuilder.ConnectionString, type));
@@ -103,15 +100,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return isNewTenantName(tenant);
 		}
 
-		//[HttpPost]
-		//[TenantUnitOfWork]
-		//[Route("api/Import/Conflicts")]
-		//public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
-		//{
-		//	var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
-		//	return Json(_getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant));
-		//}
-
 		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)
 		{
 			return Json(_tenantExists.Check(tenant));
@@ -122,17 +110,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("CheckAppLogin")]
 		public virtual JsonResult<TenantResultModel> CheckAppLogin(ImportDatabaseModel model)
 		{
-			if (_databaseHelperWrapper.LoginExists(createLoginConnectionString(model), model.UserName, isAzure()))
+			var connectionToNewDb = createLoginConnectionString(model);
+			var version = _databaseHelperWrapper.Version(connectionToNewDb);
+			if (_databaseHelperWrapper.LoginExists(connectionToNewDb, model.UserName, version))
 				return Json(new TenantResultModel {Success = true, Message = "Login exists, make sure you have entered a correct password."});
 			string message;
-			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(createLoginConnectionString(model), model.UserName, model.Password, isAzure(), out message);
+			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(connectionToNewDb, model.UserName, model.Password, version, out message);
 			if(!canCreate)
 				return Json(new TenantResultModel { Success = false, Message = message });
-			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.UserName, model.Password,isAzure());
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version);
 			return Json(new TenantResultModel {Success = true, Message = "Created new login."});
 		}
-
-		
 
 		[HttpPost]
 		[TenantUnitOfWork]
@@ -166,19 +154,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure()))
+			var version = _databaseHelperWrapper.Version(connectionString);
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, version))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure()))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, version))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
-		}
-
-		private bool isAzure()
-		{
-			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseHelper
 	{
 		private const string MasterDatabaseName = "master";
-
+		
 		private readonly ExecuteSql _executeMaster;
 		private readonly ExecuteSql _execute;
 
@@ -21,15 +21,19 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseType = databaseType;
 			Logger = new NullLog();
 
-			_executeMaster = new ExecuteSql(()=>openConnection(true), Logger);
-			_execute = new ExecuteSql(()=>openConnection(), Logger);
-      }
+			_executeMaster = new ExecuteSql(() => openConnection(true), Logger);
+			_execute = new ExecuteSql(() => openConnection(), Logger);
+		}
 
 		public IUpgradeLog Logger { set; get; }
 		public string ConnectionString { get; private set; }
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
-		public ExecuteSql Executor { get { return _execute; } }
+
+		public ExecuteSql Executor
+		{
+			get { return _execute; }
+		}
 
 		public string DbManagerFolderPath { get; set; }
 
@@ -38,6 +42,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			return
 				Convert.ToBoolean(_executeMaster.ExecuteScalar("SELECT database_id FROM sys.databases WHERE Name = @databaseName",
 					parameters: new Dictionary<string, object> {{"@databaseName", DatabaseName}}));
+		}
+
+		public SqlVersion Version()
+		{
+			return new ServerVersionHelper(_executeMaster).Version();
 		}
 
 		public void CreateByDbManager()
@@ -66,20 +75,22 @@ namespace Teleopti.Ccc.DBManager.Library
 			creator.ApplyAzureStartDDL(DatabaseType);
 		}
 
-		public bool LoginExists(string login, bool isAzure)
+		public bool LoginExists(string login, SqlVersion sqlVersion)
 		{
 			var sql = "SELECT 1 FROM syslogins WHERE name = @login";
-			if(isAzure)
+			if (sqlVersion.IsAzure)
+			{
 				sql = "SELECT 1 FROM master.sys.sql_logins WHERE name = @login";
-			var result = _executeMaster.ExecuteScalar(sql,parameters:new Dictionary<string, object>{{"@login",login}});
+			}
+			var result = _executeMaster.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", login}});
 			return Convert.ToBoolean(result);
 		}
 
-		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
+		public bool LoginCanBeCreated(string login, string password, SqlVersion sqlVersion, out string message)
 		{
 			try
 			{
-				CreateLogin(login, password, isAzure);
+				CreateLogin(login, password, sqlVersion);
 				var sql = string.Format("DROP LOGIN [{0}]", login);
 				_executeMaster.ExecuteTransactionlessNonQuery(sql);
 				message = "";
@@ -91,17 +102,18 @@ namespace Teleopti.Ccc.DBManager.Library
 				return false;
 			}
 		}
-		public void CreateLogin(string login, string password, bool isAzure)
+
+		public void CreateLogin(string login, string password, SqlVersion sqlVersion)
 		{
-			if(LoginExists(login, isAzure))
+			if (LoginExists(login, sqlVersion))
 				return;
 
 			var sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}',
 				DEFAULT_DATABASE=[master],
 				DEFAULT_LANGUAGE=[us_english],
-				CHECK_EXPIRATION=OFF",login, password);
-			if(isAzure)
+				CHECK_EXPIRATION=OFF", login, password);
+			if (sqlVersion.IsAzure)
 				sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}'", login, password);
 			_executeMaster.ExecuteTransactionlessNonQuery(sql);
@@ -109,14 +121,15 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void AddPermissions(string login)
 		{
-			if(login == "sa")
+			if (login == "sa")
 				return;
 			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
-			if(DbUserExist(login))
-				sql = string.Format( @"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
+			if (DbUserExist(login))
+				sql = string.Format(@"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
 			_execute.ExecuteNonQuery(sql);
-			
-			sql = string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
+
+			sql =
+				string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
@@ -130,13 +143,13 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool DbUserExist(string sqlLogin)
 		{
 			const string sql = "SELECT 1 FROM sys.sysusers WHERE name = @login";
-			var result = _execute.ExecuteScalar(sql, parameters:new Dictionary<string, object>{{"@login",sqlLogin}});
+			var result = _execute.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", sqlLogin}});
 			return Convert.ToBoolean(result);
 		}
 
-		public bool HasCreateDbPermission(bool isAzure)
+		public bool HasCreateDbPermission(SqlVersion sqlVersion)
 		{
-			if (isAzure)
+			if (sqlVersion.IsAzure)
 			{
 				var dbName = Guid.NewGuid().ToString();
 				try
@@ -153,18 +166,20 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
-		
-		public bool HasCreateViewAndLoginPermission(bool isAzure)
+
+		public bool HasCreateViewAndLoginPermission(SqlVersion sqlVersion)
 		{
-			if (isAzure)
+			if (sqlVersion.IsAzure)
 			{
-				var pwd = "tT12@andSomeMore";
+				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
-				var createSql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD = N'{1}'", login, pwd);
+				var definition = sqlVersion.ProductVersion >= 12 ? "USER" : "LOGIN";
+				var createSql = string.Format("CREATE {2} [{0}] WITH PASSWORD = N'{1}'", login, pwd, definition);
+				var dropSql = string.Format("DROP {1} [{0}]", login, definition);
 				try
 				{
 					_execute.ExecuteTransactionlessNonQuery(createSql);
-					_execute.ExecuteTransactionlessNonQuery("DROP LOGIN [" + login + "]");
+					_execute.ExecuteTransactionlessNonQuery(dropSql);
 					return true;
 				}
 				catch (Exception)
@@ -174,6 +189,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
 		}
+
 		public void AddSuperUser(Guid personId, string firstName, string lastName)
 		{
 			var sql = string.Format(@"INSERT INTO Person 
@@ -190,6 +206,7 @@ SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName,
 SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', null, 0", name);
 			_execute.ExecuteNonQuery(sql);
 		}
+
 		public void CleanByAnalyticsProcedure()
 		{
 			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
@@ -295,7 +312,8 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		private void setOffline()
 		{
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(
+				string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
 		}
 
 		private void setOnline()
@@ -308,7 +326,8 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			if (!Exists()) return;
 
 			setOnline(); // if dropping a database that is offline, the file on disk will remain!
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(
+				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
 			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
 		}
 
@@ -370,8 +389,8 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') ";
 			if (DatabaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[log_object]') ";
-			
-         return Convert.ToBoolean(_execute.ExecuteScalar(sql));
+
+			return Convert.ToBoolean(_execute.ExecuteScalar(sql));
 		}
 	}
 }

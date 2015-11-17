@@ -80,15 +80,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
 
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", false);
-			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7,"","appuser",false, "NewFineTenant");
+			var sqlVersion = new SqlVersion(12, false);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7,"","appuser",sqlVersion, "NewFineTenant");
 			
 			var builderAnal = TestPolutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "password";
 
-			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "", "appuser", false, "NewFineTenant");
+			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "", "appuser", sqlVersion, "NewFineTenant");
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =

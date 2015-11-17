@@ -9,27 +9,14 @@ namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabasePatcher
 	{
-		private DatabaseFolder _databaseFolder;
 		private CommandLineArgument _commandLineArgument;
 
-		private bool _isAzure;
-		private bool _isSrvDbCreator;
-		private bool _isSrvSecurityAdmin;
-		private bool _loginExist;
-
-		private const string AzureEdition = "SQL Azure";
 		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
 		private IUpgradeLog _logger;
-		private DatabaseVersionInformation _databaseVersionInformation;
-		private SchemaVersionInformation _schemaVersionInformation;
-		private readonly Func<SqlConnection> _masterConnection;
-		private readonly Func<SqlConnection> _connection;
-
+		
 		public DatabasePatcher(IUpgradeLog upgradeLog)
 		{
 			_logger = upgradeLog;
-			_masterConnection = () => connectAndOpen(_commandLineArgument.ConnectionStringToMaster);
-			_connection = () => connectAndOpen(_commandLineArgument.ConnectionString);
 		}
 
 		public int Run(CommandLineArgument arguments)
@@ -40,9 +27,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				bool safeMode = true;
 
-				_databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
-				_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
-				logWrite("Running from:" + _databaseFolder.Path());
+				var databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
+				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
+				logWrite("Running from:" + databaseFolder.Path());
 
 				//If Permission Mode: check if application user name and password/windowsgroup is submitted
 				if (_commandLineArgument.PermissionMode)
@@ -52,50 +39,55 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Check Azure
-				_isAzure = isAzure();
+				var masterExecuteSql = new ExecuteSql(() => connectAndOpen(_commandLineArgument.ConnectionStringToMaster), _logger);
+				var databaseHelper = new ServerVersionHelper(masterExecuteSql);
+				var sqlVersion = databaseHelper.Version();
 
-				if (_isAzure && _commandLineArgument.isWindowsGroupName)
+				if (sqlVersion.IsAzure && _commandLineArgument.isWindowsGroupName)
 					throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
 				//special for Azure => fn_my_permissions does not exist: http://msdn.microsoft.com/en-us/library/windowsazure/ee336248.aspx
-				if (_isAzure)
+				bool isSrvDbCreator;
+				bool isSrvSecurityAdmin;
+				if (sqlVersion.IsAzure)
 				{
-					_isSrvDbCreator = true;
-					_isSrvSecurityAdmin = true;
+					isSrvDbCreator = true;
+					isSrvSecurityAdmin = true;
 				}
 				else
 				{
-					_isSrvDbCreator = isSrvDbCreator();
-					_isSrvSecurityAdmin = isSrvSecurityAdmin();
+					isSrvDbCreator = hasSrvDbCreator(masterExecuteSql);
+					isSrvSecurityAdmin = hasSrvSecurityAdmin(masterExecuteSql);
 				}
 
 				//try connect to DB using given AppLogin
+				bool loginExist;
 				if (!_commandLineArgument.isWindowsGroupName) //SQL
 				{
 					try
 					{
-						using(connectAndOpen(_commandLineArgument.ConnectionStringAppLogOn(_isAzure ? _commandLineArgument.DatabaseName : "master")))
+						using(connectAndOpen(_commandLineArgument.ConnectionStringAppLogOn(sqlVersion.IsAzure ? _commandLineArgument.DatabaseName : "master")))
 						{
 						}
 						
-						_loginExist = true;
+						loginExist = true;
 					}
 					catch
 					{
-						_loginExist = false;
+						loginExist = false;
 					}
 				}
 				else //Win
-					_loginExist = verifyWinGroup(_commandLineArgument.appUserName); //We will need to check on sys.syslogins
+					loginExist = verifyWinGroup(_commandLineArgument.appUserName, masterExecuteSql); //We will need to check on sys.syslogins
 
 				//New installation
-				if (_commandLineArgument.WillCreateNewDatabase && !((_isSrvDbCreator && _isSrvSecurityAdmin)))
+				if (_commandLineArgument.WillCreateNewDatabase && !((isSrvDbCreator && isSrvSecurityAdmin)))
 				{
 					throw new Exception("Either sysAdmin or dbCreator + SecurityAdmin permissions are needed to install WFM databases!");
 				}
 
 				//patch
-				if (!_loginExist && !(_isSrvSecurityAdmin))
+				if (!loginExist && !isSrvSecurityAdmin)
 				{
 					throw new Exception(string.Format(CultureInfo.CurrentCulture, "The login '{0}' does not exist or wrong password supplied, and You don't have the permission to create/alter the login.", _commandLineArgument.appUserName));
 				}
@@ -113,7 +105,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Exclude Agg from Azure
-				if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
+				if (sqlVersion.IsAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
 				{
 					logWrite("This is a TeleoptiCCCAgg, exclude from SQL Azure");
 					return 0;
@@ -121,22 +113,23 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				if (_commandLineArgument.WillCreateNewDatabase)
 				{
-					createDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
-				}
-
-				//Try create or re-create login
-				if (_commandLineArgument.PermissionMode && safeMode && _isSrvSecurityAdmin)
-				{
-					createLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
+					createDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType, sqlVersion, new DatabaseCreator(databaseFolder, masterExecuteSql));
 				}
 
 				//Does the db exist?
-				if (databaseExists())
+				if (databaseExists(masterExecuteSql))
 				{
-					_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder,new ExecuteSql(_connection, _logger));
+					//Try create or re-create login
+					var executeSql = new ExecuteSql(() => connectAndOpen(_commandLineArgument.ConnectionString), _logger);
+					if (_commandLineArgument.PermissionMode && safeMode && isSrvSecurityAdmin)
+					{
+						createLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName, databaseFolder, sqlVersion, masterExecuteSql, executeSql);
+					}
+
+					var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder,executeSql);
 
 					//if we are not db_owner, bail out
-					if (!isDbOwner())
+					if (!isDbOwner(executeSql))
 					{
 						throw new Exception("db_owner or sysAdmin permissions needed to patch the database!");
 					}
@@ -144,29 +137,29 @@ namespace Teleopti.Ccc.DBManager.Library
 					//if this is the very first create, add VersionControl table
 					if (_commandLineArgument.WillCreateNewDatabase)
 					{
-						createDefaultVersionInformation();
+						createDefaultVersionInformation(databaseVersionInformation);
 					}
 
 					//Set permissions of the newly application user on db.
 					if (_commandLineArgument.PermissionMode && safeMode)
 					{
-						createPermissions(_commandLineArgument.appUserName);
+						createPermissions(_commandLineArgument.appUserName, sqlVersion, databaseFolder, executeSql);
 					}
 
 					//Patch database
 					if (_commandLineArgument.PatchMode)
 					{
 						//Does the Version Table exist?
-						if (versionTableExists())
+						if (versionTableExists(executeSql))
 						{
 							//Shortcut to release 329, Azure specific script
-							if (_isAzure && getDatabaseBuildNumber() == 0)
+							if (sqlVersion.IsAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
 							{
-								applyAzureStartDdl(_commandLineArgument.TargetDatabaseTypeName);
+								applyAzureStartDdl(_commandLineArgument.TargetDatabaseTypeName, databaseFolder, executeSql);
 							}
 
-							var dbCreator = new DatabaseSchemaCreator(_databaseVersionInformation,
-								_schemaVersionInformation, new ExecuteSql(_connection,_logger), _databaseFolder, _logger);
+							var dbCreator = new DatabaseSchemaCreator(databaseVersionInformation,
+								schemaVersionInformation, executeSql, databaseFolder, _logger);
 							dbCreator.Create(_commandLineArgument.TargetDatabaseType);
 						}
 						else
@@ -187,7 +180,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
          catch (Exception e)
 			{
-				logWrite("An error occurred: " + e.ToString(), "ERROR");
+				logWrite(string.Format("An error occurred: {0}", e), "ERROR");
 				return -1;
 			}
 			finally
@@ -206,107 +199,86 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger.Write(s, level);
 		}
 
-		private void applyAzureStartDdl(string databaseTypeName)
+		private void applyAzureStartDdl(string databaseTypeName, DatabaseFolder folder, ExecuteSql executeSql)
 		{
 			logWrite("Applying Azure DDL starting point...");
 
 			string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\{1}.00000329.sql",
-													  _databaseFolder.Path(), databaseTypeName);
-
-			string sql;
-			using (TextReader sqlTextReader = new StreamReader(fileName))
-			{
-				sql = sqlTextReader.ReadToEnd();
-			}
-
-			var executor = new ExecuteSql(_connection, _logger);
-			executor.ExecuteNonQuery(sql,Timeouts.CommandTimeout);
+													  folder.Path(), databaseTypeName);
+			string sql = File.ReadAllText(fileName);
+			executeSql.ExecuteNonQuery(sql,Timeouts.CommandTimeout);
 		}
 
-		private int getDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseVersion(); }
-
-		private bool versionTableExists()
+		private bool versionTableExists(ExecuteSql executeSql)
 		{
 			const string sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'DatabaseVersion'";
-			var executor = new ExecuteSql(_connection, _logger);
-			return Convert.ToBoolean(executor.ExecuteScalar(sql));
+			return Convert.ToBoolean(executeSql.ExecuteScalar(sql));
 		}
 
-		private bool databaseExists()
+		private bool databaseExists(ExecuteSql masterExecuteSql)
 		{
 			const string sql = "SELECT COUNT(*) AS DBExists FROM sys.databases WHERE [name]=@database_name";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@database_name", _commandLineArgument.DatabaseName } }));
+			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@database_name", _commandLineArgument.DatabaseName } }));
 		}
 
-		private  bool isAzure()
-		{
-			const string sql = "IF (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) = @azure_edition SELECT 1 ELSE SELECT 0";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@azure_edition", AzureEdition}}));
-		}
-
-		private  bool isDbOwner()
+		private bool isDbOwner(ExecuteSql executeSql)
 		{
 			const string sql = "select IS_MEMBER ('db_owner')";
-			var exec = new ExecuteSql(_connection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql));
+			return Convert.ToBoolean(executeSql.ExecuteScalar(sql));
 		}
 
-		private  bool isSrvSecurityAdmin()
+		private bool hasSrvSecurityAdmin(ExecuteSql masterExecuteSql)
 		{
 			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='ALTER ANY LOGIN'";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql));
+			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql));
 		}
 
-		private  bool isSrvDbCreator()
+		private bool hasSrvDbCreator(ExecuteSql masterExecuteSql)
 		{
 			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='CREATE ANY DATABASE'";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql));
+			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql));
 		}
 
-		private  bool verifyWinGroup(string winNtGroup)
+		private bool verifyWinGroup(string winNtGroup, ExecuteSql masterExecuteSql)
 		{
 			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = @WinNTGroup";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@WinNTGroup", winNtGroup } }));
+			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@WinNTGroup", winNtGroup } }));
 		}
 
-		private  bool dbUserExist(string sqlLogin)
+		private bool dbUserExist(string sqlLogin, ExecuteSql executeSql)
 		{
 			const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
-			var exec = new ExecuteSql(_connection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
+			return Convert.ToBoolean(executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
-		private  bool azureLoginExist(string sqlLogin)
+		private bool azureLoginExist(string sqlLogin, ExecuteSql masterExecuteSql)
 		{
 			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			return Convert.ToBoolean(exec.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
+			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
-		private  void createDB(string databaseName, DatabaseType databaseType)
+		private bool azureDatabaseUserExist(string sqlUser, ExecuteSql executeSql)
+		{
+			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=2";
+			return Convert.ToBoolean(executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
+		}
+
+		private void createDB(string databaseName, DatabaseType databaseType, SqlVersion sqlVersion, DatabaseCreator creator)
 		{
 			logWrite("Creating database " + databaseName + "...");
 
-			var creator = new DatabaseCreator(_databaseFolder, new ExecuteSql(_masterConnection,_logger));
-			if (_isAzure)
+			if (sqlVersion.IsAzure)
 				creator.CreateAzureDatabase(databaseType, databaseName);
 			else
 				creator.CreateDatabase(databaseType, databaseName);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		private  bool sqlVersionGreaterThen(string checkVersion)
+		private bool sqlVersionGreaterThen(string checkVersion, ExecuteSql executeSql)
 		{
-			string serverVersion;
-			using (var sqlConnection = _connection())
-			{
-				serverVersion = sqlConnection.ServerVersion;
-			}
+			string serverVersion = string.Empty;
+			executeSql.ExecuteCustom(sqlConnection => { serverVersion = sqlConnection.ServerVersion; });
+			
 			var serverVersionDetails = serverVersion.Split(new[] { "." }, StringSplitOptions.None);
 			var checkVersionDetails = checkVersion.Split(new[] { "." }, StringSplitOptions.None);
 
@@ -327,93 +299,107 @@ namespace Teleopti.Ccc.DBManager.Library
 				return true;
 			if (buildCheckVersionNumber < buildVersionNumber)
 				return true;
-			else
-				return false;
+			
+			return false;
 		}
 
-		private  void createLogin(string user, string pwd, Boolean iswingroup)
+		private void createLogin(string user, string pwd, Boolean iswingroup, DatabaseFolder folder, SqlVersion sqlVersion, ExecuteSql masterExecuteSql, ExecuteSql executeSql)
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
-			if (!_isAzure)
+			if (sqlVersion.IsAzure)
 			{
-				string fileName;
 				if (iswingroup)
-					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
+					masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");
 				else
-					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
-
-				TextReader tr = new StreamReader(fileName);
-				sql = tr.ReadToEnd();
-				tr.Close();
-				sql = sql.Replace("$(SQLLOGIN)", user);
-				sql = sql.Replace("$(SQLPWD)", pwd);
-				sql = sql.Replace("$(WINLOGIN)", user);
+				{
+					if (sqlVersion.ProductVersion >= 12)
+					{
+						if (azureLoginExist(user, masterExecuteSql))
+						{
+							masterExecuteSql.ExecuteTransactionlessNonQuery(string.Format("DROP LOGIN [{0}]", user));
+						}
+						if (azureDatabaseUserExist(user, executeSql))
+							sql = string.Format("ALTER USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						else
+							sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						executeSql.ExecuteNonQuery(sql);
+					}
+					else
+					{
+						if (azureLoginExist(user, masterExecuteSql))
+							sql = string.Format("ALTER LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						else
+							sql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+						masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
+					}
+				}
 			}
 			else
 			{
+				string fileName;
 				if (iswingroup)
-					sql = "PRINT 'Windows Logins cannot be added to Windows Azure for the momement'";
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", folder.Path());
 				else
-				{
-					if (azureLoginExist(user))
-						sql = "ALTER  LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
-					else
-						sql = "CREATE LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
-				}
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", folder.Path());
+
+				sql = File.ReadAllText(fileName);
+				sql = sql.Replace("$(SQLLOGIN)", user);
+				sql = sql.Replace("$(SQLPWD)", pwd);
+				sql = sql.Replace("$(WINLOGIN)", user);
+				masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
 			}
 
-			var exec = new ExecuteSql(_masterConnection, _logger);
-			exec.ExecuteNonQuery(sql);
-			
 			logWrite("Created login!");
-
 		}
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private  void createPermissions(string user)
-		{
-			string relinkSqlUser;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		private  void createPermissions(string user, SqlVersion sqlVersion, DatabaseFolder folder, ExecuteSql executeSql)
+		{
+			
 			//if appication login = sa then don't bother to do anything
 			if (compareStringLowerCase(user, @"sa"))
 				return;
 
-			//Create or Re-link e.g Alter the DB-user from SQL-Login
-			var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
-
-			if (sqlVersionGreaterThen(SQL2005SP2))
-				relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
-			else
-				relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"sp_change_users_login 'Update_One', '{0}', '{0}'", user);
-
-			var exec = new ExecuteSql(_connection, _logger);
-			if (dbUserExist(user))
+			if ((sqlVersion.IsAzure && sqlVersion.ProductVersion < 12) || !sqlVersion.IsAzure)
 			{
-				logWrite("DB user already exist, re-link ...");
-				exec.ExecuteNonQuery(relinkSqlUser);
-			}
-			else
-			{
-				logWrite("DB user is missing. Create DB user ...");
-				exec.ExecuteNonQuery(createDBUser);
+				//Create or Re-link e.g Alter the DB-user from SQL-Login
+				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
+
+				string relinkSqlUser;
+				if (sqlVersionGreaterThen(SQL2005SP2, executeSql))
+					relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
+				else
+					relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"sp_change_users_login 'Update_One', '{0}', '{0}'", user);
+
+				if (dbUserExist(user, executeSql))
+				{
+					logWrite("DB user already exist, re-link ...");
+					executeSql.ExecuteTransactionlessNonQuery(relinkSqlUser);
+				}
+				else
+				{
+					logWrite("DB user is missing. Create DB user ...");
+					executeSql.ExecuteTransactionlessNonQuery(createDBUser);
+				}
 			}
 
 			//Add permission
-			var fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
+			var fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", folder.Path());
 
 			var sql = File.ReadAllText(fileName);
 
 			sql = sql.Replace("$(LOGIN)", user);
 
-			exec.ExecuteNonQuery(sql);
+			executeSql.ExecuteNonQuery(sql);
 
 			logWrite("Created Permissions!");
 		}
 
-		private  void createDefaultVersionInformation()
+		private void createDefaultVersionInformation(DatabaseVersionInformation databaseVersionInformation)
 		{
 			logWrite("Creating database version table and setting inital version to 0...");
-			_databaseVersionInformation.CreateTable();
+			databaseVersionInformation.CreateTable();
 		}
 
 		private SqlConnection connectAndOpen(string connectionString)

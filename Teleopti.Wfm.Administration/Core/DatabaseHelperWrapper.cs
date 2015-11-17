@@ -13,15 +13,16 @@ namespace Teleopti.Wfm.Administration.Core
 	public interface IDatabaseHelperWrapper
 	{
 		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
-		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant);
+		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, SqlVersion sqlVersion, string tenant);
 		void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		void AddBusinessUnit(string connectionToNewDb, string name);
-		bool LoginExists(string connectionToNewDb, string login, bool isAzure);
-		void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure);
-		bool HasCreateDbPermission(string connectionString, bool isAzure);
-		bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure);
-		bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message);
-		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure);
+		bool LoginExists(string connectionToNewDb, string login, SqlVersion isAzure);
+		void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion);
+		bool HasCreateDbPermission(string connectionString, SqlVersion isAzure);
+		bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion isAzure);
+		bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message);
+		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login);
+		SqlVersion Version(string connectionToNewDb);
 	}
 
 	public class DatabaseHelperWrapper : IDatabaseHelperWrapper
@@ -63,10 +64,10 @@ namespace Teleopti.Wfm.Administration.Core
 			
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, SqlVersion sqlVersion, string tenant)
 		{
 
-			if (isAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+			if (sqlVersion.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				return;
 
 			try
@@ -83,7 +84,7 @@ namespace Teleopti.Wfm.Administration.Core
 				return;
 			helper.DbManagerFolderPath = dbPath;
 			
-			if(isAzure)
+			if(sqlVersion.IsAzure)
 				helper.CreateInAzureByDbManager();
 			else
 				helper.CreateByDbManager();
@@ -92,7 +93,7 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddPermissions(login);
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
 			helper.AddPermissions(login);
@@ -104,6 +105,12 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddSuperUser(personId, firstName, lastName);
 		}
 
+		public SqlVersion Version(string connectionToNewDb)
+		{
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
+			return helper.Version();
+		}
+
 		public void AddBusinessUnit(string connectionToNewDb, string name)
 		{
 			var helper = new DatabaseHandler(new Ccc.ApplicationConfig.Common.CommandLineArgument(new string[0]));
@@ -112,35 +119,35 @@ namespace Teleopti.Wfm.Administration.Core
 			defaultDataCreator.Save(defaultAggregateRoot);
 		}
 
-		public bool LoginExists(string connectionToNewDb, string login, bool isAzure)
+		public bool LoginExists(string connectionToNewDb, string login, SqlVersion isAzure)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
 			return(helper.LoginExists(login, isAzure));
 		}
 
-        public void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure)
+        public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion)
 		{
 			// type does not mather now
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
-			helper.CreateLogin(login,password, isAzure);
+			helper.CreateLogin(login,password, sqlVersion);
 		}
 
-		public bool HasCreateDbPermission(string connectionString, bool isAzure)
+		public bool HasCreateDbPermission(string connectionString, SqlVersion isAzure)
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
 			return helper.HasCreateDbPermission(isAzure);
 		}
 
-		public bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure)
+		public bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion isAzure)
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
 			return helper.HasCreateViewAndLoginPermission(isAzure);
 		}
 
-		public bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message)
+		public bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message)
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
-			return helper.LoginCanBeCreated(login, password, isAzure, out message);
+			return helper.LoginCanBeCreated(login, password, sqlVersion, out message);
 		}
    }
 }
