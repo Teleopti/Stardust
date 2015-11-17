@@ -3,6 +3,7 @@
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', function($scope, ResourcePlannerFilterSrvc) {
+				$scope.results = [];
 
 				$scope.$watch(function() { return $scope.searchString; },
 					function(input) {

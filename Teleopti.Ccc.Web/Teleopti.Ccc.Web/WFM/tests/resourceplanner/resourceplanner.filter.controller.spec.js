@@ -56,7 +56,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		expect(scope.results).toEqual(undefined);
+		expect(scope.results).toEqual([]);
 	}));
 
 	it('should not call service when model is empty string', inject(function ($controller) {
@@ -64,7 +64,14 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 		scope.searchString = '';
 
-		expect(scope.results).toEqual(undefined);
+		expect(scope.results).toEqual([]);
+	}));
+
+	it('should work to call selectedItems before loaded', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.selectedItems().length).toEqual(0);
 	}));
 
 	it('should put clicked item in selected', inject(function ($controller) {
