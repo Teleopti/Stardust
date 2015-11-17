@@ -26,5 +26,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDayOffTemplate DefaultDayOffTemplate { get; private set; }
 		public ICollection<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; private set; }
+		public IEnumerable<IPartTimePercentage> PartTimePercentages { get; private set; }
 	}
 }

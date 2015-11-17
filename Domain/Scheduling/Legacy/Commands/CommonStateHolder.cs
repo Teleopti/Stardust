@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
+		private readonly List<IPartTimePercentage> _partTimePercentages = new List<IPartTimePercentage>();
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
 	    {
@@ -24,28 +25,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    }
 
 	    public void LoadCommonStateHolder(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
-        {
-			_absences.Clear();
-			_activities.Clear();
-			_dayOffs.Clear();
-			_scheduleTags.Clear();
-			_shiftCategories.Clear();
-			_workflowControlSets.Clear();
+	    {
+		    _absences.Clear();
+		    _activities.Clear();
+		    _dayOffs.Clear();
+		    _scheduleTags.Clear();
+		    _shiftCategories.Clear();
+		    _workflowControlSets.Clear();
+		    _partTimePercentages.Clear();
 
-            using(_disableDeleteFilter.Disable())
-            {
-                LoadActivity(repositoryFactory.CreateActivityRepository(unitOfWork));
-                LoadAbsences(repositoryFactory.CreateAbsenceRepository(unitOfWork));
-                LoadDayOffs(repositoryFactory.CreateDayOffRepository(unitOfWork));
-                LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
-                LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
-                LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
-                loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
-	            loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
-            }
-        }
 
-        private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
+		    using (_disableDeleteFilter.Disable())
+		    {
+			    LoadActivity(repositoryFactory.CreateActivityRepository(unitOfWork));
+			    LoadAbsences(repositoryFactory.CreateAbsenceRepository(unitOfWork));
+			    LoadDayOffs(repositoryFactory.CreateDayOffRepository(unitOfWork));
+			    LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
+			    LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
+			    LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
+			    loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
+			    loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
+			    loadPartTimePercentage(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork));
+		    }
+	    }
+
+	    private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
         {
             _scheduleTags.AddRange(scheduleTagRepository.LoadAll().OrderBy(t => t.Description));
             _scheduleTags.Insert(0, NullScheduleTag.Instance);
@@ -113,6 +117,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    }
 	    }
 
+	    public IEnumerable<IPartTimePercentage> PartTimePercentages
+	    {
+			get {  return _partTimePercentages; }
+	    }
+
         public IEnumerable<IActivity> Activities
         {
             get { return _activities; }
@@ -132,6 +141,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         {
 			get { return _activities.Where(a => !a.IsDeleted).ToArray(); }
         }
+
+
+		private void loadPartTimePercentage(IRepository<IPartTimePercentage> ptpRepository)
+	    {
+			_partTimePercentages.AddRange(ptpRepository.LoadAll());
+	    }
 
 	    private void LoadAbsences(IRepository<IAbsence> absRep)
 	    {
