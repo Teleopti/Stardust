@@ -633,10 +633,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						_averageAfterTaskTime = TimeSpan.FromTicks((long)
 							(_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks*t.Tasks)/_tasks));
 
-	                var overridePeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+	                var overrideAttPeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+					_overrideAverageTaskTime = overrideAttPeriodList.Any()
+						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAttPeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
+						: null;
 
-					_overrideAverageTaskTime = overridePeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overridePeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
+					var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
+					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
+						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Sum(t => t.OverrideAverageAfterTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
 					}
 					else
 					{
@@ -1115,8 +1119,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_turnOffInternalRecalc = true;
 
 				//end fix
-				long overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
-				if (overrideAverageTaskTimeTicks == 0) overrideAverageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
+			    long overrideAverageTaskTimeTicks = 1;
+				if (OverrideAverageTaskTime.HasValue)
+					overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
+				
 				ValueDistributor.DistributeTaskTimes(
 					((double)value.Value.Ticks / overrideAverageTaskTimeTicks),
 					value.Value,
@@ -1139,7 +1145,34 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public virtual TimeSpan? OverrideAverageAfterTaskTime
 	    {
 		    get { return _overrideAverageAfterTaskTime; }
-		    set { _overrideAverageAfterTaskTime = value; }
+		    set
+		    {
+				checkOpen();
+
+				bool currentState = _turnOffInternalRecalc;
+				_turnOffInternalRecalc = true;
+
+				//end fix
+				long overrideAverageAfterTaskTimeTicks = 1;
+				if (OverrideAverageAfterTaskTime.HasValue)
+					overrideAverageAfterTaskTimeTicks = OverrideAverageAfterTaskTime.Value.Ticks;
+
+				ValueDistributor.DistributeTaskTimes(
+					((double)value.Value.Ticks / overrideAverageAfterTaskTimeTicks),
+					value.Value,
+					_taskPeriodList,
+					TaskFieldToDistribute.OverrideAverageAfterTaskTime,
+					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType,
+					value.Value.Ticks);
+				_turnOffInternalRecalc = currentState;
+
+				_overrideAverageAfterTaskTime = value;
+
+				_recalculateDailyAverageTimes();
+				_recalculateDailyAverageCampaignTimes();
+
+				OnAverageTaskTimesChanged();
+		    }
 	    }
 
 	    /// <summary>

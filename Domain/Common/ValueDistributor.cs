@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -93,14 +94,12 @@ namespace Teleopti.Ccc.Domain.Common
 			foreach (IForecastingTarget owner in typedTargets)
             {
 				var propertyValue = property.GetValue(owner, null);
-	            if (propertyValue == null)
-	            {
-					property.SetValue(owner, null, null);
-		            continue;
-	            }
 
-				long averageTaskTimeTicks = ((TimeSpan)propertyValue).Ticks;
-                if (distributionType == DistributionType.ByPercent)
+	            long averageTaskTimeTicks = 0;
+	            if (property.PropertyType != typeof (TimeSpan?))
+		            averageTaskTimeTicks = ((TimeSpan) propertyValue).Ticks;
+
+	            if (distributionType == DistributionType.ByPercent)
                 {
                     if (averageTaskTimeTicks == 0)
                         averageTaskTimeTicks = (long)originalValue;  //TimeSpan.FromSeconds(1).Ticks;
