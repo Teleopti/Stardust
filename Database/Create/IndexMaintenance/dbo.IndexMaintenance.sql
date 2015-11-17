@@ -18,6 +18,7 @@ SET @CurrentDatabase=db_name()
 IF SERVERPROPERTY('EngineEdition') = 5 AND @Version < 12
 BEGIN
 	EXEC @ReturnCode = [dbo].[IndexMaintenance_Azure_v11]
+	EXEC sp_updatestats
 END
 ELSE
 BEGIN
