@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -10,17 +11,22 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly ISkillForecastedTasksProvider _skillForecastedTasksProvider;
 		private readonly ISkillActualTasksProvider _skillActualTasksDetailProvider;
+		private readonly ISkillRepository _skillRepository;
 
-		public IntradaySkillStatusService(ISkillForecastedTasksProvider skillForecastedTasksProvider, ISkillActualTasksProvider skillActualTasksDetailProvider)
+		public IntradaySkillStatusService(ISkillForecastedTasksProvider skillForecastedTasksProvider, ISkillActualTasksProvider skillActualTasksDetailProvider, ISkillRepository skillRepository)
 		{
 			_skillForecastedTasksProvider = skillForecastedTasksProvider;
 			_skillActualTasksDetailProvider = skillActualTasksDetailProvider;
+			_skillRepository = skillRepository;
 		}
 
 		public IEnumerable<SkillStatusModel> GetSkillStatusModels(DateTime now)
 		{
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			var skillsTimezone = skills.ToDictionary(skill => skill.Id.Value, skill => skill.TimeZone);
 			var taskDetails = _skillForecastedTasksProvider.GetForecastedTasks(now);
-			var actualTasks = _skillActualTasksDetailProvider.GetActualTasks();
+			var actualTasks = _skillActualTasksDetailProvider.GetActualTasks(skillsTimezone);
+			
 			var ret = taskDetails.Select(task => new SkillStatusModel()
 			{
 				Measures = new List<SkillStatusMeasure>()
@@ -41,7 +47,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var actualSum = item.IntervalTasks.Sum(interval => interval.Task);
 				if (forecastedData.Any())
 				{
-					forecastedSum =  forecastedData.First().IntervalTasks.Where(interval => interval.IntervalStart <= maxIntervalForSkill).Sum(t => t.Task);
+					forecastedSum =
+						forecastedData.First()
+							.IntervalTasks.Where(interval => interval.IntervalStart <= maxIntervalForSkill)
+							.Sum(t => t.Task);
 				}
 				var relativeDifference = forecastedSum - actualSum;
 				var message = "Below threshold";
@@ -55,7 +64,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 					{
 						skillStatus.Measures = new List<SkillStatusMeasure>
 						{
-							new SkillStatusMeasure {Name = "Calls", Value = Math.Round(relativeDifference), Severity = 1, StringValue = message, LatestDate = maxIntervalForSkill,ActualCalls = actualSum,ForecastedCalls = Math.Round(forecastedSum)}
+							new SkillStatusMeasure
+							{
+								Name = "Calls",
+								Value = Math.Round(relativeDifference),
+								Severity = 1,
+								StringValue = message,
+								LatestDate = TimeZoneHelper.ConvertFromUtc(maxIntervalForSkill, skillsTimezone[item.SkillId]),
+								ActualCalls = actualSum,
+								ForecastedCalls = Math.Round(forecastedSum)
+							}
 						};
 					}
 				}

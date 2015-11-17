@@ -233,6 +233,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.First().Measures.First().ActualCalls.Should().Be.EqualTo(20);
 		}
 
+		[Test]
+		public void ShouldReturnDateAccordingToSkillTimeZone()
+		{
+			var skillId = Guid.NewGuid();
+			var skill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
+			skill.SetId(skillId);
+			var forecastedData = new List<SkillTaskDetailsModel>
+			{
+				getSkillTaskDetailsModel(skillId, 5, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc))
+
+			};
+			SkillRepository.Add(skill);
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(skillId,new DateTime(2015, 10, 21, 14, 0, 0, DateTimeKind.Unspecified),5,"Phone")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc));
+			result.First()
+				.Measures.First()
+				.LatestDate.Should()
+				.Be.EqualTo(new DateTime(2015, 10, 21,14, 0, 0, DateTimeKind.Unspecified));
+		}
+
 		private static IntradayStatistics getIntradayStatistics(Guid skillId, DateTime start, int task, string skillName)
 		{
 			return new IntradayStatistics()
@@ -387,8 +414,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				StatOfferedTasks = 15,
 				SkillId = skillId
 			};
-			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>(){intradayStatistic1,intradayStatistic2}); 
-			var result = TargetSkillActualTasksProvider.GetActualTasks();
+			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>(){intradayStatistic1,intradayStatistic2});
+			var skillsTimeZone = new Dictionary<Guid,TimeZoneInfo>();
+			skillsTimeZone.Add(skill.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+         var result = TargetSkillActualTasksProvider.GetActualTasks(skillsTimeZone);
 			result.Count.Should().Be.EqualTo(1);
 			result.First().IntervalTasks.First().Task.Should().Be.EqualTo(10);
 			result.First().IntervalTasks.Second().Task.Should().Be.EqualTo(15);
@@ -418,9 +447,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				StatOfferedTasks = 15,
 				SkillId = skill2Id
 			};
-			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>() { intradayStatistic1, intradayStatistic2 }); 
-			//var target = new SkillActualTasksProvider(skillRepository, fakeStatisticRepository);
-			var result = TargetSkillActualTasksProvider.GetActualTasks();
+			StatisticRepository.AddIntradayStatistics(new List<IIntradayStatistics>() { intradayStatistic1, intradayStatistic2 });
+			var skillsTimeZone = new Dictionary<Guid, TimeZoneInfo>();
+			skillsTimeZone.Add(skill1.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			skillsTimeZone.Add(skill2.Id.Value, TimeZoneInfo.Utc);
+			var result = TargetSkillActualTasksProvider.GetActualTasks(skillsTimeZone);
 			result.Count.Should().Be.EqualTo(2);
 			result.First().IntervalTasks.First().Task.Should().Be.EqualTo(10);
 			result.First()

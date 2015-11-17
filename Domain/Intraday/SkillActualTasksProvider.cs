@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public class SkillActualTasksProvider : ISkillActualTasksProvider
 	{
 		private readonly IStatisticRepository _statisticRepository;
-		private ISkillRepository _skillRepository;
+		private readonly ISkillRepository _skillRepository;
 
 		public SkillActualTasksProvider(IStatisticRepository statisticRepository, ISkillRepository skillRepository)
 		{
@@ -17,20 +17,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillRepository = skillRepository;
 		}
 
-		//check if the date and time is stored in the skill timezone 
-		//and convert it in the query
 
-		public IList<SkillTaskDetails> GetActualTasks()
+		public IList<SkillTaskDetails> GetActualTasks(Dictionary<Guid, TimeZoneInfo> skillsTimezone)
 		{
 			var result = new  List<SkillTaskDetails>();
 			var intradayStatistics = _statisticRepository.LoadSkillStatisticForSpecificDates(DateOnly.Today);
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
 			foreach (var item in intradayStatistics)
 			{
-				var concernedSkill = skills.Where(x => x.Id.Value == item.SkillId);
-				if (concernedSkill.Any())
-				{
-					if (!result.Contains(new SkillTaskDetails() { SkillId = item.SkillId }))
+
+				if (!result.Contains(new SkillTaskDetails() {SkillId = item.SkillId}))
 					{
 						result.Add(new SkillTaskDetails()
 						{
@@ -38,11 +33,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 							SkillName = item.SkillName,
 							IntervalTasks =
 								intradayStatistics.Where(x => x.SkillId == item.SkillId)
-									.Select(x => new IntervalTasks() { IntervalStart = TimeZoneHelper.ConvertToUtc(x.Interval,concernedSkill.First().TimeZone), Task = x.StatOfferedTasks }).ToList()
+									.Select(
+										x =>
+											new IntervalTasks()
+											{
+												IntervalStart = TimeZoneHelper.ConvertToUtc(x.Interval, skillsTimezone[item.SkillId]),
+												Task = x.StatOfferedTasks
+											}).ToList()
 						});
 					}
-				}
-				
 			}
 			return result;
 		}
@@ -50,6 +49,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public interface ISkillActualTasksProvider
 	{
-		IList<SkillTaskDetails> GetActualTasks();
+		IList<SkillTaskDetails> GetActualTasks(Dictionary<Guid, TimeZoneInfo> skillsTimezone);
 	}
 }
