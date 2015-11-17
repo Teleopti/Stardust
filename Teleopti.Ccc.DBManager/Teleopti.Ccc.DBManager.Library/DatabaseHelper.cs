@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -71,28 +69,19 @@ namespace Teleopti.Ccc.DBManager.Library
 			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _execute);
 			databaseVersionInformation.CreateTable();
 
-			creator = new DatabaseCreator(databaseFolder, _execute);
-			creator.ApplyAzureStartDDL(DatabaseType);
-		}
-
-		public bool LoginExists(string login, SqlVersion sqlVersion)
-		{
-			var sql = "SELECT 1 FROM syslogins WHERE name = @login";
-			if (sqlVersion.IsAzure)
-			{
-				sql = "SELECT 1 FROM master.sys.sql_logins WHERE name = @login";
-			}
-			var result = _executeMaster.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", login}});
-			return Convert.ToBoolean(result);
+			var azureStart = new AzureStartDDL(databaseFolder, _execute);
+			azureStart.Apply(DatabaseType);
 		}
 
 		public bool LoginCanBeCreated(string login, string password, SqlVersion sqlVersion, out string message)
 		{
 			try
 			{
-				CreateLogin(login, password, sqlVersion);
-				var sql = string.Format("DROP LOGIN [{0}]", login);
-				_executeMaster.ExecuteTransactionlessNonQuery(sql);
+				var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
+				var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
+				loginHandler.EnablePolicyCheck();
+				loginHandler.CreateLogin(login, password, false, sqlVersion);
+				loginHandler.DropLogin(login, sqlVersion);
 				message = "";
 				return true;
 			}
@@ -103,41 +92,26 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		public void CreateLogin(string login, string password, SqlVersion sqlVersion)
+		public bool LoginExists(string login, SqlVersion sqlVersion)
 		{
-			if (LoginExists(login, sqlVersion))
-				return;
-
-			var sql = string.Format(@"CREATE LOGIN [{0}]
-				WITH PASSWORD=N'{1}',
-				DEFAULT_DATABASE=[master],
-				DEFAULT_LANGUAGE=[us_english],
-				CHECK_EXPIRATION=OFF", login, password);
-			if (sqlVersion.IsAzure)
-				sql = string.Format(@"CREATE LOGIN [{0}]
-				WITH PASSWORD=N'{1}'", login, password);
-			_executeMaster.ExecuteTransactionlessNonQuery(sql);
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
+			var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
+			return loginHandler.LoginExists(login, sqlVersion);
 		}
 
-		public void AddPermissions(string login)
+		public void CreateLogin(string login, string password, SqlVersion sqlVersion)
 		{
-			if (login == "sa")
-				return;
-			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
-			if (DbUserExist(login))
-				sql = string.Format(@"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
-			_execute.ExecuteNonQuery(sql);
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
+			var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
+			loginHandler.EnablePolicyCheck();
+			loginHandler.CreateLogin(login,password,false,sqlVersion);
+		}
 
-			sql =
-				string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
-	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
-
-	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
-	EXEC sp_addrolemember @rolename=N'db_datawriter', @membername=[{0}]
-	EXEC sp_addrolemember @rolename=N'db_datareader', @membername=[{0}]
-
-	GRANT EXECUTE TO db_executor", login);
-			_execute.ExecuteTransactionlessNonQuery(sql);
+		public void AddPermissions(string login, SqlVersion sqlVersion)
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
+			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _execute);
+			permissionsHandler.CreatePermissions(login,sqlVersion);
 		}
 
 		public bool DbUserExist(string sqlLogin)
@@ -227,61 +201,6 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			schemaCreator.Create(DatabaseType);
 		}
 
-		public Backup BackupByFileCopy(string name)
-		{
-			var backup = new Backup();
-			using (var conn = openConnection())
-			{
-				using (var command = conn.CreateCommand())
-				{
-					command.CommandText = string.Format("select * from sys.sysfiles");
-					using (var reader = command.ExecuteReader())
-					{
-						backup.Files = (from r in reader.Cast<IDataRecord>()
-							let file = r.GetString(r.GetOrdinal("filename"))
-							select new BackupFile {Source = file})
-							.ToArray();
-					}
-				}
-			}
-			using (offlineScope())
-			{
-				backup.Files.ForEach(f =>
-				{
-					f.Backup = f.Source + "." + name;
-					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Source, f.Backup);
-					var result = executeShellCommandOnServer(command);
-					if (!result.Contains("1 file(s) copied."))
-						throw new Exception();
-				});
-			}
-			return backup;
-		}
-
-		public bool TryRestoreByFileCopy(Backup backup)
-		{
-			using (offlineScope())
-			{
-				return backup.Files.All(f =>
-				{
-					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Backup, f.Source);
-					var result = executeShellCommandOnServer(command);
-					return result.Contains("1 file(s) copied.");
-				});
-			}
-		}
-
-		public class Backup
-		{
-			public IEnumerable<BackupFile> Files { get; set; }
-		}
-
-		public class BackupFile
-		{
-			public string Source { get; set; }
-			public string Backup { get; set; }
-		}
-
 		public int DatabaseVersion()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
@@ -303,71 +222,14 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			return versionInfo.GetOtherScriptFilesHash(DatabaseType);
 		}
 
-		private IDisposable offlineScope()
-		{
-			SqlConnection.ClearAllPools();
-			setOffline();
-			return new GenericDisposable(setOnline);
-		}
-
-		private void setOffline()
-		{
-			_executeMaster.ExecuteTransactionlessNonQuery(
-				string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName));
-		}
-
-		private void setOnline()
-		{
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
-		}
-
 		private void dropIfExists()
 		{
 			if (!Exists()) return;
 
-			setOnline(); // if dropping a database that is offline, the file on disk will remain!
+			new OnlineHelper(_executeMaster).SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
 			_executeMaster.ExecuteTransactionlessNonQuery(
 				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
 			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
-		}
-
-		private string executeShellCommandOnServer(string command)
-		{
-			var result = string.Empty;
-			_executeMaster.ExecuteCustom(conn =>
-			{
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = "EXEC sp_configure 'show advanced options', 1";
-					cmd.ExecuteNonQuery();
-				}
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = "RECONFIGURE";
-					cmd.ExecuteNonQuery();
-				}
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = "EXEC sp_configure 'xp_cmdshell', 1";
-					cmd.ExecuteNonQuery();
-				}
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = "RECONFIGURE";
-					cmd.ExecuteNonQuery();
-				}
-
-				using (var cmd = conn.CreateCommand())
-				{
-					cmd.CommandText = "xp_cmdshell '" + command + "'";
-					using (var reader = cmd.ExecuteReader())
-					{
-						reader.Read();
-						result = reader.GetString(0);
-					}
-				}
-			});
-			return result;
 		}
 
 		private SqlConnection openConnection(bool masterDb = false)
@@ -391,6 +253,11 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[log_object]') ";
 
 			return Convert.ToBoolean(_execute.ExecuteScalar(sql));
+		}
+
+		public BackupHelper BackupHelper()
+		{
+			return new BackupHelper(_execute,_executeMaster,DatabaseName);
 		}
 	}
 }

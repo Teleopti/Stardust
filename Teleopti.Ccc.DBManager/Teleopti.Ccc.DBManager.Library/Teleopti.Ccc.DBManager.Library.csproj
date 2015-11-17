@@ -71,7 +71,10 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AzureStartDDL.cs" />
+    <Compile Include="BackupHelper.cs" />
     <Compile Include="CommandLineArgument.cs" />
+    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="DatabaseCreator.cs" />
     <Compile Include="DatabaseFolder.cs" />
     <Compile Include="DatabaseHelper.cs" />
@@ -82,12 +85,17 @@
     <Compile Include="DbManagerFolder.cs" />
     <Compile Include="ExecuteSql.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FileLogger.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="HangfireSchemaCreator.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="LoginHelper.cs" />
     <Compile Include="NotExecutableScriptException.cs" />
     <Compile Include="NullLog.cs" />
+    <Compile Include="OnlineHelper.cs" />
+    <Compile Include="PermissionsHelper.cs" />
     <Compile Include="SchemaVersionInformation.cs" />
+    <Compile Include="ScriptPathExtensions.cs" />
     <Compile Include="ServerVersionHelper.cs" />
     <Compile Include="SqlTransientErrorChecker.cs" />
     <Compile Include="SqlVersion.cs" />

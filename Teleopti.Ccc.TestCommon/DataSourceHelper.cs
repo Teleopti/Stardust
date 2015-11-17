@@ -24,22 +24,26 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void RestoreCcc7Database(int dataHash)
 		{
-			restoreDatabase(ccc7(), dataHash);
+			var databaseHelper = ccc7();
+			restoreDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
 		}
 
 		public static void BackupCcc7Database(int dataHash)
 		{
-			backupDatabase(ccc7(), dataHash);
+			var databaseHelper = ccc7();
+			backupDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
 		}
 
 		public static void BackupAnalyticsDatabase(int dataHash)
 		{
-			backupDatabase(analytics(), dataHash);
+			var databaseHelper = analytics();
+			backupDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
 		}
 
 		public static void RestoreAnalyticsDatabase(int dataHash)
 		{
-			restoreDatabase(analytics(), dataHash);
+			var databaseHelper = analytics();
+			restoreDatabase(databaseHelper, databaseHelper.BackupHelper(), dataHash);
 		}
 
 		public static void ClearAnalyticsData()
@@ -79,7 +83,8 @@ namespace Teleopti.Ccc.TestCommon
 		private static void setupCcc7(string name)
 		{
 			var databaseHelper = ccc7();
-			if (tryRestoreDatabase(databaseHelper, 0))
+			var backupHelper = databaseHelper.BackupHelper();
+			if (tryRestoreDatabase(databaseHelper, backupHelper, 0))
 			{
 				update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
 				return;
@@ -88,7 +93,7 @@ namespace Teleopti.Ccc.TestCommon
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
-			backupDatabase(databaseHelper, 0);
+			backupDatabase(databaseHelper, backupHelper, 0);
 		}
 
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
@@ -101,10 +106,11 @@ namespace Teleopti.Ccc.TestCommon
 		private static void setupAnalytics()
 		{
 			var databaseHelper = analytics();
-			if (tryRestoreDatabase(databaseHelper, 0))
+			var backupHelper = databaseHelper.BackupHelper();
+			if (tryRestoreDatabase(databaseHelper, backupHelper, 0))
 				return;
 			createDatabase(databaseHelper);
-			backupDatabase(databaseHelper, 0);
+			backupDatabase(databaseHelper, backupHelper, 0);
 		}
 
 		private static void createDatabase(DatabaseHelper database)
@@ -119,20 +125,20 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void backupDatabase(DatabaseHelper database, int dataHash)
+		private static void backupDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
 		{
 			exceptionToConsole(
 				() =>
 				{
 					var name = backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
-					var backup = database.BackupByFileCopy(name);
+					var backup = backupHelper.BackupByFileCopy(name);
 					File.WriteAllText(name, JsonConvert.SerializeObject(backup, Formatting.Indented));
 				},
 				"Failed to backup database {0}!", database.ConnectionString
 				);
 		}
 
-		private static bool tryRestoreDatabase(DatabaseHelper database, int dataHash)
+		private static bool tryRestoreDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
 		{
 			return exceptionToConsole(
 				() =>
@@ -145,21 +151,21 @@ namespace Teleopti.Ccc.TestCommon
 					if (!File.Exists(name))
 						return false;
 
-					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(name));
-					return database.TryRestoreByFileCopy(backup);
+					var backup = JsonConvert.DeserializeObject<BackupHelper.Backup>(File.ReadAllText(name));
+					return backupHelper.TryRestoreByFileCopy(backup);
 				},
 				"Failed to restore database {0}!", database.ConnectionString
 				);
 		}
 
-		private static void restoreDatabase(DatabaseHelper database, int dataHash)
+		private static void restoreDatabase(DatabaseHelper database, BackupHelper backupHelper, int dataHash)
 		{
 			exceptionToConsole(
 				() =>
 				{
 					var name = backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
-					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(name));
-					var result = database.TryRestoreByFileCopy(backup);
+					var backup = JsonConvert.DeserializeObject<BackupHelper.Backup>(File.ReadAllText(name));
+					var result = backupHelper.TryRestoreByFileCopy(backup);
 					if (!result)
 						throw new Exception("Restore failed!");
 				},

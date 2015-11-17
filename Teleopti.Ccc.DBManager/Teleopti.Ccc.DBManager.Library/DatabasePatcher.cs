@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.IO;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -123,7 +122,8 @@ namespace Teleopti.Ccc.DBManager.Library
 					var executeSql = new ExecuteSql(() => connectAndOpen(_commandLineArgument.ConnectionString), _logger);
 					if (_commandLineArgument.PermissionMode && safeMode && isSrvSecurityAdmin)
 					{
-						createLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName, databaseFolder, sqlVersion, masterExecuteSql, executeSql);
+						var loginHelper = new LoginHelper(_logger, masterExecuteSql, executeSql, databaseFolder);
+						loginHelper.CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName, sqlVersion);
 					}
 
 					var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder,executeSql);
@@ -143,7 +143,8 @@ namespace Teleopti.Ccc.DBManager.Library
 					//Set permissions of the newly application user on db.
 					if (_commandLineArgument.PermissionMode && safeMode)
 					{
-						createPermissions(_commandLineArgument.appUserName, sqlVersion, databaseFolder, executeSql);
+						var permissionsHelper = new PermissionsHelper(_logger, databaseFolder, executeSql);
+						permissionsHelper.CreatePermissions(_commandLineArgument.appUserName, sqlVersion);
 					}
 
 					//Patch database
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.DBManager.Library
 							//Shortcut to release 329, Azure specific script
 							if (sqlVersion.IsAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
 							{
-								applyAzureStartDdl(_commandLineArgument.TargetDatabaseTypeName, databaseFolder, executeSql);
+								new AzureStartDDL(databaseFolder, executeSql).Apply((DatabaseType) Enum.Parse(typeof(DatabaseType),  _commandLineArgument.TargetDatabaseTypeName));
 							}
 
 							var dbCreator = new DatabaseSchemaCreator(databaseVersionInformation,
@@ -199,16 +200,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger.Write(s, level);
 		}
 
-		private void applyAzureStartDdl(string databaseTypeName, DatabaseFolder folder, ExecuteSql executeSql)
-		{
-			logWrite("Applying Azure DDL starting point...");
-
-			string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\{1}.00000329.sql",
-													  folder.Path(), databaseTypeName);
-			string sql = File.ReadAllText(fileName);
-			executeSql.ExecuteNonQuery(sql,Timeouts.CommandTimeout);
-		}
-
 		private bool versionTableExists(ExecuteSql executeSql)
 		{
 			const string sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'DatabaseVersion'";
@@ -245,24 +236,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@WinNTGroup", winNtGroup } }));
 		}
 
-		private bool dbUserExist(string sqlLogin, ExecuteSql executeSql)
-		{
-			const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
-			return Convert.ToBoolean(executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
-		}
-
-		private bool azureLoginExist(string sqlLogin, ExecuteSql masterExecuteSql)
-		{
-			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
-			return Convert.ToBoolean(masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
-		}
-
-		private bool azureDatabaseUserExist(string sqlUser, ExecuteSql executeSql)
-		{
-			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=2";
-			return Convert.ToBoolean(executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
-		}
-
 		private void createDB(string databaseName, DatabaseType databaseType, SqlVersion sqlVersion, DatabaseCreator creator)
 		{
 			logWrite("Creating database " + databaseName + "...");
@@ -271,129 +244,6 @@ namespace Teleopti.Ccc.DBManager.Library
 				creator.CreateAzureDatabase(databaseType, databaseName);
 			else
 				creator.CreateDatabase(databaseType, databaseName);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		private bool sqlVersionGreaterThen(string checkVersion, ExecuteSql executeSql)
-		{
-			string serverVersion = string.Empty;
-			executeSql.ExecuteCustom(sqlConnection => { serverVersion = sqlConnection.ServerVersion; });
-			
-			var serverVersionDetails = serverVersion.Split(new[] { "." }, StringSplitOptions.None);
-			var checkVersionDetails = checkVersion.Split(new[] { "." }, StringSplitOptions.None);
-
-			if (checkVersionDetails.Length < 3 && serverVersionDetails.Length < 3)
-				throw new Exception("Unknown version string given from SQL Server or in code");
-
-			var majorVersionNumber = int.Parse(serverVersionDetails[0], CultureInfo.InvariantCulture);
-			var minorVersionNumber = int.Parse(serverVersionDetails[1], CultureInfo.InvariantCulture);
-			var buildVersionNumber = int.Parse(serverVersionDetails[2], CultureInfo.InvariantCulture);
-
-			var majorCheckVersionNumber = int.Parse(checkVersionDetails[0], CultureInfo.InvariantCulture);
-			var minorCheckVersionNumber = int.Parse(checkVersionDetails[1], CultureInfo.InvariantCulture);
-			var buildCheckVersionNumber = int.Parse(checkVersionDetails[2], CultureInfo.InvariantCulture);
-
-			if (majorCheckVersionNumber < majorVersionNumber)
-				return true;
-			if (minorCheckVersionNumber < minorVersionNumber)
-				return true;
-			if (buildCheckVersionNumber < buildVersionNumber)
-				return true;
-			
-			return false;
-		}
-
-		private void createLogin(string user, string pwd, Boolean iswingroup, DatabaseFolder folder, SqlVersion sqlVersion, ExecuteSql masterExecuteSql, ExecuteSql executeSql)
-		{
-			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
-			string sql;
-			if (sqlVersion.IsAzure)
-			{
-				if (iswingroup)
-					masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");
-				else
-				{
-					if (sqlVersion.ProductVersion >= 12)
-					{
-						if (azureLoginExist(user, masterExecuteSql))
-						{
-							masterExecuteSql.ExecuteTransactionlessNonQuery(string.Format("DROP LOGIN [{0}]", user));
-						}
-						if (azureDatabaseUserExist(user, executeSql))
-							sql = string.Format("ALTER USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						else
-							sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						executeSql.ExecuteNonQuery(sql);
-					}
-					else
-					{
-						if (azureLoginExist(user, masterExecuteSql))
-							sql = string.Format("ALTER LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						else
-							sql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
-					}
-				}
-			}
-			else
-			{
-				string fileName;
-				if (iswingroup)
-					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", folder.Path());
-				else
-					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", folder.Path());
-
-				sql = File.ReadAllText(fileName);
-				sql = sql.Replace("$(SQLLOGIN)", user);
-				sql = sql.Replace("$(SQLPWD)", pwd);
-				sql = sql.Replace("$(WINLOGIN)", user);
-				masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
-			}
-
-			logWrite("Created login!");
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private  void createPermissions(string user, SqlVersion sqlVersion, DatabaseFolder folder, ExecuteSql executeSql)
-		{
-			
-			//if appication login = sa then don't bother to do anything
-			if (compareStringLowerCase(user, @"sa"))
-				return;
-
-			if ((sqlVersion.IsAzure && sqlVersion.ProductVersion < 12) || !sqlVersion.IsAzure)
-			{
-				//Create or Re-link e.g Alter the DB-user from SQL-Login
-				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
-
-				string relinkSqlUser;
-				if (sqlVersionGreaterThen(SQL2005SP2, executeSql))
-					relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
-				else
-					relinkSqlUser = string.Format(CultureInfo.CurrentCulture, @"sp_change_users_login 'Update_One', '{0}', '{0}'", user);
-
-				if (dbUserExist(user, executeSql))
-				{
-					logWrite("DB user already exist, re-link ...");
-					executeSql.ExecuteTransactionlessNonQuery(relinkSqlUser);
-				}
-				else
-				{
-					logWrite("DB user is missing. Create DB user ...");
-					executeSql.ExecuteTransactionlessNonQuery(createDBUser);
-				}
-			}
-
-			//Add permission
-			var fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", folder.Path());
-
-			var sql = File.ReadAllText(fileName);
-
-			sql = sql.Replace("$(LOGIN)", user);
-
-			executeSql.ExecuteNonQuery(sql);
-
-			logWrite("Created Permissions!");
 		}
 
 		private void createDefaultVersionInformation(DatabaseVersionInformation databaseVersionInformation)
@@ -412,43 +262,12 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		 private bool compareStringLowerCase(string stringA, string stringB)
 		{
-			return (string.Compare(stringA, stringB, true,
-				 CultureInfo.CurrentCulture) == 0);
+			return string.Compare(stringA, stringB, true, CultureInfo.CurrentCulture) == 0;
 		}
 
 		public void SetLogger(IUpgradeLog logger)
 		{
 			_logger = logger;
-		}
-	}
-
-	public class FileLogger : IUpgradeLog
-	{
-		private readonly TextWriter _logFile;
-
-		public FileLogger()
-		{
-			var nowDateTime = DateTime.Now;
-			_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManagerLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
-		}
-
-		public void Write(string message)
-		{
-			Console.Out.WriteLine(message);
-			_logFile.WriteLine(message);
-		}
-
-		public void Write(string message, string level)
-		{
-			Write(message);
-		}
-
-		public void Dispose()
-		{
-			if (_logFile == null)
-				return;
-			_logFile.Close();
-			_logFile.Dispose();
 		}
 	}
 }

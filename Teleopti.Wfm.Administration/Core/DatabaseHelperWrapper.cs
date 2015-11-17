@@ -16,12 +16,12 @@ namespace Teleopti.Wfm.Administration.Core
 		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, SqlVersion sqlVersion, string tenant);
 		void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		void AddBusinessUnit(string connectionToNewDb, string name);
-		bool LoginExists(string connectionToNewDb, string login, SqlVersion isAzure);
+		bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion);
 		void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion);
-		bool HasCreateDbPermission(string connectionString, SqlVersion isAzure);
-		bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion isAzure);
+		bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion);
+		bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion sqlVersion);
 		bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message);
-		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login);
+		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion);
 		SqlVersion Version(string connectionToNewDb);
 	}
 
@@ -90,13 +90,13 @@ namespace Teleopti.Wfm.Administration.Core
 				helper.CreateByDbManager();
 
 			helper.CreateSchemaByDbManager();
-			helper.AddPermissions(login);
+			helper.AddPermissions(login,sqlVersion);
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
-			helper.AddPermissions(login);
+			helper.AddPermissions(login, sqlVersion);
 		}
 
 		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)

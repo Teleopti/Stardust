@@ -50,9 +50,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
-			var builder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-
+			
 			var model = new CreateTenantModel
 			{
 				AppUser = RandomName.Make(),
@@ -63,7 +61,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var result = Target.CheckLogin(model).Content;
 			result.Success.Should().Be.False();
-			
 		}
 
 		[Test]

@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return true;
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion)
 		{
 		}
 

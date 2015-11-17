@@ -25,8 +25,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			TestPolutionCleaner.Clean("tenant", "appuser");
 
-			helper.CreateLogin("appuser", "SomeG00dpw", new SqlVersion(12,false));
-			helper.AddPermissions("appuser");
+			var sqlVersion = new SqlVersion(12,false);
+			helper.CreateLogin("appuser", "SomeG00dpw", sqlVersion);
+			helper.AddPermissions("appuser", sqlVersion);
 			var result =
 				Target.GetVersions(new VersionCheckModel
 				{
