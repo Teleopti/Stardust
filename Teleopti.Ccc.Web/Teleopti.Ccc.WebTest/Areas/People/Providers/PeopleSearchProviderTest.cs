@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 {
 	[TestFixture]
-	class PeopleSearchProviderTest
+	public class PeopleSearchProviderTest
 	{
 		private IPersonFinderReadOnlyRepository searchRepository;
 		private IPersonRepository personRepository;
