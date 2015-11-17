@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			var scriptFile = _databaseFolder.AzureCreateScriptsPath().ScriptFilePath(type).Replace(databaseTypeName + ".sql", databaseTypeName + ".00000329.sql");
 
 			var script = File.ReadAllText(scriptFile);
-			_executeSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+			_executeSql.ExecuteNonQuery(script, Timeouts.CommandTimeout);
 		}
 	}
 }
