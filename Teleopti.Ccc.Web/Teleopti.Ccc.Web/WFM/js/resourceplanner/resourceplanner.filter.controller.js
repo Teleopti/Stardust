@@ -4,9 +4,13 @@
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', function ($scope, ResourcePlannerFilterSrvc) {
 				$scope.maxHits = 5;
-
 				$scope.results = [];
 				$scope.selectedResults = [];
+
+				$scope.dayOffsPerWeek = {
+					MinDayOffsPerWeek: 2,
+					MaxDayOffsPerWeek: 3
+				};
 
 				$scope.$watch(function() { return $scope.searchString; },
 					function (input) {
@@ -16,16 +20,19 @@
 						}
 
 						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
-							results.forEach(function(result) {
-								result.selected = false;
-							});
 							$scope.results = results;
 						});
 					}
 				);
+				$scope.isValid = function () {
+					return false;
+				}
 
-				$scope.selectResultItem = function(item) {
-					item.selected = true;
+				$scope.isValidDayOffsPerWeek = function () {
+					return $scope.dayOffsPerWeek.MinDayOffsPerWeek <= $scope.dayOffsPerWeek.MaxDayOffsPerWeek;
+				}
+
+				$scope.selectResultItem = function (item) {
 					$scope.selectedResults.push(item);
 				}
 

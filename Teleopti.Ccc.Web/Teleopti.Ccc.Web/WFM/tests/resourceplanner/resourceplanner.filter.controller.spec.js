@@ -133,6 +133,54 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.selectedResults.length).toEqual(1);
 	}));
+	it('should have a name', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.name = "default name";
+
+		expect(scope.name).toBe("default name");
+	}));
+
+
+	it('should set default value for MaxDayOffsPerWeek', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.isValidDayOffsPerWeek()).toBe(true);
+		expect(scope.dayOffsPerWeek.MinDayOffsPerWeek).toBe(2); //?
+		expect(scope.dayOffsPerWeek.MaxDayOffsPerWeek).toBe(3); //?
+	}));
+
+	it('should set invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.dayOffsPerWeek = {
+			MinDayOffsPerWeek: 5,
+			MaxDayOffsPerWeek: 4
+		};
+
+		expect(scope.isValid()).toBe(false);
+		expect(scope.isValidDayOffsPerWeek()).toBe(false);
+	}));
+
+	it('should set valid if MaxDayOffsPerWeek is equal or greater than MinDayOffsPerWeek', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.dayOffsPerWeek = {
+			MinDayOffsPerWeek: 4,
+			MaxDayOffsPerWeek: 4
+		};
+		expect(scope.isValidDayOffsPerWeek()).toBe(true);
+		scope.dayOffsPerWeek = {
+			MinDayOffsPerWeek: 3,
+			MaxDayOffsPerWeek: 4
+		};
+		expect(scope.isValidDayOffsPerWeek()).toBe(true);
+	}));
+
 
 	var filterUrl = function (searchString, maxHits) {
 		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
