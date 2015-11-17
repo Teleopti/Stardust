@@ -101,6 +101,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 				new ScheduleDictionaryLoadOptions(true, false, false),
 				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 
+	        _repositoryFactory.CreatePartTimePercentageRepository(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).LoadAll();
+
 			foreach (var dateOnly in period.DayCollection())
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true);

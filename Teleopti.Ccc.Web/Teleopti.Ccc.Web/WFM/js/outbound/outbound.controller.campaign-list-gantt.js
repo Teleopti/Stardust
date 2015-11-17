@@ -106,7 +106,9 @@
 				return $scope.settings.periodStart.getFullYear() + $scope.settings.periodStart.getMonth();
 			}, function () {
 				$scope.$storage.visualizationPeriodStart = $scope.settings.periodStart;
-				loadExtraScheduleDataPromise().then(refreshGantt);				
+
+				$q.all([loadExtraScheduleDataPromise(), renderGanttChartPromise()]).then(refreshGantt);	
+				
 			});
 		}
 
