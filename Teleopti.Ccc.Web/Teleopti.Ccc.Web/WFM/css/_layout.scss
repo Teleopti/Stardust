@@ -54,6 +54,31 @@ input::-ms-clear {
 	display: none;
 }
 
+/*glyphicons from bootstrap needs to be overridden*/
+.glyphicon{
+	display: inline-block;
+	font: normal normal normal 24px/1 MaterialDesignIcons;
+	font-size: 16px;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	transform: translate(0, 0);
+}
+
+.glyphicon:hover:before{
+	box-shadow: 0px 0px 0px 5px $gray012;
+	background:$gray012;
+	border-radius: 1px;
+}
+
+.glyphicon-chevron-right:before {
+    content: "\f1e5"!important;
+}
+
+.glyphicon-chevron-left:before {
+    content: "\f1e4"!important;
+}
+
 
 /*
  * growl-item styles
