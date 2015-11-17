@@ -233,6 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
             Expect.Call(_repositoryFactory.CreateContractRepository(unitOfWork)).Return(contractRepMock);
             Expect.Call(_repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
+            Expect.Call(_repositoryFactory.CreatePartTimePercentageRepository(unitOfWork)).Return(_mocks.DynamicMock<IPartTimePercentageRepository>());
             Expect.Call(_repositoryFactory.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
             Expect.Call(_repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRepository);
 	        Expect.Call(_repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);

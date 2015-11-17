@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             createInitializeCommonStateHolderExpectation();
 			createPersonalAccountLoadingExpectation();
             createScheduleTagLoadingExpectation();
+			createPartTimePercentageInitializationExpectation();
 			createWorkflowControlSetLoadingExpectation();
 			
 			_permittedPeople[0].Stub(x => x.PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
@@ -140,6 +141,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _repositoryFactory.Stub(x => x.CreateContractScheduleRepository(_uow)).Return(contractScheduleRepository);
             contractScheduleRepository.Stub(x => x.LoadAllAggregate()).Return(new List<IContractSchedule>());
         }
+
+		private void createPartTimePercentageInitializationExpectation()
+		{
+			var partTimePercentageRepository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
+
+			_repositoryFactory.Stub(x => x.CreatePartTimePercentageRepository(_uow)).Return(partTimePercentageRepository);
+			partTimePercentageRepository.Stub(x => x.LoadAll()).Return(new List<IPartTimePercentage>());
+		}
 
         private void createContractLoadingExpectation()
         {

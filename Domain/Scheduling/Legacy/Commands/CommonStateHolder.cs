@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
-		private readonly List<IPartTimePercentage> _partTimePercentages = new List<IPartTimePercentage>();
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
 	    {
@@ -32,8 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    _scheduleTags.Clear();
 		    _shiftCategories.Clear();
 		    _workflowControlSets.Clear();
-		    _partTimePercentages.Clear();
-
 
 		    using (_disableDeleteFilter.Disable())
 		    {
@@ -117,11 +114,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    }
 	    }
 
-	    public IEnumerable<IPartTimePercentage> PartTimePercentages
-	    {
-			get {  return _partTimePercentages; }
-	    }
-
         public IEnumerable<IActivity> Activities
         {
             get { return _activities; }
@@ -145,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void loadPartTimePercentage(IRepository<IPartTimePercentage> ptpRepository)
 	    {
-			_partTimePercentages.AddRange(ptpRepository.LoadAll());
+			ptpRepository.LoadAll();
 	    }
 
 	    private void LoadAbsences(IRepository<IAbsence> absRep)

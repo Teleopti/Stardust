@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mockRep = new MockRepository();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void CanLoadInstance()
         {
             _absenceColl.Add(AbsenceFactory.CreateAbsence("Sick"));
@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var shiftCategoryRepMock = _mockRep.StrictMock<IShiftCategoryRepository>();
             var contractRepMock = _mockRep.StrictMock<IContractRepository>();
             var contractScheduleRepMock = _mockRep.StrictMock<IContractScheduleRepository>();
+            var partTimePercentageRepository = _mockRep.DynamicMock<IPartTimePercentageRepository>();
             var scheduleTagRep = _mockRep.StrictMock<IScheduleTagRepository>();
 	        var workflowControlSetRepository = _mockRep.StrictMock<IWorkflowControlSetRepository>();
 
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
             Expect.Call(repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRep).Repeat.Once();
 	        Expect.Call(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
+	        Expect.Call(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork)).Return(partTimePercentageRepository);
             Expect.Call(activityRepMock.LoadAll()).IgnoreArguments().Return(_activityColl);
             Expect.Call(dayOffRepMock.LoadAll()).IgnoreArguments().Return(_dayOffColl);
             Expect.Call(absenceRepMock.LoadAll()).IgnoreArguments().Return(_absenceColl);
