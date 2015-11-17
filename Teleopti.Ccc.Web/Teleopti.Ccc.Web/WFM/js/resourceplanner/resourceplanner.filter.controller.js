@@ -2,14 +2,16 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
-			'$scope', 'ResourcePlannerFilterSrvc', function($scope, ResourcePlannerFilterSrvc) {
+			'$scope', 'ResourcePlannerFilterSrvc', function ($scope, ResourcePlannerFilterSrvc) {
+				$scope.maxHits = 5;
+
 				$scope.results = [];
 
 				$scope.$watch(function() { return $scope.searchString; },
 					function(input) {
 						if (input === '' || input === undefined) return;
 
-						ResourcePlannerFilterSrvc.getData.query({ searchString: input }).$promise.then(function(results) {
+						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
 							results.forEach(function(result) {
 								result.selected = false;
 							});
@@ -26,6 +28,10 @@
 					return $scope.results.filter(function(item) {
 						return item.selected;
 					});
+				}
+
+				$scope.moreResultsExists = function () {
+					return $scope.results.length >= $scope.maxHits;
 				}
 			}
 		]);

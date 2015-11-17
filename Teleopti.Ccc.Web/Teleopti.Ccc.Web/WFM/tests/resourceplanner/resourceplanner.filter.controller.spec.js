@@ -20,9 +20,9 @@ describe('ResourcePlannerCtrl', function () {
 			Name: 'asdfasdf',
 			FilterType: 'asdfasdfasdf'
 		};
-		$httpBackend.whenGET(filterUrl(searchString))
-			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
+		$httpBackend.whenGET(filterUrl(searchString, 5))
+			.respond(200, [singleResult]);
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
 		scope.searchString = searchString;
@@ -41,7 +41,7 @@ describe('ResourcePlannerCtrl', function () {
 			Name: 'asdfasdf',
 			FilterType: 'asdfasdfasdf'
 		};
-		$httpBackend.whenGET(filterUrl(searchString))
+		$httpBackend.whenGET(filterUrl(searchString, 5))
 			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
@@ -89,7 +89,29 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedItems()[0]).toEqual(singleResult);
 	}));
 
-	var filterUrl = function (searchString) {
-		return "../api/filters?searchString=" + searchString + "&maxHits=10";
+	it('should show that more results exists', inject(function($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		for (var i = 0; i < scope.maxHits; i++) {
+			scope.results.push({ Id: i });
+		}
+
+		expect(scope.moreResultsExists()).toEqual(true);
+	}));
+
+	it('should not show that more results exists', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		for (var i = 0; i < scope.maxHits - 1; i++) {
+			scope.results.push({ Id: i });
+		}
+
+		expect(scope.moreResultsExists()).toEqual(false);
+	}));
+
+	var filterUrl = function (searchString, maxHits) {
+		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
 	}
 });

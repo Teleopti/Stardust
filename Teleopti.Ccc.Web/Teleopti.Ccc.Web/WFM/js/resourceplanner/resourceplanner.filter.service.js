@@ -3,7 +3,7 @@
 	angular.module('wfm.resourceplanner')
 		.service('ResourcePlannerFilterSrvc', [
 		'$resource', function ($resource) {
-            this.getData = $resource('../api/filters?searchString=:searchString&maxHits=10', { searchString : "@searchString"}, {
+            this.getData = $resource('../api/filters?searchString=:searchString&maxHits=:maxHits', { searchString : "@searchString", maxHits : "@maxHits"}, {
                 query: { method: 'GET', params: {}, isArray: true },
             });
 		}
