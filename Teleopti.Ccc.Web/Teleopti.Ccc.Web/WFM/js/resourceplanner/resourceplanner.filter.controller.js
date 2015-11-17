@@ -6,10 +6,14 @@
 				$scope.maxHits = 5;
 
 				$scope.results = [];
+				$scope.selectedResults = [];
 
 				$scope.$watch(function() { return $scope.searchString; },
-					function(input) {
-						if (input === '' || input === undefined) return;
+					function (input) {
+						if (input === '' || input === undefined) {
+							$scope.results = [];
+							return;
+						}
 
 						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
 							results.forEach(function(result) {
@@ -22,13 +26,9 @@
 
 				$scope.selectResultItem = function(item) {
 					item.selected = true;
+					$scope.selectedResults.push(item);
 				}
 
-				$scope.selectedItems = function () {
-					return $scope.results.filter(function(item) {
-						return item.selected;
-					});
-				}
 
 				$scope.moreResultsExists = function () {
 					return $scope.results.length >= $scope.maxHits;

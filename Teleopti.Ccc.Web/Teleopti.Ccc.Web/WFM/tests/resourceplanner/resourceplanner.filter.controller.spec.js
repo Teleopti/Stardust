@@ -49,7 +49,7 @@ describe('ResourcePlannerCtrl', function () {
 		scope.searchString = searchString;
 		$httpBackend.flush();
 
-		expect(scope.selectedItems().length).toEqual(0);
+		expect(scope.selectedResults.length).toEqual(0);
 	}));
 
 	it('should not call service when model is undefined ', inject(function ($controller) {
@@ -71,7 +71,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		expect(scope.selectedItems().length).toEqual(0);
+		expect(scope.selectedResults.length).toEqual(0);
 	}));
 
 	it('should put clicked item in selected', inject(function ($controller) {
@@ -86,7 +86,7 @@ describe('ResourcePlannerCtrl', function () {
 
 		scope.selectResultItem(singleResult);
 
-		expect(scope.selectedItems()[0]).toEqual(singleResult);
+		expect(scope.selectedResults[0]).toEqual(singleResult);
 	}));
 
 	it('should show that more results exists', inject(function($controller) {
@@ -109,6 +109,29 @@ describe('ResourcePlannerCtrl', function () {
 		}
 
 		expect(scope.moreResultsExists()).toEqual(false);
+	}));
+	it('should clear result when no input', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		var loadedResult = {};
+		scope.results = [loadedResult];
+		scope.searchString = "";
+		scope.$digest();
+
+		expect(scope.results.length).toEqual(0);
+	}));
+	it('should not clear selected when no input', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		var loadedResult = {Name:'hello',Id:'3'};
+		scope.results = [loadedResult];
+		scope.selectResultItem(loadedResult);
+		scope.searchString = "";
+		scope.$digest();
+
+		expect(scope.selectedResults.length).toEqual(1);
 	}));
 
 	var filterUrl = function (searchString, maxHits) {
