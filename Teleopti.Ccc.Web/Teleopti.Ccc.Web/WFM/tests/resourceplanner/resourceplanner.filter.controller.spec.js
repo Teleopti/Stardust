@@ -143,7 +143,7 @@ describe('ResourcePlannerCtrl', function () {
 	}));
 
 
-	it('should set default value for MaxDayOffsPerWeek', inject(function ($controller) {
+	it('should set default value for days of per week', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
@@ -179,6 +179,82 @@ describe('ResourcePlannerCtrl', function () {
 			MaxDayOffsPerWeek: 4
 		};
 		expect(scope.isValidDayOffsPerWeek()).toBe(true);
+	}));
+
+	it('should set default value for consecutive days off', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.isValidConsecDaysOff()).toBe(true);
+		expect(scope.consecDaysOff.MinConsecDaysOff).toBe(2); //?
+		expect(scope.consecDaysOff.MaxConsecDaysOff).toBe(3); //?
+	}));
+
+	it('should set invalid if MaxConsecDaysOff is smaller than MinConsecDaysOff', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.consecDaysOff = {
+			MinConsecDaysOff: 5,
+			MaxConsecDaysOff: 4
+		};
+
+		expect(scope.isValid()).toBe(false);
+		expect(scope.isValidConsecDaysOff()).toBe(false);
+	}));
+
+	it('should set valid if MaxConsecDaysOff is equal or greater than MinConsecDaysOff', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.consecDaysOff = {
+			MinConsecDaysOff: 2,
+			MaxConsecDaysOff: 2
+		};
+		expect(scope.isValidConsecDaysOff()).toBe(true);
+		scope.consecDaysOff = {
+			MinConsecDaysOff: 1,
+			MaxConsecDaysOff: 3
+		};
+		expect(scope.isValidConsecDaysOff()).toBe(true);
+	}));
+
+	it('should set default value for consecutive work days', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.isValidConsecWorkDays()).toBe(true);
+		expect(scope.consecWorkDays.MinConsecWorkDays).toBe(2); //?
+		expect(scope.consecWorkDays.MaxConsecWorkDays).toBe(3); //?
+	}));
+
+	it('should set invalid if MaxConsecWorkDays is smaller than MinConsecWorkDays', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.consecWorkDays = {
+			MinConsecWorkDays: 2,
+			MaxConsecWorkDays: 1
+		};
+
+		expect(scope.isValid()).toBe(false);
+		expect(scope.isValidConsecWorkDays()).toBe(false);
+	}));
+
+	it('should set valid if MaxConsecWorkDays is equal or greater than MinConsecWorkDays', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.consecWorkDays = {
+			MinConsecWorkDays: 4,
+			MaxConsecWorkDays: 4
+		};
+		expect(scope.isValidConsecWorkDays()).toBe(true);
+		scope.consecWorkDays = {
+			MinConsecWorkDays: 2,
+			MaxConsecWorkDays: 5
+		};
+		expect(scope.isValidConsecWorkDays()).toBe(true);
 	}));
 
 
