@@ -3,7 +3,7 @@
 describe('ResourcePlannerCtrl', function () {
 	var $q,
 		$rootScope,
-		$httpBackend
+		$httpBackend;
 
 	beforeEach(module('wfm.resourceplanner'));
 
@@ -11,16 +11,6 @@ describe('ResourcePlannerCtrl', function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-	}));
-
-	it('should not call service when model is blank ', inject(function ($controller) {
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope});
-		scope.searchString = '';
-
-		scope.$digest();
-
-		expect(scope.results).toEqual(undefined);
 	}));
 
 	it('should load one search result', inject(function ($controller) {
@@ -37,7 +27,6 @@ describe('ResourcePlannerCtrl', function () {
 
 		scope.searchString = searchString;
 		$httpBackend.flush();
-		scope.$digest();
 
 		var result = scope.results[0];
 		expect(result.Id).toEqual(singleResult.Id);
@@ -59,7 +48,6 @@ describe('ResourcePlannerCtrl', function () {
 
 		scope.searchString = searchString;
 		$httpBackend.flush();
-		scope.$digest();
 
 		expect(scope.selectedItems().length).toEqual(0);
 	}));
@@ -68,7 +56,13 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		scope.$digest();
+		expect(scope.results).toEqual(undefined);
+	}));
+
+	it('should not call service when model is empty string', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		scope.searchString = '';
 
 		expect(scope.results).toEqual(undefined);
 	}));
@@ -76,7 +70,6 @@ describe('ResourcePlannerCtrl', function () {
 	it('should put clicked item in selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope});
-
 		var singleResult = {
 			Id: 'aölsdf',
 			Name: 'asdfasdf',

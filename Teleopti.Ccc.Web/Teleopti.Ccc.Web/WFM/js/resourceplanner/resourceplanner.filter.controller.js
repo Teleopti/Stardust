@@ -7,6 +7,7 @@
 				$scope.$watch(function() { return $scope.searchString; },
 					function(input) {
 						if (input === '' || input === undefined) return;
+
 						ResourcePlannerFilterSrvc.getData.query({ searchString: input }).$promise.then(function(results) {
 							results.forEach(function(result) {
 								result.selected = false;
