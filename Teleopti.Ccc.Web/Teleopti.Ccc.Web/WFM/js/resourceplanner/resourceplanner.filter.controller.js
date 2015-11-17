@@ -3,14 +3,21 @@
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope','ResourcePlannerFilterSrvc', function ($scope, ResourcePlannerFilterSrvc) {
-				$scope.$watch(function () { return $scope.searchInput; },
+				$scope.selected = [];
+
+				$scope.$watch(function () { return $scope.searchString; },
 						function (input) {
-							if (input == "") return;
-							ResourcePlannerFilterSrvc.getData.query({searchString:input}).$promise.then(function(result){
-								$scope.result = result;
+							if (input === '' || input === undefined ) return;
+							ResourcePlannerFilterSrvc.getData.query({searchString:input}).$promise.then(function(results){
+								$scope.results = results;
 							});
 						}
 				);
-        }
+
+				$scope.selectResultItem = function(item){
+					$scope.selected.push(item);
+				}
+
+        	}
     ])
 })();
