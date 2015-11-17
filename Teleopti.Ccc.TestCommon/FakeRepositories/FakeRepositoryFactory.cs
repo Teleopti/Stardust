@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IOvertimeAvailabilityRepository _overtimeAvailabilityRepository;
 		private readonly IPersonAvailabilityRepository _personAvailabilityRepository;
 		private readonly IPersonRotationRepository _personRotationRepository;
+		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 
 		public FakeRepositoryFactory(
 			IActivityRepository activityRepository,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IStudentAvailabilityDayRepository studentAvailabilityDayRepository,
 			IOvertimeAvailabilityRepository overtimeAvailabilityRepository,
 			IPersonAvailabilityRepository personAvailabilityRepository,
-			IPersonRotationRepository personRotationRepository
+			IPersonRotationRepository personRotationRepository,
+			IPartTimePercentageRepository partTimePercentageRepository
       )
 		{
 			_activityRepository = activityRepository;
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_overtimeAvailabilityRepository = overtimeAvailabilityRepository;
 			_personAvailabilityRepository = personAvailabilityRepository;
 			_personRotationRepository = personRotationRepository;
+			_partTimePercentageRepository = partTimePercentageRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -272,7 +275,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPartTimePercentageRepository CreatePartTimePercentageRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _partTimePercentageRepository;
 		}
 
 		public IOptionalColumnRepository CreateOptionalColumnRepository(IUnitOfWork unitOfWork)

@@ -190,6 +190,7 @@
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakeMeetingRepository.cs" />
     <Compile Include="FakeRepositories\FakeOvertimeAvailabilityRepository.cs" />
+    <Compile Include="FakeRepositories\FakePartTimePercentageRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAvailabilityRepository.cs" />
