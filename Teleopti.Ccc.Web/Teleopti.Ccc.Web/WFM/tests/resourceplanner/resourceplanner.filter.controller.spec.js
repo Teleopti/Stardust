@@ -8,34 +8,35 @@ describe('ResourcePlannerCtrl', function () {
 
 	beforeEach(module('wfm.resourceplanner'));
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 	}));
 
-	it('should not call service when model is blank ', inject(function($controller) {
+	it('should not call service when model is blank ', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
-		scope.searchString='';
+		scope.searchString = '';
 
 		scope.$digest();
 
 		expect(scope.results).toEqual(undefined);
 	}));
-	it('should fetch one search result', inject(function($controller) {
+
+	it('should load one search result', inject(function ($controller) {
 		var searchString = 'something';
 		var singleResult = {
-			Id : 'aölsdf',
-			Name : 'asdfasdf',
-			FilterType : 'asdfasdfasdf'
+			Id: 'aölsdf',
+			Name: 'asdfasdf',
+			FilterType: 'asdfasdfasdf'
 		};
 		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope});
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		scope.searchString=searchString;
+		scope.searchString = searchString;
 		$httpBackend.flush();
 		scope.$digest();
 
@@ -44,7 +45,27 @@ describe('ResourcePlannerCtrl', function () {
 		expect(result.FilterType).toEqual(singleResult.FilterType);
 		expect(result.Name).toEqual(singleResult.Name);
 	}));
-	it('should not call service when model is undefined ', inject(function($controller) {
+
+	it('should not put loaded item to selected array', inject(function ($controller) {
+		var searchString = 'something';
+		var singleResult = {
+			Id: 'aölsdf',
+			Name: 'asdfasdf',
+			FilterType: 'asdfasdfasdf'
+		};
+		$httpBackend.whenGET(filterUrl(searchString))
+			.respond(200, [singleResult]);
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.searchString = searchString;
+		$httpBackend.flush();
+		scope.$digest();
+
+		expect(scope.selectedItems().length).toEqual(0);
+	}));
+
+	it('should not call service when model is undefined ', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
 
@@ -52,22 +73,24 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.results).toEqual(undefined);
 	}));
-	it('should copy clicked item in result to selected', inject(function($controller) {
+
+	it('should put clicked item in selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
 
 		var singleResult = {
-			Id : 'aölsdf',
-			Name : 'asdfasdf',
-			FilterType : 'asdfasdfasdf'
+			Id: 'aölsdf',
+			Name: 'asdfasdf',
+			FilterType: 'asdfasdfasdf'
 		};
 		scope.results = [singleResult];
 
 		scope.selectResultItem(singleResult);
 
-		expect(scope.selected[0]).toEqual(singleResult);
+		expect(scope.selectedItems()[0]).toEqual(singleResult);
 	}));
-	var filterUrl = function(searchString){
+
+	var filterUrl = function (searchString) {
 		return "../api/filters?searchString=" + searchString + "&maxHits=10";
 	}
 });
