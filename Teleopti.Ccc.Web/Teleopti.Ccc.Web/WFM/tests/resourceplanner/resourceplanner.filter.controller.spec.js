@@ -3,8 +3,7 @@
 describe('ResourcePlannerCtrl', function () {
 	var $q,
 		$rootScope,
-		$httpBackend,
-		mockResourceplannerFilterSvrc
+		$httpBackend
 
 	beforeEach(module('wfm.resourceplanner'));
 
@@ -16,7 +15,7 @@ describe('ResourcePlannerCtrl', function () {
 
 	it('should not call service when model is blank ', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope});
 		scope.searchString = '';
 
 		scope.$digest();
@@ -67,7 +66,7 @@ describe('ResourcePlannerCtrl', function () {
 
 	it('should not call service when model is undefined ', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
 		scope.$digest();
 
@@ -76,7 +75,7 @@ describe('ResourcePlannerCtrl', function () {
 
 	it('should put clicked item in selected', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope, ResourcePlannerFilterSrvc: mockResourceplannerFilterSvrc });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope});
 
 		var singleResult = {
 			Id: 'aölsdf',
