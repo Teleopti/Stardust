@@ -81,6 +81,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private static IEnumerable<GroupScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
 		{
 			var layers = shift.Projection ?? new SimpleLayer[] { };
+
+			if (shift.IsFullDayAbsence && layers.Count > 1)
+			{
+				var mergedLayer = new SimpleLayer
+				{
+					Start = layers[0].Start,
+					End = layers[layers.Count - 1].End,
+					Minutes = (int) layers[layers.Count - 1].End.Subtract(layers[0].Start).TotalMinutes,
+					Color = layers[0].Color,
+					Description = layers[0].Description,
+					IsAbsenceConfidential = layers[0].IsAbsenceConfidential
+				};
+				layers = new[] {mergedLayer};
+			}
+
 			return (
 				from l in layers
 				let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)

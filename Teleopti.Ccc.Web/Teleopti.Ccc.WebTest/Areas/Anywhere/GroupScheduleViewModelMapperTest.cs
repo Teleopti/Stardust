@@ -260,5 +260,69 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 			result.Single().Date.Should().Be(new DateTime(2013, 12, 18).ToFixedDateFormat());
 		}
+
+		[Test]
+		public void ShouldReturnOneLayerIfIsFullDayAbsence()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+			var userTimeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+			var data = new GroupScheduleData
+			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
+				UserTimeZone = userTimeZone,
+				CanSeePersons = new[] {person},
+				Schedules = new[]
+				{
+					new PersonScheduleDayReadModel
+					{
+						PersonId = person.Id.Value,
+						Model = JsonConvert.SerializeObject(new Model
+						{
+							Shift = new Shift
+							{
+								IsFullDayAbsence = true,
+								Projection = new[]
+								{
+									new SimpleLayer
+									{
+										Start = new DateTime(2015, 11, 16, 10, 0, 0, DateTimeKind.Utc),
+										Minutes = 60,
+										End = new DateTime(2015, 11, 16, 11, 0, 0, DateTimeKind.Utc),
+										Description = "absence",
+										Color = "#000000"
+									},
+									new SimpleLayer
+									{
+										Start = new DateTime(2015, 11, 16, 11, 0, 0, DateTimeKind.Utc),
+										Minutes = 60,
+										End = new DateTime(2015, 11, 16, 12, 0, 0, DateTimeKind.Utc),
+										Description = "absence",
+										Color = "#000000"
+									},
+									new SimpleLayer
+									{
+										Start = new DateTime(2015, 11, 16, 12, 0, 0, DateTimeKind.Utc),
+										Minutes = 300,
+										End = new DateTime(2015, 11, 16, 17, 0, 0, DateTimeKind.Utc),
+										Description = "absence",
+										Color = "#000000"
+									}
+								}
+							}
+						})
+					}
+				}
+			};
+
+			var result = target.Map(data);
+			var projection = result.Single().Projection;
+            result.Single().IsFullDayAbsence.Should().Be.True();
+			projection.Count().Should().Be.EqualTo(1);
+			projection.Single().Start.Should().Be.EqualTo(new DateTime(2015, 11, 16, 10, 0, 0, DateTimeKind.Utc).ToFixedDateTimeFormat());
+			projection.Single().Minutes.Should().Be.EqualTo(420);
+			projection.Single().Description.Should().Be.EqualTo("absence");
+			projection.Single().Color.Should().Be.EqualTo("#000000");
+		}
 	}
 }

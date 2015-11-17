@@ -239,6 +239,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
 
+		[Then(@"I should see '(.*)' with absence color")]
+		public void ThenIShouldSeeWithAbsenceColor(string personName, Table table)
+		{
+			var layer = table.CreateInstance<ScheduledActivityInfo>();
+			if (layer.Color != null)
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff[style*='background-color: {1}']", 
+					personName, 
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+			}
+		}
+
+
 		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)

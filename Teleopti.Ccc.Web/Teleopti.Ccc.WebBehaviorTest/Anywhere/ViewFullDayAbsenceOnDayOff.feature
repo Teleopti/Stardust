@@ -33,7 +33,7 @@ Scenario: View full day absence on day off in team schedule
 	| End time   | 2013-10-25 23:59 |
 	When I view schedules for '2013-10-25'
 	Then I should see 'Pierre Baldi' with a day off named 'Day off'
-	And I should see 'Pierre Baldi' with absence 
+	And I should see 'Pierre Baldi' with absence color
 	| Field       | Value    |
 	| Start time  | 08:00    |
 	| End time    | 16:00    |

@@ -103,11 +103,25 @@
                                     </div>
                                     <!-- /ko -->
 
-                                    <!-- ko foreach: DayOffs -->
-                                    <!-- ko if: OverlapsTimeLine -->
+	                                <!-- ko foreach: DayOffs -->
+									<!-- ko if: OverlapsTimeLine && $parent.Shifts().length > 0 -->
+									<div class="dayoff absolute"
+										 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: $parent.Shifts()[0].Layers()[0].Color}">
+										<!-- ko if: $root.DisplayDescriptions -->
+										<!-- ko if: HasOverlapingLayers($parent)-->
+										<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
+										<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- ko ifnot: HasOverlapingLayers($parent)-->
+										<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
+                                    <!-- ko if: OverlapsTimeLine && $parent.Shifts().length <= 0 -->
                                     <div
                                         class="dayoff absolute"
-                                        data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+                                        data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px'}">
                                         <!-- ko if: $root.DisplayDescriptions -->
                                         <!-- ko if: HasOverlapingLayers($parent)-->
                                         <span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
@@ -215,7 +229,8 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-    <!-- ko if: OverlapsTimeLine -->
+	<!-- ko if: OverlapsTimeLine -->
+	<!-- ko if: $parentContext.$parent.DayOffs().length !== 1 -->
     <div class="layer absolute floatleft" data-bind="
     style: {
         left: StartPixels() + 'px',
@@ -237,5 +252,6 @@
         <!-- /ko -->
         <!-- /ko -->
     </div>
+    <!-- /ko -->
     <!-- /ko -->
 </script>
