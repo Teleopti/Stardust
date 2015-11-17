@@ -6,9 +6,39 @@
 		.controller('RtaAgentsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService) {
-				var siteId = $stateParams.siteId;
-				var teamId = $stateParams.teamId;
+
+				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
+				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
+				
+				var getAgents = (function() {
+					if (teamIds.length === 1)
+						return RtaService.getAgents;
+					if (teamIds.length > 1)
+						return RtaService.getAgentsForTeams;
+					return RtaService.getAgentsForSites;
+				})();
+
+				var getStates = (function() {
+					if (teamIds.length === 1)
+						return RtaService.getStates;
+					if (teamIds.length > 1)
+						return RtaService.getStatesForTeams;
+					return RtaService.getStatesForSites;
+				})();
+
+				var updateBreadCrumb = function(agents) {
+					$scope.siteName = agents[0].SiteName;
+					$scope.teamName = agents[0].TeamName;
+				};
+				if (siteIds.length > 1) {
+					$scope.multipleSitesName = "Multiple Sites";
+					updateBreadCrumb = function() {};
+				} else if (teamIds.length > 1) {
+					$scope.multipleTeamsName = "Multiple Teams";
+					updateBreadCrumb = function() {};
+				}
+
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
 				$scope.filterText = "";
@@ -24,7 +54,8 @@
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
-				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteId);
+				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
+
 				$scope.$watch(
 					function() {
 						return $sessionStorage.buid;
@@ -35,16 +66,17 @@
 						}
 					}
 				);
+
 				$scope.getAdherenceForAgent = function(personId) {
-					if(!$scope.isSelected(personId)){
-					RtaService.forToday.query({
-							personId: personId
-						}).$promise
-						.then(function(data) {
-							$scope.adherence = data;
-							$scope.adherencePercent = data.AdherencePercent;
-							$scope.timestamp = data.LastTimestamp;
-						});
+					if (!$scope.isSelected(personId)) {
+						RtaService.forToday.query({
+								personId: personId
+							}).$promise
+							.then(function(data) {
+								$scope.adherence = data;
+								$scope.adherencePercent = data.AdherencePercent;
+								$scope.timestamp = data.LastTimestamp;
+							});
 					}
 				};
 
@@ -89,21 +121,22 @@
 				};
 
 				var updateStates = function() {
-					RtaService.getStates.query({
-							teamId: teamId
-						}).$promise
-						.then(function(states) {
-							setStatesInAgents(states);
-						});
+					getStates({
+							teamId: teamIds[0],
+							siteIds: siteIds,
+							teamIds: teamIds,
+						})
+						.then(setStatesInAgents);
 				};
 
-				RtaService.getAgents.query({
-						teamId: teamId
-					}).$promise
+				getAgents({
+						teamId: teamIds[0],
+						siteIds: siteIds,
+						teamIds: teamIds,
+					})
 					.then(function(agents) {
 						$scope.agents = agents;
-						$scope.siteName = agents[0].SiteName;
-						$scope.teamName = agents[0].TeamName;
+						updateBreadCrumb(agents);
 					})
 					.then(updateStates);
 

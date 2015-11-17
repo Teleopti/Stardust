@@ -1,94 +1,92 @@
 (function() {
-
 	'use strict';
 
 	angular.module('wfm.rta').service('RtaService', ['$resource',
 		function($resource) {
 
-			this.getAgents = $resource('../Agents/ForTeam?teamId=:teamId', {
-				teamId: '@teamId'
-			}, {
-				query: {
-					method: 'GET',
-					params: {},
-					isArray: true
-				}
-			});
+			this.getAgents = function(data) {
+				return $resource('../Agents/ForTeam', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamId: data.teamId,
+				}).$promise;
+			};
 
-			this.getAgentsForSites = $resource('../Agents/ForSites', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						siteIds: []
-					},
-					isArray: true
-				}
-			});
+			this.getAgentsForSites = function(data) {
+				return $resource('../Agents/ForSites', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteIds: data.siteIds,
+				}).$promise;
+			};
 
-			this.getStates = $resource('../Agents/GetStates?teamId=:teamId', {
-				teamId: '@teamId'
-			}, {
-				query: {
-					method: 'GET',
-					params: {},
-					isArray: true
-				}
-			});
+			this.getAgentsForTeams = function(data) {
+				return $resource('../Agents/ForTeams', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamIds: data.teamIds,
+				}).$promise;
+			};
 
-			this.getStatesForSites = $resource('../Agents/GetStatesForSites', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						siteIds: []
-					},
-					isArray: true
-				}
-			});
+			this.getStates = function(data) {
+				return $resource('../Agents/GetStates', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamId: data.teamId,
+				}).$promise;
+			};
 
-			this.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						teamIds: []
-					},
-					isArray: true
-				}
-			});
+			this.getStatesForSites = function(data) {
+				return $resource('../Agents/GetStatesForSites', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteIds: data.siteIds,
+				}).$promise;
+			};
 
-			this.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
-				query: {
-					method: 'GET',
-					params: {
-						teamIds: []
-					},
-					isArray: true
-				}
-			});
+			this.getStatesForTeams = function(data) {
+				return $resource('../Agents/GetStatesForTeams', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamIds: data.teamIds,
+				}).$promise;
+			};
 
 			this.getSites = $resource('../Sites', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: true
 				}
 			});
 
-			this.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {
-				siteId: '@siteId'
-			}, {
+			this.getTeams = $resource('../Teams/ForSite', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: true
 				}
 			});
 
-			this.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {
-				siteId: '@siteId'
-			}, {
+			this.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: true
 				}
 			});
@@ -96,37 +94,27 @@
 			this.getAdherenceForAllSites = $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: true
 				}
 			});
 
-			this.forToday = $resource('../Adherence/ForToday?personId=:personId', {
-				personId: '@personId'
-			}, {
+			this.forToday = $resource('../Adherence/ForToday', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: false
 				}
 			});
 
-			this.getPersonDetails = $resource('../Agents/PersonDetails?personId=:personId', {
-				personId: '@personId'
-			}, {
+			this.getPersonDetails = $resource('../Agents/PersonDetails', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: false
 				}
 			});
 
-			this.getAdherenceDetails = $resource('../Adherence/ForDetails?personId=:personId', {
-				personId: '@personId'
-			}, {
+			this.getAdherenceDetails = $resource('../Adherence/ForDetails', {}, {
 				query: {
 					method: 'GET',
-					params: {},
 					isArray: true
 				}
 			});

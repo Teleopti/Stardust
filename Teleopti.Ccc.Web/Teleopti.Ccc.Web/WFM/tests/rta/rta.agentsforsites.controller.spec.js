@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsForSitesCtrl', function() {
+describe('RtaAgentsCtrl for sites', function() {
 	var $q,
 		$rootScope,
 		$interval,
@@ -14,7 +14,6 @@ describe('RtaAgentsForSitesCtrl', function() {
 	var agents = [];
 	var states = [];
 	var adherence = {};
-	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
 
@@ -67,9 +66,6 @@ describe('RtaAgentsForSitesCtrl', function() {
 
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('RtaService', function() {
-				return rtaSvrc;
-			});
 			$provide.service('$stateParams', function() {
 				return stateParams;
 			});
@@ -87,50 +83,38 @@ describe('RtaAgentsForSitesCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
-		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
-			personId: '@personId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: false
-			}
-		});
-
-		rtaSvrc.getAgentsForSites = $resource('../Agents/ForSites', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					siteIds: []
-				},
-				isArray: true
-			}
-		});
-
-		rtaSvrc.getStatesForSites = $resource('../Agents/GetStatesForSites', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					siteIds: []
-				},
-				isArray: true
-			}
-		});
-
 		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
-			.respond(200, adherence);
+			.respond(function() {
+				return [200, adherence];
+			});
 		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(200, agents);
+			.respond(function() {
+				return [200, agents];
+			});
 		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(200, states);
+			.respond(function() {
+				return [200, states];
+			});
 		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
-			.respond(200, [agents[0]]);
+			.respond(function() {
+				return [200, agents[0]];
+			});
+		$httpBackend.whenGET("../Agents/ForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(function() {
+				return [200, agents];
+			});
 		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
-			.respond(200, [states[0]]);
+			.respond(function() {
+				return [200, states[0]];
+			});
+			$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+				.respond(function() {
+					return [200, states];
+				});
 	}));
 
 	var createController = function() {
-		$controller('RtaAgentsForSitesCtrl', {
+		$controller('RtaAgentsCtrl', {
 			$scope: scope
 		});
 		scope.$digest();
@@ -152,6 +136,18 @@ describe('RtaAgentsForSitesCtrl', function() {
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 	});
+
+		it('should get agents for single selected site', function() {
+			stateParams.siteIds = ["6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+			agents = [{
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			}];
+
+			createController();
+
+			expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+		});
 
 	it('should get agent states for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
@@ -243,28 +239,18 @@ describe('RtaAgentsForSitesCtrl', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
 		agents = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			Name: "Ashley Andeen",
 			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
 		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+			Name: "Charlie Caper",
 			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
 		}];
 
 		createController();
-		scope.filterText = 'Ashley';
-		scope.filterData();
+		scope.$apply("filterText = 'Ashley'");
 
-		expect(scope.gridOptions.data[0].Name).toEqual("Ashley Andeen");
-	});
-
-	it('should go back to sites when business unit is changed', function() {
-		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
-
-		createController();
-		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
-		spyOn($state, 'go');
-		scope.$digest();
-
-		expect($state.go).toHaveBeenCalledWith('rta');
+		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
 	});
 
 	it('should stop polling when page is about to destroy', function() {
@@ -283,34 +269,5 @@ describe('RtaAgentsForSitesCtrl', function() {
 		scope.$emit('$destroy');
 		$interval.flush(5000);
 		$httpBackend.verifyNoOutstandingRequest();
-	});
-
-	it('should get adherence percentage for agent when clicked', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-		}];
-		adherence = {
-			AdherencePercent: 99,
-			LastTimestamp: "16:34"
-		};
-
-		createController();
-		scope.getAdherenceForAgent(agents[0].PersonId);
-		$httpBackend.flush();
-
-		expect(scope.adherence.AdherencePercent).toEqual(99);
-		expect(scope.adherence.LastTimestamp).toEqual("16:34");
-	});
-
-	it('should not go back to sites overview when business unit is not initialized yet', function() {
-		$sessionStorage.buid = undefined;
-
-		createController();
-		$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
-		spyOn($state, 'go');
-		scope.$digest();
-
-		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
 });

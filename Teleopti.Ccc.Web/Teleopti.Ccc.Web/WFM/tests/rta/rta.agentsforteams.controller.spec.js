@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsForTeamsCtrl', function() {
+describe('RtaAgentsCtrl for teams', function() {
 	var $q,
 		$rootScope,
 		$interval,
@@ -14,7 +14,6 @@ describe('RtaAgentsForTeamsCtrl', function() {
 	var agents = [];
 	var states = [];
 	var adherence = {};
-	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
 
@@ -67,9 +66,6 @@ describe('RtaAgentsForTeamsCtrl', function() {
 
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('RtaService', function() {
-				return rtaSvrc;
-			});
 			$provide.service('$stateParams', function() {
 				return stateParams;
 			});
@@ -87,50 +83,38 @@ describe('RtaAgentsForTeamsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
-		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
-			personId: '@personId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: false
-			}
-		});
-
-		rtaSvrc.getAgentsForTeams = $resource('../Agents/ForTeams', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					teamIds: []
-				},
-				isArray: true
-			}
-		});
-
-		rtaSvrc.getStatesForTeams = $resource('../Agents/GetStatesForTeams', {}, {
-			query: {
-				method: 'GET',
-				params: {
-					teamIds: []
-				},
-				isArray: true
-			}
-		});
-		
 		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
-			.respond(200, adherence);
+			.respond(function() {
+				return [200, adherence]
+			});
 		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, agents);
+			.respond(function() {
+				return [200, agents]
+			});
+			$httpBackend.whenGET("../Agents/ForTeam?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
+				.respond(function() {
+					return [200, agents]
+				});
 		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
-			.respond(200, agents);
+			.respond(function() {
+				return [200, agents]
+			});
 		$httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(200, states);
+			.respond(function() {
+				return [200, states]
+			});
+			$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
+				.respond(function() {
+					return [200, states]
+				});
 		$httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
-			.respond(200, states);
+			.respond(function() {
+				return [200, states]
+			});
 	}));
 
 	var createController = function() {
-		$controller('RtaAgentsForTeamsCtrl', {
+		$controller('RtaAgentsCtrl', {
 			$scope: scope
 		});
 		scope.$digest();
@@ -244,14 +228,13 @@ describe('RtaAgentsForTeamsCtrl', function() {
 		states[1].State = "In Call";
 
 		createController();
-		scope.filterText = 'Caper';
-		scope.filterData();
+		scope.$apply("filterText = 'Caper'");
 		states[1].State = "Ready";
 		$interval.flush(5000);
 		$httpBackend.flush();
 
-		expect(scope.gridOptions.data[0].Name).toEqual("Charley Caper");
-		expect(scope.gridOptions.data[0].State).toEqual("Ready");
+		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
+		expect(scope.filteredData[0].State).toEqual("Ready");
 	});
 
 	it('should go back to sites when business unit is changed', function() {

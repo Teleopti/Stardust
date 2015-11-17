@@ -1274,8 +1274,6 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.service.js" />
     <Content Include="WFM\js\rta\rta.agents.filters.js" />
     <Content Include="WFM\js\rta\rta.agents.grid.service.js" />
-    <Content Include="WFM\js\rta\rta.agentsforsites.controller.js" />
-    <Content Include="WFM\js\rta\rta.agentsforteams.controller.js" />
     <Content Include="WFM\js\rta\rta.format.service.js" />
     <Content Include="WFM\js\rta\rta.route.service.js" />
     <Content Include="WFM\js\seatManagement\html\rightpanel.html" />
