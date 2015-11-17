@@ -24,5 +24,15 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: false
 			}
 		});
+		this.loadSchedulesNoReadModel = $resource("../api/TeamSchedule/GroupNoReadModel", {
+			groupId: "@groupId",
+			date: "@queryDate"
+		}, {
+			query: {
+				method: "GET",
+				params: {},
+				isArray: true
+			}
+		});
 	}
 ]);

@@ -358,6 +358,8 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoDeleteTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoPersistTest.cs" />
     <Compile Include="Areas\MultiTenancy\TenantTestAttribute.cs" />
+    <Compile Include="Areas\TeamSchedule\TeamScheduleControllerTest.cs" />
+    <Compile Include="Areas\TeamSchedule\TeamScheduleTestAttribute.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />

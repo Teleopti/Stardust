@@ -5,16 +5,19 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 
-namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
+namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
 	public class TeamScheduleController : ApiController
 	{
 		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
+		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 
-		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory)
+		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory, ITeamScheduleViewModelFactory teamScheduleViewModelFactory)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
+			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/Group")]
@@ -30,6 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
 				TotalPages = totalPage
 			};
 			return Json(result);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GroupNoReadModel")]
+		public virtual JsonResult<IEnumerable<GroupScheduleShiftViewModel>> GroupScheduleNoReadModel(Guid groupId, DateTime date)
+		{
+			var schedules =
+				_teamScheduleViewModelFactory.CreateViewModel(groupId, date);
+
+			return Json(schedules);
 		}
 	}
 

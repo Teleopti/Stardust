@@ -34,6 +34,7 @@ using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.Logging;
@@ -115,6 +116,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<IntradayAreaModule>();
 
 			tenantWebSpecificTypes(builder);
