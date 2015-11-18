@@ -6,11 +6,11 @@
 		.controller('RtaAgentsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService) {
-
+				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
-				
+
 				var getAgents = (function() {
 					if (teamIds.length === 1)
 						return RtaService.getAgents;
@@ -45,8 +45,6 @@
 				$scope.timestamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
-				$scope.selectAgent = RtaGridService.selectAgent;
-				$scope.isSelected = RtaGridService.isSelected;
 				$scope.showAdherence = RtaGridService.showAdherence;
 				$scope.showLastUpdate = RtaGridService.showLastUpdate;
 				$scope.format = RtaFormatService.formatDateTime;
@@ -55,6 +53,12 @@
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
+				$scope.selectAgent = function(personId) {
+					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
+				};
+				$scope.isSelected = function(personId) {
+					return selectedPersonId === personId;
+				};
 
 				$scope.$watch(
 					function() {

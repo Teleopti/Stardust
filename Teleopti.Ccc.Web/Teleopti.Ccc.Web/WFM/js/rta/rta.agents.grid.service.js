@@ -2,13 +2,6 @@
 	'use strict';
 	angular.module('wfm.rta').service('RtaGridService',
 		function() {
-			var selectedPersonId;
-			this.selectAgent = function(personId) {
-				selectedPersonId = this.isSelected(personId) ? '' : personId;
-			};
-			this.isSelected = function(personId) {
-				return selectedPersonId === personId;
-			};
 			this.showAdherence = function(adherence) {
 				return adherence !== null;
 			};

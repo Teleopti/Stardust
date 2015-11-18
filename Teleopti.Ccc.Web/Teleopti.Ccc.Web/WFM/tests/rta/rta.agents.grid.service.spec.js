@@ -8,23 +8,6 @@ describe('RtaGridService', function() {
 		$state = _$state_;
 	}));
 
-	it('should select an agent', function() {
-		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
-
-		target.selectAgent(personId);
-
-		expect(target.isSelected(personId)).toEqual(true);
-	});
-
-	it('should unselect an agent', function() {
-		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
-
-		target.selectAgent(personId);
-		target.selectAgent(personId);
-
-		expect(target.isSelected(personId)).toEqual(false);
-	});
-
 	it('should not display adherence link when there is no adherence change', function() {
 		expect(target.showAdherence(null)).toEqual(false);
 	});

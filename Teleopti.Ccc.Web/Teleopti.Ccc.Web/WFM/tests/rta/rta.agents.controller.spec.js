@@ -75,9 +75,9 @@ describe('RtaAgentsCtrl', function() {
 				return [200, agents];
 			});
 		$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-		.respond(function() {
-			return [200, states];
-		});
+			.respond(function() {
+				return [200, states];
+			});
 	}));
 
 	var createController = function() {
@@ -282,5 +282,35 @@ describe('RtaAgentsCtrl', function() {
 		scope.$digest();
 
 		expect($state.go).not.toHaveBeenCalledWith('rta');
+	});
+
+	it('should select an agent', function() {
+		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
+
+		createController();
+		scope.selectAgent(personId);
+
+		expect(scope.isSelected(personId)).toEqual(true);
+	});
+
+	it('should unselect an agent', function() {
+		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
+
+		createController();
+		scope.selectAgent(personId);
+		scope.selectAgent(personId);
+
+		expect(scope.isSelected(personId)).toEqual(false);
+	});
+
+	it('should unselect previous selected agent', function() {
+		var personId1 = '11610fe4-0130-4568-97de-9b5e015b2564';
+		var personId2 = '6b693b41-e2ca-4ef0-af0b-9e06008d969b';
+
+		createController();
+		scope.selectAgent(personId1);
+		scope.selectAgent(personId2);
+
+		expect(scope.isSelected(personId1)).toEqual(false);
 	});
 });
