@@ -16,16 +16,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public UpgradeDatabasesController UpgradeDatabasesController;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 
 		[Test]
 		public void ShouldUgradeToLatestVersion()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 
-			var builder = TestPolutionCleaner.TestTenantConnection();
+			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password", new SqlVersion(12,false));
 
-			var builderAnal = TestPolutionCleaner.TestTenantAnalyticsConnection();
+			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "password";
@@ -47,7 +47,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			builder.Password = "password";
 			var appConn = builder.ConnectionString;
 
-			builder.InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsConnection().InitialCatalog;
+			builder.InitialCatalog = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog;
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

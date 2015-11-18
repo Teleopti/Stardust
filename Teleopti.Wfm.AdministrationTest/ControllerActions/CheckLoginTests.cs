@@ -20,13 +20,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 
 		[Test]
 		public void ShouldReturnFalseIfLoginExist()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfBadPassword()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 			
 			var model = new CreateTenantModel
 			{
@@ -67,7 +67,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueIfCorrectNewLogin()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 

@@ -125,6 +125,7 @@
     <Compile Include="ControllerActions\ImportTenantTest.cs" />
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
     <Compile Include="TenantTestAttribute.cs" />
+    <Compile Include="TestPollutionCleaner.cs" />
     <Compile Include="UpdateCrossDatabaseViewFake.cs" />
   </ItemGroup>
   <ItemGroup>

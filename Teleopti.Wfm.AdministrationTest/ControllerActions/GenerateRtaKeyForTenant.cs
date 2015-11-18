@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public ImportController Import;
 		public ILoadAllTenants Tenants;
 		public ITenantUnitOfWork TenantUnitOfWork;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldGenerateRtaKeyWhenCreatingDatabases()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 
 			var result = Database.CreateDatabases(new CreateTenantModelForTest
 			{
@@ -51,8 +51,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldGenerateRtaKeyWith10RandomCharacters()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant1", "appuser1");
-			TestPolutionCleaner.Clean("tenant2", "appuser2");
+			TestPollutionCleaner.Clean("tenant1", "appuser1");
+			TestPollutionCleaner.Clean("tenant2", "appuser2");
 
 			Database.CreateDatabases(new CreateTenantModelForTest
 			{

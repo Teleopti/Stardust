@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 
 		[Test]
 		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfBusinessUnitIsEmpty()
 		{
-			TestPolutionCleaner.Clean("tenant","appuser");
+			TestPollutionCleaner.Clean("tenant","appuser");
 			var model = new CreateTenantModelForTest
 			{
 				BusinessUnit = "",
@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueCreatedDb()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("New Tenant", "new TenantAppUser");
+			TestPollutionCleaner.Clean("New Tenant", "new TenantAppUser");
 
 			var result = Target.CreateDatabases(new CreateTenantModelForTest
 			{

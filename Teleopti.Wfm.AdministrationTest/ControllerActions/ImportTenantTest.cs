@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class ImportTenantTest
 	{
 		public ImportController Target;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public ILoadAllTenants LoadAllTenants;
 		public ITenantUnitOfWork TenantUnitOfWork;
@@ -74,8 +74,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldImportExistingDatabases()
 		{
 			DataSourceHelper.CreateDataSource(new NoPersistCallbacks(), "TestData");
-			TestPolutionCleaner.Clean("tenant", "appuser");
-			var builder = TestPolutionCleaner.TestTenantConnection();
+			TestPollutionCleaner.Clean("tenant", "appuser");
+			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
 			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7,"","appuser",sqlVersion, "NewFineTenant");
 			
-			var builderAnal = TestPolutionCleaner.TestTenantAnalyticsConnection();
+			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "password";
@@ -102,8 +102,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				AdminPassword = tempModel.CreateDbPassword,
 				UserName = "appuser",
 				Password = "password",
-				AppDatabase = TestPolutionCleaner.TestTenantConnection().InitialCatalog,
-				AnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnection().InitialCatalog, 
+				AppDatabase = TestPollutionCleaner.TestTenantConnection().InitialCatalog,
+				AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog, 
 				Tenant = "NewFineTenant"
 			};
 

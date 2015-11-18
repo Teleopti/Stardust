@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class GetVersionsTest
 	{
 		public UpgradeDatabasesController Target;
-		public TestPolutionCleaner TestPolutionCleaner;
+		public TestPollutionCleaner TestPollutionCleaner;
 
 		[Test]
 		public void ShouldReportOkIfSameVersion()
@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var appBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			var helper = new DatabaseHelper(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7);
 
-			TestPolutionCleaner.Clean("tenant", "appuser");
+			TestPollutionCleaner.Clean("tenant", "appuser");
 
 			var sqlVersion = new SqlVersion(12,false);
 			helper.LoginTasks().CreateLogin("appuser", "SomeG00dpw", false, sqlVersion);
