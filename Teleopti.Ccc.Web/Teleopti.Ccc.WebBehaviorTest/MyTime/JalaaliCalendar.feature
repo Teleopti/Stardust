@@ -29,5 +29,5 @@ Scenario: Open Jalaali Time Picker
 	And the time is '2015-05-17 02:15Z'
 	And I am editing an existing Text Request
 	When I open the time picker
-	Then I should see a jalaali time picker with '02','15,"ق.ظ"
+	Then I should see a jalaali time picker with '02','15'
 

@@ -57,15 +57,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 
-		[Then(@"I should see a jalaali time picker with '(.*)','(.*),""(.*)""")]
-		public void ThenIShouldSeeAJalaaliTimePickerWith(string hours, string minutes, string meridiem)
+		[Then(@"I should see a jalaali time picker with '(.*)','(.*)'")]
+		public void ThenIShouldSeeAJalaaliTimePickerWith(string hours, string minutes)
 		{
-
-			Browser.Interactions.AssertInputValue (".bootstrap-timepicker-hour", hours);
+			Browser.Interactions.AssertInputValue(".bootstrap-timepicker-hour", hours);
 			Browser.Interactions.AssertInputValue (".bootstrap-timepicker-minute", minutes);
-			Browser.Interactions.AssertInputValue (".bootstrap-timepicker-meridian", meridiem);
-
 		}
+
 
 
 	}
