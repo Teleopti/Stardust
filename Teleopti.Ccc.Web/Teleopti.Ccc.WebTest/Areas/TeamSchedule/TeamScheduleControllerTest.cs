@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidential()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
