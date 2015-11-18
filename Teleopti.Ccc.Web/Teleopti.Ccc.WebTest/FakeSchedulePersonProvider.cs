@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WebTest
 		{
 			_persons = persons.ToList();
 			_personsWithMyTeamSchedulesPermission = new List<IPerson>();
+			_personsWithMyTeamSchedulesPermission.AddRange(persons);
 			_personsWithViewConfidentialPermission = new List<IPerson>();
 		}
 
