@@ -12279,9 +12279,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
     <value>Fältet Schemauppföljning kan inte vara tomt</value>
   </data>
-  <data name="ForecastChartIntro" xml:space="preserve">
-    <value> </value>
-  </data>
   <data name="GenerateForecastTip" xml:space="preserve">
     <value>Skapa prognos</value>
   </data>
@@ -12565,5 +12562,110 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="RtaLoggedOut" xml:space="preserve">
     <value>Utloggade</value>
     <comment>used in Intraday</comment>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Seat Planner</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Sittplatskarta</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Sittplatsplanering</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Kontrollerar förutsättningar för prognostisering</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Outbound</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>Outboundkampanjer</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Åtgärden misslyckades! Fel:</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Hantera personer</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Ändra kompetens</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>Försökte göra {0} sittplatsbokningar, {1} lyckades och {2} misslyckades. Det finns {3} oschemalagda agentdagar.</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Säsongsvariation</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Rensa bakgrundsbild</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Bild</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Sittplats</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Ange bakgrundsbild</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Justera mot nederkant</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Vänsterjustera</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Högerjustera</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Justera mot överkant</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Placera längst fram</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Skapa</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Avvisa</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Vänd valda objekt vågrätt</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>Vänd valda objekt lodrätt</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Gruppera valda objekt</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Flytta bakåt</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Flytta framåt</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Rotera</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Placera längst bak</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Distribuera valda objekt vågrätt</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Distribuera valda objekt lodrätt</value>
+  </data>
+  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
+    <value>Ångra ändringar och återgå till senaste sparade version</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Dela upp objekt</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>Ej tillåtet!</value>
   </data>
 </root>
