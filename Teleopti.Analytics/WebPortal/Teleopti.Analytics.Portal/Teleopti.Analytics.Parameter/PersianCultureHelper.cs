@@ -42,12 +42,11 @@ namespace Teleopti.Analytics.Parameters
 				info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 				info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 				info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-				info.AMDesignator = "ق.ظ";
-				info.PMDesignator = "ب.ظ";
 				info.FirstDayOfWeek = DayOfWeek.Saturday;
 				info.FullDateTimePattern = "yyyy MMMM dddd, dd HH:mm:ss";
 				info.LongDatePattern = "yyyy MMMM dddd, dd";
 				info.ShortDatePattern = "yyyy/MM/dd";
+				info.ShortTimePattern = "HH:mm";
 			}
 			if (readOnly)
 			{

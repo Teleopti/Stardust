@@ -11,6 +11,7 @@ namespace Teleopti.Interfaces.Domain
 		private static readonly FieldInfo CultureDataField = typeof(CultureInfo).GetField("m_cultureData", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 		private static readonly FieldInfo DateTimeFormatInfoReadOnly = typeof(DateTimeFormatInfo).GetField("m_isReadOnly", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 		private static readonly FieldInfo DateTimeFormatInfoCalendar = typeof(DateTimeFormatInfo).GetField("calendar", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+	
 
 		/// <summary> 
 		/// Fixes the DateTimeFormatInfo for Persian resources (months and week day names), and optionally sets the calendar to PersianCalendar. 
@@ -54,13 +55,11 @@ namespace Teleopti.Interfaces.Domain
 			info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 			info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 			info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-			info.AMDesignator = "ق.ظ";
-			info.PMDesignator = "ب.ظ";
 			info.FirstDayOfWeek = DayOfWeek.Saturday;
 			info.FullDateTimePattern = "yyyy MMMM dddd, dd HH:mm:ss";
 			info.LongDatePattern = "yyyy MMMM dddd, dd";
 			info.ShortDatePattern = "yyyy/MM/dd";
-
+			info.ShortTimePattern = "HH:mm";
 		}
 
 		/// <summary> 
