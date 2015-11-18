@@ -1,10 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -17,10 +17,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 	{
 		private ISeatMapLocationRepository _seatMapLocationRepository ;
 		private ISeatBookingRepository _seatBookingRepository;
+		private SeatMapPersister _seatMapPersister;
 		private SeatMapController _seatMapController;
 		private SeatMapProvider _seatMapProvider;
-		private ICommandDispatcher _commandDispatcher;
-		private ILoggedOnUser _loggedOnUser;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
 
@@ -34,10 +33,12 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 
 			_seatMapLocationRepository = MockRepository.GenerateMock<ISeatMapLocationRepository>();
 			_seatBookingRepository = MockRepository.GenerateMock<ISeatBookingRepository>();
-			_commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			_loggedOnUser = new FakeLoggedOnUser();
+
+			_seatMapPersister = new SeatMapPersister(_seatMapLocationRepository, new FakeBusinessUnitRepository(),
+				new FakeCurrentBusinessUnit(), _seatBookingRepository, new FakeSeatPlanRepository());
 			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
-			_seatMapController = new SeatMapController(_seatMapProvider, _commandDispatcher,_loggedOnUser );
+
+			_seatMapController = new SeatMapController(_seatMapProvider, _seatMapPersister);
 		}
 
 		[Test]

@@ -7,20 +7,21 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.DomainTest.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	[TestFixture]
-	internal class AddSeatMapCommandHandlerTest
+	internal class SeatMapPersisterTests
 	{
 		private FakeWriteSideRepository<ISeatMapLocation> _seatMapLocationRepository;
 		private IBusinessUnitRepository _buRepository;
 		private ICurrentBusinessUnit _currentBusinessUnit;
 		private LocationInfo _childLocationInfo;
-		private AddSeatMapCommandHandler _target;
+		private ISeatMapPersister _target;
 		private LocationInfo _childLocation2;
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatPlanRepository _seatPlanRepository;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatPlanRepository = new FakeSeatPlanRepository();
 
-			_target = new AddSeatMapCommandHandler(_seatMapLocationRepository,
+			_target = new SeatMapPersister(_seatMapLocationRepository,
 				_buRepository, _currentBusinessUnit, _seatBookingRepository, _seatPlanRepository);
 			_childLocationInfo = new LocationInfo()
 			{
@@ -60,16 +61,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityState()
 		{
-
 			const string dummyJsonData = "{DummyData}";
 
 			var command = new SaveSeatMapCommand()
 			{
 				SeatMapData = dummyJsonData,
-				
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 			var seatMapLocation = _seatMapLocationRepository.Single() as SeatMapLocation;
 
 			seatMapLocation.Id.Should().Have.Value();
@@ -82,9 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldCreateChildSeatMapsForLocationsInSeatMap()
 		{
-
 			const string dummyJsonData = @"{""objects"":[{""type"":""i-text"",""originX"":""left"",""originY"":""top"",""left"":302,""top"":44,""width"":116.07,""height"":23.4,""fill"":""#000000"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":2.84,""scaleY"":2.84,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""text"":""Teleopti China"",""fontSize"":18,""fontWeight"":"""",""fontFamily"":""helvetica"",""fontStyle"":"""",""lineHeight"":1.3,""textDecoration"":"""",""textAlign"":""left"",""path"":null,""textBackgroundColor"":"""",""useNative"":true,""styles"":{}},{""type"":""location"",""originX"":""left"",""originY"":""top"",""left"":18,""top"":259,""width"":300,""height"":200,""fill"":""rgba(255,0,0,0.5)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""rx"":0,""ry"":0,""id"":""6291c86e-3679-4df9-b2e5-a45200973fb6"",""name"":""Shenzhen"",""seatMapId"":""025e5bc6-1e04-4fe9-ab74-a45200973fb6""},""seatMapId"":""187d4c70-6158-4a38-8612-a4520098468b""},{""type"":""location"",""originX"":""left"",""originY"":""top"",""left"":638,""top"":256,""width"":300,""height"":200,""fill"":""rgba(255,0,0,0.5)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""rx"":0,""ry"":0,""id"":""bc10076d-def3-426e-9237-a45200971952"",""name"":""Chongqing"",""seatMapId"":""09ab3b5f-2cac-4306-a03a-a45200971952""}],""background"":""""}";
-
 
 			var command = new SaveSeatMapCommand()
 			{
@@ -92,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ChildLocations = new[] { _childLocationInfo, _childLocation2 }
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			var seatMapLocation = _seatMapLocationRepository.First() as SeatMapLocation;
 			var childSeatMapLocation = _seatMapLocationRepository.Last() as SeatMapLocation;
@@ -110,7 +107,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			const string dummyJsonData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":370,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""d9664f22-886b-f5bf-f799-7d59765c2604"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":565,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""8e48dd65-e68a-0834-fdc5-eae75f12065c"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";
 
-
 			var command = new SaveSeatMapCommand()
 			{
 				SeatMapData = dummyJsonData,
@@ -121,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			var seatMapLocation = _seatMapLocationRepository.First() as SeatMapLocation;
 			seatMapLocation.SeatCount.Should().Be(2);
@@ -132,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldUpdateTemporaryLocationAndSeatMapIds()
 		{
 			const string dummyJsonData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":370,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""d9664f22-886b-f5bf-f799-7d59765c2604"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":565,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""8e48dd65-e68a-0834-fdc5-eae75f12065c"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";
-
 
 			var command = new SaveSeatMapCommand()
 			{
@@ -145,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			var seatMapLocation = _seatMapLocationRepository.First() as SeatMapLocation;
 			seatMapLocation.SeatMapJsonData.Should().Not.Equals(dummyJsonData);
@@ -185,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ChildLocations = new[] { _childLocationInfo }
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			lastChildSeatMapLocation.Name.Should().Be("Shenzhen");
 			var childSeatMapLocation = _seatMapLocationRepository.Last() as SeatMapLocation;
@@ -217,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ChildLocations = new LocationInfo[0]
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			Assert.IsTrue(!_seatMapLocationRepository.First().Seats.Any());
 			Assert.IsTrue(!_seatBookingRepository.Any());
@@ -229,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldDeleteSeatPlanWhenDeletingLocationRemovesAllSeatBookingsForDay()
 		{
 			var seatMapLocation = new SeatMapLocation();
-			var belongsToDate = new DateOnly (2015, 03, 02);
+			var belongsToDate = new DateOnly(2015, 03, 02);
 
 			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":495,""top"":228.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""f19f90e8-f629-237b-2493-f2ed39e5c13b"",""name"":""Unnamed seat"",""priority"":1}],""background"":""""}";
 
@@ -237,15 +232,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatMapLocation.SetId(Guid.NewGuid());
 			var seat = seatMapLocation.AddSeat("Seat1", 1);
 			_seatMapLocationRepository.Add(seatMapLocation);
-			
+
 			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
 			seatBooking.Book(seat);
 
 			_seatBookingRepository.Add(seatBooking);
 
-			var seatPlan = new SeatPlan() {Date = belongsToDate, Status = SeatPlanStatus.Ok};
-			seatPlan.SetId (Guid.NewGuid());
-			_seatPlanRepository.Add ( seatPlan );
+			var seatPlan = new SeatPlan() { Date = belongsToDate, Status = SeatPlanStatus.Ok };
+			seatPlan.SetId(Guid.NewGuid());
+			_seatPlanRepository.Add(seatPlan);
 
 			var command = new SaveSeatMapCommand()
 			{
@@ -254,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ChildLocations = new LocationInfo[0]
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			Assert.IsNull(_seatPlanRepository.GetSeatPlanForDate(belongsToDate));
 
@@ -274,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var seat = seatMapLocation.AddSeat("Seat1", 1);
 			seat.SetId(new Guid("09d00b0b-f366-4fa9-bd94-fa2af9025d7e"));
 			var seat2 = seatMapLocation.AddSeat("Seat2", 2);
-			seat2.SetId (new Guid ("0af609cb-ba3e-fd55-4bc2-df0ec0dbfd77"));
+			seat2.SetId(new Guid("0af609cb-ba3e-fd55-4bc2-df0ec0dbfd77"));
 
 			_seatMapLocationRepository.Add(seatMapLocation);
 
@@ -302,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			Assert.IsNotNull(_seatPlanRepository.GetSeatPlanForDate(belongsToDate));
 
@@ -339,7 +334,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ChildLocations = new LocationInfo[0]
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			Assert.IsTrue(_seatMapLocationRepository.Count() == 1);
 			Assert.IsTrue(!_seatBookingRepository.Any());
@@ -391,13 +386,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			_target.Handle(command);
+			_target.Save(command);
 
 			Assert.IsTrue(_seatMapLocationRepository.Count() == 3);
 			var childSeatMapLocation = _seatMapLocationRepository.Load(childSeatMapLocation2.Id.Value);
 			Assert.IsTrue(childSeatMapLocation.Seats.Count == 1);
 			Assert.IsTrue(Equals(_seatMapLocationRepository.Load(childSeatMapLocation2.Id.Value).Seats[0], seat2));
 		}
-
 	}
 }

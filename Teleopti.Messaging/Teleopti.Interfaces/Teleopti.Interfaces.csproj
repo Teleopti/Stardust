@@ -143,6 +143,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\ISaveSeatMapCommand.cs" />
     <Compile Include="Domain\IScheduleChangedMessage.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
     <Compile Include="Domain\IBusinessRulesForPersonAccountUpdate.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Domain\IOutboundCampaign.cs" />
     <Compile Include="Domain\ISeatBookingRequestAssembler.cs" />
     <Compile Include="Domain\ISaveSchedulePartService.cs" />
+    <Compile Include="Domain\ISeatMapPersister.cs" />
     <Compile Include="Domain\ISkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IPersonSkillDayCreator.cs" />

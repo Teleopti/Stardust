@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Reflection;
-using System.Web;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
@@ -17,18 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 	public class SeatMapController : ApiController
 	{
 		private readonly ISeatMapProvider _seatMapProvider;
-		private ICommandDispatcher _commandDispatcher;
-		private ILoggedOnUser _loggedOnUser;
+		private readonly ISeatMapPersister _seatMapPersister;
 
 		public SeatMapController()
-		{
+		{}
 
-		}
-		
-		public SeatMapController(ISeatMapProvider seatMapProvider,ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
+		public SeatMapController(ISeatMapProvider seatMapProvider, ISeatMapPersister seatMapPersister)
 		{
-			_commandDispatcher = commandDispatcher;
-			_loggedOnUser = loggedOnUser;
+			_seatMapPersister = seatMapPersister;
 			_seatMapProvider = seatMapProvider;
 		}
 
@@ -44,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			return _seatMapProvider.Get(null);
 		}
-
 
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
 		public virtual LocationViewModel Get(DateTime date)
@@ -62,20 +54,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpPost]
 		public virtual bool Save([FromBody]SaveSeatMapCommand command)
 		{
-			if (command.TrackedCommandInfo != null)
-				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
-			try
-			{
-				_commandDispatcher.Execute(command);
-			}
-			catch (TargetInvocationException e)
-			{
-				if (e.InnerException is ArgumentException)
-					throw new HttpException(501, e.InnerException.Message);
-			}
+			_seatMapPersister.Save(command);
+			
 			return true;
 		}
-
-
 	}
 }
