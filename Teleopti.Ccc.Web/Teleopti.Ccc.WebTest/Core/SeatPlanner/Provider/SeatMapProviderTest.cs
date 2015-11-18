@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.SeatPlanning;
@@ -55,6 +56,30 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			
 			Assert.IsTrue(locationViewModel.Seats[0].IsOccupied);
 			Assert.IsFalse(locationViewModel.Seats[1].IsOccupied);
+		}
+
+		[Test]
+		public void ShouldLoadAvailiableRolesInTheSeats()
+		{
+			var role1 = ApplicationRoleFactory.CreateRole("role1", "Role 1");
+			var role2 = ApplicationRoleFactory.CreateRole("role2", "Role 2");
+			
+			var location = new SeatMapLocation() { Name = "Location" };
+			location.SetId(Guid.NewGuid());
+			location.AddSeat("Seat1", 1);
+			var seat2 = location.AddSeat("Seat2", 2);
+			seat2.AddRoles(role1, role2);
+
+			_seatMapLocationRepository.Add(location);
+			role2.SetDeleted();
+
+			var provider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
+			var locationViewModel = provider.Get(null);
+
+			Assert.IsTrue(locationViewModel.Seats.Count == 2);
+			Assert.IsTrue(locationViewModel.Seats[0].Roles.Count == 0);
+			Assert.IsTrue(locationViewModel.Seats[1].Roles.Count == 1);
+			Assert.AreEqual(role1.Name, locationViewModel.Seats[1].Roles.Single().Name);
 		}
 
 	}

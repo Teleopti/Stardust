@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -30,12 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			var seatMapLocation = getSeatMapLocation(id);
 			if (seatMapLocation == null) return null;
 
-			var locationViewModel = buildLocationViewModel (seatMapLocation);
-			if (bookingDate != null)
-			{
-				addOccupancyInformation(seatMapLocation, locationViewModel, bookingDate.Value);
-			
-			}
+			var locationViewModel = buildLocationViewModel (seatMapLocation, bookingDate);
 			return locationViewModel;
 		}
 
@@ -46,44 +42,53 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				: _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
 		}
 
-		private static LocationViewModel buildLocationViewModel (SeatMapLocation seatMapLocation)
+		private LocationViewModel buildLocationViewModel (SeatMapLocation seatMapLocation, DateOnly? bookingDate)
 		{
 			var parentLocation = seatMapLocation.ParentLocation;
 			var parentId = parentLocation != null ? parentLocation.Id : null;
+			var bookings = getOccupancyInformation(seatMapLocation, bookingDate);
 
 			var locationVM = new LocationViewModel()
 			{
 				Id = seatMapLocation.Id.Value,
 				Name = seatMapLocation.Name,
 				ParentId = parentId != null ? parentId.Value : Guid.Empty,
-				SeatMapJsonData = seatMapLocation.SeatMapJsonData
+				SeatMapJsonData = seatMapLocation.SeatMapJsonData,
+				Seats = buildSeatViewModels(seatMapLocation, bookings)
 			};
 
 			buildBreadCrumbInformation (locationVM, seatMapLocation);
 			return locationVM;
 		}
 
-		private void addOccupancyInformation (ISeatMapLocation seatMapLocation, LocationViewModel locationViewModel, DateOnly bookingDate)
+		private IList<ISeatBooking> getOccupancyInformation(ISeatMapLocation seatMapLocation, DateOnly? bookingDate)
 		{
-			var dateTimePeriodUtc = SeatManagementProviderUtils.GetUtcDateTimePeriodForLocalFullDay(bookingDate, _userTimeZone.TimeZone());
-			
-			var bookings = _seatMapBookingRepository.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriodUtc, seatMapLocation.Id.GetValueOrDefault());
-			if (bookings != null)
-			{
-				locationViewModel.Seats = buildSeatViewModels(seatMapLocation, bookings);	
-			}
+			if (bookingDate == null) return null;
+
+			var dateTimePeriodUtc = SeatManagementProviderUtils.GetUtcDateTimePeriodForLocalFullDay(bookingDate.Value, _userTimeZone.TimeZone());
+			return _seatMapBookingRepository
+				.LoadSeatBookingsIntersectingDateTimePeriod(dateTimePeriodUtc, seatMapLocation.Id.GetValueOrDefault());
 		}
 
-		private static List<SeatViewModel> buildSeatViewModels(ISeatMapLocation location, IEnumerable<ISeatBooking> bookings )
+		private static List<SeatViewModel> buildSeatViewModels(ISeatMapLocation location, IEnumerable<ISeatBooking> bookings)
 		{
 			if (location.Seats != null)
 			{
-				return location.Seats.Select (seat => new SeatViewModel()
+				return location.Seats.Select (seat =>
 				{
-					Id = seat.Id.Value, 
-					Name = seat.Name,
-					IsOccupied = bookings.Any(booking => booking.Seat.Id == seat.Id)
+					var roles = seat.Roles
+									.Select(role => (ApplicationRole) role)
+									.Where(role => !role.IsDeleted)
+									.ToList();
 					
+					return new SeatViewModel()
+					{
+						Id = seat.Id.Value,
+						Name = seat.Name,
+						IsOccupied = bookings!=null && bookings.Any(booking => booking.Seat.Id == seat.Id),
+						Roles = roles
+					};
+
 				}).ToList();
 			}
 

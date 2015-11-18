@@ -27,6 +27,11 @@
 							access="property"
 							name ="Parent"
 							not-null="false" foreign-key="FK_Seat_SeatMapLocation"/>
+
+		<bag name="Roles" table="ApplicationRolesForSeat" cascade="none">
+			<key column="Seat"/>
+			<many-to-many column="ApplicationRole" class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationRole"/>
+		</bag>
 		
 	</class>
 

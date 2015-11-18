@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -11,9 +12,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	[Serializable]
 	public class Seat : AggregateEntity, ISeat
 	{
+		private IList<IApplicationRole> _roles = new List<IApplicationRole>();
+
 		public virtual String Name { get; set; }
 		public virtual int Priority { get; set; }
-		
+
 		public Seat() { }
 
 		public Seat(string name, int priority)
@@ -23,6 +26,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			Name = name;
 			Priority = priority;
+		}
+
+		public virtual IList<IApplicationRole> Roles
+		{
+			get { return _roles; }
 		}
 
 		private readonly List<ISeatBooking> _seatBookings = new List<ISeatBooking>();
@@ -50,6 +58,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual void ClearBookings()
 		{
 			_seatBookings.Clear();
+		}
+
+		public virtual void AddRoles(params IApplicationRole[] roles)
+		{
+			roles.ForEach(_roles.Add);
 		}
 	}
 }
