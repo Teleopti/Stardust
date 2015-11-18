@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = target.CreateText(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc));
 
-			result.Should().Be.EqualTo("8:00AM");
+			result.Should().Be.EqualTo("8:00 AM");
 		}
 	}
 }

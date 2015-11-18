@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { "9 AM", "10 AM", "11 AM", "12 PM" };
+			var expected = new[] { "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM" };
 			var actual = result.TimeLine.Select(t => t.ShortTime);
 
 			CollectionAssert.IsSubsetOf(expected, actual);
