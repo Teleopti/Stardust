@@ -304,12 +304,25 @@ describe('ResourcePlannerCtrl', function () {
 		expect(result).toEqual(true);
 	}));
 
-	it('should return falseif persist when invalid', inject(function ($controller) {
+	it('should return false if persist when invalid', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
 		expect(scope.persist()).toEqual(false);
 	}));
+
+	it('should not be possible to select item twice', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		var item = {Id:'someGuid'};
+
+		scope.selectResultItem(item);
+		scope.selectResultItem(item);
+
+		expect(scope.selectedResults.length).toEqual(1);
+	}));
+
 
 
 	var filterUrl = function (searchString, maxHits) {

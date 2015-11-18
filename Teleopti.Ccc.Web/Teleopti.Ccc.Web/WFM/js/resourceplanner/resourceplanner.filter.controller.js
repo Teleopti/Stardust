@@ -56,7 +56,8 @@
 				}
 
 				$scope.selectResultItem = function (item) {
-					$scope.selectedResults.push(item);
+					if($scope.selectedResults.indexOf(item)<0)
+						$scope.selectedResults.push(item);
 				}
 
 				$scope.moreResultsExists = function () {
