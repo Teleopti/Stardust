@@ -42,10 +42,10 @@
 	</div>
 
 	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false">
-		
+
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
-		<div class="wfm-block" ng-click="vm.toggleRightPanel()">
+		<div class="wfm-block">
 
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
 
@@ -53,9 +53,11 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<seatmap-right-panel>
+			<seatmap-right-panel show-right-panel="vm.showRightPanel" show-toggle-button="!vm.isInOccupancyMode">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
+
+				<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" ng-if="vm.showEditor"></seatmap-object-property>
 
 			</seatmap-right-panel>
 
@@ -68,6 +70,5 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>

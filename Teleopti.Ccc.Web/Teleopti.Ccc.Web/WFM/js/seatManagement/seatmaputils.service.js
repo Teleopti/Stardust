@@ -2,7 +2,7 @@
 (function () {
 
 	angular.module('wfm.seatMap')
-		.factory('seatMapCanvasUtilsService', ['seatMapService', '$timeout', function (seatMapService, timeout) {
+		.factory('seatMapCanvasUtilsService', ['seatMapService', 'PermissionsService', '$timeout', function (seatMapService, permissionsService, timeout) {
 
 			var utils = {
 
@@ -17,6 +17,7 @@
 				getSeatObjectById: getSeatObjectById,
 				getSeatObject: getSeatObject,
 				getObjectsByType: getObjectsByType,
+				getActiveObjectsByType: getActiveObjectsByType,
 				getLocations: getLocations,
 				getSeats: getSeats,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
@@ -31,7 +32,51 @@
 				loadOccupancyDetailsForSeats: loadOccupancyDetailsForSeats,
 				selectGroupOfObjects: selectGroupOfObjects,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected,
-				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest
+				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest,
+
+				fakeGetActiveSeatObjects: fakeGetActiveSeatObjects,
+				fakeGetRoles: fakeGetRoles,
+				fakeGetSeatsWithRoles: fakeGetSeatsWithRoles
+			};
+
+			function fakeGetRoles() {
+				return permissionsService.roles.get().$promise;
+			};
+
+			function transformFabricSeatToSeatObjects(fabricSeats, rolesData) {
+				var seatObjects = [];
+				fabricSeats.forEach(function (fabricSeat) {
+					fabricSeat.roles = [];
+					fabricSeat.roles.push(rolesData[Math.floor(Math.random() * rolesData.length)].Id);
+					seatObjects.push(fakeSeatsFromSeatObjects(fabricSeat));
+				});
+
+				return seatObjects;
+			};
+
+			function fakeSeatsFromSeatObjects(seatObj) {
+				return {
+					Id: seatObj.id,
+					Name: seatObj.name,
+					Priority: seatObj.priority,
+					IsNew: (seatObj.isNew === undefined) ? false : true,
+					Roles: seatObj.roles
+				};
+			};
+
+			function fakeGetActiveSeatObjects(canvas, rolesData) {
+				var fabricSeats = getActiveObjectsByType(canvas, 'seat');
+				return transformFabricSeatToSeatObjects(fabricSeats, rolesData);
+			};
+
+			function fakeGetSeatsWithRoles(canvas) {
+				var seats = [];
+				var seatObjects = getObjectsByType(canvas, 'seat');
+				for (var i in seatObjects) {
+					var seatObj = seatObjects[i];
+					seats.push(fakeSeatsFromSeatObjects(seatObj));
+				};
+				return seats;
 			};
 
 			function setupCanvas(canvas) {
@@ -47,7 +92,7 @@
 			function doResize(canvas) {
 				var viewPortHeight = $('.seatmap').height();
 				var width = $('[ui-view]')[0].clientWidth - 0;
-				var heightReduction = $('#seatmap-toolbar').height() + $('.location-breadcrumb').height() + 4;
+				var heightReduction = $('#seatmap-toolbar').height() + $('.location-breadcrumb').height() + 5;
 
 				canvas.setHeight((viewPortHeight - heightReduction));
 				canvas.setWidth(width);
@@ -124,6 +169,42 @@
 				});
 
 				return objectsDict;
+			};
+
+			function getActiveObjectsByType(canvas, type) {
+
+				var seperateObjects, bindedObject,
+					activeObjects = [], result = [];
+
+				if (hasActiveGroup(canvas)) {
+					seperateObjects = canvas.getActiveGroup();
+					seperateObjects._objects.forEach(function (seperateObj) {
+						if (seperateObj._objects) {
+							seperateObj._objects.forEach(function (groupObj) {
+								activeObjects.push(groupObj);
+							});
+						} else {
+							activeObjects.push(seperateObj);
+						}
+					});
+				} else {
+					bindedObject = canvas.getActiveObject();
+
+					if (bindedObject._objects) {
+						bindedObject._objects.forEach(function (bindedObj) {
+							activeObjects.push(bindedObj);
+						});
+					} else {
+						activeObjects.push(bindedObject);
+					}
+				}
+
+				activeObjects.forEach(function (activeObj) {
+					if (activeObj.type == type)
+						result.push(activeObj);
+				});
+
+				return result;
 			};
 
 			function getObjectByTypeAndAddUsingFunction(canvas, type, addFunction) {
@@ -217,14 +298,13 @@
 				};
 			}
 
-
 			function getSeats(canvas) {
 				var seats = [];
 				var seatObjects = getObjectsByType(canvas, 'seat');
 				for (var i in seatObjects) {
 					var seatObj = seatObjects[i];
 					seats.push(createSeatFromSeatObj(seatObj));
-				}
+				};
 				return seats;
 			};
 
@@ -256,7 +336,6 @@
 				}
 				return null;
 			};
-
 
 			function getTopLeftSeat(canvas) {
 
@@ -356,7 +435,7 @@
 							seatPriority = allSeats[loadedSeat].priority;
 						}
 					}
-					if(!allowEdit)
+					if (!allowEdit)
 						setSelectionMode(canvas, canSelect);
 					data.seatPriority = seatPriority;
 					callbackSuccess(data);

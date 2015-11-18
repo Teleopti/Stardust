@@ -1279,10 +1279,12 @@
     <Content Include="WFM\js\rta\rta.format.service.js" />
     <Content Include="WFM\js\rta\rta.route.service.js" />
     <Content Include="WFM\js\seatManagement\html\rightpanel.html" />
+    <Content Include="WFM\js\seatManagement\html\objectproperty.html" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
     <Content Include="WFM\js\seatManagement\peopleselection.directive.js" />
     <Content Include="WFM\js\seatManagement\rightpanel.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmaptranslator.factory.js" />
+    <Content Include="WFM\js\seatManagement\seatmapobjectproperty.directive.js" />
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
     <Content Include="WFM\js\teamSchedule\personschedule.html" />

@@ -1,14 +1,12 @@
 ﻿<div class="seatmap-occupancy-detail">
 	<div class="seatbooking-operations-add" ng-if="!vm.showPeopleSelection && vm.occupancyDetails">
-		<button class="wfm-btn wfm-btn-invis-primary add-agents pull-right" ng-click="vm.showPersonSelectionPanel()">Add</button>
+		<button class="wfm-btn wfm-btn-invis-primary add-agents pull-right" ng-click="vm.showPersonSelectionPanel()">{{'Add' | translate}}</button>
 	</div>
 
 	<div class="seatbooking-operations-cancel" ng-if="vm.showPeopleSelection">
-		<button class="wfm-btn wfm-btn-invis-primary assign-agents pull-right" ng-click="vm.asignAgentsToSeats();vm.showPeopleSelection = false;">Assign</button>
-		<button class="wfm-btn wfm-btn-invis-primary cancel-operation pull-right" ng-click="vm.showPeopleSelection = false;">Cancel</button>
+		<button class="wfm-btn wfm-btn-invis-primary assign-agents pull-right" ng-click="vm.asignAgentsToSeats();vm.showPeopleSelection = false;">{{'Assign' | translate}}</button>
+		<button class="wfm-btn wfm-btn-invis-primary cancel-operation pull-right" ng-click="vm.showPeopleSelection = false;">{{'Cancel' | translate}}</button>
 	</div>
-
-	<h3 ng-show="!vm.occupancyDetails">{{'NoSeatSelected' | translate}}</h3>
 
 	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" clear-selected-people="vm.resetPersonSearch"></people-selection-list>
 
@@ -16,7 +14,7 @@
 		<ul class="wfm-list" ng-repeat="detail in vm.occupancyDetails">
 			
 			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
-				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">Seat {{detail.SeatName}}:</span>
+				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">{{'Seat'|translate}} {{detail.SeatName}}:</span>
 
 				<span ng-if="!booking.IsEmpty" class="list-item-container seat-booking-item" ng-class="[{'first-seat-booking':$index==0},vm.getSeatBookingDetailClass(booking)]">
 					{{vm.getDisplayTime(booking)}}

@@ -13432,7 +13432,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>state holder for changing shift bag panel select in web people</comment>
   </data>
   <data name="SeatHasNoBookings" xml:space="preserve">
-    <value>The selected seat has no bookings for this date</value>
+    <value>No bookings</value>
     <comment>Used on the view seat bookings page when a seat has no bookings</comment>
   </data>
   <data name="ConfirmRemoveCampaign" xml:space="preserve">

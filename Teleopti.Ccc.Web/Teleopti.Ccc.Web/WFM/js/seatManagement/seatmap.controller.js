@@ -4,7 +4,7 @@
 
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
-		
+
 	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
 
 	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout) {
@@ -12,9 +12,12 @@
 		var vm = this;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
+		vm.showRightPanel = false;
 		vm.showSearchPeople = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
+		vm.roles = [];
+		vm.activeSeats = [];
 		vm.newLocationName = '';
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
@@ -35,6 +38,8 @@
 			canvas.hoverCursor = 'pointer';
 			canvasUtils.setupCanvas(canvas);
 
+			resize();
+
 			angular.element($window).bind('resize', function () {
 				resize();
 			});
@@ -42,8 +47,6 @@
 			$scope.$on('sidenav:toggle', function () {
 				resize();
 			});
-
-			resize();
 
 			createDocumentListeners();
 			vm.isLoading = true;
@@ -70,7 +73,20 @@
 			canvasUtils.toggleMoveMode(canvas);
 		};
 
-		vm.resize = resize;
+		vm.toggleRightPanel = function (toggle) {
+			$timeout(function () {
+				vm.showRightPanel = toggle;
+				$scope.$apply();
+			}, 0);
+		};
+
+		vm.getActiveSeats = function () {
+			canvasUtils.fakeGetRoles().then(function (rolesData) {
+				vm.roles = rolesData;
+				vm.activeSeats = canvasUtils.fakeGetActiveSeatObjects(canvas, rolesData);
+				vm.toggleRightPanel(true);
+			});
+		};
 
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
@@ -156,5 +172,3 @@
 		};
 	};
 }());
-
-

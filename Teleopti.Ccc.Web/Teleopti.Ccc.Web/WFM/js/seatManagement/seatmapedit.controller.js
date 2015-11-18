@@ -144,8 +144,8 @@
 			editor.flip(canvas(), horizontal);
 		}
 
-		vm.showProperties = function() {
-			editor.flip(canvas(), true);
+		vm.showProperties = function () {
+			vm.parentVm.getActiveSeats();
 		}
 
 		vm.hasObjectSelected = function () {
@@ -255,7 +255,6 @@
 			}
 		};
 
-
 		function saveData() {
 			vm.parentVm.isLoading = true;
 
@@ -263,9 +262,10 @@
 				SeatMapData: JSON.stringify(canvas()),
 				Id: vm.parentVm.seatMapId,
 				ChildLocations: utils.getLocations(canvas()),
-				Seats: utils.getSeats(canvas()),
+				Seats: utils.getSeats(canvas())
+				//Seats: utils.fakeGetSeatsWithRoles(canvas())
 			}
-
+			//console.log('data', data);
 			editor.save(data, onSaveSuccess);
 		};
 

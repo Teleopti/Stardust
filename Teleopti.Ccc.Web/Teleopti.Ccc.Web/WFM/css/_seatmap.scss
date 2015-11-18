@@ -46,6 +46,16 @@ input[type=text],input[type=password],input[type=number]{
 	}
 }
 
+@keyframes widthChange {
+	0% {
+	width: 0px;
+	}
+
+	100%{
+	width: 5px;
+	}
+}
+
 .seatmap{
 	padding: 0;
 	z-index: 0;
@@ -210,6 +220,7 @@ seatmap-editor{
 
 #seatmap-toolbar{
 	padding-left:0px;
+	border-bottom:1px solid #e1e2e3;
 
 	.wfm-btn{
 		margin-top:2px;
@@ -276,28 +287,67 @@ seatmap-editor{
 	bottom: 0;
 	left: 0;
 	right: 0;
-	
+
 	md-slider{
 		width: 200px;
 		margin-left: 40px;
 	}
 }
 
+seatmap-right-panel{
+	z-index:1;
+
+	.resizable{
+		position:absolute;	
+		right:0;
+		width:auto;
+		min-width:307px;
+		max-width:600px;
+		top:0;
+		bottom:0;
+		margin-left:-10px;
+		transition:all 0.35s ease-in-out;
+
+		.rg-left{
+			width:5px;
+			z-index:2;
+			margin-left:0;
+			margin:0;
+			height:100%;
+			background:#e1e2e3;
+			animation: widthChange 0.5s 1;
+			-webkit-animation: widthChange 0.5s 1;
+
+			span{
+				margin-left:6px;
+				animation: fadeIn 0.5s 1;
+				-webkit-animation: fadeIn 0.5s 1;
+				z-index:1;
+			}
+		}
+	}
+
+	md-sidenav{
+		top:initial;
+		left:inital;
+		max-width:none;
+		overflow:hidden;
+	}
+	
+	.md-sidenav-right{
+		width:99.5%;
+		z-index:1;
+	}
+}
+
 .seatmap-right-panel{
-	background:$white;
-	display: block;
-	overflow:hidden;
-	width:30%;
-	min-width:380px;
-	border-left:1px solid #e1e2e3;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom:0;
-	z-index:101;
 	
 	.sidenav-header{
 		padding:9px 5px!important;
+	}
+
+	.sidenav-header .chevron:hover{
+		cursor:pointer;
 	}
 }
 
@@ -352,6 +402,10 @@ people-selection-list>div{
 		width:100%;		
 	}
 	
+	.advaned-container{
+		margin-left:5px;	
+	}
+	
 	.select-all-dialog{
 		margin:0;
 		transition: all 0.35s;
@@ -368,6 +422,14 @@ people-selection-list>div{
 		-moz-transition: all 0.35s;
 		-webkit-transition: all 0.35s;
 		-o-transition: all 0.35s; 
+
+		.ui-grid-contents-wrapper{
+			div:nth-child(2){
+				.ui-grid-viewport{
+					overflow-y:auto!important;
+				}
+			}
+		}
 	}
 
 	.pagination {
@@ -396,7 +458,7 @@ people-selection-list>div{
 	position:absolute;
 	top:40px;
 	right:0;
-	left:0;
+	left:4px;
 
 	.wfm-list{
 		overflow-y:auto;

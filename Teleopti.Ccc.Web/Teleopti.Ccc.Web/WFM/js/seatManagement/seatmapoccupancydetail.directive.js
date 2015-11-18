@@ -99,14 +99,14 @@
 
 			canvas().on('object:selected', function (e) {
 				onObjectSelection(e);
-				vm.rightPanelVm.openRightPanel();
+				vm.parentVm.showRightPanel = true;
 			});
 
 			canvas().on('selection:created', function (e) {
 				if (e.e && e.e.shiftKey) {
 					onObjectSelection(e);
 				}
-				vm.rightPanelVm.openRightPanel();
+				vm.parentVm.showRightPanel = true;
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
@@ -128,7 +128,7 @@
 					vm.occupancyDetails = undefined;
 					vm.previousSelectedSeatIds = [];
 				}
-				vm.rightPanelVm.closeRightPanel();
+				vm.parentVm.showRightPanel = false;
 			});
 
 		};
@@ -249,7 +249,7 @@
 	function linkFunction(scope, element, attributes, controllers) {
 		var vm = controllers[0];
 		vm.parentVm = controllers[1];
-		vm.rightPanelVm = controllers[2];		
+		vm.rightPanelVm = controllers[2];
 		vm.init();
 	};
 

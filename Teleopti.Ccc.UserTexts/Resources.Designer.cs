@@ -23450,7 +23450,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected seat has no bookings for this date.
+        ///   Looks up a localized string similar to No bookings.
         /// </summary>
         public static string SeatHasNoBookings {
             get {

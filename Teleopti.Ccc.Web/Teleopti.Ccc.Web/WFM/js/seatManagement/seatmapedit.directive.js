@@ -1,25 +1,26 @@
 ﻿(function () {
 
-	var directive = function () {
+	angular.module('wfm.seatMap')
+		.directive('seatmapEditor', seatmapEditorDirective);
 
+	function seatmapEditorDirective() {
 		return {
-			scope: {},
 			controller: 'SeatMapEditCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			require: ['seatmapEditor','^seatmapCanvas'],
+			require: ['seatmapEditor', '^seatmapCanvas'],
+			scope: {
+
+			},
 			templateUrl: "js/seatManagement/html/seatmapeditor.html",
+			restrict: "E",
 			link: linkFunction
 		};
 	};
 
-	angular.module('wfm.seatMap')
-		.directive('seatmapEditor', directive);
-
 	function linkFunction(scope, element, attributes, controllers) {
 		var vm = controllers[0];
-		var parentVm = controllers[1];
-		vm.parentVm = parentVm;
+		vm.parentVm = controllers[1];
 	};
 
 }());

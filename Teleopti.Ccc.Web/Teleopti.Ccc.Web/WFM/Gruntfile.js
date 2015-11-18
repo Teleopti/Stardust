@@ -90,8 +90,9 @@
 		concat: {
 			distJs: {
 				src: [
-				'node_modules/angular/angular.min.js',
+				'node_modules/angular/angular.js',
 				'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+				'node_modules/angular-resizable/angular-resizable.min.js',
 				'node_modules/angular-resource/angular-resource.min.js',
 				'node_modules/angular-sanitize/angular-sanitize.min.js',
 				'node_modules/angular-translate/dist/angular-translate.min.js',
@@ -137,6 +138,7 @@
 			distCss: {
 				src: [
 					'node_modules/bootstrap/dist/css/bootstrap.min.css',
+					'node_modules/angular-resizable/angular-resizable.min.css',
 					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
 					'node_modules/angular-ui-grid/ui-grid.min.css',
 					'node_modules/angular-material/angular-material.min.css',
