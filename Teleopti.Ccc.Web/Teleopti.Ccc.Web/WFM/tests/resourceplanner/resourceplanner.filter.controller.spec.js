@@ -323,7 +323,25 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults.length).toEqual(1);
 	}));
 
+	it('should clear search string when selected', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
+		scope.searchString = 'something';
+		scope.selectResultItem({}); 
+
+		expect(scope.searchString).toEqual('');
+	}));
+
+	it('should clear results when item selected', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.results = [{}];
+		scope.selectResultItem({});
+
+		expect(scope.results.length).toEqual(0);
+	}));
 
 	var filterUrl = function (searchString, maxHits) {
 		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
