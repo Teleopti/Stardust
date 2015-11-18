@@ -44,13 +44,18 @@
 				$scope.filterText = "";
 				$scope.timestamp = "";
 				$scope.agents = [];
-				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
+				$scope.filteredData = [];
+				RtaGridService.createAgentsGridOptions().then(function(options) {
+					options.data = 'filteredData';
+					$scope.gridOptions = options;
+				});
+
 				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
@@ -87,8 +92,6 @@
 					}
 				};
 
-				$scope.filteredData = [];
-				$scope.gridOptions.data = 'filteredData';
 
 				var filterData = function() {
 					if ($scope.filterText === undefined)

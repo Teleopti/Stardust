@@ -1,3 +1,3 @@
 ﻿(function () {
-	angular.module('wfm.rta', ['ngResource', 'ui.router', 'ngStorage']);
+	angular.module('wfm.rta', ['ngResource', 'ui.router', 'ngStorage', 'toggleService']);
 })();

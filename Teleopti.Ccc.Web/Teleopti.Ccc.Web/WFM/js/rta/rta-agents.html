@@ -1,16 +1,29 @@
 <div class="row">
-    <div class="col-lg-12">
-		<h3>Agents</h3>
-		<div ng-if="siteName && teamName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <a href="{{goBackToTeamsWithUrl}}"class="rta-nav-link">{{siteName}}</a> / <span>{{teamName}}</span></div>
-		<div ng-if="multipleSitesName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleSitesName}}</span></div>
-		<div ng-if="multipleTeamsName"><a href="{{goBackToRootWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{multipleTeamsName}}</span></div>
-      <div class="rta-agents-input">
-        <div class="input-prepend rta-search">
-          <i class="mdi mdi-magnify"></i>
-          <input type="text" placeholder="{{'Search'|translate}}..." ng-model="filterText" ng-change="filterData()">
-        </div>
-
-      </div>
-    <div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
-    </div>
+				<div class="col-lg-12">
+								<h3>Agents</h3>
+								<div ng-if="siteName && teamName">
+												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">Real Time Adherence</a>
+												/
+												<a class="rta-nav-link" href="{{goBackToTeamsWithUrl}}">{{siteName}}</a>
+												/
+												<span>{{teamName}}</span>
+								</div>
+								<div ng-if="multipleSitesName">
+												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">Real Time Adherence</a>
+												/
+												<span>{{multipleSitesName}}</span>
+								</div>
+								<div ng-if="multipleTeamsName">
+												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">Real Time Adherence</a>
+												/
+												<span>{{multipleTeamsName}}</span>
+								</div>
+								<div class="rta-agents-input">
+												<div class="input-prepend rta-search">
+																<i class="mdi mdi-magnify"></i>
+																<input ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
+												</div>
+								</div>
+								<div class="grid" ng-if="gridOptions" ui-grid-auto-resize ui-grid="gridOptions"></div>
+				</div>
 </div>

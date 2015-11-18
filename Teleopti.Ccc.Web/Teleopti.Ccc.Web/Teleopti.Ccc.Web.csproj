@@ -1236,11 +1236,12 @@
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
-    <Content Include="WFM\js\rta\grid.template.html" />
+    <Content Include="WFM\js\rta\rta-agents-rowtemplate-AdherenceDetails_34267.html" />
+    <Content Include="WFM\js\rta\rta-agents-rowtemplate.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />
-    <Content Include="WFM\js\rta\rta-agents_properalarm_prototype.html" />
+    <Content Include="WFM\js\rta\rta-agents-ProperAlarm_34975.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />

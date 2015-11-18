@@ -44,7 +44,6 @@ describe('RtaAgentsCtrl', function() {
 			AdherencePercent: 99,
 			LastTimestamp: "16:34"
 		};
-
 	});
 
 	beforeEach(function() {
@@ -77,6 +76,12 @@ describe('RtaAgentsCtrl', function() {
 		$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(function() {
 				return [200, states];
+			});
+		$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=RTA_AdherenceDetails_34267")
+			.respond(function() {
+				return [200, {
+					IsEnabled: false
+				}];
 			});
 	}));
 

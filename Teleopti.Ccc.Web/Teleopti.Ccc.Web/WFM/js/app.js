@@ -173,7 +173,7 @@ wfm.config([
 
 		var rtaAgentsTemplate = function(elem, attr) {
 			if (toggles.Wfm_RTA_ProperAlarm_34975)
-				return 'js/rta/rta-agents_properalarm_prototype.html';
+				return 'js/rta/rta-agents-ProperAlarm_34975.html';
 			return 'js/rta/rta-agents.html';
 		};
 		$stateProvider.state('rta', {

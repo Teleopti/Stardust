@@ -1,11 +1,12 @@
-﻿'use strict';
+﻿
+'use strict';
 
 angular.module('toggleService', ['ngResource']).service('Toggle', [
-	'$resource', function($resource) {
+	'$resource', '$q',
+	function($resource, $q) {
 		var that = this;
 
-		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
-		{
+		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', {
 			toggle: "@toggle"
 		}, {
 			query: {
@@ -15,8 +16,15 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 			}
 		});
 
-		that.toggle = function(toggle, callback) {
-			return that.isFeatureEnabled.query({ toggle: toggle }).$promise;
+		that.toggle = function(toggle) {
+			return $q(function(resolve) {
+				that.isFeatureEnabled.query({
+						toggle: toggle
+					}).$promise
+					.then(function(data) {
+						resolve(data.IsEnabled);
+					});
+			});
 		};
 
 	}

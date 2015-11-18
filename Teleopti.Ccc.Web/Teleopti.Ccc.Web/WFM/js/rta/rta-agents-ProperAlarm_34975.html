@@ -24,13 +24,13 @@
 																<input ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
 												</div>
 												<div class="wfm-switch">
-																<input ng-model="agentsInAlarm" id="switch1" type="checkbox"/>
+																<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
 																<label for="switch1">
 																				<span class="wfm-switch-label">In Alarm</span>
 																				<span class="wfm-switch-toggle"></span>
 																</label>
 												</div>
 								</div>
-								<div class="grid" ui-grid-auto-resize ui-grid="gridOptions"></div>
+								<div class="grid" ng-if="gridOptions" ui-grid-auto-resize ui-grid="gridOptions"></div>
 				</div>
 </div>
