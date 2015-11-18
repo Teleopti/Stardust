@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		public IAuditSetting Read()
 		{
-			var auditSetting = _currentUnitOfWork.Session().Get<AuditSetting>(AuditSetting.TheId);
+			var auditSetting = _currentUnitOfWork.Session().Get<AuditSetting>(AuditSettingDefault.TheId);
 			if(auditSetting==null)
 				throw new DataSourceException(MissingAuditSetting);
 			return auditSetting;

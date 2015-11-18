@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseHelper
 	{
-		private const string MasterDatabaseName = "master";
+		public const string MasterDatabaseName = "master";
 		
 		private readonly ExecuteSql _executeMaster;
 		private readonly ExecuteSql _execute;
@@ -28,19 +27,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
 
-		public ExecuteSql Executor
-		{
-			get { return _execute; }
-		}
-
 		public string DbManagerFolderPath { get; set; }
-
-		public bool Exists()
-		{
-			return
-				Convert.ToBoolean(_executeMaster.ExecuteScalar("SELECT database_id FROM sys.databases WHERE Name = @databaseName",
-					parameters: new Dictionary<string, object> {{"@databaseName", DatabaseName}}));
-		}
 
 		public SqlVersion Version()
 		{
@@ -77,9 +64,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			try
 			{
-				var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-				var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
-				loginHandler.EnablePolicyCheck();
+				var loginHandler = LoginTasks();
 				loginHandler.CreateLogin(login, password, false, sqlVersion);
 				loginHandler.DropLogin(login, sqlVersion);
 				message = "";
@@ -92,19 +77,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		public bool LoginExists(string login, SqlVersion sqlVersion)
-		{
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
-			return loginHandler.LoginExists(login, sqlVersion);
-		}
-
-		public void CreateLogin(string login, string password, SqlVersion sqlVersion)
+		public LoginHelper LoginTasks()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var loginHandler = new LoginHelper(Logger, _executeMaster, _execute, databaseFolder);
 			loginHandler.EnablePolicyCheck();
-			loginHandler.CreateLogin(login,password,false,sqlVersion);
+			return loginHandler;
 		}
 
 		public void AddPermissions(string login, SqlVersion sqlVersion)
@@ -114,13 +92,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			permissionsHandler.CreatePermissions(login,sqlVersion);
 		}
 
-		public bool DbUserExist(string sqlLogin)
-		{
-			const string sql = "SELECT 1 FROM sys.sysusers WHERE name = @login";
-			var result = _execute.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", sqlLogin}});
-			return Convert.ToBoolean(result);
-		}
-
 		public bool HasCreateDbPermission(SqlVersion sqlVersion)
 		{
 			if (sqlVersion.IsAzure)
@@ -128,8 +99,9 @@ namespace Teleopti.Ccc.DBManager.Library
 				var dbName = Guid.NewGuid().ToString();
 				try
 				{
-					_execute.ExecuteTransactionlessNonQuery("CREATE DATABASE [" + dbName + "]");
-					_execute.ExecuteTransactionlessNonQuery("DROP DATABASE [" + dbName + "]");
+					var tasks = new DatabaseTasks(_executeMaster);
+					tasks.Create(dbName);
+					tasks.Drop(dbName);
 					return true;
 				}
 				catch (Exception)
@@ -162,28 +134,6 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 			return Convert.ToBoolean(_execute.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
-		}
-
-		public void AddSuperUser(Guid personId, string firstName, string lastName)
-		{
-			var sql = string.Format(@"INSERT INTO Person 
-(Id, [Version], UpdatedBy, UpdatedOn, Email, Note, EmploymentNumber,FirstName, LastName, DefaultTimeZone,IsDeleted,FirstDayOfWeek)
-VALUES('{2}', 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67',  GETUTCDATE(), '', '', '', '{0}', '{1}', 'UTC', 0, 1)
-INSERT INTO PersonInApplicationRole
-SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName, lastName, personId);
-			_execute.ExecuteNonQuery(sql);
-		}
-
-		public void AddBusinessUnit(string name)
-		{
-			var sql = string.Format(@"INSERT INTO BusinessUnit
-SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', null, 0", name);
-			_execute.ExecuteNonQuery(sql);
-		}
-
-		public void CleanByAnalyticsProcedure()
-		{
-			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
 		}
 
 		public void CreateSchemaByDbManager()
@@ -224,12 +174,13 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		private void dropIfExists()
 		{
-			if (!Exists()) return;
+			var tasks = new DatabaseTasks(_executeMaster);
+			if (!tasks.Exists(DatabaseName)) return;
 
-			new OnlineHelper(_executeMaster).SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
+			tasks.SetOnline(DatabaseName); // if dropping a database that is offline, the file on disk will remain!
 			_executeMaster.ExecuteTransactionlessNonQuery(
 				string.Format("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName));
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", DatabaseName));
+			tasks.Drop(DatabaseName);
 		}
 
 		private SqlConnection openConnection(bool masterDb = false)
@@ -244,20 +195,19 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			return conn;
 		}
 
-		public bool IsCorrectDb()
+		public AppRelatedDatabaseTasks ConfigureSystem()
 		{
-			string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Activity]') ";
-			if (DatabaseType.Equals(DatabaseType.TeleoptiAnalytics))
-				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') ";
-			if (DatabaseType.Equals(DatabaseType.TeleoptiCCCAgg))
-				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[log_object]') ";
-
-			return Convert.ToBoolean(_execute.ExecuteScalar(sql));
+			return new AppRelatedDatabaseTasks(_execute);
 		}
 
 		public BackupHelper BackupHelper()
 		{
 			return new BackupHelper(_execute,_executeMaster,DatabaseName);
+		}
+
+		public DatabaseTasks Tasks()
+		{
+			return new DatabaseTasks(_executeMaster);
 		}
 	}
 }

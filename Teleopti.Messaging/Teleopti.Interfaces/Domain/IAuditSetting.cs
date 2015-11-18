@@ -29,4 +29,9 @@
 		/// <returns></returns>
 		bool ShouldBeAudited(object entity);
 	}
+
+	public static class AuditSettingDefault
+	{
+		public const int TheId = 1;
+	}
 }

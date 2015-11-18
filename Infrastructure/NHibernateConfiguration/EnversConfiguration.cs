@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			Func<ISession, IAuditSetting> auditSettingDel = s =>
 			                                 {
-			                                    var auditSetting = s.GetSession(EntityMode.Poco).Get<AuditSetting>(AuditSetting.TheId);
+			                                    var auditSetting = s.GetSession(EntityMode.Poco).Get<AuditSetting>(AuditSettingDefault.TheId);
 															if(auditSetting==null)
 																throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
 			                                 	return auditSetting;

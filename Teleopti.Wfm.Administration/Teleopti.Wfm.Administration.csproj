@@ -203,6 +203,7 @@
     <Compile Include="Core\DatabaseUpgrader.cs" />
     <Compile Include="Core\DbPathProvider.cs" />
     <Compile Include="Core\DbPathProviderFake.cs" />
+    <Compile Include="Core\IDatabaseHelperWrapper.cs" />
     <Compile Include="Core\TenantLogger.cs" />
     <Compile Include="Core\TenantUpgrader.cs" />
     <Compile Include="Core\TokenQuerier.cs" />

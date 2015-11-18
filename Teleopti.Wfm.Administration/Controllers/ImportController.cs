@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				UserID = model.AdminUser,
 				Password = model.AdminPassword,
 				DataSource = model.Server,
-				InitialCatalog = "master",
+				InitialCatalog = DatabaseHelper.MasterDatabaseName,
 				IntegratedSecurity = model.UseIntegratedSecurity
 			}.ConnectionString;
 		}

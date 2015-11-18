@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DBManager.Library
             {
                 SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
                 sqlConnectionStringBuilder.DataSource = _serverName;
-                sqlConnectionStringBuilder.InitialCatalog = "master";
+                sqlConnectionStringBuilder.InitialCatalog = DatabaseHelper.MasterDatabaseName;
                 sqlConnectionStringBuilder.CurrentLanguage = _currentLanguage;
                 sqlConnectionStringBuilder.ApplicationName = _applicationName;
                 if (_useIntegratedSecurity)

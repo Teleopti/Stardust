@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void ClearAnalyticsData()
 		{
-			analytics().CleanByAnalyticsProcedure();
+			analytics().ConfigureSystem().CleanByAnalyticsProcedure();
 		}
 
 		public static void PersistAuditSetting()
@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.TestCommon
 				() =>
 				{
 					var databaseHelper = ccc7();
-					databaseHelper.Executor.ExecuteNonQuery("delete from auditing.Auditsetting");
-					databaseHelper.Executor.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ", 0)");
+					databaseHelper.ConfigureSystem().PersistAuditSetting();
 				},
 				"Failed to persist audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
@@ -99,8 +98,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
 		{
 			var databaseHelper = ccc7();
-			databaseHelper.Executor.ExecuteNonQuery("update tenant.tenant set name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
-				parameters:new Dictionary<string, object>{{"@name",name ?? string.Empty},{"@app", databaseHelper.ConnectionString},{"@analytics", analytics().ConnectionString}});
+			databaseHelper.ConfigureSystem().SetTenantConnectionInfo(name ?? string.Empty, databaseHelper.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static void setupAnalytics()
@@ -144,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon
 				() =>
 				{
 					// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
-					if (!database.Exists())
+					if (!database.Tasks().Exists(database.DatabaseName))
 						return false;
 
 					var name = backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
@@ -233,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			//would be better if dbmanager was called, but don't have the time right now....
 			exceptionToConsole(
-				() => ccc7().Executor.ExecuteNonQuery("exec [dbo].[MergePersonAssignments]"),
+				() => ccc7().ConfigureSystem().MergePersonAssignments(),
 				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}

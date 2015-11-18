@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			var sqlVersion = new SqlVersion(12,false);
 			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion);
-			connStringBuilder.InitialCatalog = "master";
+			connStringBuilder.InitialCatalog = DatabaseHelper.MasterDatabaseName;
 			using (var conn = new SqlConnection(connStringBuilder.ConnectionString))
 			{
 				conn.Open();

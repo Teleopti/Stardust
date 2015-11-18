@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			SqlConnection.ClearAllPools();
 
-			var state = new OnlineHelper(_masterExecuteSql);
+			var state = new DatabaseTasks(_masterExecuteSql);
 			state.SetOffline(DatabaseName);
 			return new GenericDisposable(()=>state.SetOnline(DatabaseName));
 		}

@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var session = MockRepository.GenerateMock<ISession>();
 			var tempSession = MockRepository.GenerateMock<ISession>();
 			session.Expect(s => s.GetSession(EntityMode.Poco)).Return(tempSession);
-			tempSession.Expect(s => s.Get<AuditSetting>(AuditSetting.TheId)).Return(null);
+			tempSession.Expect(s => s.Get<AuditSetting>(AuditSettingDefault.TheId)).Return(null);
 			Assert.Throws<DataSourceException>(() =>
 			            ((AuditSetter) target.AuditSettingProvider).Entity(session));
 		}
