@@ -102,7 +102,8 @@
 						$scope.filteredData = $filter('agentFilter')($scope.filteredData, 'Out Adherence', propertiesForFiltering);
 				};
 
-				$scope.$watchGroup(['filterText', 'agents', 'agentsInAlarm'], filterData);
+				$scope.$watch('agents', filterData, true);
+				$scope.$watchGroup(['filterText', 'agentsInAlarm'], filterData);
 
 				$scope.changeScheduleUrl = function(teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
