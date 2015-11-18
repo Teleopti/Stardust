@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.DayOffsPerWeek = new MinMax<int>(dayOffRulesModel.MinDayOffsPerWeek, dayOffRulesModel.MaxDayOffsPerWeek);
 			dayOffRules.ConsecutiveDayOffs = new MinMax<int>(dayOffRulesModel.MinConsecutiveDayOffs, dayOffRulesModel.MaxConsecutiveDayOffs);
 			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
+			dayOffRules.Name = dayOffRulesModel.Name;
 
 			foreach (var modelfilter in dayOffRulesModel.Filters)
 			{

@@ -19,5 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public Guid Id { get; set; }
 		public bool Default { get; set; }
 		public IList<FilterModel> Filters { get; set; }
+		public string Name { get; set; }
 	}
 }

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -182,6 +183,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = DayOffRulesRepository.LoadAll().Single();
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
+		}
+
+		[Test]
+		public void ShouldInsertName()
+		{
+			var model = new DayOffRulesModel();
+			var expectedName = RandomName.Make();
+			model.Name = expectedName;
+
+			Target.Persist(model);
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			inDb.Name.Should().Be.EqualTo(expectedName);
 		}
 	}
 }
