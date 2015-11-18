@@ -1,25 +1,41 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<meta charset="utf-8" />
-</head>
-<body>
-<div class="wfm-wrap" layout></div>
-	<input type="text" name="ruleName" ng-model="name"/>
-	<div class="input-prepend" flex="100">
-		<i class="mdi mdi-magnify"></i>
-		<input type="text" name="search" ng-model="searchString" ng-model-options="{ debounce: 1000 }" />
-	</div>
-	<div class="wfm-results" ng-repeat="result in results">
-		<div class="wfm-result" ng-click="selectResultItem(result)">{{result}}</div>
-	</div>
-	<div ng-show="moreResultsExists()">
-		Det kommer mera...
-	</div>
+﻿		<div class="row">
+			<div class="col-md-12">
+				<h4 translate>Schema filter</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<form class="wfm-form">
+					<div class="form-input-wrap">
+						<label for="ruleName">Name:</label>
+						<input type="text" name="ruleName" id="ruleName" ng-model="name"/>
+					</div>
+					<div class="form-input-wrap">
+						<label for="ruleName">Enter keywords:</label>
+						<div class="input-prepend">
+							<input type="text" name="search" ng-model="searchString" ng-model-options="{ debounce: 1000 }" />
+						</div>
+						<div ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
+							<div class="wfm-filter-results" ng-repeat="result in results">
+								<div ng-click="selectResultItem(result)"><div>[{{result.FilterType}}] {{result.Name}}</div></div>
+							</div>
+							<div ng-show="moreResultsExists()">
+								And more....
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p>Selected items:</p>
+				<div class="wfm-filter-selected" ng-repeat="selected in selectedResults">
+					<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}</span>
+				</div>
+			</div>
+		</div>
 
-	<h1>this is selected</h1>
-	<div class="something" ng-repeat="result in selectedResults">{{result}}</div>
 
 <br/>
 <br/>
@@ -27,5 +43,3 @@
 <br/>
 <br/>
 <div ng-click="persist()">Save! (is ready to save: {{isValid()}})</div>
-</body>
-</html>

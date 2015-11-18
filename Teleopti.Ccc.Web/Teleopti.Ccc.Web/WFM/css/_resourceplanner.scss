@@ -28,7 +28,7 @@
 	}
 
 }
-	
+
 	.wfm-search-li {
 		 margin-left: -10px
 	}
@@ -172,9 +172,44 @@ background-color: #cacaca;
 	 }
 }
 
+.wfm-filter-dropdown{
+	position: absolute;
+	background: $white;
+	padding:$full-padding;
+	min-width:30vw;
+	z-index:200;
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2)!important;
+}
+
+.wfm-filter-selected{
+	width:100%;
+	display:inline;
+	margin:0 -5px;
+}
+
+.filter-chip{
+	padding:$full-padding;
+	background:$gray026;
+	margin-right: 10px;
+}
+
+.filter-handle{
+	padding:$full-padding;
+	background:$blue-100;
+}
+
 .skillname{
 	max-width: 20em!important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.wfm-filter-results{
+	background-color:white;
+	z-index:100;
+		cursor:pointer;
+}
+
+.wfm-filter-result:hover{
+	background-color:rgba(0,0,0,.06);
 }
