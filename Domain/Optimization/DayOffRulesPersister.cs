@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -47,30 +48,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
 			dayOffRules.Name = dayOffRulesModel.Name;
 
-
 			//TODO: this is only correct when insert/new dayoffRules
-			foreach (var modelfilter in dayOffRulesModel.Filters)
+			foreach (var filter in dayOffRulesModel.Filters.Select(createFilter))
 			{
-				switch (modelfilter.FilterType)
-				{
-					case FilterModel.ContractFilterType:
-						var contract = _contractRepository.Get(modelfilter.Id);
-						var contractFilter = new ContractFilter(contract);
-						dayOffRules.AddFilter(contractFilter);
-						break;
-					case FilterModel.SiteFilterType:
-						var site = _siteRepository.Get(modelfilter.Id);
-						var siteFilter = new SiteFilter(site);
-						dayOffRules.AddFilter(siteFilter);
-						break;
-					case FilterModel.TeamFilterType:
-						var team = _teamRepository.Get(modelfilter.Id);
-						var teamFilter = new TeamFilter(team);
-						dayOffRules.AddFilter(teamFilter);
-						break;
-					default:
-						throw new NotSupportedException(string.Format("Unknown filter type {0}", modelfilter.FilterType));
-				}
+				dayOffRules.AddFilter(filter);
+			}
+		}
+
+		private IFilter createFilter(FilterModel filterModel)
+		{
+			switch (filterModel.FilterType)
+			{
+				case FilterModel.ContractFilterType:
+					return new ContractFilter(_contractRepository.Get(filterModel.Id));
+				case FilterModel.SiteFilterType:
+					return new SiteFilter(_siteRepository.Get(filterModel.Id));
+				case FilterModel.TeamFilterType:
+					return new TeamFilter(_teamRepository.Get(filterModel.Id));
+				default:
+					throw new NotSupportedException(string.Format("Unknown filter type {0}", filterModel.FilterType));
 			}
 		}
 	}
