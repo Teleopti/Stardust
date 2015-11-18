@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 		public void Remove(IApplicationRole entity)
 		{
-			throw new NotImplementedException();
+			_roles.Remove(entity);
 		}
 
 		public IApplicationRole Get(Guid id)
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 		public IApplicationRole Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _roles.FirstOrDefault(x => x.Id.Value == id);
 		}
 
 		public long CountAllEntities()

@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using NodaTime.TimeZones;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -30,9 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	    private readonly IBusinessUnitRepository _businessUnitRepository;
 	    private readonly ISiteRepository _siteRepository;
 	    private readonly ITeamRepository _teamRepository;
+	    private readonly PersonToRoleAssociation _personToRoleAssociation;
 	 
 
-        public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit, IBusinessUnitRepository businessUnitRepository, ISiteRepository siteRepository, ITeamRepository teamRepository)
+        public RolesController(IApplicationRoleRepository roleRepository, IApplicationFunctionRepository applicationFunctionRepository, IAvailableDataRepository availableDataRepository, ICurrentBusinessUnit currentBusinessUnit, IBusinessUnitRepository businessUnitRepository, ISiteRepository siteRepository, ITeamRepository teamRepository, PersonToRoleAssociation personToRoleAssociation)
         {
             _roleRepository = roleRepository;
             _applicationFunctionRepository = applicationFunctionRepository;
@@ -41,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	        _businessUnitRepository = businessUnitRepository;
 	        _siteRepository = siteRepository;
 	        _teamRepository = teamRepository;
+	        _personToRoleAssociation = personToRoleAssociation;
         }
 
         [UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
@@ -113,11 +111,11 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
         [UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpDelete]
         public virtual IHttpActionResult Delete(Guid roleId)
         {
-            var role = _roleRepository.Load(roleId);
-            if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
-
-            _roleRepository.Remove(role);
-            return Ok();
+			  var role = _roleRepository.Load(roleId);
+			  if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			  _personToRoleAssociation.RemoveAssociation(role);
+			  _roleRepository.Remove(role);
+			  return Ok();
         }
 
         [UnitOfWork, Route("api/Permissions/Roles/{roleId}/Function/{functionId}"), HttpDelete]

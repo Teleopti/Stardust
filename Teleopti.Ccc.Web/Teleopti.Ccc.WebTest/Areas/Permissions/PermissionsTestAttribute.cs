@@ -1,5 +1,6 @@
 using System.Security.Policy;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,6 +24,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakeApplicationRolePersonRepository>().For<IApplicationRolePersonRepository>();
+			system.UseTestDouble<FakePersonInRoleQuerier>().For<IPersonInRoleQuerier>();
 		}
 	}
 }

@@ -295,6 +295,7 @@
     <Compile Include="Areas\Permissions\FakeAvailableDataRepository.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
     <Compile Include="Areas\Permissions\PermissionsTestAttribute.cs" />
+    <Compile Include="Areas\Permissions\PersonToRoleAssociationTest.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesControllerTest.cs" />

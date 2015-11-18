@@ -548,6 +548,7 @@
     <Compile Include="Areas\Permissions\Controllers\RoleNameInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
     <Compile Include="Areas\Permissions\Controllers\NewRoleInput.cs" />
+    <Compile Include="Areas\Permissions\PersonToRoleAssociation.cs" />
     <Compile Include="Areas\Reporting\Controllers\ReportController.cs" />
     <Compile Include="Areas\Reporting\Core\CommonReports.cs" />
     <Compile Include="Areas\Reporting\Core\DateTimeExtensions.cs" />
