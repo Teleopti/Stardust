@@ -283,7 +283,7 @@ describe('ResourcePlannerCtrl', function () {
 		scope.name = 'asdfasdf';
 		scope.selectedResults = [{ FilterType: "contract", Id: "5BC5B983-281A-4B92-92D6-A54F00D63A78" }];
 
-		$httpBackend.when('POST', '../api/filters',
+		$httpBackend.when('POST', '../api/resourceplanner/dayoffrules',
 				function (postData) {
 					sentData = JSON.parse(postData);
 					return true;

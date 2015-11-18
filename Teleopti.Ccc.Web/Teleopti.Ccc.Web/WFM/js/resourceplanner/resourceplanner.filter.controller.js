@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
-			'$scope', 'ResourcePlannerFilterSrvc', function ($scope, ResourcePlannerFilterSrvc) {
+			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', function ($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc) {
 				$scope.maxHits = 5;
 				$scope.results = [];
 				$scope.selectedResults = [];
@@ -65,7 +65,7 @@
 
 				$scope.persist = function () {
 					if ($scope.isValid()) {
-						ResourcePlannerFilterSrvc.persist.save(
+						ResourcePlannerSvrc.saveDayoffRules.update(
 						{
 							MinDayOffsPerWeek: $scope.dayOffsPerWeek.MinDayOffsPerWeek,
 							MaxDayOffsPerWeek: $scope.dayOffsPerWeek.MaxDayOffsPerWeek,
