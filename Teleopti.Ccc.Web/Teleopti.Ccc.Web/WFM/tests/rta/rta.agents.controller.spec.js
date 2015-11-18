@@ -313,4 +313,29 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.isSelected(personId1)).toEqual(false);
 	});
+
+	it('should not display adherence link when there is no adherence change', function() {
+		createController();
+
+		expect(scope.showAdherence(null)).toEqual(false);
+	});
+
+	it('should display adherence link when there is adherence change', function() {
+		createController();
+
+		expect(scope.showAdherence(0)).toEqual(true);
+	});
+
+	it('should not display last updated timestamp when there is no updates', function() {
+		createController();
+
+		expect(scope.showLastUpdate('')).toEqual(false);
+		expect(scope.showLastUpdate(null)).toEqual(false);
+	});
+
+	it('should display last updated timestamp', function() {
+		createController();
+
+		expect(scope.showLastUpdate('2015-11-16 08:30')).toEqual(true);
+	});
 });

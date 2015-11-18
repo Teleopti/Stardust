@@ -45,8 +45,6 @@
 				$scope.timestamp = "";
 				$scope.agents = [];
 				$scope.gridOptions = RtaGridService.createAgentsGridOptions();
-				$scope.showAdherence = RtaGridService.showAdherence;
-				$scope.showLastUpdate = RtaGridService.showLastUpdate;
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
@@ -59,7 +57,12 @@
 				$scope.isSelected = function(personId) {
 					return selectedPersonId === personId;
 				};
-
+				$scope.showAdherence = function(adherence) {
+					return adherence !== null;
+				};
+				$scope.showLastUpdate = function(timestamp) {
+					return timestamp !== null && timestamp !== '';
+				};
 				$scope.$watch(
 					function() {
 						return $sessionStorage.buid;

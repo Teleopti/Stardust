@@ -2,12 +2,6 @@
 	'use strict';
 	angular.module('wfm.rta').service('RtaGridService',
 		function() {
-			this.showAdherence = function(adherence) {
-				return adherence !== null;
-			};
-			this.showLastUpdate = function(timestamp) {
-				return timestamp !== null && timestamp !== '';
-			};
 			this.createAgentsGridOptions = function() {
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
