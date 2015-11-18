@@ -77,8 +77,7 @@ describe('RtaAgentsCtrl', function() {
 			.respond(function() {
 				return [200, states];
 			});
-		$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=RTA_AdherenceDetails_34267")
-			.respond(function() {
+			$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
 				return [200, {
 					IsEnabled: false
 				}];

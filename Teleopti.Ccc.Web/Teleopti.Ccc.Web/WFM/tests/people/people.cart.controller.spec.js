@@ -1,103 +1,124 @@
-﻿'use strict';
+﻿
+'use strict';
 
-describe("PeopleCartCtrl", function () {
+describe("PeopleCartCtrl", function() {
 	var $q,
 		$rootScope,
 		$httpBackend,
 		controller;
 
-	beforeEach(function(){
+	beforeEach(function() {
 		module('wfm');
 		module('externalModules');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		controller = setUpController(_$controller_);
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
- 	$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-		$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=Wfm_RTA_ProperAlarm_34975").respond(200, 'mock');
+		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
+			return [200, {
+				IsEnabled: false
+			}];
+		});
 	}));
 
 	var mockToggleService = {
 		isFeatureEnabled: {
-			query: function () {
+			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
 					IsEnabled: true
 				});
-				return { $promise: queryDeferred.promise };
+				return {
+					$promise: queryDeferred.promise
+				};
 			}
 		},
 	}
 
 	var mockPeopleService = {
 		loadAllSkills: {
-			get: function () {
+			get: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
-					[
-						{ SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753", SkillName: "Channel Sales" },
-						{ SkillId: "c5fffc8f-bcd6-47f7-9352-9f0800e39578", SkillName: "Direct Sales" },
-						{ SkillId: "bc50fc19-c211-4e7a-8a1a-9f0801134e37", SkillName: "Email" },
-						{ SkillId: "bc50fc19-c211-4e7a-8a1a-9f0801134e89", SkillName: "TestSkill" }
-					]
+					[{
+						SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+						SkillName: "Channel Sales"
+					}, {
+						SkillId: "c5fffc8f-bcd6-47f7-9352-9f0800e39578",
+						SkillName: "Direct Sales"
+					}, {
+						SkillId: "bc50fc19-c211-4e7a-8a1a-9f0801134e37",
+						SkillName: "Email"
+					}, {
+						SkillId: "bc50fc19-c211-4e7a-8a1a-9f0801134e89",
+						SkillName: "TestSkill"
+					}]
 				);
-				return { $promise: queryDeferred.promise };
+				return {
+					$promise: queryDeferred.promise
+				};
 			}
 		},
 		loadAllShiftBags: {
-			get: function () {
+			get: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
-					[
-						{"ShiftBagId":"f2de1ce1-3c64-4e56-8088-9b5e015ab5bc","ShiftBagName":"Paris Full Time"},
-						{"ShiftBagId":"9b5b5740-8e31-417c-82a6-9b5e015ab5bc","ShiftBagName":"London Part Time 75%"},
-						{"ShiftBagId":"bd1b60fe-5116-4fd5-85a7-9b5e015ab5bc","ShiftBagName":"London Students"}
-					]
+					[{
+						"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc",
+						"ShiftBagName": "Paris Full Time"
+					}, {
+						"ShiftBagId": "9b5b5740-8e31-417c-82a6-9b5e015ab5bc",
+						"ShiftBagName": "London Part Time 75%"
+					}, {
+						"ShiftBagId": "bd1b60fe-5116-4fd5-85a7-9b5e015ab5bc",
+						"ShiftBagName": "London Students"
+					}]
 				);
-				return { $promise: queryDeferred.promise };
+				return {
+					$promise: queryDeferred.promise
+				};
 			}
 		},
 		fetchPeople: {
-			post: function () {
+			post: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
-					[
-						{
-							"PersonId": "3833e4a7-dbf4-4130-9027-9b5e015b2580",
-							"FirstName": "Tim",
-							"LastName": "McMahon",
-							"Team": "Paris/Team 1",
-							"SkillIdList": ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753", "c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
-							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
-						},
-						{
-							"PersonId": "71d27b06-30c0-49fd-ae16-9b5e015b2580",
-							"FirstName": "George",
-							"LastName": "Lueker",
-							"Team": "Paris/Team 1",
-							"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578", "bc50fc19-c211-4e7a-8a1a-9f0801134e37"],
-							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
-						},
-						{
-							"PersonId": "1a714f36-ee87-4a06-88d6-9b5e015b2585",
-							"FirstName": "Steve",
-							"LastName": "Novack",
-							"Team": "Paris/Team 1",
-							"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
-							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
-						}
-					]
+					[{
+						"PersonId": "3833e4a7-dbf4-4130-9027-9b5e015b2580",
+						"FirstName": "Tim",
+						"LastName": "McMahon",
+						"Team": "Paris/Team 1",
+						"SkillIdList": ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753", "c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
+						"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
+					}, {
+						"PersonId": "71d27b06-30c0-49fd-ae16-9b5e015b2580",
+						"FirstName": "George",
+						"LastName": "Lueker",
+						"Team": "Paris/Team 1",
+						"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578", "bc50fc19-c211-4e7a-8a1a-9f0801134e37"],
+						"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
+					}, {
+						"PersonId": "1a714f36-ee87-4a06-88d6-9b5e015b2585",
+						"FirstName": "Steve",
+						"LastName": "Novack",
+						"Team": "Paris/Team 1",
+						"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
+						"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
+					}]
 				);
-				return { $promise: queryDeferred.promise };
+				return {
+					$promise: queryDeferred.promise
+				};
 			}
 		}
 	};
 
-	it("should show skill selected status according to people skill list", inject(function () {
+	it("should show skill selected status according to people skill list", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var availableSkills = controller.availableSkills;
@@ -169,7 +190,9 @@ describe("PeopleCartCtrl", function () {
 	it("should change shift bag correctly", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
-		var shiftBag = {"ShiftBagId": "9b5b5740-8e31-417c-82a6-9b5e015ab5bc" };
+		var shiftBag = {
+			"ShiftBagId": "9b5b5740-8e31-417c-82a6-9b5e015ab5bc"
+		};
 		controller.selectedShiftBagChanged(shiftBag.ShiftBagId);
 
 		var availablePeople = controller.availablePeople;
@@ -178,7 +201,7 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[2].ShiftBag()).toEqual("London Part Time 75%");
 	}));
 
-	it("should remove person correctly", inject(function () {
+	it("should remove person correctly", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var person = {
@@ -192,7 +215,7 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[1].PersonId).toEqual("1a714f36-ee87-4a06-88d6-9b5e015b2585");
 	}));
 
-	it("should empty the cart when clearing cart", inject(function () {
+	it("should empty the cart when clearing cart", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 
@@ -204,7 +227,15 @@ describe("PeopleCartCtrl", function () {
 
 	function setUpController($controller) {
 		var scope = $rootScope.$new();
-		var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill" }
-		return $controller("PeopleCartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		var stateParams = {
+			selectedPeopleIds: [],
+			commandTag: "AdjustSkill"
+		}
+		return $controller("PeopleCartCtrl", {
+			$scope: scope,
+			$stateParams: stateParams,
+			Toggle: mockToggleService,
+			People: mockPeopleService
+		});
 	};
 });

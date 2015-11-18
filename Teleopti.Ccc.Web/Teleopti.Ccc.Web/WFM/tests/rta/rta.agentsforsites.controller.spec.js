@@ -107,14 +107,15 @@ describe('RtaAgentsCtrl for sites', function() {
 			.respond(function() {
 				return [200, states[0]];
 			});
-			$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-				.respond(function() {
-					return [200, states];
-				});
-				$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=RTA_AdherenceDetails_34267")
-					.respond(function() {
-						return [200, {IsEnabled: false}];
-					});	
+		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(function() {
+				return [200, states];
+			});
+		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
+			return [200, {
+				IsEnabled: false
+			}];
+		});
 	}));
 
 	var createController = function() {
@@ -141,17 +142,17 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 	});
 
-		it('should get agents for single selected site', function() {
-			stateParams.siteIds = ["6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-			agents = [{
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-			}];
+	it('should get agents for single selected site', function() {
+		stateParams.siteIds = ["6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+		agents = [{
+			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+		}];
 
-			createController();
+		createController();
 
-			expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
-		});
+		expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+	});
 
 	it('should get agent states for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];

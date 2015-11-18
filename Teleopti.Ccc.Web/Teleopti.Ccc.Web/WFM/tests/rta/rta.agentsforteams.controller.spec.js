@@ -91,10 +91,10 @@ describe('RtaAgentsCtrl for teams', function() {
 			.respond(function() {
 				return [200, agents]
 			});
-			$httpBackend.whenGET("../Agents/ForTeam?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-				.respond(function() {
-					return [200, agents]
-				});
+		$httpBackend.whenGET("../Agents/ForTeam?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
+			.respond(function() {
+				return [200, agents]
+			});
 		$httpBackend.whenGET("../Agents/ForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
 			.respond(function() {
 				return [200, agents]
@@ -103,18 +103,19 @@ describe('RtaAgentsCtrl for teams', function() {
 			.respond(function() {
 				return [200, states]
 			});
-			$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-				.respond(function() {
-					return [200, states]
-				});
+		$httpBackend.whenGET("../Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
+			.respond(function() {
+				return [200, states]
+			});
 		$httpBackend.whenGET("../Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
 			.respond(function() {
 				return [200, states]
 			});
-			$httpBackend.whenGET("../ToggleHandler/IsEnabled?toggle=RTA_AdherenceDetails_34267")
-				.respond(function() {
-					return [200, {IsEnabled: false}];
-				});	
+		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
+			return [200, {
+				IsEnabled: false
+			}];
+		});
 	}));
 
 	var createController = function() {

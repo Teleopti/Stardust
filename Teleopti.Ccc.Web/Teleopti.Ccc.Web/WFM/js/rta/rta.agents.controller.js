@@ -55,7 +55,7 @@
 				options.data = 'filteredData';
 				$scope.gridOptions = options;
 				$scope.agentsInAlarm = toggleService.Wfm_RTA_ProperAlarm_34975;
-				
+
 				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
@@ -92,14 +92,15 @@
 					}
 				};
 
-
 				var filterData = function() {
 					if ($scope.filterText === undefined)
 						$scope.filteredData = $scope.agents;
 					else
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
-					if ($scope.agentsInAlarm)
-						$scope.filteredData = $filter('agentFilter')($scope.filteredData, 'Out Adherence', propertiesForFiltering);
+					if ($scope.agentsInAlarm){
+						$scope.filteredData = $filter('agentFilter')($scope.filteredData, 'Out Adherence', ['Alarm']);
+						$scope.filteredData = $filter('orderBy')($scope.filteredData, 'TimeInState', true);
+					}
 				};
 
 				$scope.$watch('agents', filterData, true);
