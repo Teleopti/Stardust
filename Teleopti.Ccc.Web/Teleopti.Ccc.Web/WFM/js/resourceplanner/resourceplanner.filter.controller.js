@@ -81,9 +81,7 @@
 							Default: false,
 							Filters: $scope.selectedResults
 						});
-						return true;
 					}
-					return false;
 				}
 			}
 		]);

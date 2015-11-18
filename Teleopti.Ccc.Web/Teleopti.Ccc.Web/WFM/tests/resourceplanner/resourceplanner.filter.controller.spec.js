@@ -289,7 +289,7 @@ describe('ResourcePlannerCtrl', function () {
 					return true;
 				}).respond(200, true);
 
-		var result = scope.persist();
+		scope.persist();
 		$httpBackend.flush();
 
 		expect(sentData.Name).toEqual(scope.name);
@@ -301,14 +301,17 @@ describe('ResourcePlannerCtrl', function () {
 		expect(sentData.MaxConsecutiveDayOffs).toEqual(scope.consecDaysOff.MaxConsecDaysOff);
 		expect(sentData.Filters[0].FilterType).toEqual(scope.selectedResults[0].FilterType);
 		expect(sentData.Filters[0].Id).toEqual(scope.selectedResults[0].Id);
-		expect(result).toEqual(true);
 	}));
 
-	it('should return false if persist when invalid', inject(function ($controller) {
+	it('should not persist when invalid', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		expect(scope.persist()).toEqual(false);
+		scope.persist();
+
+		scope.$digest();
+
+		$httpBackend.verifyNoOutstandingRequest();
 	}));
 
 	it('should not be possible to select item twice', inject(function ($controller) {
