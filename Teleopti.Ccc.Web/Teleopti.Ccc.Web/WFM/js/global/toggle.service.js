@@ -6,26 +6,29 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 	function($resource, $q) {
 		var that = this;
 
-		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', {
-			toggle: "@toggle"
-		}, {
+		that.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled', {}, {
 			query: {
 				method: 'GET',
-				params: {},
 				isArray: false
 			}
 		});
 
-		that.toggle = function(toggle) {
+		var loadToggle = function(toggle) {
 			return $q(function(resolve) {
 				that.isFeatureEnabled.query({
 						toggle: toggle
 					}).$promise
 					.then(function(data) {
-						resolve(data.IsEnabled);
+						that[toggle] = data.IsEnabled;
+						resolve();
 					});
 			});
 		};
+		
+		that.togglesLoaded = $q.all([
+			loadToggle('RTA_AdherenceDetails_34267'),
+			loadToggle('Wfm_RTA_ProperAlarm_34975'),
+		]);
 
 	}
 ]);

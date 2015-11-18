@@ -242,20 +242,17 @@ wfm.config([
 			});
 		};
 
-		// refact 3rd duplication as always please
-		var togglesLoaded = $q.all([
-			toggleService.toggle('Wfm_RTA_ProperAlarm_34975').then(function(value) {
-				toggles.Wfm_RTA_ProperAlarm_34975 = value
-			})
-		]);
-
+		toggleService.togglesLoaded.then(function() {
+			toggles.Wfm_RTA_ProperAlarm_34975 = toggleService.Wfm_RTA_ProperAlarm_34975
+		});
+		
 		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
 				refreshContext(event, next, toParams);
 				return;
 			}
-			if (!togglesLoaded.$$state.status) {
+			if (!toggleService.togglesLoaded.$$state.status) {
 				event.preventDefault();
 				togglesLoaded.then(function() {
 					$state.go(next, toParams);

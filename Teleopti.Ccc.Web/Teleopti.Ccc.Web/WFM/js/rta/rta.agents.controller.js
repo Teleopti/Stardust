@@ -4,8 +4,8 @@
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService',
-			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle',
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService) {
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
@@ -51,11 +51,11 @@
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
 				$scope.filteredData = [];
-				RtaGridService.createAgentsGridOptions().then(function(options) {
-					options.data = 'filteredData';
-					$scope.gridOptions = options;
-				});
-
+				var options = RtaGridService.createAgentsGridOptions();
+				options.data = 'filteredData';
+				$scope.gridOptions = options;
+				$scope.agentsInAlarm = toggleService.Wfm_RTA_ProperAlarm_34975;
+				
 				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
