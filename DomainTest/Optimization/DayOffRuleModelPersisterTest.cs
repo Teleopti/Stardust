@@ -1,7 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -13,6 +16,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class DayOffRuleModelPersisterTest
 	{
 		public FakeDayOffRulesRepository DayOffRulesRepository;
+		public FakeContractRepository ContractRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
 		public IDayOffRulesModelPersister Target;
 
 		[Test]
@@ -111,6 +117,71 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldInsertContractFilter()
+		{
+			var contract = new Contract("_").WithId();
+			ContractRepository.Add(contract);
+			var model = new DayOffRulesModel();
+			model.Filters.Add(
+				new FilterModel
+				{
+					Id = contract.Id.Value,
+					FilterType = FilterModel.ContractFilterType
+				}
+			);
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			var contractFilter = (ContractFilter)inDb.Filters.Single();
+			contractFilter.Contract.Should().Be.EqualTo(contract);
+		}
+
+		[Test]
+		public void ShouldInsertSiteFilter()
+		{
+			var site = new Site("_").WithId();
+			SiteRepository.Add(site);
+
+			var model = new DayOffRulesModel();
+			model.Filters.Add(
+				new FilterModel
+				{
+					Id = site.Id.Value,
+					FilterType = FilterModel.SiteFilterType
+				}
+			);
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			var siteFilter = (SiteFilter)inDb.Filters.Single();
+			siteFilter.Site.Should().Be.EqualTo(site);
+		}
+
+		[Test]
+		public void ShouldInsertTeamFilter()
+		{
+			var team = new Team().WithId();
+			TeamRepository.Add(team);
+
+			var model = new DayOffRulesModel();
+			model.Filters.Add(
+				new FilterModel
+				{
+					Id = team.Id.Value,
+					FilterType = "team"
+				}
+			);
+
+			Target.Persist(model);
+
+			var inDb = DayOffRulesRepository.LoadAll().Single();
+			var teamFilter = (TeamFilter)inDb.Filters.Single();
+			teamFilter.Team.Should().Be.EqualTo(team);
 		}
 	}
 }

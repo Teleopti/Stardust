@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IContract Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _contracts.Single(x => x.Id.Equals(id));
 		}
 
 		public IList<IContract> LoadAll()

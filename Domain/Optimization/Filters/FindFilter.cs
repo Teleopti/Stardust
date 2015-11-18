@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 			var itemsLeftToLoad = maxHits;
 			var contractHits = _contractRepository.FindContractsContain(searchString, itemsLeftToLoad)
-				.Select(contract => new FindFilterResult {FilterType = "contract", Id = contract.Id.Value, Name = contract.Description.Name});
+				.Select(contract => new FindFilterResult {FilterType = FilterModel.ContractFilterType, Id = contract.Id.Value, Name = contract.Description.Name});
 			itemsLeftToLoad = itemsLeftToLoad - contractHits.Count();
 			var teamHits = _teamRepository.FindTeamsContain(searchString, itemsLeftToLoad)
-				.Select(team => new FindFilterResult {FilterType = "team", Id = team.Id.Value, Name = team.Description.Name});
+				.Select(team => new FindFilterResult {FilterType = FilterModel.TeamFilterType, Id = team.Id.Value, Name = team.Description.Name});
 			itemsLeftToLoad = itemsLeftToLoad - teamHits.Count();
 			var siteHits = _siteRepository.FindSitesContain(searchString, itemsLeftToLoad)
-				.Select(site => new FindFilterResult { FilterType = "site", Id = site.Id.Value, Name = site.Description.Name });
+				.Select(site => new FindFilterResult { FilterType = FilterModel.SiteFilterType, Id = site.Id.Value, Name = site.Description.Name });
 
 			return contractHits.Union(teamHits).Union(siteHits);
 		}
