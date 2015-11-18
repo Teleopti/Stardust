@@ -281,7 +281,7 @@ describe('ResourcePlannerCtrl', function () {
 		var sentData;
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 		scope.name = 'asdfasdf';
-		scope.selectedResults = [{ id: '1' }];
+		scope.selectedResults = [{ FilterType: "contract", Id: "5BC5B983-281A-4B92-92D6-A54F00D63A78" }];
 
 		$httpBackend.when('POST', '../api/filters',
 				function (postData) {
@@ -292,11 +292,15 @@ describe('ResourcePlannerCtrl', function () {
 		var result = scope.persist();
 		$httpBackend.flush();
 
-		expect(sentData.name).toEqual(scope.name);
-		expect(sentData.dayOffsPerWeek).toEqual(scope.dayOffsPerWeek);
-		expect(sentData.consecDaysOff).toEqual(scope.consecDaysOff);
-		expect(sentData.consecWorkDays).toEqual(scope.consecWorkDays);
-		expect(sentData.selectedResults).toEqual(scope.selectedResults);
+		expect(sentData.Name).toEqual(scope.name);
+		expect(sentData.MinDayOffsPerWeek).toEqual(scope.dayOffsPerWeek.MinDayOffsPerWeek);
+		expect(sentData.MaxDayOffsPerWeek).toEqual(scope.dayOffsPerWeek.MaxDayOffsPerWeek);
+		expect(sentData.MinConsecutiveWorkdays).toEqual(scope.consecWorkDays.MinConsecWorkDays);
+		expect(sentData.MaxConsecutiveWorkdays).toEqual(scope.consecWorkDays.MaxConsecWorkDays);
+		expect(sentData.MinConsecutiveDayOffs).toEqual(scope.consecDaysOff.MinConsecDaysOff);
+		expect(sentData.MaxConsecutiveDayOffs).toEqual(scope.consecDaysOff.MaxConsecDaysOff);
+		expect(sentData.Filters[0].FilterType).toEqual(scope.selectedResults[0].FilterType);
+		expect(sentData.Filters[0].Id).toEqual(scope.selectedResults[0].Id);
 		expect(result).toEqual(true);
 	}));
 

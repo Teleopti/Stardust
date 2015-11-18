@@ -67,11 +67,15 @@
 					if ($scope.isValid()) {
 						ResourcePlannerFilterSrvc.persist.save(
 						{
-							name: $scope.name,
-							dayOffsPerWeek: $scope.dayOffsPerWeek,
-							consecDaysOff: $scope.consecDaysOff,
-							consecWorkDays: $scope.consecWorkDays,
-							selectedResults: $scope.selectedResults
+							MinDayOffsPerWeek: $scope.dayOffsPerWeek.MinDayOffsPerWeek,
+							MaxDayOffsPerWeek: $scope.dayOffsPerWeek.MaxDayOffsPerWeek,
+							MinConsecutiveWorkdays: $scope.consecWorkDays.MinConsecWorkDays,
+							MaxConsecutiveWorkdays: $scope.consecWorkDays.MaxConsecWorkDays,
+							MinConsecutiveDayOffs: $scope.consecDaysOff.MinConsecDaysOff,
+							MaxConsecutiveDayOffs: $scope.consecDaysOff.MaxConsecDaysOff,
+							Name: $scope.name,
+							Default: false,
+							Filters: $scope.selectedResults
 						});
 						return true;
 					}
