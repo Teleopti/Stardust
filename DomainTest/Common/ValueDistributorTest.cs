@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -355,6 +356,29 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void VerifyDistributeTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
 			ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), TaskFieldToDistribute.AverageTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
+		}
+
+		[Test]
+		public void ShouldDistributeToFirstOpenPeriod()
+		{
+			var targets = new List<ITemplateTaskPeriod>
+			{
+				new TemplateTaskPeriod(new Task(5, TimeSpan.Zero, TimeSpan.Zero), new DateTimePeriod(2015, 10, 15, 8, 2015, 10, 15, 9)),
+				new TemplateTaskPeriod(new Task(5, TimeSpan.Zero, TimeSpan.Zero), new DateTimePeriod(2015, 10, 15, 9, 2015, 10, 15, 10)),
+				new TemplateTaskPeriod(new Task(5, TimeSpan.Zero, TimeSpan.Zero), new DateTimePeriod(2015, 10, 15, 10, 2015, 10, 15, 11))
+			}.ToArray();
+
+			var openHours = new List<TimePeriod>
+			{
+				new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(10, 0, 0))
+			};
+
+			ValueDistributor.DistributeToFirstOpenPeriod(6, targets, openHours);
+
+			targets[0].Tasks.Should().Be.EqualTo(0);
+			targets[1].Tasks.Should().Be.EqualTo(6);
+			targets[2].Tasks.Should().Be.EqualTo(0);
+
 		}
 
 		/// <summary>

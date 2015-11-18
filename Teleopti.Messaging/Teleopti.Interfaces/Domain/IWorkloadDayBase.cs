@@ -196,5 +196,7 @@ namespace Teleopti.Interfaces.Domain
         void SetQueueStatistics(IQueueStatisticsProvider queueStatisticsProvider);
 
 		void DistributeTasks(IEnumerable<ITemplateTaskPeriod> sortedTemplateTaskPeriods);
+
+	    void SetUseSkewedDistribution(bool value);
     }
 }

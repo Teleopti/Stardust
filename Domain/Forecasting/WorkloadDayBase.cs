@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private readonly IList<ITaskOwner> _parents = new List<ITaskOwner>();
         private DateOnly _currentDate;
         private IQueueStatisticsProvider _queueStatisticsProvider;
+	    private bool _useSkewedDistribution;
 
         /// <summary>
         /// Creates the specified workload day
@@ -63,7 +64,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             //Reset the day
             Close();
             ChangeOpenHours(openHourList);
-        }
+		}
+
+		public virtual void SetUseSkewedDistribution(bool value)
+	    {
+		    _useSkewedDistribution = value;
+	    }
 
         protected bool IsEmailWorkload
         {
@@ -1041,7 +1047,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = true;
                 if (value < 0)
                     value = 0;
-                ValueDistributor.Distribute(value, _taskPeriodList, DistributionType.ByPercent);
+
+				_distributeTasks(value);
 
                 _tasks = value;
 
@@ -1185,6 +1192,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             _recalculateDailyCampaignTasks();
         }
+
+	    private void _distributeTasks(double value)
+	    {
+		    if (_useSkewedDistribution)
+		    {
+				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList);
+		    }
+		    else
+		    {
+				ValueDistributor.Distribute(value, _taskPeriodList, DistributionType.ByPercent);
+		    }			
+	    }
 
         private void _recalculateDailyCampaignTasks()
         {

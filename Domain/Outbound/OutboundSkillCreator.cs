@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 				workloadDayTemplate.Create(workingHour.Key.ToString(), DateTime.UtcNow, workLoad,
 					new List<TimePeriod> { workingHour.Value });
 
+				workloadDayTemplate.SetUseSkewedDistribution(true);
+				workloadDayTemplate.Tasks = 1;
 				workLoad.SetTemplate(workingHour.Key, workloadDayTemplate);
 			}
 		}
