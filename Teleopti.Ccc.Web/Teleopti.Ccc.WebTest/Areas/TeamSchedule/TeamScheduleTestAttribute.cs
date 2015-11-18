@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			//system.UseTestDouble<FakeScheduleRepository>().For<IScheduleRepository>();
 
 		}
 	}

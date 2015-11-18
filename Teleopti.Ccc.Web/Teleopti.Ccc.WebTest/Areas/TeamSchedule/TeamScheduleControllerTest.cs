@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public TeamScheduleController Target;
 		public FakeSchedulePersonProvider PersonProvider;
 		public FakeScheduleProvider ScheduleProvider;
-		public FakePermissionProvider PermissionProvider;
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("p1", "p1");
-			PersonProvider.Add(person);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario,new DateOnly(scheduleDate));
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("p1", "p1");
-			PersonProvider.Add(person);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario,new DateOnly(scheduleDate));
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("p1", "p1");
-			PersonProvider.Add(person);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
@@ -115,12 +114,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidential()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
-			PersonProvider.Add(person);
+			var person = PersonFactory.CreatePerson("pNoConfidential", "pNoConfidential");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var secretAbs = AbsenceFactory.CreateAbsence("secret");
@@ -153,8 +152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("p1", "p1");
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.ViewConfidential,new DateOnly(scheduleDate), person);
-			PersonProvider.Add(person);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+			PersonProvider.AddPersonWitViewConfidentialPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var secretAbs = AbsenceFactory.CreateAbsence("secret");
