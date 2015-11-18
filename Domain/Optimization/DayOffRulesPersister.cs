@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 
-		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, 
-																		IContractRepository contractRepository, 
+		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository,
+																		IContractRepository contractRepository,
 																		ISiteRepository siteRepository,
 																		ITeamRepository teamRepository)
 		{
@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			if (model.Id == Guid.Empty)
 			{
-				var dayOffRules = model.Default ? 
-					DayOffRules.CreateDefault() : 
+				var dayOffRules = model.Default ?
+					DayOffRules.CreateDefault() :
 					new DayOffRules();
 				setProperies(dayOffRules, model);
 				_dayOffRulesRepository.Add(dayOffRules);
@@ -47,27 +47,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
 			dayOffRules.Name = dayOffRulesModel.Name;
 
+
+			//TODO: this is only correct when insert/new dayoffRules
 			foreach (var modelfilter in dayOffRulesModel.Filters)
 			{
-				if (modelfilter.FilterType.Equals(FilterModel.ContractFilterType))
+				switch (modelfilter.FilterType)
 				{
-					var contract = _contractRepository.Get(modelfilter.Id);
-					var contractFilter = new ContractFilter(contract);
-					dayOffRules.AddFilter(contractFilter);
-				}
-
-				if (modelfilter.FilterType.Equals(FilterModel.SiteFilterType))
-				{
-					var site = _siteRepository.Get(modelfilter.Id);
-					var siteFilter = new SiteFilter(site);
-					dayOffRules.AddFilter(siteFilter);
-				}
-
-				if (modelfilter.FilterType.Equals(FilterModel.TeamFilterType))
-				{
-					var team = _teamRepository.Get(modelfilter.Id);
-					var teamFilter = new TeamFilter(team);
-					dayOffRules.AddFilter(teamFilter);
+					case FilterModel.ContractFilterType:
+						var contract = _contractRepository.Get(modelfilter.Id);
+						var contractFilter = new ContractFilter(contract);
+						dayOffRules.AddFilter(contractFilter);
+						break;
+					case FilterModel.SiteFilterType:
+						var site = _siteRepository.Get(modelfilter.Id);
+						var siteFilter = new SiteFilter(site);
+						dayOffRules.AddFilter(siteFilter);
+						break;
+					case FilterModel.TeamFilterType:
+						var team = _teamRepository.Get(modelfilter.Id);
+						var teamFilter = new TeamFilter(team);
+						dayOffRules.AddFilter(teamFilter);
+						break;
+					default:
+						throw new NotSupportedException(string.Format("Unknown filter type {0}", modelfilter.FilterType));
 				}
 			}
 		}

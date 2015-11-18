@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
@@ -183,6 +185,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = DayOffRulesRepository.LoadAll().Single();
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
+		}
+
+		[Test]
+		public void ShouldThrowIfUnknownFilter()
+		{
+			var model = new DayOffRulesModel();
+			model.Filters.Add(
+				new FilterModel
+				{
+					Id = Guid.NewGuid(),
+					FilterType = "unknown"
+				}
+			);
+			Assert.Throws<NotSupportedException>(() =>
+				Target.Persist(model));
 		}
 
 		[Test]
