@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seatMapLocation = new SeatMapLocation();
 			seatMapLocation.SetLocation("{DummyData}", locationName);
 			var seat = seatMapLocation.AddSeat("Test Seat", 0);
-			seat.AddRoles(role);
+			seat.SetRoles(role);
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
 
@@ -100,9 +100,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seatMapLocation = new SeatMapLocation();
 			seatMapLocation.SetLocation("{DummyData}", locationName);
 			var seat1 = seatMapLocation.AddSeat("Test Seat1", 0);
-			seat1.AddRoles(role1, role2);
+			seat1.SetRoles(role1, role2);
 			var seat2 = seatMapLocation.AddSeat("Test Seat2", 1);
-			seat2.AddRoles(role1);
+			seat2.SetRoles(role1);
 			seatMapLocation.AddSeat("Test Seat3", 2);
 
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			seatMapLocation.SetLocation("{DummyData}", locationName);
 			var seat1 = seatMapLocation.AddSeat("Test Seat1", 0);
 			var seat2 = seatMapLocation.AddSeat("Test Seat2", 1);
-			seat1.AddRoles(role1, role2);
-			seat2.AddRoles(role1);
+			seat1.SetRoles(role1, role2);
+			seat2.SetRoles(role1);
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
 			seatMapLocation.Seats.Remove(seat1);

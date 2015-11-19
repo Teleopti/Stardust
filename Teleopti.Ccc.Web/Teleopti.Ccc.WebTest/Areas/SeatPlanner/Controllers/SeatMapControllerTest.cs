@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			_seatBookingRepository = MockRepository.GenerateMock<ISeatBookingRepository>();
 
 			_seatMapPersister = new SeatMapPersister(_seatMapLocationRepository, new FakeBusinessUnitRepository(),
-				new FakeCurrentBusinessUnit(), _seatBookingRepository, new FakeSeatPlanRepository());
+				new FakeCurrentBusinessUnit(), _seatBookingRepository, new FakeSeatPlanRepository(), new FakeApplicationRoleRepository());
 			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
 
 			_seatMapController = new SeatMapController(_seatMapProvider, _seatMapPersister);

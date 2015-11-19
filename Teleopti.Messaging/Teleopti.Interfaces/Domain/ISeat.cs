@@ -8,6 +8,7 @@ namespace Teleopti.Interfaces.Domain
 		String Name { get; set; }
 		int Priority { get; set; }
 		IList<IApplicationRole> Roles { get; }
+		void SetRoles(params IApplicationRole[] roles);
 
 		void AddSeatBooking(ISeatBooking seatBooking);
 		void AddSeatBookings (IList<ISeatBooking> seatBookings);

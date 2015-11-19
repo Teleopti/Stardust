@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -13,15 +15,17 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
+		private readonly IApplicationRoleRepository _roleRepository;
 
 
-		public SeatMapPersister(IWriteSideRepository<ISeatMapLocation> seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit, ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
+		public SeatMapPersister(IWriteSideRepository<ISeatMapLocation> seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit, ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository, IApplicationRoleRepository roleRepository)
 		{
 			_seatMapLocationRepository = seatMapLocationRepository;
 			_businessUnitRepository = businessUnitRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_seatBookingRepository = seatBookingRepository;
 			_seatPlanRepository = seatPlanRepository;
+			_roleRepository = roleRepository;
 		}
 
 		public void Save(ISaveSeatMapCommand command)
@@ -102,19 +106,40 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		private static void updateSeats(SeatInfo[] seats, SeatMapLocation seatMapLocation)
+		private void updateSeats(SeatInfo[] seatsInfo, SeatMapLocation seatMapLocation)
 		{
-			createSeats(seats, seatMapLocation);
+			if (seatsInfo == null) return;
+
+			foreach (var seatInfo in seatsInfo)
+			{
+				if (seatInfo.IsNew)
+				{
+					createSeats(seatInfo, seatMapLocation);
+				}
+			}
+
+			//todo: updateSeatProperties performance need to be improve.
+			updateSeatProperties(seatsInfo, seatMapLocation);
 		}
 
-		private static void createSeats(SeatInfo[] seats, SeatMapLocation seatMapLocation)
+		private static void createSeats(SeatInfo seatInfo, SeatMapLocation seatMapLocation)
 		{
-			if (seats == null) return;
+			var seat = seatMapLocation.AddSeat(seatInfo.Name, seatInfo.Priority);
+			seatMapLocation.UpdateSeatMapTemporaryId(seatInfo.Id, seat.Id);
+			seatInfo.Id = seat.Id;
+		}
 
-			foreach (var seatMapInfo in seats.Where(seat => seat.IsNew))
+		private void updateSeatProperties(SeatInfo[] seatsInfo, SeatMapLocation seatMapLocation)
+		{
+			var roles = _roleRepository.LoadAll();
+			if (roles != null)
 			{
-				var seat = seatMapLocation.AddSeat(seatMapInfo.Name, seatMapInfo.Priority);
-				seatMapLocation.UpdateSeatMapTemporaryId(seatMapInfo.Id, seat.Id);
+				foreach (var seat in seatMapLocation.Seats)
+				{
+					var machedSeatInfo = seatsInfo.Single(seatInfo => seatInfo.Id == seat.Id);
+					var foundRoles = roles.Where(role => machedSeatInfo.RoleIdList.Contains(role.Id.Value)).ToArray();
+					seat.SetRoles(foundRoles.ToArray());
+				}
 			}
 		}
 

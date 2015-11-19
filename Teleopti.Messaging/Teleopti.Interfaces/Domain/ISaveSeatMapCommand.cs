@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -24,5 +25,6 @@ namespace Teleopti.Interfaces.Domain
 		public String Name { get; set; }
 		public Boolean IsNew { get; set; }
 		public Int32 Priority { get; set; }
+		public IList<Guid> RoleIdList { get; set; }
 	}
 }

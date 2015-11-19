@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			location.SetId(Guid.NewGuid());
 			location.AddSeat("Seat1", 1);
 			var seat2 = location.AddSeat("Seat2", 2);
-			seat2.AddRoles(role1, role2);
+			seat2.SetRoles(role1, role2);
 
 			_seatMapLocationRepository.Add(location);
 			role2.SetDeleted();

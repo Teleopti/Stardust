@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.DomainTest.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
@@ -25,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		private LocationInfo _childLocation2;
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatPlanRepository _seatPlanRepository;
+		private IApplicationRoleRepository _applicarionRoleRepository;
 
 		[SetUp]
 		public void Setup()
@@ -40,9 +44,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatPlanRepository = new FakeSeatPlanRepository();
+			_applicarionRoleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
 
 			_target = new SeatMapPersister(_seatMapLocationRepository,
-				_buRepository, _currentBusinessUnit, _seatBookingRepository, _seatPlanRepository);
+				_buRepository, _currentBusinessUnit, _seatBookingRepository, _seatPlanRepository, _applicarionRoleRepository);
 			_childLocationInfo = new LocationInfo()
 			{
 				Name = "Chongqing",
@@ -122,6 +127,93 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatMapLocation = _seatMapLocationRepository.First() as SeatMapLocation;
 			seatMapLocation.SeatCount.Should().Be(2);
 			seatMapLocation.Seats.First().Name.Should().Be("New Seat");
+		}
+
+		[Test]
+		public void ShouldSaveRolesForSeats()
+		{
+			const string dummyJsonData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":370,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""d9664f22-886b-f5bf-f799-7d59765c2604"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":565,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""8e48dd65-e68a-0834-fdc5-eae75f12065c"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";
+
+			var role1 = ApplicationRoleFactory.CreateRole("role1", "this is a role.");
+			role1.SetId(Guid.NewGuid());
+			var role2 = ApplicationRoleFactory.CreateRole("role2", "this is an ohter role.");
+			role2.SetId(Guid.NewGuid());
+			_applicarionRoleRepository.Stub(x => x.LoadAll()).Return(new List<IApplicationRole> {role1, role2});
+
+
+			var command = new SaveSeatMapCommand()
+			{
+				SeatMapData = dummyJsonData,
+				Seats = new[]
+				{
+					new SeatInfo()
+					{
+						Id = Guid.Parse("{d9664f22-886b-f5bf-f799-7d59765c2604}"), 
+						IsNew = true, 
+						Name = "New Seat", 
+						RoleIdList = new []{ role1.Id.Value, role2.Id.Value }
+					}
+				}
+			};
+
+			_target.Save(command);
+
+			var seatMapLocation = _seatMapLocationRepository.First() as SeatMapLocation;
+			seatMapLocation.Seats.Single().Roles.Count.Should().Be(2);
+			seatMapLocation.Seats.Single().Roles.First().Name.Should().Be("role1");
+			seatMapLocation.Seats.Single().Roles.Second().Name.Should().Be("role2");
+		}
+
+		[Test]
+		public void ShouldUpdateRolesForSeats()
+		{
+			var seatMapLocation = new SeatMapLocation();
+			var role1 = ApplicationRoleFactory.CreateRole("role1", "this is a role.");
+			role1.SetId(Guid.NewGuid());
+			var role2 = ApplicationRoleFactory.CreateRole("role2", "this is an ohter role.");
+			role2.SetId(Guid.NewGuid());
+			_applicarionRoleRepository.Stub(x => x.LoadAll()).Return(new List<IApplicationRole> { role1, role2 });
+
+
+			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":495,""top"":228.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""f19f90e8-f629-237b-2493-f2ed39e5c13b"",""name"":""Unnamed seat"",""priority"":1}],""background"":""""}";
+
+			seatMapLocation.SetLocation(seatMapData, "rootLocation");
+			seatMapLocation.SetId(Guid.NewGuid());
+			var seat1 = seatMapLocation.AddSeat("Seat1", 1);
+			seat1.SetRoles(role1, role2);
+			var seat2 = seatMapLocation.AddSeat("Seat2", 2);
+			seat2.SetRoles(role1, role2);
+			_seatMapLocationRepository.Add(seatMapLocation);
+			
+			var command = new SaveSeatMapCommand()
+			{
+				Id = seatMapLocation.Id,
+				SeatMapData = seatMapData,
+				Seats = new[]
+				{
+					new SeatInfo
+					{
+						Id = seat1.Id, 
+						IsNew = false, 
+						Name = "Seat1", 
+						RoleIdList = new []{role1.Id.Value}
+					},
+					new SeatInfo
+					{
+						Id = seat2.Id, 
+						IsNew = false, 
+						Name = "Seat1", 
+						RoleIdList = new Guid[0]
+					}
+				}
+			};
+
+			_target.Save(command);
+
+			var loadedLocation = _seatMapLocationRepository.First() as SeatMapLocation;
+			loadedLocation.Seats.First().Roles.Count.Should().Be(1);
+			loadedLocation.Seats.First().Roles.Single().Name.Should().Be("role1");
+			loadedLocation.Seats.Second().Roles.Count.Should().Be(0);
 		}
 
 		[Test]
