@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 
 		[Test]
-		public void ShouldFormatTimestamp()
+		public void ShouldUseCurrentTimeAsLastTimestamp()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-12-24 15:00");
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var result = Target.Build(personId);
 
-			result.LastTimestamp.Should().Be("2014-12-24 14:00".Utc().AsCatalanShortTime());
+			result.LastTimestamp.Should().Be("2014-12-24 15:00".Utc().AsCatalanShortTime());
 		}
 
 		[Test]

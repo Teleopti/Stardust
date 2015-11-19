@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 
 			return new AdherencePercentageViewModel
 			       {
-					   LastTimestamp = convertToAgentTimeZoneAndFormatTimestamp(readModel.LastTimestamp),
+					   LastTimestamp = currentTimeInAgentTimeZone(),
 				       AdherencePercent = percent(readModel)
 			       };
 		}
@@ -70,11 +70,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 			return (int) (secondsInAdherence/total*100);
 		}
 
-		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
+		private string currentTimeInAgentTimeZone()
 		{
-			if (!timestamp.HasValue)
-				return string.Empty;
-			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
+			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
 
