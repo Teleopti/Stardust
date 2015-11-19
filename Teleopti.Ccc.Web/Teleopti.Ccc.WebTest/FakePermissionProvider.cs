@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebTest
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{
-		private readonly bool _canSeeUnpublishedSchedule;
+		private bool _canSeeUnpublishedSchedule;
 		private readonly IList<PersonPermissionData> _personPermissionDatas = new List<PersonPermissionData>();
 
 		public FakePermissionProvider()
@@ -71,6 +71,13 @@ namespace Teleopti.Ccc.WebTest
 			if (name.Contains("Unpublish")) return false;
 			return true;
 
+		}
+		public void PermitApplicationFunction(string applicationFunctionPath, bool value)
+		{
+			if (applicationFunctionPath == DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
+			{
+				_canSeeUnpublishedSchedule = value;
+			}
 		}
 	}
 

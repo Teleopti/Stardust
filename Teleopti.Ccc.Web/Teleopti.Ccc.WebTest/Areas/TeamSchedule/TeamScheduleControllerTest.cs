@@ -10,6 +10,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public TeamScheduleController Target;
 		public FakeSchedulePersonProvider PersonProvider;
 		public FakeScheduleProvider ScheduleProvider;
+		public FakePermissionProvider PermissionProvider;
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -182,6 +184,29 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			
 		}
 
+		[Test]
+		public void ShouldReturnEmptyScheduleWhenScheduleIsUnpublishedAndNoViewUnpublishedSchedulePermission()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("p1", "p1");
+			person.WorkflowControlSet = new WorkflowControlSet("testWCS") {SchedulePublishedToDate = new DateTime(2019, 12, 30)};
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+			PermissionProvider.PermitApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, false);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()), new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			scheduleDay.Add(pa);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content;
+			var projectionVm = result.Single().Projection.ToList();
+			result.Count().Should().Be.EqualTo(1);
+			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+			projectionVm.Count().Should().Be.EqualTo(0);
+		}
 		//[Test]
 		//public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnly()
 		//{

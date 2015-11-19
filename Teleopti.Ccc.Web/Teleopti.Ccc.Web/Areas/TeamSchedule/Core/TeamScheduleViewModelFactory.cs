@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_projectionProvider = projectionProvider;
 			_schedulePersonProvider = schedulePersonProvider;
 		}
+		
 
 		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
 		{
@@ -38,27 +39,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(new DateOnly(dateInUserTimeZone), people) ??
 							   new IScheduleDay[] { };
+
+			var canSeeUnpublishedSchedules =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
 			var personScheduleDays = (from p in people
 			 let scheduleDay = (from s in scheduleDays where s.Person == p select s).SingleOrDefault()
 			 select new Tuple<IPerson, IScheduleDay>(p, scheduleDay)).ToArray();
-			var scheduleViewModels = new List<GroupScheduleShiftViewModel>();
-			foreach (var personScheduleDay in personScheduleDays)
-			{
-				var person = personScheduleDay.Item1;
-				var scheduleDay = personScheduleDay.Item2;
-				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person);
-				var scheduleVm = scheduleDay != null?_projectionProvider.Projection(scheduleDay, canViewConfidential):new GroupScheduleShiftViewModel
+
+			return (from personScheduleDay in personScheduleDays
+				let person = personScheduleDay.Item1
+				let scheduleDay = personScheduleDay.Item2
+				let canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person)
+				let isPublished = isSchedulePublished(dateInUserTimeZone, person)
+				select scheduleDay != null && (isPublished || canSeeUnpublishedSchedules) ? _projectionProvider.Projection(scheduleDay, canViewConfidential) : new GroupScheduleShiftViewModel
 				{
-					PersonId = person.Id.GetValueOrDefault().ToString(),
-					Name = person.Name.ToString(),
-					Date = dateInUserTimeZone.ToFixedDateFormat(),
-					Projection = new List<GroupScheduleLayerViewModel>()
-				};
-				scheduleViewModels.Add(scheduleVm);
-			}
+					PersonId = person.Id.GetValueOrDefault().ToString(), Name = person.Name.ToString(), Date = dateInUserTimeZone.ToFixedDateFormat(), Projection = new List<GroupScheduleLayerViewModel>()
+				}).ToList();
+		}
 
-
-			return scheduleViewModels;
+		private static bool isSchedulePublished(DateTime date, IPerson person)
+		{
+			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return false;
+			return workflowControlSet.SchedulePublishedToDate.HasValue &&
+				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
 		}
 	}
 
