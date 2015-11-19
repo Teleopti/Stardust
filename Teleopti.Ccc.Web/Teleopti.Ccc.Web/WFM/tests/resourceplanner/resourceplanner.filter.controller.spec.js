@@ -52,6 +52,37 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults.length).toEqual(0);
 	}));
 
+	it('should have isSearching set to false before first call', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		expect(scope.isSearching).toEqual(false);
+	}));
+
+	it('should set isSearching during search', inject(function ($controller) {
+		var searchString = 'something';
+		var expectedToHaveBeenTrue=false;
+
+		$httpBackend.whenGET(filterUrl(searchString, 5))
+			.respond(200, []);
+
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.$watch(function () { return scope.isSearching; }, function (value) {
+			if (value)
+				expectedToHaveBeenTrue = true;
+		});
+
+		scope.searchString = searchString;
+
+
+		$httpBackend.flush();
+
+		expect(expectedToHaveBeenTrue).toEqual(true);
+		expect(scope.isSearching).toEqual(false);
+	}));
+
 	it('should not call service when model is undefined ', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
@@ -354,6 +385,13 @@ describe('ResourcePlannerCtrl', function () {
 		scope.selectResultItem({});
 
 		expect(scope.results.length).toEqual(0);
+	}));
+
+	it('should set isSearching', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		
 	}));
 
 	var filterUrl = function (searchString, maxHits) {

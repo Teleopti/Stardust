@@ -18,7 +18,7 @@
 					MinConsecWorkDays: 2,
 					MaxConsecWorkDays:3
 				}
-
+				$scope.isSearching=false;
 
 				$scope.$watch(function() { return $scope.searchString; },
 					function (input) {
@@ -27,8 +27,10 @@
 							return;
 						}
 
+						$scope.isSearching = true;
 						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
 							$scope.results = results;
+							$scope.isSearching = false;
 						});
 					}
 				);

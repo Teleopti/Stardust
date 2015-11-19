@@ -11,13 +11,16 @@
 						<input type="text" name="ruleName" id="ruleName" ng-model="name"/>
 					</div>
 					<div class="form-input-wrap">
+						<md-progress-circular class="mini-spinner" md-mode="indeterminate" ng-show="isSearching"></md-progress-circular>
 						<label for="ruleName">Search filters:</label>
 						<div class="input-prepend">
-							<input type="text" name="search" ng-model="searchString" ng-model-options="{ debounce: 1000 }" />
+							<input type="text" name="search" ng-model="searchString" ng-model-options="{ debounce: 1000 }"/>
 						</div>
 						<div ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
 							<div class="wfm-filter-results" ng-repeat="result in results">
-								<div ng-click="selectResultItem(result)"><div>[{{result.FilterType}}] {{result.Name}}</div></div>
+								<div ng-click="selectResultItem(result)">
+									<div>[{{result.FilterType}}] {{result.Name}}</div>
+								</div>
 							</div>
 							<div ng-show="moreResultsExists()">
 								And more....
