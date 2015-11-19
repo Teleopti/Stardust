@@ -39,7 +39,8 @@
 		        scope.enforceRadioBehavior = enforceRadioBehavior;
 		        scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
 		        scope.removeWorkingPeriod = removeWorkingPeriod;
-			    scope.getTimerangeDisplay = getTimerangeDisplay;
+		        scope.getTimerangeDisplay = getTimerangeDisplay;
+			    scope.toggleAllChecks = toggleAllChecks;
 
 			    scope.disableNextDay = true;
 
@@ -56,6 +57,22 @@
 		            }
 		            scope.weekDays = weekDays;
 		        });
+
+		        function toggleAllChecks(index) {			    
+
+			        var isToggleOff = scope.workingHours[index].WeekDaySelections.every(function(x) { return x.Checked; });
+
+					if (isToggleOff) {
+						angular.forEach(scope.workingHours[index].WeekDaySelections, function(d) {
+							d.Checked = false;
+						});
+					} else {
+						angular.forEach(scope.workingHours[index].WeekDaySelections, function (d) {
+							d.Checked = true;
+							enforceRadioBehavior(index, d.WeekDay);
+						});
+					}		        	
+		        }
 
 		        function enforceRadioBehavior(refIndex, weekDay) {
 		            clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
