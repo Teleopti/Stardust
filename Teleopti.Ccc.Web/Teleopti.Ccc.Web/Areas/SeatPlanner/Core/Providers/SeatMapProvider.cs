@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 					var roles = seat.Roles
 									.Select(role => (ApplicationRole) role)
 									.Where(role => !role.IsDeleted)
+									.Select(role => role.Id.Value)
 									.ToList();
 					
 					return new SeatViewModel()
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 						Id = seat.Id.Value,
 						Name = seat.Name,
 						IsOccupied = bookings!=null && bookings.Any(booking => booking.Seat.Id == seat.Id),
-						Roles = roles
+						RoleIdList = roles
 					};
 
 				}).ToList();

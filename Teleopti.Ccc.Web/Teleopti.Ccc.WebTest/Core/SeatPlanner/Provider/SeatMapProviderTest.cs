@@ -62,7 +62,9 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		public void ShouldLoadAvailiableRolesInTheSeats()
 		{
 			var role1 = ApplicationRoleFactory.CreateRole("role1", "Role 1");
+			role1.SetId(Guid.NewGuid());
 			var role2 = ApplicationRoleFactory.CreateRole("role2", "Role 2");
+			role2.SetId(Guid.NewGuid());
 			
 			var location = new SeatMapLocation() { Name = "Location" };
 			location.SetId(Guid.NewGuid());
@@ -77,9 +79,9 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var locationViewModel = provider.Get(null);
 
 			Assert.IsTrue(locationViewModel.Seats.Count == 2);
-			Assert.IsTrue(locationViewModel.Seats[0].Roles.Count == 0);
-			Assert.IsTrue(locationViewModel.Seats[1].Roles.Count == 1);
-			Assert.AreEqual(role1.Name, locationViewModel.Seats[1].Roles.Single().Name);
+			Assert.IsTrue(locationViewModel.Seats[0].RoleIdList.Count == 0);
+			Assert.IsTrue(locationViewModel.Seats[1].RoleIdList.Count == 1);
+			Assert.AreEqual(role1.Id, locationViewModel.Seats[1].RoleIdList.Single());
 		}
 
 	}
