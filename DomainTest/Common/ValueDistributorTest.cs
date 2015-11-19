@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 				new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(10, 0, 0))
 			};
 
-			ValueDistributor.DistributeToFirstOpenPeriod(6, targets, openHours);
+			ValueDistributor.DistributeToFirstOpenPeriod(6, targets, openHours, TimeZoneInfo.Utc);
 
 			targets[0].Tasks.Should().Be.EqualTo(0);
 			targets[1].Tasks.Should().Be.EqualTo(6);

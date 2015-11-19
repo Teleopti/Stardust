@@ -108,11 +108,11 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-	    public static void DistributeToFirstOpenPeriod(double newTotal, IEnumerable<ITemplateTaskPeriod> targets, IList<TimePeriod> openHourList)
+	    public static void DistributeToFirstOpenPeriod(double newTotal, IEnumerable<ITemplateTaskPeriod> targets, IList<TimePeriod> openHourList, TimeZoneInfo targetTimeZoneInfo)
 	    {
 		    var targetList = targets.ToList();
 			targetList.ForEach(t => t.Tasks = 0);
-			var firstSuitableTarget = targetList.FirstOrDefault(x => openHourList.Any(y => x.Period.TimePeriod(TimeZoneInfo.Utc).Intersect(y)));
+			var firstSuitableTarget = targetList.FirstOrDefault(x => openHourList.Any(y => x.Period.TimePeriod(targetTimeZoneInfo).Intersect(y)));
 		    if (firstSuitableTarget != null)
 		    {
 			    firstSuitableTarget.Tasks = newTotal;

@@ -1197,7 +1197,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    {
 		    if (_useSkewedDistribution)
 		    {
-				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList);
+				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList, _workload.Skill.TimeZone);
 		    }
 		    else
 		    {

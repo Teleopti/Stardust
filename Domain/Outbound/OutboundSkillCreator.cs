@@ -61,18 +61,33 @@ namespace Teleopti.Ccc.Domain.Outbound
 			}
 		}
 
-       public void SetOpenHours(IOutboundCampaign campaign, IWorkload workLoad)
+		public void SetOpenHours(IOutboundCampaign campaign, IWorkload workLoad)
 		{
-			foreach (var workingHour in campaign.WorkingHours)
-			{
-				IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
-				workloadDayTemplate.Create(workingHour.Key.ToString(), DateTime.UtcNow, workLoad,
-					new List<TimePeriod> { workingHour.Value });
-
-				workloadDayTemplate.SetUseSkewedDistribution(true);
-				workloadDayTemplate.Tasks = 1;
-				workLoad.SetTemplate(workingHour.Key, workloadDayTemplate);
-			}
+			foreach (DayOfWeek weekDay in Enum.GetValues(typeof (DayOfWeek)))
+			{				
+				TimePeriod workingHour;
+				if (campaign.WorkingHours.TryGetValue(weekDay, out workingHour))
+				{
+					IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
+					workloadDayTemplate.Create(weekDay.ToString(), DateTime.UtcNow, workLoad, new List<TimePeriod> { workingHour });
+					workloadDayTemplate.SetUseSkewedDistribution(true);
+					workloadDayTemplate.Tasks = 1;
+					workLoad.SetTemplate(weekDay, workloadDayTemplate);
+				}
+				else
+				{
+					IWorkloadDayTemplate existingTemplate;
+					if (workLoad.TemplateWeekCollection.TryGetValue((int) weekDay, out existingTemplate))
+					{
+						var template =
+							workLoad.TryFindTemplateByName(TemplateTarget.Workload, existingTemplate.Name) as IWorkloadDayTemplate;
+						if (template == null) continue;
+						template.Tasks = 0;
+						template.Close();
+					}				
+				}
+				
+			}		
 		}
 
 		private static void setHandledWithinOnSkillTemplates(ISkill skill)

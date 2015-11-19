@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 				if (isMovePeriod(oldCampaign, campaign))
 				{
-					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone));
 					_outboundSkillCreator.SetOpenHours(campaign, campaign.Skill.WorkloadCollection.First());
+					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone));					
 				}
 			}
 			return campaign;
