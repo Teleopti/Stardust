@@ -76,7 +76,7 @@
 		vm.Init = function () {
 			vm.scheduleDate = new Date();
 			toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' }).$promise.then(function(result) {
-				vm.isFromReadModel = result;
+				vm.isFromReadModel = !result;
 			});
 			vm.loadTeams();
 		}

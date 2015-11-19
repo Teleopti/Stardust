@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Rhino.Mocks.Constraints;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
@@ -207,6 +209,42 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
 			projectionVm.Count().Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldReturnPreviousDaySScheduleWhenThereIsOvernightShift()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("p1", "p1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()), new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			scheduleDay.Add(pa);
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1), person, scenario);
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
+			scheduleDayPrevious.Add(paPrev);
+			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
+
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content;
+
+			result.Count().Should().Be.EqualTo(2);
+			result.First().Date.Should().Be.EqualTo("2020-01-01");
+			result.Second().Date.Should().Be.EqualTo("2019-12-31");
+
+		}
+
+		[Test]
+		public void ShouldReturnPreviousDaySScheduleWhenThereIsRegularActivityEndedOvernight()
+		{
+			
+
+		}
+
 		//[Test]
 		//public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnly()
 		//{
