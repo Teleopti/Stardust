@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
@@ -25,42 +21,44 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IPersonSelectorPresenter _personSelectorPresenter;
 		private PersonsFilterView(){}
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
-		private ICollection<IPerson> _selectedPersons;
+		private readonly ICollection<IPerson> _selectedPersons;
 		private FilterMultiplePersons _filterMultiplePersons;
 		private bool _getTheGuidsFromAdvanceFilter = false;
+		private readonly IPersonSelectorView _selectorView;
 
 		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids, bool isAdvanced)
 		{
 			_componentContext = componentContext;
 			InitializeComponent();
 
-			_personSelectorPresenter =
-				componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPersonSelectorPresenter>();
+			var lifeTimeScope = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
+			_personSelectorPresenter = lifeTimeScope.Resolve<IPersonSelectorPresenter>();
+
+			_selectorView = _personSelectorPresenter.View;
 			_personSelectorPresenter.ApplicationFunction = applicationFunction;
 			var view = (Control)_personSelectorPresenter.View;
 			panel1.Controls.Add(view);
 			view.Dock = DockStyle.Fill;
 
-			var selectorView = _personSelectorPresenter.View;
-			selectorView.SelectedPeriod = selectedPeriod;
+			_selectorView.SelectedPeriod = selectedPeriod;
 			_personSelectorPresenter.ShowPersons = true;
 			_personSelectorPresenter.ShowUsers = false;
-			selectorView.PreselectedPersonIds = selectedPersons.Keys;
-			selectorView.VisiblePersonIds = visiblePersonGuids;
-			selectorView.ShowCheckBoxes = true;
-			selectorView.KeepInteractiveOnDuringLoad = true;
+			_selectorView.PreselectedPersonIds = selectedPersons.Keys;
+			_selectorView.VisiblePersonIds = visiblePersonGuids;
+			_selectorView.ShowCheckBoxes = true;
+			_selectorView.KeepInteractiveOnDuringLoad = true;
 
-			selectorView.ShowDateSelection = false;
-			selectorView.HideMenu = true;
+			_selectorView.ShowDateSelection = false;
+			_selectorView.HideMenu = true;
 			if (_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(_personSelectorPresenter.LoadTabs))
 			{
 				_personSelectorPresenter.SetSelectedTab(selectedGroupPage);
 			}
-		   
+
 			SetTexts();
 			buttonAdvance.Visible = isAdvanced;
-			_selectedPersons = selectedPersons.Values ;
-			selectorView.DoFilter += selectorViewDoFilter;
+			_selectedPersons = selectedPersons.Values;
+			_selectorView.DoFilter += selectorViewDoFilter;
 
 		}
 

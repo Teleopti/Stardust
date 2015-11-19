@@ -7,8 +7,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
-using Syncfusion.Drawing;
-using Syncfusion.Grouping;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Win.Grouping
 	{
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IGroupPageHelper _groupPageHelper;
-		private readonly IComponentContext _container;
+		private IComponentContext _container;
 		private readonly IEventAggregator _globalEventAggregator;
 		private DateOnlyPeriod? _selectedPeriod;
 		private readonly Brush _intermediateBrush = Brushes.LightGray;
