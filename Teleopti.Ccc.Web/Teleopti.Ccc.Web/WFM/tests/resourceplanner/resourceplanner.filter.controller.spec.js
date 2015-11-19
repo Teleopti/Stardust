@@ -83,7 +83,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isSearching).toEqual(false);
 	}));
 
-	fit('should falsify isSearching if non successful call', inject(function ($controller) {
+	it('should falsify isSearching if non successful call', inject(function ($controller) {
 		var searchString = "blabla";
 
 		$httpBackend.whenGET(filterUrl(searchString, 5))
