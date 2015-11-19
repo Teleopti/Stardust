@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 			builder.RegisterType<SeatOccupancyProvider>().As<ISeatOccupancyProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatPlanPersister>().As<ISeatPlanPersister>().InstancePerLifetimeScope();
 			builder.RegisterType<Domain.SeatPlanning.SeatPlanner>().As<ISeatPlanner>().InstancePerLifetimeScope();
+			builder.RegisterType<SeatMapPersister>().As<ISeatMapPersister>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatBookingRequestAssembler>().As<ISeatBookingRequestAssembler>().InstancePerLifetimeScope();
 			
 		}
