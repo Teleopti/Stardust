@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
-	public class TeamScheduleViewModelFactory: ITeamScheduleViewModelFactory
+	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
-		private ILoggedOnUser _loggedOnUser;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider projectionProvider, ISchedulePersonProvider schedulePersonProvider,
@@ -33,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_loggedOnUser = loggedOnUser;
 		}
 
-
 		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
 		{
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
@@ -41,23 +35,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToArray();
 			var peopleCanSeeConfidentialAbsencesFor =
 				_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(new DateOnly(dateInUserTimeZone), people).ToList();
-			var scheduleDaysForPreviousDay = _scheduleProvider.GetScheduleForPersons(new DateOnly(dateInUserTimeZone).AddDays(-1), people) ??
-							   new IScheduleDay[] { };
+			var scheduleDaysForPreviousDay =
+				_scheduleProvider.GetScheduleForPersons(new DateOnly(dateInUserTimeZone).AddDays(-1), people) ??
+				new IScheduleDay[] {};
 			scheduleDays.AddRange(
 				scheduleDaysForPreviousDay.Where(
 					scheduleDay =>
 						scheduleDay != null && scheduleDay.PersonAssignment() != null &&
-						TimeZoneHelper.ConvertFromUtc(scheduleDay.PersonAssignment().Period.EndDateTime, userTimeZone) > dateInUserTimeZone));
+						TimeZoneHelper.ConvertFromUtc(scheduleDay.PersonAssignment().Period.EndDateTime, userTimeZone) >
+						dateInUserTimeZone));
 
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			var personScheduleDays = (from p in people
-									  let personSchedules = (from s in scheduleDays where s.Person == p select s)
-									  select new Tuple<IPerson, IEnumerable<IScheduleDay>>(p, personSchedules)).ToArray();
-
+				let personSchedules = (from s in scheduleDays where s.Person == p select s)
+				select new Tuple<IPerson, IEnumerable<IScheduleDay>>(p, personSchedules)).ToArray();
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			foreach (var personScheduleDay in personScheduleDays)
@@ -67,16 +62,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person);
 				foreach (var scheduleDay in schedules)
 				{
-					bool isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, person);
-					list.Add(scheduleDay != null && (isPublished || canSeeUnpublishedSchedules) ? _projectionProvider.Projection(scheduleDay, canViewConfidential) : new GroupScheduleShiftViewModel
-					{
-						PersonId = person.Id.GetValueOrDefault().ToString(),
-						Name = person.Name.ToString(),
-						Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-						Projection = new List<GroupScheduleLayerViewModel>()
-					});
+					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, person);
+					list.Add(isPublished || canSeeUnpublishedSchedules
+						? _projectionProvider.Projection(scheduleDay, canViewConfidential)
+						: new GroupScheduleShiftViewModel
+						{
+							PersonId = person.Id.GetValueOrDefault().ToString(),
+							Name = person.Name.ToString(),
+							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
+							Projection = new List<GroupScheduleLayerViewModel>()
+						});
 				}
-
 			}
 			return list;
 		}
