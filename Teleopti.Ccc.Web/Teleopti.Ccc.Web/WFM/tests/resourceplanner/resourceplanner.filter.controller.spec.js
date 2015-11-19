@@ -403,13 +403,15 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.results.length).toEqual(0);
 	}));
-	it('should clear the inputfield if mouse is pressed', inject(function ($controller) {
+	it('should clear the inputfields when clearInput is called', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 		scope.results = [{}];
+		scope.searchString = 'bla bla';
 		scope.clearInput();
 
 		expect(scope.results.length).toEqual(0);
+		expect(scope.searchString).toEqual('');
 	}));
 
 	it('should set isSearching', inject(function ($controller) {
