@@ -83,6 +83,5 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			Assert.IsTrue(locationViewModel.Seats[1].RoleIdList.Count == 1);
 			Assert.AreEqual(role1.Id, locationViewModel.Seats[1].RoleIdList.Single());
 		}
-
 	}
 }
