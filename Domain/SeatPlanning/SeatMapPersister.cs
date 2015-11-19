@@ -137,8 +137,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				foreach (var seat in seatMapLocation.Seats)
 				{
 					var machedSeatInfo = seatsInfo.Single(seatInfo => seatInfo.Id == seat.Id);
-					var foundRoles = roles.Where(role => machedSeatInfo.RoleIdList.Contains(role.Id.Value)).ToArray();
-					seat.SetRoles(foundRoles.ToArray());
+					var foundRoles = roles.Where(role => machedSeatInfo.RoleIdList.Contains(role.Id.Value)).ToList();
+					seat.SetRoles(foundRoles);
 				}
 			}
 		}

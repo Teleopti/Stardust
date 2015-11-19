@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatBookings.Clear();
 		}
 
-		public virtual void SetRoles(params IApplicationRole[] roles)
+		public virtual void SetRoles(IList<IApplicationRole> roles)
 		{
 			_roles = roles;
 		}

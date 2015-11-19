@@ -180,9 +180,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			seatMapLocation.SetLocation(seatMapData, "rootLocation");
 			seatMapLocation.SetId(Guid.NewGuid());
 			var seat1 = seatMapLocation.AddSeat("Seat1", 1);
-			seat1.SetRoles(role1, role2);
+			seat1.SetRoles(new IApplicationRole[] {role1, role2});
 			var seat2 = seatMapLocation.AddSeat("Seat2", 2);
-			seat2.SetRoles(role1, role2);
+			seat2.SetRoles(new IApplicationRole[] {role1, role2});
 			_seatMapLocationRepository.Add(seatMapLocation);
 			
 			var command = new SaveSeatMapCommand()
