@@ -49,6 +49,10 @@
 				$scope.isValidConsecDaysOff = function () {
 					return $scope.consecDaysOff.MinConsecDaysOff <= $scope.consecDaysOff.MaxConsecDaysOff;
 				}
+				$scope.clearInput = function () {
+					$scope.searchString = '';
+					$scope.results = [];
+				}
 
 				$scope.isValidConsecWorkDays = function () {
 					return $scope.consecWorkDays.MinConsecWorkDays <= $scope.consecWorkDays.MaxConsecWorkDays;
@@ -65,8 +69,7 @@
 					if ($scope.selectedResults.indexOf(item) < 0) {
 						$scope.selectedResults.push(item);
 					}
-					$scope.searchString = '';
-					$scope.results = [];
+					$scope.clearInput();
 				}
 
 				$scope.moreResultsExists = function () {

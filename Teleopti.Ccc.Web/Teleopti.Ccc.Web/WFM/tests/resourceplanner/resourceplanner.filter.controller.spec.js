@@ -386,6 +386,14 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.results.length).toEqual(0);
 	}));
+	it('should clear the inputfield if mouse is pressed', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		scope.results = [{}];
+		scope.clearInput();
+
+		expect(scope.results.length).toEqual(0);
+	}));
 
 	it('should set isSearching', inject(function ($controller) {
 		var scope = $rootScope.$new();
