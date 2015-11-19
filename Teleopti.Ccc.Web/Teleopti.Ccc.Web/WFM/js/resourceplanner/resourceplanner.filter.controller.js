@@ -36,7 +36,8 @@
 					return $scope.isValidDayOffsPerWeek() &&
 						$scope.isValidConsecDaysOff() &&
 						$scope.isValidConsecDaysOff() &&
-						$scope.isValidFilters();
+						$scope.isValidFilters() &&
+						$scope.isValidName();
 				}
 
 				$scope.isValidDayOffsPerWeek = function () {
@@ -53,6 +54,9 @@
 
 				$scope.isValidFilters = function () {
 					return $scope.selectedResults.length > 0;
+				}
+				$scope.isValidName = function(){
+					return $scope.name.length >0;
 				}
 
 				$scope.selectResultItem = function (item) {

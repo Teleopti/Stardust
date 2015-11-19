@@ -140,8 +140,17 @@ describe('ResourcePlannerCtrl', function () {
 		scope.name = "default name";
 
 		expect(scope.name).toBe("default name");
-	}));
 
+	}));
+	it('should set is invalid if no name', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.name = "";
+
+		expect(scope.isValid()).toBe(false);
+		expect(scope.isValidName()).toBe(false);
+	}));
 
 	it('should set default value for days of per week', inject(function ($controller) {
 		var scope = $rootScope.$new();
@@ -151,6 +160,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.dayOffsPerWeek.MinDayOffsPerWeek).toBe(2); //?
 		expect(scope.dayOffsPerWeek.MaxDayOffsPerWeek).toBe(3); //?
 	}));
+
 
 	it('should set invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function ($controller) {
 		var scope = $rootScope.$new();
@@ -261,7 +271,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		
+
 		expect(scope.isValid()).toBe(false);
 		expect(scope.isValidFilters()).toBe(false);
 	}));
@@ -331,7 +341,7 @@ describe('ResourcePlannerCtrl', function () {
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
 		scope.searchString = 'something';
-		scope.selectResultItem({}); 
+		scope.selectResultItem({});
 
 		expect(scope.searchString).toEqual('');
 	}));
