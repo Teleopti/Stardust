@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -20,25 +21,33 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
 		{
-			var scheduleVM = new GroupScheduleShiftViewModel();
+			var scheduleVm = new GroupScheduleShiftViewModel();
 			var layers = new List<GroupScheduleLayerViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			scheduleVM.PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString();
-			scheduleVM.Name = scheduleDay.Person.Name.ToString();
-			scheduleVM.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
+			scheduleVm.PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString();
+			scheduleVm.Name = scheduleDay.Person.Name.ToString();
+			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPartForDisplay();
+
+			var overtimeStart = DateTime.MaxValue;
+			var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
+			if (overtimeActivities.Any())
+			{
+				overtimeStart = overtimeActivities.Select(x => x.Period.StartDateTime).Min();
+			}
+
 			switch (significantPart)
 			{
 				case SchedulePartView.FullDayAbsence:
-					scheduleVM.IsFullDayAbsence = true;
+					scheduleVm.IsFullDayAbsence = true;
 					break;
 				case SchedulePartView.DayOff:
 					var dayOff = scheduleDay.PersonAssignment().DayOff();
 					var dayOffStart = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime;
 					var dayOffEnd = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime;
 
-					scheduleVM.DayOff = new GroupScheduleDayOffViewModel
+					scheduleVm.DayOff = new GroupScheduleDayOffViewModel
 					{
 						DayOffName = dayOff.Description.Name,
 						Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToFixedDateTimeFormat(),
@@ -46,24 +55,26 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 					};
 					if (projection.HasLayers)
-						scheduleVM.IsFullDayAbsence = true;
+						scheduleVm.IsFullDayAbsence = true;
 					break;
-
 			}
+
 			if (projection != null && projection.HasLayers)
 			{
-				scheduleVM.WorkTimeMinutes = projection.WorkTime().Minutes;
-				scheduleVM.ContractTimeMinutes = projection.ContractTime().Minutes;
-
+				scheduleVm.WorkTimeMinutes = projection.WorkTime().Minutes;
+				scheduleVm.ContractTimeMinutes = projection.ContractTime().Minutes;
 
 				foreach (var layer in projection)
 				{
-					var isPayloadAbsence = (layer.Payload is IAbsence);
+					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
+
 					var description = isPayloadAbsence
-						? (isAbsenceConfidential && !canViewConfidential ? ConfidentialPayloadValues.Description : (layer.Payload as IAbsence).Description)
+						? (isAbsenceConfidential && !canViewConfidential
+							? ConfidentialPayloadValues.Description
+							: (layer.Payload as IAbsence).Description)
 						: layer.DisplayDescription();
 
 					layers.Add(new GroupScheduleLayerViewModel
@@ -76,13 +87,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 									: (layer.Payload as IAbsence).DisplayColor.ToHtml())
 								: layer.DisplayColor().ToHtml(),
 						Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
-						Minutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes
-
+						Minutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
+						IsOvertime = layer.Period.StartDateTime >= overtimeStart
 					});
 				}
 			}
-			scheduleVM.Projection = layers;
-			return scheduleVM;
+			scheduleVm.Projection = layers;
+			return scheduleVm;
 		}
 	}
 
