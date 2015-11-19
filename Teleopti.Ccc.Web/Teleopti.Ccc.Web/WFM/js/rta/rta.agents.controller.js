@@ -62,11 +62,8 @@
 				$scope.isSelected = function(personId) {
 					return selectedPersonId === personId;
 				};
-				$scope.showAdherence = function(adherence) {
-					return adherence !== null;
-				};
-				$scope.showLastUpdate = function(timestamp) {
-					return timestamp !== null && timestamp !== '';
+				$scope.showAdherenceUpdates = function() {
+					return $scope.adherencePercent !== null;
 				};
 				$scope.$watch(
 					function() {
