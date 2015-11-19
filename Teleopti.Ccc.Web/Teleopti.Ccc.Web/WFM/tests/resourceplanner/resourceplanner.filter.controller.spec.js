@@ -83,6 +83,23 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isSearching).toEqual(false);
 	}));
 
+	fit('should falsify isSearching if non successful call', inject(function ($controller) {
+		var searchString = "blabla";
+
+		$httpBackend.whenGET(filterUrl(searchString, 5))
+			.respond(500, [{}]);
+
+
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+
+		scope.searchString = searchString;
+
+		$httpBackend.flush();
+
+		expect(scope.isSearching).toEqual(false);
+	}));
+
 	it('should not call service when model is undefined ', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });

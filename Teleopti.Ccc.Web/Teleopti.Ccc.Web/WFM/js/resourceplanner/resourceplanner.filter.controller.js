@@ -31,6 +31,8 @@
 						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
 							$scope.results = results;
 							$scope.isSearching = false;
+						}, function() {
+							$scope.isSearching = false;
 						});
 					}
 				);
