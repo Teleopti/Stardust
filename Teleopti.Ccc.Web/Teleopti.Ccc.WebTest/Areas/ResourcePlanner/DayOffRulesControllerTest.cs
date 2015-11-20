@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
 			fetchModel.Expect(x => x.FetchAll()).Return(model);
 			var target = new DayOffRulesController(fetchModel, null);
-			target.FetchAll().OkContent<DayOffRulesModel>()
+			target.FetchAll().OkContent<IEnumerable<DayOffRulesModel>>()
 				.Should().Be.SameInstanceAs(model);
 		}
 	}
