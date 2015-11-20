@@ -90,7 +90,7 @@
 		concat: {
 			distJs: {
 				src: [
-				'node_modules/angular/angular.js',
+				'node_modules/angular/angular.min.js',
 				'node_modules/angular-ui-router/release/angular-ui-router.min.js',
 				'node_modules/angular-resizable/angular-resizable.min.js',
 				'node_modules/angular-resource/angular-resource.min.js',
