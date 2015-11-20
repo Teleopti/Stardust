@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
-	public class PersonInfoController : Controller
+	public class PersonInfoController : ApiController
 	{
 		private readonly IPersistPersonInfo _persister;
 		private readonly IPersonInfoMapper _mapper;
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_findLogonInfo = findLogonInfo;
 		}
 
-		[HttpPost]
+		[HttpPost, Route("PersonInfo/Persist")]
 		//TODO: tenant - change from returning an json object with errors to non 200 http error codes
-		public virtual JsonResult Persist(PersonInfoModel personInfoModel)
+		public virtual IHttpActionResult Persist([FromBody]PersonInfoModel personInfoModel)
 		{
 			var ret = new PersistPersonInfoResult();
 			try
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			{
 				ret.IdentityIsValid = false;
 			}
-			return Json(ret);
+			return Ok(ret);
 		}
 
 		[TenantUnitOfWork]
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_persister.Persist(_mapper.Map(personInfoModel));
 		}
 
-		[HttpPost]
+		[HttpPost, Route("PersonInfo/Delete")]
 		[TenantUnitOfWork]
-		public virtual void Delete(IEnumerable<Guid> personIdsToDelete)
+		public virtual void Delete([FromBody]IEnumerable<Guid> personIdsToDelete)
 		{
 			foreach (var personInfoDelete in personIdsToDelete)
 			{
@@ -67,25 +67,25 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			}
 		}
 
-		[HttpPost]
+		[HttpPost, Route("PersonInfo/LogonInfoFromGuids")]
 		[TenantUnitOfWork]
-		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
+		public virtual IHttpActionResult LogonInfoFromGuids([FromBody]IEnumerable<Guid> personIdsToGet)
 		{
-			return Json(_findLogonInfo.GetForIds(personIdsToGet));
+			return Ok(_findLogonInfo.GetForIds(personIdsToGet));
 		}
 
-		[HttpPost]
+		[HttpGet, Route("PersonInfo/LogonFromName")]
 		[TenantUnitOfWork]
-		public virtual JsonResult LogonInfoFromLogonName(string logonName)
+		public virtual IHttpActionResult LogonInfoFromLogonName(string logonName)
 		{
-			return Json(_findLogonInfo.GetForLogonName(logonName));
+			return Ok(_findLogonInfo.GetForLogonName(logonName));
 		}
 
-		[HttpPost]
+		[HttpGet, Route("PersonInfo/LogonFromIdentity")]
 		[TenantUnitOfWork]
-		public virtual JsonResult LogonInfoFromIdentity(string identity)
+		public virtual IHttpActionResult LogonInfoFromIdentity(string identity)
 		{
-			return Json(_findLogonInfo.GetForIdentity(identity));
+			return Ok(_findLogonInfo.GetForIdentity(identity));
 		}
 	}
 }

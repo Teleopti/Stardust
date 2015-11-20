@@ -1,14 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
-	public class AuthenticateController : Controller
+	public class AuthenticateController : ApiController
 	{
 		private readonly IApplicationAuthentication _applicationAuthentication;
 		private readonly IIdentityAuthentication _identityAuthentication;
@@ -27,35 +25,35 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_logLogonAttempt = logLogonAttempt;
 		}
 
-		[HttpPost]
+		[HttpPost, Route("Authenticate/ApplicationLogon")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult ApplicationLogon(ApplicationLogonModel applicationLogonModel)
+		public virtual IHttpActionResult ApplicationLogon([FromBody]ApplicationLogonModel applicationLogonModel)
 		{
 			var res = _applicationAuthentication.Logon(applicationLogonModel.UserName, applicationLogonModel.Password);
 			_logLogonAttempt.SaveAuthenticateResult(applicationLogonModel.UserName, res.PersonId, res.Success);
-			return Json(res);
+			return Ok(res);
 		}
 
-		[HttpPost]
+		[HttpPost, Route("Authenticate/IdentityLogon")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult IdentityLogon(IdentityLogonModel identityLogonModel)
+		public virtual IHttpActionResult IdentityLogon([FromBody]IdentityLogonModel identityLogonModel)
 		{
 			var res = _identityAuthentication.Logon(identityLogonModel.Identity);
 			_logLogonAttempt.SaveAuthenticateResult(identityLogonModel.Identity, res.PersonId, res.Success);
-			return Json(res);
+			return Ok(res);
 		}
 
-		[HttpPost]
+		[HttpPost, Route("Authenticate/IdLogon")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult IdLogon(IdLogonModel idLogonModel)
+		public virtual IHttpActionResult IdLogon([FromBody]IdLogonModel idLogonModel)
 		{
 			var res = _idAuthentication.Logon(idLogonModel.Id);
 			// don't think we should do this here because this is called after the actual logon
 			//_logLogonAttempt.SaveAuthenticateResult(idLogonModel.Id.ToString(), res.PersonId, res.Success);
-			return Json(res);
+			return Ok(res);
 		}
 	}
 }

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
+			builder.RegisterType<GetHttpRequest>().As<IGetHttpRequest>().SingleInstance();
 			builder.RegisterType<DataSourceConfigDecryption>().As<IDataSourceConfigDecryption>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;

@@ -30,6 +30,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return responseToJson<T>(request);
 		}
 
+		public static T GetRequest<T>(this HttpWebRequest request)
+		{
+			request.AllowAutoRedirect = false;
+			request.Method = "GET";
+			request.ContentType = "application/json";
+			request.Accept = "application/json";
+
+			return responseToJson<T>(request);
+		}
+
 		private static T responseToJson<T>(WebRequest request)
 		{
 			using (var response = request.GetResponse())

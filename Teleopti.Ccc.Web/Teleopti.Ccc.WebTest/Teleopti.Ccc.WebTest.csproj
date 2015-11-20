@@ -524,6 +524,7 @@
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="PreserveStackTest.cs" />
     <Compile Include="TestHelper\FirstAvailableMockFactory.cs" />
+    <Compile Include="TestHelper\HttpActionResultExtensions.cs" />
     <Compile Include="TestHelper\IMockFactory.cs" />
     <Compile Include="TestHelper\IMockProxy.cs" />
     <Compile Include="TestHelper\IWriteableHttpFileCollection.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -11,16 +12,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly IPostHttpRequest _postHttpRequest;
+		private readonly IGetHttpRequest _getHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
 		private readonly ICurrentTenantCredentials _currentTenantCredentials;
 
 		public TenantLogonDataManager(ITenantServerConfiguration tenantServerConfiguration, 
 			IPostHttpRequest postHttpRequest,
+			IGetHttpRequest getHttpRequest,
 			IJsonSerializer jsonSerializer,
 			ICurrentTenantCredentials currentTenantCredentials)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
 			_postHttpRequest = postHttpRequest;
+			_getHttpRequest = getHttpRequest;
 			_jsonSerializer = jsonSerializer;
 			_currentTenantCredentials = currentTenantCredentials;
 		}
@@ -39,16 +43,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public LogonInfoModel GetLogonInfoForLogonName(string logonName)
 		{
 			var tenantCredentials = _currentTenantCredentials.TenantCredentials();
-			return _postHttpRequest.SendSecured<LogonInfoModel>(
-				_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromLogonName"), _jsonSerializer.SerializeObject(new {logonName}),
+			return _getHttpRequest.GetSecured<LogonInfoModel>(
+				_tenantServerConfiguration.FullPath("PersonInfo/LogonFromName"), new NameValueCollection{{"logonName",logonName}}, 
 				tenantCredentials);
 		}
 
 		public LogonInfoModel GetLogonInfoForIdentity(string identity)
 		{
 			var tenantCredentials = _currentTenantCredentials.TenantCredentials();
-			return _postHttpRequest.SendSecured<LogonInfoModel>(
-				_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromIdentity"), _jsonSerializer.SerializeObject(new { identity }),
+			return _getHttpRequest.GetSecured<LogonInfoModel>(
+				_tenantServerConfiguration.FullPath("PersonInfo/LogonFromIdentity"), new NameValueCollection{{"identity", identity }},
 				tenantCredentials);
 		}
 	}

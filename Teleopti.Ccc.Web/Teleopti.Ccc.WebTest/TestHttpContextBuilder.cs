@@ -53,25 +53,21 @@ namespace Teleopti.Ccc.WebTest
 			controller.ControllerContext = context;
 		}
 
-		//public void SetHttpMethodResult(this HttpRequestBase request, string httpMethod)
-		//{
-		//    SetupResult.For(request.HttpMethod).Return(httpMethod);
-		//}
-
 		private string GetUrlFileName(string url) {
-			return url.Contains("?") ? url.Substring(0, url.IndexOf("?")) : url;
+			return new Uri(url).AbsolutePath;
 		}
 
 		private NameValueCollection GetQueryStringParameters(string url)
 		{
-			if (!url.Contains("?"))
+			var query = new Uri(url).Query;
+			if (string.IsNullOrEmpty(query))
 			{
 				return null;
 			}
+
 			var parameters = new NameValueCollection();
 
-			var parts = url.Split("?".ToCharArray());
-			var keys = parts[1].Split("&".ToCharArray());
+			var keys = query.Split("&".ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
 
 			foreach (var key in keys)
 			{
