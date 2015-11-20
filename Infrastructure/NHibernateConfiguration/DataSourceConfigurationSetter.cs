@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using NHibernate.SqlAzure;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Environment = NHibernate.Cfg.Environment;
@@ -11,53 +12,51 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	{
 		public static IDataSourceConfigurationSetter ForTest()
 		{
-			return new DataSourceConfigurationSetter(false, false, "call", "unit tests", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "call", "unit tests", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForTestWithCache()
 		{
-			return new DataSourceConfigurationSetter(true, false, "call", "unit tests", new ConfigReader());
+			return new DataSourceConfigurationSetter(true, "call", "unit tests", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Etl.Tool", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Etl.Tool", new ConfigReader());
 		}
 
 		public static IDataSourceConfigurationSetter ForEtlService()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Etl.Service", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Etl.Service", new ConfigReader());
 		}
 
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.ApplicationConfiguration", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.ApplicationConfiguration", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.Sdk.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Sdk.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Wfm.Web", new ConfigReader());
+			return new DataSourceConfigurationSetter(true, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Wfm.Web", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
 		}
 
 		public const string NoDataSourceName = "[not set]";
 
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache,
-															bool useDistributedTransactionFactory,
 															string sessionContext,
 															string applicationName,
 															IConfigReader configReader)
 		{
 			UseSecondLevelCache = useSecondLevelCache;
-			UseDistributedTransactionFactory = useDistributedTransactionFactory;
 			SessionContext = sessionContext;
 			ApplicationName = applicationName ?? string.Empty;
 			if (!string.IsNullOrEmpty(configReader.AppSettings_DontUse["latency"]))
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		public bool UseSecondLevelCache { get; private set; }
-		public bool UseDistributedTransactionFactory { get; private set; }
 		public string SessionContext { get; private set; }
 		public string ApplicationName { get; private set; }
 		private bool UseLatency { get; set; }
@@ -73,7 +71,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
 			nhConfiguration.AddAssembly(typeof(Person).Assembly);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
@@ -91,10 +88,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName);
 			}
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy,
-												 UseDistributedTransactionFactory ?
-												 typeof(TeleoptiDistributedTransactionFactory).AssemblyQualifiedName :
-												 "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
+			else
+			{
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithTimeoutRetries).AssemblyQualifiedName);
+			}
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
 			if (!string.IsNullOrEmpty(SessionContext))
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CurrentSessionContextClass, SessionContext);
 

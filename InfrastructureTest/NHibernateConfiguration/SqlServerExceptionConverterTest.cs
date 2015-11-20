@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 				Assert.Fail("DataSourceException was not thrown!");
 		}
 
-		[Test]
+		[Test, Ignore("Retry strategy is applied now")]
 		public void DataSourceExceptionShouldBeThrownIfNotConnectedWhenQueryIsStarted()
 		{
 			using (var tempSession = Session.SessionFactory.OpenSession())
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			tempUow.Dispose(); //implicit rollback
 		}
 
-		[Test]
+		[Test, Ignore("Retry strategy is applied now")]
 		public void DataSourceExceptionShouldBeThrownIfDeadConnectionWhenTransactionStarted()
 		{
 			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
