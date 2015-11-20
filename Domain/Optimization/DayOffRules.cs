@@ -21,12 +21,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public static DayOffRules CreateDefault()
 		{
-      return new DayOffRules
+			return new DayOffRules
 			{
 				DayOffsPerWeek = new MinMax<int>(1, 3),
 				ConsecutiveDayOffs = new MinMax<int>(1, 3),
 				ConsecutiveWorkdays = new MinMax<int>(2, 6),
-				Default = true
+				Default = true,
+				Name = UserTexts.Resources.Default
 			};
 		}
 

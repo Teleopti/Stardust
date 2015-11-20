@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				MinConsecutiveDayOffs = dayOffRules.ConsecutiveDayOffs.Minimum,
 				MaxConsecutiveDayOffs = dayOffRules.ConsecutiveDayOffs.Maximum,
 				Id = dayOffRules.Id ?? Guid.Empty,
-				Default = dayOffRules.Default
+				Default = dayOffRules.Default,
+				Name = dayOffRules.Name
 			};
 		}
 	}
