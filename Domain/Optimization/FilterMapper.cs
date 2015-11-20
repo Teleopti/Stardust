@@ -25,19 +25,34 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var contractFilter = filter as ContractFilter;
 			if (contractFilter != null)
 			{
-				return new FilterModel { FilterType = FilterModel.ContractFilterType, Id = contractFilter.Contract.Id.Value };
+				return new FilterModel
+				{
+					FilterType = FilterModel.ContractFilterType,
+					Id = contractFilter.Contract.Id.Value,
+					Name = contractFilter.Contract.Description.Name
+				};
 			}
 
 			var teamFilter = filter as TeamFilter;
 			if (teamFilter != null)
 			{
-				return new FilterModel { FilterType = FilterModel.TeamFilterType, Id = teamFilter.Team.Id.Value };
+				return new FilterModel
+				{
+					FilterType = FilterModel.TeamFilterType,
+					Id = teamFilter.Team.Id.Value,
+					Name = teamFilter.Team.Description.Name
+				};
 			}
 
 			var siteFilter = filter as SiteFilter;
 			if (siteFilter != null)
 			{
-				return new FilterModel { FilterType = FilterModel.SiteFilterType, Id = siteFilter.Site.Id.Value };
+				return new FilterModel
+				{
+					FilterType = FilterModel.SiteFilterType,
+					Id = siteFilter.Site.Id.Value,
+					Name = siteFilter.Site.Description.Name
+				};
 			}
 
 			throw new NotSupportedException("Unknown filter type" + filter);

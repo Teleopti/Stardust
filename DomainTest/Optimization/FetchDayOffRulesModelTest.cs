@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.AccessControl;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -101,47 +100,55 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludeContractFilterWhenFetching()
 		{
-			var contract = new Contract("_").WithId();
+			var filterName = RandomName.Make();
+			var contract = new Contract(filterName).WithId();
 			var contractFilter = new ContractFilter(contract);
 			var dayOffRule = new DayOffRules().WithId();
 			dayOffRule.AddFilter(contractFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.ContractFilterType);
 			filter.Id.Should().Be.EqualTo(contract.Id.Value);
+			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
 		[Test]
 		public void ShouldIncludeTeamFilterWhenFetching()
 		{
-			var team = new Team().WithId();
+			var filterName = RandomName.Make();
+			var team = new Team {Description = new Description(filterName)}.WithId();
 			var teamFilter = new TeamFilter(team);
 			var dayOffRule = new DayOffRules().WithId();
 			dayOffRule.AddFilter(teamFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.TeamFilterType);
 			filter.Id.Should().Be.EqualTo(team.Id.Value);
+			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
 		[Test]
 		public void ShouldIncludeSiteFilterWhenFetching()
 		{
-			var site = new Site("_").WithId();
+			var filterName = RandomName.Make();
+			var site = new Site(filterName).WithId();
 			var siteFilter = new SiteFilter(site);
 			var dayOffRule = new DayOffRules().WithId();
 			dayOffRule.AddFilter(siteFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
 			var loaded = Target.FetchAll().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.SiteFilterType);
 			filter.Id.Should().Be.EqualTo(site.Id.Value);
+			filter.Name.Should().Be.EqualTo(filterName);
 		}
-
 	}
 }

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
@@ -30,6 +31,17 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			target.Persist(model);
 
 			persister.AssertWasCalled(x => x.Persist(model));
+		}
+
+		[Test]
+		public void ShouldFetchAll()
+		{
+			var model = new List<DayOffRulesModel>();
+			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
+			fetchModel.Expect(x => x.FetchAll()).Return(model);
+			var target = new DayOffRulesController(fetchModel, null);
+			target.FetchAll().OkContent<DayOffRulesModel>()
+				.Should().Be.SameInstanceAs(model);
 		}
 	}
 }
