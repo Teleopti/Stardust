@@ -199,6 +199,16 @@ describe('OutboundService Test', function () {
 	});
 
 
+	it('misService parse number string should work correctly', function () {				
+		expect(miscService.parseNumberString("123,456.7", false)).toEqual(123456.7);
+		expect(miscService.parseNumberString("123456.7", false)).toEqual(123456.7);
+		expect(miscService.parseNumberString("123,,456.7", false)).toBeFalsy();
+		expect(miscService.parseNumberString("123,45,6.7", false)).toBeFalsy();
+		expect(miscService.parseNumberString("123456.7", true)).toBeFalsy();
+		expect(miscService.parseNumberString("123456.7,8", false)).toBeFalsy();
+		expect(miscService.parseNumberString("23,456,789.123", false)).toEqual(23456789.123);
+	});
+
 	function presetCampaigns() {
 		return [
 			{

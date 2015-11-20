@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('outboundServiceModule')
-		.service('miscService', miscService);
+		.service('miscService', ['$locale', miscService]);
 
-	function miscService() {
+	function miscService($locale) {
 
 		this.isIE = false || !!document.documentMode;
 
@@ -54,6 +54,28 @@
 				}
 			});
 		};
+
+
+		this.parseNumberString = function (s, integerOnly) {
+			var gSize = $locale.NUMBER_FORMATS.PATTERNS[0].gSize;
+			var pieces = ('' + s).split($locale.NUMBER_FORMATS.DECIMAL_SEP),
+				whole = pieces[0],
+				fraction = pieces[1] || '';
+
+			if (pieces.length > 2) return false;
+			if (integerOnly && fraction.length > 0) return false;
+
+			var _whole = whole.replace(/\s+/g, '').split($locale.NUMBER_FORMATS.GROUP_SEP).join(' ');
+
+			var testWhole = new RegExp('^[-+]?[0-9]{1,' + gSize + '}( ?[0-9]{' + gSize + '})*$');
+			if (!testWhole.test(_whole)) return false;
+
+			if (fraction.length > 0) {
+				if (!/^[0-9]+$/.test(fraction)) return false;
+			}
+			return integerOnly?parseInt(_whole.replace(/\s+/g, '')):parseFloat(_whole.replace(/\s+/g, '') + '.' + fraction);
+		}
+
 
 	}
 })();

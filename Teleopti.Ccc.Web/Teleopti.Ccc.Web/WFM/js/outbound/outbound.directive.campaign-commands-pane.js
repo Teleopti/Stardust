@@ -58,9 +58,7 @@
 				});
 			}
 
-			function callbackDone() {
-				$scope.manualPlanInput = null;
-				$scope.manualBacklogInput = null;				
+			function callbackDone() {								
 				$scope.isLoading = true;
 			}
 

@@ -1,6 +1,10 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	campaign-commands-pane input.ng-invalid.ng-dirty {
+        border-bottom:2px solid #F44336;
+	}
+
 	.wfm-card-list-container {
 		max-height: none;
 	}
