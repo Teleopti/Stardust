@@ -120,6 +120,35 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndDayoff()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			scheduleDay.Add(pa);
+			scheduleDay.Add(personAbsence);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
+			var projectionVm = result.Single().Projection.ToList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
+
+			projectionVm.Count.Should().Be.EqualTo(1);
+			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
+			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
+		}
+
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidential()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -254,7 +283,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldReturnIndicateOvertimeActivity()
+		public void ShouldIndicateOvertimeActivity()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("p1", "p1");

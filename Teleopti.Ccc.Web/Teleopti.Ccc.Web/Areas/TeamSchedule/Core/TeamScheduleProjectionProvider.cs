@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			scheduleVm.Name = scheduleDay.Person.Name.ToString();
 			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
 			var projection = _projectionProvider.Projection(scheduleDay);
-			var significantPart = scheduleDay.SignificantPartForDisplay();
+			var significantPart = scheduleDay.SignificantPart();
 
 			var overtimeStart = DateTime.MaxValue;
 			var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
