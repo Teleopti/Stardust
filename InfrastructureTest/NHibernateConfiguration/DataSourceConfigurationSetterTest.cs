@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			cfg.GetProperty(Environment.DefaultSchema).Should().Be.EqualTo("dbo");
 			cfg.GetProperty(Environment.SessionFactoryName).Should().Be.EqualTo("[not set]");
 			cfg.GetProperty(Environment.SqlExceptionConverter).Should().Be.EqualTo(typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
-			cfg.GetProperty(Environment.ConnectionDriver).Should().Be.EqualTo(typeof(SqlAzureClientDriver).AssemblyQualifiedName);
+			cfg.GetProperty(Environment.ConnectionDriver).Should().Be.EqualTo(typeof(SqlAzureClientDriverWithTimeoutRetries).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.TransactionStrategy)
 				.Should()
 				.Be.EqualTo(typeof (ReliableAdoNetTransactionFactory).AssemblyQualifiedName);

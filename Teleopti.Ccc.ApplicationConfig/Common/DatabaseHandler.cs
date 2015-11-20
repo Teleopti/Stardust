@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                            {"dialect", "NHibernate.Dialect.MsSql2008Dialect"},
                            {"adonet.batch_size", "50"},
                            {Environment.CurrentSessionContextClass, "thread_static"},
-                           {"connection.driver_class", "NHibernate.Driver.SqlClientDriver"},
                            {Environment.UseSecondLevelCache, "false"},
                        };
         }
