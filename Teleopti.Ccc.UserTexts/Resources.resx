@@ -13619,8 +13619,28 @@ Reduce the complexity to use these shifts.</value>
     <value>Not allowed!</value>
     <comment>This messaeg is shown in web when a user try to open a module on which he is not authorized. This is the http response.</comment>
   </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Create and manage the different planning periods</value>
+    <comment>Manage planning periods</comment>
+  </data>
   <data name="Default" xml:space="preserve">
     <value>Default</value>
     <comment>Default</comment>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>Planning Period is scheduled</value>
+    <comment>Planning Period is scheduled</comment>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Planning Periods</value>
+    <comment>Set of planning periods</comment>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Selected Filters:</value>
+    <comment>Selected Filters:</comment>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Start Next</value>
+    <comment>Start Next</comment>
   </data>
 </root>

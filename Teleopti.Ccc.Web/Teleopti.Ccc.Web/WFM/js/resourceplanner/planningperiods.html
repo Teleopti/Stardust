@@ -40,8 +40,8 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="planningPeriod.State != 'New'" class="text-success">
-                Planning Period is scheduled.
+            <div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
+                PlanningPeriodIsScheduled
             </div>
             <button class="schedule-button wfm-btn" ng-class="{'wfm-btn-primary-disabled': disableSchedule(), 'wfm-btn-primary': !disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">{{'Schedule' | translate }} </button>
             <div ng-show="scheduleClicked && !schedulingPerformed">

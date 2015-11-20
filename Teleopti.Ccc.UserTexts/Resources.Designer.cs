@@ -6030,6 +6030,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create and manage the different planning periods.
+        /// </summary>
+        public static string CreateAndManagePlanningPeriods {
+            get {
+                return ResourceManager.GetString("CreateAndManagePlanningPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Campaign.
         /// </summary>
         public static string CreateCampaign {
@@ -19544,11 +19553,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planning Period is scheduled.
+        /// </summary>
+        public static string PlanningPeriodIsScheduled {
+            get {
+                return ResourceManager.GetString("PlanningPeriodIsScheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These requirements are missing to be able to schedule the next planning period:.
         /// </summary>
         public static string PlanningPeriodMissingMessage {
             get {
                 return ResourceManager.GetString("PlanningPeriodMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planning Periods.
+        /// </summary>
+        public static string PlanningPeriods {
+            get {
+                return ResourceManager.GetString("PlanningPeriods", resourceCulture);
             }
         }
         
@@ -23843,6 +23870,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected Filters:.
+        /// </summary>
+        public static string SelectedFiltersColon {
+            get {
+                return ResourceManager.GetString("SelectedFiltersColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled items.
         /// </summary>
         public static string SelectedItems {
@@ -26272,6 +26308,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StartMenu {
             get {
                 return ResourceManager.GetString("StartMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Next.
+        /// </summary>
+        public static string StartNext {
+            get {
+                return ResourceManager.GetString("StartNext", resourceCulture);
             }
         }
         
