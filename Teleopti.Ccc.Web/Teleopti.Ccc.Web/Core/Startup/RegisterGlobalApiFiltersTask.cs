@@ -1,7 +1,11 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 using Owin;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
+using Teleopti.Ccc.Web.Areas.Rta.Controllers;
+using Teleopti.Ccc.Web.Areas.SSO.Controllers;
+using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
@@ -31,8 +35,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (ToggleHandlerController),
 				typeof (AuthenticateController),
 				typeof(PersonInfoController),
+				typeof (ApplicationAuthenticationApiController),
+				typeof (StateController),
+				typeof(ConfigController),
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
+			_globalConfiguration.Configure(c => c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver());
 			return Task.FromResult(false);
 		}
 	}

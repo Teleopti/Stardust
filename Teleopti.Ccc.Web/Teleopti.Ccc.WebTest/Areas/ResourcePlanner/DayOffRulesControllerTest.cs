@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
 			fetchModel.Expect(x => x.FetchDefaultRules()).Return(model);
 			var target = new DayOffRulesController(fetchModel, null);
-			target.GetDefaultSettings().OkContent<DayOffRulesModel>()
+			target.GetDefaultSettings().Result<DayOffRulesModel>()
 				.Should().Be.SameInstanceAs(model);
 		}
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
 			fetchModel.Expect(x => x.FetchAll()).Return(model);
 			var target = new DayOffRulesController(fetchModel, null);
-			target.FetchAll().OkContent<IEnumerable<DayOffRulesModel>>()
+			target.FetchAll().Result<IEnumerable<DayOffRulesModel>>()
 				.Should().Be.SameInstanceAs(model);
 		}
 	}

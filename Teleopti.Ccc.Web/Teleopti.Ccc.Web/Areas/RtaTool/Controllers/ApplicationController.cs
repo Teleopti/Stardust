@@ -8,6 +8,5 @@ namespace Teleopti.Ccc.Web.Areas.RtaTool.Controllers
         {
             return new ViewResult();
         }
-
     }
 }

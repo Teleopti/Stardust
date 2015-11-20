@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-	public class StateController : Controller
+	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
@@ -15,8 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_rta = rta;
 		}
 
-		[HttpPost]
-		public void Change(ExternalUserStateWebModel input)
+		[HttpPost, Route("Rta/State/Change")]
+		public IHttpActionResult Change([FromBody]ExternalUserStateWebModel input)
 		{
 			DateTime batchId;
 			DateTime.TryParse(input.BatchId, out batchId);
@@ -37,8 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			// apparently 1 = input accepted, 0 = something was missing, anything else == error
 			if (result == 1)
-				return;
-			throw new HttpException("Result from TeleoptiRtaService was " + result);
+				return Ok();
+
+			return BadRequest("Result from TeleoptiRtaService was " + result);
 		}
 	}
 }

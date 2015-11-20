@@ -1,12 +1,9 @@
 ﻿using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -16,8 +13,7 @@ using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
-	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-	public class ApplicationAuthenticationApiController : Controller
+	public class ApplicationAuthenticationApiController : ApiController
 	{
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IChangePersonPassword _changePersonPassword;
@@ -38,34 +34,33 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			_logLogonAttempt = logLogonAttempt;
 		}
 
-		[HttpGet]
+		[HttpGet, Route("SSO/ApplicationAuthenticationApi/Password")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult CheckPassword(ApplicationAuthenticationModel model)
+		public virtual IHttpActionResult CheckPassword(ApplicationAuthenticationModel model)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(model.UserName, model.Password);
 			if (!result.Successful)
 			{
 				if (result.PasswordExpired)
 				{
-					return Json(new PasswordWarningViewModel {AlreadyExpired = true}, JsonRequestBehavior.AllowGet);
+					return Ok(new PasswordWarningViewModel {AlreadyExpired = true});
 				}
 				_logLogonAttempt.SaveAuthenticateResult(model.UserName, null, false);
-				Response.StatusCode = 400;
-				Response.TrySkipIisCustomErrors = true;
+				
 				ModelState.AddModelError("Error", result.Message);
-				return ModelState.ToJson();
+				return BadRequest(ModelState);
 			}
 
 			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
 			_logLogonAttempt.SaveAuthenticateResult(model.UserName, result.PersonId(), true);
-			return Json(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage}, JsonRequestBehavior.AllowGet);
+			return Ok(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage});
 		}
 
-		[HttpPostOrPut]
+		[HttpPut, Route("SSO/ApplicationAuthenticationApi/Password")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult ChangePassword(ChangePasswordInput model)
+		public virtual IHttpActionResult ChangePassword([FromBody]ChangePasswordInput model)
 		{
 			try
 			{
@@ -77,13 +72,12 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			catch (HttpException httpEx)
 			{
 				var errString = httpEx.GetHttpCode() == 403 ? Resources.InvalidUserNameOrPassword : Resources.PasswordPolicyWarning;
-				Response.StatusCode = 400;
-				Response.TrySkipIisCustomErrors = true;
+
 				ModelState.AddModelError("Error", errString);
-				return ModelState.ToJson();
+				return BadRequest(ModelState);
 			}
 			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
-			return Json(true);
+			return Ok(true);
 		}
 	}
 }

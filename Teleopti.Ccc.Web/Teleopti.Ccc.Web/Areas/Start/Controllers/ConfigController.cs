@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Web.Areas.Start.Core.Config;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	public class ConfigController : Controller
+	public class ConfigController : ApiController
 	{
 		private readonly ISharedSettingsFactory _sharedSettingsFactory;
 
@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sharedSettingsFactory = sharedSettingsFactory;
 		}
 
-		[HttpGet]
-		public virtual JsonResult SharedSettings()
+		[HttpGet,Route("Start/Config/SharedSettings")]
+		public virtual IHttpActionResult SharedSettings()
 		{
-			return Json(_sharedSettingsFactory.Create(), JsonRequestBehavior.AllowGet);
+			return Ok(_sharedSettingsFactory.Create());
 		}
 	}
 }

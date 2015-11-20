@@ -1,13 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
-	public class ChangePasswordController : Controller
+	public class ChangePasswordController : ApiController
 	{
 		private readonly IChangePersonPassword _changePersonPassword;
 
@@ -17,9 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		}
 
 		[TenantUnitOfWork]
-		[HttpPost]
+		[HttpPost,Route("ChangePassword/Modify")]
 		[NoTenantAuthentication]
-		public virtual void Modify(ChangePasswordModel model)
+		public virtual void Modify([FromBody]ChangePasswordModel model)
 		{
 			_changePersonPassword.Modify(model.PersonId, model.OldPassword, model.NewPassword);
 		}

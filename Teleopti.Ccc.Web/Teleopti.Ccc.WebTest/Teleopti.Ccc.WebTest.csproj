@@ -533,7 +533,6 @@
     <Compile Include="TestHelper\RhinoMocksFactory.cs" />
     <Compile Include="TestHelper\RhinoMocksProxy.cs" />
     <Compile Include="TestHelper\TestControllerBuilder.cs" />
-    <Compile Include="TestHelper\WebApiExtensions.cs" />
     <Compile Include="TestHelper\WriteableHttpFileCollection.cs" />
     <Compile Include="TestRouteBuilder.cs" />
     <Compile Include="TestUrlHelperBuilder.cs" />

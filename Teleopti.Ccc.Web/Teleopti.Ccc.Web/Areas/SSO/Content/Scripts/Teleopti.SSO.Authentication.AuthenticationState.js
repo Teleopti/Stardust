@@ -22,7 +22,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 
 	var checkPasswordAjax = function (options) {
 		$.extend(options, {
-			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/CheckPassword",
+			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/Password",
 			dataType: "json",
 			type: 'GET',
 			cache: false,
@@ -57,14 +57,14 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 
 	var changePasswordAjax = function (options) {
 		$.extend(options, {
-			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/ChangePassword",
+			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/Password",
 			dataType: "json",
-			type: 'POST',
+			type: 'PUT',
 			cache: false,
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var response = $.parseJSON(jqXHR.responseText);
-					options.errormessage(response.Errors[0]);
+					options.errormessage(response.ModelState.Error[0]);
 					return;
 				}
 			},
@@ -89,7 +89,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		var error = function (jqXHR, textStatus, errorThrown) {
 			if (jqXHR.status === 400) {
 				var response = $.parseJSON(jqXHR.responseText);
-				options.errormessage(response.Errors[0]);
+				options.errormessage(response.ModelState.Error[0]);
 				return;
 			}
 			try {
