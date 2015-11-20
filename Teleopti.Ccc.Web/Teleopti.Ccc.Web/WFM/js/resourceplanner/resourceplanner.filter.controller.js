@@ -3,7 +3,8 @@
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', function ($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc) {
-				$scope.maxHits = 5;
+				var maxHits = 5;
+
 				$scope.results = [];
 				$scope.selectedResults = [];
 				$scope.dayOffsPerWeek = {
@@ -28,7 +29,7 @@
 						}
 
 						$scope.isSearching = true;
-						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: $scope.maxHits }).$promise.then(function (results) {
+						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: maxHits }).$promise.then(function (results) {
 							$scope.results = results;
 							$scope.isSearching = false;
 						}, function() {
@@ -75,7 +76,7 @@
 				}
 
 				$scope.moreResultsExists = function () {
-					return $scope.results.length >= $scope.maxHits;
+					return $scope.results.length >= maxHits;
 				}
 
 				$scope.persist = function () {

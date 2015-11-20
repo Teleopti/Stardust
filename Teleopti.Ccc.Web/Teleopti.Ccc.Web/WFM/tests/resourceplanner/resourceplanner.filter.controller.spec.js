@@ -3,7 +3,8 @@
 describe('ResourcePlannerCtrl', function () {
 	var $q,
 		$rootScope,
-		$httpBackend;
+		$httpBackend,
+		maxHits = 5; //same as in controller
 
 	beforeEach(module('wfm.resourceplanner'));
 
@@ -21,7 +22,7 @@ describe('ResourcePlannerCtrl', function () {
 			FilterType: 'asdfasdfasdf'
 		};
 		var scope = $rootScope.$new();
-		$httpBackend.whenGET(filterUrl(searchString, 5))
+		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, [singleResult]);
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
@@ -41,7 +42,7 @@ describe('ResourcePlannerCtrl', function () {
 			Name: 'asdfasdf',
 			FilterType: 'asdfasdfasdf'
 		};
-		$httpBackend.whenGET(filterUrl(searchString, 5))
+		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
@@ -63,7 +64,7 @@ describe('ResourcePlannerCtrl', function () {
 		var searchString = 'something';
 		var expectedToHaveBeenTrue=false;
 
-		$httpBackend.whenGET(filterUrl(searchString, 5))
+		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, []);
 
 		var scope = $rootScope.$new();
@@ -86,7 +87,7 @@ describe('ResourcePlannerCtrl', function () {
 	it('should falsify isSearching if non successful call', inject(function ($controller) {
 		var searchString = "blabla";
 
-		$httpBackend.whenGET(filterUrl(searchString, 5))
+		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(500, [{}]);
 
 
@@ -141,7 +142,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		for (var i = 0; i < scope.maxHits; i++) {
+		for (var i = 0; i < maxHits; i++) {
 			scope.results.push({ Id: i });
 		}
 
@@ -152,7 +153,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
 
-		for (var i = 0; i < scope.maxHits - 1; i++) {
+		for (var i = 0; i < maxHits - 1; i++) {
 			scope.results.push({ Id: i });
 		}
 
@@ -421,7 +422,7 @@ describe('ResourcePlannerCtrl', function () {
 		
 	}));
 
-	var filterUrl = function (searchString, maxHits) {
+	var filterUrl = function (searchString) {
 		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
 	}
 });
