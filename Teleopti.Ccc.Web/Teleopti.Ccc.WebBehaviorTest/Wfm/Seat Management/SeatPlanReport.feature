@@ -46,6 +46,7 @@ Scenario: Should not showing paging bar when there is only one page
 	Then I should be able to view the report content
 	And paging bar should be hide
 
+	@ignore
 Scenario: Should filter report by date when we enter report from planning period
 	Given I have a shift with
 		| Field          | Value            |
