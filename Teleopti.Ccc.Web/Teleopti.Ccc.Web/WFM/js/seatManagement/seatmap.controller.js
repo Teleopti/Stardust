@@ -17,12 +17,14 @@
 		vm.seatMapId = null;
 		vm.parentId = null;
 		vm.roles = [];
+		vm.seats = [];
 		vm.activeSeats = [];
 		vm.newLocationName = '';
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
+		vm.seatMapRightPanelTitle = "Seat Properties";//temp name
 
 		var canvas = new fabric.CanvasWithViewport('c');
 
@@ -80,11 +82,15 @@
 			}, 0);
 		};
 
-		vm.getActiveSeats = function () {
-			canvasUtils.fakeGetRoles().then(function (rolesData) {
+		vm.getActiveObjects = function () {
+			vm.activeSeats = [];
+			canvasUtils.getRolesForSeats().then(function (rolesData) {
 				vm.roles = rolesData;
-				vm.activeSeats = canvasUtils.fakeGetActiveSeatObjects(canvas, rolesData);
-				vm.toggleRightPanel(true);
+				canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);
+
+				//TODO:currently we only support showing properties for seats
+				if (vm.activeSeats.length > 0)
+					vm.toggleRightPanel(true);
 			});
 		};
 
@@ -151,6 +157,7 @@
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
 				vm.loadedData = data.SeatMapJsonData;
+				vm.seats = data.Seats;
 			}
 
 			//resetZoom();
@@ -164,7 +171,6 @@
 
 		function onLoadSeatMapSuccess(data) {
 			resetOnLoad(data);
-
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {

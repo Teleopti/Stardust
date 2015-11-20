@@ -46,7 +46,8 @@
 			bindToController: true,
 			scope: {
 				showRightPanel: '=',
-				showToggleButton: '='
+				showToggleButton: '=',
+				panelTitle:'='
 			},
 			transclude: true,
 			templateUrl: 'js/seatManagement/html/rightpanel.html'

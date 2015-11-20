@@ -48,11 +48,15 @@ input[type=text],input[type=password],input[type=number]{
 
 @keyframes widthChange {
 	0% {
-	width: 0px;
+		width: 0px;
+	}
+	
+	50%{
+		width: 0px;
 	}
 
 	100%{
-	width: 5px;
+		width: 5px;
 	}
 }
 
@@ -344,6 +348,12 @@ seatmap-right-panel{
 	
 	.sidenav-header{
 		padding:9px 5px!important;
+		color:$white;
+	}
+	
+	.sidenav-header .chevron{
+		margin:0;
+		padding:0px 5px 0px 5px;
 	}
 
 	.sidenav-header .chevron:hover{

@@ -53,7 +53,7 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<seatmap-right-panel show-right-panel="vm.showRightPanel" show-toggle-button="!vm.isInOccupancyMode">
+			<seatmap-right-panel show-right-panel="vm.showRightPanel" show-toggle-button="!vm.isInOccupancyMode" panel-title="vm.seatMapRightPanelTitle">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 

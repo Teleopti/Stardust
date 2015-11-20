@@ -16,10 +16,13 @@
 				getObjectsOfTypeFromGroup: getObjectsOfTypeFromGroup,
 				getSeatObjectById: getSeatObjectById,
 				getSeatObject: getSeatObject,
+				createSeatFromFabricSeatObj: createSeatFromFabricSeatObj,
 				getObjectsByType: getObjectsByType,
-				getActiveObjectsByType: getActiveObjectsByType,
+				getActiveFabricObjectsByType: getActiveFabricObjectsByType,
 				getLocations: getLocations,
-				getSeats: getSeats,
+				getSeatsWithRoles: getSeatsWithRoles,
+				getRolesForSeats: getRolesForSeats,
+				getActiveSeatObjects: getActiveSeatObjects,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
 				getHighestSeatPriority: getHighestSeatPriority,
 				clearCanvas: clearCanvas,
@@ -33,50 +36,29 @@
 				selectGroupOfObjects: selectGroupOfObjects,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected,
 				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest,
-
-				fakeGetActiveSeatObjects: fakeGetActiveSeatObjects,
-				fakeGetRoles: fakeGetRoles,
-				fakeGetSeatsWithRoles: fakeGetSeatsWithRoles
 			};
 
-			function fakeGetRoles() {
+			function getRolesForSeats() {
 				return permissionsService.roles.get().$promise;
 			};
 
-			function transformFabricSeatToSeatObjects(fabricSeats, rolesData) {
-				var seatObjects = [];
+			function matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats) {
+				var hash = {};
+
 				fabricSeats.forEach(function (fabricSeat) {
-					fabricSeat.roles = [];
-					fabricSeat.roles.push(rolesData[Math.floor(Math.random() * rolesData.length)].Id);
-					seatObjects.push(fakeSeatsFromSeatObjects(fabricSeat));
+					hash[fabricSeat.id] = true;
 				});
 
-				return seatObjects;
+				seatObjects.forEach(function (seatObj) {
+					if (typeof hash[seatObj.Id] !== 'undefined') {
+						activeSeats.push(seatObj);
+					}
+				});
 			};
 
-			function fakeSeatsFromSeatObjects(seatObj) {
-				return {
-					Id: seatObj.id,
-					Name: seatObj.name,
-					Priority: seatObj.priority,
-					IsNew: (seatObj.isNew === undefined) ? false : true,
-					Roles: seatObj.roles
-				};
-			};
-
-			function fakeGetActiveSeatObjects(canvas, rolesData) {
-				var fabricSeats = getActiveObjectsByType(canvas, 'seat');
-				return transformFabricSeatToSeatObjects(fabricSeats, rolesData);
-			};
-
-			function fakeGetSeatsWithRoles(canvas) {
-				var seats = [];
-				var seatObjects = getObjectsByType(canvas, 'seat');
-				for (var i in seatObjects) {
-					var seatObj = seatObjects[i];
-					seats.push(fakeSeatsFromSeatObjects(seatObj));
-				};
-				return seats;
+			function getActiveSeatObjects(canvas, seatObjects, activeSeats) {
+				var fabricSeats = getActiveFabricObjectsByType(canvas, 'seat');
+				return matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats);
 			};
 
 			function setupCanvas(canvas) {
@@ -171,7 +153,7 @@
 				return objectsDict;
 			};
 
-			function getActiveObjectsByType(canvas, type) {
+			function getActiveFabricObjectsByType(canvas, type) {
 
 				var seperateObjects, bindedObject,
 					activeObjects = [], result = [];
@@ -289,23 +271,25 @@
 				return childLocations;
 			};
 
-			function createSeatFromSeatObj(seatObj) {
+			function createSeatFromFabricSeatObj(fabricSeatObj) {
 				return {
-					Id: seatObj.id,
-					Name: seatObj.name,
-					Priority: seatObj.priority,
-					IsNew: (seatObj.isNew === undefined) ? false : true
+					Id: fabricSeatObj.id,
+					Name: fabricSeatObj.name,
+					Priority: fabricSeatObj.priority,
+					IsNew: (fabricSeatObj.isNew === undefined) ? false : true,
+					RoleIdList: fabricSeatObj.roleIds
 				};
-			}
+			};
 
-			function getSeats(canvas) {
-				var seats = [];
-				var seatObjects = getObjectsByType(canvas, 'seat');
-				for (var i in seatObjects) {
-					var seatObj = seatObjects[i];
-					seats.push(createSeatFromSeatObj(seatObj));
-				};
-				return seats;
+			function getSeatsWithRoles(canvas) {
+				var seatOjects = [];
+				var fabricSeatObjects = getObjectsByType(canvas, 'seat');
+
+				fabricSeatObjects.forEach(function (fabricSeatObj) {
+					seatOjects.push(createSeatFromFabricSeatObj(fabricSeatObj));
+				});
+
+				return seatOjects;
 			};
 
 			function getSeatObject(canvas, selectTopLeftSeat) {
@@ -381,7 +365,6 @@
 				seatMapService.seatMap.get({ id: id, date: date }).$promise.then(function (data) {
 					loadSeatMapData(canvas, data, allowEdit, canSelectObjects, callbackSuccess, callbackNoJson);
 				});
-
 			};
 
 			function loadOccupancyDetailsForSeats(seatIds, selectedDate) {

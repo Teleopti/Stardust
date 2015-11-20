@@ -17,7 +17,7 @@
 				role.Selected = false;
 
 				vm.seats.forEach(function (seat) {
-					var roleIndex = seat.Roles.indexOf(role.Id);
+					var roleIndex = seat.RoleIdList.indexOf(role.Id);
 					if (roleIndex > -1) hasCount++;
 				});
 				if (hasCount === vm.seats.length) {
@@ -39,33 +39,29 @@
 
 		vm.selectedStatusChanged = function (role) {
 			vm.seats.forEach(function (seat) {
-				var roleIndex = seat.Roles.indexOf(role.Id);
+				var roleIndex = seat.RoleIdList.indexOf(role.Id);
 				if (role.Selected && roleIndex === -1) {
-					seat.Roles.push(role.Id);
+					seat.RoleIdList.push(role.Id);
 				}
 				if (roleIndex > -1 && !role.Selected) {
-					seat.Roles.splice(roleIndex, 1);
+					seat.RoleIdList.splice(roleIndex, 1);
 				}
-				
-				//console.log("seat", seat.Name, vm.getCorrespondingRoleNames(seat));
 			});
+			
 		};
 
 		vm.getCorrespondingRoleNames = function (seat) {
 			var seatRoleNames = [];
-			seat.Roles.forEach(function (seatRoleId) {
+			seat.RoleIdList.forEach(function (seatRoleId) {
 				seatRoleNames.push(vm.getRoleById(seatRoleId).DescriptionText);
 			});
 			return seatRoleNames;
 		};
 
-		$scope.$watch(function () {
-			var seatIds = [];
-			for (var i = 0; i < vm.seats.length; i++) seatIds.push(vm.seats[i].id);
-			return seatIds;
-		}, function () {
-			vm.updateRolesStatus();
-		}, true);
+		$scope.$watch(function () { return vm.seats.map(function (seat) { return seat.Id; }); },
+			function () {
+				vm.updateRolesStatus();
+			}, true);
 
 		vm.init = function () {
 			vm.updateRolesStatus();

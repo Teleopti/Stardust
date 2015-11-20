@@ -288,6 +288,12 @@
 	.seatplan-paging-container{
 		height:120px;
 		margin-right:-10px;
+
+		.wfm-pagination li{
+			float: left;
+			margin: 5px;
+			line-height: 1;
+		}
 	}
 
 	.seatplan-report-date-validation{

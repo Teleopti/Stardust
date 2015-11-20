@@ -21,6 +21,7 @@
 	function linkFunction(scope, element, attributes, controllers) {
 		var vm = controllers[0];
 		vm.parentVm = controllers[1];
+		vm.init();
 	};
 
 }());

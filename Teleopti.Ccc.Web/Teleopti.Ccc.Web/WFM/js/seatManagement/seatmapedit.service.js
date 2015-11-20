@@ -53,22 +53,37 @@ angular.module('wfm.seatMap')
 
 		function remove(canvas) {
 			var activeObject = canvas.getActiveObject(),
-				activeGroup = canvas.getActiveGroup();
+				activeGroup = canvas.getActiveGroup(),
+				removeObjectIds = [];
 
 			if (activeGroup) {
 				canvas.discardActiveGroup();
 				removeObjectAndTidyReferences(canvas, activeGroup);
+
+				if (activeGroup._objects) {
+					activeGroup._objects.forEach(function (activeObj) {
+						removeObjectIds.push(activeObj.id);
+					});
+				}
 			}
 			else if (activeObject) {
 				canvas.remove(activeObject);
 				removeObjectAndTidyReferences(canvas, activeObject);
+
+				if (activeObject._objects) {
+					activeObject._objects.forEach(function(activeObj) {
+						removeObjectIds.push(activeObj.id);
+					});
+				} else {
+					removeObjectIds.push(activeObject.id);
+				}
 			}
 
 			canvas.renderAll();
+			return removeObjectIds;
 		};
 
 		function removeObjectAndTidyReferences(canvas, obj) {
-
 			if (obj.get('type') == 'group') {
 				var objectsInGroup = obj.getObjects();
 				objectsInGroup.forEach(function (child) {
@@ -204,7 +219,8 @@ angular.module('wfm.seatMap')
 			var seatObj = {
 				name: seatPriority.toString(),
 				priority: seatPriority,
-				id: getTemporaryId()
+				id: getTemporaryId(),
+				roleIds :[]
 			};
 
 			fabric.loadSVGFromURL(imgName, function (objects, options) {
@@ -214,7 +230,6 @@ angular.module('wfm.seatMap')
 
 					var newSeat = new fabric.Seat(img, seatObj);
 					newSeat.set({
-						isNew: true,
 						height: groupedSVGObj.height,
 						width: groupedSVGObj.width
 					});
@@ -222,9 +237,13 @@ angular.module('wfm.seatMap')
 					canvas.add(newSeat);
 					newSeat.center();
 					newSeat.setCoords();
+					seatObj = newSeat;
 				});
-
 			});
+
+			seatObj.isNew = true;
+
+			return seatObj;
 		};
 
 		function addLocation(canvas, name) {
