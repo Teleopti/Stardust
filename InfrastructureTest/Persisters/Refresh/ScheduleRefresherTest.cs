@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
@@ -26,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var person = PersonFactory.CreatePersonWithId();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
 			var target = new ScheduleRefresher(
-				new FakePersonRepository(person), 
+				new FakePersonRepository(person),
 				null,
-				new FakePersonAssignmentRepository(personAssignment), 
+				new FakePersonAssignmentRepository(personAssignment),
 				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
 				MockRepository.GenerateMock<IMessageQueueRemoval>()
 				);
@@ -45,6 +47,55 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 		}
+
+
+		[Test]
+		public void ShouldKeepPreviousAbsencesInDictionaryWhenInsertingNewAbsence()
+		{
+			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var scenario = personAssignment.Scenario;
+
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 9, 4, 10, 2013, 9, 4, 11));
+			personAbsence.SetId(Guid.NewGuid());
+			var personAbsenceRepository = new FakePersonAbsenceRepository();
+			personAbsenceRepository.Add(personAbsence);
+
+			var target = new ScheduleRefresher(
+				new FakePersonRepository(person),
+				null,
+				new FakePersonAssignmentRepository(personAssignment),
+				personAbsenceRepository,
+				MockRepository.GenerateMock<IMessageQueueRemoval>()
+			);
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			scheduleDictionary.AddPersonAbsence(personAbsence);
+
+			var newPersonAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 9, 4, 13, 2013, 9, 4, 14));
+			newPersonAbsence.SetId(Guid.NewGuid());
+			personAbsenceRepository.Add(newPersonAbsence);
+
+			var newAbsenceMessage = new[] {new EventMessage
+				{
+					InterfaceType = typeof (IScheduleChangedEvent), 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
+					EventStartDate = newPersonAbsence.Period.StartDateTime, 
+					EventEndDate = newPersonAbsence.Period.EndDateTime
+				}};
+
+			target.Refresh(scheduleDictionary, newAbsenceMessage, null, null, _ => true);
+
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4));
+			var personAbsences = scheduleDay.PersonAbsenceCollection();
+			
+			personAbsences.Count.Should().Be(2);
+			personAbsences[0].Should().Be.EqualTo(newPersonAbsence);
+			personAbsences[1].Should().Be.EqualTo(personAbsence);
+		}
+
+
 
 		[Test]
 		public void ShouldNotRaiseConflictWhenSameVersionInMemoryAsFromMessage()
@@ -67,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			scheduleDictionary.Stub(x => x.Scenario).Return(personAssignment.Scenario);
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot())
-			                  .Return(new DifferenceCollection<IPersistableScheduleData>
+							  .Return(new DifferenceCollection<IPersistableScheduleData>
 				                  {
 					                  new DifferenceCollectionItem<IPersistableScheduleData>(personAssignment, personAssignment)
 				                  });

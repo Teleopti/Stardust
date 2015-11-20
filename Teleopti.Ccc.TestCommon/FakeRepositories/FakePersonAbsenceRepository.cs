@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAbsence entity)
 		{
-			throw new NotImplementedException();
+			_personAbsences.Add (entity);
 		}
 
 		public void Remove(IPersonAbsence entity)
@@ -68,8 +68,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario)
 		{
-			//impl correct when needed
-			return _personAbsences;
+			return _personAbsences
+					.Where(personAbsence => personAbsence.BelongsToScenario(scenario) && 
+							personAbsence.Period.Intersect(period) &&
+							persons.Contains(personAbsence.Person)).ToArray(); 
 		}
 
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)
