@@ -3,13 +3,13 @@
 	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
 
 	function PersonSchedule(currentUserInfo) {
-		var shiftProjectionViewModel = function(projection, timeLine, isOverNightShift) {
+		var createShiftProjectionViewModel = function(projection, timeLine, isOverNightShift) {
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
-			if (startTimeMinutes > timeLine.EndMinute) {
+			if ((startTimeMinutes > timeLine.EndMinute) || ((startTimeMinutes + projection.Minutes) <= timeLine.StartMinute)) {
 				return undefined;
 			}
 
@@ -29,7 +29,7 @@
 				Color: projection.Color,
 				Description: projection.Description,
 				IsOverNight: isOverNightShift
-		};
+			};
 
 			return shiftProjectionVm;
 		}
@@ -71,8 +71,13 @@
 			}
 
 			var projectionVms = [];
-			angular.forEach(projections, function(projection) {
-				projectionVms.push(new shiftProjectionViewModel(projection, timeLine, isOverNightShift));
+			angular.forEach(projections, function (projection) {
+				var proj = createShiftProjectionViewModel(projection, timeLine, isOverNightShift);
+				if (proj !== undefined) {
+					projectionVms.push(proj);
+				} else {
+					console.log("Projection started from this time will be give up for timeline:", projection.Start);
+				}
 			});
 
 			return projectionVms;
