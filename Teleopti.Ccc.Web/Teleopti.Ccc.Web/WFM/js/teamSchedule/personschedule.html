@@ -3,10 +3,11 @@
 		<div class="person-name nowrap" >{{person.Name}}</div>
 	</td>
 	<td class="schedule schedule-column">
-		<div class="relative time-line-for" ng-if="person.Shifts.length > 0">
+		<div class="relative time-line-for" ng-if="person.Shifts.length > 0 && person.DayOffs.length === 0">
 			<div class="shift" ng-repeat="shift in person.Shifts">
 				<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
-					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}">
+					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}"
+					 ng-class="projection.IsOvertime ? 'overtime' : ''">
 					<md-tooltip>{{projection.Description}}</md-tooltip>
 				</div>
 			</div>
@@ -15,7 +16,7 @@
 		<div class="relative time-line-for" ng-if="person.DayOffs.length > 0">
 			<span class="dayoff absolute"
 				  ng-repeat="dayOff in person.DayOffs"
-				  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%' }">
+				  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%', backgroundColor: person.IsFullDayAbsence ? person.Shifts[0].Projections[0].Color : ''}">
 				<md-tooltip>{{dayOff.DayOffName}}</md-tooltip>
 			</span>
 		</div>		

@@ -25,6 +25,7 @@
 					var position = lengthMinutes * timeLine.LengthPercentPerMinute;
 					return position;
 				},
+				IsOvertime: projection.IsOvertime,
 				Color: projection.Color,
 				Description: projection.Description
 			};
