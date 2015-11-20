@@ -31,6 +31,7 @@
 																</label>
 												</div>
 								</div>
-								<div class="grid" ng-if="gridOptions" ui-grid-auto-resize ui-grid="gridOptions"></div>
+								<div class="grid" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid="allGrid"></div>
+								<div class="grid" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid="inAlarmGrid"></div>
 				</div>
 </div>

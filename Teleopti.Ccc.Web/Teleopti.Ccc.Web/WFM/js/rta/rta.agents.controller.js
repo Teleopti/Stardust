@@ -9,7 +9,7 @@
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
-				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "NextActivity", "Alarm"];
+				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 
 				var getAgents = (function() {
 					if (teamIds.length === 1)
@@ -51,9 +51,12 @@
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
 				$scope.filteredData = [];
-				var options = RtaGridService.createAgentsGridOptions();
+				var options = RtaGridService.makeAllGrid();
 				options.data = 'filteredData';
-				$scope.gridOptions = options;
+				$scope.allGrid = options;
+				var options = RtaGridService.makeInAlarmGrid();
+				options.data = 'filteredData';
+				$scope.inAlarmGrid = options;
 				$scope.agentsInAlarm = toggleService.Wfm_RTA_ProperAlarm_34975;
 
 				$scope.selectAgent = function(personId) {

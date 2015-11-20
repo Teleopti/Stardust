@@ -24,7 +24,7 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 					});
 			});
 		};
-		
+
 		that.togglesLoaded = $q.all([
 			loadToggle('RTA_AdherenceDetails_34267'),
 			loadToggle('Wfm_RTA_ProperAlarm_34975'),
