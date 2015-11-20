@@ -75,8 +75,6 @@
 				var proj = createShiftProjectionViewModel(projection, timeLine, isOverNightShift);
 				if (proj !== undefined) {
 					projectionVms.push(proj);
-				} else {
-					console.log("Projection started from this time will be give up for timeline:", projection.Start);
 				}
 			});
 
