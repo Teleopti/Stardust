@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Ccc.Domain.Optimization
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class FetchDayOffRulesModel : IFetchDayOffRulesModel
 	{
@@ -11,10 +14,23 @@
 			_dayOffRulesMapper = dayOffRulesMapper;
 		}
 
+		//Will probably go away
 		public DayOffRulesModel FetchDefaultRules()
 		{
 			var defaultRules = _dayOffRulesRepository.Default();
 			return _dayOffRulesMapper.ToModel(defaultRules);
+		}
+
+		public IEnumerable<DayOffRulesModel> FetchAll()
+		{
+			var all = _dayOffRulesRepository.LoadAll();
+
+			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
+
+			if(!all.Any(x => x.Default))
+				result.Add(_dayOffRulesMapper.ToModel(DayOffRules.CreateDefault()));
+
+			return result;
 		}
 	}
 }

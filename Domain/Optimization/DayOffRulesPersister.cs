@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Optimization.Filters;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -9,19 +7,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffRulesModelPersister : IDayOffRulesModelPersister
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
-		private readonly IContractRepository _contractRepository;
-		private readonly ISiteRepository _siteRepository;
-		private readonly ITeamRepository _teamRepository;
+		private readonly FilterMapper _filterMapper;
 
-		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository,
-																		IContractRepository contractRepository,
-																		ISiteRepository siteRepository,
-																		ITeamRepository teamRepository)
+		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
-			_contractRepository = contractRepository;
-			_siteRepository = siteRepository;
-			_teamRepository = teamRepository;
+			_filterMapper = filterMapper;
 		}
 
 		public void Persist(DayOffRulesModel model)
@@ -49,24 +40,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.Name = dayOffRulesModel.Name;
 
 			//TODO: this is only correct when insert/new dayoffRules
-			foreach (var filter in dayOffRulesModel.Filters.Select(createFilter))
+			foreach (var filter in dayOffRulesModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
 			{
 				dayOffRules.AddFilter(filter);
-			}
-		}
-
-		private IFilter createFilter(FilterModel filterModel)
-		{
-			switch (filterModel.FilterType)
-			{
-				case FilterModel.ContractFilterType:
-					return new ContractFilter(_contractRepository.Get(filterModel.Id));
-				case FilterModel.SiteFilterType:
-					return new SiteFilter(_siteRepository.Get(filterModel.Id));
-				case FilterModel.TeamFilterType:
-					return new TeamFilter(_teamRepository.Get(filterModel.Id));
-				default:
-					throw new NotSupportedException(string.Format("Unknown filter type {0}", filterModel.FilterType));
 			}
 		}
 	}

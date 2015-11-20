@@ -323,6 +323,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OptimizationPreferencesFactory>().SingleInstance();
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
+			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
 			builder.RegisterType<DayOffOptimizationPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();
 			builder.RegisterType<FindFilter>().SingleInstance();
