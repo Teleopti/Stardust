@@ -3,7 +3,7 @@
 		<div class="person-name nowrap" >{{person.Name}}</div>
 	</td>
 	<td class="schedule schedule-column">
-		<div class="relative time-line-for" ng-if="person.Shifts.length > 0 && person.DayOffs.length === 0">
+		<div class="relative time-line-for" ng-if="person.Shifts.length > 0 && !person.IsFullDayAbsence">
 			<div class="shift" ng-repeat="shift in person.Shifts">
 				<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
 					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}"
