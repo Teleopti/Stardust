@@ -16,9 +16,14 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 
 		var create = function (groupSchedules, queryDate) {
 			var scheduleTimeLine = timeLine.Create(groupSchedules, queryDate);
-
+			
 			var schedules = [];
-			angular.forEach(groupSchedules, function(schedule) {
+			angular.forEach(groupSchedules, function (schedule) {
+				var isOverNightShift = false;
+				var scheduleDateInUserTimeZone = moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone);
+				if (scheduleDateInUserTimeZone < queryDate) {
+					isOverNightShift = true;
+				}
 				var existedPersonSchedule = null;
 				for (var i = 0; i < schedules.length; i++) {
 					if (schedules[i].PersonId === schedule.PersonId) {
@@ -28,9 +33,9 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 				}
 
 				if (existedPersonSchedule == null) {
-					schedules.push(personSchedule.Create(schedule, scheduleTimeLine));
+					schedules.push(personSchedule.Create(schedule, scheduleTimeLine, isOverNightShift));
 				} else {
-					existedPersonSchedule.Merge(schedule, scheduleTimeLine);
+					existedPersonSchedule.Merge(schedule, scheduleTimeLine, isOverNightShift);
 				}
 			});
 

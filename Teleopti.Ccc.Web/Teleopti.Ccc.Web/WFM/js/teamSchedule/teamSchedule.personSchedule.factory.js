@@ -3,7 +3,7 @@
 	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['CurrentUserInfo', PersonSchedule]);
 
 	function PersonSchedule(currentUserInfo) {
-		var shiftProjectionViewModel = function(projection, timeLine) {
+		var shiftProjectionViewModel = function(projection, timeLine, isOverNightShift) {
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
@@ -27,8 +27,9 @@
 				},
 				IsOvertime: projection.IsOvertime,
 				Color: projection.Color,
-				Description: projection.Description
-			};
+				Description: projection.Description,
+				IsOverNight: isOverNightShift
+		};
 
 			return shiftProjectionVm;
 		}
@@ -64,21 +65,21 @@
 			return dayOffVm;
 		}
 
-		var createProjections = function (projections, timeLine) {
+		var createProjections = function (projections, timeLine, isOverNightShift) {
 			if (projections == undefined || projections == null || projections.length === 0) {
 				return undefined;
 			}
 
 			var projectionVms = [];
 			angular.forEach(projections, function(projection) {
-				projectionVms.push(new shiftProjectionViewModel(projection, timeLine));
+				projectionVms.push(new shiftProjectionViewModel(projection, timeLine, isOverNightShift));
 			});
 
 			return projectionVms;
 		}
 
-		var merge = function(otherSchedule, timeLine) {
-			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
+		var merge = function (otherSchedule, timeLine, isOverNightShift) {
+			var otherProjections = createProjections(otherSchedule.Projection, timeLine, isOverNightShift);
 			if (otherProjections != undefined) {
 				this.Shifts.push({ Projections: otherProjections });
 			}
@@ -116,10 +117,10 @@
 			return shiftStart;
 		};
 
-		var create = function(schedule, timeLine) {
+		var create = function(schedule, timeLine, isOverNightShift) {
 			if (!schedule) schedule = {};
 
-			var projectionVms = createProjections(schedule.Projection, timeLine);
+			var projectionVms = createProjections(schedule.Projection, timeLine, isOverNightShift);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
 
 			var personSchedule = {
