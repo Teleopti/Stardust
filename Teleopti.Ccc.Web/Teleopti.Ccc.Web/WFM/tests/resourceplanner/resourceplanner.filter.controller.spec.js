@@ -6,6 +6,10 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend,
 		maxHits = 5; //same as in controller
 
+	var filterUrl = function (searchString) {
+		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
+	}
+
 	beforeEach(module('wfm.resourceplanner'));
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
@@ -414,15 +418,4 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.results.length).toEqual(0);
 		expect(scope.searchString).toEqual('');
 	}));
-
-	it('should set isSearching', inject(function ($controller) {
-		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
-
-		
-	}));
-
-	var filterUrl = function (searchString) {
-		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
-	}
 });
