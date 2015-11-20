@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Web.Http.Results;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 			var target = new ToggleHandlerController(toggleManager,null);
 			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(true);
 
-			((ToggleEnabledResult)target.IsEnabled(Toggles.TestToggle).Data).IsEnabled
+			((OkNegotiatedContentResult<ToggleEnabledResult>)target.IsEnabled(Toggles.TestToggle)).Content.IsEnabled
 				.Should().Be.True();
 		}
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 			var target = new ToggleHandlerController(toggleManager,null);
 			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(false);
 
-			((ToggleEnabledResult)target.IsEnabled(Toggles.TestToggle).Data).IsEnabled
+			((OkNegotiatedContentResult<ToggleEnabledResult>)target.IsEnabled(Toggles.TestToggle)).Content.IsEnabled
 				.Should().Be.False();
 		}
 	}

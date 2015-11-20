@@ -1,12 +1,12 @@
 ﻿using System.Linq;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Web.Areas.Toggle
 {
-	public class ToggleHandlerController : Controller
+	public class ToggleHandlerController : ApiController
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly ITogglesActive _togglesActive;
@@ -23,15 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
-		[HttpGet]
-		public JsonResult IsEnabled(Toggles toggle)
+		[HttpGet, Route("ToggleHandler/IsEnabled")]
+		public IHttpActionResult IsEnabled(Toggles toggle)
 		{
-			return Json(new ToggleEnabledResult
+			return Ok(new ToggleEnabledResult
 				{
 					IsEnabled = _toggleManager.IsEnabled(toggle)
-				},
-				JsonRequestBehavior.AllowGet
-			);
+				});
 		}
 
 		/// <summary>
@@ -40,13 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/AllToggles
 		/// ]]>
 		/// </summary>
-		[HttpGet]
-		public JsonResult AllToggles()
+		[HttpGet, Route("ToggleHandler/AllToggles")]
+		public IHttpActionResult AllToggles()
 		{
 			var dic = _togglesActive.AllActiveToggles()
 				.ToDictionary(toggleInfo => toggleInfo.Key.ToString(), toggleInfo => toggleInfo.Value);
 
-			return Json(dic, JsonRequestBehavior.AllowGet);
+			return Ok(dic);
 		}
 	}
 }

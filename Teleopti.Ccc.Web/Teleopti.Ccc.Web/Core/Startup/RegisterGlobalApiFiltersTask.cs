@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
+using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				typeof (DangerousApiController),
 				typeof (MessageBrokerController),
+				typeof (ToggleHandlerController),
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
 			return Task.FromResult(false);
