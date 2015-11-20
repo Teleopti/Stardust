@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
@@ -23,9 +22,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute(IAppBuilder application)
 		{
-			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new List<Type>
+			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new []
 			{
-				typeof (DangerousApiController)
+				typeof (DangerousApiController),
+				typeof (MessageBrokerController),
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
 			return Task.FromResult(false);

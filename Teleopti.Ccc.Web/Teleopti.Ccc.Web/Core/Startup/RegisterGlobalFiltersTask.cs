@@ -10,7 +10,6 @@ using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
-using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (ApplicationAuthenticationApiController),
 				typeof (ToggleHandlerController),
 				typeof (StateController),
-				typeof (MessageBrokerController),
 				typeof (ApplicationController),
 				typeof (AuthenticateController),
 				typeof (ChangePasswordController),

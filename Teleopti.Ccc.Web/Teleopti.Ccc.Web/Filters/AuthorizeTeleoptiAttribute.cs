@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
@@ -11,16 +10,16 @@ namespace Teleopti.Ccc.Web.Filters
 	[CLSCompliant(false)]
 	public class AuthorizeTeleoptiAttribute : AuthorizeAttribute
 	{
-		private readonly IEnumerable<Type> _excludeControllerTypes;
+		private readonly Type[] _excludeControllerTypes;
 
-		public AuthorizeTeleoptiAttribute(IEnumerable<Type> excludeControllerTypes)
+		public AuthorizeTeleoptiAttribute(Type[] excludeControllerTypes)
 		{
-			_excludeControllerTypes = excludeControllerTypes ?? new List<Type>();
+			_excludeControllerTypes = excludeControllerTypes ?? new Type[]{};
 		}
 
 		protected override bool IsAuthorized(HttpActionContext actionContext)
 		{
-			if (_excludeControllerTypes.Count() != 0)
+			if (_excludeControllerTypes.Length != 0)
 			{
 				var controllerType = actionContext.ControllerContext.Controller.GetType();
 				var controllerIsExcluded = _excludeControllerTypes.Any(t => t == controllerType || controllerType.IsSubclassOf(t));
