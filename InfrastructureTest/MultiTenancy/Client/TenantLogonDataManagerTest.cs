@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	public class TenantLogonDataManagerTest
 	{
 		public PostHttpRequestFake HttpRequestFake;
+		public GetHttpRequestFake GetRequestFake;
 		public ITenantLogonDataManager Target;
 		public CurrentTenantCredentialsFake CurrentTenantCredentials;
 
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var logonName = RandomName.Make();
 			var personId = Guid.NewGuid();
-			HttpRequestFake.SetReturnValue(new LogonInfoModel
+			GetRequestFake.SetReturnValue(new LogonInfoModel
 			{
 				LogonName = logonName,
 				PersonId = personId
@@ -68,13 +69,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldSendTenantWhenPersistingByLogonName()
 		{
-			HttpRequestFake.SetReturnValue(new LogonInfoModel());
+			GetRequestFake.SetReturnValue(new LogonInfoModel());
 			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
 			CurrentTenantCredentials.Has(tenantCredentials);
 
 			Target.GetLogonInfoForLogonName("test1");
 
-			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+			GetRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			const string identity = "identity1";
 			var personId = Guid.NewGuid();
-			HttpRequestFake.SetReturnValue(new LogonInfoModel
+			GetRequestFake.SetReturnValue(new LogonInfoModel
 			{
 				Identity = identity,
 				PersonId = personId
@@ -97,13 +98,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldSendTenantWhenPersistingByIdentity()
 		{
-			HttpRequestFake.SetReturnValue(new LogonInfoModel());
+			GetRequestFake.SetReturnValue(new LogonInfoModel());
 			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
 			CurrentTenantCredentials.Has(tenantCredentials);
 
 			Target.GetLogonInfoForIdentity("identity1");
 
-			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+			GetRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
 		}
 	}
 }

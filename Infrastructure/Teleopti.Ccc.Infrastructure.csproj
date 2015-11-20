@@ -269,6 +269,7 @@
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
     <Compile Include="MultiTenancy\Client\CurrentTenantCredentialsFake.cs" />
     <Compile Include="MultiTenancy\Client\GetHttpRequest.cs" />
+    <Compile Include="MultiTenancy\Client\GetHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ICurrentTenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />

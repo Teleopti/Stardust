@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			system.AddModule(new MultiTenancyModule(configuration));
 
 			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
 			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
 		}
 	}

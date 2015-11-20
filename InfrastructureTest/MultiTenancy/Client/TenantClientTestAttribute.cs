@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<LoadUserUnauthorizedFake>().For<ILoadUserUnauthorized>();
 			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
