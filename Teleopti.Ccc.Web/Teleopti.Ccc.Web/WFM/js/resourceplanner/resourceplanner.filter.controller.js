@@ -29,8 +29,8 @@
 						}
 
 						$scope.isSearching = true;
-						ResourcePlannerFilterSrvc.getData.query({ searchString: input, maxHits: maxHits }).$promise.then(function (results) {
-							$scope.results = results;
+						ResourcePlannerFilterSrvc.getData({ searchString: input, maxHits: maxHits }).then(function (results) {
+							$scope.results = results.data;
 							$scope.isSearching = false;
 						}, function() {
 							$scope.isSearching = false;

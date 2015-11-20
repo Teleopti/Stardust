@@ -7,7 +7,7 @@ describe('ResourcePlannerCtrl', function () {
 		maxHits = 5; //same as in controller
 
 	var filterUrl = function (searchString) {
-		return "../api/filters?searchString=" + searchString + "&maxHits=" + maxHits;
+		return "../api/filters?maxHits=" + maxHits + "&searchString=" & searchString
 	}
 
 	beforeEach(module('wfm.resourceplanner'));
@@ -17,6 +17,24 @@ describe('ResourcePlannerCtrl', function () {
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 	}));
+
+	it('should cancel previous search request', inject(function (ResourcePlannerFilterSrvc) {
+		var scope = $rootScope.$new();
+
+		var searchString = 'searchString';
+
+		$httpBackend.whenGET(filterUrl(searchString))
+			.respond(200, []);
+		ResourcePlannerFilterSrvc.getData({ searchString: searchString, maxHits: maxHits });
+		//should cancel query above - skipping params so not create new one
+		ResourcePlannerFilterSrvc.getData();
+
+
+		scope.$digest();
+
+		$httpBackend.verifyNoOutstandingRequest();
+	}));
+
 
 	it('should load one search result', inject(function ($controller) {
 		var searchString = 'something';
