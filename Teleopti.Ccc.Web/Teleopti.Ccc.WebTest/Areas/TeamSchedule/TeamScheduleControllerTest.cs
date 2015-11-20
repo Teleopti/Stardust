@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -175,6 +176,41 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnAContractDayOffDay()
+		{
+			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("p1", "p1");
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
+			person.AddPersonPeriod(personPeriod);
+			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			person.AddSchedulePeriod(schedulePeriod);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 17));
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2020, 1, 4));
+			scheduleDay.Add(pa);
+			scheduleDay.Add(personAbsence);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
+			var projectionVm = result.Single().Projection.ToList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
+
+			projectionVm.Count.Should().Be.EqualTo(1);
+			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
+			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-04 08:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
 		}
 
