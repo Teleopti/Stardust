@@ -3,9 +3,10 @@
 	'use strict';
 
 	angular.module('wfm.rta').controller('RtaTeamsCtrl', [
-		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService',
-		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService) {
+		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService', 'RtaFormatService',
+		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService, RtaFormatService) {
 
+			$scope.getAdherencePercent =  RtaFormatService.numberToPercent;
 			var siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
 

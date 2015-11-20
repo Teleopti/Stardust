@@ -3,7 +3,7 @@
     <h4>Sites</h4>
     <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedSites(selectedSites)">Open selected</button>
 	</div>
-  <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{'rta-grid': sites.length > 5, good: site.OutOfAdherence <= 3,warning: site.OutOfAdherence > 3, danger: site.OutOfAdherence > 6 }">
+  <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{'rta-grid': sites.length > 5, good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}">
     <div class="rta-stats site">
       <div class="wfm-checkbox">
         <label style="width: 20px; height: 20px; display:block !important;" ng-attr-name="{{site.Name}}">

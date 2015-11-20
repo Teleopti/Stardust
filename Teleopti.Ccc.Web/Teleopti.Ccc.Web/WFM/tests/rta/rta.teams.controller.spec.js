@@ -309,4 +309,18 @@ describe('RtaTeamsCtrl', function() {
 
 		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
+
+	it('should convert teams out of adherence and number of agents to percent', function() {
+		teamAdherence = [{
+			OutOfAdherence: 5
+		}]
+		teams = [{
+			NumberOfAgents: 10
+		}]
+
+		createController();
+		var result = scope.getAdherencePercent(teamAdherence[0].OutOfAdherence, teams[0].NumberOfAgents);
+
+		expect(result).toEqual(50);
+	});
 });

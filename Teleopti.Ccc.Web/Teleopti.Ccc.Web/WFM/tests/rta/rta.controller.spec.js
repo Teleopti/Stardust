@@ -197,4 +197,17 @@ describe('RtaCtrl', function() {
 		});
 	});
 
+	it('should convert sites out of adherence and number of agents to percent', function() {
+		sites = [{
+			NumberOfAgents: 11
+		}]
+		siteAdherence = [{
+			OutOfAdherence: 1
+		}]
+
+		createController();
+		var result = scope.getAdherencePercent(siteAdherence[0].OutOfAdherence, sites[0].NumberOfAgents);
+
+		expect(result).toEqual(9);
+	});
 });

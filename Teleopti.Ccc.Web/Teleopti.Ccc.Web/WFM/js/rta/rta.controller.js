@@ -2,12 +2,14 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService','RtaFormatService',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService) {
 
+				$scope.getAdherencePercent =  RtaFormatService.numberToPercent;
 				var selectedSiteIds = [];
 
 				var updateAdherence = function(siteAdherence) {
+
 					siteAdherence.forEach(function(site) {
 						var filteredSite = $filter('filter')($scope.sites, {
 							Id: site.Id

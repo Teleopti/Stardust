@@ -4,7 +4,7 @@
             <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
             <a href="{{goBackWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{siteName}}</span>
         </div>
-        <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5, good: team.OutOfAdherence <= 3, warning: team.OutOfAdherence > 3, danger: team.OutOfAdherence > 6 }">
+        <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5, 'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}">
             <div class="rta-stats team">
                 <div class="wfm-checkbox">
                     <label style="width: 20px; height: 20px; display:block !important;"  ng-attr-name="{{team.Name}}">

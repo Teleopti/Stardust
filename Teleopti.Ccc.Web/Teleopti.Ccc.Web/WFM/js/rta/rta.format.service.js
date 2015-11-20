@@ -25,6 +25,10 @@
 				var b = bigint & 255;
 				return "rgba(" + r + ", " + g + ", " + b + ", 0.6)";
 			};
+
+			this.numberToPercent = function(num1, num2) {
+				return (Math.floor((num1 / num2) * 100));
+			};
 		}
 	);
 })();
