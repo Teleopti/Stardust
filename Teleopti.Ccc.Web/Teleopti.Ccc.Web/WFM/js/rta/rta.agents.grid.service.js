@@ -30,43 +30,49 @@
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
+						headerCellFilter:'translate'
 					}, {
-						name: 'TeamName',
+						name: 'Team',
 						field: 'TeamName',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
+						headerCellFilter:'translate'
 					}, {
 						name: 'State',
 						field: 'State',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
+						headerCellFilter:'translate'
 					}, {
 						name: 'Activity',
 						field: 'Activity',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
-						cwidth: "1%",
+						headerCellFilter:'translate'
 					}, {
 						name: 'NextActivity',
 						field: 'NextActivity',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: nextActivityCellTemplate,
+						headerCellFilter:'translate'
 					}, {
 						name: 'Alarm',
 						field: 'Alarm',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
-						cellTemplate: alarmCellTemplate
+						cellTemplate: alarmCellTemplate,
+						headerCellFilter:'translate'
 					}, {
-						name: 'Time in Alarm',
+						name: 'TimeInAlarm',
 						field: 'TimeInState',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
-						cellTemplate: alarmDurationCellTemplate
+						cellTemplate: alarmDurationCellTemplate,
+						headerCellFilter:'translate'
 					}]
 				};
 			};

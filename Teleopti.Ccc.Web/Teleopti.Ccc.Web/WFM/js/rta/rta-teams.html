@@ -1,8 +1,8 @@
 ﻿<div class="row">
         <div class="rta-header">
-            <h4>Teams</h4>
-            <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">Open selected</button>
-            <a href="{{goBackWithUrl()}}" class="rta-nav-link">Real Time Adherence</a> / <span>{{siteName}}</span>
+            <h4>{{'Teams'|translate}}</h4>
+            <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">{{'Open'|translate}}</button>
+            <a href="{{goBackWithUrl()}}" class="rta-nav-link">{{'RealTimeAdherence'|translate}}</a> / <span>{{siteName}}</span>
         </div>
         <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5, 'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}">
             <div class="rta-stats team">
@@ -17,7 +17,7 @@
                 <div class="site-data">
                     <div>
                         <span>{{siteName}}</span>
-                        <p>Out of adherence: <b>{{team.OutOfAdherence}}</b></p>
+                        <p>{{'OutOfAdherence'|translate}}: <b>{{team.OutOfAdherence}}</b></p>
                     </div>
                 </div>
                 </div>

@@ -6,10 +6,10 @@
 	<div class="agent-menu historical-adherence" layout="row">
 		<div flex>
 			<a href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId,row.entity.PersonId)}}" class="change-schedule">
-				<span class="mdi mdi-pencil"></span>Modify Schedule
+				<span class="mdi mdi-pencil"></span>{{'ModifySchedule'|translate}}
 			</a>
 		</div>
-		<div flex ng-show="grid.appScope.showAdherenceUpdates()"><a href="{{grid.appScope.agentDetailsUrl(row.entity.PersonId)}}">Adherence: {{grid.appScope.adherencePercent}}% </a></div>
-		<div flex ng-show="grid.appScope.showAdherenceUpdates()"><span style="color:#333333;">Latest updated: {{grid.appScope.timestamp}}</span></div>
+		<div flex ng-show="grid.appScope.showAdherenceUpdates()"><a href="{{grid.appScope.agentDetailsUrl(row.entity.PersonId)}}">{{'Adherence'|translate}}: {{grid.appScope.adherencePercent}}% </a></div>
+		<div flex ng-show="grid.appScope.showAdherenceUpdates()"><span style="color:#333333;">{{'LastUpdated'|translate}}: {{grid.appScope.timestamp}}</span></div>
 	</div>
 </div>

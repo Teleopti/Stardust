@@ -1,7 +1,7 @@
 ﻿<div class="row">
   <div class="rta-header">
-    <h4>Sites</h4>
-    <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedSites(selectedSites)">Open selected</button>
+    <h4>{{'Sites'|translate}}</h4>
+    <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedSites(selectedSites)">{{'Open'|translate}}</button>
 	</div>
   <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="site in sites" ng-class="{'rta-grid': sites.length > 5, good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}">
     <div class="rta-stats site">
@@ -14,7 +14,7 @@
       <div class="rta-trigger-area" ng-click="onSiteSelect(site)">
         <b class="site-name" ng-attr-data-value="{{site.OutOfAdherence}}" ng-attr-data-max="{{site.NumberOfAgents}}">{{site.Name}}</b>
           <div class="site-data">
-            <p>Out of adherence: <b>{{site.OutOfAdherence}}</b></p>
+            <p>{{'OutOfAdherence'|translate}}: <b>{{site.OutOfAdherence}}</b></p>
           </div>
       </div>
       </div>

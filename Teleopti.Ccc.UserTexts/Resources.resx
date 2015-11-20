@@ -13643,4 +13643,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Start Next</value>
     <comment>Start Next</comment>
   </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Daily Total</value>
+    <comment>Adherence percentage of today</comment>
+  </data>
 </root>

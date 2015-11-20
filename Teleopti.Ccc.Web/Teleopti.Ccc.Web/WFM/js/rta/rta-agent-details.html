@@ -1,36 +1,36 @@
 ﻿<div class="row">
 	<div class="col-lg-12">
 		<h4>Agent Details</h4>
-		 <button class="wfm-btn wfm-btn-primary" ng-show="!isEmptyHistory()" ng-click="goBackToAgents()">Go back</button>
+		 <button class="wfm-btn wfm-btn-primary" ng-show="!isEmptyHistory()" ng-click="goBackToAgents()">{{'Back'|translate}}</button>
 		<div class="wfm-block material-depth-1 rta-agent-details">
 			<div class="row rta-agent-details-header">
 				<div class="rta-agent-details-name">
 					<span class="agent-name">{{name}}</span>
 				</div>
 				<div class="rta-agent-details-total">
-					<span class="daily-percent">Daily Total: {{dailyTotal}}%</span>
+					<span class="daily-percent">{{'DailyTotal'|translate}}: {{dailyTotal}}%</span>
 				</div>
       </div>
 			<div class="row rta-agent-details-header">
 				<div class="col-md-6">
-						<p class="text-center">Planned</p>
+						<p class="text-center">{{'Planned'|translate}}</p>
 						<div class="row">
 							<div class="col-md-6 planned-stats">
-								<span>Activity</span>
+								<span>{{'Activity'|translate}}</span>
 							</div>
 							<div class="col-md-6 planned-stats">
-								<span>Start</span>
+								<span>{{'Start'|translate}}</span>
 							</div>
 						</div>
 				</div>
 				<div class="col-md-6">
-					<p class="text-center">Actual</p>
+					<p class="text-center">{{'Actual'|translate}}</p>
 					<div class="row">
 						<div class="col-md-6 planned-stats">
-							<span>Start</span>
+							<span>{{'Start'|translate}}</span>
 						</div>
 						<div class="col-md-6 planned-stats">
-							<span>Adherence</span>
+							<span>{{'Adherence'|translate}}</span>
 						</div>
 					</div>
 				</div>
