@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             //Execute:
             using (_mocker.Record())
             {
-                Expect.Call(() => _observer1.EditorAddActivity(_mockedPart, null)).IgnoreArguments();
-                Expect.Call(() => _observer2.EditorAddActivity(_mockedPart, null)).IgnoreArguments();
+                Expect.Call(() => _observer1.EditorAddActivity(_mockedPart, null, null)).IgnoreArguments();
+                Expect.Call(() => _observer2.EditorAddActivity(_mockedPart, null, null)).IgnoreArguments();
             }
             using(_mocker.Playback())
             {
@@ -492,8 +492,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             //Execute:
             using (_mocker.Record())
             {
-                Expect.Call(() => _observer1.EditorAddActivity(_mockedPart, _selectedPeriod)).IgnoreArguments()
-                     .Constraints(Is.Anything(),Is.Equal(_selectedPeriod));
+                Expect.Call(() => _observer1.EditorAddActivity(_mockedPart, _selectedPeriod, null)).IgnoreArguments()
+                     .Constraints(Is.Anything(),Is.Equal(_selectedPeriod), Is.Null());
 
             }
             using (_mocker.Playback())

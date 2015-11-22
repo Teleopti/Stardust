@@ -257,7 +257,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             if(SchedulePart != null)
                 period = Scheduling.AddActivityCommand.GetDefaultPeriodFromPart(SchedulePart);
 
-            _observers.ForEach(o => o.EditorAddActivity(SchedulePart, period));
+	        IPayload payload = null;
+	        if (SelectedLayer != null)
+		        payload = SelectedLayer.Payload;
+
+			_observers.ForEach(o => o.EditorAddActivity(SchedulePart, period, payload));
         }
         private void AddPersonalShiftWithPeriodExecuted()
         {
@@ -276,7 +280,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private void AddActivityWithPeriodExecuted()
         {
-            _observers.ForEach(o => o.EditorAddActivity(SchedulePart, Timeline.SelectedPeriod));
+	        IPayload payload = null;
+	        if (SelectedLayer != null)
+		        payload = SelectedLayer.Payload;
+
+            _observers.ForEach(o => o.EditorAddActivity(SchedulePart, Timeline.SelectedPeriod, payload));
         }
 
         #endregion

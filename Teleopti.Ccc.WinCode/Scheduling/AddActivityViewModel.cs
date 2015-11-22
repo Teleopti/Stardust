@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return CollectionViewSource.GetDefaultView(_categories) as ListCollectionView; }
         }
 
-        public AddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> categories, DateTimePeriod period,TimeSpan interval)
-            : base(activities, period, UserTexts.Resources.AddActivity, interval)
+        public AddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> categories, DateTimePeriod period, TimeSpan interval, IActivity defaultActivity)
+            : base(activities, period, UserTexts.Resources.AddActivity, interval, defaultActivity)
         {
 
             PeriodViewModel.Min = period.StartDateTime.Date;

@@ -5525,7 +5525,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void wpfShiftEditor_AddActivity(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
-			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> {e.SchedulePart}, e.Period);
+
+			IActivity selectedActivity = null;
+			if(e.SelectedLayer != null)
+				selectedActivity = e.SelectedLayer.Payload as IActivity;
+
+			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> {e.SchedulePart}, e.Period, selectedActivity);
 			RecalculateResources();
 		}
 

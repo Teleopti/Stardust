@@ -1224,7 +1224,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     null,
                     new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test") },
                     new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                    _schedulerState.TimeZoneInfo)).IgnoreArguments().Return(dialog);
+                    _schedulerState.TimeZoneInfo, null)).IgnoreArguments().Return(dialog);
 
             Expect.Call(() => scheduleDay.CreateAndAddActivity(null, new DateTimePeriod(),  shiftCategory)).IgnoreArguments().Repeat.Once();
             Expect.Call(scheduleDay.PersonAssignment()).Return(pa);
@@ -1239,7 +1239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(() => _viewBase.ShowErrorMessage(string.Empty, string.Empty)).IgnoreArguments();
 
             _mocks.ReplayAll();
-            _target.AddActivity(list, null);
+            _target.AddActivity(list, null, null);
             _mocks.VerifyAll();
         }
 
@@ -1279,7 +1279,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IAddActivityViewModel dialog = _mocks.StrictMock<IAddActivityViewModel>();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.CreateAddActivityViewModel(null, new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test") }, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), null)).IgnoreArguments().Return(dialog);
+            Expect.Call(_viewBase.CreateAddActivityViewModel(null, new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test") }, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), null, null)).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
 
             LastCall.Repeat.Once();
@@ -1349,7 +1349,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _viewBase.ShowInformationMessage(UserTexts.Resources.NoExistingShiftSelected, UserTexts.Resources.Information);
 
             _mocks.ReplayAll();
-            _target.AddActivity(new List<IScheduleDay> { schedulePart }, period);
+            _target.AddActivity(new List<IScheduleDay> { schedulePart }, period, null);
             _mocks.VerifyAll();
         }
 
@@ -1564,7 +1564,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void AddActivityViewBaseExpectations(IScheduleDay schedulePartDayOne, IScheduleDay schedulePartDayTwo, DateTimePeriod defaultPeriod, IAddActivityViewModel dialog, IPerson person)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePartDayOne, schedulePartDayTwo });
-            Expect.Call(_viewBase.CreateAddActivityViewModel(null, null, defaultPeriod, (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
+            Expect.Call(_viewBase.CreateAddActivityViewModel(null, null, defaultPeriod, (TimeZoneInfo.Local), null)).IgnoreArguments().Return(dialog);
             Expect.Call(_viewBase.TheGrid).Return(_grid);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, defaultPeriod));
         }

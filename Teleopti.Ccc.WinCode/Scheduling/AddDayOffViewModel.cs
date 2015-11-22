@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
 
         public AddDayOffViewModel(IEnumerable<IDayOffTemplate> dayOffTemplates, DateTimePeriod period)
-            :base(dayOffTemplates, period, UserTexts.Resources.AddDayOff, TimeSpan.FromDays(1))
+            :base(dayOffTemplates, period, UserTexts.Resources.AddDayOff, TimeSpan.FromDays(1), null)
         {
             
         }

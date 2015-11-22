@@ -736,12 +736,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             View.OnPasteCompleted(); //This is probably not needed as we already do a ResourceCalculateMarkedDays
         }
 
-        public void AddActivity(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod)
+        public void AddActivity(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IActivity activity)
         {
             var command = new AddActivityCommand(_schedulerState,_view,this,schedules);
             if (defaultPeriod.HasValue)
                 command.DefaultPeriod = defaultPeriod;
-
+	        command.DefaultActivity = activity;
             try
             {
                 command.Execute();
@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void AddActivity()
         {
-            AddActivity(null, null);
+            AddActivity(null, null, null);
         }
 
         public void AddOvertime(IList<IMultiplicatorDefinitionSet> definitionSets)

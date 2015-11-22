@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
  
         IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IEnumerable<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities,IList<IShiftCategory> shiftCategories,DateTimePeriod period, TimeZoneInfo timeZoneInfo);
+        IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo, IActivity defaultActivity);
 
         IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IEnumerable<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 

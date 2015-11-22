@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                         _category2             
                                    };
             _activities = new List<IActivity> { ActivityFactory.CreateActivity("a1"), ActivityFactory.CreateActivity("a1") };
-            _target = new AddActivityViewModel(_activities,_shiftCategories,_defaultPeriod,TimeSpan.FromMinutes(12));
+            _target = new AddActivityViewModel(_activities,_shiftCategories,_defaultPeriod,TimeSpan.FromMinutes(12), null);
         }
 
         [Test]

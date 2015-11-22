@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         void UpdateNoteFromEditor();
         void UpdatePublicNoteFromEditor();
         void UpdateFromEditor();
-        void AddActivity(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod);
+        void AddActivity(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IActivity defaultActivity);
         void AddActivity();
         void AddOvertime(IList<IMultiplicatorDefinitionSet> definitionSets);
         void AddOvertime(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod, IList<IMultiplicatorDefinitionSet> definitionSets);

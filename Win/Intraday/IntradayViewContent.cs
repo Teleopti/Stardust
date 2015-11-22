@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void wpfShiftEditorAddActivity(object sender, ShiftEditorEventArgs e)
 		{
-			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> { e.SchedulePart }, e.Period);
+			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> { e.SchedulePart }, e.Period, null);
 			invalidateScheduleView(e.SchedulePart);
 		}
 

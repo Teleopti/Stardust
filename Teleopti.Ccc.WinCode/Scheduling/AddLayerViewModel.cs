@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public DateTimePeriodViewModel PeriodViewModel { get; private set; }
 
-        public AddLayerViewModel(IEnumerable<T> payloads, DateTimePeriod period, string title, TimeSpan interval)
+        public AddLayerViewModel(IEnumerable<T> payloads, DateTimePeriod period, string title, TimeSpan interval, T defaultPayload)
         {
             PeriodViewModel = new DateTimePeriodViewModel();
             PeriodViewModel.Start = period.StartDateTime;
@@ -31,14 +31,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             ShowDetailsToggleCommand = CommandModelFactory.CreateCommandModel(() => { ShowDetails = !ShowDetails; },
                                                                             CommonRoutedCommands.ShowDetails);
             CanOk = true;
+
+			if(defaultPayload != null)
+				Payloads.MoveCurrentTo(defaultPayload);
         }
 
-        public AddLayerViewModel(IEnumerable<T> payloads, ISetupDateTimePeriod setupDateTimePeriod, string title, TimeSpan interval) : this(payloads,setupDateTimePeriod.Period,title,interval)
-        {
-            //Todo, set all locks and stuff from ISetupDateTimePeriod
-        }
+	    public AddLayerViewModel(IEnumerable<T> payloads, ISetupDateTimePeriod setupDateTimePeriod, string title,
+		    TimeSpan interval) : this(payloads, setupDateTimePeriod.Period, title, interval, null)
+	    {
+		    //Todo, set all locks and stuff from ISetupDateTimePeriod
+	    }
 
-        public bool Result
+	    public bool Result
         {
             get; set;
         }

@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         /// <summary>
         /// Occurs when [add activity].
         /// </summary>
-        void EditorAddActivity(IScheduleDay part, DateTimePeriod? period);
+		void EditorAddActivity(IScheduleDay part, DateTimePeriod? period, IPayload payload);
+
+		void EditorAddActivity(IScheduleDay part, DateTimePeriod? period);
 
         /// <summary>
         /// Occurs when [add overtime].

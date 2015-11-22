@@ -187,33 +187,48 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             }
         }
 
-        public void EditorSelectionChanged(IScheduleDay part)
+	    public void EditorAddActivity(IScheduleDay part, DateTimePeriod? period)
+	    {
+			var handler = AddActivity;
+			if (handler != null)
+			{
+				ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period, null);
+				handler(this, shiftEditorEventArgs);
+			}
+	    }
+
+	    public void EditorSelectionChanged(IScheduleDay part)
         {
         	var handler = SelectionChanged;
             if (handler!= null) handler(this, new ShiftEditorEventArgs(part));
         }
 
-        public void EditorAddActivity(IScheduleDay part, DateTimePeriod? period)
+        public void EditorAddActivity(IScheduleDay part, DateTimePeriod? period, IPayload payload)
         {
             var handler = AddActivity;
             if (handler != null)
             {
-                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period);
+                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period, payload);
                 handler(this, shiftEditorEventArgs);
             }
         }
 
-        private static ShiftEditorEventArgs GetShiftEditorEventArgs(IScheduleDay part, DateTimePeriod? period)
+        private static ShiftEditorEventArgs GetShiftEditorEventArgs(IScheduleDay part, DateTimePeriod? period, IPayload payload)
         {
             ShiftEditorEventArgs shiftEditorEventArgs;
+	        var activity = payload as IActivity;
+	        ILayer<IPayload> selectedLayer = null;
+	        if (activity != null)
+		        selectedLayer = new ActivityLayer(activity, new DateTimePeriod());
+
             if (period.HasValue && period.Value.EndDateTime>DateTime.MinValue)
             {
                 var periodWithoutSeconds = truncatePeriodSeconds(period.Value);
-                shiftEditorEventArgs = new ShiftEditorEventArgs(part, periodWithoutSeconds);
+				shiftEditorEventArgs = new ShiftEditorEventArgs(part, periodWithoutSeconds, selectedLayer);
             }
             else
             {
-                shiftEditorEventArgs = new ShiftEditorEventArgs(part);
+				shiftEditorEventArgs = new ShiftEditorEventArgs(part, selectedLayer);
             }
             return shiftEditorEventArgs;
         }
@@ -233,7 +248,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             var handler = AddOvertime;
             if (handler != null)
             {
-                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period);
+                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period, null);
                 handler(this, shiftEditorEventArgs);
             }
         }
@@ -243,7 +258,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             var handler = AddAbsence;
             if (handler != null)
             {
-                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period);
+                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period, null);
                 handler(this, shiftEditorEventArgs);
             }
         }
@@ -253,7 +268,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             var handler = AddPersonalShift;
             if (handler != null)
             {
-                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period);
+                ShiftEditorEventArgs shiftEditorEventArgs = GetShiftEditorEventArgs(part, period, null);
                 handler(this, shiftEditorEventArgs);
             }
         }

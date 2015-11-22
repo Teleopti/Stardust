@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
+		public IActivity DefaultActivity { get; set; }
+
 		public static DateTimePeriod GetDefaultPeriodFromPart(IScheduleDay part)
 		{
 			DateTimePeriod defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(part.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)), part.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)));
@@ -48,7 +50,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.ActiveActivities,
 															activeShiftCategories,
 															defaultDateTimePeriod,
-															SchedulerStateHolder.TimeZoneInfo);
+															SchedulerStateHolder.TimeZoneInfo,
+															DefaultActivity);
 
 			bool result = dialog1.Result;
 

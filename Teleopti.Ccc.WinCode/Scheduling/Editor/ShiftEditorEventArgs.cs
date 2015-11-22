@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             get { return _selectedLayer; }
         }
 
-        public ShiftEditorEventArgs(IScheduleDay schedulePart)
-        {
-            _schedulePart = schedulePart;
-        }
+		public ShiftEditorEventArgs(IScheduleDay schedulePart)
+		{
+			_schedulePart = schedulePart;
+		}
 
         public ShiftEditorEventArgs(IScheduleDay schedulePart, ILayer<IPayload> selectedLayer)
         {
@@ -31,10 +31,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             _selectedLayer = selectedLayer;
         }
 
-        public ShiftEditorEventArgs(IScheduleDay schedulePart, DateTimePeriod period)
+		public ShiftEditorEventArgs(IScheduleDay schedulePart, DateTimePeriod period, ILayer<IPayload> selectedLayer)
         {
             _schedulePart = schedulePart;
             Period = period;
+	        _selectedLayer = selectedLayer;
         }
+
+		public ShiftEditorEventArgs(IScheduleDay schedulePart, DateTimePeriod period)
+		{
+			_schedulePart = schedulePart;
+			Period = period;
+		}
     }
 }

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 3);
             _title = "Title";
 
-            _target = new AddLayerViewModel<IAbsence>(_absences, _period, _title, _interval);
+            _target = new AddLayerViewModel<IAbsence>(_absences, _period, _title, _interval, null);
         }
 
         [Test]

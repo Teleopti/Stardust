@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new AddDialogComposer<AddDayOffViewModel>(model, timeZoneInfo).Result();
         }
 
-        public IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
+        public IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo, IActivity defaultActivity)
         {
-            var model = new AddActivityViewModel(activities, shiftCategories, period, WorkingInterval);
+            var model = new AddActivityViewModel(activities, shiftCategories, period, WorkingInterval, defaultActivity);
             SetBoundary(model);
             return new AddDialogComposer<AddActivityViewModel>(model, timeZoneInfo).Result();
         }
