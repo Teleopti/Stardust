@@ -17,28 +17,21 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-
-			var sortedSeatBookingRequests = seatBookingRequests
-				.OrderByDescending(s => s.MemberCount)
-				.ThenBy(s => s.SeatBookings.Min(booking => booking.StartDateTime));
-
+			var sortedSeatBookingRequests = SeatAllocatorHelper.SortSeatBookingRequests (seatBookingRequests);
 
 			foreach (var seatBookingRequest in sortedSeatBookingRequests)
 			{
-				seatBookingRequest.SeatBookings.OrderBy(booking => booking.StartDateTime).ForEach(tryToFindASeatForBooking);
+				seatBookingRequest.SeatBookings.OrderBy(booking => booking.StartDateTime).ForEach(bookSeatIfAvailable);
 			}
 		}
 
-		private void tryToFindASeatForBooking(ISeatBooking seatBooking)
+		private void bookSeatIfAvailable(ISeatBooking seatBooking)
 		{
-			var unallocatedSeat = _seats.FirstOrDefault(seat => !seat.IsAllocated(seatBooking));
-
-			if (unallocatedSeat != null)
+			var firstApplicableSeat = SeatAllocatorHelper.TryToFindASeatForBooking (seatBooking, _seats);
+			if (firstApplicableSeat != null )
 			{
-				seatBooking.Book(unallocatedSeat);
+				seatBooking.Book(firstApplicableSeat);
 			}
-
 		}
-
 	}
 }

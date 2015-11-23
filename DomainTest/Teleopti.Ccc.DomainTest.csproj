@@ -189,6 +189,7 @@
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
+    <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
     <Compile Include="SeatPlanning\SeatPlannerTests.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersisterTests.cs" />

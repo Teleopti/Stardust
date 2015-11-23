@@ -124,17 +124,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			if (IncludeInSeatPlan)
 			{
-				return getNextUnallocatedSeatOnSelf(booking);
+				return SeatAllocatorHelper.TryToFindASeatForBooking(booking, _seats.OrderBy(seat => seat.Priority));
 			}
 
 			return null;
 		}
 
-		private ISeat getNextUnallocatedSeatOnSelf(ISeatBooking booking)
-		{
-			return _seats.OrderBy(seat => seat.Priority).FirstOrDefault(seat => !seat.IsAllocated(booking));
-		}
-
+		
 		public virtual int SeatCount { get { return _seats.Count; } }
 
 		public virtual bool CanAllocateShifts(IEnumerable<ISeatBooking> agentShifts)

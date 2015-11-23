@@ -686,6 +686,7 @@
     <Compile Include="Scheduling\WebLegacy\IScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
+    <Compile Include="SeatPlanning\SeatAllocatorHelper.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequestAssembler.cs" />
     <Compile Include="SeatPlanning\SeatLevelAllocator.cs" />
     <Compile Include="SeatPlanning\SeatMapPersister.cs" />

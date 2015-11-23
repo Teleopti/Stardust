@@ -17,9 +17,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests = seatBookingRequests
-				.OrderByDescending(s => s.MemberCount)
-				.ThenBy (s => s.SeatBookings.Min(booking => booking.StartDateTime));
+			var sortedSeatBookingRequests = SeatAllocatorHelper.SortSeatBookingRequests(seatBookingRequests);
 
 			bookSeatsByGroup(sortedSeatBookingRequests);
 			bookUnallocatedShifts(sortedSeatBookingRequests);
