@@ -387,8 +387,6 @@
     </Compile>
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionFactoryTest.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDriverConnectionProviderTest.cs" />
     <Compile Include="NHibernateConfiguration\TrackerByteTest.cs" />
     <Compile Include="Foundation\WriteStringToFileTest.cs" />
     <Compile Include="Helper\DatabaseTest.cs" />
