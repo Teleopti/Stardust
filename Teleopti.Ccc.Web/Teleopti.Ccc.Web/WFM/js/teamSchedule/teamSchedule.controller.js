@@ -16,6 +16,8 @@
 			formatYear: 'yyyy',
 			startingDay: 1
 		};
+
+		var pageSize = 18;
 		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
 		vm.format = 'yyyy/MM/dd';
 
@@ -38,14 +40,20 @@
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
-		
-
 		vm.loadTeams = function () {
 			teamScheduleSvc.loadAllTeams.query({
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 			}).$promise.then(function (result) {
 				vm.Teams = result;
 			});
+		}
+
+		function getScheduleForCurrentPage(currentPageIndex) {
+			vm.groupScheduleVm = {
+				TimeLine: vm.allSchedules.TimeLine,
+				Schedules: vm.allSchedules.Schedules.slice((currentPageIndex - 1) * pageSize, currentPageIndex * pageSize)
+			}
+			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 		}
 
 		vm.loadSchedules = function (currentPageIndex) {
@@ -55,7 +63,7 @@
 				teamScheduleSvc.loadSchedules.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-					pageSize: 18,
+					pageSize: pageSize,
 					currentPageIndex: currentPageIndex
 				}).$promise.then(function (result) {
 					vm.paginationOptions.totalPages = result.TotalPages;
@@ -63,13 +71,19 @@
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
 			} else {
-				teamScheduleSvc.loadSchedulesNoReadModel.query({
-					groupId: vm.selectedTeamId,
-					date: vm.scheduleDateMoment().format("YYYY-MM-DD")
-				}).$promise.then(function (result) {
-					vm.groupScheduleVm = groupScheduleFactory.Create(result, vm.scheduleDateMoment());
-					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-				});
+				if (vm.allSchedules == undefined) {
+					teamScheduleSvc.loadSchedulesNoReadModel.query({
+						groupId: vm.selectedTeamId,
+						date: vm.scheduleDateMoment().format("YYYY-MM-DD")
+					}).$promise.then(function(result) {
+						vm.allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment());
+						vm.paginationOptions.totalPages = Math.ceil(vm.allSchedules.Schedules.length / pageSize);
+
+						getScheduleForCurrentPage(currentPageIndex);
+					});
+				} else {
+					getScheduleForCurrentPage(currentPageIndex);
+				}
 			}
 		}
 
