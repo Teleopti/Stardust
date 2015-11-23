@@ -113,6 +113,7 @@
     <Compile Include="ControllerActions\CreateDatabasesTest.cs" />
     <Compile Include="ControllerActions\CreateTenantModelForTest.cs" />
     <Compile Include="ControllerActions\DeleteTenantTest.cs" />
+    <Compile Include="ControllerActions\DeleteUserTest.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />
     <Compile Include="GetImportUsersFake.cs" />
     <Compile Include="DatabaseHelperWrapperFake.cs" />

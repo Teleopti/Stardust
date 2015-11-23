@@ -214,6 +214,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(new UpdateUserResultModel { Success = true, Message = "Successfully changed password."});
 		}
 
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("DeleteUser")]
+		public virtual void DeleteUser([FromBody]int id)
+		{
+			var user = _currentTenantSession.CurrentSession().Get<TenantAdminUser>(id);
+			if (user != null)
+				_currentTenantSession.CurrentSession().Delete(user);
+		}
+
 		private string encryptString(string value)
 		{
 			return string.Concat("###", BitConverter.ToString(hashString(value)).Replace("-", ""), "###");
