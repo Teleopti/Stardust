@@ -348,6 +348,7 @@
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="MultiTenancy\Server\TenantAuthenticationFake.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
+    <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />

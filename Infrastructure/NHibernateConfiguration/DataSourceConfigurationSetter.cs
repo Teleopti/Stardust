@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 			else
 			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithTimeoutRetries).AssemblyQualifiedName);
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
 			}
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
 			if (!string.IsNullOrEmpty(SessionContext))
