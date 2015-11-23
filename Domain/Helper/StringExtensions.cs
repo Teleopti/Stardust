@@ -53,5 +53,10 @@ namespace Teleopti.Ccc.Domain.Helper
 			return DateTime.SpecifyKind(DateTime.Parse(dateTimeString, CultureInfo.GetCultureInfo("sv-SE")), DateTimeKind.Utc);
 		}
 		
+		public static DateTime Time(this string dateTimeString)
+		{
+			return DateTime.Parse(dateTimeString, CultureInfo.GetCultureInfo("sv-SE"));
+		}
+		
 	}
 }

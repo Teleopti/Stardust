@@ -21,12 +21,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public IGetAgentStates Target;
 		public FakeAgentStateReadModelReader Database;
 		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
-			system.UseTestDouble<MutableNow>().For<INow>();
+			system.UseTestDouble<MutableNow>().For<INow>(); 
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 		}
 
 		[Test]
@@ -135,5 +137,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			agentState.Single().AlarmColor.Should().Be("#FFFFFF");
 		}
+
+		[Test]
+		public void ShouldGetActivityTimeInLoggedOnUserTimeZone()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				TeamId = teamId,
+				NextStart = "2015-11-23 09:00".Utc()
+			});
+			Now.Is("2015-11-23 08:30".Utc());
+			TimeZone.IsSweden();
+
+			var agentState = Target.ForTeams(new[] { teamId });
+
+			agentState.Single().NextActivityStartTime.Should().Be("2015-11-23 10:00".Time());
+		}
+
+		[Test]
+		public void ShouldGetNullActivityTime()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				TeamId = teamId,
+				NextStart = null
+			});
+			Now.Is("2015-11-23 08:30".Utc());
+
+			var agentState = Target.ForTeams(new[] { teamId });
+
+			agentState.Single().NextActivityStartTime.Should().Be(null);
+		}
+
 	}
 }

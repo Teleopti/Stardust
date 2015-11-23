@@ -17,24 +17,26 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly INow _now;
+		private readonly IUserTimeZone _timeZone;
 
-		public GetAgentStates(IAgentStateReadModelReader agentStateReadModelReader, INow now)
+		public GetAgentStates(IAgentStateReadModelReader agentStateReadModelReader, INow now, IUserTimeZone timeZone)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_now = now;
+			_timeZone = timeZone;
 		}
 
 		public IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds)
 		{
-			return mapping(_agentStateReadModelReader.LoadForSites(siteIds));
+			return map(_agentStateReadModelReader.LoadForSites(siteIds));
 		}
 
 		public IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds)
 		{
-			return mapping(_agentStateReadModelReader.LoadForTeams(teamIds));
+			return map(_agentStateReadModelReader.LoadForTeams(teamIds));
 		}
 
-		private IEnumerable<AgentStateViewModel> mapping(IEnumerable<AgentStateReadModel> states)
+		private IEnumerable<AgentStateViewModel> map(IEnumerable<AgentStateReadModel> states)
 		{
 			return states.Select(x => new AgentStateViewModel
 			{
@@ -43,12 +45,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				StateStart = x.StateStart,
 				Activity = x.Scheduled,
 				NextActivity = x.ScheduledNext,
-				NextActivityStartTime = x.NextStart,
+				NextActivityStartTime = toUserTimeZone(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStart,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
 				TimeInState = x.StateStart.HasValue ? (int)(_now.UtcDateTime() - x.StateStart.Value).TotalSeconds : 0
 			});
+		}
+
+		private DateTime? toUserTimeZone(DateTime? timestamp)
+		{
+			if (timestamp.HasValue)
+				return TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
+			return null;
 		}
 	}
 }
