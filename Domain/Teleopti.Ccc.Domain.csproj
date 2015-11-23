@@ -645,7 +645,7 @@
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
-    <Compile Include="Optimization\DayOffRulesPersister.cs" />
+    <Compile Include="Optimization\DayOffRulesModelPersister.cs" />
     <Compile Include="Optimization\DayOffRulesMapper.cs" />
     <Compile Include="Optimization\DayOffRulesModel.cs" />
     <Compile Include="Optimization\FetchDayOffRulesModel.cs" />
