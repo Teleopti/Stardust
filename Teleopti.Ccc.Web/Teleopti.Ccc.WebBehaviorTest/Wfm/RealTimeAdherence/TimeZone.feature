@@ -11,11 +11,7 @@ Scenario: Should see adherence percentage when call center is in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
@@ -58,11 +54,7 @@ Scenario: Should see adherence details when call center is in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with

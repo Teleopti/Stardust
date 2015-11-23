@@ -4,11 +4,7 @@
 	I want to see which parts of the organization currently not adhering to the schedule
 
 Scenario: View updates of sum of employees not adhering to schedule for each site
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
+	Given I have a role with full access
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -57,11 +53,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
+	Given I have a role with full access
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -109,11 +101,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
 Scenario: View current state of sum of employees not adhering to schedule for each site
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
+	Given I have a role with full access
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -162,11 +150,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View current state of sum of employees not adhering to schedule for each team within a site
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	| Access to everyone                     | True              |
+	Given I have a role with full access
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'

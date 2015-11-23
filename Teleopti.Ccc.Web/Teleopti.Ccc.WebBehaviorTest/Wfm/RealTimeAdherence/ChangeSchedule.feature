@@ -9,12 +9,7 @@ Scenario: Should be able to change schedule from agent state overview
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	| Field                                  | Value       |
-	| Name                                   | Team leader |
-	| Access to team                         | Red         |
-	| Access to real time adherence overview | True        |
-	| Access to Anywhere                     | true        |
+	And I have a role with full access
 	And there is a workflow control set with
 	| Field                      | Value                      |
 	| Name                       | Schedule published to 0909 |

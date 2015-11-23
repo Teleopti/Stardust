@@ -5,11 +5,7 @@
 
 Scenario: Should display sites of a selected business unit
 	Given the time is '2014-08-01 13:00'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |	
-	| Access to everyone					 | True              |
-	| Access to real time adherence overview | True              |
+	And I have a role with full access
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
@@ -33,11 +29,7 @@ Scenario: Should display sites of a selected business unit
 	Then I should see the site 'Paris'
 
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |	
-	| Access to everyone					 | True              |
-	| Access to real time adherence overview | True              |
+	Given I have a role with full access
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |

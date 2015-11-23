@@ -31,8 +31,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(userRole); // adds the role to the user and persist
 		}
 
+		[Given(@"I have a role with full access")]
+		public void GivenIHaveARoleWithFullAccess()
+		{
+			var role = new RoleConfigurable
+			{
+				AccessToEveryone = true,
+				AccessToAnywhere = true,
+				// put any that defaults to false to true here as needed
+			};
+			DataMaker.Data().Apply(role);
+			DataMaker.Data().Apply(new RoleForUser {Name = role.Name});
+		}
+		
 		[Given(@"I have a role named '(.*)'")]
-		public void GivenIHaveARoleNamedWith(string name)
+		public void GivenIHaveARoleNamed(string name)
 		{
 			DataMaker.Data().Apply(new RoleConfigurable {Name = name});
 			DataMaker.Data().Apply(new RoleForUser {Name = name});

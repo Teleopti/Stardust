@@ -8,12 +8,7 @@ Scenario: Should be able to see agents for multiple sites
 	And there is a team named 'Team Paris' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Team London' on site 'London'
-	And I have a role with
-	| Field                                  | Value                  |
-	| Name                                   | Real time analyst      |
-	| Access to site                         | Paris,London           |
-	| Access to team                         | Team Paris,Team London |
-	| Access to real time adherence overview | True                   |
+	And I have a role with full access
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Team Paris |
@@ -33,11 +28,7 @@ Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to team                         | Täby, Garnisonen  |
-	| Access to real time adherence overview | True              |
+	And I have a role with full access
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Täby       |

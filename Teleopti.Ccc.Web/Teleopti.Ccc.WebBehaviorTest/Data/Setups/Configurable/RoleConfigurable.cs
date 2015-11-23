@@ -71,6 +71,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public RoleConfigurable()
 		{
+			// DONT default permissions to false!
+			// False is the edge case!
 			Name = RandomName.Make("A role");
 			Description = RandomName.Make("A role");
 			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Description.Name;
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
 			AccessToPreferences = true;
-			AccessToRealTimeAdherenceOverview = false;
+			AccessToRealTimeAdherenceOverview = true;
 			AccessToSeatPlanner = false;
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;

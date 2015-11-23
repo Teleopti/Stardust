@@ -8,13 +8,7 @@ Scenario: Should display agents in alarm
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-# shouldnt be required ??
-	 | Access to team                         | Red         |
-# shouldnt be required, make true default
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with

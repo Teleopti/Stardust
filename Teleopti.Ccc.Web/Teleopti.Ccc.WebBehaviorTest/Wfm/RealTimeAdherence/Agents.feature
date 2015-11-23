@@ -8,11 +8,7 @@ Scenario: Should be able to see current states of all agents
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
@@ -87,11 +83,7 @@ Scenario: Should be able to see state updates of all agents
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
@@ -166,11 +158,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
@@ -261,11 +249,7 @@ Scenario: Should see adherence status when call center is in Istanbul
 	And there is an activity named 'Phone'
 	And there is a site named 'Istanbul'
 	And there is a team named 'Red' on site 'Istanbul'
-	And I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team                         | Red         |
-	 | Access to real time adherence overview | True        |
+	And I have a role with full access
 	And there is a datasouce with id 6
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
