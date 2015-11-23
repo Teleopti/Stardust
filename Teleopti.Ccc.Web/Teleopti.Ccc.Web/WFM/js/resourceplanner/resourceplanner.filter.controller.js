@@ -79,6 +79,10 @@
 				$scope.moreResultsExists = function () {
 					return $scope.results.length >= maxHits;
 				}
+				$scope.removeNode = function(node){
+					var p = $scope.selectedResults.indexOf(node);
+					$scope.selectedResults.splice(p,1);
+				}
 
 				$scope.persist = function () {
 					if ($scope.isValid()) {

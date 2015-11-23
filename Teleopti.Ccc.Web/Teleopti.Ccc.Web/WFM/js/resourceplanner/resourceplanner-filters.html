@@ -44,7 +44,7 @@
 			<div class="col-md-12">
 				<p translate>SelectedFiltersColon</p>
 				<div class="wfm-filter-selected" ng-repeat="selected in selectedResults">
-					<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}</span>
+					<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}<i class="mdi mdi-close" ng-click="removeNode(selected)"></i></span>
 				</div>
 			</div>
 		</div>

@@ -436,5 +436,14 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.results.length).toEqual(0);
 		expect(scope.searchString).toEqual('');
 	}));
+	it('should remove a selected node when removeNode is called', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		scope.selectedResults = [{id:1},{id:2}]
+		scope.removeNode(scope.selectedResults[1]);
+
+		expect(scope.selectedResults.length).toEqual(1);
+		expect(scope.selectedResults[0].id).toBe(1)
+	}));
 
 });
