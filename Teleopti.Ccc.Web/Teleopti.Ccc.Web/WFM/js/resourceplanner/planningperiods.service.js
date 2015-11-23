@@ -1,6 +1,6 @@
 ﻿(function() {
 	angular.module('restResourcePlannerService', ['ngResource']).service('PlanningPeriodSvrc', [
-		'$resource', function($resource) {
+		'$resource', '$http', function($resource, $http) {
 			//scheduling
 			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/FixedStaff', {}, {
 				query: { method: 'POST', params: name, isArray: false }
@@ -29,6 +29,13 @@
 			this.status = $resource('../api/Status/Scheduling', {}, {
 			    get: { method: 'GET', params: {}, isArray: false }
 			});
+
+			this.getDayOffRules = function() {
+				return $http({
+					method: 'GET',
+					url: '../api/resourceplanner/dayoffrules'
+				});
+			}
 		}
 	]);
 })();

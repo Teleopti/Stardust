@@ -10,8 +10,6 @@ describe('PlanningPeriodsCtrl', function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		//$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		//$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 	it('not null', inject(function($controller) {
@@ -20,6 +18,7 @@ describe('PlanningPeriodsCtrl', function () {
 			getPlanningPeriod: {
 				query: function() {}
 			},
+			getDayOffRules: function () { return { then: function () { } } },
 			isEnabled: {
 				query: function(param) {
 					var queryDeferred = $q.defer();
@@ -48,6 +47,7 @@ describe('PlanningPeriodsCtrl', function () {
 					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
 				}
 			},
+			getDayOffRules: function () { return { then: function () { } } },
 			isEnabled: {
 				query: function (param) {
 					var queryDeferred = $q.defer();
@@ -88,6 +88,7 @@ describe('PlanningPeriodsCtrl', function () {
 					};
 				}
 			},
+			getDayOffRules : function(){return {then:function(){}}},
 			isEnabled: {
 				query: function (param) {
 					var queryDeferred = $q.defer();
