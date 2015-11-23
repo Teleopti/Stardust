@@ -59,16 +59,16 @@
 										View more numbers
 									</md-tooltip>
 								</a>
-								<a class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
-									Forecast
-									<md-tooltip>
-										Forecast this workload
-									</md-tooltip>
-								</a>
 								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload)">
 									Modify <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
 									<md-tooltip>
 										Select days in chart before modifying
+									</md-tooltip>
+								</a>
+								<a class="wfm-btn wfm-btn-invis-default forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
+									Forecast
+									<md-tooltip>
+										Forecast this workload
 									</md-tooltip>
 								</a>
 							</aside>
