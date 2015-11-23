@@ -1236,6 +1236,7 @@
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
+    <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
     <Content Include="WFM\js\rta\rta-agents-headercelltemplate-ProperAlarm_34975.html" />
     <Content Include="WFM\js\rta\rta-agents-rowtemplate-AdherenceDetails_34267.html" />
@@ -1463,7 +1464,6 @@
     <Content Include="WFM\js\outbound\outbound.directive.expandable.js" />
     <Content Include="WFM\js\outbound\outbound.directive.formLocator.js" />
     <Content Include="WFM\js\outbound\outbound.service.notification.js" />
-    <Content Include="WFM\js\outbound\outbound.directive.range-validate.js" />
     <Content Include="WFM\js\outbound\outbound.service.view-utility.js" />
     <Content Include="WFM\js\global\workinghourspicker\working-hours-picker.directive.js" />
     <Content Include="WFM\js\outbound\_modules.js" />

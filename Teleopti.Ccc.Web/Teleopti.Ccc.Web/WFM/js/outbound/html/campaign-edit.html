@@ -3,7 +3,7 @@
         <div layout="row">
 			<div class="text-left navigate-to"  flex>
 				<div class="pull-left">
-					<md-button class="wfm-btn outbound-back-btn m-l-10" ng-click="backToList()" tabindex="0">
+					<md-button class="wfm-btn outbound-back-btn m-l-10" ng-click="backToList()" tabindex="0" aria-label="back">
 						<i class="mdi mdi-reply"></i>
 					</md-button>
 				</div>
@@ -59,7 +59,7 @@
                                 <span translate>CallListLength</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" range-validate range-min="0" range-max="1000000" required />
+                                <input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -71,7 +71,7 @@
                                 <span translate>TargetRate</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" range-validate range-max="100" range-min="1" required />
+                                <input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -83,7 +83,7 @@
                                 <span translate>ConnectRate</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" range-validate range-max="100" range-min="1" required />
+                                <input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -95,7 +95,7 @@
                                 <span translate>RPCR</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" range-validate range-max="100" range-min="1" required />
+                                <input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -107,7 +107,7 @@
                                 <span translate>ConnectAHT</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" range-validate range-min="0" range-max="9999" required />
+                                <input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -119,7 +119,7 @@
                                 <span translate>RPCAHT</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" range-validate range-min="0" range-max="9999" required />
+                                <input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>
@@ -131,7 +131,7 @@
                                 <span translate>UnproductiveTime</span>
                             </div>
                             <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" range-validate range-min="0" range-max="9999" required />
+                                <input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
                                     <i class="mdi mdi-check success right-sign"></i>
                                     <i class="mdi mdi-close danger wrong-sign"></i>

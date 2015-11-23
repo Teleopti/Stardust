@@ -9,7 +9,7 @@
 		<input id="ManualPlanInput"
 			   type="text"
 			   ng-model="manualPlanInput"
-			   range-validate range-min="0" float-number />
+			   numeric-value  min="0" float-number />
 		<div class="manual-input-btns" ng-mouseenter="showFirstAlertMessage=true" ng-mouseleave="showFirstAlertMessage=false" ng-init="showFirstAlertMessage=false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0 btn-save-plan"
 					ng-click="addManualPlan()"
@@ -37,7 +37,7 @@
 		<input id="ActualBacklogInput"
 			   type="text"
 			   ng-model="manualBacklogInput"
-			   range-validate range-min="0" float-number />
+			   numeric-value min="0" float-number />
 		<div class="manual-input-btns" ng-mouseenter="showSecondAlertMessage=true" ng-mouseleave="showSecondAlertMessage=false" ng-init="showSecondAlertMessage=false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0 btn-save-backlog"
 					ng-click="addManualBacklog()"
