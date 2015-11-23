@@ -32,7 +32,7 @@
 				options: {
 						projectConfiguration: 'Debug',
 						targets: ['Rebuild'],
-						version: 14.0,
+						version: 12.0,
 						maxCpuCount: null,
 						buildParameters: {
 								WarningLevel: 2
@@ -45,7 +45,7 @@
 				options: {
 						projectConfiguration: 'Debug',
 						targets: ['build'],
-						version: 14.0,
+						version: 12.0,
 						maxCpuCount: null,
 						buildParameters: {
 								WarningLevel: 2
