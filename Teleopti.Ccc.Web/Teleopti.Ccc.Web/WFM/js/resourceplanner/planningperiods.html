@@ -1,6 +1,18 @@
 ﻿<div ui-view>
     <div class="alert-warning notice-spacer" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> Warning: Server is busy scheduling, please try again later.</div>
-    <div class="row col-lg-12">
+	<div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
+		PlanningPeriodIsScheduled
+	</div>
+
+	<div ng-show="scheduleClicked && !schedulingPerformed">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		<p>{{status}} .. </p>
+		<p ng-if="errorMessage">{{errorMessage}}</p>
+	</div>
+	<div ng-if ="errorMessage">
+		<p>{{errorMessage}}</p>
+	</div>
+    <div class="row col-lg-10">
         <div ng-show="!planningPeriod.$resolved">
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
             <p>{{'CheckingForecastingRequirements' | translate}}</p>
@@ -23,6 +35,41 @@
                     </div>
                 </div>
             </div>
+			<div class="wfm-filters col-lg-12 " ng-repeat="node in dayoffRules">
+				<div class=" material-depth-1">
+				<div class="wfm-block wfm-filter-node row">
+				<div class="sub-header"><strong>{{node.Name}}</strong><i ng-show="!node.Default" class=" filter-header mdi mdi-delete"></i><i ng-show="!node.Default"class=" filter-header mdi mdi-pencil"></i> </div>
+
+
+
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-4">
+						<table class="wfm-table wfm-table-multi wfm-filter-options">
+							<thead><tr><th></th><th>Min</th><th>Max</th></tr></thead>
+							<tbody><tr><td>DayOffsPerWeek</td><td>{{node.MinDayOffsPerWeek}}</td><td>{{node.MaxDayOffsPerWeek}}</td></tr>
+							<tr><td>ConsecutiveWorkdays</td><td>{{node.MinConsecutiveWorkdays}}</td><td>{{node.MaxConsecutiveWorkdays}}</td></tr>
+							<tr><td>ConsecutiveDayOffs</td><td>{{node.MinConsecutiveDayOffs}}</td><td>{{node.MaxConsecutiveDayOffs}}</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="rules col-md-8" ng-repeat="subfilter in node.Filters">
+
+								{{subfilter.FilterType}}|{{subfilter.Name}}
+
+
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+
+			</div>
+
 
             <div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
                 <p>{{'PlanningPeriodMissingMessage' | translate}}</p>
@@ -40,18 +87,9 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
-                PlanningPeriodIsScheduled
-            </div>
-            <button class="schedule-button wfm-btn" ng-class="{'wfm-btn-primary-disabled': disableSchedule(), 'wfm-btn-primary': !disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)">{{'Schedule' | translate }} </button>
-            <div ng-show="scheduleClicked && !schedulingPerformed">
-                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-                <p>{{status}} .. </p>
-                <p ng-if="errorMessage">{{errorMessage}}</p>
-            </div>
-            <div ng-if ="errorMessage">
-                <p>{{errorMessage}}</p>
-            </div>
+
         </div>
     </div>
+	<button class="wfm-fab info" ng-class="{'wfm-btn-primary-disabled': disableSchedule(), 'wfm-btn-primary': !disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)"><i class="mdi mdi-arrow-right"></i>
+		<md-tooltip>{{'Schedule' | translate }}</md-tooltip> </button>
 </div>
