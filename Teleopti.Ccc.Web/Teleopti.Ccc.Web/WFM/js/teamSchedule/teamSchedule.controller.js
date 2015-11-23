@@ -81,10 +81,10 @@
 					pageSize: pageSize,
 					currentPageIndex: currentPageIndex
 				}).$promise.then(function (result) {
+					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-					vm.isLoading = false;
 				});
 			} else {
 				if (vm.allAgents == undefined) {
@@ -95,9 +95,10 @@
 					    vm.rawScheduleData = result;
 
 						vm.allAgents = [];
-						var allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment()).Schedules;
-						angular.forEach(allSchedules, function(schedule) {
-							vm.allAgents.push(schedule.PersonId);
+						angular.forEach(vm.rawScheduleData, function(schedule) {
+							if (vm.allAgents.indexOf(schedule.PersonId) == -1) {
+								vm.allAgents.push(schedule.PersonId);
+							}
 						});
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
