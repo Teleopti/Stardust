@@ -40,6 +40,7 @@
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
+		vm.isLoading = false;
 		vm.loadTeams = function () {
 			teamScheduleSvc.loadAllTeams.query({
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
@@ -58,6 +59,7 @@
 
 		vm.loadSchedules = function (currentPageIndex) {
 			if (vm.selectedTeamId === "") return;
+			vm.isLoading = true;
 			vm.paginationOptions.pageNumber = currentPageIndex;
 			if (vm.isFromReadModel) {
 				teamScheduleSvc.loadSchedules.query({
@@ -66,9 +68,11 @@
 					pageSize: pageSize,
 					currentPageIndex: currentPageIndex
 				}).$promise.then(function (result) {
+					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+
 				});
 			} else {
 				if (vm.allSchedules == undefined) {
@@ -76,6 +80,7 @@
 						groupId: vm.selectedTeamId,
 						date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 					}).$promise.then(function(result) {
+					vm.isLoading = false;
 						vm.allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment());
 						vm.paginationOptions.totalPages = Math.ceil(vm.allSchedules.Schedules.length / pageSize);
 
