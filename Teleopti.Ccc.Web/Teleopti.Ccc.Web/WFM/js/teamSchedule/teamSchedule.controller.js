@@ -58,12 +58,9 @@
 
 			var scheduleForCurrentPage = [];
 			angular.forEach(rawScheduleData, function(rawSchedule) {
-				for (var j = 0; j < agentsForCurrentPage.length; j++) {
-					if (rawSchedule.PersonId === agentsForCurrentPage[j]) {
-						scheduleForCurrentPage.push(rawSchedule);
-						continue;
-					}
-				};
+				if (agentsForCurrentPage.indexOf(rawSchedule.PersonId) > -1) {
+					scheduleForCurrentPage.push(rawSchedule);
+				}
 			});
 
 			vm.groupScheduleVm = groupScheduleFactory.Create(scheduleForCurrentPage, vm.scheduleDateMoment());
