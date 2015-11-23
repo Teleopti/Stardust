@@ -13647,4 +13647,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Daily Total</value>
     <comment>Adherence percentage of today</comment>
   </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Access all functions:</value>
+    <comment>toggle label in permissions functions to enable all functions for a role</comment>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Changes are disabled for predefined roles.</value>
+    <comment>Warning notice in permissions </comment>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Unselected items</value>
+    <comment>Label in permissions</comment>
+  </data>
 </root>

@@ -10004,7 +10004,7 @@ Ces options sont actives:
     <value>Gérer les permissions</value>
   </data>
   <data name="ManagePermissionsIntro" xml:space="preserve">
-    <value>Ici vous pouvez décider qui a la permission d'accéder des parties spécifiques de l'application.</value>
+    <value>Ici vous pouvez décider qui a la permission d'accéder à des parties spécifiques de l'application.</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>Objets désactivés</value>

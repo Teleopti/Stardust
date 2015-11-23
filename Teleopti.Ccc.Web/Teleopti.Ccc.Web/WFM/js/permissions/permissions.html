@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h4 translate>ManagePermissions</h4>
-			<p>Manage permissions per role. Select what functions and what data that should be available.</p>
+			<p translate>ManagePermissionsIntro</p>
 		</div>
 	</div>
 	<div class="row">
@@ -66,14 +66,14 @@
 			<div class="wfm-slide-tabs ">
 				<md-content class="material-depth-1" style="padding:0!important;">
 					<md-tabs md-dynamic-height md-border-bottom>
-						<md-tab label="Functions" ng-show="roleDetails=='functionsAvailable'">
+						<md-tab label="{{'Functions' | translate}}" ng-show="roleDetails=='functionsAvailable'">
 							<md-content class="md-padding">
 
 								<div class="functions-container" ng-include="'js/permissions/permissions.functions.html'" ng-controller="RoleFunctionsController"></div>
 
 							</md-content>
 						</md-tab>
-						<md-tab label="Data" ng-show="roleDetails=='dataAvailable'">
+						<md-tab label="{{'Data' | translate}}" ng-show="roleDetails=='dataAvailable'">
 							<md-content class="md-padding">
 
 								<div class="data-container" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>

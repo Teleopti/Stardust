@@ -21,7 +21,7 @@
 					if (!newSelectedRole.Id) return;
 					$scope.selectedRole = newSelectedRole;
 					if ($scope.selectedRole.BuiltIn) {
-						message = growl.warning("<i class='mdi mdi-alert'></i> Changes are disabled for predefined roles.", {
+						message = growl.warning("<i class='mdi mdi-alert' ></i><span translate>ChangesAreDisabled</span>", {
 							ttl: 5000,
 							disableCountDown: true
 						});
