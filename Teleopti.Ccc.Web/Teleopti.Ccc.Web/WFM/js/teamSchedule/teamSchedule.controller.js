@@ -84,6 +84,7 @@
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+					vm.isLoading = false;
 				});
 			} else {
 				if (vm.allAgents == undefined) {
@@ -113,8 +114,8 @@
 		vm.Init = function () {
 			vm.scheduleDate = new Date();
 			toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' })
-				.$promise.then(function(result) {
-					vm.loadScheduelWithReadModel = !result;
+				.$promise.then(function (result) {
+					vm.loadScheduelWithReadModel = !result.IsEnabled;
 				});
 			vm.loadTeams();
 		}
