@@ -1,65 +1,67 @@
-﻿<div class="row">
-	<div class="col-lg-12">
-		<h4>Agent Details</h4>
-		 <button class="wfm-btn wfm-btn-primary" ng-show="!isEmptyHistory()" ng-click="goBackToAgents()">{{'Back'|translate}}</button>
-		<div class="wfm-block material-depth-1 rta-agent-details">
-			<div class="row rta-agent-details-header">
-				<div class="rta-agent-details-name">
-					<span class="agent-name">{{name}}</span>
+<div class="row">
+				<div class="col-lg-12">
+								<h4>Agent Details</h4>
+								<button class="wfm-btn wfm-btn-primary" ng-click="goBackToAgents()" ng-show="!isEmptyHistory()">Go back</button>
+								<div class="row rta-agent-details-header">
+												<div class="rta-agent-details-name" flex>
+																<span class="agent-name">{{name}}</span>
+												</div>
+												<div class="rta-agent-details-total" flex>
+																<span class="daily-percent">Daily Total:	{{dailyTotal}}%</span>
+												</div>
+								</div>
 				</div>
-				<div class="rta-agent-details-total">
-					<span class="daily-percent">{{'DailyTotal'|translate}}: {{dailyTotal}}%</span>
+				<div class="col-lg-6">
+								<h4 flex>Planned</h4>
+								<table class="wfm-table">
+												<thead>
+																<tr>
+																				<th>
+																								Activity
+																				</th>
+																				<th>
+																								Start
+																				</th>
+																</tr>
+												</thead>
+												<tbody>
+																<tr ng-repeat="detail in adherence">
+																				<td class="activity-name">
+																								{{detail.Name}}
+																				</td>
+																				<td>
+																								{{detail.StartTime}}
+																				</td>
+																</tr>
+												</tbody>
+								</table>
 				</div>
-      </div>
-			<div class="row rta-agent-details-header">
-				<div class="col-md-6">
-						<p class="text-center">{{'Planned'|translate}}</p>
-						<div class="row">
-							<div class="col-md-6 planned-stats">
-								<span>{{'Activity'|translate}}</span>
-							</div>
-							<div class="col-md-6 planned-stats">
-								<span>{{'Start'|translate}}</span>
-							</div>
-						</div>
+				<div class="col-lg-6">
+								<h4 flex>Real</h4>
+								<table class="wfm-table">
+												<thead>
+																<tr>
+																				<th>
+																								Start
+																				</th>
+																				<th>
+																								Adherence
+																				</th>
+																</tr>
+												</thead>
+												<tbody>
+																<tr ng-repeat="detail in adherence">
+																				<td>
+																								{{detail.ActualStartTime}}
+																				</td>
+																				<td ng-if="detail.AdherencePercent === null" class="adherence-percent">
+																					-
+																				</td>
+																				<td ng-if="detail.AdherencePercent !== null" class="adherence-percent">
+																								{{detail.AdherencePercent}}%
+																				</td>
+																</tr>
+												</tbody>
+								</table>
 				</div>
-				<div class="col-md-6">
-					<p class="text-center">{{'Actual'|translate}}</p>
-					<div class="row">
-						<div class="col-md-6 planned-stats">
-							<span>{{'Start'|translate}}</span>
-						</div>
-						<div class="col-md-6 planned-stats">
-							<span>{{'Adherence'|translate}}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row " ng-repeat="detail in adherence">
-				<div class="col-lg-6 rta-agent-details-planned">
-					<div class="col-lg-12">
-						<div class="col-lg-6 planned-stats">
-							<span class="activity-name">{{detail.Name}}</span>
-						</div>
-            <div class="col-lg-6 planned-stats">
-						<span>{{detail.StartTime}}</span>
-          </div>
-					</div>
-				</div>
-				<div class="col-lg-6 rta-agent-details-real">
-					<div class="col-lg-12">
-            <div class="col-lg-6 real-stats">
-						  <span>{{detail.ActualStartTime}}</span>
-            </div>
-            <div class="col-lg-6 real-stats">
-						  <span ng-if="detail.AdherencePercent === null" class="adherence-percent">-</span>
-							<span ng-if="detail.AdherencePercent !== null" class="adherence-percent">{{detail.AdherencePercent}}%</span>
-            </div>
-					</div>
-				</div>
-			</div>
-			</div>
-		</div>
-	</div>
 </div>
