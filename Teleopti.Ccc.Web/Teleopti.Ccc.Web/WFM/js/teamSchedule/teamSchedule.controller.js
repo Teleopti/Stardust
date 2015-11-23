@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory','Toggle', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
 
 	function TeamScheduleController(teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
 		var vm = this;
@@ -24,18 +24,20 @@
 		vm.datePickerStatus = {
 			opened: false
 		};
-		vm.isFromReadModel = true;
+		vm.loadScheduelWithReadModel = true;
 		vm.toggleCalendar = function () {
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
 
 		vm.selectedTeamIdChanged = function () {
+			vm.allAgents = undefined;
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
 		vm.scheduleDateChanged = function () {
 			vm.loadTeams();
+			vm.allAgents = undefined;
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
@@ -49,11 +51,22 @@
 			});
 		}
 
-		function getScheduleForCurrentPage(currentPageIndex) {
-			vm.groupScheduleVm = {
-				TimeLine: vm.allSchedules.TimeLine,
-				Schedules: vm.allSchedules.Schedules.slice((currentPageIndex - 1) * pageSize, currentPageIndex * pageSize)
-			}
+		function getScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
+			var start = (currentPageIndex - 1) * pageSize;
+			var end = currentPageIndex * pageSize;
+			var agentsForCurrentPage = vm.allAgents.slice(start, end);
+
+			var scheduleForCurrentPage = [];
+			angular.forEach(rawScheduleData, function(rawSchedule) {
+				for (var j = 0; j < agentsForCurrentPage.length; j++) {
+					if (rawSchedule.PersonId === agentsForCurrentPage[j]) {
+						scheduleForCurrentPage.push(rawSchedule);
+						continue;
+					}
+				};
+			});
+
+			vm.groupScheduleVm = groupScheduleFactory.Create(scheduleForCurrentPage, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 		}
 
@@ -61,42 +74,48 @@
 			if (vm.selectedTeamId === "") return;
 			vm.isLoading = true;
 			vm.paginationOptions.pageNumber = currentPageIndex;
-			if (vm.isFromReadModel) {
+			if (vm.loadScheduelWithReadModel) {
 				teamScheduleSvc.loadSchedules.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 					pageSize: pageSize,
 					currentPageIndex: currentPageIndex
 				}).$promise.then(function (result) {
-					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-
 				});
 			} else {
-				if (vm.allSchedules == undefined) {
+				if (vm.allAgents == undefined) {
 					teamScheduleSvc.loadSchedulesNoReadModel.query({
 						groupId: vm.selectedTeamId,
 						date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 					}).$promise.then(function(result) {
-					vm.isLoading = false;
-						vm.allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment());
-						vm.paginationOptions.totalPages = Math.ceil(vm.allSchedules.Schedules.length / pageSize);
+					    vm.rawScheduleData = result;
 
-						getScheduleForCurrentPage(currentPageIndex);
+						vm.allAgents = [];
+						var allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment()).Schedules;
+						angular.forEach(allSchedules, function(schedule) {
+							vm.allAgents.push(schedule.PersonId);
+						});
+						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
+
+						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+					    vm.isLoading = false;
 					});
 				} else {
-					getScheduleForCurrentPage(currentPageIndex);
+					getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+					vm.isLoading = false;
 				}
 			}
 		}
 
 		vm.Init = function () {
 			vm.scheduleDate = new Date();
-			toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' }).$promise.then(function(result) {
-				vm.isFromReadModel = !result;
-			});
+			toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' })
+				.$promise.then(function(result) {
+					vm.loadScheduelWithReadModel = !result;
+				});
 			vm.loadTeams();
 		}
 
