@@ -10,15 +10,15 @@
 			var siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
 
-			var updateAdherence = function(teamAdherence) {
-				teamAdherence.forEach(function(team) {
-					var filteredTeam = $filter('filter')($scope.teams, {
-						Id: team.Id
-					});
-					if (filteredTeam.length > 0)
-						filteredTeam[0].OutOfAdherence = team.OutOfAdherence ? team.OutOfAdherence : 0;
-				})
-			};
+			RtaOrganizationService.getSiteName(siteId).then(function (name) {
+				$scope.siteName = name;
+			});
+
+			var polling = $interval(function () {
+				RtaService.getAdherenceForTeamsOnSite.query({
+					siteId: siteId
+				}).$promise.then(updateAdherence);
+			}, 5000);
 
 			RtaService.getTeams.query({
 					siteId: siteId
@@ -32,19 +32,17 @@
 					updateAdherence(teamAdherence);
 				});
 
-			var polling = $interval(function() {
-				RtaService.getAdherenceForTeamsOnSite.query({
-					siteId: siteId
-				}).$promise.then(updateAdherence);
-			}, 5000);
 
-			$scope.$on('$destroy', function() {
-				$interval.cancel(polling);
-			});
+			function updateAdherence(teamAdherence) {
+				teamAdherence.forEach(function (team) {
+					var filteredTeam = $filter('filter')($scope.teams, {
+						Id: team.Id
+					});
+					if (filteredTeam.length > 0)
+						filteredTeam[0].OutOfAdherence = team.OutOfAdherence ? team.OutOfAdherence : 0;
+				});
+			};
 
-			RtaOrganizationService.getSiteName(siteId).then(function(name) {
-				$scope.siteName = name;
-			});
 
 			$scope.toggleSelection = function(teamId) {
 				var index = selectedTeamIds.indexOf(teamId);
@@ -55,17 +53,17 @@
 				}
 			};
 
+			$scope.onTeamSelect = function (team) {
+				$state.go('rta-agents', {
+					siteId: siteId,
+					teamId: team.Id
+				});
+			};
+
 			$scope.openSelectedTeams = function() {
 				if (selectedTeamIds.length === 0) return;
 				$state.go('rta-agents-teams', {
 					teamIds: selectedTeamIds
-				});
-			};
-
-			$scope.onTeamSelect = function(team) {
-				$state.go('rta-agents', {
-					siteId: siteId,
-					teamId: team.Id
 				});
 			};
 
@@ -74,15 +72,20 @@
 			};
 
 			$scope.$watch(
-				function() {
+				function () {
 					return $sessionStorage.buid;
 				},
-				function(newValue, oldValue) {
+				function (newValue, oldValue) {
 					if (oldValue !== undefined && newValue !== oldValue) {
-							RtaRouteService.goToSites();
+						RtaRouteService.goToSites();
 					}
 				}
 			);
+
+
+			$scope.$on('$destroy', function () {
+				$interval.cancel(polling);
+			});
 		}
 	]);
 })();

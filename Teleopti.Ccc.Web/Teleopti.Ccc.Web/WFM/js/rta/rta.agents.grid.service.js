@@ -1,9 +1,28 @@
 (function() {
 	'use strict';
 	angular.module('wfm.rta').service('RtaGridService', ['Toggle', '$q',
-		function(toggleService, $q) {
+		function (toggleService) {
+			this.makeAllGrid = function () {
+				if (toggleService.Wfm_RTA_ProperAlarm_34975)
+					return makeGridOptions({
+						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
+						alarmDurationCellTemplate: '<div ng-if="row.entity.Alarm===\'Out Adherence\'" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
+					});
+				else
+					return makeGridOptions();
+			};
 
-			var makeGridOptions = function(args) {
+			this.makeInAlarmGrid = function () {
+				if (toggleService.Wfm_RTA_ProperAlarm_34975)
+					return makeGridOptions({
+						headerCellTemplate: '<div></div>',
+						alarmDurationCellTemplate: '<div ng-if="row.entity.Alarm===\'Out Adherence\'" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
+					});
+				else 
+					return makeGridOptions();
+			};
+
+			function makeGridOptions (args) {
 				args = args || {};
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
@@ -77,25 +96,6 @@
 				};
 			};
 
-			this.makeAllGrid = function() {
-				if (toggleService.Wfm_RTA_ProperAlarm_34975)
-					return makeGridOptions({
-						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.Alarm===\'Out Adherence\'" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
-					});
-				else
-					return makeGridOptions();
-			};
-
-			this.makeInAlarmGrid = function() {
-				if (toggleService.Wfm_RTA_ProperAlarm_34975)
-					return makeGridOptions({
-						headerCellTemplate: '<div></div>',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.Alarm===\'Out Adherence\'" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
-					});
-				else
-					return makeGridOptions();
-			};
 
 		}
 	]);
