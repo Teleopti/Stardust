@@ -11,19 +11,16 @@
 						<input type="text" name="ruleName" id="ruleName" ng-model="name"/>
 					</div>
 					<div class="form-input-wrap">
-<<<<<<< dest
-						<label for="ruleName" translate>FilterColon</label>
-=======
-						<label for="ruleName">Search filters:</label>
->>>>>>> source
+						<label for="searchInput" translate>FilterColon</label>
+
 						<div class="input-prepend">
-							<input type="text" name="search" ng-model="searchString" ng-model-options="{ debounce: 1000 }"/>
+							<input type="text" name="searchInput" id="searchInput" ng-model="searchString" ng-model-options="{ debounce: 1000 }"/>
 						</div>
 
 						<div class="row" ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
-								<md-progress-circular class=" mini-spinner md-mode="indeterminate" ng-show="isSearching">
+								<md-progress-circular class=" mini-spinner" md-mode="indeterminate" ng-show="isSearching">
 								</md-progress-circular>
-							
+
 							<div class="wfm-filter-results" ng-show="!isSearching" ng-repeat="result in results">
 								<div ng-click="selectResultItem(result)">
 									<div>[{{result.FilterType}}] {{result.Name}}</div>
@@ -46,44 +43,41 @@
 			</div>
 		</div>
 		<form name="form" class="wfm-form" novalidate>
-	 	<div class="form-input-wrap">
 
-		<div class="wfm-options" layout layout-wrap>
-			<div class="wfm-option-label" flex="100">
+		<div class="wfm-options">
+			<div class="wfm-option-label" >
 				<p translate>DaysOffPerWeek</p>
 			</div>
-			<div class="wfm-option" flex="20">
-				<label  for="daysOffMin" translate>MinColon<input type="number" ng-model="dayOffsPerWeek.MinDayOffsPerWeek" name="MinDayOffsPerWeek"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap">
+				<label  for="daysOffMin" translate>MinColon	</label>
+					<input type="number" ng-model="dayOffsPerWeek.MinDayOffsPerWeek"  placeholder="0"  id="daysOffMin"/>
 			</div>
-			<div class="wfm-option" flex="20">
-				<label for="daysOffMax" translate>MaxColon<input type="number" ng-model="dayOffsPerWeek.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap">
+				<label for="daysOffMax" translate>MaxColon</label>
+					<input type="number" ng-model="dayOffsPerWeek.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/>
 			</div>
-			<div class="wfm-option-label" flex="100" translate>
+			<div class="wfm-option-label"translate>
 			<p>ConsecutiveDaysOff</p>
 			</div>
-			<div class="wfm-option" flex="20">
-				<label  for="workOffMin" translate>MinColon<input type="number" ng-model="consecDaysOff.MinConsecDaysOff" name="MinConsecutiveDayOffs" placeholder="0" required="" id="workOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap">
+				<label  for="workOffMin" translate>MinColon</label>
+					<input type="number" ng-model="consecDaysOff.MinConsecDaysOff" name="MinConsecutiveDayOffs" placeholder="0" required="" id="workOffMin"/>
 			</div>
-			<div class="wfm-option" flex="20">
-				<label for="workOffMax" translate>MaxColon<input type="number" ng-model="consecDaysOff.MaxConsecDaysOff" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="workOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap">
+				<label for="workOffMax" translate>MaxColon</label>
+					<input type="number" ng-model="consecDaysOff.MaxConsecDaysOff" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="workOffMax"/>
 			</div>
-			<div class="wfm-option-label" flex="100">
-			<p translate>ConsecutiveWorkDays</p>
+			<div class="wfm-option-label">
+				<p translate>ConsecutiveWorkDays</p>
 			</div>
-			<div class="wfm-option" flex="20">
-				<label  for="workMin" translate>MinColon<input type="number" ng-model="consecWorkDays.MinConsecWorkDays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="workMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap" >
+				<label  for="workMin" translate>MinColon</label>
+					<input type="number" ng-model="consecWorkDays.MinConsecWorkDays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="workMin"/>
 			</div>
-			<div class="wfm-option" flex="20">
-
-				<label for="workMax" translate>MaxColon<input type="number" ng-model="consecWorkDays.MaxConsecWorkDays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="workMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-
+			<div class="wfm-option form-input-wrap">
+				<label for="workMax" translate>MaxColon</label>
+					<input type="number" ng-model="consecWorkDays.MaxConsecWorkDays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="workMax"/>
 			</div>
-		</div>
 	 </div>
 	 </form>
 
