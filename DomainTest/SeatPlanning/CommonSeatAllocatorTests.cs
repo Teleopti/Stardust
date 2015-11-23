@@ -371,10 +371,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var outboundAgent1Shift = new SeatBooking(outBoundAgent1, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var outboundAgent2Shift = new SeatBooking(outBoundAgent2, new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
-			var seatBookingRequest = new SeatBookingRequest(teamLeaderShift, outboundAgent1Shift, outboundAgent2Shift);
+			var seatBookingRequest = new SeatBookingRequest(outboundAgent1Shift, outboundAgent2Shift, teamLeaderShift);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location.AddSeat("Seat1", 1).SetRoles(new List<IApplicationRole>() { outboundRole });
+			location.AddSeat("Seat1", 1).SetRoles(new List<IApplicationRole>() { outboundRole  });
 			location.AddSeat("Seat2", 2).SetRoles(new List<IApplicationRole>() { outboundRole, teamLeader });
 			location.AddSeat("Seat3", 3).SetRoles(new List<IApplicationRole>() { outboundRole });
 

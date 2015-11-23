@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var possibleSeatsRankedByNumberOfMatchingRoles = from seat in seats
 				let personApplicationRoles = seatBooking.Person.PermissionInformation.ApplicationRoleCollection
 				let intersectionCount = seat.Roles.Intersect (personApplicationRoles).Count()
-				where seat.Roles.IsEmpty() || intersectionCount > 0
+				where seat.Roles.Count == intersectionCount
 				orderby intersectionCount descending
 				select seat;
 
