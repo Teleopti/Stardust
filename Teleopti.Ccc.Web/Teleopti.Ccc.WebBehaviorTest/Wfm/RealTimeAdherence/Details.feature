@@ -4,7 +4,7 @@
 	I want to see whom and when was adhered and not adhered to the schedule
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
-Scenario: Should be able to see adherence details for one agent within working hour
+Scenario: See adherence details for one agent within working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -45,7 +45,7 @@ Scenario: Should be able to see adherence details for one agent within working h
 	And I should see daily adherence for 'Pierre Baldi' is 25%
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
-Scenario: Should be able to see adherence details for one agent outside of working hour
+Scenario: See adherence details for one agent outside of working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'

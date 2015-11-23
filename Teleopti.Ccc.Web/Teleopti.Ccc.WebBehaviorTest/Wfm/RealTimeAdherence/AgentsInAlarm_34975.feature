@@ -4,7 +4,7 @@
 	I want to see who is currently not adhering to the schedule
 
 @ignore
-Scenario: Should display agents in alarm
+Scenario: See agents in alarm
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'

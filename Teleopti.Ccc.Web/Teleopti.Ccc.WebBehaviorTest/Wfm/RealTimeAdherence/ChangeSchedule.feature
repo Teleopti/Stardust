@@ -4,7 +4,7 @@ Feature: Real time adherence change schedule
 	As a real time analyst
 	I want to see ...
 
-Scenario: Should be able to change schedule from agent state overview
+Scenario: Change schedule
 	Given  the time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'

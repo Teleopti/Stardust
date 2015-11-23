@@ -3,7 +3,7 @@
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
 
-Scenario: Should be able to see current states of all agents
+Scenario: See current states of all agents
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -78,7 +78,7 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Time               | 0:15:00       |
 		| Alarm Color              | Green         |
 
-Scenario: Should be able to see state updates of all agents
+Scenario: See state updates of all agents
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -153,7 +153,7 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Time               | 0:15:00       |
 		| Alarm Color              | Green         |
 
-Scenario: Should be able to see all agents of the team with or without state updates
+Scenario: See all agents of the team with or without state updates
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -243,7 +243,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Field                    | Value            |
 		| Name                     | Ashley Andeen    |
 
-Scenario: Should see adherence status when call center is in Istanbul
+Scenario: See adherence status when call center is in Istanbul
 	Given I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And there is an activity named 'Phone'

@@ -3,7 +3,7 @@
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
 	
-Scenario: Should be able to see agents for multiple sites
+Scenario: See agents for multiple sites
 	Given there is a site named 'Paris'
 	And there is a team named 'Team Paris' on site 'Paris'
 	And there is a site named 'London'
@@ -24,7 +24,7 @@ Scenario: Should be able to see agents for multiple sites
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
 
-Scenario: Should be able to see agents for multiple teams
+Scenario: See agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'

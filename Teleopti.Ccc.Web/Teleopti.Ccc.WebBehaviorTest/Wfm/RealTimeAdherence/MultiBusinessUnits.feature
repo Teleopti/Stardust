@@ -3,7 +3,7 @@
 	As a real time analyst
 	I want to see ...
 
-Scenario: Should display sites of a selected business unit
+Scenario: See sites of a selected business unit
 	Given the time is '2014-08-01 13:00'
 	And I have a role with full access
 	And there is a business unit with
@@ -28,7 +28,7 @@ Scenario: Should display sites of a selected business unit
 	And I change to business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
 
-Scenario: Should be able to see all agents state updates of a team within a specific business unit
+Scenario: See all agents state updates of a team within a specific business unit
 	Given I have a role with full access
 	And there is a business unit with
 	| Field | Value           |

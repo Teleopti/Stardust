@@ -6,7 +6,7 @@ Feature: View adherence for night shifts
 	
 @ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
-Scenario: Should see adherence percentage for night shift agents
+Scenario: See adherence percentage for night shift agents
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -48,7 +48,7 @@ Scenario: Should see adherence percentage for night shift agents
 
 @ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
-Scenario: Should see adherence details for night shift agents
+Scenario: See adherence details for night shift agents
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
