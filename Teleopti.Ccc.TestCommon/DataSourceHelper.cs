@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.TestCommon
 			var dictionary = new Dictionary<string, string>();
 			if (sessionFactoryName != null)
 				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
-			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
-				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
 			dictionary[NHibernate.Cfg.Environment.Dialect] = typeof(MsSql2008Dialect).AssemblyQualifiedName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionString] = connectionString;
 			dictionary[NHibernate.Cfg.Environment.SqlExceptionConverter] = typeof(SqlServerExceptionConverter).AssemblyQualifiedName;
