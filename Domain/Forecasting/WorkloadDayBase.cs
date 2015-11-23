@@ -614,59 +614,82 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _recalculateDailyAverageStatisticTimes();
         }
 
-        private void _recalculateDailyAverageTimes()
-        {
-            if (!_turnOffInternalRecalc)
-            {
-                _turnOffInternalRecalc = true;
+		private void _recalculateDailyAverageTimes()
+		{
+			if (!_turnOffInternalRecalc)
+			{
+				_turnOffInternalRecalc = true;
 
-                if (_totalTasks > 0d)
-                {
-                    _averageTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Sum(t => t.AverageTaskTime.Ticks * t.Tasks) / _tasks));
-                    _averageAfterTaskTime = TimeSpan.FromTicks((long)
-                        (_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks * t.Tasks) / _tasks));
-                    _totalAverageTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
-                    _totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
-                        (_taskPeriodList.Sum(t => t.TotalAverageAfterTaskTime.Ticks * t.TotalTasks) / _totalTasks));
-                }
-                else
-                {
-                    if (_isClosed.IsOpenForIncomingWork && _taskPeriodList.Count > 0)
-                    {
-                        _averageTaskTime = TimeSpan.FromTicks((long)
-                                (_taskPeriodList.Average(t => t.AverageTaskTime.Ticks)));
-                        _averageAfterTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Average(t => t.AverageAfterTaskTime.Ticks)));
-                        _totalAverageTaskTime = TimeSpan.FromTicks((long)
-                                (_taskPeriodList.Average(t => t.TotalAverageTaskTime.Ticks)));
-                        _totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
-                            (_taskPeriodList.Average(t => t.TotalAverageAfterTaskTime.Ticks)));
-                    }
-                    else
-                    {
-                        _averageTaskTime = TimeSpan.FromSeconds(0);
-                        _averageAfterTaskTime = TimeSpan.FromSeconds(0);
-                        _totalAverageTaskTime = TimeSpan.FromSeconds(0);
-                        _totalAverageAfterTaskTime = TimeSpan.FromSeconds(0);
-                    }
-                }
+				if (_totalTasks > 0d)
+				{
+					if (_tasks > 0d)
+					{
+						_averageTaskTime = TimeSpan.FromTicks((long)
+							(_taskPeriodList.Sum(t => t.AverageTaskTime.Ticks*t.Tasks)/_tasks));
+						_averageAfterTaskTime = TimeSpan.FromTicks((long)
+							(_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks*t.Tasks)/_tasks));
+					}
+					else
+					{
+						recalculateDailyAverageTimesWhenZeroTasks();
+					}
+					_totalAverageTaskTime = TimeSpan.FromTicks((long)
+							(_taskPeriodList.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
+					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
+						(_taskPeriodList.Sum(t => t.TotalAverageAfterTaskTime.Ticks * t.TotalTasks) / _totalTasks));
+				}
+				else
+				{
+					recalculateDailyAverageTimesWhenZeroTotalTasks();
+					recalculateDailyAverageTimesWhenZeroTasks();
+				}
 
-                _turnOffInternalRecalc = false;
+				_turnOffInternalRecalc = false;
 
-                //Inform parent about my changed values!
-                if (_initialized) OnAverageTaskTimesChanged();
-            }
-            else
-            {
-                if (!_isDirty)
-                {
-                    _isDirty = true;
-                    Parents.ForEach(p => p.SetDirty());
-                }
-            }
-        }
+				//Inform parent about my changed values!
+				if (_initialized) OnAverageTaskTimesChanged();
+			}
+			else
+			{
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
+			}
+		}
+
+		private void recalculateDailyAverageTimesWhenZeroTotalTasks()
+		{
+			if (_isClosed.IsOpenForIncomingWork && _taskPeriodList.Count > 0)
+			{
+				_totalAverageTaskTime = TimeSpan.FromTicks((long)
+						(_taskPeriodList.Average(t => t.TotalAverageTaskTime.Ticks)));
+				_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
+					(_taskPeriodList.Average(t => t.TotalAverageAfterTaskTime.Ticks)));
+			}
+			else
+			{
+				_totalAverageTaskTime = TimeSpan.FromSeconds(0);
+				_totalAverageAfterTaskTime = TimeSpan.FromSeconds(0);
+			}
+		}
+
+		private void recalculateDailyAverageTimesWhenZeroTasks()
+		{
+			if (_isClosed.IsOpenForIncomingWork && _taskPeriodList.Count > 0)
+			{
+				_averageTaskTime = TimeSpan.FromTicks((long)
+						(_taskPeriodList.Average(t => t.AverageTaskTime.Ticks)));
+				_averageAfterTaskTime = TimeSpan.FromTicks((long)
+					(_taskPeriodList.Average(t => t.AverageAfterTaskTime.Ticks)));
+			}
+			else
+			{
+				_averageTaskTime = TimeSpan.FromSeconds(0);
+				_averageAfterTaskTime = TimeSpan.FromSeconds(0);
+			}
+		}
 
         private void _recalculateDailyAverageStatisticTimes()
         {

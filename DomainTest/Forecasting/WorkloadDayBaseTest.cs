@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		private WorkloadDayBase _workloadDayBase;
 		private IWorkload _workload;
 		private ISkill _skill;
-		private IList<ITemplateTaskPeriod> _taskPeriods;
 		private IList<TimePeriod> _openHours;
 
 		[SetUp]
@@ -28,19 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			_skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 			_workload = new Workload(_skill);
 
-			_taskPeriods = new List<ITemplateTaskPeriod>();
 			_openHours = new List<TimePeriod>();
 			_workloadDayBase = new TestWorkloadDayBase();
-
-			ITask t1 = new Task();
-			ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
-					t1,
-					new DateTimePeriod(
-							DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(7, 0, 0)), DateTimeKind.Utc),
-							DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(11, 0, 0)), DateTimeKind.Utc)));
-			p1.AverageTaskTime = new TimeSpan(0, 0, 120);
-
-			_taskPeriods.Add(p1);
 
 			_openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(1, 2, 0, 0)));
 
@@ -112,10 +100,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void VerifyRecalculateStatisticTasks()
 		{
+			ITask t1 = new Task();
+			ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
+					t1,
+					new DateTimePeriod(
+							DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(7, 0, 0)), DateTimeKind.Utc),
+							DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(11, 0, 0)), DateTimeKind.Utc)));
+			p1.AverageTaskTime = new TimeSpan(0, 0, 120);
+
+			var taskPeriods = new List<ITemplateTaskPeriod> {p1};
+
 			double totalstatisticCalculatedTasks = 0;
 			double totalStatisticAnsweredTasks = 0;
 			double totalStatisticAbandonedTasks = 0;
-			foreach (ITemplateTaskPeriod taskPeriod in _taskPeriods)
+			foreach (ITemplateTaskPeriod taskPeriod in taskPeriods)
 			{
 				totalstatisticCalculatedTasks += taskPeriod.StatisticTask.StatCalculatedTasks;
 				totalStatisticAnsweredTasks += taskPeriod.StatisticTask.StatAnsweredTasks;
@@ -147,7 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			_workloadDayBase.MakeOpen24Hours();
 			IList<TimePeriod> list = new List<TimePeriod>();
 			_workloadDayBase.ChangeOpenHours(list);
-			//Assert.IsTrue(_workloadDayBase.IsClosed);
 			Assert.IsFalse(_workloadDayBase.OpenForWork.IsOpen);
 			Assert.AreEqual(0, _workloadDayBase.TotalTasks);
 			Assert.AreEqual(0, _workloadDayBase.TaskPeriodList.Count);
@@ -976,6 +973,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
+		public void ShouldKeepTalkTimesWhenSettingOverrideTasksOverZeroCalls()
+		{
+			_workloadDayBase.Tasks = 0d;
+			_workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(90);
+			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(150);
+			_workloadDayBase.SetOverrideTasks(450d, null);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(90), _workloadDayBase.AverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(150), _workloadDayBase.AverageAfterTaskTime);
+		}
+
+		[Test]
 		public void ShouldClearOverrideTasksWhenClosingDay()
 		{
 			_workloadDayBase.SetOverrideTasks(400d, null);
@@ -1157,18 +1166,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			IWorkload workload = new Workload(skill);
 
-			_taskPeriods.Clear();
 			_openHours.Clear();
 			WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
-			ITask t1 = new Task();
 			var baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
-			ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
-					t1,
-					new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));
-			p1.AverageTaskTime = new TimeSpan(0, 0, 120);
-
-			_taskPeriods.Add(p1);
 
 			_openHours.Add(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(1, 2, 0, 0)));
 			workloadDayBase.Create(SkillDayTemplate.BaseDate, workload, _openHours);
@@ -1188,18 +1189,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			IWorkload workload = new Workload(skill);
 
-			_taskPeriods.Clear();
 			_openHours.Clear();
 			WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
-			ITask t1 = new Task();
 			DateTime baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
-			ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
-					t1,
-					new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));
-			p1.AverageTaskTime = new TimeSpan(0, 0, 120);
-
-			_taskPeriods.Add(p1);
 
 			_openHours.Add(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(1, 2, 0, 0)));
 			workloadDayBase.Create(SkillDayTemplate.BaseDate, workload, _openHours);
