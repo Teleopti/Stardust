@@ -409,15 +409,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-                // reviewed and fixed version
-                IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
             	schedulingOptions.MainShiftOptimizeActivitySpecification = null;
 
 	            var originalMainShift = originalScheduleDay.GetEditorShift();
 	            if (originalMainShift != null)
 	            {
-					originalShiftCategory = originalMainShift.ShiftCategory;
 		            _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(
 						schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
 	            }
@@ -425,15 +422,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
-                bool schedulingResult;
-                if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
-                {
-					schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
-                    if(!schedulingResult)
-						schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
-                }
-                else
-					schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,  _schedulePartModifyAndRollbackService);
+	            bool schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,  _schedulePartModifyAndRollbackService);
 
                 if (!schedulingResult)
                 {
