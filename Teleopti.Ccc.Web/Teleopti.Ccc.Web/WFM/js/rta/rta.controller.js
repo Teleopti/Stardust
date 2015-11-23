@@ -41,6 +41,8 @@
 				};
 
 				$scope.onSiteSelect = function (site) {
+					if(site.NumberOfAgents < 1)
+						return;
 					$state.go('rta-teams', {
 						siteId: site.Id
 					});

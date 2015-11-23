@@ -18,7 +18,7 @@
 						headerCellTemplate: '<div></div>',
 						alarmDurationCellTemplate: '<div ng-if="row.entity.Alarm===\'Out Adherence\'" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>'
 					});
-				else 
+				else
 					return makeGridOptions();
 			};
 

@@ -1,3 +1,4 @@
+/////////Sites & teams///////////////
 .rta-header {
 				margin-bottom: 10px;
 }
@@ -74,7 +75,12 @@
 }
 .no-agents {
 	cursor: not-allowed;
+	&:hover {
+					transition: background 0.5s linear 0s;
+					background-color: $gray-300  !important;
+	}
 }
+/////////End of Sites & teams///////////////
 
 ///////////rta-agents///////////////////////
 .rta-agents-input{
@@ -105,7 +111,7 @@
 				margin-right: 5%;
 }
 
-///////////End of rta-agents///////////////////////
+///////////End of rta-agents////////////////
 
 ///////////rta-agent-details///////////////
 .rta-agent-details {
@@ -119,8 +125,8 @@
 .rta-agent-details-total {
 				margin-left: 78%;
 }
-
 ///////////End of rta-agent-details///////////
+///////////////Media/////////////////////////
 @media only screen and (max-width: 700px),
 only screen and (max-device-width: 700px) {
 				.rta-list,
@@ -136,3 +142,4 @@ only screen and (min-device-width: 1620px) {
 								margin: 5px;
 				}
 }
+///////////////End of Media/////////////////////////

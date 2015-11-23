@@ -54,6 +54,8 @@
 			};
 
 			$scope.onTeamSelect = function (team) {
+				if(team.NumberOfAgents < 1)
+					return;
 				$state.go('rta-agents', {
 					siteId: siteId,
 					teamId: team.Id
