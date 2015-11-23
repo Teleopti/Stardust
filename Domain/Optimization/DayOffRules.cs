@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filters.Add(filter);
 		}
 
+		public virtual void ClearFilters()
+		{
+			_filters.Clear();
+		}
+
 		public virtual bool IsValidForAgent(IPerson person, DateOnly dateOnly)
 		{
 			var validFilterTypes = new Dictionary<string, bool>();

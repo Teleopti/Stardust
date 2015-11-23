@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
 			dayOffRules.Name = dayOffRulesModel.Name;
 
-			//TODO: this is only correct when insert/new dayoffRules
+			dayOffRules.ClearFilters();
 			foreach (var filter in dayOffRulesModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
 			{
 				dayOffRules.AddFilter(filter);

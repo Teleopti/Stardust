@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -199,6 +200,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			);
 			Assert.Throws<NotSupportedException>(() =>
 				Target.Persist(model));
+		}
+
+		[Test]
+		public void ShouldClearOldFiltersWhenUpdate()
+		{
+			var contract = new Contract("_").WithId();
+			var existing = new DayOffRules().WithId();
+			var team = new Team().WithId();
+			existing.AddFilter(new ContractFilter(contract));
+
+			DayOffRulesRepository.Add(existing);
+			ContractRepository.Add(contract);
+			TeamRepository.Add(team);
+
+			var model = new DayOffRulesModel
+			{
+				Id = existing.Id.Value,
+				MinDayOffsPerWeek = 2,
+				MaxDayOffsPerWeek = 6,
+				MinConsecutiveDayOffs = 1,
+				MaxConsecutiveDayOffs = 1,
+				MinConsecutiveWorkdays = 2,
+				MaxConsecutiveWorkdays = 2,
+				Filters = new List<FilterModel> { new FilterModel { FilterType = FilterModel.TeamFilterType, Name = team.Description.Name, Id=team.Id.Value} }
+			};
+
+			Target.Persist(model);
+
+			var onlyFilterInDb = (TeamFilter)DayOffRulesRepository.LoadAll().Single().Filters.Single();
+			onlyFilterInDb.Team.Id.Value.Should().Be.EqualTo(team.Id.Value);
 		}
 
 		[Test]
