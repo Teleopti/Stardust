@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 			else
 			{
+				//THIS IS WRONG - doesn't have to be IAggregateEntity any longer. Fix when we find out when this code is run
 				var entityOwner = (IAggregateEntity)owner;
 				rootsWithModifiedChildren.Add(entityOwner.Root());
 			}
@@ -93,11 +94,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (root != null)
 			{
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Delete));
+				return;
 			}
-			else
+			var aggregateEntity = entity as IAggregateEntity;
+			if (aggregateEntity != null)
 			{
-				var nonRoot = (IAggregateEntity)entity;
-				rootsWithModifiedChildren.Add(nonRoot.Root());
+				rootsWithModifiedChildren.Add(aggregateEntity.Root());
 			}
 		}
 
@@ -248,3 +250,4 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 	}
 }
+ 

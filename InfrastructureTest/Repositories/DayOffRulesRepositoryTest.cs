@@ -157,5 +157,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			dayOffRulesInDb.Name
 				.Should().Be.EqualTo(name);	
 		}
+
+		[Test]
+		public void ShouldDeleteDayOffRulesWithFilters()
+		{
+			var site = new Site("_");
+			var siteFilter = new SiteFilter(site);
+			var dayOffRules = new DayOffRules();
+			dayOffRules.AddFilter(siteFilter);
+
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(dayOffRules);
+			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+
+			rep.Remove(dayOffRules);
+
+			rep.Get(dayOffRules.Id.Value)
+				.Should().Be.Null();
+		}
 	}
 }
