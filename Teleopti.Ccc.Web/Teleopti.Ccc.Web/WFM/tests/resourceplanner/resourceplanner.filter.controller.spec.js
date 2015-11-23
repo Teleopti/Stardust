@@ -207,7 +207,7 @@ describe('ResourcePlannerCtrl', function () {
 	it('should have a name', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ResourceplannerFilterCtrl', { $scope: scope });
-
+		scope.name = "";
 		scope.name = "default name";
 
 		expect(scope.name).toBe("default name");
@@ -436,4 +436,5 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.results.length).toEqual(0);
 		expect(scope.searchString).toEqual('');
 	}));
+
 });

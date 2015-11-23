@@ -4,7 +4,7 @@
 		.controller('ResourceplannerFilterCtrl', [
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc', function ($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc) {
 				var maxHits = 5;
-
+				$scope.name = ""
 				$scope.results = [];
 				$scope.selectedResults = [];
 				$scope.dayOffsPerWeek = {
@@ -43,6 +43,7 @@
 						$scope.isValidConsecDaysOff() &&
 						$scope.isValidFilters() &&
 						$scope.isValidName();
+
 				}
 
 				$scope.isValidDayOffsPerWeek = function () {
