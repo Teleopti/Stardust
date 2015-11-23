@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(DayOffRules root)
 		{
-			throw new NotImplementedException();
+			_workRuleSettings.Remove(root);
 		}
 
 		public DayOffRules Get(Guid id)

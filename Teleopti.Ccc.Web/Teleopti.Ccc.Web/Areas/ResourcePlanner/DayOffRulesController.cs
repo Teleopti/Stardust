@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Web.Filters;
@@ -35,6 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult FetchAll()
 		{
 			return Ok(_fetchDayOffRulesModel.FetchAll());
+		}
+
+		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]
+		public virtual void Delete(Guid id)
+		{
+			_dayOffRulesModelPersister.Delete(id);
 		}
 	}
 }

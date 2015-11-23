@@ -243,5 +243,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var inDb = DayOffRulesRepository.LoadAll().Single();
 			inDb.Name.Should().Be.EqualTo(expectedName);
 		}
+
+		[Test]
+		public void ShouldDeleteDayOffRules()
+		{
+			var dayOffRules = new DayOffRules().WithId();
+			DayOffRulesRepository.Add(dayOffRules);
+
+			Target.Delete(dayOffRules.Id.Value);
+
+			DayOffRulesRepository.Get(dayOffRules.Id.Value)
+				.Should().Be.Null();
+		}
 	}
 }

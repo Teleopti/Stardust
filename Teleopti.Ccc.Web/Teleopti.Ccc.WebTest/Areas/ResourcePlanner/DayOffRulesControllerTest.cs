@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -42,6 +43,16 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var target = new DayOffRulesController(fetchModel, null);
 			target.FetchAll().Result<IEnumerable<DayOffRulesModel>>()
 				.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
+		public void ShouldDelete()
+		{
+			var id = Guid.NewGuid();
+			var persister = MockRepository.GenerateMock<IDayOffRulesModelPersister>();
+			var target = new DayOffRulesController(null, persister);
+			target.Delete(id);
+			persister.AssertWasCalled(x => x.Delete(id));
 		}
 	}
 }
