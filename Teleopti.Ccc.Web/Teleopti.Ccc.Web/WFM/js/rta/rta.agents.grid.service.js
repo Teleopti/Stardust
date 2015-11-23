@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	angular.module('wfm.rta').service('RtaGridService', ['Toggle', '$q',
+	angular.module('wfm.rta').service('RtaGridService', ['Toggle',
 		function (toggleService) {
 			this.makeAllGrid = function () {
 				if (toggleService.Wfm_RTA_ProperAlarm_34975)
