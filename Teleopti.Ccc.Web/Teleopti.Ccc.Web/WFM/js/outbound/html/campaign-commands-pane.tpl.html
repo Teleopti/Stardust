@@ -11,14 +11,14 @@
 			   ng-model="manualPlanInput"
 			   numeric-value  min="0" float-number />
 		<div class="manual-input-btns" ng-mouseenter="showFirstAlertMessage=true" ng-mouseleave="showFirstAlertMessage=false" ng-init="showFirstAlertMessage=false">
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0 btn-save-plan"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-r-0 btn-save-plan"
 					ng-click="addManualPlan()"
 					ng-disabled="!validManualProductionPlan()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualProductionPlan()}"
 					translate>
 				Save
 			</button>
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-l-0"
 					ng-click="removeManualPlan()"
 					ng-disabled="!validManualReset()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualReset()}"
@@ -39,14 +39,14 @@
 			   ng-model="manualBacklogInput"
 			   numeric-value min="0" float-number />
 		<div class="manual-input-btns" ng-mouseenter="showSecondAlertMessage=true" ng-mouseleave="showSecondAlertMessage=false" ng-init="showSecondAlertMessage=false">
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0 btn-save-backlog"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-r-0 btn-save-backlog"
 					ng-click="addManualBacklog()"
 					ng-disabled="!validManualBacklog()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualBacklog()}"
 					translate>
 				Save
 			</button>
-			<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0"
+			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-l-0"
 					ng-click="removeManualBacklog()"
 					ng-disabled="!validManualReset()"
 					ng-class="{'wfm-btn-invis-disabled': !validManualReset()}"
@@ -55,24 +55,24 @@
 			</button>
 		</div>
 	</div>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0 btn-toggle-manual-plan"
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-toggle-manual-plan"
 			ng-click="toggleManualPlan()"
 			ng-class="{'selected-ope-btn': manualPlanSwitch }"
 			translate>
 		ManualPlan
 	</button>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0"
+	<button class="wfm-btn wfm-btn-invis-primary inline-block"
 			ng-click="toggleManualBacklog()"
 			ng-class="{'selected-ope-btn': manualBacklogSwitch}"
 			translate>
 		AddBacklog
 	</button>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 m-r-0 btn-replan"
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-replan"
 			ng-click="replan()"
 			translate>
 		Replan
 	</button>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block m-l-0 btn-goto-edit-campaign"
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-goto-edit-campaign"
 			ng-click="gotoEditCampaign()"
 			translate>
 		Edit
