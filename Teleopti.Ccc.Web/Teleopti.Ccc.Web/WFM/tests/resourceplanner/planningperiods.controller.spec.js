@@ -2,16 +2,16 @@
 describe('PlanningPeriodsCtrl', function () {
 	var $q,
 		$rootScope,
-		$httpBackend;;
+		$httpBackend;
 
-	beforeEach(module('wfm'));
+	beforeEach(module('wfm.resourceplanner'));
 
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		//$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
+		//$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 	it('not null', inject(function($controller) {
@@ -110,4 +110,29 @@ describe('PlanningPeriodsCtrl', function () {
 		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
 	}));
 
+	it('should fetch all dayoffrules', inject(function ($controller) {
+		var loadedDayOffRules = [{ Id: 'something' }];
+		var scope = $rootScope.$new();
+
+		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
+		$httpBackend.whenGET('../ToggleHandler/IsEnabled?toggle=Wfm_ChangePlanningPeriod_33043').respond(200, {});
+		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
+
+		$httpBackend.whenGET('../api/resourceplanner/dayoffrules')
+			.respond(200, loadedDayOffRules);
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope});
+
+		$httpBackend.flush();
+
+		expect(scope.dayoffRules[0].Id).toEqual('something');
+	}));
+
+	it('should set dayoffrules to empty array before loaded', inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope });
+
+		expect(scope.dayoffRules.length).toEqual(0);
+	}));
 });

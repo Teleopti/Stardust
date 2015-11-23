@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('PlanningPeriodsCtrl', [
-			'$scope', '$state', '$stateParams', '$interval', 'PlanningPeriodSvrc', function ($scope, $state, $stateParams, $interval, PlanningPeriodSvrc) {
+			'$scope', '$state', '$stateParams', '$interval', 'PlanningPeriodSvrc', '$http', function ($scope, $state, $stateParams, $interval, PlanningPeriodSvrc, $http) {
 	        //schedulings
 	        $scope.status = '';
 	        $scope.scheduledDays = 0;
@@ -13,6 +13,16 @@
 	        $scope.disableSchedule = function() {
 	            return $scope.isScheduleRunning || $scope.scheduleClicked;
 	        };
+				$scope.dayoffRules=[];
+
+				//bryt ut till egen service sen?
+				$http({
+	        method: 'GET',
+	        url: '../api/resourceplanner/dayoffrules'
+				}).then(function(result) {
+					$scope.dayoffRules = result.data;
+				});
+
 
 	        function updateRunningStatus() {
 	            PlanningPeriodSvrc.status.get().$promise.then(function(result) {
