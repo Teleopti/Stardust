@@ -12,17 +12,13 @@
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 
 				var getAgents = (function() {
-					if (teamIds.length === 1)
-						return RtaService.getAgents;
-					if (teamIds.length > 1)
+					if (teamIds.length > 0)
 						return RtaService.getAgentsForTeams;
 					return RtaService.getAgentsForSites;
 				})();
 
 				var getStates = (function() {
-					if (teamIds.length === 1)
-						return RtaService.getStates;
-					if (teamIds.length > 1)
+					if (teamIds.length > 0)
 						return RtaService.getStatesForTeams;
 					return RtaService.getStatesForSites;
 				})();

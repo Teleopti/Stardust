@@ -4,17 +4,6 @@
 	angular.module('wfm.rta').service('RtaService', ['$resource',
 		function($resource) {
 
-			this.getAgents = function(data) {
-				return $resource('../Agents/ForTeam', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					teamId: data.teamId,
-				}).$promise;
-			};
-
 			this.getAgentsForSites = function(data) {
 				return $resource('../Agents/ForSites', {}, {
 					query: {
@@ -34,17 +23,6 @@
 					}
 				}).query({
 					teamIds: data.teamIds,
-				}).$promise;
-			};
-
-			this.getStates = function(data) {
-				return $resource('../Agents/GetStates', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					teamId: data.teamId,
 				}).$promise;
 			};
 
