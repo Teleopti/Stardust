@@ -72,27 +72,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!checkCreate.Success)
 				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
-			var version = _databaseHelperWrapper.Version(connectionToNewDb);
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
-			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, version, model.Tenant);
-			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, version, model.Tenant);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, version, model.Tenant);
-
-			if (version.IsAzure)
-				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");
-			else
-				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAgg");
-
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 
+			var version = _databaseHelperWrapper.Version(connectionToNewDb);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
+			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, version, model.Tenant, newTenant.GetId());
+			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
+			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, version, model.Tenant, newTenant.GetId());
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, version, model.Tenant, newTenant.GetId());
+
+			if (version.IsAzure)
+				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");
+			else
+				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAgg");
+
+			
+
 			addSuperUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
-			return Json(new TenantResultModel { Success = true, Message = "Successfully created a new Tenant." });
+			return Json(new TenantResultModel { Success = true, Message = "Successfully created a new Tenant.", TenantId = newTenant.GetId() });
 		}
 
 		[HttpPost]
@@ -384,7 +386,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		public string Message { get; set; }
 		public bool Success { get; set; }
-
+		public int TenantId { get; set; }
 	}
 
 	public class AddSuperUserToTenantModel

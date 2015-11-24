@@ -10,6 +10,7 @@
 
 		vm.Tenant = $routeParams.tenant;
 		vm.OriginalName = $routeParams.tenant;
+		vm.TenantId = -1;
 		vm.Server = "";
 		vm.UserName = "";
 		vm.Password = "";
@@ -37,11 +38,13 @@
 		vm.BuName = '';
 		vm.NewBusinessUnitMessage = '';
 		vm.NewBuOk = true;
+		vm.Log = null;
 
 		vm.LoadTenant = function () {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
+					vm.TenantId = data.Id,
 					vm.TenantOk = data.Success;
 					vm.Server = data.Server;
 					vm.UserName = data.UserName;
@@ -54,6 +57,7 @@
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
+					vm.GetImportLog();
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
@@ -64,6 +68,13 @@
 			if (vm.Version === null) return false;
 			return vm.Version.AppVersionOk === false;
 		};
+
+		vm.ShowTheLog = false;
+		vm.ShowLog = false;
+		vm.ShowHide = function () {
+			//If DIV is visible it will be hidden and vice versa.
+			vm.ShowTheLog = vm.ShowLog;
+		}
 
 		vm.CheckImportAdmin = function () {
 			vm.Message = '';
@@ -243,6 +254,15 @@
 						});
 
 			}
+
+		vm.GetImportLog = function () {
+			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.Log = data;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		}
 
 		}
 

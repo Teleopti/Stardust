@@ -47,6 +47,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<TenantUpgrader>().SingleInstance();
 			builder.RegisterType<FileLogger>().As<IUpgradeLog>();
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
+			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
 			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();

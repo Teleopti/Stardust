@@ -88,25 +88,69 @@
 			<!--<div ng-show="importVm.AppVersionOk != true">-->
 			<div>
 				<h3>Upgrade information</h3>
-				<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
-				<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
+				<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br/>
+				<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br/>
 				<label>If the imported database's version is lower it will be upgraded.</label><br/>
 				<label ng-class="dataIsNotOk">{{importVm.ToEarlyVersionMessage}}</label>
 			</div>
 
 
-			<!--</div>  -->
-			<br />
+			<!--</div> -->
+			<br/>
 			<p>
 				<button ng-show="importVm.ToEarly == false" class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
 				<div id="loading" style="padding-left: 25px; float: left">
-					<img src="Content/images/ajax-loader.gif" />
+					<img src="Content/images/ajax-loader.gif"/>
 				</div>
 			</p>
 			<div ng-class="(importVm.Success==true) ? 'dataIsOk' : 'dataIsNotOk'">
 				{{importVm.Message}}
 			</div>
 		</div>
+
+
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<br />
+
+				<label for="chkShowLog">
+					<input type="checkbox" id="chkShowLog" ng-model="importVm.ShowLog" ng-change="importVm.ShowHide()" />
+					Show upgrade log
+				</label>
+			</div>
+
+		</div>
+
+		<div class="col-md-12" ng-show="importVm.ShowTheLog">
+			<div class="col-md-6">
+				<h3>Database upgrade log</h3>
+				<table>
+					<thead>
+						<tr>
+							<td class="paddingTenantList">Name</td>
+							<td class="paddingTenantList">Time</td>
+							<td class="paddingTenantList">Level</td>
+							<td class="paddingTenantList">Message</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="row in importVm.Log" ng-class-odd="'oddRow'">
+							<td class="paddingTenantList">{{row.Tenant}} </td>
+							<td class="paddingTenantList">{{row.Time}} </td>
+							<td class="paddingTenantList">{{row.Level}} </td>
+							<td class="paddingTenantList">{{row.Message}} </td>
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+
+
+
+
 		<!--<div class="col-md-6">
 			<h3>Conflicting users {{importVm.NumberOfConflicting}}</h3>
 			({{importVm.NumberOfNotConflicting}} are not conflicting)

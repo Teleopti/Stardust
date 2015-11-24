@@ -8,10 +8,12 @@ namespace Teleopti.Wfm.Administration.Core
 	public class TenantLogger: IUpgradeLog
 	{
 		private readonly string _tenant;
+		private readonly int _tenantId;
 
-		public TenantLogger(string tenant)
+		public TenantLogger(string tenant, int tenantId)
 		{
 			_tenant = tenant;
+			_tenantId = tenantId;
 		}
 
 		public void Write(string message)
@@ -21,7 +23,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void Write(string message, string level)
 		{
-			var sql = "insert into Tenant.UpgradeLog (Tenant, Time, Level, Message) values(@tenant, @time, @level, @message)";
+			var sql = "insert into Tenant.UpgradeLog (Tenant, Time, Level, Message, TenantId) values(@tenant, @time, @level, @message, @tenantid)";
 
 			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
 			{
@@ -32,6 +34,7 @@ namespace Teleopti.Wfm.Administration.Core
 					sqlCommand.Parameters.AddWithValue("@time", DateTime.Now);
 					sqlCommand.Parameters.AddWithValue("@level", level);
 					sqlCommand.Parameters.AddWithValue("@message", message);
+					sqlCommand.Parameters.AddWithValue("@tenantid", _tenantId);
 					sqlCommand.ExecuteNonQuery();
 				}
 			}

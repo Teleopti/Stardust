@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -17,13 +18,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ITenantExists _tenantExists;
 		private readonly Import _import;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
-		
-		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import, ICheckDatabaseVersions checkDatabaseVersions)
+		private readonly IUpgradeLogRetriever _upgradeLogRetriever;
+
+		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import,
+			ICheckDatabaseVersions checkDatabaseVersions, IUpgradeLogRetriever upgradeLogRetriever)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
 			_import = import;
 			_checkDatabaseVersions = checkDatabaseVersions;
+			_upgradeLogRetriever = upgradeLogRetriever;
 		}
 
 		[HttpPost]
@@ -63,7 +67,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var importResult = _import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, aggConnectionstring, model.AdminUser, model.AdminPassword);
 		
-			return Json(new ImportTenantResultModel { Success = importResult.Success, Message = importResult.Message });
+			return Json(new ImportTenantResultModel { Success = importResult.Success, Message = importResult.Message, TenantId = importResult.TenantId });
 			
 		}
 
@@ -129,6 +133,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual JsonResult<TenantResultModel> CheckImportAdmin(ImportDatabaseModel model)
 		{
 			return Json(checkImportAdminInternal(createLoginConnectionString(model)));
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("GetImportLog")]
+		public virtual JsonResult<IList<UpgradeLog>> GetImportLog([FromBody] int tenantId)
+		{
+			return Json(_upgradeLogRetriever.GetUpgradeLog(tenantId));
 		}
 
 		private string createLoginConnectionString(ImportDatabaseModel model)

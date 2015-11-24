@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	public class Tenant
 	{
 #pragma warning disable 169
+#pragma warning disable 649
 		private int id;
+#pragma warning restore 649
 #pragma warning restore 169
 
 		protected Tenant(){}
@@ -29,5 +31,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			return string.Join("", hash.Select(b => b.ToString("x2")).ToArray()).Substring(0, 10);
 		}
 
+		public virtual int GetId()
+		{
+			return id;
+		}
 	}
 }

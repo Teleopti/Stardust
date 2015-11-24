@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_pathProvider = pathProvider;
 		}
 
-		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword,bool useIntegratedSecurity, string appUser, string appPassword, bool permissionMode, string tenant)
+		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword,bool useIntegratedSecurity, string appUser, string appPassword, bool permissionMode, string tenant, int tenantId)
 		{
 			var commands = new CommandLineArgument(new string[] {})
 			{
@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.Core
 				PermissionMode = permissionMode,
 				UseIntegratedSecurity = useIntegratedSecurity
 			};
-			_databasePatcher.SetLogger(new TenantLogger(tenant));
+			_databasePatcher.SetLogger(new TenantLogger(tenant, tenantId));
          return _databasePatcher.Run(commands);
 
 		}

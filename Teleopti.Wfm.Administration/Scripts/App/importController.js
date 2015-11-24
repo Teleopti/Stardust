@@ -40,6 +40,13 @@
 		vm.AppLoginMessage = '';
 		vm.AppLoginOk = false;
 
+		vm.ShowTheLog = false;
+		vm.ShowLog = false;
+		vm.ShowHide = function () {
+			//If DIV is visible it will be hidden and vice versa.
+			vm.ShowTheLog = vm.ShowLog;
+		}
+
 		vm.CheckTenantName = function () {
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
@@ -190,27 +197,6 @@
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
 		}
-		//vm.CheckUsers = function () {
-		//	if (vm.AppDbOk == false) {
-		//		vm.Conflicts = null;
-		//		return;
-		//	}
-		//	$http.post('./api/Import/Conflicts', {
-		//		Server: vm.Server,
-		//		UserName: vm.UserName,
-		//		Password: vm.Password,
-		//		AppDatabase: vm.AppDatabase,
-		//		Tenant: vm.Tenant
-		//	}, tokenHeaderService.getHeaders())
-		//		.success(function (data) {
-		//			vm.Conflicts = data.ConflictingUserModels;
-		//			vm.NumberOfConflicting = data.NumberOfConflicting;
-		//			vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
-
-		//		}).error(function (xhr, ajaxOptions, thrownError) {
-		//			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-		//		});
-		//}
 
 		vm.startImport = function () {
 			if (vm.AppVersionOk != true && vm.SqlUserOk != true) {
@@ -234,13 +220,24 @@
 				.success(function (data) {
 					vm.Success = data.Success;
 					vm.Message = data.Message;
+					vm.TenantId = data.TenantId;
 					$("#loading").hide();
+					vm.GetImportLog();
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					$("#loading").hide();
+				});
+		};
+
+		vm.GetImportLog = function() {
+			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
+				.success(function(data) {
+					vm.Log = data;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}

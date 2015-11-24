@@ -69,7 +69,7 @@ namespace Teleopti.Wfm.Administration.Core
 		}
 
 		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login,
-			SqlVersion sqlVersion, string tenant)
+			SqlVersion sqlVersion, string tenant, int tenantId)
 		{
 
 			if (sqlVersion.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {Logger = new TenantLogger(tenant), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 
