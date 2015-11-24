@@ -23,10 +23,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
-[assembly: OwinStartup(typeof(Startup))]
 namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class Startup
