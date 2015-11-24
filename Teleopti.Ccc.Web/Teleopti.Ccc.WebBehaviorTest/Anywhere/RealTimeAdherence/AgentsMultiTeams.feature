@@ -29,8 +29,8 @@ Scenario: Should be able to see agents for multiple sites
 	And I click the site checkbox for 'London'
 	And I click the site checkbox for 'Paris'
 	And I click 'open'
-	Then I should see real time agent name for 'Pierre Baldi'
-	And I should see real time agent name for 'Ashley Andeen'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
 
 Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
@@ -53,5 +53,5 @@ Scenario: Should be able to see agents for multiple teams
 	And I click the team checkbox for 'Täby'
 	And I click the team checkbox for 'Garnisonen'
 	And I click 'open'
-	Then I should see real time agent name for 'Pierre Baldi'
-	And I should see real time agent name for 'Ashley Andeen'
+	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'

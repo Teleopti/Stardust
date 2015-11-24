@@ -249,7 +249,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm                    | Adhering         |
 		| Alarm Time               | 0:15:00          |
 		| Alarm Color              | Green            |
-	And I should see real time agent name for 'John Smith'
+	And I should see agent status for 'John Smith'
 
 Scenario: Should see adherence status when call center is in Istanbul
 	Given I am located in Istanbul
