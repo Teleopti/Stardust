@@ -34,6 +34,14 @@ namespace Teleopti.Wfm.Administration.Core
 				return path + @"..\..\DatabaseInstaller";
 			if (System.IO.Directory.Exists(path + @"..\DatabaseInstaller"))
 				return path + @"..\DatabaseInstaller";
+
+			//azure?
+			if (System.IO.Directory.Exists(path + @"..\..\..\approot\Tools\Database"))
+				return path + @"..\..\..\approot\Tools\Database";
+			if (System.IO.Directory.Exists(path + @"..\..\approot\Tools\Database"))
+				return path + @"..\..\approot\Tools\Database";
+			if (System.IO.Directory.Exists(path + @"..\approot\Tools\Database"))
+				return path + @"..\approot\Tools\Database";
 			return null;
 		}
 	}
