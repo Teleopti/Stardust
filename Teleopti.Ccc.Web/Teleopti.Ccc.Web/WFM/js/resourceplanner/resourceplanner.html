@@ -7,62 +7,6 @@
 	</div>
 
 	<button ng-click="startNextPlanningPeriod()" class="wfm-btn wfm-btn-primary" ng-class="{'wfm-btn-primary-disabled':!isValid}"ng-disabled="!isValid" translate>StartNext</button>
-<div class="wfm-options">
-	<form name="form" class="wfm-form" novalidate>
- 	<div class="form-input-wrap">
-
-	<div class="wfm-options" layout layout-wrap>
-		<div class="wfm-option-label" flex="100">
-			<p translate>DaysOffPerWeek</p>
-		</div>
-		<div class="wfm-option" flex="20">
-			<label  for="nameId" translate>MinColon<input type="number" ng-model="optionForm.rules.MinDayOffsPerWeek" name="MinDayOffsPerWeek"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-		    </div>
-		</div>
-		<div class="wfm-option" flex="20">
-			<label for="nameId" translate>MaxColon<input type="number" ng-model="optionForm.rules.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-		    <div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-		 	   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-		    </div>
-		</div>
-		<div class="wfm-option-label" flex="100">
-		<p translate>ConsecutiveDaysOff</p>
-		</div>
-		<div class="wfm-option" flex="20">
-			<label  for="nameId" translate>MinColon<input type="number" ng-model="optionForm.rules.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-			</div>
-		</div>
-		<div class="wfm-option" flex="20">
-			<label for="nameId" translate>MaxColon<input type="number" ng-model="optionForm.rules.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs"placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-			</div>
-		</div>
-		<div class="wfm-option-label" flex="100">
-		<p translate>ConsecutiveWorkDays</p>
-		</div>
-		<div class="wfm-option" flex="20">
-			<label  for="nameId" translate>MinColon<input type="number" ng-model="optionForm.rules.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays"  placeholder="0" required="" id="daysOffMin"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-			</div>
-		</div>
-		<div class="wfm-option" flex="20">
-
-			<label for="nameId" translate>MaxColon<input type="number" ng-model="optionForm.rules.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" required="" id="daysOffMax"/ ng-change="validateInputAndSend(optionForm.rules)"></label>
-			<div flex ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$touched">
-			   <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>Required</div>
-			</div>
-		</div>
-	</div>
- </div>
- </form>
-
-</div>
 
 	<div class="card-group">
 		<div class="wfm-card" ng-class="{'wfm-card-disabled':!isValid}"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
