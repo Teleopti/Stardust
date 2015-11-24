@@ -4,7 +4,7 @@ describe('ForecastingStartCtrl', function () {
 	    $rootScope,
 	    $httpBackend;
 
-	beforeEach(module('wfm'));
+	beforeEach(module('wfm.forecasting'));
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;

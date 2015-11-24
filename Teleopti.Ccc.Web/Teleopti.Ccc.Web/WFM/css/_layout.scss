@@ -309,3 +309,39 @@ position: fixed;
 .brand{
 	margin-left:35px;
 }
+/*
+.sidenav-header{
+	background:$white;
+	overflow: hidden!important;
+	position: relative;
+
+	&:hover{
+		background: $gray012;
+	}
+}
+
+.sidenav{
+	li{
+		overflow: hidden;
+	}
+
+	i{
+		margin-right: 10px;
+		margin-left: 10px;
+	}
+
+	span{
+		position: absolute;
+		display:inline;
+		opacity: 1;
+		padding-left: 20px;
+	}
+}
+
+.sidenav.is-hidden{
+	flex-basis: 50px;
+
+	span{
+		width:0;
+	}
+}*/
