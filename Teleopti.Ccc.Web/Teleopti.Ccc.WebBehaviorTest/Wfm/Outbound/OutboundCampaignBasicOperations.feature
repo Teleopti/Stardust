@@ -145,13 +145,17 @@ And after that I am redirected to the campaign list page
 And I set the starting month for viewing period to '2015-09-01'
 Then I should not see 'Campaign4' in campaign list 
 
-@ignore
+
 Scenario: Edit a campaign
-When I view the detail of the campaign created with 
+Given there is an activity named 'NewCampaign'
+And there is a skill named 'NewCampaign' with activity 'NewCampaign'
+And there is a workload 'TheWorkload1' with skill 'NewCampaign'
+And I have created a campaign with
 | Field                             | Value       |
 | Name                              | NewCampaign |
 | Start Date                        | 2015-12-01  |
-| End Date                          | 2016-01-30  |
+| End Date                          | 2015-12-14  |
+| Skill                             | NewCampaign |
 | Call List Len                     | 5555        |
 | Target Rate                       | 55          |
 | Connect Rate                      | 55          |
@@ -161,11 +165,12 @@ When I view the detail of the campaign created with
 | Unproductive Time                 | 55          |
 | Opening Hour Start                | 08:00       |
 | Opening Hour End                  | 16:00       |
+When I view campaign 'NewCampaign'
 And I see the edit campaign form
 And I change the campaign period to 
 | Field      | Value      |
 | Start Date | 2016-10-15 |
-| End Date   | 2016-11-15 |
+| End Date   | 2016-10-29 |
 And after the update is done I goto the campaign list page
 And I set the starting month for viewing period to '2016-10-01'
 Then I should see 'NewCampaign' in campaign list 

@@ -143,18 +143,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.SetScopeValues(".campaign-edit", new Dictionary<string, string>
 			{				
 				{ "campaign.StartDate.Date", string.Format("new Date('{0}')", instance.StartDate)},
-				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },	
+				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaignSpanningPeriodForm.$pristine", "false" }
 			});
 
-			Browser.Interactions.WaitScopeCondition(".campaign-edit", "isInputValid()", Is.EqualTo("true"), () =>
-					Browser.Interactions.ClickVisibleOnly(".form-submit.wfm-btn-primary"));	
+			Browser.Interactions.Click(".form-submit.wfm-btn-primary");
 		}
 
 		[When(@"after the update is done I goto the campaign list page")]
 		public void WhenAfterTheUpdateIsDoneIGotoTheCampaignListPage()
 		{
-			Browser.Interactions.AssertScopeValue(".campaign-edit", "campaignSpanningPeriodForm.$pristine", Is.EqualTo("true"));
 			Navigation.GoToOutbound();			
 		}
 

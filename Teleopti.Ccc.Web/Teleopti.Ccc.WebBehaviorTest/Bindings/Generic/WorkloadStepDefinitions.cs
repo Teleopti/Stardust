@@ -22,6 +22,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Open24Hours = true
 			});
 		}
+
+		[Given(@"there is a workload '(.*)' with skill '(.*)'")]
+		public void GivenThereIsAWorkloadWithSkill(string workload, string skill)
+		{
+			DataMaker.Data().Apply(new WorkloadConfigurable
+			{
+				WorkloadName = workload,
+				SkillName = skill,
+				Open24Hours = true
+			});
+		}
 	}
 
 	[Binding]
