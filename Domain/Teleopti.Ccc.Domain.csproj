@@ -447,7 +447,6 @@
     <Compile Include="Collection\CachedShiftCategoryDistribution.cs" />
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
-    <Compile Include="Collection\ReadOnlyDictionary_DoNotUse.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
@@ -1333,7 +1332,6 @@
     <Compile Include="AgentInfo\PersonSkill.cs" />
     <Compile Include="Analytics\DataSourceEtl.cs" />
     <Compile Include="Analytics\TimeZoneDim.cs" />
-    <Compile Include="Collection\DayOfWeekIntDictionary.cs" />
     <Compile Include="Collection\DifferenceCollection.cs" />
     <Compile Include="Collection\DifferenceEntityCollectionService.cs" />
     <Compile Include="Collection\Extensions.cs" />
