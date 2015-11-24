@@ -150,11 +150,11 @@
 
 			function _setChartOption_color() {
 				var colorMap = {
-					rawBacklogs: '#1F77B4',
+					rawBacklogs: '1F77B4',
 					progress: '#2CA02C',
-					unscheduledPlans: '#66C2FF',
+					unscheduledPlans: '#9FA8DA',
 					schedules: '#C2E085',
-					overStaff: '#FF7F0E'
+					overStaff: '#4FC3F7'
 				};
 
 				$scope.campaign.WarningInfo.forEach(function (e) {
