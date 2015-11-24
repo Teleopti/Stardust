@@ -373,6 +373,9 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	$scope.searchKeyword = function () {
 		getPage($scope.paginationOptions.pageNumber);
+		if ($scope.paginationOptions.totalPages > 1) {
+			$scope.selectAllVisible = true;
+		}
 	};
 
 	var loadAllResults = function (successCallback) {
