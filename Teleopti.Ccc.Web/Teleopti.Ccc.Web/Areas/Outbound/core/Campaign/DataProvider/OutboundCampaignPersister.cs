@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				if (isMovePeriod(oldCampaign, campaign))
 				{
 					_outboundSkillCreator.SetOpenHours(campaign, campaign.Skill.WorkloadCollection.First());
+					_outboundSkillCreator.SetHandledWithinOnSkillTemplates(campaign.Skill);
 					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone));					
 				}
 			}

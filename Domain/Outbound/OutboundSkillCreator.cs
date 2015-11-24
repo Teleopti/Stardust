@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 	{
 		ISkill CreateSkill(IActivity activity, IOutboundCampaign campaign);
 		void SetOpenHours(IOutboundCampaign campaign, IWorkload workLoad);
+		void SetHandledWithinOnSkillTemplates(ISkill skill);
 	}
 
 	public class OutboundSkillCreator : IOutboundSkillCreator
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 			skill.AddWorkload(workLoad);
 
-			setHandledWithinOnSkillTemplates(skill);
+			SetHandledWithinOnSkillTemplates(skill);
 			setIntradayProfile(skill);
 
 			return skill;
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			}		
 		}
 
-		private static void setHandledWithinOnSkillTemplates(ISkill skill)
+		public void SetHandledWithinOnSkillTemplates(ISkill skill)
 		{
 			DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
 			DateTimePeriod timePeriod = new DateTimePeriod(
