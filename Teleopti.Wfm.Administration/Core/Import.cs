@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Administration.Core
 			return new ImportTenantResultModel
 			{
 				Success = true,
-				TenantId = newTenant.GetId(),
+				TenantId = newTenant.Id,
 				Message = string.Format("Succesfully imported a new Tenant with {0} user.", conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting)
 			};
 		}

@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Administration.Controllers
          return Json(new TenantModel
 			{
 				Name = tenant.Name,
-				Id = tenant.GetId(),
+				Id = tenant.Id,
             UserName = builder.UserID,
 				Password = builder.Password,
 				AppDatabase = builder.InitialCatalog,

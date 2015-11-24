@@ -5,7 +5,7 @@
 						default-access="property"
 						schema="Tenant">
 	<class name="Tenant">
-		<id name="id" access="field">
+		<id name="Id">
 			<generator class="identity" />
 		</id>
 		<property name="Name" />
