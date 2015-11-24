@@ -136,34 +136,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			return list.ElementAt(_random.Next(0, list.Count()));
 		}
 
-		/// <summary>
-		/// Clones the collection.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="originalList">The original list.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Madhuranga Pinnagoda
-		/// Created date: 2008-10-01
-		/// </remarks>
-		public static IList<T> CloneCollection<T>(IList<T> originalList)
-		{
-			InParameter.NotNull("originalList", originalList);
-
-			IList<T> copyList = new List<T>();
-
-			//Check whether interface been inherited by ICloneableEntity
-			if (typeof (T).IsInterface && typeof (T).GetInterface("ICloneableEntity`1") != null)
-			{
-				foreach (T listItem in originalList)
-				{
-					T copyItem = ((ICloneableEntity<T>) listItem).EntityClone();
-					copyList.Add(copyItem);
-				}
-			}
-			return copyList;
-		}
-
 		public static bool IsEmpty<T>(this IEnumerable<T> source)
 		{
 			return !source.Any();
@@ -267,13 +239,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static T Second<T>(this IEnumerable<T> source)
 		{
 			return source.ElementAt(1);
-		}
-
-		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
-		{
-			yield return item;
-			foreach (var a in source)
-				yield return a;
 		}
 
 		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)

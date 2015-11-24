@@ -142,37 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
             return false;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]  
-        public void VerifyCloneCollection()
-        {
-            // check for ICloneableEntity implemented, not empty values.
-            IList<IWorkShiftLimiter> originalCollection = new List<IWorkShiftLimiter>();
-
-            IWorkShiftLimiter atl1 = new ActivityTimeLimiter(new Activity("act"), TimeSpan.FromHours(2), OperatorLimiter.Equals);
-            originalCollection.Add(atl1);
-
-            IWorkShiftLimiter atl2 = new ActivityTimeLimiter(new Activity("act1"), TimeSpan.FromHours(2), OperatorLimiter.Equals);
-            originalCollection.Add(atl2);
-
-            IWorkShiftLimiter atl3 = new ActivityTimeLimiter(new Activity("act2"), TimeSpan.FromHours(2), OperatorLimiter.Equals);
-            originalCollection.Add(atl3);
-
-            IList<IWorkShiftLimiter> cloneCollection = Extensions.CloneCollection(originalCollection);
-            
-            Assert.AreEqual(cloneCollection.Count, originalCollection.Count);
-
-
-            // check for ICloneableEntity not implemented, empty values.
-            IList<ActivityTimeLimiter> originalCollection1 = new List<ActivityTimeLimiter>();
-            ActivityTimeLimiter atl4 = new ActivityTimeLimiter(new Activity("act4"), TimeSpan.FromHours(2), OperatorLimiter.Equals);
-            originalCollection1.Add(atl4);
-
-            IList<ActivityTimeLimiter> cloneCollection1 = Extensions.CloneCollection(originalCollection1);
-                        
-            Assert.AreEqual(cloneCollection1.Count, 0);
-
-        }
-
         [Test]
         public void VerifyIsEmpty()
         {
