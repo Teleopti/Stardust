@@ -149,7 +149,7 @@ Then I should not see 'Campaign4' in campaign list
 Scenario: Edit a campaign
 Given there is an activity named 'NewCampaign'
 And there is a skill named 'NewCampaign' with activity 'NewCampaign'
-And there is a workload 'TheWorkload1' with skill 'NewCampaign'
+And there is a workload named 'TheWorkload1' with skill 'NewCampaign'
 And I have created a campaign with
 | Field                             | Value       |
 | Name                              | NewCampaign |

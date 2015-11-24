@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			});
 		}
 
-		[Given(@"there is a workload '(.*)' with skill '(.*)'")]
-		public void GivenThereIsAWorkloadWithSkill(string workload, string skill)
+		[Given(@"there is a workload named '(.*)' with skill '(.*)'")]
+		public void GivenThereIsAWorkloadNamedWithSkill(string workload, string skill)
 		{
 			DataMaker.Data().Apply(new WorkloadConfigurable
 			{
