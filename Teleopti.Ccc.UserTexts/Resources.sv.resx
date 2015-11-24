@@ -5078,7 +5078,7 @@ tillgänglighet</value>
     <comment>X people found (info about search)</comment>
   </data>
   <data name="People" xml:space="preserve">
-    <value>personer</value>
+    <value>Personer</value>
     <comment>people</comment>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
@@ -12463,7 +12463,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Planera sittplatser</value>
   </data>
   <data name="SeatPlanSubmittedOK" xml:space="preserve">
-    <value>Sittplatsplan </value>
+    <value>Sittplatsplan skapades</value>
   </data>
   <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
     <value>team eller lokal måste anges</value>
@@ -12567,10 +12567,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Seat Planner</value>
   </data>
   <data name="SeatMap" xml:space="preserve">
-    <value>Sittplatskarta</value>
+    <value>Seat Map</value>
   </data>
   <data name="SeatPlan" xml:space="preserve">
-    <value>Sittplatsplanering</value>
+    <value>Seat Plan</value>
   </data>
   <data name="CheckingForecastingRequirements" xml:space="preserve">
     <value>Kontrollerar förutsättningar för prognostisering</value>
@@ -12667,5 +12667,50 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
     <value>Ej tillåtet!</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Välj en övergripande rättighetsnivå:</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Lägg till en specifik rättighet i listan nedan:</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Skapa och hantera planeringsperioder</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>Planeringsperioden är schemalagd</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Planeringsperioder</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Valda filter:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Starta nästa</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Totalt idag:</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Åtkomst till alla funktioner:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Ändringar kan inte göras på fördefinierade roller.</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Ej valda objekt</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Uppdaterade:</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Import misslyckades:</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Importerade:</value>
   </data>
 </root>

@@ -6861,7 +6861,7 @@ Updated on: {1}</value>
   </data>
   <data name="FileTypeSelection" xml:space="preserve">
     <value>Select type of export file</value>
-    <comment>used in payrollexport</comment>
+    <comment>used in payroll export</comment>
   </data>
   <data name="ESL" xml:space="preserve">
     <value>ESL</value>
@@ -12294,7 +12294,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="FileProperCase" xml:space="preserve">
     <value>File</value>
-    <comment>If not using stupid FILE style</comment>
+    <comment>If not using FILE style</comment>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>Sign out</value>
@@ -12954,11 +12954,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Haven't set any setting for the gamification</comment>
   </data>
   <data name="SeatMap" xml:space="preserve">
-    <value>Seat map</value>
+    <value>Seat Map</value>
     <comment>Name of Seat Map page</comment>
   </data>
   <data name="SeatPlan" xml:space="preserve">
-    <value>Seat plan</value>
+    <value>Seat Plan</value>
     <comment>Name of Seat Plan page</comment>
   </data>
   <data name="CheckingForecastingRequirements" xml:space="preserve">
@@ -13391,7 +13391,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>error msg after skills update procedure fail</comment>
   </data>
   <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
-    <value>Successfully updated people count:</value>
+    <value>Updated successfully:</value>
     <comment>count of people successfully update skills</comment>
   </data>
   <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
@@ -13470,7 +13470,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Seat Bookings</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
-    <value>Failed imported count:</value>
+    <value>Import failed:</value>
     <comment>Failed imported count:</comment>
   </data>
   <data name="InternalErrorXMsg" xml:space="preserve">
@@ -13482,7 +13482,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Please find the downloaded excel sheet to check the detailed error.</comment>
   </data>
   <data name="SuccessfullyImportedCountColon" xml:space="preserve">
-    <value>Successfully imported count:</value>
+    <value>Imported successfully:</value>
     <comment>Successfully imported count:</comment>
   </data>
   <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
