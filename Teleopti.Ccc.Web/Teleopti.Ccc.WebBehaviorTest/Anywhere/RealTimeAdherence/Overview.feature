@@ -3,6 +3,9 @@
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
+Background:
+	Given there is a switch
+
 Scenario: Show site without always loading status
 	Given the time is '2014-01-21 13:00'
 	And I have a role with
@@ -41,24 +44,19 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
 	| Access to everyone                     | True              |
-	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	| Field          | Value        |
 	| Team           | Green        |
 	| Start Date     | 2014-01-01   |
-	| External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
 	| Field          | Value         |
 	| Team           | Red           |
 	| Start Date     | 2014-01-01    |
-	| External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -83,8 +81,8 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
 	 When I view Real time adherence overview
-	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
+	 And 'Pierre Baldi' sets his phone state to 'Pause'
+	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
@@ -94,23 +92,18 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
 	| Access to everyone                     | True              |
-	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	| Field          | Value        |
 	| Team           | Green        |
 	| Start Date     | 2014-01-21   |
-	| External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
 	| Field          | Value         |
 	| Team           | Red           |
 	| Start Date     | 2014-01-21    |
-	| External Logon | Ashley Andeen |
 	 And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -135,8 +128,8 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
 	 When I view Real time adherence for site 'Paris'
-	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
+	 And 'Pierre Baldi' sets his phone state to 'Pause'
+	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
@@ -171,24 +164,19 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
 	| Access to everyone                     | True              |
-	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	| Field          | Value        |
 	| Team           | Green        |
 	| Start Date     | 2014-01-01   |
-	| External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
 	| Field          | Value         |
 	| Team           | Red           |
 	| Start Date     | 2014-01-01    |
-	| External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -212,8 +200,8 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets her phone state to 'Ready'
 	When I view Real time adherence overview
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
@@ -224,23 +212,19 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
 	| Access to everyone                     | True              |
-	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	| Field          | Value        |
 	| Team           | Green        |
 	| Start Date     | 2014-01-21   |
 	| External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
 	| Field          | Value         |
 	| Team           | Red           |
 	| Start Date     | 2014-01-21    |
-	| External Logon | Ashley Andeen |
 	 And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -264,8 +248,8 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	And the time is '2014-01-21 13:00'
-	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
+	 And 'Pierre Baldi' sets his phone state to 'Pause'
+	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 When I view Real time adherence for site 'Paris'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence

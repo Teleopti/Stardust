@@ -3,6 +3,9 @@
 	As a real time analyst
 	I want to see ...
 	
+Background:
+	Given there is a switch
+
 @OnlyRunIfEnabled('RTA_NewEventHangfireRTA_34333')
 Scenario: Should be able to see adherence percentage from agent state overview
 	Given there is an activity named 'Phone'
@@ -13,13 +16,10 @@ Scenario: Should be able to see adherence percentage from agent state overview
 	 | Name                                   | Team leader |
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
-	And there is a datasouce with id 6
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-10-06   |
-	 | External Logon | Pierre Baldi |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Start time               | 2014-10-06 08:00 |
@@ -40,9 +40,9 @@ Scenario: Should be able to see adherence percentage from agent state overview
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
 	When the time is '2014-10-06 08:00:00'
-	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2014-10-06 09:00:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the time is '2014-10-06 12:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state

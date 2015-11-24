@@ -1,5 +1,9 @@
 using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -36,6 +40,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				DataMaker.Data().Apply(team);
 				Team = team.Name;
 			}
+
+			ExternalLogon = user.Name.ToString();
+			ExternalLogonDataSourceId = PhoneStateStepDefinitions.DataSourceId;
 
 			base.Apply(uow, user, cultureInfo);
 		}

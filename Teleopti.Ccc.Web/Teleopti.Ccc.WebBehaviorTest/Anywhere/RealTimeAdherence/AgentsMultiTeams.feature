@@ -3,6 +3,9 @@
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
 	
+Background:
+	Given there is a switch
+
 Scenario: Should be able to see agents for multiple sites
 	Given there is a site named 'Paris'
 	And there is a team named 'Team Paris' on site 'Paris'

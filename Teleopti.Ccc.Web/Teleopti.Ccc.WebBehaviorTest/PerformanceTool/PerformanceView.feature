@@ -4,7 +4,8 @@
 	I want to test, measure and view timings of scenarios
 	
 Background:
-	Given I have a role with
+	Given there is a switch
+	And I have a role with
 	| Field | Value     |
 	| Name  | Developer |
 	And I have a person period with
@@ -48,15 +49,12 @@ Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 @ignore
 Scenario: Measure manage adherence by rta states
 	Given the time is '2015-01-14 12:00'
-	And there is a datasouce with id 6
 	And there is a site named 'Paris'
 	And there is a team named 'Team1' on site 'Paris'
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	| Field          | Value        |
 	| Team           | Team1    |
 	| Start Date     | 2014-01-01   |
-	| External Logon | Pierre Baldi |
 	And there are 1 rta state codes and state code groups
 	When I am viewing the performance view for 'Manage Adherence Load Test'
 	And I input a configuration for Pierre Baldi of 'Team1' with 1 states and 1 poll per second on datasource 6

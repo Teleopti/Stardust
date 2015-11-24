@@ -3,25 +3,23 @@
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
 
+Background:
+	Given there is a switch
+
 @ignore
 Scenario: See agents in alarm
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with full access
-	And there is a datasouce with id 6
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2015-11-23   |
-	 | External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
 	 | Field          | Value         |
 	 | Team           | Red           |
 	 | Start Date     | 2015-11-23   |
-	 | External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |

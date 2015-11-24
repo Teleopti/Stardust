@@ -1,7 +1,10 @@
-﻿Feature: Real time adherence multiple business units
+﻿Feature: Multiple business units
 	In order to ...
 	As a real time analyst
 	I want to see ...
+
+Background:
+	Given there is a switch
 
 Scenario: See sites of a selected business unit
 	Given the time is '2014-08-01 13:00'
@@ -35,13 +38,10 @@ Scenario: See all agents state updates of a team within a specific business unit
 	| Name  | Business Unit 1 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a team named 'Red' on site 'Paris'
-	And there is a datasouce with id 6
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
-	 | External Logon | Pierre Baldi |
 	And there is an alarm with 
 	| Field         | Value           |
 	| Name          | Positive        |
@@ -51,7 +51,7 @@ Scenario: See all agents state updates of a team within a specific business unit
 	When I view Real time adherence sites
 	And I change to business unit 'Business Unit 1'
 	And I view real time adherence for agents on team 'Red'
-	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	Then I should see agent details for 'Pierre Baldi'
 		| Name  |              |
 		| Name  | Pierre Baldi |

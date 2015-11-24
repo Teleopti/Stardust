@@ -62,31 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var user = table.CreateInstance<UserConfigurable>();
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
-
-		[Given(@"there are (.*) persons belong to '(.*)' with own external logon on datasource (.*)")]
-		public void GivenThereArePersonsBelongToWithOwnExternalLogonOnDatasource(int personCount, string teamName, int dataSourceId)
-		{
-			for (var i = 0; i < personCount; i++)
-			{
-				var personName = "Person" + i;
-				DataMaker.Data().Apply(new ExternalLogonConfigurable
-				{
-					AcdLogOnName = personName,
-					DataSourceId = dataSourceId,
-					AcdLogOnOriginalId = personName
-				});
-				DataMaker.Person(personName).Apply(new PersonPeriodConfigurable
-				{
-					StartDate = new DateTime(2015, 1, 1),
-					Team = teamName,
-					ExternalLogon = personName
-				});
-			}
-		}
-
-
-
-
+		
 
 
 

@@ -3,6 +3,9 @@
 	As a real time analyst
 	I want to see correct adherence value
 
+Background:
+	Given there is a switch
+
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: Should adherence percentage with neutral adherence
 	Given there is an activity named 'Phone'
@@ -14,13 +17,10 @@ Scenario: Should adherence percentage with neutral adherence
 	 | Name                                   | Team leader |
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
-	And there is a datasouce with id 6
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2015-03-02   |
-	 | External Logon | Pierre Baldi |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
@@ -44,9 +44,9 @@ Scenario: Should adherence percentage with neutral adherence
 	| Adherence       | Neutral        |
 	| Staffing effect | -1             |
 	When the time is '2015-03-02 08:00:00'
-	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2015-03-02 09:00:00'
-	And 'Pierre Baldi' sets his phone state to 'SomeCode' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'SomeCode'
 	And the time is '2015-03-02 10:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state
@@ -63,13 +63,10 @@ Scenario: Should see adherence details with neutral adherence
 	 | Name                                   | Team leader |
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
-	And there is a datasouce with id 6
-	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2015-03-02   |
-	 | External Logon | Pierre Baldi |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
@@ -93,9 +90,9 @@ Scenario: Should see adherence details with neutral adherence
 	| Adherence       | Neutral        |
 	| Staffing effect | -1             |
 	When the time is '2015-03-02 08:00:00'
-	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2015-03-02 09:00:00'
-	And 'Pierre Baldi' sets his phone state to 'SomeCode' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'SomeCode'
 	And the time is '2015-03-02 10:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
 	Then I should see 'Administration' without adherence
