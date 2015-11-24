@@ -21,7 +21,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly ITenantExists _tenantExists;
-		private readonly IDbPathProvider _dbPathProvider;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 		private readonly PersistTenant _persistTenant;
@@ -31,7 +30,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IDatabaseHelperWrapper databaseHelperWrapper, 
 			ICurrentTenantSession currentTenantSession,
 			ITenantExists tenantExists, 
-			IDbPathProvider dbPathProvider, 
 			ILoadAllTenants loadAllTenants,
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
@@ -40,7 +38,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
 			_tenantExists = tenantExists;
-			_dbPathProvider = dbPathProvider;
 			_loadAllTenants = loadAllTenants;
 			_checkPasswordStrength = checkPasswordStrength;
 			_persistTenant = persistTenant;
@@ -75,14 +72,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!checkCreate.Success)
 				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
-			var dbPath = _dbPathProvider.GetDbPath();
-
 			var version = _databaseHelperWrapper.Version(connectionToNewDb);
 			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
-			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, version, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, version, model.Tenant);
 			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, version, model.Tenant);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, version, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, version, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, version, model.Tenant);
 
 			if (version.IsAzure)
 				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");

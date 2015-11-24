@@ -123,6 +123,7 @@
 					}
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					vm.AppDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
 		}
 		vm.CheckAnalDb = function () {
@@ -140,6 +141,7 @@
 					vm.AnalDbCheckMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					vm.AnalDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
 		}
 
@@ -163,6 +165,7 @@
 					vm.AggDbCheckMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					vm.AggDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
 		}
 
