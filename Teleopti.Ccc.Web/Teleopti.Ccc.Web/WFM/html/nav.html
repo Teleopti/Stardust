@@ -16,8 +16,10 @@
 		</div>
 		<div class="navbar-right" >
 			<span ng-controller="SearchCtrl">
-				<i class="mdi mdi-magnify"></i>
-				<input type="text" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
+				<label for="searchbar">
+					<i class="mdi mdi-magnify searchbaricon"></i>
+					<input type="text" id="searchbar" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
+				</label>
 				<div class="search-results material-depth-2">
 					<ul class="wfm-list">
 						<div ng-repeat="gp in searchResultGroups">

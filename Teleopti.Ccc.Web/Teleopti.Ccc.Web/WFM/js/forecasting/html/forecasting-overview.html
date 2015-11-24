@@ -1,20 +1,20 @@
 <div>
-	<div class="alert-info notice-spacer" ng-if="isForecastRunning"><i class='mdi mdi-information'></i> Forecast is running.</div>
+	<div class="alert-info notice-spacer" ng-if="isForecastRunning"><i class='mdi mdi-information'></i> RunningForecast.</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<h4>Overview</h4>
+			<h4>{{'OverView' | translate}}</h4>
 			<div class="forecast-create-fad">
 				<button class="wfm-fab info forecast-create-button" ng-click="displayForecastingModal()" ng-disabled="isForecastRunning" ng-class="{'wfm-btn-invis-disabled': isForecastRunning}">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>
-						Forecast all
+						{{'ForecastAll' | translate}}
 					</md-tooltip>
 				</button>
 
 				<button class="wfm-fab info skill-create-button" ng-click="createSkill()" ng-if="isCreateSkillEnabled">
 					<i class="mdi mdi-plus"></i>
 					<md-tooltip>
-						New Skill
+							{{'NewSkill' | translate}}
 					</md-tooltip>
 				</button>
 			</div>
@@ -28,17 +28,17 @@
 						<div>
 							<span><b>{{workload.Name}}</b></span>
 							<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
-							<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>Success</md-tooltip><i class="mdi mdi-check"></i></span>
+							<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
 							<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
 							<span class="chevron pull-right"><i class="mdi mdi-chevron-right"></i></span>
 						</div>
 					</card-header>
 					<card-body>
 						<span>
-							This is your existing forecast. To be able to modify calls select some day(s) in the chart.
+							{{'ForecastWorkloadIntro' | translate}}
 							<span class="row">
 								<div class=" forecast-campaign">
-									<label style="margin:0;">Scenario:</label>
+									<label style="margin:0;">	{{'Scenario' | translate}}:</label>
 									<select class="col-xs-6 col-md-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
 								</div>
 							</span>
@@ -56,19 +56,19 @@
 								<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
 									{{ 'Statistics' | translate }}
 									<md-tooltip>
-										View more numbers
+										{{ 'ViewChartTip' | translate }}
 									</md-tooltip>
 								</a>
 								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload)">
-									Modify <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
+									{{ 'Modify' | translate }} <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
 									<md-tooltip>
-										Select days in chart before modifying
+										{{ 'SelectToModify' | translate }}
 									</md-tooltip>
 								</a>
 								<a class="wfm-btn wfm-btn-invis-default forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
-									Forecast
+									{{ 'ForecastDo' | translate }}
 									<md-tooltip>
-										Forecast this workload
+										{{ 'GenerateForecastTip' | translate }}
 									</md-tooltip>
 								</a>
 							</aside>
@@ -86,26 +86,26 @@
 		<div class="modalbg">
 			<div class="dialog">
 				<div class="modal-header" ng-if="modalForecastingInfo.forecastForAll">
-					Forecast all workloads
+					{{ 'ForecastAll' | translate }}
 				</div>
 				<div class="modal-header" ng-if="modalForecastingInfo.forecastForOneWorkload">
-					Forecast workload <b>{{modalForecastingInfo.selectedWorkload.Name}}</b>
+					{{ 'ForecastDo' | translate }} <b>{{modalForecastingInfo.selectedWorkload.Name}}</b>
 				</div>
 				<div class="modal-inner-content">
 					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForAll">
-						<label class="col-md-2">Scenario:</label>
+						<label class="col-md-2">{{ 'Scenario' | translate }}:</label>
 						<span class="col-md-2">
 							<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
 						</span>
 					</div>
 					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForOneWorkload">
-						<label class="col-md-2">Scenario:</label>
+						<label class="col-md-2">{{ 'Scenario' | translate }}:</label>
 						<span class="col-md-2">
 							<b>{{modalForecastingInfo.selectedScenario.Name}}</b>
 						</span>
 					</div>
 					<div class="wfm-block row">
-						<label class="col-md-2" style="margin:0;">Future period:</label>
+						<label class="col-md-2" style="margin:0;">{{'ForecastPeriod' | translate}}:</label>
 						<div class="col-md-10">
 							<div class="wfm-datepicker-wrap">
 								<div class="sub-header">
@@ -119,14 +119,14 @@
 								</div>
 								<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
 							</div>
-							<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 1 year.</div>
+							<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<aside>
 						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</a>
-						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'Forecast' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</a>
 					</aside>
 				</div>
 			</div>
@@ -138,7 +138,7 @@
 		<div class="modalbg">
 			<div class="dialog">
 				<div class="modal-header">
-					Modify
+					{{ 'Modify' | translate }}
 				</div>
 				<div class="modal-inner-content">
 					<div ng-hide="addCampaign || overrideTasks">
@@ -146,12 +146,12 @@
 						<br />
 						<label class="forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
 							<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">Override Calls</span>
+							<span class="wfm-btn wfm-btn-invis-default">{{ 'AbsenceOverride' | translate }}</span>
 						</label>
 
 						<label class="forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
 							<input type="checkbox" ng-model="addCampaign" id="addCampaignToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">Campaign</span>
+							<span class="wfm-btn wfm-btn-invis-default">{{ 'Campaign' | translate }}</span>
 						</label>
 						<br />
 						<br />
@@ -164,13 +164,13 @@
 					</div>
 					<div ng-show="overrideTasks && !addCampaign">
 						<form name="form" class="wfm-form" novalidate ng-submit="applyOverrideTasks(form.$valid);">
-							<h4>Override Calls</h4>
+							<h4>{{ 'AbsenceOverride' | translate }}</h4>
 							<dl>
-								<p>Override the forecasted calls. Changes made here will be saved until they are cleared.</p>
+								<p>{{ 'ForecastOverrideMsg' | translate }}</p>
 								<dd>
 									<div class="form-input-wrap skill-service-level-seconds">
 										<label for="overrideTasksInputId">
-											Calls/day
+											{{ 'CallsSlashDay' | translate }}{{ 'ForecastOverrideMsg' | translate }}
 											<input type="number" ng-model="modalModifyInfo.overrideTasks" name="overrideTasksInput" required="" id="overrideTasksInputId" min="0" />
 										</label>
 										<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
@@ -194,21 +194,21 @@
 
 					<div ng-show="!overrideTasks && addCampaign">
 						<div class="wfm-block">
-							<h4>Campaign</h4>
-							<p>Define a percentage for expected increase or decrease</p>
+							<h4>{{ 'Campaign' | translate }}</h4>
+							<p>{{ 'AddCampaignIntro' | translate }}</p>
 						</div>
 						<div class="wfm-block campaign-position">
 							<table class="wfm-table wfm-table-multi forecast-period">
 								<thead>
 									<tr>
 										<th></th>
-										<th>Forecasted</th>
-										<th>With campaign</th>
+										<th>{{ 'Forecasted' | translate }}</th>
+										<th>{{ 'Calls' | translate }}</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Calls</td>
+										<td>{{ 'Calls' | translate }}</td>
 										<td class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}</td>
 										<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</td>
 									</tr>
@@ -217,7 +217,7 @@
 						</div>
 						<span>
 							<div class="wfm-block campaign-position">
-								<label>Change campaign calls (%):</label>
+								<label>{{ 'CampaignCallsPercentSign' | translate }}:</label>
 
 								<form name="campaignForm">
 									<div class="row forecast-campaign">

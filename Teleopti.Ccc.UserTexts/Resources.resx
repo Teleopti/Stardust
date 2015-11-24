@@ -277,6 +277,10 @@
     <value>Answered calls</value>
     <comment>Answered calls</comment>
   </data>
+    <data name="CallsSlashDay" xml:space="preserve">
+    <value>Calls/day</value>
+    <comment>Calls per day</comment>
+  </data>
   <data name="ApplicationLogInName" xml:space="preserve">
     <value>Appl. logon name</value>
     <comment>Appl. logon name</comment>
@@ -384,6 +388,10 @@
   <data name="CampaignCallsPercentSign" xml:space="preserve">
     <value>Campaign calls %</value>
     <comment>Campaign calls %</comment>
+  </data>
+    <data name="Calls" xml:space="preserve">
+    <value>Calls %</value>
+    <comment>Calls %</comment>
   </data>
   <data name="CampaignTalkTimePercentSign" xml:space="preserve">
     <value>Campaign talk time %</value>
@@ -1264,6 +1272,10 @@ Date</value>
   <data name="NewShift" xml:space="preserve">
     <value>New Shift</value>
     <comment>New shift menu item</comment>
+  </data>
+    <data name="NewSkill" xml:space="preserve">
+    <value>New Skill</value>
+    <comment>New skill</comment>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
     <value>New Skill...</value>
@@ -2540,6 +2552,10 @@ Periods</comment>
   <data name="AuditTrail" xml:space="preserve">
     <value>Audit Trail</value>
     <comment>Audit Trail</comment>
+  </data>
+    <data name="Scenario" xml:space="preserve">
+    <value>Scenario</value>
+    <comment>scenario label</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
     <value>Manage Scenarios</value>
@@ -6758,6 +6774,10 @@ Meeting</value>
     <value>Forecasted hours incoming</value>
     <comment>Forecasted hours incoming</comment>
   </data>
+    <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Define a percentage for expected increase or decrease</value>
+    <comment>Explanation of campaign inputs</comment>
+  </data>
   <data name="RelativeDifferenceIncoming" xml:space="preserve">
     <value>Relative difference incoming</value>
     <comment>Relative difference incoming</comment>
@@ -10101,6 +10121,18 @@ These options are activated:
     <value>Override</value>
     <comment>override for budgeted allowance</comment>
   </data>
+    <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Override the forecasted calls. Changes made here will be saved until they are cleared.</value>
+    <comment>Information while making overrides to forecasts</comment>
+  </data>
+    <data name="Forecasted" xml:space="preserve">
+    <value>Forecasted</value>
+    <comment>Forecasted calls</comment>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>With campaign</value>
+    <comment>calls with campaign</comment>
+  </data>
   <data name="AbsenceThreshold" xml:space="preserve">
     <value>Threshold</value>
     <comment>threshold for budgeted allowance</comment>
@@ -10307,6 +10339,10 @@ These options are activated:
   <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
     <value>Export forecast to other business unit</value>
     <comment>Export forecast to other business unit</comment>
+  </data>
+    <data name="SuccessTip" xml:space="preserve">
+    <value>Success</value>
+    <comment>Forecast was successful</comment>
   </data>
   <data name="RunningBackgroundJob" xml:space="preserve">
     <value>Running background job...</value>
@@ -10624,6 +10660,18 @@ These options are activated:
   <data name="ImportForecastFromFile" xml:space="preserve">
     <value>Import forecast from file</value>
     <comment>Import forecast from file</comment>
+  </data>
+    <data name="RunningForecast" xml:space="preserve">
+    <value>Forecast is running</value>
+    <comment>Forecast is running message</comment>
+  </data>
+      <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>This is your existing forecast. To be able to modify calls select some day(s) in the chart.</value>
+    <comment>intro message on each workload</comment>
+  </data>
+      <data name="ClearForecastChart" xml:space="preserve">
+    <value>Clear chart selection</value>
+    <comment>Clear forecast chart selection</comment>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
     <value>Request Allowances</value>
@@ -11361,6 +11409,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="GenerateForecastFor" xml:space="preserve">
     <value>Generate forecast for</value>
     <comment>Period and scenario selection in quick forecast</comment>
+  </data>
+    <data name="ForecastDo" xml:space="preserve">
+    <value>Forecast</value>
+    <comment>click to forecast one workload</comment>
   </data>
   <data name="SelectedAbsences" xml:space="preserve">
     <value>Selected absences</value>
@@ -13026,9 +13078,17 @@ Reduce the complexity to use these shifts.</value>
     <value>Outbound</value>
     <comment>Permission: Outbound</comment>
   </data>
+    <data name="ForecastAll" xml:space="preserve">
+    <value>Forecast all</value>
+    <comment>forecast all workloads</comment>
+  </data>
   <data name="ForecastChartIntro" xml:space="preserve">
     <value>Based on volumes prior to the historical data, forecast methods have been created and applied to the previous year. The most accurate method is currently displayed in the chart and will be used for your next forecast.</value>
     <comment>Describe the web forecast method chart</comment>
+  </data>
+    <data name="Method" xml:space="preserve">
+    <value>Method</value>
+    <comment>View statistics about forecast method</comment>
   </data>
   <data name="GenerateForecastTip" xml:space="preserve">
     <value>Generate forecast</value>
@@ -13049,6 +13109,14 @@ Reduce the complexity to use these shifts.</value>
   <data name="SelectForecastPeriodIntro" xml:space="preserve">
     <value>Choose a future period to forecast</value>
     <comment>Pick a period before web forecast</comment>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Future period</value>
+    <comment>future forecast period</comment>
+  </data>
+    <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>Forecast period cannot be more than 1 year</value>
+    <comment>future forecast period max length</comment>
   </data>
   <data name="ChangePlanningPeriodTo" xml:space="preserve">
     <value>Change planning period to</value>
@@ -13646,6 +13714,14 @@ Reduce the complexity to use these shifts.</value>
   <data name="DailyTotal" xml:space="preserve">
     <value>Daily Total</value>
     <comment>Adherence percentage of today</comment>
+  </data>
+    <data name="SelectToModify" xml:space="preserve">
+    <value>Select days in the chart before modifying</value>
+    <comment>message shown if no points are selected</comment>
+  </data>
+      <data name="Modify" xml:space="preserve">
+    <value>Modify</value>
+    <comment>Modify</comment>
   </data>
   <data name="AccessAllFunctions" xml:space="preserve">
     <value>Access all functions:</value>
