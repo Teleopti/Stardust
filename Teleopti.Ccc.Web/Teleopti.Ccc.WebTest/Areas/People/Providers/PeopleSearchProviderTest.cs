@@ -3,11 +3,14 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private IPersonRepository personRepository;
 		private PeopleSearchProvider target;
 		private IOptionalColumnRepository optionalColumnRepository;
+		private IPermissionProvider permissionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -27,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
+			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
 				new FakePermissionProvider(), optionalColumnRepository);
 		}
@@ -41,6 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				});
 			person.Name = new Name("Ashley", "Andeen");
 			person.Email = "ashley.andeen@abc.com";
+			person.EmploymentNumber = "1011";
 
 			var personId = person.Id.Value;
 			person.TerminatePerson(new DateOnly(2025, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
@@ -79,16 +85,16 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
-			optionalColumns.Count().Equals(1);
-			optionalColumns.First().Equals("CellPhone");
+			optionalColumns.Count().Should().Be.EqualTo(1);
+			optionalColumns.First().Name.Should().Be.EqualTo("CellPhone");
 
 			var first = peopleList.First();
-			first.Name.FirstName.Equals("Ashley");
-			first.Name.LastName.Equals("Andeen");
-			first.EmploymentNumber.Equals("1011");
-			first.Id.Equals(personId);
-			first.Email.Equals("ashley.andeen@abc.com");
-			first.MyTeam(DateOnly.Today).Equals(new DateOnly(2025, 04, 09));
+			first.Name.FirstName.Should().Be.EqualTo("Ashley");
+			first.Name.LastName.Should().Be.EqualTo("Andeen");
+			first.EmploymentNumber.Should().Be.EqualTo("1011");
+			first.Id.Should().Be.EqualTo(personId);
+			first.Email.Should().Be.EqualTo("ashley.andeen@abc.com");
+			first.MyTeam(DateOnly.Today).Description.Name.Should().Be.EqualTo("TestTeam");
 		}
 
 		[Test]
@@ -109,6 +115,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				c.SetRow(1, personFinderDisplayRow);
 				return true;
 			}));
+			permissionProvider.Stub(
+				x =>
+					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today,
+						personFinderDisplayRow)).Return(false);
 			personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson>());
 			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>());
 
@@ -120,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			};
 			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>());
 			var peopleList = result.People;
-			peopleList.Count().Equals(0);
+			peopleList.Count().Should().Be.EqualTo(0);
 		}
 	}
 }

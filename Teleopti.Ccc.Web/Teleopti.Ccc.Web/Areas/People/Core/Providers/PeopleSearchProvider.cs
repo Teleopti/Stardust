@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					r =>
 						r.RowNumber > 0 &&
 						_permissionProvider.HasOrganisationDetailPermission(
-						DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,
+						DefinedRaptorApplicationFunctionPaths.WebPeople,
 							DateOnly.Today, r));
 			var personIdList = permittedPersonList.Select(x => x.PersonId);
 			var peopleList = _personRepository.FindPeople(personIdList).ToList();
