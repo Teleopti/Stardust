@@ -30,8 +30,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="name" type="text" ng-model="campaign.Name" placeholder="{{ NewCampaignName | translate }}" ng-minlength="1" ng-maxlength="50" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -40,8 +40,8 @@
                             <div flex class="icon-set-fix m-r-10p">
 								<activity-picker ng-model="campaign.Activity" disable-create="true" class="custom-input"></activity-picker>
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -61,8 +61,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -85,8 +85,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +97,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -109,8 +109,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -121,8 +121,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -133,8 +133,8 @@
                             <div flex class="icon-set-fix m-r-10p">
                                 <input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
                                 <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check success right-sign"></i>
-                                    <i class="mdi mdi-close danger wrong-sign"></i>
+                                    <i class="mdi mdi-check right-sign"></i>
+                                    <i class="mdi mdi-close wrong-sign"></i>
                                 </div>
                             </div>
                         </div>
@@ -172,8 +172,8 @@
                         <div class="in-place-element">
                             <input type="text" ng-class="[validWorkingHours()?'custom-valid':'custom-invalid', dirtyWorkingHours?'ng-dirty':'ng-pristine' ]" ng-show="false" />
                             <div class="icon-set  input-validation-sign" expandable>
-                                <i class="mdi mdi-check success right-sign"></i>
-                                <i class="mdi mdi-close danger wrong-sign"></i>
+                                <i class="mdi mdi-check right-sign"></i>
+                                <i class="mdi mdi-close wrong-sign"></i>
                             </div>
                         </div>
                     </div>

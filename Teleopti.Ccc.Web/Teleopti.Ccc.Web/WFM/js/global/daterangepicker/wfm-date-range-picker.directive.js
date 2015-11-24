@@ -106,8 +106,8 @@
           "      <div class=\"sub-header\">" +
           "	<span translate>From</span> <strong>{{ startDate | date: \"longDate\" }}</strong>" +
           "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
-          "	  <i class=\"mdi mdi-check success right-sign \"></i>" +
-          "	  <i class=\"mdi mdi-close danger wrong-sign\"></i>" +
+          "	  <i class=\"mdi mdi-check right-sign \"></i>" +
+          "	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
           "	</div>" +
           "      </div>" +
           "      <datepicker name=\"startDatePicker\" show-weeks=\"true\" class=\"wfm-datepicker datepicker-start-date\" ng-model=\"startDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
@@ -116,8 +116,8 @@
           "      <div class=\"sub-header\">" +
           "	<span translate>To</span> <strong>{{ endDate | date: \"longDate\" }}</strong>" +
           "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
-          "	  <i class=\"mdi mdi-check success right-sign \"></i>" +
-          "	  <i class=\"mdi mdi-close danger wrong-sign\"></i>" +
+          "	  <i class=\"mdi mdi-check right-sign \"></i>" +
+          "	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
           "	</div>" +
           "      </div>" +
           "      <datepicker show-weeks=\"true\" class=\"wfm-datepicker datepicker-end-date\" ng-model=\"endDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
