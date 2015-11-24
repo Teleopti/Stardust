@@ -45,12 +45,14 @@ Scenario: See agents in alarm
 # lets rename "alarm color" to "color"
 	| Color           | Orange       |
 	| Name            | Not adhering |
+# new "is alarm"
+	| Alarm           | True         |
 	| Alarm threshold | 00:01:00     |
 # the new "alarm color"
 	| Alarm color     | Red          |
 	And the time is '2015-11-23 12:30:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets his phone state to 'Ready'
 # make "real time adherence for agents on..." and "real time adherence for ALL agents on..." steps, change old scenarios ?
 # OR make "real time adherence for agents IN ALARM on..." and "real time adherence for agents on..." steps, change old scenarios ?
 	When I view real time adherence for agents on team 'Red'
