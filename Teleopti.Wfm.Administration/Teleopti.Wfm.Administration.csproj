@@ -207,6 +207,7 @@
     <Compile Include="Core\TenantLogger.cs" />
     <Compile Include="Core\TenantUpgrader.cs" />
     <Compile Include="Core\TokenQuerier.cs" />
+    <Compile Include="Core\UpgradeLogRetriever.cs" />
     <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Controllers\UpgradeDatabasesController.cs" />
