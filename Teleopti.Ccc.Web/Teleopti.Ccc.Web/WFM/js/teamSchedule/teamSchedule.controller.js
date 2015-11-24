@@ -91,12 +91,11 @@
 					}).$promise.then(function(result) {
 					    vm.rawScheduleData = result;
 
-						vm.allAgents = [];
-						angular.forEach(vm.rawScheduleData, function(schedule) {
-							if (vm.allAgents.indexOf(schedule.PersonId) == -1) {
-								vm.allAgents.push(schedule.PersonId);
-							}
-						});
+					    vm.allAgents = [];
+					    var allSchedules = groupScheduleFactory.Create(result, vm.scheduleDateMoment()).Schedules; // keep the agents in right order
+					    angular.forEach(allSchedules, function (schedule) {
+					    	vm.allAgents.push(schedule.PersonId);
+					    });
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
 						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
