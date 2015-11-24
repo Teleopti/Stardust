@@ -6,7 +6,17 @@
 		.filter('showWeekdays', ['$translate', showWeekdays])
 		.filter('showPhase', [showPhase])
 		.filter('showTimespan', showTimespan)
-		.filter('decreaseOneDay', decreaseOneDay);
+		.filter('decreaseOneDay', decreaseOneDay)
+		.filter('monthview', ['$locale', '$filter', monthview]);
+
+
+	function monthview($locale, $filter) {
+		var format = $locale.DATETIME_FORMATS['mediumDate'].replace('d', '').trim();
+
+		return function(date) {
+			return $filter('date')(date, format);
+		}
+	}
 
 	function showPhase() {
 		return function(statusCode) {
@@ -18,7 +28,6 @@
 			}
 			return mapping[statusCode];
 		}
-
 	};
 
 	function showWeekdays($translate) {	    
