@@ -37,6 +37,7 @@ Scenario: Publish the schedules for next planning period
 	And I click publish
 	Then I should see the planning period as published in the summary
 
+@ignore
 @OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
 Scenario: Update the next planning period
 	Given the time is '2014-04-10' 
