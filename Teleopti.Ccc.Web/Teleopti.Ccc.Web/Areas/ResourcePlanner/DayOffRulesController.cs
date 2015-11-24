@@ -43,5 +43,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			_dayOffRulesModelPersister.Delete(id);
 		}
+
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/{id}")]
+		public IHttpActionResult Fetch(Guid id)
+		{
+			return Ok(_fetchDayOffRulesModel.Fetch(id));
+		}
 	}
 }

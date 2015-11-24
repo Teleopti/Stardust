@@ -150,5 +150,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			filter.Id.Should().Be.EqualTo(site.Id.Value);
 			filter.Name.Should().Be.EqualTo(filterName);
 		}
+
+
+		[Test]
+		public void ShouldFetchDayOffRule()
+		{
+			var curr = new DayOffRules().WithId();
+			DayOffRulesRepository.Add(curr);
+			curr.ConsecutiveWorkdays = new MinMax<int>(1,1);
+			curr.ConsecutiveDayOffs = new MinMax<int>(2,2);
+			curr.DayOffsPerWeek = new MinMax<int>(3,3);
+			curr.Name = RandomName.Make();
+
+			var dayOffRulesModel = Target.Fetch(curr.Id.Value);
+			dayOffRulesModel.MinDayOffsPerWeek.Should().Be.EqualTo(curr.DayOffsPerWeek.Minimum);
+			dayOffRulesModel.MaxDayOffsPerWeek.Should().Be.EqualTo(curr.DayOffsPerWeek.Maximum);
+			dayOffRulesModel.MinConsecutiveDayOffs.Should().Be.EqualTo(curr.ConsecutiveDayOffs.Minimum);
+			dayOffRulesModel.MaxConsecutiveDayOffs.Should().Be.EqualTo(curr.ConsecutiveDayOffs.Maximum);
+			dayOffRulesModel.MinConsecutiveWorkdays.Should().Be.EqualTo(curr.ConsecutiveWorkdays.Minimum);
+			dayOffRulesModel.MaxConsecutiveWorkdays.Should().Be.EqualTo(curr.ConsecutiveWorkdays.Maximum);
+			dayOffRulesModel.Id.Should().Be.EqualTo(curr.Id);
+			dayOffRulesModel.Default.Should().Be.False();
+			dayOffRulesModel.Name.Should().Be.EqualTo(curr.Name);
+		}
+
+		[Test]
+		public void ShouldThrowIfFetchNonExisting()
+		{
+			Assert.Throws<ArgumentException>(() => Target.Fetch(Guid.NewGuid()));
+		} 
 	}
 }

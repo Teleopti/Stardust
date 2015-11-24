@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -6,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		DayOffRulesModel FetchDefaultRules();
 		IEnumerable<DayOffRulesModel> FetchAll();
+		DayOffRulesModel Fetch(Guid id);
 	}
 }

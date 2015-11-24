@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -31,6 +32,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 				result.Add(_dayOffRulesMapper.ToModel(DayOffRules.CreateDefault()));
 
 			return result;
+		}
+
+		public DayOffRulesModel Fetch(Guid id)
+		{
+			var dayOffRules = _dayOffRulesRepository.Get(id);
+			if (dayOffRules == null)
+				throw new ArgumentException(string.Format("Cannot find DayOffRules with Id {0}", id));
+
+			return _dayOffRulesMapper.ToModel(dayOffRules);
 		}
 	}
 }

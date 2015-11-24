@@ -46,6 +46,19 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldFetchOne()
+		{
+			var id = Guid.NewGuid();
+			var model = new DayOffRulesModel();
+
+			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
+			fetchModel.Expect(x => x.Fetch(id)).Return(model);
+			var target = new DayOffRulesController(fetchModel, null);
+			target.Fetch(id).Result<DayOffRulesModel>()
+				.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
 		public void ShouldDelete()
 		{
 			var id = Guid.NewGuid();
