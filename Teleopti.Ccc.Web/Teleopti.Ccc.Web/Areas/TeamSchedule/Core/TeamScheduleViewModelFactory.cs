@@ -60,6 +60,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var person = personScheduleDay.Item1;
 				var schedules = personScheduleDay.Item2;
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person);
+				if (!schedules.Any())
+				{
+					list.Add(new GroupScheduleShiftViewModel
+					{
+						PersonId = person.Id.GetValueOrDefault().ToString(),
+						Name = person.Name.ToString(),
+						Date = dateInUserTimeZone.ToFixedDateFormat(),
+						Projection = new List<GroupScheduleLayerViewModel>()
+					});
+				}
 				foreach (var scheduleDay in schedules)
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, person);

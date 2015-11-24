@@ -40,7 +40,7 @@
 			<tr class="person">
 				<th class="person-name person-name-column" style="width: 15%"></th>
 				<th id="time-line-container" class="schedule schedule-column" >
-					<time-line times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
+					<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
 				</th>
 				<th style="width: 1%">
 				</th>

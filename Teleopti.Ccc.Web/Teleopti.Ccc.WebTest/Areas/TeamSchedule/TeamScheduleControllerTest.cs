@@ -32,6 +32,22 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldReturnCorrectProjectionWhenThereIsNoSchedule()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("p1", "p1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
+
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = result.Single().Projection.ToList();
+			projectionVm.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsMainShift()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

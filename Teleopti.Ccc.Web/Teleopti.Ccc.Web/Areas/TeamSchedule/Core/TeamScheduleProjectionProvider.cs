@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var significantPart = scheduleDay.SignificantPart();
 
 			var overtimeStart = DateTime.MaxValue;
-			var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
-			if (overtimeActivities.Any())
+			if (scheduleDay.PersonAssignment() != null && scheduleDay.PersonAssignment().OvertimeActivities().Any())
 			{
+				var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
 				overtimeStart = overtimeActivities.Select(x => x.Period.StartDateTime).Min();
 			}
 
