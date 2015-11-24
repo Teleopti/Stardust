@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 		public void ThenIShouldSeeReceiversAs(Table table)
 		{
 			Browser.Interactions.AssertExists(".message-send-feedback");
-			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			var persons = table.CreateSet<RealTimeAdherenceAgentStatus>();
 			foreach (var person in persons)
 			{
 				Browser.Interactions.AssertExistsUsingJQuery(".message-receivers li:contains('" + person.Name + "')");
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 		[When(@"I send message for")]
 		public void WhenISendMessageFor(Table table)
 		{
-			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			var persons = table.CreateSet<RealTimeAdherenceAgentStatus>();
 			var ids=persons.Select(x => DataMaker.Data().Person(x.Name).Person.Id.Value);
 			
 			TestControllerMethods.Logon();
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 		[When(@"I \(without signed in\) send message for")]
 		public void WhenIWithoutSignedInSendMessageFor(Table table)
 		{
-			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			var persons = table.CreateSet<RealTimeAdherenceAgentStatus>();
 			var ids = persons.Select(x => DataMaker.Data().Person(x.Name).Person.Id.Value);
 
 			Navigation.GotoMessageTool(ids);

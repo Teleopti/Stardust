@@ -5,10 +5,7 @@
 
 Background:
 	Given there is a switch
-
-@ignore
-Scenario: See agents in alarm
-	Given there is an activity named 'Phone'
+	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with full access
@@ -50,17 +47,23 @@ Scenario: See agents in alarm
 	| Alarm threshold | 00:01:00     |
 # the new "alarm color"
 	| Alarm color     | Red          |
-	And the time is '2015-11-23 12:30:00'
+
+@ignore
+Scenario: See agents in alarm
+	Given the time is '2015-11-23 12:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
-# make "real time adherence for agents on..." and "real time adherence for ALL agents on..." steps, change old scenarios ?
-# OR make "real time adherence for agents IN ALARM on..." and "real time adherence for agents on..." steps, change old scenarios ?
+# make previous scenarios "I view real time adherence for all agents"
+# that toggle the screen toggle off if the feature toggle is on ;)
 	When I view real time adherence for agents on team 'Red'
-	And the time is '2015-11-23 12:35:00'
-	Then I should see agent details for 'Pierre Baldi'
+	Then I should not see agent status for 'Pierre Baldi'
+	And I should not see agent status for 'Ashley Andeen'
+# as time passes, pierre should appear on screen
+	When 5 minutes has passed
+	Then I should see agent status
 		| Name       |              |
 		| Name       | Pierre Baldi |
 # rename to "color". This is display color, not "alarm color" as it says in other scenarios
 		| Color      | Red          |
 		| Alarm Time | 0:04:00      |
-	And I should not see agent 'Ashley Andeen'
+	And I should not see agent status for 'Ashley Andeen'

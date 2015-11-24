@@ -55,7 +55,7 @@ Scenario: See current states of all agents
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	When I view real time adherence for agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
-	Then I should see agent details for 'Pierre Baldi'
+	Then I should see agent status
 		| Name                     |              |
 		| Name                     | Pierre Baldi |
 		| State                    | Pause        |
@@ -65,7 +65,7 @@ Scenario: See current states of all agents
 		| Alarm                    | Not adhering |
 		| Alarm Time               | 0:15:00      |
 		| Alarm Color              | Red          |
-	And I should see agent details for 'Ashley Andeen'
+	And I should see agent status
 		| Field                    | Value         |
 		| Name                     | Ashley Andeen |
 		| State                    | Ready         |
@@ -125,7 +125,7 @@ Scenario: See state updates of all agents
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2014-01-21 12:45:00'
-	Then I should see agent details for 'Pierre Baldi'
+	Then I should see agent status
 		| Name                     |              |
 		| Name                     | Pierre Baldi |
 		| State                    | Pause        |
@@ -135,7 +135,7 @@ Scenario: See state updates of all agents
 		| Alarm                    | Not adhering |
 		| Alarm Time               | 0:15:00      |
 		| Alarm Color              | Red          |
-	And I should see agent details for 'Ashley Andeen'
+	And I should see agent status
 		| Field                    | Value         |
 		| Name                     | Ashley Andeen |
 		| State                    | Ready         |
@@ -146,7 +146,7 @@ Scenario: See state updates of all agents
 		| Alarm Time               | 0:15:00       |
 		| Alarm Color              | Green         |
 
-Scenario: See all agents of the team with or without state updates
+Scenario: See all agents of the team even without state updates
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -160,78 +160,14 @@ Scenario: See all agents of the team with or without state updates
 	 | Field          | Value         |
 	 | Team           | Red           |
 	 | Start Date     | 2014-01-21    |
-	 And John Smith has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
-	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
-	And Ashley Andeen has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
-	And John Smith has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
-	And there is an alarm with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
-	And there is an alarm with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Alarm Color     | Red          |
-	| Name            | Not adhering |
-	| Staffing effect | -1           |
 	And the time is '2014-01-21 12:30:00'
 	When I view real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2014-01-21 12:45:00'
-	Then I should see agent details for 'Pierre Baldi'
-		| Name                     |                  |
-		| Name                     | Pierre Baldi     |
-		| State                    | Pause            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
-		| Alarm                    | Not adhering     |
-		| Alarm Time               | 0:15:00          |
-		| Alarm Color              | Red              |
-	And I should see agent details for 'Ashley Andeen'
-		| Field                    | Value            |
-		| Name                     | Ashley Andeen    |
-		| State                    | Ready            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
-		| Alarm                    | Adhering         |
-		| Alarm Time               | 0:15:00          |
-		| Alarm Color              | Green            |
-	And I should see agent details for 'John Smith'
-		| Field                    | Value            |
-		| Name                     | Ashley Andeen    |
+	Then I should see agent status for 'Pierre Baldi'
+	Then I should see agent status for 'Ashley Andeen'
 
-Scenario: See adherence status when call center is in Istanbul
+Scenario: See agent status when call center is in Istanbul
 	Given I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And there is an activity named 'Phone'
@@ -258,7 +194,7 @@ Scenario: See adherence status when call center is in Istanbul
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2015-03-24 07:00:00'
 	And I view real time adherence for agents on team 'Red'
-	Then I should see agent details for 'Pierre Baldi'
+	Then I should see agent status
 		| Field       | Value        |
 		| Name        | Pierre Baldi |
 		| State       | Ready        |

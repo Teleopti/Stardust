@@ -51,23 +51,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see real time agent details for '(.*)'")]
 		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)
 		{
-			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStateInfo>();
-			assertRealTimeAgentDetails(name,stateInfo);
+			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStatus>();
+			assertAgentStatus(name,stateInfo);
 		}
 		
-		[Then(@"I should see agent details for '(.*)'")]
-		public void ThenIShouldSeeAgentDetailsFor(string name, Table table)
+		[Then(@"I should see agent status")]
+		public void ThenIShouldSeeAgentDetailsFor(Table table)
 		{
-			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStateInfo>();
-			assertAgentDetails(name,stateInfo);
+			var status = table.CreateInstance<RealTimeAdherenceAgentStatus>();
+			assertAgentStatus(status);
 		}
 
-		[Then(@"I should see real time agent name for '(.*)'")]
-		public void ThenIShouldSeeRealTimeAgentNameFor(string name)
+		[Then(@"I should see agent status for '(.*)'")]
+		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
-			assertRealTimeAgentName(name);
+			var status = new RealTimeAdherenceAgentStatus() {Name = name};
+			assertAgentStatus(status);
 		}
-
+		
 		[Then(@"I should see the menu with option of change schedule")]
 		public void ThenIShouldSeeTheMenuWithOptionOfChangeSchedule()
 		{
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenISelect(Table table)
 		{
 			Browser.Interactions.AssertExists(".send-message");
-			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			var persons = table.CreateSet<RealTimeAdherenceAgentStatus>();
 			foreach (var person in persons)
 			{
 				Browser.Interactions.ClickUsingJQuery(".agent-state:has(.agent-name:contains('" + person.Name + "')) .selectable-agent input");
@@ -172,66 +173,54 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickContaining("option", businessUnitName);
 		}
 
-		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
+		private static void assertAgentStatus(string name, RealTimeAdherenceAgentStatus status)
 		{
 			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";
 
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.State);
-			if (stateInfo.Activity != null)	
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Activity);
-			if (stateInfo.NextActivity != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivity);
-			if (stateInfo.NextActivityStartTimeFormatted() != null )
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
-			if (stateInfo.Alarm != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
-			if (stateInfo.AlarmTimeFormatted() != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.State);
+			if (status.Activity != null)	
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Activity);
+			if (status.NextActivity != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivity);
+			if (status.NextActivityStartTimeFormatted() != null )
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivityStartTimeFormatted());
+			if (status.Alarm != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Alarm);
+			if (status.AlarmTimeFormatted() != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.AlarmTimeFormatted());
 
-			if (stateInfo.AlarmColor != null)
+			if (status.AlarmColor != null)
 			{
 				const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
-				Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
+				Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(status.AlarmColor, "0.6"), name);
 			}
 		}
 
-		private static void assertAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
+		private static void assertAgentStatus(RealTimeAdherenceAgentStatus status)
 		{
-			var selector = "[agentid='" + IdForPerson(name) + "']";
-			 
-			if (stateInfo.State != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.State);
-			if (stateInfo.Activity != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.Activity);
-			if (stateInfo.NextActivity != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.NextActivity);
-			if (stateInfo.NextActivityStartTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.NextActivityStartTimeFormatted());
-			if (stateInfo.Alarm != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.Alarm);
-			if (stateInfo.AlarmTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, stateInfo.AlarmTimeFormatted());
+			var personId = DataMaker.Person(status.Name).Person.Id.Value;
+			var selector = "[agentid='" + personId + "']";
 
-			if (stateInfo.AlarmColor != null)
+			if (status.State != null)
+				Browser.Interactions.AssertAnyContains(selector, status.State);
+			if (status.Activity != null)
+				Browser.Interactions.AssertAnyContains(selector, status.Activity);
+			if (status.NextActivity != null)
+				Browser.Interactions.AssertAnyContains(selector, status.NextActivity);
+			if (status.NextActivityStartTimeFormatted() != null)
+				Browser.Interactions.AssertAnyContains(selector, status.NextActivityStartTimeFormatted());
+			if (status.Alarm != null)
+				Browser.Interactions.AssertAnyContains(selector, status.Alarm);
+			if (status.AlarmTimeFormatted() != null)
+				Browser.Interactions.AssertAnyContains(selector, status.AlarmTimeFormatted());
+
+			if (status.AlarmColor != null)
 			{
-				var colorSelector = "[agentid='" + IdForPerson(name) + "'][style*='background-color: " + toRGBA(stateInfo.AlarmColor, "0.6") +"']";
+				var colorSelector = selector + "[style*='background-color: " + toRGBA(status.AlarmColor, "0.6") +"']";
 				Browser.Interactions.AssertExists(colorSelector);
 			}
 		}
-
-		private static Guid IdForPerson(string name)
-		{
-			return DataMaker.Person(name).Person.Id.Value;
-		}
-
-
-		private static void assertRealTimeAgentName(string name)
-		{
-			const string selector = "body";
-
-			Browser.Interactions.AssertAnyContains(selector, name);
-		}
-
+		
 		private static String toRGBA(string colorName, string transparency)
 		{
 			var color = Color.FromName(colorName);
@@ -239,7 +228,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 	}
 
-	public class RealTimeAdherenceAgentStateInfo
+	public class RealTimeAdherenceAgentStatus
 	{
 		public string Name	{ get; set; }
 		public string State	{ get; set; }

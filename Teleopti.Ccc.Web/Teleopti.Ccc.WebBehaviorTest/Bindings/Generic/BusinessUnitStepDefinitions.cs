@@ -8,6 +8,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class BusinessUnitStepDefinitions
 	{
+		[Given(@"there is a business unit named '(.*)'")]
+		public void GivenThereIsABusinessUnitWith(string name)
+		{
+			DataMaker.Data().Apply(new BusinessUnitConfigurable {Name = name});
+		}
+
 		[Given(@"there is a business unit with")]
 		public void GivenThereIsABusinessUnitWith(Table table)
 		{
