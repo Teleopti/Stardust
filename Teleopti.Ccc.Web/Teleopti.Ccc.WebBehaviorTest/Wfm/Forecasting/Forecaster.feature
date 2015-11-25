@@ -44,6 +44,7 @@ Scenario: Add campaign
 	And I apply the campaign
 	Then I should see that the total calls for the first day has doubled
 
+@ignore
 Scenario: Keep campaigns when reforecasting
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
