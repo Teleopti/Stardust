@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team,
 							new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1))));
 					}
+					agentsWithSetting = agentsWithSetting.Distinct().ToList();
 
 					var isRuleWithDifferentThreshold = setting.GamificationSettingRuleSet ==
 													   GamificationSettingRuleSet.RuleWithDifferentThreshold;

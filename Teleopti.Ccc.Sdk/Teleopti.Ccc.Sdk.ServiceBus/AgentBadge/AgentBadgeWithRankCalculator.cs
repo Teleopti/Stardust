@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_now = now;
 		}
 
-		protected IList<IAgentBadgeWithRankTransaction> AddBadge<T>(IEnumerable<IPerson> allPersons,
+		protected IList<IAgentBadgeWithRankTransaction> AddBadge<T>(HashSet<IPerson> allPersons,
 			IDictionary<Guid, T> agentsListShouldGetBadge, BadgeType badgeType,
 			T bronzeBadgeThreshold, T silverBadgeThreshold, T goldBadgeThreshold,
 			bool largerIsBetter, DateOnly date) where T : IComparable
@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				return newAwardedBadges;
 			}
 
-			foreach (
-				var person in
-					agentsListShouldGetBadge.Select(agent => allPersons.SingleOrDefault(x => x.Id != null && x.Id.Value == agent.Key))
-						.Where(a => a != null))
+			var agentsShouldGetBadge = agentsListShouldGetBadge.Select(
+				agent => allPersons.SingleOrDefault(x => x.Id != null && x.Id.Value == agent.Key))
+				.Where(agent => agent != null);
+			foreach (var person in agentsShouldGetBadge)
 			{
 				var hasBadgePermission = person.PermissionInformation.ApplicationRoleCollection.Any(
 					role => role.ApplicationFunctionCollection.Contains(viewBadgeFunc));
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var personId = person.Id;
 				if (personId == null) continue;
 
-				var value = agentsListShouldGetBadge[(Guid)person.Id];
+				var value = agentsListShouldGetBadge[(Guid)personId];
 				var bronzeBadgeAmount = 0;
 				var silverBadgeAmount = 0;
 				var goldBadgeAmount = 0;
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					logger.DebugFormat("Award {0} badge to agent {1} (ID: {2}), "
 						+ "Bronze badge count: {3}, Silver badge count: {4}, Gold badge count: {5}.",
-						badgeType, person.Name, person.Id, bronzeBadgeAmount, silverBadgeAmount, goldBadgeAmount);
+						badgeType, person.Name, personId, bronzeBadgeAmount, silverBadgeAmount, goldBadgeAmount);
 				}
 
 				var newBadge = new AgentBadgeWithRankTransaction
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					setting.AdherenceGoldThreshold);
 			}
 
-			var personList = allPersons.ToList();
+			var personList = new HashSet<IPerson>(allPersons);
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentAdherenceList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date,
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					setting.AHTBronzeThreshold, setting.AHTSilverThreshold, setting.AHTGoldThreshold);
 			}
 
-			var personList = allPersons.ToList();
+			var personList = new HashSet<IPerson>(allPersons);
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTBronzeThreshold, businessUnitId);
 
@@ -311,11 +311,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					setting.AnsweredCallsBronzeThreshold, setting.AnsweredCallsSilverThreshold, setting.AnsweredCallsGoldThreshold);
 			}
 
-			var personList = allPersons.ToList();
+			var personList = new HashSet<IPerson>(allPersons);
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date,
 				setting.AnsweredCallsBronzeThreshold, businessUnitId);
-
 
 			if (agentsList.Count > 0)
 			{
