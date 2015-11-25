@@ -31,6 +31,10 @@ namespace Teleopti.Ccc.DBManager.Library
 							case 40540:
 							case 40613:
 							case 40143:
+							case 40671:
+							case 40648:
+							case 45168:
+							case 45169:
 							case 233:
 							case 64:
 							case -2: //Timeout
