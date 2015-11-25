@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	
+
 	[Serializable]
 	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
 	{
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual IList<SeatMapLocation> ChildLocations
 		{
 			get { return _childLocations; }
-			
+
 		}
 
 		public virtual string Name { get; set; }
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			var childSeatMapLocation = new SeatMapLocation();
 			childSeatMapLocation.SetLocation("{}", location.Name);
-			AddChild (childSeatMapLocation);
+			AddChild(childSeatMapLocation);
 			return childSeatMapLocation;
 		}
 
@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public virtual Seat AddSeat(String name, int priority)
 		{
-			var seat = new Seat (name, priority);
+			var seat = new Seat(name, priority);
 			_seats.Add(seat);
-			seat.SetParent (this);
+			seat.SetParent(this);
 			return seat;
 		}
 
@@ -105,23 +105,29 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
+
+		public virtual IList<SeatMapLocation> GetFullLocationHierachyAsList()
+		{
+			var locations = new List<SeatMapLocation> ();
+
+			foreach (var child in _childLocations)
+			{
+				locations.AddRange(child.GetFullLocationHierachyAsList().ToList());
+			}
+			
+			locations.Add (this);
+
+			return locations;
+		}
+
+
 		public virtual void UpdateSeatMapTemporaryId(Guid? temporaryId, Guid? persistedId)
 		{
 			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
 		}
 
-		public virtual ISeat GetNextUnallocatedSeat(ISeatBooking booking, Boolean ignoreChildren)
+		public virtual ISeat GetNextUnallocatedSeat(ISeatBooking booking)
 		{
-			if (!ignoreChildren)
-			{
-				foreach (var seat in _childLocations.OrderByDescending(l => l.SeatCount)
-					.Select(childLocation => childLocation.GetNextUnallocatedSeat(booking, false))
-					.Where(seat => seat != null))
-				{
-					return seat;
-				}
-			}
-
 			if (IncludeInSeatPlan)
 			{
 				return SeatAllocatorHelper.TryToFindASeatForBooking(booking, _seats.OrderBy(seat => seat.Priority));
@@ -130,45 +136,38 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return null;
 		}
 
-		
+
 		public virtual int SeatCount { get { return _seats.Count; } }
 
-		public virtual bool CanAllocateShifts(IEnumerable<ISeatBooking> agentShifts)
+		public virtual bool CanAllocateShifts(params ISeatBooking[] agentShifts)
 		{
 			if (!IncludeInSeatPlan)
 			{
 				return false;
 			}
 
-			var temporaryBookedSeats = _seats.Select(s => new TransientBooking(s)).ToArray();
-			var temporaryBookings = agentShifts.Select(s => new TemporaryBooking(s)).ToArray();
+			var transientSeatBookings = _seats.Select(s => new TransientBooking(s)).ToList();
+			var temporaryBookings = agentShifts.Select(s => new TemporaryBooking(s)).ToList();
+
 			foreach (var agentShift in temporaryBookings)
 			{
-				foreach (var temporaryBooking in temporaryBookedSeats)
+				var seat = SeatAllocatorHelper.TryToFindASeatForBookingCheckingTransientBookings (agentShift.SeatBooking, _seats, transientSeatBookings);
+
+				if (seat != null)
 				{
-					if (!temporaryBooking.IsAllocated(agentShift.SeatBooking))
+					var temporarySeatBooking = transientSeatBookings.SingleOrDefault (booking => booking.Seat == seat);
+
+					if (temporarySeatBooking != null && !temporarySeatBooking.IsAllocated (agentShift.SeatBooking))
 					{
-						temporaryBooking.TemporarilyAllocate(agentShift.SeatBooking);
+						temporarySeatBooking.TemporarilyAllocate (agentShift.SeatBooking);
 						agentShift.SetBooked();
-						break;
+
 					}
 				}
 			}
+
+			
 			return temporaryBookings.All(s => s.IsBooked);
-		}
-
-		public virtual ISeatMapLocation GetLocationToAllocateSeats(IEnumerable<ISeatBooking> agentShifts)
-		{
-			foreach (var childLocation in _childLocations.OrderByDescending(l => l.SeatCount))
-			{
-				var location = childLocation.GetLocationToAllocateSeats(agentShifts);
-				if (location != null)
-				{
-					return location;
-				}
-			}
-
-			return CanAllocateShifts(agentShifts) ? this : null;
 		}
 
 		private class TemporaryBooking

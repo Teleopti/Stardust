@@ -12,6 +12,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly ISeat _seat;
 		private readonly ICollection<ISeatBooking> _almostAllocatedBookings = new Collection<ISeatBooking>();
 
+		public ISeat Seat
+		{
+			get { return _seat; }
+		}
+
 		public TransientBooking(ISeat seat)
 		{
 			_seat = seat;

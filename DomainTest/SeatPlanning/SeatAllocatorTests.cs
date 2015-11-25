@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SeatPlanning
@@ -20,31 +22,31 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateTwoAgentsToOneSeatEach()
 		{
-			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsToOneSeatEach (false);
+			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsToOneSeatEach(false);
 		}
 
 		[Test]
 		public void ShouldAllocateAccordingToPriority()
 		{
-			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority (false);
+			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority(false);
 		}
 
 		[Test]
 		public void ShouldAllocateTwoAgentsSequentiallyToOneSeat()
 		{
-			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsSequentiallyToOneSeat (false);
+			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsSequentiallyToOneSeat(false);
 		}
 
 		[Test]
 		public void ShouldAllocateSeatsByEarliestFirst()
 		{
-			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst (false);
+			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst(false);
 		}
 
 		[Test]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
-			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat (false);
+			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat(false);
 		}
 
 		[Test]
@@ -84,11 +86,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location1= new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location1.AddSeat("L1 Seat1", 1);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat1", 1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
@@ -107,11 +109,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
-			location1.AddSeat("L1 Seat2",2);
+			location1.AddSeat("L1 Seat1", 1);
+			location1.AddSeat("L1 Seat2", 2);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat1", 1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
@@ -130,11 +132,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat1", 1);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
-			location2.AddSeat("L2 Seat2",2);
+			location2.AddSeat("L2 Seat1", 1);
+			location2.AddSeat("L2 Seat2", 2);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
@@ -154,13 +156,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
-			location1.AddSeat("L1 Seat2",2);
-			location1.AddSeat("L1 Seat3",3);
+			location1.AddSeat("L1 Seat1", 1);
+			location1.AddSeat("L1 Seat2", 2);
+			location1.AddSeat("L1 Seat3", 3);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
-			location2.AddSeat("L2 Seat2",2);
+			location2.AddSeat("L2 Seat1", 1);
+			location2.AddSeat("L2 Seat2", 2);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
@@ -177,10 +179,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat1", 1);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat1", 1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
@@ -197,10 +199,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat1", 1);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat1", 1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
@@ -218,13 +220,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3, agentShift4);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location1.AddSeat("L1 Seat1",1);
-			location1.AddSeat("L1 Seat2",2);
-			location1.AddSeat("L1 Seat2",3);
+			location1.AddSeat("L1 Seat1", 1);
+			location1.AddSeat("L1 Seat2", 2);
+			location1.AddSeat("L1 Seat2", 3);
 
 			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			location2.AddSeat("L2 Seat1",1);
-			location2.AddSeat("L2 Seat2",2);
+			location2.AddSeat("L2 Seat1", 1);
+			location2.AddSeat("L2 Seat2", 2);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
@@ -243,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room1.AddSeat("Room1 Seat1",1);
+			room1.AddSeat("Room1 Seat1", 1);
 
 			building.AddChild(room1);
 
@@ -261,13 +263,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			var room2 = new SeatMapLocation() {IncludeInSeatPlan = true};
+			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			var roomChild1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-		
-			roomChild1.AddSeat("Room1Child Seat1",1);
+
+			roomChild1.AddSeat("Room1Child Seat1", 1);
 			building.AddChild(room1);
 			building.AddChild(room2);
-			room1.AddChild (roomChild1);
+			room1.AddChild(roomChild1);
 
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
@@ -284,8 +286,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var building = new SeatMapLocation() { IncludeInSeatPlan = false };
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = false };
 			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room1.AddSeat("Room1 Seat1",1);
-			room2.AddSeat("Room2 Seat1",1);
+			room1.AddSeat("Room1 Seat1", 1);
+			room2.AddSeat("Room2 Seat1", 1);
 
 			building.AddChild(room1);
 			building.AddChild(room2);
@@ -304,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			building.AddChild(room1);
-			building.AddSeat("Building Seat1",1);
+			building.AddSeat("Building Seat1", 1);
 
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
@@ -321,11 +323,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room1.AddSeat("Room 1 Seat 1",1);
+			room1.AddSeat("Room 1 Seat 1", 1);
 
 			building.AddChild(room1);
-			building.AddSeat("Building Seat1",1);
-			building.AddSeat("Building Seat2",2);
+			building.AddSeat("Building Seat1", 1);
+			building.AddSeat("Building Seat2", 2);
 
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
@@ -350,23 +352,24 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room1.AddSeat("Room1 Seat1",1);
-			room1.AddSeat("Room1 Seat2",2);
-
+			room1.AddSeat("Room1 Seat1", 1);
+			room1.AddSeat("Room1 Seat2", 2);
+			
 			building.AddChild(room1);
-			building.AddSeat("Building Seat1",1);
-			building.AddSeat("Building Seat2",2);
-			building.AddSeat("Building Seat3",3);
-
+			building.AddSeat("Building Seat1", 1);
+			building.AddSeat("Building Seat2", 2);
+			building.AddSeat("Building Seat3", 3);
+			
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1, seatBookingRequest2, seatBookingRequest3);
 
 			var allocatedSeatsGroup1 = seatBookingRequest1.SeatBookings.Select(s => s.Seat.Name);
-			Assert.That(allocatedSeatsGroup1.Contains("Room1 Seat1"));
-			Assert.That(allocatedSeatsGroup1.Contains("Room1 Seat2"));
+
+			Assert.That(allocatedSeatsGroup1.Contains("Building Seat1"));
+			Assert.That(allocatedSeatsGroup1.Contains("Building Seat2"));
 
 			var allocatedSeatsGroup2 = seatBookingRequest2.SeatBookings.Select(s => s.Seat.Name);
-			Assert.That(allocatedSeatsGroup2.Contains("Building Seat1"));
-			Assert.That(allocatedSeatsGroup2.Contains("Building Seat2"));
+			Assert.That(allocatedSeatsGroup2.Contains("Room1 Seat1"));
+			Assert.That(allocatedSeatsGroup2.Contains("Room1 Seat2"));
 
 			Assert.That(agentShift5.Seat.Name == "Building Seat3");
 		}
@@ -398,14 +401,14 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room 1 Seat 1", 1);
 			var existingBooking = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
-			existingBooking.Book (room1.Seats.Single());
+			existingBooking.Book(room1.Seats.Single());
 
 			var agent2Shift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 			var seatBookingRequest1 = new SeatBookingRequest(agent2Shift1);
 			new SeatAllocator(room1).AllocateSeats(seatBookingRequest1);
-			
+
 			Assert.That(agent2Shift1.Seat == null);
-			Assert.That(Equals (existingBooking.Seat, room1.Seats.Single()));
+			Assert.That(Equals(existingBooking.Seat, room1.Seats.Single()));
 		}
 
 		[Test]
@@ -415,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var agentShift1_Day2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 02, 8, 0, 0), new DateTime(2014, 01, 02, 17, 00, 00));
 			var agentShift2_Day2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 02, 8, 0, 0), new DateTime(2014, 01, 02, 17, 0, 0));
-			
+
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift1_Day2, agentShift2_Day2);
 
 			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -440,9 +443,154 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 		[Test]
+		public void ShouldConsiderRolesWhenDecidingIfCanAllocateTeamToLocation()
+		{
+
+			var dateOnly = new DateOnly(2014, 01, 01);
+
+			var outboundApplicationRole = ApplicationRoleFactory.CreateRole("Outbound", "xxx");
+			var inboundApplicationRole = ApplicationRoleFactory.CreateRole("Inbound", "xxx");
+
+			var agent1 = PersonFactory.CreatePerson();
+			var agent2 = PersonFactory.CreatePerson();
+			var agent3 = PersonFactory.CreatePerson();
+			var agent4 = PersonFactory.CreatePerson();
+
+			new[] { agent1, agent2, agent3 }.ForEach((agent) => agent.PermissionInformation.AddApplicationRole(outboundApplicationRole));
+
+			agent4.PermissionInformation.AddApplicationRole(inboundApplicationRole);
+
+			var agentShift1 = new SeatBooking(agent1, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift2 = new SeatBooking(agent2, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift3 = new SeatBooking(agent3, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift4 = new SeatBooking(agent4, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+
+			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
+			var seatBookingRequest2 = new SeatBookingRequest(agentShift4);
+
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
+
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room1.AddSeat("Room1 Seat0", 1);
+			room1.AddSeat("Room1 Seat1", 2);
+			room1.AddSeat("Room1 Seat2", 3);
+			room1.AddSeat("Room1 Seat3", 4);
+			room1.AddSeat("Room1 Seat4", 5);
+
+			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
+
+			room2.AddSeat("Room2 Seat1", 1);
+			room2.AddSeat("Room2 Seat2", 2);
+			room2.AddSeat("Room2 Seat3", 3);
+
+			room1.Seats.ForEach((seat) => seat.SetRoles(new[] { inboundApplicationRole }));
+			room2.Seats.ForEach((seat) => seat.SetRoles(new[] { outboundApplicationRole }));
+
+			room2.AddSeat("Room2 Seat0", 1); // make this seat have no role...
+
+			building.AddChild(room1);
+			building.AddChild(room2);
+
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+
+			var allocatedSeatsGroup1 = seatBookingRequest1.SeatBookings.Select(s => s.Seat.Name);
+			Assert.That(allocatedSeatsGroup1.Contains("Room2 Seat1"));
+			Assert.That(allocatedSeatsGroup1.Contains("Room2 Seat2"));
+			Assert.That(allocatedSeatsGroup1.Contains("Room2 Seat3"));
+
+			var allocatedSeatsGroup2 = seatBookingRequest2.SeatBookings.Select(s => s.Seat.Name);
+			Assert.That(allocatedSeatsGroup2.Contains("Room1 Seat0"));
+
+		}
+
+
+		[Test]
+		public void ShouldConsiderRolesAndThenNumberOfSeatsWhenChoosingLocationForTeam()
+		{
+
+			var dateOnly = new DateOnly(2014, 01, 01);
+
+			var outboundApplicationRole = ApplicationRoleFactory.CreateRole("Outbound", "xxx");
+
+			var agent1 = PersonFactory.CreatePerson();
+			var agent2 = PersonFactory.CreatePerson();
+
+			new[] { agent1, agent2 }.ForEach((agent) => agent.PermissionInformation.AddApplicationRole(outboundApplicationRole));
+
+
+			var agentShift1 = new SeatBooking(agent1, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift2 = new SeatBooking(agent2, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+
+			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
+
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
+
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room1.AddSeat("Room1 Seat1", 1);
+			room1.AddSeat("Room1 Seat2", 2);
+			room1.AddSeat("Room1 Seat3", 3);
+
+			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
+
+			room2.AddSeat("Room2 Seat1", 1);
+			room2.AddSeat("Room2 Seat2", 2);
+
+			room2.Seats.ForEach((seat) => seat.SetRoles(new[] { outboundApplicationRole }));
+
+			building.AddChild(room1);
+			building.AddChild(room2);
+
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
+
+			Assert.AreEqual(room2.Seats[0].Name, seatBookingRequest1.SeatBookings.First().Seat.Name);
+			Assert.AreEqual(room2.Seats[1].Name, seatBookingRequest1.SeatBookings.Last().Seat.Name);
+		}
+
+		[Test]
+		public void ShouldConsiderRolesAndThenNumberOfSeatsWhenChoosingLocationForTeamAndAllocateToParent()
+		{
+
+			var dateOnly = new DateOnly(2014, 01, 01);
+
+			var outboundApplicationRole = ApplicationRoleFactory.CreateRole("Outbound", "xxx");
+
+			var agent1 = PersonFactory.CreatePerson();
+			var agent2 = PersonFactory.CreatePerson();
+
+			new[] { agent1, agent2 }.ForEach((agent) => agent.PermissionInformation.AddApplicationRole(outboundApplicationRole));
+
+
+			var agentShift1 = new SeatBooking(agent1, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+			var agentShift2 = new SeatBooking(agent2, dateOnly, dateOnly.Date.AddHours(8), dateOnly.Date.AddHours(17));
+
+			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
+
+			var rootLocation = new SeatMapLocation() { IncludeInSeatPlan = true };
+			rootLocation.AddSeat("Room2 Seat1", 1);
+			rootLocation.AddSeat("Room2 Seat2", 2);
+
+
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room1.AddSeat("Room1 Seat1", 1);
+			room1.AddSeat("Room1 Seat2", 2);
+			room1.AddSeat("Room1 Seat3", 3);
+
+			
+			rootLocation.Seats.ForEach((seat) => seat.SetRoles(new[] { outboundApplicationRole }));
+
+			rootLocation.AddChild(room1);
+			
+
+			new SeatAllocator(rootLocation).AllocateSeats(seatBookingRequest1);
+
+			Assert.AreEqual(rootLocation.Seats[0].Name, seatBookingRequest1.SeatBookings.First().Seat.Name);
+			Assert.AreEqual(rootLocation.Seats[1].Name, seatBookingRequest1.SeatBookings.Last().Seat.Name);
+		}
+
+		[Test]
 		public void ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch()
 		{
-			CommonSeatAllocatorTests.ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch (false);
+			CommonSeatAllocatorTests.ShouldNotAllocateAnAgentToASeatWhereRolesDoNotMatch(false);
 		}
 
 		[Test]
@@ -464,7 +612,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority(false);
 		}
 
-		
+
 		#region Performance Benchmarks
 
 		[Test, Ignore]

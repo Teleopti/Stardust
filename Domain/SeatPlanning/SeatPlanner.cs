@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				}
 		}
 
-		private ISeatPlanningResult createSeatPlansForPeriod(ISeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
+		private ISeatPlanningResult createSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
 		{
 			var people = getPeople(teams, period);
 			var seatBookingInformation = _seatBookingRequestAssembler.CreateSeatBookingRequests(people, period);

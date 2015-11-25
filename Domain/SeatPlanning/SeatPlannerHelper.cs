@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			new SeatLevelAllocator(seats).AllocateSeats(groupedRequests);
 		}
 
-		public static void AllocateSeatsToRequests(ISeatMapLocation rootSeatMapLocation, ISeatBookingRequestParameters seatBookingInformation)
+		public static void AllocateSeatsToRequests(SeatMapLocation rootSeatMapLocation, ISeatBookingRequestParameters seatBookingInformation)
 		{
 			var groupedRequests = groupByDateAndTeam(seatBookingInformation.TeamGroupedBookings);
 			new SeatAllocator(rootSeatMapLocation).AllocateSeats(groupedRequests);
