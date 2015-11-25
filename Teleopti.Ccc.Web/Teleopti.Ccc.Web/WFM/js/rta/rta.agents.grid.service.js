@@ -28,7 +28,7 @@
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
 				var coloredWithDurationCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
-				var nextActivityCellTemplate = '<div class="ui-grid-cell-contents"><span class="mdi mdi-arrow-right"></span>{{grid.appScope.format(row.entity.NextActivityStartTime)}} {{row.entity.NextActivity}}</div>';
+				var nextActivityCellTemplate = '<div class="ui-grid-cell-contents"><span class="mdi mdi-arrow-right"></span>{{row.entity.NextActivityStartTime}} {{row.entity.NextActivity}}</div>';
 				var alarmCellTemplate = coloredCellTemplate;
 				var alarmDurationCellTemplate = args.alarmDurationCellTemplate || coloredWithDurationCellTemplate;
 

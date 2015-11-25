@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -22,13 +23,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public FakeAgentStateReadModelReader Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
+		public FakeUserCulture Culture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
-			system.UseTestDouble<MutableNow>().For<INow>(); 
+			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
 		[Test]
@@ -83,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().StateStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().Activity.Should().Be("phone");
 			agentState.Single().NextActivity.Should().Be("lunch");
-			agentState.Single().NextActivityStartTime.Should().Be("2015-10-22 09:00".Utc());
+			agentState.Single().NextActivityStartTime.Should().Be("09:00");
 			agentState.Single().Alarm.Should().Be("in adherence");
 			agentState.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().AlarmColor.Should().Be("#000000");
@@ -117,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().StateStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().Activity.Should().Be("phone");
 			agentState.Single().NextActivity.Should().Be("lunch");
-			agentState.Single().NextActivityStartTime.Should().Be("2015-10-22 09:00".Utc());
+			agentState.Single().NextActivityStartTime.Should().Be("09:00");
 			agentState.Single().Alarm.Should().Be("in adherence");
 			agentState.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().AlarmColor.Should().Be("#000000");
@@ -149,10 +152,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-11-23 08:30".Utc());
 			TimeZone.IsSweden();
+			Culture.IsSwedish();
 
 			var agentState = Target.ForTeams(new[] { teamId });
 
-			agentState.Single().NextActivityStartTime.Should().Be("2015-11-23 10:00".Time());
+			agentState.Single().NextActivityStartTime.Should().Be("10:00");
+		}
+
+		[Test]
+		public void ShouldGetActivityTimeForTomorrow()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				TeamId = teamId,
+				NextStart = "2015-11-24 09:00".Utc()
+			});
+			Now.Is("2015-11-23 17:30".Utc());
+			TimeZone.IsSweden();
+			Culture.IsSwedish();
+
+			var agentState = Target.ForTeams(new[] { teamId });
+
+			agentState.Single().NextActivityStartTime.Should().Be("2015-11-24 10:00");
 		}
 
 		[Test]

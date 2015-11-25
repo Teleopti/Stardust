@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public interface IGetAgentStates
 	{
-		IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds);
-		IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds);
+		IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds);
+		IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds);
 	}
 
 	public class GetAgentStates : IGetAgentStates
@@ -18,34 +18,36 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IUserCulture _culture;
 
-		public GetAgentStates(IAgentStateReadModelReader agentStateReadModelReader, INow now, IUserTimeZone timeZone)
+		public GetAgentStates(IAgentStateReadModelReader agentStateReadModelReader, INow now, IUserTimeZone timeZone, IUserCulture culture)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_now = now;
 			_timeZone = timeZone;
+			_culture = culture;
 		}
 
-		public IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds)
+		public IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds)
 		{
 			return map(_agentStateReadModelReader.LoadForSites(siteIds));
 		}
 
-		public IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds)
+		public IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds)
 		{
 			return map(_agentStateReadModelReader.LoadForTeams(teamIds));
 		}
 
-		private IEnumerable<AgentStateViewModel> map(IEnumerable<AgentStateReadModel> states)
+		private IEnumerable<AgentStatusViewModel> map(IEnumerable<AgentStateReadModel> states)
 		{
-			return states.Select(x => new AgentStateViewModel
+			return states.Select(x => new AgentStatusViewModel
 			{
 				PersonId = x.PersonId,
 				State = x.State,
 				StateStart = x.StateStart,
 				Activity = x.Scheduled,
 				NextActivity = x.ScheduledNext,
-				NextActivityStartTime = toUserTimeZone(x.NextStart),
+				NextActivityStartTime = formatTime(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStart,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
@@ -53,11 +55,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			});
 		}
 
-		private DateTime? toUserTimeZone(DateTime? timestamp)
+		private string formatTime(DateTime? timestamp)
 		{
-			if (timestamp.HasValue)
-				return TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
-			return null;
+			if (!timestamp.HasValue) return null;
+			var userTime = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
+			var today = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
+
+			return userTime < today.AddDays(1)
+				? userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
+				: userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortDatePattern) + " " +
+				  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
+				;
 		}
 	}
 }

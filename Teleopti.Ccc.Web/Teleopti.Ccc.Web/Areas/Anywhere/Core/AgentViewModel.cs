@@ -26,4 +26,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public int TimeInState { get; set; }
 	}
 
+	public class AgentStatusViewModel
+	{
+		public Guid PersonId { get; set; }
+		public string State { get; set; }
+		public DateTime? StateStart { get; set; }
+		public string Activity { get; set; }
+		public string NextActivity { get; set; }
+		public string NextActivityStartTime { get; set; }
+		public string Alarm { get; set; }
+		public DateTime? AlarmStart { get; set; }
+		public string AlarmColor { get; set; }
+		public int TimeInState { get; set; }
+	}
 }
