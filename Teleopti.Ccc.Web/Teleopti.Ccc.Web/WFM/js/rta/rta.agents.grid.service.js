@@ -41,7 +41,7 @@
 				return {
 					rowTemplate: rowTemplate,
 					columnDefs: [{
-						name: 'Name',
+						displayName: 'Name',
 						field: 'Name',
 						sort: {
 							direction: 'asc'
@@ -51,42 +51,42 @@
 						cellTemplate: coloredCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'Team',
+						displayName: 'Team',
 						field: 'TeamName',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'State',
+						displayName: 'State',
 						field: 'State',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'Activity',
+						displayName: 'Activity',
 						field: 'Activity',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: coloredCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'NextActivity',
+						displayName: 'NextActivity',
 						field: 'NextActivity',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: nextActivityCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'Alarm',
+						displayName: 'Alarm',
 						field: 'Alarm',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
 						cellTemplate: alarmCellTemplate,
 						headerCellFilter:'translate'
 					}, {
-						name: 'TimeInAlarm',
+						displayName: 'TimeInAlarm',
 						field: 'TimeInState',
 						enableColumnMenu: false,
 						headerCellTemplate: headerCellTemplate,
