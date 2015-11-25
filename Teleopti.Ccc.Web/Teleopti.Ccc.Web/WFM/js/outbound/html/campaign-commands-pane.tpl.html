@@ -1,7 +1,7 @@
 ﻿<div class="relative clearfix nowrap text-right p-l-5 p-r-5">
 	<div class="manual-input-container" ng-show="manualPlanSwitch">
 		<div class="error-msg-container  alert-warning notice-spacer gantt-alert-message"
-			 ng-show="showDateSelectionHint()&&showFirstAlertMessage">
+			  ng-show="showDateSelectionHint()&&isPlanTryingDoAction()">
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
@@ -10,7 +10,7 @@
 			   type="text"
 			   ng-model="manualPlanInput"
 			   numeric-value  min="0" float-number />
-		<div class="manual-input-btns" ng-mouseenter="showFirstAlertMessage=true" ng-mouseleave="showFirstAlertMessage=false" ng-init="showFirstAlertMessage=false">
+		<div class="manual-input-btns" ng-init="showFirstAlertMessage=false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-r-0 btn-save-plan"
 					ng-click="addManualPlan()"
 					ng-disabled="!validManualProductionPlan()"
@@ -20,8 +20,6 @@
 			</button>
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-l-0"
 					ng-click="removeManualPlan()"
-					ng-disabled="!validManualReset()"
-					ng-class="{'wfm-btn-invis-disabled': !validManualReset()}"
 					translate>
 				Reset
 			</button>
@@ -29,7 +27,7 @@
 	</div>
 	<div class="manual-input-container" ng-show="manualBacklogSwitch">
 		<div class="error-msg-container  alert-warning notice-spacer gantt-alert-message"
-			 ng-show="showDateSelectionHint()&&showSecondAlertMessage">
+			  ng-show="showDateSelectionHint()&&isBacklogTryingDoAction()">
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
@@ -38,7 +36,7 @@
 			   type="text"
 			   ng-model="manualBacklogInput"
 			   numeric-value min="0" float-number />
-		<div class="manual-input-btns" ng-mouseenter="showSecondAlertMessage=true" ng-mouseleave="showSecondAlertMessage=false" ng-init="showSecondAlertMessage=false">
+		<div class="manual-input-btns" ng-init="showSecondAlertMessage=false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-r-0 btn-save-backlog"
 					ng-click="addManualBacklog()"
 					ng-disabled="!validManualBacklog()"
@@ -48,8 +46,6 @@
 			</button>
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary p-5-10 m-l-0"
 					ng-click="removeManualBacklog()"
-					ng-disabled="!validManualReset()"
-					ng-class="{'wfm-btn-invis-disabled': !validManualReset()}"
 					translate>
 				Reset
 			</button>
