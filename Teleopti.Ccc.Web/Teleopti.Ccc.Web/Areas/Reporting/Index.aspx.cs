@@ -199,7 +199,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				Response.AddHeader("content-disposition",
 					inlineOrAtt + " filename=" + commonReports.Name + Guid.NewGuid() + "." + extension);
 				Response.BinaryWrite(bytes); // create the file
-				Response.Flush(); // send it to the client to download
+				if(Response.IsClientConnected)
+					Response.Flush(); // send it to the client to download
 			}
 		}	
 	}
