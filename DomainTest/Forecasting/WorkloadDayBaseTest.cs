@@ -1093,6 +1093,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
+		public void ShouldRecalculateCampaignTasksCorrect()
+		{
+			_workloadDayBase.CampaignTasks = new Percent(0.5d);
+			_workloadDayBase.RecalculateDailyCampaignTasks();
+			
+			Assert.AreEqual(new Percent(0.5d).Value, Math.Round(_workloadDayBase.CampaignTasks.Value, 2));
+		}
+
+		[Test]
+		public void ShouldRecalculateCampaignTaskTimesCorrect()
+		{
+			_workloadDayBase.CampaignTaskTime = new Percent(0.5d);
+			_workloadDayBase.CampaignAfterTaskTime = new Percent(0.75d);
+			_workloadDayBase.RecalculateDailyAverageCampaignTimes();
+
+			Assert.AreEqual(new Percent(0.5d).Value, Math.Round(_workloadDayBase.CampaignTaskTime.Value, 2));
+			Assert.AreEqual(new Percent(0.75d).Value, Math.Round(_workloadDayBase.CampaignAfterTaskTime.Value, 2));
+		}
+
+		[Test]
 		public void VerifyCampaignTimesCanBeSet()
 		{
 			_workloadDayBase.Lock();
