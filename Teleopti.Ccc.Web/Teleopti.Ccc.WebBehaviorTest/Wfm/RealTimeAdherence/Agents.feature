@@ -56,7 +56,7 @@ Scenario: See current states
 	When I view real time adherence for agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status
-		| Name                     |              |
+		| Field                    | Value        |
 		| Name                     | Pierre Baldi |
 		| State                    | Pause        |
 		| Activity                 | Phone        |
@@ -83,7 +83,7 @@ Scenario: See state updates
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status
-		| Name                     |              |
+		| Field                    | Value        |
 		| Name                     | Pierre Baldi |
 		| State                    | Pause        |
 		| Activity                 | Phone        |
@@ -115,10 +115,10 @@ Scenario: See agent status when call center is in Istanbul
 	Given I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2015-03-24 08:00 |
-	| End time                 | 2015-03-24 10:00 |
-	| Activity                 | Phone            |
+	| Field      | Value            |
+	| Start time | 2015-03-24 08:00 |
+	| End time   | 2015-03-24 10:00 |
+	| Activity   | Phone            |
 	When the utc time is '2015-03-24 06:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2015-03-24 07:00:00'
