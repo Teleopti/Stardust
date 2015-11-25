@@ -638,12 +638,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
 					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
 						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Sum(t => t.OverrideAverageAfterTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
+						: null;
 					}
 					else
 					{
 						recalculateDailyAverageTimesWhenZeroTasks();
 					}
-						: null;
 
 					_totalAverageTaskTime = TimeSpan.FromTicks((long)
 							(_taskPeriodList.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
