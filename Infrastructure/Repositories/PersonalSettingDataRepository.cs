@@ -36,11 +36,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public T FindValueByKeyAndOwnerPerson<T>(string key, IPerson ownerPerson, T defaultValue) where T : class, ISettingValue
 		{
 
-			var data = CurrentUnitOfWork.Current().Session().CreateCriteria(typeof(PersonalSettingData))
-						.Add(Restrictions.Eq("Key", key))
-						.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
-						.SetCacheable(true)
-						.UniqueResult<ISettingData>();
+			var data = CurrentUnitOfWork.Current().Session().CreateCriteria(typeof (PersonalSettingData))
+				.Add(Restrictions.Eq("Key", key))
+				.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
+				.SetCacheable(true)
+				.UniqueResult<ISettingData>()
+					   ??
+					   new PersonalSettingData(key,
+					   	TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(CurrentUnitOfWork)));
 
             return data.GetValue(defaultValue);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
@@ -219,6 +220,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Clear();
 			Assert.AreEqual(44, rep.FindValueByKey("rätt", defaultValue).Data);
 		}
+
+		[Test]
+		public void VerifyNotFindValueByKeyAndPersonThenUseDefault()
+		{
+			setupFieldsForExternalPerson();
+
+			var rep = new PersonalSettingDataRepository(UnitOfWork);
+			testData s = rep.FindValueByKeyAndOwnerPerson("idonotexist", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(UnitOfWork))), new testData { Data = -1});
+
+			s.Data.Should().Be.EqualTo(-1);
+		}
+
 
         [Serializable]
         private class testData : SettingValue
