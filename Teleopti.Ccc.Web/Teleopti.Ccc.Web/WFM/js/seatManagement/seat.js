@@ -54,4 +54,3 @@ fabric.Seat.fromObject = function (object, callback) {
 };
 
 
-
