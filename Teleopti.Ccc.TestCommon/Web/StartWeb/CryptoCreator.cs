@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb
 {
     public class CryptoCreator
     {

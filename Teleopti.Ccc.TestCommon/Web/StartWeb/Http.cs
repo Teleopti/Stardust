@@ -4,9 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb
 {
 	public static class Http
 	{

@@ -2,9 +2,8 @@
 using System.IO;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb
 {
 	public static class TestSiteConfigurationSetup
 	{

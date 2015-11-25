@@ -214,7 +214,6 @@
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
     <Compile Include="Core\Navigation\FakeClientTimeUsingSinonProvenWay.cs" />
     <Compile Include="Core\Navigation\FakeTimeUsingMyTimeMethod.cs" />
-    <Compile Include="Core\Http.cs" />
     <Compile Include="Core\Navigation\ApplicationStartupTimeout.cs" />
     <Compile Include="Core\Navigation\BustCache.cs" />
     <Compile Include="Core\Navigation\GotoArgs.cs" />
@@ -552,7 +551,6 @@
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
-    <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\Setups\DoNotUse\AbsenceInContractTime.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
@@ -577,9 +575,6 @@
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\BudgetdayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\BudgetGroupConfigurable.cs" />
-    <Compile Include="Data\AllTags.cs" />
-    <Compile Include="Data\FileConfigurator.cs" />
-    <Compile Include="Data\Paths.cs" />
     <Compile Include="MyTime\PreferencesExtendedTemplate.feature.cs">
       <DependentUpon>PreferencesExtendedTemplate.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -819,7 +814,6 @@
     </Compile>
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
-    <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation\Navigation.cs" />

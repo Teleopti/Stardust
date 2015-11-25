@@ -62,6 +62,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="IISExpress.Automation, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IISExpress.Automation.0.1.1\lib\net40\IISExpress.Automation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -111,6 +115,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
@@ -488,6 +493,12 @@
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
+    <Compile Include="Web\StartWeb\AllTags.cs" />
+    <Compile Include="Web\StartWeb\CryptoCreator.cs" />
+    <Compile Include="Web\StartWeb\FileConfigurator.cs" />
+    <Compile Include="Web\StartWeb\Http.cs" />
+    <Compile Include="Web\StartWeb\Paths.cs" />
+    <Compile Include="Web\StartWeb\TestSiteConfigurationSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -520,6 +531,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Teleopti.Ccc.TestCommon.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
