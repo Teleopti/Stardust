@@ -143,7 +143,15 @@ namespace Teleopti.Ccc.DBManager.Library
 					handleWithRetry(sql, action, ++attempt);
 				}
 
-				_upgradeLog.Write(exception.Message, "ERROR");
+				string message = exception.Message;
+				SqlException sqlException;
+				if ((sqlException = exception as SqlException) != null)
+				{
+					message = message + Environment.NewLine + "Error numbers: " +
+							  string.Join(", ", sqlException.Errors.OfType<SqlError>().Select(e => e.Number));
+				}
+
+				_upgradeLog.Write(message, "ERROR");
 				_upgradeLog.Write("Failing script: " + sql, "ERROR");
 				
 				throw;
