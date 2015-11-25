@@ -48,7 +48,7 @@ describe('seatmap editor controller tests', function () {
 			});
 
 			done();
-		}, 5000);
+		}, 4000);
 
 	});
 
