@@ -10,23 +10,14 @@ Background:
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with full access
 	And Pierre Baldi has a person period with
-	 | Field          | Value        |
-	 | Team           | Red          |
-	 | Start Date     | 2015-11-23   |
-	And Ashley Andeen has a person period with
-	 | Field          | Value         |
-	 | Team           | Red           |
-	 | Start Date     | 2015-11-23   |
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2015-11-23 |
 	And John King has a person period with
-	 | Field          | Value         |
-	 | Team           | Red           |
-	 | Start Date     | 2015-11-23   |
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2015-11-23 |
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Activity                 | Phone            |
-	| Start time               | 2015-11-23 08:00 |
-	| End time                 | 2015-11-23 17:00 |
-	And Ashley Andeen has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
 	| Start time               | 2015-11-23 08:00 |
@@ -64,7 +55,6 @@ Scenario: See agents with the highest alarm time first
 # that toggle the screen toggle off if the feature toggle is on ;)
 	And I am viewing real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And 'John King' sets his phone state to 'Ready'
 	When the time is '2015-11-23 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
