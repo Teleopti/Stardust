@@ -83,5 +83,29 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			Assert.IsTrue(locationViewModel.Seats[1].RoleIdList.Count == 1);
 			Assert.AreEqual(role1.Id, locationViewModel.Seats[1].RoleIdList.Single());
 		}
+
+		[Test]
+		public void ShouldLoadPropertiesInTheSeats()
+		{
+			var role1 = ApplicationRoleFactory.CreateRole("role1", "Role 1");
+			role1.SetId(Guid.NewGuid());
+
+			var location = new SeatMapLocation() { Name = "Location" };
+			location.SetId(Guid.NewGuid());
+			var seat1 = location.AddSeat("Seat1", 1);
+			seat1.SetRoles(new IApplicationRole[] {role1});
+
+			_seatMapLocationRepository.Add(location);
+
+			var provider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
+			var locationViewModel = provider.Get(null);
+
+			Assert.IsTrue(locationViewModel.Seats.Count == 1);
+			Assert.IsTrue(locationViewModel.Seats.Single().Id == seat1.Id);
+			Assert.IsTrue(locationViewModel.Seats[0].RoleIdList.Count == 1);
+			Assert.AreEqual(role1.Id, locationViewModel.Seats[0].RoleIdList.Single());
+			Assert.AreEqual(seat1.Priority, locationViewModel.Seats[0].Priority);
+			Assert.AreEqual(seat1.Name, locationViewModel.Seats[0].Name);
+		}
 	}
 }

@@ -14,9 +14,7 @@ fabric.Seat = fabric.util.createClass(fabric.Image, {
 
 	toObject: function () {
 		return fabric.util.object.extend(this.callSuper('toObject'), {
-			id: this.get('id'),
-			name: this.get('name'),
-			priority: this.get('priority'),
+			id: this.get('id')
 		});
 	},
 

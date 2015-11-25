@@ -392,14 +392,23 @@
 					return;
 				}
 
+				var seatsIdAndPriorityDic = {};
+				data.Seats.forEach(function(seatInfo) {
+					seatsIdAndPriorityDic[seatInfo.Id] = seatInfo.Priority;
+				});
+
 				canvas.loadFromJSON(json, function () {
 					canvas.renderAll();
 					var allSeats = getObjectsByType(canvas, 'seat');
 					for (var loadedSeat in allSeats) {
+
+						allSeats[loadedSeat].priority = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
+
 						if (allSeats[loadedSeat].priority > seatPriority) {
 							seatPriority = allSeats[loadedSeat].priority;
 						}
 					}
+					canvas.renderAll();
 					if (!allowEdit)
 						setSelectionMode(canvas, canSelect);
 					data.seatPriority = seatPriority;

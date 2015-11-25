@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 						Id = seat.Id.Value,
 						Name = seat.Name,
 						IsOccupied = bookings!=null && bookings.Any(booking => booking.Seat.Id == seat.Id),
-						RoleIdList = roles
+						RoleIdList = roles,
+						Priority = seat.Priority
 					};
 
 				}).ToList();
