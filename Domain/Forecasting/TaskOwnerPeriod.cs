@@ -541,10 +541,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
                 long averageAfterTaskTimeTicks = AverageAfterTaskTime.Ticks;
                 if (averageAfterTaskTimeTicks == 0) averageAfterTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-                ValueDistributor.DistributeTaskTimes(
-                    ((double)value.Ticks / averageAfterTaskTimeTicks),
-                    TaskOwnerDayOpenCollection(),
-                    TaskFieldToDistribute.AverageAfterTaskTime, value.Ticks);
+				ValueDistributor.DistributeAverageAfterTaskTime(
+					((double)value.Ticks / averageAfterTaskTimeTicks),
+					value,
+					TaskOwnerDayOpenCollection(),
+					DistributionType.ByPercent);
 
                 _averageAfterTaskTime = value;
 
@@ -582,10 +583,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
                 long averageTaskTimeTicks = AverageTaskTime.Ticks;
                 if (averageTaskTimeTicks == 0) averageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-                ValueDistributor.DistributeTaskTimes(
+                ValueDistributor.DistributeAverageTaskTime(
                     ((double)value.Ticks / averageTaskTimeTicks),
+					value,
                     TaskOwnerDayOpenCollection(),
-                    TaskFieldToDistribute.AverageTaskTime, value.Ticks);
+					DistributionType.ByPercent);
 
                 _averageTaskTime = value;
 

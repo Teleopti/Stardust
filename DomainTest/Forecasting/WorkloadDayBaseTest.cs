@@ -755,10 +755,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			using (mocks.Playback())
 			{
 				_workloadDayBase.SetQueueStatistics(provider);
+
 				Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[0].StatisticTask.StatCalculatedTasks);
 				Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
+
 				_workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
+
 				Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
+
 				_workloadDayBase.TaskPeriodList[0].Tasks = 104d;
 				_workloadDayBase.TaskPeriodList[0].AverageTaskTime = TimeSpan.FromSeconds(10);
 				_workloadDayBase.TaskPeriodList[0].AverageAfterTaskTime = TimeSpan.FromSeconds(20);
@@ -771,6 +775,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 												{
 														_workloadDayBase.TaskPeriodList[0]
 												});
+
 				Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
 				Assert.AreEqual(1.529d, Math.Round(_workloadDayBase.TaskPeriodList[1].Tasks), 3);
 				Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[1].AverageTaskTime);

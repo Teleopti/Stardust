@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
-using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -25,9 +21,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void DistributeValuesByPercent()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
-			double newTotal = 190d;
+			const double newTotal = 190d;
 			ValueDistributor.Distribute(newTotal, targets, DistributionType.ByPercent);
 			for (int i = 0; i < targets.Count; i++)
 			{
@@ -38,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldDistributeOverrideTasks()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
 			const double newDailyOverrideTasks = 190d;
 
@@ -53,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldClearOverrideTasks()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 			ValueDistributor.DistributeOverrideTasks(null, targets, null);
 
 			foreach (var target in targets)
@@ -65,9 +61,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldDistributeOverrideTasksByPatternWhenZeroForecast()
 		{
-			const double newDailyOverrideTasks = 190d; 
-			IList<TestDistributionTarget> targets = GetZeroDistributionTargetsForTest();
-			IList<TestDistributionTarget> pattern = GetDistributionTargetsForTest();
+			const double newDailyOverrideTasks = 190d;
+			IList<testDistributionTarget> targets = GetZeroDistributionTargetsForTest();
+			IList<testDistributionTarget> pattern = getDistributionTargetsForTest();
 
 			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets, pattern);
 
@@ -77,12 +73,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			}
 		}
 
-		private IList<TestDistributionTarget> GetZeroDistributionTargetsForTest()
+		private IList<testDistributionTarget> GetZeroDistributionTargetsForTest()
 		{
-			IList<TestDistributionTarget> targets = new List<TestDistributionTarget>();
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
 			for (int i = 0; i < 10; i++)
 			{
-				var target = new TestDistributionTarget()
+				var target = new testDistributionTarget()
 				{
 					Tasks = 0
 				};
@@ -91,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			return targets;
 		}
-		
+
 		/// <summary>
 		/// Distributes the values even test.
 		/// </summary>
@@ -102,9 +98,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void DistributeValuesEvenly()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
-			double newTotal = 190d;
+			const double newTotal = 190d;
 			ValueDistributor.Distribute(newTotal, targets, DistributionType.Even);
 			for (int i = 0; i < targets.Count; i++)
 			{
@@ -112,155 +108,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 				//3.5 is the expected distribution to each item
 				Assert.AreEqual(i + 11 + 3.5d, targets[i].Tasks);
 			}
-		}
-
-		/// <summary>
-		/// Distributes the task times average task time.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageTaskTime()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			double percentage = 0.25d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(1.5d), targets[0].AverageTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(3.75d), targets[9].AverageTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times average task time with zero as old value.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-19
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageTaskTimeWithZeroAsOldValue()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			foreach (TestDistributionTarget item in targets)
-			{
-				item.AverageTaskTime = TimeSpan.Zero;
-			}
-
-			double percentage = 0.25d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(1), targets[0].AverageTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(1), targets[9].AverageTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times average after task time with zero as old value.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-19
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageAfterTaskTimeWithZeroAsOldValue()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			foreach (TestDistributionTarget item in targets)
-			{
-				item.AverageAfterTaskTime = TimeSpan.Zero;
-			}
-
-			double percentage = 0.25d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(1), targets[0].AverageAfterTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(1), targets[9].AverageAfterTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times average task time with zero as new value.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-19
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageTaskTimeWithZeroAsNewValue()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			double percentage = 0d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[0].AverageTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[9].AverageTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times average after task time with zero as new value.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-19
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageAfterTaskTimeWithZeroAsNewValue()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			double percentage = 0d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[0].AverageAfterTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(0d), targets[9].AverageAfterTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times average after task time.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesAverageAfterTaskTime()
-		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-
-			const double percentage = 0.25d;
-			ValueDistributor.DistributeTaskTimes(percentage, targets, TaskFieldToDistribute.AverageAfterTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(0.25d), targets[0].AverageAfterTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(2.5d), targets[9].AverageAfterTaskTime);
-		}
-
-		/// <summary>
-		/// Distributes the task times with invalid class as target test.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		[Test]
-		public void DistributeTaskTimesWithInvalidClassAsTarget()
-		{
-			IList<Color> targets = new List<Color>();
-			targets.Add(Color.White);
-
-			ValueDistributor.DistributeTaskTimes(0.19d, targets, TaskFieldToDistribute.AverageTaskTime, TimeSpan.FromSeconds(1).Ticks);
-
-			Assert.AreEqual(1, targets.Count);
-			Assert.AreEqual(Color.White, targets[0]);
 		}
 
 		/// <summary>
@@ -292,8 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void DistributeValuesWithZeroTasks()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
-			foreach (TestDistributionTarget testDistributionTarget in targets)
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+			foreach (testDistributionTarget testDistributionTarget in targets)
 			{
 				testDistributionTarget.Tasks = 0;
 			}
@@ -301,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			ValueDistributor.Distribute(75d, targets, DistributionType.ByPercent);
 
 			Assert.AreEqual(10, targets.Count);
-			foreach (TestDistributionTarget testDistributionTarget in targets)
+			foreach (testDistributionTarget testDistributionTarget in targets)
 			{
 				Assert.AreEqual(7.5d, testDistributionTarget.Tasks);
 			}
@@ -317,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void DistributeValuesWithOneZeroTask()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 			targets[8].Tasks = 0;
 
 			ValueDistributor.Distribute(75d, targets, DistributionType.ByPercent);
@@ -329,11 +176,55 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void DistributeTaskTimesEvenAverageAfterTaskTime()
+		public void DistributeAverageTaskTimeEvenly()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
-			ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(5), targets, TaskFieldToDistribute.AverageAfterTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
+			ValueDistributor.DistributeAverageTaskTime(0d, TimeSpan.FromSeconds(10), targets, DistributionType.Even);
+
+			Assert.AreEqual(10, targets.Count);
+			Assert.AreEqual(TimeSpan.FromSeconds(10d), targets[0].AverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(10d), targets[9].AverageTaskTime);
+		}
+
+		[Test]
+		public void DistributeAverageTaskTimeByPercentage()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { AverageTaskTime = TimeSpan.FromSeconds(60) });
+			targets.Add(new testDistributionTarget { AverageTaskTime = TimeSpan.FromSeconds(120) });
+
+			ValueDistributor.DistributeAverageTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(60).Ticks * 0.5d, targets[0].AverageTaskTime.Ticks);
+			Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks * 0.5d, targets[1].AverageTaskTime.Ticks);
+		}
+
+		[Test]
+		public void DistributeAverageTaskTimeByPercentageWhenOriginalValueIsZero()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { AverageTaskTime = TimeSpan.FromSeconds(0) });
+
+			ValueDistributor.DistributeAverageTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].AverageTaskTime.Ticks);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void VerifyDistributeAverageTaskTimesEvenDoesNotAcceptNegativeTime()
+		{
+			ValueDistributor.DistributeAverageTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even);
+		}
+
+		[Test]
+		public void DistributeAverageAfterTaskTimeEvenly()
+		{
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeAverageAfterTaskTime(0d, TimeSpan.FromSeconds(5), targets, DistributionType.Even);
 
 			Assert.AreEqual(10, targets.Count);
 			Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[0].AverageAfterTaskTime);
@@ -341,21 +232,149 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void DistributeTaskTimesEvenAverageTaskTime()
+		public void DistributeAverageAfterTaskTimeByPercentage()
 		{
-			IList<TestDistributionTarget> targets = GetDistributionTargetsForTest();
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
 
-			ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(10), targets, TaskFieldToDistribute.AverageTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
+			targets.Add(new testDistributionTarget { AverageAfterTaskTime = TimeSpan.FromSeconds(60) });
+			targets.Add(new testDistributionTarget { AverageAfterTaskTime = TimeSpan.FromSeconds(120) });
 
-			Assert.AreEqual(10, targets.Count);
-			Assert.AreEqual(TimeSpan.FromSeconds(10d), targets[0].AverageTaskTime);
-			Assert.AreEqual(TimeSpan.FromSeconds(10d), targets[9].AverageTaskTime);
+			ValueDistributor.DistributeAverageAfterTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(60).Ticks * 0.5d, targets[0].AverageAfterTaskTime.Ticks);
+			Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks * 0.5d, targets[1].AverageAfterTaskTime.Ticks);
+		}
+
+		[Test]
+		public void DistributeAverageAfterTaskTimeByPercentageWhenOriginalValueIsZero()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { AverageAfterTaskTime = TimeSpan.FromSeconds(0) });
+
+			ValueDistributor.DistributeAverageAfterTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].AverageAfterTaskTime.Ticks);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void VerifyDistributeTaskTimesEvenDoesNotAcceptNegativeTime()
+		public void VerifyDistributeAverageAfterTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
-			ValueDistributor.DistributeTaskTimes(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), TaskFieldToDistribute.AverageTaskTime, DistributionType.Even, TimeSpan.FromSeconds(1).Ticks);
+			ValueDistributor.DistributeAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even);
+		}
+
+		[Test]
+		public void DistributeOverrideAverageTaskTimeEvenly()
+		{
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideAverageTaskTime(0d, TimeSpan.FromSeconds(5), targets, DistributionType.Even);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[0].OverrideAverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[9].OverrideAverageTaskTime);
+		}
+
+		[Test]
+		public void ShouldRemoveOverrideAverageTaskTimeDistribution()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+			targets.Add(new testDistributionTarget { OverrideAverageTaskTime = TimeSpan.FromSeconds(60) });
+
+			ValueDistributor.DistributeOverrideAverageTaskTime(0d, null, targets, DistributionType.Even);
+
+			Assert.AreEqual(null, targets[0].OverrideAverageTaskTime);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void VerifyDistributeOverrideAverageTaskTimesEvenDoesNotAcceptNegativeTime()
+		{
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideAverageTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even);
+		}
+
+		[Test]
+		public void DistributeOverrideAverageTaskTimeByPercentage()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { OverrideAverageTaskTime = TimeSpan.FromSeconds(60) });
+			targets.Add(new testDistributionTarget { OverrideAverageTaskTime = TimeSpan.FromSeconds(120) });
+
+			ValueDistributor.DistributeOverrideAverageTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(60).Ticks * 0.5d, targets[0].OverrideAverageTaskTime.Value.Ticks);
+			Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks * 0.5d, targets[1].OverrideAverageTaskTime.Value.Ticks);
+		}
+
+		[Test]
+		public void DistributeOverrideAverageTaskTimeByPercentageWhenOriginalValueIsZero()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { OverrideAverageTaskTime = TimeSpan.FromSeconds(0) });
+
+			ValueDistributor.DistributeOverrideAverageTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].OverrideAverageTaskTime.Value.Ticks);
+		}
+
+
+
+		[Test]
+		public void DistributeOverrideAverageAfterTaskTimeEvenly()
+		{
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0d, TimeSpan.FromSeconds(5), targets, DistributionType.Even);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[0].OverrideAverageAfterTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(5d), targets[9].OverrideAverageAfterTaskTime);
+		}
+
+		[Test]
+		public void ShouldRemoveOverrideAverageAfterTaskTimeDistribution()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+			targets.Add(new testDistributionTarget { OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(60) });
+
+			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0d, null, targets, DistributionType.Even);
+
+			Assert.AreEqual(null, targets[0].OverrideAverageAfterTaskTime);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void VerifyDistributeOverrideAverageAfterTaskTimesEvenDoesNotAcceptNegativeTime()
+		{
+			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even);
+		}
+
+		[Test]
+		public void DistributeOverrideAverageAfterTaskTimeByPercentage()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(60) });
+			targets.Add(new testDistributionTarget { OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(120) });
+
+			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(60).Ticks * 0.5d, targets[0].OverrideAverageAfterTaskTime.Value.Ticks);
+			Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks * 0.5d, targets[1].OverrideAverageAfterTaskTime.Value.Ticks);
+		}
+
+		[Test]
+		public void DistributeOverrideAverageAfterTaskTimeByPercentageWhenOriginalValueIsZero()
+		{
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
+
+			targets.Add(new testDistributionTarget { OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(0) });
+
+			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0.5d, TimeSpan.FromSeconds(30), targets, DistributionType.ByPercent);
+
+			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].OverrideAverageAfterTaskTime.Value.Ticks);
 		}
 
 		[Test]
@@ -389,12 +408,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created by: robink
 		/// Created date: 2007-12-13
 		/// </remarks>
-		private static IList<TestDistributionTarget> GetDistributionTargetsForTest()
+		private static IList<testDistributionTarget> getDistributionTargetsForTest()
 		{
-			IList<TestDistributionTarget> targets = new List<TestDistributionTarget>();
+			IList<testDistributionTarget> targets = new List<testDistributionTarget>();
 			for (int i = 0; i < 10; i++)
 			{
-				var target = new TestDistributionTarget()
+				var target = new testDistributionTarget()
 				{
 					Tasks = i + 11,
 					AverageAfterTaskTime = TimeSpan.FromSeconds(i + 1),
@@ -413,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created by: robink
 		/// Created date: 2007-12-13
 		/// </remarks>
-		private class TestDistributionTarget : ITaskOwner
+		private sealed class testDistributionTarget : ITaskOwner
 		{
 			#region ITaskOwner Members
 
@@ -685,7 +704,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			public TimeSpan? OverrideAverageAfterTaskTime { get; set; }
 
-			public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
+			public void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
 			{
 				_overrideTasks = task;
 			}

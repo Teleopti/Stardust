@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -55,64 +53,36 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        /// <summary>
-        /// Distributes the task times.
-        /// </summary>
-        /// <param name="changeAsPercent">The change as percent.</param>
-        /// <param name="targets">The targets.</param>
-        /// <param name="taskFieldToDistribute">The task field to distribute.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-13
-        /// </remarks>
-        public static void DistributeTaskTimes(double changeAsPercent, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, Double originalValue)
-        {
-            DistributeTaskTimes(changeAsPercent, TimeSpan.Zero, targets, taskFieldToDistribute, DistributionType.ByPercent, originalValue);
-        }
+        
+		public static void DistributeAverageTaskTime(double changeAsPercent, TimeSpan newTime, IEnumerable targets, DistributionType distributionType)
+		{
+			averageTaskTimeCheck(newTime);
 
-        /// <summary>
-        /// Distributes the task times.
-        /// </summary>
-        /// <param name="changeAsPercent">The change as percent.</param>
-        /// <param name="newTime">The new time.</param>
-        /// <param name="targets">The targets.</param>
-        /// <param name="taskFieldToDistribute">The task field to distribute.</param>
-        /// <param name="distributionType">Type of the distribution.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-08-25
-        /// </remarks>
-        public static void DistributeTaskTimes(double changeAsPercent, TimeSpan newTime, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, DistributionType distributionType, double originalValue)
-        {
-            if (newTime < TimeSpan.Zero) throw new ArgumentOutOfRangeException("newTime", "The new time cannot be negative. Use TimeSpan.Zero instead.");
-			IList<IForecastingTarget> typedTargets = targets.OfType<IForecastingTarget>().ToList();
+			int numberOfTargets;
+			var typedTargets = forecastingTargets(targets, out numberOfTargets);
+			if (numberOfTargets == 0) return;
 
-            int numberOfTargets = typedTargets.Count();
-            if (numberOfTargets == 0) return;
+			foreach (var owner in typedTargets)
+			{
+				var averageTaskTimeTicks = distributeTimesForInterval(changeAsPercent, newTime, distributionType, owner.AverageTaskTime.Ticks);
+				owner.AverageTaskTime = TimeSpan.FromTicks(averageTaskTimeTicks);
+			}
+		}
 
-			PropertyInfo property = typeof(IForecastingTarget).GetProperty(taskFieldToDistribute.ToString());
-			foreach (IForecastingTarget owner in typedTargets)
-            {
-				var propertyValue = property.GetValue(owner, null);
+		public static void DistributeAverageAfterTaskTime(double changeAsPercent, TimeSpan newTime, IEnumerable targets, DistributionType distributionType)
+		{
+			averageTaskTimeCheck(newTime);
 
-	            long averageTaskTimeTicks = 0;
-	            if (property.PropertyType != typeof (TimeSpan?))
-		            averageTaskTimeTicks = ((TimeSpan) propertyValue).Ticks;
+			int numberOfTargets;
+			var typedTargets = forecastingTargets(targets, out numberOfTargets);
+			if (numberOfTargets == 0) return;
 
-	            if (distributionType == DistributionType.ByPercent)
-                {
-                    if (averageTaskTimeTicks == 0)
-                        averageTaskTimeTicks = (long)originalValue;  //TimeSpan.FromSeconds(1).Ticks;
-                    else
-                    averageTaskTimeTicks = (long)(averageTaskTimeTicks * changeAsPercent);
-                }
-                else
-                {
-                    averageTaskTimeTicks = newTime.Ticks;
-                }
-                property.SetValue(owner, TimeSpan.FromTicks(averageTaskTimeTicks), null);
-            }
-        }
+			foreach (var owner in typedTargets)
+			{
+				var averageAfterTaskTimeTicks = distributeTimesForInterval(changeAsPercent, newTime, distributionType, owner.AverageAfterTaskTime.Ticks);
+				owner.AverageAfterTaskTime = TimeSpan.FromTicks(averageAfterTaskTimeTicks);
+			}
+		}
 
 	    public static void DistributeToFirstOpenPeriod(double newTotal, IEnumerable<ITemplateTaskPeriod> targets, IList<TimePeriod> openHourList, TimeZoneInfo targetTimeZoneInfo)
 	    {
@@ -125,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Common
 		    }		    
 	    }
 
-		public static void DistributeOverrideTasks(double? newTotal, IEnumerable<ITaskOwner> targets, IEnumerable<IForecastingTarget> intradayCallPattern)
+	    public static void DistributeOverrideTasks(double? newTotal, IEnumerable<ITaskOwner> targets, IEnumerable<IForecastingTarget> intradayCallPattern)
 		{
 			var typedTargets = targets.OfType<ITaskOwner>();
 			var dailyTasks = typedTargets.Sum(t => t.Tasks);
@@ -154,6 +124,89 @@ namespace Teleopti.Ccc.Domain.Common
 				}
 			}
 		}
+
+		public static void DistributeOverrideAverageTaskTime(double changeAsPercent, TimeSpan? newTime, IEnumerable targets, DistributionType distributionType)
+		{
+			int numberOfTargets;
+			var typedTargets = forecastingTargets(targets, out numberOfTargets);
+			if (numberOfTargets == 0) return;
+
+			if (newTime.HasValue)
+			{
+				averageTaskTimeCheck(newTime.Value);
+				foreach (var owner in typedTargets)
+				{
+					var originalValueTicks = owner.OverrideAverageTaskTime.HasValue ? owner.OverrideAverageTaskTime.Value.Ticks : 0;
+					var overrideAverageTaskTimeTicks = distributeTimesForInterval(changeAsPercent, newTime.Value, distributionType, originalValueTicks);
+					owner.OverrideAverageTaskTime = TimeSpan.FromTicks(overrideAverageTaskTimeTicks);
+				}
+			}
+			else
+			{
+				foreach (var owner in typedTargets)
+				{
+					owner.OverrideAverageTaskTime = null;
+				}
+			}
+	    }
+
+		public static void DistributeOverrideAverageAfterTaskTime(double changeAsPercent, TimeSpan? newTime, IEnumerable targets, DistributionType distributionType)
+	    {
+			int numberOfTargets;
+			var typedTargets = forecastingTargets(targets, out numberOfTargets);
+			if (numberOfTargets == 0) return;
+
+			if (newTime.HasValue)
+			{
+				averageTaskTimeCheck(newTime.Value);
+				foreach (var owner in typedTargets)
+				{
+					var originalValueTicks = owner.OverrideAverageAfterTaskTime.HasValue ? owner.OverrideAverageAfterTaskTime.Value.Ticks : 0;
+					var overrideAverageAfterTaskTimeTicks = distributeTimesForInterval(changeAsPercent, newTime.Value, distributionType, originalValueTicks);
+					owner.OverrideAverageAfterTaskTime = TimeSpan.FromTicks(overrideAverageAfterTaskTimeTicks);
+				}
+			}
+			else
+			{
+				foreach (var owner in typedTargets)
+				{
+					owner.OverrideAverageAfterTaskTime = null;
+				}
+			}
+	    }
+
+		private static void averageTaskTimeCheck(TimeSpan newTime)
+		{
+			if (newTime < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException("newTime", "The new time cannot be negative. Use TimeSpan.Zero instead.");
+		}
+
+		private static IEnumerable<IForecastingTarget> forecastingTargets(IEnumerable targets, out int numberOfTargets)
+		{
+			IList<IForecastingTarget> typedTargets = targets.OfType<IForecastingTarget>().ToList();
+
+			numberOfTargets = typedTargets.Count();
+			return typedTargets;
+		}
+
+		private static long distributeTimesForInterval(double changeAsPercent, TimeSpan newTime,
+			DistributionType distributionType, long originalAverageTaskTimeTicks)
+		{
+			long newAverageTaskTimeTicks;
+			if (distributionType == DistributionType.ByPercent)
+			{
+				if (originalAverageTaskTimeTicks == 0)
+					newAverageTaskTimeTicks = newTime.Ticks;
+				else
+					newAverageTaskTimeTicks = (long)(originalAverageTaskTimeTicks * changeAsPercent);
+			}
+			else
+			{
+				newAverageTaskTimeTicks = newTime.Ticks;
+			}
+			return newAverageTaskTimeTicks;
+		}
+
     }
 
     /// <summary>

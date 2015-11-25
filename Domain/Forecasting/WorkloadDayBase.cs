@@ -353,13 +353,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 //end fix
                 long averageTaskTimeTicks = AverageTaskTime.Ticks;
                 if (averageTaskTimeTicks == 0) averageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-                ValueDistributor.DistributeTaskTimes(
+                ValueDistributor.DistributeAverageTaskTime(
                     ((double)value.Ticks / averageTaskTimeTicks),
                     value, 
 					_taskPeriodList,
-                    TaskFieldToDistribute.AverageTaskTime,
-                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, 
-					value.Ticks);
+                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
                 _turnOffInternalRecalc = currentState;
 
                 _averageTaskTime = value;
@@ -394,11 +392,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
                 long averageAfterTaskTimeTicks = AverageAfterTaskTime.Ticks;
                 if (averageAfterTaskTimeTicks == 0) averageAfterTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-                ValueDistributor.DistributeTaskTimes(
+                ValueDistributor.DistributeAverageAfterTaskTime(
                     ((double)value.Ticks / averageAfterTaskTimeTicks),
                     value, _taskPeriodList,
-                    TaskFieldToDistribute.AverageAfterTaskTime,
-                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType, value.Ticks);
+                    _workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
                 _turnOffInternalRecalc = currentState;
 
                 _averageAfterTaskTime = value;
@@ -1123,13 +1120,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				if (OverrideAverageTaskTime.HasValue)
 					overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
 				
-				ValueDistributor.DistributeTaskTimes(
+				ValueDistributor.DistributeOverrideAverageTaskTime(
 					((double)value.Value.Ticks / overrideAverageTaskTimeTicks),
 					value.Value,
 					_taskPeriodList,
-					TaskFieldToDistribute.OverrideAverageTaskTime,
-					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType,
-					value.Value.Ticks);
+					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
 				_turnOffInternalRecalc = currentState;
 
 				_overrideAverageTaskTime = value;
@@ -1157,13 +1152,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				if (OverrideAverageAfterTaskTime.HasValue)
 					overrideAverageAfterTaskTimeTicks = OverrideAverageAfterTaskTime.Value.Ticks;
 
-				ValueDistributor.DistributeTaskTimes(
+				ValueDistributor.DistributeOverrideAverageAfterTaskTime(
 					((double)value.Value.Ticks / overrideAverageAfterTaskTimeTicks),
 					value.Value,
 					_taskPeriodList,
-					TaskFieldToDistribute.OverrideAverageAfterTaskTime,
-					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType,
-					value.Value.Ticks);
+					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
 				_turnOffInternalRecalc = currentState;
 
 				_overrideAverageAfterTaskTime = value;

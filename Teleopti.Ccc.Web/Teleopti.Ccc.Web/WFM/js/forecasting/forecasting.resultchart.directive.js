@@ -53,7 +53,7 @@
 							grouped: true,
 							draggable: true,
 							isselectable: function (chartPoint) {
-								if (chartPoint.id === 'vtc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
+								if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
 									return false;
 								return true;
 							}
