@@ -26,7 +26,7 @@ module.exports = function(config) {
 	],
 
 	proxies: {
-		'/js/SeatManagement/Images/': '/basejs/seatManagement/images/'
+		'/js/seatManagement/images/': '/base/js/seatManagement/images/'
 	},
 
 	// list of files to exclude

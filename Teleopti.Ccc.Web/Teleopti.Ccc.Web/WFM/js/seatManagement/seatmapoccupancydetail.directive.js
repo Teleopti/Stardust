@@ -99,14 +99,14 @@
 
 			canvas().on('object:selected', function (e) {
 				onObjectSelection(e);
-				vm.parentVm.showRightPanel = true;
+				vm.parentVm.rightPanelOption.panelState = true;
 			});
 
 			canvas().on('selection:created', function (e) {
 				if (e.e && e.e.shiftKey) {
 					onObjectSelection(e);
 				}
-				vm.parentVm.showRightPanel = true;
+				vm.parentVm.rightPanelOption.panelState = true;
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
@@ -128,7 +128,7 @@
 					vm.occupancyDetails = undefined;
 					vm.previousSelectedSeatIds = [];
 				}
-				vm.parentVm.showRightPanel = false;
+				vm.parentVm.rightPanelOption.panelState = false;
 			});
 
 		};
@@ -250,6 +250,9 @@
 		var vm = controllers[0];
 		vm.parentVm = controllers[1];
 		vm.rightPanelVm = controllers[2];
+		
+		vm.parentVm.rightPanelOption.panelTitle = "Seat Information";//need to translate
+
 		vm.init();
 	};
 

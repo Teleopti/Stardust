@@ -27,20 +27,29 @@ describe('seatmap editor controller tests', function () {
 	}));
 
 
-	it('should be able to add seats to parentVm Seat array', function () {
-		controller.addSeat();
-		controller.addSeat();
-		controller.addSeat();
-		controller.addSeat();
-		controller.save();
 
-		expect(seatMapServiceParams.Id).toEqual(undefined);
-		expect(seatMapServiceParams.Location).toEqual(undefined);
-		expect(seatMapServiceParams.ChildLocations.length).toEqual(0);
-		expect(seatMapServiceParams.Seats.length).toEqual(4);
-		seatMapServiceParams.Seats.forEach(function (seat) {
-			expect(seat.RoleIdList.length).toEqual(0);
-		});
+	it('should be able to add seats to parentVm Seat array', function (done) {
+
+		controller.addSeat();
+		controller.addSeat();
+		controller.addSeat();
+		controller.addSeat();
+
+		setTimeout(function () {
+
+			controller.save();
+
+			expect(seatMapServiceParams.Id).toEqual(undefined);
+			expect(seatMapServiceParams.Location).toEqual(undefined);
+			expect(seatMapServiceParams.ChildLocations.length).toEqual(0);
+			expect(seatMapServiceParams.Seats.length).toEqual(4);
+			seatMapServiceParams.Seats.forEach(function (seat) {
+				expect(seat.RoleIdList.length).toEqual(0);
+			});
+
+			done();
+		}, 5000);
+
 	});
 
 
@@ -58,7 +67,7 @@ describe('seatmap editor controller tests', function () {
 		controller.parentVm = {
 			seats: [],
 			getCanvas: function () { return canvas; },
-			toggleRightPanel: function () { }
+			rightPanelOption: {}
 		};
 	};
 

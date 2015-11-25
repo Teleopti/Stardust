@@ -1,40 +1,28 @@
 ﻿'use strict';
 
-
 (function () {
 
 	angular.module('wfm.seatMap').controller('seatmapObjectPropertyCtrl', seatmapObjectPropertyCtrl);
 
-	seatmapObjectPropertyCtrl.$inject = ['$scope'];
-
-	function seatmapObjectPropertyCtrl($scope) {
+	function seatmapObjectPropertyCtrl() {
 		var vm = this;
 
-		vm.updateRolesStatus = function () {
-			vm.roles.forEach(function (role) {
-				var hasCount = 0;
-				role.Status = "none";
-				role.Selected = false;
+		vm.rolesStatus = function(role) {
+			var appliedRoleCount = 0;
+			role.Selected = false;
 
-				vm.seats.forEach(function (seat) {
-					var roleIndex = seat.RoleIdList.indexOf(role.Id);
-					if (roleIndex > -1) hasCount++;
-				});
-				if (hasCount === vm.seats.length) {
-					role.Status = "all";
-					role.Selected = true;
-				} else if (hasCount < vm.seats.length && hasCount > 0) {
-					role.Status = "partial";
-				}
+			vm.seats.forEach(function (seat) {
+				var roleIndex = seat.RoleIdList.indexOf(role.Id);
+				if (roleIndex > -1) appliedRoleCount++;
 			});
-		};
 
-		vm.getRoleById = function (id) {
-			for (var i = 0; i < vm.roles.length; i++) {
-				if (vm.roles[i].Id == id)
-					return vm.roles[i];
+			if (appliedRoleCount === vm.seats.length) {
+				role.Selected = true;
+				return false;
+
+			} else if (appliedRoleCount < vm.seats.length && appliedRoleCount > 0) {
+				return true;
 			}
-			return {};
 		};
 
 		vm.selectedStatusChanged = function (role) {
@@ -47,27 +35,7 @@
 					seat.RoleIdList.splice(roleIndex, 1);
 				}
 			});
-			
 		};
-
-		vm.getCorrespondingRoleNames = function (seat) {
-			var seatRoleNames = [];
-			seat.RoleIdList.forEach(function (seatRoleId) {
-				seatRoleNames.push(vm.getRoleById(seatRoleId).DescriptionText);
-			});
-			return seatRoleNames;
-		};
-
-		$scope.$watch(function () { return vm.seats.map(function (seat) { return seat.Id; }); },
-			function () {
-				vm.updateRolesStatus();
-			}, true);
-
-		vm.init = function () {
-			vm.updateRolesStatus();
-		};
-
-		vm.init();
 	};
 
 	angular.module('wfm.seatMap').directive('seatmapObjectProperty', seatmapObjectProperty);
@@ -93,8 +61,6 @@
  * Version: 1.0.0 - 2015-07-01T06:28:52.320Z
  * License: MIT
  */
-
-
 (function () {
 	'use strict';
 	/**

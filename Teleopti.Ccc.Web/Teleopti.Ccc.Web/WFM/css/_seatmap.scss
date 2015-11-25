@@ -309,7 +309,6 @@ seatmap-right-panel{
 		max-width:600px;
 		top:0;
 		bottom:0;
-		margin-left:-10px;
 		transition:all 0.35s ease-in-out;
 
 		.rg-left{
@@ -460,7 +459,7 @@ people-selection-list>div{
 	bottom: 0;
 	position: absolute;
 	right: 0;
-	left: 0;
+	left: 3px;
 }
 
 .seat-booking-list{
@@ -468,7 +467,8 @@ people-selection-list>div{
 	position:absolute;
 	top:40px;
 	right:0;
-	left:4px;
+	left:0;
+	bottom:0px;
 
 	.wfm-list{
 		overflow-y:auto;

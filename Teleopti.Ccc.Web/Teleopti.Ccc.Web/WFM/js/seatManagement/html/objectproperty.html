@@ -12,8 +12,8 @@
 			<i class="mdi mdi-filter-outline"></i>
 			<input class="text-filter" type="text" name="roleFilter" ng-model="roleFilter.Name"/>
 		</div>
-		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'">
-			<input type="checkbox" id="{{role.Id}}" ng-model="role.Selected" ng-change="vm.selectedStatusChanged(role)" seat-role-indeterminate="role.Status =='partial'" />
+		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'" style="transition: none;">
+			<input type="checkbox" id="{{role.Id}}" ng-model="role.Selected" ng-change="vm.selectedStatusChanged(role)" seat-role-indeterminate="vm.rolesStatus(role)" />
 			<label for="{{role.Id}}">
 				<span class="wfm-checkbox-toggle"></span>
 				<span class="wfm-checkbox-label">{{role.DescriptionText}}</span>

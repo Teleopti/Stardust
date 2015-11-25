@@ -3,8 +3,8 @@
 	<md-sidenav class="md-sidenav-right md-sidenav-skill-pael seatmap-right-panel drsElement" md-component-id="right-panel">
 
 		<div class="sidenav-header">
-			<span class="chevron pull-left" ng-click="vm.closePanel()"><i class="mdi mdi-arrow-right"></i></span>
-			<span>{{vm.panelTitle | translate}}</span>
+			<span class="chevron pull-left" ng-click="vm.closePanel()" ng-if="vm.panelOptions.showCloseButton"><i class="mdi mdi-arrow-right"></i></span>
+			<span>{{vm.panelOptions.panelTitle}}</span>
 		</div>
 
 		<div ng-transclude></div>

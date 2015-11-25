@@ -11,29 +11,26 @@
 		vm.openPanel = function () {
 			if (!$mdSidenav('right-panel').isOpen()) {
 				$mdSidenav('right-panel').open();
+				vm.onOpen();
 			}
-			vm.showRightPanel = true;
 			vm.showResizer = true;
 		};
 
 		vm.closePanel = function () {
 			if ($mdSidenav('right-panel').isOpen()) {
 				$mdSidenav('right-panel').close();
+				vm.onClose();
 			}
-			vm.showRightPanel = false;
 			vm.showResizer = false;
 		};
 
-		vm.togglePanel = function () {
-			if (vm.showRightPanel) {
+		$scope.$watch(function () { return vm.panelOptions.panelState }, function (newValue, oldValue) {
+			if (newValue) {
 				vm.openPanel();
-			} else {
+			}
+			else {
 				vm.closePanel();
 			}
-		};
-
-		$scope.$watch(function () { return vm.showRightPanel }, function () {
-			vm.togglePanel();
 		}, true);
 	};
 
@@ -45,12 +42,19 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {
-				showRightPanel: '=',
-				showToggleButton: '=',
-				panelTitle:'='
+				panelOptions: "=",
+				onOpen: "&",
+				onClose: "&"
 			},
 			transclude: true,
-			templateUrl: 'js/seatManagement/html/rightpanel.html'
+			templateUrl: 'js/seatManagement/html/rightpanel.html',
+			link: linkFunction
 		}
+	};
+
+	function linkFunction(scope, attr, element) {
+		scope.vm.panelOptions.panelTitle = scope.vm.panelOptions.panelTitle || "Right Panel";
+		scope.vm.panelOptions.showCloseButton = scope.vm.panelOptions.showCloseButton == true;
+		scope.vm.panelOptions.showBackdrop = scope.vm.panelOptions.showBackdrop == true;
 	};
 })();

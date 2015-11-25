@@ -43,11 +43,11 @@ angular.module('wfm.seatMap')
 			};
 		};
 
-		function paste(canvas) {
+		function paste(canvas, onCloneSuccess) {
 			if (editService.copiedGroup) {
-				cloneSelectedItems(canvas, editService.copiedGroup);
+				cloneSelectedItems(canvas, editService.copiedGroup, onCloneSuccess);
 			} else if (editService.copiedObject) {
-				cloneObject(canvas, editService.copiedObject);
+				cloneObject(canvas, editService.copiedObject, onCloneSuccess);
 			}
 		};
 
@@ -58,61 +58,57 @@ angular.module('wfm.seatMap')
 
 			if (activeGroup) {
 				canvas.discardActiveGroup();
-				removeObjectAndTidyReferences(canvas, activeGroup);
-
-				if (activeGroup._objects) {
-					activeGroup._objects.forEach(function (activeObj) {
-						removeObjectIds.push(activeObj.id);
-					});
-				}
-			}
-			else if (activeObject) {
+				removeObjectAndTidyReferences(canvas, activeGroup, removeObjectIds);
+			}else if (activeObject) {
 				canvas.remove(activeObject);
-				removeObjectAndTidyReferences(canvas, activeObject);
+				removeObjectAndTidyReferences(canvas, activeObject, removeObjectIds);
 
-				if (activeObject._objects) {
-					activeObject._objects.forEach(function(activeObj) {
-						removeObjectIds.push(activeObj.id);
-					});
-				} else {
+				if (!activeObject._objects) {
 					removeObjectIds.push(activeObject.id);
 				}
 			}
 
 			canvas.renderAll();
+
 			return removeObjectIds;
 		};
 
-		function removeObjectAndTidyReferences(canvas, obj) {
+		function removeObjectAndTidyReferences(canvas, obj, removeObjectIds) {
 			if (obj.get('type') == 'group') {
 				var objectsInGroup = obj.getObjects();
 				objectsInGroup.forEach(function (child) {
-					removeObjectAndTidyReferences(canvas, child);
+					removeObjectAndTidyReferences(canvas, child, removeObjectIds);
+					
 					canvas.remove(child);
+
+					if (child.get('type') == 'seat') {
+						removeObjectIds.push(child.id);
+					}
 				});
 			}
-
 		};
 
-		function cloneObject(canvas, objectToClone) {
+		function cloneObject(canvas, objectToClone, onCloneSuccess) {
 
 			objectToClone.clone(function (obj) {
-				pasteObject(canvas, obj);
+				var seatObjects = pasteObject(canvas, obj);
+				onCloneSuccess(seatObjects);
 				canvas.setActiveObject(obj);
 			});
 		};
 
-		function cloneSelectedItems(canvas, cloneGroup) {
-
+		function cloneSelectedItems(canvas, cloneGroup, onCloneSuccess) {
 			canvas.deactivateAll();
-
 			var childObjects = [];
 			var count = cloneGroup._objects.length;
 			var cloneCount = 0;
 
 			for (var i in cloneGroup._objects) {
 				cloneGroup._objects[i].clone(function (obj) {
-					pasteObject(canvas, obj);
+
+					var seatObjects = pasteObject(canvas, obj);
+					onCloneSuccess(seatObjects);
+
 					childObjects.push(obj);
 					cloneCount++;
 					if (cloneCount == count) {
@@ -132,18 +128,20 @@ angular.module('wfm.seatMap')
 			canvas.renderAll();
 		};
 
-		var pasteObject = function (canvas, obj) {
-			updateSeatDataOnPaste(obj, utils.getHighestSeatPriority(canvas));
+		function pasteObject(canvas, obj) {
+			var seatObjects = [];
+			updateSeatDataOnPaste(obj, utils.getHighestSeatPriority(canvas), seatObjects);
 			obj.set("top", obj.top + 35);
 			obj.set("left", obj.left + 35);
 			canvas.add(obj);
+			return seatObjects;
 		};
 
-		function updateSeatDataOnPaste(obj, seatPriority) {
+		function updateSeatDataOnPaste(obj, seatPriority, seatObjects) {
 			if (obj.type == 'group') {
 				for (var i = 0; i < obj._objects.length; i++) {
 					var childObj = obj._objects[i];
-					seatPriority = updateSeatDataOnPaste(childObj, seatPriority);
+					seatPriority = updateSeatDataOnPaste(childObj, seatPriority, seatObjects);
 				}
 
 			} else {
@@ -153,11 +151,12 @@ angular.module('wfm.seatMap')
 					obj.set('priority', seatPriority);
 					obj.set('name', seatPriority);
 					obj.set('id', getTemporaryId());
+					seatObjects.push({ Id: obj.id, isNew: true, Priority: obj.priority, Name: obj.name, RoleIdList: [] });
 				}
 			}
 
 			return seatPriority;
-		}
+		};
 
 		function getTemporaryId() {
 
@@ -205,11 +204,11 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		function addSeat(canvas, withDesk) {
+		function addSeat(canvas, withDesk, addSeatSuccess) {
 
 			var seatPriority = utils.getHighestSeatPriority(canvas) + 1;
 
-			var imgName = 'js/SeatManagement/Images/';
+			var imgName = 'js/seatManagement/images/';
 			if (withDesk) {
 				imgName += 'seatAndDesk.svg';
 			} else {
@@ -217,9 +216,10 @@ angular.module('wfm.seatMap')
 			}
 
 			var seatObj = {
+				id: getTemporaryId(),
 				name: seatPriority.toString(),
 				priority: seatPriority,
-				id: getTemporaryId(),
+				isNew: true,
 				roleIds :[]
 			};
 
@@ -227,7 +227,6 @@ angular.module('wfm.seatMap')
 				var groupedSVGObj = fabric.util.groupSVGElements(objects, options);
 
 				fabric.util.loadImage(imgName, function (img) {
-
 					var newSeat = new fabric.Seat(img, seatObj);
 					newSeat.set({
 						height: groupedSVGObj.height,
@@ -237,13 +236,15 @@ angular.module('wfm.seatMap')
 					canvas.add(newSeat);
 					newSeat.center();
 					newSeat.setCoords();
-					seatObj = newSeat;
+					addSeatSuccess({
+						Id: seatObj.id,
+						Name: seatObj.name,
+						Priority: seatObj.priority,
+						IsNew: (seatObj.isNew === undefined) ? false : true,
+						RoleIdList: seatObj.roleIds
+					});
 				});
 			});
-
-			seatObj.isNew = true;
-
-			return seatObj;
 		};
 
 		function addLocation(canvas, name) {

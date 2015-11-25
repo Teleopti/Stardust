@@ -2,7 +2,7 @@
 (function () {
 
 	angular.module('wfm.seatMap')
-		.factory('seatMapCanvasUtilsService', ['seatMapService', 'PermissionsService', '$timeout', function (seatMapService, permissionsService, timeout) {
+		.factory('seatMapCanvasUtilsService', ['seatMapService', '$timeout', function (seatMapService, timeout) {
 
 			var utils = {
 
@@ -20,8 +20,6 @@
 				getObjectsByType: getObjectsByType,
 				getActiveFabricObjectsByType: getActiveFabricObjectsByType,
 				getLocations: getLocations,
-				getSeatsWithRoles: getSeatsWithRoles,
-				getRolesForSeats: getRolesForSeats,
 				getActiveSeatObjects: getActiveSeatObjects,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
 				getHighestSeatPriority: getHighestSeatPriority,
@@ -36,10 +34,6 @@
 				selectGroupOfObjects: selectGroupOfObjects,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected,
 				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest,
-			};
-
-			function getRolesForSeats() {
-				return permissionsService.roles.get().$promise;
 			};
 
 			function matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats) {
@@ -58,7 +52,7 @@
 
 			function getActiveSeatObjects(canvas, seatObjects, activeSeats) {
 				var fabricSeats = getActiveFabricObjectsByType(canvas, 'seat');
-				return matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats);
+				matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats);
 			};
 
 			function setupCanvas(canvas) {
@@ -185,7 +179,6 @@
 					if (activeObj.type == type)
 						result.push(activeObj);
 				});
-
 				return result;
 			};
 
@@ -279,17 +272,6 @@
 					IsNew: (fabricSeatObj.isNew === undefined) ? false : true,
 					RoleIdList: fabricSeatObj.roleIds
 				};
-			};
-
-			function getSeatsWithRoles(canvas) {
-				var seatOjects = [];
-				var fabricSeatObjects = getObjectsByType(canvas, 'seat');
-
-				fabricSeatObjects.forEach(function (fabricSeatObj) {
-					seatOjects.push(createSeatFromFabricSeatObj(fabricSeatObj));
-				});
-
-				return seatOjects;
 			};
 
 			function getSeatObject(canvas, selectTopLeftSeat) {

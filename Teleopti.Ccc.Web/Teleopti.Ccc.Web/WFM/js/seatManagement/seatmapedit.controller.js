@@ -18,19 +18,18 @@
 		vm.fileCallbackFunction = null;
 		
 		vm.init = function () {
-			//TODO: We can enable opening right panel once we click on seat or location. It is a little annoying :(
-			//canvas().on('object:selected', function (e) {
-			//	vm.parentVm.getActiveObjects();
-			//});
+			canvas().on('object:selected', function (e) {
+				vm.parentVm.getActiveObjects();
+			});
 
-			//canvas().on('selection:created', function (e) {
-			//	if (e.e && e.e.shiftKey) {
-			//		vm.parentVm.getActiveObjects();
-			//	}
-			//});
+			canvas().on('selection:created', function (e) {
+				if (e.e && e.e.shiftKey) {
+					vm.parentVm.getActiveObjects();
+				}
+			});
 
 			canvas().on('before:selection:cleared', function (e) {
-				vm.parentVm.toggleRightPanel(false);
+				vm.parentVm.rightPanelOption.panelState = false;
 			});
 
 			createDocumentListeners();
@@ -44,7 +43,6 @@
 		};
 
 		vm.addChosenImage = function (image) {
-
 			var imagePreviewElement = document.getElementById('image-preview');
 			var sizeFromImagePreview = { height: imagePreviewElement.height, width: imagePreviewElement.width };
 			vm.showFileDialog = false;
@@ -77,22 +75,19 @@
 		};
 
 		vm.addSeat = function () {
-			var newFabricSeat = editor.addSeat(canvas(), false);
-			var newSeatObj = utils.createSeatFromFabricSeatObj(newFabricSeat);
-
-			vm.parentVm.seats.push(newSeatObj);
+			editor.addSeat(canvas(), false, afterAddSeat);
 		};
 
-		vm.addText = function () {
+		vm.addText = function() {
 			editor.addText(canvas(), 'Double click here to edit text');
-		}
+		};
 
 		vm.copy = function () {
 			editor.copy(canvas());
 		};
 
 		vm.paste = function () {
-			editor.paste(canvas());
+			editor.paste(canvas(), afterPaste);
 		};
 
 		vm.cut = function () {
@@ -154,37 +149,23 @@
 
 		vm.delete = function () {
 			var removeObjectIds = editor.remove(canvas());
-			var hash = {};
-			var result = [];
-
-			removeObjectIds.forEach(function (removeObjId) {
-				hash[removeObjId] = true;
+			vm.parentVm.seats = vm.parentVm.seats.filter(function (seat) {
+				return removeObjectIds.indexOf(seat.Id) == -1;
 			});
-
-			vm.parentVm.seats.forEach(function (seatObj) {
-				if (typeof hash[seatObj.Id] === 'undefined') {
-					result.push(seatObj);
-				}
-			});
-
-			vm.parentVm.seats = result;
 		};
 
 		vm.flip = function (horizontal) {
 			editor.flip(canvas(), horizontal);
 		}
 
-		vm.showProperties = function () {
-			vm.parentVm.getActiveObjects();
-		}
-
-		vm.hasObjectSelected = function () {
+		vm.hasObjectSelected = function() {
 			return (canvas().getActiveObject() || canvas().getActiveGroup()) != null;
-		}
+		};
 
 		vm.hasChanges = function () {
-			return vm.parentVm.loadedData != JSON.stringify(canvas());
-		}
+			var seatPropertiesChanged = vm.parentVm.loadedSeatsData != JSON.stringify(vm.parentVm.seats);
+			return (vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged);
+		};
 
 		vm.refreshSeatMap = function () {
 			vm.parentVm.refreshSeatMap();
@@ -192,6 +173,14 @@
 
 		function canvas() {
 			return vm.parentVm.getCanvas();
+		};
+
+		function afterAddSeat(newSeat) {
+			vm.parentVm.seats.push(newSeat);
+		};
+
+		function afterPaste(seats) {
+			vm.parentVm.seats = vm.parentVm.seats.concat(seats);
 		};
 
 		function createDocumentListeners() {
@@ -235,13 +224,6 @@
 				case 76: // L
 					if (event.altKey) {
 						$scope.$apply(vm.addLocation());
-					}
-					break;
-
-				case 80: // P
-					if (event.altKey) {
-						preventDefaultEvent(event);
-						$scope.$apply(vm.showProperties());
 					}
 					break;
 
@@ -294,7 +276,7 @@
 			};
 
 			editor.save(data, onSaveSuccess);
-			vm.parentVm.toggleRightPanel(false);
+			vm.parentVm.rightPanelOption.panelState = false;
 		};
 
 		function onSaveSuccess() {

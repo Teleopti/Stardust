@@ -5,14 +5,13 @@
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', '$timeout'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'PermissionsService', '$timeout'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, $timeout) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, permissionsService, $timeout) {
 
 		var vm = this;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
-		vm.showRightPanel = false;
 		vm.showSearchPeople = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
@@ -23,8 +22,14 @@
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
+		vm.loadedSeatsData = [];
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
-		vm.seatMapRightPanelTitle = "Seat Properties";//temp name
+		vm.rightPanelOption = {
+			panelState: false,
+			panelTitle: "Seat Properties",
+			showCloseButton: true,
+			showBackdrop: false
+		};
 
 		var canvas = new fabric.CanvasWithViewport('c');
 
@@ -75,23 +80,19 @@
 			canvasUtils.toggleMoveMode(canvas);
 		};
 
-		vm.toggleRightPanel = function (toggle) {
-			$timeout(function () {
-				vm.showRightPanel = toggle;
-				$scope.$apply();
-			}, 0);
+		vm.getRoles = function () {
+			permissionsService.roles.get().$promise.then(function (rolesData) {
+				vm.roles = rolesData;
+			});
 		};
-
+	
 		vm.getActiveObjects = function () {
 			vm.activeSeats = [];
-			canvasUtils.getRolesForSeats().then(function (rolesData) {
-				vm.roles = rolesData;
-				canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);
+			canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);
 
-				//TODO:currently we only support showing properties for seats
-				if (vm.activeSeats.length > 0)
-					vm.toggleRightPanel(true);
-			});
+			//TODO:currently we only support showing properties for seats
+			if (vm.activeSeats.length > 0)
+				vm.rightPanelOption.panelState = true;
 		};
 
 		vm.handleBreadcrumbClick = function (id) {
@@ -152,11 +153,12 @@
 
 			setupLocationDoubleClickHandler();
 
-			if (data) {
+			if (data.Id != undefined) {
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
-				vm.loadedData = data.SeatMapJsonData;
+				vm.loadedJsonData = data.SeatMapJsonData;
+				vm.loadedSeatsData = JSON.stringify(data.Seats);
 				vm.seats = data.Seats;
 			}
 
@@ -164,9 +166,7 @@
 			vm.isLoading = false;
 			canvas.fire('seatmaplocation:loaded', { data: data });
 
-			$timeout(function () {
-				$scope.$apply();
-			});
+			$timeout(function() { $scope.$apply(); });
 		};
 
 		function onLoadSeatMapSuccess(data) {
