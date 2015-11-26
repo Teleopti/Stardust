@@ -17,7 +17,7 @@
 						<label for="searchInput" translate>FilterColon</label>
 
 						<div class="input-prepend">
-							<input type="text" name="searchInput" id="searchInput" ng-model="searchString" ng-model-options="{ debounce: 1000 }"/>
+							<input type="text" name="searchInput" id="searchInput" ng-model="searchString" ng-model-options="{ debounce: 300 }"/>
 						</div>
 
 						<div class="row" ng-class="{'wfm-filter-dropdown':searchString.length > 0}">

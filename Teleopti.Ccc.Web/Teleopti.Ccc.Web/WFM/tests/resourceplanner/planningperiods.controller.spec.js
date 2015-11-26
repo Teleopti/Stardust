@@ -10,6 +10,11 @@ describe('PlanningPeriodsCtrl', function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+
+		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
+		$httpBackend.whenGET('../ToggleHandler/IsEnabled?toggle=Wfm_ChangePlanningPeriod_33043').respond(200, {});
+		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
+
 	}));
 
 	it('not null', inject(function($controller) {
@@ -74,7 +79,7 @@ describe('PlanningPeriodsCtrl', function () {
 		var scope = $rootScope.$new();
 		var mockPlanningPeriodSvrc = {
 			getPlanningPeriod: {
-				query: function() {	
+				query: function() {
 					return {
 						Skills: [
 							{
@@ -115,10 +120,6 @@ describe('PlanningPeriodsCtrl', function () {
 		var loadedDayOffRules = [{ Id: 'something' }];
 		var scope = $rootScope.$new();
 
-		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
-		$httpBackend.whenGET('../ToggleHandler/IsEnabled?toggle=Wfm_ChangePlanningPeriod_33043').respond(200, {});
-		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
-
 		$httpBackend.whenGET('../api/resourceplanner/dayoffrules')
 			.respond(200, loadedDayOffRules);
 
@@ -135,5 +136,33 @@ describe('PlanningPeriodsCtrl', function () {
 		$controller('PlanningPeriodsCtrl', { $scope: scope });
 
 		expect(scope.dayoffRules.length).toEqual(0);
+	}));
+	it('should be able to edit each ruleset', inject(function ($controller, $state) {
+		var scope = $rootScope.$new();
+		spyOn($state, 'go');
+		var stateParams = {id:2};
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state, $stateParams:stateParams });
+		var filter = {id:1}
+		scope.editRuleset(filter.id);
+
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.filter',{filterId:filter.Id, periodId:stateParams.id});
+
+	}));
+	it('should be able to delete each ruleset', inject(function ($controller, $state) {
+		var scope = $rootScope.$new();
+		var result = [{Id:1},{Id:3}]
+		$httpBackend.whenDELETE('../api/resourceplanner/dayoffrules/2').respond(200, {});
+		$httpBackend.whenGET('../api/resourceplanner/dayoffrules')
+			.respond(200, result);
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state });
+		scope.dayoffRules = [{Id:1},{Id:2},{Id:3}];
+		scope.destoryRuleset(scope.dayoffRules[1]);
+
+		$httpBackend.flush();
+
+		expect(scope.dayoffRules[1].Id).toBe(3);
+
 	}));
 });

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/{id}")]
-		public IHttpActionResult Fetch(Guid id)
+		public virtual IHttpActionResult Fetch(Guid id)
 		{
 			return Ok(_fetchDayOffRulesModel.Fetch(id));
 		}

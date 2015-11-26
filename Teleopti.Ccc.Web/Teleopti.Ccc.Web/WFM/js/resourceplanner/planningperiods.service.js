@@ -29,6 +29,9 @@
 			this.status = $resource('../api/Status/Scheduling', {}, {
 			    get: { method: 'GET', params: {}, isArray: false }
 			});
+			this.destroyDayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', {id:'@id'}, {
+				remove: { method: 'DELETE', params: {}, isArray: false }
+			});
 
 			this.getDayOffRules = function() {
 				return $http({

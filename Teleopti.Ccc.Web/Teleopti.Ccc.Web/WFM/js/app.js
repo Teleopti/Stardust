@@ -91,6 +91,10 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourcePlannerCtrl'
 		}).state('resourceplanner.filter', {
+			params:{
+				filterId:{},
+				periodId:{}
+			},
 			url: '/dayoffrules',
 			templateUrl: 'js/resourceplanner/resourceplanner-filters.html',
 			controller: 'ResourceplannerFilterCtrl'

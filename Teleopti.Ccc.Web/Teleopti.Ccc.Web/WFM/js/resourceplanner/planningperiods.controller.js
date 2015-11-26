@@ -48,7 +48,6 @@
 	            $scope.status = '';
 	            $scope.scheduleClicked = false;
 	        }
-
 	        $scope.launchSchedule = function (p) {
 	            $scope.errorMessage = undefined;
 	            $scope.schedulingPerformed = false;
@@ -87,6 +86,19 @@
 	                $scope.planningPeriod = result;
 	            });
 	        };
+			$scope.editRuleset = function(filter){
+				$state.go('resourceplanner.filter',{filterId:filter.Id, periodId:$stateParams.id})
+			};
+			$scope.createRuleset = function(){
+				$state.go('resourceplanner.filter',{periodId:$stateParams.id})
+			};
+			$scope.destoryRuleset = function(node){
+				PlanningPeriodSvrc.destroyDayOffRule.remove({id:node.Id}).$promise.then(function(){
+					PlanningPeriodSvrc.getDayOffRules().then(function (result) {
+						$scope.dayoffRules = result.data;
+					});
+				});
+			};
 
 	        $scope.$on('$destroy', function() {
 	            // Make sure that the interval is destroyed too

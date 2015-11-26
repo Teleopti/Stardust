@@ -19,6 +19,9 @@
 			this.saveDayoffRules = $resource('../api/resourceplanner/dayoffrules', {}, {
 				update: { method: 'POST', params: {}, isArray: false }
 			});
+			this.getFilter = $resource('../api/resourceplanner/dayoffrules/:id', {id:'@id'}, {
+				query: { method: 'GET', params: {}, isArray: false }
+			});
 
 		}
 		]).service('PlanningPeriodNewSvrc', [

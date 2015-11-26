@@ -9,14 +9,32 @@ describe('ResourcePlannerCtrl', function () {
 	var filterUrl = function (searchString) {
 		return "../api/filters?maxHits=" + maxHits + "&searchString=" & searchString
 	}
-
+	var singleFilter = function (id) {
+		return "../api/resourceplanner/dayoffrules/"+id
+	}
+	beforeEach(function() {
+		module(function($provide) {
+			$provide.service('$stateParams', function() {
+				return stateParams;
+			});
+		});
+	});
 	beforeEach(module('wfm.resourceplanner'));
+	var mockStateParams = {filterId:1,period:1};
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+
+		$httpBackend.when('GET', '../api/resourceplanner/dayoffrules/default',
+				function (getData) {
+					sentData = JSON.parse(getData);
+					return true;
+				}).respond(200, true);
+
 	}));
+
 
 	it('should cancel previous search request', inject(function (ResourcePlannerFilterSrvc) {
 		var scope = $rootScope.$new();
@@ -36,7 +54,7 @@ describe('ResourcePlannerCtrl', function () {
 	}));
 
 
-	it('should load one search result', inject(function ($controller) {
+	it('should load one search result', inject(function ($controller,$stateParams) {
 		var searchString = 'something';
 		var singleResult = {
 			Id: 'aölsdf',
@@ -46,7 +64,7 @@ describe('ResourcePlannerCtrl', function () {
 		var scope = $rootScope.$new();
 		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, [singleResult]);
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.searchString = searchString;
 		$httpBackend.flush();
@@ -57,7 +75,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(result.Name).toEqual(singleResult.Name);
 	}));
 
-	it('should not put loaded item to selected array', inject(function ($controller) {
+	it('should not put loaded item to selected array', inject(function ($controller,$stateParams) {
 		var searchString = 'something';
 		var singleResult = {
 			Id: 'aölsdf',
@@ -67,7 +85,7 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.whenGET(filterUrl(searchString))
 			.respond(200, [singleResult]);
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
 
 		scope.searchString = searchString;
 		$httpBackend.flush();
@@ -75,14 +93,14 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults.length).toEqual(0);
 	}));
 
-	it('should have isSearching set to false before first call', inject(function ($controller) {
+	it('should have isSearching set to false before first call', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isSearching).toEqual(false);
 	}));
 
-	it('should set isSearching during search', inject(function ($controller) {
+	it('should set isSearching during search', inject(function ($controller,$stateParams) {
 		var searchString = 'something';
 		var expectedToHaveBeenTrue=false;
 
@@ -90,7 +108,7 @@ describe('ResourcePlannerCtrl', function () {
 			.respond(200, []);
 
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
 
 		scope.$watch(function () { return scope.isSearching; }, function (value) {
 			if (value)
@@ -106,7 +124,7 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isSearching).toEqual(false);
 	}));
 
-	it('should falsify isSearching if non successful call', inject(function ($controller) {
+	it('should falsify isSearching if non successful call', inject(function ($controller,$stateParams) {
 		var searchString = "blabla";
 
 		$httpBackend.whenGET(filterUrl(searchString))
@@ -114,7 +132,7 @@ describe('ResourcePlannerCtrl', function () {
 
 
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams  });
 
 		scope.searchString = searchString;
 
@@ -123,31 +141,31 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isSearching).toEqual(false);
 	}));
 
-	it('should not call service when model is undefined ', inject(function ($controller) {
+	it('should not call service when model is undefined ', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.results).toEqual([]);
 	}));
 
-	it('should not call service when model is empty string', inject(function ($controller) {
+	it('should not call service when model is empty string', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		scope.searchString = '';
 
 		expect(scope.results).toEqual([]);
 	}));
 
-	it('should work to call selectedItems before loaded', inject(function ($controller) {
+	it('should work to call selectedItems before loaded', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.selectedResults.length).toEqual(0);
 	}));
 
-	it('should put clicked item in selected', inject(function ($controller) {
+	it('should put clicked item in selected', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope});
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		var singleResult = {
 			Id: 'aölsdf',
 			Name: 'asdfasdf',
@@ -160,9 +178,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults[0]).toEqual(singleResult);
 	}));
 
-	it('should show that more results exists', inject(function($controller) {
+	it('should show that more results exists', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		for (var i = 0; i < maxHits; i++) {
 			scope.results.push({ Id: i });
@@ -171,9 +189,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.moreResultsExists()).toEqual(true);
 	}));
 
-	it('should not show that more results exists', inject(function ($controller) {
+	it('should not show that more results exists', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		for (var i = 0; i < maxHits - 1; i++) {
 			scope.results.push({ Id: i });
@@ -181,9 +199,9 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.moreResultsExists()).toEqual(false);
 	}));
-	it('should clear result when no input', inject(function ($controller) {
+	it('should clear result when no input', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		var loadedResult = {};
 		scope.results = [loadedResult];
@@ -192,9 +210,9 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.results.length).toEqual(0);
 	}));
-	it('should not clear selected when no input', inject(function ($controller) {
+	it('should not clear selected when no input', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		var loadedResult = {Name:'hello',Id:'3'};
 		scope.results = [loadedResult];
@@ -204,18 +222,18 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.selectedResults.length).toEqual(1);
 	}));
-	it('should have a name', inject(function ($controller) {
+	it('should have a name', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		scope.name = "";
 		scope.name = "default name";
 
 		expect(scope.name).toBe("default name");
 
 	}));
-	it('should set is invalid if no name', inject(function ($controller) {
+	it('should set is invalid if no name', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.name = "";
 
@@ -223,9 +241,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidName()).toBe(false);
 	}));
 
-	it('should set default value for days of per week', inject(function ($controller) {
+	it('should set default value for days of per week', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isValidDayOffsPerWeek()).toBe(true);
 		expect(scope.dayOffsPerWeek.MinDayOffsPerWeek).toBe(2); //?
@@ -233,9 +251,9 @@ describe('ResourcePlannerCtrl', function () {
 	}));
 
 
-	it('should set invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function ($controller) {
+	it('should set invalid if MaxDayOffsPerWeek is smaller than MinDayOffsPerWeek', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.dayOffsPerWeek = {
 			MinDayOffsPerWeek: 5,
@@ -246,9 +264,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidDayOffsPerWeek()).toBe(false);
 	}));
 
-	it('should set valid if MaxDayOffsPerWeek is equal or greater than MinDayOffsPerWeek', inject(function ($controller) {
+	it('should set valid if MaxDayOffsPerWeek is equal or greater than MinDayOffsPerWeek', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.dayOffsPerWeek = {
 			MinDayOffsPerWeek: 4,
@@ -262,18 +280,18 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidDayOffsPerWeek()).toBe(true);
 	}));
 
-	it('should set default value for consecutive days off', inject(function ($controller) {
+	it('should set default value for consecutive days off', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isValidConsecDaysOff()).toBe(true);
 		expect(scope.consecDaysOff.MinConsecDaysOff).toBe(2); //?
 		expect(scope.consecDaysOff.MaxConsecDaysOff).toBe(3); //?
 	}));
 
-	it('should set invalid if MaxConsecDaysOff is smaller than MinConsecDaysOff', inject(function ($controller) {
+	it('should set invalid if MaxConsecDaysOff is smaller than MinConsecDaysOff', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.consecDaysOff = {
 			MinConsecDaysOff: 5,
@@ -284,9 +302,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidConsecDaysOff()).toBe(false);
 	}));
 
-	it('should set valid if MaxConsecDaysOff is equal or greater than MinConsecDaysOff', inject(function ($controller) {
+	it('should set valid if MaxConsecDaysOff is equal or greater than MinConsecDaysOff', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.consecDaysOff = {
 			MinConsecDaysOff: 2,
@@ -300,18 +318,18 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidConsecDaysOff()).toBe(true);
 	}));
 
-	it('should set default value for consecutive work days', inject(function ($controller) {
+	it('should set default value for consecutive work days', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		expect(scope.isValidConsecWorkDays()).toBe(true);
 		expect(scope.consecWorkDays.MinConsecWorkDays).toBe(2); //?
 		expect(scope.consecWorkDays.MaxConsecWorkDays).toBe(3); //?
 	}));
 
-	it('should set invalid if MaxConsecWorkDays is smaller than MinConsecWorkDays', inject(function ($controller) {
+	it('should set invalid if MaxConsecWorkDays is smaller than MinConsecWorkDays', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.consecWorkDays = {
 			MinConsecWorkDays: 2,
@@ -322,9 +340,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidConsecWorkDays()).toBe(false);
 	}));
 
-	it('should set valid if MaxConsecWorkDays is equal or greater than MinConsecWorkDays', inject(function ($controller) {
+	it('should set valid if MaxConsecWorkDays is equal or greater than MinConsecWorkDays', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.consecWorkDays = {
 			MinConsecWorkDays: 4,
@@ -338,9 +356,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.isValidConsecWorkDays()).toBe(true);
 	}));
 
-	it('should be invalid if no selected result', inject(function ($controller) {
+	it('should be invalid if no selected result', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 
 		expect(scope.isValid()).toBe(false);
@@ -348,20 +366,26 @@ describe('ResourcePlannerCtrl', function () {
 	}));
 
 
-	it('should be valid if at least one selected result', inject(function ($controller) {
+	it('should be valid if at least one selected result', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.selectedResults = [{}];
 
 		expect(scope.isValidFilters()).toBe(true);
 	}));
 
-	it('should be able to save the dayoffrule', inject(function ($controller) {
+	it('should be able to save the dayoffrule', inject(function ($controller, $state,$stateParams) {
 		var scope = $rootScope.$new();
 		var sentData;
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		spyOn($state, 'go');
+
+
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$state:$state, $stateParams:mockStateParams });
 		scope.name = 'asdfasdf';
+		scope.filterId = 10;
+		scope.default = 'false';
+
 		scope.selectedResults = [{ FilterType: "contract", Id: "5BC5B983-281A-4B92-92D6-A54F00D63A78" }];
 
 		$httpBackend.when('POST', '../api/resourceplanner/dayoffrules',
@@ -372,8 +396,9 @@ describe('ResourcePlannerCtrl', function () {
 
 		scope.persist();
 		$httpBackend.flush();
-
 		expect(sentData.Name).toEqual(scope.name);
+		expect(sentData.Id).toEqual(scope.filterId);
+		expect(sentData.Default).toEqual(scope.default);
 		expect(sentData.MinDayOffsPerWeek).toEqual(scope.dayOffsPerWeek.MinDayOffsPerWeek);
 		expect(sentData.MaxDayOffsPerWeek).toEqual(scope.dayOffsPerWeek.MaxDayOffsPerWeek);
 		expect(sentData.MinConsecutiveWorkdays).toEqual(scope.consecWorkDays.MinConsecWorkDays);
@@ -382,11 +407,13 @@ describe('ResourcePlannerCtrl', function () {
 		expect(sentData.MaxConsecutiveDayOffs).toEqual(scope.consecDaysOff.MaxConsecDaysOff);
 		expect(sentData.Filters[0].FilterType).toEqual(scope.selectedResults[0].FilterType);
 		expect(sentData.Filters[0].Id).toEqual(scope.selectedResults[0].Id);
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiod',{id:$stateParams.period});
+
 	}));
 
-	it('should not persist when invalid', inject(function ($controller) {
+	it('should not persist when invalid', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.persist();
 
@@ -395,9 +422,9 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.verifyNoOutstandingRequest();
 	}));
 
-	it('should not be possible to select item twice', inject(function ($controller) {
+	it('should not be possible to select item twice', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		var item = {Id:'someGuid'};
 
@@ -407,9 +434,9 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.selectedResults.length).toEqual(1);
 	}));
 
-	it('should clear search string when selected', inject(function ($controller) {
+	it('should clear search string when selected', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.searchString = 'something';
 		scope.selectResultItem({});
@@ -417,18 +444,18 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.searchString).toEqual('');
 	}));
 
-	it('should clear results when item selected', inject(function ($controller) {
+	it('should clear results when item selected', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 
 		scope.results = [{}];
 		scope.selectResultItem({});
 
 		expect(scope.results.length).toEqual(0);
 	}));
-	it('should clear the inputfields when clearInput is called', inject(function ($controller) {
+	it('should clear the inputfields when clearInput is called', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		scope.results = [{}];
 		scope.searchString = 'bla bla';
 		scope.clearInput();
@@ -436,14 +463,62 @@ describe('ResourcePlannerCtrl', function () {
 		expect(scope.results.length).toEqual(0);
 		expect(scope.searchString).toEqual('');
 	}));
-	it('should remove a selected node when removeNode is called', inject(function ($controller) {
+	it('should remove a selected node when removeNode is called', inject(function ($controller,$stateParams) {
 		var scope = $rootScope.$new();
-		$controller('ResourceplannerFilterCtrl', { $scope: scope });
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
 		scope.selectedResults = [{id:1},{id:2}]
 		scope.removeNode(scope.selectedResults[1]);
 
 		expect(scope.selectedResults.length).toEqual(1);
 		expect(scope.selectedResults[0].id).toBe(1)
+	}));
+	it('should disable button when save is pressed', inject(function ($controller,$stateParams) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
+		scope.isEnabled = false
+		scope.persist();
+		expect(scope.isEnabled).toBe(false);
+	}));
+	it('should not call service if no data is transfered from filter-list', inject(function ($controller,$stateParams) {
+		var scope = $rootScope.$new();
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
+		$stateParams = {};
+		scope.name = "";
+		scope.$digest();
+
+		expect(scope.name).toBe("");
+	}));
+	it('should set new values for options if data is transfered from filter-list', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var $stateParams = {filterId:'1',period: '10'};
+		var singleResult = {
+			Id: '111-111-111',
+			Name: 'newName',
+		};
+
+
+		$httpBackend.whenGET(singleFilter($stateParams.filterId))
+			.respond(200, singleResult);
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:$stateParams });
+
+		$httpBackend.flush();
+		expect(scope.name).toBe("newName");
+	}));
+	it('should set same id if one already exists', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var $stateParams = {filterId:'111-111-111',period: '10'};
+		var singleResult = {
+			Id: '111-111-111',
+			Name: 'newName',
+		};
+
+
+		$httpBackend.whenGET(singleFilter($stateParams.filterId))
+			.respond(200, singleResult);
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:$stateParams });
+
+		$httpBackend.flush();
+		expect(scope.filterId).toBe("111-111-111");
 	}));
 
 });
