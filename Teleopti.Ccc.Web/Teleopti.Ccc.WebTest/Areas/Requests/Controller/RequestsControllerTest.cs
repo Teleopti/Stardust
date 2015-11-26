@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var requestViewModels = new[] { new RequestViewModel()};
 			requestsViewModelFactory.Stub(x => x.Create(dateOnlyPeriod)).Return(requestViewModels);
 			var target = new RequestsController(requestsViewModelFactory);
-			var requests = target.All(dateOnlyPeriod);
+			var requests = target.All(dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate);
 
 			requests.Should().Be.SameInstanceAs(requestViewModels);
 		}
