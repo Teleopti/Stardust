@@ -314,11 +314,11 @@ position: fixed;
 	cursor:pointer;
 }
 
-/*
 .sidenav-header{
 	background:$white;
-	overflow: hidden!important;
+	overflow: hidden;
 	position: relative;
+	display: flex;
 
 	&:hover{
 		background: $gray012;
@@ -326,11 +326,12 @@ position: fixed;
 }
 
 .sidenav{
-	li{
-		overflow: hidden;
-	}
-
+    flex-basis: 240px!important;
 	i{
+		/*border-radius: 50%;
+		text-align: center;
+		background: white;
+		box-shadow: 0 0 0 3px white;*/
 		margin-right: 10px;
 		margin-left: 10px;
 	}
@@ -339,14 +340,16 @@ position: fixed;
 		position: absolute;
 		display:inline;
 		opacity: 1;
+		white-space:nowrap;
 		padding-left: 20px;
+		text-overflow: ellipsis;
 	}
 }
 
 .sidenav.is-hidden{
-	flex-basis: 50px;
+	flex-basis: 50px!important;
 
 	span{
 		width:0;
 	}
-}*/
+}
