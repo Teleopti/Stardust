@@ -577,6 +577,7 @@
     </Compile>
     <Compile Include="Areas\Global\BasicActionThrottler.cs" />
     <Compile Include="Areas\Global\BlockToken.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
@@ -607,6 +608,7 @@
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanController.cs" />
+    <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModule.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatBookingReportProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatMapProvider.cs" />

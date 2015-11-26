@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Requests;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
+using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller

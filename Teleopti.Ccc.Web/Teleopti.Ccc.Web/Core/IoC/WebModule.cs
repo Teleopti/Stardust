@@ -30,6 +30,7 @@ using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
+using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC;
@@ -123,6 +124,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<PeopleAreaModule>();
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<IntradayAreaModule>();
+			builder.RegisterModule<RequestsAreaModule>();
 
 			tenantWebSpecificTypes(builder);
 		}
@@ -186,4 +188,5 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
 		}
 	}
+
 }
