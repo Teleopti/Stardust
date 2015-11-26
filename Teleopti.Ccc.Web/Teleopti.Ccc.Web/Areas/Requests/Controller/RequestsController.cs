@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebRequests)]
 	public class RequestsController : ApiController
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
