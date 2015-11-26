@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
@@ -18,11 +17,4 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			return true;
 		}
 	}
-
-    public static class DateOnlyForBehaviorTests
-    {
-        private static readonly DateOnly Today = DateOnly.Today;
-
-        public static DateOnly TestToday { get { return Today; } }
-    }
 }
