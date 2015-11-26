@@ -81,7 +81,7 @@ describe('OutboundSummaryCtrl', function() {
 		test.target.updateAllCampaignGanttDisplay(toBeUpdated);
 
 		expect(test.scope.ganttData[0].tasks[0].color).toEqual('#C2E085');
-		expect(test.scope.ganttData[1].tasks[0].color).toEqual('#66C2FF');
+		expect(test.scope.ganttData[1].tasks[0].color).toEqual('#9FA8DA');
 	});
 
 	it('should extend the row when click and collapse when click again', function () {
