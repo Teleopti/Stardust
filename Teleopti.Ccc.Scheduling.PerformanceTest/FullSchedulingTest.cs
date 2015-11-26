@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -17,12 +18,10 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Test, Explicit]
 		public void MeasurePerformance()
 		{
-			// Move this to app.config!
-			var userName = "demo";
-			var password = "demo";
-			var businessUnitName = "Teleopti WFM Demo";
-			var planningPeriodId = "32f17285-f7ad-4c76-a050-a5590100ca00";
-			///////////////////////////
+			var userName = ConfigurationManager.AppSettings["UserName"];
+			var password = ConfigurationManager.AppSettings["Password"];
+			var businessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
+			var planningPeriodId = ConfigurationManager.AppSettings["PlanningGroupId"];
 
 			using (var browserActivator = new CoypuChromeActivator())
 			{
@@ -35,17 +34,16 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 					"Test/Logon", 
 					string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
 
-				//Goto scheduling page
+				//Schedule a certain planning period
 				browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
-
-				//click schedule button
 				browserInteractions.Click(".schedule-button");
 
-				//wrong assert here for now - should check
-				//1. Show report page -> ok
-				//2. If "server busy -> fail
-				//3. If error is written -> fail
-				browserInteractions.AssertExists(".schedule-report");
+				//Wait for scheduler to finish
+				using (new TimeoutScope(browserActivator, TimeSpan.FromHours(10)))
+				{
+					//add checks for "server busy" or ".errorMessage" is visible during wait
+					browserInteractions.AssertExists(".scheduling-result");
+				}
 			}
 		}
 
