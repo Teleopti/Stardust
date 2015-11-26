@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			return _browserInteractions;
 		}
 
-		public void Close()
+		public void Dispose()
 		{
 		}
 	}

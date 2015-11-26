@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			log.Debug("Cleaing up after test run");
 
-			Browser.Close();
+			Browser.Dispose();
 			TestSiteConfigurationSetup.TearDown();
 
 			log.Debug("Finished test run");

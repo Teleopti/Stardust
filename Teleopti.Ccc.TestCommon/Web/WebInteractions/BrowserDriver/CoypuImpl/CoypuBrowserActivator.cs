@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
 
-	    public void Close()
+		public void Dispose()
 		{
 			if (_browser == null) return;
 			_browser.Dispose();
