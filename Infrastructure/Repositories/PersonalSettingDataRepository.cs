@@ -40,13 +40,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Key", key))
 				.Add(Restrictions.Eq("OwnerPerson", ownerPerson))
 				.SetCacheable(true)
-				.UniqueResult<ISettingData>()
-					   ??
-					   new PersonalSettingData(key,
-					   	TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(CurrentUnitOfWork)));
+				.UniqueResult<ISettingData>();
 
-            return data.GetValue(defaultValue);
-
+			return data == null ? defaultValue : data.GetValue(defaultValue);
 		}
 
         public T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue
