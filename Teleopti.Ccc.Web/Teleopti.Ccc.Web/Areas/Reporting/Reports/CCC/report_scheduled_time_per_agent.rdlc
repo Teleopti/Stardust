@@ -9,10 +9,7 @@
               <Width>7.13688cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>6.49229cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>13.76833cm</Width>
+              <Width>17.98521cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -53,10 +50,9 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>3</ColSpan>
+                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
                 <TablixCell />
               </TablixCells>
             </TablixRow>
@@ -125,10 +121,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -192,10 +186,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -267,10 +259,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -342,10 +332,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -419,10 +407,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -498,10 +484,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -577,10 +561,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -652,10 +634,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -727,10 +707,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -798,10 +776,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -869,10 +845,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -948,17 +922,14 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
-            <TablixMember />
             <TablixMember />
             <TablixMember />
           </TablixMembers>
@@ -1039,17 +1010,17 @@
         <Top>0.25cm</Top>
         <Left>0.25cm</Left>
         <Height>7.8cm</Height>
-        <Width>27.3975cm</Width>
+        <Width>25.12209cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5.37312cm</Width>
+              <Width>4.57937cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.78562cm</Width>
+              <Width>3.30392cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.87313cm</Width>
@@ -1338,7 +1309,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.63492cm</Height>
+              <Height>0.60846cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1665,7 +1636,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>1cm</Height>
+              <Height>0.60313cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2176,6 +2147,7 @@
                               <Value>=Code.ShortDateString(Fields!date.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -3092,19 +3064,19 @@
         </TablixRowHierarchy>
         <Top>8.71875cm</Top>
         <Left>0.25002cm</Left>
-        <Height>4.91713cm</Height>
-        <Width>27.39748cm</Width>
+        <Height>4.4938cm</Height>
+        <Width>25.12207cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
     </ReportItems>
-    <Height>14.03895cm</Height>
+    <Height>13.35103cm</Height>
     <Style />
   </Body>
-  <Width>28.46284cm</Width>
+  <Width>25.55729cm</Width>
   <Page>
     <PageHeader>
-      <Height>1.75cm</Height>
+      <Height>1.56703cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -3129,8 +3101,9 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox4</rd:DefaultName>
+          <Top>0.14111cm</Top>
           <Left>0.25cm</Left>
-          <Height>1.50529cm</Height>
+          <Height>1.3289cm</Height>
           <Width>16.52139cm</Width>
           <Style>
             <Border>
@@ -3168,7 +3141,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>23.8975cm</Left>
+          <Left>21.62208cm</Left>
           <Height>0.5cm</Height>
           <Width>3.75cm</Width>
           <ZIndex>1</ZIndex>
@@ -3200,8 +3173,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox1</rd:DefaultName>
-          <Top>0.5cm</Top>
-          <Left>25.3975cm</Left>
+          <Top>0.67639cm</Top>
+          <Left>23.12208cm</Left>
           <Height>0.5cm</Height>
           <Width>2.25cm</Width>
           <ZIndex>2</ZIndex>
@@ -3213,10 +3186,10 @@
           </Style>
         </Textbox>
         <Line Name="line1">
-          <Top>1.75cm</Top>
-          <Left>0.25cm</Left>
+          <Top>1.47001cm</Top>
+          <Left>0.25002cm</Left>
           <Height>0cm</Height>
-          <Width>20cm</Width>
+          <Width>25.12207cm</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -3257,7 +3230,7 @@
           </Paragraphs>
           <Top>0.14111cm</Top>
           <Height>0.50265cm</Height>
-          <Width>27.35646cm</Width>
+          <Width>25.37208cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
