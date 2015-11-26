@@ -7,4 +7,13 @@ namespace Teleopti.Interfaces.Domain
 		ShiftTradeRequest,
 		ShiftExchangeOffer
 	}
+
+	public enum RequestStatus
+	{
+		New,
+		Pending,
+		Approved,
+		Denied,
+		Referred
+	}
 }

@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2011-10-27
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
+
+		IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period);
 		
 		/// <summary>
 		/// Finds all specific types requests from and to a person for given page.

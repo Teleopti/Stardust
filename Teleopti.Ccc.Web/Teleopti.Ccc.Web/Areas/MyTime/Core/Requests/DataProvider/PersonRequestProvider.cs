@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(Paging paging)
+		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(Paging paging)
 		{
 			var types = new List<RequestType>
 			{
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)
+		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period)
 		{
 			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), period.ToDateTimePeriod(_userTimeZone.TimeZone()));
 		}
@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			if (personRequest == null)
 				throw new DataSourceException("No person request found for id " + id);
 			return personRequest;
+		}
+
+		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)
+		{
+			return _repository.FindAllRequests(period.ToDateTimePeriod(_userTimeZone.TimeZone()));
 		}
 	}
 }

@@ -18,6 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
+using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			userTimeZone.Stub(x => x.TimeZone()).Return((TimeZoneInfo.Local));
 			repository.Stub(x => x.FindAllRequestsForAgent(person, period.ToDateTimePeriod(userTimeZone.TimeZone()))).Return(personRequests);
 
-			var result = target.RetrieveRequests(period);
+			var result = target.RetrieveRequestsForLoggedOnUser(period);
 
 			result.Should().Be.SameInstanceAs(personRequests);
 		}
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging).Count()));
 
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
 		}
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging).Count()));
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
 		}
 
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
 			RequestRepository.Add(shiftTradeRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequests(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
 
 			requestQueue.Count().Should().Be(0);
 			Assert.IsFalse(requestQueue.Any(requestFromProvider =>
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(shiftTradeRequest);
 			((FakePermissionProvider)PermissionProvider).PermitPerson(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, requestDate, person);
 
-			var requestQueue = RequestProvider.RetrieveRequests(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
 
 			requestQueue.Count().Should().Be(1);
 			Assert.IsTrue(requestQueue.Count(requestFromProvider =>
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(shiftTradeRequest);
 			RequestRepository.Add(textRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequests(new Paging {Skip = 0, Take = 5}).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}).ToArray();
 
 			requestQueue.Count().Should().Be(1);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
@@ -207,11 +208,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(textRequest);
 			RequestRepository.Add(request);
 
-			var requestQueue = RequestProvider.RetrieveRequests(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
 
 			requestQueue.Count().Should().Be(2);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest || requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
+		}
+
+		[Test]
+		public void ShouldReturnAllRequestsForPeriod()
+		{
+			var personRequestRepository = new FakePersonRequestRepository();
+			var personRequestFactory = new PersonRequestFactory();
+			var personRequest1 = personRequestFactory.CreateNewPersonRequest();
+			personRequestRepository.Add(personRequest1);
+			var personRequest2 = personRequestFactory.CreateNewPersonRequest();
+			personRequestRepository.Add(personRequest2);
+			var target = new PersonRequestProvider(personRequestRepository, null, new FakeUserTimeZone(TimeZoneInfo.Utc), null, null);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
+			var requests = target.RetrieveRequests(period);
+			requests.First().Should().Be.EqualTo(personRequest1);
+			requests.Last().Should().Be.EqualTo(personRequest2);
 		}
 	}
 }

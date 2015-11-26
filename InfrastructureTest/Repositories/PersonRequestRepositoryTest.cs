@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -142,6 +143,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personFrom = PersonFactory.CreatePerson("personFrom");
 			PersistAndRemoveFromUnitOfWork(personFrom);
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
 
 			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
@@ -150,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    });
 			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
-			var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
+		    var absenceRequest = new PersonRequest(_person, new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var offerRequest = createShiftExchangeOffer(new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -996,6 +1002,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(result.Any(request => request.Request.RequestType == RequestType.ShiftTradeRequest));
 		}
 
+		[Test]
+		public void ShouldReturnAllRequestsInPeriod()
+		{
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1),DateTime.UtcNow.AddDays(1))).ToArray();
+			result.Count().Should().Be(2);
+		}
 	}
     
 }

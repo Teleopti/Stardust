@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
 									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay).ToList();
-									var personRequests = _personRequestProvider.RetrieveRequests(week);
+									var personRequests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(week);
 									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
 									
 									var showSeatBookings = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShowSeatBooking_34799);

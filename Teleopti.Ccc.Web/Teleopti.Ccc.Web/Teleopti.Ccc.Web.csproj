@@ -476,6 +476,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestsViewModelFactory.cs" />
+    <Compile Include="Areas\Requests\Controller\RequestsController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningConfigurationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignWarningProvider.cs" />
@@ -575,6 +577,7 @@
     </Compile>
     <Compile Include="Areas\Global\BasicActionThrottler.cs" />
     <Compile Include="Areas\Global\BlockToken.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
@@ -2274,6 +2277,7 @@
     <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
+    <Folder Include="Areas\Requests\Core\Provider\" />
     <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />

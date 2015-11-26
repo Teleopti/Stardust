@@ -166,11 +166,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null,
 			                                          null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
-			personRequestProvider.Stub(x => x.RetrieveRequests(paging)).Return(new IPersonRequest[] { });
+			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging)).Return(new IPersonRequest[] { });
 
 			target.CreatePagingViewModel(paging);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveRequests(paging));
+			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging));
 		}
 
 		[Test]

@@ -132,6 +132,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequests.List<IPersonRequest>();
 		}
 
+		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period)
+		{
+			var requestForPeriod = DetachedCriteria.For<Request>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
+				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime))
+				.Add(Restrictions.Or(Restrictions.Eq("class", typeof (AbsenceRequest)), Restrictions.Eq("class", typeof (TextRequest))));
+
+			return Session.CreateCriteria<IPersonRequest>("req")
+				.SetFetchMode("requests", FetchMode.Join)
+				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
+				.List<IPersonRequest>();
+		}
+
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
 			var allRequests = FindAllRequestsForAgent(person);

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Web.Core.Data;
 

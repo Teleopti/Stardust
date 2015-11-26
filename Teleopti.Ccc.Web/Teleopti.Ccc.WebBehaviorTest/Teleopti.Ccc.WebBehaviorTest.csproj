@@ -938,6 +938,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\Requests\Basic.feature.cs">
+      <DependentUpon>Basic.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Wfm\Requests\RequestsStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1356,6 +1362,10 @@
     <None Include="Wfm\RealTimeAdherence\TimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Requests\Basic.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Basic.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Seat Management\SeatMap.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
