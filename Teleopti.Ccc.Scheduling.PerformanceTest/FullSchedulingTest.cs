@@ -16,11 +16,20 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Test, Explicit]
 		public void MeasurePerformance()
 		{
+			var userName = "demo";
+			var password = "demo";
+			var businessUnitName = "Teleopti WFM Demo";
+
 			using (var browserActivator = new CoypuChromeActivator())
 			{
 				browserActivator.Start(TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(5));
 				var browserInteractions = browserActivator.GetInteractions();
-				browserInteractions.GoTo(new Uri(TestSiteConfigurationSetup.URL, "Authentication").ToString());
+
+				//Logon
+				browserInteractions.GoTo(string.Concat(
+					TestSiteConfigurationSetup.URL, 
+					"Test/Logon", 
+					string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
 			}
 		}
 
