@@ -19,14 +19,7 @@
 	<div class="row" style="position:relative">
 		<h4 ng-hide="isSelectionMode">{{'ManagePeople' | translate}}</h4>
 		<div class="col-md-4">
-			<div class="input-prepend people-search">
-				<i class="mdi mdi-magnify"></i>
-				<input id="simple-search" style="width: 90%; height: 23px;" type="text" placeholder="{{'Search'|translate}}..."
-					   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword() || turnOffAdvancedSearch()" ng-change="validateSearchKeywordChanged()"
-					   ng-click="toggleAdvancedSearchOption($event)" />
-				<advance-search class="dropdown" ng-cloak ng-if="isAdvancedSearchEnabled && showAdvancedSearchOption" outside-click="turnOffAdvancedSearch()"></advance-search>
-			</div>
-
+			<people-search-input search-options="searchOptions" search-callback="searchKeyword"></people-search-input>
 		</div>
 		
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isSelectionMode">

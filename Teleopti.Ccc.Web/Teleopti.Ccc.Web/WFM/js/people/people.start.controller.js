@@ -11,10 +11,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	uiGridExporterConstants, $q, toggleSvc, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
-	$scope.keyword = $stateParams.currentKeyword != undefined ? $stateParams.currentKeyword : "";
-	$scope.searchKeywordChanged = false;
-	$scope.advancedSearchForm = {};
-	$scope.searchCriteriaDic = {};
+	$scope.searchOptions = {
+		keyword: $stateParams.currentKeyword != undefined ? $stateParams.currentKeyword : "",
+		searchKeywordChanged: false,
+		isAdvancedSearchEnabled: false
+	}
 	$scope.lang = i18nService.getCurrentLang();
 	$scope.isImportUsersEnabled = false;
 	$scope.isAdjustSkillEnabled = false;
@@ -179,7 +180,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		$state.go("people.selection", {
 			selectedPeopleIds: getSelectedPeople(),
 			commandTag: commandTag,
-			currentKeyword: $scope.keyword,
+			currentKeyword: $scope.searchOptions.keyword,
 			paginationOptions: $scope.paginationOptions
 		});
 	};
@@ -265,7 +266,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		$scope.gridApi.pagination.seek(pageIndex);
 	} 
 	function getPage(pageIndex) {
-		$scope.paginationOptions.pageNumber = $scope.searchKeywordChanged ? 1 : pageIndex;
+		$scope.paginationOptions.pageNumber = $scope.searchOptions.searchKeywordChanged ? 1 : pageIndex;
 
 		var sortColumnList = "";
 		for (var i = 0; i < $scope.paginationOptions.sortColumns.length; i++) {
@@ -278,7 +279,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 
 		peopleSvc.search.query({
-			keyword: $scope.keyword,
+			keyword: $scope.searchOptions.keyword,
 			pageSize: $scope.paginationOptions.pageSize,
 			currentPageIndex: $scope.paginationOptions.pageNumber,
 			sortColumns: sortColumnList
@@ -319,57 +320,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			setPeopleSelectionStatus();
 			$scope.optionalColumns = result.OptionalColumns;
 			$scope.paginationOptions.totalPages = result.TotalPages;
-			$scope.keyword = $scope.defautKeyword();
-			$scope.searchKeywordChanged = false;
+			$scope.searchOptions.keyword = $scope.defautKeyword();
+			$scope.searchOptions.searchKeywordChanged = false;
 			$scope.gridOptions.totalItems = result.TotalPages * $scope.paginationOptions.pageSize;
 		});
 	}
-
-	var allSearchTypes = [
-		"FirstName",
-		"LastName",
-		"EmploymentNumber",
-		"Organization",
-		"Role",
-		"Contract",
-		"ContractSchedule",
-		"ShiftBag",
-		"PartTimePercentage",
-		"Skill",
-		"BudgetGroup",
-		"Note"
-	];
-
-	function setSearchFormProperty(searchType, searchValue) {
-		angular.forEach(allSearchTypes, function (propName) {
-			if (propName.toUpperCase() === searchType.toUpperCase()) {
-				$scope.advancedSearchForm[propName] = searchValue;
-			}
-		});
-	}
-
-	function parseSearchKeywordInputted() {
-		$scope.advancedSearchForm = {};
-		if ($scope.keyword.indexOf(':') !== -1) {
-			var searchTerms = $scope.keyword.split(',');
-			angular.forEach(searchTerms, function (searchTerm) {
-				var termSplitter = searchTerm.indexOf(':');
-				if (termSplitter < 0) {
-					return;
-				}
-
-				var searchType = searchTerm.substring(0, termSplitter).trim();
-				var searchValue = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
-
-				setSearchFormProperty(searchType, searchValue);
-			});
-		}
-	}
-
-	$scope.validateSearchKeywordChanged = function () {
-		$scope.searchKeywordChanged = true;
-		parseSearchKeywordInputted();
-	};
 
 	$scope.searchKeyword = function () {
 		getPage($scope.paginationOptions.pageNumber);
@@ -390,7 +345,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 
 		return peopleSvc.search.query({
-			keyword: $scope.keyword,
+			keyword: $scope.searchOptions.keyword,
 			pageSize: $scope.gridOptions.totalItems,
 			currentPageIndex: 1,
 			sortColumns: sortColumnList
@@ -402,52 +357,16 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.defautKeyword = function () {
-		if ($scope.keyword === '' && $scope.gridOptions.data !== undefined && $scope.getCurrentPageSelectedRowsLength() > 0) {
+		if ($scope.searchOptions.keyword === '' && $scope.gridOptions.data !== undefined && $scope.getCurrentPageSelectedRowsLength() > 0) {
 			return "\"" + $scope.gridOptions.data[0].Team.replace("/", "\" \"") + "\"";
 		}
-		return $scope.keyword;
-	};
-
-	$scope.showAdvancedSearchOption = false;
-	$scope.toggleAdvancedSearchOption = function ($event) {
-		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
-		$event.stopPropagation();
-		parseSearchKeywordInputted();
-	};
-
-	$scope.turnOffAdvancedSearch = function () {
-		$scope.showAdvancedSearchOption = false;
-	};
-
-	function getSearchCriteria(title, value) {
-		return value !== undefined && value !== "" ? title + ": " + value + ", " : "";
-	}
-
-	$scope.advancedSearch = function () {
-		$scope.showAdvancedSearchOption = false;
-
-		var keyword = "";
-		angular.forEach(allSearchTypes, function (searchType) {
-			// Change first letter to lowercase
-			var title = searchType.charAt(0).toLowerCase() + searchType.slice(1);
-			keyword += getSearchCriteria(title, $scope.advancedSearchForm[searchType]);
-		});
-
-		if (keyword !== "") {
-			keyword = keyword.substring(0, keyword.length - 2);
-		}
-		if (keyword !== "" && keyword !== $scope.keyword) {
-			$scope.searchKeywordChanged = true;
-		}
-		$scope.keyword = keyword;
-
-		getPage($scope.paginationOptions.pageNumber);
+		return $scope.searchOptions.keyword;
 	};
 
 	var promisesForDataInitialization = [];
 	var promiseForAdvancedSearchToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
 	promiseForAdvancedSearchToggle.then(function (result) {
-		$scope.isAdvancedSearchEnabled = result.IsEnabled;
+		$scope.searchOptions.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 	promisesForDataInitialization.push(promiseForAdvancedSearchToggle);
 

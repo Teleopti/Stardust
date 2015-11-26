@@ -1292,6 +1292,7 @@
     <Content Include="WFM\js\seatManagement\seatmapobjectproperty.directive.js" />
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
+    <Content Include="WFM\js\people\peopleSearchInput.directive.js" />
     <Content Include="WFM\js\teamSchedule\personschedule.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.groupSchedule.factory.js" />
@@ -1437,7 +1438,6 @@
     <Content Include="WFM\js\outbound\outbound.controller.default.js" />
     <Content Include="WFM\js\outbound\outbound.directive.selectable-datagrid.js" />
     <Content Include="WFM\js\outbound\outbound.service.translation.js" />
-    <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
     <Content Include="WFM\js\people\people.cart.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
