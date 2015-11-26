@@ -69,6 +69,13 @@ input[type=text],input[type=password],input[type=number]{
 	bottom: -10px;
 	left: -10px;
 	overflow:hidden;
+
+	.wfm-block{
+		width: 100%;
+		margin: 0;
+		padding:0px 10px 0px 10px;
+		position:relative;
+	}
 }
 
 .seatmap-view-header{
@@ -193,13 +200,6 @@ a.mfb-component__button--main {
 	md-backdrop.md-sidenav-backdrop{
 		display:none;
 	}	
-}
-
-.wfm-block{
-	width: 100%;
-	margin: 0;
-	padding:0px 10px 0px 10px;
-	position:relative;
 }
 
 seatmap-editor{

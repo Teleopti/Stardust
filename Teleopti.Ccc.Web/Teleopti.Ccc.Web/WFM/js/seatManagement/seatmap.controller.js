@@ -97,6 +97,7 @@
 
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
+			vm.rightPanelOption.panelState = false;
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
