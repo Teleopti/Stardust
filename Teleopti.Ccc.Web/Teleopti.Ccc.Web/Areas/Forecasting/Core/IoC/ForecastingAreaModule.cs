@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 			builder.RegisterType<ForecastResultViewModelFactory>().SingleInstance().As<IForecastResultViewModelFactory>();
 			builder.RegisterType<IntradayPatternViewModelFactory>().SingleInstance().As<IIntradayPatternViewModelFactory>();
 			builder.RegisterType<CampaignPersister>().SingleInstance().As<ICampaignPersister>();
-			builder.RegisterType<OverrideTasksPersister>().SingleInstance().As<IOverrideTasksPersister>();
+			builder.RegisterType<OverridePersister>().SingleInstance().As<IOverridePersister>();
 		}
 	}
 }

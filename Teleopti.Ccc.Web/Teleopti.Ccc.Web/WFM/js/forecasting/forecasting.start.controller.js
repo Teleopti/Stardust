@@ -148,6 +148,8 @@
 					buildModifyDays(workload);
 					$scope.modalModifyInfo.campaignPercentage = 0;
 					$scope.modalModifyInfo.overrideTasks = 0;
+					$scope.modalModifyInfo.overrideTalkTime = 0;
+					$scope.modalModifyInfo.overrideAcw = 0;
 					$scope.modalModifyInfo.selectedWorkload = workload;
 					$scope.modalModifyInfo.selectedScenario = workload.Scenario;
 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
@@ -256,7 +258,7 @@
 						});
 				};
 
-				$scope.applyOverrideTasks = function (isFormValid) {
+				$scope.applyOverride = function (isFormValid) {
 					if (!isFormValid || $scope.disableApplyModification()) {
 						return;
 					}
@@ -267,12 +269,14 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/OverrideTasks", JSON.stringify(
+					$http.post("../api/Forecasting/Override", JSON.stringify(
 						{
 							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
-							OverrideTasks: $scope.modalModifyInfo.overrideTasks
+							OverrideTasks: $scope.modalModifyInfo.overrideTasks,
+							OverrideTalkTime: $scope.modalModifyInfo.overrideTalkTime,
+							OverrideAfterCallWork: $scope.modalModifyInfo.overrideAcw
 						}))
 						.success(function (data, status, headers, config) {
 							if (data.Success) {

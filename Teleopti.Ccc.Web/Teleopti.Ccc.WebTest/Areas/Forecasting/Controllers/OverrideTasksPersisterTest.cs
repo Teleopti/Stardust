@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var intradayForecaster = MockRepository.GenerateMock<IIntradayForecaster>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			var target = new OverrideTasksPersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
+			var target = new OverridePersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
 			workloadDay.OverrideTasks.Should().Be.EqualTo(null);
 
 			const double overrideTasks = 300d;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(workload)).Return(null);
 			
-			var target = new OverrideTasksPersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
+			var target = new OverridePersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
 			target.Persist(scenario, workload, new[]
 			{
 				new ModifiedDay
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					{DayOfWeek.Monday, mondayPattern}
 				});
 
-			var target = new OverrideTasksPersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
+			var target = new OverridePersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
 			target.Persist(scenario, workload, new[]
 			{
 				new ModifiedDay

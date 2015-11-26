@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldAddOverrideForecastedValues()
 		{
-			var input = new OverrideTasksInput
+			var input = new OverrideInput
 			{
 				Days = new[] {new ModifiedDay {Date = new DateTime()}},
 				ScenarioId = Guid.NewGuid(),
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				IgnoreOverrideTalkTime = false,
 				IgnoreOverrideAfterCallWork = false
 			};
-			var overrideTasksPersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
+			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var scenario = new Scenario("default");
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Return(workload);
 			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister);
 
-			var result = target.OverrideTasks(input);
+			var result = target.Override(input);
 			result.Result.Success.Should().Be.True();
 
 			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks, TimeSpan.FromSeconds(input.OverrideTalkTime), TimeSpan.FromSeconds(input.OverrideAfterCallWork)));
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldIgnoreOverrideForecastedValues()
 		{
-			var input = new OverrideTasksInput
+			var input = new OverrideInput
 			{
 				Days = new[] { new ModifiedDay { Date = new DateTime() } },
 				ScenarioId = Guid.NewGuid(),
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				IgnoreOverrideTalkTime = true,
 				IgnoreOverrideAfterCallWork = true
 			};
-			var overrideTasksPersister = MockRepository.GenerateMock<IOverrideTasksPersister>();
+			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var scenario = new Scenario("default");
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Return(workload);
 			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister);
 
-			var result = target.OverrideTasks(input);
+			var result = target.Override(input);
 			result.Result.Success.Should().Be.True();
 			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, null, null, null));
 		}

@@ -9,14 +9,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
-	public class OverrideTasksPersister : IOverrideTasksPersister
+	public class OverridePersister : IOverridePersister
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IFutureData _futureData;
 		private readonly IIntradayForecaster _intradayForecaster;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public OverrideTasksPersister(ISkillDayRepository skillDayRepository, IFutureData futureData, IIntradayForecaster intradayForecaster, IHistoricalPeriodProvider historicalPeriodProvider)
+		public OverridePersister(ISkillDayRepository skillDayRepository, IFutureData futureData, IIntradayForecaster intradayForecaster, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_skillDayRepository = skillDayRepository;
 			_futureData = futureData;

@@ -111,7 +111,7 @@ Scenario: Override only forecasted calls for one day
 	And Forecast has succeeded
 	When I select the first day in the forecast chart
 	And I select to modify the forecast
-	And I select to do override calls
+	And I select to override forecasted values
 	And I enter '500' calls per day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
@@ -125,7 +125,7 @@ Scenario: Override the forecasted values for one day
 	And Forecast has succeeded
 	When I select the first day in the forecast chart
 	And I select to modify the forecast
-	And I select to do override calls
+	And I select to override forecasted values
 	And I enter '500' calls per day
 	And I enter '100' seconds talk time
 	And I enter '50' seconds after call work

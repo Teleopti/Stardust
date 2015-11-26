@@ -209,6 +209,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-modify-button");
 		}
 
+		[When(@"I select to override forecasted values")]
+		public void WhenISelectToOverrideForecastedValues()
+		{
+			Browser.Interactions.Click(".forecast-override-tasks-button");
+		}
+
+
 		[When(@"I choose to add a campaign")]
 		public void WhenIChooseToAddACampaign()
 		{
@@ -224,8 +231,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I enter '(.*)' calls per day")]
 		public void WhenIEnterCallsPerDay(string calls)
 		{
+			Browser.Interactions.Click(".override-tasks-checkbox");
 			Browser.Interactions.FillWith("#overrideTasksInputId", calls);
 			Browser.Interactions.AssertInputValue("#overrideTasksInputId", calls);
+		}
+
+		[When(@"I enter '(.*)' seconds talk time")]
+		public void WhenIEnterSecondsTalkTime(string talkTime)
+		{
+			Browser.Interactions.Click(".override-talktime-checkbox");
+			Browser.Interactions.FillWith("#overrideTalkTimeInputId", talkTime);
+			Browser.Interactions.AssertInputValue("#overrideTalkTimeInputId", talkTime);
+		}
+
+		[When(@"I enter '(.*)' seconds after call work")]
+		public void WhenIEnterSecondsAfterCallWork(string afterCallWork)
+		{
+			Browser.Interactions.Click(".override-acw-checkbox");
+			Browser.Interactions.FillWith("#overrideAcwInputId", afterCallWork);
+			Browser.Interactions.AssertInputValue("#overrideAcwInputId", afterCallWork);
 		}
 
 		[When(@"I increase the calls by (.*) percent")]
@@ -272,7 +296,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, calls);
 		}
 
+		[Then(@"I should see that the total talk time for the first day is '(.*)'")]
+		public void ThenIShouldSeeThatTheTotalTalkTimeForTheFirstDayIs(string talkTime)
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"return Math.round(v1);"
+				, talkTime);
+		}
 
+		[Then(@"I should see that the total after call work for the first day is '(.*)'")]
+		public void ThenIShouldSeeThatTheTotalAfterCallWorkForTheFirstDayIs(string afterCallWork)
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"return Math.round(v1);"
+				, afterCallWork);
+		}
+
+		
 		[Given(@"I am viewing the forecast chart")]
 		public void GivenIAmViewingTheForecastChart()
 		{

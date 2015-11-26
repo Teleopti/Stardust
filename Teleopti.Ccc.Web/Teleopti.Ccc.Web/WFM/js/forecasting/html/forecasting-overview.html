@@ -163,25 +163,80 @@
 						</div>
 					</div>
 					<div ng-show="overrideTasks && !addCampaign">
-						<form name="form" class="wfm-form" novalidate ng-submit="applyOverrideTasks(form.$valid);">
+						<form name="form" class="wfm-form" novalidate ng-submit="applyOverride(form.$valid);">
 							<h4>{{ 'AbsenceOverride' | translate }}</h4>
 							<dl>
 								<p>{{ 'ForecastOverrideMsg' | translate }}</p>
 								<dd>
-									<div class="form-input-wrap skill-service-level-seconds">
-										<label for="overrideTasksInputId">
-											{{ 'CallsSlashDay' | translate }}
-											<input type="number" ng-model="modalModifyInfo.overrideTasks" name="overrideTasksInput" required="" id="overrideTasksInputId" min="0" />
-										</label>
-										<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-											<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">Seconds are required</div>
-											<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">Negative values are not allowed</div>
-										</div>
-									</div>
+									<ul class="wfm-accordion">
+										<li>
+											<div class="wfm-checkbox">
+												<input type="checkbox" id="tasksCheckId" />
+												<label class="override-tasks-checkbox" for="tasksCheckId" ng-click="activeTaskInput = !activeTaskInput">
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label">Calls</span>
+												</label>
+											</div>
+											<div class="wfm-accordion-content" ng-cloak ng-show="activeTaskInput">
+												<div class="form-input-wrap skill-service-level-seconds">
+													<label for="overrideTasksInputId">
+														{{ 'CallsSlashDay' | translate }}
+														<input type="number" ng-model="modalModifyInfo.overrideTasks" name="overrideTasksInput" required="" id="overrideTasksInputId" min="0" />
+													</label>
+													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">Seconds are required</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">Negative values are not allowed</div>
+													</div>
+												</div>
+											</div>
+										</li>
+
+										<li>
+											<div class="wfm-checkbox">
+												<input type="checkbox" id="talkTimeCheckId" />
+												<label class="override-talktime-checkbox" for="talkTimeCheckId" ng-click="activeTalkInput = !activeTalkInput">
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label">Talk time </span>
+												</label>
+											</div>
+											<div class="wfm-accordion-content" ng-cloak ng-show="activeTalkInput">
+												<div class="form-input-wrap skill-service-level-seconds">
+													<label for="overrideTalkTimeInputId">
+														Seconds/call
+														<input type="number" ng-model="modalModifyInfo.overrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
+													</label>
+													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.required}">Can not be empty</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.min}">Negative values are not allowed</div>
+													</div>
+												</div>
+											</div>
+										</li>
+
+										<li>
+											<div class="wfm-checkbox">
+												<input type="checkbox" id="AcwCheckId" />
+												<label class="override-acw-checkbox" for="AcwCheckId" ng-click="activeAcwInput = !activeAcwInput">
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label">After call work </span>
+												</label>
+											</div>
+											<div class="wfm-accordion-content" ng-cloak ng-show="activeAcwInput">
+												<div class="form-input-wrap skill-service-level-seconds">
+													<label for="overrideAcwInputId">
+														Seconds/call
+														<input type="number" ng-model="modalModifyInfo.overrideAcw" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
+													</label>
+													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">Seconds are required</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">Negative values are not allowed</div>
+													</div>
+												</div>
+											</div>
+										</li>
+									</ul>
 								</dd>
 							</dl>
-							<br />
-							<br />
 							<br />
 							<div class="modal-footer">
 								<aside>

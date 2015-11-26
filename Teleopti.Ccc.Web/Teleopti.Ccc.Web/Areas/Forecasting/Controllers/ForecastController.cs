@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly ICampaignPersister _campaignPersister;
-		private readonly IOverrideTasksPersister _overrideTasksPersister;
+		private readonly IOverridePersister _overridePersister;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IOverrideTasksPersister overrideTasksPersister)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IOverridePersister overridePersister)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_campaignPersister = campaignPersister;
-			_overrideTasksPersister = overrideTasksPersister;
+			_overridePersister = overridePersister;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -185,8 +185,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/OverrideTasks")]
-		public virtual Task<ForecastResultViewModel> OverrideTasks(OverrideTasksInput input)
+		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
+		public virtual Task<ForecastResultViewModel> Override(OverrideInput input)
 		{
 			var failedTask = Task.FromResult(new ForecastResultViewModel
 			{
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				var scenario = _scenarioRepository.Get(input.ScenarioId);
 				var workload = _workloadRepository.Get(input.WorkloadId);
-				_overrideTasksPersister.Persist(scenario, workload, input.Days, 
+				_overridePersister.Persist(scenario, workload, input.Days, 
 					input.IgnoreOverrideTasks ? null : (double?)input.OverrideTasks,
 					input.IgnoreOverrideTalkTime ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideTalkTime),
 					input.IgnoreOverrideAfterCallWork ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideAfterCallWork));
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public double CampaignTasksPercent { get; set; }
 	}
 
-	public class OverrideTasksInput : ModifyInput
+	public class OverrideInput : ModifyInput
 	{
 		public double OverrideTasks { get; set; }
 		public double OverrideTalkTime { get; set; }
