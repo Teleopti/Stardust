@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Navigation = Teleopti.Ccc.WebBehaviorTest.Bindings.NavigationStepDefinitions;
 

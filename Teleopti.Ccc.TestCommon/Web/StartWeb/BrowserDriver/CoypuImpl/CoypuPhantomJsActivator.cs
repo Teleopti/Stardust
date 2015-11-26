@@ -1,6 +1,6 @@
 ﻿using Coypu.Drivers.Selenium;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.CoypuImpl
 {
 	public class CoypuPhantomJsActivator : CoypuBrowserActivator
 	{

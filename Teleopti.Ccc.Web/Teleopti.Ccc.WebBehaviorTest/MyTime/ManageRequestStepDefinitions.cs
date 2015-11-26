@@ -3,11 +3,12 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Ccc.Domain.Helper;
+using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsControlExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -43,9 +44,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I input absence request values with ""(.*)"" from ""(.*)"" to ""(.*)""")]
 		public void WhenIInputAbsenceRequestValuesWithFromTo(string absenceName, DateTime dateFrom, DateTime dateTo)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", absenceName);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-subject", "The cake is a.. Cake!");
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
+			BrowserInteractionsControlExtensions.SelectOptionByTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-absence", absenceName);
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I submit my changes for the existing shift trade post")]
 		public void WhenISubmitMyChangesForTheExistingShiftTradePost()
 		{
-			Browser.Interactions.ClickUsingJQuery(".request-list .request .request-new-send");
+			BrowserInteractionsJQueryExtensions.ClickUsingJQuery(Browser.Interactions, ".request-list .request .request-new-send");
 		}
 
 	}

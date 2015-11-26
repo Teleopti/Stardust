@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
 {
 	public static class FuncExtensions
 	{
@@ -17,4 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			return true;
 		}
 	}
+
+    public static class DateOnlyForBehaviorTests
+    {
+        private static readonly DateOnly Today = DateOnly.Today;
+
+        public static DateOnly TestToday { get { return Today; } }
+    }
 }

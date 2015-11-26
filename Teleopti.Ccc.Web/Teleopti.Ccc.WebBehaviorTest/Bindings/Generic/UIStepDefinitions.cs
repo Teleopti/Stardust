@@ -1,7 +1,6 @@
 using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
 {
 	public sealed class TimeoutScope : IDisposable
 	{

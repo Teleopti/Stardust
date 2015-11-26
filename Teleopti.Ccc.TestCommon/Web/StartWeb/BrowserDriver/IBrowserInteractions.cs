@@ -1,7 +1,6 @@
 ﻿using System;
-using Coypu;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
 {
 	public interface IBrowserInteractions
 	{

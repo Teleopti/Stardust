@@ -4,13 +4,13 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {

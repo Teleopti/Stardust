@@ -4,10 +4,11 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
+using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsControlExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change the subject to '(.*)' for the existing request")]
 		public void WhenIChangeTheSubjectToForTheExistingRequest(string subject)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request .request-edit-subject", subject);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".request .request-edit-subject", subject);
 		}
 
 		[Then(@"I should see the existing text request in the list with subject '(.*)'")]
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see delete button")]
 		public void ThenIShouldNotSeeDeleteButton()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".request-new-delete");
+			BrowserInteractionsJQueryExtensions.AssertNotVisibleUsingJQuery(Browser.Interactions, ".request-new-delete");
 		}
 
 		[Then(@"I should see the values of the existing text request")]
@@ -105,14 +106,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var today = DateOnlyForBehaviorTests.TestToday.Date;
 
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(DataMaker.Data().MyCulture));
+			BrowserInteractionsJQueryExtensions.AssertInputValueUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-datefrom", today.ToShortDateString(DataMaker.Data().MyCulture));
+			BrowserInteractionsJQueryExtensions.AssertInputValueUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-dateto", today.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", string.Empty);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-subject", string.Empty);
 		}
 
 		[When(@"I try to input too long message request values")]
@@ -134,12 +135,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void TypeSubject(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-subject", text);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".request-new-subject", text);
 		}
 
 		private void TypeMessage(string text)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request-new-message", text);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".request-new-message", text);
 		}
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
@@ -148,11 +149,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  fromDate.ToShortDateString(DataMaker.Data().MyCulture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
 							  toDate.ToShortDateString(DataMaker.Data().MyCulture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timeto", toTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-timeto", toTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}
 
 		[When(@"I input later start time than end time")]
@@ -191,7 +192,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see message adjusted to maximum length")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-message", new string('t', 2000));
+			BrowserInteractionsJQueryExtensions.AssertInputValueUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-message", new string('t', 2000));
         }
 
 		[Then(@"I should see texts describing too long subject error")]

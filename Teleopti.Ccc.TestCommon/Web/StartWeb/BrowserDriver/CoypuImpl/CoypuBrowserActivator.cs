@@ -1,7 +1,7 @@
 ﻿using System;
 using Coypu;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
+namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.CoypuImpl
 {
 	public class CoypuBrowserActivator : IBrowserActivator
 	{

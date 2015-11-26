@@ -208,10 +208,7 @@
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Bindings\TestRun.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
-    <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
+    <Compile Include="Core\Extensions\DateOnlyForBehaviorTests.cs" />
     <Compile Include="Core\Navigation\FakeClientTimeUsingSinonProvenWay.cs" />
     <Compile Include="Core\Navigation\FakeTimeUsingMyTimeMethod.cs" />
     <Compile Include="Core\Navigation\ApplicationStartupTimeout.cs" />
@@ -427,7 +424,6 @@
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\Configurable\SiteConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
@@ -485,9 +481,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
     <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
     <Compile Include="MyTime\CalendarShare.feature.cs">
@@ -495,8 +488,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuChromeActivator.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
@@ -545,13 +536,7 @@
     <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
-    <Compile Include="Core\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
-    <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
-    <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
     <Compile Include="Data\Setups\DoNotUse\AbsenceInContractTime.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
@@ -595,8 +580,6 @@
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
-    <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -684,7 +667,6 @@
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
-    <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
     <Compile Include="Data\GlobalDataMaker.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
@@ -818,7 +800,6 @@
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation\Navigation.cs" />
-    <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\DoNotUse\UserStepDefinitions.cs" />
     <Compile Include="MyTime\TextRequestFromSchedule.feature.cs">

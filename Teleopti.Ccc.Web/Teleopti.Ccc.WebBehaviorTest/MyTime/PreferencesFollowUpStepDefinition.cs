@@ -2,7 +2,6 @@ using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime

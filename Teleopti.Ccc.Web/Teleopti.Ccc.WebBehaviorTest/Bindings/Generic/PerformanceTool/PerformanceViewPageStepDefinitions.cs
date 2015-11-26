@@ -6,10 +6,11 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsControlExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		[When(@"I select scenario '(.*)'")]
 		public void WhenISelectScenario(string scenario)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".scenario-selector", scenario);
+			BrowserInteractionsControlExtensions.SelectOptionByTextUsingJQuery(Browser.Interactions, ".scenario-selector", scenario);
 		}
 
 		[When(@"I input a configuration with (.*) scenarios in json format")]
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 						}
 				};
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".scenario-configuration", value);
 		}
 
 		[When(@"I input an RTA configuration scenario for '(.*)' in json format on datasource (.*)")]
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			};
 
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".scenario-configuration", value);
 		}
 
 		[When(@"I input a configuration for (.*) of (.*) with (.*) states and (.*) poll per second on datasource (.*)")]
@@ -93,14 +94,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			}
 
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, ".scenario-configuration", value);
 		}
 		
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]
 		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated(int messages, string model)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
-			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, ".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, ".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
 		}
 
 

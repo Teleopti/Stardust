@@ -2,7 +2,7 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;

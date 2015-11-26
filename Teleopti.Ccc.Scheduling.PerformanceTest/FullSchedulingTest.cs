@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[TearDown]
 		public void CleanUp()
 		{
-			
+			TestSiteConfigurationSetup.TearDown();
 		}
 	}
 }

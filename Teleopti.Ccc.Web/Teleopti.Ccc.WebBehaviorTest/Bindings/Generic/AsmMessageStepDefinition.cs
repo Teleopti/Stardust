@@ -8,12 +8,12 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -92,28 +92,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the message detail form with the message '(.*)'")]
 		public void ThenIShouldSeeTheMessageDetailFormWithTheMessage(string messageText)
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery(".detail-form");
-			Browser.Interactions.AssertFirstContainsUsingJQuery(".detail-form .message-text", messageText);
+			BrowserInteractionsJQueryExtensions.AssertVisibleUsingJQuery(Browser.Interactions, ".detail-form");
+			BrowserInteractionsJQueryExtensions.AssertFirstContainsUsingJQuery(Browser.Interactions, ".detail-form .message-text", messageText);
 		}
 
 		[When(@"I click on the message with the title '(.*)'")]
 		public void WhenIClickOnTheMessageWithTheTitle(string messsageTitle)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format(CultureInfo.InvariantCulture, ".message .title:contains('{0}')", messsageTitle));
+			BrowserInteractionsJQueryExtensions.ClickUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture, ".message .title:contains('{0}')", messsageTitle));
 		}
 
 
 		[When(@"I confirm reading the message with the title '(.*)'")]
 		public void WhenIConfirmReadingTheMessageWithTheTitle(string messageTitle)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			BrowserInteractionsJQueryExtensions.ClickUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 			                                         ".message:has(.title:contains('{0}')) .confirm-read", messageTitle));
 		}
 
 		[Then(@"I should see a user-friendly message explaining I dont have any messages")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery(".no-messages");
+			BrowserInteractionsJQueryExtensions.AssertVisibleUsingJQuery(Browser.Interactions, ".no-messages");
 		}
 
 		[When(@"I enter the text reply '(.*)'")]
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should be able to write a text reply for the message with the title '(.*)'")]
 		public void ThenIShouldBeAbleToWriteATextReplyForTheMessageWithTheTitle(string messageTitle)
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			BrowserInteractionsJQueryExtensions.AssertVisibleUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 																		".message:has(.title:contains('{0}')) .text-reply",
 			                                                            messageTitle));
 		}
@@ -137,14 +137,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var dialogue1 = table.Rows[0][0];
 			var dialogue2 = table.Rows[1][0];
 			const string selector = ".message:has(.title:contains('{0}')) .dialogue > span:contains('{1}')";
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue1));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue2));
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue1));
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue2));
 		}
 
 		[Then(@"I should not be able to send response for the message with the title '(.*)'")]
 		public void ThenTheSendButtonShouldBeDisabledForTheMessageWithTheTitle(string messageTitle)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 																		".message:has(.title:contains('{0}')) .confirm-read:disabled",
 																		messageTitle));
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should be able to send response for the message with the title '(.*)'")]
 		public void ThenTheSendButtonShouldBeEnabledForTheMessageWithTheTitle(string messageTitle)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			BrowserInteractionsJQueryExtensions.AssertExistsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 																		".message:has(.title:contains('{0}')) .confirm-read:not(disabled)",
 																		messageTitle));
 		}
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIChooseReplyOptionForTheMessageWithTheTitle(string replyOption, string messageTitle)
 		{
 			string selector = string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option:contains('{1}')", messageTitle, replyOption);
-			Browser.Interactions.ClickUsingJQuery(selector);
+			BrowserInteractionsJQueryExtensions.ClickUsingJQuery(Browser.Interactions, selector);
 		}
 
 		[Then(@"I should be able to select one of the following options for the message with the title '(.*)'")]
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			for (int i = 0; i < table.RowCount; i++)
 			{
-				Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+				BrowserInteractionsJQueryExtensions.AssertFirstContainsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 																	   ".message:has(.title:contains('{0}')) .message-option:nth-child({1})",
 																	   messageTitle, i + 1),
 																	   table.Rows[i][0]);
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should not see any options for the message with the title '(.*)'")]
 		public void ThenIShouldNotSeeAnyOptionsForTheMessageWithTheTitle(string messageTitle)
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			BrowserInteractionsJQueryExtensions.AssertNotVisibleUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture,
 																	   ".message:has(.title:contains('{0}')) .message-option",
 																	   messageTitle));
 		}
@@ -208,8 +208,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"the reply option '(.*)' should not be selected for the message with the title '(.*)'")]
 		public void ThenTheReplyOptionShouldNotBeSelectedForTheMessageWithTheTitle(string replyOption, string messageTitle)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(
-				string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option:contains('{1}')",
+			BrowserInteractionsJQueryExtensions.AssertNotExistsUsingJQuery(Browser.Interactions, string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option:contains('{1}')",
 				              messageTitle, replyOption),
 				string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option.active:contains('{1}')",
 				              messageTitle, replyOption));

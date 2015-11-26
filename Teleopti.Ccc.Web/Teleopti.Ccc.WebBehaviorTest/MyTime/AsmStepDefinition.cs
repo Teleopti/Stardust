@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Text;
 using System.Xml;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
