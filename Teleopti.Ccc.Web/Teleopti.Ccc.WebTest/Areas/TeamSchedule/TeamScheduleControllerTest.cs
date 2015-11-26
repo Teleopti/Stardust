@@ -35,15 +35,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsNoSchedule()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
 
-			var projectionVm = result.Single().Projection.ToList();
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes"); // Refer to FakeCommonAgentNameProvider
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(0);
 		}
 
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsMainShift()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -65,9 +67,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(2);
 
 			projectionVm[0].Description.Should().Be.EqualTo("activity1");
@@ -83,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsDayOff()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -96,14 +102,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
 			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(0);
 
-			result.Single().DayOff.DayOffName.Should().Be.EqualTo("test");
-			result.Single().DayOff.Start.Should().Be.EqualTo("2020-01-01 00:00");
-			result.Single().DayOff.Minutes.Should().Be.EqualTo(1440);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+			schedule.DayOff.DayOffName.Should().Be.EqualTo("test");
+			schedule.DayOff.Start.Should().Be.EqualTo("2020-01-01 00:00");
+			schedule.DayOff.Minutes.Should().Be.EqualTo(1440);
 		}
 
 		[Test]
@@ -126,20 +136,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
 			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+			
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 		}
 
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndShift()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -154,11 +167,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
-
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 09:00");
@@ -184,11 +199,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
-
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 
+			var schedule = result.Single();
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
@@ -199,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnAContractDayOffDay()
 		{
 			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
 			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
 			person.AddPersonPeriod(personPeriod);
@@ -219,11 +235,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
-
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(true);
 
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-04 08:00");
@@ -249,10 +267,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
-
+			
+			var schedule = result.Single();
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+			
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(2);
 
 			projectionVm[0].Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
@@ -270,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidential()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 			PersonProvider.AddPersonWitViewConfidentialPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -287,10 +307,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
-
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+
+			var projectionVm = schedule.Projection.ToList();
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
 
 			projectionVm.Count.Should().Be.EqualTo(2);
 
@@ -309,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnEmptyScheduleWhenScheduleIsUnpublishedAndNoViewUnpublishedSchedulePermission()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			person.WorkflowControlSet = new WorkflowControlSet("testWCS")
 			{
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
@@ -328,9 +351,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
-			var projectionVm = result.Single().Projection.ToList();
 			result.Count.Should().Be.EqualTo(1);
-			result.Single().IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(0);
 		}
 
@@ -338,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnScheduleForPreviousDayWhenThereIsOvernightShift()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -368,7 +395,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldIndicateOvertimeActivity()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("p1", "p1");
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.IocCommon;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -12,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
-	public class TeamScheduleTestAttribute:IoCTestAttribute
+	public class TeamScheduleTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-
+			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 		}
 	}
 }

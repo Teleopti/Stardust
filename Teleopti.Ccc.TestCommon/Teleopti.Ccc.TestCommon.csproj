@@ -150,6 +150,7 @@
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="FakeData\FakeClassicScheduleCommand.cs" />
+    <Compile Include="FakeData\FakeCommonAgentNameProvider.cs" />
     <Compile Include="FakeData\FakeCommonStateHolder.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
