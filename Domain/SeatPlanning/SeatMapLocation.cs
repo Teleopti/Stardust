@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -105,7 +103,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-
 		public virtual IList<SeatMapLocation> GetFullLocationHierachyAsList()
 		{
 			var locations = new List<SeatMapLocation> ();
@@ -119,8 +116,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return locations;
 		}
-
-
+		
 		public virtual void UpdateSeatMapTemporaryId(Guid? temporaryId, Guid? persistedId)
 		{
 			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
@@ -135,8 +131,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return null;
 		}
-
-
+		
 		public virtual int SeatCount { get { return _seats.Count; } }
 
 		public virtual bool CanAllocateShifts(params ISeatBooking[] agentShifts)
@@ -161,11 +156,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					{
 						temporarySeatBooking.TemporarilyAllocate (agentShift.SeatBooking);
 						agentShift.SetBooked();
-
 					}
 				}
 			}
-
 			
 			return temporaryBookings.All(s => s.IsBooked);
 		}

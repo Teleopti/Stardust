@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -79,8 +76,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				}
 			}
 		}
-
-
+		
 		private void bookSeatsForLocation(IEnumerable<ISeatBooking> unallocatedShifts, ISeatMapLocation targetSeatMapLocation)
 		{
 			foreach (var shift in unallocatedShifts)

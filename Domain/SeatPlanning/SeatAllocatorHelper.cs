@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return foundSeats.FirstOrDefault();
 		}
 
-
 		public static ISeat TryToFindASeatForBooking(ISeatBooking seatBooking, IEnumerable<ISeat> seats)
 		{
 			var seatsByPersonRoleMatch = findPossibleSeatsRankedByPersonRoleMatches(seatBooking, seats);
@@ -37,27 +34,22 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public static IEnumerable<ISeatMapLocation> GetLocationsInOrderOfBookingOrder( IList<SeatMapLocation> seatMapLocations, params ISeatBooking[] seatBookings)
 		{
-			//if (bookGroupedRequestsTogether)
-			//{
-				var locationsInOrder = from location in seatMapLocations
-									   where location.IncludeInSeatPlan
-									   orderby
-										   sumIntersectionsBetweenBookingRequestAgentRolesAndSeatRoles(seatBookings, location.Seats) descending,
-										   location.SeatCount descending
-									   select location;
+			var locationsInOrder = from location in seatMapLocations
+								   where location.IncludeInSeatPlan
+								   orderby
+									   sumAgentRoleAndSeatRoleIntersections(seatBookings, location.Seats) descending,
+									   location.SeatCount descending
+								   select location;
 
-				return locationsInOrder;
-			//}
-
-			//return seatMapLocations.OrderByDescending(location => location.SeatCount);
+			return locationsInOrder;
 		}
 		
-		private static int sumIntersectionsBetweenBookingRequestAgentRolesAndSeatRoles(IEnumerable<ISeatBooking>seatBookings, IEnumerable<ISeat> seats)
+		private static int sumAgentRoleAndSeatRoleIntersections(IEnumerable<ISeatBooking>seatBookings, IEnumerable<ISeat> seats)
 		{
-			return seatBookings.Sum (booking => getCountOfIntersectionsBetweenBookingAndSeatRoles (seats, booking));
+			return seatBookings.Sum (booking => getAgentRoleAndSeatRoleIntersectionCount (seats, booking));
 		}
 
-		private static int getCountOfIntersectionsBetweenBookingAndSeatRoles (IEnumerable<ISeat> seats, ISeatBooking seatBooking)
+		private static int getAgentRoleAndSeatRoleIntersectionCount (IEnumerable<ISeat> seats, ISeatBooking seatBooking)
 		{
 			return (from seat in seats
 					let personApplicationRoles = seatBooking.Person.PermissionInformation.ApplicationRoleCollection
