@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Models
 		public string HelpUrl { get; set; }
 		public string CurrentLogonAgentName { get; set; }
 		public string CurrentBuName { get; set; }
+		public bool UseOpenXml { get; set; }
 	}
 }

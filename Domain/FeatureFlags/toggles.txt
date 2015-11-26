@@ -94,3 +94,4 @@ WfmPermission_ReplaceOldPermission_34671 = RC
 WfmTeamSchedule_NoReadModel_35609 = RC
 
 Wfm_Requests_Basic_35986 = dev
+Report_UseOpenXmlFormat_35797 = true

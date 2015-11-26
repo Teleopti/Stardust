@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
@@ -25,14 +27,16 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IToggleManager _toggleManager;
 
 		public ReportController(IReportsNavigationProvider reportsNavigationProvider, IPersonNameProvider personNameProvider,
-			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit currentBusinessUnit)
+			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit currentBusinessUnit, IToggleManager toggleManager)
 		{
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_personNameProvider = personNameProvider;
 			_loggedOnUser = loggedOnUser;
 			_currentBusinessUnit = currentBusinessUnit;
+			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWorkAction]
@@ -79,7 +83,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 						ReportNavigationItems = reportsItems,
 						HelpUrl = helpUrl,
 						CurrentLogonAgentName = agentName,
-						CurrentBuName = buName
+						CurrentBuName = buName,
+						UseOpenXml = _toggleManager.IsEnabled(Toggles.Report_UseOpenXmlFormat_35797)
 					});
 			}
 		}

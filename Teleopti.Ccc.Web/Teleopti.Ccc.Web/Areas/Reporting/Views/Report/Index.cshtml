@@ -104,6 +104,6 @@
 				
 			</div>
 		</header>
-		<iframe style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id"></iframe>
+		<iframe style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id&UseOpenXml=@Model.UseOpenXml.ToString().ToLower()"></iframe>
 	</body>
 </html>

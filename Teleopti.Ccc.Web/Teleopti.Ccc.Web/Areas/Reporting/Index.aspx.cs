@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 	{
 		protected Guid ReportId;
 		protected Guid GroupPageCode;
+		protected bool UseOpenXml = false;
 		protected override void OnInit(EventArgs e)
 		{
 			base.OnInit(e);
@@ -25,6 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
 					return;
 				ParameterSelector.ReportId = ReportId;
+
+				bool.TryParse(Request.QueryString.Get("UseOpenXml"), out UseOpenXml);
 
 				using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 				{
@@ -95,12 +98,12 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		protected void ButtonShowClickExcel(object sender, ImageClickEventArgs e)
 		{
-			doIt("Excel");
-		}
+			doIt(excelFormat());
+      }
 
 		protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
 		{
-			doIt("Word");
+			doIt(wordFormat());
 		}
 
 		protected void ButtonShowClickImage(object sender, ImageClickEventArgs e)
@@ -178,7 +181,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					viewer.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
 				}
 				var inlineOrAtt = "inline;";
-				if (format.Equals("Word") || format.Equals("Excel"))
+				if (format.Equals(wordFormat()) || format.Equals(excelFormat()))
 					inlineOrAtt = "attachment;";
 				// Variables
 				Warning[] warnings;
@@ -191,7 +194,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				byte[] bytes = viewer.LocalReport.Render(format, "<DeviceInfo><OutputFormat>PNG</OutputFormat></DeviceInfo>", out mimeType, out encoding, out extension, out streamIds,
 					out warnings);
 
-				// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.
 				Response.Clear();
 				Response.ContentType = mimeType;
 				// commonReports + Guid.NewGuid() = to get uniquie name to be able to open more than one with different selections
@@ -205,6 +207,16 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					Context.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
 				}
 			}
-		}	
+		}
+		
+		private string wordFormat()
+		{
+			return UseOpenXml ? "WORDOPENXML" : "WORD";
+		}
+
+		private string excelFormat()
+		{
+			return UseOpenXml ? "EXCELOPENXML" : "EXCEL";
+		}
 	}
 }
