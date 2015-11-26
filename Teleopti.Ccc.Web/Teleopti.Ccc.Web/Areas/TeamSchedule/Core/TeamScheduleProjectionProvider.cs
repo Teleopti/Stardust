@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -13,14 +12,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
-			ICommonAgentNameProvider commonAgentNameProvider)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
-			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
@@ -29,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var layers = new List<GroupScheduleLayerViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			scheduleVm.PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString();
-			scheduleVm.Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(scheduleDay.Person);
+			scheduleVm.Name = scheduleDay.Person.Name.ToString();
 			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();

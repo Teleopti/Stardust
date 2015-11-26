@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -17,18 +16,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider projectionProvider, ISchedulePersonProvider schedulePersonProvider,
-			ILoggedOnUser loggedOnUser, ICommonAgentNameProvider commonAgentNameProvider)
+			ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_schedulePersonProvider = schedulePersonProvider;
 			_loggedOnUser = loggedOnUser;
-			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
@@ -58,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				select new Tuple<IPerson, IEnumerable<IScheduleDay>>(p, personSchedules)).ToArray();
 
 			var list = new List<GroupScheduleShiftViewModel>();
-			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			foreach (var personScheduleDay in personScheduleDays)
 			{
 				var person = personScheduleDay.Item1;
@@ -69,12 +65,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					list.Add(new GroupScheduleShiftViewModel
 					{
 						PersonId = person.Id.GetValueOrDefault().ToString(),
-						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+						Name = person.Name.ToString(),
 						Date = dateInUserTimeZone.ToFixedDateFormat(),
 						Projection = new List<GroupScheduleLayerViewModel>()
 					});
 				}
-
 				foreach (var scheduleDay in schedules)
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, person);
@@ -83,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),
-							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+							Name = person.Name.ToString(),
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 							Projection = new List<GroupScheduleLayerViewModel>()
 						});
