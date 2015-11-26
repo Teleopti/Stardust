@@ -51,8 +51,8 @@
 				vm.searchOptions.searchKeywordChanged = true;
 			}
 			vm.searchOptions.keyword = keyword;
-
-			vm.searchCallback();
+			if (vm.searchCallback)
+				vm.searchCallback();
 		};
 
 		var allSearchTypes = [

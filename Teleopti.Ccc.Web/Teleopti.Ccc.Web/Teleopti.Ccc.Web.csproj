@@ -1309,6 +1309,7 @@
     <Content Include="WFM\tests\global\currentuserinfo.service.spec.js" />
     <Content Include="WFM\tests\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
+    <Content Include="WFM\tests\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
