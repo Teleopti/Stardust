@@ -487,56 +487,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             return noRest;
         }
-    
-		[Test]
-		public void ShouldReturnSchedulePeriodWhenEqualWithOpenPeriod()
-		{
-			var dateFrom = new DateOnly(2010, 1, 1);
-			var dateTo = new DateOnly(2010, 1, 31);
-			var openPeriod = new DateOnlyPeriod(dateFrom,dateTo);
-			var schedulePeriod = _mockRep.StrictMock<ISchedulePeriod>();
-			
-			using (_mockRep.Record())
-			{
-                schedulePeriod.SetParent(_agent);
-				Expect.Call(schedulePeriod.DateFrom).Return(dateFrom).Repeat.AtLeastOnce();
-				Expect.Call(schedulePeriod.GetSchedulePeriod(dateFrom)).Return(openPeriod);
-				Expect.Call(schedulePeriod.GetSchedulePeriod(dateTo)).Return(openPeriod);
-			}
-
-			using (_mockRep.Playback())
-			{
-                _agent.AddSchedulePeriod(schedulePeriod);
-				
-				Assert.IsTrue(ViewBaseHelper.CheckOpenPeriodMatchSchedulePeriod(_agent, openPeriod));
-			}
-		}
 
 		[Test]
 		public void ShouldSetCellValueTargetTimeToNaWhenSchedulePeriodAndOpenPeriodDoNotMatch()
 		{
+			var person = PersonFactory.CreatePerson();
+			var personWithSchedulePeriod = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2001, 1, 2));
+
 			using (var style = new GridStyleInfo())
 			{
 				var baseDateTime = new DateOnly(2001, 1, 1);
 				var baseDateTimePeriod = new DateOnlyPeriod(baseDateTime, baseDateTime.AddDays(10));
-				var person = _mockRep.StrictMock<IPerson>();
-				var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 01, 01), SchedulePeriodType.Week, 4);
-				var schedulePeriods = new List<ISchedulePeriod> {schedulePeriod};
+				
 				var range = _mockRep.StrictMock<IScheduleRange>();
 				var schedulingResultStateHolder = _mockRep.StrictMock<ISchedulingResultStateHolder>();
 
-				using (_mockRep.Record())
-				{
-					Expect.Call(person.PersonSchedulePeriods(baseDateTimePeriod)).IgnoreArguments().Return(schedulePeriods).Repeat.
-					    AtLeastOnce();
-				}
-
-				using (_mockRep.Playback())
-				{
-					ViewBaseHelper.StyleTargetScheduleContractTimeCell(style, person, baseDateTimePeriod,
-																	   schedulingResultStateHolder, range);
-				}
-
+				ViewBaseHelper.StyleTargetScheduleContractTimeCell(style, personWithSchedulePeriod, baseDateTimePeriod, schedulingResultStateHolder, range);
+		
 				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
 			}
 
@@ -545,28 +512,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldSetCellValueTargetDayOffToNaWhenSchedulePeriodAndOpenPeriodDoNotMatch()
 		{
+			var person = PersonFactory.CreatePerson();
+			var personWithSchedulePeriod = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2001, 1, 2));
+
 			using (var style = new GridStyleInfo())
 			{
 				var baseDateTime = new DateOnly(2001, 1, 1);
 				var baseDateTimePeriod = new DateOnlyPeriod(baseDateTime, baseDateTime.AddDays(10));
-				var person = _mockRep.StrictMock<IPerson>();
-				var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 01, 01), SchedulePeriodType.Week, 4);
-				var schedulePeriods = new List<ISchedulePeriod> {schedulePeriod};
+
 				var range = _mockRep.StrictMock<IScheduleRange>();
-
-				using (_mockRep.Record())
-				{
-					Expect.Call(person.PersonSchedulePeriods(baseDateTimePeriod)).IgnoreArguments().Return(schedulePeriods).Repeat.
-						AtLeastOnce();
-				}
-
-				using (_mockRep.Playback())
-				{
-					ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, person, baseDateTimePeriod, range);
-				}
+				
+				ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, personWithSchedulePeriod, baseDateTimePeriod, range);
 
 				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
-			}
+			}	
 		}
 		       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
@@ -740,6 +699,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
         }
+
+	    [Test]
+		public void ShouldMatchSchedulePeriodWithOpenPeriodWhenPreviousPeriodIntersectOpenPeriod()
+	    {
+		    var schedulePeriodDateFrom1 = new DateOnly(2015, 11, 23);
+			var schedulePeriodDateFrom2 = new DateOnly(2015, 11, 30);
+			var openPeriodDateFrom = new DateOnly(2015, 11, 30);
+			var openPeriodDateTo = new DateOnly(2015, 12, 27);
+			var openPeriod = new DateOnlyPeriod(openPeriodDateFrom, openPeriodDateTo);
+			var schedulePeriod1 = new SchedulePeriod(schedulePeriodDateFrom1, SchedulePeriodType.Week, 4);
+			var schedulePeriod2 = new SchedulePeriod(schedulePeriodDateFrom2, SchedulePeriodType.Week, 4);
+
+			_agent.AddSchedulePeriod(schedulePeriod1);
+			_agent.AddSchedulePeriod(schedulePeriod2);
+
+			var match = ViewBaseHelper.CheckOpenPeriodMatchSchedulePeriod(_agent, openPeriod);
+
+			Assert.IsTrue(match);  
+	    }
 
 	    private IPersonAssignment CreatePersonAssignment()
 	    {

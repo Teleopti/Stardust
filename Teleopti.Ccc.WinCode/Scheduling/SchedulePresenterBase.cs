@@ -516,10 +516,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     ViewBaseHelper.StyleCurrentTotalDayOffCell(styleInfo, SchedulerState.Schedules[person], period);
                     break;
                 case ColumnType.TargetContractTimeColumn:
-            		var virtualSchedulePeriod = person.VirtualSchedulePeriod(period.StartDate);
-					if (!virtualSchedulePeriod.IsValid)
-						return;
-
 					ViewBaseHelper.StyleTargetScheduleContractTimeCell(styleInfo, person, new DateOnlyPeriod(period.StartDate, period.EndDate),
 																	   SchedulerState.SchedulingResultState,
 																	   SchedulerState.Schedules[person]);

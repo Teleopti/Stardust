@@ -281,93 +281,50 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
         }
 
-        [Test]
-        public void ShouldSetStyleToNaOnDayOffCellWhenSchedulePeriodAndOpenPeriodDoNotMatch()
-        {
-            var person = _mocks.StrictMock<IPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            var scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            var schedulePeriod = _mocks.StrictMock<ISchedulePeriod>();
-            IList<ISchedulePeriod> schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
-                Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
-                Expect.Call(scheduleDictionary[person]).Return(scheduleRange);
-                Expect.Call(person.PersonSchedulePeriods(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(schedulePeriods);
-                Expect.Call(schedulePeriod.GetSchedulePeriod(new DateOnly(2009, 2, 2))).IgnoreArguments().Return((new DateOnlyPeriod(2009, 2, 2, 2009, 4, 1))).Repeat.AtLeastOnce();
-            }
-
-            using (_mocks.Playback())
-            {
-                using (var gridStyleInfo = new GridStyleInfo())
-                {
-                    _target.QueryOverviewStyleInfo(gridStyleInfo, person, ColumnType.TargetDayOffColumn);
-                    Assert.AreEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
-                }
-            }
-        }
 
         [Test]
         public void ShouldNotSetStyleToNaOnDayOffCellWhenSchedulePeriodAndOpenPeriodMatch()
         {
-            var person = _mocks.StrictMock<IPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            var scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Day, 2);
-            schedulePeriod.SetParent(person);
-            IList<ISchedulePeriod> schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-            var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            var permissionInformation = _mocks.StrictMock<IPermissionInformation>();
+			_period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
+			var person = PersonFactory.CreatePerson();
+			var personWithSchedulePeriod = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2009, 2, 15));
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			_schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
+			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
-                Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
-                Expect.Call(scheduleDictionary[person]).Return(scheduleRange);
-                Expect.Call(person.PersonSchedulePeriods(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(schedulePeriods).Repeat.AtLeastOnce();
-				Expect.Call(scheduleRange.CalculatedTargetScheduleDaysOff(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(0).Repeat.AtLeastOnce();
-                Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).IgnoreArguments().Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
-                Expect.Call(permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            }
+			using (_mocks.Record())
+			{
+				Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+				Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
+				Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
+			}
 
-            using (_mocks.Playback())
-            {
-                using (var gridStyleInfo = new GridStyleInfo())
-                {
-                    _target.QueryOverviewStyleInfo(gridStyleInfo, person, ColumnType.TargetDayOffColumn);
-                    Assert.AreNotEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
-                }
-            }
+			using (_mocks.Playback())
+			{
+				using (var gridStyleInfo = new GridStyleInfo())
+				{
+
+					_target.QueryOverviewStyleInfo(gridStyleInfo, personWithSchedulePeriod, ColumnType.TargetDayOffColumn);
+					Assert.AreEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
+				}
+			}
         }
 
         [Test]
         public void ShouldSetStyleToNaOnContractCellWhenSchedulePeriodAndOpenPeriodDoNotMatch()
         {
-            var person = _mocks.StrictMock<IPerson>();
+			_period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
+	        var person = PersonFactory.CreatePerson();
+	        var personWithSchedulePeriod = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2009, 2, 15));
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             var scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            var schedulePeriod = _mocks.StrictMock<ISchedulePeriod>();
-            IList<ISchedulePeriod> schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-            var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
             using (_mocks.Record())
             {
                 Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
                 Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
                 Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriods(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(schedulePeriods);
-                Expect.Call(schedulePeriod.GetSchedulePeriod(new DateOnly(2009, 2, 2))).IgnoreArguments().Return((new DateOnlyPeriod(2009, 2, 2, 2009, 4, 1))).Repeat.AtLeastOnce();
-                Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).Return(virtualSchedulePeriod);
-                Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-
             }
 
             using (_mocks.Playback())
@@ -375,7 +332,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 using (var gridStyleInfo = new GridStyleInfo())
                 {
 
-                    _target.QueryOverviewStyleInfo(gridStyleInfo, person, ColumnType.TargetContractTimeColumn);
+					_target.QueryOverviewStyleInfo(gridStyleInfo, personWithSchedulePeriod, ColumnType.TargetContractTimeColumn);
                     Assert.AreEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
                 }
             }
@@ -384,40 +341,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ShouldNotSetStyleToNaOnContractCellWhenSchedulePeriodAndOpenPeriodMatch()
         {
-            var person = _mocks.StrictMock<IPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            var scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Day, 2);
-            schedulePeriod.SetParent(person);
-            IList<ISchedulePeriod> schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-            var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            var permissionInformation = _mocks.StrictMock<IPermissionInformation>();
+			_period = new DateOnlyPeriod(2015, 11, 23, 2015, 11, 29);
+	        var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+	        var schedulePeriod = new SchedulePeriod(new DateOnly(2015, 11, 23), SchedulePeriodType.Week, 1);
+			person.AddSchedulePeriod(schedulePeriod);
+			
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			_schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
+			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(_period, TimeZoneInfo.Utc);
+			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
-                Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
-                Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriods(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).IgnoreArguments().Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
-                Expect.Call(permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
-				Expect.Call(scheduleRange.CalculatedTargetTimeHolder(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
-                Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            }
+			using (_mocks.Record())
+			{
+				Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+				Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
+				Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
+				Expect.Call(scheduleRange.CalculatedTargetTimeHolder(_period)).Return(TimeSpan.Zero);
+			}
 
-            using (_mocks.Playback())
-            {
+			using (_mocks.Playback())
+			{
+				using (var gridStyleInfo = new GridStyleInfo())
+				{
 
-                using (var gridStyleInfo = new GridStyleInfo())
-                {
-
-                    _target.QueryOverviewStyleInfo(gridStyleInfo, person, ColumnType.TargetContractTimeColumn);
-                    Assert.AreNotEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
-                }
-            }
+					_target.QueryOverviewStyleInfo(gridStyleInfo, person, ColumnType.TargetContractTimeColumn);
+					Assert.AreNotEqual(UserTexts.Resources.NA, gridStyleInfo.CellValue);
+				}
+			}
         }
 
 		[Test]

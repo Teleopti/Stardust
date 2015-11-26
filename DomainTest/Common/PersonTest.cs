@@ -705,5 +705,33 @@ namespace Teleopti.Ccc.DomainTest.Common
 				_target.ActivatePerson(personAccountUpdater);
 			}
 		}
+
+	    [Test]
+	    public void ShouldReturnCorrectVirtualSchedulePeriodWhenX()
+	    {
+		    var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+		    var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 11, 23), SchedulePeriodType.Week, 4);
+			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2015, 11, 30), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod1);
+			person.AddSchedulePeriod(schedulePeriod2);
+
+		    var virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 11, 23));
+
+		    virtualSchedulePeriod.DateOnlyPeriod.EndDate.Should().Be.EqualTo(new DateOnly(2015, 11, 29));
+	    }
+
+		[Test]
+		public void ShouldReturnCorrectVirtualSchedulePeriodWhenX2()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 11, 23), SchedulePeriodType.Week, 4);
+			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2015, 11, 30), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod1);
+			person.AddSchedulePeriod(schedulePeriod2);
+
+			var virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 12, 1));
+
+			virtualSchedulePeriod.DateOnlyPeriod.StartDate.Should().Be.EqualTo(new DateOnly(2015, 11, 30));
+		}
     }
 }

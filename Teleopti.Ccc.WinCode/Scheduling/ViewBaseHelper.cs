@@ -396,13 +396,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (person == null)
 				throw new ArgumentNullException("person");
 
-			var schedulePeriods = person.PersonSchedulePeriods(openPeriod);
-			if (!schedulePeriods.Any()) return false;
+			var virtualSchedulePeriodFirst = person.VirtualSchedulePeriod(openPeriod.StartDate);
+			var virtualSchedulePeriodLast = person.VirtualSchedulePeriod(openPeriod.EndDate);
 
-			var startPeriod = schedulePeriods[0].GetSchedulePeriod(openPeriod.StartDate);
-			var endPeriod = schedulePeriods[schedulePeriods.Count - 1].GetSchedulePeriod(openPeriod.EndDate);
-			if (startPeriod == null || endPeriod == null) return false;
-			return startPeriod.Value.StartDate == openPeriod.StartDate && endPeriod.Value.EndDate == openPeriod.EndDate;
+			if (virtualSchedulePeriodFirst.DateOnlyPeriod.StartDate.Equals(openPeriod.StartDate) &&
+				virtualSchedulePeriodLast.DateOnlyPeriod.EndDate.Equals(openPeriod.EndDate))
+				return true;
+
+			return false;
 		}
 
 		public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
