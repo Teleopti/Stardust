@@ -61,11 +61,12 @@ namespace Teleopti.Ccc.TestCommon.Web.StartWeb
 		{
 			// maybe this SO thread contains alternatives:
 			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
-			FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
+			var runningConfig = "iisexpress.running.config";
+			FileConfigurator.ConfigureByTags("iisexpress.config", runningConfig, new AllTags());
 			var parameters = new Parameters
 				{
 					Systray = false,
-					Config = "Data\\iisexpress.running.config /apppool:\"Clr4IntegratedAppPool\""
+					Config = string.Concat(runningConfig,  " /apppool:\"Clr4IntegratedAppPool\"")
 				};
 			_server = new IISExpress(parameters);
 		}

@@ -1163,10 +1163,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
-    <None Include="Data\iisexpress.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.19.0.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1549,6 +1545,9 @@ if not exist "$(ProjectDir)license.xml" copy "$(ProjectDir)..\..\LicenseFiles\Te
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\StartWeb\iisexpress.config" "$(TargetDir)\iisexpress.config"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

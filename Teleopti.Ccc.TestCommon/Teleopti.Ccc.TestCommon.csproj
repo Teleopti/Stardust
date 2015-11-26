@@ -536,6 +536,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Web\StartWeb\iisexpress.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Teleopti.Ccc.TestCommon.sp_deleteAllData.DROP.sql">
