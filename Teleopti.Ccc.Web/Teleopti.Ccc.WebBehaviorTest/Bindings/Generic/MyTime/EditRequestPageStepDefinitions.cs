@@ -7,7 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.MyTime;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {

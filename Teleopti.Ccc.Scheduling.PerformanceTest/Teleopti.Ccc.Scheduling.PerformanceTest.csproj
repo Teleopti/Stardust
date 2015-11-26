@@ -69,7 +69,7 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\StartWeb\iisexpress.config" "$(TargetDir)\iisexpress.config"</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)\iisexpress.config"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

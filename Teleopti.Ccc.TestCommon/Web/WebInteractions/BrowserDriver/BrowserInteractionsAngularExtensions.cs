@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.CoypuImpl;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public static class BrowserInteractionsAngularExtensions
 	{

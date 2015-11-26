@@ -3,7 +3,7 @@ using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;

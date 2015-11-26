@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
+﻿namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public static class JavascriptEncodingExtensions
 	{

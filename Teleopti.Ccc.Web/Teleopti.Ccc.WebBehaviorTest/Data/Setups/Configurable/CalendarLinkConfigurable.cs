@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.Web.StartWeb;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

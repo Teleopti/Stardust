@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.CoypuImpl;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core

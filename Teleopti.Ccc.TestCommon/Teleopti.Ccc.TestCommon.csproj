@@ -506,33 +506,33 @@
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
-    <Compile Include="Web\StartWeb\AllTags.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\CoypuImpl\CoypuChromeActivator.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\EventualAssert.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\FuncExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\IBrowserActivator.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\IBrowserInteractions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\IExceptionCatcher.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\JavascriptEncodingExtensions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\NoBrowserActivator.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\NoBrowserInteractions.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\Timeouts.cs" />
-    <Compile Include="Web\StartWeb\BrowserDriver\TimeoutScope.cs" />
-    <Compile Include="Web\StartWeb\CryptoCreator.cs" />
-    <Compile Include="Web\StartWeb\FileConfigurator.cs" />
-    <Compile Include="Web\StartWeb\Http.cs" />
-    <Compile Include="Web\StartWeb\Paths.cs" />
-    <Compile Include="Web\StartWeb\TestSiteConfigurationSetup.cs" />
+    <Compile Include="Web\WebInteractions\AllTags.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsAngularExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuChromeActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\EventualAssert.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\FuncExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\IBrowserActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\IBrowserInteractions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\IExceptionCatcher.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\JavascriptEncodingExtensions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\NoBrowserActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\NoBrowserInteractions.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\Timeouts.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\TimeoutScope.cs" />
+    <Compile Include="Web\WebInteractions\CryptoCreator.cs" />
+    <Compile Include="Web\WebInteractions\FileConfigurator.cs" />
+    <Compile Include="Web\WebInteractions\Http.cs" />
+    <Compile Include="Web\WebInteractions\Paths.cs" />
+    <Compile Include="Web\WebInteractions\TestSiteConfigurationSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -573,7 +573,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Web\StartWeb\iisexpress.config">
+    <None Include="Web\WebInteractions\iisexpress.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

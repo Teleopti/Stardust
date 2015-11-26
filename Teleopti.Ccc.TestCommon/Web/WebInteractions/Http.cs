@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public static class Http
 	{

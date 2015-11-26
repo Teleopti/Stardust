@@ -3,7 +3,7 @@ using System.IO;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public static class TestSiteConfigurationSetup
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public class AllTags : Dictionary<string, string>
 	{

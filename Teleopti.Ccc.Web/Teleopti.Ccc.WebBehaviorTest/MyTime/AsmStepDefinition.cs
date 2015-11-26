@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Xml;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 

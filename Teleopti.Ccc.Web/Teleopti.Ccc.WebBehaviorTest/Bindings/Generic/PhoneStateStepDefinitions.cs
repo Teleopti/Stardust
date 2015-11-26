@@ -2,7 +2,7 @@
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.Web.StartWeb;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 

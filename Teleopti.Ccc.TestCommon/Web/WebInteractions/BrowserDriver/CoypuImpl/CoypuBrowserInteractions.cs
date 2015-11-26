@@ -6,7 +6,7 @@ using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.CoypuImpl
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 {
 	public class CoypuBrowserInteractions : IBrowserInteractions
 	{

@@ -12,7 +12,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {

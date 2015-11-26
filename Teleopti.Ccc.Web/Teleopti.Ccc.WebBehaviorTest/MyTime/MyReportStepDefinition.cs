@@ -1,7 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;

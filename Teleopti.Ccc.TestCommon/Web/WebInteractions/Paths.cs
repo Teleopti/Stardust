@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public static class Paths
 	{

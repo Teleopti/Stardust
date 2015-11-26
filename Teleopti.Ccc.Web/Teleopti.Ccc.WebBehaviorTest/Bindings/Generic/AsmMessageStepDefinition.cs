@@ -13,7 +13,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
-using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.BrowserInteractionsJQueryExtensions;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic

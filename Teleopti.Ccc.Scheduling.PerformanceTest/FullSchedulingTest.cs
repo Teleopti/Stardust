@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.TestCommon.Web.StartWeb;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {

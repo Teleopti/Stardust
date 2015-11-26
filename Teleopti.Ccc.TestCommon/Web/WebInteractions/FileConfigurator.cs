@@ -2,7 +2,7 @@
 using System.IO;
 using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 {
 	public static class FileConfigurator
 	{

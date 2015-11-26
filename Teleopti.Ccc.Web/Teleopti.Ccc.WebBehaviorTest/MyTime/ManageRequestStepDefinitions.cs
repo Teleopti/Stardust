@@ -7,8 +7,8 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Ccc.Domain.Helper;
-using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsControlExtensions;
-using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
+using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.BrowserInteractionsControlExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.BrowserInteractionsJQueryExtensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {

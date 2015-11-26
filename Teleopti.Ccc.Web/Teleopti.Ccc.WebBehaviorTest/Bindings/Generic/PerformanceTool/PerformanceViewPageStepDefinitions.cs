@@ -9,8 +9,8 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
-using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsControlExtensions;
-using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver.BrowserInteractionsJQueryExtensions;
+using BrowserInteractionsControlExtensions = Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.BrowserInteractionsControlExtensions;
+using BrowserInteractionsJQueryExtensions = Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.BrowserInteractionsJQueryExtensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 {

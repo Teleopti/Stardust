@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.Domain;
 

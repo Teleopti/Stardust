@@ -2,7 +2,7 @@
 using System.Threading;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon.Web.StartWeb.BrowserDriver
+namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public static class FuncExtensions
 	{
