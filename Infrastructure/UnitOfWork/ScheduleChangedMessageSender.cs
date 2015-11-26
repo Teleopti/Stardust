@@ -47,10 +47,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void send(Func<IInitiatorIdentifier> initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
-			if (!scheduleData.Any()) return;
+			var persistableScheduleDatas = scheduleData as IPersistableScheduleData[] ?? scheduleData.ToArray();
+			if (!persistableScheduleDatas.Any()) return;
 
-			var people = scheduleData.Select(s => s.Person).Distinct();
-			var scenarios = scheduleData.Select(s => s.Scenario).Distinct();
+			var people = persistableScheduleDatas.Select(s => s.Person).Distinct().ToArray();
+			var scenarios = persistableScheduleDatas.Select(s => s.Scenario).Distinct();
 			var startDateTime = DateTime.MaxValue;
 			var endDateTime = DateTime.MinValue;
 			var personIds = new HashSet<Guid>();
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				foreach (var person in people)
 				{
 					var matchedItems =
-						scheduleData.Where(s => s.Scenario != null && s.Scenario.Equals(scenario) && s.Person.Equals(person))
+						persistableScheduleDatas.Where(s =>  s.Person.Equals(person) && s.Scenario != null && s.Scenario.Equals(scenario))
 							.ToArray();
 					if (!matchedItems.Any()) continue;
 
