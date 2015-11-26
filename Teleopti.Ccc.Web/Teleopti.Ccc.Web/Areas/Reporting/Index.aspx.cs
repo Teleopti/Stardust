@@ -192,7 +192,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					out warnings);
 
 				// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.
-				Response.Buffer = true;
 				Response.Clear();
 				Response.ContentType = mimeType;
 				// commonReports + Guid.NewGuid() = to get uniquie name to be able to open more than one with different selections
@@ -200,7 +199,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					inlineOrAtt + " filename=" + commonReports.Name + Guid.NewGuid() + "." + extension);
 				Response.BinaryWrite(bytes); // create the file
 				if(Response.IsClientConnected)
-					Response.Flush(); // send it to the client to download
+				{
+					Response.Flush(); // Sends all currently buffered output to the client.
+					Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+					Context.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
+				}
 			}
 		}	
 	}
