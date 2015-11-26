@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -85,5 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(0);
 		}
+
 	}
 }

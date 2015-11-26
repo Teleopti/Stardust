@@ -224,6 +224,7 @@
     <Compile Include="ApplicationLayer\Rta\FullTests\InconsistentPercentage32862.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AuthenticationKeyTenantTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IncorrectOutOfAdherenceCount35829.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityActualStartEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ThreadingTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilderTest.cs" />
