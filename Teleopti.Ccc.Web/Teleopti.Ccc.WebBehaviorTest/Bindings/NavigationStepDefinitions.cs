@@ -371,6 +371,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoSeatPlan(date);
 		}
+
+		[When(@"I view Seat plan on ""(.*)"" and wait until planning period loaded")]
+		public void WhenIViewSeatPlanOnAndWaitUntilPlanningPeriodLoaded(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoSeatPlanAndWaitUntilPlanningPeriodLoaded(date);
+		}
 		
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()

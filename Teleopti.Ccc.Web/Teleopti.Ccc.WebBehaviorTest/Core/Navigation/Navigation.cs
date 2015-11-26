@@ -343,6 +343,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			}
 		}
 
+		public static void GotoSeatPlanAndWaitUntilPlanningPeriodLoaded(DateTime? date)
+		{
+			if (date.HasValue)
+			{
+				GoToPage("wfm/#/seatPlan/" + date.Value.ToString("yyyy-MM-dd"), new WaitUntilSeatPlanPlanningPeriodLoaded());
+			}
+			else
+			{
+				GoToPage("wfm/#/seatPlan", new WaitUntilSeatPlanPlanningPeriodLoaded());
+			}
+		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{

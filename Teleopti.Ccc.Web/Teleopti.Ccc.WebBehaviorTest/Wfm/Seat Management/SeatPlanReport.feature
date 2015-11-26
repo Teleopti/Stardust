@@ -46,7 +46,6 @@ Scenario: Should not showing paging bar when there is only one page
 	Then I should be able to view the report content
 	And paging bar should be hide
 
-	@ignore
 Scenario: Should filter report by date when we enter report from planning period
 	Given I have a shift with
 		| Field          | Value            |
@@ -61,6 +60,6 @@ Scenario: Should filter report by date when we enter report from planning period
 	And there is a planning period with
 		| Field		| Value			|
 		| Date		| 2015-04-01	|
-	When I view Seat plan on "2015-05-01"
+	When I view Seat plan on "2015-05-01" and wait until planning period loaded
 	And I click SeatPlanReport button from planning period
 	Then I should be able to view the report from "2015-05-01" to "2015-05-31"

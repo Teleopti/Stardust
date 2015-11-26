@@ -97,9 +97,10 @@
 			resourcePlannerService.getPlanningPeriodsForRange
 			   .query(planningPeriodParams)
 			   .$promise.then(function (data) {
-			   	vm.isLoadingPlanningPeriods = false;
-			   	vm.planningPeriods = data;
-			   });
+			   		vm.isLoadingPlanningPeriods = false;
+			   		vm.planningPeriods = data;
+			   		setDataLoadedAttributeOnWfmCardListForScenarioTests();
+				});
 		};
 
 		vm.getDateString = function (date) {
@@ -197,6 +198,11 @@
 			vm.loadMonthDetails(moment());
 		}
 
+		function setDataLoadedAttributeOnWfmCardListForScenarioTests() {
+			setTimeout(function() {
+				document.getElementsByTagName('wfm-card-list')[0].setAttribute('planning-period-loaded', 'loaded');
+			}, 50);
+		}
 	}
 }());
 
