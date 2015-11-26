@@ -80,14 +80,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Selenium.WebDriver.2.39.0\lib\net40\WebDriver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WebDriver.Support, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature.cs">
@@ -1137,10 +1129,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
-    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.19.0.0\content\chromedriver.exe">
-      <Link>chromedriver.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1520,7 +1508,10 @@ if not exist "$(ProjectDir)license.xml" copy "$(ProjectDir)..\..\LicenseFiles\Te
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)\iisexpress.config"</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)\iisexpress.config"
+copy "$(SolutionDir)\packages\Selenium.WebDriver.2.39.0\lib\net40\webdriver.dll" "$(TargetDir)\webdriver.dll"
+copy "$(SolutionDir)\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll" "$(TargetDir)\webdriver.support.dll"
+copy "$(SolutionDir)\packages\WebDriver.ChromeDriver.win32.2.19.0.0\content\chromedriver.exe" "$(TargetDir)\chromedriver.exe"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

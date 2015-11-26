@@ -71,6 +71,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)\Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)\iisexpress.config"
 copy "$(SolutionDir)\packages\Selenium.WebDriver.2.39.0\lib\net40\webdriver.dll" "$(TargetDir)\webdriver.dll"
+copy "$(SolutionDir)\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll" "$(TargetDir)\webdriver.support.dll"
 copy "$(SolutionDir)\packages\WebDriver.ChromeDriver.win32.2.19.0.0\content\chromedriver.exe" "$(TargetDir)\chromedriver.exe"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
