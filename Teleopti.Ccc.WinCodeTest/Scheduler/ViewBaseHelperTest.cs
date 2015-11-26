@@ -513,25 +513,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-	    public void ShouldMatchSchedulePeriodWithOpenPeriodWhenPreviousPeriodIntersectOpenPeriod()
-	    {
-			var schedulePeriodDateFrom1 = new DateOnly(2015, 11, 23);
-			var schedulePeriodDateFrom2 = new DateOnly(2015, 11, 30);
-			var openPeriodDateFrom = new DateOnly(2015, 11, 30);
-			var openPeriodDateTo = new DateOnly(2015, 12, 27);
-			var openPeriod = new DateOnlyPeriod(openPeriodDateFrom, openPeriodDateTo);
-			var schedulePeriod1 = new SchedulePeriod(schedulePeriodDateFrom1, SchedulePeriodType.Week, 4);
-			var schedulePeriod2 = new SchedulePeriod(schedulePeriodDateFrom2, SchedulePeriodType.Week, 4);
-
-			_agent.AddSchedulePeriod(schedulePeriod1);
-			_agent.AddSchedulePeriod(schedulePeriod2);
-
-			var match = ViewBaseHelper.CheckOpenPeriodMatchSchedulePeriod(_agent, openPeriod);
-
-			Assert.IsTrue(match);  
-	    }
-
-		[Test]
 		public void ShouldSetCellValueTargetTimeToNaWhenSchedulePeriodAndOpenPeriodDoNotMatch()
 		{
 			using (var style = new GridStyleInfo())
