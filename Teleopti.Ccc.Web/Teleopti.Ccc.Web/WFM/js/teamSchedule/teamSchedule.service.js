@@ -34,5 +34,16 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: true
 			}
 		});
+
+		this.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
+			keyword: "@keyword",
+			date: "@queryDate"
+		}, {
+			query: {
+				method: "GET",
+				params: {},
+				isArray: false
+			}
+		});
 	}
 ]);

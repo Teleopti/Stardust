@@ -10,7 +10,7 @@
 </style>
 <div class="team-schedule">
 	Team schedule
-	<div style="border: solid red 1px; height: 40px">
+	<div style="border: solid red 1px; height: 40px" ng-if="!vm.isSearchScheduleEnabled">
 		<span class="col-sm-5 col-md-3 col-lg-3">
 			<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamIdChanged()">
 				<option value="" disabled selected>Pick a team...</option>
@@ -33,13 +33,15 @@
 		</span>
 		<span style="color:red"> Only for test purpose, it will be removed later.</span>
 	</div>
-	
+
+	<people-search-input ng-show="vm.isSearchScheduleEnabled" search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
+
 	<table class="table table-hover" ng-if="!vm.isLoading" id="team-schedule">
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<thead>
 			<tr class="person">
 				<th class="person-name person-name-column" style="width: 15%"></th>
-				<th id="time-line-container" class="schedule schedule-column" >
+				<th id="time-line-container" class="schedule schedule-column">
 					<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
 				</th>
 				<th style="width: 1%">

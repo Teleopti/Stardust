@@ -9,7 +9,7 @@
 			var allProjections = [];
 			angular.forEach(groupSchedule, function (personSchedule) {
 				var scheduleDate = moment(personSchedule.Date);
-				if (scheduleDate.diff(baseDate, "days") <= 0) {
+				if (scheduleDate.diff(baseDate, "days") <= 0 && personSchedule.Projection != undefined && personSchedule.Projection.length > 0) {
 					allProjections = allProjections.concat(personSchedule.Projection);
 				}
 			});
