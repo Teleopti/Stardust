@@ -205,7 +205,6 @@
     <Compile Include="Core\Navigation\WaitUntilHangfireQueueIsProcessed.cs" />
     <Compile Include="Core\Navigation\WaitUntilLoaded.cs" />
     <Compile Include="Core\Navigation\WaitUntilReadyForInteraction.cs" />
-    <Compile Include="Core\Navigation\WaitUntilSeatPlanPlanningPeriodLoaded.cs" />
     <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeBasedOnSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\GamificationSettingConfigurable.cs" />

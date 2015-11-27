@@ -60,6 +60,6 @@ Scenario: Should filter report by date when we enter report from planning period
 	And there is a planning period with
 		| Field		| Value			|
 		| Date		| 2015-04-01	|
-	When I view Seat plan on "2015-05-01" and wait until planning period loaded
+	When I view Seat plan on "2015-05-01"
 	And I click SeatPlanReport button from planning period
 	Then I should be able to view the report from "2015-05-01" to "2015-05-31"

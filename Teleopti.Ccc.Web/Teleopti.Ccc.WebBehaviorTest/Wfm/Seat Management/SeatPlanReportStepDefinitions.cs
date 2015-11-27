@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 	[Binding]
 	internal class SeatPlanReportStepDefinitions
 	{
-
 		[When(@"I click SeatPlanReport button")]
 		public void WhenIClickSeatPlanReportButton()
 		{
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click SeatPlanReport button from planning period")]
 		public void WhenIClickSeatPlanReportButtonFromPlanningPeriod()
 		{
+			Browser.Interactions.AssertExists("wfm-card-list");
 			Browser.Interactions.Click("wfm-card-list card-header");
 			Browser.Interactions.Click("wfm-card-list card-body .period-report-btn");
 		}

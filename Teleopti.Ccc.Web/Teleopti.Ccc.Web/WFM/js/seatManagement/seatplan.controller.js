@@ -60,6 +60,7 @@
 
 		vm.loadMonthDetails = function (date) {
 			var dateMoment = moment(date);
+			vm.isLoadingPlanningPeriods = true;
 
 			vm.currentMonth = dateMoment.month();
 
@@ -99,7 +100,6 @@
 			   .$promise.then(function (data) {
 			   		vm.isLoadingPlanningPeriods = false;
 			   		vm.planningPeriods = data;
-			   		setDataLoadedAttributeOnWfmCardListForScenarioTests();
 				});
 		};
 
@@ -198,11 +198,6 @@
 			vm.loadMonthDetails(moment());
 		}
 
-		function setDataLoadedAttributeOnWfmCardListForScenarioTests() {
-			setTimeout(function() {
-				document.getElementsByTagName('wfm-card-list')[0].setAttribute('planning-period-loaded', 'loaded');
-			}, 50);
-		}
 	}
 }());
 
