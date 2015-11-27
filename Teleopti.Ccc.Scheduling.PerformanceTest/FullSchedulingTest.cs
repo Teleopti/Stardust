@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
 	public class FullSchedulingTest
 	{
-		[SetUp]
-		public void Setup()
-		{
-			TestSiteConfigurationSetup.Setup();
-		}
-
 		[Test]
 		public void MeasurePerformance()
 		{
@@ -28,23 +22,37 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserActivator.Start(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(100));
 				var browserInteractions = browserActivator.GetInteractions();
 
-				//Logon
-				browserInteractions.GoTo(string.Concat(
-					TestSiteConfigurationSetup.URL, 
-					"Test/Logon", 
-					string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
+				logon(browserInteractions, businessUnitName, userName, password);
 
-				//Schedule a certain planning period
-				browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
-				browserInteractions.Click(".schedule-button");
+				scheduleAndOptimize(browserInteractions, planningPeriodId);
 
-				//Wait for scheduler to finish
 				using (new TimeoutScope(browserActivator, TimeSpan.FromHours(10)))
 				{
-					//add checks for "server busy" or ".errorMessage" is visible during wait
-					browserInteractions.AssertExists(".scheduling-result");
+					browserInteractions.AssertExists(".scheduling-result, .errorMessage, .alert-warning");
 				}
+				browserInteractions.AssertNotExists(".scheduling-result", ".errorMessage");
+				browserInteractions.AssertNotExists(".scheduling-result", ".alert-warning");
 			}
+		}
+
+		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
+		{
+			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
+			browserInteractions.Click(".schedule-button");
+		}
+
+		private static void logon(IBrowserInteractions browserInteractions, string businessUnitName, string userName, string password)
+		{
+			browserInteractions.GoTo(string.Concat(
+				TestSiteConfigurationSetup.URL,
+				"Test/Logon",
+				string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			TestSiteConfigurationSetup.Setup();
 		}
 
 		[TearDown]
