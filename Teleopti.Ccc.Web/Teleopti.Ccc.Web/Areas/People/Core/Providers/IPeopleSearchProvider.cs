@@ -6,7 +6,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 {
 	public interface IPeopleSearchProvider
 	{
-		PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
-			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns);
+		PeopleSummaryModel SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function);
+
+		IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function);
+		IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function);
 	}
 }

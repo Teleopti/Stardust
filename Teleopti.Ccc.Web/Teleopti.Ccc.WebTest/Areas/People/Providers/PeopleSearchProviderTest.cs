@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>());
+			var result = target.SearchPermittedPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(),DefinedRaptorApplicationFunctionPaths.WebPeople);
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>());
+			var result = target.SearchPermittedPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 			var peopleList = result.People;
 			peopleList.Count().Should().Be.EqualTo(0);
 		}

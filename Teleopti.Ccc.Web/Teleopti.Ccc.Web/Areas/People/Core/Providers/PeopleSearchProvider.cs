@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -29,16 +30,39 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_optionalColumnRepository = optionalColumnRepository;
 		}
 
-		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
-			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
+		public PeopleSummaryModel SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
 			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
 
-			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns)
+			var personIdList = GetPermittedPersonIdList(criteriaDictionary,
+				pageSize, currentPageIndex, currentDate, sortedColumns, function);
+			var peopleList = _personRepository.FindPeople(personIdList).ToList();
+			var totalPages = peopleList.Count == 0 ? 0 : peopleList.Count / pageSize + 1;
+
+			return new PeopleSummaryModel
+			{
+				People = peopleList,
+				TotalPages = totalPages,
+				OptionalColumns = optionalColumnCollection
+			};
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
+		{
+			
+			var personIdList = GetPermittedPersonIdList(criteriaDictionary, 9999, 1,dateInUserTimeZone, null, function);
+			return _personRepository.FindPeople(personIdList).ToList();
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
+		{
+			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate,
+				sortedColumns)
 			{
 				CurrentPage = currentPageIndex
 			};
-
 			_searchRepository.Find(search);
 
 			var permittedPersonList =
@@ -46,17 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					r =>
 						r.RowNumber > 0 &&
 						_permissionProvider.HasOrganisationDetailPermission(
-						DefinedRaptorApplicationFunctionPaths.WebPeople,
-							DateOnly.Today, r));
-			var personIdList = permittedPersonList.Select(x => x.PersonId);
-			var peopleList = _personRepository.FindPeople(personIdList).ToList();
-
-			return new PeopleSummaryModel
-			{
-				People = peopleList,
-				TotalPages = search.TotalPages,
-				OptionalColumns = optionalColumnCollection
-			};
-		}
+						function,
+							currentDate, r));
+			return permittedPersonList.Select(x => x.PersonId);
+		} 
 	}
 }

@@ -144,10 +144,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			};
 		}
 
-		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
-			 DateOnly currentDate, IDictionary<string, bool> sortedColumns)
+		public PeopleSummaryModel SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
+			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
 			return _model;
+		}
+
+		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
+			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
