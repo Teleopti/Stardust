@@ -86,6 +86,7 @@
 		Wfm_RTA_ProperAlarm_34975,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		WfmTeamSchedule_NoReadModel_35609,
+		WfmTeamSchedule_FindScheduleEasily_35611,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
