@@ -184,9 +184,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\HangFire.SqlServer.1.4.3\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.SqlServer.Msmq">
-      <HintPath>..\..\packages\HangFire.SqlServer.MSMQ.1.4.3\lib\net45\Hangfire.SqlServer.Msmq.dll</HintPath>
-    </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
