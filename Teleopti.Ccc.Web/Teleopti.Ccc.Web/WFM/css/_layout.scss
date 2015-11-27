@@ -314,6 +314,7 @@ position: fixed;
 	cursor:pointer;
 }
 
+/*left sidenav */
 .sidenav-header{
 	background:$white;
 	overflow: hidden;
@@ -353,3 +354,27 @@ position: fixed;
 		width:0;
 	}
 }
+
+/*Notifications*/
+.arrow-up{
+	    margin-top: -15px!important;
+}
+
+  .notification-list{
+
+		li{
+			background: transparent;
+			border:none;
+			border-top: 1px solid $gray012;
+		}
+
+		i{
+			padding-right: 0;
+			margin-right: 5px;
+		}
+
+		.subtext{
+			margin-left: 26px;
+		}
+
+	}

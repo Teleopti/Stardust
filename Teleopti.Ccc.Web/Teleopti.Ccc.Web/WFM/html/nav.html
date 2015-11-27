@@ -46,18 +46,23 @@
 					<div class="context-content" >
 						<div class="notification-list">
 								<h4>Notifications
-								<!--	<div class="wfm-switch pull-right">
-									<input type="checkbox" ng-init="activeNotification=true" ng-click="activeNotification=!activeNotification" id="notificationToggle" />
+							<div class="wfm-switch pull-right">
+									<input type="checkbox" ng-model="activeNotification" ng-init="activeNotification=true" id="notificationToggle"/>
 									<label for="notificationToggle">
 										<span class="wfm-switch-toggle"></span>
 									</label>
-									<md-tooltip ng-if="activeNotification==true">Turn on</md-tooltip>
-									<md-tooltip ng-if="activeNotification==false">Turn off</md-tooltip>
-								</div>-->
+									<md-tooltip ng-if="activeNotification==true">Turn off</md-tooltip>
+									<md-tooltip ng-if="activeNotification==false">Turn on</md-tooltip>
+								</div>
 								</h4>
 								<div ng-controller="NotificationsCtrl">
-									<ul class="notification-list">
-										<li ng-repeat="item in notificationResult"><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
+									<ul ng-if="activeNotification==true" class="notification-list wfm-simple-list">
+											<li ng-repeat="alarm in notificationResult" ng-if="alarm.length > 0">
+														<i class="mdi mdi-alert-circle"></i>
+														<b>{{alarm.JobCategory}}</b>
+														<span class="pull-right">{{alarm.Timestamp | date:'HH:mm'}}</span>
+														<div class="subtext">{{alarm.Status}}</div>
+											</li>
 									</ul>
 								</div>
 						</div>
