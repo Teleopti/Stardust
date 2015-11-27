@@ -46,7 +46,7 @@
 					<div class="context-content" >
 						<div class="notification-list">
 								<h4>Notifications
-							<!--	<div class="wfm-switch pull-right">
+								<!--	<div class="wfm-switch pull-right">
 									<input type="checkbox" ng-init="activeNotification=true" ng-click="activeNotification=!activeNotification" id="notificationToggle" />
 									<label for="notificationToggle">
 										<span class="wfm-switch-toggle"></span>
@@ -56,8 +56,8 @@
 								</div>-->
 								</h4>
 								<div ng-controller="NotificationsCtrl">
-									<ul class="notification-list" ng-repeat="item in notificationResult">
-										<li><i class="mdi mdi-alert-circle"></i>{{notificationResult.length}}{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
+									<ul class="notification-list">
+										<li ng-repeat="item in notificationResult"><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
 									</ul>
 								</div>
 						</div>
