@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -10,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions, DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
 	public class OrganizationSelectionController : ApiController
 	{
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;

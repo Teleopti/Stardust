@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPermissions, DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
 	public class ApplicationFunctionsController : ApiController
 	{
 		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
