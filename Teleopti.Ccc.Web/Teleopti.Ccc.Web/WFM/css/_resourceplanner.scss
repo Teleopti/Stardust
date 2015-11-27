@@ -191,7 +191,7 @@ background-color: #cacaca;
 .filter-chip{
 	padding:$full-padding;
 	background:$gray012;
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
 .filter-handle{
@@ -223,4 +223,11 @@ background-color: #cacaca;
 
 .wfm-filter-options{
 	margin:0 auto;
+}
+.unrelated-filters{
+	display:inline-block;
+	padding:10px 0;
+}
+.related-filters{
+	display:inline-block;
 }

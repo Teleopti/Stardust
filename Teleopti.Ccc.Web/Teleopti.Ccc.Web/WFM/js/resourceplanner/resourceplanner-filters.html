@@ -43,8 +43,14 @@
 		<div class="row" ng-show="selectedResults.length > 0">
 			<div class="col-md-12">
 				<p translate>SelectedFiltersColon</p>
-				<div class="wfm-filter-selected" ng-repeat="selected in selectedResults">
-					<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}<i class="mdi mdi-close" ng-click="removeNode(selected)"></i></span>
+				<div class="wfm-filter-selected">
+					<div class="unrelated-filters" ng-repeat="selected in selectedResults" ng-if="selected.FilterType != 'contract'">
+						<span class="filter-handle">{{selected.FilterType}}</span><span class="filter-chip">{{selected.Name}}<i class="mdi mdi-close" ng-click="removeNode(selected)"></i></span>
+					</div>
+					<br/>
+					<div class="unrelated-filters" ng-repeat="contractSelected in selectedResults" ng-if="contractSelected.FilterType === 'contract'">
+						<span class="filter-handle">{{contractSelected.FilterType}}</span><span class="filter-chip">{{contractSelected.Name}}<i class="mdi mdi-close" ng-click="removeNode(contractSelected)"></i></span>
+					</div>
 				</div>
 			</div>
 		</div>
