@@ -6,12 +6,12 @@
 		<add key="ToggleMode" value="ALL" />
 		
 		<!-- These needs to be set dynamically on build machine -->
-		<add key="DB_ANALYTICS" value="Infratest_Analytics" />
-		<add key="DB_CCC7" value="ccc_DemoSales_TeleoptiCCC7" />
+		<add key="DB_ANALYTICS" value="YourAnalyticsDb" />
+		<add key="DB_CCC7" value="YourAppDb" />
 		<add key="SQL_SERVER_NAME" value="." />
-		<add key="UserName" value="demo"/>
-		<add key="Password" value="demo"/>
-		<add key="BusinessUnitName" value="Teleopti WFM Demo"/>
-		<add key="PlanningGroupId" value="5EDE88CE-6DD0-4D23-94C4-A55C00F7A6AA"/>
+		<add key="UserName" value="logonName"/>
+		<add key="Password" value="logonPassword"/>
+		<add key="BusinessUnitName" value="TheBusinessUnit name"/>
+		<add key="PlanningGroupId" value="guid to planning group to run"/>
 	</appSettings>
 </configuration>
