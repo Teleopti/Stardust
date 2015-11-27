@@ -707,7 +707,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 	    [Test]
-	    public void ShouldReturnCorrectVirtualSchedulePeriodWhenX()
+	    public void ShouldReturnCorrectVirtualSchedulePeriodWhenNextPeriodInteruptCurrent()
 	    {
 		    var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 		    var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 11, 23), SchedulePeriodType.Week, 4);
@@ -721,7 +721,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	    }
 
 		[Test]
-		public void ShouldReturnCorrectVirtualSchedulePeriodWhenX2()
+		public void ShouldReturnCorrectVirtualSchedulePeriodWhenPeriodBeforeIsInterupted()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 11, 23), SchedulePeriodType.Week, 4);
@@ -732,6 +732,43 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 12, 1));
 
 			virtualSchedulePeriod.DateOnlyPeriod.StartDate.Should().Be.EqualTo(new DateOnly(2015, 11, 30));
+		}
+
+	    [Test]
+	    public void LastPhysicalPersonSchedulePeriodShouldBeReturned()
+	    {
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod1);
+			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 2, 7), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod2);
+			var schedulePeriod3 = new SchedulePeriod(new DateOnly(2013, 2, 4), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod3);
+
+		    var schedulePeriods =
+			    person.PersonSchedulePeriods(new DateOnlyPeriod(new DateOnly(2015, 11, 30), new DateOnly(2015, 12, 13)));
+
+		    schedulePeriods.Count.Should().Be.EqualTo(1);
+			schedulePeriods[0].DateFrom.Should().Be.EqualTo(new DateOnly(2013, 2, 4));
+	    }
+
+		[Test]
+		public void LastPhysicalPersonSchedulePeriodsShouldBeReturned()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod1);
+			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 2, 7), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod2);
+			var schedulePeriod3 = new SchedulePeriod(new DateOnly(2013, 2, 4), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod3);
+
+			var schedulePeriods =
+				person.PersonSchedulePeriods(new DateOnlyPeriod(new DateOnly(2011, 2, 15), new DateOnly(2015, 12, 13)));
+
+			schedulePeriods.Count.Should().Be.EqualTo(2);
+			schedulePeriods[0].DateFrom.Should().Be.EqualTo(new DateOnly(2011, 2, 7));
+			schedulePeriods[1].DateFrom.Should().Be.EqualTo(new DateOnly(2013, 2, 4));
 		}
     }
 }

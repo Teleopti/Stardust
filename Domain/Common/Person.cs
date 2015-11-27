@@ -604,38 +604,44 @@ namespace Teleopti.Ccc.Domain.Common
 	        return dateOnly > _terminalDate;
         }
 
-        public virtual IList<ISchedulePeriod> PersonSchedulePeriods(DateOnlyPeriod timePeriod)
-        {
-            IList<ISchedulePeriod> retList = new List<ISchedulePeriod>();
-            
-            if (isTerminated(timePeriod.StartDate))
-                return retList;
+		public virtual IList<ISchedulePeriod> PersonSchedulePeriods(DateOnlyPeriod timePeriod)
+		{
+			IList<ISchedulePeriod> retList = new List<ISchedulePeriod>();
 
-            //get list with periods where startdate is less than inparam end date
-            var periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= timePeriod.EndDate);
-            ISchedulePeriod period = null;
+			if (isTerminated(timePeriod.StartDate))
+				return retList;
 
-            foreach (ISchedulePeriod p in periods)
-            {
-                if (timePeriod.Contains(p.DateFrom))
-                {
-                    retList.Add(p);
-                }
+			//get list with periods where startdate is less than inparam end date
+			var periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= timePeriod.EndDate);
+			ISchedulePeriod period = null;
+			TimeSpan minVal = TimeSpan.MaxValue;
+			foreach (ISchedulePeriod p in periods)
+			{
+				if (timePeriod.Contains(p.DateFrom))
+				{
+					retList.Add(p);
+				}
 
-                if (period == null || period.DateFrom > p.DateFrom)
-                {
-                    period = p;
-                }
-            }
+				//get diff between inpara and startdate
+				TimeSpan diff = timePeriod.StartDate.Date.Subtract(p.DateFrom.Date);
 
-            if (period != null)
-            {
-                if (!retList.Contains(period))
-                    retList.Add(period);
-            }
+				//check against smallest diff and check that inparam is greater than startdate
+				if (diff < minVal && diff.TotalMinutes >= 0)
+				{
+					minVal = diff;
+					period = p;
+				}
+			}
 
-            return retList.OrderBy(s => s.DateFrom.Date).ToList();
-        }
+			if (period != null)
+			{
+				if (!retList.Contains(period))
+					retList.Add(period);
+			}
+
+			return retList.OrderBy(s => s.DateFrom.Date).ToList();
+
+		}
 
         public virtual IPersonPeriod NextPeriod(IPersonPeriod period)
         {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using NHibernate.Persister.Entity;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -177,5 +179,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			
 			Assert.AreEqual(expectedPeriod, _target.SchedulerRangeToLoad(_person));
 		}
+
+	    [Test]
+	    public void Bug36032ShouldReturnCorrectPeriod()
+	    {
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2009, 2, 2), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod1);
+			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 2, 7), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod2);
+			var schedulePeriod3 = new SchedulePeriod(new DateOnly(2013, 2, 4), SchedulePeriodType.Week, 4);
+			person.AddSchedulePeriod(schedulePeriod3);
+
+			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));//GMT+1
+			_person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("en-GB"));
+			_person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
+
+			_requestedPeriod = new DateTimePeriod(2015, 11, 30, 2015, 12, 27);
+			_target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
+		    var x = _target.SchedulerRangeToLoad(person);
+			x.StartDateTime.Should().Be.LessThan(new DateTime(2015, 11, 9));
+			x.EndDateTime.Should().Be.GreaterThan(new DateTime(2016, 1, 3));
+	    }
     }
 }
