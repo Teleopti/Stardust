@@ -172,6 +172,10 @@
 					$scope.modalModifyLaunch = false;
 				};
 
+				$scope.formatSelectedDayCount = function(count) {
+					return $scope.formatDayCount(count / 3, true);
+				};
+
 				$scope.formatDayCount = function (count, withParenthesis) {
 					if (count > 0)
 						if (withParenthesis)

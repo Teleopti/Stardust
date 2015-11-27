@@ -60,7 +60,7 @@
 									</md-tooltip>
 								</a>
 								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload)">
-									{{ 'Modify' | translate }} <span ng-bind="formatDayCount(workload.selectedDays().length, true)"></span>
+									{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDays().length)"></span>
 									<md-tooltip>
 										{{ 'SelectToModify' | translate }}
 									</md-tooltip>

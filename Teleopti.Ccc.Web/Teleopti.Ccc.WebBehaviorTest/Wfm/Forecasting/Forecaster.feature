@@ -117,7 +117,6 @@ Scenario: Override only forecasted calls for one day
 	Then I should see that the total calls for the first day is '500'
 
 	
-@ignore
 Scenario: Override the forecasted values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'

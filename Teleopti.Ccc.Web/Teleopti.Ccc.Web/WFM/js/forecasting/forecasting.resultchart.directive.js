@@ -55,7 +55,7 @@
 							grouped: true,
 							draggable: true,
 							isselectable: function (chartPoint) {
-								if (chartPoint.id === 'vttt' || chartPoint.id === 'vtacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
+								if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
 									return false;
 								return true;
 							}
@@ -73,15 +73,16 @@
 						colors: {
 							vtc: '#0099FF',
 							vc: '#99D6FF',
-							vttt: '#008000',
-							vtt: '#9CCC65',
-							vtacw: '#800080',
+							vttt: '#77ac39',
+							vtt: '#C2E085',
+							vtacw: '#eb2e9e',
 							vacw: '#F488C8',
 							vcampaign: 'tomato',
 							voverride: 'purple'
 						},
+						hide: ['vc', 'vtt', 'vacw'],
 						onclick: function (chartPoint) {
-							if (chartPoint.id === 'vc' || chartPoint.id === 'vtt' || chartPoint.id === 'vacw')
+							if (chartPoint.id === 'vtc' || chartPoint.id === 'vttt' || chartPoint.id === 'vtacw')
 								$scope.$apply();
 						}
 					},
