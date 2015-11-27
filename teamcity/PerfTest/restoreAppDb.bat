@@ -7,15 +7,15 @@ set destinationBakFile=%repoRoot%\db.bak
 set appDb=PerfApp
 set analDb=PerfAnal
 set aggDb=PerfAgg
-set sourceBakFile=%1
+set sourceFolder=%1
 IF [%1]==[] (
-	echo Pass in a path to a db bak file, eg "restoreAppDb myWfmAppDb.bak"
+	echo Pass in a path to a folder containing "ccc7.bak" and "app.config"
 	pause
 	exit
 )
 
 ::copy bak file
-COPY "%sourceBakFile%" "%destinationBakFile%" /Y
+COPY "%sourceFolder%\ccc7.bak" "%destinationBakFile%" /Y
 
 ::restore db
 SQLCMD -S. -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%destinationBakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%appDb%"
@@ -31,3 +31,7 @@ SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") 
 ::upgrade appdb
 %RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D"%appDb%" -E -OTeleoptiCCC7 -F"%RepoRoot%\Database"
 %RepoRoot%\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe -DS. -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
+
+
+::copy app.config
+COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" /Y
