@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			var userName = ConfigurationManager.AppSettings["UserName"];
 			var password = ConfigurationManager.AppSettings["Password"];
 			var businessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
-			var planningPeriodId = ConfigurationManager.AppSettings["PlanningGroupId"];
+			var planningPeriodId = ConfigurationManager.AppSettings["PlanningPeriodId"];
 
 			using (var browserActivator = new CoypuChromeActivator())
 			{

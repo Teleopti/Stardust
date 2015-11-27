@@ -12,6 +12,6 @@
 		<add key="UserName" value="logonName"/>
 		<add key="Password" value="logonPassword"/>
 		<add key="BusinessUnitName" value="TheBusinessUnit name"/>
-		<add key="PlanningGroupId" value="guid to planning group to run"/>
+		<add key="PlanningPeriodId" value="guid to planning period to run"/>
 	</appSettings>
 </configuration>
