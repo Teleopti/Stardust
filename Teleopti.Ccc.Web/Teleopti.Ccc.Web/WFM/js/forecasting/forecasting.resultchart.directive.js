@@ -42,10 +42,12 @@
 						keys: {
 							// x: 'name', // it's possible to specify 'x' when category axis
 							x: 'date',
-							value: ['vtc', 'vc', 'vtt', 'vacw', 'vcampaign', 'voverride']
+							value: ['vtc', 'vc', 'vttt', 'vtt', 'vtacw', 'vacw', 'vcampaign', 'voverride']
 						},
 						axes: {
+							vttt: 'y2',
 							vtt: 'y2',
+							vtacw: 'y2',
 							vacw: 'y2'
 						},
 						selection: {
@@ -53,7 +55,7 @@
 							grouped: true,
 							draggable: true,
 							isselectable: function (chartPoint) {
-								if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
+								if (chartPoint.id === 'vttt' || chartPoint.id === 'vtacw' || chartPoint.id === 'vtc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
 									return false;
 								return true;
 							}
@@ -61,7 +63,9 @@
 						names: {
 							vtc: $translate.instant('TotalCallsCaret'),
 							vc: $translate.instant('CallsCaret'),
+							vttt: 'Total Talk time >',
 							vtt: $translate.instant('TalkTimeCaret'),
+							vtacw: 'Total ACW >',
 							vacw: $translate.instant('AcwCaret'),
 							voverride: $translate.instant('ForecastValueOverride'),
 							vcampaign: $translate.instant('PartOfCampaign')
@@ -69,13 +73,15 @@
 						colors: {
 							vtc: '#0099FF',
 							vc: '#99D6FF',
+							vttt: '#008000',
 							vtt: '#9CCC65',
+							vtacw: '#800080',
 							vacw: '#F488C8',
 							vcampaign: 'tomato',
 							voverride: 'purple'
 						},
 						onclick: function (chartPoint) {
-							if (chartPoint.id === 'vc')
+							if (chartPoint.id === 'vc' || chartPoint.id === 'vtt' || chartPoint.id === 'vacw')
 								$scope.$apply();
 						}
 					},

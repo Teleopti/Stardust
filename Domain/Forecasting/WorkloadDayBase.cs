@@ -1116,13 +1116,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_turnOffInternalRecalc = true;
 
 				//end fix
-			    long overrideAverageTaskTimeTicks = 1;
+			   long overrideAverageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
 				if (OverrideAverageTaskTime.HasValue)
 					overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
+				var newValueTicks = value.HasValue ? value.Value.Ticks : 1d;
 				
 				ValueDistributor.DistributeOverrideAverageTaskTime(
-					((double)value.Value.Ticks / overrideAverageTaskTimeTicks),
-					value.Value,
+					newValueTicks / overrideAverageTaskTimeTicks,
+					value,
 					_taskPeriodList,
 					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
 				_turnOffInternalRecalc = currentState;
@@ -1151,10 +1152,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				long overrideAverageAfterTaskTimeTicks = 1;
 				if (OverrideAverageAfterTaskTime.HasValue)
 					overrideAverageAfterTaskTimeTicks = OverrideAverageAfterTaskTime.Value.Ticks;
+				var newValueTicks = value.HasValue ? value.Value.Ticks : 1d;
 
 				ValueDistributor.DistributeOverrideAverageAfterTaskTime(
-					((double)value.Value.Ticks / overrideAverageAfterTaskTimeTicks),
-					value.Value,
+					newValueTicks / overrideAverageAfterTaskTimeTicks,
+					value,
 					_taskPeriodList,
 					_workload.Skill.SkillType.TaskTimeDistributionService.DistributionType);
 				_turnOffInternalRecalc = currentState;
