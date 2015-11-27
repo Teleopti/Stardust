@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<DatabaseUpgrader>().SingleInstance();
 			builder.RegisterType<DatabasePatcher>().SingleInstance();
 			builder.RegisterType<TenantUpgrader>().SingleInstance();
-			builder.RegisterType<FileLogger>().As<IUpgradeLog>();
+			builder.RegisterType<NullLog>().As<IUpgradeLog>();
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
 			
