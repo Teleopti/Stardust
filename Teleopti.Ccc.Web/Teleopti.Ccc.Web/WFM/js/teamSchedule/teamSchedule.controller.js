@@ -105,6 +105,7 @@
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
 						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+						
 						vm.isLoading = false;
 					});
 				} else {
@@ -122,7 +123,6 @@
 						vm.total = result.Total;
 						if (vm.searchOptions.keyword == "" && result.Keyword != "") {
 							vm.searchOptions.keyword = result.Keyword;
-							console.log("keyword", vm.searchOptions.keyword);
 						}
 
 						vm.allAgents = [];
@@ -133,13 +133,13 @@
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
 						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+						vm.searchOptions.searchKeywordChanged = false;
 						vm.isLoading = false;
 					});
 				} else {
 					getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
 					vm.isLoading = false;
 				}
-				console.log("keyword", vm.searchOptions.keyword);
 			}
 		}
 		vm.searchSchedules = function() {
