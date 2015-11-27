@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private static T responseToJson<T>(WebRequest request)
 		{
-			using (var response = request.GetResponse())
+			((HttpWebRequest) request).AllowAutoRedirect = true;
+         using (var response = request.GetResponse())
 			{
 				using (var reader = new StreamReader(response.GetResponseStream()))
 				{
