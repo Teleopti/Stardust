@@ -403,6 +403,7 @@
 					for (var loadedSeat in allSeats) {
 
 						allSeats[loadedSeat].priority = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
+						allSeats[loadedSeat].name = seatsIdAndPriorityDic[allSeats[loadedSeat].id];
 
 						if (allSeats[loadedSeat].priority > seatPriority) {
 							seatPriority = allSeats[loadedSeat].priority;

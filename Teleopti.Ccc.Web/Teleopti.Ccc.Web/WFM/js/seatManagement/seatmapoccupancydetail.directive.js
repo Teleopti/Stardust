@@ -87,10 +87,12 @@
 					var seats = utils.getObjectsOfTypeFromGroup(object, 'seat');
 					if (seats.length > 0) {
 						loadOccupancyForSeats(seats);
+						vm.parentVm.rightPanelOption.panelState = true;
 					}
 				} else {
 					if (object.get('type') == 'seat') {
 						loadOccupancyForSeats([object]);
+						vm.parentVm.rightPanelOption.panelState = true;
 					}
 				}
 
@@ -99,14 +101,12 @@
 
 			canvas().on('object:selected', function (e) {
 				onObjectSelection(e);
-				vm.parentVm.rightPanelOption.panelState = true;
 			});
 
 			canvas().on('selection:created', function (e) {
 				if (e.e && e.e.shiftKey) {
 					onObjectSelection(e);
 				}
-				vm.parentVm.rightPanelOption.panelState = true;
 			});
 
 			canvas().on('before:selection:cleared', function (e) {
