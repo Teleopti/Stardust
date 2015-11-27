@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="App.config.template" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,9 @@
 copy "$(SolutionDir)\packages\Selenium.WebDriver.2.39.0\lib\net40\webdriver.dll" "$(TargetDir)\webdriver.dll"
 copy "$(SolutionDir)\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll" "$(TargetDir)\webdriver.support.dll"
 copy "$(SolutionDir)\packages\WebDriver.ChromeDriver.win32.2.19.0.0\content\chromedriver.exe" "$(TargetDir)\chromedriver.exe"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)app.config.template" "$(ProjectDir)app.config"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
