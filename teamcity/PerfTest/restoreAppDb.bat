@@ -1,0 +1,31 @@
+@ECHO off
+
+::Get path to this batchfile
+SET THIS=%~dp0
+Set RepoRoot=%THIS:~0,-19%
+set destinationBakFile=%repoRoot%\db.bak
+set appDb=PerfApp
+set analDb=PerfAnal
+set aggDb=PerfAgg
+set sourceBakFile=%1
+IF [%1]==[] (
+	echo Pass in a path to a db bak file, eg "restoreAppDb myWfmAppDb.bak"
+	pause
+	exit
+)
+
+::copy bak file
+COPY "%sourceBakFile%" "%destinationBakFile%" /Y
+
+::restore db
+SQLCMD -S. -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%destinationBakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%appDb%"
+
+::Skapa agg + analytics
+SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%analDb%"") drop database %analDb%"
+SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database %aggDb%"
+%RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D%analDb% -E -OTeleoptiAnalytics -F"%RepoRoot%\Database" -C
+%RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D%aggDb% -E -OTeleoptiCCCAgg -F"%RepoRoot%\Database" -C
+
+::upgrade appdb
+%RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D"%appDb%" -E -OTeleoptiCCC7 -F"%RepoRoot%\Database"
+%RepoRoot%\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe -DS. -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
