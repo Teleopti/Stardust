@@ -3,7 +3,6 @@ Feature: Permissions
 	As a resource planner
 	I want to work on permissions
 
-@ignore
 Scenario: Create a role
 	Given I have a role with
 		| Field                                 | Value             |
@@ -14,7 +13,6 @@ Scenario: Create a role
 	Then I should see a role 'roleA' in the list
 
 
-@ignore
 Scenario: Add a function to a role
 	Given I have a role with
 		| Field                                 | Value             |
