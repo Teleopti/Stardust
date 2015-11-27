@@ -21,8 +21,10 @@ COPY "%sourceBakFile%" "%destinationBakFile%" /Y
 SQLCMD -S. -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%destinationBakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%appDb%"
 
 ::Skapa agg + analytics
-SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%analDb%"") drop database %analDb%"
-SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database %aggDb%"
+SQLCMD -S. -E -Q "alter database [%analDb%] set single_user with rollback immediate"
+SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%analDb%"") drop database [%analDb%]"
+SQLCMD -S. -E -Q "alter database [%aggDb%] set single_user with rollback immediate"
+SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database [%aggDb%]"
 %RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D%analDb% -E -OTeleoptiAnalytics -F"%RepoRoot%\Database" -C
 %RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe -S. -D%aggDb% -E -OTeleoptiCCCAgg -F"%RepoRoot%\Database" -C
 
