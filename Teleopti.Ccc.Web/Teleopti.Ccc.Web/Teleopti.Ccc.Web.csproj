@@ -1242,6 +1242,11 @@
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
+    <Content Include="WFM\js\requests\html\requests-overview.tpl.html" />
+    <Content Include="WFM\js\requests\requests-overview.directive.js" />
+    <Content Include="WFM\js\requests\requests-table-container.directive.js" />
+    <Content Include="WFM\js\requests\requestsDefinitions.service.js" />
+    <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
     <Content Include="WFM\js\rta\rta-agents-headercelltemplate-ProperAlarm_34975.html" />
     <Content Include="WFM\js\rta\rta-agents-rowtemplate-AdherenceDetails_34267.html" />
@@ -1311,10 +1316,10 @@
     <Content Include="WFM\tests\global\currentuserinfo.service.spec.js" />
     <Content Include="WFM\tests\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.controller.campaign-list-gantt.spec.js" />
-    <Content Include="WFM\tests\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
+    <Content Include="WFM\tests\requests\requests.controller.spec.js" />
     <Content Include="WFM\tests\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />
@@ -2190,6 +2195,7 @@
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
     <Content Include="WFM\css\_timerangepicker.scss" />
     <Content Include="WFM\css\_teamschedule.scss" />
+    <Content Include="WFM\tests\requests\requests-overview.directive.spec.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
