@@ -203,9 +203,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				var scenario = _scenarioRepository.Get(input.ScenarioId);
 				var workload = _workloadRepository.Get(input.WorkloadId);
 				_overridePersister.Persist(scenario, workload, input.Days, 
-					input.IgnoreOverrideTasks ? null : (double?)input.OverrideTasks,
-					input.IgnoreOverrideTalkTime ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideTalkTime),
-					input.IgnoreOverrideAfterCallWork ? null : (TimeSpan?)TimeSpan.FromSeconds(input.OverrideAfterCallWork));
+					input.ShouldSetOverrideTasks ? (double?)input.OverrideTasks : null,
+					input.ShouldSetOverrideTalkTime ? (TimeSpan?)TimeSpan.FromSeconds(input.OverrideTalkTime) : null,
+					input.ShouldSetOverrideAfterCallWork ? (TimeSpan?)TimeSpan.FromSeconds(input.OverrideAfterCallWork) : null);
 				return Task.FromResult(new ForecastResultViewModel
 				{
 					Success = true
@@ -252,9 +252,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public double OverrideTasks { get; set; }
 		public double OverrideTalkTime { get; set; }
 		public double OverrideAfterCallWork { get; set; }
-		public bool IgnoreOverrideTasks { get; set; }
-		public bool IgnoreOverrideTalkTime { get; set; }
-		public bool IgnoreOverrideAfterCallWork { get; set; }
+		public bool ShouldSetOverrideTasks { get; set; }
+		public bool ShouldSetOverrideTalkTime { get; set; }
+		public bool ShouldSetOverrideAfterCallWork { get; set; }
 	}
 
 	public class ModifiedDay

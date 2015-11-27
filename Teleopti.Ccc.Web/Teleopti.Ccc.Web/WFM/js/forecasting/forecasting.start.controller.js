@@ -126,14 +126,28 @@
 					min: -100
 				};
 
-				var buildModifyDays = function (workload) {
+				var handleModifyDays = function (workload) {
 					var tempsum = 0;
 					$scope.modifyDays = [];
+					var isOnlyOneDaySelected = workload.selectedDays().length/3 == 1;
 					angular.forEach(workload.selectedDays(), function (value) {
-						$scope.modifyDays.push({
-							date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
-						});
-						tempsum += value.value;
+						if (value.id == 'vtc') {
+							if (isOnlyOneDaySelected) {
+								$scope.modalModifyInfo.overrideTasks = Math.round(value.value * 10) / 10;
+							}
+							$scope.modifyDays.push({
+								date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
+							});
+							tempsum += value.value;
+						}
+						if (isOnlyOneDaySelected) {
+							if (value.id == 'vttt') {
+								$scope.modalModifyInfo.overrideTalkTime = Math.round(value.value * 10) / 10;
+							}
+							if (value.id == 'vtacw') {
+								$scope.modalModifyInfo.overrideAcw = Math.round(value.value * 10) / 10;
+							}
+						}
 					});
 					$scope.sumOfCallsForSelectedDays = tempsum.toFixed(1);
 				};
@@ -145,11 +159,14 @@
 						return;
 					}
 					$scope.modalModifyLaunch = true;
-					buildModifyDays(workload);
+					$scope.modalModifyInfo.overrideTasks = undefined;
+					$scope.modalModifyInfo.overrideTalkTime = undefined;
+					$scope.modalModifyInfo.overrideAcw = undefined;
+					handleModifyDays(workload);
 					$scope.modalModifyInfo.campaignPercentage = 0;
-					$scope.modalModifyInfo.overrideTasks = 0;
-					$scope.modalModifyInfo.overrideTalkTime = 0;
-					$scope.modalModifyInfo.overrideAcw = 0;
+					$scope.modalModifyInfo.shouldSetOverrideTasks = false;
+					$scope.modalModifyInfo.shouldSetOverrideTalkTime = false;
+					$scope.modalModifyInfo.shouldSetOverrideAfterCallWork = false;
 					$scope.modalModifyInfo.selectedWorkload = workload;
 					$scope.modalModifyInfo.selectedScenario = workload.Scenario;
 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
@@ -280,7 +297,10 @@
 							ScenarioId: workload.Scenario.Id,
 							OverrideTasks: $scope.modalModifyInfo.overrideTasks,
 							OverrideTalkTime: $scope.modalModifyInfo.overrideTalkTime,
-							OverrideAfterCallWork: $scope.modalModifyInfo.overrideAcw
+							OverrideAfterCallWork: $scope.modalModifyInfo.overrideAcw,
+							ShouldSetOverrideTasks: $scope.modalModifyInfo.shouldSetOverrideTasks,
+							ShouldSetOverrideTalkTime: $scope.modalModifyInfo.shouldSetOverrideTalkTime,
+							ShouldSetOverrideAfterCallWork: $scope.modalModifyInfo.shouldSetOverrideAfterCallWork
 						}))
 						.success(function (data, status, headers, config) {
 							if (data.Success) {

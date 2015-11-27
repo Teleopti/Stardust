@@ -171,7 +171,7 @@
 									<ul class="wfm-accordion">
 										<li>
 											<div class="wfm-checkbox">
-												<input type="checkbox" id="tasksCheckId" />
+												<input type="checkbox" id="tasksCheckId" ng-model="modalModifyInfo.shouldSetOverrideTasks" />
 												<label class="override-tasks-checkbox" for="tasksCheckId" ng-click="activeTaskInput = !activeTaskInput">
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label">Calls</span>
@@ -193,7 +193,7 @@
 
 										<li>
 											<div class="wfm-checkbox">
-												<input type="checkbox" id="talkTimeCheckId" />
+												<input type="checkbox" id="talkTimeCheckId" ng-model="modalModifyInfo.shouldSetOverrideTalkTime" />
 												<label class="override-talktime-checkbox" for="talkTimeCheckId" ng-click="activeTalkInput = !activeTalkInput">
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label">Talk time </span>
@@ -215,7 +215,7 @@
 
 										<li>
 											<div class="wfm-checkbox">
-												<input type="checkbox" id="AcwCheckId" />
+												<input type="checkbox" id="AcwCheckId" ng-model="modalModifyInfo.shouldSetOverrideAfterCallWork" />
 												<label class="override-acw-checkbox" for="AcwCheckId" ng-click="activeAcwInput = !activeAcwInput">
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label">After call work </span>

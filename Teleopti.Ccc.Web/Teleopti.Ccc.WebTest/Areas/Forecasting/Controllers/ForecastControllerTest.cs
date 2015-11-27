@@ -240,9 +240,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				OverrideTasks = 50,
 				OverrideTalkTime = 20,
 				OverrideAfterCallWork = 25,
-				IgnoreOverrideTasks = false,
-				IgnoreOverrideTalkTime = false,
-				IgnoreOverrideAfterCallWork = false
+				ShouldSetOverrideTasks = true,
+				ShouldSetOverrideTalkTime = true,
+				ShouldSetOverrideAfterCallWork = true
 			};
 			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
@@ -271,9 +271,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				OverrideTasks = 50,
 				OverrideTalkTime = 20,
 				OverrideAfterCallWork = 25,
-				IgnoreOverrideTasks = true,
-				IgnoreOverrideTalkTime = true,
-				IgnoreOverrideAfterCallWork = true
+				ShouldSetOverrideTasks = false,
+				ShouldSetOverrideTalkTime = false,
+				ShouldSetOverrideAfterCallWork = false
 			};
 			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
