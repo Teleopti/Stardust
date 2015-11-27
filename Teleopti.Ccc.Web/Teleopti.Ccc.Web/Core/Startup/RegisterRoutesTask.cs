@@ -37,11 +37,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private static void registerWebApiRoutes(HttpConfiguration config)
 		{
 			config.MapHttpAttributeRoutes();
-
-			config.Routes.MapHttpRoute(
-				name: "Forecasting_API",
-				routeTemplate: "api/Forecasting/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional });
 		}
 
 		public void registerRoutes(RouteCollection routes)

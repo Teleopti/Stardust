@@ -1,12 +1,11 @@
 using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 {
@@ -15,33 +14,24 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 		[Test]
 		public void ShouldReturnAbsenceId()
 		{
-			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
-			var target = new ConfigurationController(absenceRepository, MockRepository.GenerateMock<ILoggedOnUser>());
+			var absenceRepository = new FakeAbsenceRepository();
+			var target = new PerformanceToolConfigurationController(absenceRepository, new FakeLoggedOnUser(PersonFactory.CreatePersonWithId()));
 
-			var absence = new Absence();
-			absence.SetId(Guid.NewGuid());
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			absenceRepository.Add(absence);
 
-			absenceRepository.Stub(x => x.LoadAll()).Return(new[] { absence });
-
-			var result = target.GetAAbsenceId();
-
-			result.Data.Should().Be.EqualTo(absence.Id.Value);
+			var result = target.GetAAbsenceId().Result<Guid>();
+			result.Should().Be.EqualTo(absence.Id.Value);
 		}
 
 		[Test]
 		public void ShouldReturnPersonId()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var target = new ConfigurationController(MockRepository.GenerateMock<IAbsenceRepository>(), loggedOnUser);
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new PerformanceToolConfigurationController(new FakeAbsenceRepository(), new FakeLoggedOnUser(person));
 
-			var person = new Person();
-			person.SetId(Guid.NewGuid());
-
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			
-			var result = target.GetAPersonId();
-
-			result.Data.Should().Be.EqualTo(person.Id.Value);
+			var result = target.GetAPersonId().Result<Guid>();
+			result.Should().Be.EqualTo(person.Id.Value);
 		}
 	}
 }

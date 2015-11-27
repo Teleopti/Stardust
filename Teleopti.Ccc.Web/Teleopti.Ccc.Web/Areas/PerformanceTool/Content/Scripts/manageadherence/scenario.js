@@ -20,14 +20,14 @@ define([
 
 		this.Name = "Manage Adherence Load Test";
 		this.GenerateForm =
-			"<form action='" + document.URL + "/application/ManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
+			"<form action='" + document.URL + "/../api/PerformanceTool/ManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
 					<div class='form-group'>\
 						<input type='number' class='form-control' name='iterationCount' value='1000'>\
 					</div>\
 					<button class='btn btn-primary'>Generate</button>\
 				</form>";
 		this.ClearForm =
-			"<form action='" + document.URL + "/application/ClearManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
+			"<form action='" + document.URL + "/../api/PerformanceTool/ClearManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
 					<div class='form-group'>\
 						<input type='number' class='form-control' name='iterationCount' value='1000'>\
 					</div>\
@@ -148,7 +148,7 @@ define([
 				}
 			});
 			$.ajax({
-				url: "performancetool/application/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
+			    url: "/api/PerformanceTool/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
 				success: function () {
 					self.runIterations();
 				}

@@ -8,6 +8,5 @@ namespace Teleopti.Ccc.Web.Areas.MessageBrokerTool.Controllers
         {
             return new ViewResult();
         }
-
     }
 }

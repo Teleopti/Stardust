@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			_globalConfiguration.Configure(c => c.Filters.Add(new AuthorizeTeleoptiAttribute(new []
 			{
-				typeof (DangerousApiController),
+				typeof (DangerousController),
 				typeof (MessageBrokerController),
 				typeof (ToggleHandlerController),
 				typeof (AuthenticateController),

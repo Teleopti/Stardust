@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck
 
 			context.MapRoute(
 				"HealthCheck_default",
-				"HealthCheck/{controller}/{action}/{id}",
-				new { controller = "Application", action = "Index", id = UrlParameter.Optional }
-			);
+				"HealthCheck/{controller}/{action}",
+				new {controller = "Application", action = "Index"}
+				);
 		}
 	}
 }

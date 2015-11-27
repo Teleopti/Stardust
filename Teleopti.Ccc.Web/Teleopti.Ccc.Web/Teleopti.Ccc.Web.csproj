@@ -450,6 +450,8 @@
     <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
+    <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
+    <Compile Include="Areas\HealthCheck\Controllers\LoadEtlJobHistoryInput.cs" />
     <Compile Include="Areas\Intraday\IntradayAreaModule.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillStatusController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
@@ -473,6 +475,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
@@ -536,7 +540,6 @@
     <Compile Include="Areas\People\Controllers\ImportPeopleController.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonDataProvider.cs" />
-    <Compile Include="Areas\PerformanceTool\Controllers\DangerousApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\DangerousController.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILeaderboardSettingBasedBadgeProvider.cs" />
@@ -819,6 +822,7 @@
     <Compile Include="Core\Data\ActivityViewModel.cs" />
     <Compile Include="Core\Data\IActivityProvider.cs" />
     <Compile Include="Core\Data\ActivityProvider.cs" />
+    <Compile Include="Core\DateOnlyModelBinder.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />
@@ -906,7 +910,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationController.cs" />
-    <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationController.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolConfigurationController.cs" />
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Core\IOpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Controllers\OpenIdController.cs" />

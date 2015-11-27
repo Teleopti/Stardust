@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void RegisterModelBinders(ModelBinderDictionary binders)
 		{
-			var dateOnlyModelBinder = new DateOnlyModelBinder();
+			var dateOnlyModelBinder = new Areas.MyTime.Core.DateOnlyModelBinder();
 			var timeOfDayModelBinder = new TimeOfDayModelBinder();
 			var nullableTimeOfDayModelBinder = new TimeOfDayModelBinder(nullable: true);
 			var timeSpanModelBinder = new TimeSpanModelBinder();

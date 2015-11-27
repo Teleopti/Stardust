@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 {
 	[LocalHostAccess]
-	public class DangerousController : Controller
+	public class DangerousController : ApiController
 	{
 		private readonly INow _now;
 		private readonly ISiteRepository _siteRepository;
@@ -42,10 +41,25 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		[UnitOfWork]
+		[Route("api/PerformanceTool/Dangerous/ThrowDivideByZeroException"), HttpGet]
+		public int ThrowDivideByZeroException()
+		{
+			var zero = 0;
+			var number = 1;
+
+			return number / zero;
+		}
+
+		[Route("api/PerformanceTool/Dangerous/ThrowException"), HttpGet]
+		public void ThrowException()
+		{
+			throw new Exception("Testing");
+		}
+
+		[UnitOfWork, HttpPost, Route("api/PerformanceTool/Dangerous/Create5000Agents")]
 		public virtual void Create5000Agents()
 		{
-			var date = new DateOnly(_now.UtcDateTime());
+			var date = _now.LocalDateOnly();
 			var site = new Site("Site");
 			_siteRepository.Add(site);
 			var team = new Team { Site = site, Description = new Description("team") };
@@ -56,38 +70,18 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			_partTimePercentageRepository.Add(partTimePercentage);
 			var contractSchedule = new ContractSchedule("cs");
 			_contractScheduleRepository.Add(contractSchedule);
+
+			var utcTimeZone = TimeZoneInfo.Utc;
 			for (var i = 0; i < 5000; i++)
 			{
 				var person = new Person();
-				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+				person.PermissionInformation.SetDefaultTimeZone(utcTimeZone);
 				var personPeriod = new PersonPeriod(date,
 					new PersonContract(contract, partTimePercentage, contractSchedule), team);
 				person.AddPersonPeriod(personPeriod);
 				_personRepository.Add(person);
 			}
 			_unitOfWork.Current().PersistAll();
-		}
-
-		public int ThrowDivideByZeroException()
-		{
-			var zero = 0;
-			var number = 1;
-			return number/zero;
-		}
-
-		public void ThrowException()
-		{
-			throw new Exception("Testing");
-		}
-	}
-
-	public class LocalHostAccessAttribute : AuthorizeAttribute
-	{
-		protected override bool AuthorizeCore(HttpContextBase httpContext)
-		{
-			if (httpContext.Request.IsLocal)
-				return true;
-			throw new HttpException(404, "");
 		}
 	}
 }

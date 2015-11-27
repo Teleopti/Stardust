@@ -15,12 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 	{
 		public static string ToJson<T>(this T target)
 		{
-			return ToJson(target, null);
-		}
-
-		public static string ToJson<T>(this T target, IEnumerable<Type> knownTypes)
-		{
-			var ser = createSurrogateSerializer(typeof (T), knownTypes);
+			var ser = createSurrogateSerializer(typeof (T));
 
 			using (var ms = new MemoryStream())
 			{
@@ -29,30 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			}
 		}
 
-		/*
-		public static T FromJson<T>(this string targetString)
-		{
-			return FromJson<T>(targetString, null);
-		}
-
-		public static T FromJson<T>(this string targetString, IEnumerable<Type> knownTypes)
-		{
-			T obj; // T obj = Activator.CreateInstance<T>();
-			using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(targetString)))
-			{
-				var ser = createSurrogateSerializer(typeof (T), knownTypes);
-				obj = (T) ser.ReadObject(ms);
-				ms.Close();
-			}
-			return obj;
-		}
-		 * */
-
-		private static DataContractJsonSerializer createSurrogateSerializer(Type t, IEnumerable<Type> knownTypes)
+		private static DataContractJsonSerializer createSurrogateSerializer(Type t)
 		{
 			var surrogate = new DateOnlyToFixedStringSurrogate();
 			var surrogateSerializer =
-				new DataContractJsonSerializer(t, knownTypes, Int16.MaxValue, false, surrogate, false);
+				new DataContractJsonSerializer(t, null, Int16.MaxValue, false, surrogate, false);
 			return surrogateSerializer;
 		}
 

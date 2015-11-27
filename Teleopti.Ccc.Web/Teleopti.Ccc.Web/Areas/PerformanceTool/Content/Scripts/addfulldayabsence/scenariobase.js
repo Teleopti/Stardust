@@ -109,14 +109,14 @@ define([
 				var personId;
 
 				var promise1 = $.ajax({
-					url: 'Configuration/GetAAbsenceId',
+				    url: 'api/PerformanceTool/Configuration/AnAbsenceId',
 					success: function (data, textStatus, jqXHR) {
 						absenceId = data;
 					}
 				});
 
 				var promise2 = $.ajax({
-					url: 'Configuration/GetAPersonId',
+				    url: 'api/PerformanceTool/Configuration/APersonId',
 					success: function (data, textStatus, jqXHR) {
 						personId = data;
 					}
