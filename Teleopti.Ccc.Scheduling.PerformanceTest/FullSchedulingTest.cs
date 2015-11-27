@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			TestSiteConfigurationSetup.Setup();
 		}
 
-		[Test, Explicit]
+		[Test]
 		public void MeasurePerformance()
 		{
 			var userName = ConfigurationManager.AppSettings["UserName"];
