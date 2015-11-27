@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -5,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAdherenceAggregatorInfo
 	{
 		PersonOrganizationData Person { get; }
-		AdherenceState AggregatorAdherence { get; }
+		EventAdherence AggregatorAdherence { get; }
 		AgentStateReadModel MakeAgentStateReadModel();
 	}
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 		
 		public PersonOrganizationData Person { get; private set; }
-		public AdherenceState AggregatorAdherence { get; set; }
+		public EventAdherence AggregatorAdherence { get; set; }
 
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{

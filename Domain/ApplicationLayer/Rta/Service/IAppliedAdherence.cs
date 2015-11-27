@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAppliedAdherence
 	{
 		Adherence ForAlarm(IAlarmType alarmType);
-		EventAdherence StateToEvent(AdherenceState adherenceState);
+		EventAdherence ForEvent(Adherence? adherence, double? staffingEffect);
 	}
 
 	public class ByStaffingEffect : IAppliedAdherence
@@ -16,19 +16,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (alarmType == null)
 				return Adherence.In;
-			return ForStaffingEffect(alarmType.StaffingEffect);
+			return forStaffingEffect(alarmType.StaffingEffect);
 		}
 
-		public EventAdherence StateToEvent(AdherenceState adherenceState)
+		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
 		{
-			return adherenceState == AdherenceState.Out 
-				? EventAdherence.Out 
+			return forStaffingEffect(staffingEffect) == Adherence.Out 
+				? EventAdherence.Out
 				: EventAdherence.In;
 		}
 
-		public static Adherence ForStaffingEffect(double staffingEffect)
+		private static Adherence forStaffingEffect(double? staffingEffect)
 		{
-			return staffingEffect.Equals(0)
+			if (!staffingEffect.HasValue)
+				return Adherence.In;
+			return staffingEffect.Value.Equals(0)
 				? Adherence.In
 				: Adherence.Out;
 		}
@@ -42,16 +44,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return Adherence.Neutral;
 			return alarmType.Adherence.HasValue
 				? alarmType.Adherence.Value
-				: ByStaffingEffect.ForStaffingEffect(alarmType.StaffingEffect);
+				: forStaffingEffect(alarmType.StaffingEffect);
 		}
 
-		public EventAdherence StateToEvent(AdherenceState adherenceState)
+		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
 		{
-			if (adherenceState == AdherenceState.In)
+			if (!adherence.HasValue)
+				adherence = forStaffingEffect(staffingEffect);
+
+			if (adherence == Adherence.In)
 				return EventAdherence.In;
-			if (adherenceState == AdherenceState.Out)
+			if (adherence == Adherence.Out)
 				return EventAdherence.Out;
+
 			return EventAdherence.Neutral;
+		}
+
+		private static Adherence forStaffingEffect(double? staffingEffect)
+		{
+			if (!staffingEffect.HasValue)
+				return Adherence.Neutral;
+			return staffingEffect.Value.Equals(0)
+				? Adherence.In
+				: Adherence.Out;
 		}
 	}
 }

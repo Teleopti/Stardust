@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
+	[Ignore]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class IncorrectOutOfAdherenceCount35829
 	{
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher Publisher;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
-		[Test, Ignore]
-		public void ShouldSendInAdherenceEventAfterShiftHasEnded()
+		[Test]
+		public void ShouldWork_RealScenario()
 		{
 			var person = Guid.NewGuid();
 			var inbound = Guid.NewGuid();
@@ -72,11 +73,65 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 			Publisher.Clear();
 			
-			Now.Is("2015-11-25 23:00");
+			Now.Is("2015-11-25 23:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishPersonInAdherenceEventWhenShiftEnds()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+				.WithAlarm("logged off", phone, -1)
+				;
+			Now.Is("2015-11-24 17:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "logged off"
+			});
+			Now.Is("2015-11-25 8:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
+
+			Now.Is("2015-11-25 12:01");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldPublishPersonOutOfAdherenceEventWhenShiftEnds()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+				.WithAlarm("phone", phone, 0)
+				.WithAlarm("phone", null, +1)
+				;
+			Now.Is("2015-11-25 8:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2015-11-25 12:01");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>()
+				.Should().Not.Be.Empty();
+
 		}
 	}
 }

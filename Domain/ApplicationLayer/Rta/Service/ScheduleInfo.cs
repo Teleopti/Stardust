@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShiftStarted()
 		{
-			return _stored.ActivityId == null &&
+			return _stored.ActivityId() == null &&
 				   CurrentActivity() != null;
 		}
 
 		public bool ShiftEnded()
 		{
-			return _stored.ActivityId != null &&
+			return _stored.ActivityId() != null &&
 				   CurrentActivity() == null &&
 				   PreviousActivity() != null;
 		}

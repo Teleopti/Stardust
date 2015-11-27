@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldPublishPersonOutOfAdherenceEventOnPositiveStaffingEffect()
+		public void ShouldPublishOnPositiveStaffingEffect()
 		{
 			var state = new ExternalUserStateForTest
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishPersonOutOfAdherenceEventOnNegativeStaffingEffect()
+		public void ShouldPublishOnNegativeStaffingEffect()
 		{
 			var state = new ExternalUserStateForTest
 			{
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotPublishEventIfStillOutOfAdherence()
+		public void ShouldNotPublishIfStillOutOfAdherence()
 		{
 			var state1 = new ExternalUserStateForTest
 			{
@@ -98,30 +98,51 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishTheTimeWhenPersonOutOfAdherence()
+		public void ShouldPublishTimeOfStateChange()
 		{
-			var state = new ExternalUserStateForTest
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, phone, 0)
+				.WithAlarm("loggedoff", phone, -1);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode"
-			};
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			Database
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", activityId, -1);
-			Now.Is("2014-10-20 9:00");
+				StateCode = "loggedoff"
+			});
 
-			Target.SaveState(state);
+			var @event = Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
+			@event.Timestamp.Should().Be("2014-10-20 9:05".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishTimeOfActivityChange()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, phone, -1)
+				.WithAlarm("loggedoff", phone, -1);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedoff"
+			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			@event.Timestamp.Should().Be("2014-10-20 9:00".Utc());
 		}
 
 		[Test]
-		public void ShouldPublishEventWithBusinessUnitId()
+		public void ShouldPublishWithBusinessUnitId()
 		{
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -144,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishTheTeam()
+		public void ShouldPublishWithTeamId()
 		{
 			var state = new ExternalUserStateForTest
 			{

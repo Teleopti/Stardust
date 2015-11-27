@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public StoredStateInfo Load(Guid personId)
 		{
-			return new StoredStateInfo(personId);
+			return null;
 		}
 	}
 }

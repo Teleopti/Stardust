@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public void Publish(StateInfo info, DateTime time, AdherenceState adherence)
+		public void Publish(StateInfo info, DateTime time, EventAdherence adherence)
 		{
 		}
 	}

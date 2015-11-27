@@ -18,18 +18,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!info.State.StateGroupChanged()) return;
 
-			var adherenceChanged = info.Adherence.AdherenceForPreviousStateAndCurrentActivity() != info.Adherence.AdherenceState();
-
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
 			{
 				PersonId = info.Person.PersonId,
 				Timestamp = info.CurrentTime,
-				AdherenceWithPreviousActivity = info.Adherence.EventAdherenceForNewStateAndPreviousActivity(),
-				Adherence = info.Adherence.EventAdherence()
+				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),
+				Adherence = info.Adherence.Adherence()
 			});
 
-			if (adherenceChanged)
-				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence.AdherenceState());
+			if (info.Adherence.AdherenceChangedFromStateChange())
+				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence.Adherence());
 		}
 	}
 }

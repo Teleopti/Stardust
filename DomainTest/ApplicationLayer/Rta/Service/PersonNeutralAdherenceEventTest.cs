@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		[Test]
 		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldNotUseAdherencePropertyIfToggleOff()
+		public void ShouldNotPublishIfToggleOff()
 		{
 			var personId = Guid.NewGuid();
 			var admin = Guid.NewGuid();
@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-10 8:00", "2015-03-10 10:00")
 				.WithAlarm("phone", phone, 0, Adherence.In);
+			Now.Is("2015-03-10 8:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
 			Now.Is("2015-03-10 8:30");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -95,6 +98,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-10 8:00", "2015-03-10 10:00")
 				.WithAlarm("break", phone, 0, Adherence.Out);
+			Now.Is("2015-03-10 8:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
 			Now.Is("2015-03-10 8:30");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -161,11 +167,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "someOtherCode"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
+			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>()
+				.Where(x => x.Timestamp == "2015-03-19 8:01".Utc()).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldPublishWithProperties()
+		public void ShouldPublishTimeOfStateChange()
+		{
+			var person = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, admin, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, admin, 0, Adherence.Out)
+				.WithAlarm("admin", admin, 0, Adherence.Neutral);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single();
+			@event.Timestamp.Should().Be("2014-10-20 9:05".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishTimeOfActivityChange()
+		{
+			var person = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, admin, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, admin, 0, Adherence.Neutral)
+				.WithAlarm("admin", admin, 0, Adherence.Neutral);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single();
+			@event.Timestamp.Should().Be("2014-10-20 9:00".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishWithPersonTeamSiteIds()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -176,9 +227,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId, businessUnitId, teamId, siteId)
 				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
-				.WithAlarm("admin", admin, 0, Adherence.Neutral);
-			
-			Now.Is("2015-03-10 8:30");
+				.WithAlarm("admin", admin, 0, Adherence.Neutral)
+				;
+			Now.Is("2015-03-10 8:00");
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -188,14 +239,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			var @event = Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single();
 			@event.PersonId.Should().Be(personId);
-			@event.Timestamp.Should().Be("2015-03-10 8:30".Utc());
 			@event.TeamId.Should().Be(teamId);
 			@event.SiteId.Should().Be(siteId);
 		}
 
-
 		[Test]
-		public void ShouldPublishEventWithBusinessUnitId()
+		public void ShouldPublishWithBusinessUnitId()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();

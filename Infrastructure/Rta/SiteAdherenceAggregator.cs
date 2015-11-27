@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				personIds.AddRange(_personRepository.FindPeopleBelongTeam(team, timePeriod).Select(x => x.Id.GetValueOrDefault()));
 			}
 			var lastStates = _statisticRepository.Load(personIds);
-			return lastStates.Count(x => AdherenceInfo.AdherenceFor(x) == AdherenceState.Out);
+			return lastStates.Count(x => AdherenceInfo.AggregatorAdherence(x) == EventAdherence.Out);
 		}
 	}
 }

@@ -232,6 +232,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAuthenticator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IPreviousStateInfoLoader.cs" />

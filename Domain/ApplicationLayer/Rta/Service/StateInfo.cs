@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -20,10 +21,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}
 
-		private Guid platformTypeId { get { return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId : Input.ParsedPlatformTypeId(); } }
-		private string stateCode { get { return Input.StateCode ?? Stored.StateCode; } }
-		private DateTime? stateStart { get { return State.AlarmTypeId() == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime; } }
-		private DateTime? batchId { get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId; } }
+		private Guid platformTypeId
+		{
+			get { return string.IsNullOrEmpty(Input.PlatformTypeId) ?  Stored.PlatformTypeId() : Input.ParsedPlatformTypeId(); }
+		}
+
+		private string stateCode
+		{
+			get { return Input.StateCode ?? Stored.StateCode(); }
+		}
+
+		private DateTime? stateStart
+		{
+			get { return State.AlarmTypeId() == Stored.AlarmTypeId() ? Stored.AlarmTypeStartTime : CurrentTime; }
+		}
+
+		private DateTime? batchId
+		{
+			get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId(); }
+		}
 
 		public ExternalUserStateInputModel Input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
@@ -31,15 +47,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StoredStateInfo Stored { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
-		public DateTime CurrentTime { get; private set;  }
-		
+		public DateTime CurrentTime { get; private set; }
+
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
 			return new AgentStateReadModel
 			{
 				BatchId = batchId,
 				NextStart = Schedule.NextActivityStartTime(),
-				OriginalDataSourceId = Input.SourceId ?? Stored.SourceId,
+				OriginalDataSourceId = Input.SourceId ?? Stored.SourceId(),
 				PersonId = Person.PersonId,
 				PlatformTypeId = platformTypeId,
 				ReceivedTime = CurrentTime,
@@ -69,19 +85,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-		public AdherenceState AggregatorAdherence { get { return Adherence.AdherenceState(); } }
+		public EventAdherence AggregatorAdherence { get { return Adherence.Adherence(); } }
 
 		public bool Send
 		{
 			get
 			{
-				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId) ||
-					   !State.StateGroupId().Equals(Stored.StateGroupId) ||
-					   !Schedule.NextActivityId().Equals(Stored.NextActivityId) ||
-					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime)
+				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
+					   !State.StateGroupId().Equals(Stored.StateGroupId()) ||
+					   !Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
+					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime())
 					;
 			}
 		}
-
 	}
 }

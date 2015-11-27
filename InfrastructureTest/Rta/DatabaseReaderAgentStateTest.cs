@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ScheduledNext = "next",
 				ScheduledNextId = Guid.NewGuid(),
 				StaffingEffect = 1,
-				Adherence = (int) AdherenceState.Neutral,
+				Adherence = (int) Adherence.Neutral,
 				State = "state",
 				StateCode = "statecode",
 				StateId = Guid.NewGuid(),

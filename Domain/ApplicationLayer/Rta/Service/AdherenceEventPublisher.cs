@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info, DateTime time, AdherenceState toAdherence)
+		public void Publish(StateInfo info, DateTime time, EventAdherence toAdherence)
 		{
-			if (toAdherence == AdherenceState.In)
+			if (toAdherence == EventAdherence.In)
 			{
 				_eventPublisher.Publish(info, new PersonInAdherenceEvent
 				{
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 			}
 
-			if (toAdherence == AdherenceState.Out)
+			if (toAdherence == EventAdherence.Out)
 			{
 				_eventPublisher.Publish(info, new PersonOutOfAdherenceEvent
 				{
@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 			}
 
-			if (toAdherence == AdherenceState.Neutral ||
-				toAdherence == AdherenceState.Unknown)
+			if (toAdherence == EventAdherence.Neutral)
 			{
 				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
 				{

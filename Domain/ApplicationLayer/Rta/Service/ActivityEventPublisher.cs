@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -17,25 +18,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var currentActivity = info.Schedule.CurrentActivity();
 
-			if (info.Schedule.CurrentActivityId() == info.Stored.ActivityId || currentActivity == null) return;
+			if (info.Schedule.CurrentActivityId() == info.Stored.ActivityId() || currentActivity == null) return;
 
-			var previousStateTime = info.Stored.ReceivedTime;
+			var previousStateTime = info.Stored.ReceivedTime();
 			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
 			var startTime = activityStartedInThePast
 				? previousStateTime
 				: currentActivity.StartDateTime;
-			var adherenceChanged = info.Adherence.AdherenceForPreviousState() != info.Adherence.AdherenceForPreviousStateAndCurrentActivity();
 
 			_eventPublisher.Publish(info, new PersonActivityStartEvent
 			{
 				PersonId = info.Person.PersonId,
 				StartTime = startTime,
 				Name = currentActivity.Name,
-				Adherence = info.Adherence.EventAdherenceForPreviousStateAndCurrentActivity(),
+				Adherence = info.Adherence.AdherenceForStoredStateAndCurrentActivity(),
 			});
 
-			if (adherenceChanged)
-				_adherenceEventPublisher.Publish(info, startTime, info.Adherence.AdherenceForPreviousStateAndCurrentActivity());
+			if (info.Adherence.AdherenceChangedFromActivityChange())
+				_adherenceEventPublisher.Publish(info, startTime, info.Adherence.AdherenceForStoredStateAndCurrentActivity());
 		}
 	}
 }

@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			EventPublisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 
-
 		[Test]
 		public void ShouldMapDefaultAdherenceWhenNoAlarm()
 		{

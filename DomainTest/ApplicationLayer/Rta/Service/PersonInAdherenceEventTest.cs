@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldPublishPersonInAdherenceEventWhenNoStaffingEffect()
+		public void ShouldPublishWhenNoStaffingEffect()
 		{
 			var state = new ExternalUserStateForTest
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 		
 		[Test]
-		public void ShouldNotPublishEventIfStillInAdherence()
+		public void ShouldNotPublishIfStillInAdherence()
 		{
 			var state1 = new ExternalUserStateForTest
 			{
@@ -75,23 +75,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishTheTimeWhenPersonInAdherence()
+		public void ShouldPublishTimeOfStateChange()
 		{
-			var state = new ExternalUserStateForTest
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, phone, -1)
+				.WithAlarm("phone", phone, 0);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode"
-			};
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			Database
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", activityId, 0);
-			Now.Is("2014-10-20 9:00");
+				StateCode = "phone"
+			});
 
-			Target.SaveState(state);
+			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
+			@event.Timestamp.Should().Be("2014-10-20 9:05".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishTimeOfActivityChange()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm(null, phone, 0)
+				.WithAlarm("phone", phone, 0);
+			Now.Is("2014-10-20 9:05");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.Timestamp.Should().Be("2014-10-20 9:00".Utc());
@@ -146,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishWithsiteId()
+		public void ShouldPublishWithSiteId()
 		{
 			var state = new ExternalUserStateForTest
 			{

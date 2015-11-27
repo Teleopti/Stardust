@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool StateGroupChanged()
 		{
-			return _stateMapping.StateGroupId != _stored.StateGroupId;
+			return _stateMapping.StateGroupId != _stored.StateGroupId();
 		}
 
 		public Guid? StateGroupId()
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _alarmMapping.StaffingEffect;
 		}
 
-		public AdherenceState Adherence()
+		public Adherence? Adherence()
 		{
 			return _alarmMapping.Adherence;
 		}

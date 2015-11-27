@@ -128,13 +128,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				TeamId = teamId,
 				PersonId = personId,
-				Adherence = (int) AdherenceState.Out
+				Adherence = (int) Adherence.Out
 			};
 			new DatabaseWriter(new FakeConnectionStrings())
 				.PersistActualAgentReadModel(state);
 
-			target.Load(new[] {personId}).Single().Adherence.Should().Be(AdherenceState.Out);
-			target.LoadForTeam(teamId).Single().Adherence.Should().Be(AdherenceState.Out);
+			target.Load(new[] {personId}).Single().Adherence.Should().Be(Adherence.Out);
+			target.LoadForTeam(teamId).Single().Adherence.Should().Be(Adherence.Out);
 		}
     }
 }

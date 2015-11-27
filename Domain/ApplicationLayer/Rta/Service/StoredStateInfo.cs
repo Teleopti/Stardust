@@ -8,15 +8,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StoredStateInfo(Guid personId)
 		{
 			PersonId = personId;
-			StateGroupId = Guid.NewGuid();
 		}
 
 		public StoredStateInfo(Guid personId, AgentStateReadModel fromStorage)
 		{
 			PersonId = personId;
-			StateGroupId = Guid.NewGuid();
-			if (fromStorage == null)
-				return;
 			PersonId = fromStorage.PersonId;
 			BatchId = fromStorage.BatchId;
 			PlatformTypeId = fromStorage.PlatformTypeId;
@@ -30,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AlarmTypeId = fromStorage.AlarmId;
 			AlarmTypeStartTime = fromStorage.StateStart;
 			StaffingEffect = fromStorage.StaffingEffect;
-			Adherence = (AdherenceState?)fromStorage.Adherence;
+			Adherence = (Adherence?)fromStorage.Adherence;
 		}
 
 		public DateTime? BatchId { get; set; }
@@ -49,6 +45,68 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid? AlarmTypeId { get; set; }
 		public DateTime? AlarmTypeStartTime { get; set; }
 		public double? StaffingEffect { get; set; }
-		public AdherenceState? Adherence { get; set; }
+		public Adherence? Adherence { get; set; }
+	}
+
+	public static class StoredExtensions
+	{
+		public static Guid PlatformTypeId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.PlatformTypeId);
+		}
+
+		public static Guid? ActivityId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.ActivityId);
+		}
+
+		public static string StateCode(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.StateCode);
+		}
+
+		public static DateTime? BatchId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.BatchId);
+		}
+
+		public static Guid? AlarmTypeId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.AlarmTypeId);
+		}
+
+		public static DateTime ReceivedTime(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.ReceivedTime);
+		}
+
+		public static DateTime? NextActivityStartTime(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.NextActivityStartTime);
+		}
+		public static string SourceId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.SourceId);
+		}
+		
+
+		public static Guid? NextActivityId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.NextActivityId);
+		}
+		
+		public static Guid? StateGroupId(this StoredStateInfo stored)
+		{
+			return stored.get(s => s.StateGroupId);
+		}
+
+		
+
+		private static T get<T>(this StoredStateInfo stored, Func<StoredStateInfo, T> getter)
+		{
+			if (stored == null)
+				return default(T);
+			return getter(stored);
+		}
 	}
 }

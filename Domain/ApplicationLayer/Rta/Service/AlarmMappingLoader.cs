@@ -47,9 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					ActivityId = activityId,
 					AlarmTypeId = alarmTypeId,
 					AlarmName = alarmType.Description.Name,
-					Adherence = alarmIsSoftDeleted(m.AlarmType) 
-					? AdherenceState.Neutral 
-					: AdherenceInfo.ConvertAdherence(_appliedAdherence.ForAlarm(m.AlarmType)),
+					Adherence = _appliedAdherence.ForAlarm(m.AlarmType),
 					StaffingEffect = (int) alarmType.StaffingEffect,
 					DisplayColor = alarmType.DisplayColor.ToArgb(),
 					ThresholdTime = alarmType.ThresholdTime.Ticks

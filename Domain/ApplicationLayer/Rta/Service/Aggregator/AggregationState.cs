@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !AdherenceInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.AggregatorAdherence);
+				adherenceChanged = !AdherenceInfo.AggregatorAdherence(data.AgentStateReadModel).Equals(state.AggregatorAdherence);
 				data.AgentStateReadModel = actualAgentState;
 				data.TeamId = state.Person.TeamId;
 				data.SiteId = state.Person.SiteId;
@@ -39,14 +40,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 		{
 			return _aggregationDatas
 					.Where(k => k.Value.TeamId == teamId)
-					.Count(x => AdherenceInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(AdherenceState.Out));
+					.Count(x => AdherenceInfo.AggregatorAdherence(x.Value.AgentStateReadModel).Equals(EventAdherence.Out));
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.SiteId == siteId)
-				.Count(x => AdherenceInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(AdherenceState.Out));
+				.Count(x => AdherenceInfo.AggregatorAdherence(x.Value.AgentStateReadModel).Equals(EventAdherence.Out));
 		}
 
 		public IEnumerable<AgentStateReadModel> GetActualAgentStateForTeam(Guid teamId)

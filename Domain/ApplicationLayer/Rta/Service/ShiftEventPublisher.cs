@@ -1,4 +1,3 @@
-using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service

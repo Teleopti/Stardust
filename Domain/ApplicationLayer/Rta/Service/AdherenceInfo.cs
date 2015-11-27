@@ -4,24 +4,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public enum AdherenceState
-	{
-		Unknown,
-		In,
-		Out,
-		Neutral
-	}
-
 	public class AdherenceInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
+		private readonly StoredStateInfo _stored;
 		private readonly StateAlarmInfo _stateAlarmInfo;
+		private readonly ScheduleInfo _scheduleInfo;
 		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly IStateMapper _stateMapper;
-		private readonly Lazy<AdherenceState> _adherenceForPreviousState;
-		private readonly Lazy<AdherenceState> _adherenceForPreviousStateAndCurrentActivity;
-		private readonly Lazy<AdherenceState> _adherenceForNewStateAndPreviousActivity;
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
@@ -34,80 +25,75 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_input = input;
 			_person = person;
+			_stored = stored;
 			_stateAlarmInfo = stateAlarmInfo;
+			_scheduleInfo = scheduleInfo;
 			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
-
-			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(stored));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(stored.StateCode, stored.PlatformTypeId, scheduleInfo.CurrentActivityId()));
-			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
 		}
 
-		public EventAdherence EventAdherence()
+		public EventAdherence Adherence()
 		{
-			return _appliedAdherence.StateToEvent(AdherenceState());
+			return _appliedAdherence.ForEvent(_stateAlarmInfo.Adherence(), _stateAlarmInfo.StaffingEffect());
 		}
 
-		public EventAdherence EventAdherenceForNewStateAndPreviousActivity()
+		public EventAdherence AdherenceForStoredState()
 		{
-			return _appliedAdherence.StateToEvent(_adherenceForNewStateAndPreviousActivity.Value);
+			return adherenceFor(_stored.StateCode(), _stored.PlatformTypeId(), _stored.ActivityId());
 		}
 
-		public EventAdherence EventAdherenceForPreviousStateAndCurrentActivity()
+		public EventAdherence AdherenceForNewStateAndPreviousActivity()
 		{
-			return _appliedAdherence.StateToEvent(_adherenceForPreviousStateAndCurrentActivity.Value);
+			return adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), _scheduleInfo.PreviousActivity());
 		}
 
-		public AdherenceState AdherenceState()
+		public EventAdherence AdherenceForStoredStateAndCurrentActivity()
 		{
-			return _stateAlarmInfo.Adherence();
+			return adherenceFor(_stored.StateCode(), _stored.PlatformTypeId(), _scheduleInfo.CurrentActivity());
 		}
 
-		public AdherenceState AdherenceForPreviousState()
+		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduleLayer activity)
 		{
-			return _adherenceForPreviousState.Value;
+			var activityId = (Guid?)null;
+			if (activity != null)
+				activityId = activity.PayloadId;
+			return adherenceFor(stateCode, platformTypeId, activityId);
 		}
 
-		public AdherenceState AdherenceForPreviousStateAndCurrentActivity()
-		{
-			return _adherenceForPreviousStateAndCurrentActivity.Value;
-		}
-		
-		private AdherenceState adherenceFor(StoredStateInfo stateInfo)
-		{
-			return stateInfo.Adherence.HasValue ? stateInfo.Adherence.Value : Service.AdherenceState.Unknown;
-		}
-
-		private AdherenceState adherenceFor(string stateCode, Guid platformTypeId, ScheduleLayer activity)
-		{
-			if (activity == null)
-				return adherenceFor(stateCode, platformTypeId, (Guid?) null);
-			return adherenceFor(stateCode, platformTypeId, activity.PayloadId);
-		}
-
-		private AdherenceState adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
+		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
 			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (alarm == null)
-				return Service.AdherenceState.Unknown;
-			return alarm.Adherence;
+				return _appliedAdherence.ForEvent(null, null);
+			return _appliedAdherence.ForEvent(alarm.Adherence, alarm.StaffingEffect);
 		}
 
-		public static AdherenceState ConvertAdherence(Adherence adherence)
+		public static EventAdherence AggregatorAdherence(AgentStateReadModel readModel)
 		{
-			AdherenceState adherenceState;
-			if (!Enum.TryParse(adherence.ToString(), out adherenceState))
-				return Service.AdherenceState.Unknown;
-			return adherenceState;
+			return new ByStaffingEffect().ForEvent(null, readModel.StaffingEffect);
 		}
 
-		public static AdherenceState AdherenceFor(AgentStateReadModel readModel)
+
+
+
+
+		public bool AdherenceChangedFromActivityChange()
 		{
-			var staffingEffect = readModel.StaffingEffect;
-			if (staffingEffect.HasValue)
-				return ConvertAdherence(ByStaffingEffect.ForStaffingEffect(staffingEffect.Value));
-			return Service.AdherenceState.Unknown;
+			EventAdherence? from = null;
+			if (_stored != null)
+				from = AdherenceForStoredState();
+			var to = AdherenceForStoredStateAndCurrentActivity();
+			return from != to;
 		}
 
+		public bool AdherenceChangedFromStateChange()
+		{
+			EventAdherence? from = null;
+			if (_stored != null)
+				from = AdherenceForStoredStateAndCurrentActivity();
+			var to = Adherence();
+			return from != to;
+		}
+		
 	}
 }
