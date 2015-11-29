@@ -191,5 +191,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.SiteId.Should().Be(siteId);
 		}
 
+		[Test]
+		public void ShouldPublishWhenShiftEnds()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+				.WithAlarm("logged off", phone, -1)
+				;
+			Now.Is("2015-11-24 17:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "logged off"
+			});
+			Now.Is("2015-11-25 8:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Publisher.Clear();
+
+			Now.Is("2015-11-25 12:01");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single().Timestamp.Should().Be("2015-11-25 12:00".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishWhenInAfterShiftEnds()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+				.WithAlarm("phone", phone, 0)
+				.WithAlarm("phone", null, 1)
+				.WithAlarm("logged off", phone, -1)
+				.WithAlarm("logged off", null, 0)
+				;
+			Now.Is("2015-11-25 8:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2015-11-25 12:01");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "logged off"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single().Timestamp.Should().Be("2015-11-25 12:01".Utc());
+		}
+
 	}
 }
