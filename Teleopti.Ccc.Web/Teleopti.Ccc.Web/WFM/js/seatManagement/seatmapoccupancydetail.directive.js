@@ -176,7 +176,7 @@
 		};
 
 		function seatCanvasPositionComparer(seatA, seatB) {
-			return (seatA.left + seatA.top) - (seatB.left + seatB.top);
+			return seatA.priority - seatB.priority;
 		};
 
 		function canvas() {
