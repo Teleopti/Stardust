@@ -6,7 +6,7 @@ using Hangfire.Server;
 using Hangfire.SqlServer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 
 	// with Hangfire 1.5, we think we can inject our server component without deriving from SqlServerStorage

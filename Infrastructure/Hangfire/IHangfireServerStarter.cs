@@ -1,6 +1,6 @@
 using Owin;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	public interface IHangfireServerStarter
 	{

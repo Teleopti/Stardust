@@ -1,6 +1,7 @@
 using Autofac;
 using Hangfire;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire

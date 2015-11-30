@@ -3,7 +3,7 @@ using Hangfire.Common;
 using Hangfire.States;
 using Hangfire.Storage;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	[CLSCompliant(false)]
 	public class JobExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter

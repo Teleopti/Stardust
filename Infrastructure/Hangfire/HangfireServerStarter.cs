@@ -8,7 +8,7 @@ using Hangfire.Storage;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	[CLSCompliant(false)]
 	public class HangfireServerStarter : IHangfireServerStarter
