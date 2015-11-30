@@ -1,0 +1,2 @@
+truncate table readmodel.SiteOutOfAdherence
+truncate table readmodel.TeamOutOfAdherence
