@@ -28,16 +28,9 @@
 			controllerAs: 'requestsOverview',
 			bindToController: true,
 			restrict: 'E',
-			//templateUrl: 'js/requests/html/requests-overview.tpl.html'
-			template: getTemplate()
+			templateUrl: 'js/requests/html/requests-overview.tpl.html'
 		};
 
 	}
-
-
-	function getTemplate() {
-		return '<requests-table-container class="requests-table-container" requests-data="vm.requests"></requests-table-container>';
-	}
-
 
 })();

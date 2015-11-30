@@ -174,7 +174,7 @@
 
 		ngtemplates: {
 			'wfm.templates': {
-				src: ['html/**/*.html', 'js/**/*.html'],
+				src: ['html/**/*.html', 'js/**/*.html', 'js/**/html/*.html'],
 				dest: 'dist/templates.js',
 				options: {
 					standalone: true

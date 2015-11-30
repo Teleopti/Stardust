@@ -1240,9 +1240,10 @@
     <Content Include="WFM\js\global\businessunits\_modules.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\requests\html\requests-overview.tpl.html" />
+    <Content Include="WFM\js\requests\html\requests-table-container.tpl.html" />
     <Content Include="WFM\js\requests\requests-overview.directive.js" />
     <Content Include="WFM\js\requests\requests-table-container.directive.js" />
-    <Content Include="WFM\js\requests\requestsDefinitions.service.js" />
+    <Content Include="WFM\js\requests\requests-definitions.service.js" />
     <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
     <Content Include="WFM\js\rta\rta-agents-headercelltemplate-ProperAlarm_34975.html" />

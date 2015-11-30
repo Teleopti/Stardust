@@ -7,7 +7,8 @@
 
 		var targetElement, targetScope;
 	
-		beforeEach(module('wfm.requests'));	
+		beforeEach(module('wfm.templates'));
+		beforeEach(module('wfm.requests'));
 
 		beforeEach(function() {
 			var requestsDataService = new FakeRequestsDataService();
@@ -25,7 +26,7 @@
 			requestsDefinitions = _requestsDefinitions_;
 			targetScope = $rootScope.$new();
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
-			
+			targetScope.$digest();
 		}));
 
 
@@ -55,6 +56,7 @@
 		var $compile, $rootScope, requestsDefinitions;
 
 		var targetElement, targetScope;
+		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 		
 

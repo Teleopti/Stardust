@@ -28,8 +28,7 @@
 				requests: '='
 			},
 			require: 'requestsTableContainer',
-			//templateUrl: 'js/requests/html/requests-overview.tpl.html'
-			template: getTemplate(),
+			templateUrl: 'js/requests/html/requests-table-container.tpl.html',		
 			link: postlink
 		};
 
@@ -38,12 +37,6 @@
 			scope.requestsTableContainer.gridOptions = ctrl.getGridOptions(scope.requestsTableContainer.requests);
 
 		}
-	}
-
-	
-	function getTemplate() {		
-		return '<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid"></div>';
-	}
-
+	}	
 
 })();
