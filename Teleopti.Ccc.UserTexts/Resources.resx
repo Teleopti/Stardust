@@ -10170,7 +10170,7 @@ These options are activated:
     <comment>override for budgeted allowance</comment>
   </data>
   <data name="ForecastOverrideMsg" xml:space="preserve">
-    <value>Override the forecasted calls. Changes made here will be saved until they are cleared.</value>
+    <value>Override the forecasted values.</value>
     <comment>Information while making overrides to forecasts</comment>
   </data>
   <data name="With campaign" xml:space="preserve">

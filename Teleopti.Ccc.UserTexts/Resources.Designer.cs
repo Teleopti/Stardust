@@ -10598,7 +10598,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Override the forecasted calls. Changes made here will be saved until they are cleared..
+        ///   Looks up a localized string similar to Override the forecasted values..
         /// </summary>
         public static string ForecastOverrideMsg {
             get {
