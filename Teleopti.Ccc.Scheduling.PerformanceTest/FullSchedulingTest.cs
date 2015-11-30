@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				{
 					browserInteractions.AssertExists(".scheduling-result, .errorMessage, .alert-warning");
 				}
-				browserInteractions.AssertNotExists(".scheduling-result", ".errorMessage");
-				browserInteractions.AssertNotExists(".scheduling-result", ".alert-warning");
+				browserInteractions.AssertNotExists("body", ".errorMessage");
+				browserInteractions.AssertNotExists("body", ".alert-warning");
+				browserInteractions.AssertExists(".scheduling-result");
 			}
 		}
 
