@@ -1599,6 +1599,10 @@ Periods</comment>
     <value>Redo</value>
     <comment>Redo</comment>
   </data>
+    <data name="Accuracy" xml:space="preserve">
+    <value>Accuracy</value>
+    <comment>Accuracy</comment>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
     <comment>Refresh</comment>
@@ -1896,6 +1900,14 @@ Periods</comment>
   <data name="ForecastMethod" xml:space="preserve">
     <value>Forecast method</value>
     <comment>ForecastMethod</comment>
+  </data>
+    <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Forecast method id:</value>
+    <comment>Label for forecast method chosen</comment>
+  </data>
+      <data name="BestForecastMethod" xml:space="preserve">
+    <value>Best method</value>
+    <comment>tooltip for forecast method chosen</comment>
   </data>
   <data name="SkillViews" xml:space="preserve">
     <value>Skill Views</value>
@@ -5317,6 +5329,10 @@ Availability</value>
   <data name="EarlyWarning" xml:space="preserve">
     <value>Early Warning</value>
     <comment>Early warning</comment>
+  </data>
+    <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Warning! There is no historical data available</value>
+    <comment>warning shown when no data could be found</comment>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
     <value>Min Max Staffing</value>

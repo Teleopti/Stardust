@@ -13,7 +13,7 @@
 		</div>
 		<div ng-if="!loading">
 			<div class="alert-warning notice-spacer" ng-if="weekDays.length===0">
-				<i class='mdi mdi-alert'></i> Warning: There is no historical data available.
+				<i class='mdi mdi-alert'></i> {{'WarningNoHistorícalData' | translate}}
 			</div>
 			<div ng-repeat="weekDay in weekDays" class="wfm-block">
 				<h4>
@@ -26,4 +26,3 @@
 		</div>
 	</div>
 </div>
-
