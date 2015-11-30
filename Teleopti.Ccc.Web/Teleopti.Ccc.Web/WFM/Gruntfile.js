@@ -4,9 +4,9 @@
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'js/**/*.js', 'tests/**/*.js'],
-				tasks: ['concat:distJs','concat:distCss','uglify:dev','sass','cssmin','cacheBust'],
+				tasks: ['uglify:dev', 'sass', 'cssmin'],
 				options: {
-					spawn: false
+					spawn: false,
 				}
 			}
 		},
@@ -24,6 +24,7 @@
                         verbose:true
 					}
 			}
+
 	 },
 	 msbuild: {
 		rebuild: {
@@ -82,7 +83,7 @@
 			},
 			target: {
 				files: {
-					'dist/assets/css/style.min.css': ['css/style.css']
+					'dist/style.min.css': ['css/style.css']
 				}
 			}
 		},
@@ -132,7 +133,7 @@
 				'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 				'vendor/uigrid.directive.ext.js'
 				],
-				dest: 'dist/assets/js/modules.js',
+				dest: 'dist/modules.js',
 		    },
 			distCss: {
 				src: [
@@ -149,19 +150,19 @@
 					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
-				dest: 'dist/assets/css/modules.css',
+				dest: 'dist/modules.css',
 			},
 		},
 
 		uglify: {
 			dist: {
 				files: {
-					'dist/assets/js/main.min.js': ['js/**/*.js']
+					'dist/main.min.js': ['js/**/*.js']
 				}
 			},
 			dev: {
 				files: {
-					'dist/assets/js/main.min.js': ['js/**/*.js']
+					'dist/main.min.js': ['js/**/*.js']
 				},
 				options: {
 					sourceMap: true,
@@ -174,28 +175,12 @@
 		ngtemplates: {
 			'wfm.templates': {
 				src: ['html/**/*.html', 'js/**/*.html', 'js/**/html/*.html'],
-				dest: 'dist/assets/js/templates.js',
-
+				dest: 'dist/templates.js',
 				options: {
 					standalone: true
 				}
 			}
-		},
-		cacheBust: {
-		    options: {
-		      encoding: 'utf8',
-		      algorithm: 'md5',
-		      length: 16,
-			  ignorePatterns: ['materialdesignicons','vendor/MaterialDesignIcons/css/materialdesignicons.min.css'],
-			  rename:false,
-			  deleteOriginals: false,
-		    },
-		    assets: {
-		      files: [{
-		        src: ['index.html'],
-		      }]
-		    }
-		  }
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -207,18 +192,15 @@
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-cache-bust');
 
 	// Default task(s).
-	grunt.registerTask('default', ['devBuild','test','watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('default', ['dist','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin','concat:distJs','concat:distCss','cacheBust']); // this task should only be used by the build. It's kind of packaging for production.
-	grunt.registerTask('devBuild',['uglify:dev', 'sass', 'cssmin','concat:distJs','concat:distCss','cacheBust'])
-	grunt.registerTask('nova', ['devBuild','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
-
-
+	grunt.registerTask('dist', ['concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('nova', ['dist','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('build', ['msbuild:build']); // build the solution
 
 
 };
