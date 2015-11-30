@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	[TaskPriority(100)]
 	public class HangfireServerStartupTask : IBootstrapperTask
 	{
-		private readonly IHangfireServerStarter _starter;
+		private readonly HangfireServerStarter _starter;
 
-		public HangfireServerStartupTask(IHangfireServerStarter starter)
+		public HangfireServerStartupTask(HangfireServerStarter starter)
 		{
 			_starter = starter;
 		}

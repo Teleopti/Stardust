@@ -262,7 +262,6 @@
     <Compile Include="Hangfire\HangfireEventClient.cs" />
     <Compile Include="Hangfire\HangfireEventServer.cs" />
     <Compile Include="Hangfire\HangfireServerStarter.cs" />
-    <Compile Include="Hangfire\IHangfireServerStarter.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />
     <Compile Include="Licensing\SetLicenseActivator.cs" />
