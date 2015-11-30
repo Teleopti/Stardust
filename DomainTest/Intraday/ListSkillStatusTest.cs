@@ -260,6 +260,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				.Be.EqualTo(new DateTime(2015, 10, 21,14, 0, 0, DateTimeKind.Unspecified));
 		}
 
+		[Test]
+		public void ShouldIgnoreTheSkillWithoutAnyQueueOrWorkload()
+		{
+			var phoneSkillId = Guid.NewGuid();
+			var chatSkillId = Guid.NewGuid();
+			var phoneSkill = SkillFactory.CreateSkill("Phone", TimeZoneInfo.Utc);
+			phoneSkill.SetId(phoneSkillId);
+			var forecastedData = new List<SkillTaskDetailsModel>
+			{
+				getSkillTaskDetailsModel(phoneSkillId, 7, "Phone", new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 10, 21, 10, 0, 0, DateTimeKind.Utc))
+
+			};
+			SkillRepository.Add(phoneSkill);
+			SkillDayRepository.AddFakeTemplateTaskModels(forecastedData);
+			IList<IIntradayStatistics> actualData = new List<IIntradayStatistics>()
+			{
+				getIntradayStatistics(chatSkillId,new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),12,"Chat"),
+				getIntradayStatistics(phoneSkillId,new DateTime(2015, 10, 21, 9, 0, 0, DateTimeKind.Utc),12,"Phone")
+			};
+			StatisticRepository.AddIntradayStatistics(actualData);
+
+			var result = Target.GetSkillStatusModels(new DateTime(2015, 10, 21, 11, 0, 0, DateTimeKind.Utc));
+			result.Count().Should().Be.EqualTo(1);
+			result.First().SkillName.Should().Be.EqualTo("Phone");
+		}
+
 		private static IntradayStatistics getIntradayStatistics(Guid skillId, DateTime start, int task, string skillName)
 		{
 			return new IntradayStatistics()

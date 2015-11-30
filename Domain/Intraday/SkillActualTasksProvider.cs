@@ -9,12 +9,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public class SkillActualTasksProvider : ISkillActualTasksProvider
 	{
 		private readonly IStatisticRepository _statisticRepository;
-		private readonly ISkillRepository _skillRepository;
 
-		public SkillActualTasksProvider(IStatisticRepository statisticRepository, ISkillRepository skillRepository)
+		public SkillActualTasksProvider(IStatisticRepository statisticRepository)
 		{
 			_statisticRepository = statisticRepository;
-			_skillRepository = skillRepository;
 		}
 
 
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var intradayStatistics = _statisticRepository.LoadSkillStatisticForSpecificDates(DateOnly.Today);
 			foreach (var item in intradayStatistics)
 			{
-
+				if (!skillsTimezone.ContainsKey(item.SkillId)) continue;
 				if (!result.Contains(new SkillTaskDetails() {SkillId = item.SkillId}))
 					{
 						result.Add(new SkillTaskDetails()
