@@ -1241,6 +1241,8 @@
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\requests\html\requests-overview.tpl.html" />
     <Content Include="WFM\js\requests\html\requests-table-container.tpl.html" />
+    <Content Include="WFM\js\requests\html\requests.html" />
+    <Content Include="WFM\js\requests\requests-data.service.js" />
     <Content Include="WFM\js\requests\requests-overview.directive.js" />
     <Content Include="WFM\js\requests\requests-table-container.directive.js" />
     <Content Include="WFM\js\requests\requests-definitions.service.js" />

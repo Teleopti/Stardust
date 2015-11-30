@@ -19,10 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_requestsViewModelFactory = requestsViewModelFactory;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Requests/loadTextAndAbsenceRequests")]
-		public IEnumerable<RequestViewModel> All(DateOnly startDate, DateOnly endDate)
+		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
+		public virtual IEnumerable<RequestViewModel> AllRequests(AllRequestsFormData input)
 		{
-			return _requestsViewModelFactory.Create(new DateOnlyPeriod(startDate, endDate));
+			return _requestsViewModelFactory.Create(new DateOnlyPeriod(input.StartDate, input.EndDate));
 		}
+
+		public class AllRequestsFormData
+		{
+			public DateOnly StartDate;
+			public DateOnly EndDate;
+		}
+
 	}
 }

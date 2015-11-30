@@ -35,7 +35,8 @@ var wfm = angular.module('wfm', [
 	'wfm.start',
 	'wfm.businessunits',
 	'wfm.teamSchedule',
-	'wfm.intraday'
+	'wfm.intraday',
+	'wfm.requests'
 ]);
 
 var toggles = {
@@ -173,6 +174,9 @@ wfm.config([
 			url: '/teamSchedule',
 			templateUrl: 'js/teamSchedule/schedule.html',
 			controller: 'TeamScheduleCtrl as vm'
+		}).state('requests', {
+			url: '/requests',
+			templateUrl: 'js/requests/html/requests.html'
 		});
 
 		var rtaAgentsTemplate = function(elem, attr) {

@@ -43,12 +43,17 @@
 			};
 		
 			requestsData.setRequests([request]);
-			targetScope.requestsOverview.init();
+			
+			var targets = targetElement.find('requests-table-container');
+			var scope = angular.element(targets[0]).scope();
+			
+			scope.requestsOverview.init();		
 
-			expect(targetScope.requestsOverview.requests.length).toEqual(1);
-			expect(targetScope.requestsOverview.requests[0]).toEqual(request);
+			expect(scope.requestsOverview.requests.length).toEqual(1);
+			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
 
+		// ToDo: didn't test correct data-binding for the child directive
 	});
 
 	describe('requests table container directive', function() {

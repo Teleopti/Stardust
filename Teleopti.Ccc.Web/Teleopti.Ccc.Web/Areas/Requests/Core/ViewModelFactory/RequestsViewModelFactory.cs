@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		public IEnumerable<RequestViewModel> Create(DateOnlyPeriod dateOnlyPeriod)
 		{
 			var requests = _personRequestProvider.RetrieveRequests(dateOnlyPeriod);
-			return requests.Select(x => new RequestViewModel()
+			var requestViewModels = requests.Select(x => new RequestViewModel()
 			{
 				Id = x.Id.GetValueOrDefault(),
 				Subject = x.GetSubject(new NoFormatting()),
@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 					x.IsPending? RequestStatus.Pending:
 						x.IsDenied? RequestStatus.Denied
 							: RequestStatus.New
-			});
+			}).ToArray();
+			return requestViewModels;
 		}
 	}
 }

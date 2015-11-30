@@ -13,10 +13,13 @@
 		var vm = this;
 
 		vm.requests = [];
+		vm.requestsFilter = {};
 		vm.init = init;
-		
+
+		init();
+
 		function init() {
-			requestsData.getAllRequestsPromise().then(function (requests) {
+			requestsData.getAllRequestsPromise(vm.requestsFilter).then(function (requests) {
 				vm.requests = requests;			
 			});
 		}
@@ -27,10 +30,10 @@
 			controller: 'requestsOverviewCtrl',
 			controllerAs: 'requestsOverview',
 			bindToController: true,
+			scope: {},
 			restrict: 'E',
-			templateUrl: 'js/requests/html/requests-overview.tpl.html'
-		};
-
+			templateUrl: 'js/requests/html/requests-overview.tpl.html'			
+		};		
 	}
 
 })();
