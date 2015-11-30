@@ -6,7 +6,7 @@
 			$scope.issues = $stateParams.result.BusinessRulesValidationResults;
 			$scope.hasIssues = $scope.issues.length > 0;
 			$scope.scheduledAgents = $stateParams.result.ScheduledAgentsCount;
-            var scheduleResult = $stateParams.interResult._skillResultList;
+            var scheduleResult = $stateParams.interResult.SkillResultList;
 			$scope.planningPeriod = $stateParams.planningperiod
             $scope.dayNodes = scheduleResult;
 			$scope.gridOptions = {
