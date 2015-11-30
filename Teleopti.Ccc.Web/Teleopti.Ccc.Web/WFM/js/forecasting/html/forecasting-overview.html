@@ -181,11 +181,11 @@
 												<div class="form-input-wrap skill-service-level-seconds">
 													<label for="overrideTasksInputId">
 														{{ 'CallsSlashDay' | translate }}
-														<input type="number" ng-model="modalModifyInfo.overrideTasks" name="overrideTasksInput" required="" id="overrideTasksInputId" min="0" />
+														<input type="number" ng-model="modalModifyInfo.overrideTasks" ng-required="modalModifyInfo.shouldSetOverrideTasks" name="overrideTasksInput" id="overrideTasksInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">Seconds are required</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">Negative values are not allowed</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">{{ 'Required' | translate }}</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
 													</div>
 												</div>
 											</div>
@@ -203,11 +203,11 @@
 												<div class="form-input-wrap skill-service-level-seconds">
 													<label for="overrideTalkTimeInputId">
 														Seconds/call
-														<input type="number" ng-model="modalModifyInfo.overrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
+														<input type="number" ng-model="modalModifyInfo.overrideTalkTime" ng-required="modalModifyInfo.shouldSetOverrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.required}">Can not be empty</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.min}">Negative values are not allowed</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.required}">{{ 'Required' | translate }}</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
 													</div>
 												</div>
 											</div>
@@ -225,11 +225,11 @@
 												<div class="form-input-wrap skill-service-level-seconds">
 													<label for="overrideAcwInputId">
 														Seconds/call
-														<input type="number" ng-model="modalModifyInfo.overrideAcw" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
+														<input type="number" ng-model="modalModifyInfo.overrideAcw" ng-required="modalModifyInfo.shouldSetOverrideAfterCallWork" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">Seconds are required</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">Negative values are not allowed</div>
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">{{ 'Required' | translate }}</div>				 
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
 													</div>
 												</div>
 											</div>

@@ -416,7 +416,11 @@
 				};
 
 				$scope.disableApplyModification = function () {
-					return $scope.isForecastRunning;
+					return $scope.isForecastRunning
+						||
+						(!$scope.modalModifyInfo.shouldSetOverrideTasks
+							&& !$scope.modalModifyInfo.shouldSetOverrideTalkTime
+							&& !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork);
 				};
 
 				$scope.nextStepAdvanced = function (workload) {
