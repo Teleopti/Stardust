@@ -48,17 +48,5 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				"Test/Logon",
 				string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password)));
 		}
-
-		[SetUp]
-		public void Setup()
-		{
-			TestSiteConfigurationSetup.Setup();
-		}
-
-		[TearDown]
-		public void CleanUp()
-		{
-			TestSiteConfigurationSetup.TearDown();
-		}
 	}
 }

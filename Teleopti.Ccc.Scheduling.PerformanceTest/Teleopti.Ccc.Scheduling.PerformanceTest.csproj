@@ -47,9 +47,12 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="FullSchedulingTest.cs" />
+    <Compile Include="NUnitSetup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
