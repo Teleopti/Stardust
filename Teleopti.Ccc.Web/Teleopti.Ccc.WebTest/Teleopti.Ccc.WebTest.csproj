@@ -252,6 +252,7 @@
     <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
+    <Compile Include="Areas\Global\FakeJobResultRepository.cs" />
     <Compile Include="Areas\Global\FakePermissionProvider.cs" />
     <Compile Include="Areas\Global\GlobalAreaControllerTest.cs" />
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
@@ -267,6 +268,8 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
+    <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactoryTest.cs" />

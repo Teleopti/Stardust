@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
 	public class FakeApplicationFunctionRepository : IApplicationFunctionRepository
 	{
-		IList<IApplicationFunction> _applicationFunctions = new List<IApplicationFunction>();
+		readonly IList<IApplicationFunction> _applicationFunctions = new List<IApplicationFunction>();
 		public void Add(IApplicationFunction entity)
 		{
 			_applicationFunctions.Add(entity);
