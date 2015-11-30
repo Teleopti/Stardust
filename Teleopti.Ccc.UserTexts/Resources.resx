@@ -277,7 +277,7 @@
     <value>Answered calls</value>
     <comment>Answered calls</comment>
   </data>
-    <data name="CallsSlashDay" xml:space="preserve">
+  <data name="CallsSlashDay" xml:space="preserve">
     <value>Calls/day</value>
     <comment>Calls per day</comment>
   </data>
@@ -374,8 +374,8 @@
     <comment>Calculated occupancy %</comment>
   </data>
   <data name="Calls" xml:space="preserve">
-    <value>Calls</value>
-    <comment>Calls</comment>
+    <value>Calls %</value>
+    <comment>Calls %</comment>
   </data>
   <data name="CampaignACWPercentSign" xml:space="preserve">
     <value>Campaign ACW %</value>
@@ -388,10 +388,6 @@
   <data name="CampaignCallsPercentSign" xml:space="preserve">
     <value>Campaign calls %</value>
     <comment>Campaign calls %</comment>
-  </data>
-    <data name="Calls" xml:space="preserve">
-    <value>Calls %</value>
-    <comment>Calls %</comment>
   </data>
   <data name="CampaignTalkTimePercentSign" xml:space="preserve">
     <value>Campaign talk time %</value>
@@ -1273,7 +1269,7 @@ Date</value>
     <value>New Shift</value>
     <comment>New shift menu item</comment>
   </data>
-    <data name="NewSkill" xml:space="preserve">
+  <data name="NewSkill" xml:space="preserve">
     <value>New Skill</value>
     <comment>New skill</comment>
   </data>
@@ -1677,7 +1673,7 @@ Periods</comment>
   </data>
   <data name="Scenario" xml:space="preserve">
     <value>Scenario</value>
-    <comment>Scenario</comment>
+    <comment>scenario label</comment>
   </data>
   <data name="ScenarioColon" xml:space="preserve">
     <value>Scenario:</value>
@@ -2553,10 +2549,6 @@ Periods</comment>
     <value>Audit Trail</value>
     <comment>Audit Trail</comment>
   </data>
-    <data name="Scenario" xml:space="preserve">
-    <value>Scenario</value>
-    <comment>scenario label</comment>
-  </data>
   <data name="ManageScenarios" xml:space="preserve">
     <value>Manage Scenarios</value>
     <comment>Manage your scenarios</comment>
@@ -3342,7 +3334,7 @@ Replace</value>
   </data>
   <data name="Forecasted" xml:space="preserve">
     <value>Forecasted</value>
-    <comment>Forecasted</comment>
+    <comment>Forecasted calls</comment>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
     <value>Agents with shrinkage</value>
@@ -6774,7 +6766,7 @@ Meeting</value>
     <value>Forecasted hours incoming</value>
     <comment>Forecasted hours incoming</comment>
   </data>
-    <data name="AddCampaignIntro" xml:space="preserve">
+  <data name="AddCampaignIntro" xml:space="preserve">
     <value>Define a percentage for expected increase or decrease</value>
     <comment>Explanation of campaign inputs</comment>
   </data>
@@ -10121,13 +10113,9 @@ These options are activated:
     <value>Override</value>
     <comment>override for budgeted allowance</comment>
   </data>
-    <data name="ForecastOverrideMsg" xml:space="preserve">
+  <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Override the forecasted calls. Changes made here will be saved until they are cleared.</value>
     <comment>Information while making overrides to forecasts</comment>
-  </data>
-    <data name="Forecasted" xml:space="preserve">
-    <value>Forecasted</value>
-    <comment>Forecasted calls</comment>
   </data>
   <data name="With campaign" xml:space="preserve">
     <value>With campaign</value>
@@ -10340,7 +10328,7 @@ These options are activated:
     <value>Export forecast to other business unit</value>
     <comment>Export forecast to other business unit</comment>
   </data>
-    <data name="SuccessTip" xml:space="preserve">
+  <data name="SuccessTip" xml:space="preserve">
     <value>Success</value>
     <comment>Forecast was successful</comment>
   </data>
@@ -10661,15 +10649,15 @@ These options are activated:
     <value>Import forecast from file</value>
     <comment>Import forecast from file</comment>
   </data>
-    <data name="RunningForecast" xml:space="preserve">
+  <data name="RunningForecast" xml:space="preserve">
     <value>Forecast is running</value>
     <comment>Forecast is running message</comment>
   </data>
-      <data name="ForecastWorkloadIntro" xml:space="preserve">
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
     <value>This is your existing forecast. To be able to modify calls select some day(s) in the chart.</value>
     <comment>intro message on each workload</comment>
   </data>
-      <data name="ClearForecastChart" xml:space="preserve">
+  <data name="ClearForecastChart" xml:space="preserve">
     <value>Clear chart selection</value>
     <comment>Clear forecast chart selection</comment>
   </data>
@@ -11410,7 +11398,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Generate forecast for</value>
     <comment>Period and scenario selection in quick forecast</comment>
   </data>
-    <data name="ForecastDo" xml:space="preserve">
+  <data name="ForecastDo" xml:space="preserve">
     <value>Forecast</value>
     <comment>click to forecast one workload</comment>
   </data>
@@ -13078,11 +13066,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Outbound</value>
     <comment>Permission: Outbound</comment>
   </data>
-    <data name="ForecastAll" xml:space="preserve">
+  <data name="ForecastAll" xml:space="preserve">
     <value>Forecast all</value>
-    <comment>forecast all workloads</comment>
+    <comment>Forecast all</comment>
   </data>
-    <data name="Method" xml:space="preserve">
+  <data name="Method" xml:space="preserve">
     <value>Method</value>
     <comment>View statistics about forecast method</comment>
   </data>
@@ -13098,10 +13086,6 @@ Reduce the complexity to use these shifts.</value>
     <value>View method chart</value>
     <comment>Trigger modal window in advanced web forecast</comment>
   </data>
-  <data name="ForecastAll" xml:space="preserve">
-    <value>Forecast all</value>
-    <comment>Forecast all</comment>
-  </data>
   <data name="SelectForecastPeriodIntro" xml:space="preserve">
     <value>Choose a future period to forecast</value>
     <comment>Pick a period before web forecast</comment>
@@ -13110,7 +13094,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Future period</value>
     <comment>future forecast period</comment>
   </data>
-    <data name="ForecastPeriodLength" xml:space="preserve">
+  <data name="ForecastPeriodLength" xml:space="preserve">
     <value>Forecast period cannot be more than 1 year</value>
     <comment>future forecast period max length</comment>
   </data>
@@ -13711,11 +13695,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Daily Total</value>
     <comment>Adherence percentage of today</comment>
   </data>
-    <data name="SelectToModify" xml:space="preserve">
+  <data name="SelectToModify" xml:space="preserve">
     <value>Select days in the chart before modifying</value>
     <comment>message shown if no points are selected</comment>
   </data>
-      <data name="Modify" xml:space="preserve">
+  <data name="Modify" xml:space="preserve">
     <value>Modify</value>
     <comment>Modify</comment>
   </data>
@@ -13730,5 +13714,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="UnselectedItems" xml:space="preserve">
     <value>Unselected items</value>
     <comment>Label in permissions</comment>
+  </data>
+  <data name="ThisSearchWillReturnAnExcessiveNumberOfResultsDotPleaseRefineYourSearchDot" xml:space="preserve">
+    <value>This search will return an excessive number of results. Please refine your search.</value>
+    <comment>Notice in team schedules under WFM, when the search results are greater than 500.</comment>
   </data>
 </root>
