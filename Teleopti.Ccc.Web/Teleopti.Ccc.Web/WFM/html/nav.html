@@ -8,7 +8,7 @@
 					<span class="ui-select">
 						<i class="bu-caret mdi mdi-menu-down"></i>
 						<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
-						<md-tooltip>Switch business unit</md-tooltip>
+						<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
 					</span>
 				</span>
 			</span>
@@ -39,20 +39,20 @@
 				</div>
 			</span>
 			<button class="nav-context-menu">
-				<i class="mdi mdi-bell"><md-tooltip>Notifications</md-tooltip></i>
+				<i class="mdi mdi-bell"><md-tooltip>{{'Notifications'|translate}}</md-tooltip></i>
 				<!--<div class="notification-ticker"></div>-->
 				<div class="nav-context-menu-left">
 					<div class="arrow-up"></div>
 					<div class="context-content" >
 						<div class="notification-list">
-								<h4>Notifications
+								<h4>{{'Notifications'|translate}}
 							<div class="wfm-switch pull-right">
 									<input type="checkbox" ng-model="activeNotification" ng-init="activeNotification=true" id="notificationToggle"/>
 									<label for="notificationToggle">
 										<span class="wfm-switch-toggle"></span>
 									</label>
-									<md-tooltip ng-if="activeNotification==true">Turn off</md-tooltip>
-									<md-tooltip ng-if="activeNotification==false">Turn on</md-tooltip>
+									<md-tooltip ng-if="activeNotification==true">{{'Disable'|translate}}</md-tooltip>
+									<md-tooltip ng-if="activeNotification==false">{{'Enable'|translate}}</md-tooltip>
 								</div>
 								</h4>
 								<div ng-controller="NotificationsCtrl">
@@ -70,27 +70,27 @@
 				</div>
 			</button>
 			<button class="nav-context-menu">
-			<i class="mdi mdi-help-circle"><md-tooltip>Help</md-tooltip></i>
+			<i class="mdi mdi-help-circle"><md-tooltip>{{'HelpLabel'|translate}}</md-tooltip></i>
 			<div class="nav-context-menu-left">
 				<div class="arrow-up"></div>
 				<div class="context-content" ng-controller="HelpController">
 						<h4>
 							<a href="{{help.currentHelp.helpUrl}}"></a></a>
-							<span class="caps">{{help.currentHelp.name}}</span> view.</h4>
+							<span class="caps">{{help.currentHelp.name}}</span></h4>
 						<p class="description">{{ help.currentHelp.helpDesc }}
 						</br>
 					</p>
 					<footer>
-						<a href="{{help.currentHelp.helpUrl}}">Online help</a>
+						<a href="{{help.currentHelp.helpUrl}}">{{'OnloneHelp' | translate}}</a>
 					</footer>
 				</div>
 			</div>
 		</button>
 			<a href="#"><i class="mdi mdi-settings"></i>
-				<md-tooltip>Settings</md-tooltip>
+				<md-tooltip>{{'Settings'|translate}}</md-tooltip>
 			</a>
 			<a href="../Authentication/SignOut"><i class="mdi mdi-logout"></i>
-				<md-tooltip>Logout</md-tooltip>
+				<md-tooltip>{{'Logout'|translate}}</md-tooltip>
 			</a>
 		</div>
 	</div>
