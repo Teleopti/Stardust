@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId = info.Person.PersonId,
 				Timestamp = info.CurrentTime,
 				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),
-				Adherence = info.Adherence.Adherence()
+				Adherence = info.Adherence.AdherenceForNewStateAndCurrentActivity()
 			});
 
 			if (info.Adherence.AdherenceChangedFromStateChange())
-				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence.Adherence());
+				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence.AdherenceForNewStateAndCurrentActivity());
 		}
 	}
 }

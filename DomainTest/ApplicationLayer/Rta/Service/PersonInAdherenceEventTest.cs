@@ -200,6 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", person)
 				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
 				.WithAlarm("logged off", phone, -1)
+				.WithAlarm("logged off", null, 0)
 				;
 			Now.Is("2015-11-24 17:00");
 			Target.SaveState(new ExternalUserStateForTest

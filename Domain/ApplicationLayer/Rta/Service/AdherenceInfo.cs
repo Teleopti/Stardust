@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateMapper = stateMapper;
 		}
 
-		public EventAdherence Adherence()
+		public EventAdherence AdherenceForNewStateAndCurrentActivity()
 		{
 			return _appliedAdherence.ForEvent(_stateAlarmInfo.Adherence(), _stateAlarmInfo.StaffingEffect());
 		}
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			EventAdherence? from = null;
 			if (_stored != null)
 				from = AdherenceForStoredStateAndCurrentActivity();
-			var to = Adherence();
+			var to = AdherenceForNewStateAndCurrentActivity();
 			return from != to;
 		}
 		

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-		public EventAdherence AggregatorAdherence { get { return Adherence.Adherence(); } }
+		public EventAdherence AggregatorAdherence { get { return Adherence.AdherenceForNewStateAndCurrentActivity(); } }
 
 		public bool Send
 		{
