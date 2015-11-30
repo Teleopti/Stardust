@@ -15,14 +15,17 @@ module.exports = function(config) {
 
 	// list of files / patterns to load in the browser
 	files: [
-		'dist/modules.js',
+        'dist/assets/js/modules.js',
 		'node_modules/angular-mocks/angular-mocks.js',
-		'dist/templates.js',     	
-		'js/**/*.js',		
+		'dist/assets/js/templates.js',
+		'js/**/*.js',
 		'tests/**/*spec.js',
 
 		//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
-		{ pattern: 'js/seatManagement/images/*.svg', watched: false, included: false, served: true }
+		{ pattern: 'js/seatManagement/images/*.svg', watched: false, included: false, served: true },
+		'js/**/*.js',
+		'dist/assets/js/templates.js',
+		'tests/**/*spec.js'
 	],
 
 	proxies: {
