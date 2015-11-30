@@ -35,3 +35,5 @@ SQLCMD -S. -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") 
 
 ::copy app.config
 COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" /Y
+COPY "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\debug\app.config" /Y
+COPY "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\release\app.config" /Y
