@@ -5,7 +5,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class HangfireModule : Module
+	internal class HangfireModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityChangesChecker>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
+			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
 
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>().SingleInstance();

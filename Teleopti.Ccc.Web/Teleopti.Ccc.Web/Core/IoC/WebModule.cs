@@ -90,8 +90,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ForecastingAreaModule>();
 			builder.RegisterModule(new ResourcePlannerModule());
 
-			builder.RegisterModule(new HangfireModule(_configuration));
-
 			builder.RegisterModule<ResourceHandlerModule>();
 
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();

@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule(new HangfireModule(configuration));
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance(); //should probably use infratest attr for these tests instead.
 			return builder.Build();
 		}
