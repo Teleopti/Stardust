@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
+			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 		}
 
 		private void fakePrincipal(ISystem system)

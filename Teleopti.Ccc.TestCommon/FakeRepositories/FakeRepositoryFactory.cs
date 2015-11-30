@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPersonAvailabilityRepository _personAvailabilityRepository;
 		private readonly IPersonRotationRepository _personRotationRepository;
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
+		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 
 		public FakeRepositoryFactory(
 			IActivityRepository activityRepository,
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IOvertimeAvailabilityRepository overtimeAvailabilityRepository,
 			IPersonAvailabilityRepository personAvailabilityRepository,
 			IPersonRotationRepository personRotationRepository,
-			IPartTimePercentageRepository partTimePercentageRepository
+			IPartTimePercentageRepository partTimePercentageRepository,
+			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
       )
 		{
 			_activityRepository = activityRepository;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAvailabilityRepository = personAvailabilityRepository;
 			_personRotationRepository = personRotationRepository;
 			_partTimePercentageRepository = partTimePercentageRepository;
+			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -210,7 +213,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IMultiplicatorDefinitionSetRepository CreateMultiplicatorDefinitionSetRepository(IUnitOfWork unitOfWork)
 		{
-			throw new System.NotImplementedException();
+			return _multiplicatorDefinitionSetRepository;
 		}
 
 		public ISiteRepository CreateSiteRepository(IUnitOfWork unitOfWork)
