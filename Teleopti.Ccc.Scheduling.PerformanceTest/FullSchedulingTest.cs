@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -12,19 +11,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
-			var userName = ConfigurationManager.AppSettings["UserName"];
-			var password = ConfigurationManager.AppSettings["Password"];
-			var businessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
-			var planningPeriodId = ConfigurationManager.AppSettings["PlanningPeriodId"];
-
 			using (var browserActivator = new CoypuChromeActivator())
 			{
 				browserActivator.Start(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(100));
 				var browserInteractions = browserActivator.GetInteractions();
 
-				logon(browserInteractions, businessUnitName, userName, password);
+				logon(browserInteractions, AppConfigs.BusinessUnitName, AppConfigs.UserName, AppConfigs.Password);
 
-				scheduleAndOptimize(browserInteractions, planningPeriodId);
+				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningPeriodId);
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromHours(10)))
 				{
