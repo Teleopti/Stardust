@@ -21,7 +21,7 @@
 			controller: 'TimeLineCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: "js/teamSchedule/timeline.html",
+			templateUrl: "js/teamSchedule/html/timeline.html",
 			scope: {
 				times: '=?',
 				scheduleCount: '=?'

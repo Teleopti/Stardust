@@ -172,7 +172,7 @@ wfm.config([
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('personSchedule', {
 			url: '/teamSchedule',
-			templateUrl: 'js/teamSchedule/schedule.html',
+			templateUrl: 'js/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleCtrl as vm'
 		}).state('requests', {
 			url: '/requests',
