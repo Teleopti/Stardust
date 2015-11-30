@@ -122,6 +122,7 @@
     <Compile Include="Configuration\EventHandlersModuleTest.cs" />
     <Compile Include="Configuration\EventsPublisherModuleTest.cs" />
     <Compile Include="Configuration\ForecasterModuleTest.cs" />
+    <Compile Include="Configuration\HangfireModuleTest.cs" />
     <Compile Include="Configuration\InitializeModuleTest.cs" />
     <Compile Include="Configuration\LogModuleTest.cs" />
     <Compile Include="Configuration\MessageBrokerModuleTest.cs" />

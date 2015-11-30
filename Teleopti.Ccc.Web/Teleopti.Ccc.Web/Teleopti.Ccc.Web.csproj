@@ -819,7 +819,6 @@
     <Compile Include="Core\Data\ActivityViewModel.cs" />
     <Compile Include="Core\Data\IActivityProvider.cs" />
     <Compile Include="Core\Data\ActivityProvider.cs" />
-    <Compile Include="Core\Hangfire\HangfireModule.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />

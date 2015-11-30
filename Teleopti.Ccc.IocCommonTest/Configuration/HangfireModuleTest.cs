@@ -7,9 +7,9 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Web.Core.Hangfire;
+using Teleopti.Ccc.IocCommon.Configuration;
 
-namespace Teleopti.Ccc.WebTest.Core.IoC
+namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	[TestFixture]
 	public class HangfireModuleTest
