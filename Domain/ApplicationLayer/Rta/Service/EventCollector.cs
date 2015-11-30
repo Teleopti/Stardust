@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			events.ForEach(_events.Add);
 		}
 
-		public void PublishTransitions(StateInfo info)
+		public void PublishTransitions()
 		{
 			var publisher = _publisher.Current();
 			// of duplicate events, publish the first, which IS the first in time because..

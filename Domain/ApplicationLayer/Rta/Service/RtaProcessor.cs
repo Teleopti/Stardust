@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_stateEventPublisher.Publish(info);
 				}
 
-				eventCollector.PublishTransitions(info);
+				eventCollector.PublishTransitions();
 			}
 		}
 	}
