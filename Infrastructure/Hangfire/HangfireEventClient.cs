@@ -2,7 +2,7 @@ using System;
 using Hangfire;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	[CLSCompliant(false)]
 	public class HangfireEventClient : IHangfireEventClient

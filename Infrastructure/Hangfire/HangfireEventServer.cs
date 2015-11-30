@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
-namespace Teleopti.Ccc.Web.Core.Hangfire
+namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	public class HangfireEventServer
 	{
