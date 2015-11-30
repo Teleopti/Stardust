@@ -267,6 +267,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignTaskManagerTest.cs" />

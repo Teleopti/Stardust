@@ -13,7 +13,7 @@ using Teleopti.Ccc.Web.Core.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 {
 	[TestFixture]
-	class OutboundAreaModuleTest
+	public class OutboundAreaModuleTest
 	{
 		private ContainerBuilder _containerBuilder;
 		private string _requestTag;
