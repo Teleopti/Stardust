@@ -66,5 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    IDayOffTemplate DefaultDayOffTemplate { get; }
 		ICollection<IWorkflowControlSet> WorkflowControlSets { get; }
 		ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; }
+
+		IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets { get; }
     }
 }

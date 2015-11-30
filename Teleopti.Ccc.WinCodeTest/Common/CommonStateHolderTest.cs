@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var partTimePercentageRepository = _mockRep.DynamicMock<IPartTimePercentageRepository>();
             var scheduleTagRep = _mockRep.StrictMock<IScheduleTagRepository>();
 	        var workflowControlSetRepository = _mockRep.StrictMock<IWorkflowControlSetRepository>();
+	        var multi = _mockRep.DynamicMock<IMultiplicatorDefinitionSetRepository>();
 
             Expect.Call(repositoryFactory.CreateAbsenceRepository(unitOfWork)).Return(absenceRepMock);
             Expect.Call(repositoryFactory.CreateDayOffRepository(unitOfWork)).Return(dayOffRepMock);
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRep).Repeat.Once();
 	        Expect.Call(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
 	        Expect.Call(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork)).Return(partTimePercentageRepository);
+	        Expect.Call(repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork)).Return(multi);
             Expect.Call(activityRepMock.LoadAll()).IgnoreArguments().Return(_activityColl);
             Expect.Call(dayOffRepMock.LoadAll()).IgnoreArguments().Return(_dayOffColl);
             Expect.Call(absenceRepMock.LoadAll()).IgnoreArguments().Return(_absenceColl);

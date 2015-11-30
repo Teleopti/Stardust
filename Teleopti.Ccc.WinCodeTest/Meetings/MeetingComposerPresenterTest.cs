@@ -224,8 +224,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var businessUnitRepository = _mocks.StrictMock<IBusinessUnitRepository>();
             var scheduleTagRepository = _mocks.StrictMock<IScheduleTagRepository>();
 	        var workflowControlSetRepository = _mocks.StrictMock<IWorkflowControlSetRepository>();
+			var multi = _mocks.DynamicMock<IMultiplicatorDefinitionSetRepository>();
 
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             Expect.Call(_repositoryFactory.CreateAbsenceRepository(unitOfWork)).Return(absenceRepository);
             Expect.Call(_repositoryFactory.CreateActivityRepository(unitOfWork)).Return(activityRepository);
             Expect.Call(_repositoryFactory.CreateDayOffRepository(unitOfWork)).Return(dayOffRepository);
@@ -237,8 +238,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_repositoryFactory.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
             Expect.Call(_repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRepository);
 	        Expect.Call(_repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
+			Expect.Call(_repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork)).Return(multi);
 
-            unitOfWork.Dispose();
+			unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
 
             Expect.Call(absenceRepository.LoadAll()).Return(new List<IAbsence>());

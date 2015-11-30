@@ -179,6 +179,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
 					return;
 				uow.Reassociate(_schedulerState.RequestedScenario);
+				uow.Reassociate(_schedulerState.CommonStateHolder.MultiplicatorDefinitionSets);
 			}
 		}
 

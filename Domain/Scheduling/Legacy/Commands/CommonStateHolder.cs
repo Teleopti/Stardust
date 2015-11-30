@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
+		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets;
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
 	    {
@@ -43,10 +44,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			    loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
 			    loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
 			    loadPartTimePercentage(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork));
+				loadMultiplicatorDefinitionSet(repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork));
 		    }
 	    }
 
-	    private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
+	    private void loadMultiplicatorDefinitionSet(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository)
+	    {
+		    _multiplicatorDefinitionSets = multiplicatorDefinitionSetRepository.LoadAllSortByName();
+	    }
+
+	    public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets
+	    {
+			get { return _multiplicatorDefinitionSets; }
+	    }
+       private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
         {
             _scheduleTags.AddRange(scheduleTagRepository.LoadAll().OrderBy(t => t.Description));
             _scheduleTags.Insert(0, NullScheduleTag.Instance);
