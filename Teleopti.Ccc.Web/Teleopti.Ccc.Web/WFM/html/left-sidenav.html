@@ -54,6 +54,9 @@
 				<i ng-if="accordionTitle.InternalName == 'intraday'" class="mdi mdi-compass-outline">
 					<md-tooltip>{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>
+				<i ng-if="accordionTitle.InternalName == 'requests'" class="mdi mdi-account-multiple">
+					<md-tooltip>{{accordionTitle.Name | translate}}</md-tooltip>
+				</i>
 				<span>{{accordionTitle.Name | translate}}</span>
 			</div>
 		</a>
