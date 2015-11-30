@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain;
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 {
 	[UseOnToggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TaskPriority(100)]
+	[CLSCompliant(false)]
 	public class HangfireServerStartupTask : IBootstrapperTask
 	{
 		private readonly HangfireServerStarter _starter;
