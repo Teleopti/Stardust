@@ -2,8 +2,8 @@
 	<td class="person-name person-name-column">
 		<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
 			<label>
-				<input type="checkbox" name="checkbox">
-				<span class="wfm-checkbox-toggle"></span>
+				<input type="checkbox" ng-checked="isSelected(person.PersonId)" ng-click="updateSelection($event, person.PersonId)">
+				<span class=" wfm-checkbox-toggle"></span>
 				<span class="wfm-checkbox-label person-name nowrap">{{person.Name}}</span>
 			</label>
 		</div>

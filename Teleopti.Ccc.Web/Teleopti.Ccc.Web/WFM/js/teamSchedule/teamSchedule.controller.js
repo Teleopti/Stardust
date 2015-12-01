@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['$scope', '$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
 
-	function TeamScheduleController($q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
+	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
 		var vm = this;
 
 		vm.selectedTeamId = '';
@@ -32,6 +32,44 @@
 		vm.isAbsenceReportingEnabled = false;
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
+
+		$scope.selected = [];
+
+		var updateSelected = function (action, id) {
+			if (action === 'add' && $scope.selected.indexOf(id) === -1) {
+				$scope.selected.push(id);
+			}
+			if (action === 'remove' && $scope.selected.indexOf(id) !== -1) {
+				$scope.selected.splice($scope.selected.indexOf(id), 1);
+			}
+		};
+
+		$scope.updateSelection = function ($event, id) {
+			var checkbox = $event.target;
+			var action = (checkbox.checked ? 'add' : 'remove');
+			updateSelected(action, id);
+		};
+
+		$scope.selectAll = function ($event) {
+			var checkbox = $event.target;
+			var action = (checkbox.checked ? 'add' : 'remove');
+			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
+				var schedule = vm.groupScheduleVm.Schedules[i];
+				updateSelected(action, schedule.PersonId);
+			}
+		};
+
+		$scope.getSelectedClass = function (schedule) {
+			return $scope.isSelected(schedule.PersonId) ? 'selected' : '';
+		};
+		$scope.isSelected = function (id) {
+			return $scope.selected.indexOf(id) >= 0;
+		};
+
+		$scope.isSelectedAll = function () {
+			return $scope.selected.length === vm.groupScheduleVm.Schedules.length;
+		};
+
 		vm.toggleCalendar = function () {
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
