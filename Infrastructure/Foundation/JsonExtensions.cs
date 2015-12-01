@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public static T ExecuteJsonRequest<T>(this UriBuilder uriBuilder)
 		{
 			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
-			request.AllowAutoRedirect = false;
+			request.AllowAutoRedirect = true;
 
 			return responseToJson<T>(request);
 		}
@@ -27,22 +27,22 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				requestWriter.Write(json);
 			}
 
+			request.AllowAutoRedirect = true;
 			return responseToJson<T>(request);
 		}
 
 		public static T GetRequest<T>(this HttpWebRequest request)
 		{
-			request.AllowAutoRedirect = false;
 			request.Method = "GET";
 			request.ContentType = "application/json";
 			request.Accept = "application/json";
+			request.AllowAutoRedirect = true;
 
 			return responseToJson<T>(request);
 		}
 
 		private static T responseToJson<T>(WebRequest request)
 		{
-			((HttpWebRequest) request).AllowAutoRedirect = true;
          using (var response = request.GetResponse())
 			{
 				using (var reader = new StreamReader(response.GetResponseStream()))
