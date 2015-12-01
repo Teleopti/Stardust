@@ -96,6 +96,9 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			//Save businessunit
 			_businessUnitCreator.Save(defaultAggregateRoot.BusinessUnit);
 
+			//Create default Scenario
+			ScenarioCreator.CreateDefault(_sessionFactory, defaultAggregateRoot.BusinessUnit, _person);
+
 			//Save admin role
 			_applicationRoleCreator.Save(defaultAggregateRoot.AdministratorRole);
 			IAvailableData availableData = _availableDataCreator.Create(defaultAggregateRoot.AdministratorRole, AvailableDataRangeOption.Everyone);
