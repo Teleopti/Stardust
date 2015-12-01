@@ -1,3 +1,2 @@
-﻿<md-progress-linear md-mode="indeterminate" ng-if="!loaded"></md-progress-linear>
-
-<requests-table-container class="requests-table-container" requests="requestsOverview.requests" ng-if="loaded"></requests-table-container>
+﻿<md-progress-linear md-mode="indeterminate" ng-if="!requestsOverview.loaded"></md-progress-linear>
+<requests-table-container class="requests-table-container" requests="requestsOverview.requests" ng-if="requestsOverview.loaded">></requests-table-container>

@@ -7,22 +7,22 @@
 		.directive('requestsOverview', requestsOverviewDirective);
 
 
-	requestsOverviewController.$inject = ['$scope', 'requestsData'];
+	requestsOverviewController.$inject = ['requestsData'];
 
-	function requestsOverviewController($scope, requestsData) {
+	function requestsOverviewController(requestsData) {
 		var vm = this;
 
 		vm.requests = [];
 		vm.requestsFilter = {};
 		vm.init = init;
-		$scope.loaded = false;
+		vm.loaded = false;
 
 		init();
 
 		function init() {
 			requestsData.getAllRequestsPromise(vm.requestsFilter).then(function (requests) {
 				vm.requests = requests.data;
-				$scope.loaded = true;
+				vm.loaded = true;
 			});
 		}
 	}
@@ -32,7 +32,7 @@
 			controller: 'requestsOverviewCtrl',
 			controllerAs: 'requestsOverview',
 			bindToController: true,
-			scope: {},
+			scope: { },
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html'			
 		};		
