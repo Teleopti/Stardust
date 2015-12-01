@@ -34,28 +34,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				};
 
 		private static registeredActivator _activator;
+		private static TimeSpan _timeout;
+		private static TimeSpan _retry;
 
 		static Browser()
 		{
 			_activator = activators.First();
 		}
 
-		private static IBrowserActivator GetStartedActivator()
+		private static IBrowserActivator getStartedActivator()
 		{
 			if (!_activator.Started)
 			{
-				_activator.Activator.Start(Timeouts.Timeout, Timeouts.Poll);
+				_activator.Activator.Start(_timeout, _retry);
 				_activator.Started = true;
 			}
 			return _activator.Activator;
 		}
 
-		public static IBrowserInteractions Interactions { get { return GetStartedActivator().GetInteractions(); } }
+		public static IBrowserInteractions Interactions { get { return getStartedActivator().GetInteractions(); } }
 
 		public static void SetDefaultTimeouts(TimeSpan timeout, TimeSpan retry)
 		{
-			Timeouts.Timeout = timeout;
-			Timeouts.Poll = retry;
+			_timeout = timeout;
+			_retry = retry; 
 		}
 
 		public static void SelectBrowserByTag()
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static IDisposable TimeoutScope(TimeSpan timeout)
 		{
-			return new TimeoutScope(GetStartedActivator(), timeout);
+			return new TimeoutScope(getStartedActivator(), timeout);
 		}
 
 		public static void Dispose()

@@ -21,12 +21,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			_configuration = configuration;
 		}
 
-		public void SetTimeout(TimeSpan timeout)
+		public void SpecialTimeout(TimeSpan? timeout)
 		{
-			if (timeout == _configuration.Timeout)
-				specialTimeout = null;
-			else
-				specialTimeout = timeout;
+			specialTimeout = null;
 		}
 
 		private Options newOptions()
@@ -235,7 +232,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		private void eventualAssert<T>(Func<T> value, Constraint constraint, Func<string> message)
 		{
-			EventualAssert.That(value, constraint, message, new SeleniumExceptionCatcher());
+			var o = options();
+			EventualAssert.That(value, constraint, message, new SeleniumExceptionCatcher(), o.RetryInterval, o.Timeout);
 		}
+
 	}
 }

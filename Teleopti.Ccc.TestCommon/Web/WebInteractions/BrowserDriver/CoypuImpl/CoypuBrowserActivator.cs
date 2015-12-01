@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			_browserConfiguration = browserConfiguration;
 		}
 
-		public void SetTimeout(TimeSpan timeout)
+		public void SpecialTimeout(TimeSpan? timeout)
 		{
-			_interactions.SetTimeout(timeout);
+			_interactions.SpecialTimeout(timeout);
 		}
-
+		
 		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
 			var configuration = new SessionConfiguration

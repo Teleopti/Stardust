@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public static class EventualAssert
 	{
-		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message, IExceptionCatcher exceptionCatcher)
+		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message, IExceptionCatcher exceptionCatcher, TimeSpan poll, TimeSpan timeout)
 		{
 			ReusableConstraint reusableConstraint = constraint;
 			Exception exception = null;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 					}
 				};
 
-			if (longPollTimeSafeAssert.WaitUntil(Timeouts.Poll, Timeouts.Timeout)) return;
+			if (longPollTimeSafeAssert.WaitUntil(poll, timeout)) return;
 
 			if (message != null)
 				Assert.Fail(message.Invoke());

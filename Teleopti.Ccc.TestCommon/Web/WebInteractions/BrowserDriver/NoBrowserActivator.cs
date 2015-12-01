@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			_browserInteractions = new NoBrowserInteractions();
 		}
-
-		public void SetTimeout(TimeSpan timeout)
+		
+		public void SpecialTimeout(TimeSpan? timeout)
 		{
 		}
 

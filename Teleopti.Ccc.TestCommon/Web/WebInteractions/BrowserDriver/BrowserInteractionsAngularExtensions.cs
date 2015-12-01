@@ -29,9 +29,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 
 		public static void AssertScopeValue(this IBrowserInteractions interactions, string selector, string name, Constraint constraint, bool useIsolateScope = false)
 		{
+			// using eventual assert here is not required.
+			// use interactions.AssertJavascriptResultContains to be more robust!
+			// hardcoding timeout and polling here for now... anyone who understands, please clean this up
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
-			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));		
+			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
 			EventualAssert.That(() =>
 			{
 				var query = scopeByQuerySelector(selector, useIsolateScope) + string.Format(" return scope.$result{0}; ", readerName);
@@ -40,7 +43,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 				Console.Out.WriteLine(">>> " + result + " - " + name);					
 				return result;
 
-			}, constraint, () => "Failed to assert scope value " + name, new SeleniumExceptionCatcher());
+			}, 
+			constraint, 
+			() => "Failed to assert scope value " + name, 
+			new SeleniumExceptionCatcher(), 
+			TimeSpan.FromMilliseconds(25), TimeSpan.FromSeconds(10));
 		}
 
 
