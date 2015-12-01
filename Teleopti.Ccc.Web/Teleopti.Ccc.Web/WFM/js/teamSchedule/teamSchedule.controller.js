@@ -29,6 +29,7 @@
 		vm.datePickerStatus = {
 			opened: false
 		};
+		vm.isAbsenceReportingEnabled = false;
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
 		vm.toggleCalendar = function () {
@@ -160,10 +161,16 @@
 			vm.isSearchScheduleEnabled = result.IsEnabled;
 		});
 
+		var absenceReportingTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_AbsenceReporting_35995' }).$promise;
+		absenceReportingTogglePromise.then(function (result) {
+			vm.isAbsenceReportingEnabled = result.IsEnabled;
+		});
+
 		vm.Init = function () {
 			vm.loadTeams();
 
-			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise]).then(function () {
+			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise]).then(function () {
+				console.log("isAbsenceReportingEnabled ", vm.isAbsenceReportingEnabled);
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}

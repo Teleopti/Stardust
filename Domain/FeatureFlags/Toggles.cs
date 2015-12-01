@@ -87,6 +87,7 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		WfmTeamSchedule_NoReadModel_35609,
 		WfmTeamSchedule_FindScheduleEasily_35611,
+		WfmTeamSchedule_AbsenceReporting_35995,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
