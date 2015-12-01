@@ -53,13 +53,13 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<seatmap-right-panel panel-options="vm.rightPanelOption" on-open="vm.getRoles()">
+			<wfm-right-panel panel-options="vm.rightPanelOption" on-open="vm.getRoles()">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 
 				<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" ng-if="vm.showEditor"></seatmap-object-property>
 
-			</seatmap-right-panel>
+			</wfm-right-panel>
 
 			<div class="seatmap-bottom-bar">
 				<div class="seatmap-zoom-bar">

@@ -1,11 +1,11 @@
 ﻿'use strict';
 
 (function () {
+	var wfmRightPanel = angular.module('wfm.rightPanel', []);
+	wfmRightPanel.controller('wfmRightPanelCtrl', wfmRightPanelCtrl);
+	wfmRightPanelCtrl.$inject = ['$mdSidenav', '$scope'];
 
-	angular.module('wfm.seatMap').controller('seatmapRightPanelCtrl', seatmapRightPanelCtrl);
-	seatmapRightPanelCtrl.$inject = ['$mdSidenav', '$scope'];
-
-	function seatmapRightPanelCtrl($mdSidenav, $scope) {
+	function wfmRightPanelCtrl($mdSidenav, $scope) {
 		var vm = this;
 
 		vm.openPanel = function () {
@@ -34,11 +34,11 @@
 		}, true);
 	};
 
-	angular.module('wfm.seatMap').directive('seatmapRightPanel', seatmapRightPanel);
+	wfmRightPanel.directive('wfmRightPanel', wfmRightPanelDirective);
 
-	function seatmapRightPanel() {
+	function wfmRightPanelDirective() {
 		return {
-			controller: 'seatmapRightPanelCtrl',
+			controller: 'wfmRightPanelCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {
@@ -47,7 +47,7 @@
 				onClose: "&"
 			},
 			transclude: true,
-			templateUrl: 'js/seatManagement/html/rightpanel.html',
+			templateUrl: 'js/global/wfmrightpanel/rightpanel.html',
 			link: linkFunction
 		}
 	};
