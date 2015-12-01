@@ -1,8 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 		{
 			var personData = _personGenerator.Generate(iterationCount);
 			var stateCodes = _stateGenerator.Generate(iterationCount);
-			return Ok(new {personData.Persons, States = stateCodes, personData.TeamId});
+			return Ok(new AdherenceLoadTestParameters(personData.Persons, stateCodes, personData.TeamId));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/performancetool/ClearManageAdherenceLoadTest")]
@@ -52,5 +53,19 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			_personGenerator.Clear(iterationCount);
 			return Ok("ok");
 		}
+	}
+
+	public struct AdherenceLoadTestParameters
+	{
+		public AdherenceLoadTestParameters(IEnumerable<PersonWithExternalLogon> persons, IEnumerable<string> states,Guid teamId) : this()
+		{
+			Persons = persons;
+			States = states;
+			TeamId = teamId;
+		}
+
+		public IEnumerable<PersonWithExternalLogon> Persons { get; private set; }
+		public IEnumerable<string> States { get; private set; }
+		public Guid TeamId { get; private set; }
 	}
 }
