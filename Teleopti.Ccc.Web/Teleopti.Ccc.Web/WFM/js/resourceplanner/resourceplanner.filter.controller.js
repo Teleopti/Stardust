@@ -24,6 +24,11 @@
 				};
 				$scope.isSearching=false;
 				if (Object.keys($stateParams.filterId).length > 0) {
+					if ($stateParams.isDefault) {
+						$scope.default = $stateParams.isDefault;
+						$scope.name = "Default";
+						$scope.filterId = $stateParams.filterId;
+					}else {
 					ResourcePlannerSvrc.getFilter.query({id:$stateParams.filterId}).$promise.then(function(result){
 						$scope.name = result.Name;
 						$scope.filterId = $stateParams.filterId;
@@ -42,6 +47,9 @@
 							MaxConsecWorkDays:result.MaxConsecutiveWorkdays
 						}
 					});
+					}
+				}
+				else{
 				}
 
 				$scope.$watch(function() { return $scope.searchString; },
@@ -86,7 +94,7 @@
 				}
 
 				$scope.isValidFilters = function () {
-					return $scope.selectedResults.length > 0;
+					return $scope.selectedResults.length > 0 || $scope.default;
 				}
 				$scope.isValidName = function(){
 					return $scope.name.length >0;

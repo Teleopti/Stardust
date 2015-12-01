@@ -87,7 +87,7 @@
 	            });
 	        };
 			$scope.editRuleset = function(filter){
-				$state.go('resourceplanner.filter',{filterId:filter.Id, periodId:$stateParams.id})
+				$state.go('resourceplanner.filter',{filterId:filter.Id, periodId:$stateParams.id,isDefault:filter.Default})
 			};
 			$scope.createRuleset = function(){
 				$state.go('resourceplanner.filter',{periodId:$stateParams.id})

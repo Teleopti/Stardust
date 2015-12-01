@@ -520,5 +520,12 @@ describe('ResourcePlannerCtrl', function () {
 		$httpBackend.flush();
 		expect(scope.filterId).toBe("111-111-111");
 	}));
+	it('should save if default', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var $stateParams = {filterId:'000-000-000',period: '10',isDefault:true};
+		$controller('ResourceplannerFilterCtrl', { $scope: scope, $stateParams:$stateParams });
+
+		expect(scope.default).toBe(true);
+	}));
 
 });

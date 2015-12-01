@@ -143,10 +143,10 @@ describe('PlanningPeriodsCtrl', function () {
 		var stateParams = {id:2};
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state, $stateParams:stateParams });
-		var filter = {id:1}
-		scope.editRuleset(filter.id);
+		var filter = {id:1,default:false}
+		scope.editRuleset(filter.id,filter.default);
 
-		expect($state.go).toHaveBeenCalledWith('resourceplanner.filter',{filterId:filter.Id, periodId:stateParams.id});
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.filter',{filterId:filter.Id, periodId:stateParams.id, isDefault:filter.Default});
 
 	}));
 	it('should be able to delete each ruleset', inject(function ($controller, $state) {

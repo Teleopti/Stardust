@@ -8,7 +8,7 @@
 				<form class="wfm-form">
 					<div class="form-input-wrap">
 						<label for="ruleName" translate>NameColon</label>
-						<input type="text" name="ruleName" id="ruleName" ng-model="name"/>
+						<input type="text" name="ruleName" id="ruleName" ng-disabled="default" ng-model="name"/>
 						<p class="text-danger" ng-show="!isValidName()">
 							Name Required
 						</p>
@@ -17,7 +17,7 @@
 						<label for="searchInput" translate>FilterColon</label>
 
 						<div class="input-prepend">
-							<input type="text" name="searchInput" id="searchInput" ng-model="searchString" ng-model-options="{ debounce: 300 }"/>
+							<input type="text" name="searchInput" id="searchInput" ng-disabled="default" ng-model="searchString" ng-model-options="{ debounce: 300 }"/>
 						</div>
 
 						<div class="row" ng-class="{'wfm-filter-dropdown':searchString.length > 0}">
@@ -37,7 +37,7 @@
 				</form>
 			</div>
 		</div>
-		<p class="text-danger" ng-show="selectedResults.length === 0">
+		<p class="text-danger" ng-show="!isValidFilters() ">
 			Please add a filter
 		</p>
 		<div class="row" ng-show="selectedResults.length > 0">
