@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private bool azureDatabaseUserExist(string sqlUser)
 		{
-			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=2";
+			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND type_desc='SQL_USER'";
 			return Convert.ToBoolean(_executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
 		}
 
@@ -79,14 +79,18 @@ namespace Teleopti.Ccc.DBManager.Library
 				{
 					if (sqlVersion.ProductVersion >= 12)
 					{
+						if (azureDatabaseUserExist(user))
+						{
+							sql = string.Format("DROP USER [{0}]", user);
+							_executeSql.ExecuteNonQuery(sql);
+						}
+		
 						if (azureLoginExist(user))
 						{
 							_masterExecuteSql.ExecuteTransactionlessNonQuery(string.Format("DROP LOGIN [{0}]", user));
 						}
-						if (azureDatabaseUserExist(user))
-							sql = string.Format("ALTER USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
-						else
-							sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
+
+						sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
 						_executeSql.ExecuteNonQuery(sql);
 					}
 					else
