@@ -165,4 +165,10 @@ describe('PlanningPeriodsCtrl', function () {
 		expect(scope.dayoffRules[1].Id).toBe(3);
 
 	}));
+	it('should disable scheduling before planning period is loaded', inject(function($controller) {
+		var scope = $rootScope.$new();
+		$controller('PlanningPeriodsCtrl', { $scope: scope });
+
+		expect(scope.disableSchedule()).toBe(true);
+	}));
 });
