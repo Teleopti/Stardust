@@ -10004,19 +10004,19 @@ These options are activated:
     <comment>Working</comment>
   </data>
     <data name="TotalCallsCaret" xml:space="preserve">
-    <value>Total calls < </value>
+    <value>Total calls &#60; </value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="CallsCaret" xml:space="preserve">
-    <value>Calls < </value>
+    <value>Calls &#60; </value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="TalkTimeCaret" xml:space="preserve">
-    <value>Talk time < </value>
+    <value>Talk time &#60; </value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="AcwCaret" xml:space="preserve">
-    <value>ACW < </value>
+    <value>ACW &#60; </value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="ForecastValueOverride" xml:space="preserve">
