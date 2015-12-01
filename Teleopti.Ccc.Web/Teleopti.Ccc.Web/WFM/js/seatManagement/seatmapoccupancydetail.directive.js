@@ -261,7 +261,7 @@
 			controller: 'SeatMapOccupancyCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			require: ['seatmapOccupancyDetail', '^seatmapCanvas', '^seatmapRightPanel'],
+			require: ['seatmapOccupancyDetail', '^seatmapCanvas', '^wfmRightPanel'],
 			scope: {
 				scheduleDate: '=',
 				refreshSeatMap: '&'
