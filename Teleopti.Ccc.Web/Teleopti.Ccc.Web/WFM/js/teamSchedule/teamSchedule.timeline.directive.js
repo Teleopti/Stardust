@@ -1,18 +1,25 @@
 'use strict';
 
 (function () {
-	var timeLineCtrl = function ($scope) {
+	var timeLineCtrl = function($scope, toggleSvc) {
 		var vm = this;
 		vm.height = 0;
-		$scope.$watch(function () {
+		$scope.$watch(function() {
 			return vm.scheduleCount;
-		}, function (newValue) {
+		}, function(newValue) {
 			if (newValue > 0) {
-				var headerHeight = 17; //angular.element($("#time-line-container"))[0].offsetHeight
-				var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
-				var rowHeight = 41;
+				toggleSvc.isFeatureEnabled
+					.query({ toggle: 'WfmTeamSchedule_AbsenceReporting_35995' })
+					.$promise
+					.then(function(result) {
+						var withCheckbox = result.IsEnabled;
 
-				vm.height = rowHeight * (vm.scheduleCount) + headerHeight + labelHeight;
+						var headerHeight = 17; //angular.element($("#time-line-container"))[0].offsetHeight
+						var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
+						var rowHeight = withCheckbox ? 42 : 32;
+
+						vm.height = rowHeight * (vm.scheduleCount) + headerHeight + labelHeight;
+					});
 			}
 		});
 	}
@@ -31,7 +38,7 @@
 	};
 	angular.module('wfm.teamSchedule')
 		.directive('timeLine', directive)
-		.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
+		.controller('TimeLineCtrl', ['$scope', 'Toggle', timeLineCtrl]);
 
 	function linkFunction(scope, element, attributes, vm) {
 	};
