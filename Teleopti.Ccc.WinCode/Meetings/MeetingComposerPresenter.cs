@@ -123,10 +123,13 @@ namespace Teleopti.Ccc.WinCode.Meetings
             else
             {
                 var availablePersons = _schedulerStateHolder.SchedulingResultState.PersonsInOrganization;
+	            var multi = _schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets;
+
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
 																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
                 _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
+					((List<IMultiplicatorDefinitionSet>)_schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
             }
 
             _view.SetRecurrentMeetingActive(_model.IsRecurring);

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
-		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets;
+		private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
 	    {
