@@ -10023,8 +10023,8 @@ These options are activated:
     <value>Foretasted value overridden</value>
     <comment>label for the forecasting chart</comment>
   </data>
-  <data name="ForecastValueOverride" xml:space="preserve">
-    <value>Foretasted value overridden</value>
+  <data name="PartOfCampaign" xml:space="preserve">
+    <value>Part of a campaign</value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
