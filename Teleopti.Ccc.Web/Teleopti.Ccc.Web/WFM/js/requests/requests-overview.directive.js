@@ -7,20 +7,22 @@
 		.directive('requestsOverview', requestsOverviewDirective);
 
 
-	requestsOverviewController.$inject = ['requestsData'];
+	requestsOverviewController.$inject = ['$scope', 'requestsData'];
 
-	function requestsOverviewController(requestsData) {
+	function requestsOverviewController($scope, requestsData) {
 		var vm = this;
 
 		vm.requests = [];
 		vm.requestsFilter = {};
 		vm.init = init;
+		$scope.loaded = false;
 
 		init();
 
 		function init() {
 			requestsData.getAllRequestsPromise(vm.requestsFilter).then(function (requests) {
-				vm.requests = requests;			
+				vm.requests = requests.data;
+				$scope.loaded = true;
 			});
 		}
 	}

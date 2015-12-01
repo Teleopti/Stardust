@@ -6,8 +6,12 @@
 		.controller('requestsTableContainerCtrl', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
-	function requestsTableContainerController() {		
-		this.getGridOptions = function(requests) {
+	function requestsTableContainerController() {
+
+		this.gridOptions = getGridOptions([]);
+		this.getGridOptions = getGridOptions;
+
+		function getGridOptions(requests) {
 			return {
 				data: requests,
 				columnDefs: [
@@ -34,8 +38,8 @@
 
 
 		function postlink(scope, elem, attrs, ctrl) {
-			scope.requestsTableContainer.gridOptions = ctrl.getGridOptions(scope.requestsTableContainer.requests);
-
+			scope.requestsTableContainer.gridOptions = ctrl.getGridOptions([]);
+			scope.requestsTableContainer.gridOptions.data = scope.requestsTableContainer.requests;
 		}
 	}	
 

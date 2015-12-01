@@ -25,12 +25,13 @@
 			requestsData = _requestsData_;
 			requestsDefinitions = _requestsDefinitions_;
 			targetScope = $rootScope.$new();
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
-			targetScope.$digest();
 		}));
 
 
-		it("Show requests table container", function() {
+		it("Show requests table container", function () {
+			requestsData.setRequests({ data: [] });
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
 			expect(targets.length).toEqual(1);
 		});
@@ -42,13 +43,13 @@
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
 		
-			requestsData.setRequests([request]);
+			requestsData.setRequests({data: [request]});
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.$digest();
 			
 			var targets = targetElement.find('requests-table-container');
 			var scope = angular.element(targets[0]).scope();
 			
-			scope.requestsOverview.init();		
-
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
