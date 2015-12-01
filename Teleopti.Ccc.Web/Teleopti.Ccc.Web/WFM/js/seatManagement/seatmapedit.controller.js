@@ -177,14 +177,20 @@
 
 		function afterAddSeat(newSeat) {
 			vm.parentVm.seats.push(newSeat);
+			createDocumentListeners();
 		};
 
 		function afterPaste(seats) {
 			vm.parentVm.seats = vm.parentVm.seats.concat(seats);
+			createDocumentListeners();
 		};
 
 		function createDocumentListeners() {
 			document.onkeydown = onKeyDownHandler;
+		};
+
+		function suspendDocumentListeners() {
+			document.onkeydown = null;
 		};
 
 		function onKeyDownHandler(event) {
@@ -198,11 +204,12 @@
 		};
 
 		function performKeyDownAction(canvas, event) {
-			//event.preventDefault();
+			if (vm.parentVm.isLoading) return;
 			var key = window.event ? window.event.keyCode : event.keyCode;
 
 			switch (key) {
 				case 45: // insert
+					suspendDocumentListeners();
 					vm.addSeat();
 					break;
 				case 46: // delete
@@ -229,6 +236,7 @@
 
 				case 86: // Ctrl+V
 					if (event.ctrlKey) {
+						suspendDocumentListeners();
 						preventDefaultEvent(event);
 						vm.paste();
 					}
@@ -242,6 +250,7 @@
 					}
 					if (event.altKey) {
 						preventDefaultEvent(event);
+						suspendDocumentListeners();
 						vm.addSeat();
 					}
 					break;
