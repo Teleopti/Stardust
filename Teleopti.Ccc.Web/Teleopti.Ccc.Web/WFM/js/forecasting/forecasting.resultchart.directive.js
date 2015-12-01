@@ -59,12 +59,12 @@
 							}
 						},
 						names: {
-							vtc: $translate('TotalCallsCaret'),
-							vc: $translate('CallsCaret'),
-							vtt: $translate('TalkTimeCaret'),
-							vacw: $translate('AcwCaret'),
-							voverride: $translate('ForecastValueOverride'),
-							vcampaign: $translate('PartOfCampaign')
+							vtc: $translate.instant('TotalCallsCaret'),
+							vc: $translate.instant('CallsCaret'),
+							vtt: $translate.instant('TalkTimeCaret'),
+							vacw: $translate.instant('AcwCaret'),
+							voverride: $translate.instant('ForecastValueOverride'),
+							vcampaign: $translate.instant('PartOfCampaign')
 						},
 						colors: {
 							vtc: '#0099FF',
