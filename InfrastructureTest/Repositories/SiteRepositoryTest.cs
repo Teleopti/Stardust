@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -114,5 +115,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
-	}
+
+	    [Test]
+	    public void ShouldNotLoadDeletedTeams()
+	    {
+		    var name = RandomName.Make();
+		    var site = new Site(name);
+		    var team = new Team {Description = new Description(RandomName.Make()), Site = site};
+		    site.AddTeam(team);
+		    PersistAndRemoveFromUnitOfWork(site);
+		    PersistAndRemoveFromUnitOfWork(team);
+
+		    new TeamRepository(UnitOfWork).Remove(team);
+		    PersistAndRemoveFromUnitOfWork(team);
+
+		    var loaded = new SiteRepository(UnitOfWork).FindSiteByDescriptionName(name);
+		    loaded.Single().TeamCollection.Count.Should().Be(0);
+	    }
+    }
 }

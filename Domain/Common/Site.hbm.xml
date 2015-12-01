@@ -23,7 +23,7 @@
     <!--IEntity-->
 
     <bag name="TeamCollection"
-            inverse ="true" order-by="Name">
+            inverse ="true" order-by="Name" where="IsDeleted = 0">
       <key column="Site" />
       <one-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team"/>
     </bag>
