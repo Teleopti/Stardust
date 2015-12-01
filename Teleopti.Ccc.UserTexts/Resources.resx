@@ -10003,6 +10003,30 @@ These options are activated:
     <value>Working...</value>
     <comment>Working</comment>
   </data>
+    <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Total calls < </value>
+    <comment>label for the forecasting chart</comment>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Calls < </value>
+    <comment>label for the forecasting chart</comment>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Talk time < </value>
+    <comment>label for the forecasting chart</comment>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW < </value>
+    <comment>label for the forecasting chart</comment>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Foretasted value overridden</value>
+    <comment>label for the forecasting chart</comment>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Foretasted value overridden</value>
+    <comment>label for the forecasting chart</comment>
+  </data>
   <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
     <value>You have to map at least one sub skill.</value>
     <comment>You have to map at least one sub skill</comment>

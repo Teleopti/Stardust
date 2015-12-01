@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.forecasting').directive('forecastResultChart', [forecastResultChart]);
+	angular.module('wfm.forecasting').directive('forecastResultChart', ['$translate', forecastResultChart]);
 
-	function forecastResultChart() {
+	function forecastResultChart($translate) {
 		return {
 			controller: ['$scope', forecastResultChartCtrl],
 			templateUrl: "js/forecasting/html/forecasting-result-chart.html",
@@ -33,7 +33,7 @@
 			}
 
 			function generateChart(chartData) {
-					
+
 				$scope.chart = c3.generate({
 					bindto: "#" + $scope.chartId,
 					data: {
@@ -59,12 +59,12 @@
 							}
 						},
 						names: {
-							vtc: 'Total Calls <',
-							vc: 'Calls <',
-							vtt: 'Talk time >',
-							vacw: 'ACW >',
-							voverride: 'Forecasted value(s) overridden',
-							vcampaign: 'Part of a campaign'
+							vtc: $translate('TotalCallsCaret'),
+							vc: $translate('CallsCaret'),
+							vtt: $translate('TalkTimeCaret'),
+							vacw: $translate('AcwCaret'),
+							voverride: $translate('ForecastValueOverride'),
+							vcampaign: $translate('PartOfCampaign')
 						},
 						colors: {
 							vtc: '#0099FF',
