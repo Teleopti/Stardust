@@ -14,7 +14,7 @@
 				<button class="wfm-fab info skill-create-button" ng-click="createSkill()" ng-if="isCreateSkillEnabled">
 					<i class="mdi mdi-plus"></i>
 					<md-tooltip>
-							{{'NewSkill' | translate}}
+						{{'NewSkill' | translate}}
 					</md-tooltip>
 				</button>
 			</div>
@@ -142,7 +142,10 @@
 				</div>
 				<div class="modal-inner-content">
 					<div ng-hide="addCampaign || overrideTasks">
-						<h4>Select override calls or campaign to modify the <b>{{selectedDayCount()}}</b> day(s) for scenario <b>{{modalModifyInfo.selectedScenario.Name}}. </b></h4>
+						<p>
+							Modify override calls or campaign for scenario <b>{{modalModifyInfo.selectedScenario.Name}}</b>.
+							{{modalModifyInfo.selectedDaysText}}
+						</p>
 						<br />
 						<label class="forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
 							<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
@@ -166,7 +169,10 @@
 						<form name="form" class="wfm-form" novalidate ng-submit="applyOverride(form.$valid);">
 							<h4>{{ 'AbsenceOverride' | translate }}</h4>
 							<dl>
-								<p>{{ 'ForecastOverrideMsg' | translate }}</p>
+								<p>
+									{{ 'ForecastOverrideMsg' | translate }}
+									{{ modalModifyInfo.selectedDaysText }}
+								</p>
 								<dd>
 									<ul class="wfm-accordion">
 										<li>
@@ -228,7 +234,7 @@
 														<input type="number" ng-model="modalModifyInfo.overrideAcw" ng-required="modalModifyInfo.shouldSetOverrideAfterCallWork" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">{{ 'Required' | translate }}</div>				 
+														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">{{ 'Required' | translate }}</div>
 														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
 													</div>
 												</div>
@@ -241,7 +247,7 @@
 							<div class="modal-footer">
 								<aside>
 									<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-									<button type="submit" class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}">{{ 'Apply' | translate }}</button>
+									<button type="submit" class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyOverride()" ng-class="{'wfm-btn-invis-disabled': disableApplyOverride()}">{{ 'Apply' | translate }}</button>
 								</aside>
 							</div>
 						</form>
@@ -250,7 +256,10 @@
 					<div ng-show="!overrideTasks && addCampaign">
 						<div class="wfm-block">
 							<h4>{{ 'Campaign' | translate }}</h4>
-							<p>{{ 'AddCampaignIntro' | translate }}</p>
+							<p>
+								{{ 'AddCampaignIntro' | translate }}.
+								{{modalModifyInfo.selectedDaysText}}
+							</p>
 						</div>
 						<div class="wfm-block campaign-position">
 							<table class="wfm-table wfm-table-multi forecast-period">
@@ -286,7 +295,7 @@
 						<div class="modal-footer">
 							<aside>
 								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyModification()" ng-class="{'wfm-btn-invis-disabled': disableApplyModification()}" ng-click="applyCampaign(); addCampaign=false">{{ 'Apply' | translate }}</a>
+								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="applyCampaign(); addCampaign=false">{{ 'Apply' | translate }}</a>
 							</aside>
 						</div>
 					</div>

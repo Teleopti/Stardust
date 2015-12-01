@@ -154,7 +154,6 @@
 
 				$scope.modalModifyLaunch = false;
 				$scope.displayModifyModal = function (workload) {
-
 					if ($scope.disableModify(workload)) {
 						return;
 					}
@@ -169,8 +168,33 @@
 					$scope.modalModifyInfo.shouldSetOverrideAfterCallWork = false;
 					$scope.modalModifyInfo.selectedWorkload = workload;
 					$scope.modalModifyInfo.selectedScenario = workload.Scenario;
-					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
+					$scope.modalModifyInfo.selectedDaysText = buildSelectedDaysText();
+					$scope.modalModifyInfo.selectedDayCount = $scope.modifyDays.length;
+					$scope.modalModifyInfo.selectedDaySpan = selectedDaySpanString();
+ 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 				};
+
+				var buildSelectedDaysText = function() {
+					if ($scope.modifyDays.length == 1) {
+						var singleDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
+						return 'Selected day is {0}.'.replace('{0}', singleDate);
+					}
+					var firstDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
+					var lastDate = $filter('date')($scope.modifyDays[$scope.modifyDays.length - 1].date, 'shortDate');
+					var text = '{0} days are selected from {1} to {2}.';
+					text = text.replace('{0}', $scope.modifyDays.length);
+					text = text.replace('{1}', firstDate);
+					text = text.replace('{2}', lastDate);
+					return text;
+				}
+
+				var selectedDaySpanString = function () {
+					if ($scope.modifyDays.length == 1)
+						return $filter('date')($scope.modifyDays[0].date, 'shortDate');
+					else {
+						return $filter('date')($scope.modifyDays[0].date, 'shortDate') + ' - ' + $filter('date')($scope.modifyDays[$scope.modifyDays.length - 1].date, 'shortDate');
+					}
+				}
 
 				$scope.campaignPercentageChanged = function (campaignForm) {
 					if (campaignForm) {
@@ -239,7 +263,7 @@
 				};
 
 				$scope.applyCampaign = function () {
-					if ($scope.disableApplyModification()) {
+					if ($scope.disableApplyCampaign()) {
 						return;
 					}
 					$scope.modalModifyLaunch = false;
@@ -280,7 +304,7 @@
 				};
 
 				$scope.applyOverride = function (isFormValid) {
-					if (!isFormValid || $scope.disableApplyModification()) {
+					if (!isFormValid || $scope.disableApplyOverride()) {
 						return;
 					}
 					$scope.modalModifyLaunch = false;
@@ -415,7 +439,11 @@
 					return $scope.moreThanOneYear() || $scope.isForecastRunning;
 				};
 
-				$scope.disableApplyModification = function () {
+				$scope.disableApplyCampaign = function () {
+					return $scope.isForecastRunning;
+				};
+
+				$scope.disableApplyOverride = function () {
 					return $scope.isForecastRunning
 						||
 						(!$scope.modalModifyInfo.shouldSetOverrideTasks
