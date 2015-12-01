@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void SpecialTimeout(TimeSpan? timeout)
 		{
-			specialTimeout = null;
+			specialTimeout = timeout;
 		}
 
 		private Options newOptions()
