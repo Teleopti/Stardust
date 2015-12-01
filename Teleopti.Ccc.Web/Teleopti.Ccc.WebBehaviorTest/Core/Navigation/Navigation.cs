@@ -492,5 +492,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("MyTime/CiscoWidget");
 		}
+
+		public static void GoToWfmRequests()
+		{
+			GoToPage("wfm/#/requests");
+		}
 	}
 }

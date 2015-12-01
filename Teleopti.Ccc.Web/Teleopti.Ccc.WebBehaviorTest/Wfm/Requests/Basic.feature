@@ -26,8 +26,8 @@ Scenario: Display requests
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	When I view wfm requests
-	Then I should see a text request from 'Ashley' in the list
-	And I should see a absence request from 'John' in the list
+	Then I should see a request from 'Ashley' in the list
+	And I should see a request from 'John' in the list
 
 @ignore
 Scenario: Sort requests
