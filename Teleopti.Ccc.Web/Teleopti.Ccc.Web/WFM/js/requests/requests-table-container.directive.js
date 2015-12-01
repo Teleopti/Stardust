@@ -13,10 +13,16 @@
 
 		function getGridOptions(requests) {
 			return {
+				enableGridMenu: true,
 				data: requests,
 				columnDefs: [
-					{ displayName: 'Id', field: 'Id', cellClass: 'request-id'}
-				]
+					{ displayName: 'Subject', field: 'Subject', cellClass: 'request-subject', enableSorting: false },
+					{ displayName: 'Message', field: 'Message', cellClass: 'request-message', enableSorting: false },
+					{ displayName: 'Type', field: 'TypeText', cellClass: 'request-type', enableSorting: false },
+					{ displayName: 'AgentName', field: 'AgentName', cellClass: 'request-name', enableSorting: false },
+					{ displayName: 'Status', field: 'StatusText', cellClass: 'request-status', enableSorting: false },
+					{ displayName: 'UpdatedTime', field: 'UpdatedTime', cellClass: 'request-updated-time'}
+				] 
 			};
 
 		}
