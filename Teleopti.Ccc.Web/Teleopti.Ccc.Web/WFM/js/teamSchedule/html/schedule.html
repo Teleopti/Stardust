@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	
-	<div class="alert-error notice-spacer" ng-if="vm.total > 500"><i class='mdi mdi-alert-octagon'></i>{{'ThisSearchWillReturnAnExcessiveNumberOfResultsDotPleaseRefineYourSearchDot'|translate}}</div>
+	<div class="alert-error notice-spacer" ng-if="vm.total > 500"><i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}</div>
 	<table class="table table-hover" ng-if="!vm.isLoading" id="team-schedule">
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<thead>

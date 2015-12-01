@@ -1599,7 +1599,7 @@ Periods</comment>
     <value>Redo</value>
     <comment>Redo</comment>
   </data>
-    <data name="Accuracy" xml:space="preserve">
+  <data name="Accuracy" xml:space="preserve">
     <value>Accuracy</value>
     <comment>Accuracy</comment>
   </data>
@@ -1901,11 +1901,11 @@ Periods</comment>
     <value>Forecast method</value>
     <comment>ForecastMethod</comment>
   </data>
-    <data name="ForecastMethodIDColon" xml:space="preserve">
+  <data name="ForecastMethodIDColon" xml:space="preserve">
     <value>Forecast method id:</value>
     <comment>Label for forecast method chosen</comment>
   </data>
-      <data name="BestForecastMethod" xml:space="preserve">
+  <data name="BestForecastMethod" xml:space="preserve">
     <value>Best method</value>
     <comment>tooltip for forecast method chosen</comment>
   </data>
@@ -5330,7 +5330,7 @@ Availability</value>
     <value>Early Warning</value>
     <comment>Early warning</comment>
   </data>
-    <data name="WarningNoHistorícalData" xml:space="preserve">
+  <data name="WarningNoHistorícalData" xml:space="preserve">
     <value>Warning! There is no historical data available</value>
     <comment>warning shown when no data could be found</comment>
   </data>
@@ -13731,7 +13731,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Unselected items</value>
     <comment>Label in permissions</comment>
   </data>
-  <data name="ThisSearchWillReturnAnExcessiveNumberOfResultsDotPleaseRefineYourSearchDot" xml:space="preserve">
+  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
     <value>This search will return an excessive number of results. Please refine your search.</value>
     <comment>Notice in team schedules under WFM, when the search results are greater than 500.</comment>
   </data>

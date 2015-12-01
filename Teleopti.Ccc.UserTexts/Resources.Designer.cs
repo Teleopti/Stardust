@@ -430,6 +430,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accuracy.
+        /// </summary>
+        public static string Accuracy {
+            get {
+                return ResourceManager.GetString("Accuracy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string Action {
@@ -3590,6 +3599,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BelongsToPlanningGroup {
             get {
                 return ResourceManager.GetString("BelongsToPlanningGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Best method.
+        /// </summary>
+        public static string BestForecastMethod {
+            get {
+                return ResourceManager.GetString("BestForecastMethod", resourceCulture);
             }
         }
         
@@ -10468,6 +10486,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ForecastMethodColon {
             get {
                 return ResourceManager.GetString("ForecastMethodColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecast method id:.
+        /// </summary>
+        public static string ForecastMethodIDColon {
+            get {
+                return ResourceManager.GetString("ForecastMethodIDColon", resourceCulture);
             }
         }
         
@@ -27257,6 +27284,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This search will return an excessive number of results. Please refine your search..
+        /// </summary>
+        public static string TeamScheduleSearchExcessiveResults {
+            get {
+                return ResourceManager.GetString("TeamScheduleSearchExcessiveResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team Scheduling.
         /// </summary>
         public static string TeamScheduling {
@@ -27876,15 +27912,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThisRoleCannotBeDeleted {
             get {
                 return ResourceManager.GetString("ThisRoleCannotBeDeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This search will return an excessive number of results. Please refine your search..
-        /// </summary>
-        public static string ThisSearchWillReturnAnExcessiveNumberOfResultsDotPleaseRefineYourSearchDot {
-            get {
-                return ResourceManager.GetString("ThisSearchWillReturnAnExcessiveNumberOfResultsDotPleaseRefineYourSearchDot", resourceCulture);
             }
         }
         
@@ -29955,6 +29982,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WarningMessageTitle {
             get {
                 return ResourceManager.GetString("WarningMessageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! There is no historical data available.
+        /// </summary>
+        public static string WarningNoHistorícalData {
+            get {
+                return ResourceManager.GetString("WarningNoHistorícalData", resourceCulture);
             }
         }
         
