@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -17,21 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class PersonTest
     {
-        private IPerson _target;
-        private MockRepository _mockRepository;
-        private IPersonAccountUpdater _personAccountUpdater;
-
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
-        [SetUp]
-        public void Setup()
-        {
-            _mockRepository = new MockRepository();
-            _personAccountUpdater = _mockRepository.StrictMock<IPersonAccountUpdater>();
-            _target = new Person();
-        }
-
 	    [Test]
 	    public void AddingNoteShouldBeTrimmed()
 	    {
@@ -44,38 +28,40 @@ namespace Teleopti.Ccc.DomainTest.Common
 
         [Test]
         public void VerifyDefaultPropertiesAreSet()
-        {
-            Assert.AreEqual(new Name(), _target.Name);
-            Assert.AreEqual(string.Empty, _target.Email);
-            Assert.AreEqual(string.Empty, _target.Note);
-            Assert.AreEqual(string.Empty, _target.EmploymentNumber);
-            Assert.IsNotNull(_target.PermissionInformation);
-            Assert.IsFalse(_target is IBelongsToBusinessUnit);
-            Assert.AreSame(_target, _target.PermissionInformation.BelongsTo);
-            Assert.AreEqual(0, _target.PersonPeriodCollection.Count());
-            Assert.IsFalse(_target.TerminalDate.HasValue);
-            Assert.AreEqual(0, _target.PersonSchedulePeriodCollection.Count);
-           Assert.AreSame(_target, _target.PersonWriteProtection.BelongsTo);
+		{
+			var target = new Person();
+            Assert.AreEqual(new Name(), target.Name);
+            Assert.AreEqual(string.Empty, target.Email);
+            Assert.AreEqual(string.Empty, target.Note);
+            Assert.AreEqual(string.Empty, target.EmploymentNumber);
+            Assert.IsNotNull(target.PermissionInformation);
+            Assert.IsFalse(target is IBelongsToBusinessUnit);
+            Assert.AreSame(target, target.PermissionInformation.BelongsTo);
+            Assert.AreEqual(0, target.PersonPeriodCollection.Count());
+            Assert.IsFalse(target.TerminalDate.HasValue);
+            Assert.AreEqual(0, target.PersonSchedulePeriodCollection.Count);
+           Assert.AreSame(target, target.PersonWriteProtection.BelongsTo);
         }
 
         [Test]
         public void CanSetProperties()
-        {
+		{
+			var target = new Person();
             Name name = new Name("Roger", "M����r");
             string email = "roger@foo.bar";
             string note = "�h en s� flink agent!";
             string employmentNumber = "123";
             DateOnly date = new DateOnly(2059, 12, 31);
-            _target.Name = name;
-            _target.Email = email;
-            _target.Note = note;
-            _target.EmploymentNumber = employmentNumber;
-            _target.TerminatePerson(date, _personAccountUpdater);
-            Assert.AreEqual(date, _target.TerminalDate);
-            Assert.AreEqual(name, _target.Name);
-            Assert.AreEqual(email, _target.Email);
-            Assert.AreEqual(note, _target.Note);
-            Assert.AreEqual(employmentNumber, _target.EmploymentNumber);
+            target.Name = name;
+            target.Email = email;
+            target.Note = note;
+            target.EmploymentNumber = employmentNumber;
+            target.TerminatePerson(date, new PersonAccountUpdaterDummy());
+            Assert.AreEqual(date, target.TerminalDate);
+            Assert.AreEqual(name, target.Name);
+            Assert.AreEqual(email, target.Email);
+            Assert.AreEqual(note, target.Note);
+            Assert.AreEqual(employmentNumber, target.EmploymentNumber);
         }
 
         [Test]
@@ -89,11 +75,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			
+			var target = new Person();
+			target.AddPersonPeriod(personPeriod);
+            target.AddSkill(personSkill,personPeriod);
 
-			_target.AddPersonPeriod(personPeriod);
-            _target.AddSkill(personSkill,personPeriod);
-
-            Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
+            Assert.IsTrue(target.PersonPeriodCollection.Contains(personPeriod));
         }
 
         [Test]
@@ -107,14 +94,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			
+			var target = new Person();
+			target.AddPersonPeriod(personPeriod);
+            target.AddSkill(personSkill,personPeriod);
 
-			_target.AddPersonPeriod(personPeriod);
-            _target.AddSkill(personSkill,personPeriod);
-
-            Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
-            Assert.AreEqual(1, _target.PersonPeriodCollection.Count);
-            _target.AddPersonPeriod(personPeriod);
-            Assert.AreEqual(1, _target.PersonPeriodCollection.Count);
+            Assert.IsTrue(target.PersonPeriodCollection.Contains(personPeriod));
+            Assert.AreEqual(1, target.PersonPeriodCollection.Count);
+            target.AddPersonPeriod(personPeriod);
+            Assert.AreEqual(1, target.PersonPeriodCollection.Count);
         }
 
         [Test]
@@ -129,18 +117,20 @@ namespace Teleopti.Ccc.DomainTest.Common
             ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-			_target.AddPersonPeriod(personPeriod);
-            _target.AddSkill(personSkill, personPeriod);
+			var target = new Person();
+			target.AddPersonPeriod(personPeriod);
+            target.AddSkill(personSkill, personPeriod);
 
-            Assert.IsTrue(_target.PersonPeriodCollection.Contains(personPeriod));
-            _target.DeletePersonPeriod(personPeriod);
-            Assert.IsFalse(_target.PersonPeriodCollection.Contains(personPeriod));
+            Assert.IsTrue(target.PersonPeriodCollection.Contains(personPeriod));
+            target.DeletePersonPeriod(personPeriod);
+            Assert.IsFalse(target.PersonPeriodCollection.Contains(personPeriod));
         }
 
         [Test]
         public void CanFindMyTeam()
         {
-            Assert.IsNull(_target.MyTeam(DateOnly.Today));
+			var target = new Person();
+            Assert.IsNull(target.MyTeam(DateOnly.Today));
 
             DateOnly date = new DateOnly(2000, 1, 1);
             IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract","Testing","Test1");
@@ -149,14 +139,14 @@ namespace Teleopti.Ccc.DomainTest.Common
             site.AddTeam(team);
 
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
-			_target.AddPersonPeriod(personPeriod); 
+			target.AddPersonPeriod(personPeriod); 
 
 			ISkill skill = SkillFactory.CreateSkill("test skill");
             IPersonSkill personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
 
-            _target.AddSkill(personSkill,personPeriod);
+            target.AddSkill(personSkill,personPeriod);
 
-            Assert.AreSame(team, _target.MyTeam(DateOnly.Today));
+            Assert.AreSame(team, target.MyTeam(DateOnly.Today));
         }
 
         [Test]
@@ -166,15 +156,16 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(10));
             IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(100));
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            _target.AddPersonPeriod(personPeriod3);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            target.AddPersonPeriod(personPeriod3);
 
-            Assert.AreEqual(3, _target.PersonPeriodCollection.Count());
+            Assert.AreEqual(3, target.PersonPeriodCollection.Count());
 
-            _target.RemoveAllPersonPeriods();
+            target.RemoveAllPersonPeriods();
 
-            Assert.AreEqual(0, _target.PersonPeriodCollection.Count());
+            Assert.AreEqual(0, target.PersonPeriodCollection.Count());
         }
 
 		[Test]
@@ -184,11 +175,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(1));
 			IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(10));
 
-			_target.AddPersonPeriod(personPeriod1);
-			_target.AddPersonPeriod(personPeriod2);
-			_target.AddPersonPeriod(personPeriod3);
+			var target = new Person();
+			target.AddPersonPeriod(personPeriod1);
+			target.AddPersonPeriod(personPeriod2);
+			target.AddPersonPeriod(personPeriod3);
 
-			_target.ChangePersonPeriodStartDate(DateOnly.Today,personPeriod3);
+			target.ChangePersonPeriodStartDate(DateOnly.Today,personPeriod3);
 
 			personPeriod3.StartDate.Should().Be.EqualTo(DateOnly.Today.AddDays(2));
 		}
@@ -202,34 +194,37 @@ namespace Teleopti.Ccc.DomainTest.Common
             ISchedulePeriod schedulePeriod3 =
                 SchedulePeriodFactory.CreateSchedulePeriod(DateOnly.Today.AddDays(100));
 
-            _target.AddSchedulePeriod(schedulePeriod1);
-            _target.AddSchedulePeriod(schedulePeriod2);
-            _target.AddSchedulePeriod(schedulePeriod3);
+			var target = new Person();
+            target.AddSchedulePeriod(schedulePeriod1);
+            target.AddSchedulePeriod(schedulePeriod2);
+            target.AddSchedulePeriod(schedulePeriod3);
 
-            Assert.AreEqual(3, _target.PersonSchedulePeriodCollection.Count);
+            Assert.AreEqual(3, target.PersonSchedulePeriodCollection.Count);
 
-            _target.RemoveAllSchedulePeriods();
+            target.RemoveAllSchedulePeriods();
 
-            Assert.AreEqual(0, _target.PersonSchedulePeriodCollection.Count);
+            Assert.AreEqual(0, target.PersonSchedulePeriodCollection.Count);
         }
 
         [Test]
         public void CanAddSchedulePeriod()
         {
+			var target = new Person();
             SchedulePeriod period = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Day, 4);
-            _target.AddSchedulePeriod(period);
-            Assert.AreEqual(1, _target.PersonSchedulePeriodCollection.Count);
+            target.AddSchedulePeriod(period);
+            Assert.AreEqual(1, target.PersonSchedulePeriodCollection.Count);
         }
 
         [Test]
         public void VerifyCanRemoveSchedulePeriod()
         {
+			var target = new Person();
             SchedulePeriod period = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Day, 4);
-            _target.AddSchedulePeriod(period);
-            Assert.AreEqual(1, _target.PersonSchedulePeriodCollection.Count);
+            target.AddSchedulePeriod(period);
+            Assert.AreEqual(1, target.PersonSchedulePeriodCollection.Count);
 
-            _target.RemoveSchedulePeriod(period);
-            Assert.AreEqual(0, _target.PersonSchedulePeriodCollection.Count);
+            target.RemoveSchedulePeriod(period);
+            Assert.AreEqual(0, target.PersonSchedulePeriodCollection.Count);
         }
 
         [Test]
@@ -243,14 +238,15 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1995, 1, 1), team2);
             IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 2), team3);
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            _target.AddPersonPeriod(personPeriod3);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            target.AddPersonPeriod(personPeriod3);
 
-            Assert.AreSame(personPeriod1, _target.Period(new DateOnly(2001, 1, 2)));
-            Assert.AreSame(personPeriod2, _target.Period(new DateOnly(1998, 1, 1)));
-            Assert.AreSame(personPeriod3, _target.Period(new DateOnly(2009, 12, 31)));
-            Assert.IsNull(_target.Period(new DateOnly(1007, 12, 4)));
+            Assert.AreSame(personPeriod1, target.Period(new DateOnly(2001, 1, 2)));
+            Assert.AreSame(personPeriod2, target.Period(new DateOnly(1998, 1, 1)));
+            Assert.AreSame(personPeriod3, target.Period(new DateOnly(2009, 12, 31)));
+            Assert.IsNull(target.Period(new DateOnly(1007, 12, 4)));
         }
 
         [Test]
@@ -260,13 +256,14 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1995, 1, 1), team1);
             IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 2), team1);
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            Assert.AreEqual(2, _target.PersonPeriodCollection.Count());
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            Assert.AreEqual(2, target.PersonPeriodCollection.Count());
 
-            _target.TerminatePerson(new DateOnly(2002, 1, 1), _personAccountUpdater);
+            target.TerminatePerson(new DateOnly(2002, 1, 1), new PersonAccountUpdaterDummy());
 
-            Assert.AreEqual(1, _target.PersonPeriodCollection.Count());
+            Assert.AreEqual(1, target.PersonPeriodCollection.Count());
         }
 
 		[Test]
@@ -276,12 +273,13 @@ namespace Teleopti.Ccc.DomainTest.Common
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1995, 1, 1), team1);
 			IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 2), team1);
 
-			_target.AddPersonPeriod(personPeriod1);
-			_target.AddPersonPeriod(personPeriod2);
+			var target = new Person();
+			target.AddPersonPeriod(personPeriod1);
+			target.AddPersonPeriod(personPeriod2);
 
-			_target.TerminatePerson(new DateOnly(2002, 1, 2), _personAccountUpdater);
+			target.TerminatePerson(new DateOnly(2002, 1, 2), new PersonAccountUpdaterDummy());
 
-			Assert.AreEqual(_target.TerminalDate.Value, _target.PersonPeriodCollection[1].EndDate());
+			Assert.AreEqual(target.TerminalDate.Value, target.PersonPeriodCollection[1].EndDate());
 		}
 
         [Test]
@@ -290,21 +288,24 @@ namespace Teleopti.Ccc.DomainTest.Common
             SchedulePeriod period1 = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Week, 4);
             SchedulePeriod period2 = new SchedulePeriod(new DateOnly(2006, 1, 1), SchedulePeriodType.Month, 1);
 
-            _target.AddSchedulePeriod(period1);
-            _target.AddSchedulePeriod(period2);
+			var target = new Person();
+            target.AddSchedulePeriod(period1);
+            target.AddSchedulePeriod(period2);
 
-            Assert.AreEqual(period1, _target.SchedulePeriod(new DateOnly(2005, 1, 1)));
-            Assert.AreEqual(period2, _target.SchedulePeriod(new DateOnly(2007, 1, 1)));
-            Assert.IsNotNull(_target.VirtualSchedulePeriod(new DateOnly(2007, 1, 1)));
+            Assert.AreEqual(period1, target.SchedulePeriod(new DateOnly(2005, 1, 1)));
+            Assert.AreEqual(period2, target.SchedulePeriod(new DateOnly(2007, 1, 1)));
+            Assert.IsNotNull(target.VirtualSchedulePeriod(new DateOnly(2007, 1, 1)));
         }
 
 		 [Test]
 		 public void ShouldReturnNextComingVirtualPeriodIfNotExists()
 		 {
 		 	var period = new SchedulePeriod(new DateOnly(2020, 1, 1), SchedulePeriodType.Day, 4);
-		 	_target.AddSchedulePeriod(period);
+			
+			 var target = new Person();
+		 	target.AddSchedulePeriod(period);
 
-		 	_target.VirtualSchedulePeriodOrNext(new DateOnly(2010, 1, 1))
+		 	target.VirtualSchedulePeriodOrNext(new DateOnly(2010, 1, 1))
 		 		.DateOnlyPeriod.StartDate.Should().Be.EqualTo(new DateOnly(2020, 1, 1));
 		 }
 
@@ -312,9 +313,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 		 public void ShouldReturnCurrentIfVirtualPeriodExists()
 		 {
 			 var period = new SchedulePeriod(new DateOnly(2020, 1, 1), SchedulePeriodType.Day, 4);
-			 _target.AddSchedulePeriod(period);
+			 
+			 var target = new Person();
+			 target.AddSchedulePeriod(period);
 
-			 _target.VirtualSchedulePeriodOrNext(new DateOnly(2020, 1, 1))
+			 target.VirtualSchedulePeriodOrNext(new DateOnly(2020, 1, 1))
 				 .DateOnlyPeriod.StartDate.Should().Be.EqualTo(new DateOnly(2020, 1, 1));
 		 }
 
@@ -324,10 +327,11 @@ namespace Teleopti.Ccc.DomainTest.Common
             SchedulePeriod period1 = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Week, 4);
             SchedulePeriod period2 = new SchedulePeriod(new DateOnly(2006, 1, 1), SchedulePeriodType.Month, 1);
 
-            _target.AddSchedulePeriod(period1);
-            _target.AddSchedulePeriod(period2);
+			var target = new Person();
+            target.AddSchedulePeriod(period1);
+            target.AddSchedulePeriod(period2);
 
-            Assert.IsNull(_target.SchedulePeriod(new DateOnly(2004, 1, 1)));
+            Assert.IsNull(target.SchedulePeriod(new DateOnly(2004, 1, 1)));
         }
 
         [Test]
@@ -341,12 +345,13 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team2);
             IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 1), team3);
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            _target.AddPersonPeriod(personPeriod3);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            target.AddPersonPeriod(personPeriod3);
 
-            Assert.AreSame(personPeriod2, _target.NextPeriod(personPeriod1));
-            Assert.IsNull(_target.NextPeriod(personPeriod3));
+            Assert.AreSame(personPeriod2, target.NextPeriod(personPeriod1));
+            Assert.IsNull(target.NextPeriod(personPeriod3));
         }
 
         [Test]
@@ -360,12 +365,13 @@ namespace Teleopti.Ccc.DomainTest.Common
             var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team2);
             var personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 1), team3);
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            _target.AddPersonPeriod(personPeriod3);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            target.AddPersonPeriod(personPeriod3);
 
-            Assert.AreSame(personPeriod2, _target.PreviousPeriod(personPeriod3));
-            Assert.IsNull(_target.PreviousPeriod(personPeriod1));       
+            Assert.AreSame(personPeriod2, target.PreviousPeriod(personPeriod3));
+            Assert.IsNull(target.PreviousPeriod(personPeriod1));       
         }
 
         [Test]
@@ -374,11 +380,12 @@ namespace Teleopti.Ccc.DomainTest.Common
             SchedulePeriod period1 = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Week, 4);
             SchedulePeriod period2 = new SchedulePeriod(new DateOnly(2006, 1, 1), SchedulePeriodType.Month, 1);
 
-            _target.AddSchedulePeriod(period1);
-            _target.AddSchedulePeriod(period2);
+			var target = new Person();
+            target.AddSchedulePeriod(period1);
+            target.AddSchedulePeriod(period2);
 
-            Assert.AreEqual(period2, _target.NextSchedulePeriod(period1));
-            Assert.IsNull(_target.NextSchedulePeriod(period2));
+            Assert.AreEqual(period2, target.NextSchedulePeriod(period1));
+            Assert.IsNull(target.NextSchedulePeriod(period2));
         }
 
         /// <summary>
@@ -400,51 +407,50 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriodC = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 2), teamC);
             IPersonPeriod personPeriodA2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2003, 6, 1), teamA);
 
-            _target.AddPersonPeriod(personPeriodA1);
-            _target.AddPersonPeriod(personPeriodB);
-            _target.AddPersonPeriod(personPeriodC);
-            _target.AddPersonPeriod(personPeriodA2);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriodA1);
+            target.AddPersonPeriod(personPeriodB);
+            target.AddPersonPeriod(personPeriodC);
+            target.AddPersonPeriod(personPeriodA2);
 
-            IList<IPersonPeriod> personPeriodCollection;
-
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1990, 1, 1), new DateOnly(2020, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+	        DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1990, 1, 1), new DateOnly(2020, 1, 1));
+            IList<IPersonPeriod> personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(4, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1990, 1, 1), new DateOnly(1996, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(1, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1990, 1, 1), new DateOnly(1992, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(0, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1996, 1, 1),new DateOnly(1997, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(1, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(1998, 1, 1),new DateOnly(2020, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(4, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2001, 1, 1),new DateOnly(2020, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(3, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2003, 1, 1),new DateOnly(2020, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(2, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2004, 1, 1),new DateOnly(2020, 1, 1));
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(1, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2002, 1, 1),new DateOnly(2020, 1, 1));
-            _target.TerminatePerson(new DateOnly(2001, 1, 1), _personAccountUpdater);
-            personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
+            target.TerminatePerson(new DateOnly(2001, 1, 1), new PersonAccountUpdaterDummy());
+            personPeriodCollection = target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(0, personPeriodCollection.Count);
 
-            Assert.IsNull(_target.Period(new DateOnly(2001, 1, 2)));
+            Assert.IsNull(target.Period(new DateOnly(2001, 1, 2)));
         }
 
         [Test]
@@ -454,22 +460,23 @@ namespace Teleopti.Ccc.DomainTest.Common
             SchedulePeriod period2 = new SchedulePeriod(new DateOnly(2006, 1, 1), SchedulePeriodType.Month, 1);
             SchedulePeriod period3 = new SchedulePeriod(new DateOnly(2007, 1, 1), SchedulePeriodType.Month, 1);
 
-            _target.AddSchedulePeriod(period1);
-            _target.AddSchedulePeriod(period2);
-            _target.AddSchedulePeriod(period3);
+			var target = new Person();
+            target.AddSchedulePeriod(period1);
+            target.AddSchedulePeriod(period2);
+            target.AddSchedulePeriod(period3);
 
             DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2005, 10, 10), new DateOnly(2006, 10, 10));
-            IList<ISchedulePeriod> personScheduleCollection = _target.PersonSchedulePeriods(dateOnlyPeriod);
+            IList<ISchedulePeriod> personScheduleCollection = target.PersonSchedulePeriods(dateOnlyPeriod);
 
             Assert.AreEqual(2, personScheduleCollection.Count);
             Assert.IsTrue(personScheduleCollection.Contains(period1));
             Assert.IsTrue(personScheduleCollection.Contains(period2));
 
-            _target.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
+            target.TerminatePerson(new DateOnly(2005, 1, 1), new PersonAccountUpdaterDummy());
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2005, 10, 10), new DateOnly(2006, 10, 10));
-            personScheduleCollection = _target.PersonSchedulePeriods(dateOnlyPeriod);
+            personScheduleCollection = target.PersonSchedulePeriods(dateOnlyPeriod);
             Assert.AreEqual(0, personScheduleCollection.Count);
-            Assert.IsNull(_target.SchedulePeriod(new DateOnly(2005, 1, 2)));
+            Assert.IsNull(target.SchedulePeriod(new DateOnly(2005, 1, 2)));
         }
 
         /// <summary>
@@ -486,7 +493,8 @@ namespace Teleopti.Ccc.DomainTest.Common
             Team team = TeamFactory.CreateSimpleTeam("Team1");
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 2), team);
 
-            _target.PersonPeriodCollection.Add(personPeriod);
+			var target = new Person();
+            target.PersonPeriodCollection.Add(personPeriod);
         }
 
 
@@ -499,10 +507,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
 
-            _target.AddPersonPeriod(personPeriod);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod);
 
-            Assert.IsFalse(_target.IsAgent(date.AddDays(-1)));
-            Assert.IsTrue(_target.IsAgent(date.AddDays(1)));
+            Assert.IsFalse(target.IsAgent(date.AddDays(-1)));
+            Assert.IsTrue(target.IsAgent(date.AddDays(1)));
         }
 
         [Test]
@@ -516,12 +525,13 @@ namespace Teleopti.Ccc.DomainTest.Common
             IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 1, 1), team2);
             IPersonPeriod personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2002, 1, 1), team3);
 
-            _target.AddPersonPeriod(personPeriod1);
-            _target.AddPersonPeriod(personPeriod2);
-            _target.AddPersonPeriod(personPeriod3);
-            _target.TerminatePerson(new DateOnly(2009, 1, 8), _personAccountUpdater);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod1);
+            target.AddPersonPeriod(personPeriod2);
+            target.AddPersonPeriod(personPeriod3);
+            target.TerminatePerson(new DateOnly(2009, 1, 8), new PersonAccountUpdaterDummy());
 
-            Assert.AreEqual(109, _target.Seniority);
+            Assert.AreEqual(109, target.Seniority);
         }
 
         [Test]
@@ -535,18 +545,20 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             IPersonPeriod personPeriodA1 = PersonPeriodFactory.CreatePersonPeriod(dateTime, teamA);
 
-            _target.AddPersonPeriod(personPeriodA1);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriodA1);
 
-            _target.TerminatePerson(dateTime, _personAccountUpdater);
+	        var personAccountUpdaterDummy = new PersonAccountUpdaterDummy();
+	        target.TerminatePerson(dateTime, personAccountUpdaterDummy);
 
             DateOnly dateOnly = new DateOnly(2000, 1, 2);
-            Assert.IsNotNull(_target.Period(dateOnly));
-            Assert.AreEqual(1, _target.PersonPeriods(new DateOnlyPeriod(dateTime, dateTime)).Count);
+            Assert.IsNotNull(target.Period(dateOnly));
+            Assert.AreEqual(1, target.PersonPeriods(new DateOnlyPeriod(dateTime, dateTime)).Count);
 
-            _target.TerminatePerson(dateTime1, _personAccountUpdater);
+            target.TerminatePerson(dateTime1, personAccountUpdaterDummy);
 
-            Assert.IsNull(_target.Period(dateOnly));
-            Assert.AreEqual(0, _target.PersonPeriods(new DateOnlyPeriod(dateTime1, dateTime1)).Count);
+            Assert.IsNull(target.Period(dateOnly));
+            Assert.AreEqual(0, target.PersonPeriods(new DateOnlyPeriod(dateTime1, dateTime1)).Count);
 
         }
 
@@ -559,60 +571,59 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             SchedulePeriod period1 = new SchedulePeriod(dateTime, SchedulePeriodType.Week, 4);
 
-            _target.AddSchedulePeriod(period1);
+			var target = new Person();
+            target.AddSchedulePeriod(period1);
+	        var personAccountUpdater = new PersonAccountUpdaterDummy();
+	        target.TerminatePerson(dateTime,personAccountUpdater);
 
-            _target.TerminatePerson(dateTime,_personAccountUpdater);
+            Assert.IsNotNull(target.SchedulePeriod(dateTime));
 
+            target.TerminatePerson(dateTime1, personAccountUpdater);
 
-            Assert.IsNotNull(_target.SchedulePeriod(dateTime));
-
-            _target.TerminatePerson(dateTime1, _personAccountUpdater);
-
-            Assert.IsNull(_target.SchedulePeriod(dateTime));
+            Assert.IsNull(target.SchedulePeriod(dateTime));
         }
 
         [Test]
         public void VerifyOneRotationCanReplacePreviousRotation()
         {
-            _target.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
+			var target = new Person();
             IRotation rotation1 = new Rotation("rotation1", 7);
             IRotation rotation2 = new Rotation("rotation2", 7);
             IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("test");
             rotation1.RotationDays[0].RestrictionCollection[0].ShiftCategory = shiftCategory;
             rotation2.RotationDays[1].RestrictionCollection[0].ShiftCategory = shiftCategory;
-            IPersonRotation personRotation1 = new PersonRotation(_target, rotation1, new DateOnly(2001, 1, 1), 0);
-            IPersonRotation personRotation2 = new PersonRotation(_target, rotation2, new DateOnly(2001, 1, 8), 0);
-            IList<IPersonRotation> rotations = new List<IPersonRotation>();
-            rotations.Add(personRotation2);
-            rotations.Add(personRotation1);
+            IPersonRotation personRotation1 = new PersonRotation(target, rotation1, new DateOnly(2001, 1, 1), 0);
+            IPersonRotation personRotation2 = new PersonRotation(target, rotation2, new DateOnly(2001, 1, 8), 0);
+            IList<IPersonRotation> rotations = new List<IPersonRotation> {personRotation2, personRotation1};
 
-            DateOnly queryDate = new DateOnly(2001, 1, 1);
-            Assert.AreEqual(shiftCategory, _target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
+	        DateOnly queryDate = new DateOnly(2001, 1, 1);
+            Assert.AreEqual(shiftCategory, target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
             queryDate = queryDate.AddDays(1);
-            Assert.IsNull(_target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
+            Assert.IsNull(target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
 
             queryDate = new DateOnly(2001, 1, 8);
-            Assert.IsNull(_target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
+            Assert.IsNull(target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
             queryDate = queryDate.AddDays(1);
-            Assert.AreEqual(shiftCategory, _target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
-            
+            Assert.AreEqual(shiftCategory, target.GetPersonRotationDayRestrictions(rotations, queryDate)[0].ShiftCategory);
         }
 
         [Test]
         public void CanSetWorkflowControlSet()
         {
-            Assert.IsNull(_target.WorkflowControlSet);
+			var target = new Person();
+            Assert.IsNull(target.WorkflowControlSet);
             IWorkflowControlSet workflowControlSet = new WorkflowControlSet("MyControlSet");
-            _target.WorkflowControlSet = workflowControlSet;
-            Assert.IsNotNull(_target.WorkflowControlSet);
-            Assert.AreEqual(workflowControlSet, _target.WorkflowControlSet);
+            target.WorkflowControlSet = workflowControlSet;
+            Assert.IsNotNull(target.WorkflowControlSet);
+            Assert.AreEqual(workflowControlSet, target.WorkflowControlSet);
         }
 
         [Test]
         public void ShouldCheckPersonHasPersonPeriodBeforeGetContractTime()
         {
             var dateOnly = new DateOnly(2012, 12, 1);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.Zero));
+			var target = new Person();
+            Assert.That(target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime.Value, Is.EqualTo(TimeSpan.Zero));
         }
 
         [Test]
@@ -624,8 +635,10 @@ namespace Teleopti.Ccc.DomainTest.Common
                 new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromContract },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
-            _target.AddPersonPeriod(personPeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
+			
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod);
+            Assert.That(target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime.Value, Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
         }
 
         [Test]
@@ -637,11 +650,13 @@ namespace Teleopti.Ccc.DomainTest.Common
                 new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
-            _target.AddPersonPeriod(personPeriod);
+			
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod);
             var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(dateOnly);
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
-            _target.AddSchedulePeriod(schedulePeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.FromHours(6)));
+            target.AddSchedulePeriod(schedulePeriod);
+            Assert.That(target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime.Value, Is.EqualTo(TimeSpan.FromHours(6)));
         } 
         
         [Test]
@@ -662,49 +677,34 @@ namespace Teleopti.Ccc.DomainTest.Common
                     new PartTimePercentage("Testing"), contractSchedule);
        
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
-            _target.AddPersonPeriod(personPeriod);
+			var target = new Person();
+            target.AddPersonPeriod(personPeriod);
             var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2012, 6, 1));
             schedulePeriod.PeriodType = SchedulePeriodType.Month;
             schedulePeriod.Number = 1;
             schedulePeriod.PeriodTime = new TimeSpan(0, 167, 42, 0);
             schedulePeriod.DaysOff = 12;
-            _target.AddSchedulePeriod(schedulePeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime, Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
+            target.AddSchedulePeriod(schedulePeriod);
+            Assert.That(target.AverageWorkTimeOfDay(dateOnly).AverageWorkTime.Value, Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
         }
 
 	    [Test]
 	    public void ShuoldPersonAccountUpdaterCalledWhenTerminatePerson()
 	    {
-			DateOnly dateOnly = new DateOnly();
-		    MockRepository mocks = new MockRepository();
-			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
-	        using (mocks.Record())
-		    {
-			   Expect.Call(() => personAccountUpdater.Update(_target))
-				   .Repeat.Once();
-		    }
-		    using (mocks.Playback())
-		    {
-				_target.TerminatePerson(dateOnly, personAccountUpdater);
-		    }
+		    var personAccountUpdater = new PersonAccountUpdaterDummy();
+			var target = new Person();
+		    target.TerminatePerson(new DateOnly(), personAccountUpdater);
+		    personAccountUpdater.CallCount.Should().Be.EqualTo(1);
 	    }
 
-		[Test]
-		public void ShouldPersonAccountUpdaterCalledWhenActivatePerson()
-		{
-			MockRepository mocks = new MockRepository();
-			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
-            
-			using (mocks.Record())
-			{
-				Expect.Call(() => personAccountUpdater.Update(_target))
-					.Repeat.Once();
-			}
-			using (mocks.Playback())
-			{
-				_target.ActivatePerson(personAccountUpdater);
-			}
-		}
+	    [Test]
+	    public void ShouldPersonAccountUpdaterCalledWhenActivatePerson()
+	    {
+		    var personAccountUpdater = new PersonAccountUpdaterDummy();
+			var target = new Person();
+		    target.ActivatePerson(personAccountUpdater);
+		    personAccountUpdater.CallCount.Should().Be.EqualTo(1);
+	    }
 
 	    [Test]
 	    public void ShouldReturnCorrectVirtualSchedulePeriodWhenNextPeriodInteruptCurrent()
@@ -732,6 +732,36 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 12, 1));
 
 			virtualSchedulePeriod.DateOnlyPeriod.StartDate.Should().Be.EqualTo(new DateOnly(2015, 11, 30));
+		}
+
+		[Test]
+		public void ShouldReturnCorrectAverageWorkTimePerDayWithPeriodTimeOverrideAndWorkTimeSourceFromSchedulePeriod()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var newPeriod = person.Period(DateOnly.MinValue);
+			newPeriod.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
+			person.AddPersonPeriod(newPeriod);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 10, 1), SchedulePeriodType.Month, 1);
+			schedulePeriod1.PeriodTime = TimeSpan.FromHours(171.5);
+			person.AddSchedulePeriod(schedulePeriod1);
+
+			IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 10, 30));
+			virtualSchedulePeriod.AverageWorkTimePerDay.TotalHours.Should().Be.GreaterThan(0);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectDaysOffWithDaysOffOverrideAndWorkTimeSourceFromSchedulePeriod()
+		{
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			var newPeriod = person.Period(DateOnly.MinValue);
+			newPeriod.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
+			person.AddPersonPeriod(newPeriod);
+			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2015, 10, 1), SchedulePeriodType.Month, 1);
+			schedulePeriod1.DaysOff = 8;
+			person.AddSchedulePeriod(schedulePeriod1);
+
+			IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(new DateOnly(2015, 10, 30));
+			virtualSchedulePeriod.DaysOff().Should().Be.GreaterThan(0);
 		}
 
 	    [Test]

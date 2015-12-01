@@ -283,11 +283,11 @@ namespace Teleopti.Interfaces.Domain
 	public struct PersonWorkDay
 	{
 		public PersonWorkDay(DateOnly date, bool workDay = false)
-			: this(date,TimeSpan.Zero, WorkTimeSource.FromSchedulePeriod, new Percent(1), workDay)
+			: this(date,new Lazy<TimeSpan>(()=>TimeSpan.Zero), WorkTimeSource.FromSchedulePeriod, new Percent(1), workDay)
 		{
 		}
 
-		public PersonWorkDay(DateOnly date, TimeSpan averageWorkTime, WorkTimeSource workTimeSource, Percent partTimePercentage, bool isWorkDay = false) : this()
+		public PersonWorkDay(DateOnly date, Lazy<TimeSpan> averageWorkTime, WorkTimeSource workTimeSource, Percent partTimePercentage, bool isWorkDay = false) : this()
 		{
 			IsWorkDay = isWorkDay;
 			AverageWorkTime = averageWorkTime;
@@ -297,7 +297,7 @@ namespace Teleopti.Interfaces.Domain
 		}
 
 		public DateOnly Date { get; private set; }
-		public TimeSpan AverageWorkTime { get; private set; }
+		public Lazy<TimeSpan> AverageWorkTime { get; private set; }
 		public WorkTimeSource WorkTimeSource { get; private set; }
 		public Percent PartTimePercentage { get; private set; }
 		public bool IsWorkDay { get; private set; }

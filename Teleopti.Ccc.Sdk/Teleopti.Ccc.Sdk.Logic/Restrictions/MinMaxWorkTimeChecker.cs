@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             var person = scheduleDay.Person;
             var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
 	        var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
-	        var avgWorkTime = new TimeSpan((long)(averageWorkTimeOfDay.AverageWorkTime.Ticks  * averageWorkTimeOfDay.PartTimePercentage.Value));
+	        var avgWorkTime = new TimeSpan((long)(averageWorkTimeOfDay.AverageWorkTime.Value.Ticks  * averageWorkTimeOfDay.PartTimePercentage.Value));
 
 			if (!averageWorkTimeOfDay.IsWorkDay)
                 return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero)};

@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(scheduleDate);
 				if (averageWorkTimeOfDay.WorkTimeSource == WorkTimeSource.FromContract)
-					workLengthTicks = (long) (averageWorkTimeOfDay.AverageWorkTime.Ticks*averageWorkTimeOfDay.PartTimePercentage.Value);
+					workLengthTicks = (long) (averageWorkTimeOfDay.AverageWorkTime.Value.Ticks*averageWorkTimeOfDay.PartTimePercentage.Value);
 				else
-					workLengthTicks = averageWorkTimeOfDay.AverageWorkTime.Ticks;
+					workLengthTicks = averageWorkTimeOfDay.AverageWorkTime.Value.Ticks;
 
 				var shouldWork = averageWorkTimeOfDay.IsWorkDay && !ScheduleDay.HasDayOff();
 

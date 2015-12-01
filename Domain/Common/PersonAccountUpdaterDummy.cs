@@ -5,8 +5,10 @@ namespace Teleopti.Ccc.Domain.Common
 	public class PersonAccountUpdaterDummy : IPersonAccountUpdater
 	{
         public void Update(IPerson person)
-		{
-			// do not do anything
-		}
+        {
+	        CallCount++;
+        }
+
+		public int CallCount { get; private set; }
 	}
 }	

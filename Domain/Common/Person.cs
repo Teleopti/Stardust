@@ -865,7 +865,7 @@ namespace Teleopti.Ccc.Domain.Common
 							var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
 							if (m.PersonPeriod == null) return new PersonWorkDay(m.Day);
 							return new PersonWorkDay(m.Day,
-								calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day),
+								new Lazy<TimeSpan>(()=>calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day)),
 								m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
 								m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
 								isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
@@ -905,7 +905,7 @@ namespace Teleopti.Ccc.Domain.Common
 			var contract = personPeriod.PersonContract.Contract;
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule;
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage;
-		    return new PersonWorkDay(dateOnly, calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly),
+		    return new PersonWorkDay(dateOnly, new Lazy<TimeSpan>(()=>calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly)),
 				contract.WorkTimeSource,
 				partTimePercentage != null ? partTimePercentage.Percentage : new Percent(1d),
 				isWorkDay(contractSchedule,dateOnly));
