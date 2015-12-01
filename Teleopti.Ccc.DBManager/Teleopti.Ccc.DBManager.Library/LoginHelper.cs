@@ -34,9 +34,15 @@ namespace Teleopti.Ccc.DBManager.Library
 			return Convert.ToBoolean(_masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
 		}
 
-		private bool azureDatabaseUserExist(string sqlUser)
+		private bool azureContainedDatabaseUserExist(string sqlUser)
 		{
 			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=2";
+			return Convert.ToBoolean(_executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
+		}
+
+		private bool azureDatabaseUserExist(string sqlUser)
+		{
+			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=1";
 			return Convert.ToBoolean(_executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
 		}
 
@@ -61,10 +67,16 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void DropLogin(string user, SqlVersion sqlVersion)
 		{
-			var sql = string.Format("DROP LOGIN [{0}]", user);
 			if (sqlVersion.IsAzure && sqlVersion.ProductVersion >= 12)
-				sql = string.Format("DROP USER [{0}]", user);
-			_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);
+			{
+				var sql = string.Format("DROP USER [{0}]", user);
+				_executeSql.ExecuteTransactionlessNonQuery(sql);
+			}
+			else
+			{
+				var sql = string.Format("DROP LOGIN [{0}]", user);
+				_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);	
+			}
 		}
 
 		public void CreateLogin(string user, string pwd, Boolean iswingroup, SqlVersion sqlVersion)
@@ -84,6 +96,10 @@ namespace Teleopti.Ccc.DBManager.Library
 							_masterExecuteSql.ExecuteTransactionlessNonQuery(string.Format("DROP LOGIN [{0}]", user));
 						}
 						if (azureDatabaseUserExist(user))
+						{
+							_executeSql.ExecuteTransactionlessNonQuery(string.Format("DROP USER [{0}]", user));
+						}
+						if (azureContainedDatabaseUserExist(user))
 							sql = string.Format("ALTER USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
 						else
 							sql = string.Format("CREATE USER [{0}] WITH PASSWORD=N'{1}'", user, pwd);
