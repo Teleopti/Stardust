@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Drop(string databaseName)
 		{
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", databaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("DROP DATABASE [{0}]", databaseName),120);
 		}
 
 		public void Create(string databaseName)
 		{
-			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("CREATE DATABASE [{0}]", databaseName));
+			_executeMaster.ExecuteTransactionlessNonQuery(string.Format("CREATE DATABASE [{0}]", databaseName),120);
 		}
 
 		public void SetOnline(string databaseName)
