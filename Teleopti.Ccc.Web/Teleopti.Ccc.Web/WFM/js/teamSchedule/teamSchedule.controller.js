@@ -170,7 +170,6 @@
 			vm.loadTeams();
 
 			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise]).then(function () {
-				console.log("isAbsenceReportingEnabled ", vm.isAbsenceReportingEnabled);
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}
