@@ -2,7 +2,6 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {

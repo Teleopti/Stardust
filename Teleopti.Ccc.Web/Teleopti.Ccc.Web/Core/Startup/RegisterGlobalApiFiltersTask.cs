@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof(PersonInfoController),
 				typeof (ApplicationAuthenticationApiController),
 				typeof (StateController),
+				typeof (LanguageController),
 				typeof(ConfigController),
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
