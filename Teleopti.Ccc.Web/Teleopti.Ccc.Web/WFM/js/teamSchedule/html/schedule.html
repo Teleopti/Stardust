@@ -57,6 +57,14 @@
 					<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
 				</th>
 				<th style="width: 1%">
+					<button class="context-menu wfm-fab mini info" style="padding: 0 !important; border-radius: 23%" ng-if="vm.isAbsenceReportingEnabled">
+						<i class="mdi mdi-dots-vertical"></i>
+						<span class="context-menu-left" style="z-index: 1000">
+							<ul class="wfm-list">
+								<li>Add absence</li>
+							</ul>
+						</span>
+					</button>
 				</th>
 			</tr>
 		</thead>
