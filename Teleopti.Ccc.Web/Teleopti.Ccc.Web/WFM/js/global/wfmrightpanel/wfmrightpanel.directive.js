@@ -47,7 +47,7 @@
 				onClose: "&"
 			},
 			transclude: true,
-			templateUrl: 'js/global/wfmrightpanel/rightpanel.html',
+			templateUrl: 'js/global/wfmrightpanel/wfmrightpanel.html',
 			link: linkFunction
 		}
 	};
