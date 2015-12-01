@@ -1316,7 +1316,6 @@
     <Content Include="WFM\tests\people\people.start.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledata.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.rolefunctions.service.spec.js" />
-    <Content Include="WFM\tests\requests\requests.controller.spec.js" />
     <Content Include="WFM\tests\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agents.controller.spec.js" />

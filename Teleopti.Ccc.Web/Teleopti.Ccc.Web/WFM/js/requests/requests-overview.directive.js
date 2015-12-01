@@ -13,14 +13,17 @@
 		var vm = this;
 
 		vm.requests = [];
-		vm.requestsFilter = {};
-		vm.init = init;
-		vm.loaded = false;
+		vm.requestsFilter = {
+			period: {
+				startDate: new Date(),
+				endDate: moment().add(1, 'day').toDate()
+			}
+		};
+		vm.reload = reload;
 
-		init();
-
-		function init() {
-			requestsData.getAllRequestsPromise(vm.requestsFilter).then(function (requests) {
+		function reload(requestsFilter) {
+			vm.loaded = false;
+			requestsData.getAllRequestsPromise(requestsFilter).then(function (requests) {
 				vm.requests = requests.data;
 				vm.loaded = true;
 			});
@@ -34,8 +37,22 @@
 			bindToController: true,
 			scope: { },
 			restrict: 'E',
-			templateUrl: 'js/requests/html/requests-overview.tpl.html'			
-		};		
+			templateUrl: 'js/requests/html/requests-overview.tpl.html',
+			link: postlink
+		};
+
+		function postlink(scope, elem, attrs, ctrl) {
+			scope.$watch(function () {
+				var period = scope.requestsOverview.requestsFilter.period;
+				return {
+					startDate: period.startDate,
+					endDate: period.endDate
+				}
+			}, function (newValue) {
+				scope.requestsOverview.requestsFilter.period = newValue;
+				ctrl.reload(scope.requestsOverview.requestsFilter);
+			}, true);
+		};
 	}
 
 })();
