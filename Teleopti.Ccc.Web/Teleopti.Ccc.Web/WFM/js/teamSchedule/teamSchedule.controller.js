@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['$scope', '$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
 
-	function TeamScheduleController($q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
+	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
 		vm.permissionAddFullDayAbsence = false;
@@ -34,6 +34,24 @@
 		vm.isAbsenceReportingEnabled = false;
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
+
+		vm.rightPanelOption = {
+			panelState: false,
+			panelTitle: "Add Absence",
+			showCloseButton: true,
+			showBackdrop: false
+		};
+
+		vm.selectedAbsence = '';
+		vm.absences = [
+			{
+				AbsenceId: "AC7ACFAC-C997-47DE-9729-06F424FB765D",
+				AbsenceName: "Sick"
+			}
+		];
+		vm.selectedAbsenceChanged = function(absenceId) {
+			
+		};
 
 		vm.selected = [];
 
@@ -196,6 +214,79 @@
 		vm.searchSchedules = function() {
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
+
+		vm.showAddAbsencePanel = function() {
+			vm.rightPanelOption.panelState = true;
+		}
+
+		vm.menuState = 'open';
+		vm.toggleMenuState = function () {
+			if (vm.menuState === 'closed') {
+				vm.menuState = 'open';
+				if ($mdSidenav('report-absence').isOpen()) {
+					$mdSidenav('report-absence').toggle();
+				}
+			} else {
+				vm.menuState = 'closed';
+			}
+		}
+		vm.isOpen = function () { return false; };
+
+		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
+			vm.menuState = newValue ? 'closed' : 'open';
+		}, true);
+
+		vm.commands = [
+			{
+				label: "addAbsence",
+				panelName: 'report-absence',
+				action: function () {
+					vm.toggleMenuState();
+					vm.setCurrentCommand("addAbsence")();
+				},
+				active: function () {
+					return vm.isAbsenceReportingEnabled;
+				}
+			}
+		];
+
+		vm.currentCommand = function () {
+			if (vm.commandName != undefined) {
+				for (var i = 0; i < vm.commands.length; i++) {
+					var cmd = vm.commands[i];
+					if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
+						return cmd;
+					}
+				};
+			}
+			return undefined;
+		};
+		vm.setCurrentCommand = function (cmdName) {
+			var currentCmd = vm.currentCommand();
+			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
+				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
+					if (sideNav.isOpen()) {
+						sideNav.toggle();
+					}
+				});
+			}
+
+			vm.commandName = cmdName;
+
+			var cmd = vm.currentCommand();
+			$mdComponentRegistry.when(cmd.panelName).then(function (sideNav) {
+				vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
+			});
+			return buildToggler(cmd.panelName);
+		}
+
+		function buildToggler(navID) {
+			var debounceFn = $mdUtil.debounce(function () {
+				$mdSidenav(navID).toggle().then(function () { });
+			}, 200);
+			return debounceFn;
+		}
+
 		var loadWithoutReadModelTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' }).$promise;
 		loadWithoutReadModelTogglePromise.then(function (result) {
 			vm.loadScheduelWithReadModel = !result.IsEnabled;

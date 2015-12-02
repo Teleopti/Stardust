@@ -46,40 +46,64 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="alert-error notice-spacer" ng-if="vm.total > 500"><i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}</div>
-	<table class="table table-hover" ng-if="!vm.isLoading" id="team-schedule">
-		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<thead>
-			<tr class="person">
-				<th class="person-name person-name-column" style="width: 15%">
-					<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
-						<label>
+
+	<div class="alert-error notice-spacer" ng-if="vm.total > 500"><i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
+	</div>
+
+	<div class="big-table-wrapper material-depth-1" style="position: relative">
+		<table class="table table-hover" ng-if="!vm.isLoading" id="team-schedule">
+			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<thead>
+				<tr class="person">
+					<th class="person-name person-name-column" style="width: 15%">
+						<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
+							<label>
 							<input type="checkbox" ng-checked="vm.isSelectedAll()" ng-click="vm.selectAll($event)">
-							<span class="wfm-checkbox-toggle"></span>
-							<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
-						</label>
-					</div>
-				</th>
-				<th id="time-line-container" class="schedule schedule-column">
-					<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
-				</th>
-				<th style="width: 1%">
-					<button class="context-menu wfm-fab mini info" style="padding: 0 !important; border-radius: 23%" ng-if="vm.isAbsenceReportingEnabled">
-						<i class="mdi mdi-dots-vertical"></i>
-						<span class="context-menu-left" style="z-index: 1000">
-							<ul class="wfm-list">
-								<li>Add absence</li>
-							</ul>
-						</span>
-					</button>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
+								<span class="wfm-checkbox-toggle"></span>
+								<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
+							</label>
+						</div>
+					</th>
+					<th id="time-line-container" class="schedule schedule-column">
+						<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
+					</th>
+					<th style="width: 1%">
+						<button class="context-menu wfm-fab mini info" style="padding: 0 !important; border-radius: 23%" ng-if="vm.isAbsenceReportingEnabled">
+							<i class="mdi mdi-dots-vertical"></i>
+							<span class="context-menu-left" style="z-index: 1000">
+								<ul class="wfm-list">
+									<li ng-repeat="cmd in vm.commands" ng-click="cmd.action()">{{cmd.label}}</li>
+								</ul>
+							</span>
+						</button>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
 			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
+			<div class="sidenav-header">report absence</div>
+			<md-content layout-padding style="height: 48vh">
+				<select style="font-family: Calibri" ng-model="vm.selectedAbsence" ng-change="vm.selectedAbsenceChanged(vm.selectedAbsence)">
+					<option value="" disabled selected="">{{'PickAAbsence'|translate}}</option>
+					<option value={{absence.AbsenceId}} ng-repeat="absence in vm.absences|orderBy: 'AbsenceName'">{{absence.AbsenceName}}</option>
+				</select>
+				<div>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
+					</p>
+				</div>
+			</md-content>
+			<div style="position: relative;float: right;">
+				<button class="wfm-btn wfm-btn-primary" xng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" xng-disabled="!vm.dataChanged" xng-click="vm.updatePeopleWithSkills()">{{'Apply' | translate}}</button>
+			</div>
+		</md-sidenav>
+	</div>
 
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 </div>
