@@ -616,6 +616,7 @@
     <Compile Include="Forecasting\Angel\Accuracy\ForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />
     <Compile Include="Forecasting\ITaskOwnerPeriod.cs" />
+    <Compile Include="Forecasting\OverrideTask.cs" />
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Aop\Core\IAspect.cs" />
