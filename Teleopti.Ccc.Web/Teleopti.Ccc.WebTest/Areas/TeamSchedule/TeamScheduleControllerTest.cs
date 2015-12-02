@@ -1,24 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TeamScheduleTest]
-	public class TeamScheduleControllerTest
+	public class TeamScheduleControllerIntegrationTest
 	{
 		public TeamScheduleController Target;
 		public FakeSchedulePersonProvider PersonProvider;
@@ -416,6 +422,64 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			schedule.Date.Should().Be.EqualTo("2020-01-01");
 			schedule.Projection.First().IsOvertime.Should().Be.EqualTo(false);
 			schedule.Projection.Last().IsOvertime.Should().Be.EqualTo(true);
+		}
+	}
+
+	[TestFixture]
+	internal class TeamScheduleControllerTest
+	{
+		[Test]
+		public void ShouldAssignOperatePersionForAddFullDayAbsence()
+		{
+			var expectedPerson = new Person();
+			expectedPerson.SetId(Guid.NewGuid());
+			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
+			
+			var target = new TeamScheduleController(null, null, loggonUser, null, null);
+
+			var form = new FullDayAbsenceForm {PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo()};
+			target.AddFullDayAbsence(form);
+
+			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.Value);
+		}
+
+		[Test]
+		public void ShouldAddFullDayAbsenceForMoreThanOneAgent()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var form = new FullDayAbsenceForm
+			{
+				PersonIds = new List<Guid>() { person1, person2 }
+			};
+			target.AddFullDayAbsence(form);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+		}
+
+		[Test]
+		public void ShouldAddFullDayAbsenceThroughInputForm()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+
+			var form = new FullDayAbsenceForm
+			{
+				PersonIds = new List<Guid>{ Guid.NewGuid() },
+				AbsenceId = Guid.NewGuid(),
+				StartDate = DateTime.MinValue,
+				EndDate = DateTime.MaxValue,
+			};
+			target.AddFullDayAbsence(form);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
 		}
 	}
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
@@ -19,5 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public IEnumerable<GroupScheduleShiftViewModel> Schedules { get; set; }
 		public int Total { get; set; }
 		public string Keyword { get; set; }
+	}
+
+	public class FullDayAbsenceForm
+	{
+		public IEnumerable<Guid> PersonIds { get; set; }
+		public Guid AbsenceId { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }
