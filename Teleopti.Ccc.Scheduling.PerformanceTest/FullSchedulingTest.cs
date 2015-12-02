@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
-			browserInteractions.Click(".schedule-button");
+			browserInteractions.Click(".schedule-button:enabled");
 		}
 
 		private static void logon(IBrowserInteractions browserInteractions, string businessUnitName, string userName, string password)
