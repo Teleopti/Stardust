@@ -3738,6 +3738,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Both override and campaign added.
+        /// </summary>
+        public static string BothOverrideAndCampaignAdded {
+            get {
+                return ResourceManager.GetString("BothOverrideAndCampaignAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bottom.
         /// </summary>
         public static string Bottom {
@@ -4283,6 +4292,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignACWPercentSign {
             get {
                 return ResourceManager.GetString("CampaignACWPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign added.
+        /// </summary>
+        public static string CampaignAdded {
+            get {
+                return ResourceManager.GetString("CampaignAdded", resourceCulture);
             }
         }
         
@@ -28528,6 +28546,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total ACW &gt;.
+        /// </summary>
+        public static string TotalAcwCaret {
+            get {
+                return ResourceManager.GetString("TotalAcwCaret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total AEW.
         /// </summary>
         public static string TotalAEW {
@@ -28677,6 +28704,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TotalTalkTime {
             get {
                 return ResourceManager.GetString("TotalTalkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Talk time &gt;.
+        /// </summary>
+        public static string TotalTalkTimeCaret {
+            get {
+                return ResourceManager.GetString("TotalTalkTimeCaret", resourceCulture);
             }
         }
         

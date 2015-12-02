@@ -10031,8 +10031,8 @@ These options are activated:
     <value>Forecasted value overridden</value>
     <comment>label for the forecasting chart</comment>
   </data>
-  <data name="PartOfCampaign" xml:space="preserve">
-    <value>Part of a campaign</value>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Campaign added</value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
@@ -13779,13 +13779,25 @@ Reduce the complexity to use these shifts.</value>
     <value>Please add a filter</value>
     <comment>Notice for user that they need to add a filter</comment>
   </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Both override and campaign added</value>
+    <comment>label for the forecasting chart</comment>
+  </data>
   <data name="NameRequired" xml:space="preserve">
     <value>Name is required</value>
     <comment>Notice for user that they need to add a name</comment>
   </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Total ACW &gt;</value>
+    <comment>label for the forecasting chart</comment>
+  </data>
   <data name="ScheduleIsRunning" xml:space="preserve">
     <value>Warning: Server is busy scheduling, please try again later.</value>
     <comment>inform the user when a scheduling task is already running</comment>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Total Talk time &gt;</value>
+    <comment>label for the forecasting chart</comment>
   </data>
   <data name="AmountOfFilters" xml:space="preserve">
     <value>Amount of Filters</value>

@@ -63,13 +63,13 @@
 						names: {
 							vtc: $translate.instant('TotalCallsCaret'),
 							vc: $translate.instant('CallsCaret'),
-							vttt: 'Total Talk time >',
+							vttt: $translate.instant('TotalTalkTimeCaret'),
 							vtt: $translate.instant('TalkTimeCaret'),
-							vtacw: 'Total ACW >',
+							vtacw: $translate.instant('TotalAcwCaret'),
 							vacw: $translate.instant('AcwCaret'),
 							voverride: $translate.instant('ForecastValueOverride'),
-							vcampaign: $translate.instant('PartOfCampaign')
-							vcombo: 'Both override and campaign added'
+							vcampaign: $translate.instant('CampaignAdded'),
+							vcombo: $translate.instant('BothOverrideAndCampaignAdded')
 						},
 						colors: {
 							vtc: '#0099FF',
