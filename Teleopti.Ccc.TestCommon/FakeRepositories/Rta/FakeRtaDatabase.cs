@@ -5,7 +5,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
@@ -63,16 +62,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public readonly FakeAdherenceDetailsReadModelPersister AdherenceDetailsReadModelPersister;
 		public readonly FakeAdherencePercentageReadModelPersister AdherencePercentageReadModelPersister;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
-		private static Random datasourceRandom = new Random();
+		private static readonly Random random = new Random();
 
 		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
 		private string _platformTypeId;
 
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
-		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
+
+		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
+		private class userData
+		{
+			public int DataSourceId;
+			public string ExternalLogOn;
+			public PersonOrganizationData Data;
+		}
+		private readonly List<userData> _userInfos = new List<userData>();
 
 		private class scheduleLayer2
 		{
@@ -112,6 +119,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public StoredStateInfo StoredState;
 		public AgentStateReadModel PersistedReadModel;
+
 		public StoredStateInfo StoredStateFor(Guid personId)
 		{
 			return new StoredStateInfo(personId, AgentStateReadModelReader.GetCurrentActualAgentState(personId));
@@ -168,7 +176,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			if (_datasources.Any(x => x.Key == sourceId))
 				return this;
-			_datasources.Add(new KeyValuePair<string, int>(sourceId, datasourceRandom.Next(0, 1000)));
+			_datasources.Add(new KeyValuePair<string, int>(sourceId, random.Next(0, 1000)));
 			return this;
 		}
 
@@ -192,7 +200,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (_datasources.Any(x => x.Key == source))
 				dataSource = _datasources.Single(x => x.Key == source).Value;
 
-
 			var lookupKey = string.Format("{0}|{1}", dataSource, userCode).ToUpper(); //putting this logic here is just WRONG
 			_externalLogOns.Add(
 				new KeyValuePair<string, IEnumerable<ResolvedPerson>>(
@@ -212,6 +219,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				SiteId = siteId.Value,
 			});
 
+			_userInfos.Add(new userData
+			{
+				ExternalLogOn = userCode,
+				DataSourceId = dataSource,
+				Data = new PersonOrganizationData
+				{
+					PersonId = personId,
+					BusinessUnitId = _businessUnitId,
+					TeamId = teamId.Value,
+					SiteId = siteId.Value,
+				}
+			});
 			return this;
 		}
 
@@ -353,11 +372,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return new UtcTimeZone().TimeZone();
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
-		{
-			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
-		}
-
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);
@@ -370,6 +384,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			StoredState = new StoredStateInfo(model.PersonId, model);
 		}
 
+		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
+		{
+			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
+		}
+
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			return _personOrganizationData
@@ -377,6 +396,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
+		public IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn)
+		{
+			return _userInfos
+				.Where(x =>
+					x.ExternalLogOn == externalLogOn &&
+					x.DataSourceId == dataSourceId)
+				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))
+				.ToArray();
+		}
+
+		public IEnumerable<PersonOrganizationData> LoadAllPersonsData()
+		{
+			return _userInfos
+				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))
+				.ToArray();
+		}
 	}
 
 	public static class FakeDatabaseBuilderExtensions

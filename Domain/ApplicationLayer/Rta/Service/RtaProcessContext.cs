@@ -7,21 +7,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessContext
 	{
-		private readonly PersonOrganizationData _person;
-
 		public RtaProcessContext(
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person, 
-			INow now,
-			IDatabaseLoader databaseLoader, 
+			INow now, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator, 
 			IPreviousStateInfoLoader previousStateInfoLoader)
 		{
-			if (!databaseLoader.PersonOrganizationData().TryGetValue(person.PersonId, out _person))
-				return;
-			_person.BusinessUnitId = person.BusinessUnitId;
+			Person = person;
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 
@@ -31,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
 		}
 
-		public PersonOrganizationData Person { get { return _person; } }
+		public PersonOrganizationData Person { get; private set; }
 		public ExternalUserStateInputModel Input { get; private set; }
 		public DateTime CurrentTime { get; set; }
 

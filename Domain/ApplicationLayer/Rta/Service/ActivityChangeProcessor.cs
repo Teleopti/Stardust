@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ActivityChangeProcessor
 	{
 		private readonly INow _now;
+		private readonly IPersonLoader _personLoader;
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly RtaProcessor _processor;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public ActivityChangeProcessor(
 			INow now,
-			IDatabaseLoader databaseLoader,
+			IPersonLoader personLoader,
+			IDatabaseLoader databaseLoader, 
 			RtaProcessor processor,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender agentStateMessageSender,
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			)
 		{
 			_now = now;
+			_personLoader = personLoader;
 			_databaseLoader = databaseLoader;
 			_processor = processor;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -43,17 +46,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var now = _now.UtcDateTime();
 
-			var persons = from l in _databaseLoader.ExternalLogOns().Values
-				from p in l
-				select p;
+			var persons = _personLoader.LoadAllPersonsData();
 
-			persons.ForEach(p =>
+			persons.ForEach(person =>
 			{
-				PersonOrganizationData person;
-				if (!_databaseLoader.PersonOrganizationData().TryGetValue(p.PersonId, out person))
-					return;
-				person.BusinessUnitId = p.BusinessUnitId;
-				
 				var schedule = _databaseLoader.GetCurrentSchedule(person.PersonId);
 
 				var current = new currentPeriod();
@@ -105,7 +101,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					input,
 					person,
 					_now,
-					_databaseLoader,
 					_agentStateReadModelUpdater,
 					_agentStateMessageSender,
 					_adherenceAggregator,

@@ -235,6 +235,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAuthenticator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IPersonLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
@@ -310,7 +311,6 @@
     <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonOrganizationData.cs" />
     <Compile Include="ApplicationLayer\Rta\Resolvers\DataSourceResolver.cs" />
-    <Compile Include="ApplicationLayer\Rta\Resolvers\PersonResolver.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RtaProcessContext.cs" />

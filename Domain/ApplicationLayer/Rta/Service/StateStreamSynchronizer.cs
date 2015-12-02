@@ -74,10 +74,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						new PersonOrganizationData
 						{
 							BusinessUnitId = s.BusinessUnitId,
-							PersonId = s.PersonId
-						}, 
+							PersonId = s.PersonId,
+							SiteId = s.SiteId.GetValueOrDefault(),
+							TeamId = s.TeamId.GetValueOrDefault()
+						},
 						_now,
-						_databaseLoader,
 						null,
 						null,
 						null,

@@ -40,9 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			RtaProcessContext context
 			)
 		{
-			if (context.Person == null)
-				return;
-
 			lock (personLocks.GetOrAdd(context.Person.PersonId, g => new object()))
 			{
 				var eventCollector = new EventCollector(_eventPublisher);

@@ -24,6 +24,7 @@
 		RTA_CalculatePercentageInAgentTimezone_31236,
 		RTA_NeutralAdherence_30930,
 		RTA_MultiTenancy_32539,
+		RTA_DeletedPersons_36041,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

@@ -41,6 +41,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AdherenceAggregator>().As<IAdherenceAggregator>().SingleInstance();
 			}
 
+			if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
+				builder.RegisterType<LoadFromDatabase>().As<IPersonLoader>().SingleInstance();
+			else
+				builder.RegisterType<LoadByResolve>().As<IPersonLoader>().SingleInstance();
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
 			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))

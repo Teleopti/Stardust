@@ -24,29 +24,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAuthenticator _authenticator;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
+		private readonly IPersonLoader _personLoader;
 		private readonly INow _now;
-		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateMessageSender _messageSender;
 		private readonly IAdherenceAggregator _adherenceAggregator;
-		private readonly PersonResolver _personResolver;
 		private readonly IStateMapper _stateMapper;
 
 		public Rta(
 			IAdherenceAggregator adherenceAggregator,
-			IAgentStateReadModelReader agentStateReadModelReader, 
-			IPreviousStateInfoLoader previousStateInfoLoader, 
+			IAgentStateReadModelReader agentStateReadModelReader,
+			IPreviousStateInfoLoader previousStateInfoLoader,
 			ICacheInvalidator cacheInvalidator,
 			IStateMapper stateMapper,
-			INow now, 
+			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator,
 			RtaInitializor initializor,
-			ActivityChangeProcessor activityChangeProcessor
-			)
+			ActivityChangeProcessor activityChangeProcessor,
+			IPersonLoader personLoader)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_previousStateInfoLoader = previousStateInfoLoader;
@@ -57,12 +56,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_authenticator = authenticator;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
+			_personLoader = personLoader;
 			_now = now;
-			_databaseLoader = databaseLoader;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_messageSender = messageSender;
 			_adherenceAggregator = adherenceAggregator;
-			_personResolver = new PersonResolver(databaseLoader);
 
 			Log.Info("The real time adherence service is now started");
 		}
@@ -178,27 +176,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				input.StateCode = newStateCode;
 			}
 		}
-		
+
 		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
-			IEnumerable<ResolvedPerson> personWithBusinessUnits;
-			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
+			var persons = _personLoader.LoadPersonData(dataSourceId, input.UserCode);
+
+			if (!persons.Any())
 			{
 				Log.InfoFormat("No person available for datasource id: {0} and UserCode: {1}", dataSourceId, input.UserCode);
 				return 0;
 			}
 
 			//GLHF
-			foreach (var p in personWithBusinessUnits)
+			foreach (var person in persons)
 			{
-				Log.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
-				process(
-					input,
-					new PersonOrganizationData
-					{
-						PersonId = p.PersonId,
-						BusinessUnitId = p.BusinessUnitId
-					});
+				Log.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, person.PersonId);
+				process(input, person);
 			}
 
 			return 1;
@@ -220,7 +213,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					new PersonOrganizationData
 					{
 						PersonId = agent.PersonId,
-						BusinessUnitId = agent.BusinessUnitId
+						BusinessUnitId = agent.BusinessUnitId,
+						SiteId = agent.SiteId.GetValueOrDefault(),
+						TeamId = agent.TeamId.GetValueOrDefault()
 					});
 
 
@@ -248,7 +243,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					input,
 					person,
 					_now,
-					_databaseLoader,
 					_agentStateReadModelUpdater,
 					_messageSender,
 					_adherenceAggregator,

@@ -13,9 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IDatabaseReader
 	{
 		ConcurrentDictionary<string, int> Datasources();
-		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
+
+		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
 		IEnumerable<PersonOrganizationData> PersonOrganizationData();
+
+		IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn);
+		IEnumerable<PersonOrganizationData> LoadAllPersonsData();
 	}
 
 }

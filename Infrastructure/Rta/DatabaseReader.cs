@@ -164,5 +164,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 			return ret;
 		}
+
+		public IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<PersonOrganizationData> LoadAllPersonsData()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
