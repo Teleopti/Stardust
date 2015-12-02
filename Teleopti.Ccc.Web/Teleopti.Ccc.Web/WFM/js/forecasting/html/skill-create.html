@@ -1,11 +1,11 @@
 ﻿<div>
 	<form name="form" class="wfm-form forecasting-skill-form" novalidate ng-submit="createSkill(form.$valid)">
-		<h4 class="create-skill-header">Create Skill</h4>
+		<h4 class="create-skill-header">{{'CreateSkill'|translate}}</h4>
 		<dl>
-			<h5 class="skill-section-header">General</h5>
+			<h5 class="skill-section-header">{{'GeneralGrid'|translate}}</h5>
 			<dd>
 				<div class="form-input-wrap skill-name">
-					<label for="nameId">Name</label>
+					<label for="nameId">{{'Name'|translate}}</label>
 					<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">The name is required</div>
@@ -13,38 +13,38 @@
 					</div>
 				</div>
 				<div class="form-input-wrap skill-activity">
-					<label for="activityId">Activity</label>
+					<label for="activityId">{{'SkillActivity'|translate}}</label>
 					<select id="activityId" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities" name="Activity" required></select>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">The activity is required</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-timezone">
-					<label for="timezoneId">Time zone</label>
+					<label for="timezoneId">{{'TimeZone'|translate}}</label>
 					<select id="timezoneId" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones" name="Timezone" required></select>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.Timezone.$error.required}">The time zone is required</div>
 					</div>
 				</div>
 			</dd>
-			<h5 class="skill-section-header">Staffing levels</h5>
+			<h5 class="skill-section-header">{{'StaffingLevels'|translate}}</h5>
 			<dd>
 				<div class="form-input-wrap skill-service-level-percent">
-					<label for="serviceLevelPercentId">Service level (%) <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
+					<label for="serviceLevelPercentId">{{'ServiceLevelParenthesisPercentSign'|translate}} <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">Percentage is required</div>
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">Percentage should be 1-100</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-service-level-seconds">
-					<label for="skillServiceLevelSecondsId">Service level (s) <input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
+					<label for="skillServiceLevelSecondsId">{{'ServiceLevelSeconds'|translate}}<input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">Seconds are required</div>
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">Seconds should be 1-86400</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-shrinkage">
-					<label for="shrinkageId">Shrinkage (%) <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
+					<label for="shrinkageId">{{'ShrinkageParenthesisPercentSign'|translate}} <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">Shrinkage is required</div>
 						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">Shrinkage should be 1-99</div>
@@ -52,7 +52,7 @@
 				</div>
 			</dd>
 
-			<h5 class="skill-section-header">Queues</h5>
+			<h5 class="skill-section-header">{{'Queues'|translate}}</h5>
 			<dd>
 				<div class="skill-queues">
 					<div class="big-table-wrapper material-depth-1 queue-list">
@@ -64,7 +64,7 @@
 				</div>
 			</dd>
 
-			<h5 class="skill-section-header">Open hours</h5>
+			<h5 class="skill-section-header">{{'OpenHours'|translate}}</h5>
 			<dd>
 				<div>
 					<working-hours-picker class="skill-create-form-picker" working-hours="model.workingHours"></working-hours-picker>
@@ -75,7 +75,7 @@
 			</dd>
 			<dd>
 				<div>
-					<button type="submit" class="wfm-btn wfm-btn-primary pull-right skill-save">Save</button>
+					<button type="submit" class="wfm-btn wfm-btn-primary pull-right skill-save">{{'Save'|translate}}</button>
 				</div>
 			</dd>
 		</dl>

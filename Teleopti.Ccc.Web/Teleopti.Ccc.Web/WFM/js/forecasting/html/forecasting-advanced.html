@@ -13,7 +13,7 @@
 							<div ng-include="'first-forecast-tab.html'" ng-init="init()"></div>
 						</md-content>
 					</md-tab>
-					<md-tab label="Outliers" ng-if="isQueueStatisticsEnabled">
+					<md-tab label="{{'Outliers'|translate}}" ng-if="isQueueStatisticsEnabled">
 						<md-content class="md-padding">
 							<div ng-include="'second-forecast-tab.html'"></div>
 						</md-content>
@@ -65,7 +65,7 @@
 	<div ng-if="queueStatisticsLoading">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
-	<div class="alert-warning notice-spacer" ng-show="noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+	<div class="alert-warning notice-spacer" ng-show="noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> {{'WarningNoHistorícalData'|translate}}</div>
 	<div ng-if="!queueStatisticsLoading && !noHistoricalDataForForecasting">
 		<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 			<chart-axis>
@@ -79,4 +79,3 @@
 		</c3chart>
 	</div>
 </script>
-

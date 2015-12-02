@@ -36,9 +36,9 @@
 					enableSelectAll: true,
 					enableFullRowSelection: true,
 					columnDefs: [
-						{ displayName: 'Name', field: 'Name', enableColumnMenu: false },
-						{ displayName: 'Log object', field: 'LogObjectName', enableColumnMenu: false },
-						{ displayName: 'Description', field: 'Description', enableColumnMenu: false }
+						{ displayName: 'Name', field: 'Name', enableColumnMenu: false, headerCellFilter:'translate' },
+						{ displayName: 'LogObject', field: 'LogObjectName', enableColumnMenu: false, headerCellFilter:'translate' },
+						{ displayName: 'Description', field: 'Description', enableColumnMenu: false, headerCellFilter:'translate' }
 					],
 					onRegisterApi: function (gridApi) {
 						$scope.gridApi = gridApi;
@@ -77,7 +77,7 @@
 					if (!isFormValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
 						if ($scope.hideQueueInvalidMessage)
 							$scope.queueSelected = false;
-						growl.warning("<i class='mdi mdi-alert'></i> Could not apply. See issues above.", {
+						growl.warning("<i class='mdi mdi-alert'></i> {{'CouldNotApply'|translate}}", {
 							ttl: 5000,
 							disableCountDown: true
 						});

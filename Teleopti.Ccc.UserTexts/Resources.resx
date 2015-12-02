@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -4133,6 +4133,10 @@ Accounts</value>
     <value>Understaffing</value>
     <comment>Understaffing</comment>
   </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Staffing levels</value>
+    <comment>Label for skill create</comment>
+  </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
     <value>Your Schedule has Changed. Click here to see updated Schedule.</value>
     <comment>ballon tool tip text</comment>
@@ -4710,7 +4714,7 @@ Workload</value>
     <comment>Yes To All</comment>
   </data>
   <data name="ApplyStandard" xml:space="preserve">
-    <value>Apply 
+    <value>Apply
 Standard</value>
     <comment>Ribbon in Forecaster</comment>
   </data>
@@ -5675,7 +5679,7 @@ Availability</value>
 * Receive product activation key file (e.g. via mail)
 * Save the product activation key to disk
 * If you have any work pending save in the application, save that before applying product activation key
-* Browse to the product activation key file using browse button below 
+* Browse to the product activation key file using browse button below
 * Apply product activation key
 * Application will shutdown
 * Restart MyTime to get newly licensed options
@@ -5684,7 +5688,7 @@ Availability</value>
   </data>
   <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Product Activation Key "{0}" could not be accessed
-Error details: 
+Error details:
 {1}</value>
     <comment>IOException for product activation key file in LogOnScreen</comment>
   </data>
@@ -6513,6 +6517,10 @@ Meeting</value>
   <data name="CreateSkillSummery" xml:space="preserve">
     <value>Create skill summary</value>
     <comment>Context menu in Scheduler</comment>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Create skill</value>
+    <comment>Label for skill create</comment>
   </data>
   <data name="EditSkillSummery" xml:space="preserve">
     <value>Edit skill summary</value>
@@ -7554,7 +7562,7 @@ Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>To help us improve we would appreciate if you could provide us with the following information. 
+    <value>To help us improve we would appreciate if you could provide us with the following information.
 
 1.	Step by step on how to reproduce the error:
 
@@ -8322,7 +8330,7 @@ Period</value>
     <comment>You have to have at least one activity and shift category before creating a rule set.</comment>
   </data>
   <data name="PublishingDateSchedule" xml:space="preserve">
-    <value>Publishing Date 
+    <value>Publishing Date
 Schedule</value>
   </data>
   <data name="Calculation" xml:space="preserve">
@@ -8917,11 +8925,11 @@ Period: {3}</value>
     <comment>My profil</comment>
   </data>
   <data name="ChangePasswordValidationError" xml:space="preserve">
-    <value>The password could not be changed. 
-Please verify that your current password is correct and that your confirmation of the new password is valid. 
+    <value>The password could not be changed.
+Please verify that your current password is correct and that your confirmation of the new password is valid.
 If this validation error still occurs you must verify that your password follows the policy rules regarding length and characters.</value>
-    <comment>The password could not be changed. 
-Please verify that your current password is correct and that your confirmation of the new password is valid. 
+    <comment>The password could not be changed.
+Please verify that your current password is correct and that your confirmation of the new password is valid.
 If this validation error still occurs you must verify that your password follows the policy rules regarding length and characters.</comment>
   </data>
   <data name="PasswordPolicyWarning" xml:space="preserve">
@@ -10067,9 +10075,17 @@ These options are activated:
     <value>Use same Days off</value>
     <comment>Use same Days off</comment>
   </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Could not apply. See issues above.</value>
+    <comment>Error message when creating skill</comment>
+  </data>
   <data name="UseTeam" xml:space="preserve">
     <value>Use Team</value>
     <comment>Use Team</comment>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Outliers</value>
+    <comment>label for outliers in forecast</comment>
   </data>
   <data name="AuditingIsNotRunning" xml:space="preserve">
     <value>Schedule audit trail is not running.</value>
