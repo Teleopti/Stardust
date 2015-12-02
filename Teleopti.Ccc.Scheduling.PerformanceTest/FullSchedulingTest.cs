@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
 			browserInteractions.Click(".schedule-button:enabled");
+			browserInteractions.AssertExists(".test-schedule-is-running");
 		}
 
 		private static void logon(IBrowserInteractions browserInteractions, string businessUnitName, string userName, string password)
