@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn)
+		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
 			return _userInfos
 				.Where(x =>
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadAllPersonsData()
+		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
 			return _userInfos
 				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))

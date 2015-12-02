@@ -165,12 +165,36 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ret;
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn)
+		private const string loadAllPersonData = "exec [dbo].[LoadPersonOrganizationData] @now, @dataSourceId, @externalLogOn";
+
+		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
-			throw new NotImplementedException();
+			using (var conn = new SqlConnection(_connectionStrings.Application()))
+			{
+				conn.Open();
+				using (var cmd = new SqlCommand(loadAllPersonData, conn))
+				{
+					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
+					cmd.Parameters.AddWithValue("@dataSourceId", dataSourceId);
+					cmd.Parameters.AddWithValue("@externalLogOn", externalLogOn);
+					using (var reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							yield return new PersonOrganizationData
+							{
+								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+								TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
+								SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
+								BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
+							};
+						}
+					}
+				}
+			}
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadAllPersonsData()
+		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
 			throw new NotImplementedException();
 		}

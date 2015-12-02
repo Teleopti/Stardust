@@ -81,12 +81,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string userCode)
 		{
-			return _databaseReader.LoadPersonData(dataSourceId, userCode);
+			return _databaseReader.LoadPersonOrganizationData(dataSourceId, userCode);
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadAllPersonsData()
 		{
-			return _databaseReader.LoadAllPersonsData();
+			return _databaseReader.LoadAllPersonOrganizationData();
 		}
 	}
 

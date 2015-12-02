@@ -14,8 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-	[Category("LongRunning")]
-	[ActualAgentStateReadWriteTest]
+	[RtaDatabaseTest]
 	public class DatabaseReaderTest
 	{
 		public IDatabaseReader Reader;

@@ -234,7 +234,9 @@
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
+    <Compile Include="Rta\DatabaseReaderLoadPersonDataTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
+    <Compile Include="Rta\RtaDatabaseTestAttribute.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ScheduleChangedMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
@@ -494,7 +496,7 @@
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
-    <Compile Include="Rta\PersonOrganizationReaderTest.cs" />
+    <Compile Include="Rta\DatabaseReaderPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\TeamAdherenceAggregatorTest.cs" />
     <Compile Include="Rta\SiteAdherenceAggregatorTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />

@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	public class PersonOrganizationReaderTest : DatabaseTestWithoutTransaction
+	public class DatabaseReaderPersonOrganizationDataTest : DatabaseTestWithoutTransaction
 	{
 		[Test]
 		public void ShouldFetchTeamForPerson()

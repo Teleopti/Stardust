@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	[ActualAgentStateReadWriteTest]
+	[RtaDatabaseTest]
 	public class ActualAgentStateReadModelPersistingTest
 	{
 		public IDatabaseWriter Target;

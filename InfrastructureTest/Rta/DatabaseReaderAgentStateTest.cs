@@ -3,21 +3,16 @@ using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
-	[Category("LongRunning")]
-	[ActualAgentStateReadWriteTest]
+	[RtaDatabaseTest]
 	public class DatabaseReaderAgentStateTest
 	{
 		public IAgentStateReadModelReader Reader;
@@ -200,41 +195,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldNotCrashWhenBusinessUnitIdIsNull()
 		{
 			var personId = Guid.NewGuid();
-			ActualAgentStateReadWriteTestAttribute.ApplySql(string.Format(@"					
+			RtaDatabaseTestAttribute.ApplySql(string.Format(@"					
 						insert into rta.ActualAgentState (PersonId,  PlatformTypeId, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
 						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00"));
 			
 			Assert.DoesNotThrow(() => Reader.GetMissingAgentStatesFromBatch("2015-04-21 8:15".Utc(), "2"));
 		}
-	}
-
-	public class ActualAgentStateReadWriteTestAttribute : InfrastructureTestAttribute
-	{
-		protected override void AfterTest()
-		{
-			ApplySql("DELETE FROM RTA.ActualAgentState");
-			removeAddedPerson();
-		}
-		
-		private static void removeAddedPerson()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
-				personRepository.LoadAll().ForEach(personRepository.Remove);
-				uow.PersistAll();
-			}
-		}
-
-		public static void ApplySql(string sql)
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(sql, connection))
-					command.ExecuteNonQuery();
-			}
-		}
-
 	}
 }

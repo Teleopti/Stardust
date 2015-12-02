@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
 		IEnumerable<PersonOrganizationData> PersonOrganizationData();
 
-		IEnumerable<PersonOrganizationData> LoadPersonData(int dataSourceId, string externalLogOn);
-		IEnumerable<PersonOrganizationData> LoadAllPersonsData();
+		IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn);
+		IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData();
 	}
 
 }
