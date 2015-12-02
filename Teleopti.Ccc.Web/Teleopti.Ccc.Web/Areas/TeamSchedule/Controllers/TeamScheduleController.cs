@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
@@ -79,16 +80,4 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 	}
-
-	public class PagingGroupScheduleShiftViewModel
-	{
-		public IEnumerable<GroupScheduleShiftViewModel> GroupSchedule { get; set; }
-		public int TotalPages { get; set; }
 	}
-	public class GroupScheduleViewModel
-	{
-		public IEnumerable<GroupScheduleShiftViewModel> Schedules { get; set; }
-		public int Total { get; set; }
-		public string Keyword { get; set; }
-	}
-}
