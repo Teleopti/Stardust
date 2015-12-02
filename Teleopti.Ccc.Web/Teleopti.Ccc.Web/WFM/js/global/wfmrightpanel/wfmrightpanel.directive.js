@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 (function () {
-	var wfmRightPanel = angular.module('wfm.rightPanel', []);
+	var wfmRightPanel = angular.module('wfm.rightPanel', ['angularResizable']);
 	wfmRightPanel.controller('wfmRightPanelCtrl', wfmRightPanelCtrl);
 	wfmRightPanelCtrl.$inject = ['$mdSidenav', '$scope'];
 
@@ -14,6 +14,7 @@
 				vm.onOpen();
 			}
 			vm.showResizer = true;
+			vm.panelOptions.panelState = true;
 		};
 
 		vm.closePanel = function () {
@@ -22,6 +23,7 @@
 				vm.onClose();
 			}
 			vm.showResizer = false;
+			vm.panelOptions.panelState = false;
 		};
 
 		$scope.$watch(function () { return vm.panelOptions.panelState }, function (newValue, oldValue) {
