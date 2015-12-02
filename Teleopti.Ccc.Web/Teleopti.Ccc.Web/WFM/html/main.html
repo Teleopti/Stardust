@@ -54,55 +54,6 @@
 
 <div class="start-wrapper">
 	<div class="start-content">
-		<div layout="row" ng-cloak>
-			<div flex data-ng-controller="FeedCtrl" ng-init="loadFeed($event)">
-				<div class="bottom-header">Teleopti blog</div>
-				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 1">
-					<div class="row">
-						<div class="col-md-11">
-							<div class="wfm-block">
-								<h4>
-									{{feed.title}}
-									<br>
-									<i>
-										<small class="text-muted">
-											By {{feed.author}} - {{feed.publishedDate}}
-										</small>
-									</i>
-								</h4>
-								{{feed.contentSnippet}}
-								<div class="social-footer">
-									Share:
-									<a href="http://twitter.com/share?url={{feed.link}}">
-										<i class="mdi mdi-twitter">
-											<md-tooltip>Twitter</md-tooltip>
-										</i>
-									</a>
-									<a href="http://www.facebook.com/sharer.php?u=href={{feed.link}}">
-										<i class="mdi mdi-facebook">
-											<md-tooltip>Facebook</md-tooltip>
-										</i>
-									</a>
-									<a href="https://plus.google.com/share?url={{feed.link}}">
-										<i class="mdi mdi-google-plus-box">
-											<md-tooltip>Google+</md-tooltip>
-										</i>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-1 start-blog-btn">
-							<a href="{{feed.link}}" target="_blank">
-								<button class=" wfm-fab info"><i class="mdi mdi-receipt"></i></button>
-								<md-tooltip>Read more</md-tooltip>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<h4>Teleopti services</h4>
 		<div layout="row" class="start-spacer-down">
 			<div flex class="start-panel material-depth-1">
 				<div class="wfm-block">

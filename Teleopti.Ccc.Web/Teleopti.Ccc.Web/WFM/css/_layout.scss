@@ -145,6 +145,7 @@ input::-ms-clear {
 		margin:0 5px;
 		display: inline-block;
 		background: $white;
+		margin-bottom: 15px;
 	}
 
 	.start-tutorial{
@@ -161,11 +162,6 @@ input::-ms-clear {
 
 	.social-footer {
 		padding: 5px 0;
-	}
-
-	.start-spacer-down {
-		margin-bottom: 15px;
-		background:$white;
 	}
 
 	.start-blog-btn {
