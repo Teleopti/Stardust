@@ -15,7 +15,7 @@ Background:
 	| Field      | Value        |
 	| Start date | 2015-06-18   |
 
-@ignore
+
 Scenario: Display requests
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
@@ -26,6 +26,7 @@ Scenario: Display requests
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	When I view wfm requests
+	And I select to loading requests from '2015-10-01' to '2015-10-04'
 	Then I should see a request from 'Ashley' in the list
 	And I should see a request from 'John' in the list
 
