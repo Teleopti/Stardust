@@ -55,7 +55,7 @@
 				<th class="person-name person-name-column" style="width: 15%">
 					<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
 						<label>
-							<input type="checkbox" ng-checked="isSelectedAll()" ng-click="selectAll($event)">
+							<input type="checkbox" ng-checked="vm.isSelectedAll()" ng-click="vm.selectAll($event)">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
 						</label>
@@ -77,7 +77,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="getSelectedClass(person)"></tr>
+			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
 		</tbody>
 	</table>
 

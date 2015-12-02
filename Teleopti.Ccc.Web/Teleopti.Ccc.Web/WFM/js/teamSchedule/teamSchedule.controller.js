@@ -1,10 +1,12 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
+	function TeamScheduleController($q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc) {
 		var vm = this;
+
+		vm.permissionAddFullDayAbsence = false;
 
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
@@ -33,24 +35,24 @@
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
 
-		$scope.selected = [];
+		vm.selected = [];
 
 		var updateSelected = function (action, id) {
-			if (action === 'add' && $scope.selected.indexOf(id) === -1) {
-				$scope.selected.push(id);
+			if (action === 'add' && vm.selected.indexOf(id) === -1) {
+				vm.selected.push(id);
 			}
-			if (action === 'remove' && $scope.selected.indexOf(id) !== -1) {
-				$scope.selected.splice($scope.selected.indexOf(id), 1);
+			if (action === 'remove' && vm.selected.indexOf(id) !== -1) {
+				vm.selected.splice(vm.selected.indexOf(id), 1);
 			}
 		};
 
-		$scope.updateSelection = function ($event, id) {
+		vm.updateSelection = function ($event, id) {
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
 			updateSelected(action, id);
 		};
 
-		$scope.selectAll = function ($event) {
+		vm.selectAll = function ($event) {
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
 			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
@@ -59,15 +61,17 @@
 			}
 		};
 
-		$scope.getSelectedClass = function (schedule) {
-			return $scope.isSelected(schedule.PersonId) ? 'selected' : '';
-		};
-		$scope.isSelected = function (id) {
-			return $scope.selected.indexOf(id) >= 0;
+		vm.getSelectedClass = function (schedule) {
+			return vm.isSelected(schedule.PersonId) ? 'selected' : '';
 		};
 
-		$scope.isSelectedAll = function () {
-			return $scope.selected.length === vm.groupScheduleVm.Schedules.length;
+		vm.isSelected = function (id) {
+			return vm.selected.indexOf(id) >= 0;
+		};
+
+		vm.isSelectedAll = function () {
+			if (vm.groupScheduleVm !== undefined) return vm.selected.length === vm.groupScheduleVm.Schedules.length;
+			return false;
 		};
 
 		vm.toggleCalendar = function () {
@@ -93,6 +97,13 @@
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 			}).$promise.then(function (result) {
 				vm.Teams = result;
+			});
+		}
+
+		vm.loadPermissions = function () {
+			teamScheduleSvc.getPermissions.query({
+			}).$promise.then(function(permissions) {
+				vm.permissionAddFullDayAbsence = permissions.IsAddFullDayAbsenceAvailable;
 			});
 		}
 
@@ -127,6 +138,7 @@
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+					
 				});
 			} else if (!vm.isSearchScheduleEnabled) {
 				if (vm.allAgents == undefined) {
@@ -206,12 +218,13 @@
 
 		vm.Init = function () {
 			vm.loadTeams();
-
 			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise]).then(function () {
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}
 			});
+
+			vm.loadPermissions();
 		}
 
 		vm.Init();

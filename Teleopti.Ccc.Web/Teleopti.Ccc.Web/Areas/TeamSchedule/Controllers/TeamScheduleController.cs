@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
@@ -14,15 +16,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
 	public class TeamScheduleController : ApiController
 	{
+		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private ILoggedOnUser _loggonUser;
 
-		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser)
+		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser, IPrincipalAuthorization principalAuthorization)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
+			_principalAuthorization = principalAuthorization;
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
+		public virtual JsonResult<PermissionsViewModel> GetPermissions()
+		{
+			var permissions = new PermissionsViewModel()
+			{
+				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)
+			};
+
+			return Json(permissions);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/Group")]

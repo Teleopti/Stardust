@@ -45,5 +45,14 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: false
 			}
 		});
+
+		this.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
+		},{
+			query: {
+				method: "GET",
+				params: {},
+				isArray: false
+			}
+		});
 	}
 ]);
