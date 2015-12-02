@@ -13,6 +13,7 @@
 		var vm = this;
 
 		vm.requests = [];
+		
 		vm.requestsFilter = {
 			period: {
 				startDate: new Date(),
@@ -42,15 +43,17 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-			scope.$watch(function () {
+			scope.$watch(function() {
 				var period = scope.requestsOverview.requestsFilter.period;
 				return {
 					startDate: period.startDate,
 					endDate: period.endDate
 				}
-			}, function (newValue) {
+			}, function(newValue) {
+				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
 				scope.requestsOverview.requestsFilter.period = newValue;
 				ctrl.reload(scope.requestsOverview.requestsFilter);
+
 			}, true);
 		};
 	}

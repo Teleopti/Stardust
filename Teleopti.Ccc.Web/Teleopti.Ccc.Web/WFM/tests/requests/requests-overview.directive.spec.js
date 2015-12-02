@@ -46,15 +46,38 @@
 			requestsData.setRequests({data: [request]});
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
-			
-			var targets = targetElement.find('requests-table-container');
-			var scope = angular.element(targets[0]).scope();
-			
+			var scope = getInnerScope(targetElement);		
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
 
 		// ToDo: didn't test correct data-binding for the child directive
+
+		it("Should not request data when filter contains error", function() {
+
+			requestsData.setRequests({ data: [] });
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+
+			requestsData.reset();
+			scope.requestsOverview.requestsFilter = {
+				period: {
+					startDate: moment().add(1, 'day').toDate(),
+					endDate: new Date()
+				}
+			};
+		
+			targetScope.$digest();			
+			expect(requestsData.getHasSentRequests()).toBeFalsy();
+		});
+
+		function getInnerScope(element) {
+			var targets = element.find('requests-table-container');
+			return angular.element(targets[0]).scope();
+		}
+
 	});
 
 	describe('requests table container directive', function() {
@@ -98,12 +121,21 @@
 	function FakeRequestsDataService() {
 
 		var _requests;
+		var _hasSentRequests;
+
+		this.reset = function () {
+			_requests = [];
+			_hasSentRequests = false;
+		};
 
 		this.setRequests = function(requests) {
 			_requests = requests;
 		};
 
-		this.getAllRequestsPromise = function() {
+		this.getHasSentRequests = function () { return _hasSentRequests; }
+
+		this.getAllRequestsPromise = function () {
+			_hasSentRequests = true;
 			return {
 				then: function (cb) {					
 					cb(_requests);
