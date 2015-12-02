@@ -24,11 +24,6 @@
 			startingDay: 1
 		};
 
-		vm.rightPanelDateOptions = {
-			formatYear: 'yyyy',
-			startingDay: 1
-		};
-
 		var pageSize = 18;
 		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
 		vm.format = 'yyyy/MM/dd';
@@ -47,16 +42,7 @@
 			showBackdrop: false
 		};
 
-		vm.selectedAbsence = '';
-		vm.absences = [
-			{
-				AbsenceId: "AC7ACFAC-C997-47DE-9729-06F424FB765D",
-				AbsenceName: "Sick"
-			}
-		];
-		vm.selectedAbsenceChanged = function(absenceId) {
-			vm.selectedAbsence = absenceId;
-		};
+		vm.selectedAbsenceId = '';
 
 		vm.selected = [];
 
@@ -286,14 +272,32 @@
 		}
 
 		vm.selectedAbsenceStartDate = new Date();
-		vm.absenceStartDateChanged = function(startDate) {
-		//	vm.selectedAbsenceStartDate = startDate;
-		}
 
 		vm.absenceStartDatePickerOpened = false;
 
 		vm.toggleAbsenceStartCalendar = function () {
 			vm.absenceStartDatePickerOpened = !vm.absenceStartDatePickerOpened;
+		};
+
+		vm.selectedAbsenceEndDate = new Date();
+
+		vm.absenceEndDatePickerOpened = false;
+
+		vm.toggleAbsenceEndCalendar = function () {
+			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
+		};
+		vm.isDataChangeValid = function() {
+			return vm.selected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
+		}
+		vm.applyAbsence = function() {
+			teamScheduleSvc.applyFullDayAbsence.post({
+				PersonIds: vm.selected,
+				AbsenceId: vm.selectedAbsenceId,
+				StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
+				EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
+			}).$promise.then(function(result) {
+				
+			});
 		};
 
 		function buildToggler(navID) {

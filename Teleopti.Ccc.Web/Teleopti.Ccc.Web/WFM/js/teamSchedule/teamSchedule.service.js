@@ -63,5 +63,13 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: true
 			}
 		});
+
+		this.applyFullDayAbsence = $resource("../api/TeamSchedule/AddFullDayAbsence", {}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		})
 	}
 ]);
