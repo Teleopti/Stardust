@@ -13775,4 +13775,32 @@ Reduce the complexity to use these shifts.</value>
     <value>This search will return an excessive number of results. Please refine your search.</value>
     <comment>Notice in team schedules under WFM, when the search results are greater than 500.</comment>
   </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Please add a filter</value>
+    <comment>Notice for user that they need to add a filter</comment>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Name is required</value>
+    <comment>Notice for user that they need to add a name</comment>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Warning: Server is busy scheduling, please try again later.</value>
+    <comment>inform the user when a scheduling task is already running</comment>
+  </data>
+  <data name="AmountOfFilters" xml:space="preserve">
+    <value>Amount of Filters</value>
+    <comment>Display the amount of filters</comment>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Change planning period</value>
+    <comment>Change selected planning period</comment>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Edit filter</value>
+    <comment>Edit selected filter</comment>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Delete filter</value>
+    <comment>Delete selected filter</comment>
+  </data>
 </root>

@@ -1,5 +1,5 @@
 ﻿<div ui-view>
-    <div class="alert-warning notice-spacer" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> Warning: Server is busy scheduling, please try again later.</div>
+    <div class="alert-warning notice-spacer" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> <span translate>ScheduleIsRunning</span></div>
 	<div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
 		PlanningPeriodIsScheduled
 	</div>
@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="col-lg-11">
 			{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}
-			<i ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon"><md-tooltip>Change planning period</md-tooltip></i>
+			<i ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
 
 			<div ng-show="!planningPeriod.$resolved">
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
@@ -54,7 +54,7 @@
 		<div class="row">
 		<div class="wfm-filters col-lg-4" ng-repeat="node in dayoffRules">
 				<div class="wfm-filter-node wfm-block material-depth-1">
-					<div class="sub-header"><strong>{{node.Name}}</strong><i ng-show="!node.Default" class=" filter-header mdi mdi-delete searchbaricon" ng-click="destoryRuleset(node)"><md-tooltip>Delete filter rules</md-tooltip></i><i class=" filter-header mdi mdi-pencil searchbaricon" ng-click="editRuleset(node)"><md-tooltip>Edit filter</md-tooltip></i> </div>
+					<div class="sub-header"><strong>{{node.Name}}</strong><i ng-show="!node.Default" class=" filter-header mdi mdi-delete searchbaricon" ng-click="destoryRuleset(node)"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i><i class=" filter-header mdi mdi-pencil searchbaricon" ng-click="editRuleset(node)"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i> </div>
 					<table class="wfm-table wfm-table-multi wfm-filter-options">
 						<thead><tr><th></th><th>Min</th><th>Max</th></tr></thead>
 						<tbody><tr><td>DayOffsPerWeek</td><td>{{node.MinDayOffsPerWeek}}</td><td>{{node.MaxDayOffsPerWeek}}</td></tr>
@@ -69,9 +69,9 @@
 						<div ng-cloak ng-show="showFilterRules">
 							<div class="modalbg">
 								<div class="dialog">
-									<div class="modal-header">
-										Filter rules
-									</div>
+									<div class="modal-header" translate>
+										Filters
+									</div>.
 									<div class="modal-inner-content">
 										<div class="col-lg-6" ng-repeat="subfilter in node.Filters">
 												{{subfilter.FilterType}} {{subfilter.Name}}
@@ -79,7 +79,7 @@
 									</div>
 									<div class="modal-footer">
 										<aside>
-											<a ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">Close</a>
+											<a ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default" translate>Close</a>
 										</aside>
 									</div>
 								</div>

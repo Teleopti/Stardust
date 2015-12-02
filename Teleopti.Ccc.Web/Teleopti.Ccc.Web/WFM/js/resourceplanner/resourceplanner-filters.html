@@ -9,8 +9,8 @@
 					<div class="form-input-wrap">
 						<label for="ruleName" translate>NameColon</label>
 						<input type="text" name="ruleName" id="ruleName" ng-disabled="default" ng-model="name"/>
-						<p class="text-danger" ng-show="!isValidName()">
-							Name Required
+						<p class="text-danger" ng-show="!isValidName()" translate>
+							NameRequired
 						</p>
 					</div>
 					<div class="form-input-wrap">
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<p class="text-danger" ng-show="!isValidFilters() ">
-			Please add a filter
+			<span translate>ValidationforFilter</span>
 		</p>
 		<div class="row" ng-show="selectedResults.length > 0">
 			<div class="col-md-12">
