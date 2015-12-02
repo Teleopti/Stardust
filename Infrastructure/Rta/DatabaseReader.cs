@@ -165,38 +165,50 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ret;
 		}
 
-		private const string loadAllPersonData = "exec [dbo].[LoadPersonOrganizationData] @now, @dataSourceId, @externalLogOn";
-
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
 			using (var conn = new SqlConnection(_connectionStrings.Application()))
 			{
 				conn.Open();
-				using (var cmd = new SqlCommand(loadAllPersonData, conn))
+				using (var cmd = new SqlCommand("exec [dbo].[LoadPersonOrganizationData] @now, @dataSourceId, @externalLogOn", conn))
 				{
 					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
 					cmd.Parameters.AddWithValue("@dataSourceId", dataSourceId);
 					cmd.Parameters.AddWithValue("@externalLogOn", externalLogOn);
-					using (var reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							yield return new PersonOrganizationData
-							{
-								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-								TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
-								SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
-								BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
-							};
-						}
-					}
+					return readPersonOrganizationDatas(cmd).ToArray();
 				}
 			}
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
-			throw new NotImplementedException();
+			using (var conn = new SqlConnection(_connectionStrings.Application()))
+			{
+				conn.Open();
+				using (var cmd = new SqlCommand("exec [dbo].[LoadAllPersonOrganizationData] @now", conn))
+				{
+					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
+					return readPersonOrganizationDatas(cmd).ToArray();
+				}
+			}
+
+		}
+
+		private static IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(SqlCommand cmd)
+		{
+			using (var reader = cmd.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					yield return new PersonOrganizationData
+					{
+						PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+						TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
+						SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
+						BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
+					};
+				}
+			}
 		}
 	}
 }

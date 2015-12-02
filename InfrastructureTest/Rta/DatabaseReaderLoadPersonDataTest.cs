@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
-		public void ShouldLoadAllStuff()
+		public void ShouldLoadProperties()
 		{
 			var person = addPerson(1, "user");
 
@@ -136,5 +137,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Single().SiteId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.Id);
 			result.Single().BusinessUnitId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.BusinessUnit.Id);
 		}
+
+		[Test]
+		public void ShouldLoadAllData()
+		{
+			var person1 = addPerson(2, "user");
+			var person2 = addPerson(3, "user");
+
+			var result = Reader.LoadAllPersonOrganizationData();
+
+			result.Select(r => r.PersonId).Should().Have.SameValuesAs(person1.Id.Value, person2.Id.Value);
+		}
+
+		[Test]
+		public void ShouldFindAllByActivePersonPeriod()
+		{
+			Now.Is("2015-12-02");
+			var pastUser = addPerson("user", 1, "2015-10-01".Date());
+			addPersonPeriod(pastUser, "2015-10-31".Date());
+			var currentUser = addPerson("user", 1, "2015-11-01".Date());
+			var futureUser = addPerson("user", 1, "2015-12-31".Date());
+
+			var result = Reader.LoadAllPersonOrganizationData();
+
+			result.Single().PersonId.Should().Be(currentUser.Id);
+		}
+
+		[Test]
+		public void ShouldLoadAllWithProperties()
+		{
+			var person = addPerson(1, "user");
+
+			var results = Reader.LoadAllPersonOrganizationData();
+			Console.WriteLine(results.GetType());
+
+			var result = results.Single(r => r.PersonId == person.Id);
+			result.TeamId.Should().Be(person.PersonPeriodCollection.Single().Team.Id);
+			result.SiteId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.Id);
+			result.BusinessUnitId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.BusinessUnit.Id);
+		}
+
 	}
 }
