@@ -12713,4 +12713,79 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SuccessfullyImportedCountColon" xml:space="preserve">
     <value>Importerade:</value>
   </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Samtal/dag</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Ny kompetens</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Noggrannhet</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Prognosmetod-ID</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Bästa metod</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Varning! Det finns ingen tillgänglig historisk data</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Ange en procentsats för förväntad ökning eller minskning</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Överbemanna</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Totalt antal samtal &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Samtal &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Samtalstid &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Prognostiserat värde ersatt</value>
+  </data>
+  <data name="PartOfCampaign" xml:space="preserve">
+    <value>Del av en kampanj</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>Med kampanj</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Prognostisering pågår</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Detta är din befintliga prognos. För att kunna ändra antal samtal, markera dagar i grafen. </value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Rensa urval i grafen</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Prognostisera</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Framtida period</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>Prognosperioden kan inte vara längre än 1 år</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>Ineffektiv tid (s)</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>Markera dagar i grafen innan ändring görs</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Ändra</value>
+  </data>
+  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
+    <value>Den här sökningen kommer att returnera ett alltför stort antal träffar. Var god och avgränsa din sökning.  </value>
+  </data>
 </root>

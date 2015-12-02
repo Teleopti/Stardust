@@ -10020,7 +10020,7 @@ These options are activated:
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="ForecastValueOverride" xml:space="preserve">
-    <value>Foretasted value overridden</value>
+    <value>Forecasted value overridden</value>
     <comment>label for the forecasting chart</comment>
   </data>
   <data name="PartOfCampaign" xml:space="preserve">
