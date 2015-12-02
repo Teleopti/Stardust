@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
-		private ILoggedOnUser _loggonUser;
+		private readonly ILoggedOnUser _loggonUser;
 		private readonly ICommandDispatcher _commandDispatcher;
 
 		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
@@ -82,8 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
-				return
-					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
+				return Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 
 			if (string.IsNullOrEmpty(keyword))

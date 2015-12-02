@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
@@ -20,6 +20,11 @@
 		}
 
 		vm.dateOptions = {
+			formatYear: 'yyyy',
+			startingDay: 1
+		};
+
+		vm.rightPanelDateOptions = {
 			formatYear: 'yyyy',
 			startingDay: 1
 		};
@@ -50,7 +55,7 @@
 			}
 		];
 		vm.selectedAbsenceChanged = function(absenceId) {
-			
+			vm.selectedAbsence = absenceId;
 		};
 
 		vm.selected = [];
@@ -280,6 +285,17 @@
 			return buildToggler(cmd.panelName);
 		}
 
+		vm.selectedAbsenceStartDate = new Date();
+		vm.absenceStartDateChanged = function(startDate) {
+		//	vm.selectedAbsenceStartDate = startDate;
+		}
+
+		vm.absenceStartDatePickerOpened = false;
+
+		vm.toggleAbsenceStartCalendar = function () {
+			vm.absenceStartDatePickerOpened = !vm.absenceStartDatePickerOpened;
+		};
+
 		function buildToggler(navID) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navID).toggle().then(function () { });
@@ -307,9 +323,14 @@
 			vm.isAbsenceReportingEnabled = result.IsEnabled;
 		});
 
+		var loadAbsencePromise = teamScheduleSvc.loadAbsences.query().$promise;
+		loadAbsencePromise.then(function (result) {
+			vm.absences = result;
+		});
+		
 		vm.Init = function () {
 			vm.loadTeams();
-			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise]).then(function () {
+			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise, loadAbsencePromise]).then(function () {
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}

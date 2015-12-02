@@ -36,14 +36,6 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.loadAbsences = $resource("../api/TeamSchedule/Absences", {}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: true
-			}
-		});
-
 		this.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
 			keyword: "@keyword",
 			date: "@queryDate"
@@ -61,6 +53,14 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				method: "GET",
 				params: {},
 				isArray: false
+			}
+		});
+
+		this.loadAbsences = $resource("../api/Absence/GetAvailableAbsences", {}, {
+			query: {
+				method: "GET",
+				params: {},
+				isArray: true
 			}
 		});
 	}
