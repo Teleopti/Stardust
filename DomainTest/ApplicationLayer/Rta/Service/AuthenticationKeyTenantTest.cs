@@ -106,5 +106,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
 			Database.StoredState.Should().Be.Null();
 		}
+
+
+		[Test]
+		public void ShouldThrowInvalidAuthenticationKeyExceptionWithPriorState()
+		{
+			Database.WithUser("user");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "user"
+			});
+
+			Assert.Throws(typeof (InvalidAuthenticationKeyException),
+				() => Target.SaveState(new ExternalUserStateForTest
+				{
+					AuthenticationKey = "key",
+					UserCode = "user"
+				}));
+		}
+
 	}
 }
