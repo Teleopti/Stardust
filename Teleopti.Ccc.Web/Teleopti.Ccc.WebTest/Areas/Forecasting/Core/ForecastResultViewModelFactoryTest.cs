@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 		}
 
 		[Test]
-		public void ShouldCreateViewModelWithOverride()
+		public void ShouldCreateViewModelWithOverrideCalls()
 		{
-			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(0), 500d, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(120));
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(0), 500d, null, null);
 
 			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
@@ -85,8 +85,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(500d);
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(500d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+		}
+
+		[Test]
+		public void ShouldCreateViewModelWithOverrideTalkTime()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(0), null, TimeSpan.FromSeconds(90), null);
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
+		}
+
+		[Test]
+		public void ShouldCreateViewModelWithOverrideAcw()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(0), null, null, TimeSpan.FromSeconds(90));
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
 		}
 
 		[Test, ExpectedException(typeof(RuntimeBinderException))]
@@ -100,8 +127,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
-			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(400d);
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(1d);
 			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(75d);
+		}
+
+		[Test]
+		public void ShouldCreateViewModelWhenHaveBothCampaignCallsAndOverrideAcw()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(150), null, null, TimeSpan.FromSeconds(120));
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.vcombo, 2)).Should().Be.EqualTo(1d);
+		}
+
+		[Test, ExpectedException(typeof(RuntimeBinderException))]
+		public void ShouldNotHaveVoverrideInViewModelWhenHaveBothCampaignCallsAndOverrideAcw()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(150), null, null, TimeSpan.FromSeconds(120));
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.voverride, 2)).Should().Be.EqualTo(null);
+		}
+
+		[Test, ExpectedException(typeof(RuntimeBinderException))]
+		public void ShouldNotHaveVcampaignInViewModelWhenHaveBothCampaignCallsAndOverrideAcw()
+		{
+			stubForecastDataForOneDay(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(150), null, null, TimeSpan.FromSeconds(120));
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			dynamic firstDay = result.Days.First();
+			(Math.Round((double)firstDay.vcampaign, 2)).Should().Be.EqualTo(new Percent(150).Value);
 		}
 
 		private void stubForecastDataForOneDay(Task task, Percent campaignTasks, double? overrideTasks, TimeSpan? overrideTaskTime, TimeSpan? overrideAfterTaskTime)

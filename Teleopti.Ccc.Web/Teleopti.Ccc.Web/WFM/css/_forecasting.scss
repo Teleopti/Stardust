@@ -150,12 +150,14 @@
 	top: -25px;
 }
 
+.c3-legend-item-vcombo,
 .c3-legend-item-vcampaign,
 .c3-legend-item-voverride{
 	display:none;
 	visibility:hidden;
 }
 
+.c3-tooltip-name-vcombo > td.value,
 .c3-tooltip-name-voverride > td.value,
 .c3-tooltip-name-vcampaign > td.value{
 	color:transparent!important;
@@ -164,6 +166,7 @@
 
 }
 
+.c3-tooltip-name-vcombo > td.name,
 .c3-tooltip-name-voverride > td.name,
 .c3-tooltip-name-vcampaign > td.name{
 	background:$gray-300 ;
@@ -190,6 +193,18 @@
 }
 
 .c3-lines-voverride{
+ opacity: 0;
+}
+
+.c3-circles-vcombo > .c3-circle{
+ stroke:gray!important;
+ stroke-width: 3!important;
+ fill:gray!important;
+ transform: translate(0px,15px);
+ cy:160!important;
+}
+
+.c3-lines-vcombo{
  opacity: 0;
 }
 

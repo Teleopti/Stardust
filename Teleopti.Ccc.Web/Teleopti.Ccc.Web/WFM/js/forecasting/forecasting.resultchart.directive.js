@@ -42,7 +42,7 @@
 						keys: {
 							// x: 'name', // it's possible to specify 'x' when category axis
 							x: 'date',
-							value: ['vtc', 'vc', 'vttt', 'vtt', 'vtacw', 'vacw', 'vcampaign', 'voverride']
+							value: ['vtc', 'vc', 'vttt', 'vtt', 'vtacw', 'vacw', 'vcampaign', 'voverride', 'vcombo']
 						},
 						axes: {
 							vttt: 'y2',
@@ -55,7 +55,7 @@
 							grouped: true,
 							draggable: true,
 							isselectable: function (chartPoint) {
-								if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride')
+								if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vc' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride' || chartPoint.id === 'vcombo')
 									return false;
 								return true;
 							}
@@ -69,6 +69,7 @@
 							vacw: $translate.instant('AcwCaret'),
 							voverride: $translate.instant('ForecastValueOverride'),
 							vcampaign: $translate.instant('PartOfCampaign')
+							vcombo: 'Both override and campaign added'
 						},
 						colors: {
 							vtc: '#0099FF',
@@ -78,7 +79,8 @@
 							vtacw: '#eb2e9e',
 							vacw: '#F488C8',
 							vcampaign: 'tomato',
-							voverride: 'purple'
+							voverride: 'purple',
+							vcombo: 'gray'
 						},
 						hide: ['vc', 'vtt', 'vacw'],
 						onclick: function (chartPoint) {

@@ -47,11 +47,23 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				day.vttt = workloadDay.TotalAverageTaskTime.TotalSeconds;
 				day.vacw = workloadDay.AverageAfterTaskTime.TotalSeconds;
 				day.vtacw = workloadDay.TotalAverageAfterTaskTime.TotalSeconds;
-				
-				if (workloadDay.OverrideTasks.HasValue)
-					day.voverride = workloadDay.OverrideTasks.Value;
+
+				if (Math.Abs(workloadDay.CampaignTasks.Value) > 0
+					&& !workloadDay.OverrideTasks.HasValue 
+					&& (workloadDay.OverrideAverageTaskTime.HasValue || workloadDay.OverrideAverageAfterTaskTime.HasValue))
+				{
+					day.vcombo = 1;
+				}
+				else if (workloadDay.OverrideTasks.HasValue
+							|| workloadDay.OverrideAverageTaskTime.HasValue
+							|| workloadDay.OverrideAverageAfterTaskTime.HasValue)
+				{
+					day.voverride = 1;
+				}
 				else if (Math.Abs(workloadDay.CampaignTasks.Value) > 0)
+				{
 					day.vcampaign = workloadDay.CampaignTasks.Value;
+				}
 
 				days.Add(day);
 			}
