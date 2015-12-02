@@ -681,6 +681,7 @@
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
@@ -1198,7 +1199,6 @@
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandler.cs" />
-    <Compile Include="Scheduling\TeamBlock\DayOff\ValidNumberOfDayOffInAWeekSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />

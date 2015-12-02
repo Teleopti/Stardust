@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		{
 			_matrix = matrix;
 			TargetDaysOff = _matrix.SchedulePeriod.DaysOff();
-			foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
+			foreach (var scheduleDayPro in _matrix.FullWeeksPeriodDays)
 			{
 				IScheduleDayData toAdd = _scheduleDayDataMapper.Map(scheduleDayPro, schedulingOptions);
 				ScheduleDayDataDictionary.Add(toAdd.DateOnly, toAdd);

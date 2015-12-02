@@ -165,5 +165,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			TargetDaysOff = value;
 		}
+
+		public void SetDayOff(DateOnly date)
+		{
+			ScheduleDayDataDictionary[date].IsDayOff = true;
+		}
 	}
 }

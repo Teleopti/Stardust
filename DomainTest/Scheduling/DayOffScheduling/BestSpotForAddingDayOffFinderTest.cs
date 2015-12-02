@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -30,29 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void NewerSearchOutsideTheList()
-		{
-			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 2)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 3)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 4)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 5)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 6)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 7)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 8)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 9)].IsScheduled = true;
-			dataList[new DateOnly(2013, 1, 10)].IsScheduled = true;
-
-			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
-			Assert.IsFalse(result.HasValue);
-		}
-
-		[Test]
 		public void EmptyListShouldReturnNull()
 		{
-			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
+			DateOnly? result = _target.Find(new List<IScheduleDayData>());
 			Assert.IsFalse(result.HasValue);
 		}
 

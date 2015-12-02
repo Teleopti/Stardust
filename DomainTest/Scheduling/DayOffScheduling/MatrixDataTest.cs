@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> {_scheduleDayPro1, _scheduleDayPro2};
 			Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 			Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-			Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
+			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
 			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
 				new ScheduleDayData(DateOnly.MinValue));
 			Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(

@@ -1,26 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 {
-    public class SplitSchedulePeriodToWeekPeriod
-    {
-        public IList<DateOnlyPeriod> Split(DateOnlyPeriod dateTimePeriod)
+	public interface ISplitSchedulePeriodToWeekPeriod
+	{
+		IList<DateOnlyPeriod> Split(DateOnlyPeriod dateTimePeriod, DayOfWeek workWeekStartsAt);
+	}
+
+	public class SplitSchedulePeriodToWeekPeriod : ISplitSchedulePeriodToWeekPeriod
+	{
+        public IList<DateOnlyPeriod> Split(DateOnlyPeriod dateTimePeriod, DayOfWeek workWeekStartsAt)
         {
             var resultList = new List<DateOnlyPeriod>();
-            var startDateTime = dateTimePeriod.StartDate;
-            
-            while (startDateTime <= dateTimePeriod.EndDate)
-            {
-                var endDateTime = startDateTime;
-                for (int i = 0; i < 6; i++)
-                {
-                    if (!dateTimePeriod.Contains(endDateTime.AddDays(1))) break;
-                    endDateTime = endDateTime.AddDays(1);
-                }
-                resultList.Add(new DateOnlyPeriod(startDateTime, endDateTime));
-                startDateTime = endDateTime.AddDays(1);
-            }
+
+			var firstWeekStartDate = DateHelper.GetFirstDateInWeek(dateTimePeriod.StartDate, workWeekStartsAt);
+	        var lastWeekEndDate = DateHelper.GetLastDateInWeek(dateTimePeriod.EndDate, workWeekStartsAt);
+			while (firstWeekStartDate <= lastWeekEndDate)
+	        {
+		        resultList.Add(new DateOnlyPeriod(firstWeekStartDate, firstWeekStartDate.AddDays(6)));
+		        firstWeekStartDate = firstWeekStartDate.AddDays(7);
+	        }
+
             return resultList;
         }
        

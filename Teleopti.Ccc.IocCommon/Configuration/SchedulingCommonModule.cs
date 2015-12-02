@@ -437,12 +437,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().InstancePerLifetimeScope();
-			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().InstancePerLifetimeScope();
-			builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>().InstancePerLifetimeScope();
+			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
+			builder.RegisterType<MissingDayOffBestSpotDecider>().As<IMissingDayOffBestSpotDecider>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
