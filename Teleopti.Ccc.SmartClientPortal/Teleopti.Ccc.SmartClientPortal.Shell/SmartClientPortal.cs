@@ -26,6 +26,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -348,8 +349,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
-			
-			
+
+			_container.Resolve<IHangFireClient>().Configure();
 		}
 
 		public void setWfmWebUrl(string module)

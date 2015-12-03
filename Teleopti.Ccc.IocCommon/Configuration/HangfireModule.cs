@@ -1,5 +1,6 @@
 using Autofac;
 using Hangfire;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 
@@ -24,6 +25,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
+				builder.RegisterType<HangFireClient>().As<IHangFireClient>().SingleInstance();
+			else
+				builder.RegisterType<NoHangFireClient>().As<IHangFireClient>().SingleInstance();
 		}
 	}
 }

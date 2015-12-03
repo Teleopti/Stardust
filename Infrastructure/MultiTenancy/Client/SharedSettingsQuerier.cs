@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				var jsonString = response.Content.ReadAsStringAsync().Result;
 				var ret = JsonConvert.DeserializeObject<SharedSettings>(jsonString);
 				ret.Queue = Encryption.DecryptStringFromBase64(ret.Queue, EncryptionConstants.Image1, EncryptionConstants.Image2);
+				ret.Hangfire = Encryption.DecryptStringFromBase64(ret.Hangfire, EncryptionConstants.Image1, EncryptionConstants.Image2);
 
 				return ret;
 			}

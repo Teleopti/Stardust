@@ -329,6 +329,7 @@
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeAuthenticator.cs" />
+    <Compile Include="Areas\Start\Core\Config\FakeLoadPasswordPolicyService.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactoryTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\VerifyPasswordPolicyTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\HttpRequestUserAgentFake.cs" />
