@@ -91,6 +91,19 @@
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
 
+		var addScheduleDay = function (days) {
+			vm.scheduleDate = moment(vm.scheduleDate).add(days, "day").toDate();
+			vm.scheduleDateChanged();
+		}
+
+		vm.gotoPreviousDate = function() {
+			addScheduleDay(-1);
+		}
+
+		vm.gotoNextDate = function () {
+			addScheduleDay(1);
+		}
+
 		vm.selectedTeamIdChanged = function () {
 			vm.allAgents = undefined;
 			vm.paginationOptions.pageNumber = 1;

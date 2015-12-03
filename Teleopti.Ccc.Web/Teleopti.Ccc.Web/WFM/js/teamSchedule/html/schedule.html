@@ -1,6 +1,6 @@
 ﻿<style>
 	.input-group input[type=text] {
-		height: 34px;
+		height: 35px;
 		border: 1px solid #ccc;
 	}
 
@@ -28,13 +28,21 @@
 			</select>
 		</span>
 		<span class="col-sm-5 col-md-3 col-lg-3">
-			<span class="input-group">
+			<span class="input-group" style="min-width: 230px; max-width: 250px;">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="vm.gotoPreviousDate()">
+						<i class="mdi mdi-chevron-left"></i>
+					</button>
+				</span>
 				<input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.scheduleDate"
 					   ng-change="vm.scheduleDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions"
 					   show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()">
-						<i class="glyphicon glyphicon-calendar"></i>
+						<i class="mdi calendar"></i>
+					</button>
+					<button type="button" class="btn btn-default" ng-click="vm.gotoNextDate()">
+						<i class="mdi chevron-right"></i>
 					</button>
 				</span>
 			</span>
@@ -47,12 +55,22 @@
 			<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
-			<div class="input-group">
-				<input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.scheduleDate" ng-change="vm.scheduleDateChanged()"
-					   is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
-					   ng-required="true" close-text="Close" />
+			<div class="input-group" style="min-width: 230px; max-width: 250px;">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
+					<button type="button" class="btn btn-default" ng-click="vm.gotoPreviousDate()">
+						<i class="mdi mdi-chevron-left"></i>
+					</button>
+				</span>
+				<input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.scheduleDate" ng-change="vm.scheduleDateChanged()"
+						is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
+						ng-required="true" close-text="Close" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()">
+						<i class="mdi mdi-calendar"></i>
+					</button>
+					<button type="button" class="btn btn-default" ng-click="vm.gotoNextDate()">
+						<i class="mdi mdi-chevron-right"></i>
+					</button>
 				</span>
 			</div>
 		</div>
