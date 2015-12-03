@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void ThenIShouldSeeARequestFromInTheList(string userName)
 		{
 			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
-			Browser.Interactions.AssertAnyContains(".request-name .ui-grid-cell-contents", userName);
+			Browser.Interactions.AssertAnyContains(".request-agent-name .ui-grid-cell-contents", userName);
 		}
 
 		[When(@"I sort the request list by descending agent name")]
