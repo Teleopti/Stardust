@@ -58,15 +58,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			var zone = Person.PermissionInformation.DefaultTimeZone();
-			Parallel.ForEach(period.ToDateOnlyPeriod(zone).DayCollection(), day =>
+			foreach (var day in period.ToDateOnlyPeriod(zone).DayCollection())
 			{
 				var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, zone);
 				var part = ScheduleDay(dayAndPeriod, true, AvailablePeriods());
 				(from data in _scheduleObjectsWithNoPermissions
-					where data.BelongsToPeriod(dayAndPeriod)
-					select data).ForEach(data => part.Add((IScheduleData) data.Clone()));
+				 where data.BelongsToPeriod(dayAndPeriod)
+				 select data).ForEach(data => part.Add((IScheduleData)data.Clone()));
 				extractor.AddSchedulePart(part);
-			});
+			}
 		}
 
 		public IScheduleDay ReFetch(IScheduleDay schedulePart)
