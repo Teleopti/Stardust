@@ -34,7 +34,7 @@
 		<span style="color:red"> Only for test purpose, it will be removed later.</span>
 	</div>
 
-	<div class="big-table-wrapper material-depth-1" style="position: relative">
+	<div class="" style="position: relative">
 		<div class="row" ng-if="vm.isSearchScheduleEnabled">
 			<div class="col-md-4">
 				<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
@@ -49,11 +49,19 @@
 					</span>
 				</div>
 			</div>
+			<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right" ng-if="vm.isMenuVisible()">
+				<i class="mdi mdi-dots-vertical"></i>
+				<span class="context-menu-left" style="z-index: 1000">
+					<ul class="wfm-list">
+						<li ng-repeat="cmd in vm.commands" ng-click="cmd.action()">{{cmd.label}}</li>
+					</ul>
+				</span>
+			</button>
 		</div>
 		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
 			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
 		</div>
-		<table class="table table-hover" ng-if="!vm.isLoading" id="team-schedule">
+		<table class="table table-hover big-table-wrapper material-depth-1" ng-if="!vm.isLoading" id="team-schedule">
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<thead>
 				<tr class="person">
@@ -70,14 +78,6 @@
 						<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
 					</th>
 					<th style="width: 1%">
-						<button class="context-menu wfm-fab mini info" style="padding: 0 !important; border-radius: 23%" ng-if="vm.isMenuVisible()">
-							<i class="mdi mdi-dots-vertical"></i>
-							<span class="context-menu-left" style="z-index: 1000">
-								<ul class="wfm-list">
-									<li ng-repeat="cmd in vm.commands" ng-click="cmd.action()">{{cmd.label}}</li>
-								</ul>
-							</span>
-						</button>
 					</th>
 				</tr>
 			</thead>
