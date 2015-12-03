@@ -282,12 +282,19 @@
 		};
 
 		vm.selectedAbsenceEndDate = new Date();
-
 		vm.absenceEndDatePickerOpened = false;
+
+		vm.isFullDayAbsence = false;
+		vm.permission = {};
+
+		vm.isMenuVisible = function() {
+			return vm.isAbsenceReportingEnabled && (vm.permission.IsAddFullDayAbsenceAvailable || vm.permission.IsAddIntradayAbsenceAvailable);
+		}
 
 		vm.toggleAbsenceEndCalendar = function () {
 			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
 		};
+
 		vm.isDataChangeValid = function() {
 			return vm.selected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
 		}
@@ -333,10 +340,15 @@
 		loadAbsencePromise.then(function (result) {
 			vm.absences = result;
 		});
-		
+
+		var getPermissionsPromise = teamScheduleSvc.getPermissions.query().$promise;
+		getPermissionsPromise.then(function(result) {
+			vm.permission = result;
+		});
+
 		vm.Init = function () {
 			vm.loadTeams();
-			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise, loadAbsencePromise]).then(function () {
+			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}

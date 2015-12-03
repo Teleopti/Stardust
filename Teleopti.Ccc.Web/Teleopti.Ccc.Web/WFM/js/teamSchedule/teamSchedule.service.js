@@ -70,6 +70,6 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				params: {},
 				isArray: false
 			}
-		})
+		});
 	}
 ]);

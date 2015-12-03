@@ -140,7 +140,7 @@
 		var meridianInfo = getMeridiemInfo();
 
 		return {
-			template: '<timepicker></timepicker>',
+			template: '<uib-timepicker></uib-timepicker>',
 			controller: ['$scope', timepickerWrapCtrl],
 			compile: compileFn
 		};
