@@ -90,7 +90,7 @@
 			<div class="sidenav-header">report absence</div>
 			<md-content layout-padding style="height: 60vh">
 				<select style="font-family: Calibri" ng-model="vm.selectedAbsenceId">
-					<option value="" disabled selected="">{{'PickAAbsence'|translate}}</option>
+					<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
 					<option value={{absence.Id}} ng-repeat="absence in vm.absences|orderBy: 'Name'">{{absence.Name}}</option>
 				</select>
 				<div>{{'From'|translate}}: </div>

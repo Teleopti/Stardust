@@ -682,6 +682,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ACW &lt; .
+        /// </summary>
+        public static string AcwCaret {
+            get {
+                return ResourceManager.GetString("AcwCaret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -2150,6 +2159,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount of Filters.
+        /// </summary>
+        public static string AmountOfFilters {
+            get {
+                return ResourceManager.GetString("AmountOfFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Employment Number.
         /// </summary>
         public static string AmpersandEmployeeNumber {
@@ -2561,7 +2579,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///* Receive product activation key file (e.g. via mail)
         ///* Save the product activation key to disk
         ///* If you have any work pending save in the application, save that before applying product activation key
-        ///* Browse to the product activation key file using browse button below 
+        ///* Browse to the product activation key file using browse button below
         ///* Apply product activation key
         ///* Application will shutdown
         ///* Restart MyTime to get newly licensed options
@@ -2574,7 +2592,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply 
+        ///   Looks up a localized string similar to Apply
         ///Standard.
         /// </summary>
         public static string ApplyStandard {
@@ -4215,6 +4233,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calls &lt; .
+        /// </summary>
+        public static string CallsCaret {
+            get {
+                return ResourceManager.GetString("CallsCaret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calls/day.
         /// </summary>
         public static string CallsSlashDay {
@@ -4720,7 +4747,7 @@ namespace Teleopti.Ccc.UserTexts {
         
         /// <summary>
         ///   Looks up a localized string similar to Product Activation Key &quot;{0}&quot; could not be accessed
-        ///Error details: 
+        ///Error details:
         ///{1}.
         /// </summary>
         public static string CannotReadProductActivationKeyFile {
@@ -4865,13 +4892,22 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The password could not be changed. 
-        ///Please verify that your current password is correct and that your confirmation of the new password is valid. 
+        ///   Looks up a localized string similar to The password could not be changed.
+        ///Please verify that your current password is correct and that your confirmation of the new password is valid.
         ///If this validation error still occurs you must verify that your password follows the policy rules regarding length and characters..
         /// </summary>
         public static string ChangePasswordValidationError {
             get {
                 return ResourceManager.GetString("ChangePasswordValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change planning period.
+        /// </summary>
+        public static string ChangePlanningPeriod {
+            get {
+                return ResourceManager.GetString("ChangePlanningPeriod", resourceCulture);
             }
         }
         
@@ -6021,6 +6057,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not apply. See issues above..
+        /// </summary>
+        public static string CouldNotApply {
+            get {
+                return ResourceManager.GetString("CouldNotApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong with the file export, please try a different location.
         /// </summary>
         public static string CouldNotExportForecastToFile {
@@ -6252,6 +6297,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreateShiftTradeRequest {
             get {
                 return ResourceManager.GetString("CreateShiftTradeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create skill.
+        /// </summary>
+        public static string CreateSkill {
+            get {
+                return ResourceManager.GetString("CreateSkill", resourceCulture);
             }
         }
         
@@ -7429,6 +7483,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete filter.
+        /// </summary>
+        public static string DeleteFilter {
+            get {
+                return ResourceManager.GetString("DeleteFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete gamification setting.
         /// </summary>
         public static string DeleteGamificationSetting {
@@ -8325,6 +8388,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EditCommonAgentNameDescription {
             get {
                 return ResourceManager.GetString("EditCommonAgentNameDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit filter.
+        /// </summary>
+        public static string EditFilter {
+            get {
+                return ResourceManager.GetString("EditFilter", resourceCulture);
             }
         }
         
@@ -10531,6 +10603,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Forecasts {
             get {
                 return ResourceManager.GetString("Forecasts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecasted value overridden.
+        /// </summary>
+        public static string ForecastValueOverride {
+            get {
+                return ResourceManager.GetString("ForecastValueOverride", resourceCulture);
             }
         }
         
@@ -15658,6 +15739,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name is required.
+        /// </summary>
+        public static string NameRequired {
+            get {
+                return ResourceManager.GetString("NameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name the {0}.
         /// </summary>
         public static string NameType {
@@ -18326,6 +18416,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Outliers.
+        /// </summary>
+        public static string Outliers {
+            get {
+                return ResourceManager.GetString("Outliers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Out of adherence.
         /// </summary>
         public static string OutOfAdherence {
@@ -18556,6 +18655,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Participants {
             get {
                 return ResourceManager.GetString("Participants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Part of a campaign.
+        /// </summary>
+        public static string PartOfCampaign {
+            get {
+                return ResourceManager.GetString("PartOfCampaign", resourceCulture);
             }
         }
         
@@ -19580,6 +19688,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick an absence.
+        /// </summary>
+        public static string PickAnAbsence {
+            get {
+                return ResourceManager.GetString("PickAnAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick a shift bag.
         /// </summary>
         public static string PickAShiftBag {
@@ -20313,7 +20430,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publishing Date 
+        ///   Looks up a localized string similar to Publishing Date
         ///Schedule.
         /// </summary>
         public static string PublishingDateSchedule {
@@ -23148,6 +23265,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleHourlyEmployees {
             get {
                 return ResourceManager.GetString("ScheduleHourlyEmployees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: Server is busy scheduling, please try again later..
+        /// </summary>
+        public static string ScheduleIsRunning {
+            get {
+                return ResourceManager.GetString("ScheduleIsRunning", resourceCulture);
             }
         }
         
@@ -26348,6 +26474,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing levels.
+        /// </summary>
+        public static string StaffingLevels {
+            get {
+                return ResourceManager.GetString("StaffingLevels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Standard.
         /// </summary>
         public static string Standard {
@@ -27082,6 +27217,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TalkTime {
             get {
                 return ResourceManager.GetString("TalkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Talk time &lt; .
+        /// </summary>
+        public static string TalkTimeCaret {
+            get {
+                return ResourceManager.GetString("TalkTimeCaret", resourceCulture);
             }
         }
         
@@ -28357,6 +28501,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total calls &lt; .
+        /// </summary>
+        public static string TotalCallsCaret {
+            get {
+                return ResourceManager.GetString("TotalCallsCaret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total chats.
         /// </summary>
         public static string TotalChats {
@@ -28717,7 +28870,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To help us improve we would appreciate if you could provide us with the following information. 
+        ///   Looks up a localized string similar to To help us improve we would appreciate if you could provide us with the following information.
         ///
         ///1.	Step by step on how to reproduce the error:
         ///
@@ -29613,6 +29766,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValidationError {
             get {
                 return ResourceManager.GetString("ValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add a filter.
+        /// </summary>
+        public static string ValidationforFilter {
+            get {
+                return ResourceManager.GetString("ValidationforFilter", resourceCulture);
             }
         }
         
