@@ -6,6 +6,8 @@
 	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
+		vm.initialized = false;
+
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function() {
@@ -14,7 +16,7 @@
 		vm.searchOptions = {
 			keyword: "",
 			isAdvancedSearchEnabled: false,
-			searchKeywordChanged:false
+			searchKeywordChanged: false
 		}
 
 		vm.dateOptions = {
@@ -95,22 +97,18 @@
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 		}
 
-		vm.scheduleDateChanged = function () {
-			vm.loadTeams();
-			vm.allAgents = undefined;
-			vm.paginationOptions.pageNumber = 1;
-			vm.loadSchedules(vm.paginationOptions.pageNumber);
-		}
-
-		vm.isLoading = false;
-		vm.loadTeams = function () {
+		vm.scheduleDateChanged = function() {
 			teamScheduleSvc.loadAllTeams.query({
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
-			}).$promise.then(function (result) {
+			}).$promise.then(function(result) {
 				vm.Teams = result;
+				vm.allAgents = undefined;
+				vm.paginationOptions.pageNumber = 1;
+				vm.loadSchedules(vm.paginationOptions.pageNumber);
 			});
 		}
 
+		vm.isLoading = false;
 	
 		function getScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
 			var start = (currentPageIndex - 1) * pageSize;
@@ -317,7 +315,6 @@
 
 				});
 			}
-			
 		};
 
 		function buildToggler(navID) {
@@ -326,6 +323,11 @@
 			}, 200);
 			return debounceFn;
 		}
+
+		var loadTeamPromise = teamScheduleSvc.loadAllTeams.query({ date: vm.scheduleDateMoment().format("YYYY-MM-DD") }).$promise;
+		loadTeamPromise.then(function(result) {
+			vm.Teams = result;
+		});
 
 		var loadWithoutReadModelTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_NoReadModel_35609' }).$promise;
 		loadWithoutReadModelTogglePromise.then(function (result) {
@@ -358,11 +360,12 @@
 		});
 
 		vm.Init = function () {
-			vm.loadTeams();
-			$q.all([loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise, absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {
+			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
+				absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {
 				if (vm.isSearchScheduleEnabled) {
 					vm.searchSchedules();
 				}
+				vm.initialized = true;
 			});
 
 			createDocumentListeners();

@@ -6,7 +6,7 @@
 			'$templateCache', function($templateCache) {
 				$templateCache.put("template/timepicker/timepicker.html",
 				
-					"<table>" +
+					"<table class=\"timepicker\">" +
 					"  <tbody>" +
 					"    <tr>" +
 					"      <td class=\"form-group\" ng-class=\"{'has-error': invalidHours}\">" +
