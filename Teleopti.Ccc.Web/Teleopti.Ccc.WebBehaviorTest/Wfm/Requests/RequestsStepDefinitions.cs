@@ -48,5 +48,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.AssertAnyContains(".request-name .ui-grid-cell-contents", userName);
 		}
 
+		[When(@"I sort the request list by descending agent name")]
+		public void WhenISortTheRequestListByDescendingAgentName()
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-header-cell:contains('AgentName') .ui-grid-column-menu-button");
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-items li:nth(1) button");
+		}
+
+		[Then(@"I should see the request from '(.*)' before the request from '(.*)' in the list")]
+		public void ThenIShouldSeeTheRequestFromBeforeTheRequestFromInTheList(string agentName1, string agentName2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".ui-grid-row:contains('{0}') + .ui-grid-row:contains('{1}')", agentName1, agentName2);
+		}
+
+
 	}
 }

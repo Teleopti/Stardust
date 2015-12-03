@@ -30,7 +30,6 @@ Scenario: Display requests
 	Then I should see a request from 'Ashley' in the list
 	And I should see a request from 'John' in the list
 
-@ignore
 Scenario: Sort requests
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
@@ -42,8 +41,9 @@ Scenario: Sort requests
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
 	| Update Time  | 2015-11-01 14:00 |
-	And I view wfm requests
-	When I sort the request list by ascending update time
+	When I view wfm requests
+	And I select to loading requests from '2015-10-01' to '2015-10-04'
+	And I sort the request list by descending agent name
 	Then I should see the request from 'John' before the request from 'Ashley' in the list
 
 @ignore
