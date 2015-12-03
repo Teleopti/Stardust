@@ -7,6 +7,7 @@
 		var vm = this;
 
 		vm.permissionAddFullDayAbsence = false;
+		vm.permissionAddIntradayAbsence = false;
 
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
@@ -113,6 +114,7 @@
 			teamScheduleSvc.getPermissions.query({
 			}).$promise.then(function(permissions) {
 				vm.permissionAddFullDayAbsence = permissions.IsAddFullDayAbsenceAvailable;
+				vm.permissionAddIntradayAbsence = permissions.IsAddIntradayAbsenceAvailable;
 			});
 		}
 

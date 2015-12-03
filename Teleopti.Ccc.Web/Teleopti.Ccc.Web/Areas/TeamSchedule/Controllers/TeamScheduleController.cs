@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var permissions = new PermissionsViewModel()
 			{
-				IsAddFullDayAbsenceAvailable =
-					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)
+				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)
 			};
 
 			return Json(permissions);

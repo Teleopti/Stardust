@@ -12,8 +12,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
@@ -428,6 +428,32 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 	[TestFixture]
 	internal class TeamScheduleControllerTest
 	{
+		[Test]
+		public void ShouldGetFullDayAbsencePermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x=>x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null);
+			var result = target.GetPermissions();
+
+			result.Content.IsAddFullDayAbsenceAvailable.Should().Be.EqualTo(expectedResult);
+		}		
+		
+		[Test]
+		public void ShouldGetIntradayAbsencePermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)).Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null);
+			var result = target.GetPermissions();
+
+			result.Content.IsAddIntradayAbsenceAvailable.Should().Be.EqualTo(expectedResult);
+		}
+
 		[Test]
 		public void ShouldAssignOperatePersionForAddFullDayAbsence()
 		{
