@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -69,19 +70,28 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			Logger.InfoFormat("The Application is starting. ");
 
 			var builder = BuildIoc();
+
+			builder.Register(c => new SdkConfigReader(() =>
+			{
+				var webSettings = new WebSettings
+				{
+					Settings = c.Resolve<ISharedSettingsQuerier>()
+						.GetSharedSettings()
+						.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
+				};
+				return webSettings;
+			})).As<IConfigReader>().AsSelf().SingleInstance();
+
 			var container = builder.Build();
 			AutofacHostFactory.Container = container;
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
-			var sharedSettingsQuerier = container.Resolve<ISharedSettingsQuerier>();
-
-			var settings = sharedSettingsQuerier.GetSharedSettings();
-			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
-
-			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
+			
+			var settings = container.Resolve<SdkConfigReader>();
+			var passwordPolicyDocument = XDocument.Parse(settings.AppConfig("PasswordPolicy"));
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 			var initializeApplication = new InitializeApplication(messageBroker);
-			initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings);
-			new InitializeMessageBroker(messageBroker).Start(appSettings);
+			initializeApplication.Start(new SdkState(), passwordPolicyService, settings.ApplicationConfigs());
+			new InitializeMessageBroker(messageBroker).Start(settings.ApplicationConfigs());
 
 			//////TODO: Remove this when payroll stuff are fixed! Only here because of payrolls...//////
 			// webconfig key "Tenancy" can also be removed. And registration of LoadAllTenants in SDK... Should only go to tenant server/web when logging in
@@ -101,6 +111,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			////////////////////////////////////////////////////////////////////////////////////////////
 
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
+
+			container.Resolve<IHangFireClient>().Configure();
 
 			Logger.Info("Initialized application");
 		}
