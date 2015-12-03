@@ -3,7 +3,7 @@
 
 	describe('Requests overview directive', function() {
 
-		var $compile, $rootScope, requestsData, requestsDefinitions;
+		var $compile, $rootScope, requestsDataService, requestsDefinitions;
 
 		var targetElement, targetScope;
 	
@@ -13,23 +13,23 @@
 		beforeEach(function() {
 			var requestsDataService = new FakeRequestsDataService();
 			module(function($provide) {
-				$provide.service('requestsData', function() {
+				$provide.service('requestsDataService', function () {
 					return requestsDataService;
 				});
 			});
 		});
 
-		beforeEach(inject(function(_$compile_, _$rootScope_, _requestsData_, _requestsDefinitions_) {
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
-			requestsData = _requestsData_;
+			requestsDataService = _requestsDataService_;
 			requestsDefinitions = _requestsDefinitions_;
 			targetScope = $rootScope.$new();
 		}));
 
 
 		it("show requests table container", function () {
-			requestsData.setRequests({ data: [] });
+			requestsDataService.setRequests({ data: [] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
@@ -43,7 +43,7 @@
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
 		
-			requestsData.setRequests({data: [request]});
+			requestsDataService.setRequests({ data: [request] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);		
@@ -53,13 +53,13 @@
 
 		it("should not request data when filter contains error", function() {
 
-			requestsData.setRequests({ data: [] });
+			requestsDataService.setRequests({ data: [] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 
-			requestsData.reset();
+			requestsDataService.reset();
 			scope.requestsOverview.requestsFilter = {
 				period: {
 					startDate: moment().add(1, 'day').toDate(),
@@ -68,18 +68,18 @@
 			};
 		
 			targetScope.$digest();			
-			expect(requestsData.getHasSentRequests()).toBeFalsy();
+			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 		});
 
 		it("should request data when filter change to valid values", function () {
 
-			requestsData.setRequests({ data: [] });
+			requestsDataService.setRequests({ data: [] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 
-			requestsData.reset();
+			requestsDataService.reset();
 			scope.requestsOverview.requestsFilter = {
 				period: {
 					startDate:new Date(),
@@ -88,7 +88,7 @@
 			};
 
 			targetScope.$digest();
-			expect(requestsData.getHasSentRequests()).toBeTruthy();
+			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
 
 		function getInnerScope(element) {

@@ -7,9 +7,9 @@
 		.directive('requestsOverview', requestsOverviewDirective);
 
 
-	requestsOverviewController.$inject = ['requestsData'];
+	requestsOverviewController.$inject = ['requestsDataService'];
 
-	function requestsOverviewController(requestsData) {
+	function requestsOverviewController(requestsDataService) {
 		var vm = this;
 
 		vm.requests = [];
@@ -26,7 +26,7 @@
 
 		function reload(requestsFilter) {
 			vm.loaded = false;
-			requestsData.getAllRequestsPromise(requestsFilter).then(function (requests) {
+			requestsDataService.getAllRequestsPromise(requestsFilter).then(function (requests) {
 				vm.requests = requests.data;
 				vm.loaded = true;
 			});

@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsData', ['$http', 'requestsDefinitions', requestsDataService]);
+	angular.module('wfm.requests').service('requestsDataService', ['$http', 'requestsDefinitions', requestsDataService]);
 		
 
 	function requestsDataService($http, requestsDefinitions) {
