@@ -558,4 +558,9 @@
 	<state name="HCI">45</state>
 	<state name="Logoff">LOGGED-OFF</state>
   </RtaState>
+<RtaState name="InContact" platformTypeId="4438CED2-40CA-4F5E-B5DD-3F264B0A6997">
+	<state name="Logoff">0</state>
+	<state name="Logon">1</state>
+	<state name="Ready">2</state>
+</RtaState>
 </Rta>
