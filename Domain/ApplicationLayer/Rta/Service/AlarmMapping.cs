@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string StateCode { get; set; }
 		public Guid? ActivityId { get; set; }
 
-		public Guid AlarmTypeId { get; set; }
+		public Guid RuleId { get; set; }
 		public string AlarmName { get; set; }
 		public Adherence? Adherence { get; set; }
 		public int? StaffingEffect { get; set; }

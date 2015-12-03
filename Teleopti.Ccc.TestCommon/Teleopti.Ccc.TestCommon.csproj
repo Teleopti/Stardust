@@ -237,7 +237,7 @@
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelReader.cs" />
-    <Compile Include="FakeRepositories\FakeAlarmTypeRepository.cs" />
+    <Compile Include="FakeRepositories\FakeRtaRuleRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
     <Compile Include="FakeRepositories\FakeRtaStateGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeStateGroupActivityAlarmRepository.cs" />

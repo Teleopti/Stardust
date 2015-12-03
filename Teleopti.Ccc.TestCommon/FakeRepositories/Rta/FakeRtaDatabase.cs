@@ -261,17 +261,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			var platformTypeIdGuid = platformTypeId ?? new Guid(_platformTypeId);
 
-			IAlarmType alarmType = null;
+			IRtaRule _rtaRule = null;
 			if (alarmId != null)
 			{
-				alarmType = new AlarmType();
-				alarmType.SetId(alarmId);
-				alarmType.SetBusinessUnit(_businessUnit);
-				alarmType.StaffingEffect = staffingEffect;
-				alarmType.ThresholdTime = threshold;
-				alarmType.Adherence = adherence;
+				_rtaRule = new RtaRule();
+				_rtaRule.SetId(alarmId);
+				_rtaRule.SetBusinessUnit(_businessUnit);
+				_rtaRule.StaffingEffect = staffingEffect;
+				_rtaRule.ThresholdTime = threshold;
+				_rtaRule.Adherence = adherence;
 				if (isDeleted)
-					((IDeleteTag) alarmType).SetDeleted();
+					((IDeleteTag) _rtaRule).SetDeleted();
 			}
 
 			IRtaStateGroup stateGroup = null;
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			}
 
 			var mapping = new StateGroupActivityAlarm(stateGroup, activity);
-			mapping.AlarmType = alarmType;
+			mapping.RtaRule = _rtaRule;
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			StateGroupActivityAlarmRepository.Add(mapping);

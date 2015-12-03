@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldHaveAdherenceColumn()
 		{
-			var target = new AlarmControlPresenter(new IAlarmType[] {}, new FakeView(), new[] {new AdherenceColumn()});
+			var target = new AlarmControlPresenter(new IRtaRule[] {}, new FakeView(), new[] {new AdherenceColumn()});
 
 			target.Columns.SingleOrDefault(x => x.Text == Resources.Adherence).Should().Not.Be.Null();
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldHaveAdherenceColumnAfterStaffingEffect()
 		{
-			var target = new AlarmControlPresenter(new IAlarmType[] {}, new FakeView(), new[] {new AdherenceColumn()});
+			var target = new AlarmControlPresenter(new IRtaRule[] {}, new FakeView(), new[] {new AdherenceColumn()});
 
 			var staffingEffect = target.Columns.IndexOf(target.Columns.Single(x => x.Text == Resources.StaffingEffect));
 			var adherence = target.Columns.IndexOf(target.Columns.Single(x => x.Text == Resources.Adherence));
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldDisplayInAdherence()
 		{
-			var alarmType = new AlarmType {Adherence = Adherence.In};
-			var target = new AlarmControlPresenter(new IAlarmType[] {alarmType}, new FakeView(), new[] {new AdherenceColumn()});
+			var rule = new RtaRule {Adherence = Adherence.In};
+			var target = new AlarmControlPresenter(new IRtaRule[] {rule}, new FakeView(), new[] {new AdherenceColumn()});
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			var info = new GridStyleInfo();
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldDisplayOutOfAdherence()
 		{
-			var alarmType = new AlarmType {Adherence = Adherence.Out};
-			var target = new AlarmControlPresenter(new IAlarmType[] {alarmType}, new FakeView(), new[] {new AdherenceColumn()});
+			var rule = new RtaRule {Adherence = Adherence.Out};
+			var target = new AlarmControlPresenter(new IRtaRule[] {rule}, new FakeView(), new[] {new AdherenceColumn()});
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			var info = new GridStyleInfo();
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldDisplayNeutralAdherence()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.Neutral };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.Neutral };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			var info = new GridStyleInfo();
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldBeComboBox()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.Neutral };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.Neutral };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			var info = new GridStyleInfo();
@@ -90,49 +90,49 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldUpdateInAdherence()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.Neutral };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.Neutral };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, adherence.Index, new GridStyleInfo { CellValue = Resources.InAdherence }, new StyleModifyType()));
 
-			alarmType.Adherence.Should().Be(Adherence.In);
+			rule.Adherence.Should().Be(Adherence.In);
 		}
 
 		[Test]
 		public void ShouldUpdateOutOfAdherence()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.Neutral };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.Neutral };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, adherence.Index, new GridStyleInfo { CellValue = Resources.OutOfAdherence }, new StyleModifyType()));
 
-			alarmType.Adherence.Should().Be(Adherence.Out);
+			rule.Adherence.Should().Be(Adherence.Out);
 		}
 
 		[Test]
 		public void ShouldUpdateNeutralAdherence()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.In };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.In };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, adherence.Index, new GridStyleInfo { CellValue = Resources.NeutralAdherence }, new StyleModifyType()));
 
-			alarmType.Adherence.Should().Be(Adherence.Neutral);
+			rule.Adherence.Should().Be(Adherence.Neutral);
 		}
 
 		[Test]
 		public void ShouldUpdateEmpty()
 		{
-			var alarmType = new AlarmType { Adherence = Adherence.In };
-			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var rule = new RtaRule { Adherence = Adherence.In };
+			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AdherenceColumn() });
 			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, adherence.Index, new GridStyleInfo { CellValue = string.Empty }, new StyleModifyType()));
 
-			alarmType.Adherence.Should().Be(null);
+			rule.Adherence.Should().Be(null);
 		}
 	}
 

@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.WinCode.Settings
 		{
 			get { return ContainedEntity.StateGroup; }
 		}
-		public IAlarmType AlarmType
+		public IRtaRule RtaRule
 		{
-			get { return ContainedEntity.AlarmType; }
-			set { ContainedEntity.AlarmType = value; }
+			get { return ContainedEntity.RtaRule; }
+			set { ContainedEntity.RtaRule = value; }
 		}
 
 		public IStateGroupActivityAlarm ContainedOriginalEntity

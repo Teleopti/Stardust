@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ActivityId = fromStorage.ScheduledId;
 			NextActivityId = fromStorage.ScheduledNextId;
 			NextActivityStartTime = fromStorage.NextStart;
-			AlarmTypeId = fromStorage.AlarmId;
-			AlarmTypeStartTime = fromStorage.StateStart;
+			RuleId = fromStorage.AlarmId;
+			RuleStartTime = fromStorage.StateStart;
 			StaffingEffect = fromStorage.StaffingEffect;
 			Adherence = (Adherence?)fromStorage.Adherence;
 		}
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid? NextActivityId { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
 
-		public Guid? AlarmTypeId { get; set; }
-		public DateTime? AlarmTypeStartTime { get; set; }
+		public Guid? RuleId { get; set; }
+		public DateTime? RuleStartTime { get; set; }
 		public double? StaffingEffect { get; set; }
 		public Adherence? Adherence { get; set; }
 	}
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return stored.get(s => s.BatchId);
 		}
 
-		public static Guid? AlarmTypeId(this StoredStateInfo stored)
+		public static Guid? RuleId(this StoredStateInfo stored)
 		{
-			return stored.get(s => s.AlarmTypeId);
+			return stored.get(s => s.RuleId);
 		}
 
 		public static DateTime ReceivedTime(this StoredStateInfo stored)

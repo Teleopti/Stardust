@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// <summary>
     /// Repository for alarm types
     /// </summary>
-    public class AlarmTypeRepository : Repository<IAlarmType>, IAlarmTypeRepository
+    public class RtaRuleRepository : Repository<IRtaRule>, IRtaRuleRepository
     {
-        public AlarmTypeRepository(IUnitOfWork unitOfWork)
+        public RtaRuleRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
             : base(unitOfWork)
 #pragma warning restore 618
         {
         }
 
-	    public AlarmTypeRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    public RtaRuleRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 	    }
     }

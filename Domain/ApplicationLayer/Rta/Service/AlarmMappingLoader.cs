@@ -37,33 +37,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				let statecode = c != null ? c.StateCode : null
 				let platformTypeId = c != null ? c.PlatformTypeId : Guid.Empty
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
-				let alarmType = m.AlarmType != null && !alarmIsSoftDeleted(m.AlarmType) ? m.AlarmType : new AlarmType()
-				let alarmTypeId = alarmType.Id.HasValue ? alarmType.Id.Value : Guid.Empty
+				let rule = m.RtaRule != null && !alarmIsSoftDeleted(m.RtaRule) ? m.RtaRule : new RtaRule()
+				let ruleId = rule.Id.HasValue ? rule.Id.Value : Guid.Empty
 				select new AlarmMapping
 				{
 					BusinessUnitId = businessUnitId,
 					PlatformTypeId = platformTypeId,
 					StateCode = statecode,
 					ActivityId = activityId,
-					AlarmTypeId = alarmTypeId,
-					AlarmName = alarmType.Description.Name,
-					Adherence = _appliedAdherence.ForAlarm(m.AlarmType),
-					StaffingEffect = (int) alarmType.StaffingEffect,
-					DisplayColor = alarmType.DisplayColor.ToArgb(),
-					ThresholdTime = alarmType.ThresholdTime.Ticks
+					RuleId = ruleId,
+					AlarmName = rule.Description.Name,
+					Adherence = _appliedAdherence.ForAlarm(m.RtaRule),
+					StaffingEffect = (int) rule.StaffingEffect,
+					DisplayColor = rule.DisplayColor.ToArgb(),
+					ThresholdTime = rule.ThresholdTime.Ticks
 				}
 				).ToArray();
 		}
 
-		private static bool alarmIsSoftDeleted(IAlarmType alarmType)
+		private static bool alarmIsSoftDeleted(IRtaRule _rtaRule)
 		{
-			return alarmType != null && ((IDeleteTag)alarmType).IsDeleted;
+			return _rtaRule != null && ((IDeleteTag)_rtaRule).IsDeleted;
 		}
 
 		private static Guid tryGetBusinessUnitId(IStateGroupActivityAlarm m)
 		{
 			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;
-			if (m.AlarmType != null) return m.AlarmType.BusinessUnit.Id.Value;
+			if (m.RtaRule != null) return m.RtaRule.BusinessUnit.Id.Value;
 			return Guid.Empty;
 		}
 	}

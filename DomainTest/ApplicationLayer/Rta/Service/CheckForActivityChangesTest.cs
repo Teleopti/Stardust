@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Context.SimulateRestart();
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.StoredState.AlarmTypeId.Should().Be(alarm);
+			Database.StoredState.RuleId.Should().Be(alarm);
 		}
 	}
 }

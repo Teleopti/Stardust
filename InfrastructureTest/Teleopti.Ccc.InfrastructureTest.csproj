@@ -434,7 +434,7 @@
     <Compile Include="Repositories\AvailableDataRepositoryTest.cs" />
     <Compile Include="Repositories\BudgetGroupRepositoryTest.cs" />
     <Compile Include="Repositories\CollectionHelperTest.cs" />
-    <Compile Include="Repositories\AlarmTypeRepositoryTest.cs" />
+    <Compile Include="Repositories\RtaRuleRepositoryTest.cs" />
     <Compile Include="Repositories\BudgetDayRepositoryTest.cs" />
     <Compile Include="Repositories\MasterActivityRepositoryTest.cs" />
     <Compile Include="Repositories\ExtendedPreferenceTemplateRepositoryTest.cs" />

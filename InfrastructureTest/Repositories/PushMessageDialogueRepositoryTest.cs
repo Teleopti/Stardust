@@ -13,11 +13,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-
-
-    /// <summary>
-    /// Tests AlarmTypeRepository
-    /// </summary>
     [TestFixture]
     [Category("LongRunning")]
     public class PushMessageDialogueRepositoryTest : RepositoryTest<IPushMessageDialogue>

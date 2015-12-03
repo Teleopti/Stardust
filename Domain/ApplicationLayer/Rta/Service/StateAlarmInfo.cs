@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _alarmMapping.Adherence;
 		}
 
-		public Guid? AlarmTypeId()
+		public Guid? RuleId()
 		{
-			return _alarmMapping.AlarmTypeId;
+			return _alarmMapping.RuleId;
 		}
 
 		public string AlarmName()

@@ -424,7 +424,7 @@
     <Compile Include="Domain\IActivityRestriction.cs" />
     <Compile Include="Domain\IAffectedPersonSkillService.cs" />
     <Compile Include="Domain\IAggregateSkillStaffPeriod.cs" />
-    <Compile Include="Domain\IAlarmType.cs" />
+    <Compile Include="Domain\IRtaRule.cs" />
     <Compile Include="Domain\IAvailabilityDay.cs" />
     <Compile Include="Domain\IAvailabilityRestriction.cs" />
     <Compile Include="Domain\IAvailabilityRotation.cs" />

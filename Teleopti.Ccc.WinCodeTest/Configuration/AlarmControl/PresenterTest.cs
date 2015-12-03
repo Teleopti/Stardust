@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
     {
         private AlarmControlPresenter _target;
         private MockRepository mocks;
-        private IList<IAlarmType> _alarms;
+        private IList<IRtaRule> _rules;
         private IAlarmControlView _view;
         private IPerson _createPerson;
         private DateTime _createDate;
@@ -30,27 +30,27 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
         {
             mocks = new MockRepository();
 
-            _alarms = new List<IAlarmType>();
-            _alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _alarms.Add(new AlarmType(new Description("moo"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            SetCreatedInfo(_alarms);
+            _rules = new List<IRtaRule>();
+            _rules.Add(new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _rules.Add(new RtaRule(new Description("moo"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _rules.Add(new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _rules.Add(new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            SetCreatedInfo(_rules);
             _view = mocks.StrictMock<IAlarmControlView>();
-            _target = new AlarmControlPresenter(_alarms, _view, null);
+            _target = new AlarmControlPresenter(_rules, _view, null);
         }
 
-        private void SetCreatedInfo(IEnumerable<IAlarmType> alarms)
+        private void SetCreatedInfo(IEnumerable<IRtaRule> alarms)
         {
             _createPerson = PersonFactory.CreatePerson();
             _createDate = new DateTime(2009, 1, 1);
             _createPerson.PermissionInformation.SetDefaultTimeZone((
                                                                        TimeZoneInfo.FindSystemTimeZoneById(
                                                                            "W. Europe Standard Time")));
-            foreach (AlarmType alarmType in alarms)
+            foreach (RtaRule rule in alarms)
             {
-                ReflectionHelper.SetUpdatedBy(alarmType, _createPerson);
-                ReflectionHelper.SetUpdatedOn(alarmType, _createDate.AddHours(1));
+                ReflectionHelper.SetUpdatedBy(rule, _createPerson);
+                ReflectionHelper.SetUpdatedOn(rule, _createDate.AddHours(1));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
         {
             var e = new GridRowColCountEventArgs();
             _target.QueryRowCount(null, e);
-            Assert.AreEqual(_alarms.Count, e.Count);
+            Assert.AreEqual(_rules.Count, e.Count);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
         [Test]
         public void QueryCellInfoWithBadIndex()
         {
-            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view, null);
+            _target = new AlarmControlPresenter(new List<IRtaRule>(), _view, null);
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(-1, -1, style);
             _target.QueryCellInfo(null, e);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
         [Test]
         public void QueryHeaderShouldReturnColumnHeader()
         {
-            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view, null);
+            _target = new AlarmControlPresenter(new List<IRtaRule>(), _view, null);
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.Name, style);
             _target.QueryCellInfo(null, e);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Name, style, StyleModifyType.Changes);
             e.Style.Text = "foo";
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual("foo", _alarms[0].Description.Name);
+            Assert.AreEqual("foo", _rules[0].Description.Name);
         }
 
         [Test]
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Time, style, StyleModifyType.Changes);
             e.Style.CellValue = 45.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(45.0d, _alarms[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(45.0d, _rules[0].ThresholdTime.TotalSeconds);
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.StaffingEffect, style, StyleModifyType.Changes);
             e.Style.CellValue = 45.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(45.0d, _alarms[0].StaffingEffect);
+            Assert.AreEqual(45.0d, _rules[0].StaffingEffect);
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Color, style, StyleModifyType.Changes);
             e.Style.CellValue = Color.Red;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(Color.Red, _alarms[0].DisplayColor);
+            Assert.AreEqual(Color.Red, _rules[0].DisplayColor);
         }
 
         [Test]
@@ -214,25 +214,25 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var style = new GridStyleInfo();
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Name, style, StyleModifyType.Changes);
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual("userALARM", _alarms[0].Description.Name);
+            Assert.AreEqual("userALARM", _rules[0].Description.Name);
 
             style = new GridStyleInfo();
             e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Time, style, StyleModifyType.Changes);
             e.Style.CellValue = 0.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(0.0d, _alarms[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(0.0d, _rules[0].ThresholdTime.TotalSeconds);
 
             style = new GridStyleInfo();
             e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.StaffingEffect, style, StyleModifyType.Changes);
             e.Style.CellValue = 0.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(0.0d, _alarms[0].StaffingEffect);
+            Assert.AreEqual(0.0d, _rules[0].StaffingEffect);
 
             style = new GridStyleInfo();
             e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Color, style, StyleModifyType.Changes);
             e.Style.CellValue = Color.Empty;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(Color.Blue, _alarms[0].DisplayColor);
+            Assert.AreEqual(Color.Blue, _rules[0].DisplayColor);
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, 2, style, StyleModifyType.Changes);
             e.Style.CellValue = -10.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(1.0d, _alarms[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(1.0d, _rules[0].ThresholdTime.TotalSeconds);
         }
 
         [Test]
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             e.Style.CellValue = "moo";
             mocks.ReplayAll();
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual("userALARM", _alarms[0].Description.Name);
+            Assert.AreEqual("userALARM", _rules[0].Description.Name);
         }
     }
 }

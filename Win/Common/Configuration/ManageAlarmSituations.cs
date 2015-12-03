@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_view = new ManageAlarmSituationView(gridControlAlarms);
 			var currentUnitOfWork = UnitOfWorkFactory.CurrentUnitOfWork();
 			_view.Presenter = new ManageAlarmSituationPresenter(UnitOfWorkFactory.Current,
-																new AlarmTypeRepository(currentUnitOfWork),
+																new RtaRuleRepository(currentUnitOfWork),
 																new RtaStateGroupRepository(currentUnitOfWork),
 																new ActivityRepository(currentUnitOfWork),
 																new StateGroupActivityAlarmRepository(currentUnitOfWork),

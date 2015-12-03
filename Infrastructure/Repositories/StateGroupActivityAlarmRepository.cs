@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateCriteria(typeof (StateGroupActivityAlarm))
 				.SetFetchMode("Activity", FetchMode.Join)
 				.SetFetchMode("StateGroup", FetchMode.Join)
-				.SetFetchMode("AlarmType", FetchMode.Join)
+				.SetFetchMode("RtaRule", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IStateGroupActivityAlarm>();
 		}

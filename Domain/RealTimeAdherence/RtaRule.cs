@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-	public class AlarmType : VersionedAggregateRootWithBusinessUnit, IAlarmType, IDeleteTag
+	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule, IDeleteTag
     {
         private Description _description;
         private Color _displayColor;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private bool _isDeleted;
 		private Adherence? _adherence;
 
-		public AlarmType(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
+		public RtaRule(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
         {
             _description = description;
             _displayColor = color;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             _staffingEffect = staffingEffect;
         }
 
-		public AlarmType()
+		public RtaRule()
         {}
 
         public virtual double StaffingEffect

@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private IActivity activity;
         private IRtaStateGroup stateGroup;
-        private IAlarmType alarmType;
+        private IRtaRule _rtaRule;
 
     	protected override void ConcreteSetup()
         {
             stateGroup = new RtaStateGroup("state group", true, true);
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            alarmType = new AlarmType(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50),0.0);
-            PersistAndRemoveFromUnitOfWork(alarmType);
+            _rtaRule = new RtaRule(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50),0.0);
+            PersistAndRemoveFromUnitOfWork(_rtaRule);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(activity);
 
             IStateGroupActivityAlarm stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity);
-            stateGroupActivityAlarm.AlarmType = alarmType;
+            stateGroupActivityAlarm.RtaRule = _rtaRule;
             return stateGroupActivityAlarm;
         }
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IStateGroupActivityAlarm org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Activity.Description.Name, loadedAggregateFromDatabase.Activity.Description.Name);
-            Assert.AreEqual(org.AlarmType.Id, loadedAggregateFromDatabase.AlarmType.Id);
+            Assert.AreEqual(org.RtaRule.Id, loadedAggregateFromDatabase.RtaRule.Id);
             Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
         }
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, result.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].Activity));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateGroup));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].AlarmType));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].RtaRule));
         }
     }
 }

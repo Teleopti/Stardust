@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.RealTimeAdherence"
                    default-access="field.camelcase-underscore">
   
-	<class name="AlarmType">
+	<class name="RtaRule">
 		<!--IEntity-->
 		<id name="Id"
 				type="guid"
@@ -17,7 +17,7 @@
 		<many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
-					 foreign-key="FK_AlarmType_Person_UpdatedBy" />
+					 foreign-key="FK_RtaRule_Person_UpdatedBy" />
 		<property name="UpdatedOn"
 				  type="UtcDateTime"
 				  not-null="true"/>
@@ -48,7 +48,7 @@
     <many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
             access="nosetter.camelcase-underscore" 
-					 not-null="true" foreign-key="FK_AlarmType_BusinessUnit"/>
+					 not-null="true" foreign-key="FK_RtaRule_BusinessUnit"/>
     <property name="IsDeleted"
           type="boolean"
           not-null="true"/>

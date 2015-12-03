@@ -37,6 +37,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-11-14
         /// </remarks>
-        IAlarmType AlarmType { get; set; }
+        IRtaRule RtaRule { get; set; }
     }
 }

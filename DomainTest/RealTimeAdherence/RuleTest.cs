@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -9,9 +8,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 {
 	[TestFixture]
-	public class AlarmTypeTest
+	public class RuleTest
 	{
-		private AlarmType _target;
+		private RtaRule _target;
 		private readonly Description _description = new Description("Wrong state");
 		private readonly Color _color = Color.DeepPink;
 		private readonly TimeSpan _thresholdTime = TimeSpan.FromSeconds(150);
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		[SetUp]
 		public void Setup()
 		{
-			_target = new AlarmType(_description, _color, _thresholdTime, _staffingEffect);
+			_target = new RtaRule(_description, _color, _thresholdTime, _staffingEffect);
 		}
 
 		[Test]
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		[Test]
 		public void ShouldNotThrowWhenNoAdherence()
 		{
-			var target = new AlarmType();
+			var target = new RtaRule();
 
 			Assert.DoesNotThrow(() =>
 			{

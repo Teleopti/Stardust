@@ -616,7 +616,7 @@
     <Compile Include="Repositories\AbsenceRepository.cs" />
     <Compile Include="Repositories\AvailableDataRepository.cs" />
     <Compile Include="Repositories\CollectionHelper.cs" />
-    <Compile Include="Repositories\AlarmTypeRepository.cs" />
+    <Compile Include="Repositories\RtaRuleRepository.cs" />
     <Compile Include="Repositories\LicenseRepository.cs" />
     <Compile Include="Repositories\MultiplicatorRepository.cs" />
     <Compile Include="Repositories\PayrollExportRepository.cs" />

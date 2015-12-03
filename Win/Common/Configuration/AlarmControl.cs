@@ -8,12 +8,12 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using AlarmTypeRepository=Teleopti.Ccc.Infrastructure.Repositories.AlarmTypeRepository;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private readonly IEnumerable<IAlarmControlPresenterDecorator> _decorators;
 		private IUnitOfWork _uow;
-		private AlarmTypeRepository _alarmTypeRepository;
-		private readonly List<IAlarmType> _alarmTypes = new List<IAlarmType>();
+		private RtaRuleRepository _rtaRuleRepository;
+		private readonly List<IRtaRule> _alarmTypes = new List<IRtaRule>();
 		private AlarmControlView _view;
 		private int _selectedItem =-1;
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
-			var atype = new AlarmType(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), 0.0);
+			var atype = new RtaRule(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), 0.0);
 			_alarmTypes.Add(atype);
 			_view.LoadGrid();
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{
 					var item = _alarmTypes[_selectedItem];
 					if(item.Id.HasValue)
-						_alarmTypeRepository.Remove(item);
+						_rtaRuleRepository.Remove(item);
 					_alarmTypes.Remove(item);
 					_selectedItem = -1;
 				}
@@ -102,13 +102,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			foreach (var type in _alarmTypes.Where(type => type.Id == null))
 			{
 				if(!alarmTypeValuesAreOk(type)) return;
-				_alarmTypeRepository.Add(type);
+				_rtaRuleRepository.Add(type);
 			}
 			if (!_decorators.IsNullOrEmpty())
 				_alarmTypes.ForEach(checkAdherenceType);
 		}
 
-		private bool alarmTypeValuesAreOk(IAlarmType type)
+		private bool alarmTypeValuesAreOk(IRtaRule type)
 		{
 			if (String.IsNullOrEmpty(type.Description.Name ))
 			{
@@ -128,9 +128,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return true;
 		}
 
-		private static void checkAdherenceType(IAlarmType alarmType)
+		private static void checkAdherenceType(IRtaRule _rtaRule)
 		{
-			if (!alarmType.Adherence.HasValue)
+			if (!_rtaRule.Adherence.HasValue)
 				throw new ValidationException(Resources.AdherenceCannotBeEmpty);
 		}
 
@@ -160,9 +160,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void loadAlarmTypes()
 		{
-			_alarmTypeRepository = new AlarmTypeRepository(_uow);
+			_rtaRuleRepository = new RtaRuleRepository(_uow);
 			_alarmTypes.Clear();
-			_alarmTypes.AddRange(_alarmTypeRepository.LoadAll());
+			_alarmTypes.AddRange(_rtaRuleRepository.LoadAll());
 
 			if (_view!=null)
 			{

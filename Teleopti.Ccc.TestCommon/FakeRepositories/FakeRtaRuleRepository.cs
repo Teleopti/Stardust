@@ -6,31 +6,31 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeAlarmTypeRepository : IAlarmTypeRepository
+	public class FakeRtaRuleRepository : IRtaRuleRepository
 	{
-		private readonly IList<IAlarmType> _data = new List<IAlarmType>();
+		private readonly IList<IRtaRule> _data = new List<IRtaRule>();
 
-		public void Add(IAlarmType entity)
+		public void Add(IRtaRule entity)
 		{
 			_data.Add(entity);
 		}
 
-		public void Remove(IAlarmType entity)
+		public void Remove(IRtaRule entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IAlarmType Get(Guid id)
+		public IRtaRule Get(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<IAlarmType> LoadAll()
+		public IList<IRtaRule> LoadAll()
 		{
 			return _data;
 		}
 
-		public IAlarmType Load(Guid id)
+		public IRtaRule Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IAlarmType> entityCollection)
+		public void AddRange(IEnumerable<IRtaRule> entityCollection)
 		{
 			throw new NotImplementedException();
 		}

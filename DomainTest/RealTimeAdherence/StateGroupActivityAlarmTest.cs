@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private MockRepository mocks;
         private IActivity activity;
         private IRtaStateGroup rtaStateGroup;
-        private IAlarmType alarmType;
+        private IRtaRule _rtaRule;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             mocks = new MockRepository();
             activity = mocks.StrictMock<IActivity>();
             rtaStateGroup = mocks.StrictMock<IRtaStateGroup>();
-            alarmType = mocks.StrictMock<IAlarmType>();
+            _rtaRule = mocks.StrictMock<IRtaRule>();
             target = new StateGroupActivityAlarm(rtaStateGroup,activity);
         }
 
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(activity,target.Activity);
             Assert.AreEqual(rtaStateGroup,target.StateGroup);
 
-            target.AlarmType = alarmType;
+            target.RtaRule = _rtaRule;
 
-            Assert.AreEqual(alarmType,target.AlarmType);
+            Assert.AreEqual(_rtaRule,target.RtaRule);
         }
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
 			clone = (IStateGroupActivityAlarm)target.Clone();
 			clone.Id.Should().Be(target.Id);
-			clone.AlarmType.Should().Be(target.AlarmType);
+			clone.RtaRule.Should().Be(target.RtaRule);
 		}
     }
 }

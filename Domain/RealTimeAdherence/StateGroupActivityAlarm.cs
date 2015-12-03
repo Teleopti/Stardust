@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
-        private IAlarmType _alarmType;
+        private IRtaRule _rtaRule;
 
         public StateGroupActivityAlarm(IRtaStateGroup stateGroup, IActivity activity)
         {
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             get { return _stateGroup; }
         }
 
-        public virtual IAlarmType AlarmType
+        public virtual IRtaRule RtaRule
         {
-            get { return _alarmType; }
-            set { _alarmType = value; }
+            get { return _rtaRule; }
+            set { _rtaRule = value; }
         }
 
 		public virtual object Clone()

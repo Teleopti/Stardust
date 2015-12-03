@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
-			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, StaffingEffect);
+			var rule = new RtaRule(new Description(Name), color, TimeSpan.Zero, StaffingEffect);
 
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (Activity != null)
 				activity = activityRepository.LoadAll().First(a => a.Name == Activity);
 
-			var stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity) { AlarmType = alarmType };
+			var stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity) { RtaRule = rule };
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				Adherence adherence;
 				if(Enum.TryParse(Adherence, true, out adherence))
-				alarmType.Adherence = adherence;
+				rule.Adherence = adherence;
 			}
 			
-			var alarmTypeRepository = new AlarmTypeRepository(currentUnitOfWork);
-			alarmTypeRepository.Add(alarmType);
+			var ruleRepository = new RtaRuleRepository(currentUnitOfWork);
+			ruleRepository.Add(rule);
 
 			var alarmRepository = new StateGroupActivityAlarmRepository(currentUnitOfWork);
 			alarmRepository.Add(stateGroupActivityAlarm);

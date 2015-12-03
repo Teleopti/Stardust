@@ -31,9 +31,9 @@
        class="Teleopti.Ccc.Domain.RealTimeAdherence.RtaStateGroup"
        not-null="false" foreign-key="FK_StateGroupActivityAlarm_RtaStateGroup"/>
 
-    <many-to-one name="AlarmType"
-       class="Teleopti.Ccc.Domain.RealTimeAdherence.AlarmType"
-       not-null="false" foreign-key="FK_StateGroupActivityAlarm_AlarmType"/>
+    <many-to-one name="RtaRule"
+       class="Teleopti.Ccc.Domain.RealTimeAdherence.RtaRule"
+       not-null="false" foreign-key="FK_StateGroupActivityAlarm_RtaRule"/>
     
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"

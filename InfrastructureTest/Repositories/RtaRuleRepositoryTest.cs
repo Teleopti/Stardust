@@ -13,23 +13,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     ///</summary>
     [TestFixture]
     [Category("LongRunning")]
-    public class AlarmTypeRepositoryTest : RepositoryTest<IAlarmType>
+    public class RtaRuleRepositoryTest : RepositoryTest<IRtaRule>
     {
         protected override void ConcreteSetup()
         {
         }  
 
-        protected override IAlarmType CreateAggregateWithCorrectBusinessUnit()
+        protected override IRtaRule CreateAggregateWithCorrectBusinessUnit()
         {
-            return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8)
+            return new RtaRule(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8)
             {
 	            Adherence = Adherence.In
             };
         }
 
-        protected override void VerifyAggregateGraphProperties(IAlarmType loadedAggregateFromDatabase)
+        protected override void VerifyAggregateGraphProperties(IRtaRule loadedAggregateFromDatabase)
         {
-            IAlarmType org = CreateAggregateWithCorrectBusinessUnit();
+            IRtaRule org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(Adherence.In, loadedAggregateFromDatabase.Adherence);
         }
 
-        protected override Repository<IAlarmType> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+        protected override Repository<IRtaRule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new AlarmTypeRepository(currentUnitOfWork);
+            return new RtaRuleRepository(currentUnitOfWork);
         }
     }
 }

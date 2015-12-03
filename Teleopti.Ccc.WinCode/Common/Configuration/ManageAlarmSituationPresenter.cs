@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
 	public class ManageAlarmSituationPresenter : IDisposable
 	{
-		private readonly List<IAlarmType> _alarmTypes = new List<IAlarmType>();
+		private readonly List<IRtaRule> _alarmTypes = new List<IRtaRule>();
 		private readonly List<IActivity> _activities = new List<IActivity>();
 		private readonly List<IRtaStateGroup> _rtaStateGroups = new List<IRtaStateGroup>();
 		private readonly List<StateGroupActivityAlarmModel> _stateGroupActivityAlarms = new List<StateGroupActivityAlarmModel>();
@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IAlarmTypeRepository _alarmTypeRepository;
+		private readonly IRtaRuleRepository _rtaRuleRepository;
 
 		private readonly object StateGroupLock = new object();
 
-		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBrokerComposite messageBroker, IManageAlarmSituationView manageAlarmSituationView)
+		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IRtaRuleRepository rtaRuleRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBrokerComposite messageBroker, IManageAlarmSituationView manageAlarmSituationView)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_alarmTypeRepository = alarmTypeRepository;
+			_rtaRuleRepository = rtaRuleRepository;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
 			_activityRepository = activityRepository;
 			_stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				{
 					_alarmTypes.Clear();
-					_alarmTypes.AddRange(_alarmTypeRepository.LoadAll());
+					_alarmTypes.AddRange(_rtaRuleRepository.LoadAll());
 					_rtaStateGroups.Clear();
 					_rtaStateGroups.AddRange(_rtaStateGroupRepository.LoadAllCompleteGraph());
 					_rtaStateGroups.Add(null);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 						_stateGroupActivityAlarmRepository.LoadAllCompleteGraph().Select(m => new StateGroupActivityAlarmModel(m)));
 					_messageBroker.RegisterEventSubscription(OnRtaStateGroupEvent, typeof (IRtaStateGroup));
 					_messageBroker.RegisterEventSubscription(OnActivityEvent, typeof (IActivity));
-					_messageBroker.RegisterEventSubscription(OnAlarmEvent, typeof (IAlarmType));
+					_messageBroker.RegisterEventSubscription(OnAlarmEvent, typeof (IRtaRule));
 				}
 			}
 		}
@@ -79,18 +79,18 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
 					    e.Message.DomainUpdateType == DomainUpdateType.Delete)
 					{
-						IAlarmType alarmType = _alarmTypes.FirstOrDefault(s => s != null && s.Id == e.Message.DomainObjectId);
-						if (alarmType != null)
+						IRtaRule _rtaRule = _alarmTypes.FirstOrDefault(s => s != null && s.Id == e.Message.DomainObjectId);
+						if (_rtaRule != null)
 						{
-							_alarmTypes.Remove(alarmType);
+							_alarmTypes.Remove(_rtaRule);
 						}
 					}
 
 					if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
 					    e.Message.DomainUpdateType == DomainUpdateType.Insert)
 					{
-						IAlarmType alarmType = _alarmTypeRepository.Get(e.Message.DomainObjectId);
-						if (alarmType != null) _alarmTypes.Add(alarmType);
+						IRtaRule _rtaRule = _rtaRuleRepository.Get(e.Message.DomainObjectId);
+						if (_rtaRule != null) _alarmTypes.Add(_rtaRule);
 					}
 					_manageAlarmSituationView.RefreshGrid();
 				}
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
 					_activityRepository.LoadAll();
-					_alarmTypeRepository.LoadAll();
+					_rtaRuleRepository.LoadAll();
 					_rtaStateGroupRepository.LoadAll();
 				}
 				foreach (var stateGroupActivityAlarm in _stateGroupActivityAlarmsToRemove)
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			e.Style.CellType = "ComboBox";
 			var list = new StringCollection();
 			list.Add(string.Empty); // Unknown item
-			foreach (IAlarmType type in _alarmTypes)
+			foreach (IRtaRule type in _alarmTypes)
 			{
 				list.Add(type.Description.Name);
 			}
@@ -288,10 +288,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			var activity = _activities[e.RowIndex - 1];
 			var stateGroupActivityAlarm =
 				_stateGroupActivityAlarms.SingleOrDefault(item => isActivityMatch(item, activity) && isStateGroupMatch(item, rtaStateGroup));
-			if (stateGroupActivityAlarm != null && stateGroupActivityAlarm.AlarmType != null)
+			if (stateGroupActivityAlarm != null && stateGroupActivityAlarm.RtaRule != null)
 			{
-				e.Style.CellValue = stateGroupActivityAlarm.AlarmType.Description.Name;
-				e.Style.BackColor = stateGroupActivityAlarm.AlarmType.DisplayColor;
+				e.Style.CellValue = stateGroupActivityAlarm.RtaRule.Description.Name;
+				e.Style.BackColor = stateGroupActivityAlarm.RtaRule.DisplayColor;
 			}
 			else
 			{
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			if (e.RowIndex > _activities.Count) return;
 
 			string s = e.Style.Text;
-			IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
+			IRtaRule _rtaRule = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
 
 			var rtaStateGroup = _rtaStateGroups[e.ColIndex - 1];
 			var activity = _activities[e.RowIndex - 1];
@@ -405,14 +405,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				var situation = new StateGroupActivityAlarm(rtaStateGroup, activity)
 					{
-						AlarmType = alarmType
+						RtaRule = _rtaRule
 					};
 				stateGroupActivityAlarm = new StateGroupActivityAlarmModel(situation);
 				_stateGroupActivityAlarms.Add(stateGroupActivityAlarm);
 			}
 			else
 			{
-				stateGroupActivityAlarm.AlarmType = alarmType;
+				stateGroupActivityAlarm.RtaRule = _rtaRule;
 			}
 
 			e.Handled = true;

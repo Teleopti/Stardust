@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private DateTime? stateStart
 		{
-			get { return State.AlarmTypeId() == Stored.AlarmTypeId() ? Stored.AlarmTypeStartTime : CurrentTime; }
+			get { return State.RuleId() == Stored.RuleId() ? Stored.RuleStartTime : CurrentTime; }
 		}
 
 		private DateTime? batchId
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateCode = stateCode,
 				StateId = State.StateGroupId(),
 				StateStart = stateStart,
-				AlarmId = State.AlarmTypeId(),
+				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
 				AlarmStart = CurrentTime.AddTicks(State.AlarmThresholdTime()),
 				BusinessUnitId = Person.BusinessUnitId,

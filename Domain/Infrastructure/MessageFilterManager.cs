@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			aggregateRoots.Add(typeof (PersonRequest), new List<Type> {typeof (IPersonRequest)});
 			aggregateRoots.Add(typeof (RtaStateGroup), new List<Type> {typeof (IRtaStateGroup)});
 			aggregateRoots.Add(typeof (Activity), new List<Type> {typeof (IActivity)});
-			aggregateRoots.Add(typeof (AlarmType), new List<Type> {typeof (IAlarmType)});
+			aggregateRoots.Add(typeof (RtaRule), new List<Type> {typeof (IRtaRule)});
 			aggregateRoots.Add(typeof (Team), new List<Type> {typeof (ITeam)});
 			aggregateRoots.Add(typeof (Site), new List<Type> {typeof (ISite)});
 			aggregateRoots.Add(typeof (Scorecard), new List<Type> {typeof (IScorecard)});

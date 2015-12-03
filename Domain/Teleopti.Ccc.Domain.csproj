@@ -1438,7 +1438,7 @@
     <Compile Include="Repositories\IStateGroupActivityAlarmRepository.cs" />
     <Compile Include="Repositories\IActivityRepository.cs" />
     <Compile Include="Repositories\IRtaStateGroupRepository.cs" />
-    <Compile Include="Repositories\IAlarmTypeRepository.cs" />
+    <Compile Include="Repositories\IRtaRuleRepository.cs" />
     <Compile Include="Repositories\IShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IStudentAvailabilityDayRepository.cs" />
     <Compile Include="Repositories\ITeamRepository.cs" />
@@ -1457,7 +1457,7 @@
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
-    <Compile Include="RealTimeAdherence\AlarmType.cs" />
+    <Compile Include="RealTimeAdherence\RtaRule.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateService.cs" />
@@ -2341,7 +2341,7 @@
     <EmbeddedResource Include="Scheduling\DayOffTemplate.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\AlarmType.hbm.xml" />
+    <EmbeddedResource Include="RealTimeAdherence\RtaRule.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RealTimeAdherence\StateGroupActivityAlarm.hbm.xml" />

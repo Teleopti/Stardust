@@ -6,17 +6,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAppliedAdherence
 	{
-		Adherence ForAlarm(IAlarmType alarmType);
+		Adherence ForAlarm(IRtaRule _rtaRule);
 		EventAdherence ForEvent(Adherence? adherence, double? staffingEffect);
 	}
 
 	public class ByStaffingEffect : IAppliedAdherence
 	{
-		public Adherence ForAlarm(IAlarmType alarmType)
+		public Adherence ForAlarm(IRtaRule _rtaRule)
 		{
-			if (alarmType == null)
+			if (_rtaRule == null)
 				return Adherence.In;
-			return forStaffingEffect(alarmType.StaffingEffect);
+			return forStaffingEffect(_rtaRule.StaffingEffect);
 		}
 
 		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class BySetting : IAppliedAdherence
 	{
-		public Adherence ForAlarm(IAlarmType alarmType)
+		public Adherence ForAlarm(IRtaRule _rtaRule)
 		{
-			if (alarmType == null)
+			if (_rtaRule == null)
 				return Adherence.Neutral;
-			return alarmType.Adherence.HasValue
-				? alarmType.Adherence.Value
-				: forStaffingEffect(alarmType.StaffingEffect);
+			return _rtaRule.Adherence.HasValue
+				? _rtaRule.Adherence.Value
+				: forStaffingEffect(_rtaRule.StaffingEffect);
 		}
 
 		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
