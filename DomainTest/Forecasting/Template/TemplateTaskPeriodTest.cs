@@ -43,12 +43,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        public void VerifyConstructorWithCampaignWorks()
+        public void VerifyConstructorWithCampaignAndOverrideWorks()
         {
-            _target = new TemplateTaskPeriod(_task, _campaign, _timePeriod);
+	        var overrideTask = new OverrideTask(45, TimeSpan.FromSeconds(50), null);
+			  _target = new TemplateTaskPeriod(_task, _campaign, overrideTask, _timePeriod);
             Assert.IsNotNull(_target);
             Assert.AreEqual(_task, _target.Task);
             Assert.AreEqual(_campaign, _target.Campaign);
+            Assert.AreEqual(overrideTask, _target.OverrideTask);
             Assert.AreEqual(_timePeriod, _target.Period);
         }
 
@@ -58,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.Task, _task);
             Assert.AreEqual(_target.Period, _timePeriod);
             Assert.AreEqual(new Campaign(), _target.Campaign);
+            Assert.AreEqual(new OverrideTask(), _target.OverrideTask);
         }
 
         [Test]
@@ -528,6 +531,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
+            Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
             
             taskPeriodClone = _target.NoneEntityClone();
@@ -535,6 +539,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
+				Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
             
             taskPeriodClone = _target.EntityClone();
@@ -542,6 +547,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
+				Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
         }
 
@@ -550,8 +556,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         {
             DateTime startAnother = _target.Period.StartDateTime.AddHours(-5);
             DateTime endAnother = _target.Period.StartDateTime;
-            DateTimePeriod anotherDateTimePeriod = new DateTimePeriod(startAnother, endAnother);
-            ITemplateTaskPeriod anotherTemplateTaskPeriod = new TemplateTaskPeriod(_task, _campaign,
+            var anotherDateTimePeriod = new DateTimePeriod(startAnother, endAnother);
+            ITemplateTaskPeriod anotherTemplateTaskPeriod = new TemplateTaskPeriod(_task, _campaign, new OverrideTask(), 
                                                                                    anotherDateTimePeriod);
             IList<ITemplateTaskPeriod> templateTaskPeriods = new List<ITemplateTaskPeriod>();
             templateTaskPeriods.Add(_target);

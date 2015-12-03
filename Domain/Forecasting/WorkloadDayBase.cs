@@ -1520,9 +1520,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 TemplateTaskPeriod newTaskPeriod = new TemplateTaskPeriod(
                     newTask,
                     newCampaign,
+						  new OverrideTask(), 
                     new DateTimePeriod(
-                        currentTaskPeriodList.First().Period.StartDateTime,
-                        currentTaskPeriodList.Last().Period.EndDateTime));
+	                    currentTaskPeriodList.First().Period.StartDateTime,
+		                    currentTaskPeriodList.Last().Period.EndDateTime));
 
                 lockAction(this);
                 newTaskPeriod.SetParent(this);

@@ -18,13 +18,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
     public class TemplateTaskPeriod : AggregateEntity, ITemplateTaskPeriod
     {
         private ITask _task;
-	    private double? _overrideTasks;
         private ICampaign _campaign = new Campaign();
+	    private IOverrideTask _overrideTask;
         private double _aggregatedTasks;
         private IStatisticTask _statisticTask = new StatisticTask();
         private readonly DateTimePeriod _period;
-	    private TimeSpan? _overrideAverageTaskTime;
-	    private TimeSpan? _overrideAverageAfterTaskTime;
 	    private static readonly TimeSpan MaxTime = TimeSpan.FromHours(100);
 
         /// <summary>
@@ -42,19 +40,21 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             _period = period;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateTaskPeriod"/> class.
-        /// </summary>
-        /// <param name="task">The task.</param>
-        /// <param name="campaign">The campaign.</param>
-        /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public TemplateTaskPeriod(ITask task, ICampaign campaign, DateTimePeriod period) : this(task,period)
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="TemplateTaskPeriod"/> class.
+	    /// </summary>
+	    /// <param name="task">The task.</param>
+	    /// <param name="campaign">The campaign.</param>
+	    /// <param name="overrideTask"></param>
+	    /// <param name="period">The period.</param>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-03-04
+	    /// </remarks>
+	    public TemplateTaskPeriod(ITask task, ICampaign campaign, IOverrideTask overrideTask, DateTimePeriod period) : this(task,period)
         {
             _campaign = campaign;
+		    _overrideTask = overrideTask;
         }
 
         /// <summary>
@@ -105,31 +105,44 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             get { return _period; }
         }
 
+
+
 	    public virtual double? OverrideTasks
 	    {
-		    get { return _overrideTasks; }		  
+		    get { return OverrideTask.OverrideTasks; }		  
 	    }
 
 	    public virtual TimeSpan? OverrideAverageTaskTime
 	    {
-		    get { return _overrideAverageTaskTime; }
+			 get { return OverrideTask.OverrideAverageTaskTime; }
 		    set
 		    {
-			    _overrideAverageTaskTime = value;
+				 _overrideTask = new OverrideTask(OverrideTask.OverrideTasks, value, OverrideTask.OverrideAverageAfterTaskTime);
 				OnAverageTaskTimesChanged();
 		    }
 	    }
 
 	    public virtual TimeSpan? OverrideAverageAfterTaskTime
 	    {
-		    get { return _overrideAverageAfterTaskTime; }
+			 get { return OverrideTask.OverrideAverageAfterTaskTime; }
 		    set
 		    {
-			    _overrideAverageAfterTaskTime = value;
+				 _overrideTask = new OverrideTask(OverrideTask.OverrideTasks, OverrideTask.OverrideAverageTaskTime, value);
 				OnAverageTaskTimesChanged();
 		    }
 	    }
 
+
+	    public virtual IOverrideTask OverrideTask
+	    {
+		    get
+		    {
+			    if (_overrideTask == null)
+				    _overrideTask = new OverrideTask();
+			    return _overrideTask;
+		    }
+		    protected set { _overrideTask = value; }
+	    }
 
 	    /// <summary>
 	    /// Sets the number of tasks.
@@ -664,7 +677,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 
 	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
 	    {
-			_overrideTasks = task;
+			_overrideTask = new OverrideTask(task, OverrideTask.OverrideAverageTaskTime, OverrideTask.OverrideAverageAfterTaskTime);
 			OnTasksChanged();
 	    }
 
@@ -954,7 +967,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
                     taskOwnerPeriod.CampaignTaskTime,
                     taskOwnerPeriod.CampaignAfterTaskTime);
             
-            ITemplateTaskPeriod newTemplateTaskPeriod = new TemplateTaskPeriod(newTask, newCampaign, newDateTimePeriod);
+            ITemplateTaskPeriod newTemplateTaskPeriod = new TemplateTaskPeriod(newTask, newCampaign, new OverrideTask(), newDateTimePeriod);
 
             newTemplateTaskPeriod.StatisticTask.StatAbandonedTasks = taskOwnerPeriod.TotalStatisticAbandonedTasks;
             newTemplateTaskPeriod.StatisticTask.StatAnsweredTasks = taskOwnerPeriod.TotalStatisticAnsweredTasks;

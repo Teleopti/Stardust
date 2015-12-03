@@ -220,6 +220,7 @@ namespace Teleopti.Ccc.Domain.Helper
             ITemplateTaskPeriod resultTaskPeriod = new TemplateTaskPeriod(
                 new Task(tasks, averageTaskTime, averageAfterTaskTime),
                 taskPeriod.Campaign,
+					 new OverrideTask(), 
                 basePeriod);
             resultTaskPeriod.AggregatedTasks = aggregatedTasks;
 
@@ -284,6 +285,7 @@ namespace Teleopti.Ccc.Domain.Helper
 	        var resultingTaskPeriod = new TemplateTaskPeriod(
                 new Task(tasks, averageTaskTime, averageAfterTaskTime),
                 new Campaign(campaignTasks, campaignTaskTime, campaignAfterTaskTime),
+					 new OverrideTask(), 
                 basePeriod);
             resultingTaskPeriod.AggregatedTasks = aggregatedTasks;
 
