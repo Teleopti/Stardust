@@ -194,12 +194,13 @@
 	grunt.loadNpmTasks('grunt-contrib-concat');
 
 	// Default task(s).
-	grunt.registerTask('default', ['dist','test','watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('default', ['devBuild','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
+	grunt.registerTask('devBuild',['concat:distJs','concat:distCss','uglify:dev', 'sass', 'cssmin'])
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
 	grunt.registerTask('dist', ['concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
-	grunt.registerTask('nova', ['dist','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('nova', ['devBuild','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 
 
