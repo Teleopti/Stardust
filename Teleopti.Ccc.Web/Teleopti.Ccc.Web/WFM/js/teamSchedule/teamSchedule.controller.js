@@ -37,7 +37,7 @@
 
 		vm.rightPanelOption = {
 			panelState: false,
-			panelTitle: "Add Absence",
+			panelTitle: "AddAbsence",
 			showCloseButton: true,
 			showBackdrop: false
 		};
@@ -228,7 +228,7 @@
 
 		vm.commands = [
 			{
-				label: "addAbsence",
+				label: "AddAbsence",
 				panelName: 'report-absence',
 				action: function () {
 					vm.toggleMenuState();
