@@ -18,14 +18,18 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
 
+		//always use 64bit version? Don't want to change old behavior currently though...
+		public const string PathToIISExpress32 = "c:\\program files (x86)\\IIS Express\\iisexpress.exe";
+		public const string PathToIISExpress64 = "c:\\program files\\IIS Express\\iisexpress.exe";
+
 		private const bool useIisExpressStartedByVisualStudio = false;
 
-		public static void Setup()
+		public static void Setup(string pathToIISExpress)
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			WriteWebConfigs();
 			if (!useIisExpressStartedByVisualStudio)
-				StartIISExpress();
+				StartIISExpress(pathToIISExpress);
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -57,18 +61,18 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			});
 		}
 
-		private static void StartIISExpress()
+		private static void StartIISExpress(string pathToIisExpress)
 		{
 			// maybe this SO thread contains alternatives:
 			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
 			var runningConfig = "iisexpress.running.config";
 			FileConfigurator.ConfigureByTags("iisexpress.config", runningConfig, new AllTags());
 			var parameters = new Parameters
-				{
-					Systray = false,
-					Config = string.Concat(runningConfig,  " /apppool:\"Clr4IntegratedAppPool\"")
-				};
-			_server = new IISExpress(parameters);
+			{
+				Systray = false,
+				Config = string.Concat(runningConfig, " /apppool:\"Clr4IntegratedAppPool\"")
+			};
+			_server = new IISExpress(parameters, pathToIisExpress);
 		}
 
 		public static void TearDown()
