@@ -28,7 +28,7 @@
 		}));
 
 
-		it("Show requests table container", function () {
+		it("show requests table container", function () {
 			requestsData.setRequests({ data: [] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
@@ -36,7 +36,7 @@
 			expect(targets.length).toEqual(1);
 		});
 
-		it("Populate requests data from requests data service", function() {
+		it("populate requests data from requests data service", function() {
 
 			var request = {
 				Id: 1,
@@ -49,11 +49,9 @@
 			var scope = getInnerScope(targetElement);		
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
-		});
+		});		
 
-		// ToDo: didn't test correct data-binding for the child directive
-
-		it("Should not request data when filter contains error", function() {
+		it("should not request data when filter contains error", function() {
 
 			requestsData.setRequests({ data: [] });
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
@@ -71,6 +69,26 @@
 		
 			targetScope.$digest();			
 			expect(requestsData.getHasSentRequests()).toBeFalsy();
+		});
+
+		it("should request data when filter change to valid values", function () {
+
+			requestsData.setRequests({ data: [] });
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+
+			requestsData.reset();
+			scope.requestsOverview.requestsFilter = {
+				period: {
+					startDate:new Date(),
+					endDate:  moment().add(2, 'day').toDate()
+				}
+			};
+
+			targetScope.$digest();
+			expect(requestsData.getHasSentRequests()).toBeTruthy();
 		});
 
 		function getInnerScope(element) {
@@ -100,17 +118,17 @@
 			targetScope.$digest();
 		}));
 
-		it('Should apply template', function() {
+		it('should apply template', function() {
 			expect(targetElement.html()).not.toEqual('');
 		});
 
-		it('See UI Grid', function() {
+		it('see UI Grid', function() {
 			var targets = Array.from(targetElement.children());
 			expect(targets.some(function (target) { return angular.element(target).hasClass('ui-grid'); })).toBeTruthy();
 
 		});
 
-		it("See table rows for each request", function () {
+		it("see table rows for each request", function () {
 			var targets = targetElement[0].querySelectorAll('.ui-grid-row');
 			expect(targets.length).toEqual(2);
 		});

@@ -272,7 +272,6 @@
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
-    <Compile Include="Areas\Requests\Controller\RequestsControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignTaskManagerTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignWarningProviderTest.cs" />
@@ -672,6 +671,7 @@
   <ItemGroup>
     <Folder Include="Areas\MyTime\Core\TeamSchedule\Mapping\" />
     <Folder Include="Areas\Outbound\Models\" />
+    <Folder Include="Areas\Requests\Controller\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Properties\" />
   </ItemGroup>

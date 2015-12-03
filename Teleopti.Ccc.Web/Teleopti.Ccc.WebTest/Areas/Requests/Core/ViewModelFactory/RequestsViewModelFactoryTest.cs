@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
@@ -37,7 +39,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var target = new RequestsViewModelFactory(personRequestProvider, new FakePersonNameProvider());
 
-			var result = target.Create(dateOnlyPeriod);
+			var input = new AllRequestsFormData
+			{
+				StartDate = dateOnlyPeriod.StartDate,
+				EndDate = dateOnlyPeriod.EndDate
+			};
+
+			var result = target.Create(input);
 
 			var first = result.First();
 			first.Subject.Should().Be.EqualTo(personRequest1.GetSubject(new NoFormatting()));
@@ -91,10 +99,57 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var target = new RequestsViewModelFactory(personRequestProvider, new FakePersonNameProvider());
 
-			var result = target.Create(dateOnlyPeriod);
+			var input = new AllRequestsFormData
+			{
+				StartDate = dateOnlyPeriod.StartDate,
+				EndDate = dateOnlyPeriod.EndDate
+			};
+
+			var result = target.Create(input);
 			result.Last().AgentName.Should().Be.EqualTo("test1 test1");
 			result.Second().AgentName.Should().Be.EqualTo("test3 test3");
 			result.First().AgentName.Should().Be.EqualTo("test2 test2");
+		}
+
+		[Test]
+		public void ShouldOrderByNameCorrectly()
+		{
+			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 1, 2015, 11, 2);
+			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var textRequest = new TextRequest(new DateTimePeriod());
+			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
+			personRequest1.SetId(Guid.NewGuid());
+			personRequest1.UpdatedOn = new DateTime(2015, 11, 1, 1, 0, 0);
+			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
+				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod()));
+			personRequest2.SetId(Guid.NewGuid());
+			personRequest2.UpdatedOn = new DateTime(2015, 11, 1, 3, 0, 0);
+			var textRequest3 = new TextRequest(new DateTimePeriod());
+			var personRequest3 = new PersonRequest(PersonFactory.CreatePerson("test3"), textRequest3);
+			personRequest3.SetId(Guid.NewGuid());
+			personRequest3.UpdatedOn = new DateTime(2015, 11, 1, 2, 0, 0);
+			personRequestProvider.Stub(x => x.RetrieveRequests(dateOnlyPeriod))
+				.Return(new[]
+				{
+					personRequest1,
+					personRequest2,
+					personRequest3
+				});
+
+			var target = new RequestsViewModelFactory(personRequestProvider, new FakePersonNameProvider());
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = dateOnlyPeriod.StartDate,
+				EndDate = dateOnlyPeriod.EndDate,
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc }
+			};
+
+			var result = target.Create(input);
+			result.First().AgentName.Should().Be.EqualTo("test1 test1");
+			result.Second().AgentName.Should().Be.EqualTo("test2 test2");
+			result.Last().AgentName.Should().Be.EqualTo("test3 test3");
+
 		}
 	}
 }

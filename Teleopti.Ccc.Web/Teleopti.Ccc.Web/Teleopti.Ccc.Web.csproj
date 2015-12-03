@@ -476,6 +476,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
+    <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
