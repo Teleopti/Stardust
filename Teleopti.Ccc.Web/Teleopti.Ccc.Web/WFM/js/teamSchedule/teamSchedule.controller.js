@@ -221,6 +221,11 @@
 
 		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
 			vm.menuState = newValue ? 'closed' : 'open';
+			if (newValue) {
+				suspendDocumentListeners();
+			} else {
+				createDocumentListeners();
+			}
 		}, true);
 
 		vm.commands = [
