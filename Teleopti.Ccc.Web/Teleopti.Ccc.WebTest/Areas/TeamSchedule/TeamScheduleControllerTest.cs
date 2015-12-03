@@ -535,6 +535,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person2 = Guid.NewGuid();
 			var form = new IntradayAbsenceForm
 			{
+				StartTime = DateTime.MinValue,
+				EndTime = DateTime.MaxValue,
 				PersonIds = new List<Guid>() { person1, person2 }
 			};
 			target.AddIntradayAbsence(form);

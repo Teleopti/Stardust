@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 		public bool IsValid()
 		{
-			var isValid = !(StartTime > EndTime);
-			return isValid;
+			return StartTime < EndTime;
 		}
 	}
 }
