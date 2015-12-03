@@ -69,7 +69,7 @@
 		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
 			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
 		</div>
-		<table class="table table-hover big-table-wrapper material-depth-1" ng-if="!vm.isLoading" id="team-schedule">
+		<table class="table table-hover big-table-wrapper material-depth-1" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<thead>
 				<tr class="person">
