@@ -6,9 +6,6 @@
 	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
-		vm.permissionAddFullDayAbsence = false;
-		vm.permissionAddIntradayAbsence = false;
-
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function() {
@@ -62,9 +59,13 @@
 			updateSelected(action, id);
 		};
 
-		vm.selectAll = function ($event) {
+		vm.toggleAll = function ($event) {
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
+			updateAllStatus(action);
+		};
+
+		var updateAllStatus = function (action) {
 			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
 				var schedule = vm.groupScheduleVm.Schedules[i];
 				updateSelected(action, schedule.PersonId);
@@ -110,14 +111,7 @@
 			});
 		}
 
-		vm.loadPermissions = function () {
-			teamScheduleSvc.getPermissions.query({
-			}).$promise.then(function(permissions) {
-				vm.permissionAddFullDayAbsence = permissions.IsAddFullDayAbsenceAvailable;
-				vm.permissionAddIntradayAbsence = permissions.IsAddIntradayAbsenceAvailable;
-			});
-		}
-
+	
 		function getScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
 			var start = (currentPageIndex - 1) * pageSize;
 			var end = currentPageIndex * pageSize;
@@ -354,8 +348,47 @@
 				}
 			});
 
-			vm.loadPermissions();
+			createDocumentListeners();
 		}
+
+		$scope.$on('$destroy', function () {
+			suspendDocumentListeners();
+		});
+
+		function preventDefaultEvent(event) {
+			// ie <11 doesnt have e.preventDefault();
+			if (event.preventDefault) event.preventDefault();
+			event.returnValue = false;
+		};
+
+		function createDocumentListeners() {
+			document.onkeydown = onKeyDownHandler;
+		};
+
+		function suspendDocumentListeners() {
+			document.onkeydown = null;
+		};
+
+		function onKeyDownHandler(event) {
+			performKeyDownAction(event);
+		};
+
+		function performKeyDownAction(event) {
+			var key = window.event ? window.event.keyCode : event.keyCode;
+
+			switch (key) {
+				
+				case 65: // Alt+A
+					if (event.altKey) {
+						preventDefaultEvent(event);
+						$scope.$evalAsync(updateAllStatus('add'));
+					}
+					break;
+				
+				default:
+					break;
+			}
+		};
 
 		vm.Init();
 	}
