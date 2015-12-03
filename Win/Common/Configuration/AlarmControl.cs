@@ -20,15 +20,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	public partial class AlarmControl : BaseUserControl, ISettingPage
 	{
 		private readonly IEnumerable<IAlarmControlPresenterDecorator> _decorators;
+		private readonly IAlarmControlNamer _alarmControlNamer;
 		private IUnitOfWork _uow;
 		private RtaRuleRepository _rtaRuleRepository;
-		private readonly List<IRtaRule> _alarmTypes = new List<IRtaRule>();
+		private readonly List<IRtaRule> _rules = new List<IRtaRule>();
 		private AlarmControlView _view;
 		private int _selectedItem =-1;
 
-		public AlarmControl(IEnumerable<IAlarmControlPresenterDecorator> decorators)
+		public AlarmControl(IEnumerable<IAlarmControlPresenterDecorator> decorators, IAlarmControlNamer alarmControlNamer)
 		{
 			_decorators = decorators;
+			_alarmControlNamer = alarmControlNamer;
 			InitializeComponent();
 		}
 
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		void setupAlarmGrid(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_view = new AlarmControlView(gridControlAlarmTypes);
-			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view, _decorators);
+			_view.Presenter = new AlarmControlPresenter(_rules, _view, _decorators);
 			_view.PresentThisItem += viewPresentThisItem;
 			_view.WarnOfThis += viewWarnOfThis;
 			_view.LoadGrid();
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void buttonNewClick(object sender, EventArgs e)
 		{
 			var atype = new RtaRule(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), 0.0);
-			_alarmTypes.Add(atype);
+			_rules.Add(atype);
 			_view.LoadGrid();
 		}
 
@@ -85,10 +87,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				if (ViewBase.ShowYesNoMessage(Resources.DeleteSelectedRowsQuestionmark, Resources.Alarm) ==
 					DialogResult.Yes)
 				{
-					var item = _alarmTypes[_selectedItem];
+					var item = _rules[_selectedItem];
 					if(item.Id.HasValue)
 						_rtaRuleRepository.Remove(item);
-					_alarmTypes.Remove(item);
+					_rules.Remove(item);
 					_selectedItem = -1;
 				}
 			}
@@ -99,16 +101,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
-			foreach (var type in _alarmTypes.Where(type => type.Id == null))
+			foreach (var type in _rules.Where(type => type.Id == null))
 			{
-				if(!alarmTypeValuesAreOk(type)) return;
+				if(!rulesAreOk(type)) return;
 				_rtaRuleRepository.Add(type);
 			}
 			if (!_decorators.IsNullOrEmpty())
-				_alarmTypes.ForEach(checkAdherenceType);
+				_rules.ForEach(checkAdherenceType);
 		}
 
-		private bool alarmTypeValuesAreOk(IRtaRule type)
+		private bool rulesAreOk(IRtaRule type)
 		{
 			if (String.IsNullOrEmpty(type.Description.Name ))
 			{
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			_alarmTypes.Clear();
+			_rules.Clear();
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
@@ -153,16 +155,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			SetTexts();
 		}
 
-		public void LoadControl()
+		protected override void SetCommonTexts()
 		{
-			loadAlarmTypes();
+			base.SetCommonTexts();
+			this.label2.Text = _alarmControlNamer.PanelHeader();
+			this.labelTitle.Text = _alarmControlNamer.Title();
 		}
 
-		private void loadAlarmTypes()
+		public void LoadControl()
+		{
+			loadRules();
+		}
+
+		private void loadRules()
 		{
 			_rtaRuleRepository = new RtaRuleRepository(_uow);
-			_alarmTypes.Clear();
-			_alarmTypes.AddRange(_rtaRuleRepository.LoadAll());
+			_rules.Clear();
+			_rules.AddRange(_rtaRuleRepository.LoadAll());
 
 			if (_view!=null)
 			{
@@ -183,7 +192,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public string TreeNode()
 		{
-			return Resources.AlarmTypes;
+			return _alarmControlNamer.TreeNodeName();
 		}
 
 		public void OnShow()

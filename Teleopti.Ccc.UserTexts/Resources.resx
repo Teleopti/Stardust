@@ -13807,4 +13807,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Pick an absence</value>
     <comment>Pick an absence</comment>
   </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Manage Rules</value>
+  </data>
 </root>

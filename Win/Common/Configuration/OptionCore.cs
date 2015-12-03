@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new SystemSettingControl(_toggleManager),
 											new RotationPage(),
 											new DaysOffControl(),
-											new AlarmControl(alarmControlPresenterDecorators()),
+											new AlarmControl(alarmControlPresenterDecorators(), alarmControlNamer()),
 											new ManageAlarmSituations(),
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
@@ -209,6 +209,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			return allSupportedPages;
+		}
+
+		private IAlarmControlNamer alarmControlNamer()
+		{
+			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
+				return new RtaRuleNamer();
+			return new AlarmTypeNamer();
 		}
 
 		private IEnumerable<IAlarmControlPresenterDecorator> alarmControlPresenterDecorators()
