@@ -307,7 +307,7 @@ Try
                 ("$TeleoptiCCCPath\SDK","$sitesroot\1"),
                 ("$TeleoptiCCCPath\Web","$sitesroot\3"),
                 ("$TeleoptiCCCPath\Client","$sitesroot\4"),
-                ("$TeleoptiCCCPath\RTA","$sitesroot\3"),
+                ("$TeleoptiCCCPath\RTA","$sitesroot\5"),
                 ("$TeleoptiCCCPath\BrokerBackplane","$sitesroot\6"),
                 ("$TeleoptiCCCPath\AuthenticationBridge","$sitesroot\7"),
                 ("$TeleoptiCCCPath\WindowsIdentityProvider","$sitesroot\8")
