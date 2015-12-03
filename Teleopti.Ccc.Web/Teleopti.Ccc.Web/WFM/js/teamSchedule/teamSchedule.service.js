@@ -71,5 +71,13 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: false
 			}
 		});
+
+		this.applyIntradayAbsence = $resource("../api/TeamSchedule/AddIntradayAbsence", {}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		});
 	}
 ]);

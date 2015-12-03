@@ -298,14 +298,26 @@
 			return vm.selected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
 		}
 		vm.applyAbsence = function() {
-			teamScheduleSvc.applyFullDayAbsence.post({
-				PersonIds: vm.selected,
-				AbsenceId: vm.selectedAbsenceId,
-				StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
-				EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
-			}).$promise.then(function(result) {
-				
-			});
+			if (vm.isFullDayAbsence) {
+				teamScheduleSvc.applyFullDayAbsence.post({
+					PersonIds: vm.selected,
+					AbsenceId: vm.selectedAbsenceId,
+					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
+					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
+				}).$promise.then(function(result) {
+
+				});
+			} else {
+				teamScheduleSvc.applyIntradayAbsence.post({
+					PersonIds: vm.selected,
+					AbsenceId: vm.selectedAbsenceId,
+					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
+					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
+				}).$promise.then(function(result) {
+
+				});
+			}
+			
 		};
 
 		function buildToggler(navID) {
