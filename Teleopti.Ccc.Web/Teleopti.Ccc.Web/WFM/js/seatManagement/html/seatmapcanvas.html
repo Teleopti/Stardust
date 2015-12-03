@@ -10,7 +10,7 @@
 
 <div class="seatmap">
 
-	<div class="seatmap-view-header material-depth-1" ng-if="vm.showOccupancy">
+	<div class="seatmap-view-header" ng-if="vm.showOccupancy">
 
 		<button class="wfm-btn return-button pull-left" ng-click="vm.toggle()">
 			<i class="mdi mdi-reply"></i>
@@ -38,10 +38,10 @@
 				<span class="divider" ng-if="!$last">></span>
 			</span>
 		</div>
-		<md-divider ng-if="!vm.isLoading"></md-divider>
+		
 	</div>
 
-	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false">
+	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false" ng-class="{'booking-view':vm.showOccupancy}">
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 

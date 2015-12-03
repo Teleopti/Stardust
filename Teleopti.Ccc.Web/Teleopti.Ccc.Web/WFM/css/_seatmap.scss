@@ -82,6 +82,7 @@ input[type=text],input[type=password],input[type=number]{
 	height: 41px;
 	position:relative;
 	z-index:2;
+	border-bottom:1px solid #e1e2e3;
 
 	.wfm-btn{
 		height:100%;
@@ -132,19 +133,20 @@ input[type=text],input[type=password],input[type=number]{
 }
 
 .location-breadcrumb{
-	background:$white;
 	position: absolute;
-	height:40px;
+	height:30px;
 	top:40px;
 	left:0;
 	right:0;
 	z-index:1;
 
 	div{
-		height: 40px;
+		height: 30px;
 		position: relative;
-		padding-top: 14px;
+		padding-top: 7px;
+		padding-right: 7px;
 		background: $white;
+		display:inline-block;
 	}
 
 	.breadcrumb-inverse{
@@ -193,13 +195,17 @@ a.mfb-component__button--main {
 
 .seatmap-canvas {
 	position:absolute;
-	top:42px;
+	top:30px;
 	bottom:0px;
 	overflow:hidden;
 
 	md-backdrop.md-sidenav-backdrop{
 		display:none;
 	}	
+}
+
+.seatmap-canvas.booking-view {
+	top:40px;
 }
 
 seatmap-editor{

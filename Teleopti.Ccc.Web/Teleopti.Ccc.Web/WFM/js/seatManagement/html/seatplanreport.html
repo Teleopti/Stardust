@@ -9,7 +9,7 @@
 </style>
 
 <div class="row seatplan-report">
-	<div class="seatplan-report-header material-depth-1">
+	<div class="seatplan-report-header">
 
 		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
 			<i class="mdi mdi-reply"></i>
@@ -26,7 +26,7 @@
 
 		<span class="turn-off-filter-blank" ng-click="vm.isFilterOpened = false"></span>
 
-		<div class="seatplan-report-filter wfm-slide-tabs material-depth-2" ng-show="vm.isFilterOpened">
+		<div class="seatplan-report-filter wfm-slide-tabs material-depth-1" ng-show="vm.isFilterOpened">
 			<div class=" header-bar">
 				<button class="wfm-btn wfm-btn-invis-default" ng-class="{'button-active':vm.isDatePickerOpened}" ng-click="vm.toggleFilter('date')">{{'Date' | translate}}</button>
 				<button class="wfm-btn wfm-btn-invis-default" ng-class="{'button-active':vm.isTeamPickerOpened}" ng-click="vm.toggleFilter('team')">{{'Team' | translate}}</button>
