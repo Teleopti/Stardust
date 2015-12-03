@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public Guid Id { get; set; }
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? CreatedTime { get; set; }
+		public RequestType Type { get; set; }
 		public string TypeText { get; set; }
 		public RequestStatus Status { get; set; }
 		public string StatusText { get; set; }

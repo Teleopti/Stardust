@@ -2195,6 +2195,7 @@
     <Content Include="WFM\css\_teamschedule.scss" />
     <Content Include="WFM\tests\requests\requests-overview.directive.spec.js" />
     <Content Include="WFM\css\_wfmrightpanel.scss" />
+    <Content Include="WFM\css\_requests.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

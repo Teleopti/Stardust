@@ -22,12 +22,13 @@
 				useExternalSorting: true,
 				data: requests,
 				columnDefs: [
-					{ displayName: 'Subject', field: 'Subject', cellClass: 'request-subject', enableSorting: false },
-					{ displayName: 'Message', field: 'Message', cellClass: 'request-message', enableSorting: false },
-					{ displayName: 'Type', field: 'TypeText', cellClass: 'request-type', enableSorting: false },
-					{ displayName: 'AgentName', field: 'AgentName', cellClass: 'request-agent-name' },
-					{ displayName: 'Status', field: 'StatusText', cellClass: 'request-status', enableSorting: false },
-					{ displayName: 'UpdatedTime', field: 'UpdatedTime', cellClass: 'request-updated-time'}
+					{ displayName: 'CreatedOn', field: 'CreatedTime', headerCellFilter: 'translate', cellClass: 'request-created-time', enableSorting: false, cellFilter: 'date : "short"' },
+					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name' },
+					{ displayName: 'Type', field: 'TypeText', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false },
+					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false },
+					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false },					
+					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', enableSorting: false },
+					{ displayName: 'UpdatedOn', field: 'UpdatedTime', headerCellFilter: 'translate', cellClass: 'request-updated-time', cellFilter: 'date : "shortDate"', visible: false }
 				],
 				onRegisterApi: function (gridApi) {
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {

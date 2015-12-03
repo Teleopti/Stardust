@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				CreatedTime = x.CreatedOn,
 				UpdatedTime = x.UpdatedOn,
 				AgentName =  _personNameProvider.BuildNameFromSetting(x.Person.Name),
-
+				Type = x.Request.RequestType,
 				TypeText = x.Request.RequestTypeDescription,
 				StatusText = x.StatusText,
 				Status = x.IsApproved? RequestStatus.Approved : 

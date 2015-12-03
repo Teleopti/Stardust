@@ -2,7 +2,6 @@
 
 	'use strict';
 
-	angular.module('wfm.requests', ['ui.grid']);
-
+	angular.module('wfm.requests', ['ui.grid', 'pascalprecht.translate']);
 
 })();
