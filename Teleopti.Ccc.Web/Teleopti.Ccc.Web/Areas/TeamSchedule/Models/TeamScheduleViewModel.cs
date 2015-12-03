@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -31,5 +32,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+	}	
+	
+	public class IntradayAbsenceForm
+	{
+		public IEnumerable<Guid> PersonIds { get; set; }
+		public Guid AbsenceId { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+
+		public bool IsValid()
+		{
+			var isValid = !(StartTime > EndTime);
+			return isValid;
+		}
 	}
 }

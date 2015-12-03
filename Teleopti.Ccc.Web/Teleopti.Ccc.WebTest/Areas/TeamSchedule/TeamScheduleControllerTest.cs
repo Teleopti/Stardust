@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -455,7 +456,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldAssignOperatePersionForAddFullDayAbsence()
+		public void ShouldAssignOperatePersonForAddFullDayAbsence()
 		{
 			var expectedPerson = new Person();
 			expectedPerson.SetId(Guid.NewGuid());
@@ -506,6 +507,77 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
 			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
 			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
+		}
+
+		[Test]
+		public void ShouldAssignOperatePersonForAddIntradayAbsence()
+		{
+			var expectedPerson = new Person();
+			expectedPerson.SetId(Guid.NewGuid());
+			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
+
+			var target = new TeamScheduleController(null, null, loggonUser, null, null);
+
+			var form = new IntradayAbsenceForm { PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo() };
+			target.AddIntradayAbsence(form);
+
+			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.Value);
+		}
+
+		[Test]
+		public void ShouldAddIntradayAbsenceForMoreThanOneAgent()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var form = new IntradayAbsenceForm
+			{
+				PersonIds = new List<Guid>() { person1, person2 }
+			};
+			target.AddIntradayAbsence(form);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+		}
+
+		[Test]
+		public void ShouldAddIntradayAbsenceThroughInputForm()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+
+			var form = new IntradayAbsenceForm
+			{
+				PersonIds = new List<Guid> { Guid.NewGuid() },
+				AbsenceId = Guid.NewGuid(),
+				StartTime = DateTime.MinValue,
+				EndTime = DateTime.MaxValue,
+			};
+			target.AddIntradayAbsence(form);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
+			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestWhenEndTimeEarlierThanStartTime()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+
+			var form = new IntradayAbsenceForm
+			{
+				StartTime = DateTime.MaxValue,
+				EndTime = DateTime.MinValue,
+			};
+			var result = target.AddIntradayAbsence(form);
+
+			result.Should().Be.OfType<BadRequestErrorMessageResult>();
+			commandDispatcher.AssertWasNotCalled(x=>x.Execute(null), y=>y.IgnoreArguments());
 		}
 	}
 }

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
@@ -124,6 +125,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 
 			return Json(true);
+		}
+
+		[HttpPost, UnitOfWork, AddIntradayAbsencePermission, Route("api/TeamSchedule/AddIntradayAbsence")]
+		public virtual IHttpActionResult AddIntradayAbsence(IntradayAbsenceForm form)
+		{
+			if (form.TrackedCommandInfo != null) form.TrackedCommandInfo.OperatedPersonId = _loggonUser.CurrentUser().Id.Value;
+
+			if (!form.IsValid())
+			{
+				return BadRequest(Resources.EndTimeMustBeGreaterOrEqualToStartTime);
+			}
+
+			foreach (var personId in form.PersonIds)
+			{
+				var command = new AddIntradayAbsenceCommand
+				{
+					PersonId = personId,
+					AbsenceId = form.AbsenceId,
+					StartTime = form.StartTime,
+					EndTime = form.EndTime,
+					TrackedCommandInfo = form.TrackedCommandInfo
+				};
+				_commandDispatcher.Execute(command);
+			}
+
+			return Ok();
 		}
 	}
 }
