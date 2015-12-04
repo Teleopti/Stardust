@@ -395,7 +395,7 @@
 		});
 
 		vm.Init = function () {
-			for (var i = 0; i < 28; ++i) {//max page number is 28 = 500/18
+			for (var i = 0; i < 29; ++i) {//max page number is 28 = 500/18, and use page number as index
 				vm.pageSelected[i] = [];
 			}
 
