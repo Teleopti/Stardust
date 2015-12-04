@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void WhenISortTheRequestListByDescendingAgentName()
 		{
 			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
-			Browser.Interactions.ClickUsingJQuery(".ui-grid-header-cell:contains('AgentName') .ui-grid-column-menu-button");
+			Browser.Interactions.ClickUsingJQuery(".request-agent-name-header .ui-grid-column-menu-button");
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-items li:nth(1) button");
 		}
 

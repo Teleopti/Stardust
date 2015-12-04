@@ -30,7 +30,6 @@ Scenario: Display requests
 	Then I should see a request from 'Ashley' in the list
 	And I should see a request from 'John' in the list
 
-@ignore
 Scenario: Sort requests
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
