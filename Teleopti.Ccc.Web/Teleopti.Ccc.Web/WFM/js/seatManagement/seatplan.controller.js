@@ -4,22 +4,18 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams', 'Toggle','$filter'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', 'Toggle'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params, toggleService, filter) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, toggleService) {
 
 		var vm = this;
 
-		vm.setupTranslatedStrings = function () {
-
-			vm.translatedStrings = {};
-			vm.setupTranslatedString("LoadingSeatPlanStatus");
-
+		vm.setupSeatPlanStatusStrings = function () {
 			vm.seatPlanStatus = {};
-			vm.translateSeatPlanStatus(0, 'SeatPlanStatusOK');
-			vm.translateSeatPlanStatus(2, 'SeatPlanStatusError');
-			vm.translateSeatPlanStatus(1, 'SeatPlanStatusInProgress');
-			vm.translateSeatPlanStatus(3, 'SeatPlanStatusNoSeatPlanned');
+			vm.seatPlanStatus[0] = 'SeatPlanStatusOK';
+			vm.seatPlanStatus[1] = 'SeatPlanStatusInProgress';
+			vm.seatPlanStatus[2] = 'SeatPlanStatusError';
+			vm.seatPlanStatus[3] = 'SeatPlanStatusNoSeatPlanned';
 		};
 
 
@@ -44,19 +40,6 @@
 		};
 
 		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
-
-		vm.setupTranslatedString = function (key) {
-			translate(key).then(function (result) {
-				vm.translatedStrings[key] = result;
-			});
-		};
-
-		vm.translateSeatPlanStatus = function (key, translationConstant) {
-			translate(translationConstant).then(function (result) {
-				vm.seatPlanStatus[key] = result;
-			});
-		};
-
 
 		vm.loadMonthDetails = function (date) {
 			var dateMoment = moment(date);
@@ -152,7 +135,7 @@
 		vm.getToDayInfo = function () {
 
 			if (vm.isLoadingCalendar) {
-				return vm.translatedStrings["LoadingSeatPlanStatus"];
+				return 'LoadingSeatPlanStatus';
 			}
 
 			var dayInfoString = vm.seatPlanStatus[3];
@@ -184,7 +167,7 @@
 		};
 
 		vm.init = function () {
-			vm.setupTranslatedStrings();
+			vm.setupSeatPlanStatusStrings();
 			vm.setupToggles();
 		};
 
