@@ -245,7 +245,7 @@ wfm.config([
 				$translate.fallbackLanguage('en');
 
 				$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
-					HelpService.updateState($state.current.name);
+					HelpService.updateState($state);
 				});
 				$state.go(next, toParams);
 			});
