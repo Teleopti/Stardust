@@ -8,19 +8,20 @@ Teleopti.SSO.Authentication.JQueryAjaxViewModel = function () {
 		return !self.Active();
 	});
 
-	$('body').ajaxStart(function () {
+    var doc = $(document);
+	doc.ajaxStart(function () {
 		self.Active(true);
 	});
-	$('body').ajaxStop(function () {
+
+	doc.ajaxStop(function () {
 		self.Active(false);
 	});
 
-	$('body').ajaxSend(function () {
+	doc.ajaxSend(function () {
 		self.Count(self.Count() + 1);
 	});
-	$('body').ajaxComplete(function () {
+	
+	doc.ajaxComplete(function () {
 		self.Count(self.Count() - 1);
 	});
-
-
 };
