@@ -3,20 +3,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class StateGroupActivityAlarm : VersionedAggregateRootWithBusinessUnit, IStateGroupActivityAlarm
+    public class RtaMap : VersionedAggregateRootWithBusinessUnit, IRtaMap
 
 	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
         private IRtaRule _rtaRule;
 
-        public StateGroupActivityAlarm(IRtaStateGroup stateGroup, IActivity activity)
+        public RtaMap(IRtaStateGroup stateGroup, IActivity activity)
         {
             _stateGroup = stateGroup;
             _activity = activity;
         }
 
-        protected StateGroupActivityAlarm()
+        protected RtaMap()
         {}
 
         public virtual IActivity Activity
@@ -40,16 +40,16 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 			return EntityClone();
 		}
 
-		public virtual IStateGroupActivityAlarm NoneEntityClone()
+		public virtual IRtaMap NoneEntityClone()
 		{
-			var clone = (IStateGroupActivityAlarm)MemberwiseClone();
+			var clone = (IRtaMap)MemberwiseClone();
 			clone.SetId(null);
 			return clone;
 		}
 
-		public virtual IStateGroupActivityAlarm EntityClone()
+		public virtual IRtaMap EntityClone()
 		{
-			return (IStateGroupActivityAlarm) MemberwiseClone();
+			return (IRtaMap) MemberwiseClone();
 		}
 	}
 }

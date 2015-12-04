@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.RealTimeAdherence"
                    default-access="field.camelcase-underscore">
   
-	<class name="StateGroupActivityAlarm">
+	<class name="RtaMap">
 		<!--IEntity-->
 		<id name="Id"
 				type="guid"
@@ -17,7 +17,7 @@
 		<many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
-					 foreign-key="FK_StateGroupActivityAlarm_Person_UpdatedBy" />
+					 foreign-key="FK_RtaMap_Person_UpdatedBy" />
 		<property name="UpdatedOn"
 				  type="UtcDateTime"
 				  not-null="true"/>
@@ -25,20 +25,20 @@
 
     <many-to-one name="Activity"
        class="Teleopti.Ccc.Domain.Scheduling.Activity"
-       not-null="false" foreign-key="FK_StateGroupActivityAlarm_Activity"/>
+       not-null="false" foreign-key="FK_RtaMap_Activity"/>
 
     <many-to-one name="StateGroup"
        class="Teleopti.Ccc.Domain.RealTimeAdherence.RtaStateGroup"
-       not-null="false" foreign-key="FK_StateGroupActivityAlarm_RtaStateGroup"/>
+       not-null="false" foreign-key="FK_RtaMap_RtaStateGroup"/>
 
     <many-to-one name="RtaRule"
        class="Teleopti.Ccc.Domain.RealTimeAdherence.RtaRule"
-       not-null="false" foreign-key="FK_StateGroupActivityAlarm_RtaRule"/>
+       not-null="false" foreign-key="FK_RtaMap_RtaRule"/>
     
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
             access="nosetter.camelcase-underscore" 
-					 not-null="true" foreign-key="FK_StateGroupActivityAlarm_BusinessUnit"/>
+					 not-null="true" foreign-key="FK_RtaMap_BusinessUnit"/>
 
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />

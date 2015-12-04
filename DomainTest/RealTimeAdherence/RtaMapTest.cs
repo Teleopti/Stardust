@@ -9,9 +9,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 {
     [TestFixture]
-    public class StateGroupActivityAlarmTest
+    public class RtaMapTest
     {
-        private StateGroupActivityAlarm target;
+        private RtaMap target;
         private MockRepository mocks;
         private IActivity activity;
         private IRtaStateGroup rtaStateGroup;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             activity = mocks.StrictMock<IActivity>();
             rtaStateGroup = mocks.StrictMock<IRtaStateGroup>();
             _rtaRule = mocks.StrictMock<IRtaRule>();
-            target = new StateGroupActivityAlarm(rtaStateGroup,activity);
+            target = new RtaMap(rtaStateGroup,activity);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			clone.Id.HasValue.Should().Be(false);
 			clone.StateGroup.Should().Be(target.StateGroup);
 
-			clone = (IStateGroupActivityAlarm)target.Clone();
+			clone = (IRtaMap)target.Clone();
 			clone.Id.Should().Be(target.Id);
 			clone.RtaRule.Should().Be(target.RtaRule);
 		}

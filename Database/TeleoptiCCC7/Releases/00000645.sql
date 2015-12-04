@@ -1,0 +1,8 @@
+EXEC sp_rename N'[dbo].[StateGroupActivityAlarm]', N'RtaMap'
+EXEC sp_rename N'[dbo].[RtaMap].[PK_StateGroupActivityAlarm]', N'PK_RtaMap', N'INDEX'
+EXEC sp_rename N'[FK_StateGroupActivityAlarm_Activity]', N'FK_RtaMap_Activity', N'OBJECT'
+EXEC sp_rename N'[FK_StateGroupActivityAlarm_BusinessUnit]', N'FK_RtaMap_BusinessUnit', N'OBJECT'
+EXEC sp_rename N'[FK_StateGroupActivityAlarm_Person_UpdatedBy]', N'FK_RtaMap_Person_UpdatedBy', N'OBJECT'
+EXEC sp_rename N'[FK_StateGroupActivityAlarm_RtaRule]', N'FK_RtaMap_RtaRule', N'OBJECT'
+EXEC sp_rename N'[FK_StateGroupActivityAlarm_RtaStateGroup]', N'FK_RtaMap_RtaStateGroup', N'OBJECT'
+EXEC sp_rename N'[UQ_StateGroupActivityAlarm]', N'UQ_RtaMap', N'OBJECT'

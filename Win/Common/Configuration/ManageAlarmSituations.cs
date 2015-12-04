@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																new RtaRuleRepository(currentUnitOfWork),
 																new RtaStateGroupRepository(currentUnitOfWork),
 																new ActivityRepository(currentUnitOfWork),
-																new StateGroupActivityAlarmRepository(currentUnitOfWork),
+																new RtaMapRepository(currentUnitOfWork),
 																StateHolderReader.Instance.StateReader.ApplicationScopeData
 																				 .Messaging, _view);
 			_view.LoadGrid();

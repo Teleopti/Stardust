@@ -11,22 +11,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AlarmMappingLoader : IAlarmMappingLoader
 	{
-		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
+		private readonly IRtaMapRepository _rtaMapRepository;
 		private readonly IAppliedAdherence _appliedAdherence;
 
 		public AlarmMappingLoader(
-			IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
+			IRtaMapRepository rtaMapRepository,
 			IAppliedAdherence appliedAdherence
 			)
 		{
-			_stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
+			_rtaMapRepository = rtaMapRepository;
 			_appliedAdherence = appliedAdherence;
 		}
 
 		[AllBusinessUnitsUnitOfWork]
 		public virtual IEnumerable<AlarmMapping> Load()
 		{
-			var mappings = _stateGroupActivityAlarmRepository.LoadAll();
+			var mappings = _rtaMapRepository.LoadAll();
 			return (
 				from m in mappings
 				let businessUnitId = tryGetBusinessUnitId(m)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _rtaRule != null && ((IDeleteTag)_rtaRule).IsDeleted;
 		}
 
-		private static Guid tryGetBusinessUnitId(IStateGroupActivityAlarm m)
+		private static Guid tryGetBusinessUnitId(IRtaMap m)
 		{
 			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;
 			if (m.RtaRule != null) return m.RtaRule.BusinessUnit.Id.Value;

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeDayOffRulesRepository>().For<IDayOffRulesRepository>();
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
 			system.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
-			system.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
+			system.UseTestDouble<FakeRtaMapRepository>().For<IRtaMapRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();

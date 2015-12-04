@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    public interface IStateGroupActivityAlarmRepository : IRepository<IStateGroupActivityAlarm  >
+    public interface IRtaMapRepository : IRepository<IRtaMap  >
     {
         /// <summary>
         /// Loads all complete graph.
@@ -13,6 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: robink
         /// Created date: 2008-11-21
         /// </remarks>
-        IList<IStateGroupActivityAlarm> LoadAllCompleteGraph();
+        IList<IRtaMap> LoadAllCompleteGraph();
     }
 }

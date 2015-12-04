@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly INow _now;
 		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
 		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
-		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
+		public readonly FakeRtaMapRepository RtaMapRepository;
 		public readonly FakeTenants Tenants;
 		public readonly FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModelPersister;
 		public readonly FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModelPersister;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			INow now,
 			FakeAgentStateReadModelReader agentStateReadModelReader,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
-			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
+			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
 			FakeTeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister,
 			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_now = now;
 			AgentStateReadModelReader = agentStateReadModelReader;
 			RtaStateGroupRepository = rtaStateGroupRepository;
-			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
+			RtaMapRepository = rtaMapRepository;
 			Tenants = tenants;
 			TeamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
 			SiteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
@@ -303,11 +303,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				activity.SetBusinessUnit(_businessUnit);
 			}
 
-			var mapping = new StateGroupActivityAlarm(stateGroup, activity);
+			var mapping = new RtaMap(stateGroup, activity);
 			mapping.RtaRule = _rtaRule;
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
-			StateGroupActivityAlarmRepository.Add(mapping);
+			RtaMapRepository.Add(mapping);
 
 			return this;
 		}

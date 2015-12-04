@@ -1423,7 +1423,7 @@
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
+    <Compile Include="RealTimeAdherence\RtaMap.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />
     <Compile Include="Repositories\IGroupPageRepository.cs" />
     <Compile Include="Repositories\INoteRepository.cs" />
@@ -1436,7 +1436,7 @@
     <Compile Include="Repositories\IRuleSetBagRepository.cs" />
     <Compile Include="Repositories\ISettingDataRepository.cs" />
     <Compile Include="Repositories\ISiteRepository.cs" />
-    <Compile Include="Repositories\IStateGroupActivityAlarmRepository.cs" />
+    <Compile Include="Repositories\IRtaMapRepository.cs" />
     <Compile Include="Repositories\IActivityRepository.cs" />
     <Compile Include="Repositories\IRtaStateGroupRepository.cs" />
     <Compile Include="Repositories\IRtaRuleRepository.cs" />
@@ -2345,7 +2345,9 @@
     <EmbeddedResource Include="RealTimeAdherence\RtaRule.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\StateGroupActivityAlarm.hbm.xml" />
+    <EmbeddedResource Include="RealTimeAdherence\RtaMap.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\License.hbm.xml" />

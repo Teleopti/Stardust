@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Settings
 {
-	public class StateGroupActivityAlarmModel : EntityContainer<IStateGroupActivityAlarm>
+	public class StateGroupActivityAlarmModel : EntityContainer<IRtaMap>
 	{
-		private IStateGroupActivityAlarm _containedOriginalEntity;
+		private IRtaMap _containedOriginalEntity;
 
 		public IActivity Activity {
 			get { return ContainedEntity.Activity; }
@@ -22,29 +22,29 @@ namespace Teleopti.Ccc.WinCode.Settings
 			set { ContainedEntity.RtaRule = value; }
 		}
 
-		public IStateGroupActivityAlarm ContainedOriginalEntity
+		public IRtaMap ContainedOriginalEntity
 		{
 			get { return _containedOriginalEntity; }
 			set { _containedOriginalEntity = value; }
 		}
 
-		public StateGroupActivityAlarmModel(IStateGroupActivityAlarm stateGroupActivityAlarm)
+		public StateGroupActivityAlarmModel(IRtaMap rtaMap)
 		{
-			setContainedEntity(stateGroupActivityAlarm);
+			setContainedEntity(rtaMap);
 		}
 
-		private void setContainedEntity(IStateGroupActivityAlarm stateGroupActivityAlarm)
+		private void setContainedEntity(IRtaMap rtaMap)
 		{
-			ContainedEntity = stateGroupActivityAlarm.EntityClone();
-			ContainedOriginalEntity = stateGroupActivityAlarm;
+			ContainedEntity = rtaMap.EntityClone();
+			ContainedOriginalEntity = rtaMap;
 		}
 
-		public void UpdateAfterMerge(IStateGroupActivityAlarm stateGroupActivityAlarm)
+		public void UpdateAfterMerge(IRtaMap rtaMap)
 		{
-			setContainedEntity(stateGroupActivityAlarm);
+			setContainedEntity(rtaMap);
 		}
 
-		public void ResetRtaStateGroupState(IStateGroupActivityAlarm stateGroup)
+		public void ResetRtaStateGroupState(IRtaMap stateGroup)
 		{
 			setContainedEntity(stateGroup ?? ContainedOriginalEntity);
 		}

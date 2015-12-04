@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var stateGroupRepository = new RtaStateGroupRepository(uow);
-				var alarmMappingRepository = new StateGroupActivityAlarmRepository(uow);
+				var alarmMappingRepository = new RtaMapRepository(uow);
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{
 					removeGroupActivityAlarmMappingsWithGroup(removedGroup, alarmMappingRepository);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 		}
 
-		private static void removeGroupActivityAlarmMappingsWithGroup(IRtaStateGroup @group, IRepository<IStateGroupActivityAlarm> alarmMappingRepository)
+		private static void removeGroupActivityAlarmMappingsWithGroup(IRtaStateGroup @group, IRepository<IRtaMap> alarmMappingRepository)
 		{
 			var mappingsWithStateGroup = alarmMappingRepository.LoadAll()
 				.Where(x => @group.Equals(x.StateGroup));

@@ -624,7 +624,7 @@
     <Compile Include="Repositories\PeopleAndSkillLoaderDecider.cs" />
     <Compile Include="Repositories\PersonalSettingDataRepository.cs" />
     <Compile Include="Repositories\SettingDataRepository.cs" />
-    <Compile Include="Repositories\StateGroupActivityAlarmRepository.cs" />
+    <Compile Include="Repositories\RtaMapRepository.cs" />
     <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />

@@ -8,17 +8,17 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class StateGroupActivityAlarmRepository : Repository<IStateGroupActivityAlarm>,
-		IStateGroupActivityAlarmRepository
+	public class RtaMapRepository : Repository<IRtaMap>,
+		IRtaMapRepository
 	{
-		public StateGroupActivityAlarmRepository(IUnitOfWork unitOfWork)
+		public RtaMapRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
 			: base(unitOfWork)
 #pragma warning restore 618
 		{
 		}
 
-		public StateGroupActivityAlarmRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public RtaMapRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			get { return false; }
 		}
 
-		public IList<IStateGroupActivityAlarm> LoadAllCompleteGraph()
+		public IList<IRtaMap> LoadAllCompleteGraph()
 		{
-			return Session.CreateCriteria(typeof (StateGroupActivityAlarm))
+			return Session.CreateCriteria(typeof (RtaMap))
 				.SetFetchMode("Activity", FetchMode.Join)
 				.SetFetchMode("StateGroup", FetchMode.Join)
 				.SetFetchMode("RtaRule", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.List<IStateGroupActivityAlarm>();
+				.List<IRtaMap>();
 		}
 	}
 }

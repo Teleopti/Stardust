@@ -983,7 +983,7 @@
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
     <Compile Include="ResourceCalculation\ResourceOptimizerPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceTest.cs" />
-    <Compile Include="RealTimeAdherence\StateGroupActivityAlarmTest.cs" />
+    <Compile Include="RealTimeAdherence\RtaMapTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\ResourceOptimizationHelperTest.cs" />

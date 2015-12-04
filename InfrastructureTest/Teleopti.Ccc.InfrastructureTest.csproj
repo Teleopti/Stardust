@@ -457,7 +457,7 @@
     <Compile Include="Repositories\PeopleAndSkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\PersonalSettingDataRepositoryTest.cs" />
     <Compile Include="Repositories\RotationNewRepositoryTest.cs" />
-    <Compile Include="Repositories\StateGroupActivityAlarmRepositoryTest.cs" />
+    <Compile Include="Repositories\RtaMapRepositoryTest.cs" />
     <Compile Include="Repositories\DayOffTemplateRepositoryTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepositoryTest.cs" />

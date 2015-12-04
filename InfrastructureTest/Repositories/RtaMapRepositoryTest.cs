@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     ///</summary>
     [TestFixture]
     [Category("LongRunning")]
-    public class StateGroupActivityAlarmRepositoryTest : RepositoryTest<IStateGroupActivityAlarm>
+    public class RtaMapRepositoryTest : RepositoryTest<IRtaMap>
     {
         private IActivity activity;
         private IRtaStateGroup stateGroup;
@@ -38,31 +38,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// Should be a "full detailed" aggregate
         /// </summary>
         /// <returns></returns>
-        protected override IStateGroupActivityAlarm CreateAggregateWithCorrectBusinessUnit()
+        protected override IRtaMap CreateAggregateWithCorrectBusinessUnit()
         {
 			activity = new Activity("roger") { DisplayColor = Color.White };
 			PersistAndRemoveFromUnitOfWork(activity);
 
-            IStateGroupActivityAlarm stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity);
-            stateGroupActivityAlarm.RtaRule = _rtaRule;
-            return stateGroupActivityAlarm;
+            IRtaMap rtaMap = new RtaMap(stateGroup, activity);
+            rtaMap.RtaRule = _rtaRule;
+            return rtaMap;
         }
 
         /// <summary>
         /// Verifies the aggregate graph properties.
         /// </summary>
         /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
-        protected override void VerifyAggregateGraphProperties(IStateGroupActivityAlarm loadedAggregateFromDatabase)
+        protected override void VerifyAggregateGraphProperties(IRtaMap loadedAggregateFromDatabase)
         {
-            IStateGroupActivityAlarm org = CreateAggregateWithCorrectBusinessUnit();
+            IRtaMap org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Activity.Description.Name, loadedAggregateFromDatabase.Activity.Description.Name);
             Assert.AreEqual(org.RtaRule.Id, loadedAggregateFromDatabase.RtaRule.Id);
             Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
         }
 
-        protected override Repository<IStateGroupActivityAlarm> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+        protected override Repository<IRtaMap> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            return new StateGroupActivityAlarmRepository(currentUnitOfWork);
+            return new RtaMapRepository(currentUnitOfWork);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var stateGroupActivityAlarm = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(stateGroupActivityAlarm);
 
-            var result = new StateGroupActivityAlarmRepository(UnitOfWork).LoadAllCompleteGraph();
+            var result = new RtaMapRepository(UnitOfWork).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].Activity));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateGroup));

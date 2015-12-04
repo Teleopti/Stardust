@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly List<IRtaStateGroup> _rtaStateGroups = new List<IRtaStateGroup>();
 		private readonly List<StateGroupActivityAlarmModel> _stateGroupActivityAlarms = new List<StateGroupActivityAlarmModel>();
 		private readonly IList<StateGroupActivityAlarmModel> _stateGroupActivityAlarmsToRemove = new List<StateGroupActivityAlarmModel>();
-		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
+		private readonly IRtaMapRepository _rtaMapRepository;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private IManageAlarmSituationView _manageAlarmSituationView;
 		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		private readonly object StateGroupLock = new object();
 
-		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IRtaRuleRepository rtaRuleRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBrokerComposite messageBroker, IManageAlarmSituationView manageAlarmSituationView)
+		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IRtaRuleRepository rtaRuleRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IRtaMapRepository rtaMapRepository, IMessageBrokerComposite messageBroker, IManageAlarmSituationView manageAlarmSituationView)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_rtaRuleRepository = rtaRuleRepository;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
 			_activityRepository = activityRepository;
-			_stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
+			_rtaMapRepository = rtaMapRepository;
 			_messageBroker = messageBroker;
 			_manageAlarmSituationView = manageAlarmSituationView;
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					_activities.AddRange(_activityRepository.LoadAll());
 					_activities.Add(null);
 					_stateGroupActivityAlarms.AddRange(
-						_stateGroupActivityAlarmRepository.LoadAllCompleteGraph().Select(m => new StateGroupActivityAlarmModel(m)));
+						_rtaMapRepository.LoadAllCompleteGraph().Select(m => new StateGroupActivityAlarmModel(m)));
 					_messageBroker.RegisterEventSubscription(OnRtaStateGroupEvent, typeof (IRtaStateGroup));
 					_messageBroker.RegisterEventSubscription(OnActivityEvent, typeof (IActivity));
 					_messageBroker.RegisterEventSubscription(OnAlarmEvent, typeof (IRtaRule));
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				{
 					if (stateGroupActivityAlarm.Id.HasValue)
 					{
-						_stateGroupActivityAlarmRepository.Remove(stateGroupActivityAlarm.ContainedEntity);
+						_rtaMapRepository.Remove(stateGroupActivityAlarm.ContainedEntity);
 					}
 				}
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				{
 					if (!stateGroupActivityAlarm.Id.HasValue)
 					{
-						_stateGroupActivityAlarmRepository.Add(stateGroupActivityAlarm.ContainedEntity);
+						_rtaMapRepository.Add(stateGroupActivityAlarm.ContainedEntity);
 						stateGroupActivityAlarm.UpdateAfterMerge(stateGroupActivityAlarm.ContainedEntity);
 					}
 					else
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 			if (stateGroupActivityAlarm == null)
 			{
-				var situation = new StateGroupActivityAlarm(rtaStateGroup, activity)
+				var situation = new RtaMap(rtaStateGroup, activity)
 					{
 						RtaRule = _rtaRule
 					};

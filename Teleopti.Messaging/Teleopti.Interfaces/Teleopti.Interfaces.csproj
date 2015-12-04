@@ -508,7 +508,7 @@
     <Compile Include="Domain\ISkillTypeEmail.cs" />
     <Compile Include="Domain\ISkillTypePhone.cs" />
     <Compile Include="Domain\ISpecification.cs" />
-    <Compile Include="Domain\IStateGroupActivityAlarm.cs" />
+    <Compile Include="Domain\IRtaMap.cs" />
     <Compile Include="Domain\IStudentAvailabilityDay.cs" />
     <Compile Include="Domain\ISwapDetail.cs" />
     <Compile Include="Domain\ITemplateReference.cs" />

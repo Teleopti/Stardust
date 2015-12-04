@@ -240,7 +240,7 @@
     <Compile Include="FakeRepositories\FakeRtaRuleRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaDatabase.cs" />
     <Compile Include="FakeRepositories\FakeRtaStateGroupRepository.cs" />
-    <Compile Include="FakeRepositories\FakeStateGroupActivityAlarmRepository.cs" />
+    <Compile Include="FakeRepositories\FakeRtaMapRepository.cs" />
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
     <Compile Include="FakeScheduleDifferenceSaver.cs" />
     <Compile Include="FakeScheduleRange.cs" />
