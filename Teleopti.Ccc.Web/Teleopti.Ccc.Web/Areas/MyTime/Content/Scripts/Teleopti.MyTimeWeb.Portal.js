@@ -40,28 +40,27 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _attachAjaxEvents() {
-		$('#loading')
-			.hide()  // hide it initially
-			.ajaxStart(function () {
-				var bodyInner = $('#body-inner');
-				$(this)
-					.css({
-						'width': $(bodyInner).width(),
-						'height': $(bodyInner).height() + 10
-					})
-					.show()
-				;
-				$('img', this)
-					.css({
-						'top': 50 + $(window).scrollTop()
-					});
-			})
-			.ajaxStop(function () {
-				$(this).hide();
-			});
+	    $('#loading').hide();  // hide it initially
+
+	    $(document).ajaxStart(function() {
+	        var bodyInner = $('#body-inner');
+	        $('#loading')
+	            .css({
+	                'width': $(bodyInner).width(),
+	                'height': $(bodyInner).height() + 10
+	            })
+	            .show();
+	        $('img', $('#loading')[0])
+	            .css({
+	                'top': 50 + $(window).scrollTop()
+	            });
+	    });
+	    $(document).ajaxStop(function() {
+	        $('#loading').hide();
+	    });
 	}
 
-	function _initNavigation() {
+    function _initNavigation() {
 
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
