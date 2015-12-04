@@ -934,15 +934,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Location.
-        /// </summary>
-        public static string AddLocation {
-            get {
-                return ResourceManager.GetString("AddLocation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add Main Layer.
         /// </summary>
         public static string AddMainLayer {
