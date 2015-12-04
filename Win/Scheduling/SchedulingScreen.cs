@@ -2371,7 +2371,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						.CellValue as IScheduleDay;
 				return scheduleDay;
 			}
-				return _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex]
+			return _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex]
 					.CellValue as IScheduleDay;
 		}
 
