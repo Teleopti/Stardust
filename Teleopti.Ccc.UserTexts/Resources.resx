@@ -13806,6 +13806,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="PickAnAbsence" xml:space="preserve">
     <value>Pick an absence</value>
     <comment>Pick an absence</comment>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Add Location</value>
+    <comment>Add location dialog box tittle in seat map</comment>
   </data>
   <data name="ManageRules" xml:space="preserve">
     <value>Manage Rules</value>
