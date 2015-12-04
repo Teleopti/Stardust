@@ -15,6 +15,11 @@
 	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
 		padding: 5px;
 	}
+
+	ul li.item[disabled] {
+		opacity: .4;
+		cursor: not-allowed;
+	}
 </style>
 <div class="team-schedule">
 	Team schedule
@@ -78,7 +83,7 @@
 			<i class="mdi mdi-dots-vertical"></i>
 			<span class="context-menu-left" style="z-index: 1000">
 				<ul class="wfm-list">
-					<li ng-repeat="cmd in vm.commands" ng-click="cmd.action()">{{cmd.label|translate}}</li>
+					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selected.length == 0" ng-click="vm.selected.length == 0 || cmd.action()">{{cmd.label|translate}}</li>
 				</ul>
 			</span>
 		</button>
