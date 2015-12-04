@@ -13814,4 +13814,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Add Location</value>
     <comment>Add location dialog title</comment>
   </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Manage Mappings</value>
+    <comment>Managing the mapping</comment>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Mappings</value>
+    <comment>Mapping state group, activety to rules</comment>
+  </data>
 </root>

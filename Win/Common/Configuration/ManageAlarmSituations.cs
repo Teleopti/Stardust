@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class ManageAlarmSituations : BaseUserControl, ISettingPage
 	{
+		private readonly IRtaControlNamer _mapNamer;
 		private ManageAlarmSituationView _view;
 
 
-		public ManageAlarmSituations()
+		public ManageAlarmSituations(IRtaControlNamer mapNamer)
 		{
+			_mapNamer = mapNamer;
 			InitializeComponent();
 		}
 
@@ -42,6 +44,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			setColors();
 			SetTexts();
+		}
+
+		protected override void SetCommonTexts()
+		{
+			base.SetCommonTexts();
+			labelHeader.Text = _mapNamer.Title();
+			labelSubHeader1.Text = _mapNamer.PanelHeader();
 		}
 
 		private void setColors()
@@ -81,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public string TreeNode()
 		{
-			return Resources.Alarms;
+			return _mapNamer.TreeNodeName();
 		}
 
 		public void OnShow()

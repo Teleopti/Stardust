@@ -13,9 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests StateGroupActivityAlarmRepository
-    ///</summary>
+
     [TestFixture]
     [Category("LongRunning")]
     public class RtaMapRepositoryTest : RepositoryTest<IRtaMap>
@@ -68,8 +66,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyLoadAllCompleteGraph()
         {
-            var stateGroupActivityAlarm = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(stateGroupActivityAlarm);
+            var rtaMap = CreateAggregateWithCorrectBusinessUnit();
+            PersistAndRemoveFromUnitOfWork(rtaMap);
 
             var result = new RtaMapRepository(UnitOfWork).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count);

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Settings
 {
-	public class StateGroupActivityAlarmModel : EntityContainer<IRtaMap>
+	public class RtaMapModel : EntityContainer<IRtaMap>
 	{
 		private IRtaMap _containedOriginalEntity;
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 			set { _containedOriginalEntity = value; }
 		}
 
-		public StateGroupActivityAlarmModel(IRtaMap rtaMap)
+		public RtaMapModel(IRtaMap rtaMap)
 		{
 			setContainedEntity(rtaMap);
 		}

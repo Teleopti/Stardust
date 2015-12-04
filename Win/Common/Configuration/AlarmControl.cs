@@ -20,17 +20,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	public partial class AlarmControl : BaseUserControl, ISettingPage
 	{
 		private readonly IEnumerable<IAlarmControlPresenterDecorator> _decorators;
-		private readonly IAlarmControlNamer _alarmControlNamer;
+		private readonly IRtaControlNamer _rtaControlNamer;
 		private IUnitOfWork _uow;
 		private RtaRuleRepository _rtaRuleRepository;
 		private readonly List<IRtaRule> _rules = new List<IRtaRule>();
 		private AlarmControlView _view;
 		private int _selectedItem =-1;
 
-		public AlarmControl(IEnumerable<IAlarmControlPresenterDecorator> decorators, IAlarmControlNamer alarmControlNamer)
+		public AlarmControl(IEnumerable<IAlarmControlPresenterDecorator> decorators, IRtaControlNamer rtaControlNamer)
 		{
 			_decorators = decorators;
-			_alarmControlNamer = alarmControlNamer;
+			_rtaControlNamer = rtaControlNamer;
 			InitializeComponent();
 		}
 
@@ -158,8 +158,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-			this.label2.Text = _alarmControlNamer.PanelHeader();
-			this.labelTitle.Text = _alarmControlNamer.Title();
+			this.label2.Text = _rtaControlNamer.PanelHeader();
+			this.labelTitle.Text = _rtaControlNamer.Title();
 		}
 
 		public void LoadControl()
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public string TreeNode()
 		{
-			return _alarmControlNamer.TreeNodeName();
+			return _rtaControlNamer.TreeNodeName();
 		}
 
 		public void OnShow()

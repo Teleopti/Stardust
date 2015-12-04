@@ -13,7 +13,6 @@ using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Specialized;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -21,11 +20,11 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
 	public class ManageAlarmSituationPresenter : IDisposable
 	{
-		private readonly List<IRtaRule> _alarmTypes = new List<IRtaRule>();
+		private readonly List<IRtaRule> _rules = new List<IRtaRule>();
 		private readonly List<IActivity> _activities = new List<IActivity>();
 		private readonly List<IRtaStateGroup> _rtaStateGroups = new List<IRtaStateGroup>();
-		private readonly List<StateGroupActivityAlarmModel> _stateGroupActivityAlarms = new List<StateGroupActivityAlarmModel>();
-		private readonly IList<StateGroupActivityAlarmModel> _stateGroupActivityAlarmsToRemove = new List<StateGroupActivityAlarmModel>();
+		private readonly List<RtaMapModel> _rtaMaps = new List<RtaMapModel>();
+		private readonly IList<RtaMapModel> _rtaMapModelsToRemove = new List<RtaMapModel>();
 		private readonly IRtaMapRepository _rtaMapRepository;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private IManageAlarmSituationView _manageAlarmSituationView;
@@ -53,16 +52,16 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				{
-					_alarmTypes.Clear();
-					_alarmTypes.AddRange(_rtaRuleRepository.LoadAll());
+					_rules.Clear();
+					_rules.AddRange(_rtaRuleRepository.LoadAll());
 					_rtaStateGroups.Clear();
 					_rtaStateGroups.AddRange(_rtaStateGroupRepository.LoadAllCompleteGraph());
 					_rtaStateGroups.Add(null);
 					_activities.Clear();
 					_activities.AddRange(_activityRepository.LoadAll());
 					_activities.Add(null);
-					_stateGroupActivityAlarms.AddRange(
-						_rtaMapRepository.LoadAllCompleteGraph().Select(m => new StateGroupActivityAlarmModel(m)));
+					_rtaMaps.AddRange(
+						_rtaMapRepository.LoadAllCompleteGraph().Select(m => new RtaMapModel(m)));
 					_messageBroker.RegisterEventSubscription(OnRtaStateGroupEvent, typeof (IRtaStateGroup));
 					_messageBroker.RegisterEventSubscription(OnActivityEvent, typeof (IActivity));
 					_messageBroker.RegisterEventSubscription(OnAlarmEvent, typeof (IRtaRule));
@@ -79,10 +78,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
 					    e.Message.DomainUpdateType == DomainUpdateType.Delete)
 					{
-						IRtaRule _rtaRule = _alarmTypes.FirstOrDefault(s => s != null && s.Id == e.Message.DomainObjectId);
+						IRtaRule _rtaRule = _rules.FirstOrDefault(s => s != null && s.Id == e.Message.DomainObjectId);
 						if (_rtaRule != null)
 						{
-							_alarmTypes.Remove(_rtaRule);
+							_rules.Remove(_rtaRule);
 						}
 					}
 
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					    e.Message.DomainUpdateType == DomainUpdateType.Insert)
 					{
 						IRtaRule _rtaRule = _rtaRuleRepository.Get(e.Message.DomainObjectId);
-						if (_rtaRule != null) _alarmTypes.Add(_rtaRule);
+						if (_rtaRule != null) _rules.Add(_rtaRule);
 					}
 					_manageAlarmSituationView.RefreshGrid();
 				}
@@ -161,32 +160,32 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					_rtaRuleRepository.LoadAll();
 					_rtaStateGroupRepository.LoadAll();
 				}
-				foreach (var stateGroupActivityAlarm in _stateGroupActivityAlarmsToRemove)
+				foreach (var rtaMapModel in _rtaMapModelsToRemove)
 				{
-					if (stateGroupActivityAlarm.Id.HasValue)
+					if (rtaMapModel.Id.HasValue)
 					{
-						_rtaMapRepository.Remove(stateGroupActivityAlarm.ContainedEntity);
+						_rtaMapRepository.Remove(rtaMapModel.ContainedEntity);
 					}
 				}
 
-				foreach (var stateGroupActivityAlarm in _stateGroupActivityAlarms)
+				foreach (var map in _rtaMaps)
 				{
-					if (!stateGroupActivityAlarm.Id.HasValue)
+					if (!map.Id.HasValue)
 					{
-						_rtaMapRepository.Add(stateGroupActivityAlarm.ContainedEntity);
-						stateGroupActivityAlarm.UpdateAfterMerge(stateGroupActivityAlarm.ContainedEntity);
+						_rtaMapRepository.Add(map.ContainedEntity);
+						map.UpdateAfterMerge(map.ContainedEntity);
 					}
 					else
 					{
-						uow.Reassociate(stateGroupActivityAlarm.ContainedOriginalEntity);
-						var newState = uow.Merge(stateGroupActivityAlarm.ContainedEntity);
-						stateGroupActivityAlarm.UpdateAfterMerge(newState);
+						uow.Reassociate(map.ContainedOriginalEntity);
+						var newState = uow.Merge(map.ContainedEntity);
+						map.UpdateAfterMerge(newState);
 					}
 				}
 
 				uow.PersistAll();
-				_stateGroupActivityAlarmsToRemove.Clear(); 
-				foreach (var stateGroupView in _stateGroupActivityAlarms)
+				_rtaMapModelsToRemove.Clear(); 
+				foreach (var stateGroupView in _rtaMaps)
 					stateGroupView.ResetRtaStateGroupState(null);
 				
 			}
@@ -277,7 +276,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			e.Style.CellType = "ComboBox";
 			var list = new StringCollection();
 			list.Add(string.Empty); // Unknown item
-			foreach (IRtaRule type in _alarmTypes)
+			foreach (IRtaRule type in _rules)
 			{
 				list.Add(type.Description.Name);
 			}
@@ -286,12 +285,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 			var rtaStateGroup = _rtaStateGroups[e.ColIndex - 1];
 			var activity = _activities[e.RowIndex - 1];
-			var stateGroupActivityAlarm =
-				_stateGroupActivityAlarms.SingleOrDefault(item => isActivityMatch(item, activity) && isStateGroupMatch(item, rtaStateGroup));
-			if (stateGroupActivityAlarm != null && stateGroupActivityAlarm.RtaRule != null)
+			var rtaMap =
+				_rtaMaps.SingleOrDefault(item => isActivityMatch(item, activity) && isStateGroupMatch(item, rtaStateGroup));
+			if (rtaMap != null && rtaMap.RtaRule != null)
 			{
-				e.Style.CellValue = stateGroupActivityAlarm.RtaRule.Description.Name;
-				e.Style.BackColor = stateGroupActivityAlarm.RtaRule.DisplayColor;
+				e.Style.CellValue = rtaMap.RtaRule.Description.Name;
+				e.Style.BackColor = rtaMap.RtaRule.DisplayColor;
 			}
 			else
 			{
@@ -299,30 +298,30 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 		}
 
-		private static bool isStateGroupMatch(StateGroupActivityAlarmModel stateGroupActivityAlarm, IRtaStateGroup rtaStateGroup)
+		private static bool isStateGroupMatch(RtaMapModel rtaMap, IRtaStateGroup rtaStateGroup)
 		{
-			if (stateGroupActivityAlarm.StateGroup == null && rtaStateGroup == null)
+			if (rtaMap.StateGroup == null && rtaStateGroup == null)
 			{
 				return true;
 			}
-			if (stateGroupActivityAlarm.StateGroup == null || rtaStateGroup == null)
+			if (rtaMap.StateGroup == null || rtaStateGroup == null)
 			{
 				return false;
 			}
-			return stateGroupActivityAlarm.StateGroup.Equals(rtaStateGroup);
+			return rtaMap.StateGroup.Equals(rtaStateGroup);
 		}
 
-		private static bool isActivityMatch(StateGroupActivityAlarmModel stateGroupActivityAlarm, IActivity activity)
+		private static bool isActivityMatch(RtaMapModel rtaMap, IActivity activity)
 		{
-			if (stateGroupActivityAlarm.Activity == null && activity == null)
+			if (rtaMap.Activity == null && activity == null)
 			{
 				return true;
 			}
-			if (stateGroupActivityAlarm.Activity == null || activity == null)
+			if (rtaMap.Activity == null || activity == null)
 			{
 				return false;
 			}
-			return stateGroupActivityAlarm.Activity.Equals(activity);
+			return rtaMap.Activity.Equals(activity);
 		}
 
 		/// <summary>
@@ -393,26 +392,26 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			if (e.RowIndex > _activities.Count) return;
 
 			string s = e.Style.Text;
-			IRtaRule _rtaRule = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
+			IRtaRule _rtaRule = _rules.SingleOrDefault(a => a.Description.Name == s);
 
 			var rtaStateGroup = _rtaStateGroups[e.ColIndex - 1];
 			var activity = _activities[e.RowIndex - 1];
-			var stateGroupActivityAlarm =
-				_stateGroupActivityAlarms.SingleOrDefault(
+			var rtaMap =
+				_rtaMaps.SingleOrDefault(
 					item => isActivityMatch(item, activity) && isStateGroupMatch(item, rtaStateGroup));
 
-			if (stateGroupActivityAlarm == null)
+			if (rtaMap == null)
 			{
 				var situation = new RtaMap(rtaStateGroup, activity)
 					{
 						RtaRule = _rtaRule
 					};
-				stateGroupActivityAlarm = new StateGroupActivityAlarmModel(situation);
-				_stateGroupActivityAlarms.Add(stateGroupActivityAlarm);
+				rtaMap = new RtaMapModel(situation);
+				_rtaMaps.Add(rtaMap);
 			}
 			else
 			{
-				stateGroupActivityAlarm.RtaRule = _rtaRule;
+				rtaMap.RtaRule = _rtaRule;
 			}
 
 			e.Handled = true;

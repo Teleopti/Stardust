@@ -46,14 +46,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (Activity != null)
 				activity = activityRepository.LoadAll().First(a => a.Name == Activity);
 
-			var stateGroupActivityAlarm = new RtaMap(stateGroup, activity) { RtaRule = rule };
+			var rtaMap = new RtaMap(stateGroup, activity) { RtaRule = rule };
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
 				var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
 				if (stateGroup != null)
 					stateGroup.SetBusinessUnit(businessUnit);
-				stateGroupActivityAlarm.SetBusinessUnit(businessUnit);
+				rtaMap.SetBusinessUnit(businessUnit);
 			}
 
 			if (!string.IsNullOrWhiteSpace(Adherence))
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			ruleRepository.Add(rule);
 
 			var alarmRepository = new RtaMapRepository(currentUnitOfWork);
-			alarmRepository.Add(stateGroupActivityAlarm);
+			alarmRepository.Add(rtaMap);
 		}
 	}
 }

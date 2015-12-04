@@ -459,7 +459,7 @@
     <Compile Include="Common\BaseUserControlWithMessageBrokerHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Common\Configuration\IAlarmControlNamer.cs" />
+    <Compile Include="Common\Configuration\IRtaControlNamer.cs" />
     <Compile Include="Common\Configuration\SeniorityControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

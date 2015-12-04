@@ -281,13 +281,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		private void prepareMockForLoad(IList<IRtaStateGroup> rtaStateGroups, IList<IRtaRule> rules,
-		                                IList<IActivity> activities, IList<IRtaMap> stateGroupActivityAlarms)
+		                                IList<IActivity> activities, IList<IRtaMap> rtaMap)
 		{
 #pragma warning disable 618
 			_rtaStateGroupRepository.Stub(x => x.LoadAllCompleteGraph()).Return(rtaStateGroups);
 			_rtaRuleRepository.Stub(x => x.LoadAll()).Return(rules);
 			_activityRepository.Stub(x => x.LoadAll()).Return(activities);
-			_stateGroupActvityAlarmRepository.Stub(x => x.LoadAllCompleteGraph()).Return(stateGroupActivityAlarms);
+			_stateGroupActvityAlarmRepository.Stub(x => x.LoadAllCompleteGraph()).Return(rtaMap);
 #pragma warning restore 618
 		}
 
@@ -388,12 +388,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
-			var stategroupactivityalarm1 = new RtaMap(rtaitem1, activity) {RtaRule = alarms[1]};
+			var rtaMap1 = new RtaMap(rtaitem1, activity) {RtaRule = alarms[1]};
 
-			var stategroupactivityalarm2 = new RtaMap(null, null) {RtaRule = alarms[1]};
+			var rtaMap2 = new RtaMap(null, null) {RtaRule = alarms[1]};
 
 			prepareMockForLoad(new List<IRtaStateGroup> {rtaitem1, rtaitem2}, alarms, new List<IActivity> {activity},
-			                   new List<IRtaMap> {stategroupactivityalarm1, stategroupactivityalarm2});
+			                   new List<IRtaMap> {rtaMap1, rtaMap2});
 
 			var list = new StringCollection();
 			foreach (IRtaRule type in alarms)
@@ -491,9 +491,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var rtaitem = new RtaStateGroup("stategroup", true, false);
 			var rtagroups = new List<IRtaStateGroup> {rtaitem};
 
-			var stategroupactivityalarm = new RtaMap(rtaitem, activity) {RtaRule = alarms[1]};
+			var rtaMap = new RtaMap(rtaitem, activity) {RtaRule = alarms[1]};
 
-			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {stategroupactivityalarm});
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {rtaMap});
 
 			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _rtaRuleRepository, _rtaStateGroupRepository,
 			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
@@ -534,9 +534,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var rtaitem = new RtaStateGroup("stategroup", true, false);
 			rtagroups.Add(rtaitem);
 
-			var stategroupactivityalarm = new RtaMap(rtaitem, activity) {RtaRule = alarms[1]};
+			var rtaMap = new RtaMap(rtaitem, activity) {RtaRule = alarms[1]};
 
-			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {stategroupactivityalarm});
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {rtaMap});
 
 			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _rtaRuleRepository, _rtaStateGroupRepository,
 			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
@@ -570,9 +570,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var rtagroups = new List<IRtaStateGroup>();
 
-			var stategroupactivityalarm = new RtaMap(null, activity) {RtaRule = alarms[1]};
+			var rtaMap = new RtaMap(null, activity) {RtaRule = alarms[1]};
 
-			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {stategroupactivityalarm});
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {rtaMap});
 
 			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _rtaRuleRepository, _rtaStateGroupRepository,
 			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
@@ -605,9 +605,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var rtaitem = new RtaStateGroup("stategroup", true, false);
 			rtagroups.Add(rtaitem);
 
-			var stategroupactivityalarm = new RtaMap(rtaitem, null) {RtaRule = alarms[1]};
+			var rtaMap = new RtaMap(rtaitem, null) {RtaRule = alarms[1]};
 
-			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {stategroupactivityalarm});
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> {rtaMap});
 
 			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _rtaRuleRepository, _rtaStateGroupRepository,
 			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Test]
-		public void ShouldSaveChangedStateGroupActivityAlarm()
+		public void ShouldSaveChangedRtaMap()
 		{
 			var alarms = new List<IRtaRule>
 				{
@@ -638,12 +638,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var rtaitem = new RtaStateGroup("stategroup", true, false);
 			rtagroups.Add(rtaitem);
 
-			IRtaMap stategroupactivityalarm = new RtaMap(rtaitem, null) { RtaRule = alarms[1] };
-			stategroupactivityalarm.SetId(Guid.NewGuid());
-			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> { stategroupactivityalarm });
+			IRtaMap rtaMap = new RtaMap(rtaitem, null) { RtaRule = alarms[1] };
+			rtaMap.SetId(Guid.NewGuid());
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IRtaMap> { rtaMap });
 
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			unitOfWork.Stub(x => x.Merge(stategroupactivityalarm)).IgnoreArguments().Return(stategroupactivityalarm);
+			unitOfWork.Stub(x => x.Merge(rtaMap)).IgnoreArguments().Return(rtaMap);
 
 			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _rtaRuleRepository, _rtaStateGroupRepository,
 														_activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
@@ -656,9 +656,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target.SaveCellInfo(null, e);
 			_target.OnSave();
 
-			unitOfWork.AssertWasCalled(x => x.Merge(stategroupactivityalarm),
+			unitOfWork.AssertWasCalled(x => x.Merge(rtaMap),
 			                           o =>
-			                           o.Constraints(Rhino.Mocks.Constraints.Is.Equal(stategroupactivityalarm)));
+			                           o.Constraints(Rhino.Mocks.Constraints.Is.Equal(rtaMap)));
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_rtaRuleRepository.AssertWasCalled(x => x.LoadAll());
 			_activityRepository.AssertWasCalled(x => x.LoadAll());
