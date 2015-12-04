@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', 'requestsDefinitions'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', 'requestsDefinitions'];
 
-	function requestsTableContainerController($scope, requestsDefinitions) {
+	function requestsTableContainerController($scope, $translate, requestsDefinitions) {
 
 		var vm = this;
 
@@ -21,13 +21,16 @@
 				enableGridMenu: true,
 				useExternalSorting: true,
 				data: requests,
+				gridMenuTitleFilter: $translate,
 				columnDefs: [
-					{ displayName: 'CreatedOn', field: 'CreatedTime', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header', cellFilter: 'date : "short"' },
+					{ displayName: 'StartTime', field: 'PeriodStartTime', headerCellFilter: 'translate', cellClass: 'request-period-start-time', enableSorting: false, headerCellClass: 'request-period-start-time-header', cellFilter: 'date : "short"' },
+					{ displayName: 'EndTime', field: 'PeriodEndTime', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 					{ displayName: 'Type', field: 'TypeText', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
 					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false, headerCellClass: 'request-subject-header' },
-					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header' },
+					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', enableSorting: false, headerCellClass: 'request-status-header' },
+					{ displayName: 'CreatedOn', field: 'CreatedTime', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header', cellFilter: 'date : "short"' },
 					{ displayName: 'UpdatedOn', field: 'UpdatedTime', headerCellFilter: 'translate', cellClass: 'request-updated-time', cellFilter: 'date : "shortDate"', visible: false, headerCellClass: 'request-updated-time-header' }
 				],
 				onRegisterApi: function (gridApi) {

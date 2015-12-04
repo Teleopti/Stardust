@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				Id = request.Id.GetValueOrDefault(),
 				Subject = request.GetSubject(new NoFormatting()),
 				Message = request.GetMessage(new NoFormatting()),
+				PeriodStartTime = request.Request.Period.StartDateTime,
+				PeriodEndTime = request.Request.Period.EndDateTime,
 				CreatedTime = request.CreatedOn,
 				UpdatedTime = request.UpdatedOn,
 				AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name),
