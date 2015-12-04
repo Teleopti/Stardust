@@ -1,53 +1,55 @@
-﻿	.team-schedule .time-line {
+﻿.team-schedule {
+	.time-line {
 		min-width: 300px;
 		z-index: 10;
+
+		.ruler {
+			height: 100%;
+			width: 1px;
+			background-color: rgba(0,0,0,0.2);
+			z-index: 10;
+		}
+
+		.label {
+			font-size: xx-small;
+			height: 12px;
+			z-index: 11;
+			margin-left: -23px;
+		}
 	}
 
-	.team-schedule .time-line .ruler {
-		height: 100%;
-		width: 1px;
-		background-color: rgba(0,0,0,0.2);
-		z-index: 10;
+	.shift {
+		.layer {
+			z-index: 10;
+			height: 22px;
+			text-align: center;
+		}
+
+		.layer:first-of-type {
+			-webkit-border-radius: 4px 0px 0px 4px;
+			-moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+		}
+
+		.layer:last-of-type {
+			-webkit-border-radius: 0px 4px 4px 0px;
+			-moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+		}
+
+		.layer:only-child {
+			-webkit-border-radius: 4px 4px 4px 4px;
+			-moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+		}
 	}
 
-	.team-schedule .time-line .label {
-		font-size: xx-small;
-		height: 12px;
-		z-index: 11;
-		margin-left: -23px;
-	}
-
-	.team-schedule .shift .layer {
-		z-index: 10;
-		height: 22px;
-		text-align: center;
-	}
-
-	.team-schedule .shift .layer:first-of-type
-	{
-		-webkit-border-radius: 4px 0px 0px 4px;
-		   -moz-border-radius: 4px 0px 0px 4px;
-				border-radius: 4px 0px 0px 4px;
-	}
-	.team-schedule .shift .layer:last-of-type
-	{
-		-webkit-border-radius: 0px 4px 4px 0px;
-		   -moz-border-radius: 0px 4px 4px 0px;
-				border-radius: 0px 4px 4px 0px;
-	}
-	.team-schedule .shift .layer:only-child
-	{
-		-webkit-border-radius: 4px 4px 4px 4px;
-		   -moz-border-radius: 4px 4px 4px 4px;
-				border-radius: 4px 4px 4px 4px;
-	}
-
-	.team-schedule .overtime{
+	.overtime {
 		background-size: 11px 11px;
 		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent);
 	}
 
-	.team-schedule .dayoff {
+	.dayoff {
 		text-align: center;
 		top: -5px;
 		height: 30px;
@@ -61,13 +63,44 @@
 	}
 
 	.person-name-column {
-		.wfm-checkbox-toggle:after
-		{
+		.wfm-checkbox-toggle:after {
 			width: 15px;
 			height: 15px;
 			font-size: 11px;
 		}
-		.wfm-checkbox{
+
+		.wfm-checkbox {
 			padding: 0;
 		}
 	}
+
+	.input-group input[type=text] {
+		height: 35px;
+		border: 1px solid #ccc;
+	}
+
+	.timepicker {
+		input[type=text] {
+			width: 45px;
+			height: 35px;
+			border: 1px solid #E0E0E0;
+		}
+
+		button {
+			min-width: 30px;
+		}
+	}
+
+	ul li.item[disabled] {
+		opacity: .4;
+		cursor: not-allowed;
+	}
+
+	.table {
+		thead > tr > th, td
+		tbody > tr > th, td
+		tfoot > tr > th, td {
+			padding: 5px;
+		}
+	}
+}

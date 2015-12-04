@@ -1,29 +1,4 @@
-﻿<style>
-	.team-schedule .input-group input[type=text] {
-		height: 35px;
-		border: 1px solid #ccc;
-	}
-
-	.team-schedule .timepicker input[type=text] {
-		width: 40px;
-		height: 35px;
-		border: 1px solid #E0E0E0;
-	}
-
-	.team-schedule .timepicker button {
-		min-width: 30px;
-	}
-
-	.team-schedule .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-		padding: 5px;
-	}
-
-	.team-schedule ul li.item[disabled] {
-		opacity: .4;
-		cursor: not-allowed;
-	}
-</style>
-<div class="team-schedule">
+﻿<div class="team-schedule">
 	Team schedule
 	<div style="border: solid red 1px; height: 40px" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">
 		<span class="col-sm-5 col-md-3 col-lg-3">
