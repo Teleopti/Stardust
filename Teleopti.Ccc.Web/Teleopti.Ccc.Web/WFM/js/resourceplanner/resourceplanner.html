@@ -9,7 +9,7 @@
 	<button ng-click="startNextPlanningPeriod()" class="wfm-btn wfm-btn-primary"  translate>StartNext</button>
 
 	<div class="card-group">
-		<div class="wfm-card"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
+		<div class="wfm-card planingperiod-test-container"  ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
 			<p>
 				<!--{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i style="vertical-align: middle;" title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>-->
 				{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>

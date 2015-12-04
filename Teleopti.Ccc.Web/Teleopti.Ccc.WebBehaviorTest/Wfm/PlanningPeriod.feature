@@ -12,7 +12,6 @@ Scenario: show the next planning period
 	When I view Resource planner
 	Then I should see planning period from '2014-05-01'to '2014-05-31'
 
-@ignore
 Scenario: schedule the next planning period
 	Given the time is '2014-04-10'
 	And I have a role with
@@ -37,7 +36,6 @@ Scenario: Publish the schedules for next planning period
 	And I click publish
 	Then I should see the planning period as published in the summary
 
-@ignore
 @OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
 Scenario: Update the next planning period
 	Given the time is '2014-04-10' 
@@ -70,7 +68,7 @@ Scenario: Update the next planning period
 	And I open planning period
 	And I click next planning period
 	And I update planning period to two week 
-	Then I should see updated period from '2014-04-13'to '2014-04-26'
+	Then I should see updated period label from '2014-04-13'to '2014-04-26'
 
 Scenario: Create the next planning period
 	Given the time is '2014-04-10'

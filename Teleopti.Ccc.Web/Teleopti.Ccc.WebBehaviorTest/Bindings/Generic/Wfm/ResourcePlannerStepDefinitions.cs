@@ -21,9 +21,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see updated period from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeeUpdatedPeriodFromTo(DateTime fromDate, DateTime toDate)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-accordion", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains(".wfm-accordion", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".wfm-card", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".wfm-card", toDate.ToString("yyyy-MM-dd"));
 		}
+
 
 
 		[Then(@"I should see '(.*)'")]
@@ -36,6 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIClickSchedule()
 		{
 			Browser.Interactions.Click(".schedule-button");
+		}
+		[Then(@"I should see updated period label from '(.*)'to '(.*)'")]
+		public void ThenIShouldSeeUpdatedPeriodLabelFromTo(DateTime fromDate, DateTime toDate)
+		{
+			Browser.Interactions.AssertAnyContains(".next-planning-peroid", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".next-planning-peroid", toDate.ToString("yyyy-MM-dd"));
 		}
 
 		[When(@"I create new planning period")]
@@ -57,13 +64,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I click next planning period")]
 		public void WhenIClickNextPlanningPeriod()
 		{
-			Browser.Interactions.Click(".next-planning-peroid");
+			Browser.Interactions.Click(".update-planning-peroid");
 		}
 
 		[When(@"I update planning period to two week")]
 		public void WhenIUpdatePlanningPeriodToWeek()
 		{
-			Browser.Interactions.ClickContaining(".wfm-radio-label","2 Week");
+			Browser.Interactions.ClickContaining(".wfm-radio-label", "2 Week");
 		}
 
 		[Given(@"GroupingReadModel is updated")]

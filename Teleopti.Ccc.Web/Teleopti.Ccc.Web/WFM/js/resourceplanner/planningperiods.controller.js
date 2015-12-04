@@ -81,8 +81,10 @@
 	            });
 	        };
 	        $scope.rangeUpdated = function(id, rangeDetails) {
+				$scope.rangeDisabled = true;
 	            var planningPeriodChangeRangeModel = { Number: rangeDetails.Number, PeriodType: rangeDetails.PeriodType, DateFrom: rangeDetails.StartDate };
 	            PlanningPeriodSvrc.changeRange.update({ id: id }, JSON.stringify(planningPeriodChangeRangeModel)).$promise.then(function(result) {
+					$scope.rangeDisabled = false;
 	                $scope.planningPeriod = result;
 	            });
 	        };

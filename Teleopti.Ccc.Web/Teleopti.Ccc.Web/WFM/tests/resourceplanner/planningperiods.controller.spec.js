@@ -171,4 +171,11 @@ describe('PlanningPeriodsCtrl', function () {
 
 		expect(scope.disableSchedule()).toBe(true);
 	}));
+	it('should disable planningperiod select while servercall is made', inject(function($controller) {
+		var scope = $rootScope.$new();
+		var rangeDetails = {Number:10,}
+		$controller('PlanningPeriodsCtrl', { $scope: scope });
+		scope.rangeUpdated(10,rangeDetails);
+		expect(scope.rangeDisabled).toBe(true);
+	}));
 });
