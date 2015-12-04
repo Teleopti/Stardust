@@ -16,7 +16,9 @@
 			AgentNameAsc: 0,
 			AgentNameDesc: 1,
 			UpdatedOnAsc: 2,
-			UpdatedOnDesc: 3
+			UpdatedOnDesc: 3,
+			CreatedOnAsc: 4,
+			CreatedOnDesc: 5
 		};
 
 		this.normalizeRequestsFilter = function(filter) {
@@ -35,6 +37,8 @@
 				return sortColumn.sort.direction == 'asc' ? Orders.AgentNameAsc : Orders.AgentNameDesc;
 			} else if (sortColumn.name == 'UpdatedTime') {
 				return sortColumn.sort.direction == 'asc' ? Orders.UpdatedOnAsc : Orders.UpdatedOnDesc;
+			} else if (sortColumn.name == 'CreatedTime') {
+				return sortColumn.sort.direction == 'asc' ? Orders.CreatedOnAsc : Orders.CreatedOnDesc;
 			} else {
 				return null;
 			}

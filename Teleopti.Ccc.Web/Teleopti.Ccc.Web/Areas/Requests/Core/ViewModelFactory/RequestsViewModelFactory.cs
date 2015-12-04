@@ -37,6 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 					return requestViewModels.OrderByDescending(x => x.AgentName);
 				case RequestsSortingOrder.AgentNameAsc:
 					return requestViewModels.OrderBy(x => x.AgentName);
+				case RequestsSortingOrder.CreatedOnDesc:
+					return requestViewModels.OrderByDescending(x => x.CreatedTime);
+				case RequestsSortingOrder.CreatedOnAsc:
+					return requestViewModels.OrderBy(x => x.CreatedTime);
 				default:				
 					return requestViewModels.OrderByDescending(x => x.UpdatedTime);
 			}

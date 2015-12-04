@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		AgentNameAsc,
 		AgentNameDesc,
 		UpdatedOnAsc,
-		UpdatedOnDesc
+		UpdatedOnDesc,
+		CreatedOnAsc,
+		CreatedOnDesc
 	}
 }

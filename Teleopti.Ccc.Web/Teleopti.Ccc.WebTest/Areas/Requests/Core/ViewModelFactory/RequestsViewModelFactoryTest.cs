@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetCreate()
 		{
-			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 1, 2015, 11, 2);
+			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 01, 2015, 11, 02);
 		
 			var textRequest = new TextRequest(new DateTimePeriod());
 			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
@@ -76,20 +76,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldOrderByUpdatedTimeByDefault()
 		{
-			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 1, 2015, 11, 2);
+			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 01, 2015, 11, 02);
 		
 			var textRequest = new TextRequest(new DateTimePeriod());
 			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
 			personRequest1.SetId(Guid.NewGuid());
-			personRequest1.UpdatedOn = new DateTime(2015, 11, 1, 1, 0, 0);
+			personRequest1.UpdatedOn = new DateTime(2015, 11, 01, 01, 00, 00);
 			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
 				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod()));
 			personRequest2.SetId(Guid.NewGuid());
-			personRequest2.UpdatedOn = new DateTime(2015, 11, 1, 3, 0, 0);
+			personRequest2.UpdatedOn = new DateTime(2015, 11, 01, 03, 00, 00);
 			var textRequest3 = new TextRequest(new DateTimePeriod());
 			var personRequest3 = new PersonRequest(PersonFactory.CreatePerson("test3"), textRequest3);
 			personRequest3.SetId(Guid.NewGuid());
-			personRequest3.UpdatedOn = new DateTime(2015, 11, 1, 2, 0, 0);
+			personRequest3.UpdatedOn = new DateTime(2015, 11, 01, 02, 00, 00);
 
 			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
 
@@ -113,19 +113,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldOrderByNameCorrectly()
 		{
-			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 1, 2015, 11, 2);
+			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 01, 2015, 11, 02);
 			var textRequest = new TextRequest(new DateTimePeriod());
 			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
 			personRequest1.SetId(Guid.NewGuid());
-			personRequest1.UpdatedOn = new DateTime(2015, 11, 1, 1, 0, 0);
+			personRequest1.UpdatedOn = new DateTime(2015, 11, 01, 01, 00, 00);
 			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
 				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod()));
 			personRequest2.SetId(Guid.NewGuid());
-			personRequest2.UpdatedOn = new DateTime(2015, 11, 1, 3, 0, 0);
+			personRequest2.UpdatedOn = new DateTime(2015, 11, 01, 03, 00, 00);
 			var textRequest3 = new TextRequest(new DateTimePeriod());
 			var personRequest3 = new PersonRequest(PersonFactory.CreatePerson("test3"), textRequest3);
 			personRequest3.SetId(Guid.NewGuid());
-			personRequest3.UpdatedOn = new DateTime(2015, 11, 1, 2, 0, 0);
+			personRequest3.UpdatedOn = new DateTime(2015, 11, 01, 02, 00, 00);
 
 			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
 			personRequestRepository.Add(personRequest1);
@@ -144,6 +144,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.Second().AgentName.Should().Be.EqualTo("test2 test2");
 			result.Last().AgentName.Should().Be.EqualTo("test3 test3");
 
+		}
+
+		[Test]
+		public void ShouldOrderByCreatedTimeCorrectly()
+		{
+			var dateOnlyPeriod = new DateOnlyPeriod(2015, 11, 01, 2015, 11, 02);
+
+			var textRequest = new TextRequest(new DateTimePeriod());
+			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
+			personRequest1.SetId(Guid.NewGuid());
+			typeof(PersonRequest).GetProperty("CreatedOn").SetValue(personRequest1, new DateTime(2015, 01, 03, 18, 00, 00), null);
+
+			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
+				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod()));
+			personRequest2.SetId(Guid.NewGuid());
+			typeof(PersonRequest).GetProperty("CreatedOn").SetValue(personRequest2, new DateTime(2015, 01, 01, 18, 00, 00), null);
+
+			var textRequest3 = new TextRequest(new DateTimePeriod());
+			var personRequest3 = new PersonRequest(PersonFactory.CreatePerson("test3"), textRequest3);
+			personRequest3.SetId(Guid.NewGuid());
+			typeof(PersonRequest).GetProperty("CreatedOn").SetValue(personRequest3, new DateTime(2015, 01, 02, 18, 00, 00), null);
+
+			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
+
+			personRequestRepository.Add(personRequest1);
+			personRequestRepository.Add(personRequest2);
+			personRequestRepository.Add(personRequest3);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = dateOnlyPeriod.StartDate,
+				EndDate = dateOnlyPeriod.EndDate,
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.CreatedOnAsc }
+			};
+
+			var result = Target.Create(input);
+			result.First().AgentName.Should().Be.EqualTo("test2 test2");
+			result.Second().AgentName.Should().Be.EqualTo("test3 test3");
+			result.Last().AgentName.Should().Be.EqualTo("test1 test1");
 		}
 	}
 }
