@@ -193,7 +193,6 @@ BEGIN
 	AND Processed=0
 	AND ProcessingUntil<GetUtcDate()
 	AND QueueId = @QueueId
-	ORDER BY CreatedAt ASC
 END
 GO
 ----
