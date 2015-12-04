@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)
 		{
-			return _repository.FindAllRequests(period.ToDateTimePeriod(_userTimeZone.TimeZone()));
+			return _repository.FindAllRequests(period.ToDateTimePeriod(_userTimeZone.TimeZone()),
+				new List<RequestType> {RequestType.AbsenceRequest, RequestType.TextRequest});
 		}
 	}
 }

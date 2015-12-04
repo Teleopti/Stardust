@@ -373,6 +373,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			return _requestRepository;
 		}
 
+		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period, IEnumerable<RequestType> whitelistRequestTypes)
+		{
+			return _requestRepository.Where(request => whitelistRequestTypes.Contains(request.Request.RequestType));
+		}
+
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
 			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType));		

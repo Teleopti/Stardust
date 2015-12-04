@@ -134,17 +134,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period)
 		{
+			return FindAllRequests(period, null);
+		}
+
+		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period,
+			IEnumerable<RequestType> whitelistRequestTypes)
+		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
-				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime))
-				.Add(Restrictions.Or(Restrictions.Eq("class", typeof (AbsenceRequest)), Restrictions.Eq("class", typeof (TextRequest))));
+				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
+
+			if (whitelistRequestTypes != null)
+			{
+				var typeCriterion = whitelistRequestTypes.Select(toRequestClassTypeConstraint)
+					.Where(c => c != null).Aggregate(Restrictions.Or);
+				requestForPeriod.Add(typeCriterion);
+			}
+
 
 			return Session.CreateCriteria<IPersonRequest>("req")
 				.SetFetchMode("requests", FetchMode.Join)
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
 				.List<IPersonRequest>();
 		}
+
+		private ICriterion toRequestClassTypeConstraint(RequestType t)
+		{
+			Type type;
+			switch (t)
+			{
+				case RequestType.AbsenceRequest:
+					type = typeof(AbsenceRequest);
+					break;
+				case RequestType.TextRequest:
+					type = typeof(TextRequest);
+					break;
+				default:
+					return null;
+			}
+			return Restrictions.Eq("class", type);
+		}
+
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{

@@ -1008,8 +1008,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1),DateTime.UtcNow.AddDays(1))).ToArray();
+			result.Count().Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldReturnAllRequestsInPeriodWithWhitelistedTypes()
+		{
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}).ToArray();
 			result.Count().Should().Be(2);
 		}
+
 	}
     
 }
