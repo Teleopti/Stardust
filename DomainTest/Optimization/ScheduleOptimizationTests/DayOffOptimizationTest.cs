@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-      public IScheduleRepository ScheduleRepository;
+		public FakeDayOffRulesRepository DayOffRulesRepository;
+		public IScheduleRepository ScheduleRepository;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 
 		[Test]
@@ -110,5 +111,61 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest)
 				.Should().Be.True();
 		}
-	}
+
+		[Test, Explicit("To be fixed - #36191")]
+		public void ShouldOptimizeEvenWhenDayoffsAreNotInLegalStateAtStart()
+		{
+			var firstDay = new DateOnly(2015, 12, 07); //mon
+			var scenario = ScenarioRepository.Has("some name");
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
+			schedulePeriod.SetDaysOff(4);
+			DayOffRulesRepository.HasDefault(x =>
+			{
+				x.ConsecutiveDayOffs = new MinMax<int>(1, 1);   //actual setup tp test 
+				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
+			});
+
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
+
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				TimeSpan.FromHours(20), //DO at start
+				TimeSpan.FromHours(10), //DO at start
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(1),
+
+				TimeSpan.FromHours(20), //DO at start
+				TimeSpan.FromHours(10), //DO at start
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(10),
+				TimeSpan.FromHours(1)
+				));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[7].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[8].CurrentDate).SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).DayOff().Should().Be.Null();
+			PersonAssignmentRepository.GetSingle(skillDays[7].CurrentDate).DayOff().Should().Be.Null();
+		}
+
+		[Test, Explicit("To be implemented, fix above and see what needs to be done/written")]
+		public void ShouldNotLeaveBlankSpotsWhenWhenDayoffsAreNotInLegalStateAtStart()
+		{
+			//something similar like above but different asserts
+		}
+  }
 }
