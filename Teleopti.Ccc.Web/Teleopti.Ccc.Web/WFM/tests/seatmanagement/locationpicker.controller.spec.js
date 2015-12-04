@@ -5,19 +5,17 @@ describe('seatplan report controller tests', function() {
 	var $q,
 		$rootScope,
 		$httpBackend,
-		controller,
-		seatPlanTranslatorFactory;
+		controller;
 
 	beforeEach(function() {
 		module('wfm.seatPlan');
 		module('pascalprecht.translate');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatPlanTranslatorFactory_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		seatPlanTranslatorFactory = _seatPlanTranslatorFactory_;
 		controller = setUpController(_$controller_);
 	}));
 
@@ -106,8 +104,7 @@ describe('seatplan report controller tests', function() {
 		return $controller('LocationPickerCtrl',
 		{
 			$scope: scope,
-			seatPlanService: mockSeatPlanService,
-			translator: seatPlanTranslatorFactory
+			seatPlanService: mockSeatPlanService
 		});
 	};
 
