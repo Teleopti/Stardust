@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
 			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
-			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader>();
 			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister, ISiteOutOfAdherenceReadModelReader>();
 
 			system.UseTestDouble<ControllableReadModelTransactionSyncronization>().For<IReadModelTransactionSyncronization>();

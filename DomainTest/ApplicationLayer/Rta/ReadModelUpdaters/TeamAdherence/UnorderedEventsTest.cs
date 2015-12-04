@@ -29,6 +29,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 			Persister.Get(teamId).Count.Should().Be(2);
 		}
 
+		[Test]
+		[Ignore]
+		// ???
+		public void ShouldHandleWhenPeronDeletedEventIsTheFirstEvent_IsItWorthToImplent_QuestionMark()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			var events = new IEvent[]
+			{
+					new PersonDeletedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-12-04 08:05".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						TeamId = teamId,
+						Timestamp = "2015-12-04 08:00".Utc()
+					},
+			};
+			events.ForEach(e => Target.Handle((dynamic)e));
+
+			Persister.Get(teamId).Count.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldHandleOutOfSyncPersonDeletedEvents()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = Guid.NewGuid(), TeamId = teamId, Timestamp = "2015-12-04 10:00".Utc() });
+
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, TeamId = teamId, Timestamp = "2015-12-04 10:05".Utc() });
+			Target.Handle(new PersonDeletedEvent { PersonId = personId, Timestamp = "2015-12-04 10:00".Utc() });
+
+			Persister.Get(teamId).Count.Should().Be(1);
+		}
 	}
 
 	public class EventsPermuationFactory

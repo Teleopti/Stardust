@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		}
 
 		[Test]
-		public void ShouldRecalculateForThePersonsSite()
+		public void ShouldNotRecalculateOtherSite()
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();

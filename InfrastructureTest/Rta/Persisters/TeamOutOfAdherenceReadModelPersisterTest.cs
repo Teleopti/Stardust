@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
@@ -96,6 +95,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 
 			var models = Reader.Read(siteId1);
+			models.Single(x => x.TeamId == teamId1A).Count.Should().Be(1);
+			models.Single(x => x.TeamId == teamId1B).Count.Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldGetAllTeams()
+		{
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var teamId1A = Guid.NewGuid();
+			var teamId1B = Guid.NewGuid();
+			var teamId2A = Guid.NewGuid();
+
+			Target.Persist(new TeamOutOfAdherenceReadModel
+			{
+				SiteId = siteId1,
+				TeamId = teamId1A,
+				Count = 1
+			});
+			Target.Persist(new TeamOutOfAdherenceReadModel
+			{
+				SiteId = siteId1,
+				TeamId = teamId1B,
+				Count = 2
+			});
+			Target.Persist(new TeamOutOfAdherenceReadModel
+			{
+				SiteId = siteId2,
+				TeamId = teamId2A,
+				Count = 3
+			});
+
+			var models = Reader.Read();
 			models.Single(x => x.TeamId == teamId1A).Count.Should().Be(1);
 			models.Single(x => x.TeamId == teamId1B).Count.Should().Be(2);
 		}

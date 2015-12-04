@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -25,6 +24,11 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
 		{
 			return _models.Where(x => x.SiteId == siteId);
+		}
+
+		public IEnumerable<TeamOutOfAdherenceReadModel> Read()
+		{
+			return _models.Select(m => JsonConvert.DeserializeObject<TeamOutOfAdherenceReadModel>(JsonConvert.SerializeObject(m))).ToArray();
 		}
 
 		public bool HasData()

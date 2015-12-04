@@ -20,6 +20,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
         {
             return _data.Where(x => x.SiteId == siteId);
         }
-        
+
+	    public IEnumerable<TeamOutOfAdherenceReadModel> Read()
+	    {
+		    return _data.ToArray();
+	    }
     }
 }

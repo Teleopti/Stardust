@@ -12,14 +12,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<PersonInAdherenceEvent>, 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,
+		IHandleEvent<PersonDeletedEvent>,
 		IInitializeble,
 		IRecreatable
 	{
 		private readonly ITeamOutOfAdherenceReadModelPersister _persister;
+		private readonly ITeamOutOfAdherenceReadModelReader _reader;
 
-		public TeamOutOfAdherenceReadModelUpdater(ITeamOutOfAdherenceReadModelPersister persister)
+		public TeamOutOfAdherenceReadModelUpdater(
+			ITeamOutOfAdherenceReadModelPersister persister, 
+			ITeamOutOfAdherenceReadModelReader reader)
 		{
 			_persister = persister;
+			_reader = reader;
 		}
 
 		[ReadModelUnitOfWork]
@@ -52,6 +57,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				}));
 		}
 
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			var models =
+				from model in _reader.Read()
+				from state in model.State
+				where state.PersonId == @event.PersonId
+				select model;
+
+			foreach (var model in models)
+			{
+				deletePerson(model, @event.PersonId);
+				calculate(model);
+				_persister.Persist(model);
+			}
+		}
+
+		private static void deletePerson(TeamOutOfAdherenceReadModel model, Guid personId)
+		{
+			var state = stateForPerson(model, personId);
+			state.Deleted = true;
+			state.OutOfAdherence = false;
+			removeRedundantOldStates(model);
+		}
+
 		private void handleEvent(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
 		{
 			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel
@@ -65,10 +95,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister.Persist(model);
 		}
 
-		private void updatePerson(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<TeamOutOfAdherenceReadModelState> mutate)
+		private static void updatePerson(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<TeamOutOfAdherenceReadModelState> mutate)
 		{
 			var state = stateForPerson(model, personId);
-			if (state.Time <= time)
+			if (state.Time <= time && !state.Deleted)
 			{
 				state.Time = time;
 				mutate(state);

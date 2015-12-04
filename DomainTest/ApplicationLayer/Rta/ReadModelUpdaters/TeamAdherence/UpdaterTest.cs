@@ -9,14 +9,16 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdherence
 {
 	[TestFixture]
+	[AdherenceTest]
 	public class UpdaterTest
 	{
+		public FakeTeamOutOfAdherenceReadModelPersister persister;
+		public TeamOutOfAdherenceReadModelUpdater target;
+
 		[Test]
 		public void ShouldPersistTeamAdherenceOnInAdherence()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() {TeamId = teamId});
 
@@ -27,8 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public void ShouldPersistTeamAdherenceInOutOfAdherence()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId });
 
@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -54,8 +52,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -68,8 +64,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -83,8 +77,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -98,8 +90,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent {TeamId = teamId, PersonId = personId});
 			target.Handle(new PersonNeutralAdherenceEvent {TeamId = teamId, PersonId = personId});
@@ -112,8 +102,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
 			target.Handle(new PersonNeutralAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -127,8 +115,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
@@ -142,10 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
-
+			
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId1, PersonId = Guid.NewGuid() });
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId2, PersonId = Guid.NewGuid() });
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId1, PersonId = Guid.NewGuid() });
@@ -158,8 +141,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public void ShouldExcludePersonGoingInAdherenceForTheFirstTime()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid()});
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid()});
@@ -171,8 +152,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public void ShouldNeverCountNegativePersonsBeingOutOfAdherence()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
@@ -185,8 +164,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() { TeamId = teamId, SiteId = siteId});
 
@@ -198,8 +175,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
-			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent{ TeamId = teamId, SiteId = siteId});
 

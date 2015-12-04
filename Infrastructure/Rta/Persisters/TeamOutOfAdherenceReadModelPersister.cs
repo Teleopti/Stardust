@@ -117,5 +117,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Cast<TeamOutOfAdherenceReadModel>();
 		}
 
+		public IEnumerable<TeamOutOfAdherenceReadModel> Read()
+		{
+			return _unitOfWork.Current()
+				   .CreateSqlQuery(
+					   "SELECT " +
+					   "		TeamId, " +
+					   "		Count " +
+					   "FROM " +
+					   "		ReadModel.TeamOutOfAdherence ")
+				   .AddScalar("TeamId", NHibernateUtil.Guid)
+				   .AddScalar("Count", NHibernateUtil.Int32)
+				   .SetResultTransformer(Transformers.AliasToBean(typeof(TeamOutOfAdherenceReadModel)))
+				   .List()
+				   .Cast<TeamOutOfAdherenceReadModel>();
+		}
 	}
 }
