@@ -10,11 +10,11 @@
 	<tr ng-repeat-start="team in bookingByDate.Teams"></tr>
 
 	<tr ng-show="$first">
-		<th class="td-team">Team</th>
-		<th class="td-agent">Agent</th>
-		<th class="td-location">Location</th>
-		<th class="td-seat">Seat</th>
-		<th class="td-time">Time</th>
+		<th class="td-team">{{'Team' | translate }}</th>
+		<th class="td-agent">{{'Agent' | translate }}</th>
+		<th class="td-location">{{'Location' | translate }}</th>
+		<th class="td-seat">{{'Seat' | translate }}</th>
+		<th class="td-time">{{'Time' | translate }}</th>
 	</tr>
 
 	<tr ng-repeat="booking in team.SeatBookings" ng-class="[$index % 2== 0 ? 'tr-color':'' ]">

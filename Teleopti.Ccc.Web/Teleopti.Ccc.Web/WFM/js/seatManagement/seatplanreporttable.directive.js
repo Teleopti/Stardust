@@ -3,19 +3,19 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('seatPlanReportTableCtrl', seatPlanReportTableCtrl);
-	seatPlanReportTableCtrl.$inject = ['seatPlanTranslatorFactory', 'seatMapCanvasUtilsService'];
+	seatPlanReportTableCtrl.$inject = ['$translate', 'seatMapCanvasUtilsService'];
 
-	function seatPlanReportTableCtrl(seatPlanTranslatorFactory, utils) {
+	function seatPlanReportTableCtrl($translate, utils) {
 		var vm = this;
 
 		vm.getDisplayTime = function (booking) {
 
 			if (booking.IsDayOff) {
-				return seatPlanTranslatorFactory.TranslatedStrings['DayOff'];
+				return $translate.instant('DayOff');
 			}
 
 			if (booking.IsFullDayAbsence) {
-				return seatPlanTranslatorFactory.TranslatedStrings['FullDayAbsence'];
+				return $translate.instant('FullDayAbsence');
 			}
 
 			return utils.getSeatBookingTimeDisplay(booking);

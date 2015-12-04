@@ -1,9 +1,9 @@
 ﻿(function () {
 
 	angular.module('wfm.seatPlan').controller('SeatPlanInitCtrl', seatPlanInitDirectiveController);
-	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'growl', 'seatPlanTranslatorFactory'];
+	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'growl', '$translate'];
 
-	function seatPlanInitDirectiveController(seatPlanService, growl, seatPlanTranslatorFactory) {
+	function seatPlanInitDirectiveController(seatPlanService, growl, $translate) {
 
 		var vm = this;
 
@@ -38,7 +38,7 @@
 			};
 
 			if (vm.selectedTeams.length == 0 || vm.selectedLocations.length == 0) {
-				onSelectedTeamsLocationsEmpty(seatPlanTranslatorFactory.TranslatedStrings["TeamsOrLocationsAreUnselected"]);
+				onSelectedTeamsLocationsEmpty($translate.instant("TeamsOrLocationsAreUnselected"));
 				vm.processingSeatPlan = false;
 			}
 			else {
@@ -54,7 +54,7 @@
 		
 		function onAddSeatPlanCompleted(seatPlanResultMessage) {
 
-			var seatPlanResultDetailMessage = seatPlanTranslatorFactory.TranslatedStrings['SeatPlanResultDetailMessage']
+			var seatPlanResultDetailMessage = $translate.instant('SeatPlanResultDetailMessage')
 						.replace('{0}', seatPlanResultMessage.NumberOfBookingRequests)
 						.replace('{1}', seatPlanResultMessage.RequestsGranted)
 						.replace('{2}', seatPlanResultMessage.RequestsDenied)
