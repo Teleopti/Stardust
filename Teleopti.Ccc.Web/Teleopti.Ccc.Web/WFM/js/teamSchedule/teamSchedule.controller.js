@@ -45,7 +45,7 @@
 		vm.selectedAbsenceId = '';
 
 		vm.selectAllVisible = false;
-		vm.selected = [];
+		vm.totalSelected = [];
 		vm.pageSelected = [];
 
 		vm.selectAllForAllPages = function () {
@@ -57,19 +57,19 @@
 		};
 
 		var updateSelected = function (action, id, pageNumber) {
-			if (action === 'add' && vm.selected.indexOf(id) === -1) {
-				vm.selected.push(id);
+			if (action === 'add' && vm.totalSelected.indexOf(id) === -1) {
+				vm.totalSelected.push(id);
 
 				vm.pageSelected[pageNumber].push(id);
 			}
-			if (action === 'remove' && vm.selected.indexOf(id) !== -1) {
-				vm.selected.splice(vm.selected.indexOf(id), 1);
+			if (action === 'remove' && vm.totalSelected.indexOf(id) !== -1) {
+				vm.totalSelected.splice(vm.totalSelected.indexOf(id), 1);
 
 				if (vm.pageSelected[pageNumber] != null) {
 					vm.pageSelected[pageNumber].splice(vm.pageSelected[pageNumber].indexOf(id), 1);
 				}
 			}
-			vm.selectAllVisible = vm.paginationOptions.totalPages > 1 && vm.selected.length < vm.allAgents.length;
+			vm.selectAllVisible = vm.paginationOptions.totalPages > 1 && vm.totalSelected.length < vm.allAgents.length;
 		};
 
 		vm.updateSelection = function ($event, id) {
@@ -79,7 +79,6 @@
 		};
 
 		vm.toggleAll = function ($event) {
-			
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
 			updateAllStatusForOnePage(action, vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber);
@@ -329,12 +328,12 @@
 		};
 
 		vm.isDataChangeValid = function() {
-			return vm.selected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
+			return vm.totalSelected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
 		}
 		vm.applyAbsence = function() {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: vm.selected,
+					PersonIds: vm.totalSelected,
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
@@ -343,7 +342,7 @@
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
-					PersonIds: vm.selected,
+					PersonIds: vm.totalSelected,
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
