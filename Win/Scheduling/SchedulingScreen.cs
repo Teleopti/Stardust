@@ -2322,9 +2322,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Updating shift editor"))
 			{
 				notesEditor.LoadNote(null);
-				IScheduleDay scheduleDay =
-					_scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex]
-						.CellValue as IScheduleDay;
+
+				var scheduleDay = getSelectedScheduleDayForShiftEditor();
 
 				if (scheduleDay == null)
 				{
@@ -2352,6 +2351,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				}
 			}
+		}
+
+		private IScheduleDay getSelectedScheduleDayForShiftEditor()
+		{
+			var getFirstDataColumnIndex = new Func<ScheduleViewBase, int>((scheduleView) =>
+			{
+				int colIndex = scheduleView.ViewGrid.CurrentCell.ColIndex;
+				if (colIndex < scheduleView.ViewGrid.Cols.FrozenCount)
+					colIndex = Math.Min(scheduleView.ViewGrid.ColCount, scheduleView.ViewGrid.Cols.FrozenCount++);
+				return colIndex;
+			});
+
+			// in case of DayViewNew the selected schedule day is according to the first datacolumn
+			if (_scheduleView is DayViewNew)
+			{
+				var firstDataColumnIndex = getFirstDataColumnIndex(_scheduleView);
+				var scheduleDay = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, firstDataColumnIndex]
+						.CellValue as IScheduleDay;
+				return scheduleDay;
+			}
+				return _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex]
+					.CellValue as IScheduleDay;
 		}
 
 		private void schedulePartToEditor(IScheduleDay part)
