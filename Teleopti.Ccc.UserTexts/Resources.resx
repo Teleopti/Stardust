@@ -13810,4 +13810,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="ManageRules" xml:space="preserve">
     <value>Manage Rules</value>
   </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Add Location</value>
+    <comment>Add location dialog title</comment>
+  </data>
 </root>
