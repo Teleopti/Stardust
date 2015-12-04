@@ -13822,4 +13822,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Mappings</value>
     <comment>Mapping state group, activety to rules</comment>
   </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Threshold</value>
+    <comment>Time threshold</comment>
+  </data>
 </root>

@@ -28105,6 +28105,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Threshold.
+        /// </summary>
+        public static string Threshold {
+            get {
+                return ResourceManager.GetString("Threshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thresholds.
         /// </summary>
         public static string Thresholds {

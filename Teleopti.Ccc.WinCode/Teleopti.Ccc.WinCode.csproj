@@ -314,6 +314,7 @@
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
+    <Compile Include="Common\Configuration\Rta\AdherenceColumn.cs" />
     <Compile Include="Common\Configuration\ChangePasswordModel.cs" />
     <Compile Include="Common\Configuration\ChangePasswordPresenter.cs" />
     <Compile Include="Common\Configuration\IChangePasswordView.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityPresenter.cs" />
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityViewModel.cs" />
     <Compile Include="Common\Configuration\GamificationSettingProvider.cs" />
+    <Compile Include="Common\Configuration\Rta\ThresholdColumn.cs" />
     <Compile Include="Common\Configuration\SeniorityControlPresenter.cs" />
     <Compile Include="Common\Configuration\SetGamificationSettingPresenter.cs" />
     <Compile Include="Common\Configuration\SitePresenter.cs" />

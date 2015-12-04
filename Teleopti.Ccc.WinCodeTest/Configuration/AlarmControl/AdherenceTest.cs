@@ -6,6 +6,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
+using Teleopti.Ccc.WinCode.Common.Configuration.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl

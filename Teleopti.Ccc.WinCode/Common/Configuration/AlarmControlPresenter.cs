@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
@@ -19,15 +18,15 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	public class AlarmControlPresenter
 	{
 		private readonly IAlarmControlView _view;
-		private readonly IEnumerable<IRtaRule> _alarmTypes;
+		private readonly IEnumerable<IRtaRule> _rules;
 		private readonly IList<Column> _columns = new List<Column>();
 
-		public AlarmControlPresenter(IEnumerable<IRtaRule> alarmTypes, IAlarmControlView view, IEnumerable<IAlarmControlPresenterDecorator> decorators)
+		public AlarmControlPresenter(IEnumerable<IRtaRule> rules, IAlarmControlView view, IEnumerable<IAlarmControlPresenterDecorator> decorators)
 		{
 			decorators = decorators ?? new IAlarmControlPresenterDecorator[] {};
 
 			_view = view;
-			_alarmTypes = alarmTypes;
+			_rules = rules;
 
 			_columns.Add(ColumnHeader.Name);
 			_columns.Add(ColumnHeader.StaffingEffect);
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		public void QueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = _alarmTypes.Count();
+			e.Count = _rules.Count();
 			e.Handled = true;
 		}
 
@@ -91,48 +90,48 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				if (e.ColIndex == 0)
 					return;
-				var alarmType = _alarmTypes.ElementAt(e.RowIndex - 1);
+				var alarmType = _rules.ElementAt(e.RowIndex - 1);
 				Columns.Single(c => c.Index == e.ColIndex).Get(alarmType, e);
 			}
 			e.Handled = true;
 		}
 		
-		private static void getStaffingEffect(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getStaffingEffect(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.CellType = "NumericCell";
-			e.Style.CellValue = _rtaRule.StaffingEffect;
+			e.Style.CellValue = rule.StaffingEffect;
 		}
 
-		private static void getName(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getName(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
-			e.Style.Text = _rtaRule.Description.Name;
+			e.Style.Text = rule.Description.Name;
 		}
 
-		private static void getColor(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getColor(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.CellType = "ColorPickerCell";
 			e.Style.CellValueType = typeof(Color);
-			e.Style.CellValue = _rtaRule.DisplayColor;
+			e.Style.CellValue = rule.DisplayColor;
 		}
 
-		private static void getTime(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getTime(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
-			e.Style.CellValue = _rtaRule.ThresholdTime.TotalSeconds;
+			e.Style.CellValue = rule.ThresholdTime.TotalSeconds;
 			e.Style.CellType = "NumericCell";
 		}
 
-		private static void getUpdatedBy(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getUpdatedBy(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.CellType = "Static";
-			if (_rtaRule.UpdatedBy != null)
-				e.Style.CellValue = _rtaRule.UpdatedBy.Name;
+			if (rule.UpdatedBy != null)
+				e.Style.CellValue = rule.UpdatedBy.Name;
 		}
 
-		private static void getUpdatedOn(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
+		private static void getUpdatedOn(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.CellType = "Static";
-			if (_rtaRule.UpdatedOn.HasValue)
-				e.Style.CellValue = new LocalizedUpdateInfo().UpdatedTimeInUserPerspective(_rtaRule);
+			if (rule.UpdatedOn.HasValue)
+				e.Style.CellValue = new LocalizedUpdateInfo().UpdatedTimeInUserPerspective(rule);
 		}
 
 		private void queryHeader(GridQueryCellInfoEventArgs e)
@@ -149,15 +148,15 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			if (e.RowIndex == 0 || e.ColIndex == 0) return;
 
-			if (!_alarmTypes.Any())
+			if (!_rules.Any())
 				return;
 
 			var column = Columns.SingleOrDefault(c => c.Index == e.ColIndex && c.Update != null);
 
 			if (column != null)
 			{
-				var alarmType = _alarmTypes.ElementAt(e.RowIndex - 1);
-				column.Update(alarmType, _alarmTypes, _view, e);
+				var alarmType = _rules.ElementAt(e.RowIndex - 1);
+				column.Update(alarmType, _rules, _view, e);
 			}
 
 			e.Handled = true;
@@ -202,33 +201,4 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			alarm.Description = new Description(name);
 		}
 	}
-
-	public class AdherenceColumn : IAlarmControlPresenterDecorator
-	{
-		public void Decorate(AlarmControlPresenter alarmControlPresenter)
-		{
-			var staffingEffect = alarmControlPresenter.Columns.IndexOf(AlarmControlPresenter.ColumnHeader.StaffingEffect);
-			alarmControlPresenter.Columns.Insert(staffingEffect + 1,
-				new AlarmControlPresenter.Column
-				{
-					Text = Resources.Adherence,
-					Get = getAdherence,
-					Update = updateAdherence
-				});
-		}
-
-		private static void updateAdherence(IRtaRule _rtaRule, IEnumerable<IRtaRule> alarmTypes, IAlarmControlView view, GridSaveCellInfoEventArgs e)
-		{
-			_rtaRule.SetAdherenceByText(e.Style.CellValue as string);
-		}
-
-		private static void getAdherence(IRtaRule _rtaRule, GridQueryCellInfoEventArgs e)
-		{
-			e.Style.CellType = "ComboBox";
-			e.Style.ChoiceList = new StringCollection { Resources.InAdherence, Resources.OutOfAdherence, Resources.NeutralAdherence };
-			e.Style.DropDownStyle = GridDropDownStyle.Exclusive;
-			e.Style.CellValue = _rtaRule.AdherenceText;
-		}
-	}
-
 }

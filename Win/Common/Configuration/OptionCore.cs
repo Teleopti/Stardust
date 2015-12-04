@@ -13,6 +13,7 @@ using Teleopti.Ccc.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.Win.Payroll.Overtime;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common.Configuration;
+using Teleopti.Ccc.WinCode.Common.Configuration.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -229,6 +230,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (_toggleManager.IsEnabled(Toggles.RTA_NeutralAdherence_30930))
 				yield return new AdherenceColumn();
+			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
+				yield return new ThresholdColumn();
 		}
 	}
 

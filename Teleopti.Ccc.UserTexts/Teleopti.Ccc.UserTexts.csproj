@@ -139,9 +139,13 @@
     <EmbeddedResource Include="Resources.es.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.fa.resx" />
+    <EmbeddedResource Include="Resources.fa.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.fi.resx" />
-    <EmbeddedResource Include="Resources.fr-CA.resx" />
+    <EmbeddedResource Include="Resources.fr-CA.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.fr.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -155,7 +159,9 @@
     <EmbeddedResource Include="Resources.no.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.pl.resx" />
+    <EmbeddedResource Include="Resources.pl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.pt.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
