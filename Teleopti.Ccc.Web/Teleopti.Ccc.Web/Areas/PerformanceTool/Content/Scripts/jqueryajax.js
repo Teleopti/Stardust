@@ -13,17 +13,17 @@ define([
                 return !self.Active();
             });
 
-            $('body').ajaxStart(function() {
+            $(document).ajaxStart(function() {
                 self.Active(true);
             });
-            $('body').ajaxStop(function() {
+            $(document).ajaxStop(function () {
                 self.Active(false);
             });
 
-            $('body').ajaxSend(function() {
+            $(document).ajaxSend(function () {
                 self.Count(self.Count() + 1);
             });
-            $('body').ajaxComplete(function() {
+            $(document).ajaxComplete(function () {
                 self.Count(self.Count() - 1);
             });
         };
