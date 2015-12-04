@@ -1,29 +1,7 @@
 ﻿<style>
-	.wfm-checkbox input[type=checkbox]:indeterminate ~ label .wfm-checkbox-toggle:after {
-		background-color: #66c2ff;
-		text-align: center;
-		color: #fff;
-	}
-
-	.input-group input[type=text] {
-		height: 34px;
-		border: 1px solid #ccc;
-	}
-
-	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
-	.ui-grid-column-menu .ui-grid-menu .ui-grid-menu-mid.ng-hide-remove,
-	.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid.ng-hide-add,
-	.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid.ng-hide-remove {
-		-moz-transition: none !important;
-		-webkit-transition: none !important;
-		-o-transition: color 0 ease-in !important;
-		-ms-transition: none !important;
-		transition: none !important;
-	}
-
 </style>
-<div>
-	<div class="row people-cart" style="position: relative">
+<div class="people-cart">
+	<div class="row" style="position: relative">
 		<h4>{{'SelectedPeople' | translate}}</h4>
 		<div class="col-sm-1" style="padding-left:0; padding-right: 0; width: 60px">
 			<p>
@@ -33,7 +11,7 @@
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
 			<p class="input-group">
-				<input type="text" class="form-control" style="height:35px" datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+				<input type="text" class="form-control" datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="mdi mdi-calendar"></i></button>
 				</span>

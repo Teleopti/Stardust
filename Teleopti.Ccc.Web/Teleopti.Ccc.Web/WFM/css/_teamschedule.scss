@@ -97,10 +97,10 @@
 	}
 
 	.table {
-		thead > tr > th, td
-		tbody > tr > th, td
-		tfoot > tr > th, td {
-			padding: 5px;
+		thead, tbody, tfoot {
+			tr > th, td {
+				padding: 5px;
+			}
 		}
 	}
 }
