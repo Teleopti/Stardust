@@ -39,23 +39,17 @@
 				</span>
 			</nav>
 		</div>
-		
-		
 	</div>
-	
 	
 	<div class="row select-all-dialog" ng-show="selectAllVisible">
 		<span class="notice-spacer" ng-click="selectAllMatch()">
 			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 		</span>
 	</div>
-
 	
 	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
-		
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<wfm-pagination pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
-		
 	</div>
 
 	<import-people ng-if="showImportPanel" ng-cloak></import-people>
