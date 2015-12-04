@@ -33,5 +33,5 @@ JOIN dbo.Site s ON s.Id = t.Site
 GO
 
 CREATE UNIQUE CLUSTERED INDEX CIX_v_LoadPersonData
-    ON dbo.[v_PersonOrganizationData] (PersonPeriodId, AcdLogOnOriginalId ASC, StartDate DESC);
+    ON dbo.[v_PersonOrganizationData] (AcdLogOnOriginalId ASC, StartDate DESC, PersonPeriodId);
 GO
