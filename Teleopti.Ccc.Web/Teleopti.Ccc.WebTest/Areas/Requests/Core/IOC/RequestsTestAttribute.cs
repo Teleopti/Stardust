@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.AddModule(new WebModule(configuration, null));
 
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
+			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();

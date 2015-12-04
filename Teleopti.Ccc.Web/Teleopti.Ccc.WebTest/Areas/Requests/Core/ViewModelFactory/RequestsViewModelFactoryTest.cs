@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 	{
 		public IRequestsViewModelFactory Target;
 		public IPersonRequestRepository PersonRequestRepository;
+		public IPermissionProvider PermissionProvider;
 
 
 		[Test]
@@ -36,10 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			personRequest2.SetId(Guid.NewGuid());
 
 			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
-			
 			personRequestRepository.Add(personRequest1);
 			personRequestRepository.Add(personRequest2);
-
+			
 			var input = new AllRequestsFormData
 			{
 				StartDate = dateOnlyPeriod.StartDate,
@@ -184,5 +186,72 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.Second().AgentName.Should().Be.EqualTo("test3 test3");
 			result.Last().AgentName.Should().Be.EqualTo("test1 test1");
 		}
+
+		[Test]
+		public void ShouldNotSeeRequestWithoutPermission()
+		{
+			var textRequest = new TextRequest(new DateTimePeriod(2015, 12, 1, 2015, 12, 15));
+			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
+			personRequest1.SetId(Guid.NewGuid());
+
+			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
+				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod(2015, 12, 10, 2015, 12, 15)));
+			personRequest2.SetId(Guid.NewGuid());
+
+			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
+			personRequestRepository.Add(personRequest1);
+			personRequestRepository.Add(personRequest2);
+		
+
+			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
+			permissionProvider.Enable();
+			
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 12, 1),
+				EndDate = new DateOnly(2015, 12, 31)
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(0);
+		}
+
+
+		[Test]
+		public void ShouldNotSeeRequestBeforePermissionDate()
+		{			
+			var textRequest = new TextRequest(new DateTimePeriod(2015, 12, 1, 2015, 12, 15));
+			var personRequest1 = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest);
+			personRequest1.SetId(Guid.NewGuid());
+			
+			var personRequest2 = new PersonRequest(PersonFactory.CreatePerson("test2"),
+				new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"), new DateTimePeriod(2015, 12, 10, 2015, 12, 15)));
+			personRequest2.SetId(Guid.NewGuid());
+
+			var textRequest3 = new TextRequest(new DateTimePeriod(2015, 12, 20, 2015, 12, 25));
+			var personRequest3 = new PersonRequest(PersonFactory.CreatePerson("test3"), textRequest3);
+			personRequest3.SetId(Guid.NewGuid());
+		
+
+			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
+			personRequestRepository.Add(personRequest1);
+			personRequestRepository.Add(personRequest2);
+			personRequestRepository.Add(personRequest3);
+
+			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
+			permissionProvider.Enable();
+
+			permissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebRequests, new DateOnly(2015, 12, 18));
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 12, 1),
+				EndDate = new DateOnly(2015, 12, 31)				
+			};
+
+			var result = Target.Create(input);
+			result.Count().Should().Be.EqualTo(1);
+		}
+
 	}
 }

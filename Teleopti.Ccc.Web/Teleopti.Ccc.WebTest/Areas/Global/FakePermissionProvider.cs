@@ -7,11 +7,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{
-		private readonly List<string> applicationFunctions = new List<string>();
+		private readonly Dictionary<string, DateOnly?> applicationFunctions = new Dictionary<string, DateOnly?>();
+		private bool enabled = false;
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
-			return applicationFunctions.Contains(applicationFunctionPath);
+			return applicationFunctions.ContainsKey(applicationFunctionPath);
 		}
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
@@ -32,7 +33,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
 			IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			throw new NotImplementedException();
+			if (!enabled) return true;
+			return applicationFunctions.ContainsKey(applicationFunctionPath)
+				&& (!applicationFunctions[applicationFunctionPath].HasValue || applicationFunctions[applicationFunctionPath] <= date);
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date, IPerson person,
@@ -41,10 +44,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			throw new NotImplementedException();
 		}
 
+		public void Enable()
+		{
+			enabled = true;
+		}
+
+		public void Disable()
+		{
+			enabled = false;
+		}
+
 		public void Permit(string applicationFunction)
 		{
-			if (!applicationFunctions.Contains(applicationFunction))
-				applicationFunctions.Add(applicationFunction);
+			if (!applicationFunctions.ContainsKey(applicationFunction))
+				applicationFunctions.Add(applicationFunction, null);
+		}
+
+		public void Permit(string applicationFunction, DateOnly date)
+		{
+			if (!applicationFunctions.ContainsKey(applicationFunction))
+				applicationFunctions.Add(applicationFunction, date);
+		}
+
+		public void Reject(string applicationFunction)
+		{
+			if (applicationFunctions.ContainsKey(applicationFunction))
+				applicationFunctions.Remove(applicationFunction);
 		}
 	}
 }
