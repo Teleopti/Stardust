@@ -8,31 +8,31 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdherence
 {
+	[AdherenceTest]
 	[TestFixture]
 	public class UpdaterTest
 	{
+		public FakeSiteOutOfAdherenceReadModelPersister Persister;
+		public SiteOutOfAdherenceReadModelUpdater Target;
+
 		[Test]
 		public void ShouldPersistSiteAdherenceOnInAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId });
 
-			persister.Get(siteId).Should().Not.Be.Null();
+			Persister.Get(siteId).Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldPersistSiteAdherenceOnOutOfAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent() { SiteId = siteId });
+			Target.Handle(new PersonOutOfAdherenceEvent() { SiteId = siteId });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -40,13 +40,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(0);
+			Persister.Get(siteId).Count.Should().Be(0);
 		}
 
 		[Test]
@@ -54,13 +52,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -68,14 +64,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -83,14 +77,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(0);
+			Persister.Get(siteId).Count.Should().Be(0);
 		}
 		
 		[Test]
@@ -98,13 +90,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonNeutralAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonNeutralAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(0);
+			Persister.Get(siteId).Count.Should().Be(0);
 		}
 
 		[Test]
@@ -112,84 +102,72 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonNeutralAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonNeutralAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldSummarizePersonsOutOfAdherence()
 		{
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
-
+		
 		[Test]
 		public void ShouldSummarizePersonsOutOfAdherenceForEachSite()
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
 
-			persister.Get(siteId1).Count.Should().Be(2);
-			persister.Get(siteId2).Count.Should().Be(1);
+			Persister.Get(siteId1).Count.Should().Be(2);
+			Persister.Get(siteId2).Count.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldExcludePersonGoingInAdherenceForTheFirstTime()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldNeverCountNegativePersonsBeingOutOfAdherence()
 		{
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 
-			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
 
-			persister.Get(siteId).Count.Should().Be(0);
+			Persister.Get(siteId).Count.Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldUpdateAgentsOutOfAdherenceWhenFirstStateIsInAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
-			target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
 
-			persister.Get(siteId).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -197,12 +175,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent() {SiteId = siteId, BusinessUnitId = businessUnitId});
+			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = siteId, BusinessUnitId = businessUnitId});
 
-			persister.GetForBusinessUnit(businessUnitId).Single().BusinessUnitId.Should().Be(businessUnitId);
+			Persister.GetForBusinessUnit(businessUnitId).Single().BusinessUnitId.Should().Be(businessUnitId);
 		}
 
 		[Test]
@@ -210,14 +186,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		{
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
-			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId });
+			Target.Handle(new PersonInAdherenceEvent { SiteId = siteId, BusinessUnitId = businessUnitId });
 
-			persister.GetForBusinessUnit(businessUnitId).Single().BusinessUnitId.Should().Be(businessUnitId);
+			Persister.GetForBusinessUnit(businessUnitId).Single().BusinessUnitId.Should().Be(businessUnitId);
 		}
-
 	}
 	
 }

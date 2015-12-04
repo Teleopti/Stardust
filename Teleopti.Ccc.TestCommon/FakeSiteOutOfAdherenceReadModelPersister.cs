@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<SiteOutOfAdherenceReadModel> Read()
 		{
-			return _models;
+			return _models.Select(m => JsonConvert.DeserializeObject<SiteOutOfAdherenceReadModel>(JsonConvert.SerializeObject(m))).ToArray();
 		}
 
 		public SiteOutOfAdherenceReadModel Get(Guid siteId)

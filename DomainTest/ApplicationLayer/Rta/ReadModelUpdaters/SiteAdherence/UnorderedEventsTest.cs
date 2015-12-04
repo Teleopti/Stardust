@@ -28,6 +28,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
 			Persister.Get(siteId).Count.Should().Be(2);
 		}
+		
+		[Test]
+		[Ignore]
+		// ???
+		public void ShouldHandleWhenPeronDeletedEventIsTheFirstEvent_IsItWorthToImplent_QuestionMark() 
+		{
+			var personId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+
+			var events = new IEvent[]
+			{
+					new PersonDeletedEvent
+					{
+						PersonId = personId,
+						Timestamp = "2015-12-04 08:05".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						SiteId = siteId,
+						Timestamp = "2015-12-04 08:00".Utc()
+					},
+			};
+			events.ForEach(e => Target.Handle((dynamic) e));
+
+			Persister.Get(siteId).Count.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldHandleOutOfSyncPersonDeletedEvents()
+		{
+			var person = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent {PersonId = Guid.NewGuid(), SiteId = site, Timestamp = "2015-12-04 10:00".Utc()});
+
+			Target.Handle(new PersonOutOfAdherenceEvent {PersonId = person, SiteId = site, Timestamp = "2015-12-04 10:05".Utc()});
+			Target.Handle(new PersonDeletedEvent {PersonId = person, Timestamp = "2015-12-04 10:00".Utc()});
+
+			Persister.Get(site).Count.Should().Be(1);
+		}
 	}
 
 	public class EventsPermuationFactory
@@ -74,11 +114,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 						Timestamp = "2015-02-18 12:08".Utc()
 					}
 				};
-				var permutations = events.Permutations();
-				return from p in permutations
-					   let name = (from pe in p select pe.GetType().Name).Aggregate((current, next) => current + ", " + next)
-					   select new TestCaseData(p).SetName(name);
+				return getTestData(events);
 			}
+		}
+
+		private static IEnumerable getTestData(IEnumerable<IEvent> events)
+		{
+			var permutations = events.Permutations();
+			return from p in permutations
+				   let name = (from pe in p select pe.GetType().Name).Aggregate((current, next) => current + ", " + next)
+				   select new TestCaseData(p).SetName(name);
 		}
 	}
 }
