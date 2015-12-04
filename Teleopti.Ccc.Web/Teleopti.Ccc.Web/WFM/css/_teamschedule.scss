@@ -59,3 +59,15 @@
 	.absolute {
 		position: absolute;
 	}
+
+	.person-name-column {
+		.wfm-checkbox-toggle:after
+		{
+			width: 15px;
+			height: 15px;
+			font-size: 11px;
+		}
+		.wfm-checkbox{
+			padding: 0;
+		}
+	}
