@@ -49,7 +49,6 @@
 		vm.pageSelected = [];
 
 		vm.selectAllForAllPages = function () {
-			console.log("all page", vm.paginationOptions.totalPages);
 			for (var i = 0; i < vm.paginationOptions.totalPages; ++i) {
 				var scheduleVm = getScheduleForCurrentPage(vm.rawScheduleData, i+1);
 				updateAllStatusForOnePage('add', scheduleVm.Schedules, i+1);
