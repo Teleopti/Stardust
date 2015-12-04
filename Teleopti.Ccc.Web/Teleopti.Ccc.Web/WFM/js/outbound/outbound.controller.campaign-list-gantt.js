@@ -315,7 +315,7 @@
 
 		function updateGanttRowFromCampaignStatus(row, campaignStatus) {
 			row.campaignNameClass = null;
-			row.tasks[0].color = campaignStatus.IsScheduled ? '#C2E085' : '#9FA8DA';
+			row.tasks[0].color = campaignStatus.IsScheduled ? '#C2E085' : '#ffc36b';
 			campaignStatus.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'CampaignUnderSLA') {
 					row.campaignNameClass = 'campaign-late';

@@ -150,9 +150,9 @@
 
 			function _setChartOption_color() {
 				var colorMap = {
-					rawBacklogs: '1F77B4',
+					rawBacklogs: '#1F77B4',
 					progress: '#2CA02C',
-					unscheduledPlans: '#9FA8DA',
+					unscheduledPlans: '#ffc36b',
 					schedules: '#C2E085',
 					overStaff: '#4FC3F7'
 				};
@@ -162,7 +162,7 @@
 						colorMap.progress = '#F44336';
 					}
 					if (e.TypeOfRule == 'CampaignOverstaff') {
-						colorMap.progress = '#FF7F0E';
+						colorMap.progress = '#4FC3F7';
 					}
 				});
 				var dataColor = {};
