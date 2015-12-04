@@ -44,33 +44,51 @@
 
 		vm.selectedAbsenceId = '';
 
+		vm.selectAllVisible = false;
 		vm.selected = [];
+		vm.pageSelected = [];
 
-		var updateSelected = function (action, id) {
+		vm.selectAllForAllPages = function () {
+			console.log("all page", vm.paginationOptions.totalPages);
+			for (var i = 0; i < vm.paginationOptions.totalPages; ++i) {
+				var scheduleVm = getScheduleForCurrentPage(vm.rawScheduleData, i+1);
+				updateAllStatusForOnePage('add', scheduleVm.Schedules, i+1);
+			}
+			vm.selectAllVisible = false;
+		};
+
+		var updateSelected = function (action, id, pageNumber) {
 			if (action === 'add' && vm.selected.indexOf(id) === -1) {
 				vm.selected.push(id);
+
+				vm.pageSelected[pageNumber].push(id);
 			}
 			if (action === 'remove' && vm.selected.indexOf(id) !== -1) {
 				vm.selected.splice(vm.selected.indexOf(id), 1);
+
+				if (vm.pageSelected[pageNumber] != null) {
+					vm.pageSelected[pageNumber].splice(vm.pageSelected[pageNumber].indexOf(id), 1);
+				}
 			}
+			vm.selectAllVisible = vm.paginationOptions.totalPages > 1 && vm.selected.length < vm.allAgents.length;
 		};
 
 		vm.updateSelection = function ($event, id) {
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
-			updateSelected(action, id);
+			updateSelected(action, id, vm.paginationOptions.pageNumber);
 		};
 
 		vm.toggleAll = function ($event) {
+			
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
-			updateAllStatus(action);
+			updateAllStatusForOnePage(action, vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber);
 		};
 
-		var updateAllStatus = function (action) {
-			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
-				var schedule = vm.groupScheduleVm.Schedules[i];
-				updateSelected(action, schedule.PersonId);
+		var updateAllStatusForOnePage = function (action, schedules, pageNumber) {
+			for (var i = 0; i < schedules.length; i++) {
+				updateSelected(action, schedules[i].PersonId, pageNumber);
 			}
 		};
 
@@ -79,11 +97,13 @@
 		};
 
 		vm.isSelected = function (id) {
-			return vm.selected.indexOf(id) >= 0;
+			return vm.pageSelected[vm.paginationOptions.pageNumber].indexOf(id) >= 0;
 		};
 
 		vm.isSelectedAll = function () {
-			if (vm.groupScheduleVm !== undefined) return vm.selected.length === vm.groupScheduleVm.Schedules.length;
+			if (vm.groupScheduleVm !== undefined) {
+				return vm.pageSelected[vm.paginationOptions.pageNumber].length === vm.groupScheduleVm.Schedules.length;
+			}
 			return false;
 		};
 
@@ -135,9 +155,14 @@
 				}
 			});
 
-			vm.groupScheduleVm = groupScheduleFactory.Create(scheduleForCurrentPage, vm.scheduleDateMoment());
-			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+			return groupScheduleFactory.Create(scheduleForCurrentPage, vm.scheduleDateMoment());
 		}
+
+		function setScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
+			var scheduleVm = getScheduleForCurrentPage(rawScheduleData, currentPageIndex);
+			vm.groupScheduleVm = scheduleVm;
+			vm.scheduleCount = scheduleVm.Schedules.length;
+		};
 
 		vm.loadSchedules = function(currentPageIndex) {
 			if (vm.selectedTeamId === "" && !vm.isSearchScheduleEnabled) return;
@@ -171,12 +196,11 @@
 						});
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
-						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
-						
+						setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
 						vm.isLoading = false;
 					});
 				} else {
-					getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+					setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
 					vm.isLoading = false;
 				}
 			} else if (vm.isSearchScheduleEnabled) {
@@ -199,12 +223,12 @@
 						});
 						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
 
-						getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+						setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
 						vm.searchOptions.searchKeywordChanged = false;
 						vm.isLoading = false;
 					});
 				} else {
-					getScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+					setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
 					vm.isLoading = false;
 				}
 			}
@@ -373,6 +397,10 @@
 		});
 
 		vm.Init = function () {
+			for (var i = 0; i < 28; ++i) {//max page number is 28 = 500/18
+				vm.pageSelected[i] = [];
+			}
+
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
 				absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {
 				if (vm.isSearchScheduleEnabled) {
@@ -414,7 +442,7 @@
 				case 65: // Alt+A
 					if (event.altKey) {
 						preventDefaultEvent(event);
-						$scope.$evalAsync(updateAllStatus('add'));
+						$scope.$evalAsync(updateAllStatusForOnePage('add', vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber));
 					}
 					break;
 				
