@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(Paging paging);
 		IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period);
-		IPersonRequest RetrieveRequest(Guid id);
-		IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period);
+		IPersonRequest RetrieveRequest(Guid id);		
 	}
 }

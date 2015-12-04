@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -11,44 +12,27 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
 	public class RequestsViewModelFactory : IRequestsViewModelFactory
 	{
-		private readonly IPersonRequestProvider _personRequestProvider;
+		private readonly IRequestsProvider _requestsProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 
-		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IPersonNameProvider personNameProvider)
+		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IPersonNameProvider personNameProvider)
 		{
-			_personRequestProvider = personRequestProvider;
+			_requestsProvider = requestsProvider;
 			_personNameProvider = personNameProvider;
 		}
 
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
-			var requests = _personRequestProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate));
-			
-			var requestViewModels = requests.Select(x => new RequestViewModel()
-			{
-				Id = x.Id.GetValueOrDefault(),
-				Subject = x.GetSubject(new NoFormatting()),
-				Message = x.GetMessage(new NoFormatting()),
-				CreatedTime = x.CreatedOn,
-				UpdatedTime = x.UpdatedOn,
-				AgentName =  _personNameProvider.BuildNameFromSetting(x.Person.Name),
-				Type = x.Request.RequestType,
-				TypeText = x.Request.RequestTypeDescription,
-				StatusText = x.StatusText,
-				Status = x.IsApproved? RequestStatus.Approved : 
-					x.IsPending? RequestStatus.Pending:
-						x.IsDenied? RequestStatus.Denied
-							: RequestStatus.New
-			}).ToArray();
+			var requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate));
 
+			var requestViewModels = requests.Select(toViewModel).ToArray();
 
 			var primarySortingOrder = input.SortingOrders.Any()
 				? input.SortingOrders.First()
 				: RequestsSortingOrder.UpdatedOnDesc;
 
 			switch (primarySortingOrder)
-			{
-				
+			{				
 				case RequestsSortingOrder.AgentNameDesc:
 					return requestViewModels.OrderByDescending(x => x.AgentName);
 				case RequestsSortingOrder.AgentNameAsc:
@@ -57,5 +41,29 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 					return requestViewModels.OrderByDescending(x => x.UpdatedTime);
 			}
 		}
+
+		private RequestViewModel toViewModel(IPersonRequest request)
+		{
+			return new RequestViewModel()
+			{
+				Id = request.Id.GetValueOrDefault(),
+				Subject = request.GetSubject(new NoFormatting()),
+				Message = request.GetMessage(new NoFormatting()),
+				CreatedTime = request.CreatedOn,
+				UpdatedTime = request.UpdatedOn,
+				AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name),
+				Type = request.Request.RequestType,
+				TypeText = request.Request.RequestTypeDescription,
+				StatusText = request.StatusText,
+				Status = request.IsApproved
+					? RequestStatus.Approved
+					: request.IsPending
+						? RequestStatus.Pending
+						: request.IsDenied
+							? RequestStatus.Denied
+							: RequestStatus.New
+			};
+		}
+
 	}
 }

@@ -212,22 +212,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			requestQueue.Count().Should().Be(2);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest || requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
-		}
-
-		[Test]
-		public void ShouldReturnAllRequestsForPeriod()
-		{
-			var personRequestRepository = new FakePersonRequestRepository();
-			var personRequestFactory = new PersonRequestFactory();
-			var personRequest1 = personRequestFactory.CreateNewPersonRequest();
-			personRequestRepository.Add(personRequest1);
-			var personRequest2 = personRequestFactory.CreateNewPersonRequest();
-			personRequestRepository.Add(personRequest2);
-			var target = new PersonRequestProvider(personRequestRepository, null, new FakeUserTimeZone(TimeZoneInfo.Utc), null, null);
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
-			var requests = target.RetrieveRequests(period);
-			requests.First().Should().Be.EqualTo(personRequest1);
-			requests.Last().Should().Be.EqualTo(personRequest2);
-		}
+		}		
 	}
 }

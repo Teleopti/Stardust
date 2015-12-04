@@ -272,6 +272,7 @@
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
+    <Compile Include="Areas\Requests\Core\IOC\RequestsTestAttribute.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignTaskManagerTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignWarningProviderTest.cs" />

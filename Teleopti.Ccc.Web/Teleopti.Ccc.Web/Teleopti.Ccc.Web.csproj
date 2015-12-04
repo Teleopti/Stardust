@@ -477,6 +477,8 @@
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
+    <Compile Include="Areas\Requests\Core\Provider\IRequestsProvider.cs" />
+    <Compile Include="Areas\Requests\Core\Provider\RequestsProvider.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Controller\RequestsController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignTaskManager.cs" />
@@ -2286,7 +2288,6 @@
     <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
-    <Folder Include="Areas\Requests\Core\Provider\" />
     <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />
