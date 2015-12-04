@@ -33,7 +33,7 @@
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
 			<p class="input-group">
-				<input type="text" class="form-control" style="height:35px" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+				<input type="text" class="form-control" style="height:35px" datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="mdi mdi-calendar"></i></button>
 				</span>

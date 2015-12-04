@@ -1,9 +1,11 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', 'TeamSchedule', 'CurrentUserInfo', 'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'CurrentUserInfo',
+			'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, teamScheduleSvc, currentUserInfo, groupScheduleFactory, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
+	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, currentUserInfo, groupScheduleFactory,
+		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
 		vm.initialized = false;
@@ -26,7 +28,6 @@
 
 		var pageSize = 18;
 		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
-		vm.format = 'yyyy/MM/dd';
 
 		vm.datePickerStatus = {
 			opened: false
@@ -395,6 +396,11 @@
 		});
 
 		vm.Init = function () {
+			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+			$scope.$on('$localeChangeSuccess', function () {
+				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+			});
+
 			for (var i = 0; i < 29; ++i) {//max page number is 28 = 500/18, and use page number as index
 				vm.pageSelected[i] = [];
 			}

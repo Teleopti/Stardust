@@ -3,10 +3,12 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state', '$interval', '$mdComponentRegistry', PeopleCartController
+			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav',
+			'$mdUtil', '$state', '$interval', '$mdComponentRegistry', '$locale', PeopleCartController
 		]);
 
-	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state, $interval, $mdComponentRegistry) {
+	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc,
+		$mdSidenav, $mdUtil, $state, $interval, $mdComponentRegistry, $locale) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.processing = false;
@@ -33,10 +35,7 @@
 			if (newVal)
 				vm.paginationOptions.totalPages = newVal;
 		});
-
-		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		vm.format = vm.formats[1];
-
+		
 		vm.datePickerStatus = {
 			opened: false
 		};
@@ -220,6 +219,11 @@
 		}
 
 		function initialize() {
+			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+			$scope.$on('$localeChangeSuccess', function () {
+				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+			});
+
 			vm.setCurrentCommand($stateParams.commandTag);
 
 			var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
