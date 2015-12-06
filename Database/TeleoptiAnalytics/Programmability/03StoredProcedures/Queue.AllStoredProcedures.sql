@@ -241,7 +241,7 @@ BEGIN
 	AND Processed=0
 	AND ProcessingUntil<GetUtcDate()
 	AND QueueId=@QueueId
-	ORDER BY CreatedAt ASC
+	ORDER BY MessageId ASC
 	
 	if (@MessageId is not null)
 		BEGIN
