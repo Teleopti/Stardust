@@ -3,6 +3,7 @@ DROP PROCEDURE [stage].[etl_stg_availability_delete]
 GO
 
 
+
 create PROCEDURE [stage].[etl_stg_availability_delete]
 WITH EXECUTE AS OWNER
 AS
