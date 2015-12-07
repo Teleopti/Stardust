@@ -56,25 +56,6 @@
 		width: 0;
 	}
 
-	.advaned-container {
-		position: absolute;
-		margin-top: -15px;
-		margin-left: 20px;
-		padding: 5px 10px;
-		background-color: #fff;
-	}
-
-	.people-form-input {
-		position: relative;
-		float: left;
-		margin-top: 20px;
-		margin-right: 20px;
-
-		input[type=text] {
-			height: auto;
-		}
-	}
-
 	.advanced-input {
 		font-size: 15px;
 		position: relative;
@@ -230,6 +211,26 @@
 				height: 35px;
 				border: 1px solid #ccc;
 			}
+		}
+	}
+}
+
+.advanced-search-container {
+	position: absolute;
+	margin-top: -15px;
+	margin-left: 20px;
+	padding: 5px 10px;
+	background-color: #fff;
+	z-index: 15;
+
+	.people-form-input {
+		position: relative;
+		float: left;
+		margin-top: 20px;
+		margin-right: 20px;
+
+		input[type=text] {
+			height: auto;
 		}
 	}
 }
