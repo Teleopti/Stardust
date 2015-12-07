@@ -79,5 +79,13 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: false
 			}
 		});
+
+		this.getScheduleForPeople = $resource("../api/TeamSchedule/GetScheduleForPeople", {}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		});
 	}
 ]);
