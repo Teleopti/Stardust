@@ -51,7 +51,7 @@
 
     <div class="row">
 		<div class=" col-lg-12">
-			<button type="button" name="button" ng-click="createRuleset()" class="wfm-btn wfm-btn-default">create new ruleset</button>
+			<button type="button" name="button" ng-click="createRuleset()" class="wfm-btn wfm-btn-default" translate>createNewRuleset</button>
 		</div>
 	</div>
 		<div class="row">
@@ -60,13 +60,13 @@
 					<div class="sub-header"><strong>{{node.Name}}</strong><i ng-show="!node.Default" class=" filter-header mdi mdi-delete searchbaricon" ng-click="destoryRuleset(node)"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i><i class=" filter-header mdi mdi-pencil searchbaricon" ng-click="editRuleset(node)"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i> </div>
 					<table class="wfm-table wfm-table-multi wfm-filter-options">
 						<thead><tr><th></th><th>Min</th><th>Max</th></tr></thead>
-						<tbody><tr><td>DayOffsPerWeek</td><td>{{node.MinDayOffsPerWeek}}</td><td>{{node.MaxDayOffsPerWeek}}</td></tr>
-							<tr><td>ConsecutiveWorkdays</td><td>{{node.MinConsecutiveWorkdays}}</td><td>{{node.MaxConsecutiveWorkdays}}</td></tr>
-							<tr><td>ConsecutiveDayOffs</td><td>{{node.MinConsecutiveDayOffs}}</td><td>{{node.MaxConsecutiveDayOffs}}</td></tr>
+						<tbody><tr><td translate>DaysOffPerWeek</td><td>{{node.MinDayOffsPerWeek}}</td><td>{{node.MaxDayOffsPerWeek}}</td></tr>
+							<tr><td translate>ConsecutiveWorkDays</td><td>{{node.MinConsecutiveWorkdays}}</td><td>{{node.MaxConsecutiveWorkdays}}</td></tr>
+							<tr><td translate>ConsecutiveDaysOff</td><td>{{node.MinConsecutiveDayOffs}}</td><td>{{node.MaxConsecutiveDayOffs}}</td></tr>
 						</tbody>
 					</table>
 
-					<span translate>AmountOfFilters: </span>{{node.Filters.length}}<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default" ng-hide="node.Filters.length === 0"><span translate>Show</span></button>
+					<span translate>AmountOfFilters</span>: {{node.Filters.length}}<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default" ng-hide="node.Filters.length === 0"><span translate>Show</span></button>
 
 					<div ng-cloak class="modal-box">
 						<div ng-cloak ng-show="showFilterRules">

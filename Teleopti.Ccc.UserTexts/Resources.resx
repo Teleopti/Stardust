@@ -13830,4 +13830,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Is Alarm</value>
     <comment>A rta rule flag</comment>
   </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Create new ruleset</value>
+    <comment>Create a new ruleset for a selectet range of filters</comment>
+  </data>
 </root>
