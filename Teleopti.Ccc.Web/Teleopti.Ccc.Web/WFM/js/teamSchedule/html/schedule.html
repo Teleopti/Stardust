@@ -1,7 +1,7 @@
 ﻿<div class="team-schedule">
 	Team schedule
-	<div style="border: solid red 1px; height: 40px" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">
-		<span class="col-sm-5 col-md-3 col-lg-3">
+	<div class="row" style="height: 40px" ng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px'}">
+		<span class="col-sm-5 col-md-3 col-lg-3" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">
 			<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamIdChanged()">
 				<option value="" disabled selected>Pick a team...</option>
 				<option value={{team.Id}} ng-repeat="team in vm.Teams|orderBy: 'Name'">
@@ -9,10 +9,13 @@
 				</option>
 			</select>
 		</span>
+		<div class="col-md-4" ng-if="vm.isSearchScheduleEnabled">
+			<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
+		</div>
 		<span class="col-sm-5 col-md-3 col-lg-3">
 			<span style="min-width: 280px; max-width: 300px;">
 				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()">
-					<i class="mdi mdi-chevron-left"></i>
+					<i class="mdi mdi-chevron-double-left"></i>
 				</button>
 				<input type="text" class="pointer" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.scheduleDate" ng-change="vm.scheduleDateChanged()"
 					   is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
@@ -21,42 +24,22 @@
 					<i class="mdi mdi-calendar"></i>
 				</button>
 				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoNextDate()">
-					<i class="mdi mdi-chevron-right"></i>
+					<i class="mdi mdi-chevron-double-right"></i>
 				</button>
 			</span>
 		</span>
-		<span style="color:red"> Only for test purpose, it will be removed later.</span>
-	</div>
-	
-	<div class="row" ng-if="vm.isSearchScheduleEnabled">
-		<div class="col-md-4">
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
-		</div>
-		<div class="col-sm-5 col-md-3 col-lg-3">
-			<div style="min-width: 280px; max-width: 300px;">
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()">
-					<i class="mdi mdi-chevron-double-left middle"></i>
-				</button>
-				<input type="text" class="pointer" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.scheduleDate" ng-change="vm.scheduleDateChanged()"
-					   is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
-					   ng-required="true" close-text="Close" />
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()">
-					<i class="mdi mdi-calendar"></i>
-				</button>
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoNextDate()">
-					<i class="mdi mdi-chevron-double-right middle"></i>
-				</button>
-			</div>
-		</div>
 
-		<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right" ng-if="vm.isMenuVisible()">
+		<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right; margin-top: 2px;" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical"></i>
 			<span class="context-menu-left" style="z-index: 1000">
 				<ul class="wfm-list">
-					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selected.length == 0" ng-click="vm.selected.length == 0 || cmd.action()">{{cmd.label|translate}}</li>
+					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selected.length == 0"
+						ng-click="vm.selected.length == 0 || cmd.action()">{{cmd.label|translate}}</li>
 				</ul>
 			</span>
 		</button>
+
+		<span style="color:red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
 	</div>
 	
 	<div class="row select-all-dialog" ng-show="vm.selectAllVisible">
