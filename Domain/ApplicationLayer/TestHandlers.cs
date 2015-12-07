@@ -1,4 +1,4 @@
-using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
@@ -6,10 +6,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	[UseOnToggle(Toggles.TestToggle)]
 	public class HandlerUsedOnTestToggle : 
-		IHandleEvent<TestToggleEvent>
+		IHandleEvent<TestToggleEvent>,
+		IRecreatable,
+		IInitializeble
 	{
 		public void Handle(TestToggleEvent @event)
 		{
+		}
+
+		public void DeleteAll()
+		{
+		}
+
+		public bool Initialized()
+		{
+			return true;
 		}
 	}
 
@@ -20,7 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	[UseOnToggle(Toggles.TestToggle)]
 	public class HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2 : 
 		IHandleEvent<TestToggleEvent>,
-		IHandleEvent<TestToggle2Event>
+		IHandleEvent<TestToggle2Event>,
+		IRecreatable,
+		IInitializeble
 	{
 		public void Handle(TestToggleEvent @event)
 		{
@@ -29,6 +42,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[UseOnToggle(Toggles.TestToggle2)]
 		public void Handle(TestToggle2Event @event)
 		{
+		}
+
+		public void DeleteAll()
+		{
+		}
+
+		public bool Initialized()
+		{
+			return true;
 		}
 	}
 
