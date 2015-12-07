@@ -22,4 +22,18 @@ describe('ForecastingStartCtrl', function () {
 		expect(scope.period.startDate.toString()).toBe(moment().utc().add(1, 'months').startOf('month').toDate().toString());
 		expect(scope.period.endDate.toString()).toBe(moment().utc().add(2, 'months').startOf('month').toDate().toString());
 	}));
+
+	it('Should cancel forecasting modal', inject(function($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope });
+		scope.cancelForecastingModal();
+		expect(scope.modalForecastingLaunch).toBe(false);
+	}));
+
+	it('Should cancel modify modal', inject(function($controller) {
+			var scope = $rootScope.$new();
+			$controller('ForecastingStartCtrl', { $scope: scope });
+			scope.cancelModifyModal();
+			expect(scope.modalModifyLaunch).toBe(false);
+	}));
 });
