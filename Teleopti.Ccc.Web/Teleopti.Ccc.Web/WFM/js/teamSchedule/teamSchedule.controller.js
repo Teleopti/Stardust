@@ -329,7 +329,7 @@
 		};
 
 		vm.isDataChangeValid = function() {
-			return vm.totalSelected.length > 0 && vm.selectedAbsenceId != "" && vm.selectedAbsenceEndDate >= vm.selectedAbsenceStartDate;
+			return vm.totalSelected.length > 0 && vm.selectedAbsenceId !== "" && vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate;
 		}
 		vm.applyAbsence = function() {
 			if (vm.isFullDayAbsence) {
