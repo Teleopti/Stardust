@@ -8,14 +8,14 @@ Background:
 	| Field                  | Value            |
 	| Name                   | Resource Planner |
 	| Access to wfm requests | true             |
+	| Access to everyone     | true             |
 	And 'Ashley' has a person period with 
 	| Field      | Value        |
 	| Start date | 2015-06-18   |
 	And 'John' has a person period with 
-	| Field      | Value        |
-	| Start date | 2015-06-18   |
+	| Field      | Value      |
+	| Start date | 2015-06-18 |
 
-@ignore
 Scenario: Display requests
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
@@ -30,7 +30,6 @@ Scenario: Display requests
 	Then I should see a request from 'Ashley' in the list
 	And I should see a request from 'John' in the list
 
-@ignore
 Scenario: Sort requests
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |

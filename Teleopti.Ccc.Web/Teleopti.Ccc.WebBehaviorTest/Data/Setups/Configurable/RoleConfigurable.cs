@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToResourcePlanner { get; set; }
 		public bool AccessToPeople { get; set; }
 		public bool AccessToOutbound { get; set; }
+		public bool AccessToWfmRequests { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -110,6 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			MoveActivity = true;
 			QuickForecaster = false;
 			AccessToOutbound = false;
+			AccessToWfmRequests = false;
 		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
@@ -319,6 +321,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SeatPlanner
 											  select f;
+
+			if (!AccessToWfmRequests)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebRequests
+									   select f;
 
 			return applicationFunctions;
 		}
