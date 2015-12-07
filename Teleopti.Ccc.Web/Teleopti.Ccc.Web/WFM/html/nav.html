@@ -69,23 +69,8 @@
 					</div>
 				</div>
 			</button>
-			<button class="nav-context-menu">
-			<i class="mdi mdi-help-circle"><md-tooltip>{{'HelpLabel'|translate}}</md-tooltip></i>
-			<div class="nav-context-menu-left">
-				<div class="arrow-up"></div>
-				<div class="context-content" ng-controller="HelpController">
-						<h4>
-							<a href="{{help.currentHelp.helpUrl}}"></a>
-							<span class="caps">{{help.currentHelp.name}}</span></h4>
-						<p class="description">{{ help.currentHelp.helpDesc }}
-							<br/>
-					</p>
-					<footer>
-						<a href="{{help.currentHelp.helpUrl}}" target="_blank">{{'OnlineHelp' | translate}}</a>
-					</footer>
-				</div>
-			</div>
-		</button>
+			<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
+				<i class="mdi mdi-help-circle"><md-tooltip>{{'HelpLabel'|translate}}</md-tooltip></i></a>
 			<a href="#"><i class="mdi mdi-settings"></i>
 				<md-tooltip>{{'Settings'|translate}}</md-tooltip>
 			</a>
