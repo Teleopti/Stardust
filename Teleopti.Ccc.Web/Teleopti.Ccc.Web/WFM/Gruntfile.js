@@ -4,7 +4,7 @@
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'js/**/*.js', 'tests/**/*.js'],
-				tasks: ['uglify:dev', 'sass', 'cssmin'],
+				tasks: ['devBuild'],
 				options: {
 					spawn: false,
 				}
@@ -171,6 +171,28 @@
 				}
 			}
 		},
+		cacheBust: {
+		  options: {
+			encoding: 'utf8',
+			algorithm: 'md5',
+			length: 16,
+			deleteOriginals: false,
+			rename:false,
+			ignorePatterns:['MaterialDesignIcons/css/materialdesignicons.min.css']
+		  },
+		  assets: {
+			files: [{
+			  src: ['index.html']
+			}]
+		  }
+	  },
+	  processhtml: {
+		dist: {
+			files: {
+			  'index.html': ['index.tpl.html']
+			}
+		  }
+		},
 
 		ngtemplates: {
 			'wfm.templates': {
@@ -192,16 +214,20 @@
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-cache-Bust');
+	grunt.loadNpmTasks('grunt-processhtml');
+
 
 	// Default task(s).
 	grunt.registerTask('default', ['devBuild','test','watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates','karma:dev']);
-	grunt.registerTask('devBuild',['concat:distJs','concat:distCss','uglify:dev', 'sass', 'cssmin'])
+	grunt.registerTask('devBuild',['concat:distJs','concat:distCss','uglify:dev', 'sass', 'cssmin','generateIndex'])
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['concat:distJs','concat:distCss','uglify:dist', 'sass', 'cssmin','generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devBuild','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
+	grunt.registerTask('generateIndex',['processhtml','cacheBust'])
 
 
 };
