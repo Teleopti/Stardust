@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
@@ -22,6 +23,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
+using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -41,18 +43,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				{
 					var matches = from i in t.GetInterfaces()
 						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
-						let toggleEnabled = t.EnabledByToggle(_config)
-						where isHandler && toggleEnabled
+						let isHandlerEnabled = t.TypeEnabledByToggle(_config)
+						where isHandler && isHandlerEnabled
 						select i;
 					return matches.Any();
 				})
 				.As(t =>
 				{
 					return from i in t.GetInterfaces()
+
 						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
+						let eventType = isHandler ? i.GetMethods().Single().GetParameters().Single().ParameterType : null
+						let isHandleMethodEnabled = isHandler && t.GetMethod("Handle", new[] {eventType}).MethodEnabledByToggle(_config)
+
 						let isInitializable = i == typeof (IInitializeble)
 						let isSynchronizable = i == typeof (IRecreatable)
-						where isHandler || isInitializable || isSynchronizable
+						where
+							(isHandler && isHandleMethodEnabled) ||
+							isInitializable ||
+							isSynchronizable
 						select i;
 				})
 				.SingleInstance()

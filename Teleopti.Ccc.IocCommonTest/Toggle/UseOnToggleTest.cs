@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 
-			Assert.That(typeof(targetWithAttrib).EnabledByToggle(iocConfig), Is.True);
+			Assert.That(typeof(targetWithAttrib).TypeEnabledByToggle(iocConfig), Is.True);
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false).Repeat.Any();
 
-			Assert.That(typeof(targetWithoutAttrib).EnabledByToggle(iocConfig), Is.True);
+			Assert.That(typeof(targetWithoutAttrib).TypeEnabledByToggle(iocConfig), Is.True);
 		}
 
 		[Test]
@@ -34,19 +34,17 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 
-			Assert.That(typeof(targetWithAttrib).EnabledByToggle(iocConfig), Is.False);
+			Assert.That(typeof(targetWithAttrib).TypeEnabledByToggle(iocConfig), Is.False);
 		}
 
 		[UseOnToggle(Toggles.TestToggle)]
 		private class targetWithAttrib
 		{
-			 
 		}
-
 
 		private class targetWithoutAttrib
 		{
-
 		}
+
 	}
 }
