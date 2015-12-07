@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromHours(10)))
 				{
-					browserInteractions.AssertExists(".scheduling-result, .errorMessage, .alert-warning");
+					browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .alert-warning");
 				}
-				browserInteractions.AssertNotExists("body", ".errorMessage");
+				browserInteractions.AssertNotExists("body", ".test-errorMessage");
 				browserInteractions.AssertNotExists("body", ".alert-warning");
 				browserInteractions.AssertExists(".scheduling-result");
 			}

@@ -41,12 +41,11 @@
 	        }
 
 	        function handleScheduleOrOptimizeError(error) {
-	            startPoll();
-
 	            $scope.errorMessage = "An error occurred. Please try again.";
 	            $scope.schedulingPerformed = false;
 	            $scope.status = '';
 	            $scope.scheduleClicked = false;
+	            startPoll();
 	        }
 	        $scope.launchSchedule = function (p) {
 	            $scope.errorMessage = undefined;
