@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonShiftStartEvent>,
 		IHandleEvent<PersonShiftEndEvent>,
+		IHandleEvent<PersonDeletedEvent>,
 		IInitializeble
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
@@ -96,6 +97,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					ShiftEnded = true
 				},
 				m => m.ShiftHasEnded = true);
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			_persister.Delete(@event.PersonId);
 		}
 
 		private void handleEvent(Guid personId, DateOnly? belongsToDate, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)

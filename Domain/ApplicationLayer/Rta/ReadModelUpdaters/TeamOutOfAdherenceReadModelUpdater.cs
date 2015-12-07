@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					person.OutOfAdherence = false;
 				}));
 		}
-
+		
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{

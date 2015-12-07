@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonDeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonDeletedTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
