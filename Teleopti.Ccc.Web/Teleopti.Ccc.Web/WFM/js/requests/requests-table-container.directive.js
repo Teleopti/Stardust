@@ -15,6 +15,7 @@
 
 		vm.gridOptions = getGridOptions([]);
 		vm.getGridOptions = getGridOptions;
+		vm.prepareComputedColumns = prepareComputedColumns;
 
 		function getGridOptions(requests) {
 			return {
@@ -24,7 +25,8 @@
 				gridMenuTitleFilter: $translate,
 				columnDefs: [
 					{ displayName: 'StartTime', field: 'PeriodStartTime', headerCellFilter: 'translate', cellClass: 'request-period-start-time', enableSorting: false, headerCellClass: 'request-period-start-time-header', cellFilter: 'date : "short"' },
-					{ displayName: 'EndTime', field: 'PeriodEndTime', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"' },
+					{ displayName: 'EndTime', field: 'PeriodEndTime', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"', visible: false },
+					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 					{ displayName: 'Type', field: 'TypeText', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
 					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false, headerCellClass: 'request-subject-header' },
@@ -39,6 +41,16 @@
 					});
 				}
 			};
+		}
+
+		function prepareComputedColumns(dataArray) {
+			angular.forEach(dataArray, function(row) {
+				row.GetDuration = function() {
+					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
+					return moment.duration(length, 'seconds').humanize();
+				}
+			});
+			return dataArray;
 		}
 	}
 
@@ -64,8 +76,8 @@
 			
 			scope.$watchCollection(function() {
 				return scope.requestsTableContainer.requests;
-			}, function(v) {
-				scope.requestsTableContainer.gridOptions.data = v;				
+			}, function (v) {
+				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
 			});
 
 					
