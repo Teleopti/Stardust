@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 {
 	[TestFixture]
-	public class RuleColumnsTest
+	public class ThresholdTest
 	{
 		[Test]
 		public void ShouldDisplayThresholdTextInColumnHeader()

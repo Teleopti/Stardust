@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -8,9 +10,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests AlarmTypeRepository
-    ///</summary>
     [TestFixture]
     [Category("LongRunning")]
     public class RtaRuleRepositoryTest : RepositoryTest<IRtaRule>
@@ -41,5 +40,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new RtaRuleRepository(currentUnitOfWork);
         }
+
+	    [Test]
+	    public void ShouldBeAlarmByDefault()
+	    {
+		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			PersistAndRemoveFromUnitOfWork(rule);
+			
+			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+
+			loaded.IsAlarm.Should().Be.True();
+	    }
+
+	    [Test]
+	    public void ShouldChangeToNotAnAlarm()
+	    {
+		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			PersistAndRemoveFromUnitOfWork(rule);
+		    rule.IsAlarm = false;
+			PersistAndRemoveFromUnitOfWork(rule);
+			
+			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+
+			loaded.IsAlarm.Should().Be.False();
+	    }
     }
 }

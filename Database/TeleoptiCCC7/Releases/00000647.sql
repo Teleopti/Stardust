@@ -1,0 +1,2 @@
+ALTER TABLE dbo.RtaRule ADD
+	IsAlarm bit NOT NULL CONSTRAINT DF_RtaRule_IsAlarm DEFAULT 1

@@ -21,6 +21,7 @@ namespace Teleopti.Interfaces.Domain
 		Adherence? Adherence { get; set; }
 		void SetAdherenceByText(string text);
 		string AdherenceText { get; }
+	    bool IsAlarm { get; set; }
     }
 	
 }

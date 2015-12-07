@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
+using Teleopti.Ccc.WinCode.Common.Configuration.Rta;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				if(!rulesAreOk(type)) return;
 				_rtaRuleRepository.Add(type);
 			}
-			if (!_decorators.IsNullOrEmpty())
+			if (_decorators.Any(x=> x is AdherenceColumn))
 				_rules.ForEach(checkAdherenceType);
 		}
 

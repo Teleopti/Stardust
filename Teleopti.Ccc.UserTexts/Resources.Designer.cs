@@ -12471,6 +12471,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Alarm.
+        /// </summary>
+        public static string IsAlarm {
+            get {
+                return ResourceManager.GetString("IsAlarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Contract Time.
         /// </summary>
         public static string IsContractTime {

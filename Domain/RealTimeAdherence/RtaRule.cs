@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private double _staffingEffect;
         private bool _isDeleted;
 		private Adherence? _adherence;
+		private bool _isAlarm = true;
 
 		public RtaRule(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
         {
@@ -82,6 +83,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 			}
 		}
 
+		public virtual bool IsAlarm { get { return _isAlarm; } set { _isAlarm = value; }}
+
 		public virtual TimeSpan ThresholdTime
         {
             get { return _thresholdTime; }
@@ -131,7 +134,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return this; }
         }
-
     }
 
 }

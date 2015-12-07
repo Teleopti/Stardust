@@ -231,7 +231,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (_toggleManager.IsEnabled(Toggles.RTA_NeutralAdherence_30930))
 				yield return new AdherenceColumn();
 			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
+			{
 				yield return new ThresholdColumn();
+				yield return new IsAlarmColumn();
+			}
 		}
 	}
 

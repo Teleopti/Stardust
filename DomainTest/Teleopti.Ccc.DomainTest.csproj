@@ -961,7 +961,7 @@
     </Compile>
     <Compile Include="Payroll\PayrollExportTest.cs" />
     <Compile Include="Payroll\PayrollResultTest.cs" />
-    <Compile Include="RealTimeAdherence\RuleTest.cs" />
+    <Compile Include="RealTimeAdherence\RtaRuleTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateGroupTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolderTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateTest.cs" />

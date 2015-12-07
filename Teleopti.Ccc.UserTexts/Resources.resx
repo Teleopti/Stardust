@@ -13826,4 +13826,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Threshold</value>
     <comment>Time threshold</comment>
   </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Is Alarm</value>
+    <comment>A rta rule flag</comment>
+  </data>
 </root>

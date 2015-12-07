@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 {
 	[TestFixture]
-	public class RuleTest
+	public class RtaRuleTest
 	{
 		private RtaRule _target;
 		private readonly Description _description = new Description("Wrong state");
