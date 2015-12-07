@@ -374,8 +374,8 @@
     <comment>Calculated occupancy %</comment>
   </data>
   <data name="Calls" xml:space="preserve">
-    <value>Calls %</value>
-    <comment>Calls %</comment>
+    <value>Calls</value>
+    <comment>Calls</comment>
   </data>
   <data name="CampaignACWPercentSign" xml:space="preserve">
     <value>Campaign ACW %</value>
