@@ -1,6 +1,6 @@
 ﻿<div class="team-schedule">
 	Team schedule
-	<div class="row" style="height: 40px" ng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px'}">
+	<div class="row" style="height: 40px" ng-style="vm.initialized && !vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
 		<span class="col-sm-5 col-md-3 col-lg-3" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">
 			<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamIdChanged()">
 				<option value="" disabled selected>Pick a team...</option>
@@ -17,9 +17,9 @@
 				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()">
 					<i class="mdi mdi-chevron-double-left"></i>
 				</button>
-				<input type="text" class="pointer" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.scheduleDate" ng-change="vm.scheduleDateChanged()"
-					   is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
-					   ng-required="true" close-text="Close" />
+				<input type="text" class="pointer" style="text-align: center;" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.scheduleDate"
+					   ng-change="vm.scheduleDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false"
+					   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()">
 					<i class="mdi mdi-calendar"></i>
 				</button>
@@ -88,27 +88,34 @@
 				<option value={{absence.Id}} ng-repeat="absence in vm.absences|orderBy: 'Name'">{{absence.Name}}</option>
 			</select>
 			<div>{{'From'|translate}}: </div>
-			<div ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
-				<input type="text" class="pointer" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedAbsenceStartDate"
-					   is-open="vm.absenceStartDatePickerOpened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
-					   ng-required="true" close-text="Close"/>
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleAbsenceStartCalendar()">
-					<i class="mdi mdi-calendar"></i>
-				</button>
+			<div class="row" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
+				<span class="col-lg-7" style="padding-right: 0">
+					<input type="text" class="pointer" style="text-align: center; max-width: 90px; padding-bottom: 7px;" uib-datepicker-popup="{{vm.dateFormat}}"
+						   ng-model="vm.selectedAbsenceStartDate" is-open="vm.absenceStartDatePickerOpened" datepicker-options="vm.dateOptions"
+						   show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+					<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleAbsenceStartCalendar()">
+						<i class="mdi mdi-calendar"></i>
+					</button>
+				</span>
+				<span class="col-lg-5" style="padding-left: 0">
+					<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
+				</span>
 			</div>
-
-			<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
 
 			<div>{{'To'|translate}}: </div>
-			<div ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
-				<input type="text" class="pointer" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedAbsenceEndDate"
-					   is-open="vm.absenceEndDatePickerOpened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)"
-					   ng-required="true" close-text="Close" />
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleAbsenceEndCalendar()">
-					<i class="mdi mdi-calendar"></i>
-				</button>
+			<div class="row" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
+				<span class="col-lg-7" style="padding-right: 0">
+					<input type="text" class="pointer" style="text-align: center; max-width: 90px; padding-bottom: 7px;" uib-datepicker-popup="{{vm.dateFormat}}"
+						   ng-model="vm.selectedAbsenceEndDate" is-open="vm.absenceEndDatePickerOpened" datepicker-options="vm.dateOptions"
+						   show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+					<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleAbsenceEndCalendar()">
+						<i class="mdi mdi-calendar"></i>
+					</button>
+				</span>
+				<span class="col-lg-5" style="padding-left: 0">
+					<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
+				</span>
 			</div>
-			<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
 
 			<div class="wfm-checkbox" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
 				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" />
