@@ -49,14 +49,6 @@
 		vm.totalSelected = [];
 		vm.pageSelected = [];
 
-		vm.selectAllForAllPages = function () {
-			for (var i = 0; i < vm.paginationOptions.totalPages; ++i) {
-				var scheduleVm = getScheduleForCurrentPage(vm.rawScheduleData, i+1);
-				updateAllStatusForOnePage('add', scheduleVm.Schedules, i+1);
-			}
-			vm.selectAllVisible = false;
-		};
-
 		var updateSelected = function (action, id, pageNumber) {
 			if (action === 'add' && vm.totalSelected.indexOf(id) === -1) {
 				vm.totalSelected.push(id);
@@ -79,16 +71,24 @@
 			updateSelected(action, id, vm.paginationOptions.pageNumber);
 		};
 
+		var updateAllStatusForOnePage = function (action, schedules, pageNumber) {
+			for (var i = 0; i < schedules.length; i++) {
+				updateSelected(action, schedules[i].PersonId, pageNumber);
+			}
+		};
+
 		vm.toggleAll = function ($event) {
 			var checkbox = $event.target;
 			var action = (checkbox.checked ? 'add' : 'remove');
 			updateAllStatusForOnePage(action, vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber);
 		};
 
-		var updateAllStatusForOnePage = function (action, schedules, pageNumber) {
-			for (var i = 0; i < schedules.length; i++) {
-				updateSelected(action, schedules[i].PersonId, pageNumber);
+		vm.selectAllForAllPages = function () {
+			for (var i = 0; i < vm.paginationOptions.totalPages; ++i) {
+				var scheduleVm = getScheduleForCurrentPage(vm.rawScheduleData, i + 1);
+				updateAllStatusForOnePage('add', scheduleVm.Schedules, i + 1);
 			}
+			vm.selectAllVisible = false;
 		};
 
 		vm.getSelectedClass = function (schedule) {
@@ -211,7 +211,7 @@
 					}).$promise.then(function(result) {
 						vm.rawScheduleData = result.Schedules;
 						vm.total = result.Total;
-						if (vm.searchOptions.keyword == "" && result.Keyword != "") {
+						if (vm.searchOptions.keyword === "" && result.Keyword !== "") {
 							vm.searchOptions.keyword = result.Keyword;
 						}
 
@@ -353,9 +353,9 @@
 			}
 		};
 
-		function buildToggler(navID) {
+		function buildToggler(navId) {
 			var debounceFn = $mdUtil.debounce(function () {
-				$mdSidenav(navID).toggle().then(function () { });
+				$mdSidenav(navId).toggle().then(function () { });
 			}, 200);
 			return debounceFn;
 		}
