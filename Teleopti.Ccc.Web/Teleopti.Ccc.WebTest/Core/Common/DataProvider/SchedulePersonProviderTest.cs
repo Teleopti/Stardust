@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -12,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
@@ -79,6 +79,25 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			target.GetPermittedPersonsForGroup(DateOnly.Today, groupId, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
 			personRepository.AssertWasCalled(x => x.FindPeople(Arg<IEnumerable<Guid>>.List.ContainsAll(new[]{personId})));
+		}
+
+
+		[Test]
+		public void ShouldFilterPermittedPersonWhenQueryingGivenPeopleList()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var persons = new[] { new Person(), new Person() };
+
+			personRepository.Stub(x => x.FindPeople(persons.Select(p=>p.Id.GetValueOrDefault()))).IgnoreArguments().Return(persons);
+			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(0))).Return(false);
+			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(1))).Return(true);
+
+			var target = new SchedulePersonProvider(personRepository, permissionProvider, null, null);
+
+			var result = target.GetPermittedPeople(new GroupScheduleInput { PersonIds = persons.Select(p => p.Id.GetValueOrDefault()), ScheduleDate = DateOnly.Today.Date}, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			result.Single().Should().Be(persons.ElementAt(1));
 		}
 	}
 }

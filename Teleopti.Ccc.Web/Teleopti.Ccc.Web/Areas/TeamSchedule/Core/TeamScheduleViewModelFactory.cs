@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone)
 		{
-			var people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+			var people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.TeamSchedule).ToArray();
 			if (people.Count() > 500)
 			{
 				return new GroupScheduleViewModel
@@ -107,13 +107,42 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					Total = people.Count(),
 				}; 
 			}
-			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			
 			var peopleCanSeeConfidentialAbsencesFor =
 				_searchProvider.GetPermittedPersonIdList(criteriaDictionary,9999,1,dateInUserTimeZone,null,DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
+			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor);
+			return new GroupScheduleViewModel
+			{
+				Schedules = list,
+				Total = people.Count()
+			};
+		}
+
+		public GroupScheduleViewModel CreateViewModel(GroupScheduleInput input)
+		{
+			var people = _schedulePersonProvider.GetPermittedPeople(input, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToArray();
+			var peopleCanSeeConfidentialAbsencesFor =
+				_schedulePersonProvider.GetPermittedPeople(input,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
+
+			var list = constructGroupScheduleShiftViewModels(new DateOnly(input.ScheduleDate), people,
+				peopleCanSeeConfidentialAbsencesFor.Select(p => p.Id.GetValueOrDefault()));
+
+			return new GroupScheduleViewModel
+			{
+				Schedules = list,
+				Total = people.Count()
+			};
+		}
+
+		private IEnumerable<GroupScheduleShiftViewModel> constructGroupScheduleShiftViewModels(DateOnly dateInUserTimeZone, IEnumerable<IPerson> people,
+			IEnumerable<Guid> peopleCanSeeConfidentialAbsencesFor)
+		{
+			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, people).ToList();
 			var scheduleDaysForPreviousDay =
 				_scheduleProvider.GetScheduleForPersons(dateInUserTimeZone.AddDays(-1), people) ??
-				new IScheduleDay[] { };
+				new IScheduleDay[] {};
 			scheduleDays.AddRange(
 				scheduleDaysForPreviousDay.Where(
 					scheduleDay =>
@@ -125,8 +154,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			var personScheduleDays = (from p in people
-									  let personSchedules = (from s in scheduleDays where s.Person == p select s)
-									  select new Tuple<IPerson, IEnumerable<IScheduleDay>>(p, personSchedules)).ToArray();
+				let personSchedules = (from s in scheduleDays where s.Person == p select s)
+				select new Tuple<IPerson, IEnumerable<IScheduleDay>>(p, personSchedules)).ToArray();
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
@@ -160,13 +189,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						});
 				}
 			}
-			return new GroupScheduleViewModel
-			{
-				Schedules = list,
-				Total = people.Count()
-			};
+			return list;
 		}
-
 		private static bool isSchedulePublished(DateTime date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
@@ -175,11 +199,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
 				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
 		}
-	}
-
-	public interface ITeamScheduleViewModelFactory
-	{
-		IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone);
-		GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone);
 	}
 }

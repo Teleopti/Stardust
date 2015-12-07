@@ -106,6 +106,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/GetScheduleForPeople")]
+		public virtual JsonResult<GroupScheduleViewModel> GetSchedulesForPeople(GroupScheduleInput input)
+		{
+			var result = _teamScheduleViewModelFactory.CreateViewModel(input);
+			return Json(result);
+		}
+
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
 		public virtual JsonResult<bool> AddFullDayAbsence(FullDayAbsenceForm form)
 		{

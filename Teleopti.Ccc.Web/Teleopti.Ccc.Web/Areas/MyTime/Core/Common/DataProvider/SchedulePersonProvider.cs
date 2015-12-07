@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -40,6 +41,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				p => _permissionProvider.HasOrganisationDetailPermission(
 					function, date, p));
 			return _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
+		}
+
+		public IEnumerable<IPerson> GetPermittedPeople(GroupScheduleInput input, string function)
+		{
+			var people = _personRepository.FindPeople(input.PersonIds);
+			return (from person in people
+				where _permissionProvider.HasPersonPermission(function, new DateOnly(input.ScheduleDate), person)
+				select person).ToArray();
 		}
 	}
 }

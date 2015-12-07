@@ -46,4 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 			return StartTime < EndTime;
 		}
 	}
+
+	public class GroupScheduleInput
+	{
+		public IEnumerable<Guid> PersonIds { get; set; }
+		public DateTime ScheduleDate { get; set; }
+	}
 }
