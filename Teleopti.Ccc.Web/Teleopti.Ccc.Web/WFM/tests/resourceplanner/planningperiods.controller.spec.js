@@ -2,7 +2,8 @@
 describe('PlanningPeriodsCtrl', function () {
 	var $q,
 		$rootScope,
-		$httpBackend;
+		$httpBackend,
+		planningPeriodSvc;
 
 	beforeEach(module('wfm.resourceplanner'));
 
@@ -14,62 +15,44 @@ describe('PlanningPeriodsCtrl', function () {
 		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
 		$httpBackend.whenGET('../ToggleHandler/IsEnabled?toggle=Wfm_ChangePlanningPeriod_33043').respond(200, {});
 		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
-
-	}));
-
-	it('not null', inject(function($controller) {
-		var scope = $rootScope.$new();
-		var mockPlanningPeriodSvrc = {
+		planningPeriodSvc = {
 			getPlanningPeriod: {
-				query: function() {}
+				query: function () { }
 			},
 			getDayOffRules: function () { return { then: function () { } } },
 			isEnabled: {
-				query: function(param) {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve('true');
-					return { $promise: queryDeferred.promise };
-				}
-			},
-            status: {
-                get: function() {
-                    var queryDeferred = $q.defer();
-                    queryDeferred.resolve({IsRunning:false});
-                    return { $promise: queryDeferred.promise };
-                }
-            }
-		};
-
-		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
-		expect($controller).not.toBe(null);
-	}));
-
-	it('returns correct planning period', inject(function($controller) {
-		var scope = $rootScope.$new();
-		var mockPlanningPeriodSvrc = {
-			getPlanningPeriod: {
-				query: function() {
-					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
-				}
-			},
-			getDayOffRules: function () { return { then: function () { } } },
-			isEnabled: {
-				query: function (param) {
+				query: function () {
 					var queryDeferred = $q.defer();
 					queryDeferred.resolve('true');
 					return { $promise: queryDeferred.promise };
 				}
 			},
 			status: {
-			    get: function () {
-			        var queryDeferred = $q.defer();
-			        queryDeferred.resolve({ IsRunning: false });
-			        return { $promise: queryDeferred.promise };
-			    }
+				get: function () {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve({ IsRunning: false });
+					return { $promise: queryDeferred.promise };
+				}
 			}
 		};
+	}));
 
-		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
+	it('not null', inject(function($controller) {
+		var scope = $rootScope.$new();
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+		expect($controller).not.toBe(null);
+	}));
+
+	it('returns correct planning period', inject(function($controller) {
+		var scope = $rootScope.$new();
+		planningPeriodSvc.getPlanningPeriod = {
+				query: function() {
+					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
+				}
+			};
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
 		expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
 		expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
 		expect(scope.planningPeriod.Id).toEqual('someguid');
@@ -77,40 +60,23 @@ describe('PlanningPeriodsCtrl', function () {
 
 	it('returns missing skills with content', inject(function($controller) {
 		var scope = $rootScope.$new();
-		var mockPlanningPeriodSvrc = {
-			getPlanningPeriod: {
-				query: function() {
-					return {
-						Skills: [
-							{
-								SkillName: 'Phone',
-								MissingRanges: [
-									{ StartDate: new Date(20150502), EndDate: new Date(20150509) },
-									{ StartDate: new Date(20150515), EndDate: new Date(20150517) }
-								]
-							}
-						]
-					};
-				}
-			},
-			getDayOffRules : function(){return {then:function(){}}},
-			isEnabled: {
-				query: function (param) {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve('true');
-					return { $promise: queryDeferred.promise };
-				}
-			},
-			status: {
-			    get: function () {
-			        var queryDeferred = $q.defer();
-			        queryDeferred.resolve({ IsRunning: false });
-			        return { $promise: queryDeferred.promise };
-			    }
+		planningPeriodSvc.getPlanningPeriod = {
+			query: function() {
+				return {
+					Skills: [
+						{
+							SkillName: 'Phone',
+							MissingRanges: [
+								{ StartDate: new Date(20150502), EndDate: new Date(20150509) },
+								{ StartDate: new Date(20150515), EndDate: new Date(20150517) }
+							]
+						}
+					]
+				};
 			}
 		};
 
-		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
 
 		expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
 		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
@@ -183,27 +149,7 @@ describe('PlanningPeriodsCtrl', function () {
 
 		var numberOfKeepAliveCalls = 0;
 
-		var planningPeriodSvc = {
-			keepAlive: function () { numberOfKeepAliveCalls++;  },
-			getDayOffRules: function() { return { then: function() {} } },
-			status: {
-				get: function() {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve({ IsRunning: false });
-					return { $promise: queryDeferred.promise };
-				}
-			}, isEnabled: {
-				query: function () {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve('true');
-					return { $promise: queryDeferred.promise };
-				}
-			}, getPlanningPeriod: {
-				query: function () {
-					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
-				}
-			}
-		};
+		planningPeriodSvc.keepAlive = function() { numberOfKeepAliveCalls++; };
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
 
