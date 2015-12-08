@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string TypeText { get; set; }
 		public RequestStatus Status { get; set; }
 		public string StatusText { get; set; }
+		public Description Payload { get; set; }
 	}
 }

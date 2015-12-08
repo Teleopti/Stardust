@@ -29,7 +29,7 @@
 					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', enableSorting: false },
-					{ displayName: 'Type', field: 'TypeText', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
+					{ displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
 					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false, headerCellClass: 'request-subject-header' },
 					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', enableSorting: false, headerCellClass: 'request-status-header' },
@@ -57,6 +57,12 @@
 					//if (period < 1) console.log('period < 1', period);
 					//if (period > 1) console.log('period > 1', period);
 				}
+				row.GetType = function() {
+					if (row.TypeText === "Absence") {
+						row.TypeText = row.Payload.Name;
+					}
+					return row.TypeText;
+				}
 			});
 			return dataArray;
 		}
@@ -77,7 +83,6 @@
 			link: postlink
 		};
 
-
 		function postlink(scope, elem, attrs, ctrls) {			
 			var requestsTableContainerCtrl = ctrls[0];			
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
@@ -87,8 +92,6 @@
 			}, function (v) {
 				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
 			});
-
-					
 		}
 	}	
 

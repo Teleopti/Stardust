@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 						? RequestStatus.Pending
 						: request.IsDenied
 							? RequestStatus.Denied
-							: RequestStatus.New
+							: RequestStatus.New,
+				Payload = request.Request.RequestPayloadDescription
 			};
 		}		
 
