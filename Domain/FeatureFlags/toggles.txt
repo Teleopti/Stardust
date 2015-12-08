@@ -44,6 +44,7 @@ MyTeam_Reports_31070 = true
 MyTimeWeb_AbsenceReport_31011 = true
 ETL_SpeedUpETL_30791 = true
 RTA_NewEventHangfireRTA_34333 = true
+#Cannot be relreased yet due to performance and IO #
 RTA_AdherenceDetails_34267 = RC
 RTA_NotifyViaSMS_31567 = true
 MyTimeWeb_ShiftTradeExchangeBulletin_31296 = true
@@ -59,22 +60,24 @@ ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Portal_DifferentiateBadgeSettingForAgents_31318 = true
 Backlog_Module_23980 = DEV
 MyTeam_MakeTeamScheduleConsistent_31897 = true
+#Cannot be relreased yet because it depends on 34267 #
 RTA_CalculatePercentageInAgentTimezone_31236 = RC
+#Cannot be relreased yet because it depends on 34267 #
 RTA_NeutralAdherence_30930 = RC
 MyTimeWeb_SortSchedule_32092 = true
 MyTimeWeb_EnhanceTeamSchedule_32580 = true
 MyTimeWeb_JalaaliCalendar_32997 = true
+# Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 WfmPeople_AdvancedSearch_32973 = true
 Wfm_Outbound_Campaign_32696 = true
 Wfm_Outbound_Campaign_GanttChart_Navigation_34924 = true
-SeatPlanner_Logon_32003 = RC
-Wfm_SeatPlan_SeatMapBookingView_32814 = RC
-MyTimeWeb_ShowSeatBooking_34799 = RC
+SeatPlanner_Logon_32003 = true
+Wfm_SeatPlan_SeatMapBookingView_32814 = true
+MyTimeWeb_ShowSeatBooking_34799 = true
 MyTimeWeb_PreferenceShowNightViolation_33152 = true
-
 Scheduler_OptimizeFlexibleDayOffs_22409 = true
 WfmForecast_QueueStatistics_32572 = true
 WfmForecast_ResultView_33605 = true
