@@ -26,46 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		{
 			events.ForEach(e => Target.Handle((dynamic)e));
 			var teamId = events.OfType<PersonOutOfAdherenceEvent>().First().TeamId;
-			Persister.Get(teamId).Count.Should().Be(2);
-		}
-
-		[Test]
-		[Ignore]
-		// ???
-		public void ShouldHandleWhenPeronDeletedEventIsTheFirstEvent_IsItWorthToImplent_QuestionMark()
-		{
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-
-			var events = new IEvent[]
-			{
-					new PersonDeletedEvent
-					{
-						PersonId = personId,
-						Timestamp = "2015-12-04 08:05".Utc()
-					},
-					new PersonOutOfAdherenceEvent
-					{
-						PersonId = personId,
-						TeamId = teamId,
-						Timestamp = "2015-12-04 08:00".Utc()
-					},
-			};
-			events.ForEach(e => Target.Handle((dynamic)e));
-
-			Persister.Get(teamId).Count.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldHandleOutOfSyncPersonDeletedEvents()
-		{
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = Guid.NewGuid(), TeamId = teamId, Timestamp = "2015-12-04 10:00".Utc() });
-
-			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, TeamId = teamId, Timestamp = "2015-12-04 10:05".Utc() });
-			Target.Handle(new PersonDeletedEvent { PersonId = personId, Timestamp = "2015-12-04 10:00".Utc() });
-
 			Persister.Get(teamId).Count.Should().Be(1);
 		}
 	}
@@ -81,13 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 				var teamId = Guid.NewGuid();
 				var events = new List<IEvent>
 				{
-
-					new PersonOutOfAdherenceEvent
-					{
-						PersonId = personId1,
-						TeamId = teamId,
-						Timestamp = "2015-02-18 12:00".Utc()
-					},
 					new PersonInAdherenceEvent
 					{
 						PersonId = personId1,
@@ -112,6 +65,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 						PersonId = personId2,
 						TeamId = teamId,
 						Timestamp = "2015-02-18 12:08".Utc()
+					},
+					new PersonDeletedEvent
+					{
+						PersonId = personId2,
+						Timestamp = "2015-02-18 12:09".Utc(),
+						PersonPeriodsBefore = new[] {new PersonPeriodDetail {TeamId = teamId}}
 					}
 				};
 

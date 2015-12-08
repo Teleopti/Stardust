@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleEvent(@event.TeamId, @event.SiteId, model =>
+			handleEvent(@event.SiteId, @event.TeamId, model =>
 				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
 					person.OutOfAdherence = true;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			handleEvent(@event.TeamId, @event.SiteId, model =>
+			handleEvent(@event.SiteId, @event.TeamId, model =>
 				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
 					person.OutOfAdherence = false;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonNeutralAdherenceEvent @event)
 		{
-			handleEvent(@event.TeamId, @event.SiteId, model =>
+			handleEvent(@event.SiteId, @event.TeamId, model =>
 				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
 					person.OutOfAdherence = false;
@@ -60,29 +61,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			var models =
-				from model in _reader.Read()
-				from state in model.State
-				where state.PersonId == @event.PersonId
-				select model;
+			if (@event.PersonPeriodsBefore == null || @event.PersonPeriodsBefore.IsEmpty())
+				return;
 
-			foreach (var model in models)
+			foreach (var personPeriod in @event.PersonPeriodsBefore)
 			{
-				deletePerson(model, @event.PersonId);
-				calculate(model);
-				_persister.Persist(model);
+				handleEvent(personPeriod.SiteId, personPeriod.TeamId, model =>
+					deletePerson(model, @event.PersonId, @event.Timestamp, person =>
+					{
+						person.Deleted = true;
+						person.OutOfAdherence = false;
+					}));
 			}
 		}
-
-		private static void deletePerson(TeamOutOfAdherenceReadModel model, Guid personId)
-		{
-			var state = stateForPerson(model, personId);
-			state.Deleted = true;
-			state.OutOfAdherence = false;
-			removeRedundantOldStates(model);
-		}
-
-		private void handleEvent(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
+		
+		private void handleEvent(Guid siteId, Guid teamId, Action<TeamOutOfAdherenceReadModel> mutate)
 		{
 			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel
 			{
@@ -93,6 +86,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			mutate(model);
 			calculate(model);
 			_persister.Persist(model);
+		}
+
+		private static void deletePerson(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<TeamOutOfAdherenceReadModelState> mutate)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = time;
+			mutate(state);
+			removeRedundantOldStates(model);
 		}
 
 		private static void updatePerson(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<TeamOutOfAdherenceReadModelState> mutate)
