@@ -108,10 +108,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return result;
 		}
 
+		public void Delete(Guid personId)
+		{
+			_unitOfWork.Current().CreateSqlQuery(
+				"DELETE ReadModel.AdherencePercentage " +
+				"WHERE PersonId =:PersonId")
+				.SetGuid("PersonId", personId)
+				.ExecuteUpdate();
+		}
+
 		public bool HasData()
 		{
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult() > 0;
 		}
+
 
 		private class getModel : AdherencePercentageReadModel
 		{

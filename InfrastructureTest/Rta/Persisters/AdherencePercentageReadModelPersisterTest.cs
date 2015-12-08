@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	[ReadModelUnitOfWorkTest]
 	public class AdherencePercentageReadModelPersisterTest
 	{
-		public IAdherencePercentageReadModelPersister Target { get; set; }
-		public IAdherencePercentageReadModelReader Reader { get; set; }
+		public IAdherencePercentageReadModelPersister Target;
+		public IAdherencePercentageReadModelReader Reader;
 
 		[Test]
 		public void ShouldSaveReadModelForPerson()
@@ -96,6 +96,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
 			model.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
 			model.State.Single().Timestamp.Should().Be("2012-08-29 8:15".Utc());
+		}
+
+		[Test]
+		public void ShouldDelete()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2015-12-08".Utc(),
+				PersonId = personId
+			});
+
+			Target.Delete(personId);
+
+			Target.Get("2015-12-08".Date(), personId).Should().Be.Null();
 		}
 
 		[Test]
