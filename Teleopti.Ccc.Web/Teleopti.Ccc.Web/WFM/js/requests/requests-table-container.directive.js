@@ -28,7 +28,7 @@
 					{ displayName: 'EndTime', field: 'PeriodEndTime', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"', visible: false },
 					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
-				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header' },
+				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', enableSorting: false },
 					{ displayName: 'Type', field: 'TypeText', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
 					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false, headerCellClass: 'request-subject-header' },
 					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header', visible: false },
@@ -49,6 +49,13 @@
 				row.GetDuration = function() {
 					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 					return moment.duration(length, 'seconds').humanize();
+				}
+				row.FormatedPeriodStartTime = function() {
+					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
+					var period = moment.duration(length, 'seconds').days();
+					console.log(moment.duration(length, 'seconds'), row.Subject);
+					//if (period < 1) console.log('period < 1', period);
+					//if (period > 1) console.log('period > 1', period);
 				}
 			});
 			return dataArray;
