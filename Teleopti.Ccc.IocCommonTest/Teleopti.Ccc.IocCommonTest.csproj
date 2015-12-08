@@ -135,7 +135,6 @@
     <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />
     <Compile Include="Configuration\TenantClientModuleTest.cs" />
-    <Compile Include="Configuration\UnitOfWorkModuleTest.cs" />
     <Compile Include="MultipleConfig\AppConfigOverriderTest.cs" />
     <Compile Include="MultipleConfig\WebConfigReaderTest.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />
