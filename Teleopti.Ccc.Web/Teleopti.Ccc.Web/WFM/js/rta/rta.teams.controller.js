@@ -6,35 +6,34 @@
 		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService', 'RtaFormatService',
 		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService, RtaFormatService) {
 
-			$scope.getAdherencePercent =  RtaFormatService.numberToPercent;
+			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 			var siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
 
-			RtaOrganizationService.getSiteName(siteId).then(function (name) {
+			RtaOrganizationService.getSiteName(siteId).then(function(name) {
 				$scope.siteName = name;
 			});
 
-			var polling = $interval(function () {
-				RtaService.getAdherenceForTeamsOnSite.query({
+			var polling = $interval(function() {
+				RtaService.getAdherenceForTeamsOnSite({
 					siteId: siteId
-				}).$promise.then(updateAdherence);
+				}).then(updateAdherence);
 			}, 5000);
 
-			RtaService.getTeams.query({
+			RtaService.getTeams({
+				siteId: siteId
+			}).then(function(teams) {
+				$scope.teams = teams;
+				return RtaService.getAdherenceForTeamsOnSite({
 					siteId: siteId
-				})
-				.$promise.then(function(teams) {
-					$scope.teams = teams;
-					return RtaService.getAdherenceForTeamsOnSite.query({
-						siteId: siteId
-					}).$promise;
-				}).then(function(teamAdherence) {
-					updateAdherence(teamAdherence);
 				});
+			}).then(function(teamAdherence) {
+				updateAdherence(teamAdherence);
+			});
 
 
 			function updateAdherence(teamAdherence) {
-				teamAdherence.forEach(function (team) {
+				teamAdherence.forEach(function(team) {
 					var filteredTeam = $filter('filter')($scope.teams, {
 						Id: team.Id
 					});
@@ -53,8 +52,8 @@
 				}
 			};
 
-			$scope.onTeamSelect = function (team) {
-				if(team.NumberOfAgents < 1)
+			$scope.onTeamSelect = function(team) {
+				if (team.NumberOfAgents < 1)
 					return;
 				$state.go('rta-agents', {
 					siteId: siteId,
@@ -74,18 +73,17 @@
 			};
 
 			$scope.$watch(
-				function () {
+				function() {
 					return $sessionStorage.buid;
 				},
-				function (newValue, oldValue) {
+				function(newValue, oldValue) {
 					if (oldValue !== undefined && newValue !== oldValue) {
 						RtaRouteService.goToSites();
 					}
 				}
 			);
 
-
-			$scope.$on('$destroy', function () {
+			$scope.$on('$destroy', function() {
 				$interval.cancel(polling);
 			});
 		}

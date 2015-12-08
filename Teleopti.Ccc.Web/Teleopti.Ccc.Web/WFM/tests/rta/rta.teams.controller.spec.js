@@ -14,7 +14,6 @@ describe('RtaTeamsCtrl', function() {
 	var teamAdherence = [];
 	var sites = [];
 	var teams = [];
-	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
 
@@ -55,9 +54,6 @@ describe('RtaTeamsCtrl', function() {
 
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('RtaService', function() {
-				return rtaSvrc;
-			});
 			$provide.service('$stateParams', function() {
 				return stateParams;
 			});
@@ -75,16 +71,6 @@ describe('RtaTeamsCtrl', function() {
 		$httpBackend = _$httpBackend_;
 		$sessionStorage = _$sessionStorage_;
 
-		rtaSvrc.getTeams = $resource('../Teams/ForSite?siteId=:siteId', {
-			siteId: '@siteId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
-
 		//London
 		$httpBackend.whenGET("../Teams/ForSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teams);
@@ -94,16 +80,6 @@ describe('RtaTeamsCtrl', function() {
 		//Stores
 		$httpBackend.whenGET("../Teams/ForSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
 			.respond(200, []);
-
-		rtaSvrc.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=:siteId', {
-			siteId: '@siteId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
 		//London
 		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teamAdherence);
@@ -113,14 +89,6 @@ describe('RtaTeamsCtrl', function() {
 		//Stores
 		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
 			.respond(200, []);
-
-		rtaSvrc.getSites = $resource('../Sites', {}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
 		$httpBackend.whenGET("../Sites")
 			.respond(200, sites);
 	}));

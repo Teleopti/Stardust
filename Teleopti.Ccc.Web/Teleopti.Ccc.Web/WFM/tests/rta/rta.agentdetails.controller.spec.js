@@ -11,7 +11,6 @@ describe('RtaAgentDetailsCtrl', function() {
 		scope;
 
 	var stateParams = {};
-	var rtaSvrc = {};
 	var personDetails = {};
 	var activityAdherence = [];
 	var dailyPercent = {};
@@ -39,9 +38,6 @@ describe('RtaAgentDetailsCtrl', function() {
 
 	beforeEach(function() {
 		module(function($provide) {
-			$provide.service('RtaService', function() {
-				return rtaSvrc;
-			});
 			$provide.service('$stateParams', function() {
 				return stateParams;
 			});
@@ -58,36 +54,6 @@ describe('RtaAgentDetailsCtrl', function() {
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
-
-		rtaSvrc.getPersonDetails = $resource('../Agents/PersonDetails?personId=:personId', {
-			personId: '@personId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: false
-			}
-		});
-
-		rtaSvrc.getAdherenceDetails = $resource('../Adherence/ForDetails?personId=:personId', {
-			personId: '@personId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
-
-		rtaSvrc.forToday = $resource('../Adherence/ForToday?personId=:personId', {
-			personId: '@personId'
-		}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: false
-			}
-		});
 
 		$httpBackend.whenGET("../Agents/PersonDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, personDetails);

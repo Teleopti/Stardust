@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('wfm.rta').service('RtaService', ['$resource',
+	angular.module('wfm.rta').service('RtaService', ['RtaResourceFactory',
 		function($resource) {
 
 			this.getAgentsForSites = function(data) {
@@ -48,33 +48,45 @@
 				}).$promise;
 			};
 
-			this.getSites = $resource('../Sites', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			});
+			this.getAdherenceForTeamsOnSite = function(data) {
+				return $resource('../Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteId: data.siteId
+				}).$promise;
+			};
 
-			this.getTeams = $resource('../Teams/ForSite', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			});
+			this.getAdherenceForAllSites = function(data) {
+				return $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query().$promise;
+			};
 
-			this.getAdherenceForTeamsOnSite = $resource('../Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			});
+			this.getSites = function(data) {
+				return $resource('../Sites', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query().$promise;
+			};
 
-			this.getAdherenceForAllSites = $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			});
+			this.getTeams = function(data) {
+				return $resource('../Teams/ForSite', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					siteId: data.siteId
+				}).$promise;
+			};
 
 			this.forToday = $resource('../Adherence/ForToday', {}, {
 				query: {

@@ -1,28 +1,26 @@
-(function () {
+(function() {
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService',
-			function ($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService) {
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService) {
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				var selectedSiteIds = [];
 
-				var polling = $interval(function () {
-					RtaService.getAdherenceForAllSites.query()
-						.$promise.then(updateAdherence);
+				var polling = $interval(function() {
+					RtaService.getAdherenceForAllSites().then(updateAdherence);
 				}, 5000);
 
-				RtaService.getSites.query()
-					.$promise.then(function (sites) {
-						$scope.sites = sites;
-						return RtaService.getAdherenceForAllSites.query().$promise;
-					}).then(function (siteAdherence) {
-						updateAdherence(siteAdherence);
-					});
+				RtaService.getSites().then(function(sites) {
+					$scope.sites = sites;
+					return RtaService.getAdherenceForAllSites();
+				}).then(function(siteAdherence) {
+					updateAdherence(siteAdherence);
+				});
 
 				function updateAdherence(siteAdherence) {
-					siteAdherence.forEach(function (site) {
+					siteAdherence.forEach(function(site) {
 						var filteredSite = $filter('filter')($scope.sites, {
 							Id: site.Id
 						});
@@ -31,7 +29,7 @@
 					});
 				};
 
-				$scope.toggleSelection = function (siteId) {
+				$scope.toggleSelection = function(siteId) {
 					var index = selectedSiteIds.indexOf(siteId);
 					if (index > -1) {
 						selectedSiteIds.splice(index, 1);
@@ -40,22 +38,22 @@
 					}
 				};
 
-				$scope.onSiteSelect = function (site) {
-					if(site.NumberOfAgents < 1)
+				$scope.onSiteSelect = function(site) {
+					if (site.NumberOfAgents < 1)
 						return;
 					$state.go('rta-teams', {
 						siteId: site.Id
 					});
 				};
 
-				$scope.openSelectedSites = function () {
+				$scope.openSelectedSites = function() {
 					if (selectedSiteIds.length === 0) return;
 					$state.go('rta-agents-sites', {
 						siteIds: selectedSiteIds
 					});
 				};
 
-				$scope.$on('$destroy', function () {
+				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);
 				});
 			}

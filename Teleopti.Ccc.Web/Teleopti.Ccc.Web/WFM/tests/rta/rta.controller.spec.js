@@ -11,7 +11,6 @@ describe('RtaCtrl', function() {
 
 	var sites = [];
 	var siteAdherence = [];
-	var rtaSvrc = {};
 
 	beforeEach(module('wfm.rta'));
 
@@ -39,14 +38,6 @@ describe('RtaCtrl', function() {
 
 	});
 
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.service('RtaService', function() {
-				return rtaSvrc;
-			});
-		});
-	});
-
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_) {
 		$controller = _$controller_;
 		scope = _$rootScope_.$new();
@@ -56,22 +47,6 @@ describe('RtaCtrl', function() {
 		$resource = _$resource_;
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
-
-		rtaSvrc.getSites = $resource('../Sites', {}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
-
-		rtaSvrc.getAdherenceForAllSites = $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
 
 		$httpBackend.whenGET("../Sites")
 			.respond(200, sites);

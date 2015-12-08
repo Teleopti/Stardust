@@ -6,12 +6,12 @@
 	   '$filter', '$q', 'RtaService', function ($filter, $q, RtaService) {
 
 	  	var service = {};
-			service.sites = RtaService.getSites ? RtaService.getSites.query() : null;
+			service.sites = RtaService.getSites ? RtaService.getSites() : null;
 			service.teams = undefined;
 
 	   	service.getSiteName = function (siteId) {
 				var deferred = $q.defer();
-				service.sites.$promise.then(function(data){
+				service.sites.then(function(data){
 					var siteName = null;
 					var result = $filter('filter')(data, { Id: siteId });
 		   		if (result.length > 0) {

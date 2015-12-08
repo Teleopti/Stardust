@@ -1295,6 +1295,7 @@
     <Content Include="WFM\js\rta\rta.agents.filters.js" />
     <Content Include="WFM\js\rta\rta.agents.grid.service.js" />
     <Content Include="WFM\js\rta\rta.format.service.js" />
+    <Content Include="WFM\js\rta\rta.resource.factory.js" />
     <Content Include="WFM\js\rta\rta.route.service.js" />
     <Content Include="WFM\js\seatManagement\html\objectproperty.html" />
     <Content Include="WFM\js\seatManagement\images\seatWithBooking.svg" />
