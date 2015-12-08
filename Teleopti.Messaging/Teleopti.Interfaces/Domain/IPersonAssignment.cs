@@ -46,12 +46,7 @@ namespace Teleopti.Interfaces.Domain
 	    IEnumerable<IOvertimeShiftLayer> OvertimeActivities();
 	    IEnumerable<IShiftLayer> ShiftLayers { get; }
 
-	    /// <summary>
-		/// Publish the ScheduleChangedEvent
-		/// </summary>
-		void ScheduleChanged();
-
-		bool RemoveActivity(IShiftLayer layer);
+	    bool RemoveActivity(IShiftLayer layer);
 	    void AddPersonalActivity(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    IDayOff DayOff();

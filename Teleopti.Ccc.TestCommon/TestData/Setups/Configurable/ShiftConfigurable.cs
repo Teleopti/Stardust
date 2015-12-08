@@ -76,9 +76,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			personAssignment.AddActivity(activity, _assignmentPeriod);
 			addScheduleActivity(timeZone, personAssignment, currentUnitOfWork);
 
-			// simply publish the schedule changed event so that the read model is updated
-			personAssignment.ScheduleChanged();
-
 			assignmentRepository.Add(personAssignment);
 		}
 

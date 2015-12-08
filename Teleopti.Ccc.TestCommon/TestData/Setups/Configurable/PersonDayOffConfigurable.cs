@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			personDayOff.SetDayOff(dayOff);
 
 			var repository = new PersonAssignmentRepository(currentUnitOfWork);
-
-			personDayOff.ScheduleChanged();
-
+			
 			repository.Add(personDayOff);
 		}
 	}

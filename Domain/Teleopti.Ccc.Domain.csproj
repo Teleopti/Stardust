@@ -184,6 +184,8 @@
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\DayOffAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />

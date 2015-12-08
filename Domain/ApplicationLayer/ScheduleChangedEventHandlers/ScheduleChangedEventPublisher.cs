@@ -1,4 +1,6 @@
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -8,8 +10,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<PersonAbsenceAddedEvent>,
 		IHandleEvent<ActivityAddedEvent>,
 		IHandleEvent<ActivityMovedEvent>,
-		IHandleEvent<PersonAbsenceModifiedEvent>
-
+		IHandleEvent<PersonAbsenceModifiedEvent>,
+		IHandleEvent<DayOffAddedEvent>,
+		IHandleEvent<DayUnscheduledEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _publisher;
 
@@ -113,5 +116,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				TrackId = @event.TrackId
 			});
 		}
+
+		public void Handle(DayOffAddedEvent @event)
+		{
+			var dateTimeperiod = dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(@event.Date);
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				Datasource = @event.Datasource,
+				BusinessUnitId = @event.BusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = dateTimeperiod.StartDateTime,
+				EndDateTime = dateTimeperiod.EndDateTime,
+				InitiatorId = @event.InitiatorId
+			});
+		}
+
+		public void Handle(DayUnscheduledEvent @event)
+		{
+			var dateTimeperiod = dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(@event.Date);
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				Datasource = @event.Datasource,
+				BusinessUnitId = @event.BusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = dateTimeperiod.StartDateTime,
+				EndDateTime = dateTimeperiod.EndDateTime,
+				InitiatorId = @event.InitiatorId
+			});
+		}
+
+		private static DateTimePeriod dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(DateOnly date)
+		{
+			var dateTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
+			return new DateTimePeriod(
+				dateTime.AddHours(-24),
+				dateTime.AddHours(48));
+		}
+
 	}
 }

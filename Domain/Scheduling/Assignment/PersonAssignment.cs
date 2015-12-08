@@ -40,6 +40,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ClearOvertimeActivities();
 			ClearPersonalActivities();
 			SetDayOff(null);
+			AddEvent(() => new DayUnscheduledEvent
+			{
+				Date = Date,
+				PersonId = Person.Id.Value,
+				ScenarioId = Scenario.Id.Value,
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+			});
 		}
 
 		public virtual DateOnly Date { get; protected set; }
@@ -140,18 +147,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IScenario Scenario
 		{
 			get { return _scenario; }
-		}
-
-		public virtual void ScheduleChanged()
-		{
-			AddEvent(new ScheduleChangedEvent
-				{
-					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
-					ScenarioId = Scenario.Id.GetValueOrDefault(),
-					StartDateTime = Period.StartDateTime,
-					EndDateTime = Period.EndDateTime,
-					PersonId = Person.Id.GetValueOrDefault(),
-				});
 		}
 
 		public virtual bool RemoveActivity(IShiftLayer layer)
@@ -425,11 +420,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetDayOff(IDayOffTemplate template)
 		{
-			if (template != null)
-			{
-				ClearMainActivities();
-			}
 			_dayOffTemplate = template;
+			if (_dayOffTemplate == null) return;
+
+			ClearMainActivities();
+			AddEvent(() => new DayOffAddedEvent
+			{
+				Date = Date,
+				PersonId = Person.Id.Value,
+				ScenarioId = Scenario.Id.Value,
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+			});
 		}
 
 		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination)

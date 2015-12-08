@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
 		{
 			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var personDayOff = new PersonAssignment(user, scenario, new DateOnly(Date));
-			personDayOff.ClearMainActivities();
+			var emptyPersonAssignment = new PersonAssignment(user, scenario, new DateOnly(Date));
+			emptyPersonAssignment.Clear();
 
 			var repository = new PersonAssignmentRepository(currentUnitOfWork);
-
-			personDayOff.ScheduleChanged();
-
-			repository.Add(personDayOff);
+			
+			repository.Add(emptyPersonAssignment);
 		}
 	}
 }
