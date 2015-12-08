@@ -4,7 +4,10 @@
 		text-align: center;
 	}
 
-
+	.ui-grid-viewport{
+	    height:auto !important;
+		overflow:hidden !important;
+	}
 
 
 }
