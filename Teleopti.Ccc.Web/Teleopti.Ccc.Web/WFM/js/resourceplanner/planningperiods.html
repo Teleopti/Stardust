@@ -1,5 +1,5 @@
 ﻿<div ui-view>
-    <div class="alert-warning notice-spacer" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> <span translate>ScheduleIsRunning</span></div>
+    <div class="alert-warning notice-spacer server-busy" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> <span translate>ScheduleIsRunning</span></div>
 	<div ng-if="planningPeriod.State != 'New'" class="text-success" translate>
 		PlanningPeriodIsScheduled
 	</div>
