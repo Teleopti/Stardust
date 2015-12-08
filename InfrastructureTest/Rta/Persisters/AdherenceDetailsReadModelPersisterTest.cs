@@ -107,6 +107,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldDelete()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2015-12-08".Utc(),
+				PersonId = personId,
+			});
+
+			Target.Delete(personId);
+
+			Target.HasData().Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldAddWithNulls()
 		{
 			var personId = Guid.NewGuid();

@@ -62,6 +62,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.ExecuteUpdate();
 		}
 
+		public void Delete(Guid personId)
+		{
+			_unitOfWork.Current().CreateSqlQuery(
+				   "DELETE ReadModel.AdherenceDetails " +
+				   "WHERE " +
+				   "	PersonId = :PersonId")
+				   .SetGuid("PersonId", personId)
+				   .ExecuteUpdate();
+		}
+
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
@@ -93,10 +103,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return result;
 		}
 
+
 		public bool HasData()
 		{
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.AdherenceDetails ").UniqueResult() > 0;
 		}
+
 
 		private class internalModel : AdherenceDetailsReadModel
 		{

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader
 	{
-		private readonly IList<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
+		private IList<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
 
 		public FakeAdherenceDetailsReadModelPersister()
 		{
@@ -50,10 +50,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.Add(model);
 		}
 
+		public void Delete(Guid personId)
+		{
+			_data = _data.Where(x => x.PersonId != personId).ToList();
+		}
+
 		public bool HasData()
 		{
 			return _data.Any();
 		}
+
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
