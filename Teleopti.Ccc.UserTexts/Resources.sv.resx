@@ -3246,7 +3246,7 @@ Ersätt</value>
     <value>tt:mm</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value>Plats</value>
+    <value>Lokal</value>
   </data>
   <data name="Meetings" xml:space="preserve">
     <value>Möten</value>
@@ -4127,7 +4127,7 @@ Ersätt</value>
     <value>Hantera tilläggskolumner</value>
   </data>
   <data name="LocationColon" xml:space="preserve">
-    <value>Plats:</value>
+    <value>Lokal:</value>
   </data>
   <data name="SubjectColon" xml:space="preserve">
     <value>Ämne:</value>
@@ -12787,5 +12787,41 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
     <value>Den här sökningen kommer att returnera ett alltför stort antal träffar. Var god och avgränsa din sökning.  </value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Var god lägg till ett filter</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Namn krävs</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Varning: Servern är upptagen med schemaläggning. Var god försök igen senare.</value>
+  </data>
+  <data name="AmountOfFilters" xml:space="preserve">
+    <value>Antal filter</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Ändra planeringsperiod</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Ändra filter</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Ta bort filter</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>Välj en frånvaro</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Hantera regler</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Lägg till lokal</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Tröskelvärde</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Skapa ny regeluppsättning</value>
   </data>
 </root>
