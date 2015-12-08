@@ -55,23 +55,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						StartDateTime = g.Min(s => s.Period.StartDateTime),
 						EndDateTime = g.Max(s => s.Period.EndDateTime),
 					};
-				});
-			
-			if (messages.Any())
+				})
+				.ToArray();
+
+			if (!messages.Any()) return;
+
+			var retries = 0;
+			while (retries < 2)
 			{
-				var retries = 0;
-				while (retries < 2)
+				try
 				{
-					try
-					{
-						retries++;
-						_eventPublisher.Publish(messages.ToArray());
-						return;
-					}
-					catch (SqlException ex)
-					{
-						LogManager.GetLogger(typeof(ScheduleChangedEventPublisher)).Error(ex);
-					}
+					retries++;
+					_eventPublisher.Publish(messages);
+					return;
+				}
+				catch (SqlException ex)
+				{
+					LogManager.GetLogger(typeof(ScheduleChangedEventPublisher)).Error(ex);
 				}
 			}
 		}
