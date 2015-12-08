@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Transactions;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -78,18 +77,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void mightStartTransaction()
 		{
-			if (_transaction == null && !hasOuterTransaction())
+			if (_transaction != null) return;
+			try
 			{
-				try
-				{
-					_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
-						_session.BeginTransaction() :
-						_session.BeginTransaction(IsolationLevel.Serializable);
-				}
-				catch (TransactionException transactionException)
-				{
-					throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
-				}
+				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
+					_session.BeginTransaction() :
+					_session.BeginTransaction(IsolationLevel.Serializable);
+			}
+			catch (TransactionException transactionException)
+			{
+				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
 			}
 		}
 
@@ -186,12 +183,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void commitInnerTransaction()
 		{
-			if (Transaction.Current == null)
-			{
-				_transaction.Commit();
-				_transaction.Dispose();
-				_transaction = null;
-			}
+			_transaction.Commit();
+			_transaction.Dispose();
+			_transaction = null;
 		}
 
 		private void invokeCallbacks(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -298,11 +292,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterSuccessfulTx(Action func)
 		{
 			Session.Transaction.RegisterSynchronization(new TransactionCallback(func));
-		}
-
-		private static bool hasOuterTransaction()
-		{
-			return Transaction.Current != null;
 		}
 
 		private void safeRollback()

@@ -159,7 +159,6 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime" />
     <Reference Include="System.Security" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
