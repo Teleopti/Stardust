@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				CreatedTime = request.CreatedOn,
 				UpdatedTime = request.UpdatedOn,
 				AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name),
+				Seniority=request.Person.Seniority,
 				Type = request.Request.RequestType,
 				TypeText = request.Request.RequestTypeDescription,
 				StatusText = request.StatusText,
