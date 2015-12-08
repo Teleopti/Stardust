@@ -2,13 +2,18 @@
 
 	.ui-grid-cell-contents {
 		text-align: center;
+		width:85%;
 	}
-
 	.ui-grid-viewport{
 	    height:auto !important;
 		overflow:hidden !important;
 	}
-
-
+	.ui-grid-column-menu-button-last-col{
+	    margin-right:0;
+	}
+	.ui-grid-menu-button{
+	    top: 2px;
+        right: -3px;
+	}
 }
 	
