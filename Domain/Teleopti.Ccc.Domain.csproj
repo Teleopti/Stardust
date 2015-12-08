@@ -160,6 +160,8 @@
     <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />
+    <Compile Include="ApplicationLayer\Commands\AbsenceCreatorInfo.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\IAbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\SaveSeatMapCommand.cs" />

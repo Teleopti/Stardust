@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakeCurrentScenario _currentScenario;
 		private FakeScheduleRepository _scheduleRepository;
 		private PersonAbsenceCreator _personAccountCreator;
+		private IAbsenceCommandConverter _absenceCommandConverter;
 
 		[SetUp]
 		public void Setup()
@@ -36,17 +37,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
 			_personAccountCreator = new PersonAbsenceCreator (saveSchedulePartService, businessRulesForAccountUpdate);
+
+			_absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleRepository);
 		}
 
 		[Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository,
-				_personRepository,
-				_absenceRepository,
-				_currentScenario,
-				_personAccountCreator);
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -77,14 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		[Test]
 		public void ShouldSetupEntityState()
-		{ 
-			
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository,
-				_personRepository,
-				_absenceRepository,
-				_currentScenario,
-				_personAccountCreator);
+		{
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -102,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate);
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
 		}
-		
+
 		[Test]
 		public void ShouldConvertFromAgentsTimeZone()
 		{
@@ -110,13 +102,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
 			var personRepository = new FakeWriteSideRepository<IPerson> { person };
-			
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository, 
-				personRepository, 
-				_absenceRepository, 
-				_currentScenario, 
-				_personAccountCreator);
+			var absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, personRepository, _absenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, absenceCommandConverter);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -142,13 +129,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 10, 2013, 3, 25, 15);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
-			_scheduleRepository.Add (personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository,
-				_personRepository,
-				_absenceRepository,
-				_currentScenario,
-				_personAccountCreator);
+			_scheduleRepository.Add(personAssignment);
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{
@@ -170,18 +152,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotOverlapNightShiftFromDayBeforeStartDate()
 		{
-			
+
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 24, 18, 2013, 3, 25, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
-			
-			_scheduleRepository.Add (personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository,
-				_personRepository,
-				_absenceRepository,
-				_currentScenario,
-				_personAccountCreator);
+
+			_scheduleRepository.Add(personAssignment);
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{
@@ -204,13 +181,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = _personRepository.Single();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 18, 2013, 3, 26, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, personAssignmentPeriod);
-			_scheduleRepository.Add (personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(
-				_scheduleRepository,
-				_personRepository,
-				_absenceRepository,
-				_currentScenario,
-				_personAccountCreator);
+			_scheduleRepository.Add(personAssignment);
+			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, _absenceCommandConverter);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{
@@ -223,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsence = _scheduleRepository.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			absenceLayer.Period.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
-			var @event =personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent; 
+			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
 			@event.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
 	}

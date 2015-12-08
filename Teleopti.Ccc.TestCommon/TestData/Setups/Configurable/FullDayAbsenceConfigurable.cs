@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository), personAbsenceAccountRepository);
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var personAbsenceCreator = new PersonAbsenceCreator (scheduleDifferenceSaver, businessRulesForAccountUpdate);
-			var handler = new AddFullDayAbsenceCommandHandler(scheduleRepository, new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), new ThisCurrentScenario(scenario),personAbsenceCreator);
+			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), scheduleRepository );
+			var handler = new AddFullDayAbsenceCommandHandler(personAbsenceCreator, commandConverter);
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,

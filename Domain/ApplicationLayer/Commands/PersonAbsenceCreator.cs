@@ -39,9 +39,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer) as PersonAbsence;
 			return personAbsence;
 		}
-
-
-	
-		
 	}
 }

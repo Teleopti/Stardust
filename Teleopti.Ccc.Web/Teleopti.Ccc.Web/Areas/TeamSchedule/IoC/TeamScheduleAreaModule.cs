@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 {
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 		{
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>().SingleInstance();
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>().SingleInstance();
-
+			builder.RegisterType<AbsencePersister>().As<IAbsencePersister>().SingleInstance();
 		}
 	}
 }

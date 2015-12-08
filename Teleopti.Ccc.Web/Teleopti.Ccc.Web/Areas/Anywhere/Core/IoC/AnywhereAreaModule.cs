@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -69,6 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();
 			
 			builder.RegisterType<PersonAbsenceCreator>().As<IPersonAbsenceCreator>();
+			builder.RegisterType<AbsenceCommandConverter>().As<IAbsenceCommandConverter>();
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>();	
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>();
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>();
