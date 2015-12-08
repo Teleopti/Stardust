@@ -33,12 +33,12 @@
 			
 			var Orders = self.REQUEST_SORTING_ORDERS;
 
-			if (sortColumn.name == 'AgentName') {
-				return sortColumn.sort.direction == 'asc' ? Orders.AgentNameAsc : Orders.AgentNameDesc;
+			if (sortColumn.name === 'AgentName') {
+				return sortColumn.sort.direction === 'asc' ? Orders.AgentNameAsc : Orders.AgentNameDesc;
 			} else if (sortColumn.name == 'UpdatedTime') {
-				return sortColumn.sort.direction == 'asc' ? Orders.UpdatedOnAsc : Orders.UpdatedOnDesc;
+				return sortColumn.sort.direction === 'asc' ? Orders.UpdatedOnAsc : Orders.UpdatedOnDesc;
 			} else if (sortColumn.name == 'CreatedTime') {
-				return sortColumn.sort.direction == 'asc' ? Orders.CreatedOnAsc : Orders.CreatedOnDesc;
+				return sortColumn.sort.direction === 'asc' ? Orders.CreatedOnAsc : Orders.CreatedOnDesc;
 			} else {
 				return null;
 			}
