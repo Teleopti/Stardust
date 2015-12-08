@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 
 		public void SetupConfiguration(IocArgs args)
 		{
-			args.OptimizeScheduleChangedEvents = true;
+			args.OptimizeScheduleChangedEvents_DontUseFromWeb = true;
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

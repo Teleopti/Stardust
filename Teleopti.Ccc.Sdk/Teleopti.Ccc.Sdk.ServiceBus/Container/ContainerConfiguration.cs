@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 						{
 							SharedContainer = sharedContainer,
 							DataSourceConfigurationSetter =
-								Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForServiceBus()
+								Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForServiceBus(),
+							OptimizeScheduleChangedEvents_DontUseFromWeb = true
 						}, _toggleManager)));
 
 			build.RegisterModule<ShiftTradeModule>();

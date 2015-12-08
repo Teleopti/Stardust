@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			/**************************************/
 			/*         Order dependant            */
 			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
-			if (_configuration.Args().OptimizeScheduleChangedEvents)
+			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
 				builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
 			/*           End                      */
 			/**************************************/

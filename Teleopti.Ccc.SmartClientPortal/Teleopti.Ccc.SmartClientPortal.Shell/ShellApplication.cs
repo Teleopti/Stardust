@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					MessageBrokerListeningEnabled = true,
 					ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
-					OptimizeScheduleChangedEvents = true
+					OptimizeScheduleChangedEvents_DontUseFromWeb = true
 				};
 				var configuration = new IocConfiguration(
 							iocArgs,
