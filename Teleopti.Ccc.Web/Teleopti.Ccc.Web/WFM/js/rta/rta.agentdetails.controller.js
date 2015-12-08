@@ -17,23 +17,23 @@
 						return window.history.length === 1;
 				};
 
-				RtaService.getPersonDetails.query({
+				RtaService.getPersonDetails({
 						personId: personId
-					}).$promise
+					})
 					.then(function(person) {
 						$scope.name = person.Name;
 					});
 
-				RtaService.getAdherenceDetails.query({
+				RtaService.getAdherenceDetails({
 						personId: personId
-					}).$promise
+					})
 					.then(function(adherence) {
 						$scope.adherence = adherence;
 					});
 
-				RtaService.forToday.query({
+				RtaService.forToday({
 						personId: personId
-					}).$promise
+					})
 					.then(function(data) {
 						$scope.dailyTotal = data.AdherencePercent;
 					});

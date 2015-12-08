@@ -88,26 +88,38 @@
 				}).$promise;
 			};
 
-			this.forToday = $resource('../Adherence/ForToday', {}, {
-				query: {
-					method: 'GET',
-					isArray: false
-				}
-			});
+			this.forToday = function(data) {
+				return $resource('../Adherence/ForToday', {}, {
+					query: {
+						method: 'GET',
+						isArray: false
+					}
+				}).query({
+					personId: data.personId
+				}).$promise;
+			};
 
-			this.getPersonDetails = $resource('../Agents/PersonDetails', {}, {
-				query: {
-					method: 'GET',
-					isArray: false
-				}
-			});
+			this.getPersonDetails = function(data) {
+				return $resource('../Agents/PersonDetails', {}, {
+					query: {
+						method: 'GET',
+						isArray: false
+					}
+				}).query({
+					personId: data.personId
+				}).$promise;
+			};
 
-			this.getAdherenceDetails = $resource('../Adherence/ForDetails', {}, {
-				query: {
-					method: 'GET',
-					isArray: true
-				}
-			});
+			this.getAdherenceDetails = function(data) {
+				return $resource('../Adherence/ForDetails', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					personId: data.personId
+				}).$promise;
+			};
 		}
 	]);
 })();

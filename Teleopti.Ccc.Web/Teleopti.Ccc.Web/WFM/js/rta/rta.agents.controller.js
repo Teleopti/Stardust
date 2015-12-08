@@ -77,9 +77,9 @@
 
 				$scope.getAdherenceForAgent = function(personId) {
 					if (!$scope.isSelected(personId)) {
-						RtaService.forToday.query({
+						RtaService.forToday({
 								personId: personId
-							}).$promise
+							})
 							.then(function(data) {
 								$scope.adherence = data;
 								$scope.adherencePercent = data.AdherencePercent;
