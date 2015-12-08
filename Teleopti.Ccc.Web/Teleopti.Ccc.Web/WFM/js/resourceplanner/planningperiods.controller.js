@@ -36,7 +36,8 @@
 	        function cancelPoll() {
 	            $scope.isScheduleRunning = false;
 	            if (angular.isDefined(stopPolling)) {
-	                $interval.cancel(stopPolling);
+	            	$interval.cancel(stopPolling);
+		            stopPolling = undefined;
 	            }
 	        }
 
