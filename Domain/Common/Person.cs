@@ -466,8 +466,9 @@ namespace Teleopti.Ccc.Domain.Common
 						{
 							StartDate = p.StartDate.Date,
 							EndDate = p.EndDate().Date,
+							SiteId = p.Team.Site.Id.GetValueOrDefault(),
 							TeamId = p.Team.Id.GetValueOrDefault(),
-							PersonSkillDetails = gatherSkillDetails(p)
+							PersonSkillDetails = gatherSkillDetails(p),
 						}).ToList();
 		}
 

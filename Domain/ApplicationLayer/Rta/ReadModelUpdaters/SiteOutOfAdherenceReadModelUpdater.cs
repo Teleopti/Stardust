@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -60,26 +61,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			var models = 
-				from model in _reader.Read()
-				from state in model.State
-				where state.PersonId == @event.PersonId
-				select model;
-			
-			foreach (var model in models)
-			{
-				deletePerson(model, @event.PersonId);
-				calculate(model);
-				_persister.Persist(model);
-			}
-		}
+			if (@event.PersonPeriodsBefore == null || @event.PersonPeriodsBefore.IsEmpty())
+				return;
 
-		private static void deletePerson(SiteOutOfAdherenceReadModel model, Guid personId)
-		{
-			var state = stateForPerson(model, personId);
-			state.Deleted = true;
-			state.OutOfAdherence = false;
-			removeRedundantOldStates(model);
+			foreach (var personPeriod in @event.PersonPeriodsBefore)
+			{
+				handleEvent(@event.BusinessUnitId, personPeriod.SiteId, model =>
+					deletePerson(model, @event.PersonId, @event.Timestamp, person =>
+					{
+						person.Deleted = true;
+						person.OutOfAdherence = false;
+					}));
+			}
 		}
 		
 		private void handleEvent(Guid businessUnitId, Guid siteId, Action<SiteOutOfAdherenceReadModel> mutate)
@@ -93,6 +86,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			mutate(model);
 			calculate(model);
 			_persister.Persist(model);
+		}
+
+		private static void deletePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<SiteOutOfAdherenceReadModelState> mutate)
+		{
+			var state = stateForPerson(model, personId);
+			state.Time = time;
+			mutate(state);
+			removeRedundantOldStates(model);
 		}
 
 		private static void updatePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<SiteOutOfAdherenceReadModelState> mutate)

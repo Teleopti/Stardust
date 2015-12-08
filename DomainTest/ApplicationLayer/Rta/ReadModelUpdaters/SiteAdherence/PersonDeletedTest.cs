@@ -25,7 +25,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			var personId = Guid.NewGuid();
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] {new PersonPeriodDetail {SiteId = siteId}}
+			});
 
 			Persister.Get(siteId).Count.Should().Be(0);
 		}
@@ -40,7 +44,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = Guid.NewGuid() });
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId2 } }
+			});
 
 			Persister.Get(siteId1).Count.Should().Be(1);
 		}
@@ -54,7 +62,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = personId });
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] {new PersonPeriodDetail {SiteId = siteId1}, new PersonPeriodDetail {SiteId = siteId2}}
+			});
 
 			Persister.Get(siteId1).Count.Should().Be(0);
 			Persister.Get(siteId2).Count.Should().Be(0);
@@ -63,27 +75,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		[Test]
 		public void ShouldNotIncludeDeletedPersonInNextRecalculation()
 		{
-			var site = Guid.NewGuid();
-			var person = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = site, PersonId = person });
+			var siteId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
 
-			Target.Handle(new PersonDeletedEvent { PersonId = person });
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = site, PersonId = new Guid() });
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId } }
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = new Guid() });
 
-			Persister.Get(site).Count.Should().Be(1);
+			Persister.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldRememberPersonWasDeletedForACoupleOfMinutes()
 		{
-			var site = Guid.NewGuid();
-			var person = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = site, PersonId = person, Timestamp = "2015-12-04 08:00".Utc()});
+			var siteId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = siteId, PersonId = personId, Timestamp = "2015-12-04 08:00".Utc()});
 
-			Target.Handle(new PersonDeletedEvent {PersonId = person, Timestamp = "2015-12-04 10:00".Utc()});
-			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = site, PersonId = person, Timestamp = "2015-12-04 10:05".Utc()});
+			Target.Handle(new PersonDeletedEvent
+			{
+				PersonId = personId,
+				PersonPeriodsBefore = new[] { new PersonPeriodDetail { SiteId = siteId } },
+				Timestamp = "2015-12-04 10:00".Utc()
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent {SiteId = siteId, PersonId = personId, Timestamp = "2015-12-04 10:05".Utc()});
 
-			Persister.Get(site).Count.Should().Be(0);
+			Persister.Get(siteId).Count.Should().Be(0);
 		}
 	}
 }
