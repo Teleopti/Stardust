@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IClearEvents _clearEvents;
 
-		public CurrentUnitOfWorkScheduleRangePersister(IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
+		public CurrentUnitOfWorkScheduleRangePersister(
+			IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 			IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
 			IClearEvents clearEvents)

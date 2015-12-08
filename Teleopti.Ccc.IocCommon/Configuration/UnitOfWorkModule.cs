@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			#region All implementation of IPersistCallback
 			var businessUnit = CurrentBusinessUnit.Make();
-			builder.RegisterType<ClearEvents>().As<IBeforeSendEvents>();
 
 			/**************************************/
 			/*         Order dependant            */

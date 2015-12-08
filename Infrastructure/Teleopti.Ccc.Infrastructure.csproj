@@ -555,7 +555,6 @@
     <Compile Include="UnitOfWork\DisableDeletedFilter.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\FromFactory.cs" />
-    <Compile Include="UnitOfWork\IBeforeSendEvents.cs" />
     <Compile Include="UnitOfWork\IClearEvents.cs" />
     <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EventContextPopulator.cs" />

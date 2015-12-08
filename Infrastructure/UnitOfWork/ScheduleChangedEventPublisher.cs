@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,47 +15,48 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class ScheduleChangedEventPublisher : IPersistCallback
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
-		private readonly IBeforeSendEvents _clearEvents;
-		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
-		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher, IBeforeSendEvents clearEvents)
+		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
-			_clearEvents = clearEvents;
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
+			var roots = modifiedRoots.Select(r => r.Root);
+			var personAssignments = roots.OfType<IPersonAssignment>().Cast<IPersistableScheduleData>();
+			var personAbsences = roots.OfType<IPersonAbsence>();
+			var scheduleData = personAssignments.Concat(personAbsences)
+				.Where(x => x.Scenario != null)
+				.Select(x =>
+				{
+					if (x is IAggregateRootWithEvents)
+						(x as IAggregateRootWithEvents).PopAllEvents();
+					return x;
+				})
+				.ToArray();
+			
 			if (!scheduleData.Any()) return;
 
-			var people = scheduleData.Select(s => s.Person).Distinct();
-			var scenarios = scheduleData.Select(s => s.Scenario).Distinct();
-			var messages = new List<ScheduleChangedEvent>();
-
-			foreach (var person in people)
-			{
-				foreach (var scenario in scenarios)
+			var scheduleChangesPerPerson = scheduleData
+				.GroupBy(x => new
 				{
-					if (scenario==null) continue;
+					x.Person,
+					x.Scenario
+				}, x => x);
 
-					var matchedItems = scheduleData.Where(s => s.Scenario!=null && s.Scenario.Equals(scenario) && s.Person.Equals(person)).ToArray();
-					if (!matchedItems.Any()) continue;
-
-					_clearEvents.Execute(matchedItems);
-					var startDateTime = matchedItems.Min(s => s.Period.StartDateTime);
-					var endDateTime = matchedItems.Max(s => s.Period.EndDateTime);
-
-					messages.Add(new ScheduleChangedEvent
-					              	{
-					              		ScenarioId = scenario.Id.GetValueOrDefault(),
-										StartDateTime = startDateTime,
-					              		EndDateTime = endDateTime,
-					              		PersonId = person.Id.GetValueOrDefault(),
-					              	});
-				}
-			}
-
+			var messages = scheduleChangesPerPerson
+				.Select(g =>
+				{
+					return new ScheduleChangedEvent
+					{
+						PersonId = g.Key.Person.Id.GetValueOrDefault(),
+						ScenarioId = g.Key.Scenario.Id.GetValueOrDefault(),
+						StartDateTime = g.Min(s => s.Period.StartDateTime),
+						EndDateTime = g.Max(s => s.Period.EndDateTime),
+					};
+				});
+			
 			if (messages.Any())
 			{
 				var retries = 0;
@@ -64,17 +68,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						_eventPublisher.Publish(messages.ToArray());
 						return;
 					}
-					catch (SqlException)
-					{ }
+					catch (SqlException ex)
+					{
+						LogManager.GetLogger(typeof(ScheduleChangedEventPublisher)).Error(ex);
+					}
 				}
 			}
 		}
-
-		private static IEnumerable<IPersistableScheduleData> extractScheduleChangesOnly(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			var scheduleData = modifiedRoots.Select(r => r.Root).OfType<IPersistableScheduleData>();
-			scheduleData = scheduleData.Where(s => IncludedTypes.Any(t => s.GetType().GetInterfaces().Contains(t)));
-			return scheduleData;
-		}
+		
 	}
 }

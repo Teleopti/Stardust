@@ -1,6 +1,10 @@
-﻿namespace Teleopti.Ccc.Infrastructure.UnitOfWork
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface IClearEvents : IBeforeSendEvents
+	public interface IClearEvents
 	{
+		void Execute(IEnumerable<IAggregateRoot> aggregateRoots);
 	}
 }
