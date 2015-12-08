@@ -39,6 +39,10 @@
 					url: '../api/resourceplanner/dayoffrules'
 				});
 			}
+
+			this.keepAlive = function() {
+				return $http({ url: '../api/resourceplanner/keepalive', method: 'POST' });
+			}
 		}
 	]);
 })();

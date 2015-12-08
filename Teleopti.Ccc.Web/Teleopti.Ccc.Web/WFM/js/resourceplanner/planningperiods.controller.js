@@ -19,6 +19,11 @@
 					$scope.dayoffRules = result.data;
 				});
 
+				var tenMinutes = 1000 * 60 * 10;
+				var keepAliveRef = $interval(function() {
+					PlanningPeriodSvrc.keepAlive();
+				}, tenMinutes);
+
 
 	        function updateRunningStatus() {
 	            PlanningPeriodSvrc.status.get().$promise.then(function(result) {
@@ -102,7 +107,8 @@
 
 	        $scope.$on('$destroy', function() {
 	            // Make sure that the interval is destroyed too
-	            cancelPoll();
+	        	cancelPoll();
+		        $interval.cancel(keepAliveRef);
 	        });
 	    }
 	]);

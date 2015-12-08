@@ -60,6 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
+		//remove me when we move scheduling/optimization out of http request
+		[HttpPost, Route("api/ResourcePlanner/KeepAlive")]
+		public virtual void KeepAlive()
+		{
+		}
+
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), UnitOfWork]
 		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
 		{

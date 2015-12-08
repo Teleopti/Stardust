@@ -178,4 +178,40 @@ describe('PlanningPeriodsCtrl', function () {
 		scope.rangeUpdated(10,rangeDetails);
 		expect(scope.rangeDisabled).toBe(true);
 	}));
+	it('should call keep alive each 10th minute to make sure session is alive', inject(function($controller, $interval) {
+		var scope = $rootScope.$new();
+
+		var numberOfKeepAliveCalls = 0;
+
+		var planningPeriodSvc = {
+			keepAlive: function () { numberOfKeepAliveCalls++;  },
+			getDayOffRules: function() { return { then: function() {} } },
+			status: {
+				get: function() {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve({ IsRunning: false });
+					return { $promise: queryDeferred.promise };
+				}
+			}, isEnabled: {
+				query: function () {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
+			}, getPlanningPeriod: {
+				query: function () {
+					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
+				}
+			}
+		};
+
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+
+		var twentyFiveMinutes = 1000 * 60 * 25;
+		$interval.flush(twentyFiveMinutes);
+
+		scope.$digest();
+
+		expect(numberOfKeepAliveCalls).toBe(2);
+	}));
 });
