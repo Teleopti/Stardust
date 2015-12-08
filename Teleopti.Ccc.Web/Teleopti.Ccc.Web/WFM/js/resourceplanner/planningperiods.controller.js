@@ -41,7 +41,7 @@
 	            }
 	        }
 
-	        function handleScheduleOrOptimizeError(error) {
+	        function handleScheduleOrOptimizeError() {
 	            $scope.errorMessage = "An error occurred. Please try again.";
 	            $scope.schedulingPerformed = false;
 	            $scope.status = '';
@@ -57,9 +57,7 @@
 	            cancelPoll();
 	            $scope.status = 'Scheduling';
 	            PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
-	                //if not success
 	                $scope.scheduledDays = scheduleResult.DaysScheduled;
-	                //else
 	                $scope.status = 'Optimizing days off';
 	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
 	                    $scope.schedulingPerformed = true;
