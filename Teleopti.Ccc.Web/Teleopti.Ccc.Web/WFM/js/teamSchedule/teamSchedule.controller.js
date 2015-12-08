@@ -262,14 +262,16 @@
 			}
 		}, true);
 
+		var toggleAddAbsencePanel = function () {
+			vm.toggleMenuState();
+			vm.setCurrentCommand("addAbsence")();
+		}
+
 		vm.commands = [
 			{
 				label: "AddAbsence",
 				panelName: 'report-absence',
-				action: function () {
-					vm.toggleMenuState();
-					vm.setCurrentCommand("addAbsence")();
-				},
+				action: toggleAddAbsencePanel,
 				active: function () {
 					return vm.isAbsenceReportingEnabled;
 				}
@@ -442,11 +444,10 @@
 			var key = window.event ? window.event.keyCode : event.keyCode;
 
 			switch (key) {
-				
 				case 65: // Alt+A
 					if (event.altKey) {
 						preventDefaultEvent(event);
-						$scope.$evalAsync(updateAllStatusForOnePage('add', vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber));
+						$scope.$evalAsync(toggleAddAbsencePanel());
 					}
 					break;
 				
