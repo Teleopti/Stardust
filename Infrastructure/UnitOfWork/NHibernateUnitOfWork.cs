@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	/// </summary>
 	public class NHibernateUnitOfWork : IUnitOfWork
 	{
-		private AggregateRootInterceptor _interceptor;
+		private Lazy<AggregateRootInterceptor> _interceptor;
 		private ISession _session;
 		private IMessageBrokerComposite _messageBroker;
 		private bool disposed;
@@ -52,17 +52,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_isolationLevel = isolationLevel;
 			setInitiator(initiator);
 			_persistCallbacks = persistCallbacks;
+			_interceptor =
+				new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
 		{
 			get
 			{
-				if (_interceptor == null)
-				{
-					_interceptor = (AggregateRootInterceptor)_session.GetSessionImplementation().Interceptor;
-				}
-				return _interceptor;
+				return _interceptor.Value;
 			}
 		}
 
@@ -378,9 +376,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_sendPushMessageWhenRootAlteredService = null;
 			}
 
-			if (_interceptor != null)
+			if (_interceptor.IsValueCreated)
 			{
-				_interceptor.Clear();
+				_interceptor.Value.Clear();
 				_interceptor = null;
 			}
 		}
