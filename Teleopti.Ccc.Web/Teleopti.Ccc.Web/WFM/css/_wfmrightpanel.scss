@@ -1,4 +1,38 @@
-﻿wfm-right-panel{
+﻿@keyframes widthChange {
+	0% {
+		width: 0px;
+	}
+	
+	50%{
+		width: 0px;
+	}
+
+	100%{
+		width: 5px;
+	}
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+	opacity: 0;
+	}
+
+	100% {
+	opacity: 1;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+	opacity: 0;
+	}
+
+	100% {
+	opacity: 1;
+	}
+}
+
+wfm-right-panel{
 	z-index:1;
 
 	.resizable{
@@ -9,7 +43,6 @@
 		max-width:600px;
 		top:0;
 		bottom:0;
-		transition:all 0.35s ease-in-out;
 
 		.rg-left{
 			width:5px;

@@ -4,11 +4,6 @@ input[type=text],input[type=password],input[type=number]{
 	line-height:1;
 }
 
-.fadein {
-	animation: fadeIn 1.3s 1;
-	-webkit-animation: fadeIn 1.3s 1;
-}
-
 @keyframes fromTop {
 	0% {
 	transform: translateY(-250px);
@@ -23,40 +18,6 @@ input[type=text],input[type=password],input[type=number]{
 	}
 	100% {
 	transform: translateY(0);
-	}
-}
-
-@-webkit-keyframes fadeIn {
-	0% {
-	opacity: 0;
-	}
-
-	100% {
-	opacity: 1;
-	}
-}
-
-@keyframes fadeIn {
-	0% {
-	opacity: 0;
-	}
-
-	100% {
-	opacity: 1;
-	}
-}
-
-@keyframes widthChange {
-	0% {
-		width: 0px;
-	}
-	
-	50%{
-		width: 0px;
-	}
-
-	100%{
-		width: 5px;
 	}
 }
 
