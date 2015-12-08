@@ -40,8 +40,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			#region All implementation of IPersistCallback
 			var businessUnit = CurrentBusinessUnit.Make();
 			builder.RegisterType<ClearEvents>().As<IBeforeSendEvents>();
-			builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
+
+			/**************************************/
+			/*         Order dependant            */
 			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
+			if (_configuration.Args().OptimizeScheduleChangedEvents)
+				builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
+			/*           End                      */
+			/**************************************/
+
 			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
 			builder.RegisterType<GroupPageChangedBusMessageSender>().As<IPersistCallback>();
 			builder.Register(

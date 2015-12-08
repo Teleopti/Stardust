@@ -200,7 +200,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				var builder = new ContainerBuilder();
 
-				var iocArgs = new IocArgs(configReader) { MessageBrokerListeningEnabled = true, ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory)};
+				var iocArgs = new IocArgs(configReader)
+				{
+					MessageBrokerListeningEnabled = true,
+					ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
+					OptimizeScheduleChangedEvents = true
+				};
 				var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));

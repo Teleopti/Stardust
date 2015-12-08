@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class EventPublishingTest : ISetup
+	public class FatClientOptimizationEventPublishingTest : ISetup, ISetupConfiguration
 	{
 		public ICurrentUnitOfWorkFactory Uow;
 		public FakeEventPublisher EventsPublisher;
@@ -26,36 +26,42 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public IActivityRepository ActivityRepository;
 
+		public void SetupConfiguration(IocArgs args)
+		{
+			args.OptimizeScheduleChangedEvents = true;
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
-
+		
 		[Test]
-		public void ShouldPublishEvents()
+		public void ShouldOnlyPublishScheduleChangedEventWhenPersistingPersonAssignment()
 		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+			var activity = new Activity(".");
 			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
 			{
-				var scenario = ScenarioFactory.CreateScenario(".", true, false);
 				ScenarioRepository.Add(scenario);
-
-				var person = PersonFactory.CreatePerson();
 				PersonRepository.Add(person);
-
-				var activity = new Activity(".");
 				ActivityRepository.Add(activity);
+				uow.PersistAll();
+			}
+			EventsPublisher.Clear();
 
-				var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 15));
-				personAssignment.AddActivity(activity, new DateTimePeriod(2015, 6, 15, 8, 2015, 6, 15, 17));
+			var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 15));
+			personAssignment.AddActivity(activity, new DateTimePeriod(2015, 6, 15, 8, 2015, 6, 15, 17));
 
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
 				PersonAssignmentRepository.Add(personAssignment);
-
 				uow.PersistAll();
 			}
 
-			EventsPublisher.PublishedEvents.OfType<ActivityAddedEvent>()
-				.Should().Have.Count.GreaterThan(0);
+			EventsPublisher.PublishedEvents.All(x => x.GetType() == typeof(ScheduleChangedEvent))
+				.Should().Be.True();
 		}
-
 	}
 }

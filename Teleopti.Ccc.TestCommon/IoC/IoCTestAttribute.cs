@@ -126,8 +126,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			{
 				ThrottleMessages = false // the throttler shouldnt be started in ioc common at all, but...
 			};
+			if (_fixture is ISetupConfiguration)
+				(_fixture as ISetupConfiguration).SetupConfiguration(args);
 			var configuration = new IocConfiguration(args, Toggles());
-
+			
 			system.AddModule(new CommonModule(configuration));
 
 			system.UseTestDouble(new MutableNow("2014-12-18 13:31")).For<INow>();
