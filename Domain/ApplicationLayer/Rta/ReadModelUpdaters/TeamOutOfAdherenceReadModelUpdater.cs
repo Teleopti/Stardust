@@ -18,14 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IRecreatable
 	{
 		private readonly ITeamOutOfAdherenceReadModelPersister _persister;
-		private readonly ITeamOutOfAdherenceReadModelReader _reader;
 
-		public TeamOutOfAdherenceReadModelUpdater(
-			ITeamOutOfAdherenceReadModelPersister persister, 
-			ITeamOutOfAdherenceReadModelReader reader)
+		public TeamOutOfAdherenceReadModelUpdater(ITeamOutOfAdherenceReadModelPersister persister)
 		{
 			_persister = persister;
-			_reader = reader;
 		}
 
 		[ReadModelUnitOfWork]
