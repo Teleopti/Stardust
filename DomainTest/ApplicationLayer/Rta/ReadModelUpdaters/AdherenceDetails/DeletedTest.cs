@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public AdherenceDetailsReadModelUpdater Target;
-
-		[Ignore]
+		
 		[Test]
 		public void ShouldDeletePerson()
 		{
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 
 			Target.Handle(new PersonDeletedEvent {PersonId = personId});
 
-			Persister.Model.Should().Be.Null();
+			Persister.HasData().Should().Be.False();
 		}
 	}
 }
