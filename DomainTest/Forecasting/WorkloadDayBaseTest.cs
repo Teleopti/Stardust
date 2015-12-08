@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -460,7 +461,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		public void VerifyChangingOverrideAverageTaskTimeDistributesToPeriods()
+		public void ShouldSetAndGetOverrideTaskTimes()
 		{
 			_workloadDayBase.Close();
 			_workloadDayBase.MakeOpen24Hours();
@@ -470,14 +471,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			_workloadDayBase.SortedTaskPeriodList[0].SetTasks(tasks1);
 			_workloadDayBase.SortedTaskPeriodList[0].OverrideAverageTaskTime = TimeSpan.FromSeconds(120);
+			_workloadDayBase.SortedTaskPeriodList[0].OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(120);
 
 			_workloadDayBase.SortedTaskPeriodList[1].SetTasks(tasks2);
 			_workloadDayBase.SortedTaskPeriodList[1].OverrideAverageTaskTime = TimeSpan.FromSeconds(240);
+			_workloadDayBase.SortedTaskPeriodList[1].OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(240);
 
 			Assert.AreEqual(TimeSpan.FromSeconds(200), _workloadDayBase.OverrideAverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(200), _workloadDayBase.OverrideAverageAfterTaskTime);
 
 			_workloadDayBase.OverrideAverageTaskTime = TimeSpan.FromSeconds(400);
+			_workloadDayBase.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(400);
+
 			Assert.AreEqual(TimeSpan.FromSeconds(240), _workloadDayBase.SortedTaskPeriodList[0].OverrideAverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(240), _workloadDayBase.SortedTaskPeriodList[0].OverrideAverageAfterTaskTime);
 		}
 
 		[Test]
@@ -883,10 +890,86 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			_workloadDayBase.Release();
 			_workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
 			Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
-			Assert.AreEqual(0.05d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignTasks.Value, 2));
-			Assert.AreEqual(0.1d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignTaskTime.Value, 2));
-			Assert.AreEqual(0.21d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime.Value, 2));
+			Assert.AreEqual(0.05d,_workloadDayBase.TaskPeriodList[0].CampaignTasks.Value, 0.001d);
+			Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[0].CampaignTaskTime.Value, 0.001d);
+			Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime.Value, 0.001d);
 
+		}
+
+		[Test]
+		public void ShouldMergeWithOverrideTasks()
+		{
+			_workloadDayBase = new TestWorkloadDayBase();
+
+			_openHours.Clear();
+			_openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(9, 30, 0)));
+
+			_workloadDayBase.Create(SkillDayTemplate.BaseDate, _workload, _openHours);
+
+			_workloadDayBase.Tasks = 100;
+
+			_workloadDayBase.SetOverrideTasks(200d, null);
+
+			Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+
+			_workloadDayBase.MergeTemplateTaskPeriods(_workloadDayBase.TaskPeriodList);
+
+			Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
+			Assert.AreEqual(200d, _workloadDayBase.TaskPeriodList[0].OverrideTask.OverrideTasks);
+		}
+
+		[Test]
+		public void ShouldMergeWithOverrideAndCampaign()
+		{
+			_workloadDayBase = new TestWorkloadDayBase();
+
+			_openHours.Clear();
+			_openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(9, 30, 0)));
+
+			_workloadDayBase.Create(SkillDayTemplate.BaseDate, _workload, _openHours);
+
+			_workloadDayBase.Tasks = 100;
+			_workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(15);
+			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(20);
+			_workloadDayBase.CampaignTasks = new Percent(0.10d);
+			_workloadDayBase.CampaignTaskTime = new Percent(0.20d);
+			_workloadDayBase.CampaignAfterTaskTime = new Percent(0.30d);
+
+			_workloadDayBase.SetOverrideTasks(200d, null);
+			_workloadDayBase.OverrideAverageTaskTime = TimeSpan.FromSeconds(30);
+			_workloadDayBase.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(60);
+
+			Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+
+			_workloadDayBase.MergeTemplateTaskPeriods(_workloadDayBase.TaskPeriodList);
+
+			Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
+			Assert.AreEqual(0.10d, _workloadDayBase.TaskPeriodList[0].CampaignTasks.Value, 0.001d);
+			Assert.AreEqual(0.20d, _workloadDayBase.TaskPeriodList[0].CampaignTaskTime.Value, 0.001d);
+			Assert.AreEqual(0.30d, _workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime.Value, 0.001d);
+		}
+
+		[Test]
+		public void ShouldMergeWithOverrideTaskTimes()
+		{
+			_workloadDayBase = new TestWorkloadDayBase();
+
+			_openHours.Clear();
+			_openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(9, 30, 0)));
+
+			_workloadDayBase.Create(SkillDayTemplate.BaseDate, _workload, _openHours);
+
+			_workloadDayBase.Tasks = 100;
+			_workloadDayBase.OverrideAverageTaskTime = TimeSpan.FromSeconds(100);
+			_workloadDayBase.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200);
+
+			Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+
+			_workloadDayBase.MergeTemplateTaskPeriods(_workloadDayBase.TaskPeriodList);
+
+			Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
+			Assert.AreEqual(TimeSpan.FromSeconds(100), _workloadDayBase.TaskPeriodList[0].OverrideTask.OverrideAverageTaskTime);
+			Assert.AreEqual(TimeSpan.FromSeconds(200), _workloadDayBase.TaskPeriodList[0].OverrideTask.OverrideAverageAfterTaskTime);
 		}
 
 		[Test]
@@ -1104,6 +1187,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void ShouldRecalculateCampaignTaskTimesCorrect()
 		{
+			_workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(30);
+			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(60);
 			_workloadDayBase.CampaignTaskTime = new Percent(0.5d);
 			_workloadDayBase.CampaignAfterTaskTime = new Percent(0.75d);
 			_workloadDayBase.RecalculateDailyAverageCampaignTimes();

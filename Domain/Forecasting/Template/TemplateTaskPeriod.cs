@@ -940,49 +940,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 
         #endregion
 
-        /// <summary>
-        /// Merges the specified template task periods into one single.
-        /// </summary>
-        /// <param name="templateTaskPeriods">The template task periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2009-01-25
-        /// </remarks>
-        public static ITemplateTaskPeriod Merge(IList<ITemplateTaskPeriod> templateTaskPeriods)
-        {
-            IList<ITemplateTaskPeriod> sortedTemplateTaskPeriods = (from t in templateTaskPeriods
-                                        orderby t.Period.StartDateTime ascending
-                                        select t).ToList();
-            DateTimePeriod newDateTimePeriod = new DateTimePeriod(sortedTemplateTaskPeriods[0].Period.StartDateTime, sortedTemplateTaskPeriods[sortedTemplateTaskPeriods.Count - 1].Period.EndDateTime);
-            TaskOwnerPeriod taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, sortedTemplateTaskPeriods.OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
-
-                ITask newTask = new Task(
-                    taskOwnerPeriod.Tasks,
-                    taskOwnerPeriod.AverageTaskTime,
-                    taskOwnerPeriod.AverageAfterTaskTime);
-
-                ICampaign newCampaign = new Campaign(
-                    taskOwnerPeriod.CampaignTasks,
-                    taskOwnerPeriod.CampaignTaskTime,
-                    taskOwnerPeriod.CampaignAfterTaskTime);
-            
-            ITemplateTaskPeriod newTemplateTaskPeriod = new TemplateTaskPeriod(newTask, newCampaign, new OverrideTask(), newDateTimePeriod);
-
-            newTemplateTaskPeriod.StatisticTask.StatAbandonedTasks = taskOwnerPeriod.TotalStatisticAbandonedTasks;
-            newTemplateTaskPeriod.StatisticTask.StatAnsweredTasks = taskOwnerPeriod.TotalStatisticAnsweredTasks;
-            newTemplateTaskPeriod.StatisticTask.StatCalculatedTasks = taskOwnerPeriod.TotalStatisticCalculatedTasks;
-            newTemplateTaskPeriod.StatisticTask.StatAverageAfterTaskTimeSeconds =
-                (int)taskOwnerPeriod.TotalStatisticAverageAfterTaskTime.TotalSeconds;
-            newTemplateTaskPeriod.StatisticTask.StatAverageTaskTimeSeconds =
-                (int)taskOwnerPeriod.TotalStatisticAverageTaskTime.TotalSeconds;
-
-            newTemplateTaskPeriod.Lock();
-            newTemplateTaskPeriod.SetParent(sortedTemplateTaskPeriods[0].Parent);
-            newTemplateTaskPeriod.Release();
-            return newTemplateTaskPeriod;
-        }
-
         public virtual IList<ITemplateTaskPeriodView> Split(TimeSpan periodLength)
         {
             if (Period.ElapsedTime() < periodLength)

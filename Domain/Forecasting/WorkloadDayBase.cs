@@ -1346,13 +1346,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = true;
                 if (_averageTaskTime != TimeSpan.Zero)
                 {
-	                double totalCampaignTaskTime = _taskPeriodList.Sum(t => t.AverageTaskTime.Ticks * t.CampaignTaskTime.Value);
-						 _campaignTaskTime = new Percent(totalCampaignTaskTime / _averageTaskTime.Ticks);
+	                double totalCampaignTaskTime = _taskPeriodList.Sum(t => t.AverageTaskTime.Ticks * (1 + t.CampaignTaskTime.Value));
+						 double sumOfTaskTime = _taskPeriodList.Count * _averageTaskTime.Ticks;
+						 _campaignTaskTime = new Percent((totalCampaignTaskTime / sumOfTaskTime) - 1d);
                 }
                 if (_averageAfterTaskTime != TimeSpan.Zero)
-                {
-						 double totalCampaignAfterTaskTime = _taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks * t.CampaignAfterTaskTime.Value);
-						 _campaignAfterTaskTime = new Percent(totalCampaignAfterTaskTime / _averageAfterTaskTime.Ticks);
+					 {
+						 double totalCampaignAfterTaskTime = _taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks * (1 + t.CampaignAfterTaskTime.Value));
+						 double sumOfAfterTaskTime = _taskPeriodList.Count * _averageAfterTaskTime.Ticks;
+						 _campaignAfterTaskTime = new Percent((totalCampaignAfterTaskTime / sumOfAfterTaskTime) - 1d);
                 }
                 _turnOffInternalRecalc = false;
 
@@ -1517,10 +1519,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     taskOwnerPeriod.CampaignTaskTime,
                     taskOwnerPeriod.CampaignAfterTaskTime);
 
+	            OverrideTask newOverride = new OverrideTask(
+		            taskOwnerPeriod.OverrideTasks,
+			            taskOwnerPeriod.OverrideAverageTaskTime,
+			            taskOwnerPeriod.OverrideAverageAfterTaskTime);
+
                 TemplateTaskPeriod newTaskPeriod = new TemplateTaskPeriod(
                     newTask,
                     newCampaign,
-						  new OverrideTask(), 
+						  newOverride, 
                     new DateTimePeriod(
 	                    currentTaskPeriodList.First().Period.StartDateTime,
 		                    currentTaskPeriodList.Last().Period.EndDateTime));
@@ -1752,8 +1759,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		    _recalculateDailyTasks();
 		    _recalculateDailyAverageTimes();
-		    _recalculateDailyCampaignTasks();
-		    _recalculateDailyAverageCampaignTimes();
 
 		    OnTasksChanged();
 	    }

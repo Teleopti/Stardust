@@ -551,28 +551,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
         }
 
-        [Test]
-        public void VerifyMerge()
-        {
-            DateTime startAnother = _target.Period.StartDateTime.AddHours(-5);
-            DateTime endAnother = _target.Period.StartDateTime;
-            var anotherDateTimePeriod = new DateTimePeriod(startAnother, endAnother);
-            ITemplateTaskPeriod anotherTemplateTaskPeriod = new TemplateTaskPeriod(_task, _campaign, new OverrideTask(), 
-                                                                                   anotherDateTimePeriod);
-            IList<ITemplateTaskPeriod> templateTaskPeriods = new List<ITemplateTaskPeriod>();
-            templateTaskPeriods.Add(_target);
-            templateTaskPeriods.Add(anotherTemplateTaskPeriod);
-
-            _target.SetTasks(45);
-            anotherTemplateTaskPeriod.SetTasks(55);
-
-            ITemplateTaskPeriod mergedTemplateTaskPeriod = TemplateTaskPeriod.Merge(templateTaskPeriods);
-
-            Assert.IsTrue(anotherTemplateTaskPeriod.Period.StartDateTime.Equals(mergedTemplateTaskPeriod.Period.StartDateTime));
-            Assert.IsTrue(_target.Period.EndDateTime.Equals(mergedTemplateTaskPeriod.Period.EndDateTime));
-            Assert.AreEqual(100, mergedTemplateTaskPeriod.Tasks);
-        }
-
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifySplitTemplateTaskPeriodWithLowerPeriodLength()
         {

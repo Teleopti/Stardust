@@ -1308,6 +1308,79 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(new Percent(), target.CampaignTaskTime);
             Assert.AreEqual(new Percent(), target.CampaignAfterTaskTime);
         }
+	
+		[Test]
+		public void ShouldRecalculateCampaignTaskCorrectlyWhenOverrideExists()
+		{
+			target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date, _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
+			
+			target.TaskOwnerDayCollection[0].Tasks = 100;
+			target.TaskOwnerDayCollection[0].AverageTaskTime = TimeSpan.FromSeconds(40);
+			target.TaskOwnerDayCollection[0].AverageAfterTaskTime = TimeSpan.FromSeconds(80);
+			
+			target.TaskOwnerDayCollection[0].CampaignTasks = new Percent(0.5d);
+			target.TaskOwnerDayCollection[0].CampaignTaskTime = new Percent(0.1d);
+			target.TaskOwnerDayCollection[0].CampaignAfterTaskTime = new Percent(0.2d);
+
+			target.TaskOwnerDayCollection[0].SetOverrideTasks(200d, null);
+			target.TaskOwnerDayCollection[0].OverrideAverageTaskTime = TimeSpan.FromSeconds(60);
+			target.TaskOwnerDayCollection[0].OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(120);
+
+			target.RecalculateDailyCampaignTasks();
+			target.RecalculateDailyAverageCampaignTimes();
+
+			Assert.AreEqual(0.5d, target.CampaignTasks.Value, 0.001d);
+			Assert.AreEqual(0.1d, target.CampaignTaskTime.Value, 0.001d);
+			Assert.AreEqual(0.2d, target.CampaignAfterTaskTime.Value, 0.001d);
+		}
+
+
+		[Test]
+		public void ShouldSetOverrideTasks()
+		{
+			target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date, _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
+			target.SetOverrideTasks(400d, null);
+			Assert.AreEqual(400d, Math.Round(target.OverrideTasks.Value, 2));
+			Assert.AreEqual(400d, target.TotalTasks, 3);
+		}
+
+		[Test]
+		public void ShouldSetAndGetOverrideTaskTimes()
+		{
+			double tasks1 = 100;
+			double tasks2 = 200;
+
+			ITaskOwner[] workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date.AddDays(1), _workload).OfType<ITaskOwner>().ToArray();
+			workloadDays[0].Tasks = tasks1;
+			workloadDays[1].Tasks = tasks2;
+
+			target = new TaskOwnerPeriod(target.CurrentDate, workloadDays, TaskOwnerPeriodType.Other)
+			{
+				OverrideAverageTaskTime = TimeSpan.FromSeconds(60),
+				OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(40)
+			};
+
+			Assert.AreEqual(TimeSpan.FromSeconds(60).TotalSeconds, Math.Round(target.TotalAverageTaskTime.TotalSeconds, 0));
+			Assert.AreEqual(TimeSpan.FromSeconds(40).TotalSeconds, Math.Round(target.TotalAverageAfterTaskTime.TotalSeconds, 0));
+		}
+
+		[Test]
+		public void ShouldRecalculateCampaignTaskTimesCorrect()
+		{
+			target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other)
+			{
+				AverageTaskTime = TimeSpan.FromSeconds(30),
+				AverageAfterTaskTime = TimeSpan.FromSeconds(60),
+				CampaignTaskTime = new Percent(0.5d),
+				CampaignAfterTaskTime = new Percent(0.75d)
+			};
+
+			target.RecalculateDailyAverageCampaignTimes();
+
+			Assert.AreEqual(new Percent(0.5d).Value, Math.Round(target.CampaignTaskTime.Value, 2));
+			Assert.AreEqual(new Percent(0.75d).Value, Math.Round(target.CampaignAfterTaskTime.Value, 2));
+		}
+
 
         /// <summary>
         /// Verifies the campaign times can be set.
