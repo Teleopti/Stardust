@@ -29,23 +29,28 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
+			var mapping = new Dictionary<RequestsSortingOrder, Func<RequestViewModel, object>>
+			{
+				{ RequestsSortingOrder.AgentNameAsc, model => model.AgentName },
+				{ RequestsSortingOrder.AgentNameDesc, model => model.AgentName },
+				{ RequestsSortingOrder.UpdatedOnAsc, model => model.UpdatedTime },
+				{ RequestsSortingOrder.UpdatedOnDesc, model => model.UpdatedTime },
+				{ RequestsSortingOrder.CreatedOnAsc, model => model.CreatedTime },
+				{ RequestsSortingOrder.CreatedOnDesc, model => model.CreatedTime }
+			};
+
 			var primarySortingOrder = input.SortingOrders.Any()
 				? input.SortingOrders.First()
 				: RequestsSortingOrder.UpdatedOnDesc;
 
-			switch (primarySortingOrder)
-			{				
-				case RequestsSortingOrder.AgentNameDesc:
-					return requestViewModels.OrderByDescending(x => x.AgentName);
-				case RequestsSortingOrder.AgentNameAsc:
-					return requestViewModels.OrderBy(x => x.AgentName);
-				case RequestsSortingOrder.CreatedOnDesc:
-					return requestViewModels.OrderByDescending(x => x.CreatedTime);
-				case RequestsSortingOrder.CreatedOnAsc:
-					return requestViewModels.OrderBy(x => x.CreatedTime);
-				default:				
-					return requestViewModels.OrderByDescending(x => x.UpdatedTime);
-			}
+			var result = primarySortingOrder.ToString().EndsWith("Asc") ?
+				requestViewModels.OrderBy(mapping[primarySortingOrder]) :
+				requestViewModels.OrderByDescending(mapping[primarySortingOrder]);
+
+			return input.SortingOrders.Where(o => mapping.ContainsKey(o))
+				.Aggregate(result, (current, order) => order.ToString().EndsWith("Asc")
+				? current.ThenBy(mapping[order])
+				: current.ThenByDescending(mapping[order]));
 		}
 
 		private RequestViewModel toViewModel(IPersonRequest request)
