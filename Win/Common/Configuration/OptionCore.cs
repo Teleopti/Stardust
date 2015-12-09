@@ -234,6 +234,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				yield return new ThresholdColumn();
 				yield return new IsAlarmColumn();
+				yield return new AlarmColorColumn();
 			}
 		}
 	}

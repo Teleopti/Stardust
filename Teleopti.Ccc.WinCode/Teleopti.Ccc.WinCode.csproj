@@ -332,6 +332,7 @@
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityPresenter.cs" />
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityViewModel.cs" />
     <Compile Include="Common\Configuration\GamificationSettingProvider.cs" />
+    <Compile Include="Common\Configuration\Rta\AlarmColorColumn.cs" />
     <Compile Include="Common\Configuration\Rta\IsAlarmColumn.cs" />
     <Compile Include="Common\Configuration\Rta\ThresholdColumn.cs" />
     <Compile Include="Common\Configuration\SeniorityControlPresenter.cs" />

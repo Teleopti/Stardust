@@ -13838,4 +13838,8 @@ Reduce the complexity to use these shifts.</value>
     <value>No results were found</value>
     <comment>Feedback to inform the user that their search yielded no results</comment>
   </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Alarm Color</value>
+    <comment>Color for Rta alarms</comment>
+  </data>
 </root>

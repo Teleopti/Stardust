@@ -344,6 +344,7 @@
     <Compile Include="Common\TransparentMeetingControlPresenterTest.cs" />
     <Compile Include="Common\WhenAddingNewScheduleToShiftEditor.cs" />
     <Compile Include="Configuration\AlarmControl\AdherenceTest.cs" />
+    <Compile Include="Configuration\AlarmControl\AlarmColorTest.cs" />
     <Compile Include="Configuration\AlarmControl\IsAlarmTest.cs" />
     <Compile Include="Configuration\AlarmControl\ThresholdTest.cs" />
     <Compile Include="Configuration\ChangePasswordPresenterTest.cs" />
