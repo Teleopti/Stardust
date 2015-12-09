@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -14,7 +16,7 @@ using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			var result = target.BusinessUnits();
 
-			result.Data.Should().Be.SameInstanceAs(businessUnitViewModels);
+			result.Result<IEnumerable<BusinessUnitViewModel>>().Should().Be.SameInstanceAs(businessUnitViewModels);
 		}
 
 		[Test]
@@ -65,14 +67,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, null, null, null, new FakeToggleManager());
+			var target = new AuthenticationApiController(null, identityLogon, null, null, null, new FakeToggleManager());
 
-			var result = target.BusinessUnits();
-
-			target.Response.StatusCode.Should().Be(400);
-			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Not.Be.Null();
-			(result.Data as ModelStateResult).Errors.Single().Should().Not.Be.Null();
+			var result = (InvalidModelStateResult)target.BusinessUnits();
+			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -92,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, log, MockRepository.GenerateMock<IWebLogOn>(), null, new FakeToggleManager());
 			identityLogon.Stub(x => x.LogonIdentityUser()).Return(result);
 			log.Expect(x => x.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful));
-			target.Logon(Guid.NewGuid());
+			target.Logon(new ApiLogonInputModel {BusinessUnitId = Guid.NewGuid()});
 
 			identityLogon.AssertWasCalled(x => x.LogonIdentityUser());
 		}
@@ -115,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
 
-			target.Logon(businessUnitId);
+			target.Logon(new ApiLogonInputModel { BusinessUnitId = businessUnitId });
 
 			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword));
 		}
@@ -125,14 +123,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null, null, new FakeToggleManager());
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null, null, new FakeToggleManager());
 
-			var result = target.Logon(Guid.NewGuid());
+			var result = (InvalidModelStateResult)target.Logon(new ApiLogonInputModel { BusinessUnitId = Guid.NewGuid() });
 
-			target.Response.StatusCode.Should().Be(400);
-			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 		}
 
 		[Test]
@@ -142,14 +137,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult {Successful = true, DataSource = new FakeDataSource(), Person = PersonFactory.CreatePersonWithGuid(RandomName.Make(), RandomName.Make())});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, MockRepository.GenerateStub<IDataSourceForTenant>(), new FakeToggleManager());
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, MockRepository.GenerateStub<IDataSourceForTenant>(), new FakeToggleManager());
 
-			var result = target.Logon(Guid.NewGuid());
+			var result = (InvalidModelStateResult)target.Logon(new ApiLogonInputModel { BusinessUnitId = Guid.NewGuid() });
 
-			target.Response.StatusCode.Should().Be(400);
-			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiProductActivationKeyException);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.TeleoptiProductActivationKeyException);
+			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiProductActivationKeyException);
 		}
 
 		[Test]
@@ -161,9 +153,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var dataSourceForTenant = MockRepository.GenerateMock<IDataSourceForTenant>();
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			webLogon.Expect(x => x.LogOn(null, Guid.Empty, Guid.Empty, null)).IgnoreArguments().Throw(new LicenseMissingException());
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, dataSourceForTenant, new FakeToggleManager());
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, dataSourceForTenant, new FakeToggleManager());
 
-			target.Logon(Guid.NewGuid());
+			target.Logon(new ApiLogonInputModel { BusinessUnitId = Guid.NewGuid() });
 
 			dataSourceForTenant.AssertWasCalled(x => x.RemoveDataSource(tenantName));
 		}
@@ -185,15 +177,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword)).Throw(new PermissionException());
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
+			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon, null, new FakeToggleManager());
 
-			var result = target.Logon(businessUnitId);
+			var result = (InvalidModelStateResult)target.Logon(new ApiLogonInputModel { BusinessUnitId = businessUnitId });
 
-			target.Response.StatusCode.Should().Be(400);
-			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.InsufficientPermissionForWeb);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.InsufficientPermissionForWeb);
-			
+			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.InsufficientPermissionForWeb);
 		}
 	}
 }

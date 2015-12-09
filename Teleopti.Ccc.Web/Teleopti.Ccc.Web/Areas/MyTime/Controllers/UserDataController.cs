@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public class UserDataController : Controller
+	public class UserDataController : ApiController
 	{
 		private readonly IUserDataFactory _userDataFactory;
 
@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_userDataFactory = userDataFactory;
 		}
 
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult FetchUserData()
+		[UnitOfWork]
+		[HttpGet,Route("mytime/userdata/FetchUserData")]
+		public virtual IHttpActionResult FetchUserData()
 		{
-			return Json(_userDataFactory.CreateViewModel(), JsonRequestBehavior.AllowGet);
+			return Ok(_userDataFactory.CreateViewModel());
 		}
 	}
 }

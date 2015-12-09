@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	public class MenuController : Controller
+	public class MenuController : ApiController
     {
 		private readonly IMenuViewModelFactory _menuViewModelFactory;
 
@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
     		_menuViewModelFactory = menuViewModelFactory;
     	}
 
-		[HttpGet]
-		public JsonResult Applications()
+		[HttpGet, Route("Start/Menu/Applications")]
+		public IHttpActionResult Applications()
 		{
-			return Json(_menuViewModelFactory.CreateMenuViewModel(), JsonRequestBehavior.AllowGet);
+			return Ok(_menuViewModelFactory.CreateMenuViewModel());
 		}
     }
 }

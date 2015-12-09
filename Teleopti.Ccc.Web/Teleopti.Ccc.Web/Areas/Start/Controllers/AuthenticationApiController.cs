@@ -1,22 +1,17 @@
-using System;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-	public class AuthenticationApiController : Controller
+	public class AuthenticationApiController : ApiController
 	{
 		private readonly IBusinessUnitsViewModelFactory _businessUnitViewModelFactory;
 		private readonly IIdentityLogon _identityLogon;
@@ -40,22 +35,22 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_toggleManager = toggleManager;
 		}
 
-		[HttpGet]
+		[HttpGet,Route("start/authenticationapi/businessunits")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult BusinessUnits()
+		public virtual IHttpActionResult BusinessUnits()
 		{
 			var result = _identityLogon.LogonIdentityUser();
 			if (!result.Successful)
 				return errorMessage("Unknown error");
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
-			return Json(businessUnits, JsonRequestBehavior.AllowGet);
+			return Ok(businessUnits);
 		}
 
-		[HttpPost]
+		[HttpPost, Route("start/authenticationapi/logon")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual JsonResult Logon(Guid businessUnitId)
+		public virtual IHttpActionResult Logon([FromBody]ApiLogonInputModel model)
 		{
 			var result = _identityLogon.LogonIdentityUser();
 			_logLogonAttempt.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful);
@@ -63,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 			try
 			{
-				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value, result.TenantPassword);
+				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value, result.TenantPassword);
 			}
 			catch (PermissionException)
 			{
@@ -76,15 +71,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 
 			var isToggleOpen = _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762);
-			return Json(new { MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen }, JsonRequestBehavior.AllowGet);
+			return Ok(new { MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen });
 		}
 
-		private JsonResult errorMessage(string message)
+		private IHttpActionResult errorMessage(string message)
 		{
-			Response.StatusCode = 400;
-			Response.TrySkipIisCustomErrors = true;
 			ModelState.AddModelError("Error", message);
-			return ModelState.ToJson();
+			return BadRequest(ModelState);
 		}
 	}
 }

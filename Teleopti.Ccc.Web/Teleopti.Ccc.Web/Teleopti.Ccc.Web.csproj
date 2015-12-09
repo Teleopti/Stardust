@@ -264,7 +264,7 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -634,6 +634,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />
+    <Compile Include="Areas\Start\Controllers\ApiLogonInputModel.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
     <Compile Include="Areas\Start\Controllers\ReturnController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticatorResult.cs" />

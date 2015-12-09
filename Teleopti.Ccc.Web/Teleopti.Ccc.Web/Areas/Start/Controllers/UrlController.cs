@@ -3,17 +3,12 @@ using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
-
-using DotNetOpenAuth.OpenId;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers

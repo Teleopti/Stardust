@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			using (var controller = new UserDataController(userDataFactory))
 			{
 				var model = controller.FetchUserData();
-				model.Data.Should().Be.SameInstanceAs(expected);
+				model.Result<UserData>().Should().Be.SameInstanceAs(expected);
 			}
 		}
 	}
