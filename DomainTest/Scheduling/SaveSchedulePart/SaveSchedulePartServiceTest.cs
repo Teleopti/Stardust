@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				target.Save(scheduleDay, null, new ScheduleTag());
+				target.Save(scheduleDay, null, new ScheduleTag(), false);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<BusinessRuleValidationException>(() => target.Save(scheduleDay, null, new ScheduleTag()));
+				Assert.Throws<BusinessRuleValidationException>(() => target.Save(scheduleDay, null, new ScheduleTag(), false));
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				target.Save(scheduleDay, null, new ScheduleTag());
+				target.Save(scheduleDay, null, new ScheduleTag(), false);
 			}
 		}
 	}

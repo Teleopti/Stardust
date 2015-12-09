@@ -15,11 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public PersonAbsence Create(AbsenceCreatorInfo info, bool isFullDayAbsence)
+		public object Create(AbsenceCreatorInfo info, bool isFullDayAbsence, bool isNeedRuleCheckResult = false)
 		{
 			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(info.ScheduleRange);
 			var personAbsence = createPersonAbsence(info.ScheduleDay, info.Absence, info.AbsenceTimePeriod);
-			_saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+			var ruleCheckResult = _saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance, isNeedRuleCheckResult);
+			if (isNeedRuleCheckResult) return ruleCheckResult;
 
 			if (isFullDayAbsence)
 			{

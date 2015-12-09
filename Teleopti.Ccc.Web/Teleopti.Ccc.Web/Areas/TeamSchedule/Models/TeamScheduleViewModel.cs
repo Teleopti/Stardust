@@ -52,4 +52,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public IEnumerable<Guid> PersonIds { get; set; }
 		public DateTime ScheduleDate { get; set; }
 	}
+
+	public class AddAbsenceFailResult
+	{
+		public string PersonName { get; set; }
+		public IList<string> Message { get; set; }
+	}
 }

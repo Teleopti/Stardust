@@ -6,7 +6,6 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -18,6 +17,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -474,8 +474,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		[Test]
 		public void ShouldAddFullDayAbsenceForMoreThanOneAgent()
 		{
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
+			var target = new TeamScheduleController(null, null, null, null, absencePersister);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -485,15 +485,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.AddFullDayAbsence(form);
 
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
 		}
 
 		[Test]
 		public void ShouldAddFullDayAbsenceThroughInputForm()
 		{
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
+			var target = new TeamScheduleController(null, null, null, null, absencePersister);
 
 			var form = new FullDayAbsenceForm
 			{
@@ -504,9 +504,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.AddFullDayAbsence(form);
 
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
+			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
+			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
 		}
 
 		[Test]
@@ -528,8 +528,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		[Test]
 		public void ShouldAddIntradayAbsenceForMoreThanOneAgent()
 		{
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
+			var target = new TeamScheduleController(null, null, null, null, absencePersister);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -541,15 +541,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.AddIntradayAbsence(form);
 
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
 		}
 
 		[Test]
 		public void ShouldAddIntradayAbsenceThroughInputForm()
 		{
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
+			var target = new TeamScheduleController(null, null, null, null, absencePersister);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -560,16 +560,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			};
 			target.AddIntradayAbsence(form);
 
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
-			commandDispatcher.AssertWasCalled(x => x.Execute(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
+			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
+			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestWhenEndTimeEarlierThanStartTime()
 		{
-			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new TeamScheduleController(null, null, null, null, commandDispatcher);
+			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
+			var target = new TeamScheduleController(null, null, null, null, absencePersister);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var result = target.AddIntradayAbsence(form);
 
 			result.Should().Be.OfType<BadRequestErrorMessageResult>();
-			commandDispatcher.AssertWasNotCalled(x=>x.Execute(null), y=>y.IgnoreArguments());
+			absencePersister.AssertWasNotCalled(x => x.PersistIntradayAbsence(null), y => y.IgnoreArguments());
 		}
 	}
 }

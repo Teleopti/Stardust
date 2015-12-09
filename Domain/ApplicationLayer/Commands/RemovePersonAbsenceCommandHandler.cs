@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				scheduleDay.Remove(personAbsence);
 			}
 
-			_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
+			_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance, false);
 		}
 	}
 }

@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 {
@@ -13,16 +15,34 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			_personAbsenceCreator = personAbsenceCreator;
 		}
 
-		public void PersistFullDayAbsence(AddFullDayAbsenceCommand command)
+		public AddAbsenceFailResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
-			_personAbsenceCreator.Create(absenceCreatorInfo, true);
+			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, true, true) as IList<string>;
+			if (createResult != null)
+			{
+				return new AddAbsenceFailResult()
+				{
+					PersonName = absenceCreatorInfo.Person.Name.ToString(),
+					Message = createResult
+				};
+			}
+			return null;
 		}
 
-		public void PersistIntradayAbsence(AddIntradayAbsenceCommand command)
+		public AddAbsenceFailResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
-			_personAbsenceCreator.Create(absenceCreatorInfo, false);
+			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, false, true) as IList<string>;
+			if (createResult != null)
+			{
+				return  new AddAbsenceFailResult()
+				{
+					PersonName = absenceCreatorInfo.Person.Name.ToString(),
+					Message = createResult
+				};
+			}
+			return null;
 		}
 	}
 }
