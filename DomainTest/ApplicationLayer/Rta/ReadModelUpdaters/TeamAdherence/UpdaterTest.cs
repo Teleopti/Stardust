@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdherence
 {
 	[TestFixture]
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	public class UpdaterTest
 	{
 		public FakeTeamOutOfAdherenceReadModelPersister persister;

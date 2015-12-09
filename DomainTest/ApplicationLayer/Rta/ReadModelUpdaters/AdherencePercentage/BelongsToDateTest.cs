@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AdherencePercentage
 {
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	[TestFixture]
 	public class BelongsToDateTest
 	{

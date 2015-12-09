@@ -3,17 +3,19 @@ using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class DatabaseWriter : IDatabaseWriter
+	public class AgentStateReadModelPersister : IAgentStateReadModelPersister
 	{
 		private readonly CloudSafeSqlExecute executor = new CloudSafeSqlExecute();
 		private readonly Func<SqlConnection> _connection;
 
-		public DatabaseWriter(IConnectionStrings connectionStrings)
+		public AgentStateReadModelPersister(IConnectionStrings connectionStrings)
 		{
 			_connection = () =>
 			{
@@ -57,6 +59,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				command.Parameters.Add("@OriginalDataSourceId", SqlDbType.NVarChar).Value = model.OriginalDataSourceId ??
 																							(object) DBNull.Value;
 
+				command.ExecuteNonQuery();
+			});
+		}
+
+		public void Delete(Guid personId)
+		{
+			executor.Run(_connection, connection =>
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.Text;
+				command.CommandText =
+				"DELETE Rta.ActualAgentState " +
+				"WHERE PersonId = @PersonId ";
+				command.Parameters.Add("@PersonId", SqlDbType.UniqueIdentifier).Value = personId;
+				
 				command.ExecuteNonQuery();
 			});
 		}

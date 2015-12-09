@@ -1013,7 +1013,7 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IDatabaseWriter.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleLayer.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />

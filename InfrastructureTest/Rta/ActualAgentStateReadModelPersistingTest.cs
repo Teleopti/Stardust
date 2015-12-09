@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[RtaDatabaseTest]
 	public class ActualAgentStateReadModelPersistingTest
 	{
-		public IDatabaseWriter Target;
+		public IAgentStateReadModelPersister Target;
 		public IAgentStateReadModelReader Reader;
 
 		[Test]

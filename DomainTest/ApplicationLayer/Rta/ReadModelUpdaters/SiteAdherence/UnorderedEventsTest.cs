@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdherence
 {
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	[TestFixture]
 	public class UnorderedEventsTest
 	{

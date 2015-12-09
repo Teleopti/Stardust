@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdherence
 {
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_DeletedPersons_36041)]
 	public class PersonDeletedTest

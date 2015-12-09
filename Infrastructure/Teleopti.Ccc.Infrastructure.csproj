@@ -423,7 +423,7 @@
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Rta\ConnectionStrings.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />
-    <Compile Include="Rta\DatabaseWriter.cs" />
+    <Compile Include="Rta\AgentStateReadModelPersister.cs" />
     <Compile Include="Rta\IConnectionStrings.cs" />
     <Compile Include="Rta\AgentStateReadModelReader.cs" />
     <Compile Include="Rta\SqlDataReaderExtensions.cs" />

@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AdherenceDetails
 {
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class NeutralAdherenceTest

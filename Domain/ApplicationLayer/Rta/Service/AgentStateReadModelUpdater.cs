@@ -1,17 +1,29 @@
-﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
-{
-	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
-	{
-		private readonly IDatabaseWriter _databaseWriter;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
-		public AgentStateReadModelUpdater(IDatabaseWriter databaseWriter)
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+{
+	public class AgentStateReadModelUpdater :
+		IRunOnHangfire,
+		IHandleEvent<PersonDeletedEvent>,
+		IAgentStateReadModelUpdater
+	{
+		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
+
+		public AgentStateReadModelUpdater(IAgentStateReadModelPersister agentStateReadModelPersister)
 		{
-			_databaseWriter = databaseWriter;
+			_agentStateReadModelPersister = agentStateReadModelPersister;
+		}
+
+		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 
 		public void Update(StateInfo info)
 		{
-			_databaseWriter.PersistActualAgentReadModel(info.MakeAgentStateReadModel());
+			_agentStateReadModelPersister.PersistActualAgentReadModel(info.MakeAgentStateReadModel());
 		}
 	}
 }

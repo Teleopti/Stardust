@@ -153,6 +153,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FakeAgentStateReadModelPersister.cs" />
     <Compile Include="FakeAgentStateReadModelReader.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />

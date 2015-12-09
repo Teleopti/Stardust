@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
+		public void Remove(Guid personId)
+		{
+			AgentStateReadModel model;
+			_data.TryRemove(personId, out model);
+		}
+
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
 		{
 			throw new NotImplementedException();

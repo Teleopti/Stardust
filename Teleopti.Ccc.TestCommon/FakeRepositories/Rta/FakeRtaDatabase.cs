@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
 	}
 
-	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
+	public class FakeRtaDatabase : IDatabaseReader, IAgentStateReadModelPersister, IFakeDataBuilder
 	{
 		private readonly IConfigReader _config;
 		private readonly INow _now;
@@ -380,6 +380,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			AgentStateReadModelReader.Has(model);
 			PersistedReadModel = model;
 			StoredState = new StoredStateInfo(model.PersonId, model);
+		}
+
+		public void Delete(Guid personId)
+		{
+			AgentStateReadModelReader.Remove(personId);
+			PersistedReadModel = null;
+			StoredState = null;
 		}
 
 		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()

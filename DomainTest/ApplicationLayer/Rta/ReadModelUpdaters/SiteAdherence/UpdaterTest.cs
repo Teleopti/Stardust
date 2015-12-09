@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdherence
 {
-	[AdherenceTest]
+	[ReadModelUpdaterTest]
 	[TestFixture]
 	public class UpdaterTest
 	{
