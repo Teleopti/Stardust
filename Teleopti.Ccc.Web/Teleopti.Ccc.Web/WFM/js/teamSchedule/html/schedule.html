@@ -9,9 +9,9 @@
 				</option>
 			</select>
 		</span>
-		<div class="col-md-4" ng-if="vm.isSearchScheduleEnabled">
+		<span class="col-md-4" ng-if="vm.isSearchScheduleEnabled">
 			<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
-		</div>
+		</span>
 		<span class="col-sm-5 col-md-3 col-lg-3">
 			<span style="min-width: 280px; max-width: 300px;">
 				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()">
@@ -39,13 +39,11 @@
 			</span>
 		</button>
 
-		<span style="color:red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
+		<span style="color: red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
 	</div>
-	
-	<div class="row select-all-dialog" ng-show="vm.selectAllVisible">
-		<span class="notice-spacer" ng-click="vm.selectAllForAllPages()">
-			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
-		</span>
+
+	<div class="row notice-spacer" ng-show="vm.selectAllVisible" ng-click="vm.selectAllForAllPages()">
+		<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 	</div>
 
 	<div class="big-table-wrapper material-depth-1" style="position: relative">
