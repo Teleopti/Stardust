@@ -462,14 +462,17 @@ namespace Teleopti.Ccc.Domain.Common
 			return 
 				personPeriods.Select(
 					p =>
-					new PersonPeriodDetail
+					{
+						var siteId = p.Team.Site != null ? p.Team.Site.Id.GetValueOrDefault() : Guid.Empty;
+						return new PersonPeriodDetail
 						{
 							StartDate = p.StartDate.Date,
 							EndDate = p.EndDate().Date,
-							//SiteId = p.Team.Site.Id.GetValueOrDefault(),
+							SiteId = siteId,
 							TeamId = p.Team.Id.GetValueOrDefault(),
 							PersonSkillDetails = gatherSkillDetails(p),
-						}).ToList();
+						};
+					}).ToList();
 		}
 
 		private ICollection<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
