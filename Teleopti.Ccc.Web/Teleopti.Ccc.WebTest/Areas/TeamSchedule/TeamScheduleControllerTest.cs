@@ -424,6 +424,155 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			schedule.Projection.First().IsOvertime.Should().Be.EqualTo(false);
 			schedule.Projection.Last().IsOvertime.Should().Be.EqualTo(true);
 		}
+
+		[Test]
+		public void ShouldReturnSchedulesWithCorrectOrder()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePerson("a1", "a1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person1);
+			var person2 = PersonFactory.CreatePerson("b1", "b1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person2);
+			var person3 = PersonFactory.CreatePerson("c1", "c1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person3);
+			var person4 = PersonFactory.CreatePerson("d1", "d1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person4);
+			var person5 = PersonFactory.CreatePerson("e1", "e1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person5);
+			var person6 = PersonFactory.CreatePerson("f1", "f1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person6);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+
+			var scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person1, scenario);
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person1, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+
+			scheduleDay1.Add(pa1);
+			
+			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person2, new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+
+				
+			scheduleDay2.Add(pa2);
+			
+			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
+			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person3, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+			scheduleDay3.Add(pa3);
+			
+
+			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
+			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+
+
+			var pa4 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person4, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+
+			scheduleDay4.Add(pa4);
+			scheduleDay4.Add(personAbsenceForPerson4);
+			
+			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
+			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
+			ScheduleProvider.AddScheduleDay(scheduleDay4);
+			ScheduleProvider.AddScheduleDay(scheduleDay5);
+			ScheduleProvider.AddScheduleDay(scheduleDay3);
+			ScheduleProvider.AddScheduleDay(scheduleDay1);
+			ScheduleProvider.AddScheduleDay(scheduleDay2);
+			
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
+
+			result.Count.Should().Be.EqualTo(6);
+			result[0].Name.Should().Be.EqualTo("b1@b1");
+			result[1].Name.Should().Be.EqualTo("a1@a1");
+			result[2].Name.Should().Be.EqualTo("c1@c1");
+			result[3].Name.Should().Be.EqualTo("d1@d1");
+			result[4].Name.Should().Be.EqualTo("e1@e1");
+			result[5].Name.Should().Be.EqualTo("f1@f1");
+		}
+		[Test]
+		public void ShouldReturnSchedulesWithCorrectOrderOnContractDayOffDay()
+		{
+			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePerson("a1", "a1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person1);
+			var person2 = PersonFactory.CreatePerson("b1", "b1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person2);
+			var person3 = PersonFactory.CreatePerson("c1", "c1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person3);
+			var person4 = PersonFactory.CreatePerson("d1", "d1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person4);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
+			person4.AddPersonPeriod(personPeriod);
+			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			person4.AddSchedulePeriod(schedulePeriod);
+
+			var person5 = PersonFactory.CreatePerson("e1", "e1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person5);
+			var person6 = PersonFactory.CreatePerson("f1", "f1");
+			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person6);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+
+			var scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person1, scenario);
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person1, new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+
+			scheduleDay1.Add(pa1);
+			
+			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person2, new DateTimePeriod(2020, 1, 4, 7, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+
+				
+			scheduleDay2.Add(pa2);
+			
+			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
+			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+					person3, new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
+					scenario);
+			scheduleDay3.Add(pa3);
+			
+
+			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
+			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
+				new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 17));
+			var pa4 = PersonAssignmentFactory.CreatePersonAssignment(person4, scenario, new DateOnly(2020, 1, 4));
+			scheduleDay4.Add(pa4);
+
+			scheduleDay4.Add(personAbsenceForPerson4);
+			
+			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
+			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
+			ScheduleProvider.AddScheduleDay(scheduleDay4);
+			ScheduleProvider.AddScheduleDay(scheduleDay5);
+			ScheduleProvider.AddScheduleDay(scheduleDay3);
+			ScheduleProvider.AddScheduleDay(scheduleDay1);
+			ScheduleProvider.AddScheduleDay(scheduleDay2);
+			
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate).Content.ToList();
+
+			result.Count.Should().Be.EqualTo(6);
+			result[0].Name.Should().Be.EqualTo("b1@b1");
+			result[1].Name.Should().Be.EqualTo("a1@a1");
+			result[2].Name.Should().Be.EqualTo("c1@c1");
+			result[3].Name.Should().Be.EqualTo("d1@d1");
+			result[4].Name.Should().Be.EqualTo("e1@e1");
+			result[5].Name.Should().Be.EqualTo("f1@f1");
+		}
 	}
 
 	[TestFixture]
