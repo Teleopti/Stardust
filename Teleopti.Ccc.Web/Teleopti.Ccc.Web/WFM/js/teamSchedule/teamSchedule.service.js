@@ -32,7 +32,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			query: {
 				method: "GET",
 				params: {},
-				isArray: true
+				isArray: false
 			}
 		});
 

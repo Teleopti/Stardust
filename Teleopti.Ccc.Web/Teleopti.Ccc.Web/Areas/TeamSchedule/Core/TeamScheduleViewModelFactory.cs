@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_searchProvider = searchProvider;
 		}
 
-		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
+		public PagingGroupScheduleShiftViewModel CreateViewModel(Guid groupId, DateTime dateInUserTimeZone, int pageSize, int currentPageIndex)
 		{
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly.Date == dateInUserTimeZone)),
 						canSeeUnpublishedSchedules);
 					return sortValue;
-				}).ThenBy(personScheduleDay =>　personScheduleDay.Item1.Name.LastName);
+				}).ThenBy(personScheduleDay =>　personScheduleDay.Item1.Name.LastName).Skip((currentPageIndex-1) * pageSize).Take(pageSize);
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
@@ -104,7 +104,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						});
 				}
 			}
-			return list;
+			return new PagingGroupScheduleShiftViewModel()
+			{
+				GroupSchedule = list,
+				TotalPages = people.Count()/pageSize + 1
+			};
 		}
 
 		private int getSortedValue(Tuple<IPerson, IScheduleDay> personSchedulePair, bool hasPermissionForUnpublishedSchedule)

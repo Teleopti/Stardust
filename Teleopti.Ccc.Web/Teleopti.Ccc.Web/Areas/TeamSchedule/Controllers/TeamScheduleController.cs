@@ -66,13 +66,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GroupNoReadModel")]
-		public virtual JsonResult<IEnumerable<GroupScheduleShiftViewModel>> GroupScheduleNoReadModel(Guid groupId,
-			DateTime date)
+		public virtual JsonResult<PagingGroupScheduleShiftViewModel> GroupScheduleNoReadModel(Guid groupId,
+			DateTime date, int pageSize, int currentPageIndex)
 		{
-			var schedules =
-				_teamScheduleViewModelFactory.CreateViewModel(groupId, date);
+			var result = _teamScheduleViewModelFactory.CreateViewModel(groupId, date, pageSize, currentPageIndex);
 
-			return Json(schedules);
+			return Json(result);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
