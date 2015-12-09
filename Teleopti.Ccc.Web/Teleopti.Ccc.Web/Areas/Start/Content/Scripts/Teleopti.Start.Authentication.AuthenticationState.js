@@ -143,7 +143,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		var error = function (jqXHR, textStatus, errorThrown) {
 			if (jqXHR.status == 400) {
 				var response = $.parseJSON(jqXHR.responseText);
-				options.errormessage(response.Errors[0]);
+				options.errormessage(response.ModelState.Error[0]);
 				return;
 			}
 			try {
@@ -243,7 +243,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				error: function (jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status == 400) {
 						var json = JSON.parse(jqXHR.responseText);
-							options.businessUnitSelectionError(json.Errors[0]);
+							options.businessUnitSelectionError(json.ModelState.Error[0]);
 					}
 				}
 			});
