@@ -21,11 +21,11 @@
 			CreatedOnDesc: 5
 		};
 
-		this.normalizeRequestsFilter = function(filter, sortingOrders) {
+		this.normalizeRequestsFilter = function(filter) {
 			return {
 				StartDate: { Date: filter.period.startDate },
 				EndDate: { Date: filter.period.endDate },
-				SortingOrders: sortingOrders
+				SortingOrders: filter.sortingOrders
 			};
 		};
 

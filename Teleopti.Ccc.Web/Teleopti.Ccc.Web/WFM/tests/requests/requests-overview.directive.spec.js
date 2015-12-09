@@ -54,41 +54,42 @@
 		it("should not request data when filter contains error", function() {
 
 			requestsDataService.setRequests({ data: [] });
-
-			targetScope.period = {};
-			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);			
-			targetScope.$digest();			
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
 
 			requestsDataService.reset();
-			targetScope.period = {
-				startDate: moment().add(1, 'day').toDate(),
-				endDate: new Date()
+			scope.requestsOverview.requestsFilter = {
+				period: {
+					startDate: moment().add(1, 'day').toDate(),
+					endDate: new Date()
+				}
 			};
 		
 			targetScope.$digest();			
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 		});
 
-		it("should request data when filter change to valid values", function() {
+		it("should request data when filter change to valid values", function () {
 
 			requestsDataService.setRequests({ data: [] });
-			targetScope.period = {};
-			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 
-			targetScope.$digest();			
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
 
 			requestsDataService.reset();
-
-			targetScope.period = {
-				startDate: new Date(),
-				endDate: moment().add(2, 'day').toDate()
-			}
+			scope.requestsOverview.requestsFilter = {
+				period: {
+					startDate:new Date(),
+					endDate:  moment().add(2, 'day').toDate()
+				}
+			};
 
 			targetScope.$digest();
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
-
-
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');

@@ -13,23 +13,29 @@
 		var vm = this;
 
 		vm.requests = [];
-
-		vm.period = {
-			startDate: (vm.period && vm.period.startDate) ? vm.period.startDate : new Date(),
-			endDate :  (vm.period && vm.period.endDate)? vm.period.endDate: new Date()
+		
+		vm.requestsFilter = {
+			period: {
+				startDate: new Date(),
+				endDate: moment().add(1, 'day').toDate()
+			},
+			sortingOrders: []
 		};
-		vm.period.endDate = vm.period.endDate? vm.period.endDate: new Date();
-
 		vm.reload = reload;
-		vm.sortingOrders = [];
+		vm.changeSortingOrder = changeSortingOrder;
 
-		function reload(requestsFilter, sortingOrders) {
+		function reload(requestsFilter) {
 			vm.loaded = false;
-			requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders).then(function (requests) {
+			requestsDataService.getAllRequestsPromise(requestsFilter).then(function (requests) {
 				vm.requests = requests.data;
 				vm.loaded = true;
 			});
 		}
+
+		function changeSortingOrder(sortingOrders) {
+			vm.requestsFilter.sortingOrders = sortingOrders;
+		}
+
 	}
 
 	function requestsOverviewDirective() {
@@ -37,9 +43,7 @@
 			controller: 'requestsOverviewCtrl',
 			controllerAs: 'requestsOverview',
 			bindToController: true,
-			scope: {
-				period: '='
-			},
+			scope: { },
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',
 			link: postlink
@@ -47,19 +51,19 @@
 
 		function postlink(scope, elem, attrs, ctrl) {
 			scope.$watch(function() {
-				var filter = {
-					period: scope.requestsOverview.period
-				}					
+				var filter = scope.requestsOverview.requestsFilter;
 				return {
 					startDate: filter.period.startDate,
 					endDate: filter.period.endDate,
-					sortingOrders: scope.requestsOverview.sortingOrders
+					sortingOrders: filter.sortingOrders
 				}
 			}, function(newValue) {
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
-				scope.requestsOverview.requestsFilter = newValue;
-				ctrl.reload({ period: scope.requestsOverview.period }, scope.requestsOverview.sortingOrders);
+				scope.requestsOverview.requestsFilter.period = newValue;
+				ctrl.reload(scope.requestsOverview.requestsFilter);
+
 			}, true);			
 		}
 	}
+
 })();

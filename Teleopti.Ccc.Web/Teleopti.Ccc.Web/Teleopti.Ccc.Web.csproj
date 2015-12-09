@@ -1252,7 +1252,6 @@
     <Content Include="WFM\js\requests\requests-overview.directive.js" />
     <Content Include="WFM\js\requests\requests-table-container.directive.js" />
     <Content Include="WFM\js\requests\requests-definitions.service.js" />
-    <Content Include="WFM\js\requests\requests.controller.js" />
     <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
     <Content Include="WFM\js\rta\rta-agents-headercelltemplate-ProperAlarm_34975.html" />
