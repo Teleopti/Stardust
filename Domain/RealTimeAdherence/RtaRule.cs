@@ -5,18 +5,16 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule, IDeleteTag
+	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
     {
         private Description _description;
         private Color _displayColor;
 		private Color _alarmColor;
         private TimeSpan _thresholdTime;
         private double _staffingEffect;
-        private bool _isDeleted;
 		private Adherence? _adherence;
 		private bool _isAlarm = true;
 
@@ -122,16 +120,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public virtual bool InContractTime { get; set; }
         public virtual ITracker Tracker { get; set; }
-
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
 
         public virtual IPayload UnderlyingPayload
         {

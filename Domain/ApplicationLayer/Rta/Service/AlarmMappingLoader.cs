@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				let statecode = c != null ? c.StateCode : null
 				let platformTypeId = c != null ? c.PlatformTypeId : Guid.Empty
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
-				let rule = m.RtaRule != null && !alarmIsSoftDeleted(m.RtaRule) ? m.RtaRule : new RtaRule()
+				let rule = m.RtaRule ?? new RtaRule()
 				let ruleId = rule.Id.HasValue ? rule.Id.Value : Guid.Empty
 				select new AlarmMapping
 				{
@@ -54,12 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				}
 				).ToArray();
 		}
-
-		private static bool alarmIsSoftDeleted(IRtaRule _rtaRule)
-		{
-			return _rtaRule != null && ((IDeleteTag)_rtaRule).IsDeleted;
-		}
-
+		
 		private static Guid tryGetBusinessUnitId(IRtaMap m)
 		{
 			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;

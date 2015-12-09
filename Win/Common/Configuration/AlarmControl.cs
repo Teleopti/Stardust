@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly IRtaControlNamer _rtaControlNamer;
 		private IUnitOfWork _uow;
 		private RtaRuleRepository _rtaRuleRepository;
+		private RtaMapRepository _rtaMapRepository;
 		private readonly List<IRtaRule> _rules = new List<IRtaRule>();
+		private readonly List<IRtaMap> _rtaMaps = new List<IRtaMap>();
 		private AlarmControlView _view;
 		private int _selectedItem =-1;
 
@@ -89,8 +91,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					DialogResult.Yes)
 				{
 					var item = _rules[_selectedItem];
-					if(item.Id.HasValue)
+					if (item.Id.HasValue)
+					{
+						if (_rtaMaps.Any(x => x.RtaRule != null && x.RtaRule.Equals(item)))
+						{
+							ViewBase.ShowWarningMessage(Resources.CannotBeDeletedBecauseItIsBeingUsedInMappings, Resources.Rules);
+							return;
+						}
 						_rtaRuleRepository.Remove(item);
+					}
 					_rules.Remove(item);
 					_selectedItem = -1;
 				}
@@ -166,6 +175,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadControl()
 		{
 			loadRules();
+			loadMappings();
 		}
 
 		private void loadRules()
@@ -178,6 +188,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_view.LoadGrid();
 			}
+		}
+
+		private void loadMappings()
+		{
+			_rtaMapRepository = new RtaMapRepository(_uow);
+			_rtaMaps.Clear();
+			_rtaMaps.AddRange(_rtaMapRepository.LoadAll());
 		}
 
 		protected override void OnLoad(EventArgs e)

@@ -13854,4 +13854,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Alarm Color</value>
     <comment>Color for Rta alarms</comment>
   </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>Can not be deleted because it is being used in mappings.</value>
+    <comment>Can not be deleted because it is being used in rta mappings.</comment>
+  </data>
 </root>

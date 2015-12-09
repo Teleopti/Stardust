@@ -54,12 +54,7 @@
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
             access="nosetter.camelcase-underscore" 
 					 not-null="true" foreign-key="FK_RtaRule_BusinessUnit"/>
-    <property name="IsDeleted"
-          type="boolean"
-          not-null="true"/>
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />
-    <filter name="deletedFlagFilter"
-      condition="IsDeleted = 0" />
 	</class>
 </hibernate-mapping>

@@ -66,14 +66,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			_target.ThresholdTime = TimeSpan.FromSeconds(-20);
 		}
 
-
-		[Test]
-		public void VerifySetDeleted()
-		{
-			_target.SetDeleted();
-			Assert.IsTrue(_target.IsDeleted);
-		}
-
 		[Test]
 		public void ShouldNotThrowWhenNoAdherence()
 		{

@@ -4638,6 +4638,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not be deleted because it is being used in mappings..
+        /// </summary>
+        public static string CannotBeDeletedBecauseItIsBeingUsedInMappings {
+            get {
+                return ResourceManager.GetString("CannotBeDeletedBecauseItIsBeingUsedInMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can not change a system alarm.
         /// </summary>
         public static string CannotChangeSystemAlarmType {
