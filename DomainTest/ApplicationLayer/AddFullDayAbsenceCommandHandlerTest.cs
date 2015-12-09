@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
 			_personAccountCreator = new PersonAbsenceCreator (saveSchedulePartService, businessRulesForAccountUpdate);
 
-			_absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleRepository);
+			_absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleRepository, null);
 		}
 
 		[Test]
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
 			var personRepository = new FakeWriteSideRepository<IPerson> { person };
-			var absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, personRepository, _absenceRepository, _scheduleRepository);
+			var absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, personRepository, _absenceRepository, _scheduleRepository, null);
 			var target = new AddFullDayAbsenceCommandHandler(_personAccountCreator, absenceCommandConverter);
 
 			var command = new AddFullDayAbsenceCommand

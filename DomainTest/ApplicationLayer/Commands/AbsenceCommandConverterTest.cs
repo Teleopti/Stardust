@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		}
 
 		[Test]
-		public void ShouldConvertAbsence()
+		public void ShouldConvertAbsenceForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -47,14 +47,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 				}
 			};
 
-			var result = target.GetCreatorInfo(command);
+			var result = target.GetCreatorInfoForFullDayAbsence(command);
 			result.Absence.Should().Be.EqualTo(_absenceRepository.Single());
 		}		
 		
 		[Test]
-		public void ShouldConvertPerson()
+		public void ShouldConvertPersonForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 				}
 			};
 
-			var result = target.GetCreatorInfo(command);
+			var result = target.GetCreatorInfoForFullDayAbsence(command);
 			result.Person.Should().Be.EqualTo(_personRepository.Single());
 		}			
 		
 		[Test]
-		public void ShouldConvertTrackedCommandInfo()
+		public void ShouldConvertTrackedCommandInfoForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository);
+			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleRepository, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 				}
 			};
 
-			var result = target.GetCreatorInfo(command);
+			var result = target.GetCreatorInfoForFullDayAbsence(command);
 			result.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(operatedPersonId);
 			result.TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 		}		

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private FakeCurrentScenario _currentScenario;
 		private FakeScheduleRepository _scheduleRepository;
 		private PersonAbsenceCreator _personAbsenceCreator;
+		private IAbsenceCommandConverter _absenceCommandConverter;
 
 		[SetUp]
 		public void Setup()
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
 			_personAbsenceCreator = new PersonAbsenceCreator (saveSchedulePartService, businessRulesForAccountUpdate );
 
+			_absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleRepository, new UtcTimeZone());
 		}
 
 
@@ -47,8 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseIntradayAbsenceAddedEvent()
 		{
-
-			var target = new AddIntradayAbsenceCommandHandler(_personRepository, _absenceRepository, _scheduleRepository, _currentScenario, new UtcTimeZone(), _personAbsenceCreator);
+			var target = new AddIntradayAbsenceCommandHandler(_personAbsenceCreator, _absenceCommandConverter);
 
 			var operatedPersonId = Guid.NewGuid();
 			var command = new AddIntradayAbsenceCommand
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityState()
 		{
-			var target = new AddIntradayAbsenceCommandHandler(_personRepository, _absenceRepository, _scheduleRepository, _currentScenario, new UtcTimeZone(), _personAbsenceCreator);
+			var target = new AddIntradayAbsenceCommandHandler(_personAbsenceCreator, _absenceCommandConverter);
 
 			var command = new AddIntradayAbsenceCommand
 				{
@@ -102,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldConvertTimesFromUsersTimeZone()
 		{
 			var userTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-
-			var target = new AddIntradayAbsenceCommandHandler(_personRepository, _absenceRepository, _scheduleRepository, _currentScenario, new SpecificTimeZone(userTimeZone), _personAbsenceCreator);
+			var absenceCommandConverter = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleRepository, new SpecificTimeZone(userTimeZone));
+			var target = new AddIntradayAbsenceCommandHandler(_personAbsenceCreator, absenceCommandConverter);
 
 			var command = new AddIntradayAbsenceCommand
 				{

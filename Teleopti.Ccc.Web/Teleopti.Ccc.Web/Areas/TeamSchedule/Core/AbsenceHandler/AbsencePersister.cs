@@ -15,9 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 
 		public void PersistFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
-			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfo(command);
-			_personAbsenceCreator.Create(absenceCreatorInfo.Absence, absenceCreatorInfo.ScheduleRange, absenceCreatorInfo.ScheduleDay, absenceCreatorInfo.AbsenceTimePeriod, absenceCreatorInfo.Person, command.TrackedCommandInfo, true);
+			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
+			_personAbsenceCreator.Create(absenceCreatorInfo, true);
 		}
 
+		public void PersistIntradayAbsence(AddIntradayAbsenceCommand command)
+		{
+			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
+			_personAbsenceCreator.Create(absenceCreatorInfo, false);
+		}
 	}
 }

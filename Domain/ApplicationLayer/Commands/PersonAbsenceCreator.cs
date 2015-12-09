@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public PersonAbsence Create(IAbsence absence, IScheduleRange scheduleRange, IScheduleDay scheduleDay, DateTimePeriod absenceTimePeriod, IPerson person, TrackedCommandInfo command, bool isFullDayAbsence)
+		public PersonAbsence Create(AbsenceCreatorInfo info, bool isFullDayAbsence)
 		{
-			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-			var personAbsence = createPersonAbsence(scheduleDay, absence, absenceTimePeriod);
-			_saveSchedulePartService.Save(scheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(info.ScheduleRange);
+			var personAbsence = createPersonAbsence(info.ScheduleDay, info.Absence, info.AbsenceTimePeriod);
+			_saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
 
 			if (isFullDayAbsence)
 			{
-				personAbsence.FullDayAbsence (person, command);
+				personAbsence.FullDayAbsence(info.Person, info.TrackedCommandInfo);
 			}
 			else
 			{
-				personAbsence.IntradayAbsence (person, command);
+				personAbsence.IntradayAbsence(info.Person, info.TrackedCommandInfo);
 			}
 
 			return personAbsence;

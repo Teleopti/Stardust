@@ -2,6 +2,7 @@
 {
 	public interface IAbsenceCommandConverter
 	{
-		AbsenceCreatorInfo GetCreatorInfo(AddFullDayAbsenceCommand command);
+		AbsenceCreatorInfo GetCreatorInfoForFullDayAbsence(AddFullDayAbsenceCommand command);
+		AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddIntradayAbsenceCommand command);
 	}
 }

@@ -12,16 +12,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personRepository;
 		private readonly IProxyForId<IAbsence> _absenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IUserTimeZone _timeZone;
 
-		public AbsenceCommandConverter(ICurrentScenario scenario, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IScheduleRepository scheduleRepository)
+		public AbsenceCommandConverter(ICurrentScenario scenario, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IScheduleRepository scheduleRepository, IUserTimeZone timeZone)
 		{
 			_scenario = scenario;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
 			_scheduleRepository = scheduleRepository;
+			_timeZone = timeZone;
 		}
 
-		public AbsenceCreatorInfo GetCreatorInfo(AddFullDayAbsenceCommand command)
+		public AbsenceCreatorInfo GetCreatorInfoForFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
@@ -39,6 +41,55 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Absence = absence,
 				AbsenceTimePeriod = absenceTimePeriod,
 				Person = person,
+				ScheduleDay = scheduleDay,
+				ScheduleRange = scheduleRange,
+				TrackedCommandInfo = command.TrackedCommandInfo
+			};
+
+			return creatorInfo;
+		}
+
+		public AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddFullDayAbsenceCommand command)
+		{
+			var person = _personRepository.Load(command.PersonId);
+			var absence = _absenceRepository.Load(command.AbsenceId);
+			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
+
+			var scheduleRange = getScheduleRangeForPeriod(period, person);
+			var scheduleDays = scheduleRange.ScheduledDayCollection(period).ToList();
+			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(command.StartDate));
+
+			var previousDay = scheduleDays.First();
+			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] { previousDay }), previousDay);
+
+			var creatorInfo = new AbsenceCreatorInfo()
+			{
+				Absence = absence,
+				AbsenceTimePeriod = absenceTimePeriod,
+				Person = person,
+				ScheduleDay = scheduleDay,
+				ScheduleRange = scheduleRange,
+				TrackedCommandInfo = command.TrackedCommandInfo
+			};
+
+			return creatorInfo;
+		}
+
+		public AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddIntradayAbsenceCommand command)
+		{
+			var person = _personRepository.Load(command.PersonId);
+			var absence = _absenceRepository.Load(command.AbsenceId);
+			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()),
+														TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
+
+			var scheduleRange = getScheduleRangeForPeriod(absenceTimePeriod.ToDateOnlyPeriod(_timeZone.TimeZone()), person);
+			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(command.StartTime));
+
+			var creatorInfo = new AbsenceCreatorInfo()
+			{
+				Absence = absence,
+				Person = person,
+				AbsenceTimePeriod = absenceTimePeriod,
 				ScheduleDay = scheduleDay,
 				ScheduleRange = scheduleRange,
 				TrackedCommandInfo = command.TrackedCommandInfo

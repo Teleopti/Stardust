@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
-			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfo(command);
-			_personAbsenceCreator.Create(absenceCreatorInfo.Absence, absenceCreatorInfo.ScheduleRange, absenceCreatorInfo.ScheduleDay, absenceCreatorInfo.AbsenceTimePeriod, absenceCreatorInfo.Person, command.TrackedCommandInfo, true);
+			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
+			_personAbsenceCreator.Create(absenceCreatorInfo, true);
 		}
 	}
 }
