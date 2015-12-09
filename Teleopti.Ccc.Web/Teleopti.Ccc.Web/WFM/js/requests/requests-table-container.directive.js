@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', 'requestsDefinitions'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions'];
 
-	function requestsTableContainerController($scope, $translate, requestsDefinitions) {
+	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions) {
 
 		var vm = this;
 
@@ -24,8 +24,8 @@
 				data: requests,
 				gridMenuTitleFilter: $translate,
 				columnDefs: [
-					{ displayName: 'StartTime', field: 'PeriodStartTime', headerCellFilter: 'translate', cellClass: 'request-period-start-time', enableSorting: false, headerCellClass: 'request-period-start-time-header', cellFilter: 'date : "short"' },
-					{ displayName: 'EndTime', field: 'PeriodEndTime', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"', visible: false },
+					{ displayName: 'StartTime', field: 'FormatedPeriodStartTime()', headerCellFilter: 'translate', cellClass: 'request-period-start-time', enableSorting: false, headerCellClass: 'request-period-start-time-header', cellFilter: 'date : "short"' },
+					{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"', visible: false },
 					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', enableSorting: false },
@@ -44,18 +44,30 @@
 			};
 		}
 
+		function formatToTimespan(length) {
+			var days = moment.duration(length, 'seconds')._data.days;
+			var hours = moment.duration(length, 'seconds')._data.hours;
+			var minutes = moment.duration(length, 'seconds')._data.minutes == 0 ? '00' : moment.duration(length, 'seconds')._data.minutes;
+			var totalHours = hours + days * 24 == 0 ? '00' : hours + days * 24;
+
+			return totalHours + ":" + minutes;
+		}
+
 		function prepareComputedColumns(dataArray) {
 			angular.forEach(dataArray, function(row) {
-				row.GetDuration = function() {
-					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
-					return moment.duration(length, 'seconds').humanize();
+				var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
+				var hours = moment.duration(length, 'seconds')._data.hours;
+				var minuts = moment.duration(length, 'seconds')._data.minutes;
+				row.GetDuration = function () {
+					return formatToTimespan(length);
 				}
-				row.FormatedPeriodStartTime = function() {
-					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
-					var period = moment.duration(length, 'seconds').days();
-					console.log(moment.duration(length, 'seconds'), row.Subject);
-					//if (period < 1) console.log('period < 1', period);
-					//if (period > 1) console.log('period > 1', period);
+				row.FormatedPeriodStartTime = function () {
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate");
+					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short');
+				}
+				row.FormatedPeriodEndTime = function () {
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate");
+					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short");
 				}
 				row.GetType = function() {
 					if (row.TypeText === "Absence") {
