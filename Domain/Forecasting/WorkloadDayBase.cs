@@ -1586,19 +1586,22 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         }
                     }
 
-                    if (baseCollection.Count > 0)
-                    {
-                        TaskOwnerPeriod splittedTaskOwnerPeriod = new TaskOwnerPeriod(
-                            _currentDate,
-                            baseCollection,
-                            TaskOwnerPeriodType.Other);
-                        splittedTaskOwnerPeriod.Tasks = templateTaskPeriod.Tasks;
-                        splittedTaskOwnerPeriod.AverageTaskTime = templateTaskPeriod.AverageTaskTime;
-                        splittedTaskOwnerPeriod.AverageAfterTaskTime = templateTaskPeriod.AverageAfterTaskTime;
-                        splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
-                        splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
-                        splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
-                    }
+	                if (baseCollection.Count > 0)
+	                {
+		                TaskOwnerPeriod splittedTaskOwnerPeriod = new TaskOwnerPeriod(
+			                _currentDate,
+				                baseCollection,
+				                TaskOwnerPeriodType.Other);
+		                splittedTaskOwnerPeriod.Tasks = templateTaskPeriod.Tasks;
+		                splittedTaskOwnerPeriod.AverageTaskTime = templateTaskPeriod.AverageTaskTime;
+		                splittedTaskOwnerPeriod.AverageAfterTaskTime = templateTaskPeriod.AverageAfterTaskTime;
+		                splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
+		                splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
+		                splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
+							 splittedTaskOwnerPeriod.SetOverrideTasks(templateTaskPeriod.OverrideTasks, null);
+		                splittedTaskOwnerPeriod.OverrideAverageTaskTime = templateTaskPeriod.OverrideAverageTaskTime;
+		                splittedTaskOwnerPeriod.OverrideAverageAfterTaskTime = templateTaskPeriod.OverrideAverageAfterTaskTime;
+	                }
                 }
             }
             ResetStatistics();

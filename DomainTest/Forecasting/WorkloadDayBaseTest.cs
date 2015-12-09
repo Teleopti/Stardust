@@ -784,19 +784,91 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 												});
 
 				Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
-				Assert.AreEqual(1.529d, Math.Round(_workloadDayBase.TaskPeriodList[1].Tasks), 3);
+				Assert.AreEqual(1.529d, _workloadDayBase.TaskPeriodList[1].Tasks, 0.001);
 				Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[1].AverageTaskTime);
 				Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[1].AverageAfterTaskTime);
 				Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[1].CampaignTasks.Value);
 				Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[1].CampaignTaskTime.Value);
 				Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[1].CampaignAfterTaskTime.Value);
-				Assert.AreEqual(1.529d, Math.Round(_workloadDayBase.TaskPeriodList[52].Tasks), 3);
+				Assert.AreEqual(1.529d, _workloadDayBase.TaskPeriodList[52].Tasks, 0.001);
 				Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[52].AverageTaskTime);
 				Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[52].AverageAfterTaskTime);
 				Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[52].CampaignTasks.Value);
 				Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[52].CampaignTaskTime.Value);
 				Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[52].CampaignAfterTaskTime.Value);
 				Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[0].StatisticTask.StatCalculatedTasks);
+			}
+		}
+
+
+		[Test]
+		public void ShouldSplitWithOverrideTasks()
+		{
+			MockRepository mocks = new MockRepository();
+			IQueueStatisticsProvider provider = mocks.StrictMock<IQueueStatisticsProvider>();
+
+			using (mocks.Record())
+			{
+				Expect.Call(provider.GetStatisticsForPeriod(_workloadDayBase.TaskPeriodList[0].Period)).Return(new StatisticTask
+				{
+					Interval = _workloadDayBase.TaskPeriodList[0].Period.StartDateTime,
+					StatCalculatedTasks = 200
+				}).Repeat.AtLeastOnce();
+				Expect.Call(provider.GetStatisticsForPeriod(new DateTimePeriod())).IgnoreArguments().Return(new StatisticTask()).Repeat.AtLeastOnce();
+			}
+
+			using (mocks.Playback())
+			{
+				_workloadDayBase.SetQueueStatistics(provider);
+
+				Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[0].StatisticTask.StatCalculatedTasks);
+				Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
+
+				_workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
+
+				Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
+
+				_workloadDayBase.TaskPeriodList[0].Tasks = 104d;
+				_workloadDayBase.TaskPeriodList[0].AverageTaskTime = TimeSpan.FromSeconds(10);
+				_workloadDayBase.TaskPeriodList[0].AverageAfterTaskTime = TimeSpan.FromSeconds(20);
+				_workloadDayBase.TaskPeriodList[0].CampaignTasks = new Percent(0.1d);
+				_workloadDayBase.TaskPeriodList[0].CampaignTaskTime = new Percent(0.2d);
+				_workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime = new Percent(0.3d);
+				_workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime = new Percent(0.3d);
+				_workloadDayBase.TaskPeriodList[0].SetOverrideTasks(200d, null);
+				_workloadDayBase.TaskPeriodList[0].OverrideAverageTaskTime = TimeSpan.FromSeconds(120);
+				_workloadDayBase.TaskPeriodList[0].OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(240);
+				
+
+				_workloadDayBase.SplitTemplateTaskPeriods(
+						new List<ITemplateTaskPeriod>
+												{
+														_workloadDayBase.TaskPeriodList[0]
+												});
+
+				Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
+				Assert.AreEqual(1.529d, _workloadDayBase.TaskPeriodList[1].Tasks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[1].AverageTaskTime);
+				Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[1].AverageAfterTaskTime);
+				Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[1].CampaignTasks.Value);
+				Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[1].CampaignTaskTime.Value);
+				Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[1].CampaignAfterTaskTime.Value);
+				Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[1].CampaignAfterTaskTime.Value);
+				Assert.AreEqual(2.941d, _workloadDayBase.TaskPeriodList[1].OverrideTasks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks, _workloadDayBase.TaskPeriodList[1].OverrideAverageTaskTime.Value.Ticks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(240).Ticks, _workloadDayBase.TaskPeriodList[1].OverrideAverageAfterTaskTime.Value.Ticks, 0.001);
+
+				Assert.AreEqual(1.529d, _workloadDayBase.TaskPeriodList[52].Tasks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[52].AverageTaskTime);
+				Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[52].AverageAfterTaskTime);
+				Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[52].CampaignTasks.Value);
+				Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[52].CampaignTaskTime.Value);
+				Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[52].CampaignAfterTaskTime.Value);
+				Assert.AreEqual(2.941d, _workloadDayBase.TaskPeriodList[52].OverrideTasks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(120).Ticks, _workloadDayBase.TaskPeriodList[52].OverrideAverageTaskTime.Value.Ticks, 0.001);
+				Assert.AreEqual(TimeSpan.FromSeconds(240).Ticks, _workloadDayBase.TaskPeriodList[52].OverrideAverageAfterTaskTime.Value.Ticks, 0.001);
+
+				
 			}
 		}
 
