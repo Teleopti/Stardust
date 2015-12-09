@@ -46,6 +46,9 @@
 	<property name="IsAlarm"
           type="boolean"
           not-null="true"/>
+		<property name="AlarmColor"
+								type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
+								not-null="true" />	
 
     <many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"

@@ -64,5 +64,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			loaded.IsAlarm.Should().Be.False();
 	    }
-    }
+
+		[Test]
+		public void ShouldHaveAlarmColorTheSameAsRuleColorByDefault()
+		{
+			var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			PersistAndRemoveFromUnitOfWork(rule);
+
+			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+
+			loaded.AlarmColor.ToArgb().Should().Be(Color.AliceBlue.ToArgb());
+		}
+
+		[Test]
+		public void ShouldHaveNewAlarmColor()
+		{
+			var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			PersistAndRemoveFromUnitOfWork(rule);
+			rule.AlarmColor = Color.AntiqueWhite;
+			PersistAndRemoveFromUnitOfWork(rule);
+
+			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+
+			loaded.AlarmColor.ToArgb().Should().Be(Color.AntiqueWhite.ToArgb());
+		}
+
+	}
 }
