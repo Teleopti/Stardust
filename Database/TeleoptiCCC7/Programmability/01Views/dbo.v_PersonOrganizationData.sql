@@ -32,7 +32,3 @@ JOIN dbo.Site s ON s.Id = t.Site
 WHERE p.IsDeleted = 0
 
 GO
-
-CREATE UNIQUE CLUSTERED INDEX CIX_v_LoadPersonData
-    ON dbo.[v_PersonOrganizationData] (AcdLogOnOriginalId ASC, StartDate DESC, PersonPeriodId);
-GO
