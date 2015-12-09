@@ -70,12 +70,11 @@
 					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate", angularTimezone);
 					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short", angularTimezone);
 				}
-				row.GetType = function () {
-					var typeText = row.TypeText;					
-					if (row.Type == requestsDefinitions.REQUEST_TYPES.ABSENCE) {
-						typeText += ' (' + row.Payload.Name + ')';
+				row.GetType = function() {
+					if (row.TypeText === "Absence") {
+						row.TypeText = row.Payload.Name;
 					}
-					return typeText;
+					return row.TypeText;
 				}
 			});
 			return dataArray;
