@@ -7,8 +7,8 @@
 	function requestsDataService($http, requestsDefinitions) {
 		var loadTextAndAbsenceRequestsUrl = '../api/Requests/loadTextAndAbsenceRequests';
 
-		this.getAllRequestsPromise = function(filter) {			
-			return $http.post(loadTextAndAbsenceRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter));
+		this.getAllRequestsPromise = function(filter, sortingOrders) {			
+			return $http.post(loadTextAndAbsenceRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders));
 		};
 
 	}

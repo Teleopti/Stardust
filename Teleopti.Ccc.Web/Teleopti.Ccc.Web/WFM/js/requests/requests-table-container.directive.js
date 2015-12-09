@@ -58,16 +58,17 @@
 				var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 				var hours = moment.duration(length, 'seconds')._data.hours;
 				var minuts = moment.duration(length, 'seconds')._data.minutes;
+				var angularTimezone = moment.tz(row.TimeZone).format("Z");
 				row.GetDuration = function () {
 					return formatToTimespan(length);
 				}
 				row.FormatedPeriodStartTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate");
-					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short');
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate", angularTimezone);
+					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short', angularTimezone);
 				}
-				row.FormatedPeriodEndTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate");
-					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short");
+				row.FormatedPeriodEndTime = function () {			
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate", angularTimezone);
+					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short", angularTimezone);
 				}
 				row.GetType = function() {
 					if (row.TypeText === "Absence") {
