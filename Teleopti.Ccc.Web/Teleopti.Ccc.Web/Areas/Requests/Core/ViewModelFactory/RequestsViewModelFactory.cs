@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 						: request.IsDenied
 							? RequestStatus.Denied
 							: RequestStatus.New,
-				Payload = request.Request.RequestPayloadDescription,
-				Team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime)).Description.Name
+				Payload = request.Request.RequestPayloadDescription
 			};
 		}		
 
