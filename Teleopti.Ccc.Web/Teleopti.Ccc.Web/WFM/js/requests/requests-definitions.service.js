@@ -8,8 +8,8 @@
 		var self = this;
 
 		this.REQUEST_TYPES = {
-			TEXT: 'TEXT',
-			ABSENCE: 'ABSENCE'
+			TEXT: 0,
+			ABSENCE: 1
 		};
 
 		this.REQUEST_SORTING_ORDERS = {
