@@ -527,5 +527,15 @@ describe('ResourcePlannerCtrl', function () {
 
 		expect(scope.default).toBe(true);
 	}));
+	it('should show that no results exists', inject(function ($controller,$stateParams) {
+		var scope = $rootScope.$new();
+
+		$controller('ResourceplannerFilterCtrl', { $scope: scope,$stateParams:mockStateParams });
+		scope.searchString = 'test';
+		scope.results = [];
+		
+
+		expect(scope.noResultsExists()).toEqual(true);
+	}));
 
 });

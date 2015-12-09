@@ -13834,4 +13834,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Create new ruleset</value>
     <comment>Create a new ruleset for a selectet range of filters</comment>
   </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>No results were found</value>
+    <comment>Feedback to inform the user that their search yielded no results</comment>
+  </data>
 </root>

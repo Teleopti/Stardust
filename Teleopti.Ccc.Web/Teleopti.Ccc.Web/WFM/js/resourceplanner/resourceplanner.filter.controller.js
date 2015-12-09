@@ -5,6 +5,7 @@
 			'$scope', 'ResourcePlannerFilterSrvc', 'ResourcePlannerSvrc','$state','$stateParams', function ($scope, ResourcePlannerFilterSrvc, ResourcePlannerSvrc,$state,$stateParams) {
 				var maxHits = 5;
 				$scope.name = ""
+				$scope.searchString = '';
 				$scope.isEnabled = true;
 				$scope.results = [];
 				$scope.default = false;
@@ -48,9 +49,7 @@
 						}
 					});
 					}
-				}
-				else{
-				}
+				};
 
 				$scope.$watch(function() { return $scope.searchString; },
 					function (input) {
@@ -75,45 +74,48 @@
 						$scope.isValidFilters() &&
 						$scope.isValidName();
 
-				}
+				};
 
 				$scope.isValidDayOffsPerWeek = function () {
 					return $scope.dayOffsPerWeek.MinDayOffsPerWeek <= $scope.dayOffsPerWeek.MaxDayOffsPerWeek;
-				}
+				};
 
 				$scope.isValidConsecDaysOff = function () {
 					return $scope.consecDaysOff.MinConsecDaysOff <= $scope.consecDaysOff.MaxConsecDaysOff;
-				}
+				};
 				$scope.clearInput = function () {
 					$scope.searchString = '';
 					$scope.results = [];
-				}
+				};
 
 				$scope.isValidConsecWorkDays = function () {
 					return $scope.consecWorkDays.MinConsecWorkDays <= $scope.consecWorkDays.MaxConsecWorkDays;
-				}
+				};
 
 				$scope.isValidFilters = function () {
 					return $scope.selectedResults.length > 0 || $scope.default;
-				}
+				};
 				$scope.isValidName = function(){
 					return $scope.name.length >0;
-				}
+				};
 
 				$scope.selectResultItem = function (item) {
 					if ($scope.selectedResults.indexOf(item) < 0) {
 						$scope.selectedResults.push(item);
 					}
 					$scope.clearInput();
-				}
+				};
 
 				$scope.moreResultsExists = function () {
 					return $scope.results.length >= maxHits;
-				}
+				};
+				$scope.noResultsExists = function(){
+					return $scope.results.length === 0 && $scope.searchString.length > 0;
+				};
 				$scope.removeNode = function(node){
 					var p = $scope.selectedResults.indexOf(node);
 					$scope.selectedResults.splice(p,1);
-				}
+				};
 
 				$scope.persist = function () {
 					if ($scope.isValid()) {
