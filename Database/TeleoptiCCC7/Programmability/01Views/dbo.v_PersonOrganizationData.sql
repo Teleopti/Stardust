@@ -29,6 +29,7 @@ JOIN dbo.ExternalLogOnCollection pc ON pc.PersonPeriod = pp.Id
 JOIN dbo.ExternalLogOn el ON el.Id = pc.ExternalLogOn
 JOIN dbo.Team t ON t.Id = pp.Team
 JOIN dbo.Site s ON s.Id = t.Site
+WHERE p.IsDeleted = 0
 
 GO
 
