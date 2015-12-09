@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -13,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IPersonNameProvider personNameProvider)
+		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
 			_requestsProvider = requestsProvider;
 			_personNameProvider = personNameProvider;
+			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
@@ -52,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				Id = request.Id.GetValueOrDefault(),
 				Subject = request.GetSubject(new NoFormatting()),
 				Message = request.GetMessage(new NoFormatting()),
+				TimeZone =  _ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id),
 				PeriodStartTime = request.Request.Period.StartDateTime,
 				PeriodEndTime = request.Request.Period.EndDateTime,
 				CreatedTime = request.CreatedOn,
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 							? RequestStatus.Denied
 							: RequestStatus.New
 			};
-		}
+		}		
 
 	}
 }
