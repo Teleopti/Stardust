@@ -330,9 +330,12 @@
 			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
 		};
 
-		vm.isDataChangeValid = function() {
-			return vm.totalSelected.length > 0 && vm.selectedAbsenceId !== "" && vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate;
+		vm.isDataChangeValid = function () {
+			var absenceTimeIsValid = (!vm.isFullDayAbsence && (vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate))
+				|| (vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day'));
+			return vm.totalSelected.length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
 		}
+
 		vm.applyAbsence = function() {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
@@ -447,7 +450,7 @@
 				case 65: // Alt+A
 					if (event.altKey) {
 						preventDefaultEvent(event);
-						$scope.$evalAsync(toggleAddAbsencePanel());
+						$scope.$evalAsync(toggleAddAbsencePanel);
 					}
 					break;
 				
