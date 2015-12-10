@@ -202,13 +202,13 @@
 												<input type="checkbox" id="talkTimeCheckId" ng-model="modalModifyInfo.shouldSetOverrideTalkTime" />
 												<label class="override-talktime-checkbox" for="talkTimeCheckId" ng-click="activeTalkInput = !activeTalkInput">
 													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">Talk time </span>
+													<span class="wfm-checkbox-label">{{'TalkTime'|translate}}</span>
 												</label>
 											</div>
 											<div class="wfm-accordion-content" ng-cloak ng-show="activeTalkInput">
 												<div class="form-input-wrap skill-service-level-seconds">
 													<label for="overrideTalkTimeInputId">
-														Seconds/call
+														{{'SecondsSlashCalls'|translate}}
 														<input type="number" ng-model="modalModifyInfo.overrideTalkTime" ng-required="modalModifyInfo.shouldSetOverrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
@@ -224,13 +224,13 @@
 												<input type="checkbox" id="AcwCheckId" ng-model="modalModifyInfo.shouldSetOverrideAfterCallWork" />
 												<label class="override-acw-checkbox" for="AcwCheckId" ng-click="activeAcwInput = !activeAcwInput">
 													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">After call work </span>
+													<span class="wfm-checkbox-label">{{'AfterCallWorkTime'|translate}}</span>
 												</label>
 											</div>
 											<div class="wfm-accordion-content" ng-cloak ng-show="activeAcwInput">
 												<div class="form-input-wrap skill-service-level-seconds">
 													<label for="overrideAcwInputId">
-														Seconds/call
+														{{'SecondsSlashCalls'|translate}}
 														<input type="number" ng-model="modalModifyInfo.overrideAcw" ng-required="modalModifyInfo.shouldSetOverrideAfterCallWork" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
 													</label>
 													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">

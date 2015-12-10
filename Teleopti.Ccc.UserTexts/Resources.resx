@@ -13878,4 +13878,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Can not be deleted because it is being used in mappings.</value>
     <comment>Can not be deleted because it is being used in rta mappings.</comment>
   </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Seconds/call</value>
+    <comment>Label for override forecast.</comment>
+  </data>
 </root>
