@@ -6,8 +6,8 @@ using NHibernate.SqlAzure;
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
     [CLSCompliant(false)]
-    public class SqlAzureClientDriverWithLogRetries : SqlAzureClientDriverWithTimeoutRetries
-    {
+    public class SqlAzureClientDriverWithLogRetries : DefaultReliableSql2008ClientDriver<SqlTransientErrorDetectionStrategyWithTimeouts>
+	{
         private static readonly ILog Logger = LogManager.GetLogger(typeof (SqlAzureClientDriverWithLogRetries));
         protected override EventHandler<RetryingEventArgs> RetryEventHandler()
         {
