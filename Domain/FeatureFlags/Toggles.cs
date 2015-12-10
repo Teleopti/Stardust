@@ -95,6 +95,7 @@
 		ResourcePlanner_WeeklyRestSolver_35043,
 		
 		Wfm_Requests_Basic_35986,
+		Wfm_Requests_People_Search_36294,
 		Report_UseOpenXmlFormat_35797
 		// ReSharper restore InconsistentNaming
 	}

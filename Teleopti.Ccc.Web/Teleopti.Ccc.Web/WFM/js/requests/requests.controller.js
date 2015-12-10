@@ -3,11 +3,18 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = [];
+	requestsController.$inject = ["RequestsToggles"];
 
-	function requestsController() {		
+	function requestsController(requestsToggles) {
 		var vm = this;
-		vm.period = { startDate: new Date(), endDate: new Date()};
+		
+		requestsToggles.togglePromise.then(init);
+
+		function init(toggles) {
+			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
+			vm.isPeopleSearchEnabled = toggles.isPeopleSearchEnabled();
+			vm.period = { startDate: new Date(), endDate: new Date() };
+		}
 	}
 
 })();

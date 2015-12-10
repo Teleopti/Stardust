@@ -47,6 +47,26 @@ Scenario: Sort requests
 	Then I should see the request from 'John' before the request from 'Ashley' in the list
 
 @ignore
+Scenario: Find requests for filtered agents
+	Given 'Ashley' has an existing text request with
+	| Field     | Value            |
+	| StartTime | 2015-10-03 10:00 |
+	| End Time  | 2015-10-03 14:00 |
+	| Update Time  | 2015-11-03 14:00 |
+	And 'John' has an existing absence request with
+	| Field     | Value            |
+	| StartTime | 2015-10-03 10:00 |
+	| End Time  | 2015-10-03 14:00 |
+	| Update Time  | 2015-11-01 14:00 |
+	When I view wfm requests
+	And I select to loading requests from '2015-10-01' to '2015-10-04'
+	And I pick the team "Green Team"
+	Then I should see a request from 'Ashley' in the list
+	And I should not see any request from 'John' in the list
+
+
+
+@ignore
 Scenario: View request details
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
