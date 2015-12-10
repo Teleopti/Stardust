@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,10 +20,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-		public CancelPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public CancelPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_scheduleTagAssembler = scheduleTagAssembler;
@@ -32,8 +31,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_saveSchedulePartService = saveSchedulePartService;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+			_scheduleSaveHandler = scheduleSaveHandler;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -60,18 +59,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					cancelPersonalActivity(personAssignment, dateTimePeriod);					
 				}
 
-				var scheduleTagEntity =
-					_scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
-				try
-				{
-					_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-					uow.PersistAll();
-				}
-				catch (BusinessRuleValidationException ex)
-				{
-					throw new FaultException(ex.Message);
-				}
+				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
 
+				_scheduleSaveHandler.ProcessSave(scheduleDay, rules, scheduleTagEntity);
+				uow.PersistAll();
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
 		}

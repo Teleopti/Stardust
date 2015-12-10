@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScheduleRepository _scheduleRepository;
         private IScenarioRepository _scenarioRepository;
         private IPersonRepository _personRepository;
-        private ISaveSchedulePartService _saveSchedulePartService;
         private NewMainShiftCommandHandler _target;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
@@ -42,6 +40,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private IScheduleTagAssembler _scheduleTagAssembler;
+		 private IScheduleSaveHandler _scheduleSaveHandler;
 
 	    [SetUp]
         public void Setup()
@@ -54,11 +53,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
-            _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
     		_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
+			_scheduleSaveHandler = _mock.DynamicMock<IScheduleSaveHandler>();
 
-            _target = new NewMainShiftCommandHandler(_currentUnitOfWorkFactory,_shiftCategoryRepository,_mainActivityLayerAssembler, _scheduleTagAssembler,_scheduleRepository,_scenarioRepository,_personRepository,_saveSchedulePartService, _businessRulesForPersonalAccountUpdate);
+			_target = new NewMainShiftCommandHandler(_currentUnitOfWorkFactory, _shiftCategoryRepository, _mainActivityLayerAssembler, _scheduleTagAssembler, _scheduleRepository, _scenarioRepository, _personRepository, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_shiftCategoryRepository.Load(_newMainShiftCommandDto.ShiftCategoryId)).Return(_shiftCategory);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
 	            Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null)).IgnoreArguments().Return(tag);
-                Expect.Call(()=>_saveSchedulePartService.Save(schedulePart, rules, tag));
+					 Expect.Call(() => _scheduleSaveHandler.ProcessSave(schedulePart, rules, tag));
             }
             using(_mock.Playback())
             {
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
 				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null))
 				      .Constraints(new PredicateConstraint<ScheduleTagDto>(t => t.Id == tagId)).Return(tag);
-				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules,tag));
+				Expect.Call(() => _scheduleSaveHandler.ProcessSave(schedulePart, rules, tag));
 			}
 			using (_mock.Playback())
 			{

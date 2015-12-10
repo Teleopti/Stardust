@@ -5,7 +5,6 @@ using Rhino.Mocks.Constraints;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private ISaveSchedulePartService _saveSchedulePartService;
         private ClearMainShiftCommandHandler _target ;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
@@ -33,6 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private IScheduleTagAssembler _scheduleTagAssembler;
+		 private IScheduleSaveHandler _scheduleSaveHandler;
 
 	    [SetUp]
         public void Setup()
@@ -41,12 +40,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_saveSchedulePartService = MockRepository.GenerateMock<ISaveSchedulePartService>();
 			_businessRulesForPersonalAccountUpdate = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			_scheduleTagAssembler = MockRepository.GenerateMock<IScheduleTagAssembler>();
+			_scheduleSaveHandler = MockRepository.GenerateMock<IScheduleSaveHandler>();
 
-            _target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService, _businessRulesForPersonalAccountUpdate);
+			_target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 		    _target.Handle(_clearMainShiftDto);
 
-		    _saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, null));
+			 _scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, null));
 	    }
 
 	    [Test]
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _target.Handle(_clearMainShiftDto);
 
 		    _scenarioRepository.AssertWasCalled(x => x.Get(scenarioId));
-		    _saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, null));
+			 _scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, null));
 	    }
 
 		[Test]
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_clearMainShiftDto.ScheduleTagId = tagId;
 			_target.Handle(_clearMainShiftDto);
 
-			_saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, tag));
+			_scheduleSaveHandler.AssertWasCalled(x => x.ProcessSave(schedulePart, rules, tag));
 		}
     }
 }

@@ -200,6 +200,7 @@
     <Compile Include="CommandHandler\RevokePersonRoleCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\ScheduleSaveHandler.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />

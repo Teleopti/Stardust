@@ -5,10 +5,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,7 +24,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private ISaveSchedulePartService _saveSchedulePartService;
         private CancelAbsenceCommandHandler _target;
         private IPerson _person;
         private IAbsence _absence;
@@ -44,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private IScheduleTagAssembler _scheduleTagAssembler;
+		 private IScheduleSaveHandler _scheduleSaveHandler;
 
 
 	    [SetUp]
@@ -56,11 +54,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
+			_scheduleSaveHandler = _mock.DynamicMock<IScheduleSaveHandler>();
 
-            _target = new CancelAbsenceCommandHandler(_dateTimePeriodAssembler, _scheduleTagAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService, _businessRulesForPersonalAccountUpdate);
+			_target = new CancelAbsenceCommandHandler(_dateTimePeriodAssembler, _scheduleTagAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleSaveHandler);
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay,rules,null));
+				Expect.Call(() => _scheduleSaveHandler.ProcessSave(scheduleDay, rules, null));
 			}
 			using (_mock.Playback())
 			{
@@ -129,7 +127,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules, null));
+				Expect.Call(() => _scheduleSaveHandler.ProcessSave(scheduleDay, rules, null));
 			}
 			using (_mock.Playback())
 			{
@@ -162,7 +160,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-                Expect.Call(()=>_saveSchedulePartService.Save(scheduleDay,rules,null));
+					 Expect.Call(() => _scheduleSaveHandler.ProcessSave(scheduleDay, rules, null));
+
             }
             using(_mock.Playback())
             {

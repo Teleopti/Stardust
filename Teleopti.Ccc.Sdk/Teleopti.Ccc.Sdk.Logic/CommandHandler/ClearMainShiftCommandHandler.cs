@@ -1,5 +1,4 @@
-﻿using System.ServiceModel;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -18,18 +17,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
-    	public ClearMainShiftCommandHandler(IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+    	public ClearMainShiftCommandHandler(IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleSaveHandler scheduleSaveHandler)
         {
     		_scheduleTagAssembler = scheduleTagAssembler;
     		_scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _saveSchedulePartService = saveSchedulePartService;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+    		_scheduleSaveHandler = scheduleSaveHandler;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -51,16 +50,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
 
-				try
-				{
-					_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-                    uow.PersistAll();
-				}
-				catch (BusinessRuleValidationException ex)
-				{
-					throw new FaultException(ex.Message);
-				}
-
+				_scheduleSaveHandler.ProcessSave(scheduleDay, rules, scheduleTagEntity);
+				uow.PersistAll();
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }

@@ -32,6 +32,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
@@ -188,6 +189,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleSaveHandler>().As<IScheduleSaveHandler>().InstancePerLifetimeScope();
 
 			//remove this crap when we get rid of local superuser in appdb
 			builder.Register(c => 

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private ISaveSchedulePartService _saveSchedulePartService;
         private AddActivityCommandHandler _target;
         private IPerson _person;
         private IActivity _activity;
@@ -46,6 +44,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private IScheduleTagAssembler _scheduleTagAssembler;
+		 private IScheduleSaveHandler _scheduleSaveHandler;
 
         [SetUp]
         public void Setup()
@@ -58,9 +57,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
+			_scheduleSaveHandler = _mock.DynamicMock<IScheduleSaveHandler>();
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _period = _dateOnlyPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
 
             _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
-			_target = new AddActivityCommandHandler(_dateTimePeriodMock, _activityRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler);
+				_target = new AddActivityCommandHandler(_dateTimePeriodMock, _activityRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler, _scheduleSaveHandler);
 
             _addAbsenceCommandDto = new AddActivityCommandDto
             {
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
             	Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
 				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null)).IgnoreArguments().Return(scheduleTag);
-                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules, scheduleTag));
+					 Expect.Call(() => _scheduleSaveHandler.ProcessSave(schedulePart, rules, scheduleTag));
             }
             using (_mock.Playback())
             {
@@ -140,7 +139,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
 				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null)).IgnoreArguments().Return(scheduleTag);
-				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules, scheduleTag ));
+				Expect.Call(() => _scheduleSaveHandler.ProcessSave(schedulePart, rules, scheduleTag));
+
 			}
 			using (_mock.Playback())
 			{

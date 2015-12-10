@@ -1,5 +1,4 @@
-﻿using System.ServiceModel;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -20,12 +19,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ISaveSchedulePartService _saveSchedulePartService;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
+		private readonly IScheduleSaveHandler _scheduleSaveHandler;
 
 
-		public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
+		public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _absenceRepository = absenceRepository;
@@ -33,16 +32,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _saveSchedulePartService = saveSchedulePartService;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_scheduleTagAssembler = scheduleTagAssembler;
+			_scheduleSaveHandler = scheduleSaveHandler;
         }
 
 		public void Handle(AddAbsenceCommandDto command)
-        {
+		{
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-                var person = _personRepository.Load(command.PersonId);
+				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var startDate = command.Date.ToDateOnly();
 				var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
@@ -56,25 +55,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var absence = _absenceRepository.Load(command.AbsenceId);
 				var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
 				scheduleDay.CreateAndAddAbsence(absenceLayer);
-				
+
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto {Id = command.ScheduleTagId});
 
-				try
-				{
-					_saveSchedulePartService.Save (scheduleDay, rules, scheduleTagEntity);
-					uow.PersistAll();
-				}
-				catch (BusinessRuleValidationException ex)
-				{
-					throw new FaultException(ex.Message);
-				}
-
-                
+				_scheduleSaveHandler.ProcessSave(scheduleDay, rules, scheduleTagEntity);
+				uow.PersistAll();
 			}
-			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
-        }
+			command.Result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 1};
+		}
 
-    	private IScenario getDesiredScenario(AddAbsenceCommandDto command)
+		private IScenario getDesiredScenario(AddAbsenceCommandDto command)
     	{
     		return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
     	}
