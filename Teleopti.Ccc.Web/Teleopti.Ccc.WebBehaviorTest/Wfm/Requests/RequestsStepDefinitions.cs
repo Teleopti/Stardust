@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.SetScopeValues("date-range-picker", new Dictionary<string, string>
 			{
-				{ "requestsOverview.requestsFilter.period.startDate", string.Format("new Date('{0}')", from)},
-				{ "requestsOverview.requestsFilter.period.endDate", string.Format("new Date('{0}')", to) },
+				{ "requests.period.startDate", string.Format("new Date('{0}')", from)},
+				{ "requests.period.endDate", string.Format("new Date('{0}')", to) },
 			});
 		}
 
