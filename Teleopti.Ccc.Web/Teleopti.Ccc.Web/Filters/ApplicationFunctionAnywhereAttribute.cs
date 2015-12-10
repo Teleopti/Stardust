@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	[CLSCompliant(false)]
-	public sealed class AddFullDayAbsencePermissionAttribute : ApplicationFunctionApiAttribute
+	public sealed class AddFullDayAbsencePermissionAttribute : ApplicationFunctionAnywhereAttribute
 	{
 		public AddFullDayAbsencePermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)
@@ -12,8 +13,7 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
-	public sealed class AddIntradayAbsencePermissionAttribute : ApplicationFunctionApiAttribute
+	public sealed class AddIntradayAbsencePermissionAttribute : ApplicationFunctionAnywhereAttribute
 	{
 		public AddIntradayAbsencePermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)
@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
-	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionApiAttribute
+	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionAnywhereAttribute
 	{
 		public RemoveAbsencePermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)
@@ -30,8 +29,7 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
-	public sealed class AddActivityPermissionAttribute : ApplicationFunctionApiAttribute
+	public sealed class AddActivityPermissionAttribute : ApplicationFunctionAnywhereAttribute
 	{
 		public AddActivityPermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.AddActivity)
@@ -39,12 +37,45 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	[CLSCompliant(false)]
-	public sealed class MoveActivityPermissionAttribute : ApplicationFunctionApiAttribute
+	public sealed class MoveActivityPermissionAttribute : ApplicationFunctionAnywhereAttribute
 	{
 		public MoveActivityPermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.MoveActivity)
 		{
+		}
+	}
+
+	public class ApplicationFunctionAnywhereAttribute : AuthorizeAttribute
+	{
+		private readonly string[] _applicationFunctionPaths;
+		public IPermissionProvider PermissionProvider { get; set; }
+
+		public ApplicationFunctionAnywhereAttribute() : this(null) { }
+
+		public ApplicationFunctionAnywhereAttribute(params string[] applicationFunctionPathses)
+		{
+			_applicationFunctionPaths = applicationFunctionPathses;
+			Order = 3;
+		}
+
+		public override void OnAuthorization(AuthorizationContext filterContext)
+		{
+			if (_applicationFunctionPaths != null && _applicationFunctionPaths.Length > 0)
+			{
+				var havePermission = _applicationFunctionPaths.Any(applicationFunctionPath => PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath));
+
+				if (!havePermission)
+				{
+					filterContext.HttpContext.Response.StatusCode = 403;
+					filterContext.Result = new JsonResult();
+				}
+			}
+			base.OnAuthorization(filterContext);
+		}
+
+		protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
+		{
+			return true;
 		}
 	}
 }
