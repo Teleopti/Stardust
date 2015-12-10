@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			var endDate = DateOnly.MinValue;
 			var personDictionary = new Dictionary<IPerson, IList<IVirtualSchedulePeriod>>();
 
-			foreach(var person in model.Persons)
+			model.Persons.ForEach(person =>
 			{
 				var periodFinder = new VirtualSchedulePeriodFinder(person);
 				var schedulePeriods = periodFinder.FindVirtualPeriods(model.Period);
@@ -134,7 +135,8 @@ namespace Teleopti.Ccc.Win.Reporting
 								: endDate;
 					personDictionary.Add(person, schedulePeriods);
 				}
-			}
+
+			});
 
 			var loadPeriod = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
 
@@ -144,28 +146,33 @@ namespace Teleopti.Ccc.Win.Reporting
 			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			loadSchedules(unitOfWork, model.Persons, stateHolder);
 			
-			foreach(KeyValuePair<IPerson, IList<IVirtualSchedulePeriod>> personSchedulePeriods in personDictionary)
+			personDictionary.ForEach(personSchedulePeriods =>
 			{
-				foreach(var schedulePeriod in personSchedulePeriods.Value)
+				var person = personSchedulePeriods.Key;
+				var schedulePeriods = personSchedulePeriods.Value;
+
+				schedulePeriods.ForEach(schedulePeriod =>
 				{
-					stateHolder.Schedules[personSchedulePeriods.Key].ForceRecalculationOfContractTimeAndDaysOff(); // bugfix 36241: empty cache in ScheduleRange object
+					//TODO: refactor report to use the same data as in the agentinfo in scheduler. DaysOff, TargetTime, ScheduledDayOff, ScheduledTime 
+					// should be the virtual schedule period's responsibility where is is tested code!!! This is NOT!
+
+					stateHolder.Schedules[person].ForceRecalculationOfContractTimeAndDaysOff();
 
 					IScheduledTimeVersusTargetTimeReportData detailData = new ScheduledTimeVersusTargetTimeReportData();
-					
-					var targetTime = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
-					detailData.PersonName = stateHolder.CommonAgentName(personSchedulePeriods.Key);
+
+					var targetTime = stateHolder.Schedules[person].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
+
+					detailData.PersonName = stateHolder.CommonAgentName(person);
 					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate.Date;
 					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate.Date;
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;
-					detailData.TargetDayOffs = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedTargetScheduleDaysOff(schedulePeriod.DateOnlyPeriod).GetValueOrDefault(0);
+					detailData.TargetDayOffs = stateHolder.Schedules[person].CalculatedTargetScheduleDaysOff(schedulePeriod.DateOnlyPeriod).GetValueOrDefault(0);
 
-
-					detailData.ScheduledTime = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedContractTimeHolderOnPeriod(schedulePeriod.DateOnlyPeriod).TotalMinutes;
-					detailData.ScheduledDayOffs = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedScheduleDaysOff;
-
+					detailData.ScheduledTime = stateHolder.Schedules[person].CalculatedContractTimeHolderOnPeriod(schedulePeriod.DateOnlyPeriod).TotalMinutes;
+					detailData.ScheduledDayOffs = stateHolder.Schedules[person].CalculatedScheduleDaysOff;
 					detailDataList.Add(detailData);
-				}
-			}
+				});
+			});
 
 			data.Add("DataSet1", detailDataList);
 		}
