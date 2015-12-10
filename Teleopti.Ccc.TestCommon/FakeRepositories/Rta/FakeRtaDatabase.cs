@@ -465,11 +465,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
 		}
-
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Adherence adherence, bool isDeleted)
-		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, TimeSpan.Zero, adherence, null);
-		}
 		
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId)
 		{
@@ -511,6 +506,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, adherence, null);
 		}
 
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence, TimeSpan thresholdTime)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, thresholdTime, adherence, null);
+		}
 	}
 
 }

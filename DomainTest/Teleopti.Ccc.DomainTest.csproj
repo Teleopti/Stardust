@@ -187,6 +187,8 @@
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StartTime\StateStartTimeTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StartTime\AdherenceStartTimeTest.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />

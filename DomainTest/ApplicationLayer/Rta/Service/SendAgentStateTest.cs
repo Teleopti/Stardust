@@ -221,39 +221,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var sent = Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);
 		}
-
-
-		[Test]
-		public void ShouldSendWithCorrectAdherenceStartTimeWhenChangingAdherence()
-		{
-			var personId = Guid.NewGuid();
-			var state1 = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			};
-			var state2 = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "break"
-			};
-			var phoneId = Guid.NewGuid();
-			Database
-				.WithDefaultsFromState(state1)
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, phoneId, "phone", "2015-01-13 10:00", "2015-01-13 11:00")
-				.WithAlarm("phone", phoneId, TimeSpan.FromMinutes(10))
-				.WithAlarm("break", phoneId, TimeSpan.FromMinutes(10))
-				;
-			Now.Is("2015-01-13 10:00");
-			Target.SaveState(state1);
-			Target.SaveState(state2);
-
-			Target.SaveState(state1);
-			
-			Sender.NotificationsOfType<AgentStateReadModel>()
-				.Last().DeseralizeActualAgentState()
-				.AdherenceStartTime.Should().Be("2015-01-13 10:10".Utc());
-		}
 	}
 }

@@ -68,6 +68,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _alarmMapping.DisplayColor;
 		}
-
 	}
 }

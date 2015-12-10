@@ -21,33 +21,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}
 
-		private Guid platformTypeId
-		{
-			get { return string.IsNullOrEmpty(Input.PlatformTypeId) ?  Stored.PlatformTypeId() : Input.ParsedPlatformTypeId(); }
-		}
+		private Guid platformTypeId => string.IsNullOrEmpty(Input.PlatformTypeId) ?  Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
 
-		private string stateCode
-		{
-			get { return Input.StateCode ?? Stored.StateCode(); }
-		}
+		private string stateCode => Input.StateCode ?? Stored.StateCode();
 
-		private DateTime? stateStartTime
-		{
-			get { return State.RuleId() == Stored.RuleId() ? Stored.RuleStartTime : CurrentTime; }
-		}
+		private DateTime? stateStartTime => State.StateGroupChanged() ? CurrentTime : Stored.StateStartTime;
 
-		private DateTime? batchId
-		{
-			get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId(); }
-		}
+		private DateTime? adherenceStartTime => (Stored == null || State.Adherence() != Stored.Adherence) ? CurrentTime : Stored.AdherenceStartTime;
+
+		private DateTime? batchId => Input.IsSnapshot ? Input.BatchId : Stored.BatchId();
 
 		public ExternalUserStateInputModel Input { get; set; }
-		public PersonOrganizationData Person { get; private set; }
-		public StateAlarmInfo State { get; private set; }
-		public StoredStateInfo Stored { get; private set; }
-		public ScheduleInfo Schedule { get; private set; }
-		public AdherenceInfo Adherence { get; private set; }
-		public DateTime CurrentTime { get; private set; }
+		public PersonOrganizationData Person { get; }
+		public StateAlarmInfo State { get; }
+		public StoredStateInfo Stored { get; }
+		public ScheduleInfo Schedule { get; }
+		public AdherenceInfo Adherence { get; }
+		public DateTime CurrentTime { get; }
 
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
@@ -66,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateStartTime = stateStartTime,
 				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
-				AdherenceStartTime = CurrentTime.AddTicks(State.AlarmThresholdTime()),
+				AdherenceStartTime = adherenceStartTime, 
 				BusinessUnitId = Person.BusinessUnitId,
 				SiteId = Person.SiteId,
 				TeamId = Person.TeamId,
@@ -78,14 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				State = State.StateGroupName()
 			};
 		}
-
-
-
-
-
-
-
-		public EventAdherence AggregatorAdherence { get { return Adherence.AdherenceForNewStateAndCurrentActivity(); } }
+		
+		public EventAdherence AggregatorAdherence => Adherence.AdherenceForNewStateAndCurrentActivity();
 
 		public bool Send
 		{
