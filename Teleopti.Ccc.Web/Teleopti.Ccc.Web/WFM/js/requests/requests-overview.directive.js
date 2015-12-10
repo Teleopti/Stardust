@@ -13,29 +13,23 @@
 		var vm = this;
 
 		vm.requests = [];
-		
-		vm.requestsFilter = {
-			period: {
-				startDate: new Date(),
-				endDate: moment().add(1, 'day').toDate()
-			},
-			sortingOrders: []
-		};
-		vm.reload = reload;
-		vm.changeSortingOrder = changeSortingOrder;
 
-		function reload(requestsFilter) {
+		vm.period = {
+			startDate: (vm.period && vm.period.startDate) ? vm.period.startDate : new Date(),
+			endDate :  (vm.period && vm.period.endDate)? vm.period.endDate: new Date()
+		};
+		vm.period.endDate = vm.period.endDate? vm.period.endDate: new Date();
+
+		vm.reload = reload;
+		vm.sortingOrders = [];
+
+		function reload(requestsFilter, sortingOrders) {
 			vm.loaded = false;
-			requestsDataService.getAllRequestsPromise(requestsFilter).then(function (requests) {
+			requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders).then(function (requests) {
 				vm.requests = requests.data;
 				vm.loaded = true;
 			});
 		}
-
-		function changeSortingOrder(sortingOrders) {
-			vm.requestsFilter.sortingOrders = sortingOrders;
-		}
-
 	}
 
 	function requestsOverviewDirective() {
@@ -43,7 +37,9 @@
 			controller: 'requestsOverviewCtrl',
 			controllerAs: 'requestsOverview',
 			bindToController: true,
-			scope: { },
+			scope: {
+				period: '='
+			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',
 			link: postlink
@@ -51,19 +47,19 @@
 
 		function postlink(scope, elem, attrs, ctrl) {
 			scope.$watch(function() {
-				var filter = scope.requestsOverview.requestsFilter;
+				var filter = {
+					period: scope.requestsOverview.period
+				}					
 				return {
 					startDate: filter.period.startDate,
 					endDate: filter.period.endDate,
-					sortingOrders: filter.sortingOrders
+					sortingOrders: scope.requestsOverview.sortingOrders
 				}
 			}, function(newValue) {
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
-				scope.requestsOverview.requestsFilter.period = newValue;
-				ctrl.reload(scope.requestsOverview.requestsFilter);
-
+				scope.requestsOverview.requestsFilter = newValue;
+				ctrl.reload({ period: scope.requestsOverview.period }, scope.requestsOverview.sortingOrders);
 			}, true);			
 		}
 	}
-
 })();

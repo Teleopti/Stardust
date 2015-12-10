@@ -177,7 +177,8 @@ wfm.config([
 			controller: 'TeamScheduleCtrl as vm'
 		}).state('requests', {
 			url: '/requests',
-			templateUrl: 'js/requests/html/requests.html'
+			templateUrl: 'js/requests/html/requests.html',
+			controller: 'RequestsCtrl as requests'
 		});
 
 		var rtaAgentsTemplate = function(elem, attr) {

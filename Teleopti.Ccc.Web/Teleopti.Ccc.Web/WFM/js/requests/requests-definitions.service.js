@@ -8,8 +8,8 @@
 		var self = this;
 
 		this.REQUEST_TYPES = {
-			TEXT: 'TEXT',
-			ABSENCE: 'ABSENCE'
+			TEXT: 0,
+			ABSENCE: 1
 		};
 
 		this.REQUEST_SORTING_ORDERS = {
@@ -21,11 +21,11 @@
 			CreatedOnDesc: 5
 		};
 
-		this.normalizeRequestsFilter = function(filter) {
+		this.normalizeRequestsFilter = function(filter, sortingOrders) {
 			return {
 				StartDate: { Date: filter.period.startDate },
 				EndDate: { Date: filter.period.endDate },
-				SortingOrders: filter.sortingOrders
+				SortingOrders: sortingOrders
 			};
 		};
 

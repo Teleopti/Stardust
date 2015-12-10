@@ -28,13 +28,14 @@
 					{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time', enableSorting: false, headerCellClass: 'request-period-end-time-header', cellFilter: 'date : "short"', visible: false },
 					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
+					{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', cellClass: 'request-team', headerCellClass: 'request-team-header', enableSorting: false },
 				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', enableSorting: false },
 					{ displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', enableSorting: false, headerCellClass: 'request-type-header' },
 					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', enableSorting: false, headerCellClass: 'request-subject-header' },
 					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', enableSorting: false, headerCellClass: 'request-status-header' },
 					{ displayName: 'CreatedOn', field: 'CreatedTime', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header', cellFilter: 'date : "short"' },
-					{ displayName: 'UpdatedOn', field: 'UpdatedTime', headerCellFilter: 'translate', cellClass: 'request-updated-time', cellFilter: 'date : "shortDate"', visible: false, headerCellClass: 'request-updated-time-header' }
+					{ displayName: 'UpdatedOn', field: 'UpdatedTime', headerCellFilter: 'translate', cellClass: 'request-updated-time', cellFilter: 'date : "short"', visible: false, headerCellClass: 'request-updated-time-header' }
 				],
 				onRegisterApi: function (gridApi) {
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
@@ -58,22 +59,24 @@
 				var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 				var hours = moment.duration(length, 'seconds')._data.hours;
 				var minuts = moment.duration(length, 'seconds')._data.minutes;
+				var angularTimezone = moment.tz(row.TimeZone).format("Z");
 				row.GetDuration = function () {
 					return formatToTimespan(length);
 				}
 				row.FormatedPeriodStartTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate");
-					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short');
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate", angularTimezone);
+					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short', angularTimezone);
 				}
-				row.FormatedPeriodEndTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate");
-					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short");
+				row.FormatedPeriodEndTime = function () {			
+					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate", angularTimezone);
+					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short", angularTimezone);
 				}
-				row.GetType = function() {
-					if (row.TypeText === "Absence") {
-						row.TypeText = row.Payload.Name;
+				row.GetType = function () {
+					var typeText = row.TypeText;					
+					if (row.Type == requestsDefinitions.REQUEST_TYPES.ABSENCE) {
+						typeText += ' (' + row.Payload.Name + ')';
 					}
-					return row.TypeText;
+					return typeText;
 				}
 			});
 			return dataArray;
