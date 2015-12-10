@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 
 		[Test]
-		public void ShouldSendWithCorrectAlarmStartWhenChangingAlarm()
+		public void ShouldSendWithCorrectAdherenceStartTimeWhenChangingAdherence()
 		{
 			var personId = Guid.NewGuid();
 			var state1 = new ExternalUserStateForTest
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			
 			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Last().DeseralizeActualAgentState()
-				.AlarmStart.Should().Be("2015-01-13 10:10".Utc());
+				.AdherenceStartTime.Should().Be("2015-01-13 10:10".Utc());
 		}
 	}
 }

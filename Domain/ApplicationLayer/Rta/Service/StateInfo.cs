@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateStartTime = stateStartTime,
 				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
-				AlarmStart = CurrentTime.AddTicks(State.AlarmThresholdTime()),
+				AdherenceStartTime = CurrentTime.AddTicks(State.AlarmThresholdTime()),
 				BusinessUnitId = Person.BusinessUnitId,
 				SiteId = Person.SiteId,
 				TeamId = Person.TeamId,

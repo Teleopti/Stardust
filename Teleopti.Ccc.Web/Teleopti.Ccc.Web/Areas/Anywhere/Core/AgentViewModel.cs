@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string NextActivity { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
-		public DateTime? AlarmStart { get; set; }
+		public DateTime? AdherenceStartTime { get; set; }
 		public string AlarmColor { get; set; }
 		public int TimeInState { get; set; }
 	}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
-		public DateTime? AlarmStart { get; set; }
+		public DateTime? AdherenceStartTime { get; set; }
 		public string AlarmColor { get; set; }
 		public int TimeInState { get; set; }
 	}

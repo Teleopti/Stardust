@@ -27,7 +27,7 @@ namespace Teleopti.Interfaces.Domain
 		public DateTime? NextStart { get; set; }
 		
 		public Guid? AlarmId { get; set; }
-		public DateTime? AlarmStart { get; set; }
+		public DateTime? AdherenceStartTime { get; set; }
 		public string AlarmName { get; set; }
 		public int? Color { get; set; }
 		public double? StaffingEffect { get; set; }
@@ -36,8 +36,8 @@ namespace Teleopti.Interfaces.Domain
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStartTime: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, AlarmStart: {8}, BatchId: {9}",
-				PersonId, StateCode, State, Scheduled, StateStartTime, ScheduledNext, NextStart, AlarmName, AlarmStart, BatchId);
+				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStartTime: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, AdherenceStartTime: {8}, BatchId: {9}",
+				PersonId, StateCode, State, Scheduled, StateStartTime, ScheduledNext, NextStart, AlarmName, AdherenceStartTime, BatchId);
 
 		}
 

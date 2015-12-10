@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 				AlarmId = null,
 				AlarmName = null,
-				AlarmStart = null,
+				AdherenceStartTime = null,
 				StaffingEffect = null,
 				Adherence = null,
 				Color = null,

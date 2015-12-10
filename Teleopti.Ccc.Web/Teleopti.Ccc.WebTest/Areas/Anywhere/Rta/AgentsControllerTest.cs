@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				ScheduledNext = "Lunch",
 				NextStart = "2001-01-01 12:30".Utc(),
 				AlarmName = "Alarma!",
-				AlarmStart = "2001-01-01 12:00".Utc(),
+				AdherenceStartTime = "2001-01-01 12:00".Utc(),
 				Color = Color.Red.ToArgb()
 			};
 			var expected = new AgentStateViewModel
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				NextActivity = "Lunch",
 				NextActivityStartTime = "2001-01-01 12:30".Utc(),
 				Alarm = "Alarma!",
-				AlarmStart = "2001-01-01 12:00".Utc(),
+				AdherenceStartTime = "2001-01-01 12:00".Utc(),
 				AlarmColor = "#FF0000"
 			};
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
 			Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
 			Assert.That(result.First().Alarm, Is.EqualTo(expected.Alarm));
-			Assert.That(result.First().AlarmStart, Is.EqualTo(expected.AlarmStart));
+			Assert.That(result.First().AdherenceStartTime, Is.EqualTo(expected.AdherenceStartTime));
 			Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
 		}
 

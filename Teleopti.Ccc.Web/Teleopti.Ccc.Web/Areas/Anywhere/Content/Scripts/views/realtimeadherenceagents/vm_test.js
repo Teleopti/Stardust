@@ -96,7 +96,7 @@
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
                         Alarm: 'Adhering',
                         AlarmColor: '#000001',
-                        AlarmStart: moment('2014-01-21 12:15').format()
+                        AdherenceStartTime: moment('2014-01-21 12:15').format()
                     },
                     {
                         PersonId: 'guid2',
@@ -108,7 +108,7 @@
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
                         Alarm: 'Not Adhering',
                         AlarmColor: '#ffffff',
-                        AlarmStart: moment('2014-01-21 12:15').format()
+                        AdherenceStartTime: moment('2014-01-21 12:15').format()
                     }
                 ]);
 
@@ -118,7 +118,7 @@
                 assert.equals(agent.TimeInState(), 10);
                 assert.equals(agent.Activity(), "Phone");
                 assert.equals(agent.NextActivity(), "Lunch");
-                assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
+                assert.equals(agent.AdherenceStartTime(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Adhering");
                 assert.equals(agent.AlarmColor(), 'rgba(0,0,1, 0.6)');
 
@@ -128,7 +128,7 @@
                 assert.equals(agent.TimeInState(), 20);
                 assert.equals(agent.Activity(), "Lunch");
                 assert.equals(agent.NextActivity(), "Phone");
-                assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
+                assert.equals(agent.AdherenceStartTime(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Not Adhering");
                 assert.equals(agent.AlarmColor(), 'rgba(255,255,255, 0.6)');
 
@@ -226,7 +226,7 @@
                         PersonId: 'guid1',
                         Alarm: 'Adhering',
                         StateStartTime: now,
-                        AlarmStart: now.add(10, 'seconds')
+                        AdherenceStartTime: now.add(10, 'seconds')
                     }
                 ]);
 

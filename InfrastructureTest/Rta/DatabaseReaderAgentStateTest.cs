@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = Guid.NewGuid(),
 				AlarmId = Guid.NewGuid(),
 				AlarmName = "alarm",
-				AlarmStart = "2014-11-11 10:33".Utc(),
+				AdherenceStartTime = "2014-11-11 10:33".Utc(),
 				BatchId = "2014-11-11 10:34".Utc(),
 				BusinessUnitId = Guid.NewGuid(),
 				Color = 3,
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.PersonId.Should().Be(state.PersonId);
 			result.AlarmId.Should().Be(state.AlarmId);
 			result.AlarmName.Should().Be(state.AlarmName);
-			result.AlarmStart.Should().Be(state.AlarmStart);
+			result.AdherenceStartTime.Should().Be(state.AdherenceStartTime);
 			result.BatchId.Should().Be(state.BatchId);
 			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
 			result.Color.Should().Be(state.Color);
