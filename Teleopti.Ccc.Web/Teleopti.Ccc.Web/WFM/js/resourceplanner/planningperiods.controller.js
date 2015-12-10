@@ -64,6 +64,10 @@
 	            PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
 	                $scope.scheduledDays = scheduleResult.DaysScheduled;
 	                $scope.status = 'Optimizing days off';
+	            	//to make sure long optimization request doesn't create a new cookie based on current time
+								//just a test push to see if it works. fix better and more general if this does the trick
+	                PlanningPeriodSvrc.keepAlive();
+								//
 	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
 	                    $scope.schedulingPerformed = true;
 							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result, planningperiod:p});
