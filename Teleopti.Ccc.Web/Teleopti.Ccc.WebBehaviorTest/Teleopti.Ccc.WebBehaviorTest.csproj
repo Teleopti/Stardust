@@ -934,6 +934,21 @@
     </Compile>
     <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
+    <Compile Include="Wfm\TeamSchedule\AddActivity.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddActivity.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\TeamSchedule\SeeWholeTeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeeWholeTeamSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\TeamSchedule\SwapShiftsForTwoAgents.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SwapShiftsForTwoAgents.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -1340,6 +1355,18 @@
     <None Include="Wfm\Seat Management\SeatPlanReport.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatPlanReport.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\AddActivity.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddActivity.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\SeeWholeTeamSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeeWholeTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\SwapShiftsForTwoAgents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SwapShiftsForTwoAgents.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
