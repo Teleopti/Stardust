@@ -148,6 +148,8 @@ namespace Teleopti.Ccc.Win.Reporting
 			{
 				foreach(var schedulePeriod in personSchedulePeriods.Value)
 				{
+					stateHolder.Schedules[personSchedulePeriods.Key].ForceRecalculationOfContractTimeAndDaysOff(); // bugfix 36241: empty cache in ScheduleRange object
+
 					IScheduledTimeVersusTargetTimeReportData detailData = new ScheduledTimeVersusTargetTimeReportData();
 					
 					var targetTime = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
