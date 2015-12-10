@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin;
 using Teleopti.Ccc.Web.Areas.Global;
@@ -43,7 +44,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof(ConfigController),
 			})));
 			_globalConfiguration.Configure(c => c.Filters.Add(new Log4NetWebApiLogger(_log4NetLogger)));
-			_globalConfiguration.Configure(c => c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver());
+			_globalConfiguration.Configure(c =>
+			{
+				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
+				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
+				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());
+			});
 			return Task.FromResult(false);
 		}
 	}
