@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_schedulePersonProvider = schedulePersonProvider;
 		}
 
-		[UnitOfWork,HttpGet]
-		public virtual JsonResult PeopleInGroup(DateTime date, Guid groupId)
+		[UnitOfWorkAction,HttpGet]
+		public JsonResult PeopleInGroup(DateTime date, Guid groupId)
 		{
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
 			                                                                DefinedRaptorApplicationFunctionPaths.

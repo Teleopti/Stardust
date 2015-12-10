@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class SitesController : ApiController
+	public class SitesController : Controller
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
@@ -36,63 +38,60 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_now = now;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Sites")]
-		public virtual IHttpActionResult Index()
+		[UnitOfWork, HttpGet]
+		public virtual JsonResult Index()
 		{
 			var sites = _personalAvailableDataProvider != null
 				? _personalAvailableDataProvider.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-					_now.LocalDateOnly()).ToArray()
+					_now.LocalDateOnly())
 				: _siteRepository.LoadAll();
 
 			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
 			if (sites.Any())
 				numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
 
-			return Ok(sites.Select(site =>
-			{
-				var valueOrDefault = site.Id.GetValueOrDefault();
-				return new SiteViewModel
-											   {
-												   Id = valueOrDefault,
-												   Name = site.Description.Name,
-												   NumberOfAgents = numberOfAgents[valueOrDefault]
-											   };
-			}));
+			return Json(sites.Select(site =>
+				new SiteViewModel
+				{
+					Id = site.Id.Value.ToString(),
+					Name = site.Description.Name,
+					NumberOfAgents = numberOfAgents[site.Id.Value]
+				}), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Sites/Get")]
-		public virtual IHttpActionResult Get(Guid siteId)
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult Get(string siteId)
 		{
-			var site = _siteRepository.Get(siteId);
-			return Ok(new SiteViewModel
+			var site = _siteRepository.Get(new Guid(siteId));
+			return Json(new SiteViewModel
 			{
-				Id = site.Id.GetValueOrDefault(),
+				Id = site.Id.Value.ToString(),
 				Name = site.Description.Name
-			});
+			}, JsonRequestBehavior.AllowGet);
 		}
 		
-		[UnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherence")]
-		public virtual IHttpActionResult GetOutOfAdherence(Guid siteId)
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetOutOfAdherence(string siteId)
 		{
-			var outOfAdherence = _siteAdherenceAggregator.Aggregate(siteId);
-			return Ok(new SiteOutOfAdherence
+			var outOfAdherence = _siteAdherenceAggregator.Aggregate(Guid.Parse(siteId));
+			return Json(new SiteOutOfAdherence
 			{
 				Id = siteId,
 				OutOfAdherence = outOfAdherence
-			});
+			}, JsonRequestBehavior.AllowGet);
 		}
 		
-		[UnitOfWork, HttpGet, Route("api/Sites/GetBusinessUnitId")]
-		public virtual IHttpActionResult GetBusinessUnitId(Guid siteId)
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetBusinessUnitId(string siteId)
 		{
-			var site = _siteRepository.Get(siteId);
-			return Ok(site.BusinessUnit.Id.GetValueOrDefault());
+			var site = _siteRepository.Get(new Guid(siteId));
+			return Json(site.BusinessUnit.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Sites/GetOutOfAdherenceForAllSites")]
-		public virtual IHttpActionResult GetOutOfAdherenceForAllSites()
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
+		public virtual JsonResult GetOutOfAdherenceForAllSites()
 		{
-			return Ok(_getAdherence.OutOfAdherence());
+			return Json(_getAdherence.OutOfAdherence(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

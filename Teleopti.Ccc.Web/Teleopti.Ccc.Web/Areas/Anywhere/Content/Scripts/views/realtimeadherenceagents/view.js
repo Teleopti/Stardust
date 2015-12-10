@@ -55,7 +55,7 @@
 			}
 
 			var loadStatesForTeam = function(teamId) {
-				loadStates("api/Agents/GetStates?teamId=" + teamId);
+				loadStates("Agents/GetStates?teamId=" + teamId);
 			};
 
 			var idsToUrl = function(idtype, ids) {
@@ -87,7 +87,7 @@
 			};
 
 			var populateTeam = function(teamId) {
-				populate("api/Agents/ForTeam?teamId=" + teamId, function() {
+				populate("Agents/ForTeam?teamId=" + teamId, function() {
 					if (!resources.RTA_NewEventHangfireRTA_34333) {
 						loadStatesForTeam(teamId);
 					}
@@ -101,7 +101,7 @@
 				});
 			};
 			var populateSites = function(siteIds) {
-				populate("api/Agents/ForSites?" + idsToUrl("siteIds", siteIds), function() {
+				populate("Agents/ForSites?" + idsToUrl("siteIds", siteIds), function() {
 					subscriptions.subscribeForSitesAdherence(function(notification) {
 							viewModel.updateFromNotification(notification);
 						},
@@ -112,7 +112,7 @@
 				});
 			};
 			var populateTeams = function(teamIds) {
-				populate("api/Agents/ForTeams?" + idsToUrl("teamIds", teamIds), function () {
+				populate("Agents/ForTeams?" + idsToUrl("teamIds", teamIds), function () {
 					subscriptions.subscribeForTeamsAdherence(function(notification) {
 							viewModel.updateFromNotification(notification);
 						},
@@ -137,7 +137,7 @@
 				if (!resources.RTA_NewEventHangfireRTA_34333) {
 					for (var site = 0; site < sites.length; site++) {
 						ajax.ajax({
-							url: "api/Teams/ForSite?siteId=" + sites[site],
+							url: "Teams/ForSite?siteId=" + sites[site],
 							success: function(data) {
 								for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
 									populateTeam(data[teamInSite].Id);

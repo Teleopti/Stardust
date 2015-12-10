@@ -12,10 +12,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_teamRepository = teamRepository;
 		}
 
-		public Guid Get(Guid teamId)
+		public Guid Get(string teamId)
 		{
-			var team = _teamRepository.Get(teamId);
+			var team = _teamRepository.Get(new Guid(teamId));
 			return team.BusinessUnitExplicit.Id.GetValueOrDefault();
 		}
+
 	}
 }

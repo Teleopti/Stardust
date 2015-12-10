@@ -72,24 +72,24 @@ describe('RtaTeamsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 
 		//London
-		$httpBackend.whenGET("../api/Teams/ForSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+		$httpBackend.whenGET("../Teams/ForSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teams);
 		//Paris
-		$httpBackend.whenGET("../api/Teams/ForSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Teams/ForSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, []);
 		//Stores
-		$httpBackend.whenGET("../api/Teams/ForSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
+		$httpBackend.whenGET("../Teams/ForSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
 			.respond(200, []);
 		//London
-		$httpBackend.whenGET("../api/Teams/GetOutOfAdherenceForTeamsOnSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(200, teamAdherence);
 		//Paris
-		$httpBackend.whenGET("../api/Teams/GetOutOfAdherenceForTeamsOnSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(200, []);
 		//Stores
-		$httpBackend.whenGET("../api/Teams/GetOutOfAdherenceForTeamsOnSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
+		$httpBackend.whenGET("../Teams/GetOutOfAdherenceForTeamsOnSite?siteId=413157c4-74a9-482c-9760-a0a200d9f90f")
 			.respond(200, []);
-		$httpBackend.whenGET("../api/Sites")
+		$httpBackend.whenGET("../Sites")
 			.respond(200, sites);
 	}));
 

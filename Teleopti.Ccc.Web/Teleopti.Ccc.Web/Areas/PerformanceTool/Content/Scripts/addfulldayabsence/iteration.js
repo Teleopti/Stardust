@@ -19,7 +19,7 @@ define([
             
             this.SendAddCommand = function() {
                 $.ajax({
-                    url: 'api/PersonScheduleCommand/AddFullDayAbsence',
+                    url: 'Anywhere/PersonScheduleCommand/AddFullDayAbsence',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',

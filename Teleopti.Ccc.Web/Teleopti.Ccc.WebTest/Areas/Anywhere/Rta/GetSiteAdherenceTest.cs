@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			
 			var result = Target.OutOfAdherence();
 
-			result.Single().Id.Should().Be(site.Id);
+			result.Single().Id.Should().Be(site.Id.ToString());
 			result.Single().OutOfAdherence.Should().Be(1);
 		}
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			
 			var result = Target.OutOfAdherence();
 
-			result.Single().Id.Should().Be(site.Id);
+			result.Single().Id.Should().Be(site.Id.ToString());
 			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}

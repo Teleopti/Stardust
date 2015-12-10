@@ -290,7 +290,7 @@ define([
 	var businessUnitsDataLoadDeffered = $.Deferred();
 	var initBusinessUnitsMenu = function (callback) {
 		ajax.ajax({
-			url: "api/BusinessUnit",
+			url: "BusinessUnit",
 			success: callback
 		});
 	};

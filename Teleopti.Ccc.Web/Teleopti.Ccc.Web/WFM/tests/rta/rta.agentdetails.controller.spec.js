@@ -55,11 +55,11 @@ describe('RtaAgentDetailsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.whenGET("../api/Agents/PersonDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+		$httpBackend.whenGET("../Agents/PersonDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, personDetails);
-		$httpBackend.whenGET("../api/Adherence/ForDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+		$httpBackend.whenGET("../Adherence/ForDetails?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, activityAdherence);
-		$httpBackend.whenGET("../api/Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(200, dailyPercent);
 	}));
 

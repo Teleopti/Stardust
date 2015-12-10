@@ -83,31 +83,31 @@ describe('RtaAgentsCtrl for sites', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.whenGET("../api/Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(function() {
 				return [200, adherence];
 			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, states];
 			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+		$httpBackend.whenGET("../Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(function() {
 				return [200, agents[0]];
 			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Agents/ForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(function() {
 				return [200, states[0]];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, states];
 			});

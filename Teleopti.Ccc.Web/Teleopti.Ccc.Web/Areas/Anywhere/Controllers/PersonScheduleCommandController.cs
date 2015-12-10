@@ -1,17 +1,20 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Web.Http;
+using System.Web.Mvc;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class PersonScheduleCommandController : ApiController
+	public class PersonScheduleCommandController : Controller
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -24,47 +27,54 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_personScheduleDayViewModelFactory = personScheduleDayViewModelFactory;
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/AddFullDayAbsence")]
+		[HttpPost]
 		[UnitOfWork]
 		[AddFullDayAbsencePermission]
-		public virtual IHttpActionResult AddFullDayAbsence([FromBody]AddFullDayAbsenceCommand command)
+		public virtual JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);
-			return Ok(new {});
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/AddIntradayAbsence")]
+		[HttpPost]
 		[UnitOfWork]
 		[AddIntradayAbsencePermission]
-		public virtual IHttpActionResult AddIntradayAbsence([FromBody]AddIntradayAbsenceCommand command)
+		public virtual JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			if (!command.IsValid())
 			{
-				return BadRequest(command.ValidationResult);
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				var data = new ModelStateResult { Errors = command.ValidationResult.ToArray() };
+				return new JsonResult
+				{
+					Data = data,
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet
+				};
 			}
 			_commandDispatcher.Execute(command);
-			return Ok(new { });
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/RemovePersonAbsence")]
+		[HttpPost]
 		[UnitOfWork]
 		[RemoveAbsencePermission]
-		public virtual IHttpActionResult RemovePersonAbsence([FromBody]RemovePersonAbsenceCommand command)
+		public virtual JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);
-			return Ok(new { });
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/ModifyPersonAbsence")]
+		[HttpPost]
 		[UnitOfWork]
 		[RemoveAbsencePermission]
-		public virtual IHttpActionResult ModifyPersonAbsence([FromBody]ModifyPersonAbsenceCommand command)
+		public virtual JsonResult ModifyPersonAbsence(ModifyPersonAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -77,24 +87,24 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				if (e.InnerException is ArgumentException)
 					throw new HttpException(501, e.InnerException.Message);
 			}
-			return Ok(new { });
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/AddActivity")]
+		[HttpPost]
 		[UnitOfWork]
 		[AddActivityPermission]
-		public virtual IHttpActionResult AddActivity([FromBody]AddActivityCommand command)
+		public virtual JsonResult AddActivity(AddActivityCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);
-			return Ok(new {});
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPost, Route("api/PersonScheduleCommand/MoveActivity")]
+		[HttpPost]
 		[UnitOfWork]
 		[MoveActivityPermission]
-		public virtual IHttpActionResult MoveActivity([FromBody]MoveActivityCommand command)
+		public virtual JsonResult MoveActivity(MoveActivityCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -107,13 +117,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				if (e.InnerException is ArgumentException)
 					throw new HttpException(501, e.InnerException.Message);
 			}
-			return Ok(new {});
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/PersonScheduleCommand/GetPersonSchedule")]
-		public virtual IHttpActionResult GetPersonSchedule(Guid personId, DateTime date)
+		[UnitOfWorkAction, HttpGet]
+		public virtual JsonResult GetPersonSchedule(Guid personId, DateTime date)
 		{
-			return Ok(_personScheduleDayViewModelFactory.CreateViewModel(personId, date));
+			return Json(_personScheduleDayViewModelFactory.CreateViewModel(personId, date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

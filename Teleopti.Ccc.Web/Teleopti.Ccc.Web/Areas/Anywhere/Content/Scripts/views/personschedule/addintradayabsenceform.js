@@ -180,7 +180,7 @@ define([
 				TrackedCommandInfo: { TrackId: trackId }
 			});
 			ajax.ajax({
-					url: 'api/PersonScheduleCommand/AddIntradayAbsence',
+					url: 'PersonScheduleCommand/AddIntradayAbsence',
 					type: 'POST',
 					headers: { 'X-Business-Unit-Filter': businessUnitId },
 					data: requestData,

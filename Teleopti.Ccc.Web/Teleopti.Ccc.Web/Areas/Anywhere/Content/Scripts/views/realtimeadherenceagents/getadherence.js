@@ -7,7 +7,7 @@
 	return {
 		ServerCall: function (callback, personId) {
 			ajax.ajax({
-				url: 'api/Adherence/ForToday?PersonId=' + personId,
+				url: 'Adherence/ForToday?PersonId=' + personId,
 				type: 'GET',
 				accepts: 'application/json',
 				success: callback

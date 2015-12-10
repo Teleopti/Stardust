@@ -32,7 +32,7 @@
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
-				url: "api/Teams/ForSite?siteId=" + siteId,
+				url: "Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
 
 					viewModel.fill(data);
@@ -44,14 +44,14 @@
 			});
 
 			ajax.ajax({
-				url: "api/Sites/Get?siteId=" + siteId,
+				url: "Sites/Get?siteId=" + siteId,
 				success: function (data) {
 					viewModel.setSiteName(data);
 				}
 			});
 
 			ajax.ajax({
-				url: "api/Sites/GetBusinessUnitId?siteId=" + siteId,
+				url: "Sites/GetBusinessUnitId?siteId=" + siteId,
 				success: function (businessUnitId) {
 					subscriptions.subscribeAdherence(function (notification) {
 						viewModel.updateFromNotification(notification);
@@ -68,7 +68,7 @@
 				for (var i = 0; i < viewModel.teams().length; i++) {
 					var team = viewModel.teams()[i];
 					ajax.ajax({
-						url: "api/Teams/GetOutOfAdherence?teamId=" + team.Id,
+						url: "Teams/GetOutOfAdherence?teamId=" + team.Id,
 						success: function (d) {
 							viewModel.update(d);
 						}

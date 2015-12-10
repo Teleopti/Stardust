@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 
-			var data = new AgentStateReadModel
+			var data = new AgentStateReadModel()
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -56,9 +55,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			};
 
 			var target = new AgentsController(null, null, null, new Now(), null, new FakeAgentStateReadModelReader(new[] { data }), null,null);
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			new StubbingControllerBuilder().InitializeController(target);
 
-			result.Length.Should().Be(1);
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
+
+			result.Count().Should().Be(1);
 			Assert.That(result.First().PersonId, Is.EqualTo(expected.PersonId));
 			Assert.That(result.First().State, Is.EqualTo(expected.State));
 			Assert.That(result.First().StateStartTime, Is.EqualTo(expected.StateStartTime));
@@ -96,6 +97,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			commonAgentNameProvider.Stub(x => x.CommonAgentNameSettings).Return(commonAgentNameSettings);
 
 			var target = new AgentsController(new FakePermissionProvider(), teamRepository, personRepository, new Now(), commonAgentNameProvider, null, null, null);
+			new StubbingControllerBuilder().InitializeController(target);
+
 			var expected = new AgentViewModel
 			{
 				PersonId = personId,
@@ -105,9 +108,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				TeamId = teamId.ToString(),
 				TeamName = team.Description.Name,
 			};
-			var result = target.ForTeam(teamId).Result<AgentViewModel[]>();
+			var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
 
-			result.Length.Should().Be(1);
+			result.Count().Should().Be(1);
 
 			Assert.That(result.Single().PersonId, Is.EqualTo(expected.PersonId));
 			Assert.That(result.Single().Name, Is.EqualTo(expected.Name));
@@ -131,7 +134,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
 
 			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), null, null, null, null);
-			var result = target.Team(person.Id.GetValueOrDefault(), date).Result<Guid>();
+			new StubbingControllerBuilder().InitializeController(target);
+
+			var result = target.Team(person.Id.GetValueOrDefault(), date).Data;
 			result.Should().Be(team.Id.GetValueOrDefault());
 		}
 
@@ -148,9 +153,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			person.Name = new Name("bill", "gates");
 
 			var target = new AgentsController(new FakePermissionProvider(), null, personRepository, new Now(), commonAgentNameProvider, null, null, null);
-			
-			var result = target.PersonDetails(person.Id.GetValueOrDefault()).Result<PersonDetailModel>();
-			result.Name.Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
+			new StubbingControllerBuilder().InitializeController(target);
+
+			dynamic result = target.PersonDetails(person.Id.GetValueOrDefault()).Data;
+			((object)result.Name).Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
 		}
 
 		[Test]
@@ -162,8 +168,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				TeamId = teamId
 			};
 			var target = new AgentsController(null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			new StubbingControllerBuilder().InitializeController(target);
+
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
 			result.Single().TimeInState.Should().Be(0);
 		}
 
@@ -179,9 +186,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var now = new MutableNow("2015-10-02 09:05");
 
 			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			new StubbingControllerBuilder().InitializeController(target);
+
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
 			result.Single().TimeInState.Should().Be((int)"5".Minutes().TotalSeconds);
 		}
 	}
+
 }
