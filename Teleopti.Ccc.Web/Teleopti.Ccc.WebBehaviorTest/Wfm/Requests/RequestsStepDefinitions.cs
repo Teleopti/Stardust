@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			DataMaker.Person(userName).Apply(absenceRequest);
 		}
 
-		[When(@"I select to loading requests from '(.*)' to '(.*)'")]
-		public void WhenISelectToLoadingRequestsFromTo(string from, string to)
+		[When(@"I select to load requests from '(.*)' to '(.*)'")]
+		public void WhenISelectToLoadRequestsFromTo(string from, string to)
 		{
 			Browser.Interactions.SetScopeValues("date-range-picker", new Dictionary<string, string>
 			{
