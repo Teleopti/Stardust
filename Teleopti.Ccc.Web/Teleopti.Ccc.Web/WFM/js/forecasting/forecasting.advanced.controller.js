@@ -2,19 +2,19 @@
 	'use strict';
 
 	angular.module('wfm.forecasting')
-		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle',
-			function ($scope, $state, $stateParams, $http, toggleService) {
+		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', '$translate',
+			function ($scope, $state, $stateParams, $http, toggleService, $translate) {
 				$scope.workloadId = $stateParams.workloadId;
 				$scope.workloadName = $stateParams.workloadName;
 
 				$scope.chartInfo = {
 					evaluationChartDataColumns: [
-						{ id: "vh", type: "line", name: "Queue Statistics" },
-						{ id: "vb", type: "line", name: "Forecast Method" }
+						{ id: "vh", type: "line", name: $translate.instant('ResReportQueueStatistics') },
+						{ id: "vb", type: "line", name: $translate.instant('ForecastMethod') }
 					],
 					queueStatisticsChartDataColumns: [
-						{ id: "vh", type: "line", name: "Queue Statistics" },
-						{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }
+						{ id: "vh", type: "line", name: $translate.instant('ResReportQueueStatistics') },
+						{ id: "vh2", type: "line", name: $translate.instant('QueueStatWoOutliers') }
 					],
 					dataX: { id: "date" }
 				};

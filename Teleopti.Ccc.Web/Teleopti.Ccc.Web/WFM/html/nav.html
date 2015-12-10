@@ -17,7 +17,7 @@
 		<div class="navbar-right" >
 			<span ng-controller="SearchCtrl">
 				<label for="searchbar">
-					<i class="mdi mdi-magnify searchbaricon"></i>
+					<i class="mdi mdi-magnify searchbaricon"><md-tooltip>{{'SearchAll' | translate}}</md-tooltip></i>
 					<input type="text" id="searchbar" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
 				</label>
 				<div class="search-results material-depth-2">
@@ -38,7 +38,7 @@
 					</ul>
 				</div>
 			</span>
-			<button class="nav-context-menu">
+			<span tabindex=0 class="nav-context-menu">
 				<i class="mdi mdi-bell"><md-tooltip>{{'Notifications'|translate}}</md-tooltip></i>
 				<!--<div class="notification-ticker"></div>-->
 				<div class="nav-context-menu-left">
@@ -68,14 +68,14 @@
 						</div>
 					</div>
 				</div>
-			</button>
+			</span>
 			<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
 				<i class="mdi mdi-help-circle"><md-tooltip>{{'HelpLabel'|translate}}</md-tooltip></i></a>
 			<a href="#"><i class="mdi mdi-settings"></i>
 				<md-tooltip>{{'Settings'|translate}}</md-tooltip>
 			</a>
 			<a href="../Authentication/SignOut"><i class="mdi mdi-logout"></i>
-				<md-tooltip>{{'Logout'|translate}}</md-tooltip>
+				<md-tooltip>{{'LogOut'|translate}}</md-tooltip>
 			</a>
 		</div>
 	</div>
