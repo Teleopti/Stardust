@@ -2,10 +2,10 @@
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'CurrentUserInfo',
-			'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
+			'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, currentUserInfo, groupScheduleFactory,
-		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
+		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout) {
 		var vm = this;
 
 		vm.initialized = false;
@@ -289,6 +289,7 @@
 			}
 			return undefined;
 		};
+
 		vm.setCurrentCommand = function (cmdName) {
 			var currentCmd = vm.currentCommand();
 			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
@@ -299,14 +300,18 @@
 				});
 			}
 
-			vm.commandName = cmdName;
+			if (cmdName != undefined && cmdName.length > 0) {
+				vm.commandName = cmdName;
 
-			var cmd = vm.currentCommand();
-			$mdComponentRegistry.when(cmd.panelName).then(function (sideNav) {
-				vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
-			});
-			return buildToggler(cmd.panelName);
-		}
+				var cmd = vm.currentCommand();
+				$mdComponentRegistry.when(cmd.panelName).then(function(sideNav) {
+					vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
+				});
+				return buildToggler(cmd.panelName);
+			} else {
+				return null;
+			}
+		};
 
 		vm.selectedAbsenceStartDate = new Date();
 
@@ -336,6 +341,32 @@
 			return vm.totalSelected.length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
 		}
 
+		vm.hasErrorInResult = false;
+		vm.showErrorDetails = false;
+		vm.errorDetails = [];
+		var handleActionResult = function (result) {
+			vm.showActionResult = true;
+			if (result.length > 0) {
+				vm.hasErrorInResult = true;
+				vm.errorDetails = result;
+			} else {
+				vm.hasErrorInResult = false;
+				vm.errorDetails = [];
+			}
+
+			vm.setCurrentCommand("");
+		}
+
+		vm.clearErrors = function() {
+			vm.showActionResult = false;
+			vm.hasErrorInResult = false;
+			vm.errorDetails = [];
+		}
+
+		vm.toggleErrorDetails = function() {
+			vm.showErrorDetails = !vm.showErrorDetails;
+		}
+
 		vm.applyAbsence = function() {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
@@ -344,7 +375,7 @@
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
 				}).$promise.then(function(result) {
-
+					handleActionResult(result);
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
@@ -353,7 +384,7 @@
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
 				}).$promise.then(function(result) {
-
+					handleActionResult(result);
 				});
 			}
 		};

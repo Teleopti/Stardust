@@ -46,6 +46,18 @@
 		<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 	</div>
 
+	<div id="absence-result1" class="row notice-spacer" ng-show="vm.showActionResult">
+		<div ng-if="!vm.hasErrorInResult" class="alert-success notice-spacer">
+			<i class='mdi mdi-thumb-up'></i>Action finished.
+			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
+		</div>
+		<div ng-if="vm.hasErrorInResult" class="alert-error notice-spacer">
+			<i class='mdi mdi-alert-octagon'></i>
+			Action failed with one or more agents, <a href="javascript: void(0);" ng-click="vm.toggleErrorDetails()">click here</a> to show details.
+			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
+		</div>
+	</div>
+
 	<div class="big-table-wrapper material-depth-1" style="position: relative">
 		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
 			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
@@ -77,7 +89,7 @@
 		</table>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 	</div>
-	
+
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
 		<md-content layout-padding style="height: 88%">
@@ -130,4 +142,27 @@
 			</button>
 		</div>
 	</md-sidenav>
+
+	<div class="modal-box" ng-if="vm.showErrorDetails">
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Error details
+				</div>
+				<div class="modal-inner-content">
+					<ul class="wfm-simple-list">
+						<li ng-repeat="error in vm.errorDetails">
+							{{error.PersonName}}
+							<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

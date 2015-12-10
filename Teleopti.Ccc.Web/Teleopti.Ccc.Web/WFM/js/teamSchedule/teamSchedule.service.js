@@ -68,7 +68,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			post: {
 				method: "POST",
 				params: {},
-				isArray: false
+				isArray: true
 			}
 		});
 
@@ -76,7 +76,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			post: {
 				method: "POST",
 				params: {},
-				isArray: false
+				isArray: true
 			}
 		});
 
