@@ -19,7 +19,7 @@ module.exports = function(config) {
 		'node_modules/angular-mocks/angular-mocks.js',
 		'dist/templates.js',     	
 		'js/**/*.js',		
-		'tests/requests/*spec.js',
+		'tests/**/*spec.js',
 
 		//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
 		{ pattern: 'js/seatManagement/images/*.svg', watched: false, included: false, served: true }

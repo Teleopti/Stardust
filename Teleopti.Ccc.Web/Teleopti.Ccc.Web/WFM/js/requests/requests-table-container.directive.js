@@ -64,12 +64,12 @@
 					return formatToTimespan(length);
 				}
 				row.FormatedPeriodStartTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodStartTime).toDate(), "shortDate", angularTimezone);
-					else return $filter('date')(moment(row.PeriodStartTime).toDate(), 'short', angularTimezone);
+					if (hours == 23 && minuts == 59) return $filter('date')(row.PeriodStartTime, "shortDate", angularTimezone);
+					else return $filter('date')(row.PeriodStartTime, 'short', angularTimezone);
 				}
 				row.FormatedPeriodEndTime = function () {			
-					if (hours == 23 && minuts == 59) return $filter('date')(moment(row.PeriodEndTime).toDate(), "shortDate", angularTimezone);
-					else return $filter('date')(moment(row.PeriodEndTime).toDate(), "short", angularTimezone);
+					if (hours == 23 && minuts == 59) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
+					else return $filter('date')(row.PeriodEndTime, "short", angularTimezone);
 				}
 				row.GetType = function () {
 					var typeText = row.TypeText;					
