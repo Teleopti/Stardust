@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				return;
 			AgentStateReadModel agentStateReadModel = JsonConvert.DeserializeObject<AgentStateReadModel>(Encoding.UTF8.GetString(stateBytes));
 
-			Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentStateReadModel.State, agentStateReadModel.PersonId, agentStateReadModel.StateStart);
+			Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start time {2}", agentStateReadModel.State, agentStateReadModel.PersonId, agentStateReadModel.StateStartTime);
 			_rtaStateHolder.SetActualAgentState(agentStateReadModel);
 			if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, new ExternalAgentStateReceivedEventArgs());
 		}

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 				NextActivity = agentStateReadModel.ScheduledNext,
 				NextActivityStartTime = agentStateReadModel.NextStart,
 				State = agentStateReadModel.State,
-				StateStart = agentStateReadModel.StateStart
+				StateStartTime = agentStateReadModel.StateStartTime
 			};
 		}
 

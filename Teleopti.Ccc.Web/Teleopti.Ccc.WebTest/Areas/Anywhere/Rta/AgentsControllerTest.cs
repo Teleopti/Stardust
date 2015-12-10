@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				PersonId = personId,
 				TeamId = teamId,
 				State = "out of adherence",
-				StateStart = "2001-01-01 11:00".Utc(),
+				StateStartTime = "2001-01-01 11:00".Utc(),
 				Scheduled = "Phone",
 				ScheduledNext = "Lunch",
 				NextStart = "2001-01-01 12:30".Utc(),
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				PersonId = personId,
 				State = "out of adherence",
-				StateStart = "2001-01-01 11:00".Utc(),
+				StateStartTime = "2001-01-01 11:00".Utc(),
 				Activity = "Phone",
 				NextActivity = "Lunch",
 				NextActivityStartTime = "2001-01-01 12:30".Utc(),
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			result.Count().Should().Be(1);
 			Assert.That(result.First().PersonId, Is.EqualTo(expected.PersonId));
 			Assert.That(result.First().State, Is.EqualTo(expected.State));
-			Assert.That(result.First().StateStart, Is.EqualTo(expected.StateStart));
+			Assert.That(result.First().StateStartTime, Is.EqualTo(expected.StateStartTime));
 			Assert.That(result.First().Activity, Is.EqualTo(expected.Activity));
 			Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
 			Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		}
 
 		[Test]
-		public void ShouldReturnTimeInStateWhenNoStateStart()
+		public void ShouldReturnTimeInStateWhenNoStateStartTime()
 		{
 			var teamId = Guid.NewGuid();
 			var data = new AgentStateReadModel
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var data = new AgentStateReadModel
 			{
 				TeamId = teamId,
-				StateStart = "2015-10-02 09:00".Utc(),
+				StateStartTime = "2015-10-02 09:00".Utc(),
 			};
 			var now = new MutableNow("2015-10-02 09:05");
 

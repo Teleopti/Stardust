@@ -37,7 +37,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -48,7 +48,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "In Call",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Short break",
 			NextActivity: "Phone",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -196,7 +196,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -207,7 +207,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "In Call",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Short break",
 			NextActivity: "Phone",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -220,7 +220,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		createController();
 
 		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].StateStart).toEqual("\/Date(1429254905000)\/");
+		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
@@ -230,7 +230,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 
 		expect(scope.agents[1].State).toEqual("In Call");
-		expect(scope.agents[1].StateStart).toEqual("\/Date(1429254905000)\/");
+		expect(scope.agents[1].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[1].Activity).toEqual("Short break");
 		expect(scope.agents[1].NextActivity).toEqual("Phone");
 		expect(scope.agents[1].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");

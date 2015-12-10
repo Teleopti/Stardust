@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			{
 				PersonId = x.PersonId,
 				State = x.State,
-				StateStart = getNullableUtcDatetime(x.StateStart),
+				StateStartTime = getNullableUtcDatetime(x.StateStartTime),
 				Activity = x.Scheduled,
 				NextActivity = x.ScheduledNext,
 				NextActivityStartTime = getNullableUtcDatetime(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = getNullableUtcDatetime(x.AlarmStart),
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
-				TimeInState = calculateTimeInState(x.StateStart)
+				TimeInState = calculateTimeInState(x.StateStartTime)
 			}).ToArray();
 
 			return Json(states, JsonRequestBehavior.AllowGet);
@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		private int calculateTimeInState(DateTime? dateTime)
 		{
-			var stateStart = getNullableUtcDatetime(dateTime);
-			return stateStart.HasValue ? (int) (_date.UtcDateTime() - stateStart.Value).TotalSeconds : 0;
+			var stateStartTime = getNullableUtcDatetime(dateTime);
+			return stateStartTime.HasValue ? (int) (_date.UtcDateTime() - stateStartTime.Value).TotalSeconds : 0;
 		}
 
 		[UnitOfWorkAction, HttpGet]

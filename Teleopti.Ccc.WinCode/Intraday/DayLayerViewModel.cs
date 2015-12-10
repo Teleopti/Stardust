@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			    var agentState = getActualAgentState(dayLayerModel);
 			    if (agentState == null) continue;
 				ModelEditable.EditItem(dayLayerModel);
-				dayLayerModel.EnteredCurrentState = agentState.StateStart ?? DateTime.MinValue;
+				dayLayerModel.EnteredCurrentState = agentState.StateStartTime ?? DateTime.MinValue;
 				ModelEditable.CommitEdit();
 			    if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
 			    
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 			ModelEditable.EditItem(dayLayerModel);
 			dayLayerModel.CurrentActivityDescription = agentStateReadModel.Scheduled;
-			dayLayerModel.EnteredCurrentState = agentStateReadModel.StateStart ?? DateTime.MinValue;
+			dayLayerModel.EnteredCurrentState = agentStateReadModel.StateStartTime ?? DateTime.MinValue;
 			dayLayerModel.NextActivityDescription = agentStateReadModel.ScheduledNext;
 			dayLayerModel.NextActivityStartDateTime = agentStateReadModel.NextStart ?? DateTime.MinValue;
 			dayLayerModel.CurrentStateDescription = agentStateReadModel.State;

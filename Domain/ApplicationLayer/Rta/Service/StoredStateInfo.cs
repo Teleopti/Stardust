@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			NextActivityId = fromStorage.ScheduledNextId;
 			NextActivityStartTime = fromStorage.NextStart;
 			RuleId = fromStorage.AlarmId;
-			RuleStartTime = fromStorage.StateStart;
+			RuleStartTime = fromStorage.StateStartTime;
 			StaffingEffect = fromStorage.StaffingEffect;
 			Adherence = (Adherence?)fromStorage.Adherence;
 		}

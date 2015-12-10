@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				State = "state",
 				StateCode = "statecode",
 				StateId = Guid.NewGuid(),
-				StateStart = "2014-11-11 10:37".Utc(),
+				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
 			writer.PersistActualAgentReadModel(state);
 			var target = Reader;
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.State.Should().Be(state.State);
 			result.StateCode.Should().Be(state.StateCode);
 			result.StateId.Should().Be(state.StateId);
-			result.StateStart.Should().Be(state.StateStart);
+			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
 
 		[Test]
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateId = Guid.NewGuid(),
 				Scheduled = "Phone",
 				ScheduledId = Guid.NewGuid(),
-				StateStart = "2015-03-06 15:00".Utc(),
+				StateStartTime = "2015-03-06 15:00".Utc(),
 				ScheduledNext = "Break",
 				ScheduledNextId = Guid.NewGuid(),
 				NextStart = "2015-03-06 06:00".Utc(),
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.StateId.Should().Be(agentStateReadModel.StateId);
 			result.Scheduled.Should().Be(agentStateReadModel.Scheduled);
 			result.ScheduledId.Should().Be(agentStateReadModel.ScheduledId);
-			result.StateStart.Should().Be(agentStateReadModel.StateStart);
+			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
 			result.ScheduledNext.Should().Be(agentStateReadModel.ScheduledNext);
 			result.ScheduledNextId.Should().Be(agentStateReadModel.ScheduledNextId);
 			result.NextStart.Should().Be(agentStateReadModel.NextStart);

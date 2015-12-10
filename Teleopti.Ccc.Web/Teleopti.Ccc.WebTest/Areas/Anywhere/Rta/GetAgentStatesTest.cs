@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				PersonId = personId,
 				SiteId = siteId,
 				State = "state",
-				StateStart = "2015-10-22 08:00".Utc(),
+				StateStartTime = "2015-10-22 08:00".Utc(),
 				Scheduled = "phone",
 				ScheduledNext = "lunch",
 				NextStart = "2015-10-22 09:00".Utc(),
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			agentState.Single().PersonId.Should().Be(personId);
 			agentState.Single().State.Should().Be("state");
-			agentState.Single().StateStart.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Single().StateStartTime.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().Activity.Should().Be("phone");
 			agentState.Single().NextActivity.Should().Be("lunch");
 			agentState.Single().NextActivityStartTime.Should().Be("09:00");
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				PersonId = personId,
 				TeamId = teamId,
 				State = "state",
-				StateStart = "2015-10-22 08:00".Utc(),
+				StateStartTime = "2015-10-22 08:00".Utc(),
 				Scheduled = "phone",
 				ScheduledNext = "lunch",
 				NextStart = "2015-10-22 09:00".Utc(),
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			agentState.Single().PersonId.Should().Be(personId);
 			agentState.Single().State.Should().Be("state");
-			agentState.Single().StateStart.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Single().StateStartTime.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().Activity.Should().Be("phone");
 			agentState.Single().NextActivity.Should().Be("lunch");
 			agentState.Single().NextActivityStartTime.Should().Be("09:00");

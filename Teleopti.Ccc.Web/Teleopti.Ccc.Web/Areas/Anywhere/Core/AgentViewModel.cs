@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public Guid PersonId { get; set; }
 		public string State { get; set; }
-		public DateTime? StateStart { get; set; }
+		public DateTime? StateStartTime { get; set; }
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public Guid PersonId { get; set; }
 		public string State { get; set; }
-		public DateTime? StateStart { get; set; }
+		public DateTime? StateStartTime { get; set; }
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }

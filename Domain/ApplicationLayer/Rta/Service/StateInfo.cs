@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			get { return Input.StateCode ?? Stored.StateCode(); }
 		}
 
-		private DateTime? stateStart
+		private DateTime? stateStartTime
 		{
 			get { return State.RuleId() == Stored.RuleId() ? Stored.RuleStartTime : CurrentTime; }
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Adherence = (int?)State.Adherence(),
 				StateCode = stateCode,
 				StateId = State.StateGroupId(),
-				StateStart = stateStart,
+				StateStartTime = stateStartTime,
 				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
 				AlarmStart = CurrentTime.AddTicks(State.AlarmThresholdTime()),

@@ -116,7 +116,7 @@
 						});
 						if (state.length > 0) {
 							agent.State = state[0].State;
-							agent.StateStart = state[0].StateStart;
+							agent.StateStartTime = state[0].StateStartTime;
 							agent.Activity = state[0].Activity;
 							agent.NextActivity = state[0].NextActivity;
 							agent.NextActivityStartTime = state[0].NextActivityStartTime;

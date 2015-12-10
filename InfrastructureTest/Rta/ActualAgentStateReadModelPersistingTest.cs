@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 				StateCode = null,
 				StateId = null,
-				StateStart = null,
+				StateStartTime = null,
 				State = null,
 
 				ScheduledId = null,

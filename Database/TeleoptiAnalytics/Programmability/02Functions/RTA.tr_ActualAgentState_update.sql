@@ -14,16 +14,16 @@ ENABLE TRIGGER RTA.tr_ActualAgentState_update ON RTA.ActualAgentState;
 
 --IF (COLUMNS_UPDATED() & 8) > 0
 BEGIN
-	INSERT INTO [RTA].[ActualAgentState_History](StateStart, person_code, time_in_state_s, state_group_code, days_cross_midnight)
+	INSERT INTO [RTA].[ActualAgentState_History](StateStartTime, person_code, time_in_state_s, state_group_code, days_cross_midnight)
 	SELECT
-		StateStart		= d.StateStart,
+		StateStartTime		= d.StateStartTime,
 		person_code		= d.PersonId,
-		time_in_state_s = datediff(ss,d.StateStart,i.StateStart),
+		time_in_state_s = datediff(ss,d.StateStartTime,i.StateStartTime),
 		state_group_code= d.StateId,
-		days_cross_midnight = datediff(dd, 0, i.StateStart) - datediff(dd, 0, d.StateStart)
+		days_cross_midnight = datediff(dd, 0, i.StateStartTime) - datediff(dd, 0, d.StateStartTime)
 	FROM DELETED d
 	INNER JOIN INSERTED i
-		ON d.StateStart<>i.StateStart  --Only if time have changed
+		ON d.StateStartTime<>i.StateStartTime  --Only if time have changed
 END
 GO
 DISABLE TRIGGER RTA.tr_ActualAgentState_update ON RTA.ActualAgentState;

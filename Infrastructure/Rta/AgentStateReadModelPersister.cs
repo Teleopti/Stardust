@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				command.Parameters.Add("@AlarmId", SqlDbType.UniqueIdentifier).Value = model.AlarmId;
 				command.Parameters.Add("@ScheduledNext", SqlDbType.NVarChar).Value = model.ScheduledNext;
 				command.Parameters.Add("@ScheduledNextId", SqlDbType.UniqueIdentifier).Value = model.ScheduledNextId;
-				command.Parameters.Add("@StateStart", SqlDbType.DateTime).Value = model.StateStart;
+				command.Parameters.Add("@StateStartTime", SqlDbType.DateTime).Value = model.StateStartTime;
 				command.Parameters.Add("@NextStart", SqlDbType.DateTime).Value = model.NextStart;
 				command.Parameters.Add("@AlarmStart", SqlDbType.DateTime).Value = model.AlarmStart;
 				command.Parameters.Add("@Color", SqlDbType.Int).Value = model.Color;

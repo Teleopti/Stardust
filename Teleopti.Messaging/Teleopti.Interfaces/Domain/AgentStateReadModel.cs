@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Domain
 		public string StateCode { get; set; }
 		public string State { get; set; }
 		public Guid? StateId { get; set; }
-		public DateTime? StateStart { get; set; }
+		public DateTime? StateStartTime { get; set; }
 
 		public Guid? ScheduledId { get; set; }
 		public string Scheduled { get; set; }
@@ -36,8 +36,8 @@ namespace Teleopti.Interfaces.Domain
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStart: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, AlarmStart: {8}, BatchId: {9}",
-				PersonId, StateCode, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart, BatchId);
+				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStartTime: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, AlarmStart: {8}, BatchId: {9}",
+				PersonId, StateCode, State, Scheduled, StateStartTime, ScheduledNext, NextStart, AlarmName, AlarmStart, BatchId);
 
 		}
 

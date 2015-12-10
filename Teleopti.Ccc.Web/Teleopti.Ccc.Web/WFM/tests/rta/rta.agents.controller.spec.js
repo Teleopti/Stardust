@@ -30,7 +30,7 @@ describe('RtaAgentsCtrl', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -133,7 +133,7 @@ describe('RtaAgentsCtrl', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -146,7 +146,7 @@ describe('RtaAgentsCtrl', function() {
 		createController();
 
 		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].StateStart).toEqual("\/Date(1429254905000)\/");
+		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
@@ -177,7 +177,7 @@ describe('RtaAgentsCtrl', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStart: "\/Date(1429254905000)\/",
+			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
@@ -190,7 +190,7 @@ describe('RtaAgentsCtrl', function() {
 		createController();
 
 		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].StateStart).toEqual("\/Date(1429254905000)\/");
+		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");

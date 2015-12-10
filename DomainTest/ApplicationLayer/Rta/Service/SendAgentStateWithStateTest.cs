@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldSendWithStateStartFromSystemTime()
+		public void ShouldSendWithStateStartTimeFromSystemTime()
 		{
 			var state = new ExternalUserStateForTest
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.SaveState(state);
 
 			var sent = Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
-			sent.StateStart.Should().Be.EqualTo("2014-10-20 10:01".Utc());
+			sent.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
 		}
 
 	}

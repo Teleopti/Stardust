@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				PersonId = x.PersonId,
 				State = x.State,
-				StateStart = x.StateStart,
+				StateStartTime = x.StateStartTime,
 				Activity = x.Scheduled,
 				NextActivity = x.ScheduledNext,
 				NextActivityStartTime = formatTime(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStart,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
-				TimeInState = x.StateStart.HasValue ? (int)(_now.UtcDateTime() - x.StateStart.Value).TotalSeconds : 0
+				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0
 			});
 		}
 

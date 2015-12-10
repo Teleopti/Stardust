@@ -89,7 +89,7 @@
                     {
                         PersonId: 'guid1',
                         State: 'Ready',
-                        StateStart: moment('2014-01-21 12:00').format(),
+                        StateStartTime: moment('2014-01-21 12:00').format(),
 						TimeInState: 10,
                         Activity: 'Phone',
                         NextActivity: 'Lunch',
@@ -102,7 +102,7 @@
                         PersonId: 'guid2',
                         State: 'Pause',
                         TimeInState: 20,
-                        StateStart: moment('2014-01-21 12:00').format(),
+                        StateStartTime: moment('2014-01-21 12:00').format(),
                         Activity: 'Lunch',
                         NextActivity: 'Phone',
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
@@ -225,7 +225,7 @@
                     {
                         PersonId: 'guid1',
                         Alarm: 'Adhering',
-                        StateStart: now,
+                        StateStartTime: now,
                         AlarmStart: now.add(10, 'seconds')
                     }
                 ]);

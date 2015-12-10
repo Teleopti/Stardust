@@ -24,7 +24,7 @@ BEGIN
 		AAS.StateId,
 		AAS.Scheduled,
 		AAS.ScheduledId,
-		AAS.StateStart,
+		AAS.StateStartTime,
 		AAS.ScheduledNext,
 		AAS.ScheduledNextId,
 		AAS.NextStart
