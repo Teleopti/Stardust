@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			log.Debug("Preparing for test run");
 
-			Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(25));
+			Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 			TestSiteConfigurationSetup.Setup(TestSiteConfigurationSetup.PathToIISExpress32);
 			TestDataSetup.Setup();
 
