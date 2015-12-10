@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 
 	'use strict';
 
@@ -16,9 +16,10 @@
 
 		vm.period = {
 			startDate: (vm.period && vm.period.startDate) ? vm.period.startDate : new Date(),
-			endDate :  (vm.period && vm.period.endDate)? vm.period.endDate: new Date()
+			endDate: (vm.period && vm.period.endDate) ? vm.period.endDate : new Date()
 		};
-		vm.period.endDate = vm.period.endDate? vm.period.endDate: new Date();
+		vm.agentSearchTerm = "";
+		vm.period.endDate = vm.period.endDate ? vm.period.endDate : new Date();
 
 		vm.reload = reload;
 		vm.sortingOrders = [];
@@ -38,7 +39,8 @@
 			controllerAs: 'requestsOverview',
 			bindToController: true,
 			scope: {
-				period: '='
+				period: '=',
+				agentSearchTerm: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',
@@ -46,20 +48,25 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-			scope.$watch(function() {
+			scope.$watch(function () {
 				var filter = {
-					period: scope.requestsOverview.period
-				}					
+					period: scope.requestsOverview.period,
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
+				}
 				return {
 					startDate: filter.period.startDate,
 					endDate: filter.period.endDate,
-					sortingOrders: scope.requestsOverview.sortingOrders
+					sortingOrders: scope.requestsOverview.sortingOrders,
+					agentSearchTerm: filter.agentSearchTerm
 				}
-			}, function(newValue) {
-				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
+			}, function (newValue) {
+				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
-				ctrl.reload({ period: scope.requestsOverview.period }, scope.requestsOverview.sortingOrders);
-			}, true);			
+				ctrl.reload({
+					period: scope.requestsOverview.period,
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm
+				}, scope.requestsOverview.sortingOrders);
+			}, true);
 		}
 	}
 })();

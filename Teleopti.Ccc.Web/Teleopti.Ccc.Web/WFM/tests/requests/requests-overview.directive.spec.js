@@ -88,7 +88,23 @@
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
 
+		it("should request data when search term changed", function () {
 
+			requestsDataService.setRequests({ data: [] });
+			targetScope.period = {};
+			targetScope.agentSearchTerm = "";
+
+			targetElement = $compile('<requests-overview period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
+
+			targetScope.$digest();
+
+			requestsDataService.reset();
+
+			targetScope.agentSearchTerm = "search term";
+			targetScope.$digest();
+			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
+			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
+		});
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');
@@ -139,10 +155,12 @@
 
 		var _requests;
 		var _hasSentRequests;
+		var _lastRequestParameters;
 
 		this.reset = function () {
 			_requests = [];
 			_hasSentRequests = false;
+			_lastRequestParameters = null;
 		};
 
 		this.setRequests = function(requests) {
@@ -150,9 +168,11 @@
 		};
 
 		this.getHasSentRequests = function () { return _hasSentRequests; }
+		this.getLastRequestParameters = function() { return _lastRequestParameters; }
 
 		this.getAllRequestsPromise = function () {
 			_hasSentRequests = true;
+			_lastRequestParameters = arguments;
 			return {
 				then: function (cb) {					
 					cb(_requests);

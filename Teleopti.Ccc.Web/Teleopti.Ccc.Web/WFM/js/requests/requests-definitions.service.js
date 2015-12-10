@@ -25,7 +25,8 @@
 			return {
 				StartDate: { Date: filter.period.startDate },
 				EndDate: { Date: filter.period.endDate },
-				SortingOrders: sortingOrders
+				SortingOrders: sortingOrders,
+				AgentSearchTerm: filter.agentSearchTerm
 			};
 		};
 
