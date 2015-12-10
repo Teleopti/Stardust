@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			PersonProvider.AddPersonWithMyTeamSchedulesPermission(person);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 			
 			var schedule = result.Single();
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
 
 			var schedule = result.Single();
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDayPrevious.Add(paPrev);
 			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 
 			result.Count.Should().Be.EqualTo(2);
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 
 			result.Count.Should().Be.EqualTo(1);
 			var schedule = result.First();
@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 
 			result.Count.Should().Be.EqualTo(6);
 			result[0].Name.Should().Be.EqualTo("b1@b1");
@@ -645,7 +645,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 2, 2).Content.ToList();
+			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 2, 2).Content.GroupSchedule.ToList();
 
 			result.Count.Should().Be.EqualTo(3);
 

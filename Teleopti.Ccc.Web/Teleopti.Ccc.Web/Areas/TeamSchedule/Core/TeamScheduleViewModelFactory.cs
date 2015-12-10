@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return new PagingGroupScheduleShiftViewModel()
 			{
 				GroupSchedule = list,
-				TotalPages = people.Count()/pageSize + 1
+				TotalPages = (int)Math.Ceiling((double)people.Count()/pageSize)
 			};
 		}
 
