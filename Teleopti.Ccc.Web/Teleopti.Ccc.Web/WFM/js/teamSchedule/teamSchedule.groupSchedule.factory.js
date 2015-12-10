@@ -41,7 +41,7 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 
 			return {
 				TimeLine: scheduleTimeLine,
-				Schedules: schedules.sort(scheduleSort)
+				Schedules: schedules
 			};
 		}
 

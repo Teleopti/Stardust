@@ -26,8 +26,9 @@
 			startingDay: 1
 		};
 
-		var pageSize = 18;
-		vm.paginationOptions = { pageNumber: 1, totalPages: 0 };
+		vm.paginationOptions = {
+			pageSize: 18, pageNumber: 1, totalPages: 0
+		};
 
 		vm.datePickerStatus = {
 			opened: false
@@ -143,8 +144,8 @@
 		vm.isLoading = false;
 
 		function getScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
-			var start = (currentPageIndex - 1) * pageSize;
-			var end = currentPageIndex * pageSize;
+			var start = (currentPageIndex - 1) * vm.paginationOptions.pageSize;
+			var end = currentPageIndex * vm.paginationOptions.pageSize;
 			var agentsForCurrentPage = vm.allAgents.slice(start, end);
 
 			var scheduleForCurrentPage = [];
@@ -171,21 +172,20 @@
 				teamScheduleSvc.loadSchedules.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-					pageSize: pageSize,
-					currentPageIndex: currentPageIndex
+					pageSize: vm.paginationOptions.pageSize,
+					currentPageIndex: vm.paginationOptions.pageNumber
 				}).$promise.then(function (result) {
 					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-
 				});
 			} else if (!vm.isSearchScheduleEnabled) {
 				teamScheduleSvc.loadSchedulesNoReadModel.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
-					pageSize: pageSize,
-					currentPageIndex: currentPageIndex
+					pageSize: vm.paginationOptions.pageSize,
+					currentPageIndex: vm.paginationOptions.pageNumber
 				}).$promise.then(function (result) {
 					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
@@ -194,32 +194,17 @@
 
 			} else if (vm.isSearchScheduleEnabled) {
 				vm.paginationOptions.pageNumber = vm.searchOptions.searchKeywordChanged ? 1 : currentPageIndex;
-				if (vm.allAgents == undefined || vm.searchOptions.searchKeywordChanged) {
-					teamScheduleSvc.searchSchedules.query({
-						keyword: vm.searchOptions.keyword,
-						date: vm.scheduleDateMoment().format("YYYY-MM-DD")
-					}).$promise.then(function (result) {
-						vm.rawScheduleData = result.Schedules;
-						vm.total = result.Total;
-						if (vm.searchOptions.keyword === "" && result.Keyword !== "") {
-							vm.searchOptions.keyword = result.Keyword;
-						}
-
-						vm.allAgents = [];
-						var allSchedules = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment()).Schedules; // keep the agents in right order
-						angular.forEach(allSchedules, function (schedule) {
-							vm.allAgents.push(schedule.PersonId);
-						});
-						vm.paginationOptions.totalPages = Math.ceil(vm.allAgents.length / pageSize);
-
-						setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
-						vm.searchOptions.searchKeywordChanged = false;
-						vm.isLoading = false;
-					});
-				} else {
-					setScheduleForCurrentPage(vm.rawScheduleData, currentPageIndex);
+				teamScheduleSvc.searchSchedules.query({
+					keyword: vm.searchOptions.keyword,
+					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
+					pageSize: vm.paginationOptions.pageSize,
+					currentPageIndex: vm.paginationOptions.pageNumber
+				}).$promise.then(function (result) {
+					vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+					vm.paginationOptions.totalPages = Math.ceil(result.Total / vm.paginationOptions.pageSize);
+					vm.searchOptions.searchKeywordChanged = false;
 					vm.isLoading = false;
-				}
+				});
 			}
 		}
 		vm.searchSchedules = function () {

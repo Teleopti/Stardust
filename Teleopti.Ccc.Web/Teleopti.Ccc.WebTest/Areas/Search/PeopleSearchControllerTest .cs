@@ -6,6 +6,7 @@ using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -133,10 +134,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
 	{
 		private readonly PeopleSummaryModel _model;
-
+		private IList<IPerson> _permittedPeople;
+		private IList<IPerson> _peopleWithConfidentialAbsencePermission; 
 
 		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns  )
 		{
+			_permittedPeople = new List<IPerson>();
+			_peopleWithConfidentialAbsencePermission = new List<IPerson>();
 			_model = new PeopleSummaryModel
 			{
 				People = peopleList.ToList(),
@@ -152,13 +156,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, string function)
 		{
-			throw new NotImplementedException();
+			if (function == DefinedRaptorApplicationFunctionPaths.ViewConfidential)
+			{
+				return _peopleWithConfidentialAbsencePermission;
+			}
+
+			return _permittedPeople;
 		}
 
 		public IEnumerable<Guid> GetPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
 			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
-			throw new NotImplementedException();
+			if (function == DefinedRaptorApplicationFunctionPaths.ViewConfidential)
+			{
+				return _peopleWithConfidentialAbsencePermission.Select(p => p.Id.GetValueOrDefault());
+			}
+			return _permittedPeople.Select(p => p.Id.GetValueOrDefault());
+		}
+
+		public void Add(IPerson person)
+		{
+			_permittedPeople.Add(person);
+		}
+
+		public void AddPersonWithViewConfidentialPermission(IPerson person)
+		{
+			_peopleWithConfidentialAbsencePermission.Add(person);
 		}
 	}
 }

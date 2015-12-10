@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date)
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize, int currentPageIndex)
 		{
 			var currentDate = new DateOnly(date);
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var criteriaDictionary = SearchTermParser.Parse(keyword);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate);
+				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex);
 			result.Keyword = keyword;
 
 			return Json(result);

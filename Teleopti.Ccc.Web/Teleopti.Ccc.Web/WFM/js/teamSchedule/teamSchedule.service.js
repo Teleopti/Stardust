@@ -38,7 +38,9 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 
 		this.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
 			keyword: "@keyword",
-			date: "@queryDate"
+			date: "@queryDate",
+			pageSize: "@pageSize",
+			currentPageIndex: "@currentPageIndex"
 		}, {
 			query: {
 				method: "GET",

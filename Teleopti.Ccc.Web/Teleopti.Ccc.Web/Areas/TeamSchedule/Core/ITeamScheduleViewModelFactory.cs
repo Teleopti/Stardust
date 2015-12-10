@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	public interface ITeamScheduleViewModelFactory
 	{
 		PagingGroupScheduleShiftViewModel CreateViewModel(Guid groupId, DateTime dateInUserTimeZone, int pageSize, int currentPageIndex);
-		GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone);
+		GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex);
 		GroupScheduleViewModel CreateViewModel(GroupScheduleInput input);
 	}
 }
