@@ -33,6 +33,9 @@ namespace Teleopti.Ccc.WinCode.Common
         /// </remarks>
         public void SetTexts(ILocalized targetControl)
         {
+	        if (targetControl == null)
+		        return;
+
             //Make sure that the keys are searched for regardless of casing
             UserTexts.Resources.ResourceManager.IgnoreCase = true;
 

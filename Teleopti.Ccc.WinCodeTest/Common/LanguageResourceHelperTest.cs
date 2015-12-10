@@ -197,6 +197,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
         }
 
+	    [Test]
+	    public void ShouldHandleNullAsTargetControlBug36008()
+	    {
+		    new LanguageResourceHelper().SetTexts(null);
+	    }
+
         #region Internal classes for test use
         internal class TestLocalization : System.ComponentModel.Component, ILocalized
         {

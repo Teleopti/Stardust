@@ -522,13 +522,13 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(193, 23);
+			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(193, 19);
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
 			this.comboBoxTeamActivity.Location = new System.Drawing.Point(279, 253);
 			this.comboBoxTeamActivity.Name = "comboBoxTeamActivity";
-			this.comboBoxTeamActivity.Size = new System.Drawing.Size(193, 23);
+			this.comboBoxTeamActivity.Size = new System.Drawing.Size(193, 19);
 			this.comboBoxTeamActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamActivity.TabIndex = 40;
 			// 
@@ -586,13 +586,13 @@
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(193, 23);
+			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(193, 19);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(279, 131);
 			this.comboBoxTeamGroupPage.Name = "comboBoxTeamGroupPage";
-			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(193, 23);
+			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(193, 19);
 			this.comboBoxTeamGroupPage.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamGroupPage.TabIndex = 35;
 			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxTeamGroupPageSelectedIndexChanged);
@@ -600,13 +600,13 @@
 			// comboBoxBlockType
 			// 
 			this.comboBoxBlockType.BackColor = System.Drawing.Color.White;
-			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(193, 23);
+			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(193, 19);
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxBlockType.Location = new System.Drawing.Point(279, 3);
 			this.comboBoxBlockType.Name = "comboBoxBlockType";
-			this.comboBoxBlockType.Size = new System.Drawing.Size(193, 23);
+			this.comboBoxBlockType.Size = new System.Drawing.Size(193, 19);
 			this.comboBoxBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxBlockType.TabIndex = 47;
 			this.comboBoxBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxBlockType_SelectedValueChanged);
@@ -782,13 +782,13 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(201, 19);
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(201, 23);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(32, 33);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(201, 19);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(201, 23);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 56;
@@ -876,7 +876,7 @@
 			this.numericUpDownResourceCalculateEvery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.numericUpDownResourceCalculateEvery.Location = new System.Drawing.Point(249, 6);
 			this.numericUpDownResourceCalculateEvery.Maximum = new decimal(new int[] {
-            10,
+            10000,
             0,
             0,
             0});
