@@ -22,7 +22,7 @@ Scenario: Schedule with full day absence is not allowed to swap
 	And I selected agent 'Steve Novack' with Early Shift
 	Then I should see "Swap shifts" menu item is disabled
 
-Scenario: Schedule with overnight shift is not allowed to swap
+Scenario: Schedule with overnight shift from yesterday is not allowed to swap
 	Given I am a team leader without 'Swap Shifts' permission
 	And I am viewing team schedule for '2016-01-01'
 	When I selected agent 'Ashley Andeen' with overnight shift from yesterday

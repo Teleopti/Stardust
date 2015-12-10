@@ -20,6 +20,9 @@ Scenario: Could not add activity when data is invalid
 	When I am viewing team schedule for '2016-01-01'
 	And I selected 1 agents
 	And I open 'Add Activity' panel for add activity
+	And I  picked activity "Phone"
+	And I set start time to "12:00"
+	And I set end time to "11:00"
 	Then I could see the button to apply 'Add Absence' is disabled
 
 Scenario: Default activity start time should be latest start time of selected agents
