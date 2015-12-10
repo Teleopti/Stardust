@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private RequestViewModel toViewModel(IPersonRequest request)
 		{
+			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
 			return new RequestViewModel()
 			{
 				Id = request.Id.GetValueOrDefault(),
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 							? RequestStatus.Denied
 							: RequestStatus.New,
 				Payload = request.Request.RequestPayloadDescription,
-				Team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime)).Description.Name
+				Team = team == null? null:team.Description.Name
 			};
 		}		
 
