@@ -38,6 +38,6 @@ CREATE UNIQUE CLUSTERED INDEX [CIX_v_LoadPersonData] ON [dbo].[v_PersonOrganizat
 	[AcdLogOnOriginalId] ASC,
 	[DataSourceId] ASC,
 	[StartDate] DESC,
-	[PersonPeriodId] ASC,
+	[PersonPeriodId] ASC
 )
 GO
