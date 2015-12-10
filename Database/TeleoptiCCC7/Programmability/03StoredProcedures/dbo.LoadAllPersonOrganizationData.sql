@@ -15,7 +15,7 @@ SELECT
 	v.SiteId,
 	v.BusinessUnitId
 FROM
-	dbo.v_PersonOrganizationData v
+	dbo.v_PersonOrganizationData v WITH(NOEXPAND)
 WHERE
 	@now BETWEEN v.StartDate AND v.EndDate
 

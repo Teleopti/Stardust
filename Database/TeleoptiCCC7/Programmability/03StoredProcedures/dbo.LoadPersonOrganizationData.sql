@@ -17,7 +17,7 @@ SELECT
 	v.SiteId,
 	v.BusinessUnitId
 FROM
-	dbo.v_PersonOrganizationData v
+	dbo.v_PersonOrganizationData v WITH(NOEXPAND)
 WHERE
 	v.AcdLogOnOriginalId = @externallogon AND
 	v.DataSourceId = @dataSourceId AND 
