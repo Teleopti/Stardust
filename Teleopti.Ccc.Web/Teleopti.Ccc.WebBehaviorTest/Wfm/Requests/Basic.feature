@@ -1,4 +1,5 @@
-﻿Feature: Requests Basic Operations
+﻿@OnlyRunIfEnabled('Wfm_Requests_Basic_35986')
+Feature: Requests Basic Operations
 	In order to approval/deny agent's requests
 	As a resource planner
 	I need to have a good overview of all the requests within a certain period
@@ -47,6 +48,7 @@ Scenario: Sort requests
 	Then I should see the request from 'John' before the request from 'Ashley' in the list
 
 @ignore
+@OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
 Scenario: Find requests for filtered agents
 	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
