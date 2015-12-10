@@ -65,7 +65,7 @@ describe('RtaAgentsCtrl', function() {
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.whenGET("../api/Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
+		$httpBackend.whenGET("../Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
 			.respond(function() {
 				return [200, adherence];
 			});
