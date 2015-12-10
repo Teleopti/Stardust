@@ -48,10 +48,10 @@ describe('RtaCtrl', function() {
 		$state = _$state_;
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.whenGET("../Sites")
+		$httpBackend.whenGET("../api/Sites")
 			.respond(200, sites);
 
-		$httpBackend.whenGET("../Sites/GetOutOfAdherenceForAllSites")
+		$httpBackend.whenGET("../api/Sites/GetOutOfAdherenceForAllSites")
 			.respond(200, siteAdherence);
 	}));
 

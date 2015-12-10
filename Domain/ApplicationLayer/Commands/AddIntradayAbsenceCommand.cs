@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 
-		public IList<string> ValidationResult { get; set; }
+		public string ValidationResult { get; set; }
 
 		public bool IsValid()
 		{
 			var isValid = true;
-			ValidationResult = new List<string>();
+			ValidationResult = String.Empty;
 			if (StartTime > EndTime)
 			{
 				isValid = false;
-				ValidationResult.Add(Resources.InvalidEndTime);
+				ValidationResult = Resources.InvalidEndTime;
 			}
 			return isValid;
 		}

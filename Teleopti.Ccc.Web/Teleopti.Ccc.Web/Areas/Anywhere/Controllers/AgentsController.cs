@@ -1,7 +1,8 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Web.Mvc;
+using System.Net;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
@@ -10,12 +11,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class AgentsController : Controller
+	public class AgentsController : ApiController
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITeamRepository _teamRepository;
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_getAgentsStates = getAgentsStates;
 		}
 
-		[HttpGet]
-		public JsonResult GetStates(Guid teamId)
+		[HttpGet, Route("api/Agents/GetStates")]
+		public IHttpActionResult GetStates(Guid teamId)
 		{
 			var states = _agentStateReadModelReader.LoadForTeam(teamId).Select(x => new AgentStateViewModel
 			{
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				TimeInState = calculateTimeInState(x.StateStartTime)
 			}).ToArray();
 
-			return Json(states, JsonRequestBehavior.AllowGet);
+			return Ok(states);
 		}
 
 		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return stateStartTime.HasValue ? (int) (_date.UtcDateTime() - stateStartTime.Value).TotalSeconds : 0;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForTeam(Guid teamId)
+		[UnitOfWork, HttpGet, Route("api/Agents/ForTeam")]
+		public virtual IHttpActionResult ForTeam(Guid teamId)
 		{
 			var team = _teamRepository.Get(teamId);
 			var isPermitted =
@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					_date.LocalDateOnly(), team);
 			if (!isPermitted)
 			{
-				Response.StatusCode = 403;
-				return null;
+				return StatusCode(HttpStatusCode.Forbidden);
 			}
 			var today = _date.LocalDateOnly();
 			var agents =
@@ -101,51 +100,56 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 								SiteName = team.Site.Description.Name,
 								TeamId = team.Id.ToString(),
 								TeamName = team.Description.Name
-							});
-			return Json(agents, JsonRequestBehavior.AllowGet);
+							}).ToArray();
+			return Ok(agents);
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult  Team(Guid personId, DateTime date)
+		[UnitOfWork, HttpGet, Route("api/Agents/Team")]
+		public virtual IHttpActionResult Team(Guid personId, DateTime date)
 		{
 			var person = _personRepository.Get(personId);
 			var team = person.MyTeam(new DateOnly(date));
-			return Json(team.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
+			return Ok(team.Id.GetValueOrDefault());
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult PersonDetails(Guid personId)
+		[UnitOfWork, HttpGet, Route("api/Agents/PersonDetails")]
+		public virtual IHttpActionResult PersonDetails(Guid personId)
 		{
-			return Json(new
-					{
-						Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))
-					},
-					JsonRequestBehavior.AllowGet);
+			return Ok(new PersonDetailModel(_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))));
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult ForSites(Guid[] siteIds)
+		[UnitOfWork, HttpGet, Route("api/Agents/ForSites")]
+		public virtual IHttpActionResult ForSites([FromUri]Guid[] siteIds)
 		{
-			return Json(_getAgents.ForSites(siteIds), JsonRequestBehavior.AllowGet);
+			return Ok(_getAgents.ForSites(siteIds));
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult ForTeams(Guid[] teamIds)
+		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]
+		public virtual IHttpActionResult ForTeams([FromUri]Guid[] teamIds)
 		{
-			return Json(_getAgents.ForTeams(teamIds), JsonRequestBehavior.AllowGet);
+			return Ok(_getAgents.ForTeams(teamIds));
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult GetStatesForSites(Guid[] siteIds)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
+		public virtual IHttpActionResult GetStatesForSites([FromUri]Guid[] siteIds)
 		{
-			return Json(_getAgentsStates.ForSites(siteIds), JsonRequestBehavior.AllowGet);
+			return Ok(_getAgentsStates.ForSites(siteIds));
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult GetStatesForTeams(Guid[] teamIds)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
+		public virtual IHttpActionResult GetStatesForTeams([FromUri]Guid[] teamIds)
 		{
-			return Json(_getAgentsStates.ForTeams(teamIds), JsonRequestBehavior.AllowGet);
+			return Ok(_getAgentsStates.ForTeams(teamIds));
 		}
 	}
 
+	public class PersonDetailModel
+	{
+		public PersonDetailModel(string name)
+		{
+			Name = name;
+		}
+
+		public string Name { get; private set; }
+	}
 }

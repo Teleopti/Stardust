@@ -47,13 +47,13 @@ define([
 	};
 
 	var loadForTeam = function(callback, businessUnitId, teamId) {
-		load(callback, businessUnitId, "Agents/GetStates?teamId=" + teamId);
+		load(callback, businessUnitId, "api/Agents/GetStates?teamId=" + teamId);
 	};
 
 	var loadForSites = function(callback, businessUnitId, siteIds) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "Agents/GetStatesForSites?" + idsToUrl("siteIds", siteIds),
+			url: "api/Agents/GetStatesForSites?" + idsToUrl("siteIds", siteIds),
 			success: function(data) {
 				callback(mapAsNotification(data));
 			}
@@ -63,7 +63,7 @@ define([
 	var loadForTeams = function(callback, businessUnitId, teamIds) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "Agents/GetStatesForTeams?" + idsToUrl("teamIds", teamIds),
+			url: "api/Agents/GetStatesForTeams?" + idsToUrl("teamIds", teamIds),
 			success: function(data) {
 				callback(mapAsNotification(data));
 			}

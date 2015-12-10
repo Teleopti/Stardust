@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class AdherenceController : Controller
+	public class AdherenceController : ApiController
 	{
 		private readonly IAdherencePercentageViewModelBuilder _adherencePercentageViewModelBuilder;
 		private readonly IAdherenceDetailsViewModelBuilder _adherenceDetailsViewModelBuilder;
@@ -16,18 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_adherenceDetailsViewModelBuilder = adherenceDetailsViewModelBuilder;
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
-		public virtual JsonResult ForToday(Guid personId)
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Adherence/ForToday")]
+		public virtual IHttpActionResult ForToday(Guid personId)
 		{
 			var model = _adherencePercentageViewModelBuilder.Build(personId);
-			return Json(model, JsonRequestBehavior.AllowGet);
+			return Ok(model);
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
-		public virtual JsonResult ForDetails(Guid personId)
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Adherence/ForDetails")]
+		public virtual IHttpActionResult ForDetails(Guid personId)
 		{
 			var model = _adherenceDetailsViewModelBuilder.Build(personId);
-			return Json(model, JsonRequestBehavior.AllowGet);
+			return Ok(model);
 		}
 	}
 }

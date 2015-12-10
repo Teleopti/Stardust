@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				Count = 1
 			});
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString());
+			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault());
 
-			result.Single().Id.Should().Be(team.Id.ToString());
+			result.Single().Id.Should().Be(team.Id);
 			result.Single().OutOfAdherence.Should().Be(1);
 		}
 
@@ -63,9 +63,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			Teams.Has(team);
 			Sites.Has(site);
 
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString());
+			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault());
 
-			result.Single().Id.Should().Be(team.Id.ToString());
+			result.Single().Id.Should().Be(team.Id);
 			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}

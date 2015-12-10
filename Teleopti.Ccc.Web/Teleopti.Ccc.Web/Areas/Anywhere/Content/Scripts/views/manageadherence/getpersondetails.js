@@ -6,7 +6,7 @@
 	return {
 		ServerCall: function (callback, personId) {
 			ajax.ajax({
-				url: "Agents/PersonDetails?PersonId=" + personId,
+				url: "api/Agents/PersonDetails?PersonId=" + personId,
 				success: callback
 			});
 		}

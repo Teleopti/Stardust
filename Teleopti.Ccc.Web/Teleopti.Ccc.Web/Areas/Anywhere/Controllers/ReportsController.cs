@@ -1,23 +1,21 @@
-using System.Web.Mvc;
+using System.Web.Http;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class ReportsController : Controller
+	public class ReportsController : ApiController
 	{
-
 		private readonly IReportItemsProvider _reportItemsProvider;
 		public ReportsController(IReportItemsProvider reportItemsProvider)
 		{
 			_reportItemsProvider = reportItemsProvider;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult GetReports()
+		[UnitOfWork, HttpGet, Route("Anywhere/Reports/GetReports")]
+		public virtual IHttpActionResult GetReports()
 		{
-			return Json(_reportItemsProvider.GetReportItems(), JsonRequestBehavior.AllowGet);
+			return Ok(_reportItemsProvider.GetReportItems());
 		}
-
 	}
 }

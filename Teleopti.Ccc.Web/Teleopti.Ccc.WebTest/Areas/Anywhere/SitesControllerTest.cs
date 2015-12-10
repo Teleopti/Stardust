@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere
@@ -29,11 +30,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site });
-			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { site })).Return(new Dictionary<Guid, int>() { { site.Id.Value, 0 } });
+			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { site })).Return(new Dictionary<Guid, int> { { site.Id.Value, 0 } });
 			
-			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+			var result = target.Index().Result<IEnumerable<SiteViewModel>>();
 
-			result.Single().Id.Should().Be(site.Id.Value.ToString());
+			result.Single().Id.Should().Be(site.Id);
 			result.Single().Name.Should().Be(site.Description.Name);
 		}
 
@@ -55,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { site1 })).Return(new Dictionary<Guid, int>() { { site1.Id.Value, 0 } });
 			
 			var target = new SitesController(siteRepository, numberOfAgentsQuery, null, null, personalAvailableDataProvider, now);
-			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+			var result = target.Index().Result<IEnumerable<SiteViewModel>>();
 			
-			result.Single().Id.Should().Be(site1.Id.Value.ToString());
+			result.Single().Id.Should().Be(site1.Id.GetValueOrDefault());
 			result.Single().Name.Should().Be(site1.Description.Name);
 		}
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site });
 			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { site })).Return(new Dictionary<Guid, int>() { { site.Id.Value, expected } });
-			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+			var result = target.Index().Result<IEnumerable<SiteViewModel>>();
 
 			result.Single().NumberOfAgents.Should().Be.EqualTo(expected);
 		}
@@ -89,9 +90,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
 
-			var result = target.Get(site.Id.Value.ToString()).Data as SiteViewModel;
+			var result = target.Get(site.Id.GetValueOrDefault()).Result<SiteViewModel>();
 
-			result.Id.Should().Be.EqualTo(site.Id.Value.ToString());
+			result.Id.Should().Be.EqualTo(site.Id);
 			result.Name.Should().Be.EqualTo(expected);
 		}
 
@@ -105,9 +106,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var target = new SitesController(siteRepository, null, siteAdherenceAggregator, null, null,null);
 
-			var result = target.GetOutOfAdherence(siteId.ToString()).Data as SiteOutOfAdherence;
+			var result = target.GetOutOfAdherence(siteId).Result<SiteOutOfAdherence>();
 
-			result.Id.Should().Be(siteId.ToString());
+			result.Id.Should().Be(siteId);
 			result.OutOfAdherence.Should().Be(expected);
 		}
 
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			siteRepository.Stub(x => x.LoadAll()).Return(new ISite[] { });
 			var target = new SitesController(siteRepository, null, null, null, null,null);
 
-			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+			var result = target.Index().Result<IEnumerable<SiteViewModel>>();
 
 			result.Should().Be.Empty();
 		}
@@ -133,8 +134,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			siteRepository.Stub(x => x.Get(site.Id.GetValueOrDefault())).Return(site);
 			var target = new SitesController(siteRepository, null, null, null, null,null);
 
-			var result = target.GetBusinessUnitId(site.Id.ToString());
-			result.Data.Should().Be(bu.Id.GetValueOrDefault());
+			var result = target.GetBusinessUnitId(site.Id.GetValueOrDefault());
+			result.Result<Guid>().Should().Be(bu.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -143,15 +144,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var getAdherence = MockRepository.GenerateMock<IGetSiteAdherence>();
 			var target = new SitesController(null, null, null, getAdherence, null,null);
 
-			var sites = new List<SiteOutOfAdherence>()
-						{
-							new SiteOutOfAdherence(){Id="Site1",OutOfAdherence = 2},
-							new SiteOutOfAdherence(){Id="Site2",OutOfAdherence = 5}
+			var sites = new List<SiteOutOfAdherence>
+			{
+							new SiteOutOfAdherence {Id=Guid.NewGuid(),OutOfAdherence = 2},
+							new SiteOutOfAdherence {Id=Guid.NewGuid(),OutOfAdherence = 5}
 						};
 		
 			getAdherence.Stub(g => g.OutOfAdherence()).Return(sites);
 
-			var result = target.GetOutOfAdherenceForAllSites().Data as IEnumerable<SiteOutOfAdherence>;
+			var result = target.GetOutOfAdherenceForAllSites().Result<IEnumerable<SiteOutOfAdherence>>();
 
 			result.Single(x => x.Id == sites[0].Id).OutOfAdherence.Should().Be(2);
 			result.Single(x => x.Id == sites[1].Id).OutOfAdherence.Should().Be(5);

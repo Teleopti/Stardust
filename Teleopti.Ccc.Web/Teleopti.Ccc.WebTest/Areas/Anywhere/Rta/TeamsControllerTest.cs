@@ -11,13 +11,16 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
@@ -35,6 +38,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
@@ -52,10 +57,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 						.WithId(teamId));
 			SiteRepository.Has(site);
 			
-			var result = Target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
+			var result = Target.ForSite(site.Id.GetValueOrDefault()).Result<IEnumerable<TeamViewModel>>();
 
 			result.Single().Name.Should().Be("team1");
-			result.Single().Id.Should().Be(teamId.ToString());
+			result.Single().Id.Should().Be(teamId);
 		}
 
 		[Test]
@@ -67,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			SiteRepository.Has(site);
 			NumberOfAgentsInTeam.Has(team, 2);
 			
-			var result = Target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
+			var result = Target.ForSite(site.Id.GetValueOrDefault()).Result<IEnumerable<TeamViewModel>>();
 
 			result.Single().NumberOfAgents.Should().Be.EqualTo(2);
 		}
@@ -84,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			
 			TeamRepository.Has(team);
 			
-			Target.GetBusinessUnitId(team.Id.ToString()).Data.Should().Be(businessUnit.Id.GetValueOrDefault());
+			Target.GetBusinessUnitId(team.Id.GetValueOrDefault()).Result<Guid>().Should().Be(businessUnit.Id.GetValueOrDefault());
 		}
 		
 		[Test]
@@ -94,9 +99,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var teamId = Guid.NewGuid();
 			TeamAdherenceAggregator.Has(teamId, 1);
 			
-			var result = Target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
+			var result = Target.GetOutOfAdherence(teamId).Result<TeamOutOfAdherence>();
 
-			result.Id.Should().Be(teamId.ToString());
+			result.Id.Should().Be(teamId);
 			result.OutOfAdherence.Should().Be(expected);
 		}
 
@@ -110,10 +115,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			TeamOutOfAdherenceReadModelReader.Has(siteId, team1, 1);
 			TeamOutOfAdherenceReadModelReader.Has(siteId, team2, 2);
 			
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(siteId.ToString()).Data as IEnumerable<TeamOutOfAdherence>;
+			var result = Target.GetOutOfAdherenceForTeamsOnSite(siteId).Result<IEnumerable<TeamOutOfAdherence>>();
 
-			result.Single(x => x.Id == team1.ToString()).OutOfAdherence.Should().Be(1);
-			result.Single(x => x.Id == team2.ToString()).OutOfAdherence.Should().Be(2);
+			result.Single(x => x.Id == team1).OutOfAdherence.Should().Be(1);
+			result.Single(x => x.Id == team2).OutOfAdherence.Should().Be(2);
 		}
 	}
 }

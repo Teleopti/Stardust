@@ -78,7 +78,7 @@
 			that.load = function () {
 				ajax.ajax({
 					headers: { 'X-Business-Unit-Filter': that.BusinessUnitId() },
-					url: "Sites",
+					url: "api/Sites",
 					success: function (data) {
 						that.fill(data);
 
@@ -99,7 +99,7 @@
 				for (var i = 0; i < that.sites().length; i++) {
 					var site = that.sites()[i];
 					ajax.ajax({
-						url: "Sites/GetOutOfAdherence?siteId=" + site.Id,
+						url: "api/Sites/GetOutOfAdherence?siteId=" + site.Id,
 						success: function (d) {
 							that.update(d);
 						}

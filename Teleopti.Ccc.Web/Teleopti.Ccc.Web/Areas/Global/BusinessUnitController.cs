@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Common;
+using System.Web.Http;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.Web.Areas.Global
 {
-	public class BusinessUnitController : Controller
+	public class BusinessUnitController : ApiController
 	{
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult Index()
+		[UnitOfWork, HttpGet, Route("api/BusinessUnit")]
+		public virtual IHttpActionResult Index()
 		{
 			var currentUserPermissionInfo = _loggedOnUser.CurrentUser().PermissionInformation;
 			if (currentUserPermissionInfo.HasAccessToAllBusinessUnits())
@@ -40,26 +39,26 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 						Id = b.Id.Value,
 						Name = b.Name
 					});
-				return Json(businessUnits, JsonRequestBehavior.AllowGet);
+				return Ok(businessUnits);
 			}
-			return Json(from b in currentUserPermissionInfo.BusinessUnitAccessCollection()
+			return Ok(from b in currentUserPermissionInfo.BusinessUnitAccessCollection()
 				select new BusinessUnitViewModel
 				{
 					Id = b.Id.Value,
 					Name = b.Name
-				}, JsonRequestBehavior.AllowGet);
+				});
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult Current()
+		[UnitOfWork, HttpGet, Route("api/BusinessUnit/Current")]
+		public virtual IHttpActionResult Current()
 		{
 			var currentBusinessUnit = _buRepository.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 				
-			return Json(new BusinessUnitViewModel
+			return Ok(new BusinessUnitViewModel
 				{
 					Id = currentBusinessUnit.Id.GetValueOrDefault(),
 					Name = currentBusinessUnit.Name
-				}, JsonRequestBehavior.AllowGet);
+				});
 		}
 	}
 }
