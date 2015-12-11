@@ -179,6 +179,7 @@
 					vm.isLoading = false;
 					vm.paginationOptions.totalPages = result.TotalPages;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
+					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
 
 			} else if (vm.isSearchScheduleEnabled) {
@@ -202,6 +203,7 @@
 					vm.isLoading = false;
 					vm.updatePersonSelectionStatus();
 					vm.toggleIsAllInCurrentPageSelected();
+					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
 			}
 		};
