@@ -80,6 +80,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
 			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
+
+			if (configuration.Toggle(Domain.FeatureFlags.Toggles.Wfm_RTA_ProperAlarm_34975))
+				system.UseTestDouble<ProperAlarmEnabled>().For<IProperAlarm>();
+			else
+				system.UseTestDouble<ProperAlarmDisabled>().For<IProperAlarm>();
 			//
 
 			system.UseTestDouble<FakeScheduleDictionaryPersister>().For<IScheduleDictionaryPersister>();

@@ -134,6 +134,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BySetting>().As<IAppliedAdherence>();
 			else
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
+
+			if (_config.Toggle(Toggles.Wfm_RTA_ProperAlarm_34975))
+				builder.RegisterType<IsAlarmStartTime>().As<IAppliedAlarmStartTime>();
+			else
+				builder.RegisterType<OldAlarmStartTime>().As<IAppliedAlarmStartTime>();
 			
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
 				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();

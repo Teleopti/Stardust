@@ -6,13 +6,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
+		private readonly IAppliedAlarmStartTime _appliedAlarmStartTime;
 
 		public StateInfo(
 			RtaProcessContext context,
 			IStateMapper stateMapper,
 			IDatabaseLoader databaseLoader,
-			IAppliedAdherence appliedAdherence)
+			IAppliedAdherence appliedAdherence,
+			IAppliedAlarmStartTime appliedAlarmStartTime)
 		{
+			_appliedAlarmStartTime = appliedAlarmStartTime;
 			Input = context.Input;
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
@@ -36,14 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			get
 			{
-				if (State.IsInAlarm())
-				{
-					if (State.HasRuleChanged())
-						return CurrentTime.AddTicks(State.AlarmThresholdTime());
-					return Stored.AlarmStartTime;
-				}
-
-				return null;
+				return _appliedAlarmStartTime.For(State, Stored, CurrentTime);
+                
 			}
 		}
 

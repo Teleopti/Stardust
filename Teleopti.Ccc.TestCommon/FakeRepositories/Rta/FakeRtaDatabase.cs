@@ -98,11 +98,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeSiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister,
 			FakeAdherenceDetailsReadModelPersister adherenceDetailsReadModelPersister,
 			FakeAdherencePercentageReadModelPersister adherencePercentageReadModelPersister,
-			FakeDataSourceForTenant dataSourceForTenant
-			)
+			FakeDataSourceForTenant dataSourceForTenant, 
+			IProperAlarm properAlarm)
 		{
 			_config = config;
 			_now = now;
+			_properAlarm = properAlarm;
 			AgentStateReadModelReader = agentStateReadModelReader;
 			RtaStateGroupRepository = rtaStateGroupRepository;
 			RtaMapRepository = rtaMapRepository;
@@ -119,6 +120,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public StoredStateInfo StoredState;
 		public AgentStateReadModel PersistedReadModel;
+		private IProperAlarm _properAlarm;
 
 		public StoredStateInfo StoredStateFor(Guid personId)
 		{
@@ -268,7 +270,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				_rtaRule.SetId(alarmId);
 				_rtaRule.SetBusinessUnit(_businessUnit);
 				_rtaRule.StaffingEffect = staffingEffect;
-				_rtaRule.IsAlarm = threshold != null;
+				_rtaRule.IsAlarm = _properAlarm.IsAlarm(threshold);
 				_rtaRule.ThresholdTime = threshold ?? TimeSpan.Zero;
 				_rtaRule.Adherence = adherence;
 			}

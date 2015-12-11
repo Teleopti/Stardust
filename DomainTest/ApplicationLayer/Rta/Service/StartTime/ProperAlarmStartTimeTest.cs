@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 {
 	[RtaTest]
 	[TestFixture]
-	public class AlarmStartTimeTest
+	[Toggle(Toggles.Wfm_RTA_ProperAlarm_34975)]
+	public class ProperAlarmStartTimeTest
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldHaveAlarmStartTimeWhenEnteringRule()
+		public void ShouldHaveAlarmStartTimeWhenEnteringAlarm()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -39,14 +43,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 
 
 		[Test]
-		public void ShouldNotHaveAlarmStartTimeWhenNotInRule()
+		public void ShouldNotHaveAlarmStartTimeWhenNotInAlarm()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, (Guid?)null);
+				.WithRule("phone", phone, 0, Adherence.In);
 			Now.Is("2015-12-10 8:00");
 
 			Target.SaveState(new ExternalUserStateForTest
