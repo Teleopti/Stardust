@@ -59,42 +59,41 @@
 		</div>
 		<div ng-if="vm.hasErrorInResult" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
-			Added absence for {{vm.selectedPersonIdList.length}} selected agent(s), {{vm.selectedPersonIdList.length - vm.errorDetails.length}} successed, {{vm.errorDetails.length}} failed! 
+			Added absence for {{vm.selectedPersonIdList.length}} selected agent(s), {{vm.selectedPersonIdList.length - vm.errorDetails.length}} successed, {{vm.errorDetails.length}} failed!
 			<a href="javascript: void(0);" ng-click="vm.toggleErrorDetails()">click here</a> to show details.
 			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
 		</div>
 	</div>
 
-		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
-			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
-		</div>
-
-		<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
-			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<thead>
-				<tr class="person">
-					<th class="person-name person-name-column" style="width: 15%">
-						<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
-							<label>
-								<input type="checkbox" ng-model="vm.isAllInCurrentPageSelected" ng-click="vm.toggleAllSelectionInCurrentPage()">
-								<span class="wfm-checkbox-toggle"></span>
-								<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
-							</label>
-						</div>
-					</th>
-					<th id="time-line-container" class="schedule schedule-column">
-						<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
-					</th>
-					<th style="width: 1%">
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
-			</tbody>
-		</table>
-		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	<div class="alert-error notice-spacer" ng-if="vm.total > 500">
+		<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
 	</div>
+
+	<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
+		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+		<thead>
+			<tr class="person">
+				<th class="person-name person-name-column" style="width: 15%">
+					<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
+						<label>
+							<input type="checkbox" ng-model="vm.isAllInCurrentPageSelected" ng-click="vm.toggleAllSelectionInCurrentPage()">
+							<span class="wfm-checkbox-toggle"></span>
+							<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
+						</label>
+					</div>
+				</th>
+				<th id="time-line-container" class="schedule schedule-column">
+					<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
+				</th>
+				<th style="width: 1%">
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
+		</tbody>
+	</table>
+	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
@@ -114,7 +113,7 @@
 					</button>
 				</span>
 				<span class="col-lg-5" style="padding-left: 0">
-					<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
 				</span>
 			</div>
 
@@ -129,7 +128,7 @@
 					</button>
 				</span>
 				<span class="col-lg-5" style="padding-left: 0">
-					<uib-timepicker ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
 				</span>
 			</div>
 
@@ -150,23 +149,24 @@
 	</md-sidenav>
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
-	<div class="modalbg">
-		<div class="dialog">
-			<div class="modal-header">
-				Error details
-			</div>
-			<div class="modal-inner-content">
-				<ul class="wfm-simple-list" style="max-height: 430px">
-					<li ng-repeat="error in vm.errorDetails">
-						{{error.PersonName}}
-						<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
-					</li>
-				</ul>
-			</div>
-			<div class="modal-footer">
-				<aside>
-					<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
-				</aside>
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Error details
+				</div>
+				<div class="modal-inner-content">
+					<ul class="wfm-simple-list" style="max-height: 430px">
+						<li ng-repeat="error in vm.errorDetails">
+							{{error.PersonName}}
+							<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+					</aside>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -431,8 +431,10 @@
 
 		vm.Init = function () {
 			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+			vm.showMeridian = false;
 			$scope.$on('$localeChangeSuccess', function () {
 				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
+				vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf(' a') > 0;
 			});
 
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
