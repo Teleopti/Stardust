@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				scheduleAndOptimize(browserInteractions, AppConfigs.PlanningPeriodId);
 
-				using (new TimeoutScope(browserActivator, TimeSpan.FromHours(10)))
+				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(2)))
 				{
 					browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container");
 				}
