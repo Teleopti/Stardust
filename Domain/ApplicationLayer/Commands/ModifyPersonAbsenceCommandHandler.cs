@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach (var scheduleDay in scheduleDaysToUpdate)
 			{
-				_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance, false);
+				_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
 			}
 
 		}

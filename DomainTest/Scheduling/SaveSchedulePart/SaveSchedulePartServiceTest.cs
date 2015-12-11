@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				target.Save(scheduleDay, null, new ScheduleTag(), false);
+				target.Save(scheduleDay, null, new ScheduleTag());
 			}
 		}
 
 		[Test]
-		public void ShouldThrowBusinessRuleExceptionOnBrokenBusinessRules()
+		public void ShouldReturnErrorMessage()
 		{
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var response = new List<IBusinessRuleResponse> { mocks.DynamicMock<IBusinessRuleResponse>() };
@@ -66,7 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<BusinessRuleValidationException>(() => target.Save(scheduleDay, null, new ScheduleTag(), false));
+				var result = target.Save(scheduleDay, null, new ScheduleTag());
+				result.Should().Not.Be.Null();
 			}
 		}
 
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			}
 			using (mocks.Playback())
 			{
-				target.Save(scheduleDay, null, new ScheduleTag(), false);
+				target.Save(scheduleDay, null, new ScheduleTag());
 			}
 		}
 	}

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -15,12 +17,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public object Create(AbsenceCreatorInfo info, bool isFullDayAbsence, bool isNeedRuleCheckResult = false)
+		public IList<string> Create(AbsenceCreatorInfo info, bool isFullDayAbsence)
 		{
 			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(info.ScheduleRange);
 			var personAbsence = createPersonAbsence(info.ScheduleDay, info.Absence, info.AbsenceTimePeriod);
-			var ruleCheckResult = _saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance, isNeedRuleCheckResult);
-			if (isNeedRuleCheckResult) return ruleCheckResult;
+			var ruleCheckResult = _saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+			if (ruleCheckResult != null) return ruleCheckResult;
 
 			if (isFullDayAbsence)
 			{
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				personAbsence.IntradayAbsence(info.Person, info.TrackedCommandInfo);
 			}
 
-			return personAbsence;
+			return null;
 		}
 
 		private static PersonAbsence createPersonAbsence(IScheduleDay scheduleDay, IAbsence absence, DateTimePeriod absenceTimePeriod)

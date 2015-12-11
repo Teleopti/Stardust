@@ -457,7 +457,6 @@
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\BusinessRuleValidationException.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />

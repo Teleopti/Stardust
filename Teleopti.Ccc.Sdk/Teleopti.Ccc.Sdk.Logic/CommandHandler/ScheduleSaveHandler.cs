@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void ProcessSave(IScheduleDay scheduleDay, INewBusinessRuleCollection rules, IScheduleTag scheduleTagEntity)
 		{
-			var result = _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity, true);
+			var result = _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
 
 			if (result != null)
 			{
@@ -31,6 +31,4 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 		}
 	}
-
-
 }

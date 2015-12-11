@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 		public AddAbsenceFailResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
-			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, true, true) as IList<string>;
+			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, true);
 			if (createResult != null)
 			{
 				return new AddAbsenceFailResult()
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 		public AddAbsenceFailResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
-			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, false, true) as IList<string>;
+			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, false);
 			if (createResult != null)
 			{
 				return  new AddAbsenceFailResult()

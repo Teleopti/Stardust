@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public interface IPersonAbsenceCreator
 	{
-		object Create(AbsenceCreatorInfo info, bool isFullDayAbsence, bool isNeedRuleCheckResult = false);
+		IList<string> Create(AbsenceCreatorInfo info, bool isFullDayAbsence);
 	}
 }

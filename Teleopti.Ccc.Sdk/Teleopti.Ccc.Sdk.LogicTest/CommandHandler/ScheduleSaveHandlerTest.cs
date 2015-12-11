@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var target = new ScheduleSaveHandler(_saveSchedulePartService);
 			target.ProcessSave(_scheduleDay, _rules, _scheduleTag);
 
-			_saveSchedulePartService.AssertWasCalled(x => x.Save(_scheduleDay, _rules, _scheduleTag, true));
+			_saveSchedulePartService.AssertWasCalled(x => x.Save(_scheduleDay, _rules, _scheduleTag));
 		}
 
 		[Test]
 		public void ShouldThrowExceptionWhenReturnErrorMessage()
 		{
 			var expectedError = new List<string>() {"error"};
-			_saveSchedulePartService.Stub(x=>x.Save(_scheduleDay, _rules, _scheduleTag, true)).Return(expectedError);
+			_saveSchedulePartService.Stub(x=>x.Save(_scheduleDay, _rules, _scheduleTag)).Return(expectedError);
 
 			var target = new ScheduleSaveHandler(_saveSchedulePartService);
 

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -22,12 +20,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag, bool isNeedGetResult = false)
+		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
 			var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
 			dic.MakeEditable();
 
-			var checkResult = checkRules(dic, scheduleDay, newBusinessRuleCollection, scheduleTag, isNeedGetResult);
+			var checkResult = checkRules(dic, scheduleDay, newBusinessRuleCollection, scheduleTag);
 			if (checkResult != null)
 			{
 				return checkResult;
@@ -37,13 +35,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			return null;
 		}
 
-		private IList<string> checkRules(IReadOnlyScheduleDictionary dic, IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag, bool isNeedGetResult)
+		private IList<string> checkRules(IReadOnlyScheduleDictionary dic, IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
 			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag)).ToList();
 			if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
-				if (isNeedGetResult) return invalidList.Select(i => i.Message).Distinct().ToArray();
-				throwExceptionIfBrokenBusinessRule(invalidList);
+				return invalidList.Select(i => i.Message).Distinct().ToArray();
 			}
 
 			return null;
@@ -53,15 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 		{
 			_scheduleDictionarySaver.SaveChanges (dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
 			_personAbsenceAccountRepository.AddRange (dic.ModifiedPersonAccounts);
-		}
-
-		private static void throwExceptionIfBrokenBusinessRule(IEnumerable<IBusinessRuleResponse> invalidList)
-		{
-			throw new BusinessRuleValidationException(
-				string.Format(System.Globalization.CultureInfo.InvariantCulture,
-					"At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
-					string.Join(Environment.NewLine,
-						invalidList.Select(i => i.Message).Distinct().ToArray())));
 		}
 	}
 }
