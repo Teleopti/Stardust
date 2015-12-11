@@ -29,14 +29,14 @@
 			</span>
 		</span>
 
-		<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right; margin-top: 2px;" ng-if="vm.isMenuVisible()">
-			<i class="mdi mdi-dots-vertical"></i>
-			<span class="context-menu-left" style="z-index: 1000">
+		<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right; margin-top: 2px; background-color: #ffffff" ng-if="vm.isMenuVisible()">
+			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
+			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
 					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selected.length == 0"
 						ng-click="vm.selected.length == 0 || cmd.action()">{{cmd.label|translate}}</li>
 				</ul>
-			</span>
+			</div>
 		</button>
 
 		<span style="color: red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
