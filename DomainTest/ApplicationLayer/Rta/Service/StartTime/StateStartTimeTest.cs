@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 	public class StateStartTimeTest
 	{
 		public FakeRtaDatabase Database;
-		public FakeMessageSender Sender;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
@@ -35,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "phone"
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-			.StateStartTime.Should().Be("2015-12-10 8:00".Utc());
+			Database.PersistedReadModel
+				.StateStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
 		[Test]
@@ -61,8 +60,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "stateone"
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-			.StateStartTime.Should().Be("2015-12-10 8:00".Utc());
+			Database.PersistedReadModel
+				.StateStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
 		[Test]
@@ -88,8 +87,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				StateCode = "statetwo"
 			});
 
-			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
-			.StateStartTime.Should().Be("2015-12-10 8:30".Utc());
+
+			Database.PersistedReadModel
+				.StateStartTime.Should().Be("2015-12-10 8:30".Utc());
 		}
 	}
 }

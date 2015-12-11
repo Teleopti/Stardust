@@ -12,90 +12,81 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 {
 	[RtaTest]
 	[TestFixture]
-	public class AdherenceStartTimeTest
+	public class AlarmStartTimeTest
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldHaveAdherenceStartTimeWhenHavingAdherence()
+		public void ShouldHaveAlarmStartTimeWhenEnteringAlarm()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
 				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
-
 			Now.Is("2015-12-10 8:00");
+
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:00".Utc());
+			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
 
+
 		[Test]
-		public void ShouldNotChangeAherenceStartTimeWhenAdherenceDoesNotChange()
+		public void ShouldNotHaveAlarmStartTimeWhenNotInAlarm()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
-				.WithAlarm("ready", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
-
+				.WithAlarm("phone", phone, 0, Adherence.In);
 			Now.Is("2015-12-10 8:00");
+
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Now.Is("2015-12-10 8:30");
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "ready"
-			});
 
-			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:00".Utc());
+			Database.PersistedReadModel.AlarmStartTime.Should().Be(null);
 		}
 
+
 		[Test]
-		public void ShouldUpdateAherenceStartTimeWhenAdherenceChanges()
+		public void ShouldNotUpdateAlarmStartTimeWhenStillInSameAlarm()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
+			var inAdherenceRule = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
-				.WithAlarm("break", phone, -1, Adherence.Out, TimeSpan.FromMinutes(5));
-
+				.WithAlarm("phone", phone, inAdherenceRule, 0, Adherence.In, "5".Minutes())
+				.WithAlarm("ACW", phone, inAdherenceRule, 0, Adherence.In, "5".Minutes())
+				;
 			Now.Is("2015-12-10 8:00");
+
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Now.Is("2015-12-10 8:30");
+			Now.Is("2015-12-10 8:10");
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "break"
+				StateCode = "ACW"
 			});
 
-			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:30".Utc());
+			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
 	}
 }

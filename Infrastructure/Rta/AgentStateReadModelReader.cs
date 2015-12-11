@@ -276,6 +276,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							BatchId = reader.NullableDateTime("BatchId"),
 							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
 							AdherenceStartTime = reader.NullableDateTime("AdherenceStartTime"),
+							AlarmStartTime = reader.NullableDateTime("AlarmStartTime"),
 							PersonId = reader.Guid("PersonId"),
 							StaffingEffect = reader.NullableDouble("StaffingEffect"),
 							Adherence = reader.NullableInt("Adherence"),

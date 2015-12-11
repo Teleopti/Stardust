@@ -27,6 +27,7 @@ namespace Teleopti.Interfaces.Domain
 		public DateTime? NextStart { get; set; }
 		
 		public Guid? AlarmId { get; set; }
+		public DateTime? AlarmStartTime { get; set; }
 		public DateTime? AdherenceStartTime { get; set; }
 		public string AlarmName { get; set; }
 		public int? Color { get; set; }

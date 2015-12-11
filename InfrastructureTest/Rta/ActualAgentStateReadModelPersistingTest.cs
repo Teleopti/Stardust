@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				AlarmId = null,
 				AlarmName = null,
 				AdherenceStartTime = null,
+				AlarmStartTime = null,
 				StaffingEffect = null,
 				Adherence = null,
 				Color = null,
@@ -101,6 +102,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = Reader.GetCurrentActualAgentState(personId);
 			result.Should().Not.Be.Null();
+		}
+
+
+		[Test]
+		public void ShouldPersistAlarmStartTime()
+		{
+			var state = new AgentStateReadModelForTest { AlarmStartTime = "2015-12-11 08:00".Utc()};
+
+			Target.PersistActualAgentReadModel(state);
+
+			Reader.GetCurrentActualAgentState(state.PersonId)
+				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
 	}

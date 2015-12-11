@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					StateCode = statecode,
 					ActivityId = activityId,
 					RuleId = ruleId,
+					IsAlarm = rule.IsAlarm,
 					AlarmName = rule.Description.Name,
 					Adherence = _appliedAdherence.ForAlarm(m.RtaRule),
 					StaffingEffect = (int) rule.StaffingEffect,

@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
+
 		public StateInfo(
 			RtaProcessContext context,
 			IStateMapper stateMapper,
@@ -30,6 +31,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private DateTime? adherenceStartTime => (Stored == null || State.Adherence() != Stored.Adherence) ? CurrentTime : Stored.AdherenceStartTime;
 
 		private DateTime? batchId => Input.IsSnapshot ? Input.BatchId : Stored.BatchId();
+
+		private DateTime? alarmStartTime
+		{
+			get
+			{
+				if (State.IsInAlarm())
+				{
+					if (State.HasRuleChanged())
+						return CurrentTime.AddTicks(State.AlarmThresholdTime());
+					return Stored.AlarmStartTime;
+				}
+
+				return null;
+			}
+		}
 
 		public ExternalUserStateInputModel Input { get; set; }
 		public PersonOrganizationData Person { get; }
@@ -57,6 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
 				AdherenceStartTime = adherenceStartTime, 
+				AlarmStartTime = alarmStartTime,
 				BusinessUnitId = Person.BusinessUnitId,
 				SiteId = Person.SiteId,
 				TeamId = Person.TeamId,

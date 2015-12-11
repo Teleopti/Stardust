@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, string source, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan? threshold, Adherence? adherence, Guid? platformTypeId);
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan? threshold, Adherence? adherence, Guid? platformTypeId)
 		{
 			var platformTypeIdGuid = platformTypeId ?? new Guid(_platformTypeId);
 
@@ -268,7 +268,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				_rtaRule.SetId(alarmId);
 				_rtaRule.SetBusinessUnit(_businessUnit);
 				_rtaRule.StaffingEffect = staffingEffect;
-				_rtaRule.ThresholdTime = threshold;
+				_rtaRule.IsAlarm = threshold != null;
+				_rtaRule.ThresholdTime = threshold ?? TimeSpan.Zero;
 				_rtaRule.Adherence = adherence;
 			}
 
@@ -468,27 +469,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, TimeSpan.Zero, null, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, null, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, Guid? alarmId)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, 0, null, false, TimeSpan.Zero, null, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, 0, null, false, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, string name)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name, false, TimeSpan.Zero, null, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name, false, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, bool isLoggedOutState)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, isLoggedOutState, TimeSpan.Zero, null, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, isLoggedOutState, null, null, null);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, TimeSpan threshold)
@@ -498,17 +499,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid platformTypeId, Guid activityId, int staffingEffect, Adherence adherence)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, adherence, platformTypeId);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, null, adherence, platformTypeId);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, adherence, null);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, null, adherence, null);
 		}
-
+		
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence, TimeSpan thresholdTime)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, thresholdTime, adherence, null);
+		}
+
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Guid alarmId, int staffingEffect, Adherence adherence, TimeSpan thresholdTime)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, staffingEffect, null, false, thresholdTime, adherence, null);
 		}
 	}
 
