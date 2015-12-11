@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static void StartIISExpress(string pathToIisExpress)
 		{
+			cleanOldLogs();
 			// maybe this SO thread contains alternatives:
 			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
 			var runningConfig = "iisexpress.running.config";
@@ -73,6 +74,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Config = string.Concat(runningConfig, " /apppool:\"Clr4IntegratedAppPool\"")
 			};
 			_server = new IISExpress(parameters, pathToIisExpress);
+		}
+
+		private static void cleanOldLogs()
+		{
+			//this folder is hard coded in iisexpress.config
+			const string logFolder = @"c:\temp\iisexpresslogs";
+			if (Directory.Exists(logFolder))
+			{
+				Directory.Delete(logFolder, true);
+			}
 		}
 
 		public static void TearDown()
