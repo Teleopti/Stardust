@@ -67,7 +67,7 @@
 					else return $filter('date')(row.PeriodStartTime, 'short', angularTimezone);
 				}
 				row.FormatedPeriodEndTime = function () {			
-					if (row.IsFullDa) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
+					if (row.IsFullDay) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
 					else return $filter('date')(row.PeriodEndTime, "short", angularTimezone);
 				}
 				row.GetType = function () {
