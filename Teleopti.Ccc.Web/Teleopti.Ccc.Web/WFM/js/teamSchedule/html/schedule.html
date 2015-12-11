@@ -34,7 +34,12 @@
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
 					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selected.length == 0"
-						ng-click="vm.selected.length == 0 || cmd.action()">{{cmd.label|translate}}</li>
+						ng-click="vm.selected.length == 0 || cmd.action()">
+						<div>
+							<span class="pull-left">{{cmd.label|translate}}</span>
+							<span class="pull-right">{{cmd.shortcut}}</span>
+						</div>
+					</li>
 				</ul>
 			</div>
 		</button>

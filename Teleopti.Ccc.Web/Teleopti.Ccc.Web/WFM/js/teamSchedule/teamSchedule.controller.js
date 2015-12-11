@@ -270,6 +270,7 @@
 		vm.commands = [
 			{
 				label: "AddAbsence",
+				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: toggleAddAbsencePanel,
 				active: function () {
