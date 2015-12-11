@@ -219,6 +219,10 @@
 			vm.rightPanelOption.panelState = true;
 		};
 
+		vm.isAnyAgentSelected = function () {
+			return vm.selectedPersonIdList.length != 0;
+		};
+
 		vm.menuState = 'open';
 
 		vm.toggleMenuState = function () {
@@ -244,8 +248,10 @@
 		}, true);
 
 		var toggleAddAbsencePanel = function () {
+			if (vm.isAnyAgentSelected()) {
 				vm.toggleMenuState();
 				vm.setCurrentCommand("addAbsence")();
+			}
 		}
 
 		vm.commands = [
