@@ -12,14 +12,21 @@
 
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
+		vm.selectedAbsenceId = '';
+		vm.total = 0;
+		vm.isAbsenceReportingEnabled = false;
+		vm.loadScheduelWithReadModel = true;
+		vm.isSearchScheduleEnabled = false;
+
 		vm.scheduleDateMoment = function () {
 			return moment(vm.scheduleDate);
-		}
+		};
+
 		vm.searchOptions = {
 			keyword: "",
 			isAdvancedSearchEnabled: false,
 			searchKeywordChanged: false
-		}
+		};
 
 		vm.dateOptions = {
 			formatYear: 'yyyy',
@@ -33,9 +40,6 @@
 		vm.datePickerStatus = {
 			opened: false
 		};
-		vm.isAbsenceReportingEnabled = false;
-		vm.loadScheduelWithReadModel = true;
-		vm.isSearchScheduleEnabled = false;
 
 		vm.rightPanelOption = {
 			panelState: false,
@@ -44,67 +48,71 @@
 			showBackdrop: false
 		};
 
-		vm.selectedAbsenceId = '';
+		vm.selectAllVisible = function () {
+			return vm.paginationOptions.totalPages > 1 && vm.selectedPersonIdList.length < vm.total;
+		};
 
-		vm.selectAllVisible = false;
-		vm.totalSelected = [];
-		vm.pageSelected = [];
+		vm.selectedPersonIdList = [];
 
-		var updateSelected = function (action, id, pageNumber) {
-			if (action === 'add' && vm.totalSelected.indexOf(id) === -1) {
-				vm.totalSelected.push(id);
-
-				vm.pageSelected[pageNumber].push(id);
+		vm.updateSelection = function (person) {
+			if (person.IsSelected && vm.selectedPersonIdList.indexOf(person.PersonId) === -1) {
+				vm.selectedPersonIdList.push(person.PersonId);
 			}
-			if (action === 'remove' && vm.totalSelected.indexOf(id) !== -1) {
-				vm.totalSelected.splice(vm.totalSelected.indexOf(id), 1);
+			if (!person.IsSelected && vm.selectedPersonIdList.indexOf(person.PersonId) != -1) {
+				vm.selectedPersonIdList.splice(vm.selectedPersonIdList.indexOf(person.PersonId), 1);
+			}
+			vm.toggleIsAllInCurrentPageSelected();
+		};
 
-				if (vm.pageSelected[pageNumber] != null) {
-					vm.pageSelected[pageNumber].splice(vm.pageSelected[pageNumber].indexOf(id), 1);
+		vm.toggleAllSelectionInCurrentPage = function () {
+			if (vm.isAllInCurrentPageSelected) {
+				angular.forEach(vm.groupScheduleVm.Schedules, function (personSchedule) {
+					personSchedule.IsSelected = true;
+					vm.updateSelection(personSchedule);
+				});
+			} else {
+				angular.forEach(vm.groupScheduleVm.Schedules, function (personSchedule) {
+					personSchedule.IsSelected = false;
+					vm.updateSelection(personSchedule);
+				});
+			}
+		};
+
+		vm.toggleIsAllInCurrentPageSelected = function () {
+			var isAnyoneUnselected = false;
+			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
+				if (vm.selectedPersonIdList.indexOf(vm.groupScheduleVm.Schedules[i].PersonId) === -1) {
+					isAnyoneUnselected = true;
+					break;
 				}
 			}
-			vm.selectAllVisible = vm.paginationOptions.totalPages > 1 && vm.totalSelected.length < vm.allAgents.length;
-		};
-
-		vm.updateSelection = function ($event, id) {
-			var checkbox = $event.target;
-			var action = (checkbox.checked ? 'add' : 'remove');
-			updateSelected(action, id, vm.paginationOptions.pageNumber);
-		};
-
-		var updateAllStatusForOnePage = function (action, schedules, pageNumber) {
-			for (var i = 0; i < schedules.length; i++) {
-				updateSelected(action, schedules[i].PersonId, pageNumber);
-			}
-		};
-
-		vm.toggleAll = function ($event) {
-			var checkbox = $event.target;
-			var action = (checkbox.checked ? 'add' : 'remove');
-			updateAllStatusForOnePage(action, vm.groupScheduleVm.Schedules, vm.paginationOptions.pageNumber);
+			vm.isAllInCurrentPageSelected = !isAnyoneUnselected;
 		};
 
 		vm.selectAllForAllPages = function () {
-			for (var i = 0; i < vm.paginationOptions.totalPages; ++i) {
-				var scheduleVm = getScheduleForCurrentPage(vm.rawScheduleData, i + 1);
-				updateAllStatusForOnePage('add', scheduleVm.Schedules, i + 1);
-			}
-			vm.selectAllVisible = false;
+			vm.loadAllResults(function (result) {
+				angular.forEach(result.Schedules, function (personSchedule) {
+					if (vm.selectedPersonIdList.indexOf(personSchedule.PersonId) === -1) {
+						vm.selectedPersonIdList.push(personSchedule.PersonId);
+					}
+				});
+				vm.updatePersonSelectionStatus();
+				vm.toggleIsAllInCurrentPageSelected();
+			});
+		};
+
+		vm.updatePersonSelectionStatus = function () {
+			angular.forEach(vm.groupScheduleVm.Schedules, function (personSchedule) {
+				if (vm.selectedPersonIdList.indexOf(personSchedule.PersonId) === -1) {
+					personSchedule.IsSelected = false;
+				} else {
+					personSchedule.IsSelected = true;
+				}
+			});
 		};
 
 		vm.getSelectedClass = function (schedule) {
-			return vm.isSelected(schedule.PersonId) ? 'selected' : '';
-		};
-
-		vm.isSelected = function (id) {
-			return vm.pageSelected[vm.paginationOptions.pageNumber].indexOf(id) >= 0;
-		};
-
-		vm.isSelectedAll = function () {
-			if (vm.groupScheduleVm !== undefined) {
-				return vm.pageSelected[vm.paginationOptions.pageNumber].length === vm.groupScheduleVm.Schedules.length;
-			}
-			return false;
+			return schedule.IsSelected ? 'selected' : '';
 		};
 
 		vm.toggleCalendar = function () {
@@ -118,51 +126,28 @@
 
 		vm.gotoPreviousDate = function () {
 			addScheduleDay(-1);
-		}
+		};
 
 		vm.gotoNextDate = function () {
 			addScheduleDay(1);
-		}
+		};
 
 		vm.selectedTeamIdChanged = function () {
-			vm.allAgents = undefined;
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
-		}
+		};
 
 		vm.scheduleDateChanged = function () {
 			teamScheduleSvc.loadAllTeams.query({
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 			}).$promise.then(function (result) {
 				vm.Teams = result;
-				vm.allAgents = undefined;
 				vm.paginationOptions.pageNumber = 1;
 				vm.loadSchedules(vm.paginationOptions.pageNumber);
 			});
-		}
+		};
 
 		vm.isLoading = false;
-
-		function getScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
-			var start = (currentPageIndex - 1) * vm.paginationOptions.pageSize;
-			var end = currentPageIndex * vm.paginationOptions.pageSize;
-			var agentsForCurrentPage = vm.allAgents.slice(start, end);
-
-			var scheduleForCurrentPage = [];
-			angular.forEach(rawScheduleData, function (rawSchedule) {
-				if (agentsForCurrentPage.indexOf(rawSchedule.PersonId) > -1) {
-					scheduleForCurrentPage.push(rawSchedule);
-				}
-			});
-
-			return groupScheduleFactory.Create(scheduleForCurrentPage, vm.scheduleDateMoment());
-		}
-
-		function setScheduleForCurrentPage(rawScheduleData, currentPageIndex) {
-			var scheduleVm = getScheduleForCurrentPage(rawScheduleData, currentPageIndex);
-			vm.groupScheduleVm = scheduleVm;
-			vm.scheduleCount = scheduleVm.Schedules.length;
-		};
 
 		vm.loadSchedules = function (currentPageIndex) {
 			if (vm.selectedTeamId === "" && !vm.isSearchScheduleEnabled) return;
@@ -193,29 +178,49 @@
 				});
 
 			} else if (vm.isSearchScheduleEnabled) {
-				vm.paginationOptions.pageNumber = vm.searchOptions.searchKeywordChanged ? 1 : currentPageIndex;
+				if (vm.searchOptions.searchKeywordChanged) {
+					vm.selectedPersonIdList = [];
+					vm.updatePersonSelectionStatus();
+					vm.toggleIsAllInCurrentPageSelected();
+					vm.paginationOptions.pageNumber = 1;
+				}
 				teamScheduleSvc.searchSchedules.query({
 					keyword: vm.searchOptions.keyword,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 					pageSize: vm.paginationOptions.pageSize,
 					currentPageIndex: vm.paginationOptions.pageNumber
 				}).$promise.then(function (result) {
+					vm.total = result.Total;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 					vm.paginationOptions.totalPages = Math.ceil(result.Total / vm.paginationOptions.pageSize);
 					vm.searchOptions.searchKeywordChanged = false;
+					vm.searchOptions.keyword = result.Keyword;
 					vm.isLoading = false;
+					vm.updatePersonSelectionStatus();
+					vm.toggleIsAllInCurrentPageSelected();
 				});
 			}
-		}
+		};
+
+		vm.loadAllResults = function (callback) {
+			teamScheduleSvc.searchSchedules.query({
+				keyword: vm.searchOptions.keyword,
+				date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
+				pageSize: vm.total,
+				currentPageIndex: 1
+			}).$promise.then(callback);
+		};
+
 		vm.searchSchedules = function () {
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
-		}
+		};
 
 		vm.showAddAbsencePanel = function () {
 			vm.rightPanelOption.panelState = true;
-		}
+		};
 
 		vm.menuState = 'open';
+
 		vm.toggleMenuState = function () {
 			if (vm.menuState === 'closed') {
 				vm.menuState = 'open';
@@ -225,7 +230,8 @@
 			} else {
 				vm.menuState = 'closed';
 			}
-		}
+		};
+
 		vm.isOpen = function () { return false; };
 
 		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
@@ -305,7 +311,7 @@
 
 		vm.isMenuVisible = function () {
 			return vm.isAbsenceReportingEnabled && (vm.permission.IsAddFullDayAbsenceAvailable || vm.permission.IsAddIntradayAbsenceAvailable);
-		}
+		};
 
 		vm.toggleAbsenceEndCalendar = function () {
 			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
@@ -314,8 +320,8 @@
 		vm.isDataChangeValid = function () {
 			var absenceTimeIsValid = (!vm.isFullDayAbsence && (vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate))
 				|| (vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day'));
-			return vm.totalSelected.length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
-		}
+			return vm.selectedPersonIdList.length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
+		};
 
 		vm.hasErrorInResult = false;
 		vm.showErrorDetails = false;
@@ -355,7 +361,7 @@
 		vm.applyAbsence = function () {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: vm.totalSelected,
+					PersonIds: vm.selectedPersonIdList,
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
@@ -364,7 +370,7 @@
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
-					PersonIds: vm.totalSelected,
+					PersonIds: vm.selectedPersonIdList,
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
@@ -379,7 +385,7 @@
 				$mdSidenav(navId).toggle().then(function () { });
 			}, 200);
 			return debounceFn;
-		}
+		};
 
 		var loadTeamPromise = teamScheduleSvc.loadAllTeams.query({ date: vm.scheduleDateMoment().format("YYYY-MM-DD") }).$promise;
 		loadTeamPromise.then(function (result) {
@@ -421,10 +427,6 @@
 			$scope.$on('$localeChangeSuccess', function () {
 				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 			});
-
-			for (var i = 0; i < 29; ++i) {//max page number is 28 = 500/18, and use page number as index
-				vm.pageSelected[i] = [];
-			}
 
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
 				absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {

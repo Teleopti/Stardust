@@ -138,7 +138,8 @@
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
-				SortValue: sortValue
+				SortValue: sortValue,
+				IsSelected: false
 			}
 
 			return personSchedule;

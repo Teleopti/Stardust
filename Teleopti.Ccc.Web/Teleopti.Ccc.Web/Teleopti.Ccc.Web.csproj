@@ -1338,7 +1338,7 @@
     <Content Include="WFM\tests\rta\rta.agentsforsites.controller.spec.js" />
     <Content Include="WFM\tests\rta\rta.agentsforteams.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapeditor.controller.spec.js" />
-    <Content Include="WFM\tests\teamSchedule\teamSchedule.groupSchedule.factory.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.controller.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.personSchedule.factory.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.timeline.factory.spec.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
