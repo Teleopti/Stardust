@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "campaign.ConnectAverageHandlingTime", instance.ConnectAverageHandlingTime.ToString() },
 				{ "campaign.RightPartyAverageHandlingTime", instance.RightPartyAverageHandlingTime.ToString() },
 				{ "campaign.UnproductiveTime", instance.UnproductiveTime.ToString() },
-				{ "campaign.StartDate.Date", string.Format("new Date('{0}')", instance.StartDate)},
-				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },
+				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
+				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaign.WorkingHours", instance.GetWorkingHoursString()},
 				{ "preventAutomaticRedirect", "true"}
 			});
@@ -142,8 +142,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 
 			Browser.Interactions.SetScopeValues(".campaign-edit", new Dictionary<string, string>
 			{				
-				{ "campaign.StartDate.Date", string.Format("new Date('{0}')", instance.StartDate)},
-				{ "campaign.EndDate.Date", string.Format("new Date('{0}')", instance.EndDate) },
+				{ "campaign.StartDate", string.Format("new Date('{0}')", instance.StartDate)},
+				{ "campaign.EndDate", string.Format("new Date('{0}')", instance.EndDate) },
 				{ "campaignSpanningPeriodForm.$pristine", "false" }
 			});
 
