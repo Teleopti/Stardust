@@ -5,7 +5,7 @@
 		function($resource) {
 
 			this.getAgentsForSites = function(data) {
-				return $resource('../Agents/ForSites', {}, {
+				return $resource('../api/Agents/ForSites', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -16,7 +16,7 @@
 			};
 
 			this.getAgentsForTeams = function(data) {
-				return $resource('../Agents/ForTeams', {}, {
+				return $resource('../api/Agents/ForTeams', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -27,7 +27,7 @@
 			};
 
 			this.getStatesForSites = function(data) {
-				return $resource('../Agents/GetStatesForSites', {}, {
+				return $resource('../api/Agents/GetStatesForSites', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -38,7 +38,7 @@
 			};
 
 			this.getStatesForTeams = function(data) {
-				return $resource('../Agents/GetStatesForTeams', {}, {
+				return $resource('../api/Agents/GetStatesForTeams', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -49,7 +49,7 @@
 			};
 
 			this.getAdherenceForTeamsOnSite = function(data) {
-				return $resource('../Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
+				return $resource('../api/Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -60,7 +60,7 @@
 			};
 
 			this.getAdherenceForAllSites = function(data) {
-				return $resource('../Sites/GetOutOfAdherenceForAllSites', {}, {
+				return $resource('../api/Sites/GetOutOfAdherenceForAllSites', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -69,7 +69,7 @@
 			};
 
 			this.getSites = function(data) {
-				return $resource('../Sites', {}, {
+				return $resource('../api/Sites', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -78,7 +78,7 @@
 			};
 
 			this.getTeams = function(data) {
-				return $resource('../Teams/ForSite', {}, {
+				return $resource('../api/Teams/ForSite', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
@@ -89,7 +89,7 @@
 			};
 
 			this.forToday = function(data) {
-				return $resource('../Adherence/ForToday', {}, {
+				return $resource('../api/Adherence/ForToday', {}, {
 					query: {
 						method: 'GET',
 						isArray: false
@@ -100,7 +100,7 @@
 			};
 
 			this.getPersonDetails = function(data) {
-				return $resource('../Agents/PersonDetails', {}, {
+				return $resource('../api/Agents/PersonDetails', {}, {
 					query: {
 						method: 'GET',
 						isArray: false
@@ -111,7 +111,7 @@
 			};
 
 			this.getAdherenceDetails = function(data) {
-				return $resource('../Adherence/ForDetails', {}, {
+				return $resource('../api/Adherence/ForDetails', {}, {
 					query: {
 						method: 'GET',
 						isArray: true

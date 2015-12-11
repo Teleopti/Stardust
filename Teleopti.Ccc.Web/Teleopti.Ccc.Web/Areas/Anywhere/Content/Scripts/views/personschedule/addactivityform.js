@@ -91,7 +91,7 @@ define([
 				TrackedCommandInfo: { TrackId: trackId }
 			});
 			ajax.ajax({
-					url: 'PersonScheduleCommand/AddActivity',
+					url: 'api/PersonScheduleCommand/AddActivity',
 					type: 'POST',
 					headers: { 'X-Business-Unit-Filter': businessUnitId },
 					data: requestData,

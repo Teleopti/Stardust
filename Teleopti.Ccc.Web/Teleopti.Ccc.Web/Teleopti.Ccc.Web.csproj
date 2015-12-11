@@ -400,7 +400,7 @@
     <Compile Include="Areas\Anywhere\Core\IGetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\BusinessUnitController.cs" />
+    <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\IGetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\IGetTeamAdherence.cs" />

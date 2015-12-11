@@ -139,7 +139,7 @@
 				TrackedCommandInfo: { TrackId: trackId }
 			});
 		    ajax.ajax({
-				    url: 'PersonScheduleCommand/MoveActivity',
+				    url: 'api/PersonScheduleCommand/MoveActivity',
 				    type: 'POST',
 				    headers: { 'X-Business-Unit-Filter': businessUnitId },
 				    data: requestData,

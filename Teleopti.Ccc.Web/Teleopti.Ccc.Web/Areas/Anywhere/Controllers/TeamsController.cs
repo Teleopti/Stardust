@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class TeamsController : Controller
+	public class TeamsController : ApiController
 	{
 		private readonly IGetTeamAdherence _getTeamAdherence;
 		private readonly IGetBusinessUnitId _getBusinessUnitId;
@@ -19,29 +17,28 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_getBusinessUnitId = getBusinessUnitId;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForSite(string siteId)
+		[UnitOfWork, HttpGet, Route("api/Teams/ForSite")]
+		public virtual IHttpActionResult ForSite(Guid siteId)
 		{
-			return Json(_getTeamAdherence.ForSite(siteId), JsonRequestBehavior.AllowGet);
+			return Ok(_getTeamAdherence.ForSite(siteId));
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public virtual JsonResult GetOutOfAdherence(string teamId)
+		[UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherence")]
+		public virtual IHttpActionResult GetOutOfAdherence(Guid teamId)
 		{
-			return Json(_getTeamAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);
+			return Ok(_getTeamAdherence.GetOutOfAdherence(teamId));
 		}
 		
-		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
-		public virtual JsonResult GetOutOfAdherenceForTeamsOnSite(string siteId)
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherenceForTeamsOnSite")]
+		public virtual IHttpActionResult GetOutOfAdherenceForTeamsOnSite(Guid siteId)
 		{
-			return Json(_getTeamAdherence.GetOutOfAdherenceForTeamsOnSite(siteId), JsonRequestBehavior.AllowGet);
+			return Ok(_getTeamAdherence.GetOutOfAdherenceForTeamsOnSite(siteId));
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult GetBusinessUnitId(string teamId)
+		[UnitOfWork, HttpGet, Route("api/Teams/GetBusinessUnitId")]
+		public virtual IHttpActionResult GetBusinessUnitId(Guid teamId)
 		{
-			return Json(_getBusinessUnitId.Get(teamId), JsonRequestBehavior.AllowGet);
+			return Ok(_getBusinessUnitId.Get(teamId));
 		}
-
 	}
 }

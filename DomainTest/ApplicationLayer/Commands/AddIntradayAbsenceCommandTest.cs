@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 {
@@ -38,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 
 			result.Should().Be.False();
 
-			command.ValidationResult.Count.Should().Be(1);
-			command.ValidationResult.First().Should().Be(Resources.InvalidEndTime);
+			command.ValidationResult.Should().Be(Resources.InvalidEndTime);
 		}
 	}
 

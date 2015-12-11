@@ -14,7 +14,7 @@
 			initBusinessUnit: initBusinessUnit
 	};
 
-		var getBusinessUnits = $resource('../BusinessUnit', {}, {
+		var getBusinessUnits = $resource('../api/BusinessUnit', {}, {
 			get: { method: 'GET', params: {}, isArray: true }
 		});
 

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IBusinessUnit> LoadAllBusinessUnitSortedByName()
 		{
-			throw new NotImplementedException();
+			return _businessUnits.OrderBy(b => b.Name).ToArray();
 		}
 
 		public IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit)

@@ -135,20 +135,20 @@ define([
 			result = new ResultViewModel();
 
 			$.ajax({
-				url: "Anywhere/BusinessUnit/Current",
+				url: "api/BusinessUnit/Current",
 				success: function (bu) {
 					intervalFunc = setInterval(function () {
 						for (var i = 0; i < self.PollingPerSecond() ; i++) {
 							$.ajax({
 								headers: { 'X-Business-Unit-Filter': bu },
-								url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId(),
+								url: "api/Agents/GetStates?teamId=" + self.TeamId(),
 							});
 						}
 					}, 1000);
 				}
 			});
 			$.ajax({
-			    url: "/api/PerformanceTool/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
+			    url: "api/PerformanceTool/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
 				success: function () {
 					self.runIterations();
 				}

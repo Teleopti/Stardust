@@ -52,7 +52,7 @@ define([
 			this.setEndTimeForAbsenceModify = function (previousDate) {
 				var trackId = guidgenerator.newGuid();
 				ajax.ajax({
-					url: 'PersonScheduleCommand/GetPersonSchedule',
+					url: 'api/PersonScheduleCommand/GetPersonSchedule',
 					dataType: "json",
 					type: 'GET',
 					data: { personId: self.personId, date: previousDate.format("YYYY-MM-DD") },
@@ -169,7 +169,7 @@ define([
 					TrackedCommandInfo: { TrackId: trackId }
 				});
 				ajax.ajax({
-					url: 'PersonScheduleCommand/ModifyPersonAbsence',
+					url: 'api/PersonScheduleCommand/ModifyPersonAbsence',
 					type: 'POST',
 					headers: { 'X-Business-Unit-Filter': data.BusinessUnitId },
 					data: requestData,
@@ -189,7 +189,7 @@ define([
 				self.Removing(true);
 				ajax.ajax(
 					{
-						url: 'PersonScheduleCommand/RemovePersonAbsence',
+						url: 'api/PersonScheduleCommand/RemovePersonAbsence',
 						type: 'POST',
 						headers: { 'X-Business-Unit-Filter': data.BusinessUnitId },
 						data: JSON.stringify({

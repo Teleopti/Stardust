@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
-using System.Web.Mvc;
-using System.Web.Routing;
+using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere
@@ -73,10 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		public void ShouldTrackAddIntradayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
+			var target = new PersonScheduleCommandController(commandDispatcher, new FakeLoggedOnUser(personWithId), null);
 
 			var command = new AddIntradayAbsenceCommand
 			{
@@ -97,20 +95,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldNotDispatchInvalidAddIntradayAbsenceCommand()
 		{
-			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
-			var context = new FakeHttpContext("/");
-			context.SetResponse(response);
-			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
-
+			
 			var command = new AddIntradayAbsenceCommand
 				{
 					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
 					EndTime = new DateTime(2013, 11, 27, 13, 00, 00, DateTimeKind.Utc)
 				};
 
-			target.AddIntradayAbsence(command);
+			var result = (BadRequestErrorMessageResult)target.AddIntradayAbsence(command);
+			result.Message.Should().Be.EqualTo(UserTexts.Resources.InvalidEndTime);
 
 			commandDispatcher.AssertWasNotCalled(x => x.Execute(command));
 		}
@@ -238,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new PersonScheduleCommandController(null, null, personScheduleDayViewModelFactory);
 
 			var result = target.GetPersonSchedule(id, date);
-			result.Data.Should().Be.SameInstanceAs(model);
+			result.Result<PersonScheduleDayViewModel>().Should().Be.SameInstanceAs(model);
 		}
 	}
 

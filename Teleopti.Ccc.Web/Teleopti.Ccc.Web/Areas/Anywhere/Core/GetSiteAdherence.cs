@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return sites.Select(s =>
 				new SiteOutOfAdherence
 				{
-					Id = s.Id.ToString(),
+					Id = s.Id.GetValueOrDefault(),
 					OutOfAdherence = adherence
 						.Where(a => a.SiteId == s.Id.Value)
 						.Select(a => a.Count)

@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -46,8 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return new ViewResult();
 		}
 
-		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
-		public JsonResult NavigationContent()
+		[UnitOfWork, HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		public virtual JsonResult NavigationContent()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();
 			return Json(new
