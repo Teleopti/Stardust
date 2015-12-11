@@ -115,6 +115,10 @@
 			return schedule.IsSelected ? 'selected' : '';
 		};
 
+		vm.isAnyAgentSelected = function () {
+			return vm.totalSelected.length != 0;
+		};
+
 		vm.toggleCalendar = function () {
 			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
@@ -244,8 +248,10 @@
 		}, true);
 
 		var toggleAddAbsencePanel = function () {
-			vm.toggleMenuState();
-			vm.setCurrentCommand("addAbsence")();
+			if (vm.isAnyAgentSelected()) {
+				vm.toggleMenuState();
+				vm.setCurrentCommand("addAbsence")();
+			}
 		}
 
 		vm.commands = [
