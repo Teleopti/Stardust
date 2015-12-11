@@ -54,12 +54,12 @@
 
 	<div id="absence-result1" class="row notice-spacer" ng-show="vm.showActionResult">
 		<div ng-if="!vm.hasErrorInResult" class="alert-success notice-spacer">
-			<i class='mdi mdi-thumb-up'></i>Added absence for all {{vm.selectedPersonIdList.length}} selected agent(s).
+			<i class='mdi mdi-thumb-up'></i>Added absence for {{vm.selectedPersonIdList.length}} selected agent(s), all successed!
 			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
 		</div>
 		<div ng-if="vm.hasErrorInResult" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
-			Added absence for {{vm.selectedPersonIdList.length - vm.errorDetails.length}} agent(s), failed with {{vm.errorDetails.length}} agent(s). 
+			Added absence for {{vm.selectedPersonIdList.length}} selected agent(s), {{vm.selectedPersonIdList.length - vm.errorDetails.length}} successed, {{vm.errorDetails.length}} failed! 
 			<a href="javascript: void(0);" ng-click="vm.toggleErrorDetails()">click here</a> to show details.
 			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
 		</div>
