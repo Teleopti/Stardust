@@ -79,9 +79,20 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 							? RequestStatus.Denied
 							: RequestStatus.New,
 				Payload = request.Request.RequestPayloadDescription,
-				Team = team == null? null:team.Description.Name
+				Team = team == null? null:team.Description.Name,
+				IsFullDay = isFullDay(request)
 			};
-		}		
+		}
+
+		private bool isFullDay(IPersonRequest request)
+		{
+			// ref: Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.TextRequestFormMappingProfile
+			var startTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone());
+			if (startTime.Hour != 0 || startTime.Minute != 0 || startTime.Second != 0) return false;
+			var endTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone());
+			if (endTime.Hour != 23 || endTime.Minute != 59 || endTime.Second != 0) return false;
+			return true;
+		}
 
 	}
 }

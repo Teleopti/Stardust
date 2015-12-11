@@ -57,18 +57,17 @@
 		function prepareComputedColumns(dataArray) {
 			angular.forEach(dataArray, function(row) {
 				var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
-				var hours = moment.duration(length, 'seconds')._data.hours;
-				var minuts = moment.duration(length, 'seconds')._data.minutes;
+				
 				var angularTimezone = moment.tz(row.TimeZone).format("Z");
 				row.GetDuration = function () {
 					return formatToTimespan(length);
 				}
 				row.FormatedPeriodStartTime = function () {
-					if (hours == 23 && minuts == 59) return $filter('date')(row.PeriodStartTime, "shortDate", angularTimezone);
+					if (row.IsFullDay) return $filter('date')(row.PeriodStartTime, "shortDate", angularTimezone);
 					else return $filter('date')(row.PeriodStartTime, 'short', angularTimezone);
 				}
 				row.FormatedPeriodEndTime = function () {			
-					if (hours == 23 && minuts == 59) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
+					if (row.IsFullDa) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
 					else return $filter('date')(row.PeriodEndTime, "short", angularTimezone);
 				}
 				row.GetType = function () {
