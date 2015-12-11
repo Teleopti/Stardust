@@ -33,8 +33,10 @@
 			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
-					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="!vm.isAnyAgentSelected()"
-						 ng-click="cmd.action()">
+
+					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="vm.selectedPersonIdList.length == 0"
+						ng-click="vm.selectedPersonIdList.length == 0 || cmd.action()">
+
 						<div>
 							<span class="pull-left">{{cmd.label|translate}}</span>
 							<span class="pull-right">{{cmd.shortcut}}</span>
@@ -53,12 +55,12 @@
 
 	<div id="absence-result1" class="row notice-spacer" ng-show="vm.showActionResult">
 		<div ng-if="!vm.hasErrorInResult" class="alert-success notice-spacer">
-			<i class='mdi mdi-thumb-up'></i>Added absence for all {{vm.totalSelected.length}} selected agent(s).
+			<i class='mdi mdi-thumb-up'></i>Added absence for all {{vm.selectedPersonIdList.length}} selected agent(s).
 			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
 		</div>
 		<div ng-if="vm.hasErrorInResult" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
-			Added absence for {{vm.totalSelected.length - vm.errorDetails.length}} agent(s), failed with {{vm.errorDetails.length}} agent(s). 
+			Added absence for {{vm.selectedPersonIdList.length - vm.errorDetails.length}} agent(s), failed with {{vm.errorDetails.length}} agent(s). 
 			<a href="javascript: void(0);" ng-click="vm.toggleErrorDetails()">click here</a> to show details.
 			<i class="mdi mdi-close pull-right" ng-click="vm.clearErrors()"></i>
 		</div>
@@ -149,24 +151,23 @@
 	</md-sidenav>
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
-		<div class="modalbg">
-			<div class="dialog">
-				<div class="modal-header">
-					Error details
-				</div>
-				<div class="modal-inner-content">
-					<ul class="wfm-simple-list" style="max-height: 430px">
-						<li ng-repeat="error in vm.errorDetails">
-							{{error.PersonName}}
-							<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
-						</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<aside>
-						<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
-					</aside>
-				</div>
+	<div class="modalbg">
+		<div class="dialog">
+			<div class="modal-header">
+				Error details
+			</div>
+			<div class="modal-inner-content">
+				<ul class="wfm-simple-list" style="max-height: 430px">
+					<li ng-repeat="error in vm.errorDetails">
+						{{error.PersonName}}
+						<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<aside>
+					<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+				</aside>
 			</div>
 		</div>
 	</div>
