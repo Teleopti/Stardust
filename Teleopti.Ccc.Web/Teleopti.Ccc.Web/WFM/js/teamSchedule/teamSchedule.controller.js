@@ -12,6 +12,8 @@
 
 		vm.selectedTeamId = '';
 		vm.scheduleDate = new Date();
+		vm.selectedAbsenceStartDate = vm.scheduleDate;
+		vm.selectedAbsenceEndDate = vm.scheduleDate;
 		vm.selectedAbsenceId = '';
 		vm.total = 0;
 		vm.isAbsenceReportingEnabled = false;
@@ -138,6 +140,8 @@
 		};
 
 		vm.scheduleDateChanged = function () {
+			vm.selectedAbsenceStartDate = vm.scheduleDate;
+			vm.selectedAbsenceEndDate = vm.scheduleDate;
 			teamScheduleSvc.loadAllTeams.query({
 				date: vm.scheduleDateMoment().format("YYYY-MM-DD")
 			}).$promise.then(function (result) {
@@ -301,15 +305,12 @@
 			}
 		};
 
-		vm.selectedAbsenceStartDate = new Date();
-
 		vm.absenceStartDatePickerOpened = false;
 
 		vm.toggleAbsenceStartCalendar = function () {
 			vm.absenceStartDatePickerOpened = !vm.absenceStartDatePickerOpened;
 		};
 
-		vm.selectedAbsenceEndDate = new Date();
 		vm.absenceEndDatePickerOpened = false;
 
 		vm.isFullDayAbsence = false;
