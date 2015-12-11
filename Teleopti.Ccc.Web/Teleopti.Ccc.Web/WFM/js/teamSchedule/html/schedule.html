@@ -35,7 +35,7 @@
 				<ul class="wfm-list">
 
 					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="!vm.isAnyAgentSelected()"
-						 ng-click="cmd.action()">
+						ng-click="cmd.action()">
 						<div>
 							<span class="pull-left">{{cmd.label|translate}}</span>
 							<span class="pull-right">{{cmd.shortcut}}</span>
@@ -65,13 +65,14 @@
 		</div>
 	</div>
 
-	<div class="alert-error notice-spacer" ng-if="vm.total > 500">
-		<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
-	</div>
+	<div class="big-table-wrapper material-depth-1" style="position: relative">
+		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
+			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
+		</div>
 
-	<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
-		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<thead>
+		<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
+			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<thead>
 			<tr class="person">
 				<th class="person-name person-name-column" style="width: 15%">
 					<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
@@ -88,12 +89,13 @@
 				<th style="width: 1%">
 				</th>
 			</tr>
-		</thead>
-		<tbody>
+			</thead>
+			<tbody>
 			<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
-		</tbody>
-	</table>
-	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+			</tbody>
+		</table>
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	</div>
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
