@@ -30,7 +30,7 @@
 		it('should get the current user from the server', function(done) {
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-				$httpBackend.expectGET("../BusinessUnit").respond(200, 'mock');
+				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
 				var request = CurrentUserInfo.getCurrentUserFromServer();
 				
 				request.success(function (result) {
@@ -56,7 +56,7 @@
 		it('should init the user context', function (done) {
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-				$httpBackend.expectGET("../BusinessUnit").respond(200, 'mock');
+				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();
