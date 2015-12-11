@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -8,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class StaffingMetricsController : Controller
+	public class StaffingMetricsController : ApiController
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IDailyStaffingMetricsViewModelFactory _dailyStaffingMetricsViewModelFactory;
@@ -19,22 +20,40 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_dailyStaffingMetricsViewModelFactory = dailyStaffingMetricsViewModelFactory;
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult AvailableSkills(DateTime date)
+		[UnitOfWork, HttpGet, Route("api/StaffingMetrics/AvailableSkills")]
+		public virtual IHttpActionResult AvailableSkills(DateTime date)
 		{
 			var dateOnly = new DateOnly(date);
-			var skills = _skillRepository.FindAllWithSkillDays(new DateOnlyPeriod(dateOnly, dateOnly)).Select(s => new { s.Id, s.Name }).OrderBy(s => s.Name).ToList();
-			return Json(new
-				{
-					Skills = skills
-				}, JsonRequestBehavior.AllowGet);
+			var skills = _skillRepository.FindAllWithSkillDays(new DateOnlyPeriod(dateOnly, dateOnly)).Select(s => new AvailableSkillModel(s.Id, s.Name)).OrderBy(s => s.Name).ToList();
+			var content = new AvailableSkillsModel
+			{
+				Skills = skills
+			};
+			return Ok(content);
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult DailyStaffingMetrics(Guid skillId, DateTime date)
+		[UnitOfWork, HttpGet, Route("api/StaffingMetrics/DailyStaffingMetrics")]
+		public virtual IHttpActionResult DailyStaffingMetrics(Guid skillId, DateTime date)
 		{
 			var vm = _dailyStaffingMetricsViewModelFactory.CreateViewModel(skillId, date);
-			return Json(vm, JsonRequestBehavior.AllowGet);
+			return Ok(vm);
 		}
+	}
+
+	public class AvailableSkillsModel
+	{
+		public ICollection<AvailableSkillModel> Skills { get; set; }
+	}
+
+	public class AvailableSkillModel
+	{
+		public AvailableSkillModel(Guid? id, string name)
+		{
+			Id = id;
+			Name = name;
+		}
+
+		public Guid? Id { get; set; }
+		public string Name { get; set; }
 	}
 }

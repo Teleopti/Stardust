@@ -41,7 +41,7 @@ define([
 
 	var loadSkills = function (buid, date, callback) {
 		$.ajax({
-			url: 'StaffingMetrics/AvailableSkills',
+			url: 'api/StaffingMetrics/AvailableSkills',
 			headers: { 'X-Business-Unit-Filter': buid},
 			cache: false,
 			dataType: 'json',

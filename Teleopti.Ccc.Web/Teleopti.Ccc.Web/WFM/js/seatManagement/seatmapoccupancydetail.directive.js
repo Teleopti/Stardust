@@ -44,7 +44,7 @@
 		};
 
 		vm.getSeatBookingDetailClass = function (booking) {
-			var belongsToDateMoment = moment(booking.BelongsToDate.Date);
+			var belongsToDateMoment = moment(booking.BelongsToDate);
 			var scheduleDateMoment = moment(vm.scheduleDate);
 
 			if (!belongsToDateMoment.isSame(scheduleDateMoment, 'day')) {

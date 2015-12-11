@@ -155,11 +155,11 @@
             <div class="wfm-block">
                 <div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
                     <span translate>Duration</span>
-                    <span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate.Date | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | amDateFormat: 'LL' }}</strong></span>
+                    <span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate | amDateFormat: 'LL' }}</strong></span>
                 </div>
                 <div ng-show="acToggle2">
                     <form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator>        
-						<date-range-picker start-date="campaign.StartDate.Date" end-date="campaign.EndDate.Date" errors="campaign.spanningPeriodErrors"></date-range-picker>						
+						<date-range-picker start-date="campaign.StartDate" end-date="campaign.EndDate" errors="campaign.spanningPeriodErrors"></date-range-picker>						
                     </form>
                 </div>
             </div>

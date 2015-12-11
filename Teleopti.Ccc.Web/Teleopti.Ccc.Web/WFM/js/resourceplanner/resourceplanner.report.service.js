@@ -12,7 +12,7 @@
 				culturalDaysOff.start = 1;
 				period.forEach(function(node){
                     node.SkillDetails.forEach(function(subnode){
-                        var day = new Date(subnode.Date.Date).getDay();
+                        var day = new Date(subnode.Date).getDay();
                         if(day == culturalDaysOff.a || day == culturalDaysOff.b){
                         	return subnode.weekend = true;
                         }

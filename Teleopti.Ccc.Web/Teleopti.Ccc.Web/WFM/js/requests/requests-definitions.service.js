@@ -23,8 +23,8 @@
 
 		this.normalizeRequestsFilter = function(filter, sortingOrders) {
 			return {
-				StartDate: { Date: filter.period.startDate },
-				EndDate: { Date: filter.period.endDate },
+				StartDate: filter.period.startDate,
+				EndDate: filter.period.endDate,
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: filter.agentSearchTerm
 			};

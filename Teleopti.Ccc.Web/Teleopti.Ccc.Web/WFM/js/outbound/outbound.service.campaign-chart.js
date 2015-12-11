@@ -95,7 +95,7 @@
 		        CampaignId: input.campaignId,
 		        ManualProductionPlan: input.selectedDates.map(function(d) {
 					return {
-						Date: { Date: d },
+						Date: d,
 						Time: input.manualPlanInput
 					}   
 		        })
@@ -116,7 +116,7 @@
 
 	        	ActualBacklog: input.selectedDates.map(function(d) {
 			        return {
-			        	Date: { Date: d },
+			        	Date: d,
 						Time: input.manualBacklogInput
 			        };
 		        })
@@ -141,7 +141,7 @@
 			    overStaff: null
 		    };
 
-		    returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
+		    returnData.dates = new moment(data.Dates).format("YYYY-MM-DD");
 		    returnData.rawBacklogs = data.BacklogPersonHours;
 		    returnData.unscheduledPlans = data.PlannedPersonHours;
 		    returnData.schedules = data.ScheduledPersonHours;

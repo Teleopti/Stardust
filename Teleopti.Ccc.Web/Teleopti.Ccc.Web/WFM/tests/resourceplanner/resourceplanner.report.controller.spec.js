@@ -14,16 +14,16 @@ describe('ResourceplannerReportCtrl', function () {
 	}));
 	var result = {};
 	result.withNoIssues = function(){
-		return {result:{BusinessRulesValidationResults:[]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:{Date:'2015-11-14'}}]}]}};
+		return {result:{BusinessRulesValidationResults:[]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-14'}]}]}};
 	};
 	result.withIssues = function(){
-		return {result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:{Date:'2015-11-14'}}]}]}};
+		return {result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-14'}]}]}};
 	};
 	result.withNoWeekends = function(){
-		return {result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:{Date:'2015-11-12'}}]}]}};
+		return {result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-12'}]}]}};
 	};
 	result.withPeriodId = function(){
-		return {planningperiod:{id:0},result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:{Date:'2015-11-12'}}]}]}}
+		return {planningperiod:{id:0},result:{BusinessRulesValidationResults:[[]]},interResult:{SkillResultList:[{SkillName:'test',SkillDetails:[{Date:'2015-11-12'}]}]}}
 	};
 
 	it('should not detect any issues', inject(function ($controller) {

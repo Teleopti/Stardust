@@ -121,25 +121,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/ForSites")]
 		public virtual IHttpActionResult ForSites([FromUri]Guid[] siteIds)
 		{
-			return Ok(_getAgents.ForSites(siteIds));
+			return Ok(_getAgents.ForSites(siteIds).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]
 		public virtual IHttpActionResult ForTeams([FromUri]Guid[] teamIds)
 		{
-			return Ok(_getAgents.ForTeams(teamIds));
+			return Ok(_getAgents.ForTeams(teamIds).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
 		public virtual IHttpActionResult GetStatesForSites([FromUri]Guid[] siteIds)
 		{
-			return Ok(_getAgentsStates.ForSites(siteIds));
+			return Ok(_getAgentsStates.ForSites(siteIds).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
 		public virtual IHttpActionResult GetStatesForTeams([FromUri]Guid[] teamIds)
 		{
-			return Ok(_getAgentsStates.ForTeams(teamIds));
+			return Ok(_getAgentsStates.ForTeams(teamIds).ToArray());
 		}
 	}
 

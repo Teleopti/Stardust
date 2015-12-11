@@ -36,8 +36,8 @@
         function init() {
             $scope.campaign = {
                 Activity: {},
-                StartDate: { Date: new Date() },
-                EndDate: { Date: new Date() },
+                StartDate: new Date(),
+                EndDate: new Date(),
                 WorkingHours: []
             };
 

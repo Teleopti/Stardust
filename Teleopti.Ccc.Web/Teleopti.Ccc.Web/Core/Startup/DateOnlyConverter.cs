@@ -8,12 +8,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
-			throw new NotImplementedException();
-		}
-
-		public override bool CanWrite
-		{
-			get { return false; }
+			serializer.Serialize(writer, ((DateOnly)value).Date);
 		}
 
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

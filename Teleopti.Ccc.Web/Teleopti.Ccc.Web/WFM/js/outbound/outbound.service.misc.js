@@ -10,12 +10,12 @@
 
 		this.getDateFromServer = function (date) {
 			var dateToBefixed = new Date(date);			
-			dateToBefixed.setTime(dateToBefixed.getTime() + dateToBefixed.getTimezoneOffset() * 60 * 1000);			
-			return dateToBefixed;
+			dateToBefixed.setTime(dateToBefixed.getTime() + dateToBefixed.getTimezoneOffset() * 60 * 1000);
+		    return dateToBefixed;
 		};
-
+        
 		this.sendDateToServer = function(date) {
-			return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
+		    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
 		};
 
 		this.isLastDayOfMonth = function(momentDate) {
@@ -54,7 +54,6 @@
 				}
 			});
 		};
-
 
 		this.parseNumberString = function (s, integerOnly) {
 			var gSize = $locale.NUMBER_FORMATS.PATTERNS[0].gSize;

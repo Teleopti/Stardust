@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
-		public virtual IHttpActionResult UpdateCampaign(Guid Id, CampaignViewModel campaignViewModel)
+		public virtual IHttpActionResult UpdateCampaign(Guid Id, [FromBody]CampaignViewModel campaignViewModel)
 		{
 			var campaign = _outboundCampaignPersister.Persist(campaignViewModel);
 			if (campaign == null)
@@ -160,9 +160,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
-		public virtual void UpdateThresholdsSetting(ThresholdSettingForm input)
+		public virtual void UpdateThresholdsSetting([FromBody]ThresholdSettingForm input)
 		{
-			var thresholdSetting = new OutboundThresholdSettings()
+			var thresholdSetting = new OutboundThresholdSettings
 			{
 				RelativeWarningThreshold = new Percent(input.Value),
 				WarningThresholdType = input.Type
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual ThresholdSettingForm GetThresholdSetting()
 		{
 			var threshold = _thresholdsSettingPersisterAndProvider.Get();
-			return new ThresholdSettingForm()
+			return new ThresholdSettingForm
 			{
 				Value = threshold.RelativeWarningThreshold.Value,
 				Type = threshold.WarningThresholdType

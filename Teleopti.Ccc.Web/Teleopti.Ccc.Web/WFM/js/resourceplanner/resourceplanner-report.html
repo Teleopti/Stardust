@@ -26,7 +26,7 @@
                     <tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">
                         <th></th>
                         <th class="datehead" ng-repeat="datenode in subnode.SkillDetails">
-                            <p>{{datenode.Date.Date  |  amDateFormat:"DD/MM" }}</p>
+                            <p>{{datenode.Date  |  amDateFormat:"DD/MM" }}</p>
                         </th>
                     </tr>
                     <tr ng-repeat="(index, subnode) in dayNodes">
@@ -36,7 +36,7 @@
 							<div class="resourceplanner-box"
 							ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
                             <div class="floater-box">
-	                            <p>{{node.Date.Date |  amDateFormat:"L"}} &nbsp;</p> 
+	                            <p>{{node.Date |  amDateFormat:"L"}} &nbsp;</p> 
 	                            <p>Rel diff: {{node.parseDif}}%</p>
                             </div>
 						</div>

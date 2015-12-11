@@ -19,7 +19,7 @@ define([
 
 	var loadDailyStaffingMetrics = function (buid, date, skillId, callback) {
 		$.ajax({
-			url: 'StaffingMetrics/DailyStaffingMetrics',
+			url: 'api/StaffingMetrics/DailyStaffingMetrics',
 			headers: { 'X-Business-Unit-Filter': buid },
 			cache: false,
 			dataType: 'json',

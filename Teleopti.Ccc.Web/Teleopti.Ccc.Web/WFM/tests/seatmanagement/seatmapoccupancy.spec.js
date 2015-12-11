@@ -63,7 +63,7 @@ describe('seatmap booking view tests', function () {
 			"SeatId": "14a2a684-74bd-4c78-b5c7-7267ac3178a2",
 			"BookingId": "6e03b40c-cad5-4f23-935e-a51300bf8f10",
 			"SeatName": "1",
-			"BelongsToDate": { "Date": "2015-01-02T00:00:00" }
+			"BelongsToDate": "2015-01-02T00:00:00"
 		};
 	};
 

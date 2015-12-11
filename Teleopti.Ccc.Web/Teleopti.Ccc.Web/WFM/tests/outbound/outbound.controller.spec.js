@@ -104,8 +104,8 @@ describe('OutboundCreateCtrl', function() {
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function() {} };
 		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function() {} };
 		completeValidCampaign(test.scope.campaign);
-		test.scope.campaign.StartDate.Date = new Date();
-		test.scope.campaign.EndDate.Date = (new Date()).setDate((new Date()).getDate() - 1);
+		test.scope.campaign.StartDate = new Date();
+		test.scope.campaign.EndDate = (new Date()).setDate((new Date()).getDate() - 1);
 		expect(test.scope.isInputValid()).not.toBeTruthy();
 	});
 

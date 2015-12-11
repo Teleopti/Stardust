@@ -61,7 +61,6 @@
 		}
 
         function init() {
-            $scope.campagin = null;
             $scope.isCampaignLoaded = function () { return angular.isDefined($scope.campaign); };
 
             var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;

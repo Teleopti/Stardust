@@ -35,16 +35,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
+			var startDate = new DateOnly(model.Date);
 			var updatedCount = 0;
 			foreach (var person in persons)
 			{
 				var inputPerson = model.People.Single(x => x.PersonId == person.Id);
 				var inputSkills = inputPerson.SkillIdList ?? new List<Guid>();
 
-				var periods = person.PersonPeriods(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)));
-				if (!periods.Any())
+				var currentPeriod = person.Period(startDate);
+				if (currentPeriod == null)
 				{
-					var newPeriod = new PersonPeriod(new DateOnly(model.Date),
+					var newPeriod = new PersonPeriod(startDate,
 						new PersonContract(_contractRepository.LoadAll().FirstOrDefault(),
 							_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault()),
 						_teamRepository.LoadAll().FirstOrDefault());
@@ -56,18 +57,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					continue;
 				}
 
-				var currentPeriod = periods.First();
 				var currentSkills = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList();
 				if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any())
 				{
 					continue;
 				}
 
-				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
+				if (!currentPeriod.StartDate.Equals(startDate))
 				{
 
 					var newPeriod = currentPeriod.NoneEntityClone();
-					newPeriod.StartDate = new DateOnly(model.Date);
+					newPeriod.StartDate = startDate;
 					person.ResetPersonSkills(newPeriod);
 
 					updatePeriodWithSkill(person, inputSkills, newPeriod, currentPeriod.PersonSkillCollection);
@@ -90,18 +90,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
+			var startDate = new DateOnly(model.Date);
 			var updatedCount = 0;
 			foreach (var person in persons)
 			{
 				var inputPerson = model.People.Single(x => x.PersonId == person.Id);
 
 				var inputShiftBag = _shiftBagRepository.Get(inputPerson.ShiftBagId.GetValueOrDefault());
-				var periods = person.PersonPeriods(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)));
-				if (!periods.Any())
+				var currentPeriod = person.Period(startDate);
+				if (currentPeriod == null)
 				{
 					var contract = new PersonContract(_contractRepository.LoadAll().FirstOrDefault(),
 						_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault());
-					var newPeriod = new PersonPeriod(new DateOnly(model.Date), contract, _teamRepository.LoadAll().FirstOrDefault())
+					var newPeriod = new PersonPeriod(startDate, contract, _teamRepository.LoadAll().FirstOrDefault())
 					{
 						RuleSetBag = inputShiftBag
 					};
@@ -111,7 +112,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					continue;
 				}
 
-				var currentPeriod = periods.First();
 				if ((currentPeriod.RuleSetBag == null && inputShiftBag == null) ||
 					(currentPeriod.RuleSetBag != null &&
 					 (currentPeriod.RuleSetBag.Id.GetValueOrDefault() == inputShiftBag.Id.GetValueOrDefault())))
@@ -119,10 +119,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					continue;
 				}
 
-				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
+				if (!currentPeriod.StartDate.Equals(startDate))
 				{
 					var newPeriod = currentPeriod.NoneEntityClone();
-					newPeriod.StartDate = new DateOnly(model.Date);
+					newPeriod.StartDate = startDate;
 
 					newPeriod.RuleSetBag = inputShiftBag;
 

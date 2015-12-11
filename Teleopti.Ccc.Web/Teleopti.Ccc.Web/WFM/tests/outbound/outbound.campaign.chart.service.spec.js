@@ -46,7 +46,7 @@ describe('Outbound Chart Service Test', function() {
 
     it('Basic graph data should be mapped correctly', function() {
         var input = {
-            Dates: { Date: '2015-07-31' },
+            Dates: '2015-07-31',
             ScheduledPersonHours: 50,
             BacklogPersonHours: 100,
             PlannedPersonHours: 30,
@@ -64,7 +64,7 @@ describe('Outbound Chart Service Test', function() {
 
 	it('Graph data with overstaff should be mapped correctly', function() {
 		var input = {
-			Dates: { Date: '2015-07-31' },
+			Dates: '2015-07-31',
 			ScheduledPersonHours: 50,
 			BacklogPersonHours: 0,
 			PlannedPersonHours: 30,
@@ -93,7 +93,7 @@ describe('Outbound Chart Service Test', function() {
         };
 
         var input = {
-            Dates: [{ Date: '2015-07-31' }],
+            Dates: [ '2015-07-31' ],
             ScheduledPersonHours: [50],
             BacklogPersonHours: [100],
             PlannedPersonHours: [30]
@@ -123,7 +123,7 @@ describe('Outbound Chart Service Test', function() {
         };
 
         var input = {
-            Dates: [{ Date: '2015-07-31' }, { Date: '2015-07-32' }],
+            Dates: [ '2015-07-31', '2015-07-32'],
             ScheduledPersonHours: [50, 10],
             BacklogPersonHours: [100, 50],
             PlannedPersonHours: [30, 20],

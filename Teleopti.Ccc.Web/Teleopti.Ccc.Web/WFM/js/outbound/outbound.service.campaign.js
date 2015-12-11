@@ -145,8 +145,8 @@
 
 		function normalizePeriod(period) {
 			return {
-				StartDate: { Date: miscService.sendDateToServer(period.PeriodStart) },
-				EndDate: { Date: miscService.sendDateToServer(period.PeriodEnd) }
+				StartDate: period.PeriodStart,
+				EndDate: period.PeriodEnd
 			};
 		};
 
@@ -170,14 +170,7 @@
 		}
 
 		function normalizeCampaign(campaign) {
-			if (campaign.StartDate) {
-				campaign.StartDate.Date = miscService.sendDateToServer(campaign.StartDate.Date);
-			}
-			if (campaign.EndDate) {
-				campaign.EndDate.Date = miscService.sendDateToServer(campaign.EndDate.Date);
-			}
-
-			var campaign = angular.copy(campaign);
+		    var campaign = angular.copy(campaign);
 
 			var formattedWorkingHours = [];
 
@@ -241,18 +234,13 @@
 		}
 
 		function denormalizeCampaign(campaign) {
-			var campaign = angular.copy(campaign);
+			var campaignCopy = angular.copy(campaign);
 
-			if (campaign.StartDate) {
-				campaign.StartDate.Date = miscService.getDateFromServer(campaign.StartDate.Date);
-			}
-			if (campaign.EndDate) {
-				campaign.EndDate.Date = miscService.getDateFromServer(campaign.EndDate.Date);
-			}
+			campaignCopy.StartDate = new Date(campaign.StartDate);
+			campaignCopy.EndDate = new Date(campaign.EndDate);
+		    var reformattedWorkingHours = [];
 
-			var reformattedWorkingHours = [];
-
-			campaign.WorkingHours.forEach(function(a) {
+		    campaignCopy.WorkingHours.forEach(function (a) {
 
 				var startTime = parseTimespanString(a.StartTime),
 					endTime = parseTimespanString(a.EndTime),
@@ -280,8 +268,8 @@
 				}
 
 			});
-			campaign.WorkingHours = reformattedWorkingHours;
-			return campaign;
+		    campaignCopy.WorkingHours = reformattedWorkingHours;
+		    return campaignCopy;
 		};
 
 		function createEmptyWorkingPeriod(startTime, endTime) {

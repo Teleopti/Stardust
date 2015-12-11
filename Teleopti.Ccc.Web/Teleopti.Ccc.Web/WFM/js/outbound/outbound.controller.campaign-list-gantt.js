@@ -294,8 +294,8 @@
 					ganttArr[ind].id = ele.Id;
 					ganttArr[ind].tasks = [];
 					ganttArr[ind].tasks[0] = {};
-					ganttArr[ind].tasks[0].from =  miscService.getDateFromServer(ele.StartDate.Date);
-					ganttArr[ind].tasks[0].to = miscService.getDateFromServer(moment(ele.EndDate.Date).add(1, 'days').toDate());
+					ganttArr[ind].tasks[0].from =  miscService.getDateFromServer(ele.StartDate);
+					ganttArr[ind].tasks[0].to = miscService.getDateFromServer(moment(ele.EndDate).add(1, 'days').toDate());
 					ganttArr[ind].tasks[0].id = ele.Id;
 					ganttArr[ind].tasks[0].color = 'rgba(0,0,0,0.6)';
 					ganttArr[ind].tasks[0].tooltips = {

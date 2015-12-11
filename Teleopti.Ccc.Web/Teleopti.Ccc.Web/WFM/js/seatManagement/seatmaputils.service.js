@@ -478,7 +478,7 @@
 
 			function getTimeZoneAdjustmentDisplay(booking) {
 
-				var belongsToDateMoment = moment(booking.BelongsToDate.Date);
+				var belongsToDateMoment = moment(booking.BelongsToDate);
 				var startDateMoment = moment(booking.StartDateTime);
 
 				var timeZoneAdjustment = "";
