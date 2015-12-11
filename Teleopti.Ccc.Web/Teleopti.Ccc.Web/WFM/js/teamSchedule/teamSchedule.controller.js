@@ -359,6 +359,8 @@
 				vm.clearErrors();
 			}, 5000);
 
+			vm.loadSchedules(vm.paginationOptions.pageNumber);
+
 			vm.setCurrentCommand("");
 		}
 
