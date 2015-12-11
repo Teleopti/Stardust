@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
-				.WithAlarm(null, phone, 0, Adherence.Out)
+				.WithRule(null, phone, 0, Adherence.Out)
 				;
 			Now.Is("2015-03-12 08:05");
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
-				.WithAlarm("phone", phone, (Guid?) null)
+				.WithRule("phone", phone, (Guid?) null)
 				;
 			Now.Is("2015-03-12 08:05");
 
@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
-				.WithAlarm("AUX1", platform1, phone, -1, Adherence.Out)
-				.WithAlarm("AUX1", platform2, phone, 0, Adherence.In)
+				.WithRule("AUX1", platform1, phone, -1, Adherence.Out)
+				.WithRule("AUX1", platform2, phone, 0, Adherence.In)
 				;
 			Now.Is("2015-05-11 08:00");
 

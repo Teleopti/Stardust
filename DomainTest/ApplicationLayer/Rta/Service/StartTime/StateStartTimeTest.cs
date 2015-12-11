@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithAlarm("stateone", Guid.NewGuid());
+				.WithRule("stateone", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithAlarm("stateone", Guid.NewGuid())
-				.WithAlarm("statetwo", Guid.NewGuid());
+				.WithRule("stateone", Guid.NewGuid())
+				.WithRule("statetwo", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest

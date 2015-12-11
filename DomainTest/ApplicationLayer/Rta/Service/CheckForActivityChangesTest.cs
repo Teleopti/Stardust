@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-09-21 09:00", "2015-09-21 11:00")
-				.WithAlarm("phone", phone, alarm)
+				.WithRule("phone", phone, alarm)
 				;
 
 			Now.Is("2015-09-21 09:00");

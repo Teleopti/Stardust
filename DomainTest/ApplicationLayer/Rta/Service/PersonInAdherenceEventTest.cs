@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", activityId, 0);
+				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(state);
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(state1)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode1", activityId, 0)
-				.WithAlarm("statecode2", activityId, 0);
+				.WithRule("statecode1", activityId, 0)
+				.WithRule("statecode2", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(state1);
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", person)
 				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithAlarm(null, phone, -1)
-				.WithAlarm("phone", phone, 0);
+				.WithRule(null, phone, -1)
+				.WithRule("phone", phone, 0);
 			Now.Is("2014-10-20 9:05");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", person)
 				.WithSchedule(person, phone, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithAlarm(null, phone, 0)
-				.WithAlarm("phone", phone, 0);
+				.WithRule(null, phone, 0)
+				.WithRule("phone", phone, 0);
 			Now.Is("2014-10-20 9:05");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-11-11 10:00", "2014-11-11 12:00")
-				.WithAlarm("statecode", activityId, 0);
+				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-11-11 11:00");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", activityId, 0);
+				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(state);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, null, siteId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", activityId, 0);
+				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
 			Target.SaveState(state);
@@ -197,10 +197,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", person)
-				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
-				.WithAlarm("logged off", phone, -1)
-				.WithAlarm("logged off", null, 0)
+					.WithUser("usercode", person)
+					.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+					.WithRule("logged off", phone, -1)
+					.WithRule("logged off", null, 0)
 				;
 			Now.Is("2015-11-24 17:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -227,10 +227,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", person)
 				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
-				.WithAlarm("phone", phone, 0)
-				.WithAlarm("phone", null, 1)
-				.WithAlarm("logged off", phone, -1)
-				.WithAlarm("logged off", null, 0)
+				.WithRule("phone", phone, 0)
+				.WithRule("phone", null, 1)
+				.WithRule("logged off", phone, -1)
+				.WithRule("logged off", null, 0)
 				;
 			Now.Is("2015-11-25 8:00");
 			Target.SaveState(new ExternalUserStateForTest

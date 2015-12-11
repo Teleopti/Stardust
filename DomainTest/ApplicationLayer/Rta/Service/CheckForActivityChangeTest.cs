@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00")
-				.WithAlarm("phone", activityId, "alarm")
+				.WithRule("phone", activityId, "alarm")
 				;
 			
 			Target.SaveState(new ExternalUserStateForTest

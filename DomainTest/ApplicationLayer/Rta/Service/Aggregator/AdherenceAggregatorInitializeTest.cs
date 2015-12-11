@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				.WithUser("user2", person2, null, teamId, null)
 				.WithSchedule(person1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(person2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Database.PersistActualAgentReadModel(new AgentStateReadModel
 			{

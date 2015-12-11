@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
-				.WithAlarm("ready", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
+				.WithRule("ready", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithAlarm("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
-				.WithAlarm("break", phone, -1, Adherence.Out, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
+				.WithRule("break", phone, -1, Adherence.Out, TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest

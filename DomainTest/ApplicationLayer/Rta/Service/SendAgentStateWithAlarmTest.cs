@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("statecode", activityId, alarmId)
+				.WithRule("statecode", activityId, alarmId)
 				;
 			Now.Is("2014-10-20 10:00");
 

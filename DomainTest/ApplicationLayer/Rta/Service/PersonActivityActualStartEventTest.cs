@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 			
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
 				.WithSchedule(personId, lunch, "2015-08-19 09:00", "2015-08-19 10:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 07:55");
 			Target.SaveState(new ExternalUserStateForTest
@@ -144,9 +144,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("loggedout", phone, -1, Adherence.Out)
-				.WithAlarm("phone", phone, 0, Adherence.In)
-				.WithAlarm("ready", phone, 0, Adherence.In);
+				.WithRule("loggedout", phone, -1, Adherence.Out)
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithRule("ready", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 07:45");
 			Target.SaveState(new ExternalUserStateForTest
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
+				.WithRule("phone", phone, 0, Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
 			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
@@ -208,8 +208,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone1, "2015-08-19 08:00", "2015-08-19 09:00")
 				.WithSchedule(personId, phone2, "2015-08-19 09:00", "2015-08-19 10:00")
-				.WithAlarm("phone", phone1, 0, Adherence.In)
-				.WithAlarm("phone", phone2, 0, Adherence.In);
+				.WithRule("phone", phone1, 0, Adherence.In)
+				.WithRule("phone", phone2, 0, Adherence.In);
 			Now.Is("2015-08-19 08:00");
 			Target.SaveState(new ExternalUserStateForTest
 			{

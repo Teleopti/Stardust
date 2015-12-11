@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("usercode")
-				.WithAlarm("phone", null);
+				.WithRule("phone", null);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{

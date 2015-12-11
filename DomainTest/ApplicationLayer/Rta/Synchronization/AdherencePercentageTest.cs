@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Now.Is("2015-01-08 11:00");
 			Database
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
-				.WithAlarm("phone", phone, 0)
+				.WithRule("phone", phone, 0)
 				.WithUser("user", personId)
 				;
 			Rta.SaveState(new ExternalUserStateForTest

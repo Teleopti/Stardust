@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, 1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				.WithUser("two", personId2, null, teamId, null)
 				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				.WithUser("two", personId2, null, Guid.NewGuid(), null)
 				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 

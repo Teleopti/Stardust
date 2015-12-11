@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, 1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 			
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			var siteId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("one", personId1, null, null, siteId)
-				.WithUser("two", personId2, null, null, siteId)
-				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+					.WithUser("one", personId1, null, null, siteId)
+					.WithUser("two", personId2, null, null, siteId)
+					.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+					.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+					.WithRule("ready", phone, 0)
+					.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 
@@ -130,8 +130,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				.WithUser("two", personId2, null, null, Guid.NewGuid())
 				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 0)
-				.WithAlarm("loggedoff", phone, -1)
+				.WithRule("ready", phone, 0)
+				.WithRule("loggedoff", phone, -1)
 				;
 			Now.Is("2014-10-20 9:00");
 

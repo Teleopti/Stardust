@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
-				.WithAlarm("statecode", Guid.Empty)
+				.WithRule("statecode", Guid.Empty)
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource("source2")
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
-				.WithAlarm("statecode1", Guid.Empty)
+				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource("source1")
 				.WithUser("usercode1", "source1", Guid.NewGuid())
 				.WithUser("usercode2", "source1", personId)
-				.WithAlarm("statecode1", Guid.Empty)
+				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode1", "source1", Guid.NewGuid())
 				.WithSource("source2")
 				.WithUser("usercode2", "source2", personId)
-				.WithAlarm("statecode1", Guid.Empty)
+				.WithRule("statecode1", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -198,8 +198,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
-				.WithAlarm("statecode", Guid.Empty)
-				.WithAlarm("statecode2", Guid.Empty, true);
+				.WithRule("statecode", Guid.Empty)
+				.WithRule("statecode2", Guid.Empty, true);
 
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultsFromState(new ExternalUserStateForTest { PlatformTypeId = platformTypeId.ToString() })
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
-				.WithAlarm("statecode", Guid.Empty)
+				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]

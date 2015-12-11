@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Database
 				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
-				.WithAlarm("phone", phone, 0);
+				.WithRule("phone", phone, 0);
 			Rta.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user", 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Database
 				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
-				.WithAlarm("phone", phone, 0);
+				.WithRule("phone", phone, 0);
 			Rta.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user", 

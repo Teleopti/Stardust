@@ -34,10 +34,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithSchedule(personId, brejk, "2014-10-20 10:00", "2014-10-20 10:15")
-				.WithAlarm("phone", phone, 0)
-				.WithAlarm("phone", brejk, 1)
-				.WithAlarm("break", brejk, 0)
-				.WithAlarm("break", phone, 1);
+				.WithRule("phone", phone, 0)
+				.WithRule("phone", brejk, 1)
+				.WithRule("break", brejk, 0)
+				.WithRule("break", phone, 1);
 			now.Is("2014-10-20 9:00");
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
-				.WithAlarm("admin", phone, 1)
-				.WithAlarm("admin", admin, 0);
+				.WithRule("admin", phone, 1)
+				.WithRule("admin", admin, 0);
 			now.Is("2014-10-20 9:15");
 			target.SaveState(new ExternalUserStateForTest
 			{

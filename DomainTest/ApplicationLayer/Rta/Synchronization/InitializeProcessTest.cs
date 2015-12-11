@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("user", personId)
-				.WithAlarm("state", Guid.NewGuid())
-				.WithAlarm("anotherstate", Guid.NewGuid());
+				.WithRule("state", Guid.NewGuid())
+				.WithRule("anotherstate", Guid.NewGuid());
 			Now.Is("2015-01-15 08:00");
 			Rta.SaveState(new ExternalUserStateForTest
 			{

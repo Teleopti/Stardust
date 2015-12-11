@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("user", personId, businessUnitId)
-				.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
-				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
-				.WithAlarm("ready", phone, 0, Adherence.In)
-				.WithAlarm("ready", admin, 0, Adherence.Neutral)
-				.WithAlarm(null, phone, 0, Adherence.Out)
-				.WithAlarm("ready", null, 0, Adherence.Out)
+					.WithBusinessUnit(businessUnitId)
+					.WithUser("user", personId, businessUnitId)
+					.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
+					.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
+					.WithRule("ready", phone, 0, Adherence.In)
+					.WithRule("ready", admin, 0, Adherence.Neutral)
+					.WithRule(null, phone, 0, Adherence.Out)
+					.WithRule("ready", null, 0, Adherence.Out)
 				;
 
 			Now.Is("2015-03-31 4:44:55");
@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				.WithUser("user", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
 				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
-				.WithAlarm("ready", phone, 0, Adherence.In)
-				.WithAlarm("ready", admin, 0, Adherence.Neutral)
-				.WithAlarm(null, phone, 0, Adherence.Out)
-				.WithAlarm("ready", null, 0, Adherence.Out)
+				.WithRule("ready", phone, 0, Adherence.In)
+				.WithRule("ready", admin, 0, Adherence.Neutral)
+				.WithRule(null, phone, 0, Adherence.Out)
+				.WithRule("ready", null, 0, Adherence.Out)
 				;
 
 			Now.Is("2015-03-31 4:44:55");

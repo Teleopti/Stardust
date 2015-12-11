@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(person, inbound, "2015-11-25 17:45:00", "2015-11-25 20:20:00")
 				.WithSchedule(person, breaks, "2015-11-25 20:20:00", "2015-11-25 20:30:00")
 				.WithSchedule(person, inbound, "2015-11-25 20:30:00", "2015-11-25 23:00:00")
-				.WithAlarm("1", inbound, -1)
-				.WithAlarm("1", breaks, 0)
-				.WithAlarm("1", lunch, 0)
+				.WithRule("1", inbound, -1)
+				.WithRule("1", breaks, 0)
+				.WithRule("1", lunch, 0)
 				;
 
 			Now.Is("2015-11-25 13:55");

@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode2", personId2)
 				.WithSchedule(personId1, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode1", activityId, 0)
-				.WithAlarm("statecode2", activityId, 1)
+				.WithRule("statecode1", activityId, 0)
+				.WithRule("statecode2", activityId, 1)
 				;
 
 			target.SaveState(state1);
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode1", activityId, 0)
-				.WithAlarm("statecode2", activityId, 0);
+				.WithRule("statecode1", activityId, 0)
+				.WithRule("statecode2", activityId, 0);
 
 			target.SaveState(new ExternalUserStateForTest
 			{

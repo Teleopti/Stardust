@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode1", Guid.NewGuid(), businessUnitId, teamId, siteId)
 				.WithUser("usercode2", personId, businessUnitId, teamId, siteId)
-				.WithAlarm("statecode", null, 1)
-				.WithAlarm("CCC Logged out", null, 0)
+				.WithRule("statecode", null, 1)
+				.WithRule("CCC Logged out", null, 0)
 				;
 			Now.Is("2014-10-20 10:00");
 			
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("statecode", phone, 1)
+				.WithRule("statecode", phone, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 			
@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var phone = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, null, teamId, null)
-				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, 1)
-				.WithAlarm("phone", phone, 1)
+					.WithUser("usercode", personId, null, teamId, null)
+					.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+					.WithRule("ready", phone, 1)
+					.WithRule("phone", phone, 1)
 				;
 			Now.Is("2014-10-20 9:00");
 			
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
-				.WithAlarm("ready", phone, "my first state")
-				.WithAlarm("phone", phone, "my second state")
+				.WithRule("ready", phone, "my first state")
+				.WithRule("phone", phone, "my second state")
 				;
 			Now.Is("2014-10-20 9:00");
 			
