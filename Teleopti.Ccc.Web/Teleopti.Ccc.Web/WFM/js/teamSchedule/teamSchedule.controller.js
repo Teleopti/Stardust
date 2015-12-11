@@ -354,6 +354,10 @@
 				vm.errorDetails = [];
 			}
 
+			vm.cleanErrorPromise = $timeout(function () {
+				vm.clearErrors();
+			}, 5000);
+
 			vm.setCurrentCommand("");
 		}
 
@@ -364,6 +368,9 @@
 		}
 
 		vm.toggleErrorDetails = function() {
+			if (vm.cleanErrorPromise != undefined) {
+				$timeout.cancel(vm.cleanErrorPromise);
+			}
 			vm.showErrorDetails = !vm.showErrorDetails;
 		}
 

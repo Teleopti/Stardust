@@ -150,7 +150,7 @@
 					Error details
 				</div>
 				<div class="modal-inner-content">
-					<ul class="wfm-simple-list">
+					<ul class="wfm-simple-list" style="max-height: 430px">
 						<li ng-repeat="error in vm.errorDetails">
 							{{error.PersonName}}
 							<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
