@@ -3,17 +3,6 @@
 angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
 	'CurrentUserInfo', 'TimeLine', 'PersonSchedule',
 	function(currentUserInfo, timeLine, personSchedule) {
-		var scheduleSort = function(first, second) {
-			var firstSortValue = first.SortValue();
-			var firstPersonName = first.Name;
-
-			var secondSortValue = second.SortValue();
-			var secondPersonName = second.Name;
-
-			var nameOrder = firstPersonName === secondPersonName ? 0 : (firstPersonName < secondPersonName ? -1 : 1);
-			return firstSortValue === secondSortValue ? nameOrder : (firstSortValue < secondSortValue ? -1 : 1);
-		}
-
 		var create = function (groupSchedules, queryDate) {
 			var scheduleTimeLine = timeLine.Create(groupSchedules, queryDate);
 			

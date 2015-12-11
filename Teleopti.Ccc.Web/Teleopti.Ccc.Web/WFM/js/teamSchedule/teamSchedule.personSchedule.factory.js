@@ -93,32 +93,6 @@
 				this.DayOffs.push(otherDayOffVm);
 			}
 		}
-		
-		var sortValue = function () {
-			if (this.Shifts.length === 0) {
-				if (this.DayOffs.length === 0) {
-					// Empty schedule at last
-					return 20000;
-				} else {
-					// DayOff after schedule
-					return 10000;
-				}
-			}
-
-			var shiftStart = -24*60;
-			angular.forEach(this.Shifts[0].Projections, function(projection) {
-				var projStart = projection.StartPosition();
-				if (shiftStart === -24 * 60 || projStart < shiftStart) {
-					shiftStart = projStart;
-				}
-			});
-
-			if (this.IsFullDayAbsence) {
-				return 5000 + shiftStart;
-			}
-
-			return shiftStart;
-		};
 
 		var create = function(schedule, timeLine, isOverNightShift) {
 			if (!schedule) schedule = {};
@@ -138,7 +112,6 @@
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
 				DayOffs: dayOffVm == undefined ? [] : [dayOffVm],
 				Merge: merge,
-				SortValue: sortValue,
 				IsSelected: false
 			}
 
