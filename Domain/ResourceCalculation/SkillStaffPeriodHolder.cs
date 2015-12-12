@@ -230,13 +230,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
 				{
-					foreach (var dictionary in content)
-					{
-						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
-
-						skillStaffPeriods.Add(dictionary.Value);
-					}
+					skillStaffPeriods.AddRange(from dictionary in content
+						where dictionary.Key.EndDateTime > utcPeriod.StartDateTime
+						where dictionary.Key.StartDateTime < utcPeriod.EndDateTime
+						select dictionary.Value);
 				}
 	        });
             return skillStaffPeriods;
