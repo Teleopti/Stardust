@@ -90,14 +90,20 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			try
 			{
-				_server.Dispose();
+				if (_server != null)
+				{
+					_server.Dispose();
+				}
 			}
 			catch (NullReferenceException)
 			{
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
-			_portsConfiguration.Dispose();
+			if (_portsConfiguration != null)
+			{
+				_portsConfiguration.Dispose();
+			}
 			WriteWebConfigs();
 		}
 
