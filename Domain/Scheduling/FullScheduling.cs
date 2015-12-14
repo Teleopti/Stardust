@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
+	//This class is just a mess. Copied from ScheduleController. Needs a lot of refactoring...
 	public class FullScheduling
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
@@ -55,6 +57,37 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
+			int daysScheduled;
+			var people = SetupAndSchedule(period, out daysScheduled);
+
+			var conflicts = Persist();
+
+			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
+			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
+
+			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.FixedStaffPeople, period).ToList();
+			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
+				schedulePeriodNotInRange, period);
+			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
+			voilatedBusinessRules.AddRange(daysOffValidationResult);
+			return new SchedulingResultModel
+				{
+					DaysScheduled = daysScheduled,
+					ConflictCount = conflicts.Count(),
+					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
+					BusinessRulesValidationResults = voilatedBusinessRules
+				};
+		}
+
+		[UnitOfWork]
+		protected virtual IEnumerable<PersistConflict> Persist()
+		{
+			return _persister.Persist(_schedulerStateHolder().Schedules);
+		}
+
+		[UnitOfWork]
+		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period, out int daysScheduled)
+		{
 			_prerequisites.MakeSureLoaded();
 
 			var people = _fixedStaffLoader.Load(period);
@@ -66,10 +99,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 
-			var daysScheduled = 0;
+			var daysScheduledInternal = 0;
 			if (allSchedules.Any())
 			{
-				EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
+				EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduledInternal++;
 				var fixedStaffSchedulingService = _fixedStaffSchedulingService();
 				fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
 
@@ -88,25 +121,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 				fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 			}
-
-			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
-			var scheduleOfSelectedPeople =
-				_schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
-			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
-
-			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.FixedStaffPeople, period).ToList();
-			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
-				schedulePeriodNotInRange, period);
-			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
-			voilatedBusinessRules.AddRange(daysOffValidationResult);
-			return
-				new SchedulingResultModel
-				{
-					DaysScheduled = daysScheduled,
-					ConflictCount = conflicts.Count(),
-					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
-					BusinessRulesValidationResults = voilatedBusinessRules
-				};
+			daysScheduled = daysScheduledInternal;
+			return people;
 		}
 
 		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)

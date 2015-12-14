@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public PeopleSelection Load(DateOnlyPeriod period)
 		{
-			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
+			var allPeople = _personRepository.FindPeopleInOrganization(period, false).ToList();
 			var peopleToSchedule =
 				allPeople.Where(
 					p =>

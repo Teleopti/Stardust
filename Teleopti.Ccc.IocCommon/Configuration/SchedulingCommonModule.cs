@@ -38,6 +38,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -317,7 +318,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
 
 			builder.RegisterType<ScheduleOptimization>().SingleInstance();
-			builder.RegisterType<FullScheduling>().SingleInstance();
+			builder.RegisterType<FullScheduling>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>().SingleInstance();
