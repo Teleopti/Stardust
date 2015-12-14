@@ -5,7 +5,13 @@ Feature: Requests Basic Operations
 	I need to have a good overview of all the requests within a certain period
 
 Background: 
-	Given I have a role with
+	Given there is a team with
+	| Field | Value    |
+	| Name  | Red Team |
+	And there is a team with
+	| Field | Value      |
+	| Name  | Green Team |
+	And I have a role with
 	| Field                  | Value            |
 	| Name                   | Resource Planner |
 	| Access to wfm requests | true             |
@@ -13,9 +19,11 @@ Background:
 	And 'Ashley' has a person period with 
 	| Field      | Value        |
 	| Start date | 2015-06-18   |
+	| Team      | Red Team   |
 	And 'John' has a person period with 
 	| Field      | Value      |
 	| Start date | 2015-06-18 |
+	| Team      | Green Team |
 	And 'Ashley' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
@@ -45,18 +53,9 @@ Scenario: Not fetch requests when choosing incorrect date range
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	Then I should not see any requests loaded
 
-@ignore
 @OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
-Scenario: Find requests by agent team
-	Given 'Ashley' has person period with
-	| Field     | Value      |
-	| StartDate | 2015-10-01 |
-	| Team      | Red Team   |
-	And 'John' has person period with
-	| Field     | Value      |
-	| StartDate | 2015-10-01 |
-	| Team      | Green Team |
-	And 'Ashley' has an existing text request with
+Scenario: Find requests by agent team	
+	Given 'Ashley' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
 	| End Time  | 2015-10-03 14:00 |
@@ -68,9 +67,11 @@ Scenario: Find requests by agent team
 	| Update Time | 2015-09-01 14:00 |
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
-	And I pick the team "Red Team"
+	And I search with
+	| Field        | Value |
+	| organization | Red   |
 	Then I should see a request from 'Ashley' in the list
-	And I should not see any request from 'John' in the list
+	
 
 @ignore
 @OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
