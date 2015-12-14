@@ -8,8 +8,8 @@
 					<label for="nameId">{{'Name'|translate}}</label>
 					<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">The name must be less than 50 characters long</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-activity">
@@ -33,21 +33,21 @@
 					<label for="serviceLevelPercentId">{{'ServiceLevelParenthesisPercentSign'|translate}} <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">Percentage should be 1-100</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{'PercentageError'|translate}}</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-service-level-seconds">
 					<label for="skillServiceLevelSecondsId">{{'ServiceLevelSeconds'|translate}}<input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">Seconds should be 1-86400</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">{{'SecondsSpan'|translate}}</div>
 					</div>
 				</div>
 				<div class="form-input-wrap skill-shrinkage">
 					<label for="shrinkageId">{{'ShrinkageParenthesisPercentSign'|translate}} <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
 					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
 						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">Shrinkage should be 1-99</div>
+						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">{{'ShrinkageSpan'|translate}}</div>
 					</div>
 				</div>
 			</dd>
@@ -69,7 +69,7 @@
 				<div>
 					<working-hours-picker class="skill-create-form-picker" working-hours="model.workingHours"></working-hours-picker>
 					<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
-						<div class="form-input-message formWarningInput">Warning: All days are closed</div>
+						<div class="form-input-message formWarningInput">{{'AllDaysAreClosed'|translate}}</div>
 					</div>
 				</div>
 			</dd>

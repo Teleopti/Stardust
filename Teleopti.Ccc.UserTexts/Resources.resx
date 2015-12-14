@@ -13890,4 +13890,24 @@ Reduce the complexity to use these shifts.</value>
     <value>Selected day is {0}</value>
     <comment>Explains the number of selected days</comment>
   </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Override calls or campaign for scenario</value>
+    <comment>User has to choose to do an override or add a campaign</comment>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>The name must be less than 50 characters long</value>
+    <comment>Error mesage for skill create</comment>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Seconds should be between 1 and 86400</value>
+    <comment>Error mesage for skill create</comment>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Shrinkage should be between 1 and 99</value>
+    <comment>Error mesage for skill create</comment>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>All days are closed</value>
+    <comment>Error mesage for skill create</comment>
+  </data>
 </root>
