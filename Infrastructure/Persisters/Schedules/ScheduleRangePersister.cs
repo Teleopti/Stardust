@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,19 +13,22 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IInitiatorIdentifier _initiatorIdentifier;
+		private readonly IClearScheduleEvents _clearScheduleEvents;
 
 		public ScheduleRangePersister(
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 			IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			IInitiatorIdentifier initiatorIdentifier)
+			IInitiatorIdentifier initiatorIdentifier,
+			IClearScheduleEvents clearScheduleEvents)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_initiatorIdentifier = initiatorIdentifier;
+			_clearScheduleEvents = clearScheduleEvents;
 		}
 
 		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
@@ -41,14 +43,15 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			}
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
+				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
 				if (conflicts.IsEmpty())
 				{
+					_clearScheduleEvents.Execute(diff);
 					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)scheduleRange);
 				}
 				var modifiedRoots = uow.PersistAll(_initiatorIdentifier);
-				return new SchedulePersistResult()
-				{
+				return new SchedulePersistResult
+				{ 
 					InitiatorIdentifier = _initiatorIdentifier,
 					PersistConflicts = conflicts,
 					ModifiedRoots = modifiedRoots

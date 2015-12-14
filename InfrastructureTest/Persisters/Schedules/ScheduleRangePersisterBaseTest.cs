@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
 				new ScheduleDifferenceSaver(scheduleRep),
-				MockRepository.GenerateMock<IInitiatorIdentifier>());
+				MockRepository.GenerateMock<IInitiatorIdentifier>(),
+				new KeepScheduleEvents());
 		}
 
 		private void setupEntities()
