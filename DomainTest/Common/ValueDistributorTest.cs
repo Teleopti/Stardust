@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
+using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -73,6 +74,84 @@ namespace Teleopti.Ccc.DomainTest.Common
 			{
 				Assert.AreEqual(((i + 11) / 155d) * newDailyOverrideTasks, targets[i].OverrideTasks);
 			}
+		}
+
+		[Test]
+		public void ShouldDistributeOverrideTasksByPatternAccordingToOpenHours()
+		{
+			var targets = new List<testDistributionTarget>()
+			{
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(60), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc))
+				},
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(90), DateTimeKind.Utc))
+				}
+			};
+
+			const double newDailyOverrideTasks = 190d;
+
+			var pattern = getDistributionTargetsForTest();
+
+			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets, pattern);
+			
+			Assert.AreEqual(((4 + 11) / 31d) * newDailyOverrideTasks, targets[0].OverrideTasks);
+			Assert.AreEqual(((5 + 11) / 31d) * newDailyOverrideTasks, targets[1].OverrideTasks);
+		}
+
+		[Test]
+		public void ShouldDistributeOverrideTasksEvenlyAccordingToOpenHoursWhenEmptyPatternIntervals()
+		{
+			var targets = new List<testDistributionTarget>()
+			{
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(60), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc))
+				},
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(90), DateTimeKind.Utc))
+				}
+			};
+
+			const double newDailyOverrideTasks = 190d;
+
+			var pattern = new List<testDistributionTarget>()
+			{
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(60), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc))
+				},
+				new testDistributionTarget()
+				{
+					Tasks = 0,
+					Period = new DateTimePeriod(DateTime.SpecifyKind(
+						DateTime.MinValue.Date.AddMinutes(75), DateTimeKind.Utc), 
+						DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(90), DateTimeKind.Utc))
+				}
+			};
+
+			ValueDistributor.DistributeOverrideTasks(newDailyOverrideTasks, targets, pattern);
+			
+			Assert.AreEqual(newDailyOverrideTasks/targets.Count, targets[0].OverrideTasks);
+			Assert.AreEqual(newDailyOverrideTasks/targets.Count, targets[1].OverrideTasks);
 		}
 
 		private IList<testDistributionTarget> GetZeroDistributionTargetsForTest()
@@ -419,7 +498,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 				{
 					Tasks = i + 11,
 					AverageAfterTaskTime = TimeSpan.FromSeconds(i + 1),
-					AverageTaskTime = TimeSpan.FromSeconds(i + 6)
+					AverageTaskTime = TimeSpan.FromSeconds(i + 6),
+					Period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(15 * i), DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.MinValue.Date.AddMinutes(15 * (i + 1)), DateTimeKind.Utc))
 				};
 				targets.Add(target);
 			}
@@ -434,7 +514,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		/// Created by: robink
 		/// Created date: 2007-12-13
 		/// </remarks>
-		private sealed class testDistributionTarget : ITaskOwner
+		private sealed class testDistributionTarget : ITaskOwner, IPeriodized
 		{
 			#region ITaskOwner Members
 
@@ -852,6 +932,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 				throw new NotImplementedException();
 			}
 			#endregion
+
+			public DateTimePeriod Period { get; set; }
 		}
 	}
 }

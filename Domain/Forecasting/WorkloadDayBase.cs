@@ -1598,7 +1598,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		                splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
 		                splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
 		                splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
-							 splittedTaskOwnerPeriod.SetOverrideTasks(templateTaskPeriod.OverrideTasks, null);
+		                splittedTaskOwnerPeriod.SetOverrideTasks(templateTaskPeriod.OverrideTasks, null);
 		                splittedTaskOwnerPeriod.OverrideAverageTaskTime = templateTaskPeriod.OverrideAverageTaskTime;
 		                splittedTaskOwnerPeriod.OverrideAverageAfterTaskTime = templateTaskPeriod.OverrideAverageAfterTaskTime;
 	                }

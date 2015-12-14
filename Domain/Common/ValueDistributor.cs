@@ -96,8 +96,9 @@ namespace Teleopti.Ccc.Domain.Common
 	    }
 
 	    public static void DistributeOverrideTasks(double? newTotal, IEnumerable<ITaskOwner> targets, IEnumerable<IForecastingTarget> intradayCallPattern)
-		{
-			var typedTargets = targets.OfType<ITaskOwner>();
+	    {
+		    var typedTargets = targets.ToList();
+		    var intradayPattern = intradayCallPattern == null ? null : intradayCallPattern.ToList(); 
 			var dailyTasks = typedTargets.Sum(t => t.Tasks);
 			if (Math.Floor(dailyTasks) > 0)
 			{
@@ -105,22 +106,40 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			else
 			{
-				if (intradayCallPattern != null)
-				{					
-
-					var intradayCallPatternArray = intradayCallPattern.ToArray();
-					int i = 0;
-					var patternTasks = intradayCallPatternArray.Sum(t => t.Tasks);
-					typedTargets.ForEach(t =>
+				if (intradayPattern != null)
+				{
+					IList<IForecastingTarget> intradayCallPatternArray = new List<IForecastingTarget>();
+					if (typedTargets.Count != intradayPattern.Count)
 					{
-						t.SetOverrideTasks((intradayCallPatternArray[i].Tasks / patternTasks) * newTotal, null);
-						i++;
-					});
-
+						foreach (var typedTarget in typedTargets)
+						{
+							var patternSelection = intradayPattern.First(
+								t => ((IPeriodized) t).Period.StartDateTime.TimeOfDay == ((IPeriodized) typedTarget).Period.StartDateTime.TimeOfDay);
+							intradayCallPatternArray.Add(patternSelection);
+						}
+					}
+					else
+					{
+						intradayCallPatternArray = intradayPattern;
+					}
+					var i = 0;
+					var patternTasks = intradayCallPatternArray.Sum(t => t.Tasks);
+					if (Math.Floor(patternTasks) > 0)
+					{
+						typedTargets.ForEach(t =>
+						{
+							t.SetOverrideTasks((intradayCallPatternArray[i].Tasks/patternTasks)*newTotal, null);
+							i++;
+						});
+					}
+					else
+					{
+						typedTargets.ForEach(t => t.SetOverrideTasks((newTotal / typedTargets.Count), null));
+					}
 				}
 				else
 				{
-					typedTargets.ForEach(t => t.SetOverrideTasks((newTotal / targets.ToList().Count), null));
+					typedTargets.ForEach(t => t.SetOverrideTasks((newTotal / typedTargets.Count), null));
 				}
 			}
 		}
