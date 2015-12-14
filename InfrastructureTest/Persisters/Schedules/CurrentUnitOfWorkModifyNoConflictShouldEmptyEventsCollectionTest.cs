@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override IScheduleRangePersister CreateTarget()
 		{
-			return new CurrentUnitOfWorkScheduleRangePersister(new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
+				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
-				MockRepository.GenerateMock<IScheduleDifferenceSaver>(), new ClearScheduleEvents());
+				MockRepository.GenerateMock<IScheduleDifferenceSaver>(), 
+				new EmptyInitiatorIdentifier(), new ClearScheduleEvents());
 		}
 
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)

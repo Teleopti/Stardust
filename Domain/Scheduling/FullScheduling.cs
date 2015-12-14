@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			int daysScheduled;
 			var people = SetupAndSchedule(period, out daysScheduled);
 
-			var conflicts = Persist();
+			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
 
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
@@ -77,12 +77,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
 					BusinessRulesValidationResults = voilatedBusinessRules
 				};
-		}
-
-		[UnitOfWork]
-		protected virtual IEnumerable<PersistConflict> Persist()
-		{
-			return _persister.Persist(_schedulerStateHolder().Schedules);
 		}
 
 		[UnitOfWork]

@@ -52,19 +52,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);
 
-			Persist();
+			_persister.Persist(_schedulerStateHolder().Schedules);
 
 			var result = new OptimizationResultModel();
 			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
 			return result;
 		}
-
-		[UnitOfWork]
-		protected virtual IEnumerable<PersistConflict> Persist()
-		{
-			return _persister.Persist(_schedulerStateHolder().Schedules);
-		}
-
 
 		[UnitOfWork]
 		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
