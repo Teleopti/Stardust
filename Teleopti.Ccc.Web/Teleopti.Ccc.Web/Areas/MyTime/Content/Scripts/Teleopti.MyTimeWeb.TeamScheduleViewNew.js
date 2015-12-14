@@ -28,7 +28,7 @@ Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
 		loadDefaultTeam: "TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580") ? "TeamSchedule/TeamScheduleNoReadModel" : "TeamSchedule/TeamSchedule"
+		loadSchedule: Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210") ? "TeamSchedule/TeamSchedule" : "TeamSchedule/TeamSchedule"
 	};
 
 	function _bindData() {
