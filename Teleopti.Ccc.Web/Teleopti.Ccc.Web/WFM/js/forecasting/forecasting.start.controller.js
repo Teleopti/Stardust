@@ -177,11 +177,11 @@
 				var buildSelectedDaysText = function() {
 					if ($scope.modifyDays.length == 1) {
 						var singleDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
-						return 'Selected day is {0}.'.replace('{0}', singleDate);
+						return 'SelectedDayIs'.replace('{0}', singleDate);
 					}
 					var firstDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
 					var lastDate = $filter('date')($scope.modifyDays[$scope.modifyDays.length - 1].date, 'shortDate');
-					var text = '{0} days are selected from {1} to {2}.';
+					var text = 'DaysAreSelectedFrom';
 					text = text.replace('{0}', $scope.modifyDays.length);
 					text = text.replace('{1}', firstDate);
 					text = text.replace('{2}', lastDate);

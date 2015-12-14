@@ -13882,4 +13882,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Seconds/call</value>
     <comment>Label for override forecast.</comment>
   </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} days are selected from {1} to {2}</value>
+    <comment>Explains the number of selected days in period</comment>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Selected day is {0}</value>
+    <comment>Explains the number of selected days</comment>
+  </data>
 </root>
