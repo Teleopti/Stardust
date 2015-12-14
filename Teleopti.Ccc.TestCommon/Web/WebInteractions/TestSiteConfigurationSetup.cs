@@ -88,7 +88,15 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public static void TearDown()
 		{
-			_server.Dispose();
+			try
+			{
+				_server.Dispose();
+			}
+			catch (NullReferenceException)
+			{
+				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
+				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
+			}
 			_portsConfiguration.Dispose();
 			WriteWebConfigs();
 		}
