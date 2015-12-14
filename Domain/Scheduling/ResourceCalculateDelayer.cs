@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly bool _considerShortBreaks;
 		private DateOnly? _lastDate;
 		private int _counter = 1;
-		private bool _paused;
 
 		public ResourceCalculateDelayer(
 			IResourceOptimizationHelper resourceOptimizationHelper, 
@@ -23,9 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod)
 		{
-			if (_paused)
-				return false;
-
 			if (!_lastDate.HasValue)
 				_lastDate = scheduleDateOnly;
 
@@ -54,16 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_counter++;
 			return false;
-		}
-
-		public void Pause()
-		{
-			_paused = true;
-		}
-
-		public void Resume()
-		{
-			_paused = false;
 		}
 	}
 }

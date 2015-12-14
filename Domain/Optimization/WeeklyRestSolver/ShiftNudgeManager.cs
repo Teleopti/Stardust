@@ -125,7 +125,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			bool leftNudgeSuccess = true;
 			bool rightNudgeSuccess = true;
-			resourceCalculateDelayer.Pause();
 			while (!restTimeEnsured)
 			{
 				var leftScheduleDay = personRange.ScheduledDay(leftDate);
@@ -134,8 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 				if (leftNudgeSuccess)
 				{
-					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
-						resourceCalculateDelayer, leftTeamBlock, schedulingResultStateHolder, optimizationPreferences);
+					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions, resourceCalculateDelayer, leftTeamBlock, schedulingResultStateHolder, optimizationPreferences);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 
@@ -158,7 +156,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					break;
 			}
 
-			resourceCalculateDelayer.Resume();
 			bool success = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			if (!success)
 			{
@@ -187,17 +184,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
-
-			foreach (var date in leftTeamBlock.BlockInfo.BlockPeriod.DayCollection())
-			{
-				resourceCalculateDelayer.CalculateIfNeeded(date, null);
-			}
-
-			foreach (var date in rightTeamBlock.BlockInfo.BlockPeriod.DayCollection())
-			{
-				resourceCalculateDelayer.CalculateIfNeeded(date, null);
-			}
-			resourceCalculateDelayer.CalculateIfNeeded(rightTeamBlock.BlockInfo.BlockPeriod.EndDate.AddDays(1), null);
 
 			return true;
 		}

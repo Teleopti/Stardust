@@ -5,8 +5,12 @@
 	/// </summary>
 	public interface IResourceCalculateDelayer
 	{
+		/// <summary>
+		/// Calculates if needed.
+		/// </summary>
+		/// <param name="scheduleDateOnly">The schedule date only.</param>
+		/// <param name="workShiftProjectionPeriod">The work shift projection period.</param>
+		/// <returns></returns>
 		bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod);
-		void Pause();
-		void Resume();
 	}
 }
