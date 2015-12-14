@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber)
