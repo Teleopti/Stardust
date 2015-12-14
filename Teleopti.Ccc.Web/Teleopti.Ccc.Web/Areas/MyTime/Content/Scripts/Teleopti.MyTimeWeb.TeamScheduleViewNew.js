@@ -28,9 +28,8 @@ Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
 		loadDefaultTeam: "TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: "TeamSchedule/TeamSchedule"
+		loadSchedule: Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580") ? "TeamSchedule/TeamScheduleNoReadModel" : "TeamSchedule/TeamSchedule"
 	};
-	
 
 	function _bindData() {
 		vm = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
@@ -40,7 +39,6 @@ Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 		});
 		ko.applyBindings(vm, $('#page')[0]);
 	};
-
 
 	function _cleanBindings() {
 		//remove old layer's tooltip if it still exist
