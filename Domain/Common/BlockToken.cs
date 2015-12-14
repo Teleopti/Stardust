@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Web.Areas.Global
+namespace Teleopti.Ccc.Domain.Common
 {
 	public class BlockToken
 	{

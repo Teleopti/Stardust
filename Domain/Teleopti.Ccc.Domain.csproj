@@ -458,6 +458,7 @@
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
+    <Compile Include="Common\BlockToken.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -677,6 +678,8 @@
     <Compile Include="Outbound\SkillTypeProvider.cs" />
     <Compile Include="Repositories\IIntradayStatistics.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
+    <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
+    <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
@@ -689,10 +692,12 @@
     <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
+    <Compile Include="Scheduling\SchedulingResultModel.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
+    <Compile Include="Scheduling\ViolatedSchedulePeriodBusinessRule.cs" />
     <Compile Include="Scheduling\WebLegacy\IScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\ScheduleControllerPrerequisites.cs" />
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />

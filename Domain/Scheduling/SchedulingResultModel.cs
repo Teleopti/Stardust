@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Domain.Common;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingResultModel
 	{

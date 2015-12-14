@@ -578,10 +578,8 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Global\BasicActionThrottler.cs" />
-    <Compile Include="Areas\Global\BlockToken.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
-    <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />
@@ -598,10 +596,8 @@
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
-    <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Global\ThrottledAction.cs" />
-    <Compile Include="Areas\ResourcePlanner\ViolatedSchedulePeriodBusinessRule.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Web.Areas.Global;
 

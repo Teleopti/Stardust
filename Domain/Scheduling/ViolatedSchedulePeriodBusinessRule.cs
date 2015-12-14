@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class ViolatedSchedulePeriodBusinessRule
 	{

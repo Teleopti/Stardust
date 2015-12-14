@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
