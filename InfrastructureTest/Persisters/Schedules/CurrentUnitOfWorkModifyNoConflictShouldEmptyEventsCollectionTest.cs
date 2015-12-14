@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			return new CurrentUnitOfWorkScheduleRangePersister(new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
-				MockRepository.GenerateMock<IScheduleDifferenceSaver>(), new ClearEvents());
+				MockRepository.GenerateMock<IScheduleDifferenceSaver>(), new ClearScheduleEvents());
 		}
 
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)

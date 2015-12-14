@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<RuleSetProjectionEntityService>().As<IRuleSetProjectionEntityService>();
 
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
-			builder.RegisterType<ClearEvents>().As<IClearEvents>().SingleInstance();
+			builder.RegisterType<ClearScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>();
 			builder.RegisterType<DayOffBusinessRuleValidation>();
 		}

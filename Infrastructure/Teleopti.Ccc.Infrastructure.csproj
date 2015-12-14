@@ -549,13 +549,13 @@
     <Compile Include="Rta\SiteAdherenceAggregator.cs" />
     <Compile Include="Rta\TeamAdherenceAggregator.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
-    <Compile Include="UnitOfWork\ClearEvents.cs" />
+    <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\CurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\CurrentPersistCallbacks.cs" />
     <Compile Include="UnitOfWork\DisableDeletedFilter.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\FromFactory.cs" />
-    <Compile Include="UnitOfWork\IClearEvents.cs" />
+    <Compile Include="UnitOfWork\IClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EventContextPopulator.cs" />
     <Compile Include="UnitOfWork\ICurrentPersistCallbacks.cs" />
