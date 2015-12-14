@@ -77,7 +77,15 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			const string logFolder = @"c:\temp\iisexpresslogs";
 			if (Directory.Exists(logFolder))
 			{
-				Directory.Delete(logFolder, true);
+				try
+				{
+					Directory.Delete(logFolder, true);
+				}
+				catch (IOException)
+				{
+					//Ignore if files are locked - The lock sometimes is still there -> timing issue
+					//doesn't really matter. Will be removed next run
+				}
 			}
 		}
 
