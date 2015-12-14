@@ -1265,6 +1265,7 @@
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />
+    <Content Include="WFM\tests\global\http.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
