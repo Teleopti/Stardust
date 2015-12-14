@@ -53,6 +53,7 @@ Scenario: Not fetch requests when choosing incorrect date range
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	Then I should not see any requests loaded
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_People_Search_36294')
 Scenario: Find requests by agent team	
 	Given 'Ashley' has an existing text request with
