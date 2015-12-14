@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe("TeamScheduleControllerTest", function () {
+describe("TeamScheduleControllerTest", function() {
 	var $q,
 		$rootScope,
 		controller,
@@ -8,13 +8,13 @@ describe("TeamScheduleControllerTest", function () {
 		$mdComponentRegistry,
 		$mdSidenav,
 		$mdUtil,
-			$locale;
+		$locale;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.teamSchedule');
 		module('externalModules');
-		module(function ($provide) {
-			$provide.service('CurrentUserInfo', function () {
+		module(function($provide) {
+			$provide.service('CurrentUserInfo', function() {
 				return {
 					DefaultTimeZone: "Etc/UTC",
 					DateFormatLocale: "en-GB"
@@ -24,27 +24,14 @@ describe("TeamScheduleControllerTest", function () {
 	});
 
 	var mockCurrentUserInfo;
-	beforeEach(inject(function (_CurrentUserInfo_) {
+	beforeEach(inject(function(_CurrentUserInfo_) {
 		mockCurrentUserInfo = _CurrentUserInfo_;
 		moment.locale(mockCurrentUserInfo.DateFormatLocale);
 	}));
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _$locale_, _GroupScheduleFactory_, _$mdComponentRegistry_, _$mdSidenav_, _$mdUtil_) {
-
-		$q = _$q_;
-		$rootScope = _$rootScope_;
-		grouScheduleFactory = _GroupScheduleFactory_;
-		$mdComponentRegistry = _$mdComponentRegistry_;
-		$mdSidenav = _$mdSidenav_;
-		$mdUtil = _$mdUtil_;
-		$locale = _$locale_;
-
-		controller = setUpController(_$controller_);
-	}));
-
 	var mockToggleService = {
 		isFeatureEnabled: {
-			query: function () {
+			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
 					IsEnabled: true
@@ -60,8 +47,7 @@ describe("TeamScheduleControllerTest", function () {
 		loadAllTeams: {
 			query: function() {
 				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-				});
+				queryDeferred.resolve({});
 				return {
 					$promise: queryDeferred.promise
 				};
@@ -70,17 +56,17 @@ describe("TeamScheduleControllerTest", function () {
 		loadAbsences: {
 			query: function() {
 				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-				});
+				queryDeferred.resolve({});
 				return {
 					$promise: queryDeferred.promise
 				};
 			}
 		},
 		getPermissions: {
-			query: function () {
+			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
+
 				});
 				return {
 					$promise: queryDeferred.promise
@@ -88,7 +74,7 @@ describe("TeamScheduleControllerTest", function () {
 			}
 		},
 		searchSchedules: {
-			query: function () {
+			query: function() {
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -125,7 +111,7 @@ describe("TeamScheduleControllerTest", function () {
 						}
 					],
 					Total: 2,
-					Keyword:""
+					Keyword: ""
 				});
 
 				return {
@@ -136,7 +122,6 @@ describe("TeamScheduleControllerTest", function () {
 	};
 
 	function setUpController($controller) {
-
 		var scope = $rootScope.$new();
 
 		return $controller("TeamScheduleCtrl", {
@@ -153,7 +138,20 @@ describe("TeamScheduleControllerTest", function () {
 		});
 	};
 
-	it("can select and deselect one person", inject(function () {
+	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _$locale_, _GroupScheduleFactory_,
+		_$mdComponentRegistry_, _$mdSidenav_, _$mdUtil_) {
+		$q = _$q_;
+		$rootScope = _$rootScope_;
+		grouScheduleFactory = _GroupScheduleFactory_;
+		$mdComponentRegistry = _$mdComponentRegistry_;
+		$mdSidenav = _$mdSidenav_;
+		$mdUtil = _$mdUtil_;
+		$locale = _$locale_;
+
+		controller = setUpController(_$controller_);
+	}));
+
+	it("can select and deselect one person", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var personSchedules = controller.groupScheduleVm.Schedules;
@@ -171,7 +169,7 @@ describe("TeamScheduleControllerTest", function () {
 		expect(selectedPersonList.length).toEqual(0);
 	}));
 
-	it("can select and deselect current page", inject(function () {
+	it("can select and deselect current page", inject(function() {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promiseddd
 
@@ -190,27 +188,25 @@ describe("TeamScheduleControllerTest", function () {
 		expect(selectedPersonList.length).toEqual(0);
 	}));
 
-	it("can display person selection status correctly", inject(function () {
+	it("can display person selection status correctly", inject(function() {
 		controller.selectedPersonIdList = ["221B-Baker-SomeoneElse", "221B-Baker-SomeoneElse1"];
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promiseddd
 
 		var personSchedules = controller.groupScheduleVm.Schedules;
 
-		
 		expect(personSchedules[0].IsSelected).toEqual(true);
 		expect(personSchedules[1].IsSelected).toEqual(false);
 		expect(controller.isAllInCurrentPageSelected).toEqual(false);
 	}));
 
-	it("can display current page selection status correctly when all people in current page are selected", inject(function () {
+	it("can display current page selection status correctly when all people in current page are selected", inject(function() {
 		controller.selectedPersonIdList = ["221B-Baker-SomeoneElse", "221B-Baker-SomeoneElse1", "221B-Sherlock"];
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promiseddd
 
 		var personSchedules = controller.groupScheduleVm.Schedules;
 
-		
 		expect(personSchedules[0].IsSelected).toEqual(true);
 		expect(personSchedules[1].IsSelected).toEqual(true);
 		expect(controller.isAllInCurrentPageSelected).toEqual(true);

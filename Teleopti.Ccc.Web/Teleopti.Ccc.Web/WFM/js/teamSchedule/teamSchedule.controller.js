@@ -100,17 +100,11 @@
 		}
 
 		vm.toggleAllSelectionInCurrentPage = function () {
-			if (vm.isAllInCurrentPageSelected) {
-				angular.forEach(vm.groupScheduleVm.Schedules, function (personSchedule) {
-					personSchedule.IsSelected = true;
-					vm.updateSelection(personSchedule);
-				});
-			} else {
-				angular.forEach(vm.groupScheduleVm.Schedules, function (personSchedule) {
-					personSchedule.IsSelected = false;
-					vm.updateSelection(personSchedule);
-				});
-			}
+			var selected = vm.isAllInCurrentPageSelected;
+			angular.forEach(vm.groupScheduleVm.Schedules, function(personSchedule) {
+				personSchedule.IsSelected = selected;
+				vm.updateSelection(personSchedule);
+			});
 		};
 
 		vm.toggleIsAllInCurrentPageSelected = function () {
