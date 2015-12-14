@@ -13,7 +13,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
+Teleopti.MyTimeWeb.TeamScheduleOld = (function ($) {
 
 	var portal = Teleopti.MyTimeWeb.Portal;
 	var readyForInteraction = function () { };
@@ -193,7 +193,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	return {
 		Init: function () {
-			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit, Teleopti.MyTimeWeb.TeamSchedule.PartialDispose);
+			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamScheduleOld.TeamSchedulePartialInit, Teleopti.MyTimeWeb.TeamScheduleOld.PartialDispose);
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;

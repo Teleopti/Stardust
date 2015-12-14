@@ -9,30 +9,6 @@
 	var left = Html.HtmlStyleLeft();
 }
 
-
-<script>
-	
-	$(function () {
-		var endpoints = {
-			loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
-			loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
-			loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
-			loadDefaultTeam: "TeamSchedule/DefaultTeam",
-			loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-			loadSchedule: "TeamSchedule/TeamSchedule"
-		};
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-		var vm = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
-
-		$(window).unbind('resize');
-		$(window).resize(function () {
-			vm.redrawLayers();
-		});
-		ko.applyBindings(vm);
-	});
-
-</script>
-
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">

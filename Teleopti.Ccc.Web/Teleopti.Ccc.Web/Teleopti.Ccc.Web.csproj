@@ -1237,6 +1237,7 @@
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="WFM\js\forecasting\html\forecasting-result-chart.html" />
     <Content Include="WFM\js\forecasting\html\forecasting.html" />
     <Content Include="WFM\js\forecasting\html\skill-create.html" />
@@ -1877,7 +1878,7 @@
     <Content Include="Areas\MyTime\Content\Images\arrow-right.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamSchedule.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewOld.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
     <Content Include="Areas\Start\Content\Css\Site.css" />

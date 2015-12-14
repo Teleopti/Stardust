@@ -21,7 +21,12 @@ $(function () {
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();
 	Teleopti.MyTimeWeb.Request.Init();
-	Teleopti.MyTimeWeb.TeamSchedule.Init();
+	if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580")) {
+		Teleopti.MyTimeWeb.TeamScheduleNew.Init();
+	} else {
+		Teleopti.MyTimeWeb.TeamScheduleOld.Init();
+	}
+	
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
 	Teleopti.MyTimeWeb.MyReport.Init();
