@@ -22,14 +22,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public const string PathToIISExpress32 = "c:\\program files (x86)\\IIS Express\\iisexpress.exe";
 		public const string PathToIISExpress64 = "c:\\program files\\IIS Express\\iisexpress.exe";
 
-		private const bool useIisExpressStartedByVisualStudio = false;
-
 		public static void Setup(string pathToIISExpress)
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			WriteWebConfigs();
-			if (!useIisExpressStartedByVisualStudio)
-				StartIISExpress(pathToIISExpress);
+			StartIISExpress(pathToIISExpress);
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -38,12 +35,10 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			var originalAuthenticationBridgePort = PortAuthenticationBridge;
 			var originalWindowsIdentityProviderPort = PortWindowsIdentityProvider;
 
-			if (!useIisExpressStartedByVisualStudio)
-			{
-				Port = new Random().Next(57000, 57999);
-				PortAuthenticationBridge = Port - new Random().Next(1, 100);
-				PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
-			}
+			Port = new Random().Next(57000, 57999);
+			PortAuthenticationBridge = Port - new Random().Next(1, 100);
+			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
+
 			URL = new Uri(string.Format("http://localhost:{0}/", Port));
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 			WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
