@@ -1050,6 +1050,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 	    }
 
+		[Test]
+		public void ShouldReturnRequestsWithSortingByFirstName()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+			var person3 = PersonFactory.CreatePerson("C");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest3 = new PersonRequest(person3, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+			PersistAndRemoveFromUnitOfWork(textRequest3);
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(
+					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
+					new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest},
+					new List<string> { "FirstName Desc"}
+				).ToArray();
+
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
+
+			var resultAsc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(
+					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
+					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
+					new List<string> { "FirstName Asc" }
+				).ToArray();
+
+			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest1, textRequest2, textRequest3 });
+
+		}
+
 	}
     
 }

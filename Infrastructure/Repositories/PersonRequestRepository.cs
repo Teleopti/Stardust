@@ -137,9 +137,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return FindAllRequests(period, null, null);
 		}
 
-
-		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period,
-			IEnumerable<IPerson> persons, IEnumerable<RequestType> whitelistRequestTypes)
+		
+		public IEnumerable<IPersonRequest> FindAllRequests(
+			DateTimePeriod period,
+			IEnumerable<IPerson> persons, 
+			IEnumerable<RequestType> whitelistRequestTypes,
+			IList<string> sortingOrders = null,
+			Paging paging = null)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
@@ -156,10 +160,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var query = Session.CreateCriteria<IPersonRequest>("req");
 			if (persons != null) query.Add(Restrictions.In("Person", persons.ToArray()));
 
-			return query
-				.SetFetchMode("requests", FetchMode.Join)
-				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
-				.List<IPersonRequest>();
+			query.SetFetchMode("requests", FetchMode.Join)
+				.Add(Subqueries.PropertyIn("Id", requestForPeriod));
+
+			sortPersonRequests(query, sortingOrders);
+			return query.List<IPersonRequest>();
 		}
 
 		private ICriterion toRequestClassTypeConstraint(RequestType t)
@@ -538,6 +543,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Ge("Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
 				.Add(Restrictions.Eq("Status", ShiftExchangeOfferStatus.Pending))
 				.List<ShiftExchangeOffer>();
+		}
+
+		private void sortPersonRequests(ICriteria criteria, IList<string> sortingOrders)
+		{
+			if (sortingOrders == null) return;
+			var orderMapping = new Dictionary<string, Action<ICriteria>>
+				{
+					{"FirstName Asc", c => c.AddOrder(Order.Asc("p.Name"))},
+					{"FirstName Desc", c => c.AddOrder(Order.Desc("p.Name"))}
+				};
+
+			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			foreach (var order in sortingOrders)
+			{
+				Action<ICriteria> orderAction;
+				if (orderMapping.TryGetValue(order, out orderAction))
+				{
+					orderAction(criteria);
+				}
+			}
 		}
 	}
 }

@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			return _requestRepository;
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period, IEnumerable<IPerson> persons, IEnumerable<RequestType> whitelistRequestTypes)
+		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period, IEnumerable<IPerson> persons, IEnumerable<RequestType> whitelistRequestTypes, IList<string> sortingOrders = null, Paging paging = null)
 		{
 			var requests = _requestRepository.Where(request => whitelistRequestTypes.Contains(request.Request.RequestType));
 			if (persons == null)
