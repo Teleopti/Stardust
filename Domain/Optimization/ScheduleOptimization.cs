@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -48,6 +50,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public OptimizationResultModel Execute(Guid planningPeriodId)
 		{
+			var planningPeriod = SetupAndOptimize(planningPeriodId);
+
+			Persist();
+
+			var result = new OptimizationResultModel();
+			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
+			return result;
+		}
+
+		[UnitOfWork]
+		protected virtual IEnumerable<PersistConflict> Persist()
+		{
+			return _persister.Persist(_schedulerStateHolder().Schedules);
+		}
+
+
+		[UnitOfWork]
+		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
+		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 
 			var period = planningPeriod.Range;
@@ -62,18 +83,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
-			
-			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
-			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople, dayOffOptimizationPreferenceProvider);
+			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(),
+				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
-			_persister.Persist(_schedulerStateHolder().Schedules);
+			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople,
+				dayOffOptimizationPreferenceProvider);
 
+			//should maybe happen _after_ all schedules are persisted?
 			planningPeriod.Scheduled();
 
-			var result = new OptimizationResultModel();
-			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
-			return result;
+			return planningPeriod;
 		}
 
 

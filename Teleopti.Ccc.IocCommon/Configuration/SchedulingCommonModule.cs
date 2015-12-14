@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
 
-			builder.RegisterType<ScheduleOptimization>().SingleInstance();
+			builder.RegisterType<ScheduleOptimization>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FullScheduling>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();

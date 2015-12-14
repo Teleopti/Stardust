@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_actionThrottler = actionThrottler;
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}"), UnitOfWork]
+		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}")]
 		public virtual IHttpActionResult FixedStaff(Guid id, BlockToken tokenFromScheduling)
 		{
 			_actionThrottler.Resume(tokenFromScheduling);
