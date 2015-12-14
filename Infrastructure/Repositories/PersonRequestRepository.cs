@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Collection;
 using NHibernate;
 using System.Linq;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -157,14 +158,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				requestForPeriod.Add(typeCriterion);
 			}
 
-			var query = Session.CreateCriteria<IPersonRequest>("req");
+			var query = Session.CreateCriteria<IPersonRequest>("personRequests");
 			if (persons != null) query.Add(Restrictions.In("Person", persons.ToArray()));
 
 			query.SetFetchMode("requests", FetchMode.Join)
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 
 			sortPersonRequests(query, sortingOrders);
+			pagePersonRequests(query, paging);
+
 			return query.List<IPersonRequest>();
+		}
+
+		private void pagePersonRequests(ICriteria query, Paging paging)
+		{
+			if (paging == null) return;		
+			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
 		}
 
 		private ICriterion toRequestClassTypeConstraint(RequestType t)
@@ -550,11 +559,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (sortingOrders == null) return;
 			var orderMapping = new Dictionary<string, Action<ICriteria>>
 				{
-					{"FirstName Asc", c => c.AddOrder(Order.Asc("p.Name"))},
-					{"FirstName Desc", c => c.AddOrder(Order.Desc("p.Name"))}
+					{"FirstName Asc", c => c.AddOrder(Order.Asc("p.Name.FirstName"))},
+					{"FirstName Desc", c => c.AddOrder(Order.Desc("p.Name.FirstName"))},
+					{"LastName Asc", c => c.AddOrder(Order.Asc("p.Name.LastName"))},
+					{"LastName Desc", c => c.AddOrder(Order.Desc("p.Name.LastName"))},
+					{"Subject Asc", c => c.AddOrder(Order.Asc("personRequests.Subject"))},
+					{"Subject Desc", c => c.AddOrder(Order.Desc("personRequests.Subject"))},
+					{"CreatedBy Asc", c => c.AddOrder(Order.Asc("personRequests.CreatedBy"))},
+					{"CreatedBy Desc", c => c.AddOrder(Order.Desc("personRequests.CreatedBy"))},
+					{"UpdatedBy Asc", c => c.AddOrder(Order.Asc("personRequests.UpdatedBy"))},
+					{"UpdatedBy Desc", c => c.AddOrder(Order.Desc("personRequests.UpdatedBy"))},
+					{"CreatedOn Asc", c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
+					{"CreatedOn Desc", c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
+					{"UpdatedOn Asc", c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
+					{"UpdatedOn Desc", c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},
+					{"requestStatus Asc", c => c.AddOrder(Order.Asc("personRequests.requestStatus"))},
+					{"requestStatus Desc", c => c.AddOrder(Order.Desc("personRequests.requestStatus"))},
+					{"Message Asc", c => c.AddOrder(Order.Asc("personRequests.Message"))},
+					{"Message Desc", c => c.AddOrder(Order.Desc("personRequests.Message"))},
+					{"PeriodStart Asc", c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
+					{"PeriodStart Desc", c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
+					{"PeriodEnd Asc", c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
+					{"PeriodEnd Desc", c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))}					
 				};
 
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
+
 			foreach (var order in sortingOrders)
 			{
 				Action<ICriteria> orderAction;

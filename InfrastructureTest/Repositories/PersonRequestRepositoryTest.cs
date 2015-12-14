@@ -1051,7 +1051,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    }
 
 		[Test]
-		public void ShouldReturnRequestsWithSortingByFirstName()
+		public void ShouldReturnRequestsWithSorting()
 		{
 			var person1 = PersonFactory.CreatePerson("A");
 			var person2 = PersonFactory.CreatePerson("B");
@@ -1092,6 +1092,118 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				).ToArray();
 
 			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest1, textRequest2, textRequest3 });
+
+		}
+
+		[Test]
+		public void ShouldReturnRequestsWithSortingByPeriod()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+			var person3 = PersonFactory.CreatePerson("C");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(2), DateTime.UtcNow.AddDays(3))));
+			var textRequest3 = new PersonRequest(person3, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(4), DateTime.UtcNow.AddDays(5))));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+			PersistAndRemoveFromUnitOfWork(textRequest3);
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(
+					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)), null,
+					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
+					new List<string> { "PeriodStart Desc" }
+				).ToArray();
+
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
+		}
+
+		[Test]
+		public void ShouldReturnRequestsWithMultisorting()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+			var person3 = PersonFactory.CreatePerson("C");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest3 = new PersonRequest(person3, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+
+			textRequest1.Subject = "Monday";
+			textRequest2.Subject = "Monday";
+			textRequest3.Subject = "Sunday";
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+			PersistAndRemoveFromUnitOfWork(textRequest3);
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(
+					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
+					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
+					new List<string> {"Subject Desc",  "FirstName Asc" }
+				).ToArray();
+
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest1, textRequest2 });
+
+			
+		}
+
+		[Test]
+		public void ShouldReturnRequestsWithPagingRequirement()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			for (int i = 0; i < 10; i++)
+			{
+				var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+				PersistAndRemoveFromUnitOfWork(textRequest1);
+				var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+				PersistAndRemoveFromUnitOfWork(textRequest2);
+			}
+
+			var result = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(
+					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
+					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
+					new List<string> { "FirstName Desc" },
+					new Paging { Skip = 10, Take = 5}
+				).ToArray();
+
+			result.Count().Should().Be.EqualTo(5);
+			result.Any(request => request.Person.Name.FirstName != "A").Should().Be.EqualTo(false);
 
 		}
 
