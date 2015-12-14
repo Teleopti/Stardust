@@ -60,11 +60,44 @@
 			if (person.IsSelected && vm.selectedPersonIdList.indexOf(person.PersonId) === -1) {
 				vm.selectedPersonIdList.push(person.PersonId);
 			}
-			if (!person.IsSelected && vm.selectedPersonIdList.indexOf(person.PersonId) != -1) {
+			if (!person.IsSelected && vm.selectedPersonIdList.indexOf(person.PersonId) !== -1) {
 				vm.selectedPersonIdList.splice(vm.selectedPersonIdList.indexOf(person.PersonId), 1);
 			}
 			vm.toggleIsAllInCurrentPageSelected();
 		};
+
+		function getScheduleStartTime(schedule) {
+			var scheduleStart = new Date("2099-12-31");
+			angular.forEach(schedule.Shifts, function(shift) {
+				var firstProjection = shift.Projections[0];
+				var start = moment(firstProjection.Start).toDate();
+				if (!firstProjection.IsOverNight && start < scheduleStart) {
+					scheduleStart = start;
+				}
+			});
+
+			return scheduleStart;
+		}
+
+		vm.getEarliestStartOfSelectedSchedule = function () {
+			var startUpdated = false;
+			var earlistStart = new Date("2099-12-31");
+			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
+				var schedule = vm.groupScheduleVm.Schedules[i];
+				var scheduleStart = getScheduleStartTime(schedule);
+				if (vm.selectedPersonIdList.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
+					startUpdated = true;
+					earlistStart = scheduleStart;
+				}
+			}
+
+			if (!startUpdated) {
+				// Set to 08:00 for empty schedule or day off
+				earlistStart = moment(vm.scheduleDate).startOf('day').add(8, 'hour').toDate();
+			}
+
+			return earlistStart;
+		}
 
 		vm.toggleAllSelectionInCurrentPage = function () {
 			if (vm.isAllInCurrentPageSelected) {
@@ -181,7 +214,6 @@
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
-
 			} else if (vm.isSearchScheduleEnabled) {
 				if (vm.searchOptions.searchKeywordChanged) {
 					vm.selectedPersonIdList = [];
@@ -255,6 +287,8 @@
 
 		var toggleAddAbsencePanel = function () {
 			if (vm.isAnyAgentSelected()) {
+				vm.selectedAbsenceStartDate = vm.getEarliestStartOfSelectedSchedule();
+
 				vm.toggleMenuState();
 				vm.setCurrentCommand("addAbsence")();
 			}

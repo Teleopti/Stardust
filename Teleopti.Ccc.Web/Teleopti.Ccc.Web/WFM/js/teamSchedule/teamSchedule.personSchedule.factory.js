@@ -14,6 +14,7 @@
 			}
 
 			var shiftProjectionVm = {
+				Start: projection.Start,
 				StartPosition: function() {
 					var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
 					var start = displayStartTimeMinutes - timeLine.StartMinute;
