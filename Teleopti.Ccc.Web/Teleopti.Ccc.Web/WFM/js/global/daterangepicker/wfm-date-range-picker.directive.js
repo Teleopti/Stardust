@@ -11,7 +11,8 @@
 				startDate: '=',
 				endDate: '=',
 				disabled: '=?',
-				errors: '=?'
+				errors: '=?',
+				templateType: '@'
 			},
 			controller: ['$scope', '$element', dateRangePickerCtrl],
 			require: ["dateRangePicker"],
@@ -19,15 +20,18 @@
 		}
 
 		function dateRangePickerCtrl($scope, $element) {
-
 			$element.addClass('wfm-date-range-picker-wrap');
 			$scope.setRangeClass = setRangeClass;
 			$scope.isInvalid = isInvalid;
-
+			$scope.isUsingNewTemplate = isUsingNewTemplate;
 			if (!angular.isDefined($scope.errors) || !angular.isArray($scope.errors)) $scope.errors = [];
 
 			this.refreshDatepickers = refreshDatepickers;
 			this.checkValidity = checkValidity;
+
+			function isUsingNewTemplate() {
+				return $scope.templateType == 'new';
+			}
 
 			function setRangeClass(date, mode) {
 				if (mode === 'day') {
@@ -97,35 +101,51 @@
 
 			scope.showMessage = !angular.isDefined(attrs.hideMessage);
 		}
+		
 	}
 
 	function getHtmlTemplate() {
-
-		return "<div class=\"wfm-block clearfix\" ng-class=\"{ 'ng-valid': !isInvalid(), 'ng-invalid': isInvalid(), 'ng-invalid-order': isInvalid('order'), 'ng-invalid-empty': isInvalid('empty')}\">" +
-          "    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
-          "      <div class=\"sub-header\">" +
-          "	<span translate>From</span> <strong>{{ startDate | date: \"longDate\" }}</strong>" +
-          "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
-          "	  <i class=\"mdi mdi-check right-sign \"></i>" +
-          "	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
-          "	</div>" +
-          "      </div>" +
-          "      <datepicker name=\"startDatePicker\" show-weeks=\"true\" class=\"wfm-datepicker datepicker-start-date\" ng-model=\"startDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
-          "    </div>" +
-          "    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
-          "      <div class=\"sub-header\">" +
-          "	<span translate>To</span> <strong>{{ endDate | date: \"longDate\" }}</strong>" +
-          "	<div class=\"icon-set form-validation-sign datepickerfix\">" +
-          "	  <i class=\"mdi mdi-check right-sign \"></i>" +
-          "	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
-          "	</div>" +
-          "      </div>" +
-          "      <datepicker show-weeks=\"true\" class=\"wfm-datepicker datepicker-end-date\" ng-model=\"endDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
-          "    </div>" +
-          "  </div>" +
-          "<div class=\"error-msg-container ng-invalid-order alert-error notice-spacer\" ng-if=\"showMessage\"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateMustBeEqualToOrEarlierThanEndDate</span></div>" +
-          "<div class=\"error-msg-container ng-invalid-empty alert-error notice-spacer\" ng-if=\"showMessage\"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateAndEndDateMustBeSet</span></div>";
-
+		return "<div ng-show=\"!isUsingNewTemplate()\" class=\"wfm-block clearfix\" ng-class=\"{ 'ng-valid': !isInvalid(), 'ng-invalid': isInvalid(), 'ng-invalid-order': isInvalid('order'), 'ng-invalid-empty': isInvalid('empty')}\">" +
+			"    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
+			"      <div class=\"sub-header\">" +
+			"	<span translate>From</span> <strong>{{ startDate | date: \"longDate\" }}</strong>" +
+			"	<div class=\"icon-set form-validation-sign datepickerfix\">" +
+			"	  <i class=\"mdi mdi-check right-sign \"></i>" +
+			"	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
+			"	</div>" +
+			"      </div>" +
+			"      <datepicker name=\"startDatePicker\" show-weeks=\"true\" class=\"wfm-datepicker datepicker-start-date\" ng-model=\"startDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
+			"    </div>" +
+			"    <div class=\"wfm-datepicker-wrap no-boxshadow\">" +
+			"      <div class=\"sub-header\">" +
+			"	<span translate>To</span> <strong>{{ endDate | date: \"longDate\" }}</strong>" +
+			"	<div class=\"icon-set form-validation-sign datepickerfix\">" +
+			"	  <i class=\"mdi mdi-check right-sign \"></i>" +
+			"	  <i class=\"mdi mdi-close wrong-sign\"></i>" +
+			"	</div>" +
+			"      </div>" +
+			"      <datepicker show-weeks=\"true\" class=\"wfm-datepicker datepicker-end-date\" ng-model=\"endDate\" ng-disabled=\"disabled\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
+			"    </div>" +
+			"  </div>" +
+			"<div ng-show=\"isUsingNewTemplate()\" class=\"inline-block\" ng-class=\"{'picker-convertible-template':isUsingNewTemplate(), 'ng-valid': !isInvalid(), 'ng-invalid': isInvalid(), 'ng-invalid-order': isInvalid('order'), 'ng-invalid-empty': isInvalid('empty')}\" ng-init=\"showAllDatePickers=false;showStartDatePicker=false;showEndDatePicker=false\">" +
+			"<span translate>From</span>" +
+			"<div class=\"inline-block relative\">" +
+			"<input class=\"pointer\" type=\"text\" ng-click=\"showStartDatePicker=!showStartDatePicker\" value=\"{{startDate | amDateFormat : 'LL' }}\" readonly />" +
+			"<div class=\"picker-wrapper \" ng-show=\"showStartDatePicker||showAllDatePickers\">" +
+			"<datepicker show-weeks=\"true\" ng-model=\"startDate\" class=\"wfm-datepicker\" ng-change=\"showStartDatePicker=false\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
+			"</div>" +
+			"</div>" +
+			"<span translate class=\"hor-m-5\">To</span>" +
+			"<div class=\"inline-block relative\">" +
+			"<input class=\"pointer\" type=\"text\" ng-click=\"showEndDatePicker=!showEndDatePicker\" value=\"{{endDate| amDateFormat : 'LL' }}\" readonly/>" +
+			"<div class=\"picker-wrapper\" ng-show=\"showEndDatePicker||showAllDatePickers\">" +
+			"<datepicker show-weeks=\"true\" ng-model=\"endDate\" class=\"wfm-datepicker\" ng-change=\"showAllDatePickers=false;showStartDatePicker=false;showEndDatePicker=false;\" custom-class=\"setRangeClass(date, mode)\"></datepicker>" +
+			"</div>" +
+			"</div>" +
+			"<i class=\"mdi mdi-calendar pointer\" ng-click=\"showAllDatePickers=!showAllDatePickers\"></i>" +
+			"</div>" +
+			"<div class=\"error-msg-container ng-invalid-order alert-error notice-spacer\" ng-if=\"showMessage\"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateMustBeEqualToOrEarlierThanEndDate</span></div>" +
+			"<div class=\"error-msg-container ng-invalid-empty alert-error notice-spacer\" ng-if=\"showMessage\"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateAndEndDateMustBeSet</span></div>";
 	}
 
 })();

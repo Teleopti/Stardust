@@ -1,4 +1,57 @@
 ﻿.wfm-date-range-picker-wrap {
+	position:relative;
+	.picker-convertible-template{
+		display:inline-block;
+		button{
+			margin-right:0;
+			marign-left:0;
+			padding:5px;
+		}
+		input{
+			text-align:center;
+			width:200px;
+		}
+		i{
+			vertical-align:middle;
+		}
+		.relative{
+			position:relative;
+		}
+		.inline-block{
+			display:inline-block;
+		}
+		.hor-m-5{
+		    margin-left:5px;
+			margin-right:5px;
+		}
+		.pointer{
+			cursor:pointer;
+		}
+		.in-date-range button {
+			background-color: $green-100;
+		 }
+		.picker-wrapper{
+			position:absolute;
+			top:23px;
+			left:50%;
+			margin-left:-109px;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+			background-color:#fff;
+			z-index:100;
+			padding:5px;
+		}
+		+ .error-msg-container, + .error-msg-container + .error-msg-container{
+			position: absolute;
+			top: 22px;
+			left: 0;
+			margin:0;
+			padding:2px;
+			width:100%;
+			z-index:99;
+			height:25px;
+			text-align:center;
+		}
+	}
   .wrong-sign {
     display: none;
     color: $red-600 ;
