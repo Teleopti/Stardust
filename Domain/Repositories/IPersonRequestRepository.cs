@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
 
 		IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period);
-		IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period, IEnumerable<RequestType> whitelistRequestTypes);
+		IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period, IEnumerable<IPerson> persons, IEnumerable<RequestType> whitelistRequestTypes);
 		
 		/// <summary>
 		/// Finds all specific types requests from and to a person for given page.

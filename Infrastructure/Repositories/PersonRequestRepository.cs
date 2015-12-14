@@ -134,11 +134,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period)
 		{
-			return FindAllRequests(period, null);
+			return FindAllRequests(period, null, null);
 		}
 
+
 		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period,
-			IEnumerable<RequestType> whitelistRequestTypes)
+			IEnumerable<IPerson> persons, IEnumerable<RequestType> whitelistRequestTypes)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
@@ -152,8 +153,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				requestForPeriod.Add(typeCriterion);
 			}
 
+			var query = Session.CreateCriteria<IPersonRequest>("req");
+			if (persons != null) query.Add(Restrictions.In("Person", persons.ToArray()));
 
-			return Session.CreateCriteria<IPersonRequest>("req")
+			return query
 				.SetFetchMode("requests", FetchMode.Join)
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
 				.List<IPersonRequest>();

@@ -6,8 +6,10 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
 			system.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
-			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();		
+			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
+			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 		}
 		
 		

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		public DateOnly StartDate;
 		public DateOnly EndDate;
 		public IList<RequestsSortingOrder> SortingOrders = new List<RequestsSortingOrder>();
+		public string AgentSearchTerm;
 	}
 
 	public enum RequestsSortingOrder

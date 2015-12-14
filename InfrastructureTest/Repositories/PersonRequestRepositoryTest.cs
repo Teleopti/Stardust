@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -142,6 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    private void setUpGetRequestsByTypeTests()
 		{
 			var personFrom = PersonFactory.CreatePerson("personFrom");
+			
 			PersistAndRemoveFromUnitOfWork(personFrom);
 			var absence = new Absence()
 			{
@@ -1017,9 +1019,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}).ToArray();
+				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null, new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}).ToArray();
 			result.Count().Should().Be(2);
 		}
+
+	    [Test]
+	    public void ShouldReturnRequestsFromTheSpecifiedPersons()
+	    {
+		    var person1 = PersonFactory.CreatePerson("person1");
+			var person2 = PersonFactory.CreatePerson("person2");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+		    PersistAndRemoveFromUnitOfWork(person2);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+		
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+
+			var result = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), new List<IPerson> { person1 }, new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }).ToArray();
+			result.Count().Should().Be(1);
+
+	    }
 
 	}
     

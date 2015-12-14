@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
+using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
-			var requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate));
+			IEnumerable<IPersonRequest> requests;
+
+			if (String.IsNullOrWhiteSpace(input.AgentSearchTerm))
+				requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate));
+			else
+				requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate), SearchTermParser.Parse(input.AgentSearchTerm));
 
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
