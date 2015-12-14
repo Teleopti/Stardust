@@ -12,13 +12,13 @@ RETURN
 (
 	SELECT 'v_log_object' as 'view_name','SELECT * FROM [$$$target$$$].dbo.log_object' as 'view_definition',4 as 'target_id'
 	UNION ALL
-	SELECT 'v_agent_logg' as 'view_name','SELECT * FROM [$$$target$$$].dbo.agent_logg WITH (NOLOCK)' as 'view_definition',4 as 'target_id'
+	SELECT 'v_agent_logg' as 'view_name','SELECT * FROM [$$$target$$$].dbo.agent_logg' as 'view_definition',4 as 'target_id'
 	UNION ALL
 	SELECT 'v_agent_info' as 'view_name','SELECT * FROM [$$$target$$$].dbo.agent_info' as 'view_definition',4 as 'target_id'
 	UNION ALL
 	SELECT 'v_queues' as 'view_name','SELECT * FROM [$$$target$$$].dbo.queues' as 'view_definition',4 as 'target_id'
 	UNION ALL
-	SELECT 'v_queue_logg' as 'view_name','SELECT * FROM [$$$target$$$].dbo.queue_logg  WITH (NOLOCK)' as 'view_definition',4 as 'target_id'
+	SELECT 'v_queue_logg' as 'view_name','SELECT * FROM [$$$target$$$].dbo.queue_logg' as 'view_definition',4 as 'target_id'
 	UNION ALL
 	SELECT 'v_ccc_system_info' as 'view_name','SELECT * FROM [$$$target$$$].dbo.ccc_system_info' as 'view_definition',4 as 'target_id'
 	UNION ALL
