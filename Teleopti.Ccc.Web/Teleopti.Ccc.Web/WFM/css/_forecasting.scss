@@ -1,4 +1,4 @@
-﻿.forecast-create-fad{
+.forecast-create-fad{
 	position:absolute;
 	top:0;
 	z-index:99;
@@ -174,10 +174,7 @@
 
 .c3-circles-vcampaign > .c3-circle{
  stroke:tomato!important;
- stroke-width: 3!important;
  fill:tomato!important;
- transform: translate(0px,15px);
- cy:160!important;
 }
 
 .c3-lines-vcampaign{
@@ -186,10 +183,7 @@
 
 .c3-circles-voverride > .c3-circle{
  stroke:purple!important;
- stroke-width: 3!important;
  fill:purple!important;
- transform: translate(0px,15px);
- cy:160!important;
 }
 
 .c3-lines-voverride{
@@ -198,10 +192,17 @@
 
 .c3-circles-vcombo > .c3-circle{
  stroke:gray!important;
- stroke-width: 3!important;
  fill:gray!important;
- transform: translate(0px,15px);
- cy:160!important;
+
+}
+
+.c3-circles-vcombo > .c3-circle,
+.c3-circles-voverride > .c3-circle,
+.c3-circles-vcampaign > .c3-circle{
+	cy:-10!important;
+	transition: .1s all ease-in-out;
+	transform: translate(0px,15px);
+  stroke-width: 3!important;
 }
 
 .c3-lines-vcombo{
