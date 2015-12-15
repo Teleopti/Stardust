@@ -109,6 +109,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 						self.activateFilterMixinChangeHandler();
 						self.activatePagingMixinChangeHandler();
 						self.selectedPageIndex(1);
+						loadSchedule();
 					}
 				); 
 			},

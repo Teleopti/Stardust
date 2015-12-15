@@ -11,7 +11,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
-using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public IPermissionProvider PermissionProvider;
-		public FakeScheduleProvider ScheduleProvider;
 
 		protected void SetUp()
 		{
@@ -70,15 +68,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonAssignmentRepository.Add(person2Assignment_1);
 			PersonAssignmentRepository.Add(person2Assignment_2);
 			PersonAssignmentRepository.Add(person3Assignment);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			var person1Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 21), person1, scenario);
-			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
-			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
-			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8));
-			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 11, 2015, 5, 21, 12));
-			person1Schedule.Add(person1Assignment1);
-			ScheduleProvider.AddScheduleDay(person1Schedule);
 		}
 
 
@@ -134,23 +123,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 20, 15, 0));
 			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
 		}
-		
-		[Test]
-		public void TeamScheduleControllerShouldReturnCorrectTimeLineNoReadModel()
-		{
-			SetUp();
-
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 21),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging {Take = 20, Skip = 0},
-				SearchNameText = ""
-			});
-
-			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 16, 15, 0));
-			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 5, 45, 0));
-		}
 
 		[Test]
 		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
@@ -185,25 +157,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
-		}
-		
-		[Test]
-		public void ShouldReturnCorrectAgentSchedulesWithDateNoReadModel()
-		{
-			SetUp();
-
-			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
-	
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 21),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
-			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 6, 0, 0));
 		}
 
 		[Test]
@@ -260,23 +213,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldNotSeeScheduleOfUnpublishedAgentNoReadModel()
-		{
-			SetUp();
-
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
-		}
-
 
 		[Test]
 		public void ShouldSeeDayOffAgentScheduleWhenDayOffFilterEnabled()

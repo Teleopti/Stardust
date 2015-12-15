@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -108,11 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			TeamScheduleViewModelReworked result;
-			result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210)
-				? _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data)
-				: _teamScheduleViewModelReworkedFactory.GetViewModel(data);
-			return Json(result);
+			return Json(_teamScheduleViewModelReworkedFactory.GetViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
