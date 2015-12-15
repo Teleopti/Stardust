@@ -15,9 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public PeopleSelection Load(DateOnlyPeriod period)
 		{
-			//RK: needs to be loading schedule period here for scheduling. not needed for publishing I think...
-			//fix soon!
-			var allPeople = _personRepository.FindPeopleInOrganization(period, false).ToList();
+			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
 			var peopleToSchedule =
 				allPeople.Where(
 					p =>
