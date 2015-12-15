@@ -12824,4 +12824,79 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="createNewRuleset" xml:space="preserve">
     <value>Skapa ny regeluppsättning</value>
   </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Bemanningsnivåer</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Skapa kompetens</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Kampanj tillagd</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Kunde inte verkställa. Se orsaker ovan. </value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Extremvärden</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Köstatistik utan extremvärden</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistik</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifieringar</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Avaktivera</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Aktivera</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Ersätt prognostiserade värden.</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Metod</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Både ersättningsvärde och kampanj angivet</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Total ACW &gt;</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Total samtalstid &gt;</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Inga träffar</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Larmfärg</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Sekunder/samtal</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} dagar är valda från {1} till {2}</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Vald dag är {0}</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Ersättningsvärde eller kampanj för scenariot</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>Namnet måste vara kortare än 50 tecken</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Antal sekunder måste vara mellan 1 och 86400</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Shrinkage måste vara mellan 1 och 99</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Alla dagar är stängda</value>
+  </data>
 </root>
