@@ -1,10 +1,8 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -116,5 +114,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
+		[Test]
+		public void ShouldPersistIsAlarm()
+		{
+			var state = new AgentStateReadModelForTest {IsInAlarm = true};
+
+			Target.PersistActualAgentReadModel(state);
+
+			Reader.GetCurrentActualAgentState(state.PersonId)
+				.IsInAlarm.Should().Be(true);
+		}
 	}
 }

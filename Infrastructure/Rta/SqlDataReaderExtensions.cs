@@ -67,5 +67,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return reader.GetDateTime(ordinal);
 		}
 
+		public static bool Boolean(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return reader.GetBoolean(ordinal);
+		}
 	}
 }

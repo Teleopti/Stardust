@@ -25,6 +25,7 @@ CREATE  PROCEDURE [RTA].[rta_addorupdate_actualagentstate]
 @Color int = NULL,
 @RuleStartTime datetime = NULL,
 @AlarmStartTime datetime = NULL,
+@IsInAlarm bit = 1,
 @StaffingEffect float = NULL,
 @Adherence int = NULL,
 @ReceivedTime datetime = NULL,
@@ -53,6 +54,7 @@ BEGIN
                       Color = @Color,
                       RuleStartTime = @RuleStartTime,
 					  AlarmStartTime = @AlarmStartTime,
+					  IsInAlarm = @IsInAlarm,
                       StaffingEffect = @StaffingEffect,
 					  Adherence = @Adherence,
                       ReceivedTime = @ReceivedTime,
@@ -66,10 +68,10 @@ BEGIN
            If @@ROWCOUNT = 0     
            insert into [RTA].[ActualAgentState]
 		   (PersonId, StateCode, PlatformTypeId, State, StateId, Scheduled, ScheduledId, StateStartTime,
-			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, RuleStartTime, AlarmStartTime,StaffingEffect,
+			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, RuleStartTime, AlarmStartTime, IsInAlarm, StaffingEffect,
 			Adherence, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId,TeamId,SiteId)
            values(@PersonId, @StateCode, @PlatformTypeId, @State, @StateId, @Scheduled, @ScheduledId, @StateStartTime,
-			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @RuleStartTime, @AlarmStartTime,@StaffingEffect,
+			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @RuleStartTime, @AlarmStartTime,@IsInAlarm, @StaffingEffect,
 			@Adherence, @ReceivedTime, @BatchId, @OriginalDataSourceId, @BusinessUnitId,@TeamId,@SiteId)
 END
 

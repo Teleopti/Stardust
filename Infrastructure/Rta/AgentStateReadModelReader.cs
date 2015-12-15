@@ -40,32 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				foreach (var personList in personGuids.Batch(400))
 				{
 					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-						@"SELECT 
-							PlatformTypeId,
-							BusinessUnitId,
-							StateCode,
-							StateId,
-							State,
-							ScheduledId,
-							Scheduled,
-							ScheduledNextId,
-							ScheduledNext,
-							ReceivedTime,
-							Color,
-							AlarmId,
-							AlarmName,
-							StateStartTime,
-							NextStart,
-							BatchId,
-							OriginalDataSourceId,
-							AlarmStartTime,
-							RuleStartTime,
-							PersonId,
-							StaffingEffect,
-							Adherence,
-							TeamId,
-							SiteId 
-						FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
+						@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
 						.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 						.SetReadOnly(true)
@@ -80,32 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					@"SELECT 
-						PlatformTypeId,
-						BusinessUnitId,
-						StateCode,
-						StateId,
-						State,
-						ScheduledId,
-						Scheduled,
-						ScheduledNextId,
-						ScheduledNext,
-						ReceivedTime,
-						Color,
-						AlarmId,
-						AlarmName,
-						StateStartTime,
-						NextStart,
-						BatchId,
-						OriginalDataSourceId,
-						AlarmStartTime,
-						RuleStartTime,
-						PersonId,
-						StaffingEffect,
-						Adherence,
-						TeamId,
-						SiteId 
-					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
+					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
 					.SetParameter("teamId", teamId)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -118,32 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					@"SELECT 
-						PlatformTypeId,
-						BusinessUnitId,
-						StateCode,
-						StateId,
-						State,
-						ScheduledId,
-						Scheduled,
-						ScheduledNextId,
-						ScheduledNext,
-						ReceivedTime,
-						Color,
-						AlarmId,
-						AlarmName,
-						StateStartTime,
-						NextStart,
-						BatchId,
-						OriginalDataSourceId,
-						AlarmStartTime,
-						RuleStartTime,
-						PersonId,
-						StaffingEffect,
-						Adherence,
-						TeamId,
-						SiteId 
-					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
+					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
 					.SetParameterList("siteIds", siteIds)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -156,32 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					@"SELECT 
-						PlatformTypeId,
-						BusinessUnitId,
-						StateCode,
-						StateId,
-						State,
-						ScheduledId,
-						Scheduled,
-						ScheduledNextId,
-						ScheduledNext,
-						ReceivedTime,
-						Color,
-						AlarmId,
-						AlarmName,
-						StateStartTime,
-						NextStart,
-						BatchId,
-						OriginalDataSourceId,
-						AlarmStartTime,
-						RuleStartTime,
-						PersonId,
-						StaffingEffect,
-						Adherence,
-						TeamId,
-						SiteId 
-					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
+					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
 					.SetParameterList("teamIds", teamIds)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -281,6 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
 							RuleStartTime = reader.NullableDateTime("RuleStartTime"),
 							AlarmStartTime = reader.NullableDateTime("AlarmStartTime"),
+							IsInAlarm = reader.Boolean("IsInAlarm"),
 							PersonId = reader.Guid("PersonId"),
 							StaffingEffect = reader.NullableDouble("StaffingEffect"),
 							Adherence = reader.NullableInt("Adherence"),
