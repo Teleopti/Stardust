@@ -73,7 +73,7 @@
 								$state.go('resourceplanner.report', { result: scheduleResult, interResult: result, planningperiod: p });
 							}, handleScheduleOrOptimizeError);
 						}, handleScheduleOrOptimizeError);
-					}, handleScheduleOrOptimizeError());
+					}, handleScheduleOrOptimizeError);
 				};
 
 	        //toggle
