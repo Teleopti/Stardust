@@ -118,5 +118,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					new ScheduleDictionaryLoadOptions(false, false), _period,
 					_scenario)[_person].ScheduledDay(new DateOnly(_startDate)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void AbsenceCancelSuccessfullyForTwoOverlappingAbsences()
+		{
+			_scheduleRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, _period).WithId());
+			_scheduleRepository.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(2)))).WithId());
+			_scheduleRepository.Add(new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, _period.ChangeEndTime(TimeSpan.FromDays(4)))).WithId());
+
+			_scheduleRepository.SetUnitOfWork(_unitOfWorkFactory.CurrentUnitOfWork());
+
+			_periodDto.UtcEndTime = _period.EndDateTime.Add(TimeSpan.FromDays(2));
+			_target.Handle(new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() });
+
+			_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+					new ScheduleDictionaryLoadOptions(false, false), _period.ChangeEndTime(TimeSpan.FromDays(3)),
+					_scenario)[_person].ScheduledDay(new DateOnly(_startDate).AddDays(3)).PersonAbsenceCollection(true).Count.Should().Be.EqualTo(1);
+		}
     }
 }

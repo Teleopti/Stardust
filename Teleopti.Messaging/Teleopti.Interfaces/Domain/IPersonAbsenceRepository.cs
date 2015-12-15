@@ -47,12 +47,12 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="person">The person.</param>
 		/// <param name="scenario">The scenario.</param>
 		/// <param name="period">The period.</param>
-		/// <param name="absence">The absence.</param>
+		/// <param name="absence">The absence, a null value will get you period for all absences matching the other criterias.</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: henrika
 		/// Created date: 2009-02-12
 		/// </remarks>
-		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence);
+		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null);
 	}
 }

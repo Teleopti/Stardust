@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ScheduleRepository : Repository<IPersistableScheduleData>, IScheduleRepository
     {
-        private IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+        private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 
         public ScheduleRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 
-        public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
+        public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
         {
             IList<IPerson> people = new List<IPerson> {person};
             var personAbsenceRepository = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork);

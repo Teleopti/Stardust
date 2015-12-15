@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
 				    .Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period, scenario)
-							       .Add(Restrictions.In("Person", personList.ToArray()))))
+							       .Add(Restrictions.InG("Person", personList.ToArray()))))
 				    .SetResultTransformer(Transformers.DistinctRootEntity)
 				    .List<IPersonAbsence>());
 			}
@@ -85,25 +85,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
+		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null)
 		{
-			const string q = @"select pa.Layer.Period
-                            from PersonAbsence pa
-                            where pa.Person=:person 
-                                and pa.Layer.Period.period.Maximum > :startTime
-                                and pa.Layer.Period.period.Minimum < :endTime
-                                and pa.Scenario =:scenario
-                                and pa.Layer.Payload =:absence
-								ORDER BY pa.Layer.Period.period.Minimum";
-
-			IList<DateTimePeriod> periods = Session.CreateQuery(q)
-						.SetEntity("person", person)
-						.SetDateTime("startTime", period.StartDateTime)
-						.SetDateTime("endTime", period.EndDateTime)
-						.SetEntity("scenario", scenario)
-						.SetEntity("absence", absence)
-						.List<DateTimePeriod>();
-			return periods;
+			var criteria = Session.CreateCriteria(typeof (PersonAbsence))
+				.SetProjection(Projections.Property("Layer.Period"))
+				.Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime))
+				.Add(Restrictions.Eq("Scenario", scenario))
+				.Add(Restrictions.Eq("Person", person));
+			if (absence != null)
+			{
+				criteria.Add(Restrictions.Eq("Layer.Payload", absence));
+			}
+			return criteria.List<DateTimePeriod>();
 		}
 
 

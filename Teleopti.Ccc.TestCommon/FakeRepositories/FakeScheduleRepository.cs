@@ -75,8 +75,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
-			var period = _data.First().Period; // max period?
-			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, _data.Where(d => d.BelongsToScenario(scenario)).ToArray());
+			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
+			var period = scheduleData.Select(s => s.Period).Aggregate((a, b) => a.MaximumPeriod(b));
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, scheduleData);
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
@@ -95,9 +96,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.Where(d => d.BelongsToScenario(scenario)).ToArray());
 		}
 
-		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
+		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
 		{
-			throw new NotImplementedException();
+			ThePeriodThatWasUsedForFindingSchedules = period;
+
+			var absencesPeriod =
+				_data.OfType<IPersonAbsence>()
+					.Where(
+						p =>
+							p.Period.Intersect(period) && (absence == null || p.Layer.Payload.Equals(absence)) && p.Scenario.Equals(scenario) &&
+							p.Person.Equals(person)).Select(s => s.Period).Aggregate((a, b) => a.MaximumPeriod(b));
+
+			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,

@@ -49,7 +49,7 @@ namespace Teleopti.Interfaces.Domain
         /// <remarks>
         /// calculates the periods if there is any absence on that period, even if the highest in projection
         /// </remarks>
-        IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence);
+        IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null);
 
     	/// <summary>
     	/// Finds the schedules for a specific period and scenario.
