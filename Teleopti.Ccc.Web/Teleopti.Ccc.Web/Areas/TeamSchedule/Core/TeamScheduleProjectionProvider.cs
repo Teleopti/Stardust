@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
@@ -100,10 +102,77 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			scheduleVm.Projection = layers;
 			return scheduleVm;
 		}
+
+		public AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
+		{
+			var ret = new AgentScheduleViewModelReworked();
+			var layers = new List<LayerViewModelReworked>();
+			ret.PersonId = person.Id.GetValueOrDefault();
+			ret.Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person);
+			if (scheduleDay == null)
+			{
+				return ret;
+			}
+
+			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var projection = _projectionProvider.Projection(scheduleDay);
+			var significantPart = scheduleDay.SignificantPart();
+			ret.IsDayOff = significantPart == SchedulePartView.DayOff;
+
+			var projectionPeriod = projection.Period();
+			if (projectionPeriod != null)
+			{
+				ret.StartTimeUtc = projectionPeriod.Value.StartDateTime;
+			}
+
+			if (projection.HasLayers)
+			{
+
+				foreach (var layer in projection)
+				{
+					var isPayloadAbsence = layer.Payload is IAbsence;
+					var isOvertime = layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
+					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
+					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
+					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
+
+					var description = isPayloadAbsence
+						? (isAbsenceConfidential && !isPermittedToViewConfidential
+							? ConfidentialPayloadValues.Description
+							: (layer.Payload as IAbsence).Description)
+						: layer.DisplayDescription();
+					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
+												startDateTimeInUserTimeZone.ToShortTimeString(),
+												endDateTimeInUserTimeZone.ToShortTimeString());
+
+					layers.Add(new LayerViewModelReworked
+					{
+						TitleHeader = description.Name,
+						Color =
+							isPayloadAbsence
+								? (isAbsenceConfidential && !isPermittedToViewConfidential
+									? ConfidentialPayloadValues.DisplayColorHex
+									: (layer.Payload as IAbsence).DisplayColor.ToHtml())
+								: layer.DisplayColor().ToHtml(),
+						Start = startDateTimeInUserTimeZone,
+						End = endDateTimeInUserTimeZone,
+						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
+						IsAbsenceConfidential = isAbsenceConfidential,
+						TitleTime = expectedTime,
+						IsOvertime = isOvertime
+					});
+				}
+			}
+			ret.ScheduleLayers = layers;
+			ret.MinStart = layers.Min(l => l.Start);
+			ret.Total = layers.Count();
+			return ret;
+		}
 	}
 
 	public interface ITeamScheduleProjectionProvider
 	{
 		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
+		AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
 	}
 }

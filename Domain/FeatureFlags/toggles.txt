@@ -97,6 +97,7 @@ MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = RC
 WfmTeamSchedule_NoReadModel_35609 = RC
 WfmTeamSchedule_FindScheduleEasily_35611 = RC
+MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = RC
