@@ -25,14 +25,11 @@
 			scope: {
 				times: '=?',
 				scheduleCount: '=?'
-			},
-			linkFunction: linkFunction
+			}
 		};
 	};
 	angular.module('wfm.teamSchedule')
 		.directive('timeLine', directive)
 		.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
-
-	function linkFunction(scope, element, attributes, vm) {
-	};
+	
 }());
