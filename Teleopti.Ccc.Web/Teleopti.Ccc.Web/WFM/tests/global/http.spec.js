@@ -60,7 +60,7 @@ describe('HttpTest', function() {
 		scope.$digest();
 	});
 
-	fit('Should react to http error 0', function(done) {
+	it('Should react to http error 0', function(done) {
 		var scope = $rootScope.$new();
 		spyOn(growl, 'error');
 		var rejection = {
