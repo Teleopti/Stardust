@@ -464,7 +464,7 @@
 			vm.showMeridian = false;
 			$scope.$on('$localeChangeSuccess', function () {
 				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
-				vm.showMeridian = timeFormat.indexOf("h:") >= 0;
+				vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf("h:") >= 0;
 			});
 
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
