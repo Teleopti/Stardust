@@ -235,6 +235,8 @@
     <Compile Include="ApplicationLayer\Rta\Aspects\IRtaDataSourceScope.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\ConnectionStringDataSourceScope.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarmStartTime.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentStateViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentViewModel.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
