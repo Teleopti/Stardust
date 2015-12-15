@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		public SchedulingResultModel DoScheduling(DateOnlyPeriod period)
+		[UnitOfWork]
+		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
 			int daysScheduled;
 			var people = SetupAndSchedule(period, out daysScheduled);
@@ -79,7 +80,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				};
 		}
 
-		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period, out int daysScheduled)
 		{
 			_prerequisites.MakeSureLoaded();

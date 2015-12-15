@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		}
 
-		public OptimizationResultModel Execute(Guid planningPeriodId)
+		[UnitOfWork]
+		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);
 
@@ -59,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
-		[UnitOfWork]
 		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
