@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 				NextActivity = x.ScheduledNext,
 				NextActivityStartTime = formatTime(x.NextStart),
 				Alarm = x.AlarmName,
-				AlarmStart = x.RuleStartTime,
+				AlarmStart = x.AlarmStartTime,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
 				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0
 			});

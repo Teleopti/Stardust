@@ -141,5 +141,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			states.Single().NextActivityStartTime.Should().Be(null);
 		}
+		
+		[Test]
+		public void ShouldHaveAlarmStartFromAlarmStartTime()
+		{
+			var agentStates = new[]
+			{
+				new AgentStateReadModel
+				{
+					AlarmStartTime = "2015-11-23 08:15".Utc()
+				}
+			};
+
+			var states = Target.Build(agentStates);
+
+			states.Single().AlarmStart.Should().Be("2015-11-23 08:15".Utc());
+		}
 	}
 }
