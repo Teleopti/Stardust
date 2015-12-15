@@ -459,12 +459,15 @@
 			vm.permission = result;
 		});
 
-		vm.Init = function () {
+		var getDateAndTimeFormat = function () {
 			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
-			vm.showMeridian = false;
+			vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf("h:") >= 0;
+		}
+
+		vm.Init = function () {
+			getDateAndTimeFormat();
 			$scope.$on('$localeChangeSuccess', function () {
-				vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
-				vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf("h:") >= 0;
+				getDateAndTimeFormat();
 			});
 
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,

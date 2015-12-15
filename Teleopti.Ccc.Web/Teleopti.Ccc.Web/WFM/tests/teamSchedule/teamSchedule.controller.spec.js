@@ -20,13 +20,23 @@ describe("TeamScheduleControllerTest", function() {
 					DateFormatLocale: "en-GB"
 				};
 			});
+
+			$provide.service('$locale', function () {
+				return {
+					DATETIME_FORMATS: {
+						shortTime: "h:mm a"
+					}
+				};
+			});
 		});
 	});
 
 	var mockCurrentUserInfo;
-	beforeEach(inject(function(_CurrentUserInfo_) {
+	var mockLocale;
+	beforeEach(inject(function(_CurrentUserInfo_, _$locale_) {
 		mockCurrentUserInfo = _CurrentUserInfo_;
 		moment.locale(mockCurrentUserInfo.DateFormatLocale);
+		mockLocale = _$locale_;
 	}));
 
 	var mockToggleService = {
@@ -128,7 +138,7 @@ describe("TeamScheduleControllerTest", function() {
 			$scope: scope,
 			Toggle: mockToggleService,
 			$q: $q,
-			$locale: $locale,
+			$locale: mockLocale,
 			TeamSchedule: mockTeamScheduleService,
 			CurrentUserInfo: mockCurrentUserInfo,
 			GroupScheduleFactory: grouScheduleFactory,
@@ -210,5 +220,12 @@ describe("TeamScheduleControllerTest", function() {
 		expect(personSchedules[0].IsSelected).toEqual(true);
 		expect(personSchedules[1].IsSelected).toEqual(true);
 		expect(controller.isAllInCurrentPageSelected).toEqual(true);
+	}));
+
+	it("should show meridian correctly", inject(function () {
+		var scope = $rootScope.$new();
+		scope.$digest(); // this is needed to resolve the promiseddd
+
+		expect(controller.showMeridian).toEqual(true);
 	}));
 });
