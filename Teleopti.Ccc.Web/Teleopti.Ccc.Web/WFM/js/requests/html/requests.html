@@ -1,6 +1,8 @@
 ﻿<div class="wfm-requests" ng-if="requests.isRequestsEnabled">
-	<people-search-input search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
-	<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate"></date-range-picker>
+	<div class="operation-container">
+		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
+		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="{{requests.templateType}}"></date-range-picker>
+	</div>
 	<requests-overview style="position: relative" period="requests.period" agent-search-term="requests.agentSearchTerm"></requests-overview>
 </div>
 

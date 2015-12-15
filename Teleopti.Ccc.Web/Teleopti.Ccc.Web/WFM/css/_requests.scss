@@ -1,5 +1,25 @@
 ﻿.wfm-requests {
-
+	.operation-container{
+		margin-bottom:10px;
+		margin-top:5px;
+	}
+	.relative{
+		position:relative;
+	}
+	.inline-block{
+		display:inline-block;
+	}
+	.request-filter {
+		.input-prepend{
+			width:350px;
+		}
+		.advanced-search-container{
+			margin-top:0;
+		}
+		#simple-search{
+			height:auto !important;
+		}
+	}
 	.ui-grid-cell-contents {
 		text-align: center;
 		width:85%;
