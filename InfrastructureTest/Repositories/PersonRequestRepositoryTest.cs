@@ -1225,6 +1225,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		}
 
+	    [Test]
+	    public void ShouldReturnCorrectRequestsTotalCountWithPaging()
+	    {
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+
+			var absence = new Absence()
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			for (int i = 0; i < 10; i++)
+			{
+				var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+				PersistAndRemoveFromUnitOfWork(textRequest1);
+				var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+				PersistAndRemoveFromUnitOfWork(textRequest2);
+			}
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc },
+				Paging = new Paging { Skip = 10, Take = 5 }
+			};
+
+		    int count;
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count).ToArray();
+
+			result.Count().Should().Be.EqualTo(5);
+		    count.Should().Be.EqualTo(20);
+
+
+	    }
+
 	}
     
 }

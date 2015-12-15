@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			_peopleSearchProvider = peopleSearchProvider;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input)
+		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, out int totalCount)
 		{
-			return _repository.FindAllRequests(toRequestFilter(input)).Where(permissionCheckPredicate);
+			return _repository.FindAllRequests(toRequestFilter(input), out totalCount).Where(permissionCheckPredicate);
 		}
 
 		private RequestFilter toRequestFilter(AllRequestsFormData input)

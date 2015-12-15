@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		// Deprecate after Wfm_Requests_Performance_36295. Use CreateRequestListViewModel instead.
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
-			
-			var requests = _requestsProvider.RetrieveRequests(input);
+			int totalCount;
+			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
 			var mapping = new Dictionary<RequestsSortingOrder, Func<RequestViewModel, object>>
@@ -56,7 +56,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
-			throw new NotImplementedException();
+			int totalCount;
+			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);
+
+			return new RequestListViewModel
+			{
+				Requests = requests.Select(toViewModel),
+				TotalCount = totalCount,
+				Skip = input.Paging.Skip,
+				Take = input.Paging.Take
+			};			
 		}
 
 		private RequestViewModel toViewModel(IPersonRequest request)

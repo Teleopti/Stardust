@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
@@ -29,7 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 
 	public class RequestListViewModel
 	{
-		public Paging Paging;
+		public int TotalCount;
+		public int Skip;
+		public int Take;
 		public IEnumerable<RequestViewModel> Requests;
 	}
 

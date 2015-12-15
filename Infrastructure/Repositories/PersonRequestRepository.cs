@@ -132,19 +132,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return personRequests.List<IPersonRequest>();
 		}
+	
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
+		{
+			int count;
+			return FindAllRequests(filter, out count, true);
+		}
+
+		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
 			criteria.SetFetchMode("requests", FetchMode.Join);
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
-			
+
 			filterRequestByPeriod(criteria, filter.Period);
 			filterRequestByPersons(criteria, filter.Persons);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
 
+			if (ignoreCount)
+			{
+				count = -1;
+			}
+			else
+			{
+				var criteriaCount = (ICriteria)criteria.Clone();
+				criteriaCount.SetProjection(Projections.RowCount());
+				count = Convert.ToInt32(criteriaCount.UniqueResult());				
+			}
+			
 			sortPersonRequests(criteria, filter.SortingOrders);
 			pagePersonRequests(criteria, filter.Paging);
 
