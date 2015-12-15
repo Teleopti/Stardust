@@ -98,7 +98,7 @@ WfmPermission_ReplaceOldPermission_34671 = RC
 WfmTeamSchedule_NoReadModel_35609 = RC
 WfmTeamSchedule_FindScheduleEasily_35611 = RC
 
-Wfm_Requests_Basic_35986 = dev
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = RC
 Wfm_Requests_People_Search_36294 = DEV
+Wfm_Requests_Performance_36295 = DEV
