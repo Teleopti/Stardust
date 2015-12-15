@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 
 			IEnumerable<AgentScheduleViewModelReworked> agentSchedules;
+
 			int pageCount = 1;
 			if (personIds.Any())
 			{
