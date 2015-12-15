@@ -33,6 +33,7 @@ namespace Teleopti.Interfaces.Domain
 		public int? Color { get; set; }
 		public double? StaffingEffect { get; set; }
 		public int? Adherence { get; set; }
+		public bool IsInAlarm { get; set; }
 
 		public override string ToString()
 		{

@@ -7,15 +7,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly IAppliedAlarmStartTime _appliedAlarmStartTime;
+		private readonly IAppliedIsAlarm _appliedIsAlarm;
 
 		public StateInfo(
 			RtaProcessContext context,
 			IStateMapper stateMapper,
 			IDatabaseLoader databaseLoader,
 			IAppliedAdherence appliedAdherence,
-			IAppliedAlarmStartTime appliedAlarmStartTime)
+			IAppliedAlarmStartTime appliedAlarmStartTime,
+			IAppliedIsAlarm appliedIsAlarm)
 		{
 			_appliedAlarmStartTime = appliedAlarmStartTime;
+			_appliedIsAlarm = appliedIsAlarm;
 			Input = context.Input;
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
@@ -65,6 +68,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
+	    private bool isInAlarm
+		{
+			get { return _appliedIsAlarm.IsAlarm(State); }
+		}
+
 		public ExternalUserStateInputModel Input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
 	    public StateAlarmInfo State { get; private set; }
@@ -100,7 +108,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				ScheduledId = Schedule.CurrentActivityId(),
 				ScheduledNext = Schedule.NextActivityName(),
 				ScheduledNextId = Schedule.NextActivityId(),
-				State = State.StateGroupName()
+				State = State.StateGroupName(),
+				IsInAlarm = isInAlarm
 			};
 		}
 		
