@@ -1,82 +1,37 @@
 ﻿"use strict";
 
 describe("TimeLine", function () {
+
 	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
+	var mockCurrentUserInfo = {
+		DefaultTimeZone: "Etc/UTC",
+		DateFormatLocale: "en-GB"
+	};
 
-	var target;
-
-	beforeEach(module("wfm.teamSchedule"));
-
-	// Setup the mock service in an anonymous module.
-	beforeEach(function () {
-		module('currentUserInfoService');
+	beforeEach(function() {
+		module("wfm.teamSchedule");
 		module(function ($provide) {
 			$provide.service('CurrentUserInfo', function () {
-				return {
-					DefaultTimeZone: "Etc/UTC",
-					DateFormatLocale: "en-GB"
-				};
+				return mockCurrentUserInfo;
 			});
 		});
-	});
 
-	//Getting reference of the mocked service
-	var mockCurrentUserInfo;
-	beforeEach(inject(function(CurrentUserInfo) {
-		mockCurrentUserInfo = CurrentUserInfo;
 		moment.locale(mockCurrentUserInfo.DateFormatLocale);
-	}));
+	});
 	
 
-	beforeEach(inject(function (TimeLine) {
-		target = TimeLine;
-	}));
+	it("should display 1 extra hour line when schedule starts or end at hour point", inject(function (TeamScheduleTimeLineFactory) {
 
-	it("should display 1 extra hour line when schedule starts or end at hour point", inject(function () {
+		var target = TeamScheduleTimeLineFactory;
+
 		var today = "2015-10-26";
 		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
-
 		var now = moment(today + " 07:35:00");
 
 		var schedules = [
-			{
-				"Date": today,
-				"Projection": [
-					{
-						"Start": today + " 12:00",
-						"Minutes": 240
-					},
-					{
-						"Start": today + " 16:00",
-						"Minutes": 240 // End = "2015-10-26 20:00"
-					}
-				],
-				"DayOff": null
-			},
-			{
-				"Date": today,
-				"Projection": [
-					{
-						"Start": today + " 08:00",
-						"Minutes": 120
-					},
-					{
-						"Start": today + " 10:00",
-						"Minutes": 360 // End = "2015-10-26 16:00"
-					}
-				],
-				"DayOff": null
-			},
-			{
-				"Date": tomorrow,
-				"Projection": [],
-				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": tomorrow + " 00:00",
-					"Minutes": 1440
-				}
-			}
+			createSchedule(today, null, [{ startHour: 12, endHour: 16 }, { startHour: 16, endHour: 20 }]),
+			createSchedule(today, null, [{ startHour: 8, endHour: 10 }, { startHour: 10, endHour: 16 }]),
+			createSchedule(tomorrow, 'dayOff')
 		];
 
 		var timeLine = target.Create(schedules, now);
@@ -101,51 +56,19 @@ describe("TimeLine", function () {
 		expect(lastHourPoint.Position()).toEqual(100);
 	}));
 
-	it("should display same whole hour line as the start or end time when schedule starts or ends not at hour point", inject(function () {
+	it("should display same whole hour line as the start or end time when schedule starts or ends not at hour point", inject(function (TeamScheduleTimeLineFactory) {
+
+		var target = TeamScheduleTimeLineFactory;
+
 		var today = "2015-10-26";
 		var tomorrow = moment(today).add(1, "days").startOf("days").format("YYYY-MM-DD");
 
 		var now = moment(today + " 07:35:00");
 
 		var schedules = [
-			{
-				"Date": today,
-				"Projection": [
-					{
-						"Start": today + " 12:00",
-						"Minutes": 240
-					},
-					{
-						"Start": today + " 16:00",
-						"Minutes": 250 // End = "2015-10-26 20:10"
-					}
-				],
-				"DayOff": null
-			},
-			{
-				"Date": today,
-				"Projection": [
-					{
-						"Start": today + " 07:30",
-						"Minutes": 120 // End = "2015-10-26 09:30"
-					},
-					{
-						"Start": today + " 10:00",
-						"Minutes": 360 // End = "2015-10-26 16:00"
-					}
-				],
-				"DayOff": null
-			},
-			{
-				"Date": tomorrow,
-				"Projection": [],
-				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": tomorrow + " 00:00",
-					"Minutes": 1440
-				}
-			}
+			createSchedule(today, null, [{ startHour: 12, endHour: 16 }, { startHour: 16, endHour: 20.5 }]),
+			createSchedule(today, null, [{ startHour: 7.5, endHour: 9.5 }, { startHour: 10, endHour: 16 }]),
+			createSchedule(tomorrow, 'dayoff')
 		];
 
 		var timeLine = target.Create(schedules, now);
@@ -169,4 +92,47 @@ describe("TimeLine", function () {
 		expect(lastHourPoint.TimeLabel).toEqual("21:00");
 		expect(lastHourPoint.Position()).toEqual(100);
 	}));
+
+
+
+	function createSchedule(belongsToDate, dayOff, projectionInfoArray) {
+
+		var dateMoment = moment(belongsToDate);
+		var projections = [];
+
+		var fakeSchedule = {
+			Date: dateMoment.format('YYYY-MM-DD'),
+			DayOff: dayOff == null ? null : createDayOff(),
+			Projection: createProjection()
+		};
+
+		function createProjection() {
+
+			if (dayOff == null) {
+				projectionInfoArray.forEach(function (projectionInfo) {
+
+					var dateMomentCopy = moment(dateMoment);
+
+					projections.push({
+						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
+						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes()
+					});
+				});
+			}
+
+			return projections;
+		};
+
+		function createDayOff() {
+			return {
+				DayOffName: 'Day off',
+				Start: dateMoment.format('YYYY-MM-DD HH:mm'),
+				Minutes: 1440
+			};
+
+		};
+
+		return fakeSchedule;
+	}
+
 });

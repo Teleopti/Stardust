@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', [
-	'CurrentUserInfo', 'TimeLine', 'PersonSchedule',
-	function(currentUserInfo, timeLine, personSchedule) {
+	'CurrentUserInfo', 'TeamScheduleTimeLineFactory', 'PersonSchedule',
+	function(currentUserInfo, timeLineFactory, personSchedule) {
 		var create = function (groupSchedules, queryDate) {
-			var scheduleTimeLine = timeLine.Create(groupSchedules, queryDate);
+			var scheduleTimeLine = timeLineFactory.Create(groupSchedules, queryDate);
 			
 			var schedules = [];
 			angular.forEach(groupSchedules, function (schedule) {
