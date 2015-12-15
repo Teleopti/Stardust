@@ -3,14 +3,8 @@
 (function () {
 	var directive = function () {
 		return {
-			templateUrl: "js/teamSchedule/html/personschedule.html",
-			linkFunction: linkFunction
+			templateUrl: "js/teamSchedule/html/personschedule.html"
 		};
 	};
-	angular.module('wfm.teamSchedule')
-		.directive('personSchedule', directive);
-
-	function linkFunction(scope, element, attributes, controllers) {
-
-	};
+	angular.module('wfm.teamSchedule').directive('personSchedule', directive);
 }());

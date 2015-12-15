@@ -2,62 +2,22 @@
 
 describe("PersonSchedule", function () {
 	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
-
 	var target;
 
-	beforeEach(module("wfm.teamSchedule"));
-
-	// Setup the mock service in an anonymous module.
-	beforeEach(module(function($provide) {
-		$provide.value("CurrentUserInfoStub", {
-			DefaultTimeZone: "Etc/UTC"
+	beforeEach(function() {
+		module("wfm.teamSchedule");
+		module(function($provide) {
+			$provide.value("CurrentUserInfoStub", {
+				DefaultTimeZone: "Etc/UTC"
+			});
 		});
-	}));
+	});
+
 
 	beforeEach(inject(function (PersonSchedule) {
 		target = PersonSchedule;
 	}));
-
-	var verifyShift = function (timeLine, shift, rawSchedule) {
-		var index = 0;
-		angular.forEach(shift.Projections, function (projection) {
-			var rawProjection = rawSchedule.Projection[index];
-			expect(projection.Color).toEqual(rawProjection.Color);
-			expect(projection.Description).toEqual(rawProjection.Description);
-
-			var startInMinute = moment(rawProjection.Start).diff(timeLine.Offset, 'minutes') - timeLine.StartMinute;
-
-			var expectedStart;
-			var expectedLength;
-
-			if (startInMinute >= 0) {
-				expectedStart = startInMinute * timeLine.LengthPercentPerMinute;
-				expectedLength = rawProjection.Minutes * timeLine.LengthPercentPerMinute;
-			} else {
-				expectedStart = 0;
-				expectedLength = (rawProjection.Minutes + startInMinute) * timeLine.LengthPercentPerMinute;
-			}
-
-			expect(projection.StartPosition()).toEqual(expectedStart);
-			expect(projection.Length()).toEqual(expectedLength);
-
-			index++;
-		});
-	}
-
-	var verifyDayOff = function (timeLine, dayOff, rawDayOff) {
-		expect(dayOff).toBeDefined();
-		expect(dayOff.DayOffName).toEqual(rawDayOff.DayOffName);
-
-		var startMinutes = moment(rawDayOff.Start).diff(timeLine.Offset, 'minutes');
-		var expectedStartMinutes = startMinutes < timeLine.StartMinute ? 0 : (startMinutes - timeLine.StartMinute);
-		expect(dayOff.StartPosition()).toEqual(expectedStartMinutes * timeLine.LengthPercentPerMinute);
-
-		var endMinutes = moment(rawDayOff.Start).add(rawDayOff.Minutes, "minute").diff(timeLine.Offset, 'minutes');
-		var actualEndMinutes = endMinutes > timeLine.EndMinute ? timeLine.EndMinute : endMinutes;
-		var expectedLengthInMinutes = (actualEndMinutes - timeLine.StartMinute) - expectedStartMinutes;
-		expect(dayOff.Length()).toEqual(expectedLengthInMinutes * timeLine.LengthPercentPerMinute);
-	}
+	
 
 	it("Can get correct projection", inject(function () {
 		var queryDate = "2015-10-26";
@@ -258,4 +218,47 @@ describe("PersonSchedule", function () {
 		verifyDayOff(timeLine, personSchedule.DayOffs[0], schedule4Yesterday.DayOff);
 		verifyDayOff(timeLine, personSchedule.DayOffs[1], schedule4Today.DayOff);
 	}));
+
+
+	function verifyShift(timeLine, shift, rawSchedule) {
+
+		shift.Projections.forEach(function (projection, index) {
+
+			var rawProjection = rawSchedule.Projection[index];
+			expect(projection.Color).toEqual(rawProjection.Color);
+			expect(projection.Description).toEqual(rawProjection.Description);
+
+			var startInMinute = moment(rawProjection.Start).diff(timeLine.Offset, 'minutes') - timeLine.StartMinute;
+
+			var expectedStart;
+			var expectedLength;
+
+			if (startInMinute >= 0) {
+				expectedStart = startInMinute * timeLine.LengthPercentPerMinute;
+				expectedLength = rawProjection.Minutes * timeLine.LengthPercentPerMinute;
+			} else {
+				expectedStart = 0;
+				expectedLength = (rawProjection.Minutes + startInMinute) * timeLine.LengthPercentPerMinute;
+			}
+
+			expect(projection.StartPosition()).toEqual(expectedStart);
+			expect(projection.Length()).toEqual(expectedLength);
+
+		});
+	};
+
+	function verifyDayOff(timeLine, dayOff, rawDayOff) {
+		expect(dayOff).toBeDefined();
+		expect(dayOff.DayOffName).toEqual(rawDayOff.DayOffName);
+
+		var startMinutes = moment(rawDayOff.Start).diff(timeLine.Offset, 'minutes');
+		var expectedStartMinutes = startMinutes < timeLine.StartMinute ? 0 : (startMinutes - timeLine.StartMinute);
+		expect(dayOff.StartPosition()).toEqual(expectedStartMinutes * timeLine.LengthPercentPerMinute);
+
+		var endMinutes = moment(rawDayOff.Start).add(rawDayOff.Minutes, "minute").diff(timeLine.Offset, 'minutes');
+		var actualEndMinutes = endMinutes > timeLine.EndMinute ? timeLine.EndMinute : endMinutes;
+		var expectedLengthInMinutes = (actualEndMinutes - timeLine.StartMinute) - expectedStartMinutes;
+		expect(dayOff.Length()).toEqual(expectedLengthInMinutes * timeLine.LengthPercentPerMinute);
+	};
+
 });
