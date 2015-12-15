@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScenarioRepository : IScenarioRepository
 	{
-		private IScenario _scenario;
+		private readonly List<IScenario> _scenario = new List<IScenario>();
 
 		public FakeScenarioRepository()
 		{			
@@ -17,61 +18,63 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeScenarioRepository(IScenario scenario)
 		{
-			_scenario = scenario;
+			_scenario.Add(scenario);
 		}
-
 
 		public IScenario Has(string name)
 		{
-			_scenario = new Scenario(name);
-			return _scenario;
+			var scenario = new Scenario(name).WithId();
+			scenario.DefaultScenario = true;
+			_scenario.Add(scenario);
+			return scenario;
 		}
 
 		public void Add(IScenario entity)
 		{
-			throw new NotImplementedException();
+			_scenario.Add(entity);
 		}
 
 		public void Remove(IScenario entity)
 		{
-			throw new NotImplementedException();
+			_scenario.Remove(entity);
 		}
 
 		public IScenario Get(Guid id)
 		{
-			return _scenario;
+			return _scenario.FirstOrDefault(s => s.Id == id);
 		}
 
 		public IList<IScenario> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _scenario;
 		}
 
 		public IScenario Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		public long CountAllEntities()
 		{
-			throw new NotImplementedException();
+			return _scenario.Count;
 		}
 
 		public void AddRange(IEnumerable<IScenario> entityCollection)
 		{
-			throw new NotImplementedException();
+			_scenario.AddRange(entityCollection);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public void SetDefault(IScenario myScenario)
 		{
-			throw new NotImplementedException();
+			_scenario.ForEach(s => s.DefaultScenario = false);
+			myScenario.DefaultScenario = true;
 		}
 
 		public IList<IScenario> FindAllSorted()
 		{
-			throw new NotImplementedException();
+			return _scenario.OrderBy(s => s.DefaultScenario).ThenBy(s => s.Description.Name).ToArray();
 		}
 
 		public IList<IScenario> FindEnabledForReportingSorted()
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			return _scenario;
+			return _scenario.FirstOrDefault(s => s.DefaultScenario);
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

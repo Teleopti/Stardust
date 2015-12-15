@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
-			throw new NotImplementedException();
+			return root;
 		}
 
 		public bool Contains(IEntity entity)
@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Reassociate(IAggregateRoot root)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot
