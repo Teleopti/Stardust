@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Then(@"I use default forecast period and forecast for one workload")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
+			Browser.Interactions.AssertNotExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload", ".wfm-card-selected .wfm-btn-invis-disabled.forecast-workload");
 			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
 			Browser.Interactions.AssertExists("span.startDate");
 			if (!ScenarioContext.Current.ContainsKey("startdate"))

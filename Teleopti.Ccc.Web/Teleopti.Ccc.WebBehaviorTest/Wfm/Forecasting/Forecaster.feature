@@ -21,7 +21,6 @@ Scenario: Forecast all
 	Then there is forecast data for default period for 'TheWorkload1'
 	And there is forecast data for default period for 'TheWorkload2'
 
-@ignore
 Scenario: Forecast one workload
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
@@ -31,7 +30,7 @@ Scenario: Forecast one workload
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload2'
 	And there is no forecast data for default period for 'TheWorkload1'
-
+	
 Scenario: Add campaign
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -44,7 +43,6 @@ Scenario: Add campaign
 	And I apply the campaign
 	Then I should see that the total calls for the first day has doubled
 
-@ignore
 Scenario: Keep campaigns when reforecasting
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -103,7 +101,6 @@ Scenario: Create new skill
 	And I save the new skill
 	Then I should see the new skill 'NewSkill1' in the list
 
-@ignore
 Scenario: Override only forecasted calls for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
@@ -115,8 +112,7 @@ Scenario: Override only forecasted calls for one day
 	And I enter '500' calls per day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
-
-	
+		
 Scenario: Override the forecasted values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
