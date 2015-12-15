@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			rtaStateHolder.BackToRecord();
 			AgentStateReadModel agentStateReadModel = new AgentStateReadModel();
-			agentStateReadModel.AdherenceStartTime = DateTime.UtcNow.AddMinutes(-45);
+			agentStateReadModel.RuleStartTime = DateTime.UtcNow.AddMinutes(-45);
 			agentStateReadModel.State = "MyCurrentStateDescription";
 			agentStateReadModel.AlarmName = "MyAlarmName";
 			var dictionary = new Dictionary<Guid, AgentStateReadModel> { { (Guid)person.Id, agentStateReadModel } };
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				{
 					PersonId = guid,
 					ScheduledNext = "New Next Activity",
-					AdherenceStartTime = DateTime.UtcNow.AddMinutes(-10),
+					RuleStartTime = DateTime.UtcNow.AddMinutes(-10),
 					AlarmName = "New Alarm Name"
 				};
 			var customEventArgs = new CustomEventArgs<AgentStateReadModel>(actualAgentState);

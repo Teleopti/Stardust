@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -12,14 +10,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 {
 	[RtaTest]
 	[TestFixture]
-	public class AdherenceStartTimeTest
+	public class RuleStartTimeTest
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldHaveAdherenceStartTimeWhenHavingAdherence()
+		public void ShouldHaveRuleStartTimeWhenHavingAdherence()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -37,11 +35,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			});
 
 			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:00".Utc());
+				.RuleStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
 		[Test]
-		public void ShouldNotChangeAherenceStartTimeWhenAdherenceDoesNotChange()
+		public void ShouldNotChangeRuleStartTimeWhenAdherenceDoesNotChange()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -66,11 +64,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			});
 
 			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:00".Utc());
+				.RuleStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
 		[Test]
-		public void ShouldUpdateAherenceStartTimeWhenAdherenceChanges()
+		public void ShouldUpdateRuleStartTimeWhenAdherenceChanges()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			});
 
 			Database.PersistedReadModel
-				.AdherenceStartTime.Should().Be("2015-12-10 8:30".Utc());
+				.RuleStartTime.Should().Be("2015-12-10 8:30".Utc());
 		}
 	}
 }

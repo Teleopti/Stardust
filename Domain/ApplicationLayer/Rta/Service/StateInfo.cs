@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	        get { return State.StateGroupChanged() ? CurrentTime : Stored.StateStartTime; }
 	    }
 
-	    private DateTime? adherenceStartTime
+	    private DateTime? ruleStartTime
 	    {
 	        get
 	        {
-	            return (Stored == null || State.Adherence() != Stored.Adherence) ? CurrentTime : Stored.AdherenceStartTime;
+	            return (Stored == null || State.Adherence() != Stored.Adherence) ? CurrentTime : Stored.RuleStartTime;
 	        }
 	    }
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateStartTime = stateStartTime,
 				AlarmId = State.RuleId(),
 				AlarmName = State.AlarmName(),
-				AdherenceStartTime = adherenceStartTime, 
+				RuleStartTime = ruleStartTime, 
 				AlarmStartTime = alarmStartTime,
 				BusinessUnitId = Person.BusinessUnitId,
 				SiteId = Person.SiteId,

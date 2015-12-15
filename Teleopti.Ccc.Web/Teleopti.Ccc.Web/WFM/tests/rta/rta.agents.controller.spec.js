@@ -35,7 +35,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
-			AdherenceStartTime: "\/Date(1432105910000)\/",
+			AlarmStart: "\/Date(1432105910000)\/",
 			AlarmColor: "#00FF00",
 			TimeInState: 15473
 		}];
@@ -138,7 +138,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
-			AdherenceStartTime: "\/Date(1432105910000)\/",
+			AlarmStart: "\/Date(1432105910000)\/",
 			AlarmColor: "#00FF00",
 			TimeInState: 15473
 		}];
@@ -151,7 +151,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].AdherenceStartTime).toEqual("\/Date(1432105910000)\/");
+		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
 		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});
@@ -182,7 +182,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
-			AdherenceStartTime: "\/Date(1432105910000)\/",
+			AlarmStart: "\/Date(1432105910000)\/",
 			AlarmColor: "#00FF00",
 			TimeInState: 15473
 		}];
@@ -195,7 +195,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].AdherenceStartTime).toEqual("\/Date(1432105910000)\/");
+		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
 		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});

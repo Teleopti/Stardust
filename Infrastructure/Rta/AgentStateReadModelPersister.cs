@@ -3,10 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				command.Parameters.Add("@ScheduledNextId", SqlDbType.UniqueIdentifier).Value = model.ScheduledNextId;
 				command.Parameters.Add("@StateStartTime", SqlDbType.DateTime).Value = model.StateStartTime;
 				command.Parameters.Add("@NextStart", SqlDbType.DateTime).Value = model.NextStart;
-				command.Parameters.Add("@AdherenceStartTime", SqlDbType.DateTime).Value = model.AdherenceStartTime;
+				command.Parameters.Add("@RuleStartTime", SqlDbType.DateTime).Value = model.RuleStartTime;
 				command.Parameters.Add("@AlarmStartTime", SqlDbType.DateTime).Value = model.AlarmStartTime;
 				command.Parameters.Add("@Color", SqlDbType.Int).Value = model.Color;
 				command.Parameters.Add("@StaffingEffect", SqlDbType.Float).Value = model.StaffingEffect;

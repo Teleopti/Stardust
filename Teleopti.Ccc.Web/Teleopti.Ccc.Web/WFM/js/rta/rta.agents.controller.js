@@ -121,7 +121,7 @@
 							agent.NextActivity = state[0].NextActivity;
 							agent.NextActivityStartTime = state[0].NextActivityStartTime;
 							agent.Alarm = state[0].Alarm;
-							agent.AdherenceStartTime = state[0].AdherenceStartTime;
+							agent.AlarmStart = state[0].AlarmStart;
 							agent.AlarmColor = state[0].AlarmColor;
 							agent.TimeInState = state[0].TimeInState;
 						}

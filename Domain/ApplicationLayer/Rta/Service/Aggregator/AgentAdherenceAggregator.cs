@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 				Activity = agentStateReadModel.Scheduled,
 				Alarm = agentStateReadModel.AlarmName,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(agentStateReadModel.Color ?? 0)),
-				AdherenceStartTime = agentStateReadModel.AdherenceStartTime,
+				RuleStartTime = agentStateReadModel.RuleStartTime,
 				NextActivity = agentStateReadModel.ScheduledNext,
 				NextActivityStartTime = agentStateReadModel.NextStart,
 				State = agentStateReadModel.State,

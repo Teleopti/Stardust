@@ -190,7 +190,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\AlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\ProperAlarmStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StartTime\StateStartTimeTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StartTime\AdherenceStartTimeTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StartTime\RuleStartTimeTest.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />

@@ -52,7 +52,7 @@ describe('RtaOrganizationService', function() {
 					"NextActivity": "Short break",
 					"NextActivityStartTime": "\/Date(1432109700000)\/",
 					"Alarm": "In Adherence",
-					"AdherenceStartTime": "\/Date(1432105910000)\/",
+					"AlarmStart": "\/Date(1432105910000)\/",
 					"AlarmColor": "#00FF00",
 					"TimeInState": 15473375
 				}]);

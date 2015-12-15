@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private DateTime _nextActivityStartDateTime;
         private int _colorValue = 16777215;
         private double _staffingEffect;
-        private DateTime _adherenceStartTime;
+        private DateTime _ruleStartTime;
 		private bool _isInEditMode;
 
 		public const int NoAlarmColorValue = 16777215;
@@ -109,10 +109,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 notifyPropertyChanged("AlarmDescription");
             }
         }
-        public DateTime AdherenceStartTime
+        public DateTime RuleStartTime
         {
-            get { return _adherenceStartTime; }
-            set { _adherenceStartTime = value; }
+            get { return _ruleStartTime; }
+            set { _ruleStartTime = value; }
         }
 
         public string NextActivityDescription

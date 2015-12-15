@@ -34,7 +34,7 @@
             that.NextAlarmColor = '';
             that.Alarm = ko.observable();
             that.AlarmColor = ko.observable();
-            that.AdherenceStartTime = ko.observable();
+            that.AlarmStart = ko.observable();
 
             that.TextWeight = ko.observable();
             that.TextColor = ko.observable();
@@ -62,13 +62,13 @@
                 that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(resources.TimeZoneOffsetMinutes, 'minutes')) : '');
 				that.updateAlarmTime();
 
-	            that.AdherenceStartTime(data.AdherenceStartTime
-	                ? moment.utc(data.AdherenceStartTime)
+				that.AlarmStart(data.AlarmStart
+	                ? moment.utc(data.AlarmStart)
 	                    .add(resources.TimeZoneOffsetMinutes, 'minutes')
 	                    .format(resources.FixedDateTimeWithSecondsFormatForMoment)
 	                : '');
 
-                if (that.shouldWaitWithUpdatingAlarm(data.AdherenceStartTime)) {
+				if (that.shouldWaitWithUpdatingAlarm(data.AlarmStart)) {
                     that.HaveNewAlarm = true;
                     that.NextAlarm = data.Alarm;
                     that.NextAlarmColor = data.AlarmColor;
@@ -104,8 +104,8 @@
 		        that.TimeInState(that.TimeInState() + 1);
 	        };
 
-            that.shouldWaitWithUpdatingAlarm = function (adherenceStartTimeUtc) {
-            	return that.AdherenceStartTime() && moment.utc().isBefore(adherenceStartTimeUtc);
+	        that.shouldWaitWithUpdatingAlarm = function (alarmStartUtc) {
+	        	return that.AlarmStart() && moment.utc().isBefore(alarmStartUtc);
             }
 
             that.refreshColor = function (newColor) {

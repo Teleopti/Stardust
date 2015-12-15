@@ -87,11 +87,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnAdherenceStartTime()
+		public void ShouldReturnRuleStartTime()
 		{
 			var dateTime = DateTime.Now;
-			_target.AdherenceStartTime = dateTime;
-			Assert.That(_target.AdherenceStartTime, Is.EqualTo(dateTime));
+			_target.RuleStartTime = dateTime;
+			Assert.That(_target.RuleStartTime, Is.EqualTo(dateTime));
 		}
 
 		[Test]

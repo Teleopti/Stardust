@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				NextActivity = x.ScheduledNext,
 				NextActivityStartTime = getNullableUtcDatetime(x.NextStart),
 				Alarm = x.AlarmName,
-				AdherenceStartTime = getNullableUtcDatetime(x.AdherenceStartTime),
+				AlarmStart = getNullableUtcDatetime(x.RuleStartTime),
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
 				TimeInState = calculateTimeInState(x.StateStartTime)
 			}).ToArray();

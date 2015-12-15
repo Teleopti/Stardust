@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				NextActivity = x.ScheduledNext,
 				NextActivityStartTime = formatTime(x.NextStart),
 				Alarm = x.AlarmName,
-				AdherenceStartTime = x.AdherenceStartTime,
+				AlarmStart = x.RuleStartTime,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
 				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0
 			});
