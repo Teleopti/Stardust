@@ -133,47 +133,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequests.List<IPersonRequest>();
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequests(DateTimePeriod period)
+		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
 		{
-			return FindAllRequests(period, null, null);
+			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
+			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
+
+			
+			filterRequestByPeriod(criteria, filter.Period);
+			filterRequestByPersons(criteria, filter.Persons);
+			filterRequestByRequestType(criteria, filter.RequestTypes);
+
+			sortPersonRequests(criteria, filter.SortingOrders);
+			pagePersonRequests(criteria, filter.Paging);
+
+			return criteria.List<IPersonRequest>();
 		}
 
-		
-		public IEnumerable<IPersonRequest> FindAllRequests(
-			DateTimePeriod period,
-			IEnumerable<IPerson> persons, 
-			IEnumerable<RequestType> whitelistRequestTypes,
-			IList<string> sortingOrders = null,
-			Paging paging = null)
+		private void filterRequestByPeriod(ICriteria criteria, DateTimePeriod period)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
 				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
 
-			if (whitelistRequestTypes != null)
-			{
-				var typeCriterion = whitelistRequestTypes.Select(toRequestClassTypeConstraint)
-					.Where(c => c != null).Aggregate(Restrictions.Or);
-				requestForPeriod.Add(typeCriterion);
-			}
-
-			var query = Session.CreateCriteria<IPersonRequest>("personRequests");
-			if (persons != null) query.Add(Restrictions.In("Person", persons.ToArray()));
-
-			query.SetFetchMode("requests", FetchMode.Join)
-				.Add(Subqueries.PropertyIn("Id", requestForPeriod));
-
-			sortPersonRequests(query, sortingOrders);
-			pagePersonRequests(query, paging);
-
-			return query.List<IPersonRequest>();
+			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
 
-		private void pagePersonRequests(ICriteria query, Paging paging)
+		private void filterRequestByPersons(ICriteria criteria, IEnumerable<IPerson> persons)
 		{
-			if (paging == null) return;		
-			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
+			if (persons == null) return;
+			criteria.Add(Restrictions.In("Person", persons.ToArray()));
+		}
+
+		private void filterRequestByRequestType(ICriteria criteria, IEnumerable<RequestType> requestTypes)
+		{
+			if (requestTypes == null) return;
+			var typeCriterion = requestTypes.Select(toRequestClassTypeConstraint)
+					.Where(c => c != null).Aggregate(Restrictions.Or);
+			criteria.Add(typeCriterion);
 		}
 
 		private ICriterion toRequestClassTypeConstraint(RequestType t)
@@ -190,10 +189,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				default:
 					return null;
 			}
-			return Restrictions.Eq("class", type);
+			return Restrictions.Eq("req.class", type);
 		}
-
-
+		
+		private void pagePersonRequests(ICriteria query, IPaging paging)
+		{
+			if (paging == null || (paging as Paging).Equals(Paging.Nothing)) return;		
+			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
+		}
+		
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
 			var allRequests = FindAllRequestsForAgent(person);
@@ -554,38 +558,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<ShiftExchangeOffer>();
 		}
 
-		private void sortPersonRequests(ICriteria criteria, IList<string> sortingOrders)
+		private void sortPersonRequests(ICriteria criteria, IList<RequestsSortingOrder> sortingOrders)
 		{
 			if (sortingOrders == null) return;
-			var orderMapping = new Dictionary<string, Action<ICriteria>>
+			var orderMapping = new Dictionary<RequestsSortingOrder, Action<ICriteria>>
 				{
-					{"FirstName Asc", c => c.AddOrder(Order.Asc("p.Name.FirstName"))},
-					{"FirstName Desc", c => c.AddOrder(Order.Desc("p.Name.FirstName"))},
-					{"LastName Asc", c => c.AddOrder(Order.Asc("p.Name.LastName"))},
-					{"LastName Desc", c => c.AddOrder(Order.Desc("p.Name.LastName"))},
-					{"Subject Asc", c => c.AddOrder(Order.Asc("personRequests.Subject"))},
-					{"Subject Desc", c => c.AddOrder(Order.Desc("personRequests.Subject"))},
-					{"CreatedBy Asc", c => c.AddOrder(Order.Asc("personRequests.CreatedBy"))},
-					{"CreatedBy Desc", c => c.AddOrder(Order.Desc("personRequests.CreatedBy"))},
-					{"UpdatedBy Asc", c => c.AddOrder(Order.Asc("personRequests.UpdatedBy"))},
-					{"UpdatedBy Desc", c => c.AddOrder(Order.Desc("personRequests.UpdatedBy"))},
-					{"CreatedOn Asc", c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
-					{"CreatedOn Desc", c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
-					{"UpdatedOn Asc", c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
-					{"UpdatedOn Desc", c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},
-					{"requestStatus Asc", c => c.AddOrder(Order.Asc("personRequests.requestStatus"))},
-					{"requestStatus Desc", c => c.AddOrder(Order.Desc("personRequests.requestStatus"))},
-					{"Message Asc", c => c.AddOrder(Order.Asc("personRequests.Message"))},
-					{"Message Desc", c => c.AddOrder(Order.Desc("personRequests.Message"))},
-					{"PeriodStart Asc", c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
-					{"PeriodStart Desc", c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
-					{"PeriodEnd Asc", c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
-					{"PeriodEnd Desc", c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))}					
+					{RequestsSortingOrder.AgentNameAsc, c => c.AddOrder(Order.Asc("p.Name.FirstName"))},
+					{RequestsSortingOrder.AgentNameDesc, c => c.AddOrder(Order.Desc("p.Name.FirstName"))},				
+					{RequestsSortingOrder.SubjectAsc, c => c.AddOrder(Order.Asc("personRequests.Subject"))},
+					{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},				
+					{RequestsSortingOrder.CreatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
+					{RequestsSortingOrder.CreatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
+					{RequestsSortingOrder.UpdatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
+					{RequestsSortingOrder.UpdatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},				
+					{RequestsSortingOrder.PeriodStartAsc, c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
+					{RequestsSortingOrder.PeriodStartDesc, c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
+					{RequestsSortingOrder.PeriodEndAsc, c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
+					{RequestsSortingOrder.PeriodEndDesc, c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))}					
 				};
 
-			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
-			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
-
+			
 			foreach (var order in sortingOrders)
 			{
 				Action<ICriteria> orderAction;

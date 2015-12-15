@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
@@ -24,4 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string Team { get; set; }
 		public bool IsFullDay { get; set; }
 	}
+
+	public class RequestListViewModel
+	{
+		public Paging Paging;
+		public IEnumerable<RequestViewModel> Requests;
+	}
+
 }

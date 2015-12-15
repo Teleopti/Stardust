@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
+using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
+using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -24,21 +26,30 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			_peopleSearchProvider = peopleSearchProvider;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)
+		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input)
 		{
-			return _repository.FindAllRequests(period.ToDateTimePeriod(_userTimeZone.TimeZone()), null,
-				new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest }).Where(permissionCheckPredicate);
+			return _repository.FindAllRequests(toRequestFilter(input)).Where(permissionCheckPredicate);
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period,
-			IDictionary<PersonFinderField, string> agentSearchTerms)
+		private RequestFilter toRequestFilter(AllRequestsFormData input)
 		{
-			var persons = _peopleSearchProvider.SearchPermittedPeople(agentSearchTerms, period.StartDate,
-				DefinedRaptorApplicationFunctionPaths.WebRequests);
-			return _repository.FindAllRequests(period.ToDateTimePeriod(_userTimeZone.TimeZone()), persons,
-				new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest }).Where(permissionCheckPredicate);
+			var filter = new RequestFilter
+			{
+				Period = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone()),
+				Paging = input.Paging,
+				RequestTypes = new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest },
+				SortingOrders = input.SortingOrders
+			};
 
+			if (!String.IsNullOrEmpty(input.AgentSearchTerm))
+			{
+				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(SearchTermParser.Parse(input.AgentSearchTerm),
+					input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests);				
+			}
+
+			return filter;
 		}
+
 
 		private bool permissionCheckPredicate(IPersonRequest request)
 		{

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 {
@@ -26,7 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _requestsViewModelFactory.Create(input);
 		}
 
-		
+		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
+		public virtual RequestListViewModel GetRequests(AllRequestsFormData input)
+		{
+			return _requestsViewModelFactory.CreateRequestListViewModel(input);
+		}
+	
+
 
 	}
 }

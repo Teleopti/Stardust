@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1009,7 +1008,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			setUpGetRequestsByTypeTests();
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1),DateTime.UtcNow.AddDays(1))).ToArray();
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1))
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(3);
 		}
 
@@ -1018,8 +1022,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			setUpGetRequestsByTypeTests();
 
-			var result = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null, new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}).ToArray();
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				RequestTypes = new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(2);
 		}
 
@@ -1044,8 +1053,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest1);
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 
-			var result = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), new List<IPerson> { person1 }, new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }).ToArray();
+		    var filter = new RequestFilter()
+		    {
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				Persons = new List<IPerson> { person1 },
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest } 
+		    };
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(1);
 
 	    }
@@ -1075,21 +1090,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 			PersistAndRemoveFromUnitOfWork(textRequest3);
 
-			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(
-					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
-					new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest},
-					new List<string> { "FirstName Desc"}
-				).ToArray();
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc }
+			};
 
+			var resultDesc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+				
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 
-			var resultAsc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(
-					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
-					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
-					new List<string> { "FirstName Asc" }
-				).ToArray();
+			filter.SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc };
+
+			var resultAsc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 
 			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest1, textRequest2, textRequest3 });
 
@@ -1120,12 +1133,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 			PersistAndRemoveFromUnitOfWork(textRequest3);
 
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(
-					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)), null,
-					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
-					new List<string> { "PeriodStart Desc" }
-				).ToArray();
+				.FindAllRequests(filter).ToArray();
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 		}
@@ -1159,12 +1174,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 			PersistAndRemoveFromUnitOfWork(textRequest3);
 
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.SubjectDesc, RequestsSortingOrder.AgentNameAsc }
+			};
+
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(
-					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
-					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
-					new List<string> {"Subject Desc",  "FirstName Asc" }
-				).ToArray();
+				.FindAllRequests(filter).ToArray();
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest1, textRequest2 });
 
@@ -1194,13 +1211,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(textRequest2);
 			}
 
-			var result = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(
-					new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)), null,
-					new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest },
-					new List<string> { "FirstName Desc" },
-					new Paging { Skip = 10, Take = 5}
-				).ToArray();
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc },
+				Paging = new Paging { Skip = 10, Take = 5 }
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 
 			result.Count().Should().Be.EqualTo(5);
 			result.Any(request => request.Person.Name.FirstName != "A").Should().Be.EqualTo(false);

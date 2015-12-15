@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
@@ -9,15 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		public DateOnly EndDate;
 		public IList<RequestsSortingOrder> SortingOrders = new List<RequestsSortingOrder>();
 		public string AgentSearchTerm;
-	}
-
-	public enum RequestsSortingOrder
-	{
-		AgentNameAsc,
-		AgentNameDesc,
-		UpdatedOnAsc,
-		UpdatedOnDesc,
-		CreatedOnAsc,
-		CreatedOnDesc
+		public Paging Paging = new Paging();
 	}
 }

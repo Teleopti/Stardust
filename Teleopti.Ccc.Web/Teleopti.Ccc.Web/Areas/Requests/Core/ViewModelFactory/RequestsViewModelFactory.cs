@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
-using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -24,15 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
+		// Deprecate after Wfm_Requests_Performance_36295. Use CreateRequestListViewModel instead.
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
-			IEnumerable<IPersonRequest> requests;
-
-			if (String.IsNullOrWhiteSpace(input.AgentSearchTerm))
-				requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate));
-			else
-				requests = _requestsProvider.RetrieveRequests(new DateOnlyPeriod(input.StartDate, input.EndDate), SearchTermParser.Parse(input.AgentSearchTerm));
-
+			
+			var requests = _requestsProvider.RetrieveRequests(input);
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
 			var mapping = new Dictionary<RequestsSortingOrder, Func<RequestViewModel, object>>
@@ -57,6 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				.Aggregate(result, (current, order) => order.ToString().EndsWith("Asc")
 				? current.ThenBy(mapping[order])
 				: current.ThenByDescending(mapping[order]));
+		}
+
+		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
+		{
+			throw new NotImplementedException();
 		}
 
 		private RequestViewModel toViewModel(IPersonRequest request)

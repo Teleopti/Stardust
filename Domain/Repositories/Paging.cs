@@ -1,8 +1,9 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public class Paging : IEquatable<Paging>
+	public class Paging : IEquatable<Paging>, IPaging
 	{
 		private int _totalCount;
 		private int _take;

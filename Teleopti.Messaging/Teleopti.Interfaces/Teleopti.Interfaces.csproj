@@ -144,6 +144,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
+    <Compile Include="Domain\IPaging.cs" />
     <Compile Include="Domain\ISaveSeatMapCommand.cs" />
     <Compile Include="Domain\IScheduleChangedMessage.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Domain\PersianCultureHelper.cs" />
     <Compile Include="Domain\PersonSkillDay.cs" />
     <Compile Include="Domain\PersonWorkDay.cs" />
+    <Compile Include="Domain\RequestFilter.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
