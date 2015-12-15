@@ -88,7 +88,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().NextActivity.Should().Be("lunch");
 			agentState.Single().NextActivityStartTime.Should().Be("09:00");
 			agentState.Single().Alarm.Should().Be("in adherence");
-			agentState.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().AlarmColor.Should().Be("#000000");
 			agentState.Single().TimeInState.Should().Be(30 * 60);
 		}
@@ -122,7 +121,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().NextActivity.Should().Be("lunch");
 			agentState.Single().NextActivityStartTime.Should().Be("09:00");
 			agentState.Single().Alarm.Should().Be("in adherence");
-			agentState.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Single().AlarmColor.Should().Be("#000000");
 			agentState.Single().TimeInState.Should().Be(30 * 60);
 		}

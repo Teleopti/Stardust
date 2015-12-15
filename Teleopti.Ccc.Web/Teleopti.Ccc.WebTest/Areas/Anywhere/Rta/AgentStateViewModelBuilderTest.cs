@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					NextStart = "2015-10-22 09:00".Utc(),
 					AlarmName = "in adherence",
 					RuleStartTime = "2015-10-22 08:00".Utc(),
-					AlarmStartTime = "2015-10-22 08:05".Utc(),
 					Color = 0
 				}
 			};
@@ -69,7 +68,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			states.Single().NextActivity.Should().Be("lunch");
 			states.Single().NextActivityStartTime.Should().Be("09:00");
 			states.Single().Alarm.Should().Be("in adherence");
-			states.Single().AlarmStart.Should().Be("2015-10-22 08:00".Utc());
 			states.Single().AlarmColor.Should().Be("#000000");
 			states.Single().TimeInState.Should().Be(30 * 60);
 		}
