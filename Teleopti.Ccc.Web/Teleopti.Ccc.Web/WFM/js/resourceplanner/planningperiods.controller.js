@@ -53,27 +53,28 @@
 	            $scope.scheduleClicked = false;
 	            startPoll();
 	        }
-	        $scope.launchSchedule = function (p) {
-	            $scope.errorMessage = undefined;
-	            $scope.schedulingPerformed = false;
-	            $scope.scheduleClicked = true;
 
-	            var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
-	            cancelPoll();
-	            $scope.status = 'Scheduling';
-	            PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
-	                $scope.scheduledDays = scheduleResult.DaysScheduled;
-	                $scope.status = 'Optimizing days off';
-	            	//to make sure long optimization request doesn't create a new cookie based on current time
-								//just a test push to see if it works. fix better and more general if this does the trick
-	                PlanningPeriodSvrc.keepAlive();
-								//
-	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
-	                    $scope.schedulingPerformed = true;
-							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result, planningperiod:p});
-	                }, handleScheduleOrOptimizeError);
-	            }, handleScheduleOrOptimizeError);
-	        };
+				$scope.launchSchedule = function(p) {
+					$scope.errorMessage = undefined;
+					$scope.schedulingPerformed = false;
+					$scope.scheduleClicked = true;
+
+					var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
+					cancelPoll();
+					$scope.status = 'Scheduling';
+					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
+						$scope.scheduledDays = scheduleResult.DaysScheduled;
+						$scope.status = 'Optimizing days off';
+						//to make sure long optimization request doesn't create a new cookie based on current time
+						//we call keepAlive here again
+						PlanningPeriodSvrc.keepAlive().then(function() {
+							PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
+								$scope.schedulingPerformed = true;
+								$state.go('resourceplanner.report', { result: scheduleResult, interResult: result, planningperiod: p });
+							}, handleScheduleOrOptimizeError);
+						}, handleScheduleOrOptimizeError);
+					}, handleScheduleOrOptimizeError());
+				};
 
 	        //toggle
 	        PlanningPeriodSvrc.isEnabled.query({ toggle: 'Wfm_ChangePlanningPeriod_33043' }).$promise.then(function(result) {
