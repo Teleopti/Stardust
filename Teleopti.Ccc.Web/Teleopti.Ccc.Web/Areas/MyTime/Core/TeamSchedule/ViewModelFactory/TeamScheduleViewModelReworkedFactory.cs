@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_personRep = personRep;
 		}
 
-
 		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
 		{
 			if (data.Paging == null || data.Paging.Take <= 0)
