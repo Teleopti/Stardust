@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Common;
+using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -52,6 +54,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
 			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
+			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 
 			system.AddService<AutoMapperConfiguration>();
 
