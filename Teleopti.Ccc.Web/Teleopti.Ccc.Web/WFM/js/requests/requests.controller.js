@@ -15,6 +15,7 @@
 			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
 			vm.isPeopleSearchEnabled = toggles.isPeopleSearchEnabled();
 			vm.period = { startDate: new Date(), endDate: new Date() };
+			vm.templateType = "new";
 			vm.agentSearchOptions = {
 				keyword: "",
 				isAdvancedSearchEnabled: true,
