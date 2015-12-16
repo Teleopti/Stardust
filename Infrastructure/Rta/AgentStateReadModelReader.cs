@@ -62,12 +62,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 		
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly)
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
 			var query = @"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
-
+			if(alarmTimeDesc.HasValue)
+				if (alarmTimeDesc.Value)
+					query += " ORDER BY AlarmStartTime";
+				else
+					query += " ORDER BY AlarmStartTime DESC";
+				
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(query)
@@ -78,11 +83,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
 			var query = @"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
 			if (inAlarmOnly.HasValue)
 				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
+			if (alarmTimeDesc.HasValue)
+				if (alarmTimeDesc.Value)
+					query += " ORDER BY AlarmStartTime";
+				else
+					query += " ORDER BY AlarmStartTime DESC";
 
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{

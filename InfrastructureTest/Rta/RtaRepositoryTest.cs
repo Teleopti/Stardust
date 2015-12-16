@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -164,6 +165,117 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = target.LoadForTeams(new[] { teamId }, true);
 
 			result.Single().PersonId.Should().Be(personId1);
+		}
+		
+		[Test]
+		public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
+		{
+			var siteId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId1,
+				AlarmStartTime = "2015-12-16 8:30".Utc()
+			};
+			var state2 = new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId2,
+				AlarmStartTime = "2015-12-16 8:00".Utc()
+			};
+			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
+			persister.PersistActualAgentReadModel(state1);
+			persister.PersistActualAgentReadModel(state2);
+
+			var result = target.LoadForSites(new[] { siteId }, null, true);
+
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadStatesOrderByLongestAlarmTimeLast()
+		{
+			var siteId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId1,
+				AlarmStartTime = "2015-12-16 8:30".Utc()
+			};
+			var state2 = new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId2,
+				AlarmStartTime = "2015-12-16 8:00".Utc()
+			};
+			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
+			persister.PersistActualAgentReadModel(state1);
+			persister.PersistActualAgentReadModel(state2);
+
+			var result = target.LoadForSites(new[] { siteId }, null, false);
+
+			result.First().PersonId.Should().Be(personId1);
+			result.Last().PersonId.Should().Be(personId2);
+		}
+		[Test]
+		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeFirst()
+		{
+			var teamId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId1,
+				AlarmStartTime = "2015-12-16 8:30".Utc()
+			};
+			var state2 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId2,
+				AlarmStartTime = "2015-12-16 8:00".Utc()
+			};
+			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
+			persister.PersistActualAgentReadModel(state1);
+			persister.PersistActualAgentReadModel(state2);
+
+			var result = target.LoadForTeams(new[] { teamId }, null, true);
+
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeLast()
+		{
+			var teamId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId1,
+				AlarmStartTime = "2015-12-16 8:30".Utc()
+			};
+			var state2 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId2,
+				AlarmStartTime = "2015-12-16 8:00".Utc()
+			};
+			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
+			persister.PersistActualAgentReadModel(state1);
+			persister.PersistActualAgentReadModel(state2);
+
+			var result = target.LoadForTeams(new[] { teamId }, null, false);
+
+			result.First().PersonId.Should().Be(personId1);
+			result.Last().PersonId.Should().Be(personId2);
 		}
 	}
 }

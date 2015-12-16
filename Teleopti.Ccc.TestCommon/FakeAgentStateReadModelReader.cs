@@ -47,17 +47,18 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}
-		
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly)
+
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
 			var sites = from s in siteIds
-					from m in _data.Values
-					where s == m.SiteId
-					select m;
-			return inAlarmOnly.HasValue ? sites.Where(x => x.IsRuleAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
+				from m in _data.Values
+				where s == m.SiteId
+				select m;
+			sites = inAlarmOnly.HasValue ? sites.Where(x => x.IsRuleAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
+			return sites;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
 		{
 			return (from t in teamIds
 					from m in _data.Values
