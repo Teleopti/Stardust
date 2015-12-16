@@ -1,5 +1,4 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_EnhanceTeamSchedule_32580')
-@OnlyRunIfDisabled('MyTimeWeb_TeamScheduleNoReadModel_36210')
 Feature: Team schedule With Paging And Filter Feature
 In order to know when my colleagues work
 As an agent
@@ -54,7 +53,7 @@ Scenario: View only my team's schedule
 
  
 
-
+@ignore
 Scenario: View team schedule, day off
 	Given I am an agent in a team
 	And I have a colleague
@@ -64,7 +63,7 @@ Scenario: View team schedule, day off
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's day off
-
+@ignore
 Scenario: Should not see unpublished schedule
 	Given I am an agent in a team
 	And I have a colleague 'Unpublished Yet'
@@ -196,6 +195,7 @@ Scenario: Sort late shifts after early shifts
 	Then I should see my colleague before myself
 
 @OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
+@ignore
 Scenario: Sort shifts by time sorting filter
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -214,6 +214,7 @@ Scenario: Sort shifts by time sorting filter
 	Then I click sort by end time asc at end time drop down button
 	And I should see myself before my colleague
 
+@ignore
 Scenario: Sort full-day absences after shifts
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -234,7 +235,7 @@ Scenario: Sort full-day absences after shifts
 	| EndTime   | 17:00      |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
-
+@ignore
 Scenario: Sort intra-day absences like there are no absences
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -255,7 +256,7 @@ Scenario: Sort intra-day absences like there are no absences
 	| EndTime   | 17:00      |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
-
+@ignore
 Scenario: Sort the absences after day off
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -275,7 +276,7 @@ Scenario: Sort the absences after day off
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
-
+@ignore
 Scenario: Sort no schedule last
 	Given I am an agent in a team
 	And I have a colleague

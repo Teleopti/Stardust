@@ -91,7 +91,7 @@ Scenario: View group schedule
 	Then I should see my schedule in team schedule 
 	And I should see 'John Smith' schedule in team schedule 
 	And I should not see 'Pierre Baldi' schedule
-
+@ignore
 Scenario: Sort late shifts after early shifts
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
