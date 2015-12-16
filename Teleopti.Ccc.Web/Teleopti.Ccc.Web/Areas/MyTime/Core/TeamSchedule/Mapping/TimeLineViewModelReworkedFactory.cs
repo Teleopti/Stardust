@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		}
 
 
-		public IEnumerable<TimeLineViewModelReworked> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
+		public TimeLineViewModelReworked[] CreateTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
 			var hourList = new List<TimeLineViewModelReworked>();
 			TimeLineViewModelReworked lastHour = null;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			if (lastHour != null)
 				hourList.Add(lastHour);
 
-			return hourList;
+			return hourList.ToArray();
 		}
 
 	}

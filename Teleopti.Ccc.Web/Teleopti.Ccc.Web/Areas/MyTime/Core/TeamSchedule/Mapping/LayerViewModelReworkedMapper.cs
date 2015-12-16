@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<LayerViewModelReworked> Map(IEnumerable<SimpleLayer> sourceLayers)
+		public LayerViewModelReworked[] Map(IEnumerable<SimpleLayer> sourceLayers)
 		{
-			return sourceLayers.Select(Map);
+			return sourceLayers.Select(Map).ToArray();
 		}
 
 		public LayerViewModelReworked Map(SimpleLayer sourceLayer)

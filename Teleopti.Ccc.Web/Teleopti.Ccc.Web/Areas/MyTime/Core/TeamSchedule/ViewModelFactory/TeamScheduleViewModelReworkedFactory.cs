@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 
-			IEnumerable<AgentScheduleViewModelReworked> agentSchedules;
+			AgentScheduleViewModelReworked[] agentSchedules;
 
 			int pageCount = 1;
 			if (personIds.Any())
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						Date = data.ScheduleDate
 					};
 
-				agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToList();
+				agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToArray();
 				int scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
 				pageCount = (int) Math.Ceiling(((double) scheduleCount)/data.Paging.Take);
 			}
 			else
 			{
-				agentSchedules = new List<AgentScheduleViewModelReworked>();
+				agentSchedules = new AgentScheduleViewModelReworked[] {};
 			}
 
 			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);
@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				}
 			}
 
-			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);
+			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate).ToArray();
 
 			return new TeamScheduleViewModelReworked
 			{
-				AgentSchedules = agentSchedules,
+				AgentSchedules = agentSchedules.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount
 			};

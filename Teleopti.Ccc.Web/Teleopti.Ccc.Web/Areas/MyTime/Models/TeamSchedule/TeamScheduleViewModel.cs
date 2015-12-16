@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Interfaces.Domain;
 
@@ -10,8 +8,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	{
 		public PeriodSelectionViewModel PeriodSelection { get; set; }
 		public Guid TeamSelection { get; set; }
-		public IEnumerable<AgentScheduleViewModel> AgentSchedules { get; set; }
-		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public AgentScheduleViewModel[] AgentSchedules { get; set; }
+		public TimeLineViewModel[] TimeLine { get; set; }
 		public bool ShiftTradePermisssion { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
 	}
@@ -26,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	public class TeamScheduleViewModelReworked
 	{
 		
-		public IEnumerable<AgentScheduleViewModelReworked> AgentSchedules { get; set; }		
-		public IEnumerable<TimeLineViewModelReworked> TimeLine { get; set; }
+		public AgentScheduleViewModelReworked[] AgentSchedules { get; set; }		
+		public TimeLineViewModelReworked[] TimeLine { get; set; }
 
 		public int TimeLineLengthInMinutes { get; set; }
 		public int PageCount { get; set; }
@@ -55,13 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	{
 		public bool HasDayOffUnder { get; set; }
 		public string AgentName { get; set; }
-		public IEnumerable<LayerViewModel> Layers { get; set; }
+		public LayerViewModel[] Layers { get; set; }
 		public string DayOffText { get; set; }
 	}
 
 	public class AgentScheduleViewModelReworked
 	{		
-		public IEnumerable<LayerViewModelReworked> ScheduleLayers { get; set; }
+		public LayerViewModelReworked[] ScheduleLayers { get; set; }
 		public string Name { get; set; }
 		public DateTime StartTimeUtc { get; set; }
 		public Guid PersonId { get; set; }

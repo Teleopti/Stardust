@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
 	public interface ILayerViewModelReworkedMapper
 	{
-		IEnumerable<LayerViewModelReworked> Map(IEnumerable<SimpleLayer> sourceLayers);
+		LayerViewModelReworked[] Map(IEnumerable<SimpleLayer> sourceLayers);
 		LayerViewModelReworked Map(SimpleLayer sourceLayer);
 	}
 }

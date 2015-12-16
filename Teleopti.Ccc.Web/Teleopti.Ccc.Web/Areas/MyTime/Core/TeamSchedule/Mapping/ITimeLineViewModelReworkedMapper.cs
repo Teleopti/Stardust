@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
 	public interface ITimeLineViewModelReworkedMapper
 	{
-		IEnumerable<TimeLineViewModelReworked> Map(IEnumerable<AgentScheduleViewModelReworked>
+		TimeLineViewModelReworked[] Map(IEnumerable<AgentScheduleViewModelReworked>
 			                                                  agentSchedules, DateOnly date);
 	}
 }
