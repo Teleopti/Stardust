@@ -4,7 +4,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.isPossibleSchedulesForAllEnabled = ko.observable(false);
 	self.isTradeForMultiDaysEnabled = ko.observable(false);
 	self.isFilterByTimeEnabled = ko.observable(false);
-	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(false);
+	self.isTeamScheduleSortingFeatureEnabled = ko.observable(false);
 	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		var filterByTimeEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_FilterPossibleShiftTradeByTime_24560");
 		self.isFilterByTimeEnabled(filterByTimeEnabled);
 
-		self.isTeamScheduleSorttingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
+		self.isTeamScheduleSortingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 
 		self.isShiftTradeBulletinBoardEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296"));
 		
