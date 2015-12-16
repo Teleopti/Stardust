@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
@@ -46,29 +47,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ViewResult Index()
+		[UnitOfWork]
+		public virtual ViewResult Index()
 		{
 			return View("RequestsPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult Requests(Paging paging)
+		public virtual JsonResult Requests(Paging paging)
 		{
 			return Json(_requestsViewModelFactory.CreatePagingViewModel(paging), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult RequestDetail(Guid id)
+		public virtual JsonResult RequestDetail(Guid id)
 		{
 			return Json(_requestsViewModelFactory.CreateRequestViewModel(id), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult PersonalAccountPermission()
+		public virtual JsonResult PersonalAccountPermission()
 		{
 			bool personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(
 				DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
@@ -76,16 +77,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(personalAccountPermission, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult FetchAbsenceAccount(Guid absenceId, DateOnly date)
+		public virtual JsonResult FetchAbsenceAccount(Guid absenceId, DateOnly date)
 		{
 			return Json(_requestsViewModelFactory.GetAbsenceAccountViewModel(absenceId, date), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult TextRequest(TextRequestForm form)
+		public virtual JsonResult TextRequest(TextRequestForm form)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -96,9 +97,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_textRequestPersister.Persist(form));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
+		public virtual JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -109,26 +110,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_shiftTradeRequestPersister.Persist(form));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult ApproveShiftTrade(ShiftTradeRequestReplyForm form)
+		public virtual JsonResult ApproveShiftTrade(ShiftTradeRequestReplyForm form)
 		{
 			var model = _respondToShiftTrade.OkByMe(form.ID, form.Message);
 			model.Status = Resources.WaitingThreeDots;
 			return Json(model);
 		}
-
-
-		[UnitOfWorkAction]
+		
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult DenyShiftTrade(ShiftTradeRequestReplyForm form)
+		public virtual JsonResult DenyShiftTrade(ShiftTradeRequestReplyForm form)
 		{
 			return Json(_respondToShiftTrade.Deny(form.ID, form.Message));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult AbsenceRequest(AbsenceRequestForm form)
+		public virtual JsonResult AbsenceRequest(AbsenceRequestForm form)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -148,18 +148,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpDelete]
 		[ActionName("RequestDetail")]
-		public JsonResult RequestDelete(Guid id)
+		public virtual JsonResult RequestDelete(Guid id)
 		{
 			_textRequestPersister.Delete(id);
 			return Json("");
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
+		public virtual JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
 			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new ShiftTradeScheduleViewModelData
@@ -174,40 +174,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestPeriod()
+		public virtual JsonResult ShiftTradeRequestPeriod()
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
+		public virtual JsonResult ShiftTradeRequestSwapDetails(Guid id)
 		{
 			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);
 			return Json(viewmodel, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult ResendShiftTrade(Guid id)
+		public virtual JsonResult ResendShiftTrade(Guid id)
 		{
 			var model = _respondToShiftTrade.ResendReferred(id);
 			model.Status = Resources.ProcessingDotDotDot;
 			return Json(model);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestMyTeam(DateOnly selectedDate)
+		public virtual JsonResult ShiftTradeRequestMyTeam(DateOnly selectedDate)
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult GetShiftTradeRequestMiscSetting(Guid id)
+		public virtual JsonResult GetShiftTradeRequestMiscSetting(Guid id)
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(id).MiscSetting, JsonRequestBehavior.AllowGet);
 		}

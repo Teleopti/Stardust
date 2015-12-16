@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
-		[UnitOfWorkAction]
-		public JsonResult Overview(DateOnly date)
+		[UnitOfWork]
+		public virtual JsonResult Overview(DateOnly date)
 		{
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
-		[UnitOfWorkAction]
-		public JsonResult AdherenceDetails(DateOnly date)
+		[UnitOfWork]
+		public virtual JsonResult AdherenceDetails(DateOnly date)
 		{
 			return Json(_myReportViewModelFactory.CreateDetailedAherenceViewModel(date), JsonRequestBehavior.AllowGet);
 		}
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         }
 
         [HttpGet]
-        [UnitOfWorkAction]
-        public JsonResult QueueMetricsDetails(DateOnly date)
+        [UnitOfWork]
+        public virtual JsonResult QueueMetricsDetails(DateOnly date)
         {
             return Json(_myReportViewModelFactory.CreateQueueMetricsViewModel(date), JsonRequestBehavior.AllowGet);
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -31,15 +32,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 		
 		[HttpGet]
-		[UnitOfWorkAction]
-		public JsonResult Messages(Paging paging)
+		[UnitOfWork]
+		public virtual JsonResult Messages(Paging paging)
 		{
 			return Json(_messageViewModelFactory.CreatePageViewModel(paging), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult Reply(ConfirmMessageViewModel messageViewModel)
+		public virtual JsonResult Reply(ConfirmMessageViewModel messageViewModel)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -50,22 +51,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_pushMessageDialoguePersister.PersistMessage(messageViewModel));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult MessagesCount()
+		public virtual JsonResult MessagesCount()
 		{
 			return Json(new MessagesInformationViewModel {UnreadMessagesCount = _pushMessageProvider.UnreadMessageCount}, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult Message(Guid messageId)
+		public virtual JsonResult Message(Guid messageId)
 		{
 			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
-		public void Send(string title, string message)
+		[UnitOfWork]
+		public virtual void Send(string title, string message)
 		{
 			_pushMessageDialoguePersister.SendNewPushMessageToLoggedOnUser(title,message);
 		}

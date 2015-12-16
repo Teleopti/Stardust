@@ -1,10 +1,9 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[TenantUnitOfWork]
 		public virtual ActionResult Index()
 		{

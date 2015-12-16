@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -25,9 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_timeFilterHelper = timeFilterHelper;
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult BulletinSchedules(DateOnly selectedDate, string teamIds, Paging paging)
+		public virtual JsonResult BulletinSchedules(DateOnly selectedDate, string teamIds, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new ShiftTradeScheduleViewModelData
@@ -39,9 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
+		public virtual JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
 			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new ShiftTradeScheduleViewModelData

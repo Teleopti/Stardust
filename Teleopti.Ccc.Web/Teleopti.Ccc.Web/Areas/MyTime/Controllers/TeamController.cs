@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_now = now;
 		}
 
-		[UnitOfWorkAction]
-		public JsonResult TeamsAndOrGroupings(DateOnly? date)
+		[UnitOfWork]
+		public virtual JsonResult TeamsAndOrGroupings(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = _now.LocalDateOnly();
@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
-		public JsonResult TeamsForShiftTrade(DateOnly? date)
+		[UnitOfWork]
+		public virtual JsonResult TeamsForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = _now.LocalDateOnly();
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
+		public virtual JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = _now.LocalDateOnly();
@@ -53,7 +53,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					allTeam = new { id = "allTeams", text = Resources.AllPermittedTeamsToMakeShiftTradeWith }
 				}, JsonRequestBehavior.AllowGet);
 		}
-
-
 	}
 }

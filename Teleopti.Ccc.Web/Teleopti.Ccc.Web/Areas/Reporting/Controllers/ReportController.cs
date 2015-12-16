@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -39,8 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			_toggleManager = toggleManager;
 		}
 
-		[UnitOfWorkAction]
-		public ActionResult Index(Guid? id)
+		[UnitOfWork]
+		public virtual ActionResult Index(Guid? id)
 		{
 			if (id == null)
 				return View("Empty");

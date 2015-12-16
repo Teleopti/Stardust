@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 
@@ -14,13 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		    _viewModelFactory = viewModelFactory;
 	    }
 
-		 [UnitOfWorkAction]
+		 [UnitOfWork]
 		 [HttpGet]
-		 public JsonResult Get()
+		 public virtual JsonResult Get()
 		 {
 			 return Json(_viewModelFactory.ViewModel(), JsonRequestBehavior.AllowGet);
 		 }
-
     }
-
 }

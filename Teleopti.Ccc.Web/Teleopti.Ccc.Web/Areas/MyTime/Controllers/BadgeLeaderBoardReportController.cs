@@ -1,12 +1,11 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -38,14 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
-		[UnitOfWorkAction]
-		public JsonResult Overview(LeaderboardQuery query)
+		[UnitOfWork]
+		public virtual JsonResult Overview(LeaderboardQuery query)
 		{
 			return Json(_badgeLeaderBoardReportViewModelFactory.CreateBadgeLeaderBoardReportViewModel(query), JsonRequestBehavior.AllowGet);
 		}
 
-	    [UnitOfWorkAction]
-	    public JsonResult OptionsForLeaderboard()
+	    [UnitOfWork]
+	    public virtual JsonResult OptionsForLeaderboard()
 	    {
 			return
 				Json(

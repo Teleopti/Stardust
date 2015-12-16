@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -49,8 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ViewResult Index(DateOnly? date, Guid? id)
+		[UnitOfWork]
+		public virtual ViewResult Index(DateOnly? date, Guid? id)
 		{
 
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580))
@@ -77,9 +78,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("TeamSchedulePartialOriginal", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult TeamScheduleCurrentDate()
+		public virtual JsonResult TeamScheduleCurrentDate()
 		{			 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
 		
@@ -94,9 +95,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPost]
-		public JsonResult TeamSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
+		public virtual JsonResult TeamSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
 			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new TeamScheduleViewModelData
@@ -115,9 +116,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(result);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult DefaultTeam(DateOnly? date)
+		public virtual JsonResult DefaultTeam(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = _now.LocalDateOnly();
@@ -128,11 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Response.StatusCode = (int) HttpStatusCode.BadRequest;
 				return Json(new { Message = UserTexts.Resources.NoTeamsAvailable }, JsonRequestBehavior.AllowGet);
 			}
-			else
-			{
-				return Json(new { DefaultTeam = defaultTeam.Id.Value }, JsonRequestBehavior.AllowGet);
-			}					
+			return Json(new { DefaultTeam = defaultTeam.Id.Value }, JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }

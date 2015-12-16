@@ -25,18 +25,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public RequestsShiftTradeScheduleFilterViewModel ViewModel()
 		{
-			IList<DateTime> hours = new List<DateTime>();
+			IList<TimeSpan> hours = new List<TimeSpan>();
 			for (var i = 0; i <= 24; ++i)
 			{
-				hours.Add(TimeZoneHelper.ConvertToUtc(DateTime.Today, _userTimeZone.TimeZone()).AddHours(i));
+				hours.Add(TimeSpan.FromHours(i));
 			}
+
+			var baseDate = DateHelper.MinSmallDateTime;
 			var ret = new RequestsShiftTradeScheduleFilterViewModel
 			{
-				DayOffShortNames =
-					from dayoff in _dayOffTemplateRepository.FindAllDayOffsSortByDescription()
-					select dayoff.Description.ShortName,
-				HourTexts = from hour in hours
-								select _createHourText.CreateText(hour),
+				DayOffShortNames = _dayOffTemplateRepository.FindAllDayOffsSortByDescription().Select(dayoff => dayoff.Description.ShortName).ToArray(),
+				HourTexts = hours.Select(hour => baseDate.Add(hour).ToShortTimeString()).ToArray(),
 				EmptyDayText = Resources.OptionEmptyDay,
 				StartTimeSortOrders = new Dictionary<string, string> { {"Start" , Resources.StartTimeAsc}, {"Start DESC" , Resources.StartTimeDesc} },
 				EndTimeSortOrders = new Dictionary<string, string> { { "End", Resources.EndTimeAsc }, { "End DESC", Resources.EndTimeDesc } }

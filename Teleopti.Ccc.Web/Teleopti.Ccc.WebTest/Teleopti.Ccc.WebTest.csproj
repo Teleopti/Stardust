@@ -631,7 +631,6 @@
     <Compile Include="RhinoMocksStubFactory.cs" />
     <Compile Include="RhinoMocksStubProxy.cs" />
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttributeTest.cs" />
-    <Compile Include="Filters\UnitOfWorkActionFilterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

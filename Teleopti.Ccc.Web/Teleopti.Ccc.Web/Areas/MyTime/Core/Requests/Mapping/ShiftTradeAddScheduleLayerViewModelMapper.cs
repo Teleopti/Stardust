@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public IEnumerable<ShiftTradeAddScheduleLayerViewModel> Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
+		public ShiftTradeAddScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
 		{
-			return sourceLayers.Select(layer => mapLayer(layer, isMySchedule));
+			return sourceLayers.Select(layer => mapLayer(layer, isMySchedule)).ToArray();
 		}
 
 		private ShiftTradeAddScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer, bool isMySchedule = false)

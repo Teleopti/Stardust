@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.UserTexts;
@@ -34,35 +35,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ActionResult Week()
+		[UnitOfWork]
+		public virtual ActionResult Week()
 		{
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ActionResult MobileWeek()
+		[UnitOfWork]
+		public virtual ActionResult MobileWeek()
 		{
 			return View("MobileWeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
         [EnsureInPortal]
-        public ActionResult Month()
+        public virtual ActionResult Month()
         {
             return View("MonthPartial");
         }
 
-		[UnitOfWorkAction]
-		public JsonResult FetchData(DateOnly? date)
+		[UnitOfWork]
+		public virtual JsonResult FetchData(DateOnly? date)
 		{
 			var showForDate = date ?? _now.LocalDateOnly();
 			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-        [UnitOfWorkAction]
-        public JsonResult FetchMonthData(DateOnly? date)
+        [UnitOfWork]
+        public virtual JsonResult FetchMonthData(DateOnly? date)
         {
             var showForDate = date ?? _now.LocalDateOnly();
             var model = _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
@@ -74,10 +75,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return RedirectToAction("Week");
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPost]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)]
-		public JsonResult OvertimeAvailability(OvertimeAvailabilityInput input)
+		public virtual JsonResult OvertimeAvailability(OvertimeAvailabilityInput input)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -88,10 +89,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_overtimeAvailabilityPersister.Persist(input), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPost]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AbsenceReport)]
-		public JsonResult ReportAbsence(AbsenceReportInput input)
+		public virtual JsonResult ReportAbsence(AbsenceReportInput input)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -111,10 +112,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpDelete]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)]
-		public JsonResult DeleteOvertimeAvailability(DateOnly date)
+		public virtual JsonResult DeleteOvertimeAvailability(DateOnly date)
 		{
 			return Json(_overtimeAvailabilityPersister.Delete(date));
 		}

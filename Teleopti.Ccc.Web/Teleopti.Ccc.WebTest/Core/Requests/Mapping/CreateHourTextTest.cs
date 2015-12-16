@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
-			var target = new CreateHourText(new ThreadCulture(), userTimeZone);
+			var target = new CreateHourText(userTimeZone);
 
 			var result = target.CreateText(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc));
 
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
-			var target = new CreateHourText(new ThreadCulture(), userTimeZone);
+			var target = new CreateHourText(userTimeZone);
 
 			var result = target.CreateText(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc));
 

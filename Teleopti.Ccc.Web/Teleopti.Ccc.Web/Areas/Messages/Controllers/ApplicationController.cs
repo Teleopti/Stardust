@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
-using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -36,10 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return View();
 	    }
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
 		[License(DefinedLicenseOptionPaths.TeleoptiCccSmsLink)]
-		public JsonResult GetPersons(string ids)
+		public virtual JsonResult GetPersons(string ids)
 	    {
 			try
 			{
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				var persons = _personRepository.FindPeople(personIds);
 				var vm = new SendMessageViewModel
 				{
-					People = persons.Select(p => new PersonViewModel { Name = p.Name.ToString(), Id = p.Id.Value })
+					People = persons.Select(p => new PersonViewModel { Name = p.Name.ToString(), Id = p.Id.GetValueOrDefault() })
 				};
 				return Json(vm, JsonRequestBehavior.AllowGet);
 			}
@@ -57,10 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			}
 	    }
 
-	    [UnitOfWorkAction]
+	    [UnitOfWork]
 	    [HttpPost]
 		[License(DefinedLicenseOptionPaths.TeleoptiCccSmsLink)]
-		public JsonResult SendMessage(Guid[] receivers, string subject, string body)
+		public virtual JsonResult SendMessage(Guid[] receivers, string subject, string body)
 	    {
 			var persons = _personRepository.FindPeople(receivers).ToArray();
 			INotificationMessage msg = new NotificationMessage
@@ -72,8 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 		    return Json("");
 	    }
 
-		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
-		public JsonResult NavigationContent()
+		[UnitOfWork, HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		public virtual JsonResult NavigationContent()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();
 			return Json(new

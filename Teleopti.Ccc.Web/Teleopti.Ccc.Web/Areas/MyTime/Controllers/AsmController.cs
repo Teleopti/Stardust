@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -36,17 +37,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View();
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult Today(DateTime asmZeroLocal)
+		public virtual JsonResult Today(DateTime asmZeroLocal)
 		{
 			var model = _asmModelFactory.CreateViewModel(asmZeroLocal);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult AlertTimeSetting()
+		public virtual JsonResult AlertTimeSetting()
 		{
 			var asmAlertTime = _globalSettingDataRepository.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			return Json(asmAlertTime, JsonRequestBehavior.AllowGet);

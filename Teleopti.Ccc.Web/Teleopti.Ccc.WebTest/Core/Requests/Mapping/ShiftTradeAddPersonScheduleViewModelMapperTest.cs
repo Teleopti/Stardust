@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				FirstName = "Arne",
 				LastName = "Anka"
 			};
-			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerViewModels = new ShiftTradeAddScheduleLayerViewModel[] {};
 			var layerMapper = MockRepository.GenerateStrictMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 			// dont know why I have to ignore arguments here but...
 			layerMapper.Expect(x => x.Map(shift.Projection)).Return(layerViewModels).IgnoreArguments().Repeat.Twice();
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Model = JsonConvert.SerializeObject(model),
 				Total = 2
 			};
-			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerViewModels = new ShiftTradeAddScheduleLayerViewModel[]{};
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsLastPage = false,
 				MinStart = new DateTime(2013,11,28,7,0,0)
 			};
-			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerViewModels = new ShiftTradeAddScheduleLayerViewModel[] {};
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				MinStart = new DateTime(2013, 11, 28, 7, 0, 0),
 				ShiftExchangeOffer = expectedId
 			};
-			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerViewModels = new ShiftTradeAddScheduleLayerViewModel[] {};
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);

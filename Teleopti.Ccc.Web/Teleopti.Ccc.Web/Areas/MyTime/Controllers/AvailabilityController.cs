@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -30,8 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ActionResult Index(DateOnly? dateParam)
+		[UnitOfWork]
+		public virtual ActionResult Index(DateOnly? dateParam)
 		{
 			var date = dateParam.HasValue ? dateParam.Value : _virtualSchedulePeriodProvider.CalculateStudentAvailabilityDefaultDate();
 
@@ -44,23 +45,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("StudentAvailabilityPartial", studentAvailabilityViewModel);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult StudentAvailabilitiesAndSchedules(DateOnly @from, DateOnly to)
 		{
 			return Json(_viewModelFactory.CreateStudentAvailabilityAndSchedulesViewModels(from, to), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult StudentAvailability(DateOnly date)
+		public virtual JsonResult StudentAvailability(DateOnly date)
 		{
 			return Json(_viewModelFactory.CreateDayViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult StudentAvailability(StudentAvailabilityDayInput input)
+		public virtual JsonResult StudentAvailability(StudentAvailabilityDayInput input)
 		{
 			return ModelState.IsValid ? 
 								Json(_studentAvailabilityPersister.Persist(input)) : 
@@ -72,10 +73,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		/// </summary>
 		/// <param name="date">Date to delete</param>
 		/// <returns>Student availability or http error code (404 for not found)</returns>
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpDelete]
 		[ActionName("StudentAvailability")]
-		public JsonResult StudentAvailabilityDelete(DateOnly date)
+		public virtual JsonResult StudentAvailabilityDelete(DateOnly date)
 		{
 			return Json(_studentAvailabilityPersister.Delete(date));
 		}

@@ -1,5 +1,5 @@
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_viewModelFactory = viewModelFactory;
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPost]
-		public JsonResult NewOffer(ShiftExchangeOfferForm form)
+		public virtual JsonResult NewOffer(ShiftExchangeOfferForm form)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_shiftExchangeOfferPersister.Persist(form, ShiftExchangeOfferStatus.Pending));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult GetAbsence(DateOnly date)
+		public virtual JsonResult GetAbsence(DateOnly date)
 		{
 			return Json(_viewModelFactory.CreateViewModel(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), date.Date), JsonRequestBehavior.AllowGet);
 		}

@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(
 				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
-					new CreateHourText(new ThreadCulture(), userTimeZone), null)));
+					new CreateHourText(userTimeZone), null)));
 		}
 		
 		[Test]
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			personNameProvider.Stub(x => x.BuildNameFromSetting(person.Name)).Return(name);
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
-									new CreateHourText(new ThreadCulture(), userTimeZone), personNameProvider)));
+									new CreateHourText(userTimeZone), personNameProvider)));
 
 			var result = Mapper.Map<TeamScheduleDayDomainData, AgentScheduleViewModel>(new TeamScheduleDayDomainData
 			                                                                           	{

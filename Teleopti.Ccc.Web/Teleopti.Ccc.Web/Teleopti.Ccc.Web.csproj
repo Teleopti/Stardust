@@ -1217,7 +1217,6 @@
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
     <Compile Include="Areas\MyTime\Core\Filters\EnsureInPortalAttribute.cs" />
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttribute.cs" />
-    <Compile Include="Filters\UnitOfWorkActionAttribute.cs" />
     <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodDateRangeViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodNavigationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodSelectionViewModel.cs" />

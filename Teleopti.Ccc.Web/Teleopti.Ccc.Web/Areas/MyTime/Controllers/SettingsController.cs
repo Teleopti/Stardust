@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -48,9 +49,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public ViewResult Index()
+		public virtual ViewResult Index()
 		{
 			return View("RegionalSettingsPartial", _settingsPermissionViewModelFactory.CreateViewModel());
 		}
@@ -63,31 +64,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
-		public JsonResult GetSettings()
+		public virtual JsonResult GetSettings()
 		{
 			var settings = _settingsViewModelFactory.CreateViewModel();
 			return Json(settings, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPut]
-		public void UpdateCulture(int lcid)
+		public virtual void UpdateCulture(int lcid)
 		{
 			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
 			_personPersister.UpdateCulture(_loggedOnUser.CurrentUser(), culture);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPut]
-		public void UpdateUiCulture(int lcid)
+		public virtual void UpdateUiCulture(int lcid)
 		{
 			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
 			_personPersister.UpdateUICulture(_loggedOnUser.CurrentUser(), culture);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
@@ -112,28 +113,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(ret);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
-		public JsonResult SetCalendarLinkStatus(bool isActive)
+		public virtual JsonResult SetCalendarLinkStatus(bool isActive)
 		{
 			var settings = _calendarLinkSettingsPersisterAndProvider.Persist(new CalendarLinkSettings {IsActive = isActive});
 			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "SetCalendarLinkStatus"));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpGet]
 		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShareCalendar)]
-		public JsonResult CalendarLinkStatus()
+		public virtual JsonResult CalendarLinkStatus()
 		{
 			var settings = _calendarLinkSettingsPersisterAndProvider.Get();
 			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "CalendarLinkStatus"),
 			            JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPut]
-		public void UpdateNameFormat(int nameFormatId)
+		public virtual void UpdateNameFormat(int nameFormatId)
 		{
 			_nameFormatSettingsPersisterAndProvider.Persist(new NameFormatSettings { NameFormatId = nameFormatId });
 		}

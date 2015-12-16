@@ -6,24 +6,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping
 {
 	public class CreateHourText : ICreateHourText
 	{
-		private readonly IUserCulture _userCulture;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public CreateHourText(IUserCulture userCulture,IUserTimeZone userTimeZone)
+		public CreateHourText(IUserTimeZone userTimeZone)
 		{
-			_userCulture = userCulture;
 			_userTimeZone = userTimeZone;
 		}
 
 		public string CreateText(DateTime time)
 		{
 			var timeZone = _userTimeZone.TimeZone();
-			var culture = _userCulture.GetCulture();
 			var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
-			var hourString = string.Format(culture, localTime.ToShortTimeString());
-
-			return hourString;
+			return localTime.ToShortTimeString();
 		}
-
 	}
 }
