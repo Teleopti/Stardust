@@ -1,4 +1,5 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_EnhanceTeamSchedule_32580')
+@OnlyRunIfDisabled('MyTimeWeb_TeamScheduleNoReadModel_36210')
 Feature: Team schedule With Paging And Filter Feature
 In order to know when my colleagues work
 As an agent
