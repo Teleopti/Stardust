@@ -44,6 +44,10 @@
 	            	$interval.cancel(stopPolling);
 		            stopPolling = undefined;
 	            }
+						if (angular.isDefined(keepAliveRef)) {
+							$interval.cancel(keepAliveRef);
+							keepAliveRef = undefined;
+						}
 	        }
 
 	        function handleScheduleOrOptimizeError() {
@@ -111,9 +115,7 @@
 			};
 
 	        $scope.$on('$destroy', function() {
-	            // Make sure that the interval is destroyed too
 	        	cancelPoll();
-		        $interval.cancel(keepAliveRef);
 	        });
 	    }
 	]);
