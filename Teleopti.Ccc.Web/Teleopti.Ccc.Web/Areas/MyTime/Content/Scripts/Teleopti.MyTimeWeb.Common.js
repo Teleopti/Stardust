@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
+			url: "ToggleHandler/IsEnabled?toggle=" + toggleName,
 			async: false,
 			success: function (data) {
 				result = data.IsEnabled;
