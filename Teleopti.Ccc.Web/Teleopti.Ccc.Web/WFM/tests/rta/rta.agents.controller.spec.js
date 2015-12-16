@@ -73,7 +73,7 @@ describe('RtaAgentsCtrl', function() {
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(function() {
 				return [200, states];
 			});

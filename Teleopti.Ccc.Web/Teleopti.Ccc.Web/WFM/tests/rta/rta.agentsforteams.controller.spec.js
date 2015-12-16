@@ -99,7 +99,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			.respond(function() {
 				return [200, agents]
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495")
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(function() {
 				return [200, states]
 			});
@@ -107,7 +107,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			.respond(function() {
 				return [200, states]
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?teamIds=34590a63-6331-4921-bc9f-9b5e015ab495&teamIds=103afc66-2bfa-45f4-9823-9e06008d5062")
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&ids=103afc66-2bfa-45f4-9823-9e06008d5062")
 			.respond(function() {
 				return [200, states]
 			});

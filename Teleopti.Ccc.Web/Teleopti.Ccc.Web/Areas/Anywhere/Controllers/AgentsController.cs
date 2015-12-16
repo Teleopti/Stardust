@@ -132,17 +132,23 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
-		public virtual IHttpActionResult GetStatesForSites([FromUri]Guid[] siteIds, [FromUri]bool? inAlarmOnly = null)
+		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForSites(siteIds, inAlarmOnly).ToArray());
+			return Ok(_getAgentsStates.ForSites(query.Ids, query.InAlarmOnly).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
-		public virtual IHttpActionResult GetStatesForTeams([FromUri]Guid[] teamIds, [FromUri]bool? inAlarmOnly = null)
+		public virtual IHttpActionResult GetStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForTeams(teamIds, inAlarmOnly).ToArray());
+			return Ok(_getAgentsStates.ForTeams(query.Ids, query.InAlarmOnly).ToArray());
 		}
 	}
+
+	public class StatesQuery
+	{
+		public Guid[] Ids { get; set; }
+		public bool? InAlarmOnly { get; set; }
+    }
 	
 	public class PersonDetailModel
 	{

@@ -33,7 +33,7 @@
 						isArray: true
 					}
 				}).query({
-					siteIds: data.siteIds,
+					ids: data.siteIds,
 				}).$promise;
 			};
 
@@ -44,7 +44,7 @@
 						isArray: true
 					}
 				}).query({
-					teamIds: data.teamIds,
+					ids: data.teamIds,
 				}).$promise;
 			};
 

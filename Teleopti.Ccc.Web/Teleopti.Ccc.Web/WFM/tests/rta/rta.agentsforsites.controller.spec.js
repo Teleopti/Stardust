@@ -91,7 +91,7 @@ describe('RtaAgentsCtrl for sites', function() {
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, states];
 			});
@@ -103,11 +103,11 @@ describe('RtaAgentsCtrl for sites', function() {
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(function() {
 				return [200, states[0]];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
 				return [200, states];
 			});
