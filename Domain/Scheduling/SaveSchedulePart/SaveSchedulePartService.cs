@@ -18,12 +18,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		
 		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
-			var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
-			dic.MakeEditable();
+			openForEditsWhenReadOnlyDictionary(scheduleDay);
+			var dic = scheduleDay.Owner;
 
 			var checkResult = checkRules(dic, scheduleDay, newBusinessRuleCollection, scheduleTag);
 			if (checkResult != null)
@@ -35,7 +34,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			return null;
 		}
 
-		private IList<string> checkRules(IReadOnlyScheduleDictionary dic, IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
+		private static void openForEditsWhenReadOnlyDictionary(IScheduleDay scheduleDay)
+		{
+			var dic = scheduleDay.Owner as IReadOnlyScheduleDictionary;
+			if (dic != null)
+			{
+				dic.MakeEditable();
+			}
+		}
+
+		private IList<string> checkRules(IScheduleDictionary dic, IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
 			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag)).ToList();
 			if (invalidList != null && invalidList.Any(l => !l.Overridden))
@@ -46,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			return null;
 		}
 
-		private void performSave (IReadOnlyScheduleDictionary dic, IScheduleDay scheduleDay)
+		private void performSave (IScheduleDictionary dic, IScheduleDay scheduleDay)
 		{
 			_scheduleDictionarySaver.SaveChanges (dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
 			_personAbsenceAccountRepository.AddRange (dic.ModifiedPersonAccounts);
