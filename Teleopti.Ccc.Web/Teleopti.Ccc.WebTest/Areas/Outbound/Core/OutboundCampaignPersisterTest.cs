@@ -564,10 +564,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			var oldPeriod = new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(15, 0, 0));
 			var campaignId = new Guid();
-			var oldCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var oldCampaign = new Domain.Outbound.Campaign { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
 			oldCampaign.SetId(campaignId);
 			oldCampaign.WorkingHours.Add(DayOfWeek.Monday, oldPeriod);
-			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var newCampaign = new Domain.Outbound.Campaign { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
 			newCampaign.SetId(campaignId);
 			newCampaign.WorkingHours.Add(DayOfWeek.Thursday, oldPeriod);
 			var skill = SkillFactory.CreateSkill("mySkill");
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load(campaignVM.Id.GetValueOrDefault()).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -587,12 +587,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldMovePeroidWhenWeekDayRemoved()
 		{
-			var oldPeriod = new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(15, 0, 0));
-			var campaignId = new Guid();
-			var oldCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var oldPeriod = new TimePeriod(9, 0, 15, 0);
+			var campaignId = Guid.NewGuid();
+			var oldCampaign = new Domain.Outbound.Campaign { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
 			oldCampaign.SetId(campaignId);
 			oldCampaign.WorkingHours.Add(DayOfWeek.Monday, oldPeriod);
-			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var newCampaign = new Domain.Outbound.Campaign { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
 			newCampaign.SetId(campaignId);
 			newCampaign.WorkingHours.Remove(DayOfWeek.Monday);
 			var skill = SkillFactory.CreateSkill("mySkill");
@@ -601,7 +601,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load(campaignVM.Id.GetValueOrDefault()).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			var id = new Guid();
 			var date = new DateOnly(2015, 7, 20);
-			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
+			var campaign = new Domain.Outbound.Campaign { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 7, 4, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 3, 23, 59, 59, DateTimeKind.Utc)) };
 			var skill = SkillFactory.CreateSkill("mySkill");
 			skill.TimeZone = TimeZoneInfo.Utc;
 			campaign.Skill = skill;
@@ -628,7 +628,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
 			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
 
-			var manualProductionPlan = new ManualPlanForm()
+			var manualProductionPlan = new ManualPlanForm
 			{
 				CampaignId = id,
 				ManualProductionPlan = new List<ManualViewModel>()

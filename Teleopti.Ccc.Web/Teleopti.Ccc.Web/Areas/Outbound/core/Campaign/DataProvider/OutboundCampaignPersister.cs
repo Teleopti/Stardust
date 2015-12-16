@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			if (campaignViewModel.Id.HasValue)
 			{
-				var oldCampaign = (IOutboundCampaign) _outboundCampaignRepository.Load((Guid) campaignViewModel.Id).Clone();
+				var oldCampaign = (IOutboundCampaign) _outboundCampaignRepository.Load(campaignViewModel.Id.GetValueOrDefault()).Clone();
 				campaign = _outboundCampaignMapper.Map(campaignViewModel);
 
 				if (oldCampaign.Name != campaign.Name)
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public void RemoveCampaign(IOutboundCampaign campaign)
 		{
 			var shouldRemoveActivity = true;
-			var activity = _activityRepository.Get(campaign.Skill.Activity.Id.Value);
+			var activity = _activityRepository.Get(campaign.Skill.Activity.Id.GetValueOrDefault());
 			if (activity != null)
 			{
 				if (activity.IsOutboundActivity)
@@ -250,11 +250,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			for (var weekDay = DayOfWeek.Sunday; weekDay <= DayOfWeek.Saturday; ++weekDay)
 			{
-				if (!oldWorkingHours.ContainsKey(weekDay) && !newWorkingHours.ContainsKey(weekDay)) continue;
-				
-				if ( (oldWorkingHours.ContainsKey(weekDay) && !newWorkingHours.ContainsKey(weekDay))
-					|| (!oldWorkingHours.ContainsKey(weekDay) && newWorkingHours.ContainsKey(weekDay))
-					|| !oldWorkingHours[weekDay].Equals(newWorkingHours[weekDay]))
+				TimePeriod oldWorkingHoursValue, newWorkingHoursValue;
+				var gotOld = oldWorkingHours.TryGetValue(weekDay, out oldWorkingHoursValue);
+				var gotNew = newWorkingHours.TryGetValue(weekDay, out newWorkingHoursValue);
+
+				if (gotOld == false && gotNew == false) continue;
+				if (!oldWorkingHoursValue.Equals(newWorkingHoursValue) || gotOld ^ gotNew)
 				{
 					return true;
 				}
