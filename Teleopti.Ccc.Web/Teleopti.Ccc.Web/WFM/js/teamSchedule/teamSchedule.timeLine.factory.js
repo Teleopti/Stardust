@@ -78,6 +78,10 @@
 				}
 			});
 
+			if (availibleProjections.length === 0) {
+				return undefined;
+			}
+
 			var sortedProjections = isStartTime
 				? availibleProjections.sort(compareProjectionByStartTime)
 				: availibleProjections.sort(compareProjectionByEndTime);

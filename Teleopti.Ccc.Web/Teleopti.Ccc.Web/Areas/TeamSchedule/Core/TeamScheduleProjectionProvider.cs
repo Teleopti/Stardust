@@ -50,16 +50,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					break;
 				case SchedulePartView.DayOff:
 				case SchedulePartView.ContractDayOff:
-					var dayOff = scheduleDay.PersonAssignment().DayOff();
+					var personAssignment = scheduleDay.PersonAssignment();
+					var dayOff = personAssignment != null ? personAssignment.DayOff() : null;
 					var dayOffStart = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime;
 					var dayOffEnd = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime;
 
 					scheduleVm.DayOff = new GroupScheduleDayOffViewModel
 					{
-						DayOffName = dayOff != null ?dayOff.Description.Name:"",
+						DayOffName = dayOff != null ? dayOff.Description.Name : "",
 						Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToFixedDateTimeFormat(),
-						Minutes = (int)dayOffEnd.Subtract(dayOffStart).TotalMinutes
-
+						Minutes = (int) dayOffEnd.Subtract(dayOffStart).TotalMinutes
 					};
 					if (projection.HasLayers)
 						scheduleVm.IsFullDayAbsence = true;
