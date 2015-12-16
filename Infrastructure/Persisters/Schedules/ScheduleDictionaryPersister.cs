@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				using (_messageSendersScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
 				{
 					var result = _scheduleRangePersister.Persist(scheduleRange);
-					completeResult.PersistConflicts = completeResult.PersistConflicts.Concat(result.PersistConflicts);
-					completeResult.ModifiedRoots = completeResult.ModifiedRoots.Concat(result.ModifiedRoots);
+					completeResult.PersistConflicts.ToList().AddRange(result.PersistConflicts);
+					completeResult.ModifiedRoots.ToList().AddRange(result.ModifiedRoots);
 					completeResult.InitiatorIdentifier = result.InitiatorIdentifier;
 				}				
 			}
