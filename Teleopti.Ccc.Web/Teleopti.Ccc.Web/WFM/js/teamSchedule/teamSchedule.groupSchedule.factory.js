@@ -9,35 +9,35 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUser
 		};
 
 		function create(groupSchedules, queryDate) {
-
-			var scheduleTimeLine = timeLineFactory.Create(groupSchedules, queryDate);
-			
-
-			function createSchedulesFromGroupSchedules(groupSchedules, timeLine) {
-				var existedSchedulesDictionary = {};
-				var schedules = [];
-
-				groupSchedules.forEach(function (schedule) {
-
-					var scheduleDateInUserTimeZone = moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone);
-					var isOverNightShift = scheduleDateInUserTimeZone < queryDate;
-					var existedPersonSchedule = existedSchedulesDictionary[schedule.PersonId];
-
-					if (existedPersonSchedule == null) {
-						existedSchedulesDictionary[schedule.PersonId] = schedule;
-						schedules.push(personSchedule.Create(schedule, timeLine, isOverNightShift));
-					} else {
-						existedPersonSchedule.Merge(schedule, timeLine, isOverNightShift);
-					}
-				});
-
-				return schedules;
-			}
-
+			var timeLine = timeLineFactory.Create(groupSchedules, queryDate);
 			return {
-				TimeLine: scheduleTimeLine,
-				Schedules: createSchedulesFromGroupSchedules(groupSchedules, scheduleTimeLine)
+				TimeLine: timeLine,
+				Schedules: createSchedulesFromGroupSchedules(groupSchedules, timeLine, queryDate)
 			};
+		}
+
+		function createSchedulesFromGroupSchedules(groupSchedules, timeLine, queryDate) {
+
+			var existedSchedulesDictionary = {};
+			var schedules = [];
+
+			groupSchedules.forEach(function (schedule) {
+
+				var scheduleDateInUserTimeZone = moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone);
+				var isOverNightShift = scheduleDateInUserTimeZone < queryDate;
+
+				var existedPersonSchedule = existedSchedulesDictionary[schedule.PersonId];
+				if (existedPersonSchedule == null) {
+					var personScheduleVm = personSchedule.Create(schedule, timeLine, isOverNightShift);
+					existedSchedulesDictionary[schedule.PersonId] = personScheduleVm;
+					schedules.push(personScheduleVm);
+				} else {
+					existedPersonSchedule.Merge(schedule, timeLine, isOverNightShift);
+				}
+
+			});
+
+			return schedules;
 		}
 
 
