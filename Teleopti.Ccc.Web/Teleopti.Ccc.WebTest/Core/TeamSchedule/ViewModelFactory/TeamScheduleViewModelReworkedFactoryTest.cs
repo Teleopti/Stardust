@@ -5,8 +5,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
@@ -75,10 +77,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var person1Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 21), person1, scenario);
 			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
-			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8));
+			person1Assignment1.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 11, 2015, 5, 21, 12));
 			person1Schedule.Add(person1Assignment1);
 			ScheduleProvider.AddScheduleDay(person1Schedule);
+
+			var person1Schedule2 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person1, scenario);
+			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
+			person1Assignment2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 8, 2015, 5, 21, 16));
+			person1Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
+			person1Schedule2.Add(person1Assignment2);
+			ScheduleProvider.AddScheduleDay(person1Schedule2);
 		}
 
 
@@ -204,6 +213,26 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 6, 0, 0));
+		}
+		
+		[Test]
+		public void ShouldIndicateOvertimeWithDateNoReadModel()
+		{
+			SetUp();
+
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+	
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 22),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
+			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.EqualTo(true);
+			agentSchedule.ScheduleLayers.Second().IsOvertime.Should().Be.EqualTo(false);
 		}
 
 		[Test]
