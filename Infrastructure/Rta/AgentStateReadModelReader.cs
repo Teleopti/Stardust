@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var query = @"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
 			if (inAlarmOnly.HasValue)
-				query += " AND IsRuleAlarm = " + inAlarmOnly;
+				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var query = @"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
 			if (inAlarmOnly.HasValue)
-				query += " AND IsRuleAlarm = " + inAlarmOnly;
+				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
 
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{

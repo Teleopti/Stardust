@@ -143,17 +143,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldLoadStatesInAlarmOnly()
 		{
 			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
 			var state1 = new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
-				PersonId = personId,
+				PersonId = personId1,
 				IsRuleAlarm = true
 			};
 			var state2 = new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
-				PersonId = personId,
+				PersonId = personId2,
 				IsRuleAlarm = false
 			};
 			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = target.LoadForTeams(new[] { teamId }, true);
 
-			result.Single().IsRuleAlarm.Should().Be(true);
+			result.Single().PersonId.Should().Be(personId1);
 		}
 	}
 }
