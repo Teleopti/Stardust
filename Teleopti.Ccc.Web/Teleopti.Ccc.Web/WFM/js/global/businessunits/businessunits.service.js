@@ -1,8 +1,8 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
 	angular.module('wfm.businessunits')
-		.service('BusinessUnitsService', ['$sessionStorage', '$q', '$resource', '$http',BusinessUnitsService]);
+		.service('BusinessUnitsService', ['$sessionStorage', '$q', '$resource', '$http', BusinessUnitsService]);
 
 	function BusinessUnitsService($sessionStorage, $q, $resource, $http) {
 		var service = {
@@ -12,7 +12,7 @@
 			getBusinessUnitFromSessionStorage: getBusinessUnitFromSessionStorage,
 			setBusinessUnitInHeaders: setBusinessUnitInHeaders,
 			initBusinessUnit: initBusinessUnit
-	};
+		};
 
 		var getBusinessUnits = $resource('../api/BusinessUnit', {}, {
 			get: { method: 'GET', params: {}, isArray: true }
@@ -64,5 +64,4 @@
 
 		return service;
 	};
-
 })();
