@@ -34,6 +34,7 @@
 					}
 				}).query({
 					ids: data.siteIds,
+					inAlarmOnly: data.inAlarmOnly
 				}).$promise;
 			};
 
@@ -45,6 +46,7 @@
 					}
 				}).query({
 					ids: data.teamIds,
+					inAlarmOnly: data.inAlarmOnly
 				}).$promise;
 			};
 

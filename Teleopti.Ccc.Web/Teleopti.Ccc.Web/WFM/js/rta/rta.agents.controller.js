@@ -133,6 +133,7 @@
 							teamId: teamIds[0],
 							siteIds: siteIds,
 							teamIds: teamIds,
+							inAlarmOnly: $scope.agentsInAlarm === true ? true : null
 						})
 						.then(setStatesInAgents);
 				};
