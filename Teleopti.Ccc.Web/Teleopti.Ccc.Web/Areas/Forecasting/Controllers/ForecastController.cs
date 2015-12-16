@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Global;
@@ -30,8 +31,20 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly ICampaignPersister _campaignPersister;
 		private readonly IOverridePersister _overridePersister;
+		private readonly IPrincipalAuthorization _principalAuthorization;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler, IScenarioRepository scenarioRepository, IWorkloadRepository workloadRepository, ICampaignPersister campaignPersister, IOverridePersister overridePersister)
+		public ForecastController(
+			IForecastCreator forecastCreator, 
+			ISkillRepository skillRepository, 
+			IForecastViewModelFactory forecastViewModelFactory, 
+			IForecastResultViewModelFactory forecastResultViewModelFactory, 
+			IIntradayPatternViewModelFactory intradayPatternViewModelFactory, 
+			IActionThrottler actionThrottler, 
+			IScenarioRepository scenarioRepository, 
+			IWorkloadRepository workloadRepository, 
+			ICampaignPersister campaignPersister, 
+			IOverridePersister overridePersister, 
+			IPrincipalAuthorization principalAuthorization)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -43,19 +56,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_workloadRepository = workloadRepository;
 			_campaignPersister = campaignPersister;
 			_overridePersister = overridePersister;
+			_principalAuthorization = principalAuthorization;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
-		public virtual IEnumerable<SkillAccuracy> Skills()
+		public virtual SkillsViewModel Skills()
 		{
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			return skills.Select(
+			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			return  new SkillsViewModel
+			{
+				IsPermittedToModifySkill = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
+				Skills = skillList.Select(
 				skill => new SkillAccuracy
 				{
 					Id = skill.Id.Value,
 					Name = skill.Name,
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy { Id = x.Id.Value, Name = x.Name }).ToArray()
-				});
+				})
+			};
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Scenarios"), HttpGet]
@@ -221,6 +239,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				_actionThrottler.Finish(token);
 			}
 		}
+	}
+
+	public class SkillsViewModel
+	{
+		public IEnumerable<SkillAccuracy> Skills { get; set; }
+		public bool IsPermittedToModifySkill { get; set; }
 	}
 
 	public class ScenarioViewModel

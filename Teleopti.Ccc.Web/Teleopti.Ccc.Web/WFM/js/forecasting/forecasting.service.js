@@ -5,7 +5,7 @@
 		.service('Forecasting', [
 			'$resource', function ($resource) {
 				this.skills = $resource('../api/Forecasting/Skills', {}, {
-					get: { method: 'GET', params: {}, isArray: true }
+					query: { method: 'GET', params: {}, isArray: false }
 				});
 
 				this.status = $resource('../api/Status/Forecasting', {}, {

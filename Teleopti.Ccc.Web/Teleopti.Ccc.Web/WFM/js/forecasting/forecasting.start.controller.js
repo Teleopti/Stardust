@@ -26,9 +26,11 @@
 					}
 				}
 
+				$scope.createSkillToggle = false;
 				$scope.isCreateSkillEnabled = false;
+
 				toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_CreateSkill_34591' }).$promise.then(function (result) {
-					$scope.isCreateSkillEnabled = result.IsEnabled;
+					$scope.createSkillToggle = result.IsEnabled;
 				});
 
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
@@ -37,7 +39,7 @@
 
 				$scope.workloads = [];
 
-				var getName = function (skillName, workloadName) {
+				var getName = function(skillName, workloadName) {
 					var name;
 					if (!workloadName || workloadName == skillName)
 						name = skillName;
@@ -45,12 +47,13 @@
 						name = skillName + " - " + workloadName;
 					}
 					return name;
-				}
+				};
 
 				var getSkills = function () {
 					var skillsPromise = forecasting.skills.query().$promise;
 					skillsPromise.then(function (result) {
-						var skills = result;
+						$scope.isCreateSkillEnabled = $scope.createSkillToggle && result.IsPermittedToModifySkill;
+						var skills = result.Skills;
 						var workloads = [];
 						var addedWorkload = null;
 						angular.forEach(skills, function (skill) {
