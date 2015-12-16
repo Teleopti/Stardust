@@ -21,8 +21,6 @@ $(function () {
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();
 	Teleopti.MyTimeWeb.Request.Init();
-	Teleopti.MyTimeWeb.TeamScheduleNew.Init();
-	Teleopti.MyTimeWeb.TeamScheduleOld.Init();
 	
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();

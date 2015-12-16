@@ -5,14 +5,14 @@
 
 @section head {
 	<script type="text/javascript">
-		$(function () { 
+		$(function() {
 			Teleopti.MyTimeWeb.Portal.Init(
-				{
-					defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
-					baseUrl: '@Url.Content("~/MyTime/")',
-					startBaseUrl: '@Url.Content("~/Start/")'
-				});
-			@if( Model.HasAsmPermission)
+			{
+				defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
+				baseUrl: '@Url.Content("~/MyTime/")',
+				startBaseUrl: '@Url.Content("~/Start/")'
+			});
+			@if (Model.HasAsmPermission)
 			{
 				<text>
 				Teleopti.MyTimeWeb.AlertActivity.StartAlert({
@@ -33,7 +33,12 @@
 					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
 				);
 
-				Teleopti.MyTimeWeb.AsmMessage.Init();
+			Teleopti.MyTimeWeb.AsmMessage.Init();
+			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580")) {
+				Teleopti.MyTimeWeb.TeamScheduleNew.Init();
+			} else {
+				Teleopti.MyTimeWeb.TeamScheduleOld.Init();
+			}
 				</text>
 			}
 		});
