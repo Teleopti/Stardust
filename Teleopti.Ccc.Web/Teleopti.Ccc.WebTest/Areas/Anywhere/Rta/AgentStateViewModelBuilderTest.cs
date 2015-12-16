@@ -155,5 +155,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			states.Single().AlarmStart.Should().Be("2015-11-23 08:15".Utc());
 		}
+		
+		[Test]
+		public void ShouldHavgIsInAlarm()
+		{
+			var agentStates = new[]
+			{
+				new AgentStateReadModel
+				{
+					IsRuleAlarm = true
+				}
+			};
+
+			var states = Target.Build(agentStates);
+
+			states.Single().IsRuleAlarm.Should().Be(true);
+		}
 	}
 }

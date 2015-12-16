@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				command.Parameters.Add("@NextStart", SqlDbType.DateTime).Value = model.NextStart;
 				command.Parameters.Add("@RuleStartTime", SqlDbType.DateTime).Value = model.RuleStartTime;
 				command.Parameters.Add("@AlarmStartTime", SqlDbType.DateTime).Value = model.AlarmStartTime;
-				command.Parameters.Add("@IsInAlarm", SqlDbType.Bit).Value = model.IsInAlarm;
+				command.Parameters.Add("@IsRuleAlarm", SqlDbType.Bit).Value = model.IsRuleAlarm;
 				command.Parameters.Add("@Color", SqlDbType.Int).Value = model.Color;
 				command.Parameters.Add("@StaffingEffect", SqlDbType.Float).Value = model.StaffingEffect;
 				command.Parameters.Add("@Adherence", SqlDbType.Int).Value = model.Adherence ?? (object) DBNull.Value;

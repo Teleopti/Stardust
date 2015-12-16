@@ -31,57 +31,62 @@ namespace Teleopti.Ccc.Infrastructure.Rta
             var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
 	        return Load(guids);
         }
-
-        public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
-        {
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-                var ret = new List<AgentStateReadModel>();
+		
+		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
+		{
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var ret = new List<AgentStateReadModel>();
 				foreach (var personList in personGuids.Batch(400))
 				{
-					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-						@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
+					ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session
+						.CreateSQLQuery(@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
-						.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+						.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 						.SetReadOnly(true)
 						.List<AgentStateReadModel>());
 				}
-                return ret;
-            }
+				return ret;
+			}
 		}
-
-	    public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
-	    {
-			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(
-					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
-					.SetParameter("teamId", teamId)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
-					.SetReadOnly(true)
-					.List<AgentStateReadModel>();
-			}  
-	    }
-
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
+		
+		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				return uow.Session().CreateSQLQuery(
-					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
+				return uow.Session().CreateSQLQuery(@"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
+					.SetParameter("teamId", teamId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
+			}
+		}
+		
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly)
+		{
+			var query = @"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
+			if (inAlarmOnly.HasValue)
+				query += " AND IsRuleAlarm = " + inAlarmOnly;
+
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(query)
 					.SetParameterList("siteIds", siteIds)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
 			}
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly)
 		{
+			var query = @"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
+			if (inAlarmOnly.HasValue)
+				query += " AND IsRuleAlarm = " + inAlarmOnly;
+
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				return uow.Session().CreateSQLQuery(
-					@"SELECT *	FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
+				return uow.Session().CreateSQLQuery(query)
 					.SetParameterList("teamIds", teamIds)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 					.SetReadOnly(true)
@@ -181,7 +186,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
 							RuleStartTime = reader.NullableDateTime("RuleStartTime"),
 							AlarmStartTime = reader.NullableDateTime("AlarmStartTime"),
-							IsInAlarm = reader.Boolean("IsInAlarm"),
+							IsRuleAlarm = reader.Boolean("IsRuleAlarm"),
 							PersonId = reader.Guid("PersonId"),
 							StaffingEffect = reader.NullableDouble("StaffingEffect"),
 							Adherence = reader.NullableInt("Adherence"),

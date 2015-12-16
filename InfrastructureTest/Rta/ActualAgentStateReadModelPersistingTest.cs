@@ -117,12 +117,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldPersistIsAlarm()
 		{
-			var state = new AgentStateReadModelForTest {IsInAlarm = true};
+			var state = new AgentStateReadModelForTest {IsRuleAlarm = true};
 
 			Target.PersistActualAgentReadModel(state);
 
 			Reader.GetCurrentActualAgentState(state.PersonId)
-				.IsInAlarm.Should().Be(true);
+				.IsRuleAlarm.Should().Be(true);
 		}
 	}
 }

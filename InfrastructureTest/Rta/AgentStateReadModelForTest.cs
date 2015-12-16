@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			ReceivedTime = DateTime.UtcNow;
 			OriginalDataSourceId = "0";
+			IsRuleAlarm = true;
 		}
 	}
 }

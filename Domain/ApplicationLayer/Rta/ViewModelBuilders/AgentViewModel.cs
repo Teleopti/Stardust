@@ -38,5 +38,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public DateTime? AlarmStart { get; set; }
 		public string AlarmColor { get; set; }
 		public int TimeInState { get; set; }
+		public bool IsRuleAlarm { get; set; }
 	}
 }

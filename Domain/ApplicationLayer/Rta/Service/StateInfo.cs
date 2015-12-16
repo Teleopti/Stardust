@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				ScheduledNext = Schedule.NextActivityName(),
 				ScheduledNextId = Schedule.NextActivityId(),
 				State = State.StateGroupName(),
-				IsInAlarm = isInAlarm
+				IsRuleAlarm = isInAlarm
 			};
 		}
 		

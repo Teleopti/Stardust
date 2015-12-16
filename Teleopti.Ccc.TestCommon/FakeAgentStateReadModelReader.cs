@@ -42,28 +42,29 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			throw new NotImplementedException();
 		}
-
+		
 		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}
-
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
+		
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly)
 		{
-			return (from s in siteIds
-				from m in _data.Values
-				where s == m.SiteId
-				select m).ToArray();
+			var sites = from s in siteIds
+					from m in _data.Values
+					where s == m.SiteId
+					select m;
+			return inAlarmOnly.HasValue ? sites.Where(x => x.IsRuleAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly)
 		{
 			return (from t in teamIds
 					from m in _data.Values
 					where t == m.TeamId
 					select m).ToArray();
 		}
-
+		
 		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			return (from s in _data.Values

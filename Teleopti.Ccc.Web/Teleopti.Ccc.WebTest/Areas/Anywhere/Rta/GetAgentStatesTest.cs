@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] { siteId });
+			var agentState = Target.ForSites(new[] {siteId});
 
 			agentState.Single().PersonId.Should().Be(personId);
 			agentState.Single().State.Should().Be("state");
@@ -124,5 +124,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			agentState.Single().AlarmColor.Should().Be("#000000");
 			agentState.Single().TimeInState.Should().Be(30 * 60);
 		}
+		
+		[Test]
+		public void ShouldOnlyGetAgentStatesInAlarm()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					SiteId = siteId1,
+					IsRuleAlarm = true
+				})
+				.Has(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					SiteId = siteId2,
+					IsRuleAlarm = false
+				});
+
+			var agentStates = Target.ForSites(new[] { siteId1, siteId2 }, true);
+
+			agentStates.Single().PersonId.Should().Be(personId1);
+		}
+
 	}
 }

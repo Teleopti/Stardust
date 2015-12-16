@@ -1,3 +1,3 @@
 ALTER TABLE RTA.ActualAgentState ADD
-	IsInAlarm bit NOT NULL CONSTRAINT DF_ActualAgentState_IsInAlarm DEFAULT 1
+	IsRuleAlarm bit NOT NULL CONSTRAINT DF_ActualAgentState_IsRuleAlarm DEFAULT 1
 GO

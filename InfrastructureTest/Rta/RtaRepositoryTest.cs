@@ -138,5 +138,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			target.Load(new[] {personId}).Single().Adherence.Should().Be(Adherence.Out);
 			target.LoadForTeam(teamId).Single().Adherence.Should().Be(Adherence.Out);
 		}
-    }
+		
+		[Test]
+		public void ShouldLoadStatesInAlarmOnly()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var state1 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId,
+				IsRuleAlarm = true
+			};
+			var state2 = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId,
+				IsRuleAlarm = false
+			};
+			var persister = new AgentStateReadModelPersister(new FakeConnectionStrings());
+			persister.PersistActualAgentReadModel(state1);
+			persister.PersistActualAgentReadModel(state2);
+
+			var result = target.LoadForTeams(new[] { teamId }, true);
+
+			result.Single().IsRuleAlarm.Should().Be(true);
+		}
+	}
 }
