@@ -25,12 +25,19 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _requestsViewModelFactory.Create(input);
 		}
 
+
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests(AllRequestsFormData input)
+		public virtual RequestListViewModel GetRequests([FromUri] AllRequestsFormData input)
+		{
+			// ToDo: This doesn't work yet. Consulting Robin how to correctly handle the DateOnly's in the AllRequestsFormData
+			return _requestsViewModelFactory.CreateRequestListViewModel(input);
+		}
+
+		[HttpPost, Route("api/Requests/listRequests"), UnitOfWork]
+		public virtual RequestListViewModel ListRequests(AllRequestsFormData input)
 		{
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}
-	
 
 
 	}

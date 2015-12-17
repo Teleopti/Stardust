@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);
+			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);	
 
 			return new RequestListViewModel
 			{
-				Requests = requests.Select(toViewModel),
+				Requests = requests.Select(toViewModel).ToList(),
 				TotalCount = totalCount,
 				Skip = input.Paging.Skip,
 				Take = input.Paging.Take

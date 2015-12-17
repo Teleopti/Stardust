@@ -24,12 +24,26 @@
 		vm.reload = reload;
 		vm.sortingOrders = [];
 
-		function reload(requestsFilter, sortingOrders) {
+		function reload(requestsFilter, sortingOrders, paging) {
 			vm.loaded = false;
-			requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders).then(function (requests) {
-				vm.requests = requests.data;
-				vm.loaded = true;
-			});
+
+			if (vm.togglePaginationEnabled) {
+				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
+					vm.requests = requests.data.Requests;
+					if (vm.totalRequestsCount !== requests.data.TotalCount) {						
+						vm.totalRequestsCount = requests.data.TotalCount;						
+						if (typeof vm.onTotalRequestsCountChanges == 'function')
+							vm.onTotalRequestsCountChanges({ totalRequestsCount: vm.totalRequestsCount });
+					}					
+					vm.loaded = true;
+				});
+
+			} else {
+				requestsDataService.getAllRequestsPromise_old(requestsFilter, sortingOrders).then(function (requests) {
+					vm.requests = requests.data;
+					vm.loaded = true;
+				});
+			}			
 		}
 	}
 
@@ -40,7 +54,10 @@
 			bindToController: true,
 			scope: {
 				period: '=',
-				agentSearchTerm: '=?'
+				agentSearchTerm: '=?',
+				paging: '=?',
+				onTotalRequestsCountChanges: '&?',
+				togglePaginationEnabled: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',
@@ -48,24 +65,33 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
+
 			scope.$watch(function () {
 				var filter = {
 					period: scope.requestsOverview.period,
 					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
 				}
-				return {
+				var target = {
 					startDate: filter.period.startDate,
 					endDate: filter.period.endDate,
 					sortingOrders: scope.requestsOverview.sortingOrders,
 					agentSearchTerm: filter.agentSearchTerm
 				}
+
+				if (scope.requestsOverview.togglePaginationEnabled) {
+					target.pageNumber = scope.requestsOverview.paging.pageNumber;
+					target.pageSize = scope.requestsOverview.paging.pageSize;
+				}
+
+				return target;
+
 			}, function (newValue) {
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
 				ctrl.reload({
 					period: scope.requestsOverview.period,
-					agentSearchTerm: scope.requestsOverview.agentSearchTerm
-				}, scope.requestsOverview.sortingOrders);
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm,					
+				}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging);
 			}, true);
 		}
 	}

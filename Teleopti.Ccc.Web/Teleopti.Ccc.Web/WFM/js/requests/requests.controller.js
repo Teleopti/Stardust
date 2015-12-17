@@ -8,13 +8,24 @@
 	function requestsController(requestsToggles) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
-
+		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
+		vm.onPageSizeChanges = onPageSizeChanges;
+	
 		requestsToggles.togglePromise.then(init);
 
 		function init(toggles) {
 			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
 			vm.isPeopleSearchEnabled = toggles.isPeopleSearchEnabled();
+			vm.isPaginationEnabled = toggles.isPaginationEnabled();
 			vm.period = { startDate: new Date(), endDate: new Date() };
+
+			vm.paging = {
+				pageSize: 10,
+				pageNumber: 1,
+				totalPages: 1,
+				totalRequestsCount: 0
+			};
+
 			vm.templateType = "dropdown";
 			vm.agentSearchOptions = {
 				keyword: "",
@@ -28,6 +39,17 @@
 			vm.agentSearchTerm = agentSearchTerm;
 		}
 
+		function onTotalRequestsCountChanges(totalRequestsCount) {			
+			vm.paging.totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
+			vm.paging.totalRequestsCount = totalRequestsCount;
+		}
+
+		function onPageSizeChanges() {			
+			vm.paging.totalPages = Math.ceil(vm.paging.totalRequestsCount / vm.paging.pageSize);
+			vm.paging.pageNumber = 1;			
+		}
+
+		
 	}
 
 })();

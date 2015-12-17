@@ -21,13 +21,22 @@
 			CreatedOnDesc: 5
 		};
 
-		this.normalizeRequestsFilter = function(filter, sortingOrders) {
-			return {
+		this.normalizeRequestsFilter = function(filter, sortingOrders, paging) {
+			var target = {
 				StartDate: filter.period.startDate,
 				EndDate: filter.period.endDate,
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: filter.agentSearchTerm
 			};
+
+			if (paging != null) {
+				target.Paging = {
+					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
+					Take: paging.pageSize
+				};
+			}
+		
+			return target;
 		};
 
 		this.translateSingleSortingOrder = function(sortColumn) {

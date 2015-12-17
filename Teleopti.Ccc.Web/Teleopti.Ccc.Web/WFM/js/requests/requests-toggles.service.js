@@ -7,7 +7,8 @@
 
 		this.toggleNames = [
 			'Wfm_Requests_Basic_35986',
-			'Wfm_Requests_People_Search_36294'
+			'Wfm_Requests_People_Search_36294',
+			'Wfm_Requests_Performance_36295'
 		];
 	
 		this.togglePromise = $q.all(self.toggleNames.map(function (t) {
@@ -28,6 +29,11 @@
 			toggles.isPeopleSearchEnabled = function () {
 				return toggles['Wfm_Requests_People_Search_36294'];
 			}
+
+			toggles.isPaginationEnabled = function() {
+				return toggles['Wfm_Requests_Performance_36295'];
+			};
+
 			return toggles;
 		}	
 	}

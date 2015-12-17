@@ -3,6 +3,35 @@
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
 		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="{{requests.templateType}}"></date-range-picker>
 	</div>
-	<requests-overview style="position: relative" period="requests.period" agent-search-term="requests.agentSearchTerm"></requests-overview>
+
+	<div class="paging-info" ng-if="requests.isPaginationEnabled">
+		<div class="paging-info-division">
+			<div>Page Size</div>
+			<md-select ng-model="requests.paging.pageSize" ng-change="requests.onPageSizeChanges()" aria-label="PageSize">
+				<md-option ng-value="10">10</md-option>
+				<md-option ng-value="20">20</md-option>
+				<md-option ng-value="50">50</md-option>
+				<md-option ng-value="100">100</md-option>
+				<md-option ng-value="200">200</md-option>
+			</md-select>
+		</div>
+
+
+	</div>
+	<requests-overview style="position: relative"
+					   period="requests.period"
+					   agent-search-term="requests.agentSearchTerm"
+					   paging="requests.paging"
+					   toggle-pagination-enabled="requests.isPaginationEnabled"
+					   on-total-requests-count-changes="requests.onTotalRequestsCountChanges(totalRequestsCount)">
+	</requests-overview>
+	<div ng-if="requests.isPaginationEnabled">
+		<div class="paging-info-division">
+			<div>Total</div>
+			<div>{{requests.paging.totalRequestsCount}}</div>
+		</div>
+		<wfm-pagination pagination-options="requests.paging"></wfm-pagination>
+	</div>
+	
 </div>
 

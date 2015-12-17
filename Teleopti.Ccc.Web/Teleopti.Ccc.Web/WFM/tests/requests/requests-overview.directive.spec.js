@@ -6,20 +6,20 @@
 		var $compile, $rootScope, requestsDataService, requestsDefinitions;
 
 		var targetElement, targetScope;
-	
+
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function() {
 			var requestsDataService = new FakeRequestsDataService();
 			module(function($provide) {
-				$provide.service('requestsDataService', function () {
+				$provide.service('requestsDataService', function() {
 					return requestsDataService;
 				});
 			});
 		});
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
+		beforeEach(inject(function(_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
@@ -28,8 +28,8 @@
 		}));
 
 
-		it("show requests table container", function () {
-			requestsDataService.setRequests({ data: [] });
+		it("show requests table container", function() {
+			requestsDataService.setRequests([]);
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
@@ -42,40 +42,40 @@
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
 			};
-		
-			requestsDataService.setRequests({ data: [request] });
+
+			requestsDataService.setRequests([request]);
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
-			var scope = getInnerScope(targetElement);		
+			var scope = getInnerScope(targetElement);
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
-		});		
+		});
 
 		it("should not request data when filter contains error", function() {
 
-			requestsDataService.setRequests({ data: [] });
+			requestsDataService.setRequests([]);
 
 			targetScope.period = {};
-			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);			
-			targetScope.$digest();			
+			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
+			targetScope.$digest();
 
 			requestsDataService.reset();
 			targetScope.period = {
 				startDate: moment().add(1, 'day').toDate(),
 				endDate: new Date()
 			};
-		
-			targetScope.$digest();			
+
+			targetScope.$digest();
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 		});
 
 		it("should request data when filter change to valid values", function() {
 
-			requestsDataService.setRequests({ data: [] });
+			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
 
-			targetScope.$digest();			
+			targetScope.$digest();
 
 			requestsDataService.reset();
 
@@ -88,9 +88,9 @@
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
 
-		it("should request data when search term changed", function () {
+		it("should request data when search term changed", function() {
 
-			requestsDataService.setRequests({ data: [] });
+			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetScope.agentSearchTerm = "";
 
@@ -105,6 +105,32 @@
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
 		});
+
+		it("should request data when pagination changed", function() {		
+
+			requestsDataService.setRequests([{ Id: 1 }, { Id: 2 }]);
+			targetScope.period = {};
+			targetScope.paging = {
+				pageSize: 1,
+				pageNumber: 1,
+				totalPages: 1,
+				totalRequestsCount: 2
+			};
+			targetScope.isPaginationEnabled = true;
+
+
+			targetElement = $compile('<requests-overview period="period"  paging="paging" toggle-pagination-enabled="isPaginationEnabled"></requests-overview>')(targetScope);
+
+			targetScope.$digest();
+
+			requestsDataService.reset();
+
+			targetScope.paging.pageNumber = 2;
+			targetScope.$digest();
+			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
+			expect(requestsDataService.getLastRequestParameters()[2].pageNumber).toEqual(2);
+		});
+
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');
@@ -170,15 +196,30 @@
 		this.getHasSentRequests = function () { return _hasSentRequests; }
 		this.getLastRequestParameters = function() { return _lastRequestParameters; }
 
-		this.getAllRequestsPromise = function () {
+		this.getAllRequestsPromise_old = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {
 				then: function (cb) {					
-					cb(_requests);
+					cb({ data: _requests });
 				}
 			}
 		};
+
+		this.getAllRequestsPromise = function() {
+			_hasSentRequests = true;
+			_lastRequestParameters = arguments;
+			return {
+				then: function(cb) {
+					cb({
+						data: {
+							Requests: _requests,
+							TotalCount: _requests.length
+						}
+					});
+				}
+			}
+		}
 	}
 
 
