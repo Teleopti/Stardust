@@ -39,9 +39,11 @@
 			vm.agentSearchTerm = agentSearchTerm;
 		}
 
-		function onTotalRequestsCountChanges(totalRequestsCount) {			
-			vm.paging.totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
-			vm.paging.totalRequestsCount = totalRequestsCount;
+		function onTotalRequestsCountChanges(totalRequestsCount) {
+			var totalPages = Math.ceil(totalRequestsCount / vm.paging.pageSize);
+			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
+			vm.paging.totalPages = totalPages;
+			vm.paging.totalRequestsCount = totalRequestsCount;			
 		}
 
 		function onPageSizeChanges() {			
