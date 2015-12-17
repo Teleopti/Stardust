@@ -1,5 +1,4 @@
-﻿
-function _initMomentLanguageWithFallback() {
+﻿function _initMomentLanguageWithFallback() {
 	var ietfLanguageTag = $('html').attr('lang').toLowerCase();;
 	var baseLang = 'en'; //Base
 	var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
@@ -14,14 +13,20 @@ function _initMomentLanguageWithFallback() {
 	}
 }
 
-$(function () {
+function initAllModules() {
     Teleopti.MyTimeWeb.Schedule.Init();
     Teleopti.MyTimeWeb.Schedule.Month.Init();
     Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();
 	Teleopti.MyTimeWeb.Request.Init();
-	
+
+	if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_EnhanceTeamSchedule_32580")) {
+		Teleopti.MyTimeWeb.TeamScheduleNew.Init();
+	} else {
+		Teleopti.MyTimeWeb.TeamScheduleOld.Init();
+	}
+
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
 	Teleopti.MyTimeWeb.MyReport.Init();
@@ -31,4 +36,4 @@ $(function () {
 	Teleopti.MyTimeWeb.Common.Layout.Init();
 
 	_initMomentLanguageWithFallback();
-});
+};
