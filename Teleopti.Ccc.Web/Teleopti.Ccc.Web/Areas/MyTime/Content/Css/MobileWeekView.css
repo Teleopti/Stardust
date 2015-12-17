@@ -20,6 +20,16 @@
 	background-image: url(../Images/stripe.png);
 }
 
+.weekview-mobile .overtime {
+	padding-top: 10px;
+}
+
+.weekview-mobile .overtime-panel-body {
+	height: 60px;
+	padding: 0;
+	text-align: center;
+}
+
 .weekview-mobile .day .panel-body {
 	height: 40px;
 	padding: 0;

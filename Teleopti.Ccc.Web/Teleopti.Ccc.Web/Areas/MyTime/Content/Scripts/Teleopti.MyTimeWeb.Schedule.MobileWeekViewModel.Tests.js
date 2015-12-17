@@ -98,12 +98,13 @@ $(document).ready(function () {
 				Display: null
 			}],
 			Days: [{
-				Periods: [{
-				}]
+				Summary: {
+					Color: ""
+				}
 			}]
 		});
 
-		equal(vm.dayViewModels()[0].hasShift(), true);
+		equal(vm.dayViewModels()[0].hasShift, true);
 	});
 
 	test("should read week day header titles", function () {
@@ -115,27 +116,5 @@ $(document).ready(function () {
 			Days: [{ Header: { Title: "Monday" } }]
 		});
 		equal(vm.dayViewModels()[0].weekDayHeaderTitle(), "Monday");
-	});
-
-	test("should indicate has full day absence", function () {
-		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
-		vm.readData({
-			PeriodSelection: [{
-				Display: null
-			}],
-			Days: [
-			{
-				Summary: {
-					Title: "Illness",
-					Color: "rgb(255,0,0)"
-				},
-				Periods: [{
-				}]
-			}]
-		});
-		equal(vm.dayViewModels()[0].hasFulldayAbsence(), true);
-		equal(vm.dayViewModels()[0].summaryColor(), "rgb(255,0,0)");
-		equal(vm.dayViewModels()[0].summaryName(), "Illness");
-
 	});
 });
