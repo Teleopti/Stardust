@@ -35,13 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
-
-			var overtimeStart = DateTime.MaxValue;
-			if (scheduleDay.PersonAssignment() != null && scheduleDay.PersonAssignment().OvertimeActivities().Any())
-			{
-				var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
-				overtimeStart = overtimeActivities.Select(x => x.Period.StartDateTime).Min();
-			}
+			var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToArray();
 
 			switch (significantPart)
 			{
@@ -68,8 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (projection != null && projection.HasLayers)
 			{
-				scheduleVm.WorkTimeMinutes = projection.WorkTime().Minutes;
-				scheduleVm.ContractTimeMinutes = projection.ContractTime().Minutes;
+				scheduleVm.WorkTimeMinutes = projection.WorkTime().TotalMinutes;
+				scheduleVm.ContractTimeMinutes = projection.ContractTime().TotalMinutes;
 
 				foreach (var layer in projection)
 				{
@@ -95,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 								: layer.DisplayColor().ToHtml(),
 						Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
 						Minutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
-						IsOvertime = layer.Period.StartDateTime >= overtimeStart
+						IsOvertime = overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
 					});
 				}
 			}
