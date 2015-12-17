@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				SortingOrders = input.SortingOrders
 			};
 
-			if (!String.IsNullOrEmpty(input.AgentSearchTerm))
+			if (input.AgentSearchTerm != null)
 			{
-				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(SearchTermParser.Parse(input.AgentSearchTerm),
-					input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests);				
+				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(input.AgentSearchTerm,
+					input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests);
 			}
 
 			return filter;

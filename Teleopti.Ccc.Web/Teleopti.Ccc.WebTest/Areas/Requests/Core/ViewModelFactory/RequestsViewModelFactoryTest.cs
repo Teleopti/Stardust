@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = "firstName: test1"								
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { {PersonFinderField.FirstName, "test1"}}					
 			};
 
 			var result = Target.Create(input);
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = "firstName: test1"
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);

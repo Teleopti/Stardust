@@ -25,7 +25,7 @@
 			var target = {
 				StartDate: filter.period.startDate,
 				EndDate: filter.period.endDate,
-				SortingOrders: sortingOrders,
+				SortingOrders: sortingOrders.join(','),
 				AgentSearchTerm: filter.agentSearchTerm
 			};
 
@@ -34,6 +34,8 @@
 					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
 					Take: paging.pageSize
 				};
+				target.Skip = target.Paging.Skip;
+				target.Take = target.Paging.Take;
 			}
 		
 			return target;

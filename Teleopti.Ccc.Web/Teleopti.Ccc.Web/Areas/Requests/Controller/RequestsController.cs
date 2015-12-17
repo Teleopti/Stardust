@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
@@ -27,18 +28,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests([FromUri] AllRequestsFormData input)
-		{
-			// ToDo: This doesn't work yet. Consulting Robin how to correctly handle the DateOnly's in the AllRequestsFormData
+		public virtual RequestListViewModel GetRequests(AllRequestsFormData input)
+		{			
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
-		}
-
-		[HttpPost, Route("api/Requests/listRequests"), UnitOfWork]
-		public virtual RequestListViewModel ListRequests(AllRequestsFormData input)
-		{
-			return _requestsViewModelFactory.CreateRequestListViewModel(input);
-		}
-
+		}		
 
 	}
 }
