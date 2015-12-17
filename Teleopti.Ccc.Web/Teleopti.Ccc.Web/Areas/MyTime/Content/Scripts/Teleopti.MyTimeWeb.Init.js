@@ -13,7 +13,7 @@
 	}
 }
 
-function initAllModules() {
+$(function() {
     Teleopti.MyTimeWeb.Schedule.Init();
     Teleopti.MyTimeWeb.Schedule.Month.Init();
     Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
@@ -36,4 +36,4 @@ function initAllModules() {
 	Teleopti.MyTimeWeb.Common.Layout.Init();
 
 	_initMomentLanguageWithFallback();
-};
+});
