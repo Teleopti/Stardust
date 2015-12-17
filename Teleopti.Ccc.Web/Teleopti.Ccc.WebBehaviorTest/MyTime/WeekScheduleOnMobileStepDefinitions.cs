@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{
 			var shift = table.CreateInstance<ShiftListItem>();
-			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.ShiftCategory);
-			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.TimeSpan);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] #mobileWeek-day-view-body", shift.Date), shift.ShiftCategory);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] #mobileWeek-day-view-body", shift.Date), shift.TimeSpan);
 		}
 
 		public class ShiftListItem
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		  public void ThenIShouldSeeTheAbsenceWith(Table table)
 		  {
 			  var absence = table.CreateInstance<AbsenceListItem>();
-			  Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .absence", absence.Date), absence.Name);
+			  Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] #mobileWeek-day-view-body", absence.Date), absence.Name);
 		  }
 
 		  public class AbsenceListItem
