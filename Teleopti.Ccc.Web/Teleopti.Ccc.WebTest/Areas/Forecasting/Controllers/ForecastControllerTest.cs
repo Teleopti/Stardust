@@ -24,11 +24,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(null, skillRepository, null, null, null, new BasicActionThrottler(), null, null, null, null, null);
+			var target = new ForecastController(null, skillRepository, null, null, null, new BasicActionThrottler(), null, null, null, null, principalAuthorization);
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			result.Skills.Single().Name.Should().Be.EqualTo(skill1.Name);

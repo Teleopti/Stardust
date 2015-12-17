@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual SkillsViewModel Skills()
 		{
 			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			return  new SkillsViewModel
+			return new SkillsViewModel
 			{
 				IsPermittedToModifySkill = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
 				Skills = skillList.Select(
