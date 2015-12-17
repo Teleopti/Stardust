@@ -308,6 +308,7 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
 	self.titleHeader = layer.TitleHeader;
 	self.titleTime = layer.TitleTime;
 	self.startTime = layer.Start;
+	self.isOvertime = layer.IsOvertime;
     self.leftPx = ko.computed(function () {
     	return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
     });
@@ -320,8 +321,21 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
     self.styleJson = ko.computed(function () {
     	if (isRtl)
-    		return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
-    	return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
+    		return {
+    			'right': self.leftPx(),
+    			'background-size': self.isOvertime ? '11px 11px' : 'initial',
+    			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : 'initial',
+    			'backgroundColor': self.backgroundColor,
+    			'paddingRight': self.widthPx()
+    		};
+    	return {
+    		'left': self.leftPx(),
+    		'background-size': self.isOvertime ? '11px 11px' : 'initial',
+    		'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : 'initial',
+    		'backgroundColor': self.backgroundColor,
+    		'paddingLeft': self.widthPx()
+    	};
+		
     });
 };
 

@@ -265,7 +265,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 		var model;
 
 
-		if (layers == null) {
+		if (layers == null || layers.length == 0) {
 			model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
 				mappedLayers,
 				null,
