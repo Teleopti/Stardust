@@ -1,25 +1,25 @@
 ﻿<tr class="person">
 	<td class="person-name person-name-column">
-		<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
+		<div class="wfm-checkbox" ng-show="vm.isAbsenceReportingEnabled()">
 			<label>
-				<input type="checkbox" ng-model="person.IsSelected" ng-change="vm.updateSelection(person)">
+				<input type="checkbox" ng-model="vm.personSchedule.IsSelected" ng-change="vm.updateSelection(vm.personSchedule)">
 				<span class=" wfm-checkbox-toggle"></span>
-				<span class="wfm-checkbox-label person-name nowrap">{{person.Name}}</span>
+				<span class="wfm-checkbox-label person-name nowrap">{{vm.personSchedule.Name}}</span>
 			</label>
 		</div>
-		<div class="person-name nowrap" ng-if="!vm.isAbsenceReportingEnabled">{{person.Name}}</div>
+		<div class="person-name nowrap" ng-hide="vm.isAbsenceReportingEnabled()">{{vm.personSchedule.Name}}</div>
 	</td>
 
 
 	<td class="schedule schedule-column">
 		<div class="relative time-line-for">
 
-			<span class="dayoff absolute" ng-repeat="dayOff in person.DayOffs" ng-if="person.DayOffs.length > 0"
+			<span class="dayoff absolute" ng-repeat="dayOff in vm.personSchedule.DayOffs" ng-if="vm.personSchedule.DayOffs.length > 0"
 				  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%'}">
 				<md-tooltip ng-if="dayOff.DayOffName !=''"> {{dayOff.DayOffName}} </md-tooltip>
 			</span>
 
-			<div class="shift" ng-repeat="shift in person.Shifts">
+			<div class="shift" ng-repeat="shift in vm.personSchedule.Shifts">
 				<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
 					 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}"
 					 ng-class="{overtime:projection.IsOvertime}">

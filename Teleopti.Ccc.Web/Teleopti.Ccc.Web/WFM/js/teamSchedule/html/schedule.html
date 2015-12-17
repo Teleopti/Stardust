@@ -73,8 +73,11 @@
 			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
 		</div>
 
-		<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule">
+		<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule"
+			   schedule-list-container="vm.groupScheduleVm.Schedules">
+
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+
 			<thead>
 				<tr class="person">
 					<th class="person-name person-name-column" style="width: 15%">
@@ -93,9 +96,14 @@
 					</th>
 				</tr>
 			</thead>
+
+
 			<tbody>
-				<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
+			<!--<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>-->
+				<tr person-schedule="person.PersonId" ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
 			</tbody>
+
+
 		</table>
 		
 	</div>

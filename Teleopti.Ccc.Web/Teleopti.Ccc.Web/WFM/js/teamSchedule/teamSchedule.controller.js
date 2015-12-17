@@ -1,11 +1,14 @@
-﻿(function () {
-	'use strict';
+﻿'use strict';
+
+(function () {
+
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'CurrentUserInfo',
 			'GroupScheduleFactory', 'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, currentUserInfo, groupScheduleFactory,
 		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout) {
+
 		var vm = this;
 
 		vm.initialized = false;
@@ -223,7 +226,10 @@
 			if (vm.selectedTeamId === "" && !vm.isSearchScheduleEnabled) return;
 			vm.isLoading = true;
 			vm.paginationOptions.pageNumber = currentPageIndex;
+
+
 			if (vm.loadScheduelWithReadModel && !vm.isSearchScheduleEnabled) {
+
 				teamScheduleSvc.loadSchedules.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
@@ -235,7 +241,12 @@
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
+
+
+
 			} else if (!vm.isSearchScheduleEnabled) {
+
+
 				teamScheduleSvc.loadSchedulesNoReadModel.query({
 					groupId: vm.selectedTeamId,
 					date: vm.scheduleDateMoment().format("YYYY-MM-DD"),
@@ -247,7 +258,11 @@
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
+
+
 			} else if (vm.isSearchScheduleEnabled) {
+
+
 				if (vm.searchOptions.searchKeywordChanged) {
 					vm.selectedPersonIdList = [];
 					vm.updatePersonSelectionStatus();
@@ -260,6 +275,10 @@
 					pageSize: vm.paginationOptions.pageSize,
 					currentPageIndex: vm.paginationOptions.pageNumber
 				}).$promise.then(function (result) {
+
+					vm.resultfrombackend = result.Schedules;
+
+
 					vm.total = result.Total;
 					vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 					vm.paginationOptions.totalPages = Math.ceil(result.Total / vm.paginationOptions.pageSize);
@@ -270,6 +289,10 @@
 					vm.toggleIsAllInCurrentPageSelected();
 					vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 				});
+
+
+
+
 			}
 		};
 
@@ -486,6 +509,7 @@
 		var absenceReportingTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_AbsenceReporting_35995' }).$promise;
 		absenceReportingTogglePromise.then(function (result) {
 			vm.isAbsenceReportingEnabled = result.IsEnabled;
+			toggleSvc['WfmTeamSchedule_AbsenceReporting_35995'] = result.IsEnabled;
 		});
 
 		var selectAgentsPerPageTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_SetAgentsPerPage_36230' }).$promise;
