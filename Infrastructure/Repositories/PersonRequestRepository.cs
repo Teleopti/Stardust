@@ -581,8 +581,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (sortingOrders == null) return;
 			var orderMapping = new Dictionary<RequestsSortingOrder, Action<ICriteria>>
 				{
-					{RequestsSortingOrder.AgentNameAsc, c => c.AddOrder(Order.Asc("p.Name.FirstName"))},
-					{RequestsSortingOrder.AgentNameDesc, c => c.AddOrder(Order.Desc("p.Name.FirstName"))},				
+					{RequestsSortingOrder.AgentNameAsc, c => c.AddOrder(Order.Asc("p.Name.LastName"))},
+					{RequestsSortingOrder.AgentNameDesc, c => c.AddOrder(Order.Desc("p.Name.LastName"))},				
 					{RequestsSortingOrder.SubjectAsc, c => c.AddOrder(Order.Asc("personRequests.Subject"))},
 					{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},				
 					{RequestsSortingOrder.CreatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
