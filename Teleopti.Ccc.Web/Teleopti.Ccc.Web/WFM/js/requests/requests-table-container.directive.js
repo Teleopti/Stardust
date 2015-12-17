@@ -45,13 +45,13 @@
 			};
 		}
 
-		function formatToTimespan(length) {
+		function formatToTimespan(length, isFullDay) {
 			var days = moment.duration(length, 'seconds')._data.days;
 			var hours = moment.duration(length, 'seconds')._data.hours;
 			var minutes = moment.duration(length, 'seconds')._data.minutes == 0 ? '00' : moment.duration(length, 'seconds')._data.minutes;
 			var totalHours = hours + days * 24 == 0 ? '00' : hours + days * 24;
-
-			return totalHours + ":" + minutes;
+			if (isFullDay) return totalHours + 1 + ":" + "00";
+			else return totalHours + ":" + minutes;
 		}
 
 		function prepareComputedColumns(dataArray) {
@@ -60,7 +60,7 @@
 				
 				var angularTimezone = moment.tz(row.TimeZone).format("Z");
 				row.GetDuration = function () {
-					return formatToTimespan(length);
+					return formatToTimespan(length, row.IsFullDay);
 				}
 				row.FormatedPeriodStartTime = function () {
 					if (row.IsFullDay) return $filter('date')(row.PeriodStartTime, "shortDate", angularTimezone);
