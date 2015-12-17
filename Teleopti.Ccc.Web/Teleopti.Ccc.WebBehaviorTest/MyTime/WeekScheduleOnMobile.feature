@@ -62,6 +62,7 @@ Scenario: View current week
 	When I view my mobile week schedule
 	Then I should see my mobile week schedule for date '2030-10-03'
 
+@ignore
 Scenario: View when you are working
 	Given I have the role 'Full access to mytime'
 	And the time is '2014-04-21 12:00'
@@ -94,6 +95,7 @@ Scenario: View when you have a day off
 	When I view my mobile week schedule
 	Then I should see the day off on '2014-04-22'
 
+@ignore
 Scenario: View when you have full day absence
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule'
@@ -107,28 +109,8 @@ Scenario: View when you have full day absence
    | Field | Value      |
    | Name  | Illness    |
    | Date  | 2014-04-15 |
-   
-@ignore
-Scenario: View when you have a full day absence on working day
-   Given I have the role 'Full access to mytime'
-   And I have the workflow control set 'Published schedule'
-   And I have a shift with
-   | Field          | Value            |
-   | StartTime      | 2014-04-15 09:00 |
-   | EndTime        | 2014-04-15 18:00 |
-   | Shift category | Early            |
-   And I have an absence with
-   | Field                   | Value            |
-   | Name      | Illness          |
-   | StartTime | 2014-04-15 09:00 |
-   | EndTime   | 2014-04-15 18:00 |
-   When I view my mobile week schedule for date '2014-04-15'
-   Then I should not see a shift on date '2014-04-15'
-   And I should see the absence with
-   | Field | Value      |
-   | Name  | Illness    |
-   | Date  | 2014-04-15 |
 
+@ignore
 Scenario: View when you are in absence on day off
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule'
