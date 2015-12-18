@@ -221,10 +221,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			{
 				var scenario = _scenarioRepository.Get(input.ScenarioId);
 				var workload = _workloadRepository.Get(input.WorkloadId);
-				_overridePersister.Persist(scenario, workload, input.Days, 
-					input.ShouldSetOverrideTasks ? (double?)input.OverrideTasks : null,
-					input.ShouldSetOverrideTalkTime ? (TimeSpan?)TimeSpan.FromSeconds(input.OverrideTalkTime) : null,
-					input.ShouldSetOverrideAfterCallWork ? (TimeSpan?)TimeSpan.FromSeconds(input.OverrideAfterCallWork) : null);
+				_overridePersister.Persist(scenario, workload, input);
 				return Task.FromResult(new ForecastResultViewModel
 				{
 					Success = true

@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldAddOverrideForecastedValues()
+		public void ShouldSetOverrideValues()
 		{
 			var input = new OverrideInput
 			{
@@ -276,37 +276,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = target.Override(input);
 			result.Result.Success.Should().Be.True();
 
-			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, input.OverrideTasks, TimeSpan.FromSeconds(input.OverrideTalkTime), TimeSpan.FromSeconds(input.OverrideAfterCallWork)));
-		}
-
-		[Test]
-		public void ShouldIgnoreOverrideForecastedValues()
-		{
-			var input = new OverrideInput
-			{
-				Days = new[] { new ModifiedDay { Date = new DateTime() } },
-				ScenarioId = Guid.NewGuid(),
-				WorkloadId = Guid.NewGuid(),
-				OverrideTasks = 50,
-				OverrideTalkTime = 20,
-				OverrideAfterCallWork = 25,
-				ShouldSetOverrideTasks = false,
-				ShouldSetOverrideTalkTime = false,
-				ShouldSetOverrideAfterCallWork = false
-			};
-			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
-			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var scenario = new Scenario("default");
-			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
-			workloadRepository.Stub(x => x.Get(input.WorkloadId))
-				.Return(workload);
-			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister, null);
-
-			var result = target.Override(input);
-			result.Result.Success.Should().Be.True();
-			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input.Days, null, null, null));
+			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input));
 		}
 	}
 }

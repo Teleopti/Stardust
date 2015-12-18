@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public void Persist(IScenario scenario, IWorkload workload, ModifiedDay[] days, double? overrideTasks, TimeSpan? overrideTalkTime, TimeSpan? overrideAfterCallWork)
+		public void Persist(IScenario scenario, IWorkload workload, OverrideInput input)
 		{
-			var min = days.Min(x => x.Date);
-			var max = days.Max(x => x.Date);
+			var min = input.Days.Min(x => x.Date);
+			var max = input.Days.Max(x => x.Date);
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(min), new DateOnly(max));
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
 			var workloadDays = _futureData.Fetch(workload, skillDays, futurePeriod).ToList();
@@ -41,23 +41,25 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					intradayPattern = _intradayForecaster.CalculatePattern(workload, statsPeriod.Value);
 			}
 
-			foreach (var workloadDay in days.Select(day => workloadDays.Single(x => x.CurrentDate == new DateOnly(day.Date))).Where(workloadDay => workloadDay.OpenForWork.IsOpen))
+			foreach (var workloadDay in input.Days.Select(day => workloadDays.Single(x => x.CurrentDate == new DateOnly(day.Date))).Where(workloadDay => workloadDay.OpenForWork.IsOpen))
 			{
-				IEnumerable<ITemplateTaskPeriod> weekdayPattern;
-				if (workloadDay.Tasks > 0d || !intradayPattern.TryGetValue(workloadDay.CurrentDate.DayOfWeek, out weekdayPattern))
+				if (input.ShouldSetOverrideTasks)
 				{
-					workloadDay.SetOverrideTasks(overrideTasks, null); 	
+					IEnumerable<ITemplateTaskPeriod> weekdayPattern;
+					if (workloadDay.Tasks > 0d || !intradayPattern.TryGetValue(workloadDay.CurrentDate.DayOfWeek, out weekdayPattern))
+						workloadDay.SetOverrideTasks(input.OverrideTasks, null);
+					else
+						workloadDay.SetOverrideTasks(input.OverrideTasks, weekdayPattern);
 				}
-				else
+				if (input.ShouldSetOverrideTalkTime)
 				{
-					workloadDay.SetOverrideTasks(overrideTasks, weekdayPattern); 
+					workloadDay.OverrideAverageTaskTime = TimeSpan.FromSeconds(input.OverrideTalkTime);
 				}
-				workloadDay.OverrideAverageTaskTime = overrideTalkTime;
-				workloadDay.OverrideAverageAfterTaskTime = overrideAfterCallWork;
-
-
+				if (input.ShouldSetOverrideAfterCallWork)
+				{
+					workloadDay.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(input.OverrideAfterCallWork);
+				}
 			}
 		}
-
 	}
 }

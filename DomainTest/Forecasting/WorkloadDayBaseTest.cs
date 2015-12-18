@@ -1154,6 +1154,28 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
+		public void ShouldSetOverrideTasksWhenOverrideValuesExist()
+		{
+			_workloadDayBase.Tasks = 200d;
+			_workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(15);
+			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(30);
+
+			_workloadDayBase.SetOverrideTasks(400d, null);
+			_workloadDayBase.OverrideAverageTaskTime = TimeSpan.FromSeconds(30);
+			_workloadDayBase.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(60);
+
+			Assert.AreEqual(_workloadDayBase.TotalTasks, 400d, 1);
+			Assert.AreEqual(_workloadDayBase.TotalAverageTaskTime.Ticks, TimeSpan.FromSeconds(30).Ticks, 1);
+			Assert.AreEqual(_workloadDayBase.TotalAverageAfterTaskTime.Ticks, TimeSpan.FromSeconds(60).Ticks, 1);
+
+			_workloadDayBase.SetOverrideTasks(800d, null);
+
+			Assert.AreEqual(_workloadDayBase.TotalTasks, 800d, 1);
+			Assert.AreEqual(_workloadDayBase.TotalAverageTaskTime.Ticks, TimeSpan.FromSeconds(30).Ticks, 1);
+			Assert.AreEqual(_workloadDayBase.TotalAverageAfterTaskTime.Ticks, TimeSpan.FromSeconds(60).Ticks, 1);
+		}
+
+		[Test]
 		public void ShouldKeepTalkTimesWhenSettingOverrideTasksOverZeroCalls()
 		{
 			_workloadDayBase.Tasks = 0d;
