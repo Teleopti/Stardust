@@ -19,6 +19,7 @@
 		vm.isAbsenceReportingEnabled = false;
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
+		vm.isSelectAgentsPerPageEnabled = false;
 
 		vm.scheduleDateMoment = function () {
 			return moment(vm.scheduleDate);
@@ -41,6 +42,17 @@
 
 		vm.datePickerStatus = {
 			opened: false
+		};
+
+
+		vm.agentsPerPageSelection = {
+			availableOptions: [
+			  { id: '1', name: 20 },
+			  { id: '2', name: 50 },
+			  { id: '3', name: 100 },
+			  { id: '4', name: 500 }
+			],
+			selectedOption: { id: '1', name: 20 } 
 		};
 
 		vm.rightPanelOption = {
@@ -447,6 +459,11 @@
 		var absenceReportingTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_AbsenceReporting_35995' }).$promise;
 		absenceReportingTogglePromise.then(function (result) {
 			vm.isAbsenceReportingEnabled = result.IsEnabled;
+		});
+
+		var selectAgentsPerPageTogglePromise = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmTeamSchedule_SetAgentsPerPage_36230' }).$promise;
+		selectAgentsPerPageTogglePromise.then(function (result) {
+			vm.isSelectAgentsPerPageEnabled = result.IsEnabled;
 		});
 
 		var loadAbsencePromise = teamScheduleSvc.loadAbsences.query().$promise;
