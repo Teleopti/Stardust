@@ -366,13 +366,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void addPersonRotations(DateOnlyPeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
 		{
 			var people = persons.ToArray();
-			var rotations = _repositoryFactory.CreatePersonRotationRepository(UnitOfWork).LoadPersonRotationsWithHierarchyData(people, period.StartDate).ToArray();
+			var rotations = _repositoryFactory.CreatePersonRotationRepository(UnitOfWork)
+				.LoadPersonRotationsWithHierarchyData(people, period.StartDate).ToLookup(x => x.Person);
 
 			foreach (var person in people)
 			{
 				foreach (var dateTime in period.DayCollection())
 				{
-					var rotationDayRestrictions = person.GetPersonRotationDayRestrictions(rotations, dateTime);
+					var rotationDayRestrictions = person.GetPersonRotationDayRestrictions(rotations[person], dateTime);
 					foreach (var restriction in rotationDayRestrictions)
 					{
 						var personRotation = new ScheduleDataRestriction(person, restriction, dateTime);
