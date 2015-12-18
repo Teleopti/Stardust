@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			Add("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
 			Add("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
+			Add("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
 		}
 	}
 }
