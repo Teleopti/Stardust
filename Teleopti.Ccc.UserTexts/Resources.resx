@@ -13914,4 +13914,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Latest acquired time</value>
     <comment>latest acquired time for early warnings</comment>
   </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Page size</value>
+    <comment>Page size</comment>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Total requests count</value>
+    <comment>show total count of requests</comment>
+  </data>
 </root>

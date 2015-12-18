@@ -10,7 +10,8 @@
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
 		vm.onPageSizeChanges = onPageSizeChanges;
-	
+		vm.pageSizeOptions = [10, 20, 50, 100, 200];
+
 		requestsToggles.togglePromise.then(init);
 
 		function init(toggles) {
