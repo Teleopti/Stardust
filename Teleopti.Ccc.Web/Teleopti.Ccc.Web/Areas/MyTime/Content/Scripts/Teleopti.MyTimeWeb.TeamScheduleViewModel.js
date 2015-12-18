@@ -6,6 +6,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.isFilterByTimeEnabled = ko.observable(false);
 	self.isTeamScheduleSortingFeatureEnabled = ko.observable(false);
 	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
+	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
 	self.cultureLoaded = ko.observable(false); // To delay rendering of date-picker
@@ -26,7 +27,9 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.isTeamScheduleSortingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 
 		self.isShiftTradeBulletinBoardEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296"));
-		
+
+		self.isTeamScheduleNoReadModelEnable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210"));
+
 	};
 
 	self.initializeShiftTrade = function () {
@@ -71,19 +74,21 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.isLoading(true);
 			},
 			function (data) {
-				if (data.AgentSchedules.length > 0) {
+				if (data.AgentSchedules.length > 0 || data.mySchedule != null) {
 					self.createTimeLine(data.TimeLine);
 				} else {
 					self.CleanTimeHourLine();
-				}			
+				}
+
+				self.createMySchedule(data.MySchedule);
 				self.createToDrawSchedules(data.AgentSchedules);
 				self.setPagingInfo(data.PageCount);
 				self.redrawLayers();
 			},
 			null,
-			function () {				
-				self.isLoading(false);			
-				if (self.refocusToNameSearch.callable != null) {					
+			function () {
+				self.isLoading(false);
+				if (self.refocusToNameSearch.callable != null) {
 					self.refocusToNameSearch.callable();
 					self.refocusToNameSearch.callable = null;
 				}
@@ -105,15 +110,15 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 						self.suspendPagingMixinChangeHandler();
 						self.hasError(false);
 						self.errorMessage();
-						self.setTeamPicker(allTeams.teams,myTeam, allTeams.allTeam);
+						self.setTeamPicker(allTeams.teams, myTeam, allTeams.allTeam);
 						self.activateFilterMixinChangeHandler();
 						self.activatePagingMixinChangeHandler();
 						self.selectedPageIndex(1);
 						loadSchedule();
 					}
-				); 
+				);
 			},
-			function (error) {				
+			function (error) {
 				self.hasError(true);
 				self.errorMessage(error.Message);
 			}
@@ -133,20 +138,22 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	});
 
 	self.isLocked(self.isLoading());
-	self.isLoading.subscribe(function(newValue) { self.isLocked(newValue);  });
+	self.isLoading.subscribe(function (newValue) { self.isLocked(newValue); });
 };
 
 
-Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = { createViewModel : function(endpoints,ajax) {
-	var vm = {}; 
-	Teleopti.MyTimeWeb.DayScheduleMixin.call(vm);
-	Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(vm, ajax, endpoints);
-	Teleopti.MyTimeWeb.TeamScheduleFilterMixin.call(vm);
-	Teleopti.MyTimeWeb.PagingMixin.call(vm);
-	Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(vm);
-	Teleopti.MyTimeWeb.TeamScheduleViewModel.call(vm);
-	vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
-	vm.featureCheck();
+Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = {
+	createViewModel: function (endpoints, ajax) {
+		var vm = {};
+		Teleopti.MyTimeWeb.DayScheduleMixin.call(vm);
+		Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(vm, ajax, endpoints);
+		Teleopti.MyTimeWeb.TeamScheduleFilterMixin.call(vm);
+		Teleopti.MyTimeWeb.PagingMixin.call(vm);
+		Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(vm);
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.call(vm);
+		vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
+		vm.featureCheck();
 
-	return vm;
-}};
+		return vm;
+	}
+};

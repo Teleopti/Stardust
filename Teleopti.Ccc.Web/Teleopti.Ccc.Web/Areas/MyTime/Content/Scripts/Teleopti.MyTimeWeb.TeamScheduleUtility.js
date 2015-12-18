@@ -1,10 +1,10 @@
-Teleopti.MyTimeWeb.DayScheduleMixin = function() {
+Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 	var self = this;
 
 	self.openPeriodStartDate = ko.observable();
 	self.openPeriodEndDate = ko.observable();
 	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-	
+
 	self.weekStart = ko.observable();
 
 	var changeHandler = null;
@@ -15,18 +15,18 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 
 	var changeHandlerSuspended = false;
 
-	self.suspendDayMixinChangeHandler = function() {
+	self.suspendDayMixinChangeHandler = function () {
 		changeHandlerSuspended = true;
 	};
 
-	self.activateDayMixinChangeHandler = function() {
+	self.activateDayMixinChangeHandler = function () {
 		changeHandlerSuspended = false;
 	};
 
 
-	self.requestedDate = ko.observable(moment().startOf('day'));	
-	
-	self.setDatePickerFormat = function(format) {
+	self.requestedDate = ko.observable(moment().startOf('day'));
+
+	self.setDatePickerFormat = function (format) {
 		self.DatePickerFormat(format);
 	};
 
@@ -38,39 +38,39 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	self.requestedDate.subscribe(function (newValue) {
 		self.requestedDateInternal(Teleopti.MyTimeWeb.Common.FormatServiceDate(newValue));
 	});
-	
+
 	self.requestedDateInternal.subscribe(function (newValue) {
 		if (changeHandler != null && !changeHandlerSuspended) {
 			changeHandler(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDateInternal()));
 		}
 	});
-	
+
 
 	self.isRequestedDateValid = function (date) {
-		if (self.openPeriodStartDate() &&  date.diff(self.openPeriodStartDate()) < 0) {
+		if (self.openPeriodStartDate() && date.diff(self.openPeriodStartDate()) < 0) {
 			return false;
-		} else if (self.openPeriodEndDate()  && self.openPeriodEndDate().diff(date) < 0) {
+		} else if (self.openPeriodEndDate() && self.openPeriodEndDate().diff(date) < 0) {
 			return false;
 		}
 		return true;
 	};
 
-	self.changeRequestedDate = function(movement) {
+	self.changeRequestedDate = function (movement) {
 		var date = moment(self.requestedDate()).add('days', movement);
 		if (self.isRequestedDateValid(date)) {
 			self.requestedDate(date);
 		}
 	};
 
-	self.nextDate = function() {
+	self.nextDate = function () {
 		self.changeRequestedDate(1);
 	};
 
-	self.previousDate = function() {
+	self.previousDate = function () {
 		self.changeRequestedDate(-1);
 	};
 
-	self.setDatePickerRange = function(now, relativeStart, relativeEnd) {
+	self.setDatePickerRange = function (now, relativeStart, relativeEnd) {
 		self.openPeriodStartDate(moment(now).add('days', relativeStart));
 		self.openPeriodEndDate(moment(now).add('days', relativeEnd));
 	};
@@ -85,7 +85,7 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 
 };
 
-Teleopti.MyTimeWeb.PagingMixin = function() {
+Teleopti.MyTimeWeb.PagingMixin = function () {
 
 	var self = this;
 	self.maxPagesVisible = 5;
@@ -98,7 +98,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 	var changeHandler = null;
 	self.selectablePages = ko.observableArray();
 
-	self.setPagingMixinChangeHandler = function(cb) {
+	self.setPagingMixinChangeHandler = function (cb) {
 		changeHandler = cb;
 	};
 
@@ -114,9 +114,9 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 
 
 	self.selectedPageIndex = ko.observable();
-	self.selectedPageIndex.subscribe(function() {
+	self.selectedPageIndex.subscribe(function () {
 		if (changeHandler != null && !changeHandlerSuspended) {
-			changeHandler.call();			
+			changeHandler.call();
 		}
 	});
 
@@ -128,15 +128,15 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 		};
 	};
 
-	self.goToFirstPage = function() {
+	self.goToFirstPage = function () {
 		self.selectedPageIndex(1);
 		self.isPreviousMore(false);
 		self.initSelectablePages(self.pageCount());
 	};
 
-	self.pageCount.subscribe(function(value) { self.initSelectablePages(value) });
+	self.pageCount.subscribe(function (value) { self.initSelectablePages(value) });
 
-	self.goToLastPage = function() {
+	self.goToLastPage = function () {
 		self.isMore(false);
 		if (self.pageCount() > self.maxPagesVisible) self.isPreviousMore(true);
 		var timesOfNumPerPage = self.pageCount() / self.maxPagesVisible;
@@ -156,7 +156,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 		self.selectedPageIndex(self.pageCount());
 	};
 
-	self.initSelectablePages = function(pageCount) {
+	self.initSelectablePages = function (pageCount) {
 		self.selectablePages.removeAll();
 		for (var i = 1; i <= pageCount; ++i) {
 			if (i <= self.maxPagesVisible) {
@@ -168,7 +168,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 		self.selectedPageIndex(1);
 		self.isPreviousMore(false);
 
-		$.each(self.selectablePages(), function(index, item) {
+		$.each(self.selectablePages(), function (index, item) {
 			if (item.index() == self.selectedPageIndex()) {
 				item.isSelected(true);
 			}
@@ -185,7 +185,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 			if ((item.index() + self.maxPagesVisible) <= self.pageCount()) {
 				item.index(item.index() + self.maxPagesVisible);
 				nextPages.push(item);
-			} 			
+			}
 		}
 		self.selectablePages(nextPages);
 		if (nextPages.length === 0 || nextPages.length < self.maxPagesVisible || nextPages[self.maxPagesVisible - 1].index() === self.pageCount()) {
@@ -196,17 +196,17 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 		self.selectedPageIndex(self.selectablePages()[0].index());
 	};
 
-	self.goPreviousPages = function() {
-		
+	self.goPreviousPages = function () {
+
 		var start = self.selectablePages()[0].index() - self.maxPagesVisible;
 		self.selectablePages.removeAll();
 
-		if (start > 0) {			
+		if (start > 0) {
 			for (var i = 0; i < self.maxPagesVisible; i++) {
 				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(start + i));
 			}
 			self.isPreviousMore(self.selectablePages()[0].index() !== 1);
-			self.isMore(self.selectablePages()[self.maxPagesVisible -1].index() < self.pageCount());
+			self.isMore(self.selectablePages()[self.maxPagesVisible - 1].index() < self.pageCount());
 			self.selectedPageIndex(self.selectablePages()[0].index());
 		} else {
 			self.goToFirstPage();
@@ -214,7 +214,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 	};
 
 
-	self.setPagingInfo = function(pageCount) {
+	self.setPagingInfo = function (pageCount) {
 		self.pageCount(pageCount);
 
 		if (self.pageCount() == 0) {
@@ -227,7 +227,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 			self.initSelectablePages(self.pageCount());
 		}
 
-		$.each(self.selectablePages(), function(index, item) {
+		$.each(self.selectablePages(), function (index, item) {
 			if (item.index() == self.selectedPageIndex()) {
 				item.isSelected(true);
 			} else {
@@ -248,6 +248,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 	self.timeLineLengthInMinutes = ko.observable();
 	self.hours = ko.observableArray();
 	self.toDrawSchedules = ko.observableArray();
+	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel());
 	self.showHourLine = ko.observable(false);
 
 	self.setTimeLineLengthInMinutes = function (firstHour, mins) {
@@ -261,9 +262,11 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 
 	var mapLayerViewModelForSchedule = function (personSchedule) {
 		var mappedLayers = [];
+		if (personSchedule == null) {
+			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false);
+		}
 		var layers = personSchedule.ScheduleLayers;
 		var model;
-
 
 		if (layers == null || layers.length == 0) {
 			model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
@@ -292,22 +295,25 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				personSchedule.Name,
 				personSchedule.PersonId,
 				personSchedule.IsDayOff);
-		}					
+		}
 		return model;
 	};
 
 	self.CleanTimeHourLine = function () {
 		self.hours([]);
 	};
-
-	self.createToDrawSchedules = function(personSchedules) {
+	self.createMySchedule = function (mySchedule) {
+		self.mySchedule(mapLayerViewModelForSchedule(mySchedule));
+		self.showHourLine(mySchedule != null);
+	};
+	self.createToDrawSchedules = function (personSchedules) {
 		self.toDrawSchedules.removeAll();
 
 		var index;
 		for (index = 0; index < personSchedules.length; ++index) {
 			self.toDrawSchedules.push(mapLayerViewModelForSchedule(personSchedules[index]));
-			self.showHourLine(true);
 		}
+		self.showHourLine(personSchedules.length > 0);
 	};
 
 	self.createTimeLine = function (hours) {
@@ -333,13 +339,13 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 		}
 	};
 
-	self.getCanvasWidth = function () {		
+	self.getCanvasWidth = function () {
 		var containerWidth = $("#draw-schedule-container").width();
 		var nameCellWidth = $("td#shift-trade-agent-name").width();
-		return containerWidth - nameCellWidth;		
+		return containerWidth - nameCellWidth;
 	};
 
-	self.redrawLayers = function() {
+	self.redrawLayers = function () {
 		var canvasWidth;
 
 		if (!self.IsLoading) {
@@ -351,16 +357,16 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 
 		self.layerCanvasPixelWidth(canvasWidth);
 
-		if (self.toDrawSchedules() != undefined) {
+		if (self.toDrawSchedules() != undefined || self.mySchedule() != undefined) {
 			$.each(self.toDrawSchedules(), function (index, schedule) {
 				$.each(schedule.layers, function (index, layer) {
 					layer.pixelPerMinute(self.pixelPerMinute());
 				});
 			});
 		}
-		
+
 		if (self.hours() != undefined) {
-			$.each(self.hours(), function(index, hour) {
+			$.each(self.hours(), function (index, hour) {
 				hour.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
@@ -368,9 +374,8 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 };
 
 Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
-
 	var self = this;
-		
+
 	self.availableTeams = ko.observableArray();
 	self.defaultTeam = ko.observable();
 	self.selectedTeam = ko.observable();
@@ -384,9 +389,9 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	self.searchNameText = ko.observable();
 	self.showTeamPicker = ko.observable(false);
 	self.showGroupings = ko.observable(false);
-	self.refocusToNameSearch = {callable : null};
+	self.refocusToNameSearch = { callable: null };
 
-	self.requestedFilter = ko.computed(function() {
+	self.requestedFilter = ko.computed(function () {
 
 		var selectedTeams = [];
 
@@ -405,13 +410,13 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 					}
 
 					if (businessHierarchyGroup != undefined) {
-						selectedTeams = businessHierarchyGroup.children.map(function(e) {
+						selectedTeams = businessHierarchyGroup.children.map(function (e) {
 							return e.id;
 						});
 					};
 				} else {
 					var availableTeams = self.availableTeams().slice(1);
-					selectedTeams = availableTeams.map(function(v) {
+					selectedTeams = availableTeams.map(function (v) {
 						return v.id;
 					});
 				}
@@ -449,26 +454,26 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	};
 
 
-	self.filterStartEndTimeClick = function() {
-		$('.dropdown-menu.filter-time-dropdown-form').on('click', function(e) {
+	self.filterStartEndTimeClick = function () {
+		$('.dropdown-menu.filter-time-dropdown-form').on('click', function (e) {
 			e.stopPropagation();
 		});
 	};
 
-	self.cleanTimeFilter = function() {
+	self.cleanTimeFilter = function () {
 		self.filteredStartTimesText.removeAll();
 		self.filteredEndTimesText.removeAll();
 
-		$.each(self.filterStartTimeList(), function(idx, filter) {
+		$.each(self.filterStartTimeList(), function (idx, filter) {
 			if (filter.isChecked()) filter.isChecked(false);
 		});
 
-		$.each(self.filterEndTimeList(), function(idx, filter) {
+		$.each(self.filterEndTimeList(), function (idx, filter) {
 			if (filter.isChecked()) filter.isChecked(false);
 		});
 	};
 
-	self.setTimeFilters = function(data) {
+	self.setTimeFilters = function (data) {
 		var rangStart = 0;
 		for (var i = 0; i < 24; i += 2) {
 			var rangEnd = rangStart + 2;
@@ -492,7 +497,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	});
 
 	self.setAllEndTimeFilter = ko.observable(false);
-	self.setAllEndTimeFilter.subscribe(function(value) {
+	self.setAllEndTimeFilter.subscribe(function (value) {
 		self.suspendFilterMixinChangeHandler();
 		$.each(self.filterEndTimeList(), function (index, item) { item.isChecked(value); });
 		self.activateFilterMixinChangeHandler();
@@ -500,7 +505,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 
 	});
 
-	self.setTeamPicker = function(teams, defaultTeam, allTeam) {
+	self.setTeamPicker = function (teams, defaultTeam, allTeam) {
 		self.showTeamPicker(teams.length >= 1);
 		self.showGroupings(teams[0] && teams[0].children != null);
 
@@ -517,18 +522,18 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 
 		self.availableTeams(teams);
-		
+
 		var isSelectedTeamAllTeam = self.selectedTeam() && self.selectedTeam() == -1;
-		var isSelectedTeamNotIncluded = self.showGroupings()?
+		var isSelectedTeamNotIncluded = self.showGroupings() ?
 			self.availableTeams().reduce(function (v, e) { return v.concat(e.children); }, []).map(function (e) { return e.id; }).indexOf(self.selectedTeam()) < 0 :
 			self.availableTeams().map(function (v) { return v.id; }).indexOf(self.selectedTeam()) < 0;
 
 		self.defaultTeam(defaultTeam);
-		
+
 		if (!self.selectedTeam()) {
 			self.selectedTeam(self.defaultTeam());
 		} else if (isSelectedTeamAllTeam) {
-			self.selectedTeam(allTeam.id !== null? allTeam.id: self.defaultTeam());
+			self.selectedTeam(allTeam.id !== null ? allTeam.id : self.defaultTeam());
 		} else if (isSelectedTeamNotIncluded) {
 			self.selectedTeam(self.defaultTeam());
 		} else {
@@ -536,7 +541,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 	};
 
-	self.isFiltered = function() {
+	self.isFiltered = function () {
 		if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
 			return false;
 		}
@@ -546,16 +551,16 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	self.selectedTeam.subscribe(function () {
 		if (changeHandler != null && !changeHandlerSuspended) {
 			changeHandler();
-		} 
+		}
 	});
 
 	self.selectedTeam.extend({ notify: "always" });
 
-	self.filterTime = ko.computed(function() {
+	self.filterTime = ko.computed(function () {
 		self.filteredStartTimesText.removeAll();
 		self.filteredEndTimesText.removeAll();
 
-		$.each(self.filterStartTimeList(), function(idx, timeInFilter) {
+		$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
 			if (timeInFilter.isChecked()) {
 				if (timeInFilter.isDayOff()) {
 					self.isDayoffFiltered(true);
@@ -570,7 +575,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 			}
 		});
 
-		$.each(self.filterEndTimeList(), function(idx, timeInFilter) {
+		$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
 			if (timeInFilter.isChecked()) {
 				var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
 				self.filteredEndTimesText.push(timeText);
@@ -580,7 +585,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		return { filterStartTimeList: self.filterStartTimeList(), filterEndTimeList: self.filterEndTimeList() };
 	});
 
-	self.filterTime.subscribe(function() {
+	self.filterTime.subscribe(function () {
 		if (!self.isLocked() && changeHandler != null && !changeHandlerSuspended) {
 			changeHandler();
 		}
@@ -593,7 +598,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		{ Description: 'glyphicon glyphicon-arrow-down', Value: 'end desc', IsStart: false }
 	]);
 
-	self.updateTimeSortOrder = function(data) {
+	self.updateTimeSortOrder = function (data) {
 		if (self.timeSortOrder() == data.Value) {
 			self.timeSortOrder(null);
 		} else {
@@ -601,25 +606,25 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 	};
 
-	self.isSortingTimeActive = function(value) {
+	self.isSortingTimeActive = function (value) {
 		return self.timeSortOrder() == value.Value;
 	}
 
-	self.timeSortOrder.subscribe(function() {
+	self.timeSortOrder.subscribe(function () {
 		if (!self.isLocked() && changeHandler != null && !changeHandlerSuspended) {
 			changeHandler();
 		}
 	});
 
-	self.isStartTimeFilterActived = ko.computed(function() {
+	self.isStartTimeFilterActived = ko.computed(function () {
 		return (self.filteredStartTimesText().length != 0 || self.isDayoffFiltered() == true || (self.timeSortOrder() == 'start asc') || (self.timeSortOrder() == 'start desc'));
 	});
 
-	self.isEndTimeFilterActived = ko.computed(function() {
+	self.isEndTimeFilterActived = ko.computed(function () {
 		return (self.filteredEndTimesText().length != 0 || self.isDayoffFiltered() == true || (self.timeSortOrder() == 'end asc') || (self.timeSortOrder() == 'end desc'));
 	});
 
-	self.changeInSearchBox = function (data, event) {		
+	self.changeInSearchBox = function (data, event) {
 		var $target = $(event.target);
 		self.refocusToNameSearch.callable = function () { $target.focus(); };
 		if (changeHandler != null && !changeHandlerSuspended) {
@@ -629,7 +634,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 
 };
 
-Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
+Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function (ajax, endpoints) {
 	var self = this;
 
 	self.loadCulture = function (success, error) {
@@ -647,7 +652,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 		});
 	};
 
-	self.loadCurrentDate = function(success, error) {
+	self.loadCurrentDate = function (success, error) {
 		ajax.Ajax({
 			url: endpoints.loadCurrentDate,
 			dataType: "json",
@@ -663,16 +668,16 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 	};
 
 	self.loadFilterTimes = function (success, error) {
-		if (self.filterStartTimeList().length == 0) {			
+		if (self.filterStartTimeList().length == 0) {
 			ajax.Ajax({
 				url: endpoints.loadFilterTimes,
 				dataType: "json",
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
-				success: function (data) {					
-					if (success != null) success(data);					
+				success: function (data) {
+					if (success != null) success(data);
 				},
-				error: function(e) {
+				error: function (e) {
 					if (error != null) error(e);
 				}
 			});
@@ -718,7 +723,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 		});
 	};
 
-	self.loadTeams = function (date, success, error) {		
+	self.loadTeams = function (date, success, error) {
 		ajax.Ajax({
 			url: endpoints.loadTeams,
 			dataType: "json",
@@ -727,12 +732,12 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 			data: {
 				date: date
 			},
-			success: function (data) {					
-				if (success != null) success(data);					
+			success: function (data) {
+				if (success != null) success(data);
 			},
-			error: function(e) {
+			error: function (e) {
 				if (error != null) error(e);
-			}			
+			}
 		});
 	};
 
@@ -755,13 +760,13 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 				Skip: paging == null ? 0 : paging.skip,
 				TimeSortOrder: filter.timeSortOrder
 			}),
-			beforeSend: function() {
+			beforeSend: function () {
 				if (beforeSend != null) beforeSend();
 			},
 			success: function (data) {
 				if (success != null) success(data);
 			},
-			error: function(e) {
+			error: function (e) {
 				if (error != null) error(e);
 			},
 			complete: function () {
