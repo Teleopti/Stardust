@@ -3,8 +3,8 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams',
-			function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams) {
+			'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
+			function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams, $translate) {
 				$scope.isForecastRunning = false;
 				function updateRunningStatus() {
 					forecasting.status.get().$promise.then(function (result) {
@@ -180,11 +180,11 @@
 				var buildSelectedDaysText = function() {
 					if ($scope.modifyDays.length == 1) {
 						var singleDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
-						return 'SelectedDayIs'.replace('{0}', singleDate);
+						return $translate.instant('SelectedDayIs').replace('{0}', singleDate);
 					}
 					var firstDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
 					var lastDate = $filter('date')($scope.modifyDays[$scope.modifyDays.length - 1].date, 'shortDate');
-					var text = 'DaysAreSelectedFrom';
+					var text = $translate.instant('DaysAreSelectedFrom');
 					text = text.replace('{0}', $scope.modifyDays.length);
 					text = text.replace('{1}', firstDate);
 					text = text.replace('{2}', lastDate);
