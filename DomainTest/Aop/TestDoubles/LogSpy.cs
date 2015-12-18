@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using log4net;
 using log4net.Core;
 
@@ -6,35 +7,49 @@ namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
 {
 	public class LogSpy : ILog
 	{
-		public ILogger Logger { get; private set; }
-		public void Debug(object message)
+		public LogSpy()
 		{
+			DebugMessages = new List<string>();
 		}
 
+		public ILogger Logger { get; private set; }
 		public string InfoMessage { get; private set; }
+		public IList<string> DebugMessages { get; private set; }
+		public string LastLoggerName { get; set; }
+
+		public void Debug(object message)
+		{
+			DebugMessages.Add(message.ToString());
+		}
 
 		public void Debug(object message, Exception exception)
 		{
+			DebugMessages.Add(message.ToString());
 		}
 
 		public void DebugFormat(string format, params object[] args)
 		{
+			DebugMessages.Add(string.Format(format, args));
 		}
 
 		public void DebugFormat(string format, object arg0)
 		{
+			DebugMessages.Add(string.Format(format, arg0));
 		}
 
 		public void DebugFormat(string format, object arg0, object arg1)
 		{
+			DebugMessages.Add(string.Format(format, arg0, arg1));
 		}
 
 		public void DebugFormat(string format, object arg0, object arg1, object arg2)
 		{
+			DebugMessages.Add(string.Format(format, arg0, arg1, arg2));
 		}
 
 		public void DebugFormat(IFormatProvider provider, string format, params object[] args)
 		{
+			DebugMessages.Add(string.Format(format, args));
 		}
 
 		public void Info(object message)

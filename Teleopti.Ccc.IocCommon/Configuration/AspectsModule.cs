@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AspectInterceptor>();
 			builder.RegisterType<InfoLogAspect>().As<ILogAspect>();
 			builder.RegisterType<LogManagerWrapper>().As<ILogManagerWrapper>();
+			builder.RegisterType<LogTimeAspect>().InstancePerDependency();
 		}
 	}
 }

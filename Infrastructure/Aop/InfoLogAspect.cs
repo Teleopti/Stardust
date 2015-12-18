@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var logger = _logManagerWrapper.GetLogger(invocation.TargetType);
+			var logger = _logManagerWrapper.GetLogger(invocation.TargetType.ToString());
 			if (!logger.IsInfoEnabled)
 				return;
 			logger.Info(invocation.Method.Name + "(" + string.Join(", ", getParametersAndArguments(invocation)) + ")");
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			var type = invocation.TargetType;
-			var logger = _logManagerWrapper.GetLogger(type);
+			var logger = _logManagerWrapper.GetLogger(type.ToString());
 			if (!logger.IsInfoEnabled || invocation.Method.ReturnType == typeof(void))
 				return;
 			logger.Info("Result : " + formatValue(invocation.ReturnValue));

@@ -475,6 +475,8 @@
     <Compile Include="Common\HttpRequestFalse.cs" />
     <Compile Include="Common\IDataSourceScope.cs" />
     <Compile Include="Common\IIsHttpRequest.cs" />
+    <Compile Include="Common\TimeLogger\LogTimeAspect.cs" />
+    <Compile Include="Common\TimeLogger\LogTimeAttribute.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />
