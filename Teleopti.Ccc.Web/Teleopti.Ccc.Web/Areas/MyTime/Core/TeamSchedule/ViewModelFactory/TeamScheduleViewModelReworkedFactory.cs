@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					return sortValue;
 				}).ThenBy(personScheduleDay => personScheduleDay.Item1.Name.LastName);
 
-				foreach (var personScheduleDay in sortedScheduleDays)
+				var requestedScheduleDays = sortedScheduleDays.Skip(data.Paging.Skip).Take(data.Paging.Take);
+				foreach (var personScheduleDay in requestedScheduleDays)
 				{
 					var person = personScheduleDay.Item1;
 					var scheduleDay = personScheduleDay.Item2;
