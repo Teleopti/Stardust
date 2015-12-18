@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) { return true; };
 
-	asyncTest("should send request to server when I type colleauge`s name in name seach box", function() {
+	test("should send request to server when I type colleauge`s name in name seach box", function() {
 
 		var nameInAjax;
 		var ajax = {
@@ -44,15 +44,11 @@ $(document).ready(function() {
 		viewModel.searchNameText("Andy");
 		viewModel.selectedTeam("00000000-0000-0000-0000-000000000000");
 
-		setTimeout(function () {
-			start();
-			equal(nameInAjax, "Andy","ajax call was sent and the SearchNameText is Andy");
-		}, 1000);
+		equal(nameInAjax, "Andy","ajax call was sent and the SearchNameText is Andy");
 	});
 
-	asyncTest("should create view model when load schedules has completed", function() {
+	test("should create view model when load schedules has completed", function() {
 
-		expect(1);
 		var ajaxResult = {
 			AgentSchedules: [
 				{
@@ -82,13 +78,10 @@ $(document).ready(function() {
 		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
 		viewModel.selectedTeam("00000000-0000-0000-0000-000000000000");
 
-		setTimeout(function() {
-			start();
-			equal(viewModel.toDrawSchedules()[0].agentName, "Andy Stephen", "view model was created and the agentName is 'Andy Stephen' ");
-		}, 1000);
+		equal(viewModel.toDrawSchedules()[0].agentName, "Andy Stephen", "view model was created and the agentName is 'Andy Stephen' ");
 	});
 
-	asyncTest("should keep selected team when date change", function () {
+	test("should keep selected team when date change", function () {
 
 		Teleopti.MyTimeWeb.TeamScheduleViewModel.loadSchedule = function () { };
 
@@ -119,17 +112,9 @@ $(document).ready(function() {
 
 		viewModel.selectedTeam("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
 
-		setTimeout(function() {
-			viewModel.requestedDate(moment().add(1, 'day').startOf('day'));
-			assert();
-		},1000);
-
-		function assert() {
-			setTimeout(function () {
-				start();
-				equal(viewModel.selectedTeam(), "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
-			}, 1000);
-		};
+		
+		viewModel.requestedDate(moment().add(1, 'day').startOf('day'));
+		equal(viewModel.selectedTeam(), "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
 
 	});
 
