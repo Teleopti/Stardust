@@ -10369,7 +10369,7 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
     <value>Du ska ha {0} fridagar.</value>
   </data>
   <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
+    <value>Web</value>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Du ska ha mellan {0} och {1} fridagar.</value>
