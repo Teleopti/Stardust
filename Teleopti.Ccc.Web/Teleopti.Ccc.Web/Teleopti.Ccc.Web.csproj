@@ -815,6 +815,7 @@
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersister.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\IAbsencePersister.cs" />
     <Compile Include="Areas\TeamSchedule\Core\ITeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\TeamScheduleSortingUtil.cs" />
     <Compile Include="Areas\TeamSchedule\Models\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleProjectionProvider.cs" />

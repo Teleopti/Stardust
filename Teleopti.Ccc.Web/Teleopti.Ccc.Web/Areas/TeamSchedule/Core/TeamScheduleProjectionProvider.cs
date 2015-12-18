@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				}
 			}
 			ret.ScheduleLayers = layers.ToArray();
-			ret.MinStart = layers.Min(l => l.Start);
+			//ret.MinStart = layers.Min(l => l.Start);
 			ret.Total = layers.Count;
 			return ret;
 		}

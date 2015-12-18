@@ -102,6 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var isPermittedToViewConfidential = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var agentSchedules = new List<AgentScheduleViewModelReworked>();
 			int pageCount = 1;
+			var canSeeUnpublishedSchedules =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			if (people.Any())
 			{
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, people).ToList();
@@ -109,7 +111,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				var personScheduleDays = (from p in people
 										  let personSchedule = (from s in scheduleDays where s.Person == p select s).SingleOrDefault()
 										  select new Tuple<IPerson, IScheduleDay>(p, personSchedule)).ToArray();
-				foreach (var personScheduleDay in personScheduleDays)
+				var sortedScheduleDays = personScheduleDays.OrderBy(personScheduleDay =>
+				{
+					var person = personScheduleDay.Item1;
+					var schedule = personScheduleDay.Item2;
+					var isPublished = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate,
+						person, ScheduleVisibleReasons.Any);
+					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished);
+					return sortValue;
+				}).ThenBy(personScheduleDay => personScheduleDay.Item1.Name.LastName);
+
+				foreach (var personScheduleDay in sortedScheduleDays)
 				{
 					var person = personScheduleDay.Item1;
 					var scheduleDay = personScheduleDay.Item2;

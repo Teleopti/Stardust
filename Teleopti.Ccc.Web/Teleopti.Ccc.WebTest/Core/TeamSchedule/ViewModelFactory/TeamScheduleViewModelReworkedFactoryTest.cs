@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			BusinessUnitRepository.Add(businessUnit);
 
 			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
-			var person2 = PersonFactory.CreatePersonWithGuid("person", "2");
+			var person2 = PersonFactory.CreatePersonWithGuid("person", "a");
 			var person3 = PersonFactory.CreatePersonWithGuid("Unpublish_person", "3");
 
 			ITeam team = TeamFactory.CreateTeamWithId("team1");
@@ -97,11 +97,61 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(person1Schedule);
 
 			var person1Schedule2 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person1, scenario);
-			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
-			person1Assignment2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 8, 2015, 5, 21, 16));
-			person1Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
+			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22 ,16));
+			person1Assignment2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 8, 2015, 5, 22, 16));
+			person1Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Schedule2.Add(person1Assignment2);
 			ScheduleProvider.AddScheduleDay(person1Schedule2);
+
+			var person1Schedule1On23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person1, scenario);
+			var person1Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23 ,16));
+			person1Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			person1Schedule1On23.Add(person1Assignment1On23);
+			ScheduleProvider.AddScheduleDay(person1Schedule1On23);
+			var person2ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), person2, scenario);
+			var person2Assignment1On23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person2,new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23 ,16));
+			person2Assignment1On23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			person2ScheduleOn23.Add(person2Assignment1On23);
+			ScheduleProvider.AddScheduleDay(person2ScheduleOn23);
+			var p3 = PersonFactory.CreatePersonWithGuid("p3","b");
+			var person3ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p3,
+				scenario);
+			var person3AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p3,
+				new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			person3AssOn23.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 9, 2015, 5, 23, 16));
+			person3ScheduleOn23.Add(person3AssOn23);
+			ScheduleProvider.AddScheduleDay(person3ScheduleOn23);
+			var p4 = PersonFactory.CreatePersonWithGuid("p4", "p4");
+			var p4ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p4, scenario);
+			var p4AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p4,
+				new DateTimePeriod(2015, 5, 23, 11, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p4AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p4, scenario,
+				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
+			p4ScheduleOn23.Add(p4AssOn23);
+			p4ScheduleOn23.Add(p4AbsenceOn23);
+			ScheduleProvider.AddScheduleDay(p4ScheduleOn23);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
+				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
+				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
+			p5ScheduleOn23.Add(p5AssOn23);
+			p5ScheduleOn23.Add(p5AbsenceOn23);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+			var p6 = PersonFactory.CreatePersonWithGuid("p6", "p6");
+			var p6ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p6, scenario);
+			p6ScheduleOn23.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("dayoff")));
+			ScheduleProvider.AddScheduleDay(p6ScheduleOn23);
+
+			p3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			p4.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			p5.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			p6.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(p3);
+			PersonRepository.Add(p4);
+			PersonRepository.Add(p5);
+			PersonRepository.Add(p6);
 		}
 
 
@@ -247,6 +297,38 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.EqualTo(true);
 			agentSchedule.ScheduleLayers.Second().IsOvertime.Should().Be.EqualTo(false);
+		}	
+	
+		[Test]
+		public void ShouldSortAgentScheduleCorrectlyWithDateNoReadModel()
+		{
+			SetUp();
+
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1").Id.GetValueOrDefault();
+			var person2 = PersonRepository.LoadAll().First(p => p.Name.LastName == "a").Id.GetValueOrDefault();
+			var person3 = PersonRepository.LoadAll().First(p => p.Name.LastName == "b").Id.GetValueOrDefault();
+			var person4 = PersonRepository.LoadAll().First(p => p.Name.LastName == "p4").Id.GetValueOrDefault();
+			var person5 = PersonRepository.LoadAll().First(p => p.Name.LastName == "p5").Id.GetValueOrDefault();
+			var person6 = PersonRepository.LoadAll().First(p => p.Name.LastName == "p6").Id.GetValueOrDefault();
+			var person7 = PersonRepository.LoadAll().First(p => p.Name.LastName == "3").Id.GetValueOrDefault();
+
+	
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedules = result.AgentSchedules;
+			agentSchedules[0].PersonId.Should().Be.EqualTo(person2);
+			agentSchedules[1].PersonId.Should().Be.EqualTo(person3);
+			agentSchedules[2].PersonId.Should().Be.EqualTo(person1);
+			agentSchedules[3].PersonId.Should().Be.EqualTo(person5);
+			agentSchedules[4].PersonId.Should().Be.EqualTo(person4);
+			agentSchedules[5].PersonId.Should().Be.EqualTo(person6);
+			agentSchedules[6].PersonId.Should().Be.EqualTo(person7);
 		}
 
 		[Test]

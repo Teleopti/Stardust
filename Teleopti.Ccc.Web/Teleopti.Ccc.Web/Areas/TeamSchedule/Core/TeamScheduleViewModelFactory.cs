@@ -65,9 +65,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var sortedPersonScheduleDays = personScheduleDays.OrderBy(
 				personScheduleDay =>
 				{
-					var sortValue = getSortedValue(new Tuple<IPerson, IScheduleDay>(personScheduleDay.Item1,
-						personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly.Date == dateInUserTimeZone)),
-						canSeeUnpublishedSchedules);
+					var person = personScheduleDay.Item1;
+					var scheduleDay =
+						personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly.Date == dateInUserTimeZone);
+					var isPublished = scheduleDay != null && isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, person);
+					var sortValue =
+						TeamScheduleSortingUtil.GetSortedValue(
+							personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly.Date == dateInUserTimeZone),
+							canSeeUnpublishedSchedules, isPublished);
 					return sortValue;
 				}).ThenBy(personScheduleDay =>　personScheduleDay.Item1.Name.LastName).Skip((currentPageIndex-1) * pageSize).Take(pageSize);
 
@@ -109,41 +114,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				GroupSchedule = list,
 				TotalPages = (int)Math.Ceiling((double)people.Count()/pageSize)
 			};
-		}
-
-		private int getSortedValue(Tuple<IPerson, IScheduleDay> personSchedulePair, bool hasPermissionForUnpublishedSchedule)
-		{
-			var person = personSchedulePair.Item1;
-			var schedule = personSchedulePair.Item2;
-			if (schedule == null || !schedule.IsScheduled())
-			{
-				return 20000;
-			}
-			var significantPart = schedule.SignificantPart();
-			var isPublished = isSchedulePublished(schedule.DateOnlyAsPeriod.DateOnly.Date, person);
-			if ((!isPublished && !hasPermissionForUnpublishedSchedule) || (schedule.PersonAssignment() == null && significantPart != SchedulePartView.FullDayAbsence))
-			{
-				return 20000;
-			}
-
-			if (schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff)
-			{
-				return 10000;
-			}
-			
-			if (!schedule.HasDayOff() && significantPart == SchedulePartView.FullDayAbsence)
-			{
-				var mininumAbsenceStartTime =
-					schedule.PersonAbsenceCollection().Select(personAbsence => personAbsence.Period.StartDateTime).Min();
-
-				return 5000 + (int)mininumAbsenceStartTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
-			}
-			if (schedule.PersonAssignment() != null)
-			{
-				return (int)schedule.PersonAssignment().Period.StartDateTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
-			}
-
-			return 0;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex)
@@ -212,9 +182,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var sortedPersonScheduleDays = personScheduleDays.OrderBy(
 				personScheduleDay =>
 				{
-					var sortValue = getSortedValue(new Tuple<IPerson, IScheduleDay>(personScheduleDay.Item1,
-						personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone)),
-						canSeeUnpublishedSchedules);
+					var person = personScheduleDay.Item1;
+					var schedule = personScheduleDay.Item2.SingleOrDefault(s => s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone);
+					var isPublished = schedule != null && isSchedulePublished(schedule.DateOnlyAsPeriod.DateOnly.Date, person);
+					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished);
 					return sortValue;
 				}).ThenBy(personScheduleDay => personScheduleDay.Item1.Name.LastName) ;
 			
