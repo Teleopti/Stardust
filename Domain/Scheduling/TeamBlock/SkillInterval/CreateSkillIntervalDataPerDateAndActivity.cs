@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		                                                                                         ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var dayIntervalDataPerDateAndActivity = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
-			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(groupMembers.ToList() , blockPeriod);
+			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(groupMembers , blockPeriod);
 			bool hasMaxSeatSkill = maxSeatSkills.Any();
 			foreach (var dateOnly in blockPeriod.DayCollection())
 			{

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var personPeriods = person.PersonPeriods(dateOnlyPeriod);
 				foreach (var personPeriod in personPeriods)
 				{
-					foreach (var personSkill in personPeriod.PersonSkillCollection)
+					foreach (var personSkill in personPeriod.PersonSkillCollection.Where(s => s.Active))
 					{
 						ret.Add(personSkill.Skill );
 					}
