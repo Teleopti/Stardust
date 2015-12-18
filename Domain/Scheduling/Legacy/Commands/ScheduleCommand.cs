@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -57,10 +58,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
-		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+		[LogTime]
+		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
+			IBackgroundWorkerWrapper backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
 			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			setThreadCulture();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
@@ -93,20 +97,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+							schedulingOptions.ConsiderShortBreaks);
 
 						ISchedulePartModifyAndRollbackService rollbackService =
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 								_scheduleDayChangeCallback(),
 								new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 						_workShiftFinderResultHolder().Clear();
-						_workShiftFinderResultHolder().AddResults(_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-								rollbackService, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider).GetResults(),DateTime.Today);
+						_workShiftFinderResultHolder()
+							.AddResults(
+								_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
+									rollbackService, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider).GetResults(), DateTime.Today);
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, 
-														selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper,
+							selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 					}
 				}
 			}
@@ -134,20 +141,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (matrixesOfSelectedScheduleDays.Count == 0)
 						return;
 
-					
-					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
-					optimizationPreferences,
-					schedulingOptions,
-					selectedPeriod, allMatrixes);	
-					
-					ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,_scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
-					_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, 
-													matrixesOfSelectedScheduleDays,backgroundWorker, dayOffOptimizationPreferenceProvider );
+
+					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
+						backgroundWorker,
+						optimizationPreferences,
+						schedulingOptions,
+						selectedPeriod, allMatrixes);
+
+
+					ExecuteWeeklyRestSolverCommand(schedulerStateHolder, schedulingOptions, optimizationPreferences, selectedPersons,
+						selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
+
+
+		[LogTime]
+		protected virtual void ExecuteWeeklyRestSolverCommand(ISchedulerStateHolder schedulerStateHolder, ISchedulingOptions schedulingOptions,
+															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
+															DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
+															IBackgroundWorkerWrapper backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		{
+			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod,
+											matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
+		}	
 
 		private static void setThreadCulture()
 		{
