@@ -24,12 +24,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var successfulContainers = new List<IDayOffOptimizerContainer>(optimizers);
 	        var cancel = false;
 		    using (PerformanceOutput.ForOperation("Optimizing days off for " + successfulContainers.Count() + " agents"))
-            {
+		    {
+			    string values = " ";
+			    int loops = 0;
 				while (successfulContainers.Count > 0)
 				{
-					IList<IDayOffOptimizerContainer> unSuccessfulContainers = new List<IDayOffOptimizerContainer>();
-					int executes = 0;
+					loops ++;
 					double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+					IList<IDayOffOptimizerContainer> unSuccessfulContainers = new List<IDayOffOptimizerContainer>();
+					int executes = 0;					
 					foreach (IDayOffOptimizerContainer optimizer in successfulContainers.GetRandom(successfulContainers.Count, true))
 					{
 						if (cancel) return;
@@ -39,18 +42,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 						if (!result)
 							unSuccessfulContainers.Add(optimizer);
 
-						double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
-						string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + successfulContainers.Count + ")" + executes + " ";
+						string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + loops + ")(" + successfulContainers.Count + ")" + executes + " ";
 						string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
-						string success = result ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
-						string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
+						string success = result ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;						
 						
 						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, progress + values + who + success, () => cancel = true));
-						if (cancel || progressResult.ShouldCancel) return;
-
-						lastPeriodValue = newPeriodValue;
+						if (cancel || progressResult.ShouldCancel) return;					
 					}
+
+					double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+					values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
 
 					foreach (IDayOffOptimizerContainer unSuccessfulContainer in unSuccessfulContainers)
 					{

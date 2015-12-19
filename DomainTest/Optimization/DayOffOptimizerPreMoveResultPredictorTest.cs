@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -118,6 +119,60 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 
 			Assert.AreEqual(0, predictedNewPeriodValue);
+		}
+
+		[Test]
+		public void ShouldReturnIfPredictedIsBetterThanCurrent()
+		{
+			var originalArray = new LockableBitArray(2, false, false, null);
+			originalArray.Set(0, true);
+			var workingArray = new LockableBitArray(2, false, false, null);
+			workingArray.Set(1, true);
+			var daysOffPreferences = new DaysOffPreferences();
+			var currentForecastScheduleValuePair1 = new ForecastScheduleValuePair();
+			currentForecastScheduleValuePair1.ScheduleValue = TimeSpan.FromHours(90).TotalMinutes;
+			currentForecastScheduleValuePair1.ForecastValue = TimeSpan.FromHours(100).TotalMinutes;
+			var currentForecastScheduleValuePair2 = new ForecastScheduleValuePair();
+			currentForecastScheduleValuePair2.ScheduleValue = TimeSpan.FromHours(100).TotalMinutes;
+			currentForecastScheduleValuePair2.ForecastValue = TimeSpan.FromHours(90).TotalMinutes;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_matrix.EffectivePeriodDays).Return(
+					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
+				Expect.Call(_matrix.Person).Return(_person);
+
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 1, 1),
+																					  new DateOnly(2012, 1, 2)));
+				Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, new DateOnly(2012, 1, 1))).
+					Return(currentForecastScheduleValuePair1);
+				Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, new DateOnly(2012, 1, 2))).
+					Return(currentForecastScheduleValuePair2);
+
+				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
+				Expect.Call(_matrix.OuterWeeksPeriodDays).Return(
+					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {
+						_scheduleDayPro1, 
+						_scheduleDayPro1, 
+						_scheduleDayPro1, 
+						_scheduleDayPro1, 
+						_scheduleDayPro1, 
+						_scheduleDayPro1, 
+						_scheduleDayPro1,
+						_scheduleDayPro1, _scheduleDayPro2 }));
+				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 1, 2)).Repeat.AtLeastOnce();
+			}
+
+			PredictorResult result;
+			using (_mocks.Playback())
+			{
+				result = _target.IsPredictedBetterThanCurrent(_matrix, workingArray, originalArray, daysOffPreferences);
+				
+			}
+
+			result.IsBetter.Should().Be.True();
 		}
 	}
 }

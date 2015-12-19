@@ -102,10 +102,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			double oldValue;
 			if(!_optimizerPreferences.Advanced.UseTweakedValues)
 			{
-				oldValue = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(currentScheduleMatrix);
-				double predictedNewValue = _dayOffOptimizerPreMoveResultPredictor.PredictedValue(currentScheduleMatrix, workingBitArray,
-				                                                                          originalBitArray, daysOffPreferences);
-				if (predictedNewValue >= oldValue)
+				var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(currentScheduleMatrix,
+					workingBitArray, originalBitArray, daysOffPreferences);
+				oldValue = predictorResult.CurrentValue;
+
+				if (!predictorResult.IsBetter)
 				{
 					writeToLogValueNotBetter();
 					foreach (var movedDay in movedDays)

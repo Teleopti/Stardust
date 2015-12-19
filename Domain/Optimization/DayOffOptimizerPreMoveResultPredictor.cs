@@ -7,10 +7,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffOptimizerPreMoveResultPredictor
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		double PredictedValue(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
-								ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences);
+			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences);
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		double CurrentValue(IScheduleMatrixPro matrix);
+
+		PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
+			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences);
 	}
 
 	public class DayOffOptimizerPreMoveResultPredictor : IDayOffOptimizerPreMoveResultPredictor
@@ -50,6 +55,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
+		public PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
+									 ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences)
+		{
+			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
+			IEnumerable<ISkill> personalSkills = extractSkills(matrix);
+			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills);
+			double currentResult = calculateValue(rawDataDictionary);
+
+			TimeSpan averageWorkTime = schedulePeriod.AverageWorkTimePerDay;
+			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
+			double predictedResult = calculateValue(rawDataDictionary);
+
+			return new PredictorResult { CurrentValue = currentResult, IsBetter = predictedResult < currentResult };
+		}
+
 		private double calculateValue(IDictionary<DateOnly, IForecastScheduleValuePair> rawDataDic)
 		{
 			var values =
@@ -66,10 +86,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!daysOffPreferences.ConsiderWeekBefore)
 				bitArrayToMatrixOffset = 7;
 
+			var outerWeeksPeriodDays = matrix.OuterWeeksPeriodDays;
 			for (int i = 0; i < workingBitArray.Count; i++)
 			{
 				IScheduleDayPro scheduleDayPro =
-						matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset];
+						outerWeeksPeriodDays[i + bitArrayToMatrixOffset];
 				DateOnly date = scheduleDayPro.Day;
 				if (workingBitArray[i] && !originalBitArray[i])
 				{
@@ -111,5 +132,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var personalSkills = matrix.Person.Period(firstPeriodDay).PersonSkillCollection;
 			return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
 		}
+	}
+
+	public class PredictorResult
+	{
+		public bool IsBetter { get; set; }
+		public double CurrentValue { get; set; }
 	}
 }
