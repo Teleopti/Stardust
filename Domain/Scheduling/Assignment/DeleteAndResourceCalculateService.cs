@@ -5,7 +5,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public interface IDeleteAndResourceCalculateService
 	{
-		IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks);
+		IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks);
+
+		IList<IScheduleDay> DeleteWithoutResourceCalculation(IList<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class DeleteAndResourceCalculateService : IDeleteAndResourceCalculateService
@@ -25,6 +29,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
 			resourceCalculate(list, considerShortBreaks);
+
+			return deleted;
+		}
+
+		public IList<IScheduleDay> DeleteWithoutResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
+		{
+			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
 
 			return deleted;
 		}

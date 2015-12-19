@@ -9,9 +9,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface ITeamBlockClearer
 	{
 		void ClearTeamBlock(ISchedulingOptions schedulingOptions,
-		                                    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                    ITeamBlockInfo teamBlock);
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			ITeamBlockInfo teamBlock);
+
+		void ClearTeamBlockWithNoResourceCalculation(
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlock);
 	}
+
+	
 
 	public class TeamBlockClearer : ITeamBlockClearer
 	{
@@ -39,6 +44,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
 			                                                                 schedulePartModifyAndRollbackService,
 			                                                                 schedulingOptions.ConsiderShortBreaks);
+		}
+
+		public void ClearTeamBlockWithNoResourceCalculation(
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlock)
+		{
+			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
+
+			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
+
+			foreach (var person in selectedTeamMembers)
+			{
+				addDaysToRemove(teamBlock, person, toRemove);
+			}
+
+			_deleteAndResourceCalculateService.DeleteWithoutResourceCalculation(toRemove,
+				schedulePartModifyAndRollbackService);
 		}
 
 		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IPerson person, IList<IScheduleDay> toRemove)

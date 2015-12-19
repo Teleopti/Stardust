@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	{
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences);
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IOptimizationPreferences optimizationPreferences, bool firstNudge);
 	}
 
 	public class ShiftNudgeEarlier : IShiftNudgeEarlier
@@ -35,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences)
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projection = personAssignment.ProjectionService().CreateProjection();
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var shiftStartDate = projectionPeriod.StartDateTime.Date;
 			var shiftEnd = projectionPeriod.EndDateTime;
 			var adjustedEnd = shiftEnd.Add(TimeSpan.FromMinutes(-15)); //allways adjust 15 minutes regardless of interval length
-			var dateOffset = (int)adjustedEnd.Date.Subtract(shiftStartDate).TotalDays;
+			var dateOffset = (int) adjustedEnd.Date.Subtract(shiftStartDate).TotalDays;
 			var timeZone = scheduleDay.TimeZone;
 			var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedEnd, timeZone);
 			var latestEndTime = shiftEndUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
@@ -51,17 +53,25 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			if (optimizationPreferences != null)
 			{
-				_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, scheduleDay.GetEditorShift(), shiftDate);
+				_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions,
+					optimizationPreferences, scheduleDay.GetEditorShift(), shiftDate);
 			}
 
 			rollbackService.ClearModificationCollection();
-			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+			if (firstNudge)
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+			else
+			{
+				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo);
+			}
 
-			
-			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
+
+			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person,
+				teamBlockInfo,
 				schedulingOptions);
 
-			if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue && effectiveRestriction.EndTimeLimitation.StartTime.Value > latestEndTime)
+			if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue &&
+				effectiveRestriction.EndTimeLimitation.StartTime.Value > latestEndTime)
 				return false;
 
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(shiftDate);
@@ -74,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			}
 
 			var adjustedEndTimeLimitation = new EndTimeLimitation(effectiveRestriction.EndTimeLimitation.StartTime, latestEndTime);
-			
+
 			var adjustedEffectiveRestriction = new EffectiveRestriction(effectiveRestriction.StartTimeLimitation,
 				adjustedEndTimeLimitation, effectiveRestriction.WorkTimeLimitation, effectiveRestriction.ShiftCategory,
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,

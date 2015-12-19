@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IOptimizationPreferences optimizationPreferences);
+			IOptimizationPreferences optimizationPreferences, bool firstNudge);
 	}
 
 	public class ShiftNudgeLater : IShiftNudgeLater
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences)
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriod = personAssignment.ProjectionService().CreateProjection().Period().Value;
@@ -55,7 +55,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			}
 
 			rollbackService.ClearModificationCollection();
-			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+			if (firstNudge)
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+			else
+			{
+				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo);
+			}
 
 			
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
