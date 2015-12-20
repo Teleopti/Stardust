@@ -325,6 +325,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 												_resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, 
 												_selectedPersons, null, _schedulingOptions, _dayOffOptimizationPreferenceProvider);
 			Assert.IsFalse(result);
+
 		}
 	}
 }
