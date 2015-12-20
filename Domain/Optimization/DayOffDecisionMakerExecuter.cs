@@ -333,6 +333,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return moveResult;
         }
 
+
         private void removeDayOffFromMatrix(
             ILockableBitArray workingBitArray, 
             ILockableBitArray originalBitArray, 
