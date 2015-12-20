@@ -197,11 +197,13 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				resourceCalculateDelayer.CalculateIfNeeded(date, null);
 			}
 
-			foreach (var date in rightTeamBlock.BlockInfo.BlockPeriod.DayCollection())
+			if(!firstRightNudge)
 			{
-				resourceCalculateDelayer.CalculateIfNeeded(date, null);
+				foreach (var date in rightTeamBlock.BlockInfo.BlockPeriod.DayCollection())
+				{
+					resourceCalculateDelayer.CalculateIfNeeded(date, null);
+				}
 			}
-			resourceCalculateDelayer.CalculateIfNeeded(rightTeamBlock.BlockInfo.BlockPeriod.EndDate.AddDays(1), null);
 
 			return true;
 		}
