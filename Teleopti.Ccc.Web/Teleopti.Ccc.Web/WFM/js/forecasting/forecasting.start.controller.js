@@ -353,6 +353,49 @@
 						});
 				};
 
+				$scope.clearOverride = function () {
+					if ($scope.disableClearOverride()) {
+						return;
+					}
+					$scope.modalModifyLaunch = false;
+					$scope.isForecastRunning = true;
+					var workload = $scope.modalModifyInfo.selectedWorkload;
+					workload.ShowProgress = true;
+					workload.IsSuccess = false;
+					workload.IsFailed = false;
+					$http.post("../api/Forecasting/Override", JSON.stringify(
+						{
+							Days: $scope.modifyDays,
+							WorkloadId: workload.Id,
+							ScenarioId: workload.Scenario.Id,
+							ShouldSetOverrideTasks: true,
+							ShouldSetOverrideTalkTime: true,
+							ShouldSetOverrideAfterCallWork: true
+						}))
+						.success(function (data, status, headers, config) {
+							if (data.Success) {
+								workload.IsSuccess = true;
+							} else {
+								workload.IsFailed = true;
+								workload.Message = data.Message;
+							}
+						})
+						.error(function (data, status, headers, config) {
+							workload.IsFailed = true;
+							if (data)
+								workload.Message = data.Message;
+							else
+								workload.Message = "Failed";
+						})
+						.finally(function () {
+							workload.ShowProgress = false;
+							$scope.isForecastRunning = false;
+							if (workload.forecastResultLoaded) {
+								$scope.getForecastResult(workload);
+							}
+						});
+				};
+
 				if (c3.applyFixForForecast) c3.applyFixForForecast(function () {
 					$scope.$apply();
 				});
@@ -452,6 +495,10 @@
 						(!$scope.modalModifyInfo.shouldSetOverrideTasks
 							&& !$scope.modalModifyInfo.shouldSetOverrideTalkTime
 							&& !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork);
+				};
+
+				$scope.disableClearOverride = function () {
+					return $scope.isForecastRunning;
 				};
 
 				$scope.nextStepAdvanced = function (workload) {

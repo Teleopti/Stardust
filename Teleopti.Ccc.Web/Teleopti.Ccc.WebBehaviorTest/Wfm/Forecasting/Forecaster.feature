@@ -144,7 +144,7 @@ Scenario: Remove override values for one day
 	And I can see that there are override values for the first day 
 	And I select the first day in the forecast chart
 	And I select to modify the forecast
-	And I remove override values
+	And I clear override values
 	Then I should see that there are no override values for the first day 
 
 Scenario: Remove override values for one day when campaign exists
@@ -168,7 +168,7 @@ Scenario: Remove override values for one day when campaign exists
 	And I can see that there are override values for the first day 
 	And I select the first day in the forecast chart
 	And I select to modify the forecast
-	And I remove override values
+	And I clear override values
 	Then I should see that the total calls for the first day has the double forecasted value 
-	And I should see that the total talk time for the first day is '100'
-	And I should see that the total after call work for the first day is '50'
+	And I should see that the talk time for the first day no longer is overridden
+	And I should see that the after call work for the first day no longer is overridden

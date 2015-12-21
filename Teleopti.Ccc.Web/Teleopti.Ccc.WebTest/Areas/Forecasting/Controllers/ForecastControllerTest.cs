@@ -278,5 +278,51 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input));
 		}
+
+		[Test]
+		public void ShouldClearOverrideValues()
+		{
+			var input = new OverrideInput
+			{
+				Days = new[] { new ModifiedDay { Date = new DateTime() } },
+				ScenarioId = Guid.NewGuid(),
+				WorkloadId = Guid.NewGuid(),
+				OverrideTasks = 50,
+				OverrideTalkTime = 20,
+				OverrideAfterCallWork = 25,
+				ShouldSetOverrideTasks = true,
+				ShouldSetOverrideTalkTime = true,
+				ShouldSetOverrideAfterCallWork = true
+			};
+			var overrideTasksPersister = MockRepository.GenerateMock<IOverridePersister>();
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var scenario = new Scenario("default");
+			scenarioRepository.Stub(x => x.Get(input.ScenarioId)).Return(scenario);
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill"));
+			workloadRepository.Stub(x => x.Get(input.WorkloadId))
+				.Return(workload);
+			var overrideTarget = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister, null);
+			var overrideResult = overrideTarget.Override(input);
+			overrideResult.Result.Success.Should().Be.True();
+			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input));
+
+			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler(), scenarioRepository, workloadRepository, null, overrideTasksPersister, null);
+
+			var clearInput = new OverrideInput
+			{
+				Days = new[] { new ModifiedDay { Date = new DateTime() } },
+				ScenarioId = Guid.NewGuid(),
+				WorkloadId = Guid.NewGuid(),
+				ShouldSetOverrideTasks = true,
+				ShouldSetOverrideTalkTime = true,
+				ShouldSetOverrideAfterCallWork = true
+			};
+
+			var result = target.Override(clearInput);
+			result.Result.Success.Should().Be.True();
+
+			overrideTasksPersister.AssertWasCalled(x => x.Persist(scenario, workload, input));
+		}
 	}
 }

@@ -224,7 +224,62 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			target.Persist(scenario, workload, input);
 
 			workloadDay.AssertWasCalled(x => x.SetOverrideTasks(300d, mondayPattern));
+		}
 
+		[Test]
+		public void ShouldClearOverride()
+		{
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
+			var scenario = new Scenario("scenario1");
+			var dateOnly = new DateOnly();
+			var workloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, dateOnly);
+			workloadDay.MakeOpen24Hours();
+			workloadDay.Tasks = 100d;
+			var skillDays = new[] { new SkillDay() };
+			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			skillDayRepository.Stub(x => x.FindRange(futurePeriod, workload.Skill, scenario)).Return(skillDays);
+			var futureData = MockRepository.GenerateMock<IFutureData>();
+			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod)).Return(new[] { workloadDay });
+
+			var intradayForecaster = MockRepository.GenerateMock<IIntradayForecaster>();
+			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
+			var target = new OverridePersister(skillDayRepository, futureData, intradayForecaster, historicalPeriodProvider);
+			workloadDay.OverrideTasks.Should().Be.EqualTo(null);
+
+			var input = new OverrideInput
+			{
+				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				ScenarioId = Guid.NewGuid(),
+				WorkloadId = Guid.NewGuid(),
+				OverrideTasks = 300,
+				OverrideTalkTime = 20,
+				OverrideAfterCallWork = 30,
+				ShouldSetOverrideTasks = true,
+				ShouldSetOverrideTalkTime = true,
+				ShouldSetOverrideAfterCallWork = true
+			};
+
+			target.Persist(scenario, workload, input);
+
+			Math.Round(workloadDay.OverrideTasks.Value, 2).Should().Be.EqualTo(input.OverrideTasks);
+			workloadDay.OverrideAverageTaskTime.Value.TotalSeconds.Should().Be.EqualTo(input.OverrideTalkTime);
+			workloadDay.OverrideAverageAfterTaskTime.Value.TotalSeconds.Should().Be.EqualTo(input.OverrideAfterCallWork);
+			historicalPeriodProvider.AssertWasNotCalled(x => x.AvailableIntradayTemplatePeriod(workload));
+			intradayForecaster.AssertWasNotCalled(x => x.CalculatePattern(Arg<IWorkload>.Is.Anything, Arg<DateOnlyPeriod>.Is.Anything));
+
+			var clearOverrideInput = input;
+			clearOverrideInput.OverrideTasks = null;
+			clearOverrideInput.OverrideTalkTime = null;
+			clearOverrideInput.OverrideAfterCallWork = null;
+
+			target.Persist(scenario, workload, clearOverrideInput);
+
+			workloadDay.OverrideTasks.Should().Be.EqualTo(null);
+			workloadDay.OverrideAverageTaskTime.Should().Be.EqualTo(null);
+			workloadDay.OverrideAverageAfterTaskTime.Should().Be.EqualTo(null);
+			historicalPeriodProvider.AssertWasNotCalled(x => x.AvailableIntradayTemplatePeriod(workload));
+			intradayForecaster.AssertWasNotCalled(x => x.CalculatePattern(Arg<IWorkload>.Is.Anything, Arg<DateOnlyPeriod>.Is.Anything));
 		}
 	}
 }

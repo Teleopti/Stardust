@@ -228,10 +228,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-override-tasks-button");
 		}
 
-		[When(@"I remove override values")]
-		public void WhenIRemoveOverrideValues()
+		[When(@"I clear override values")]
+		public void WhenIClearOverrideValues()
 		{
-			Browser.Interactions.Click(".forecast-remove-override-button");
+			Browser.Interactions.Click(".forecast-clear-override-button");
 		}
 
 		[When(@"I enter '(.*)' calls per day")]
@@ -291,6 +291,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, "true");
 		}
 
+		[When(@"I should see that the total calls for the first day is '(.*)'")]
 		[Then(@"I should see that the total calls for the first day is '(.*)'")]
 		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayIs(string calls)
 		{
@@ -302,6 +303,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, calls);
 		}
 
+		[When(@"I should see that the total talk time for the first day is '(.*)'")]
 		[Then(@"I should see that the total talk time for the first day is '(.*)'")]
 		public void ThenIShouldSeeThatTheTotalTalkTimeForTheFirstDayIs(string talkTime)
 		{
@@ -313,6 +315,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, talkTime);
 		}
 
+		[When(@"I should see that the total after call work for the first day is '(.*)'")]
 		[Then(@"I should see that the total after call work for the first day is '(.*)'")]
 		public void ThenIShouldSeeThatTheTotalAfterCallWorkForTheFirstDayIs(string afterCallWork)
 		{
@@ -324,6 +327,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, afterCallWork);
 		}
 
+		[Then(@"I should see that the talk time for the first day no longer is overridden")]
+		public void ThenIShouldSeeThatTheTalkTimeForTheFirstDayNoLongerIsOverridden()
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				 "var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2+'  ';"
+				, "true");
+		}
+
+		[Then(@"I should see that the after call work for the first day no longer is overridden")]
+		public void ThenIShouldSeeThatTheAfterCallWorkForTheFirstDayNoLongerIsOverridden()
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				 "var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2+'  ';"
+				, "true");
+		}
+
 		[When(@"I can see that there are override values for the first day")]
 		public void WhenICanSeeThatThereAreOverrideValuesForTheFirstDay()
 		{
@@ -331,19 +358,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2;"
-				, "false"); 
-			Browser.Interactions.AssertJavascriptResultContains(
-				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				 "var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0])*2);" +
-				 "return (v1==v2) + '  ' + v1+'  '+ v2;"
-				, "false"); 
-			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0])*2);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2;"
-				, "false"); 
+				"var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
+				"var v3= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var v4= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"var v5= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var v6= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"return (v1!=v2 && v3!=v4 && v5!=v6) + '  ' + v1+'  '+ v2+'  '+ v3+'  '+ v4+'  '+ v5+'  '+ v6;"
+				, "true");
 		}
 
 		[Then(@"I should see that there are no override values for the first day")]
@@ -353,19 +374,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
-				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				"var v2= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0]);" +
+				"var v3= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				"var v4= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0]);" +
+				"var v5= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var v6= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0]);" +
+				"return (v1==v2 && v3==v4 && v5==v6) + '  ' + v1+'  '+ v2+'  '+ v3+'  '+ v4+'  '+ v5+'  '+ v6;"
 				, "true");
-			Browser.Interactions.AssertJavascriptResultContains(
-				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
-				 "var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0])*2);" +
-				 "return (v1==v2) + '  ' + v1+'  '+ v2;"
-				, "true");
-			Browser.Interactions.AssertJavascriptResultContains(
-				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
-				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0])*2);" +
-				"return (v1==v2) + '  ' + v1+'  '+ v2;"
-				, "true"); 
 		}
 
 		[Given(@"I am viewing the forecast chart")]

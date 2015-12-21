@@ -53,11 +53,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				}
 				if (input.ShouldSetOverrideTalkTime)
 				{
-					workloadDay.OverrideAverageTaskTime = TimeSpan.FromSeconds(input.OverrideTalkTime);
+					workloadDay.OverrideAverageTaskTime = input.OverrideTalkTime != null
+						? (TimeSpan?) TimeSpan.FromSeconds(input.OverrideTalkTime.Value)
+						: null;
 				}
 				if (input.ShouldSetOverrideAfterCallWork)
 				{
-					workloadDay.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(input.OverrideAfterCallWork);
+					workloadDay.OverrideAverageAfterTaskTime = input.OverrideAfterCallWork != null
+						? (TimeSpan?) TimeSpan.FromSeconds(input.OverrideAfterCallWork.Value)
+						: null;
 				}
 			}
 		}

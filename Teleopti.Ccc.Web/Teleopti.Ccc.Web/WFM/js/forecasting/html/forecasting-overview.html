@@ -147,14 +147,19 @@
 							<span>{{modalModifyInfo.selectedDaysText}}</span>
 						</p>
 						<br />
+						<label class="forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
+							<input type="checkbox" ng-model="addCampaign" id="addCampaignToggle" style="display: none;" />
+							<span class="wfm-btn wfm-btn-invis-default">{{ 'Campaign' | translate }}</span>
+						</label>
+
 						<label class="forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
 							<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
 							<span class="wfm-btn wfm-btn-invis-default">{{ 'AbsenceOverride' | translate }}</span>
 						</label>
 
-						<label class="forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
-							<input type="checkbox" ng-model="addCampaign" id="addCampaignToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">{{ 'Campaign' | translate }}</span>
+						<label class="forecast-clear-override-button" style="font-weight: normal;">
+							<input type="checkbox" style="display: none;" />
+							<span class="wfm-btn wfm-btn-invis-default" ng-click="clearOverride()">Clear override</span>
 						</label>
 						<br />
 						<br />
