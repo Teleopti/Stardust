@@ -216,7 +216,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-override-tasks-button");
 		}
 
-
 		[When(@"I choose to add a campaign")]
 		public void WhenIChooseToAddACampaign()
 		{
@@ -227,6 +226,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void WhenISelectToDoOverrideCalls()
 		{
 			Browser.Interactions.Click(".forecast-override-tasks-button");
+		}
+
+		[When(@"I remove override values")]
+		public void WhenIRemoveOverrideValues()
+		{
+			Browser.Interactions.Click(".forecast-remove-override-button");
 		}
 
 		[When(@"I enter '(.*)' calls per day")]
@@ -272,10 +277,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.Click(".forecast-apply-override-tasks-button");
 		}
-		
-		[When(@"I should see that the total calls for the first day has doubled")]
-		[Then(@"I should see that the total calls for the first day has doubled")]
-		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasDoubled()
+
+		[When(@"I should see that the total calls for the first day has the double forecasted value")]
+		[Then(@"I should see that the total calls for the first day has the double forecasted value")]
+		public void ThenIShouldSeeThatTheTotalCallsForTheFirstDayHasTheDoubleForecastedValue()
 		{
 			WhenForecastHasSucceeded();
 			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
@@ -319,7 +324,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				, afterCallWork);
 		}
 
-		
+		[When(@"I can see that there are override values for the first day")]
+		public void WhenICanSeeThatThereAreOverrideValuesForTheFirstDay()
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "false"); 
+			Browser.Interactions.AssertJavascriptResultContains(
+				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				 "var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0])*2);" +
+				 "return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "false"); 
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0])*2);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "false"); 
+		}
+
+		[Then(@"I should see that there are no override values for the first day")]
+		public void ThenIShouldSeeThatThereAreNoOverrideValuesForTheFirstDay()
+		{
+			WhenForecastHasSucceeded();
+			Browser.Interactions.AssertExists(".wfm-card-selected .c3");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtc')[0]);" +
+				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vc')[0])*2);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "true");
+			Browser.Interactions.AssertJavascriptResultContains(
+				 "var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vttt')[0]);" +
+				 "var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtt')[0])*2);" +
+				 "return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "true");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var v1= parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vtacw')[0]);" +
+				"var v2= (parseFloat(angular.element(document.querySelector('.c3')).scope().chart.data.values('vacw')[0])*2);" +
+				"return (v1==v2) + '  ' + v1+'  '+ v2;"
+				, "true"); 
+		}
+
 		[Given(@"I am viewing the forecast chart")]
 		public void GivenIAmViewingTheForecastChart()
 		{
