@@ -74,7 +74,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.isLoading(true);
 			},
 			function (data) {
-				if (data.AgentSchedules.length > 0 || data.mySchedule != null) {
+				if (data.AgentSchedules.length > 0 || data.MySchedule != null) {
 					self.createTimeLine(data.TimeLine);
 				} else {
 					self.CleanTimeHourLine();
