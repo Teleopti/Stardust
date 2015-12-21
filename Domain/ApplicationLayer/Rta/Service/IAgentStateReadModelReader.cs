@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
         IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons);
         IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids);
 	    IList<AgentStateReadModel> LoadForTeam(Guid teamId);
-		IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly = null, bool? alarmTimeDesc = null);
-		IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly = null, bool? alarmTimeDesc = null);
+		IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc);
+		IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc);
 
 		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
 

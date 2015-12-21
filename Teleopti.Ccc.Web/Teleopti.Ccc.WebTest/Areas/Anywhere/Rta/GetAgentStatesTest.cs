@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] { siteId1, siteId2 });
+			var agentState = Target.ForSites(new[] {siteId1, siteId2}, null, null);
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] {siteId});
+			var agentState = Target.ForSites(new[] {siteId}, null, null);
 
 			agentState.Single().PersonId.Should().Be(personId);
 			agentState.Single().State.Should().Be("state");
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId });
+			var agentState = Target.ForTeams(new[] {teamId}, null, null);
 
 			agentState.Single().PersonId.Should().Be(personId);
 			agentState.Single().State.Should().Be("state");
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.ForSites(new[] { siteId1, siteId2 }, true);
+			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true, null);
 
 			agentStates.Single().PersonId.Should().Be(personId1);
 		}

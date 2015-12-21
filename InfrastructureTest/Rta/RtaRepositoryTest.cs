@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			dbWriter.PersistActualAgentReadModel(state2);
 			dbWriter.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadForSites(new[] {siteId1, siteId2});
+			var result = target.LoadForSites(new[] {siteId1, siteId2}, null, null);
 
 			result.Count().Should().Be(2);
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			dbWriter.PersistActualAgentReadModel(state2);
 			dbWriter.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadForTeams(new[] {teamId1, teamId2});
+			var result = target.LoadForTeams(new[] {teamId1, teamId2}, null, null);
 
 			result.Count().Should().Be(2);
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			persister.PersistActualAgentReadModel(state1);
 			persister.PersistActualAgentReadModel(state2);
 
-			var result = target.LoadForTeams(new[] { teamId }, true);
+			var result = target.LoadForTeams(new[] {teamId}, true, null);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
