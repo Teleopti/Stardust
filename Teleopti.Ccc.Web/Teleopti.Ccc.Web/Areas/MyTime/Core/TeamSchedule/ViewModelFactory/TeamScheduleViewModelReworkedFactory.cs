@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly ITimeLineViewModelReworkedMapper _timeLineViewModelReworkedMapper;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
-		private IScheduleProvider _scheduleProvider;
-		private ITeamScheduleProjectionProvider _projectionProvider;
-		private IPermissionProvider _permissionProvider;
-		private ILoggedOnUser _LogonUser;
+		private readonly IScheduleProvider _scheduleProvider;
+		private readonly ITeamScheduleProjectionProvider _projectionProvider;
+		private readonly IPermissionProvider _permissionProvider;
+		private readonly ILoggedOnUser _logonUser;
 
 		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
 			IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper,
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
-			_LogonUser = logonUser;
+			_logonUser = logonUser;
 		}
 
 		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
@@ -101,18 +101,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				return new TeamScheduleViewModelReworked();
 			}
 
-			var myScheduleDay = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate, _LogonUser.CurrentUser(),
+			var myScheduleDay = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate, _logonUser.CurrentUser(),
 				ScheduleVisibleReasons.Any)
-				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] {_LogonUser.CurrentUser()}).SingleOrDefault()
+				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] {_logonUser.CurrentUser()}).SingleOrDefault()
 				: null;
 		
-			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_LogonUser.CurrentUser(), myScheduleDay, true);
+			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_logonUser.CurrentUser(), myScheduleDay, true);
 			
 			
 			var people = _teamSchedulePersonsProvider.RetrievePeople(data).ToList();
-			if (people.Contains(_LogonUser.CurrentUser()))
+			if (people.Contains(_logonUser.CurrentUser()))
 			{
-				people.Remove(_LogonUser.CurrentUser());
+				people.Remove(_logonUser.CurrentUser());
 			}
 			var isPermittedToViewConfidential = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var agentSchedules = new List<AgentScheduleViewModelReworked>();
