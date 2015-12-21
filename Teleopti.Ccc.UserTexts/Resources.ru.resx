@@ -11721,4 +11721,676 @@ Teleopti R&amp;D</value>
   <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
     <value>Выберите общий уровень авторизации:</value>
   </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Добавить специальные права в список ниже:</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Исходящие кампании</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>Спрогнозировать все</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Метод</value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>Создать прогноз</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>Выбор периода</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>Просмотр графика метода</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>Выберите будущий период для прогноза</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Будущий период</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>Прогнозируемый период не может быть более 1 года</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>Изменить период планирования на</value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>имеющий диапазон в </value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить эту кампанию?</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>Длина списка вызовов</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>Кампания</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>Название кампании</value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>Кампании</value>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>Среднее время соединения (с)</value>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>Коэффициент соединений (%)</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>Удалить кампанию</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>Исходящие кампании</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Выполнение</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>Среднее время успешного соединения (с)</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>Коэффициент успешных соединений (%)</value>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>Цель (%)</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>Непродуктивное время (с)</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Рабочие часы</value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>Номер сотрудника</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>Примечание</value>
+  </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>Планируемый период не совпадает с периодом планирования</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>Цель в {0} выходных не выполнена</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Шаг(-и) оптимизации {0} не выполняются, если выбрано планирование блоками или по группе.</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>Приносим извинения, но сейчас система занята. Ограничьте критерии отчета или попробуйте позднее.</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>Некоторые операторы не могут быть обеспечены рабочим местом в этот  день</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>Для этого дня выполняется планирование рабочих мест</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>На этот день рабочие места не запланированы</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>Все выбранные операторы были обеспечены рабочими местами</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>операторы</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Фильтр локаций</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>Загрузка статуса плана рабочих мест</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>Нет доступных локаций</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>Период планирования для</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>План рабочих мест</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>рабочих мест(-а)</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>План рабочих мест успешно создан</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>группы или локации не выбраны</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>Невозможно получить сообщения от message broker</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>Расписание MyTeam</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Создать кампанию</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>Изменить кампанию</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>Необходимые часы</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Необходимо указать время начала и завершения</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>Кампания {0} создана.</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Не удалось создать кампанию: {0}.</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Не удалось загрузить кампанию: {0}.</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Не удалось обновить кампанию: {0}.</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>Кампания {0} обновлена.</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>Название новой активности</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Использовать существующую активность</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>Название новой кампании</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>имя и фамилия пустые;</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>Некорректное название кампании. Оно может содержать не более 255 символов.</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>пустой пароль;</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Текущая</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>отсутствует логин;</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>роль {0} не существует;</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>слишком длинное имя входа в приложение;</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>слишком длинное имя;</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>слишком длинная фамилия;</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>некорректный логин windows;</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>дублирование имен входа в приложение;</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>дублирование windows логинов;</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>некорректный пароль;</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>отсутствует имя входа в приложение;</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>Добавить незавершенные задания</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Звонки/день</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Новый навык</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Точность</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Id метода прогнозирования:</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Лучший метод</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Уровни штата</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Предупреждение! Нет доступных исторических данных</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Создать навык</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Определить процент ожидаемых повышений или снижений</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Избыток персонала</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Итого звонки &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Звонки &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Время диалога &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Спрогнозированное значение изменено</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Добавлена кампания</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Невозможно применить. См. проблемы выше.</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Отклоняющиеся значения</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Статистика очереди без отклоняющихся значений</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Уведомления</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Выключить</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Изменение спрогнозированных значений.</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>кампании</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Удачно</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Выполняется прогнозирование</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Это ваш существующий прогноз. Чтобы изменить звонки, выделите день(дни) на графике.</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Очистить выделение</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Прогноз</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Дублировать</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>Изменить план вручную</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Незавершенные задания</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Перетащите .xls или .xlsx файлы или нажмите, чтобы загрузить</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Импортировать пользователей</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>Вовремя</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Пожалуйста, укажите файл шаблона</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>Отклоненные файлы:</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Формировать отчет</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>Нет отчета для текущих условий</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Отчет по плану рабочих мест</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Запланировано вручную</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Выбраны все сотрудники на этой странице.</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Нажмите здесь, чтобы выбрать всех сотрудников на каждой странице.</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Процесс не выполнен! Ошибка:</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Успешно обновлены:</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>Дата начала должна быть равна или ранее, чем дата окончания</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Необходимо установить даты начала и окончания.</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Посмотреть распределенные места</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Вам необходимо изменить контейнер смен в соответствии.</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Закрытый день</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Посмотреть отчет</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Управление сотрудниками</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Корректировать навык</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Изменить контейнер смен</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Выбрать контейнер смен</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>Нет распределения</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>Уверены, что хотите удалить эту кампанию?</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>Удалить кампанию</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Не удалось удалить кампанию: {0}.</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Выбранные сотрудники</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Сбросить выделение</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Выберите даты в графике.</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Отсутствует столбец: {0}.</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>Выбранные файл не может быть принят. Проверьте тип файла.</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Распределение рабочих мест</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Импорт не удался:</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>произошли внутренние ошибки: {0};</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Просмотрите, загруженный файл excel с деталями ошибки.</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Импортированы успешно:</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>слишком длинный windows логин;</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>Распределение места {0} для {1} было удалено</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Необходимо выбрать хотя бы один день!</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>порог кампании</value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>Залогинен</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>Выход из системы</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Изменить навык</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>{0} распределений рабочих мест, {1} удачных и {2} неудачных. {3} дня(-ей) не запланированы.</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Сезонность</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Очистить фоновое изображение</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Рабочее место</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Установить фоновое изображение</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>По нижнему краю</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>По левому краю</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>По правому краю</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>По верхнему краю</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>На передний план</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Пропустить</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Отразить выделенные объекты по горизонтали</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>Отразить выделенные объекты по вертикали</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Сгруппировать выделенные объекты</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Переместить назад</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Переместить вперед</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Перевернуть</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>На задний план</value>
+  </data>
+  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
+    <value>Отменить изменения и вернуться к последнему сохраненному</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Разгруппировать объекты </value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>Доступ запрещен!</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Создать и настроить разные периоды планирования</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>Период запланирован</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Периоды планирования</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Выбранные фильтры:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Начать следующий</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Итого за день</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>Выбрать дни на графике перед изменением</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Доступ ко всем функциям:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Изменения для предустановленных ролей невозможны.</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Невыбранные объекты</value>
+  </data>
+  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
+    <value>Этот поиск вернет слишком большое количество результатов. Уточните условия поиска.</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Добавьте фильтр</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Добавлено изменение и кампания</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Необходимо указать имя</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Итоговое ACW &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Предупреждение: сервер занят планированием, попробуйте еще раз позднее.</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Итоговое время диалога &gt;</value>
+  </data>
+  <data name="AmountOfFilters" xml:space="preserve">
+    <value>Количество фильтров</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Изменить планируемый период</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Изменить фильтр</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Удалить фильтр</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>Выбрать отсутствие</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Управление правилами</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Добавить локацию</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Управление схемами</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Схемы</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Порог</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Создать новый набор правил</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Результаты не найдены</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Цвет предупредения</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>Не может быть удалено, так как используется в схемах.</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Секунд/звонок</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} выбрано с {1} по {2}</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Выбрано дней {0}</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Изменить звонки или кампанию для сценария</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>Название не должно превышать 50 символов</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Количество секунд дожно быть в пределах 1 и 86400</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Сокращение должно быть в пределах 1 и 99</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Все дни закрыты</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>Последнее время</value>
+  </data>
 </root>
