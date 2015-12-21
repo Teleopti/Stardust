@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TimeSortOrder = filter.TimeSortOrder
 			};
 			TeamScheduleViewModelReworked result;
-			result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210)
+			result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210) && !_toggleManager.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580)
 				? _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data)
 				: _teamScheduleViewModelReworkedFactory.GetViewModel(data);
 			return Json(result);
