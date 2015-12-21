@@ -30,10 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private Guid platformTypeId
 		{
-		    get
-		    {
-		        return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId();
-		    }
+			get { return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId(); }
 		}
 
 	    private string stateCode
@@ -48,10 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	    private DateTime? ruleStartTime
 	    {
-	        get
-	        {
-	            return (Stored == null || State.Adherence() != Stored.Adherence) ? CurrentTime : Stored.RuleStartTime;
-	        }
+		    get { return State.HasRuleChanged() ? CurrentTime : Stored.RuleStartTime; }
 	    }
 
 	    private DateTime? batchId
@@ -61,11 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	    private DateTime? alarmStartTime
 		{
-			get
-			{
-				return _appliedAlarmStartTime.For(State, Stored, CurrentTime);
-                
-			}
+		    get { return _appliedAlarmStartTime.For(State, Stored, CurrentTime); }
 		}
 
 	    private bool isInAlarm

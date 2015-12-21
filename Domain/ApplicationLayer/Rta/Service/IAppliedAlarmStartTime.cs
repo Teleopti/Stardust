@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (state.RuleId() == Guid.Empty)
 				return null;
-			if (stored.RuleId() == state.RuleId())
-				return stored.AlarmStartTime;
-			return currentTime.AddTicks(state.AlarmThresholdTime());
+			if (state.HasRuleChanged())
+				return currentTime.AddTicks(state.AlarmThresholdTime());
+			return stored.AlarmStartTime;
 		}
 	}
 

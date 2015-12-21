@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		}
 
 		[Test]
-		public void ShouldNotChangeRuleStartTimeWhenAdherenceDoesNotChange()
+		public void ShouldNotChangeRuleStartTimeWhenStillInSameRule()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
-				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
-				.WithRule("ready", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "ready"
+				StateCode = "phone"
 			});
 
 			Database.PersistedReadModel
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		}
 
 		[Test]
-		public void ShouldUpdateRuleStartTimeWhenAdherenceChanges()
+		public void ShouldUpdateRuleStartTimeWhenChangingRule()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -95,5 +94,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 			Database.PersistedReadModel
 				.RuleStartTime.Should().Be("2015-12-10 8:30".Utc());
 		}
+
+		[Test]
+		public void ShouldUpdateRuleStartTimeWhenChangingRuleWithSameAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
+				.WithRule("phone", phone, 0, Adherence.In, TimeSpan.FromMinutes(5))
+				.WithRule("ACW", phone, 0, Adherence.In, TimeSpan.FromMinutes(5));
+
+			Now.Is("2015-12-10 8:00");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Now.Is("2015-12-10 8:30");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ACW"
+			});
+
+			Database.PersistedReadModel
+				.RuleStartTime.Should().Be("2015-12-10 8:30".Utc());
+		}
+
 	}
 }
