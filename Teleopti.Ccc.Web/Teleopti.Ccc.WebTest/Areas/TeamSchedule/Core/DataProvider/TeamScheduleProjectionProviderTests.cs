@@ -12,10 +12,10 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
+namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 {
 	[TestFixture]
 	public class TeamScheduleProjectionProviderTests

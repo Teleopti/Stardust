@@ -10,7 +10,7 @@ using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
+namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
 	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
 	{

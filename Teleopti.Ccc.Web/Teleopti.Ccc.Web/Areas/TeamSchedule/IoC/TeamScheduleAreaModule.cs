@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 {
