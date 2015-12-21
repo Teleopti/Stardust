@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			base.Setup(system, configuration);
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 
@@ -45,17 +47,21 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public IPermissionProvider PermissionProvider;
 		public FakeScheduleProvider ScheduleProvider;
+		public FakeLoggedOnUser LoggedOnUser;
+
+		private ITeam team;
+		private IBusinessUnit businessUnit;
 
 		protected void SetUp()
 		{
-			var businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
 			BusinessUnitRepository.Add(businessUnit);
 
 			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
 			var person2 = PersonFactory.CreatePersonWithGuid("person", "a");
 			var person3 = PersonFactory.CreatePersonWithGuid("Unpublish_person", "3");
 
-			ITeam team = TeamFactory.CreateTeamWithId("team1");
+			team = TeamFactory.CreateTeamWithId("team1");
 			TeamRepository.Add(team);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
@@ -95,6 +101,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 11, 2015, 5, 21, 12));
 			person1Schedule.Add(person1Assignment1);
 			ScheduleProvider.AddScheduleDay(person1Schedule);
+			var person3Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 21), person3, scenario);
+			person3Schedule.CreateAndAddActivity(ActivityFactory.CreateActivity("Phone"),
+				new DateTimePeriod(2015, 5, 21, 5, 2015, 5, 21, 16));
+			ScheduleProvider.AddScheduleDay(person3Schedule);
 
 			var person1Schedule2 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person1, scenario);
 			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person1,new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22 ,16));
@@ -210,6 +220,48 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
+		}
+		
+		[Test]
+		public void ShouldReturnMyScheduleWithDateNoReadModel()
+		{
+			SetUp();
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+			LoggedOnUser.SetFakeLoggedOnUser(person1);
+	
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 21),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var mySchedule = result.MySchedule;
+			mySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2015, 5, 21, 6, 0, 0));
+			result.AgentSchedules.Count().Should().Be.EqualTo(2);
+			result.TimeLine.Count().Should().Be.EqualTo(12);
+		}
+		
+		[Test]
+		public void ShouldReturnMyScheduleCorrectlyWithDateWhenMyScheduleUnpublishedNoReadModel()
+		{
+			SetUp();
+			var person = PersonRepository.LoadAll().First(p => p.Name.LastName == "3");
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+	
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 21),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var mySchedule = result.MySchedule;
+			mySchedule.ScheduleLayers.Should().Be.Null();
+			result.AgentSchedules.Count().Should().Be.EqualTo(2);
+			result.TimeLine.Count().Should().Be.EqualTo(12);
 		}
 		
 		[Test]

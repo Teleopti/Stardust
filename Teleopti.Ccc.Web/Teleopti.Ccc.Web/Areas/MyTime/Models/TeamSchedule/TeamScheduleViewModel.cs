@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 
 		public int TimeLineLengthInMinutes { get; set; }
 		public int PageCount { get; set; }
+		public AgentScheduleViewModelReworked MySchedule { get; set; }
 	}
 
 
