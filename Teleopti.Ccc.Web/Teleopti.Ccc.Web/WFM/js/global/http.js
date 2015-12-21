@@ -25,7 +25,8 @@
 						CurrentUserInfo.resetContext();
 					}
 					if (rejection.status > 401 && rejection.status < 600 || rejection.status === 0) {
-						growl.error("<i class='mdi mdi-alert'></i>" + $translate.instant('InternalErrorMessage'), {
+						//don't remove class test-alert - used in perf tests
+						growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('InternalErrorMessage'), {
 							ttl: 0,
 							disableCountDown: true
 						});
