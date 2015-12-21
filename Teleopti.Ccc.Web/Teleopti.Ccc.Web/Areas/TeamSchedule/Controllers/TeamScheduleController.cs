@@ -7,8 +7,10 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
@@ -25,16 +27,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IAbsencePersister _absencePersister;
+		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 
 		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
 			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
-			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister)
+			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister, ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
 			_principalAuthorization = principalAuthorization;
 			_absencePersister = absencePersister;
+			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -167,6 +171,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 
 			return Ok(failResults);
+		}
+
+		[HttpPut, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
+		public virtual IHttpActionResult UpdateAgentsPerPageSetting(int agents)
+		{
+			var agentsPerPageSetting = new AgentsPerPageSetting
+			{
+				AgentsPerPage = agents
+			};
+			_agentsPerPagePersisterAndProvider.Persist(agentsPerPageSetting);
+
+			return Ok();
+		}
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/GetAgentsPerPage")]
+		public virtual JsonResult<int> GetAgentsPerPageSetting()
+		{
+			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
+			return Json(agentsPerPageSetting.AgentsPerPage);
 		}
 	}
 }
