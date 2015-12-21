@@ -478,7 +478,8 @@
 
 		var getDateAndTimeFormat = function () {
 			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
-			vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf("h:") >= 0;
+			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
+			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		}
 
 		vm.Init = function () {
