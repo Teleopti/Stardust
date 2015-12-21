@@ -155,7 +155,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						Value = batchId
 
 					},
-				});
+				})
+				.ToArray();
 
 		}
 
