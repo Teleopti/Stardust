@@ -6,16 +6,11 @@
 		.factory('httpInterceptor', [
 			'$q', 'growl', '$injector', '$timeout', '$translate', function($q, growl, $injector, $timeout, $translate) {
 				var connected = true;
-				var service = {
-					'responseError': reject,
-					'request': request
-				};
-				return service;
 
 				function request(config) {
 					if (!connected) {
 						var q = $q.defer();
-						$timeout(function() {
+						$timeout(function () {
 							q.reject();
 						}, 2000);
 						return q.promise;
@@ -37,6 +32,12 @@
 					}
 					return $q.reject(rejection);
 				}
+
+				var service = {
+					'responseError': reject,
+					'request': request
+				};
+				return service;
 			}
 		]);
 })();
