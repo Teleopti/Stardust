@@ -70,10 +70,11 @@ CREATE TABLE #rights_teams (right_id int)
            INSERT INTO #rights_teams SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
 
 
-/* If agent selected is "Not Defined" then add -1 to #rights_agents
-if @agent_id=-1
+-- If agent selected is "Not Defined" then add -1 to #rights_agents
+if @agent_code=N'00000000-0000-0000-0000-000000000001' OR @team_set=N'-1'
 	insert into #rights_agents
-		select -1*/
+		select -1
+
 
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit

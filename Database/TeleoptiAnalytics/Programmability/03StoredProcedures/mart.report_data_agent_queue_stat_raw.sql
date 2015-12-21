@@ -72,6 +72,11 @@ SET @selected_end_interval=(SELECT right(i.interval_name,5) FROM mart.dim_interv
 INSERT INTO #rights_agents
 	EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code
 
+-- If agent selected is "Not Defined" then add -1 to #rights_agents
+if @agent_code=N'00000000-0000-0000-0000-000000000001' OR @team_set=N'-1'
+	insert into #rights_agents
+		select -1
+
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams 
 	SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
@@ -88,7 +93,6 @@ IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') <
 	SET @hide_time_zone = 1
 ELSE
 	SET @hide_time_zone = 0
-
 
 SELECT DISTINCT 
 		d.date_date,
