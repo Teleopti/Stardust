@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var data = new AgentStateReadModel
 			{
 				TeamId = teamId,
-				StateStartTime = "2015-10-02 09:00".Utc(),
+				AlarmStartTime = "2015-10-02 09:00".Utc(),
 			};
 			var now = new MutableNow("2015-10-02 09:05");
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var data = new AgentStateReadModel
 			{
 				TeamId = teamId,
-				StateStartTime = "2015-10-02 09:05".Utc(),
+				AlarmStartTime = "2015-10-02 09:05".Utc(),
 			};
 			var now = new MutableNow("2015-10-02 09:00");
 
