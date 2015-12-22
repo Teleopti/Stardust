@@ -9,7 +9,7 @@
 		var listRequestsUrl = '../api/Requests/requests';
 
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {			
-			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders));
+			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
 		};
 
 		this.getAllRequestsPromise = function(filter, sortingOrders, paging) {			

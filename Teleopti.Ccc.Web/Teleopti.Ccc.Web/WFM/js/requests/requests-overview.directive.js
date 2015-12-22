@@ -66,16 +66,12 @@
 
 		function postlink(scope, elem, attrs, ctrl) {
 
-			scope.$watch(function () {
-				var filter = {
-					period: scope.requestsOverview.period,
-					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
-				}
+			scope.$watch(function () {				
 				var target = {
-					startDate: filter.period.startDate,
-					endDate: filter.period.endDate,
+					startDate: scope.requestsOverview.period.startDate,
+					endDate: scope.requestsOverview.period.endDate,
 					sortingOrders: scope.requestsOverview.sortingOrders,
-					agentSearchTerm: filter.agentSearchTerm
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
 				}
 
 				if (scope.requestsOverview.togglePaginationEnabled) {

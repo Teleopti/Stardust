@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using System.Web.Http.ValueProviders;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
-using Teleopti.Ccc.Web.Areas.SSO.Models;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 {
-	[ModelBinder(typeof(AllRequestsFormDataConverter))]
+	
 	public class AllRequestsFormData
 	{		
 		public DateOnly StartDate;

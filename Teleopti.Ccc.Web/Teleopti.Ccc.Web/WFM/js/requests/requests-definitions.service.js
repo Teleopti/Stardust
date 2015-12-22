@@ -41,6 +41,26 @@
 			return target;
 		};
 
+		this.normalizeRequestsFilter_old = function (filter, sortingOrders, paging) {
+			var target = {
+				StartDate: filter.period.startDate,
+				EndDate: filter.period.endDate,
+				SortingOrders: sortingOrders,
+				AgentSearchTerm: filter.agentSearchTerm
+			};
+
+			if (paging != null) {
+				target.Paging = {
+					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
+					Take: paging.pageSize
+				};
+				target.Skip = target.Paging.Skip;
+				target.Take = target.Paging.Take;
+			}
+
+			return target;
+		};
+
 		this.translateSingleSortingOrder = function(sortColumn) {
 			
 			var Orders = self.REQUEST_SORTING_ORDERS;

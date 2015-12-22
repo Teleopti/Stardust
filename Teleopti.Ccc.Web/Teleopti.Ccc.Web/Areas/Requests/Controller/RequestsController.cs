@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests(AllRequestsFormData input)
+		public virtual RequestListViewModel GetRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{			
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}		
