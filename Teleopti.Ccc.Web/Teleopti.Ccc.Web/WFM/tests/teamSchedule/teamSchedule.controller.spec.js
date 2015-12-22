@@ -2,17 +2,20 @@
 
 describe("TeamScheduleControllerTest", function() {
 	var $q,
-		$rootScope,
+		rootScope,
 		controller,
 		grouScheduleFactory,
 		$mdComponentRegistry,
 		$mdSidenav,
 		$mdUtil,
-		$locale;
+		$locale,
+		mockCurrentUserInfo,
+		mockLocale;
 
 	beforeEach(function() {
 		module('wfm.teamSchedule');
 		module('externalModules');
+
 		module(function($provide) {
 			$provide.service('CurrentUserInfo', function() {
 				return {
@@ -28,33 +31,124 @@ describe("TeamScheduleControllerTest", function() {
 					}
 				};
 			});
+
+
+			var mockAllTrueToggleService = {
+				isFeatureEnabled: {
+					query: function (param) {
+						var queryDeferred = $q.defer();
+						queryDeferred.resolve({ IsEnabled: true });
+						return { $promise: queryDeferred.promise }
+					}
+				}
+			};
+
+			$provide.service('Toggle', function () { return mockAllTrueToggleService });
 		});
 	});
 
-	var mockCurrentUserInfo;
-	var mockLocale;
+
+	
+
+	
 	beforeEach(inject(function(_CurrentUserInfo_, _$locale_) {
 		mockCurrentUserInfo = _CurrentUserInfo_;
 		moment.locale(mockCurrentUserInfo.DateFormatLocale);
 		mockLocale = _$locale_;
 	}));
 
-	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function() {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return {
-					$promise: queryDeferred.promise
-				};
-			}
-		}
-	};
+	//var mockToggleService = {
+	//	isFeatureEnabled: {
+	//		query: function() {
+	//			var queryDeferred = $q.defer();
+	//			queryDeferred.resolve({ IsEnabled: true });
+	//			return {
+	//				$promise: queryDeferred.promise
+	//			};
+	//		}
+	//	}
+	//};
 
-	var mockTeamScheduleService = {
-		loadAllTeams: {
+	//var mockTeamScheduleService = {
+	//	loadAllTeams: {
+	//		query: function() {
+	//			var queryDeferred = $q.defer();
+	//			queryDeferred.resolve({});
+	//			return {
+	//				$promise: queryDeferred.promise
+	//			};
+	//		}
+	//	},
+	//	loadAbsences: {
+	//		query: function() {
+	//			var queryDeferred = $q.defer();
+	//			queryDeferred.resolve({});
+	//			return {
+	//				$promise: queryDeferred.promise
+	//			};
+	//		}
+	//	},
+	//	getPermissions: {
+	//		query: function() {
+	//			var queryDeferred = $q.defer();
+	//			queryDeferred.resolve({
+
+	//			});
+	//			return {
+	//				$promise: queryDeferred.promise
+	//			};
+	//		}
+	//	},
+	//	searchSchedules: {
+	//		query: function() {
+	//			var today = "2015-10-26";
+	//			var queryDeferred = $q.defer();
+	//			queryDeferred.resolve({
+	//				Schedules: [
+	//					{
+	//						"PersonId": "221B-Baker-SomeoneElse",
+	//						"Name": "SomeoneElse",
+	//						"Date": today,
+	//						"Projection": [
+	//							{
+	//								"Color": "#80FF80",
+	//								"Description": "Email",
+	//								"Start": today + " 07:00",
+	//								"Minutes": 480
+	//							}
+	//						],
+	//						"IsFullDayAbsence": false,
+	//						"DayOff": null
+	//					},
+	//					{
+	//						"PersonId": "221B-Sherlock",
+	//						"Name": "Sherlock Holmes",
+	//						"Date": today,
+	//						"Projection": [
+	//							{
+	//								"Color": "#80FF80",
+	//								"Description": "Email",
+	//								"Start": today + " 08:00",
+	//								"Minutes": 480
+	//							}
+	//						],
+	//						"IsFullDayAbsence": false,
+	//						"DayOff": null
+	//					}
+	//				],
+	//				Total: 2,
+	//				Keyword: ""
+	//			});
+
+	//			return {
+	//				$promise: queryDeferred.promise
+	//			};
+	//		}
+	//	}
+	//};
+
+	function setupMockTeamScheduleService(teamScheduleService) {
+		teamScheduleService.loadAllTeams = {
 			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({});
@@ -62,8 +156,8 @@ describe("TeamScheduleControllerTest", function() {
 					$promise: queryDeferred.promise
 				};
 			}
-		},
-		loadAbsences: {
+		};
+		teamScheduleService.loadAbsences = {
 			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({});
@@ -71,8 +165,8 @@ describe("TeamScheduleControllerTest", function() {
 					$promise: queryDeferred.promise
 				};
 			}
-		},
-		getPermissions: {
+		};
+		teamScheduleService.getPermissions = {
 			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -82,8 +176,8 @@ describe("TeamScheduleControllerTest", function() {
 					$promise: queryDeferred.promise
 				};
 			}
-		},
-		searchSchedules: {
+		};
+		teamScheduleService.searchSchedules= {
 			query: function() {
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
@@ -139,39 +233,42 @@ describe("TeamScheduleControllerTest", function() {
 	};
 
 	function setUpController($controller) {
-		var scope = $rootScope.$new();
+		//rootScope = $rootScope.$new();
 
 		return $controller("TeamScheduleCtrl", {
-			$scope: scope,
-			Toggle: mockToggleService,
-			$q: $q,
+			$scope: rootScope,
+			//Toggle: mockToggleService,
+			//$q: $q,
 			$locale: mockLocale,
-			TeamSchedule: mockTeamScheduleService,
-			CurrentUserInfo: mockCurrentUserInfo,
-			GroupScheduleFactory: grouScheduleFactory,
-			$mdComponentRegistry: $mdComponentRegistry,
-			$mdSidenav: $mdSidenav,
-			$mdUtil: $mdUtil
+			//TeamSchedule: mockTeamScheduleService,
+			CurrentUserInfo: mockCurrentUserInfo
+			//GroupScheduleFactory: grouScheduleFactory,
+			//$mdComponentRegistry: $mdComponentRegistry,
+			//$mdSidenav: $mdSidenav,
+			//$mdUtil: $mdUtil
 		});
 	};
 
 	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _$locale_, _GroupScheduleFactory_,
-		_$mdComponentRegistry_, _$mdSidenav_, _$mdUtil_) {
+		_$mdComponentRegistry_, _$mdSidenav_, _$mdUtil_, _TeamSchedule_) {
 		$q = _$q_;
-		$rootScope = _$rootScope_;
-		grouScheduleFactory = _GroupScheduleFactory_;
-		$mdComponentRegistry = _$mdComponentRegistry_;
-		$mdSidenav = _$mdSidenav_;
-		$mdUtil = _$mdUtil_;
-		$locale = _$locale_;
-
+		rootScope = _$rootScope_.$new();
+		//grouScheduleFactory = _GroupScheduleFactory_;
+		//$mdComponentRegistry = _$mdComponentRegistry_;
+		//$mdSidenav = _$mdSidenav_;
+		//$mdUtil = _$mdUtil_;
+		//$locale = _$locale_;
+		setupMockTeamScheduleService(_TeamSchedule_);
 		controller = setUpController(_$controller_);
 	}));
 
 	it("can select and deselect one person", inject(function() {
-		var scope = $rootScope.$new();
-		scope.$digest(); // this is needed to resolve the promise
+		//var scope = $rootScope.$new();
+		//scope.$digest(); // this is needed to resolve the promise
+		rootScope.$digest();
+
 		var personSchedules = controller.groupScheduleVm.Schedules;
+
 		personSchedules[0].IsSelected = true;
 		controller.updateSelection(personSchedules[0]);
 
@@ -187,8 +284,8 @@ describe("TeamScheduleControllerTest", function() {
 	}));
 
 	it("can select and deselect current page", inject(function() {
-		var scope = $rootScope.$new();
-		scope.$digest(); // this is needed to resolve the promiseddd
+		//var scope = $rootScope.$new();
+		rootScope.$digest(); // this is needed to resolve the promiseddd
 
 		controller.isAllInCurrentPageSelected = true;
 		controller.toggleAllSelectionInCurrentPage();
@@ -207,8 +304,8 @@ describe("TeamScheduleControllerTest", function() {
 
 	it("can display person selection status correctly", inject(function() {
 		controller.selectedPersonIdList = ["221B-Baker-SomeoneElse", "221B-Baker-SomeoneElse1"];
-		var scope = $rootScope.$new();
-		scope.$digest(); // this is needed to resolve the promiseddd
+		//var scope = $rootScope.$new();
+		rootScope.$digest(); // this is needed to resolve the promiseddd
 
 		var personSchedules = controller.groupScheduleVm.Schedules;
 
@@ -219,8 +316,8 @@ describe("TeamScheduleControllerTest", function() {
 
 	it("can display current page selection status correctly when all people in current page are selected", inject(function() {
 		controller.selectedPersonIdList = ["221B-Baker-SomeoneElse", "221B-Baker-SomeoneElse1", "221B-Sherlock"];
-		var scope = $rootScope.$new();
-		scope.$digest(); // this is needed to resolve the promiseddd
+		//var scope = $rootScope.$new();
+		rootScope.$digest(); // this is needed to resolve the promiseddd
 
 		var personSchedules = controller.groupScheduleVm.Schedules;
 
@@ -230,8 +327,8 @@ describe("TeamScheduleControllerTest", function() {
 	}));
 
 	it("should show meridian correctly", inject(function () {
-		var scope = $rootScope.$new();
-		scope.$digest(); // this is needed to resolve the promiseddd
+		//var scope = $rootScope.$new();
+		rootScope.$digest(); // this is needed to resolve the promiseddd
 
 		expect(controller.showMeridian).toEqual(true);
 	}));

@@ -1,13 +1,13 @@
 ﻿<tr class="person">
 	<td class="person-name person-name-column">
-		<div class="wfm-checkbox" ng-show="vm.isAbsenceReportingEnabled()">
+		<div class="wfm-checkbox" ng-show="!vm.isAbsenceReportingEnabled()">
 			<label>
-				<input type="checkbox" ng-model="vm.personSchedule.IsSelected" ng-change="vm.updateSelection(vm.personSchedule)">
+				<input type="checkbox" ng-model="vm.personSchedule.IsSelected" xng-change="vm.updateSelection(vm.personSchedule)">
 				<span class=" wfm-checkbox-toggle"></span>
 				<span class="wfm-checkbox-label person-name nowrap">{{vm.personSchedule.Name}}</span>
 			</label>
 		</div>
-		<div class="person-name nowrap" ng-hide="vm.isAbsenceReportingEnabled()">{{vm.personSchedule.Name}}</div>
+		<div class="person-name nowrap" xng-hide="vm.isAbsenceReportingEnabled()">{{vm.personSchedule.Name}}</div>
 	</td>
 
 

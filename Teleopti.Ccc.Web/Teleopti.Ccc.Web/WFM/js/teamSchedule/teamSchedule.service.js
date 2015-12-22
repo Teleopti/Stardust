@@ -1,8 +1,11 @@
 ﻿"use strict";
 
 angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
-	"$resource", function($resource) {
-		this.loadAllTeams = $resource("../api/GroupPage/AllTeams", {
+	"$resource", "Toggle","$q", function ($resource, toggleSvc, $q) {
+
+		var service = this;
+
+		service.loadAllTeams = $resource("../api/GroupPage/AllTeams", {
 			date: "@queryDate"
 		}, {
 			query: {
@@ -12,7 +15,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.loadSchedules = $resource("../api/TeamSchedule/Group", {
+		service.loadSchedulesFromReadModelForGroup = $resource("../api/TeamSchedule/Group", {
 			groupId: "@groupId",
 			date: "@queryDate",
 			pageSize: "@pageSize",
@@ -25,7 +28,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.loadSchedulesNoReadModel = $resource("../api/TeamSchedule/GroupNoReadModel", {
+		service.loadSchedulesNoReadModel = $resource("../api/TeamSchedule/GroupNoReadModel", {
 			groupId: "@groupId",
 			date: "@queryDate"
 		}, {
@@ -36,7 +39,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
+		service.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
 			keyword: "@keyword",
 			date: "@queryDate",
 			pageSize: "@pageSize",
@@ -49,8 +52,8 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
-		},{
+		service.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
+		}, {
 			query: {
 				method: "GET",
 				params: {},
@@ -58,7 +61,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.loadAbsences = $resource("../api/Absence/GetAvailableAbsences", {}, {
+		service.loadAbsences = $resource("../api/Absence/GetAvailableAbsences", {}, {
 			query: {
 				method: "GET",
 				params: {},
@@ -66,7 +69,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.applyFullDayAbsence = $resource("../api/TeamSchedule/AddFullDayAbsence", {}, {
+		service.applyFullDayAbsence = $resource("../api/TeamSchedule/AddFullDayAbsence", {}, {
 			post: {
 				method: "POST",
 				params: {},
@@ -74,7 +77,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.applyIntradayAbsence = $resource("../api/TeamSchedule/AddIntradayAbsence", {}, {
+		service.applyIntradayAbsence = $resource("../api/TeamSchedule/AddIntradayAbsence", {}, {
 			post: {
 				method: "POST",
 				params: {},
@@ -82,7 +85,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.getScheduleForPeople = $resource("../api/TeamSchedule/GetScheduleForPeople", {}, {
+		service.getScheduleForPeople = $resource("../api/TeamSchedule/GetScheduleForPeople", {}, {
 			post: {
 				method: "POST",
 				params: {},
@@ -107,5 +110,53 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: true
 			}
 		});
+
+
+		
+
+		service.PromiseForloadedAvailableAbsenceTypes = function(callback) {
+			return $q(function (resolve) {
+				service.loadAbsences.query().$promise.then(function(result) {
+					callback(result);
+					resolve();
+				});
+			});
+		};
+
+		service.PromiseForloadedPermissions = function (callback) {
+			return $q(function(resolve) {
+				service.getPermissions.query().$promise.then(function(result) {
+					callback(result);
+					resolve();
+				});
+			});
+		};
+
+		service.PromiseForloadedAllTeamsForTeamPicker = function (queryDate, callback) {
+
+			var dateString = moment(queryDate).format("YYYY-MM-DD");
+
+			return $q(function(resolve) {
+				service.loadAllTeams.query({ date: dateString }).$promise.then(function(result) {
+					callback(result);
+					resolve();
+				});
+			});
+		};
+
+		service.PromiseForloadedToggle = function (toggleName) {
+
+			return $q(function (resolve) {
+				if (toggleSvc[toggleName] == undefined) {
+					toggleSvc.isFeatureEnabled.query({ toggle: toggleName }).$promise.then(function (result) {
+						toggleSvc[toggleName] = result.IsEnabled;
+						resolve();
+					});
+				} else {
+					resolve();
+				}
+			});
+		};
+
 	}
 ]);

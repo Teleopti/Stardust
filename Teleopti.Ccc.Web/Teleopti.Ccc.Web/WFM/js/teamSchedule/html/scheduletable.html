@@ -1,0 +1,60 @@
+﻿
+
+<table class="table table-hover" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule" ng-click="vm.test()">
+	<thead>
+		<tr>
+			<th class="person-name person-name-column" style="width: 15%">
+				<div class="wfm-checkbox" ng-if="vm.selectMode">
+					<label>
+						<!--<input type="checkbox" ng-model="vm.isAllInCurrentPageSelected" ng-click="vm.toggleAllSelectionInCurrentPage()">-->
+						<input type="checkbox" ng-checked="vm.isAllInCurrentPageSelected()" ng-click="vm.toggleAllSelectionInCurrentPage()">
+						<span class="wfm-checkbox-toggle"></span>
+						<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
+					</label>
+				</div>
+			</th>
+			<th id="time-line-container" class="schedule schedule-column">
+				<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
+			</th>
+			<th style="width: 1%"></th>
+		</tr>
+	</thead>
+
+
+	<tbody>
+		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules">
+
+			<td class="person-name person-name-column">
+				<div class="wfm-checkbox" ng-show="vm.selectMode">
+					<label>
+						<!--<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonIdSelection(personSchedule)">-->
+						<input type="checkbox" ng-checked="vm.isPersonSelected(personSchedule)" ng-click="vm.updatePersonIdSelection(personSchedule)">
+						<span class=" wfm-checkbox-toggle"></span>
+						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>
+					</label>
+				</div>
+				<div class="person-name nowrap" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
+			</td>
+
+
+			<td class="schedule schedule-column">
+
+				<div class="relative time-line-for">
+					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
+						  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%'}">
+						<md-tooltip ng-if="dayOff.DayOffName !=''"> {{dayOff.DayOffName}} </md-tooltip>
+					</span>
+					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
+						<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
+							 ng-style="{left: projection.StartPosition() + '%', width: projection.Length() + '%', backgroundColor: projection.Color}"
+							 ng-class="{overtime:projection.IsOvertime}">
+							<md-tooltip>{{projection.Description}}</md-tooltip>
+						</div>
+					</div>
+				</div>
+			</td>
+
+			<td></td>
+		</tr>
+	</tbody>
+</table>

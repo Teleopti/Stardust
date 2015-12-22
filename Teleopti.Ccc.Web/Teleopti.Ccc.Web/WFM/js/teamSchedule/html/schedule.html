@@ -1,39 +1,29 @@
 ﻿<div class="team-schedule">
 	Team schedule
-	<div class="row" ng-style="vm.initialized && !vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
-		<span class="col-sm-5 col-md-3 col-lg-3" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">
-			<select ng-model="vm.selectedTeamId" ng-change="vm.selectedTeamIdChanged()">
+	<div class="row" xng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
+
+		<span class="col-sm-5 col-md-3 col-lg-3" ng-if="!vm.isSearchScheduleEnabled">
+			<select ng-model="vm.selectedTeamId" ng-change="vm.onSelectedTeamIdChanged()">
 				<option value="" disabled selected>Pick a team...</option>
-				<option value={{team.Id}} ng-repeat="team in vm.Teams|orderBy: 'Name'">
+				<option value="{{team.Id}}" ng-repeat="team in vm.teams|orderBy: 'Name'">
 					{{team.Name}}
 				</option>
 			</select>
 		</span>
+
 		<span class="col-md-4" ng-if="vm.isSearchScheduleEnabled">
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.searchSchedules"></people-search-input>
+			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
 		</span>
+
 		<span class="col-sm-5 col-md-3 col-lg-2" style="white-space: nowrap">
-			<span style="min-width: 280px; max-width: 300px;">
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()">
-					<i class="mdi mdi-chevron-double-left"></i>
-				</button>
-				<input type="text" class="pointer" style="text-align: center;" uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.scheduleDate"
-					   ng-change="vm.scheduleDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false"
-					   date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()">
-					<i class="mdi mdi-calendar"></i>
-				</button>
-				<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoNextDate()">
-					<i class="mdi mdi-chevron-double-right"></i>
-				</button>
-			</span>
+			<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged(date)" />
 		</span>
-		
+
 		<select class="col-sm-3 col-md-3 col-lg-1" ng-if="vm.isSelectAgentsPerPageEnabled"
 				  ng-model="vm.agentsPerPageSelection.selectedOption" ng-options="option.value for option in vm.agentsPerPageSelection.availableOptions track by option.id"></select>
-
-		<button class="context-menu wfm-fab mini info" style="border-radius: 23%; float: right; margin-top: 2px; background-color: #ffffff" ng-if="vm.isMenuVisible()">
+		<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
+
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
 
@@ -48,12 +38,9 @@
 			</div>
 		</button>
 
-		<span style="color: red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
+		<!--<span style="color: red" ng-if="vm.initialized && !vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>-->
 	</div>
 
-	<div class="row notice-spacer" ng-show="vm.selectAllVisible() && vm.isAbsenceReportingEnabled" ng-click="vm.selectAllForAllPages()">
-		<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
-	</div>
 
 	<div id="absence-result1" class="row notice-spacer" ng-show="vm.showActionResult">
 		<div ng-if="!vm.hasErrorInResult" class="alert-success notice-spacer">
@@ -68,44 +55,20 @@
 		</div>
 	</div>
 
-	<div class="big-table-wrapper material-depth-1" style="position: relative;overflow: auto">
+
+
+	<div class="row notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+		<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
+	</div>
+
+	<div class="big-table-wrapper material-depth-1" style="position: relative; overflow: auto">
+
 		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
 			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
 		</div>
+		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled" />
 
-		<table class="table table-hover" ng-if="!vm.isLoading && vm.groupScheduleVm.Schedules.length > 0" id="team-schedule"
-			   schedule-list-container="vm.groupScheduleVm.Schedules">
-
-			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-
-			<thead>
-				<tr class="person">
-					<th class="person-name person-name-column" style="width: 15%">
-						<div class="wfm-checkbox" ng-if="vm.isAbsenceReportingEnabled">
-							<label>
-								<input type="checkbox" ng-model="vm.isAllInCurrentPageSelected" ng-click="vm.toggleAllSelectionInCurrentPage()">
-								<span class="wfm-checkbox-toggle"></span>
-								<span class="wfm-checkbox-label person-name nowrap"><span translate>AgentName</span></span>
-							</label>
-						</div>
-					</th>
-					<th id="time-line-container" class="schedule schedule-column">
-						<time-line ng-if="vm.groupScheduleVm.Schedules.length > 0" times="vm.groupScheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleCount"></time-line>
-					</th>
-					<th style="width: 1%">
-					</th>
-				</tr>
-			</thead>
-
-
-			<tbody>
-			<!--<tr person-schedule ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>-->
-				<tr person-schedule="person.PersonId" ng-repeat="person in vm.groupScheduleVm.Schedules" ng-class="vm.getSelectedClass(person)"></tr>
-			</tbody>
-
-
-		</table>
-		
 	</div>
 
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
@@ -119,7 +82,7 @@
 				<option value={{absence.Id}} ng-repeat="absence in vm.absences|orderBy: 'Name'">{{absence.Name}}</option>
 			</select>
 			<div>{{'From'|translate}}: </div>
-			<div class="row" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
+			<div class="row" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
 				<span class="col-lg-7" style="padding-right: 0; height: 48px;">
 					<input type="text" class="pointer" style="text-align: center; max-width: 90px; padding-bottom: 7px;" uib-datepicker-popup="{{vm.dateFormat}}"
 						   ng-model="vm.selectedAbsenceStartDate" is-open="vm.absenceStartDatePickerOpened" datepicker-options="vm.dateOptions"
@@ -129,12 +92,12 @@
 					</button>
 				</span>
 				<span class="col-lg-5" style="padding-left: 0">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
 				</span>
 			</div>
 
 			<div>{{'To'|translate}}: </div>
-			<div class="row" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
+			<div class="row" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
 				<span class="col-lg-7" style="padding-right: 0; height: 48px;">
 					<input type="text" class="pointer" style="text-align: center; max-width: 90px; padding-bottom: 7px;" uib-datepicker-popup="{{vm.dateFormat}}"
 						   ng-model="vm.selectedAbsenceEndDate" is-open="vm.absenceEndDatePickerOpened" datepicker-options="vm.dateOptions"
@@ -144,11 +107,11 @@
 					</button>
 				</span>
 				<span class="col-lg-5" style="padding-left: 0">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permission.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
 				</span>
 			</div>
 
-			<div class="wfm-checkbox" ng-if="vm.permission.IsAddFullDayAbsenceAvailable">
+			<div class="wfm-checkbox" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
 				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" />
 				<label for="is-full-day">
 					<span class="wfm-checkbox-toggle"></span>
