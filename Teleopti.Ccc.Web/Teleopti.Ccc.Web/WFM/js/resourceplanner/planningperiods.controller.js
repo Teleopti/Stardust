@@ -10,7 +10,8 @@
 
 	        $scope.isScheduleRunning = false;
 	        $scope.scheduleClicked = false;
-	        $scope.disableSchedule = function () {
+				$scope.planningPeriod = {};
+				$scope.disableSchedule = function () {
 		        return $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
 	        };
 				$scope.dayoffRules=[];

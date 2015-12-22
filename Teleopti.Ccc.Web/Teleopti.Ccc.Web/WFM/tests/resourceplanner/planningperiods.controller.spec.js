@@ -137,6 +137,15 @@ describe('PlanningPeriodsCtrl', function () {
 
 		expect(scope.disableSchedule()).toBe(true);
 	}));
+	it('should enable scheduling before planning period is loaded', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('PlanningPeriodsCtrl', { $scope: scope });
+
+		scope.planningPeriod = { StartDate: '2000-1-1', EndDate: '2000-2-1' };
+
+		expect(scope.disableSchedule()).toBe(false);
+	}));
+
 	it('should disable planningperiod select while servercall is made', inject(function($controller) {
 		var scope = $rootScope.$new();
 		var rangeDetails = {Number:10,}
