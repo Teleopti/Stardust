@@ -21,11 +21,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						fractionPeriod.HasValue ? d.FractionPeriods.Append(fractionPeriod.Value).ToArray() : d.FractionPeriods.ToArray()));
 		}
 
-		private SkillEffiencyResource[] mergeEffiencyResources(SkillEffiencyResource[] effiencyResources1,
-			SkillEffiencyResource[] effiencyResources2)
+		private static SkillEffiencyResource[] mergeEffiencyResources(IEnumerable<SkillEffiencyResource> effiencyResources1,
+			IEnumerable<SkillEffiencyResource> effiencyResources2)
 		{
-			var result = effiencyResources1.Concat(effiencyResources2);
-			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, y.Sum(z => z.Resource))).ToArray();
+			var dic = new Dictionary<Guid, double>();
+			fillDictionaryWithSkillEffiency(dic, effiencyResources1);
+			fillDictionaryWithSkillEffiency(dic, effiencyResources2);
+			return dic.Select(keyValue => new SkillEffiencyResource(keyValue.Key, keyValue.Value)).ToArray();
+		}
+		private static void fillDictionaryWithSkillEffiency(IDictionary<Guid, double> dictionary, IEnumerable<SkillEffiencyResource> skillEffiencyResources)
+		{
+			foreach (var effiencyResource in skillEffiencyResources)
+			{
+				double resource;
+				dictionary.TryGetValue(effiencyResource.Skill, out resource);
+				dictionary[effiencyResource.Skill] = resource + effiencyResource.Resource;
+			}
 		}
 
 		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] baseCollection,
