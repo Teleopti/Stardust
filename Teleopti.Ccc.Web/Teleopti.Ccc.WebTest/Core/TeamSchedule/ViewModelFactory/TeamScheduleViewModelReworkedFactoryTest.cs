@@ -284,6 +284,113 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 		
 		[Test]
+		public void ShouldIndicateFullDayAbsenceWhenHasMainShiftWithDateNoReadModel()
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			BusinessUnitRepository.Add(businessUnit);
+
+			team = TeamFactory.CreateTeamWithId("team1");
+			TeamRepository.Add(team);
+
+			p5.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(p5);
+
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("Phone"), p5,
+				new DateTimePeriod(2015, 5, 23, 7, 2015, 5, 23, 16), ShiftCategoryFactory.CreateShiftCategory("test"), scenario);
+			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
+				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
+			p5ScheduleOn23.Add(p5AssOn23);
+			p5ScheduleOn23.Add(p5AbsenceOn23);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
+			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
+		}
+		
+		[Test]
+		public void ShouldIndicateFullDayAbsenceWhenHasDayoffWithDateNoReadModel()
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			BusinessUnitRepository.Add(businessUnit);
+
+			team = TeamFactory.CreateTeamWithId("team1");
+			TeamRepository.Add(team);
+
+			p5.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(p5);
+
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, p5, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
+			var p5AbsenceOn23 = PersonAbsenceFactory.CreatePersonAbsence(p5, scenario,
+				new DateTimePeriod(2015, 5, 23, 0, 2015, 5, 23, 23));
+			p5ScheduleOn23.Add(p5AssOn23);
+			p5ScheduleOn23.Add(p5AbsenceOn23);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
+			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
+		}	
+	
+		[Test]
+		public void ShouldReturnDayoffWhenHasDayoffWithDateNoReadModel()
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			BusinessUnitRepository.Add(businessUnit);
+
+			team = TeamFactory.CreateTeamWithId("team1");
+			TeamRepository.Add(team);
+
+			p5.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(p5);
+
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			var p5AssOn23 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, p5, new DateOnly(2015, 5, 23), new DayOffTemplate(new Description("dayoff")));
+			p5ScheduleOn23.Add(p5AssOn23);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
+			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+			agentSchedule.IsDayOff.Should().Be.EqualTo(true);
+			agentSchedule.DayOffName.Should().Be.EqualTo("dayoff");
+		}
+		
+		[Test]
 		public void ShouldIndicateOvertimeWithDateNoReadModel()
 		{
 			SetUp();

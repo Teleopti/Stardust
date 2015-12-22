@@ -66,7 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public Guid PersonId { get; set; }
 		public DateTime? MinStart { get; set; }
 		public bool IsDayOff { get; set; }
-		public int Total { get; set; }	
+		public bool IsFullDayAbsence { get; set; }
+		public int Total { get; set; }
+		public string DayOffName { get; set; }
 	}
 
 	public class LayerViewModel

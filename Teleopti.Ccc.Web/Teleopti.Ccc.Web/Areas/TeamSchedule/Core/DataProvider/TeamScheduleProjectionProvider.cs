@@ -111,7 +111,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
-			ret.IsDayOff = significantPart == SchedulePartView.DayOff;
+
+			switch (significantPart)
+			{
+				case SchedulePartView.DayOff:
+					ret.IsDayOff = true;
+					ret.DayOffName = scheduleDay.PersonAssignment().DayOff().Description.Name;
+					if (projection.HasLayers)
+						ret.IsFullDayAbsence = true;
+					break;
+				case SchedulePartView.FullDayAbsence:
+					ret.IsFullDayAbsence = true;
+					break;
+			}
 
 			var projectionPeriod = projection.Period();
 			if (projectionPeriod != null)

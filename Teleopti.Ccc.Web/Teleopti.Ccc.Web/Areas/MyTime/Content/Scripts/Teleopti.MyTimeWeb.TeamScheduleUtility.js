@@ -263,7 +263,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 	var mapLayerViewModelForSchedule = function (personSchedule) {
 		var mappedLayers = [];
 		if (personSchedule == null) {
-			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false);
+			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false,'', false, false, null);
 		}
 		var layers = personSchedule.ScheduleLayers;
 		var model;
@@ -275,7 +275,11 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				null,
 				personSchedule.Name,
 				personSchedule.PersonId,
-				personSchedule.IsDayOff);
+				personSchedule.IsDayOff,
+				personSchedule.DayOffName,
+				null,
+				personSchedule.IsFullDayAbsence,
+				null);
 		} else {
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -294,7 +298,12 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				scheduleEndTime,
 				personSchedule.Name,
 				personSchedule.PersonId,
-				personSchedule.IsDayOff);
+				personSchedule.IsDayOff,
+				personSchedule.DayOffName,
+				null,
+				personSchedule.IsFullDayAbsence,
+				null
+				);
 		}
 		return model;
 	};

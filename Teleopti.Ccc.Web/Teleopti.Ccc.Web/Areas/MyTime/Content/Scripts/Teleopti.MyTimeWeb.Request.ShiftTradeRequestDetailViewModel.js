@@ -324,15 +324,15 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     		return {
     			'right': self.leftPx(),
     			'background-size': self.isOvertime ? '11px 11px' : 'initial',
-    			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : 'initial',
-    			'backgroundColor': self.backgroundColor,
+    			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : (self.IsFullDayAbsence),
+    			'background-color': self.backgroundColor,
     			'paddingRight': self.widthPx()
     		};
     	return {
     		'left': self.leftPx(),
     		'background-size': self.isOvertime ? '11px 11px' : 'initial',
     		'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : 'initial',
-    		'backgroundColor': self.backgroundColor,
+    		'background-color': self.backgroundColor,
     		'paddingLeft': self.widthPx()
     	};
 		
@@ -390,7 +390,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
     };
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff, isEmptyDay, offerId) {
+Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff,dayOffName, isEmptyDay, isFullDayAbsence, offerId) {
 	var self = this;
 
 	self.scheduleStartTime = ko.observable(scheduleStartTime);
@@ -400,7 +400,9 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	self.agentName = agentName;
 	self.layers = layers;
 	self.isDayOff = isDayOff;
+	self.dayOffName = isDayOff ? dayOffName : "";
 	self.isEmptyDay = isEmptyDay;
+	self.isFullDayAbsence = isFullDayAbsence;
 	self.ShiftExchangeOfferId = offerId;
 };
 
