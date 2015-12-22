@@ -58,4 +58,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public string PersonName { get; set; }
 		public IList<string> Message { get; set; }
 	}
+
+	public class AgentsPerPageSettingViewModel
+	{
+		public int Agents { get; set; }
+	}
 }

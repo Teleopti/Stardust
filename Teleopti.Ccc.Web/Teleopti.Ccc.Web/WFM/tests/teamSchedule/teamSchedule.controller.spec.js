@@ -128,6 +128,13 @@ describe("TeamScheduleControllerTest", function() {
 					$promise: queryDeferred.promise
 				};
 			}
+		},
+		getAgentsPerPageSetting: {
+			post: function () {
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve({ Agents: 50 });
+				return { $promise: queryDeferred.promise };
+			}
 		}
 	};
 

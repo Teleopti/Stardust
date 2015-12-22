@@ -89,5 +89,23 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: false
 			}
 		});
+
+		this.getAgentsPerPageSetting = $resource("../api/TeamSchedule/GetAgentsPerPage", {}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: false
+			}
+		});
+
+		this.updateAgentsPerPageSetting = $resource("../api/TeamSchedule/UpdateAgentsPerPage", {
+			agents: "@agents",
+		}, {
+			post: {
+				method: "POST",
+				params: {},
+				isArray: true
+			}
+		});
 	}
 ]);

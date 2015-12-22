@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Ok(failResults);
 		}
 
-		[HttpPut, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
 		public virtual IHttpActionResult UpdateAgentsPerPageSetting(int agents)
 		{
 			var agentsPerPageSetting = new AgentsPerPageSetting
@@ -186,10 +186,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[HttpPost, UnitOfWork, Route("api/TeamSchedule/GetAgentsPerPage")]
-		public virtual JsonResult<int> GetAgentsPerPageSetting()
+		public virtual JsonResult<AgentsPerPageSettingViewModel> GetAgentsPerPageSetting()
 		{
 			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
-			return Json(agentsPerPageSetting.AgentsPerPage);
+			return Json(new AgentsPerPageSettingViewModel(){Agents = agentsPerPageSetting.AgentsPerPage});
 		}
 	}
 }

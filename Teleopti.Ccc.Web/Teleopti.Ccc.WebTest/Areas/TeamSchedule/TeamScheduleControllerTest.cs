@@ -1455,7 +1455,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = target.GetAgentsPerPageSetting();
 
-			result.Content.Should().Be.EqualTo(expectedAgents);
+			result.Content.Agents.Should().Be.EqualTo(expectedAgents);
 		}
 	}
 }

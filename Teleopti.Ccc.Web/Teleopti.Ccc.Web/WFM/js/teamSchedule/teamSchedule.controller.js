@@ -16,6 +16,7 @@
 		vm.selectedAbsenceEndDate = vm.scheduleDate;
 		vm.selectedAbsenceId = '';
 		vm.total = 0;
+		vm.agentsPerPage = 20;
 		vm.isAbsenceReportingEnabled = false;
 		vm.loadScheduelWithReadModel = true;
 		vm.isSearchScheduleEnabled = false;
@@ -36,14 +37,21 @@
 			startingDay: 1
 		};
 
-		vm.paginationOptions = {
-			pageSize: 18, pageNumber: 1, totalPages: 0
-		};
 
-		vm.datePickerStatus = {
-			opened: false
+		vm.getAgentsPerPageSelectionId = function (agents) {
+			switch (agents) {
+			case 20:
+				return "1";
+			case 50:
+				return "2";
+			case 100:
+				return "3";
+			case 300:
+				return "4";
+			default:
+				return "1";
+			}
 		};
-
 
 		vm.agentsPerPageSelection = {
 			availableOptions: [
@@ -52,7 +60,26 @@
 			  { id: '3', name: 100 },
 			  { id: '4', name: 500 }
 			],
-			selectedOption: { id: '1', name: 20 } 
+			selectedOption: { id: vm.getAgentsPerPageSelectionId(vm.agentsPerPage), name: vm.agentsPerPage }
+		};
+
+
+		$scope.$watch("vm.agentsPerPageSelection.selectedOption", function (newValue, oldValue) {
+			if (newValue.id != oldValue.id) {
+				teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPageSelection.selectedOption.name }).$promise.then(function () {
+					vm.agentsPerPage = vm.agentsPerPageSelection.selectedOption.name;
+					vm.paginationOptions.pageSize = vm.agentsPerPage;
+					vm.loadSchedules(1);
+				});
+			}
+		}, true);
+
+		vm.paginationOptions = {
+			pageSize: vm.agentsPerPageSelection.selectedOption.name, pageNumber: 1, totalPages: 0
+		};
+
+		vm.datePickerStatus = {
+			opened: false
 		};
 
 		vm.rightPanelOption = {
@@ -482,6 +509,16 @@
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		}
 
+		var getAgentsPerPage = teamScheduleSvc.getAgentsPerPageSetting.post().
+			$promise.then(function (result) {
+				if (result.Agents != 0) {
+					vm.agentsPerPage = result.Agents;
+					vm.agentsPerPageSelection.selectedOption.id = vm.getAgentsPerPageSelectionId(vm.agentsPerPage);
+					vm.agentsPerPageSelection.selectedOption.name = vm.agentsPerPage;
+					vm.paginationOptions.pageSize = vm.agentsPerPage;
+				}
+		});
+
 		vm.Init = function () {
 			getDateAndTimeFormat();
 			$scope.$on('$localeChangeSuccess', function () {
@@ -489,7 +526,7 @@
 			});
 
 			$q.all([loadTeamPromise, loadWithoutReadModelTogglePromise, advancedSearchTogglePromise, searchScheduleTogglePromise,
-				absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise]).then(function () {
+				absenceReportingTogglePromise, loadAbsencePromise, getPermissionsPromise, getAgentsPerPage]).then(function () {
 					if (vm.isSearchScheduleEnabled) {
 						vm.searchSchedules();
 					}
