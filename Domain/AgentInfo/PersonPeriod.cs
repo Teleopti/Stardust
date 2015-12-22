@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			get
 			{
-				return _personSkillCollection;
+				return _personSkillCollection.ToList();
 			}
 		}
 
