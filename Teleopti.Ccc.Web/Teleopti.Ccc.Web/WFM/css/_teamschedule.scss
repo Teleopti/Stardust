@@ -1,4 +1,9 @@
 ﻿.team-schedule {
+
+	input{
+		background-color:transparent;
+	}
+		
 	.time-line {
 		min-width: 300px;
 		z-index: 10;
@@ -74,6 +79,14 @@
 		}
 	}
 
+	team-schedule-datepicker input{
+		text-align: center;
+	}
+
+	team-schedule-datepicker input.datepicker-mini{
+		width:90px;
+	}
+
 	.timepicker {
 		height: 48px;
 
@@ -95,9 +108,15 @@
 	.table {
 		thead, tbody, tfoot {
 			tr > th, td {
-				padding: 5px;
+				padding: 5px 8px 5px 3px;
+				border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
 			}
 		}
+	}
+
+	.big-table-wrapper{
+		position: relative; 
+		overflow: hidden;
 	}
 
 	.wfm-btn-sm {

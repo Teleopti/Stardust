@@ -2,16 +2,16 @@
 
 <table class="table table-hover" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule" ng-click="vm.test()">
 	<thead>
-		<tr>
+		<tr class="person">
 			<th class="person-name person-name-column" style="width: 15%">
 				<div class="wfm-checkbox" ng-if="vm.selectMode">
 					<label>
-						<!--<input type="checkbox" ng-model="vm.isAllInCurrentPageSelected" ng-click="vm.toggleAllSelectionInCurrentPage()">-->
 						<input type="checkbox" ng-checked="vm.isAllInCurrentPageSelected()" ng-click="vm.toggleAllSelectionInCurrentPage()">
 						<span class="wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
 					</label>
 				</div>
+				<div ng-hide="vm.selectMode" class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</div>
 			</th>
 			<th id="time-line-container" class="schedule schedule-column">
 				<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
@@ -27,7 +27,6 @@
 			<td class="person-name person-name-column">
 				<div class="wfm-checkbox" ng-show="vm.selectMode">
 					<label>
-						<!--<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonIdSelection(personSchedule)">-->
 						<input type="checkbox" ng-checked="vm.isPersonSelected(personSchedule)" ng-click="vm.updatePersonIdSelection(personSchedule)">
 						<span class=" wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>

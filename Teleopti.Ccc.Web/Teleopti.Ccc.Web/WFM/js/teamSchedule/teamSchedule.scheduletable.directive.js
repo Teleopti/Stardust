@@ -16,24 +16,14 @@
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
-			link: linkFunction,
 			bindToController: true,
 			controller: 'scheduleTableCtrl',
 			templateUrl: "js/teamSchedule/html/scheduletable.html"
 		};
 	};
 
-	function linkFunction(scope, element, attr) {
-		scope.vm.init();
-	};
-
 	function scheduleTableController() {
-
 		var vm = this;
-
-		vm.init = function () {
-			//console.log(vm, 'personScheduleController');
-		};
 
 		vm.toggleAllSelectionInCurrentPage = function () {
 			var isAllSelected = vm.isAllInCurrentPageSelected();
@@ -56,11 +46,6 @@
 		vm.isPersonSelected = function (personSchedule) {
 			return vm.personSelection[personSchedule.PersonId].isSelected;
 		}
-
-		//vm.test = function() {
-		//	console.log(vm.personSelection, Object.keys(vm.personSelection).length, 'select list');
-		//};
-
 	};
 
 }());

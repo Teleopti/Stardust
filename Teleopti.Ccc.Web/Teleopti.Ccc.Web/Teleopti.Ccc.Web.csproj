@@ -1265,8 +1265,10 @@
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />
+    <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.datepicker.directive.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.scheduletable.directive.js" />
     <Content Include="WFM\tests\global\http.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
@@ -1309,10 +1311,8 @@
     <Content Include="WFM\js\forecasting\skill.service.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.js" />
     <Content Include="WFM\js\people\peopleSearchInput.directive.js" />
-    <Content Include="WFM\js\teamSchedule\html\personschedule.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.groupSchedule.factory.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.personSchedule.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.personSchedule.factory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\html\schedule.html" />

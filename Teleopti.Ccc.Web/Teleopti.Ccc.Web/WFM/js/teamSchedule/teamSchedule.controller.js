@@ -10,26 +10,21 @@
 		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout) {
 
 		var vm = this;
-		//vm.selectedPersonIdList = [];
 
 		vm.isLoading = false;
 		vm.personIdSelectionDic = {};
 		vm.scheduleDate = new Date();
+		vm.selectedAbsenceEndDate = vm.scheduleDate;
+		vm.selectedAbsenceStartDate = vm.scheduleDate;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.agentsPerPage = 20;
 		vm.isSelectAgentsPerPageEnabled = false;
+
 		vm.searchOptions = {
 			keyword: '',
 			isAdvancedSearchEnabled: false,
 			searchKeywordChanged: false
 		};
-
-		vm.paginationOptions = {
-			pageSize: 18,
-			pageNumber: 1,
-			totalPages: 0
-		};
-
 
 		vm.getAgentsPerPageSelectionId = function (agents) {
 			switch (agents) {
@@ -56,7 +51,6 @@
 			selectedOption: { id: vm.getAgentsPerPageSelectionId(vm.agentsPerPage), value: vm.agentsPerPage }
 		};
 
-
 		$scope.$watch("vm.agentsPerPageSelection.selectedOption", function (newValue, oldValue) {
 			if (newValue.id != oldValue.id) {
 				teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPageSelection.selectedOption.value }).$promise.then(function () {
@@ -66,14 +60,20 @@
 				});
 			}
 		}, true);
-//todo: merge issue
-vm.paginationOptions = {
 
-			pageSize: vm.agentsPerPageSelection.selectedOption.value, pageNumber: 1, totalPages: 0
+		vm.paginationOptions = {
+			pageSize: vm.agentsPerPageSelection.selectedOption.value,
+			pageNumber: 1,
+			totalPages: 0
 		};
 
 		vm.selectAllVisible = function () {
-			return vm.paginationOptions.totalPages > 1 && Object.keys(vm.personIdSelectionDic).length < vm.total;
+			var selectedPersonIdList = getSelectedPersonIdList();
+			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
+		};
+
+		vm.isMenuVisible = function () {
+			return vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
 		};
 
 		vm.onSelectedTeamIdChanged = function () {
@@ -183,8 +183,6 @@ vm.paginationOptions = {
 		};
 
 
-
-
 		//todo: commands should be setup based on permissions
 		vm.commands = [
 			{
@@ -251,14 +249,8 @@ vm.paginationOptions = {
 		};
 
 		vm.isAnyAgentSelected = function () {
-			var isNonSelected = true;
-			for (var personId in vm.personIdSelectionDic) {
-				if (vm.personIdSelectionDic[personId].isSelected)
-					isNonSelected = false;
-				break;
-			}
-
-			return isNonSelected;
+			var selectedPersonList = getSelectedPersonIdList();
+			return selectedPersonList.length > 0;
 		};
 
 		vm.menuState = 'open';
@@ -379,7 +371,7 @@ vm.paginationOptions = {
 		vm.applyAbsence = function () {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: getSelectedPersonIdList(),//vm.selectedPersonIdList,
+					PersonIds: getSelectedPersonIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
@@ -415,16 +407,22 @@ vm.paginationOptions = {
 			return debounceFn;
 		};
 
-
 		vm.init = function () {
 			updateDateAndTimeFormat();
 			createDocumentListeners();
 			vm.isSearchScheduleEnabled = toggleSvc['WfmTeamSchedule_FindScheduleEasily_35611'];
 			vm.loadScheduelWithReadModel = !toggleSvc['WfmTeamSchedule_NoReadModel_35609'];
+			vm.isSelectAgentsPerPageEnabled = toggleSvc['WfmTeamSchedule_SetAgentsPerPage_36230'];
 			vm.isAbsenceReportingEnabled = toggleSvc['WfmTeamSchedule_AbsenceReporting_35995'];
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc['WfmPeople_AdvancedSearch_32973'];
 	
-		var getAgentsPerPage = teamScheduleSvc.getAgentsPerPageSetting.post().
+			if (vm.isSearchScheduleEnabled) {
+				vm.onKeyWordInSearchInputChanged();
+				vm.schedulePageReset();
+			}
+			vm.initialized = true;
+
+			var getAgentsPerPage = teamScheduleSvc.getAgentsPerPageSetting.post().
 			$promise.then(function (result) {
 				if (result.Agents != 0) {
 					vm.agentsPerPage = result.Agents;
@@ -432,15 +430,7 @@ vm.paginationOptions = {
 					vm.agentsPerPageSelection.selectedOption.value = vm.agentsPerPage;
 					vm.paginationOptions.pageSize = vm.agentsPerPage;
 				}
-		});
-
-
-			//todo: auto loading in another way around
-			if (vm.isSearchScheduleEnabled) {
-				vm.onKeyWordInSearchInputChanged();
-				vm.schedulePageReset();
-			}
-			vm.initialized = true;
+			});
 		};
 
 		$q.all([
@@ -448,6 +438,7 @@ vm.paginationOptions = {
 			teamScheduleSvc.PromiseForloadedToggle('WfmPeople_AdvancedSearch_32973'),
 			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_FindScheduleEasily_35611'),
 			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_AbsenceReporting_35995'),
+			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SetAgentsPerPage_36230'), 
 			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
 			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes)
@@ -467,8 +458,8 @@ vm.paginationOptions = {
 		};
 
 		function updateDateAndTimeFormat() {
-			//vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
-			vm.showMeridian = $locale.DATETIME_FORMATS.shortTime.indexOf("h:") >= 0;
+			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
+			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 		};
 

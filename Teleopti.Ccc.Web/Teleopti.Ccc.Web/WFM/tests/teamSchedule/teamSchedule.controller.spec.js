@@ -177,7 +177,7 @@ describe("TeamScheduleControllerTest", function() {
 				};
 			}
 		};
-		teamScheduleService.searchSchedules= {
+		teamScheduleService.searchSchedules = {
 			query: function() {
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
@@ -222,14 +222,15 @@ describe("TeamScheduleControllerTest", function() {
 					$promise: queryDeferred.promise
 				};
 			}
-		},
-		getAgentsPerPageSetting: {
-			post: function () {
+		};
+
+		teamScheduleService.getAgentsPerPageSetting = {
+			post: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({ Agents: 50 });
 				return { $promise: queryDeferred.promise };
 			}
-		}
+		};
 	};
 
 	function setUpController($controller) {
