@@ -13922,4 +13922,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Total requests count</value>
     <comment>show total count of requests</comment>
   </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Clear override</value>
+    <comment>Clear value that overrides forecasted value</comment>
+  </data>
 </root>
