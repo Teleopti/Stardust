@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -610,6 +611,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(range.Contains(personAssignment1));
             Assert.IsTrue(range.Contains(personAssignment2));
         }
+
+		[Test]
+		public void ShouldTakeSnapshotBeforeReturningRangeBasedOnAbsence()
+		{
+			IScheduleRange range;
+			IAbsence absenceToLookFor = AbsenceFactory.CreateAbsence("for test");
+			IPerson person = PersonFactory.CreatePerson("645");
+			IList<IPerson> people = new List<IPerson> { person };
+
+			var period1 = new DateTimePeriod(2000, 2, 1, 2000, 2, 10);
+			var longPeriod1 = new DateOnlyPeriod(2000, 1, 31, 2000, 2, 11);
+
+			var period3 = new DateTimePeriod(2000, 2, 1, 2000, 2, 11);
+
+			ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> { period1 };
+
+			AddPersonAssignment(person, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_absRep.AffectedPeriods(person, _scenario, _longPeriod, absenceToLookFor)).Return(absencePeriods);
+
+				Expect.Call(_absRep.Find(people, period3, _scenario)).Return(_absences);
+				Expect.Call(_assRep.Find(people, longPeriod1, _scenario)).Return(_assignments);
+				Expect.Call(_meetingRepository.Find(people, longPeriod1, _scenario)).Return(_meetings);
+			}
+			using (_mocks.Playback())
+			{
+				range = _target.ScheduleRangeBasedOnAbsence(_longPeriod, _scenario, person, absenceToLookFor);
+			}
+			range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()).IsEmpty().Should().Be.True();
+		}
 
 	    [Test]
 	    public void VerifyEndDateTimeIsNotLongerThanNecessary()

@@ -240,6 +240,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 }
             }
 
+			retDic.TakeSnapshot();
             return retDic[person];
         }
 
