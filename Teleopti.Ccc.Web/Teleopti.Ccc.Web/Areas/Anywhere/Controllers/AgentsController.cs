@@ -60,21 +60,31 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				Alarm = x.AlarmName,
 				AlarmStart = getNullableUtcDatetime(x.RuleStartTime),
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
-				TimeInState = calculateTimeInState(x.StateStartTime)
+				TimeInState = calculateTimeInState(x.StateStartTime),
+				TimeInAlarm = calculateTimeInAlarm(x)
 			}).ToArray();
 
 			return Ok(states);
 		}
 
-		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
+		private int? calculateTimeInAlarm(AgentStateReadModel x)
 		{
-			return dateTime == null ? (DateTime?)null : DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
+			if (x.AlarmStartTime.HasValue)
+			{
+				return _date.UtcDateTime() >= x.AlarmStartTime.Value ? (int?)(_date.UtcDateTime() - x.AlarmStartTime.Value).TotalSeconds : null;
+			}
+			return null;
 		}
-
+		
 		private int calculateTimeInState(DateTime? dateTime)
 		{
 			var stateStartTime = getNullableUtcDatetime(dateTime);
-			return stateStartTime.HasValue ? (int) (_date.UtcDateTime() - stateStartTime.Value).TotalSeconds : 0;
+			return stateStartTime.HasValue ? (int)(_date.UtcDateTime() - stateStartTime.Value).TotalSeconds : 0;
+		}
+
+		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
+		{
+			return dateTime == null ? (DateTime?)null : DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeam")]

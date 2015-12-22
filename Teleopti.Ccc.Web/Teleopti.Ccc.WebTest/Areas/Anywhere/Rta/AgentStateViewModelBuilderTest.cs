@@ -155,21 +155,50 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			states.Single().AlarmStart.Should().Be("2015-11-23 08:15".Utc());
 		}
-		
+
 		[Test]
-		public void ShouldHavgIsInAlarm()
+		public void ShouldBeNullWhenThereIsNoAlarmStartTime()
+		{
+			var agentStates = new[]
+			{
+				new AgentStateReadModel()
+			};
+
+			var states = Target.Build(agentStates);
+
+			states.Single().TimeInAlarm.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldHaveCalculatedTimeInAlarm()
 		{
 			var agentStates = new[]
 			{
 				new AgentStateReadModel
 				{
-					IsRuleAlarm = true
+					AlarmStartTime = "2015-12-22 08:00".Utc()
 				}
 			};
-
+			Now.Is("2015-12-22 08:01".Utc());
 			var states = Target.Build(agentStates);
 
-			states.Single().IsRuleAlarm.Should().Be(true);
+			states.Single().TimeInAlarm.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldBeNullWhenAlarmHasNotStartedYet()
+		{
+			var agentStates = new[]
+			{
+				new AgentStateReadModel
+				{
+					AlarmStartTime = "2015-12-22 09:00".Utc()
+				}
+			};
+			Now.Is("2015-12-22 08:30".Utc());
+			var states = Target.Build(agentStates);
+
+			states.Single().TimeInAlarm.Should().Be(null);
 		}
 	}
 }

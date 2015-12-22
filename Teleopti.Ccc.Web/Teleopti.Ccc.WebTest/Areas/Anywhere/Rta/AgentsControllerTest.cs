@@ -184,5 +184,53 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
 			result.Single().TimeInState.Should().Be((int)"5".Minutes().TotalSeconds);
 		}
+
+		[Test]
+		public void ShouldReturnTimeInAlarmWhenNoAlarmStartTime()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new AgentStateReadModel
+			{
+				TeamId = teamId
+			};
+			var target = new AgentsController(null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
+			
+			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			result.Single().TimeInAlarm.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldCalculateTimeInAlarm()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new AgentStateReadModel
+			{
+				TeamId = teamId,
+				StateStartTime = "2015-10-02 09:00".Utc(),
+			};
+			var now = new MutableNow("2015-10-02 09:05");
+
+			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
+			
+			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			result.Single().TimeInAlarm.Should().Be((int?)"5".Minutes().TotalSeconds);
+		}
+
+		[Test]
+		public void ShouldBeNullWhenAlarmHasNotStartedYet()
+		{
+			var teamId = Guid.NewGuid();
+			var data = new AgentStateReadModel
+			{
+				TeamId = teamId,
+				StateStartTime = "2015-10-02 09:05".Utc(),
+			};
+			var now = new MutableNow("2015-10-02 09:00");
+
+			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
+			
+			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
+			result.Single().TimeInAlarm.Should().Be(null);
+		}
 	}
 }

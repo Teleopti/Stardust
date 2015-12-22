@@ -36,10 +36,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 				NextActivityStartTime = formatTime(x.NextStart),
 				Alarm = x.AlarmName,
 				AlarmStart = x.AlarmStartTime,
-				IsRuleAlarm = x.IsRuleAlarm,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
-				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0
+				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
+				TimeInAlarm = calculateTimeInAlarm(x)
 			});
+		}
+
+		private int? calculateTimeInAlarm(AgentStateReadModel x)
+		{
+			if (x.AlarmStartTime.HasValue)
+			{
+				return _now.UtcDateTime() >= x.AlarmStartTime.Value ? (int?)(_now.UtcDateTime() - x.AlarmStartTime.Value).TotalSeconds : null;
+			}
+			return null;
 		}
 
 		private string formatTime(DateTime? timestamp)
