@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Infrastructure.Util;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
@@ -15,7 +13,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private readonly string _commandText;
 		private readonly CommandType _commandType;
 		private readonly string _connString;
-		private readonly IList<SqlParameter> _procParam;
 		private readonly CloudSafeSqlExecute _executor = new CloudSafeSqlExecute();
 
 		public DatabaseCommand(CommandType commandType, string commandText, string connectionString)
@@ -23,20 +20,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_connString = connectionString;
 			_commandType = commandType;
 			_commandText = commandText;
-			_procParam = new List<SqlParameter>();
 		}
 		
-		public void AddProcParameter(SqlParameter parameter)
-		{
-			InParameter.NotNull("parameter", parameter);
-
-			if (parameter.Value == null)
-				parameter.Value = DBNull.Value;
-
-			_procParam.Add(parameter);
-		}
-		
-		public DataSet ExecuteDataSet()
+		public DataSet ExecuteDataSet(SqlParameter[] sqlParameters)
 		{
 			using (var ds = new DataSet())
 			{
@@ -49,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 							using (var command = SetCommand(tran))
 							{
 								ds.Locale = Thread.CurrentThread.CurrentCulture;
-								setParams(command);
+								setParams(command, sqlParameters);
 								dataAdapter.SelectCommand = command;
 								dataAdapter.Fill(ds);
 								tran.Commit();
@@ -61,7 +47,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 		}
 
-		public int ExecuteNonQuery()
+		public int ExecuteNonQuery(SqlParameter[] sqlParameters)
 		{
 			int number = default(int);
 			_executor.Run(grabConnection, conn =>
@@ -70,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				{
 					using (var command = SetCommand(tran))
 					{
-						setParams(command);
+						setParams(command, sqlParameters);
 						number = command.ExecuteNonQuery();
 						tran.Commit();
 					}
@@ -79,7 +65,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return number;
 		}
 
-		public object ExecuteScalar()
+		public object ExecuteScalar(params SqlParameter[] sqlParameters)
 		{
 			object retVal = default(object);
 			_executor.Run(grabConnection, conn =>
@@ -88,13 +74,22 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				{
 					using (var command = SetCommand(tran))
 					{
-						setParams(command);
+						setParams(command, sqlParameters);
 						retVal = command.ExecuteScalar();
 						tran.Commit();
 					}
 				}
 			});
 			return retVal;
+		}
+
+		private void setParams(SqlCommand command, SqlParameter[] sqlParameters)
+		{
+			command.Parameters.Clear();
+			foreach (var sqlParameter in sqlParameters)
+			{
+				command.Parameters.AddWithValue(sqlParameter.ParameterName, sqlParameter.Value ?? DBNull.Value);
+			}
 		}
 
 		public int ExecuteNonQueryMaintenance()
@@ -104,7 +99,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			{
 				using (var command = SetCommandMaintenance(conn))
 				{
-					setParams(command);
 					number = command.ExecuteNonQuery();
 				}
 			});
@@ -148,15 +142,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private static SqlTransaction OpenTransaction(SqlConnection connection)
 		{
 			return connection.BeginTransaction();
-		}
-
-		private void setParams(SqlCommand command)
-		{
-			int num2 = _procParam.Count - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				command.Parameters.Add(_procParam[i]);
-			}
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -17,17 +16,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return dataTable.Rows.Count;
 		}
 
-		public static int ExecuteNonQuery(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
+		public static int ExecuteNonQuery(CommandType commandType, string commandText, SqlParameter[] parameterCollection, string connectionString)
 		{
 			var db = new DatabaseCommand(commandType, commandText, connectionString);
-			if (parameterCollection != null)
-			{
-				foreach (SqlParameter parameter in parameterCollection)
-				{
-					db.AddProcParameter(new SqlParameter(parameter.ParameterName, parameter.Value));
-				}
-			}
-			int rowsAffected = db.ExecuteNonQuery();
+			int rowsAffected = db.ExecuteNonQuery(parameterCollection ?? new SqlParameter[]{});
 			if (rowsAffected < 0) //when SET NOCOUNT ON is used inside SP
 			{
 				rowsAffected = 0;
@@ -36,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return rowsAffected;
 		}
 
-		public static int ExecuteNonQueryMaintenance(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
+		public static int ExecuteNonQueryMaintenance(CommandType commandType, string commandText, string connectionString)
 		{
 			var db = new DatabaseCommand(commandType, commandText, connectionString);
 
@@ -49,17 +41,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return rowsAffected;
 		}
 
-		public static DataSet ExecuteDataSet(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
+		public static DataSet ExecuteDataSet(CommandType commandType, string commandText, SqlParameter[] parameterCollection, string connectionString)
 		{
 			var db = new DatabaseCommand(commandType, commandText, connectionString);
-			if (parameterCollection != null)
-			{
-				foreach (SqlParameter parameter in parameterCollection)
-				{
-					db.AddProcParameter(new SqlParameter(parameter.ParameterName, parameter.Value));
-				}
-			}
-			return db.ExecuteDataSet();
+			return db.ExecuteDataSet(parameterCollection ?? new SqlParameter[] { });
 		}
 
 		public static object ExecuteScalar(CommandType commandType, string commandText, string connectionString)
@@ -68,17 +53,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return db.ExecuteScalar();
 		}
 
-		public static object ExecuteScalar(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
+		public static object ExecuteScalar(CommandType commandType, string commandText, SqlParameter[] parameterCollection, string connectionString)
 		{
 			var db = new DatabaseCommand(commandType, commandText, connectionString);
-			if (parameterCollection != null)
-			{
-				foreach (SqlParameter parameter in parameterCollection)
-				{
-					db.AddProcParameter(new SqlParameter(parameter.ParameterName, parameter.Value));
-				}
-			}
-			return db.ExecuteScalar();
+			return db.ExecuteScalar(parameterCollection ?? new SqlParameter[]{});
 		}
 
 		public static void TruncateTable(string storedProcedureName, string connectionString)

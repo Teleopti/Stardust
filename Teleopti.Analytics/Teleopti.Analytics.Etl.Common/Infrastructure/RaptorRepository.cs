@@ -31,25 +31,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	public class RaptorRepository : IRaptorRepository
 	{
 		private readonly string _dataMartConnectionString;
-		private IsolationLevel _isolationLevel;
 		private ILicenseStatusUpdater _licenseStatusUpdater;
 
 		public RaptorRepository(string dataMartConnectionString, string isolationLevel)
 		{
 			_dataMartConnectionString = dataMartConnectionString;
-			setIsolationLevel(isolationLevel);
-		}
-
-		private void setIsolationLevel(string isolationLevel)
-		{
-			if (string.IsNullOrEmpty(isolationLevel))
-			{
-				_isolationLevel = IsolationLevel.ReadCommitted;
-			}
-			else
-			{
-				_isolationLevel = (IsolationLevel)Enum.Parse(typeof(IsolationLevel), isolationLevel, true);
-			}
 		}
 
 		public int PersistPmUser(DataTable dataTable)
@@ -115,13 +101,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillGroupPagePersonDataMart(IBusinessUnit currentBusinessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", currentBusinessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", currentBusinessUnit.Id) };
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_group_page_load", parameterList, _dataMartConnectionString);
 		}
 
 		public int FillGroupPagePersonBridgeDataMart(IBusinessUnit currentBusinessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", currentBusinessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", currentBusinessUnit.Id) };
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_group_page_person_load", parameterList, _dataMartConnectionString);
 		}
 
@@ -175,7 +161,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillActivityDataMart(IBusinessUnit businessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 			return
 					 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_activity_load", parameterList,
 											  _dataMartConnectionString);
@@ -183,7 +169,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillAbsenceDataMart(IBusinessUnit businessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 
 			return
 					 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_absence_load", parameterList,
@@ -200,10 +186,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillScheduleForecastSkillDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_forecast_skill_load", parameterList,
@@ -228,10 +216,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_load", parameterList,
@@ -240,7 +230,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 				{
 					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
 					new SqlParameter("scenario_code", scenario.Id)
@@ -253,7 +243,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillDayOffDataMart(IBusinessUnit businessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 			return
 					 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_day_off_load", parameterList,
 											  _dataMartConnectionString);
@@ -277,7 +267,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			var endDate = period.EndDate;
 
 			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 				{
 					new SqlParameter("start_date", startDate.Date),
 					new SqlParameter("end_date", endDate.Date),
@@ -297,7 +287,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			var endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 				{
 					new SqlParameter("start_date", startDate.Date),
 					new SqlParameter("end_date", endDate.Date),
@@ -312,7 +302,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 				{
 					new SqlParameter("business_unit_code", businessUnit.Id),
 					new SqlParameter("scenario_code", scenario.Id)
@@ -335,7 +325,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 				{
 					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
 					new SqlParameter("scenario_code", scenario.Id)
@@ -356,8 +346,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new[] {new SqlParameter("datasource_id", dataSourceId)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_queue_load", parameterList,
@@ -367,14 +356,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
 			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			DateTime startDate = period.StartDateTimeLocal(defaultTimeZone);
+			DateTime endDate = period.EndDateTimeLocal(defaultTimeZone);
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", startDate.Date),
+				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("datasource_id", dataSourceId)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load", parameterList,
@@ -389,8 +380,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillPersonDataMart(IBusinessUnit currentBusinessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("current_business_unit_code", currentBusinessUnit.Id.Value));
+			var parameterList = new[]
+			{
+				new SqlParameter("current_business_unit_code", currentBusinessUnit.Id.Value)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_person_load", parameterList,
@@ -404,11 +397,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 											  _dataMartConnectionString);
 		}
 
-		//public int PersistSchedule(DataTable scheduleDataTable, DataTable contractDataTable, DataTable absenceDayCountDataTable)
 		public int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable)
 		{
 			int affectedRows = HelperFunctions.BulkInsert(scheduleDataTable, "stage.stg_schedule", _dataMartConnectionString);
-			//affectedRows += HelperFunctions.BulkInsert(contractDataTable, "stage.stg_contract_TEST", _dataMartConnectionString);
 			affectedRows += HelperFunctions.BulkInsert(absenceDayCountDataTable, "stage.stg_schedule_day_absence_count", _dataMartConnectionString);
 
 			return affectedRows;
@@ -416,12 +407,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
-			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
-
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_load", parameterList,
@@ -430,7 +421,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_schedule_intraday_load]", parameterList,
@@ -724,8 +715,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new[] {new SqlParameter("datasource_id", dataSourceId)};
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_quality_quest_load", parameterList,
 																_dataMartConnectionString);
@@ -738,10 +728,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", startDate.Date),
+				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("datasource_id", dataSourceId)
+			};
 
 			return
 				 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_quality_load", parameterList,
@@ -1127,8 +1119,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_intraday_load", parameterList,
@@ -1140,10 +1131,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new []
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_load", parameterList,
@@ -1152,8 +1145,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_intraday_load", parameterList,
@@ -1162,10 +1154,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new []
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			return
 				 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_load", parameterList,
@@ -1317,13 +1311,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		}
 		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
 		{
-			var result = 0;
+			int result;
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new []
+			{
+				new SqlParameter("start_date", period.StartDateTime.Date),
+				new SqlParameter("end_date", period.EndDateTime.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id)
+			};
 
 			if (isIntraday)
 			{
@@ -1355,7 +1351,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillBusinessUnitDataMart(IBusinessUnit businessUnit)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new SqlParameter[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 
 			//note: This step is BU-less, so businessUnit.Id could be removed
 
@@ -1387,8 +1383,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillAcdLogOnDataMart(int dataSourceId)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new [] {new SqlParameter("datasource_id", dataSourceId)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_acd_login_load", parameterList,
@@ -1402,7 +1397,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
+			var parameterList = new []
 				{
 					new SqlParameter("start_date", startDate.Date),
 					new SqlParameter("end_date", endDate.Date),
@@ -1421,14 +1416,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
 			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			DateTime startDate = period.StartDateTimeLocal(defaultTimeZone);
+			DateTime endDate = period.EndDateTimeLocal(defaultTimeZone);
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new []
+			{
+				new SqlParameter("start_date", startDate.Date),
+				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("datasource_id", dataSourceId)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load", parameterList,
@@ -1442,10 +1439,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", startDate.Date));
-			parameterList.Add(new SqlParameter("end_date", endDate.Date));
-			parameterList.Add(new SqlParameter("datasource_id", dataSourceId));
+			var parameterList = new []
+			{
+				new SqlParameter("start_date", startDate.Date),
+				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("datasource_id", dataSourceId)
+			};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load", parameterList,
@@ -1478,7 +1477,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			int numberOfRows;
 
 			//Prepare sql parameters
-			var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
+			var parameterList = new SqlParameter[] { new SqlParameter("business_unit_code", businessUnit.Id) };
 
 			//fill data and return effected rows
 			numberOfRows =
@@ -1517,8 +1516,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public int FillBridgeAcdLogOnPerson(IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_acd_login_person_load",
@@ -1528,8 +1526,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillBridgeWorkloadQueue(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_queue_workload_load", parameterList,
@@ -1557,8 +1554,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_skillset_skill_load", parameterList,
 								_dataMartConnectionString);
@@ -1566,8 +1562,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillFactAgentSkillDataMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_skill_load", parameterList,
 									  _dataMartConnectionString);
@@ -1588,7 +1583,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var stateGroupRepository = new RtaStateGroupRepository(uow);
-				//rtaStateGroupForBusinessUnit = stateGroupRepository.LoadAllCompleteGraph().Where(r => r.BusinessUnit.Id.Value.Equals(businessUnitId)).ToList();
 				rtaStateGroupForBusinessUnit = stateGroupRepository.LoadAll();
 			}
 			return rtaStateGroupForBusinessUnit;
@@ -1646,8 +1640,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillScorecardKpiDataMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 			return
 					 HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_scorecard_kpi_load", parameterList,
 											  _dataMartConnectionString);
@@ -1682,8 +1675,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_state_load", parameterList,
 											  _dataMartConnectionString);
@@ -1691,8 +1683,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int FillKpiTargetTeamDataMart(IBusinessUnit businessUnit)
 		{
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			var parameterList = new [] {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_kpi_targets_team_load", parameterList,
@@ -1742,11 +1733,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_schedule_forecast_skill", _dataMartConnectionString);
 		}
 
-		private static List<SqlParameter> parameterList(int dataSourceId)
+		private static SqlParameter[] parameterList(int dataSourceId)
 		{
-
-			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
+			var parameterList = new []
 			{
 				new SqlParameter("datasource_id", dataSourceId)
 			};
@@ -1811,7 +1800,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				try
 				{
 					sqlError = false;
-					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, connectionString);
+					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", connectionString);
 				}
 				catch (SqlException)
 				{

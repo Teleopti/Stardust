@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Analytics.Etl.Common.Entity;
@@ -19,10 +18,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public DataTable GetSchedulePeriods(int scheduleId)
 		{
-			var parameterList = new List<SqlParameter>
-									{
-										new SqlParameter("schedule_id", scheduleId), 
-									};
+			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
 			DataSet ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_get_schedule_periods",
 														parameterList,
 														_connectionString);
@@ -51,7 +47,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void SaveLogPost(IEtlJobLog etlJobLogItem, IJobResult jobResult)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 									{
 										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
 										new SqlParameter("job_name", jobResult.Name),
@@ -78,7 +74,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				innerException = jobStepResult.JobStepException.InnerException;
 			}
 
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 									{
 										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
 										jobStepResult.CurrentBusinessUnit == null ? new SqlParameter("business_unit_code", DBNull.Value) : new SqlParameter("business_unit_code", jobStepResult.CurrentBusinessUnit.Id),
@@ -100,7 +96,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 									{
 										new SqlParameter("start_date", startDate),
 										new SqlParameter("end_date", endDate),
@@ -115,7 +111,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 									{
 										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
 										new SqlParameter("schedule_name", etlJobScheduleItem.ScheduleName),
@@ -142,7 +138,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			foreach (IEtlJobRelativePeriod relativePeriod in etlJobScheduleItem.RelativePeriodCollection)
 			{
-				var parameterList = new List<SqlParameter>
+				var parameterList = new[]
 									{
 										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
 										new SqlParameter("job_name", relativePeriod.JobCategoryName),
@@ -158,7 +154,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void DeleteSchedule(int scheduleId)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("schedule_id", scheduleId) };
+			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
 
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_delete_schedule", parameterList,
 											_connectionString);

@@ -106,7 +106,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void SaveDataSource(int dataSourceId, int timeZoneId)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 			{
 				new SqlParameter("datasource_id", dataSourceId),
 				new SqlParameter("time_zone_id", timeZoneId)
@@ -164,13 +164,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
 		{
-			var parameterList = new List<SqlParameter> { new SqlParameter("key", cultureKey), new SqlParameter("value", configuration.CultureId) };
+			var parameterList = new[] { new SqlParameter("key", cultureKey), new SqlParameter("value", configuration.CultureId) };
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_configuration_save", parameterList, _dataMartConnectionString);
 
-			parameterList = new List<SqlParameter> { new SqlParameter("key", intervalLengthMinutesKey), new SqlParameter("value", configuration.IntervalLength) };
+			parameterList = new[] { new SqlParameter("key", intervalLengthMinutesKey), new SqlParameter("value", configuration.IntervalLength) };
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_configuration_save", parameterList, _dataMartConnectionString);
 
-			parameterList = new List<SqlParameter> { new SqlParameter("key", timeZoneCodeKey), new SqlParameter("value", configuration.TimeZoneCode) };
+			parameterList = new[] { new SqlParameter("key", timeZoneCodeKey), new SqlParameter("value", configuration.TimeZoneCode) };
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_configuration_save", parameterList, _dataMartConnectionString);
 		}
 
@@ -197,7 +197,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		private DataSet getDatasources(bool getValidDatasources, bool includeOptionAll)
 		{
-			var parameterList = new List<SqlParameter>
+			var parameterList = new[]
 												{
 													 new SqlParameter("get_valid_datasource", getValidDatasources),
 													 new SqlParameter("include_option_all", includeOptionAll)
