@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual ViewResult Index(DateOnly? date, Guid? id)
 		{
 
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580))
+			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580) || _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210))
 			{
 				return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
 			}
