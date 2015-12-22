@@ -93,14 +93,21 @@
 						$scope.filteredData = $scope.agents;
 					else
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
-					if ($scope.agentsInAlarm){
-						$scope.filteredData = $filter('agentFilter')($scope.filteredData, 'Out Adherence', ['Alarm']);
-						$scope.filteredData = $filter('orderBy')($scope.filteredData, 'TimeInState', true);
+					if ($scope.agentsInAlarm) {
+						$scope.filteredData = $filter('filter')($scope.filteredData, {
+							IsRuleAlarm: true
+						});
 					}
 				};
 
 				$scope.$watch('agents', filterData, true);
-				$scope.$watchGroup(['filterText', 'agentsInAlarm'], filterData);
+				$scope.$watch('filterText', filterData);
+				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
+					if (newValue !== oldValue) {
+						updateStates();
+						filterData();
+					}
+				});
 
 				$scope.changeScheduleUrl = function(teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
@@ -124,13 +131,15 @@
 							agent.AlarmStart = state[0].AlarmStart;
 							agent.AlarmColor = state[0].AlarmColor;
 							agent.TimeInState = state[0].TimeInState;
+							agent.IsRuleAlarm = state[0].IsRuleAlarm;
+						} else {
+							agent.IsRuleAlarm = false;
 						}
 					});
 				};
 
 				var updateStates = function() {
 					getStates({
-							teamId: teamIds[0],
 							siteIds: siteIds,
 							teamIds: teamIds,
 							inAlarmOnly: $scope.agentsInAlarm === true ? true : null
@@ -139,7 +148,6 @@
 				};
 
 				getAgents({
-						teamId: teamIds[0],
 						siteIds: siteIds,
 						teamIds: teamIds,
 					})

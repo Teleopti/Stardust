@@ -77,11 +77,11 @@ describe('RtaAgentsCtrl', function() {
 			.respond(function() {
 				return [200, states];
 			});
-			$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
-				return [200, {
-					IsEnabled: false
-				}];
-			});
+		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
+			return [200, {
+				IsEnabled: false
+			}];
+		});
 	}));
 
 	var createController = function() {
@@ -329,5 +329,63 @@ describe('RtaAgentsCtrl', function() {
 		scope.$apply('adherencePercent = 0');
 
 		expect(scope.showAdherenceUpdates()).toEqual(true);
+	});
+
+	it('should display states in alarm only', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			Name: "Ashley Andeen",
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}, {
+			Name: "Charley Caper",
+			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+		}];
+		states = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			State: "In Call",
+			IsRuleAlarm: false
+		},{
+			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+			State: "Break",
+			IsRuleAlarm: true
+		}];
+		createController();
+
+		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+			.respond(function() {
+				return [200, [states[1]]]
+			});
+		scope.$apply('agentsInAlarm = true');
+		$httpBackend.flush();
+
+		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
+		expect(scope.filteredData[0].State).toEqual("Break");
+	});
+
+	it('should display nothing', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			Name: "Ashley Andeen",
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}];
+		states = [{
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			State: "Break",
+			IsRuleAlarm: true
+		}];
+		createController();
+
+		states = [];
+		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+			.respond(function() {
+				return [200, states]
+			});
+		scope.$apply('agentsInAlarm = true');
+		$httpBackend.flush();
+
+		expect(scope.filteredData.length).toEqual(0);
 	});
 });
