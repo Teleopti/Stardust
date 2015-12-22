@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		{
 			var schedules = (agentSchedules as IList<AgentScheduleViewModelReworked>) ?? agentSchedules.ToList();
 
-			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && s.ScheduleLayers != null).ToList();
+			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && (!s.ScheduleLayers.IsNullOrEmpty())).ToList();
 
 			if (!schedulesWithoutDayoffAndEmptyDays.Any())
 				return null;
