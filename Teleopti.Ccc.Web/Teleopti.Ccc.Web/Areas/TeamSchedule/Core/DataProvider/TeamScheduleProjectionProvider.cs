@@ -35,7 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleVm.Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
-			var overtimeActivities = scheduleDay.PersonAssignment().OvertimeActivities().ToArray();
+			var personAssignment = scheduleDay.PersonAssignment();
+			var overtimeActivities = personAssignment != null
+				? personAssignment.OvertimeActivities().ToArray()
+				: null;
 
 			switch (significantPart)
 			{
@@ -44,7 +47,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					break;
 				case SchedulePartView.DayOff:
 				case SchedulePartView.ContractDayOff:
-					var personAssignment = scheduleDay.PersonAssignment();
 					var dayOff = personAssignment != null ? personAssignment.DayOff() : null;
 					var dayOffStart = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime;
 					var dayOffEnd = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime;
@@ -89,7 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								: layer.DisplayColor().ToHtml(),
 						Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
 						Minutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
-						IsOvertime = overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
+						IsOvertime =
+							overtimeActivities != null && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
 					});
 				}
 			}
@@ -97,7 +100,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return scheduleVm;
 		}
 
-		public AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
+		public AgentScheduleViewModelReworked MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay,
+			bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentScheduleViewModelReworked();
 			var layers = new List<LayerViewModelReworked>();
@@ -170,7 +174,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			}
 			ret.ScheduleLayers = layers.ToArray();
-			//ret.MinStart = layers.Min(l => l.Start);
 			ret.Total = layers.Count;
 			return ret;
 		}
