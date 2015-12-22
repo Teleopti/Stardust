@@ -345,11 +345,11 @@ describe('RtaAgentsCtrl', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "In Call",
-			IsRuleAlarm: false
+			TimeInAlarm: null
 		},{
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "Break",
-			IsRuleAlarm: true
+			TimeInAlarm: 60
 		}];
 		createController();
 
@@ -374,7 +374,7 @@ describe('RtaAgentsCtrl', function() {
 		states = [{
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Break",
-			IsRuleAlarm: true
+			TimeInAlarm: 60
 		}];
 		createController();
 

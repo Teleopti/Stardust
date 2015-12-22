@@ -95,7 +95,7 @@
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 					if ($scope.agentsInAlarm) {
 						$scope.filteredData = $filter('filter')($scope.filteredData, {
-							IsRuleAlarm: true
+							TimeInAlarm: ''
 						});
 					}
 				};
@@ -131,9 +131,9 @@
 							agent.AlarmStart = state[0].AlarmStart;
 							agent.AlarmColor = state[0].AlarmColor;
 							agent.TimeInState = state[0].TimeInState;
-							agent.IsRuleAlarm = state[0].IsRuleAlarm;
+							agent.TimeInAlarm = state[0].TimeInAlarm;
 						} else {
-							agent.IsRuleAlarm = false;
+							agent.TimeInAlarm = null;
 						}
 					});
 				};
