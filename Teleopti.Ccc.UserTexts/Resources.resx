@@ -13926,4 +13926,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Clear override</value>
     <comment>Clear value that overrides forecasted value</comment>
   </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Added absence for {0} selected agent(s), all successed!</value>
+    <comment>use in WFM TeamSchedule, a notify message to user for all added absence successed.</comment>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>Added absence for {0} selected agent(s), {1} successed, {2} failed!</value>
+    <comment>use in WFM TeamSchedule, a notify message to user for telling the success and fail result.</comment>
+  </data>
 </root>

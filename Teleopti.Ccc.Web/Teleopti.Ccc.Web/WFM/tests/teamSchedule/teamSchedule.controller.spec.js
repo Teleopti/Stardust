@@ -8,6 +8,7 @@ describe("TeamScheduleControllerTest", function() {
 	beforeEach(function() {
 		module('wfm.teamSchedule');
 		module('externalModules');
+		module('wfm.notice');
 
 		module(function ($provide) {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
@@ -16,7 +17,7 @@ describe("TeamScheduleControllerTest", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_) {
+	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _TeamSchedule_) {
 		$q = _$q_;
 		rootScope = _$rootScope_.$new();
 		setupMockTeamScheduleService(_TeamSchedule_);

@@ -4,10 +4,10 @@
 
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'GroupScheduleFactory',
-			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', TeamScheduleController]);
+			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', 'teamScheduleNotificationService', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, groupScheduleFactory,
-		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout) {
+		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout, teamScheduleNotificationService) {
 
 		var vm = this;
 
@@ -365,7 +365,6 @@
 		};
 
 		vm.absenceEndDatePickerOpened = false;
-
 		vm.isFullDayAbsence = false;
 
 		vm.toggleAbsenceEndCalendar = function () {
@@ -384,39 +383,19 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		vm.hasErrorInResult = false;
-		vm.showErrorDetails = false;
-		vm.errorDetails = [];
-		var handleActionResult = function (result) {
-			vm.showActionResult = true;
-			if (result.length > 0) {
-				vm.hasErrorInResult = true;
-				vm.errorDetails = result;
-			} else {
-				vm.hasErrorInResult = false;
-				vm.errorDetails = [];
-			}
+		var handleAddAbsenceResult = function (result) {
+			var total = vm.getSelectedPersonIdList().length;
 
-			vm.cleanErrorPromise = $timeout(function () {
-				vm.clearErrors();
-			}, 5000);
+			if (result.length > 0) {
+				var successCount = total - result.length;
+				teamScheduleNotificationService.notifAbsenceAddedFailed(total, successCount, result.length);
+			}
+			else {
+				teamScheduleNotificationService.notifyAllAbsenceAddedSuccessed(total);
+			}
 
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
-
 			vm.setCurrentCommand("");
-		}
-
-		vm.clearErrors = function () {
-			vm.showActionResult = false;
-			vm.hasErrorInResult = false;
-			vm.errorDetails = [];
-		}
-
-		vm.toggleErrorDetails = function () {
-			if (vm.cleanErrorPromise != undefined) {
-				$timeout.cancel(vm.cleanErrorPromise);
-			}
-			vm.showErrorDetails = !vm.showErrorDetails;
 		}
 
 		vm.cleanUIHistoryAfterApply = function() {
@@ -434,7 +413,7 @@
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
 				}).$promise.then(function (result) {
-					handleActionResult(result);
+					handleAddAbsenceResult(result);
 					vm.cleanUIHistoryAfterApply();
 				});
 			} else {
@@ -444,7 +423,7 @@
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
 				}).$promise.then(function (result) {
-					handleActionResult(result);
+					handleAddAbsenceResult(result);
 					vm.cleanUIHistoryAfterApply();
 				});
 			}

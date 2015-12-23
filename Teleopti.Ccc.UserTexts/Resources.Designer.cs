@@ -709,11 +709,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added absence for {0} selected agent(s), all successed!.
+        /// </summary>
+        public static string AddAbsenceSuccessedResult {
+            get {
+                return ResourceManager.GetString("AddAbsenceSuccessedResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Absence....
         /// </summary>
         public static string AddAbsenceThreeDots {
             get {
                 return ResourceManager.GetString("AddAbsenceThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added absence for {0} selected agent(s), {1} successed, {2} failed!.
+        /// </summary>
+        public static string AddAbsenceTotalResult {
+            get {
+                return ResourceManager.GetString("AddAbsenceTotalResult", resourceCulture);
             }
         }
         
