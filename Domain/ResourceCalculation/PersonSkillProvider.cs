@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SkillCombination
 	{
 		private readonly DateOnlyPeriod _period;
+		private readonly IList<Guid> _skillKeys;
 
 		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
 		{
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillEfficiencies = skillEfficiencies;
 			Key = key;
 			Skills = skills;
+			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToList();
 		}
 
 		public bool IsValidForDate(DateOnly date)
@@ -83,6 +85,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public static string ToKey(IEnumerable<Guid> idCollection)
 		{
 			return string.Join("_", idCollection.OrderBy(s => s));
+		}
+
+		public bool HasSkill(Guid skill)
+		{
+			return _skillKeys.Contains(skill);
 		}
 
 		public string Key { get; private set; }

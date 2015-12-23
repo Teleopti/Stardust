@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -14,9 +13,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skills = skills;
 		}
 
-		public string GenerateKey()
+		public bool HasActivity(Guid id)
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0}|{1}", _activity, _skills.Key);
+			return _activity == id;
+		}
+
+		//TODO: remove me later!
+		public string SkillCombinationKey()
+		{
+			return _skills.Key;
+		}
+
+		public bool ContainsSkill(Guid id)
+		{
+			return _skills.HasSkill(id);
+		}
+
+		public override bool Equals(object obj)
+		{
+			var that = obj as ActivitySkillsCombination;
+			if (that == null)
+				return false;
+			return _activity == that._activity &&
+				_skills.Key == that._skills.Key;
+		}
+
+		public override int GetHashCode()
+		{
+			return _activity.GetHashCode() ^ _skills.Key.GetHashCode();
 		}
 	}
 }

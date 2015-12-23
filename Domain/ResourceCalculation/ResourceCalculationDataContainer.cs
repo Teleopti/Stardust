@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
 			
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
-			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
+			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 			_skills.TryAdd(skills.Key,skills.Skills);
 			if (resourceLayer.RequiresSeat)
 			{
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
-			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
+			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
 			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period)
 		{
 			var skillKey = skill.Id.GetValueOrDefault();
-			var activityKey = string.Empty;
+			var activityKey = Guid.Empty;
 			if (skill.Activity != null)
 			{
-				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
+				activityKey = skill.Activity.Id.GetValueOrDefault();
 			}
 
 			var result = new List<DateTimePeriod>();
@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
 		{
 			var skillKey = skill.Id.GetValueOrDefault();
-			var activityKey = string.Empty;
+			var activityKey = Guid.Empty;
 			if (skill.Activity != null)
 			{
-				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
+				activityKey = skill.Activity.Id.GetValueOrDefault();
 			}
 
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
 		{
-			var activityKeys = _activityRequiresSeat.Keys.Select(a => a.ToString()).ToArray();
+			var activityKeys = _activityRequiresSeat.Keys;
 			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var result = new Dictionary<string, AffectedSkills>();
 
-			var activityKey = activity.Id.GetValueOrDefault().ToString();
+			var activityKey = activity.Id.GetValueOrDefault();
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{

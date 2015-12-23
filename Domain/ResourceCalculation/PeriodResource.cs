@@ -9,9 +9,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PeriodResource
 	{
-		private readonly ConcurrentDictionary<string, InnerPeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, InnerPeriodResourceDetail>();
+		private readonly ConcurrentDictionary<ActivitySkillsCombination, InnerPeriodResourceDetail> _resourceDictionary = 
+			new ConcurrentDictionary<ActivitySkillsCombination, InnerPeriodResourceDetail>();
 		
-		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
+		public void AppendResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key,
 				new InnerPeriodResourceDetail(heads, resource, skillCombination.SkillEfficiencies,
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Max(y.Sum(z => z.Resource), 0))).ToArray();
 		}
 
-		public void RemoveResource(string key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
+		public void RemoveResource(ActivitySkillsCombination key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key, new InnerPeriodResourceDetail(0, 0, skillCombination.SkillEfficiencies, new DateTimePeriod[]{}), (s, d) =>
 			{
@@ -63,14 +64,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			});
 		}
 
-		public PeriodResourceDetail GetResources(string activityKey, Guid skillKey)
+		public PeriodResourceDetail GetResources(Guid activityKey, Guid skillKey)
 		{
 			var count = 0d;
 			var resource = 0d;
-			var skillKeyString = skillKey.ToString();
 			foreach (var pair in _resourceDictionary)
 			{
-				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
+				if ((Guid.Empty == activityKey || pair.Key.HasActivity(activityKey)) && (pair.Key.ContainsSkill(skillKey)))
 				{
 					double currentResource = pair.Value.Resource;
 					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
@@ -86,13 +86,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new PeriodResourceDetail(count, resource);
 		}
 
-		public IEnumerable<DateTimePeriod> GetFractionResources(string activityKey, Guid skillKey)
+		public IEnumerable<DateTimePeriod> GetFractionResources(Guid activityKey, Guid skillKey)
 		{
 			var result = new List<DateTimePeriod>();
-			var skillKeyString = skillKey.ToString();
 			foreach (var pair in _resourceDictionary)
 			{
-				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
+				if ((Guid.Empty == activityKey || pair.Key.HasActivity(activityKey)) && (pair.Key.ContainsSkill(skillKey)))
 				{
 					result.AddRange(pair.Value.FractionPeriods);
 				}
@@ -100,14 +99,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 
-		public PeriodResourceDetail GetResources(IEnumerable<string> activityKeys, Guid skillKey)
+		public PeriodResourceDetail GetResources(IEnumerable<Guid> activityKeys, Guid skillKey)
 		{
 			var count = 0d;
 			var resource = 0d;
-			var skillKeyString = skillKey.ToString();
 			foreach (var pair in _resourceDictionary)
 			{
-				if (pair.Key.Contains(skillKeyString) && activityKeys.Any(a => pair.Key.StartsWith(a)))
+				if (pair.Key.ContainsSkill(skillKey) && activityKeys.Any(a => pair.Key.HasActivity(a)))
 				{
 					double currentResource = pair.Value.Resource;
 					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
@@ -123,13 +121,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new PeriodResourceDetail(count, resource);
 		}
 
-		public IEnumerable<SkillKeyResource> GetSkillKeyResources(string activityKey)
+		public IEnumerable<SkillKeyResource> GetSkillKeyResources(Guid activityKey)
 		{
 			foreach (var pair in _resourceDictionary)
 			{
-				if (!pair.Key.StartsWith(activityKey)) continue;
+				if (!pair.Key.HasActivity(activityKey)) continue;
 
-				var skillKey = pair.Key.Split('|')[1];
+				var skillKey = pair.Key.SkillCombinationKey();
 				yield return new SkillKeyResource { SkillKey = skillKey, Resource = new PeriodResourceDetail(pair.Value.Count,pair.Value.Resource), Effiencies = pair.Value.EffiencyResources };
 			}
 		}
