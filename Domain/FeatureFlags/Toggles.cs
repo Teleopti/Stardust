@@ -92,6 +92,7 @@
 		WfmTeamSchedule_FindScheduleEasily_35611,
 		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_SetAgentsPerPage_36230,
+		WfmTeamSchedule_SwapShifts_36231,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
