@@ -82,7 +82,7 @@
 				<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
 			</select>
 			<div>{{'From'|translate}}: </div>
-			<div class="row" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
+			<div class="row">
 				<span class="col-sm-7" style="padding-right: 0; height: 48px;">
 					<team-schedule-datepicker selected-date="vm.selectedAbsenceStartDate" mini />
 				</span>
@@ -92,7 +92,7 @@
 			</div>
 
 			<div>{{'To'|translate}}: </div>
-			<div class="row" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
+			<div class="row">
 				<span class="col-sm-7" style="padding-right: 0; height: 48px;">
 					<team-schedule-datepicker selected-date="vm.selectedAbsenceEndDate" mini />
 				</span>
@@ -102,7 +102,7 @@
 			</div>
 
 			<div class="wfm-checkbox" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
-				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" />
+				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable" />
 				<label for="is-full-day">
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>

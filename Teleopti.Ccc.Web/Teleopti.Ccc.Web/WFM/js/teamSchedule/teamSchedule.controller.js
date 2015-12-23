@@ -393,7 +393,7 @@
 
 		vm.cleanUIHistoryAfterApply = function() {
 			vm.selectedAbsenceId = '';
-			vm.isFullDayAbsence = false;
+			vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
 			vm.selectedAbsenceStartDate = vm.scheduleDate;
 			vm.selectedAbsenceEndDate = vm.scheduleDate;
 		}
@@ -455,6 +455,7 @@
 				vm.onKeyWordInSearchInputChanged();
 				vm.schedulePageReset();
 			}
+			vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
 			vm.initialized = true;
 		};
 
@@ -481,6 +482,10 @@
 			}
 		};
 
+		function isFullDayAbsenceDefaultValue() {
+			return vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable;
+		};
+		
 		function updateAllTeamsForTeamPicker(result) {
 			vm.teams = result;
 		};
