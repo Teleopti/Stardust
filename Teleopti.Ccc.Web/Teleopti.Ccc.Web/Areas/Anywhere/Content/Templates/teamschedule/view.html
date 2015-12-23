@@ -1,30 +1,4 @@
 <div class="container team-schedule">
-	<!-- ko if: StaffingMetricsVisible -->
-	<table class="table table-condensed well well-sm" data-bind="visible: DisplayStaffingMetrics">
-        <thead>
-            <tr>
-                <th>
-                    <span id="skill-selector" class="btn-group">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                            <span data-bind="text: SelectedSkillName"></span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" data-bind="foreach: { data: Skills, as: 'skill' }">
-                            <li>
-                                <a data-bind="text: skill.Name, value: skill.Id, click: $parent.SelectSkill"></a>
-                            </li>
-                        </ul>
-                    </span>
-                </th>
-                <th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="    text: Resources.LoadingThreeDots"></span></th>
-                <th><span id="forecasted-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
-                <th><span id="scheduled-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
-                <th><span id="difference-forecasted-scheduled" class="text-danger" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
-                <th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
-            </tr>
-        </thead>
-    </table>
-	<!-- /ko -->
     <div class="row"><div id="existsWhenLoadingFinishes" data-bind="ifnot: Loading"></div>
         <div class="col-xs-12 col-md-4">
             <select id="group-picker" class="col-xs-12" data-bind="disable: Loading, foreach: GroupPages, select2: { value: GroupId } ">
@@ -53,8 +27,6 @@
 							<i class="glyphicon glyphicon-info-sign"></i>
 						</button>
 					</span>
-
-
 				</div>
 			</div>
 		</div>

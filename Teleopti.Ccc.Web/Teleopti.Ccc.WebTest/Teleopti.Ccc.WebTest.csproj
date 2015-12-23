@@ -436,8 +436,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
-    <Compile Include="Areas\Anywhere\StaffingMetricsControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\DailyStaffingMetricsViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />

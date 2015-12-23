@@ -21,8 +21,8 @@ define([
     };
 
 	return {
-		GoToTeamSchedule: function (buid, id, date, skill) {
-			windowWrap.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
+		GoToTeamSchedule: function (buid, id, date) {
+			windowWrap.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date));
 		},
 		GoToTeamScheduleWithPreselectedParameter: function (buid, id, date, selectedPersonId, selectedStartMinutes) {
 			windowWrap.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) 

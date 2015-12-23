@@ -536,11 +536,9 @@
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonForScheduleFinder.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
-    <Compile Include="Repositories\DisabledScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
-    <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
     <Compile Include="Rta\ITeamAdherenceAggregator.cs" />

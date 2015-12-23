@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.IocCommon
 		public bool PublishEventsToServiceBus { get; set; }
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
-		public bool EnableNewResourceCalculation { get; set; }
 		public bool OptimizeScheduleChangedEvents_DontUseFromWeb { get; set; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.IocCommon
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
-			EnableNewResourceCalculation = configReader.ReadValue("EnableNewResourceCalculation", false);
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 		}
 

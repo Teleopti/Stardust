@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -113,8 +112,6 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			aggregateRoots.Add(typeof (IPersonScheduleDayReadModel),
 							   new List<Type> {typeof (IPersonScheduleDayReadModel)});
 			aggregateRoots.Add(typeof (IScheduleChangedEvent), new List<Type> {typeof (IScheduleChangedEvent)});
-	        aggregateRoots.Add(typeof (IScheduledResourcesReadModel),
-	                           new List<Type> {typeof (IScheduledResourcesReadModel)});
 
 			aggregateRoots.Add(typeof (Person), new List<Type> {typeof (IPerson)});
 			aggregateRoots.Add(typeof (Scenario), new List<Type> {typeof (IScenario)});
@@ -126,8 +123,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 
 			aggregateRoots.Add(typeof(Note), new List<Type> { typeof(IPersistableScheduleData), typeof(INote)});
 			aggregateRoots.Add(typeof(AgentDayScheduleTag), new List<Type> { typeof(IPersistableScheduleData), typeof(IAgentDayScheduleTag) });
-			//aggregateRoots.Add(typeof(PersonAssignment), new List<Type> { typeof(IPersistableScheduleData) });
-			//aggregateRoots.Add(typeof(PersonAbsence), new List<Type> { typeof(IPersistableScheduleData) });
+
 			aggregateRoots.Add(typeof(PublicNote), new List<Type> { typeof(IPersistableScheduleData), typeof(IPublicNote) });
 			aggregateRoots.Add(typeof(PreferenceDay), new List<Type> { typeof(IPersistableScheduleData), typeof(IPreferenceDay) });
 			aggregateRoots.Add(typeof(StudentAvailabilityDay), new List<Type> { typeof(IPersistableScheduleData), typeof(IStudentAvailabilityDay) });

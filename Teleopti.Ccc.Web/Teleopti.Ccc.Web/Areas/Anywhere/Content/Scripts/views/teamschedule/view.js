@@ -5,7 +5,6 @@ define([
 		'navigation',
 		'moment',
 		'subscriptions.groupschedule',
-		'subscriptions.staffingmetrics',
 		'subscriptions.unsubscriber',
 		'helpers',
 		'views/teamschedule/vm',
@@ -23,7 +22,6 @@ define([
 		navigation,
 		momentX,
 		groupschedulesubscriptions,
-		staffingmetricssubscriptions,
 		unsubscriber,
 		helpers,
 		teamScheduleViewModel,
@@ -38,17 +36,6 @@ define([
 	) {
 
 	var viewModel;
-
-	var loadSkills = function (buid, date, callback) {
-		$.ajax({
-			url: 'api/StaffingMetrics/AvailableSkills',
-			headers: { 'X-Business-Unit-Filter': buid},
-			cache: false,
-			dataType: 'json',
-			data: { date: date },
-			success: callback
-		});
-	};
 
 	var loadGroupPages = function (buid, date, callback) {
 		ajax.ajax({
@@ -86,20 +73,15 @@ define([
 			viewModel.GroupId.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date());
 			});
 
 			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading() || !viewModel.GroupId())
 					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date());
 			});
 
-			viewModel.SelectedSkill.subscribe(function () {
-				if (viewModel.Loading())
-					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
-			});
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 		},
@@ -165,47 +147,6 @@ define([
 				);
 			});
 
-			var skillsDeferred = $.Deferred();
-
-			if (resources.MyTeam_StaffingMetrics_25562) {
-				viewModel.StaffingMetricsVisible(true);
-				loadSkills(
-					viewModel.BusinessUnitId(),
-					helpers.Date.ToServer(viewModel.Date()),
-					function(data) {
-
-						var currentSkillId = function() {
-							if (options.secondaryId)
-								return options.secondaryId;
-							var skills = viewModel.Skills();
-							if (skills.length > 0)
-								return skills[0].Id;
-							return null;
-						};
-
-						viewModel.SetSkills(data.Skills);
-						viewModel.SelectSkillById(currentSkillId());
-						skillsDeferred.resolve();
-					});
-
-				skillsDeferred.done(function() {
-					if (!viewModel.SelectedSkill())
-						return;
-					viewModel.LoadingStaffingMetrics(true);
-
-					staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
-						viewModel.BusinessUnitId(),
-						helpers.Date.ToServer(viewModel.Date()),
-						viewModel.SelectedSkill().Id,
-						function(data) {
-							viewModel.SetDailyMetrics(data);
-							viewModel.LoadingStaffingMetrics(false);
-						});
-				});
-			} else {
-				skillsDeferred.resolve();
-			}
-
 			permissions.get().done(function (data) {
 				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
 				viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
@@ -214,7 +155,7 @@ define([
 				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
 			});
 
-			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
+			return $.when(groupPagesDeferred, groupScheduleDeferred)
 					.done(function () {
 						viewModel.Loading(false);
 						resize.notify();
@@ -225,14 +166,12 @@ define([
 		dispose: function (options) {
 			unsubscriber.unsubscribeAdherence();
 			groupschedulesubscriptions.unsubscribeGroupSchedule();
-			staffingmetricssubscriptions.unsubscribeDailyStaffingMetrics();
 			$(".datepicker.dropdown-menu").remove();
 		},
 
 		setDateFromTest: function (date) {
 			viewModel.Date(moment(date));
 		}
-
 	};
 });
 

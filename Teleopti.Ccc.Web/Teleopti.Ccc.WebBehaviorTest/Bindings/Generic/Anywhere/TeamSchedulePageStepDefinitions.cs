@@ -292,17 +292,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				string.Format("#group-picker optgroup:first-child option:nth-child({0})", teams.Length + 1));
 		}
 
-		[Then(@"I should be able to select skills")]
-		public void ThenIShouldBeAbleToSelectSkills(Table table)
-		{
-			Browser.Interactions.Click("#skill-selector");
-
-			var skills = table.CreateSet<SkillInfo>().ToArray();
-			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
-
-			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
-		}
-
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
 		{
@@ -358,12 +347,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#group-picker", teamName);
 		}
 
-		public static void SelectSkill(string name)
-		{
-			Browser.Interactions.Click("#skill-selector");
-			Browser.Interactions.ClickContaining("#skill-selector li a", name);
-		}
-
 		[When(@"I select date '(.*)'")]
 		public void WhenISelectDate(DateTime date)
 		{
@@ -380,26 +363,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeOptionBefore(string option1, string option2)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery("option:contains('{0}') + option:contains('{1}')", option1, option2);
-		}
-
-		[Then(@"I should see staffing metrics for skill '(.*)'")]
-		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
-		{
-			Browser.Interactions.AssertFirstContains("#skill-selector button", name);
-		}
-
-		[Then(@"I should see staffing metrics for skill '(.*)' with")]
-		public void ThenIShouldSeeStaffingMetricsForSkillWith(string name, Table table)
-		{
-			Browser.Interactions.AssertFirstContains("#skill-selector button", name);
-
-			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
-
-			Browser.Interactions.AssertAnyContains("#forecasted-hours", staffingMetric.ForecastedHours);
-			Browser.Interactions.AssertAnyContains("#scheduled-hours", staffingMetric.ScheduledHours);
-			Browser.Interactions.AssertAnyContains("#difference-forecasted-scheduled", staffingMetric.DifferenceHours);
-			Browser.Interactions.AssertAnyContains("#difference-forecasted-scheduled", staffingMetric.DifferencePercentage);
-			Browser.Interactions.AssertAnyContains("#estimated-service-level", staffingMetric.EstimatedServiceLevel);
 		}
 	}
 

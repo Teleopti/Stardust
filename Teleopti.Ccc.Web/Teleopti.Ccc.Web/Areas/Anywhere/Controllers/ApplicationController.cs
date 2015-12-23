@@ -63,8 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[HttpGet, OutputCache(NoStore = true, Duration = 0)]
 		public JsonResult Permissions()
 		{
-			var isSmsLinkAvailable = DefinedLicenseDataFactory.HasLicense(_currentDataSource.CurrentName()) &&
-									  DefinedLicenseDataFactory.GetLicenseActivator(_currentDataSource.CurrentName()).EnabledLicenseOptionPaths.Contains(
+			var currentName = _currentDataSource.CurrentName();
+			var isSmsLinkAvailable = DefinedLicenseDataFactory.HasLicense(currentName) &&
+									  DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
 										  DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 
 			return Json(new
@@ -183,7 +184,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				MyTeam_Reports_31070 = _toggles.IsEnabled(Toggles.MyTeam_Reports_31070),
 				MyTeam_AbsenceBackToWork_31478 = _toggles.IsEnabled(Toggles.MyTeam_AbsenceBackToWork_31478),
 				MyTeam_MoveActivity_25206 = _toggles.IsEnabled(Toggles.MyTeam_MoveActivity_25206),
-				MyTeam_StaffingMetrics_25562 = _toggles.IsEnabled(Toggles.MyTeam_StaffingMetrics_25562),
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 
 				RTA_NewEventHangfireRTA_34333 = _toggles.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333),

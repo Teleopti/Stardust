@@ -484,11 +484,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewStaffingMetrics.feature.cs">
-      <DependentUpon>ViewStaffingMetrics.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Anywhere\RemoveAbsence.feature.cs">
       <DependentUpon>RemoveAbsence.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1205,10 +1200,6 @@
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewStaffingMetrics.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewStaffingMetrics.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

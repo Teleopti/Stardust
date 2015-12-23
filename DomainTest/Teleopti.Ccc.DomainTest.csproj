@@ -296,19 +296,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtensionTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonTerminatedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonDeletedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodAddedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodRemovedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodStartDateChangedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillProficiencyChangedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillDeactivatedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillActivatedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillRemovedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
@@ -738,7 +725,6 @@
     <Compile Include="Scheduling\Overtime\OvertimePeriodValuesTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeRelativeDifferenceCalculatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregatorTest.cs" />
@@ -1042,7 +1028,6 @@
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCloserTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
     <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
-    <Compile Include="Scheduling\ResourceCalculateSkillCommandTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />

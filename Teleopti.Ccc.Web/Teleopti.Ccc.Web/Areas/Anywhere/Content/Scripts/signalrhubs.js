@@ -7,7 +7,6 @@ define(
 		'messagebroker',
 		'subscriptions.groupschedule',
 		'subscriptions.personschedule',
-		//'subscriptions.staffingmetrics',
 		//'views/realtimeadherenceteams/subscriptions.adherenceteams',
 		//'views/realtimeadherencesites/subscriptions.adherencesites',
 		//'views/realtimeadherenceagents/subscriptions.adherenceagents',

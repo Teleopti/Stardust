@@ -882,10 +882,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingProfile.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\StaffingMetricsController.cs" />
-    <Compile Include="Areas\Anywhere\Core\DailyStaffingMetricsViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\DailyStaffingMetricsViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\IDailyStaffingMetricsViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
@@ -1389,7 +1385,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.broker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.js" />

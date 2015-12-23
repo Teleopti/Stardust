@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
@@ -8,11 +7,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -117,30 +114,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
 
-			// ErikS: Bug 25359
-			if (_config.Args().EnableNewResourceCalculation)
-			{
-				builder.RegisterType<ScheduledResourcesReadModelStorage>()
-					.As<IScheduledResourcesReadModelPersister>()
-					.As<IScheduledResourcesReadModelReader>()
-					.SingleInstance();
-				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
-					.As<IScheduledResourcesReadModelPersister>()
-					.As<IScheduledResourcesReadModelReader>()
-					.SingleInstance();
-				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
-
 			builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
-
 		}
 	}
-	
 }

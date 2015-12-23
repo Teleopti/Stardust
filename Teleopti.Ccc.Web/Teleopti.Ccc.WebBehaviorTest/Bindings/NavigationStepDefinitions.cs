@@ -278,25 +278,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return buId;
 		}
 
-		[Given(@"I am viewing group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
-		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
-		public void WhenIViewTeamSchedulesStaffingMetricsForDate(DateTime date, string skill)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
-			TeamSchedulePageStepDefinitions.SelectSkill(skill);
-		}
-
-		[Given(@"I am viewing group schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
-		[When(@"I view group schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
-		public void WhenIViewTeamSchedulesStaffingMetricsForDateAndTeam(string team, DateTime date, string skill)
-		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team), buIdForTeam(team));
-			TeamSchedulePageStepDefinitions.SelectSkill(skill);
-		}
-
 		[When(@"I view person schedule for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonScheduleForInOn(string person, string group, DateTime date)
 		{
