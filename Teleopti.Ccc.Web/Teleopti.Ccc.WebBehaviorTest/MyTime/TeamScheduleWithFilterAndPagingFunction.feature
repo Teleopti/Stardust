@@ -53,7 +53,6 @@ Scenario: View only my team's schedule
 
  
 
-@ignore
 Scenario: View team schedule, day off
 	Given I am an agent in a team
 	And I have a colleague
@@ -63,7 +62,7 @@ Scenario: View team schedule, day off
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's day off
-@ignore
+
 Scenario: Should not see unpublished schedule
 	Given I am an agent in a team
 	And I have a colleague 'Unpublished Yet'
