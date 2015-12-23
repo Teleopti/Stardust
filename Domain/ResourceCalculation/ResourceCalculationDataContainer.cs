@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
-			if (!_skills.ContainsKey(skills.Key))
-			{
-				_skills.TryAdd(skills.Key,skills.Skills);
-			}
+			_skills.TryAdd(skills.Key,skills.Skills);
 			if (resourceLayer.RequiresSeat)
 			{
 				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);
