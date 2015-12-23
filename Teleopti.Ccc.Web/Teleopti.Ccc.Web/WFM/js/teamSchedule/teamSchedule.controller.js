@@ -52,6 +52,7 @@
 		};
 
 		$scope.$watch("vm.agentsPerPageSelection.selectedOption", function (newValue, oldValue) {
+			if (newValue == undefined || oldValue == undefined) return;
 			if (newValue.id != oldValue.id) {
 				teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPageSelection.selectedOption.value }).$promise.then(function () {
 					vm.agentsPerPage = vm.agentsPerPageSelection.selectedOption.value;
@@ -68,7 +69,7 @@
 		};
 
 		vm.selectAllVisible = function () {
-			var selectedPersonIdList = getSelectedPersonIdList();
+			var selectedPersonIdList = vm.getSelectedPersonIdList();
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
@@ -87,11 +88,9 @@
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
-			//if (vm.searchOptions.searchKeywordChanged) {
-			//	vm.selectedPersonIdList = [];
-			//	//vm.updatePersonSelectionStatus();
-			//	//vm.toggleIsAllInCurrentPageSelected();
-			//}
+			if (vm.searchOptions.searchKeywordChanged) {
+				vm.personIdSelectionDic = {};
+			}
 			vm.schedulePageReset();
 		};
 
@@ -209,7 +208,6 @@
 			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
 				var schedule = vm.groupScheduleVm.Schedules[i];
 				var scheduleStart = getScheduleStartTime(schedule);
-				//if (vm.selectedPersonIdList.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
 				if (vm.personIdSelectionDic[schedule.PersonId].isSelected > -1 && scheduleStart < earlistStart) {
 					startUpdated = true;
 					earlistStart = scheduleStart;
@@ -249,7 +247,7 @@
 		};
 
 		vm.isAnyAgentSelected = function () {
-			var selectedPersonList = getSelectedPersonIdList();
+			var selectedPersonList = vm.getSelectedPersonIdList();
 			return selectedPersonList.length > 0;
 		};
 
@@ -329,7 +327,6 @@
 		vm.isDataChangeValid = function () {
 			var absenceTimeIsValid = (!vm.isFullDayAbsence && (vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate))
 				|| (vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day'));
-			//return vm.selectedPersonIdList.length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
 			return Object.keys(vm.personIdSelectionDic).length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
 		};
 
@@ -371,7 +368,7 @@
 		vm.applyAbsence = function () {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: getSelectedPersonIdList(),
+					PersonIds: vm.getSelectedPersonIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
@@ -380,7 +377,7 @@
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
-					PersonIds: getSelectedPersonIdList(),
+					PersonIds: vm.getSelectedPersonIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
@@ -390,7 +387,7 @@
 			}
 		};
 
-		function getSelectedPersonIdList() {
+		vm.getSelectedPersonIdList = function() {
 			var result = [];
 			for (var key in vm.personIdSelectionDic) {
 				if (vm.personIdSelectionDic[key].isSelected) {
