@@ -284,6 +284,39 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 		
 		[Test]
+		public void ShouldReturnEmptyLayersWhenHasEmptyScheduleWithDateNoReadModel()
+		{
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var p5 = PersonFactory.CreatePersonWithGuid("p5", "p5");
+
+			businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
+			BusinessUnitRepository.Add(businessUnit);
+
+			team = TeamFactory.CreateTeamWithId("team1");
+			TeamRepository.Add(team);
+
+			p5.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(p5);
+
+			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
+			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
+
+			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
+			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+			agentSchedule.IsDayOff.Should().Be.EqualTo(false);
+			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(0);
+			result.TimeLine.Count().Should().Be.EqualTo(11);
+		}	
+	
+		[Test]
 		public void ShouldIndicateFullDayAbsenceWhenHasMainShiftWithDateNoReadModel()
 		{
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
