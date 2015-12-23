@@ -183,8 +183,6 @@
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(callback);
 		};
 
-
-		//todo: commands should be setup based on permissions
 		vm.commands = [
 			{
 				label: "AddAbsence",
@@ -208,7 +206,7 @@
 		];
 
 		function toggleAddAbsencePanel() {
-			if (vm.isAnyAgentSelected()) {
+			if (vm.isAnyAgentSelected() && vm.isMenuVisible()) {
 				vm.selectedAbsenceStartDate = vm.getEarliestStartOfSelectedSchedule();
 
 				vm.toggleMenuState();
@@ -458,16 +456,6 @@
 				vm.schedulePageReset();
 			}
 			vm.initialized = true;
-
-			var getAgentsPerPage = teamScheduleSvc.getAgentsPerPageSetting.post().
-			$promise.then(function (result) {
-				if (result.Agents != 0) {
-					vm.agentsPerPage = result.Agents;
-					vm.agentsPerPageSelection.selectedOption.id = vm.getAgentsPerPageSelectionId(vm.agentsPerPage);
-					vm.agentsPerPageSelection.selectedOption.value = vm.agentsPerPage;
-					vm.paginationOptions.pageSize = vm.agentsPerPage;
-				}
-			});
 		};
 
 		$q.all([
@@ -479,9 +467,19 @@
 			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SwapShifts_36231'),
 			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
-			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes)
+			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes),
+			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(updateAgentPerPageSetting)
 		]).then(vm.init);
 
+
+		function updateAgentPerPageSetting(result) {
+			if (result.Agents != 0) {
+				vm.agentsPerPage = result.Agents;
+				vm.agentsPerPageSelection.selectedOption.id = vm.getAgentsPerPageSelectionId(vm.agentsPerPage);
+				vm.agentsPerPageSelection.selectedOption.value = vm.agentsPerPage;
+				vm.paginationOptions.pageSize = vm.agentsPerPage;
+			}
+		};
 
 		function updateAllTeamsForTeamPicker(result) {
 			vm.teams = result;

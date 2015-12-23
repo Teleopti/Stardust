@@ -93,7 +93,16 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.getAgentsPerPageSetting = $resource("../api/TeamSchedule/GetAgentsPerPage", {}, {
+		service.PromiseForGetAgentsPerPageSetting = function(callback) {
+			return $q(function (resolve) {
+				service.getAgentsPerPageSetting.post().$promise.then(function (result) {
+					callback(result);
+					resolve();
+				});
+			});
+		};
+
+		service.getAgentsPerPageSetting = $resource("../api/TeamSchedule/GetAgentsPerPage", {}, {
 			post: {
 				method: "POST",
 				params: {},
@@ -101,7 +110,7 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 			}
 		});
 
-		this.updateAgentsPerPageSetting = $resource("../api/TeamSchedule/UpdateAgentsPerPage", {
+		service.updateAgentsPerPageSetting = $resource("../api/TeamSchedule/UpdateAgentsPerPage", {
 			agents: "@agents",
 		}, {
 			post: {
@@ -110,9 +119,6 @@ angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
 				isArray: true
 			}
 		});
-
-
-		
 
 		service.PromiseForloadedAvailableAbsenceTypes = function(callback) {
 			return $q(function (resolve) {
