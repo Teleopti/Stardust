@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionReadOnlyUpdater : IHandleEvent<ScheduledResourcesChangedEvent>
+	public class ScheduleProjectionReadOnlyUpdater : IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IPublishEventsFromEventHandlers _serviceBus;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduledResourcesChangedEvent @event)
+		public void Handle(ProjectionChangedEvent @event)
 		{
 			if (!@event.IsDefaultScenario) return;
 			var closestLayerToNow = new ProjectionChangedEventLayer
@@ -86,6 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						Timestamp = now
 					});
 			}
+		}
+
+		public void Handle(ProjectionChangedEventForScheduleProjection @event)
+		{
+			Handle(@event);
 		}
 	}
 }

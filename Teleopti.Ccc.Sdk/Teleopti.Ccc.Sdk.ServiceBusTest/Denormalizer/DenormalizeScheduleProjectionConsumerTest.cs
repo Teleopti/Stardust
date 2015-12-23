@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var period = new DateTimePeriod(utcNow,utcNow);
 
-			target.Handle(new ScheduledResourcesChangedEvent
+			target.Handle(new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					PersonId = person.Id.GetValueOrDefault(),
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var period = new DateTimePeriod(utcNow, utcNow);
 
-			target.Handle(new ScheduledResourcesChangedEvent
+			target.Handle(new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					PersonId = personId,
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
 			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
 
-			var message = new ScheduledResourcesChangedEvent
+			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var closestPeriod = new DateTimePeriod(utcNow.AddDays(1).AddMinutes(10), utcNow.AddDays(1).AddMinutes(20));
 
-			var message = new ScheduledResourcesChangedEvent
+			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var closestPeriod = new DateTimePeriod(utcNow.AddDays(-2).AddMinutes(10), utcNow.AddDays(-1).AddMinutes(20));
 
-			var message = new ScheduledResourcesChangedEvent
+			var message = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void Handle_NoNextActivityStartTime_ShouldSend()
 		{
-			var message2 = new ScheduledResourcesChangedEvent
+			var message2 = new ProjectionChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
