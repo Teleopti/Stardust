@@ -365,6 +365,13 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		}
 
+		vm.cleanUIHistoryAfterApply = function() {
+			vm.selectedAbsenceId = '';
+			vm.isFullDayAbsence = false;
+			vm.selectedAbsenceStartDate = vm.scheduleDate;
+			vm.selectedAbsenceEndDate = vm.scheduleDate;
+		}
+
 		vm.applyAbsence = function () {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
@@ -374,6 +381,7 @@
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
 				}).$promise.then(function (result) {
 					handleActionResult(result);
+					vm.cleanUIHistoryAfterApply();
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
@@ -383,6 +391,7 @@
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
 				}).$promise.then(function (result) {
 					handleActionResult(result);
+					vm.cleanUIHistoryAfterApply();
 				});
 			}
 		};
