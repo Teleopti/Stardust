@@ -53,7 +53,7 @@
 
 		$scope.$watch("vm.agentsPerPageSelection.selectedOption", function (newValue, oldValue) {
 			if (newValue == undefined || oldValue == undefined) return;
-			if (newValue.id != oldValue.id) {
+			if (newValue.id !== oldValue.id) {
 				teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPageSelection.selectedOption.value }).$promise.then(function () {
 					vm.agentsPerPage = vm.agentsPerPageSelection.selectedOption.value;
 					vm.paginationOptions.pageSize = vm.agentsPerPage;
@@ -197,10 +197,9 @@
 				shortcut: "",
 				panelName: "", // No panel needed,
 				action: swapShifts,
-				enabled: function() { return true; },
+				enabled: allowSwapShifts,
 				active: function () {
-					// TODO: Need check if the 2 selected agents has schedule with full day absence or over night shift
-					return vm.isSwapShiftEnabled && (vm.getSelectedPersonIdList().length === 2);
+					return vm.isSwapShiftEnabled;
 				}
 			}
 		];
@@ -213,6 +212,35 @@
 				vm.setCurrentCommand("addAbsence")();
 			}
 		};
+
+		function allowSwap(schedule) {
+			return !schedule.IsFullDayAbsence && schedule.Shifts.length <= 1;
+		}
+
+		function allowSwapShifts() {
+			var selectedPersonIds = vm.getSelectedPersonIdList();
+			if (selectedPersonIds.length !== 2) return false;
+
+			var firstSchedule = undefined;
+			var secondSchedule = undefined;
+			angular.forEach(vm.groupScheduleVm.Schedules, function (schedule) {
+				var firstPersonId = selectedPersonIds[0];
+				if (schedule.PersonId === firstPersonId) {
+					firstSchedule = schedule;
+				}
+
+				var secondPersonId = selectedPersonIds[1];
+				if (schedule.PersonId === secondPersonId) {
+					secondSchedule = schedule;
+				}
+			});
+
+			if (firstSchedule == undefined || secondSchedule == undefined) {
+				return false;
+			}
+
+			return allowSwap(firstSchedule) && allowSwap(secondSchedule);
+		}
 
 		function swapShifts() {
 			if (vm.getSelectedPersonIdList().length !== 2) {
@@ -432,8 +460,6 @@
 			return result;
 		}
 
-		
-
 		function buildToggler(navId) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navId).toggle().then(function () { });
@@ -471,7 +497,6 @@
 			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes),
 			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(updateAgentPerPageSetting)
 		]).then(vm.init);
-
 
 		function updateAgentPerPageSetting(result) {
 			if (result.Agents != 0) {
@@ -535,7 +560,5 @@
 					break;
 			}
 		};
-
 	};
-
 }());
