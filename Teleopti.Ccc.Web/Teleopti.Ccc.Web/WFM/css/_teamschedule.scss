@@ -4,6 +4,34 @@
 		background-color:transparent;
 	}
 		
+	.people-search-container{
+		width:410px;
+		display: inline-block;
+	}
+
+	.datepicker-container{
+		display: inline-block;
+		vertical-align:top;
+		white-space: nowrap;
+	}
+
+	team-schedule-datepicker input{
+		text-align: center;
+	}
+
+	team-schedule-datepicker input.datepicker-mini{
+		width:90px;
+	}
+
+	.people-search-container{
+		width:410px;
+		display: inline-block;
+	}
+
+	.page-size-selector{
+		width:150px;		
+	}
+
 	.time-line {
 		min-width: 300px;
 		z-index: 10;
@@ -77,14 +105,6 @@
 		.wfm-checkbox {
 			padding: 0;
 		}
-	}
-
-	team-schedule-datepicker input{
-		text-align: center;
-	}
-
-	team-schedule-datepicker input.datepicker-mini{
-		width:90px;
 	}
 
 	.timepicker {
