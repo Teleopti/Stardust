@@ -327,7 +327,7 @@
 		vm.isDataChangeValid = function () {
 			var absenceTimeIsValid = (!vm.isFullDayAbsence && (vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate))
 				|| (vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day'));
-			return Object.keys(vm.personIdSelectionDic).length > 0 && vm.selectedAbsenceId !== "" && absenceTimeIsValid;
+			return vm.isAnyAgentSelected() && vm.selectedAbsenceId !== undefined && absenceTimeIsValid;
 		};
 
 		vm.hasErrorInResult = false;
@@ -405,6 +405,8 @@
 			}
 			return result;
 		}
+
+		
 
 		function buildToggler(navId) {
 			var debounceFn = $mdUtil.debounce(function () {
