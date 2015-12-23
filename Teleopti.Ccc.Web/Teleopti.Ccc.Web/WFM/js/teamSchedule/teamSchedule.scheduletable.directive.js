@@ -39,12 +39,12 @@
 
 		vm.isAllInCurrentPageSelected = function() {
 			return vm.scheduleVm.Schedules.every(function(personSchedule) {
-				return vm.personSelection[personSchedule.PersonId].isSelected;
+				return vm.personSelection[personSchedule.PersonId]&&vm.personSelection[personSchedule.PersonId].isSelected;
 			});
 		};
 
 		vm.isPersonSelected = function (personSchedule) {
-			return vm.personSelection[personSchedule.PersonId].isSelected;
+			return vm.personSelection[personSchedule.PersonId] && vm.personSelection[personSchedule.PersonId].isSelected;
 		}
 	};
 
