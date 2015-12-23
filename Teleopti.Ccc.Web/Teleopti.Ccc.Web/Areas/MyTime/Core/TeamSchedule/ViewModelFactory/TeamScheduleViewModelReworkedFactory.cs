@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			if (people.Any())
 			{
+				pageCount = (int) Math.Ceiling((double)people.Count()/data.Paging.Take);
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, people).ToList();
 
 				var personScheduleDays = (from p in people
