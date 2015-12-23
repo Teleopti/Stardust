@@ -34,7 +34,7 @@
 				return "2";
 			case 100:
 				return "3";
-			case 300:
+			case 500:
 				return "4";
 			default:
 				return "1";
