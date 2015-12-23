@@ -28,7 +28,7 @@
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
 
-					<li class="item" ng-repeat="cmd in vm.commands" ng-disabled="!vm.isAnyAgentSelected()"
+					<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.enabled())"
 						ng-click="cmd.action()">
 						<div>
 							<span class="pull-left">{{cmd.label|translate}}</span>
@@ -38,10 +38,9 @@
 				</ul>
 			</div>
 		</button>
-		
+
 		<span style="color: red" ng-show="!vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
 	</div>
-
 
 	<div id="absence-result1" class="row notice-spacer" ng-show="vm.showActionResult">
 		<div ng-if="!vm.hasErrorInResult" class="alert-success notice-spacer">

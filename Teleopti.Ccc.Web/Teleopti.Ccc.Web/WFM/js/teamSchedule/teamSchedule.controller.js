@@ -74,7 +74,9 @@
 		};
 
 		vm.isMenuVisible = function () {
-			return vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+			var canReportAbsence = vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+			var canSwapShift = vm.isSwapShiftEnabled; // TODO: Add swap shift permission check.
+			return canReportAbsence || canSwapShift;
 		};
 
 		vm.onSelectedTeamIdChanged = function () {
@@ -189,7 +191,19 @@
 				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: toggleAddAbsencePanel,
+				enabled: function() { return vm.isAnyAgentSelected(); },
 				active: function () { return vm.isAbsenceReportingEnabled; }
+			},
+			{
+				label: "SwapShift",
+				shortcut: "",
+				panelName: "", // No panel needed,
+				action: swapShifts,
+				enabled: function() { return true; },
+				active: function () {
+					// TODO: Need check if the 2 selected agents has schedule with full day absence or over night shift
+					return vm.isSwapShiftEnabled && (vm.getSelectedPersonIdList().length === 2);
+				}
 			}
 		];
 
@@ -201,6 +215,14 @@
 				vm.setCurrentCommand("addAbsence")();
 			}
 		};
+
+		function swapShifts() {
+			if (vm.getSelectedPersonIdList().length !== 2) {
+				return;
+			}
+
+			// TODO: Implement shift swap
+		}
 
 		vm.getEarliestStartOfSelectedSchedule = function () {
 			var startUpdated = false;
@@ -429,6 +451,7 @@
 			vm.isSelectAgentsPerPageEnabled = toggleSvc['WfmTeamSchedule_SetAgentsPerPage_36230'];
 			vm.isAbsenceReportingEnabled = toggleSvc['WfmTeamSchedule_AbsenceReporting_35995'];
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc['WfmPeople_AdvancedSearch_32973'];
+			vm.isSwapShiftEnabled = toggleSvc['WfmTeamSchedule_SwapShifts_36231'];
 	
 			if (vm.isSearchScheduleEnabled) {
 				vm.onKeyWordInSearchInputChanged();
@@ -452,7 +475,8 @@
 			teamScheduleSvc.PromiseForloadedToggle('WfmPeople_AdvancedSearch_32973'),
 			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_FindScheduleEasily_35611'),
 			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_AbsenceReporting_35995'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SetAgentsPerPage_36230'), 
+			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SetAgentsPerPage_36230'),
+			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SwapShifts_36231'),
 			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
 			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes)
