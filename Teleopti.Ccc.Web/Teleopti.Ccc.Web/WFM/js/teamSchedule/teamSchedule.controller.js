@@ -325,10 +325,16 @@
 		};
 
 		vm.isDataChangeValid = function () {
-			var absenceTimeIsValid = (!vm.isFullDayAbsence && (vm.selectedAbsenceEndDate > vm.selectedAbsenceStartDate))
-				|| (vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day'));
-			return vm.isAnyAgentSelected() && vm.selectedAbsenceId !== undefined && absenceTimeIsValid;
+			return vm.isAnyAgentSelected() && vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
 		};
+
+		vm.isAbsenceTimeValid = function () {
+			return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) > moment(vm.selectedAbsenceStartDate));
+		};
+
+		vm.isAbsenceDateValid = function () {
+			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
+		}
 
 		vm.hasErrorInResult = false;
 		vm.showErrorDetails = false;
