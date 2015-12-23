@@ -1154,7 +1154,6 @@
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
     <Compile Include="Repositories\ScheduleFilter.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
-    <Compile Include="ResourceCalculation\ActivitySkillCombinationFromStorage.cs" />
     <Compile Include="ResourceCalculation\ActivitySkillsCombination.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
@@ -1171,10 +1170,7 @@
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainer.cs" />
-    <Compile Include="ResourceCalculation\ResourcesForCombinationFromStorage.cs" />
-    <Compile Include="ResourceCalculation\ResourcesFromStorage.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
-    <Compile Include="ResourceCalculation\SkillEfficienciesFromStorage.cs" />
     <Compile Include="ResourceCalculation\SkillKeyResource.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
@@ -1188,7 +1184,6 @@
     <Compile Include="Scheduling\PlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceFullDayLayerCreator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
-    <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapper.cs" />
