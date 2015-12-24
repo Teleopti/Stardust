@@ -13,22 +13,21 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 			}
 		});
 
-		var loadToggle = function(toggle) {
-			return $q(function(resolve) {
-				that.isFeatureEnabled.query({
-						toggle: toggle
-					}).$promise
-					.then(function(data) {
-						that[toggle] = data.IsEnabled;
-						resolve();
-					});
-			});
-		};
+		that.loadAllToggles = $resource('../ToggleHandler/AllToggles', {}, {
+			query: {
+				method: 'GET',
+				isArray: false
+			}
+		});
 
 		that.togglesLoaded = $q.all([
-			loadToggle('RTA_AdherenceDetails_34267'),
-			loadToggle('Wfm_RTA_ProperAlarm_34975'),
+			that.loadAllToggles.query().$promise.then(function(result) {
+				for (var toggle in result) {
+					if (!toggle.startsWith('$') && result.hasOwnProperty(toggle) && typeof (result[toggle]) === 'boolean') {
+						that[toggle] = result[toggle];
+					}
+				}
+			})
 		]);
-
 	}
 ]);

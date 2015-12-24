@@ -149,20 +149,5 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 				});
 			});
 		};
-
-		service.PromiseForloadedToggle = function (toggleName) {
-
-			return $q(function (resolve) {
-				if (toggleSvc[toggleName] == undefined) {
-					toggleSvc.isFeatureEnabled.query({ toggle: toggleName }).$promise.then(function (result) {
-						toggleSvc[toggleName] = result.IsEnabled;
-						resolve();
-					});
-				} else {
-					resolve();
-				}
-			});
-		};
-
 	}
 ]);

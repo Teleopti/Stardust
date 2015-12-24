@@ -413,12 +413,12 @@
 		vm.init = function () {
 			updateDateAndTimeFormat();
 			createDocumentListeners();
-			vm.isSearchScheduleEnabled = toggleSvc['WfmTeamSchedule_FindScheduleEasily_35611'];
-			vm.loadScheduelWithReadModel = !toggleSvc['WfmTeamSchedule_NoReadModel_35609'];
-			vm.isSelectAgentsPerPageEnabled = toggleSvc['WfmTeamSchedule_SetAgentsPerPage_36230'];
-			vm.isAbsenceReportingEnabled = toggleSvc['WfmTeamSchedule_AbsenceReporting_35995'];
-			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc['WfmPeople_AdvancedSearch_32973'];
-			vm.isSwapShiftEnabled = toggleSvc['WfmTeamSchedule_SwapShifts_36231'];
+			vm.isSearchScheduleEnabled = toggleSvc.WfmTeamSchedule_FindScheduleEasily_35611;
+			vm.loadScheduelWithReadModel = !toggleSvc.WfmTeamSchedule_NoReadModel_35609;
+			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
+			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
+			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
+			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
 	
 			if (vm.isSearchScheduleEnabled) {
 				vm.onKeyWordInSearchInputChanged();
@@ -429,12 +429,6 @@
 		};
 
 		$q.all([
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_NoReadModel_35609'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmPeople_AdvancedSearch_32973'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_FindScheduleEasily_35611'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_AbsenceReporting_35995'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SetAgentsPerPage_36230'),
-			teamScheduleSvc.PromiseForloadedToggle('WfmTeamSchedule_SwapShifts_36231'),
 			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
 			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes),
