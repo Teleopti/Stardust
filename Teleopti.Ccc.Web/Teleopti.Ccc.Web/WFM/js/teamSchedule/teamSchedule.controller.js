@@ -26,44 +26,17 @@
 			searchKeywordChanged: false
 		};
 
-		vm.getAgentsPerPageSelectionId = function (agents) {
-			switch (agents) {
-			case 20:
-				return "1";
-			case 50:
-				return "2";
-			case 100:
-				return "3";
-			case 500:
-				return "4";
-			default:
-				return "1";
-			}
-		};
+		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
-		vm.agentsPerPageSelection = {
-			availableOptions: [
-			  { id: '1', value: 20 },
-			  { id: '2', value: 50 },
-			  { id: '3', value: 100 },
-			  { id: '4', value: 500 }
-			],
-			selectedOption: { id: vm.getAgentsPerPageSelectionId(vm.agentsPerPage), value: vm.agentsPerPage }
+		vm.selectorChanged = function() {
+			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPage }).$promise.then(function () {
+				vm.paginationOptions.pageSize = vm.agentsPerPage;
+				vm.loadSchedules(1);
+			});
 		};
-
-		$scope.$watch("vm.agentsPerPageSelection.selectedOption", function (newValue, oldValue) {
-			if (newValue == undefined || oldValue == undefined) return;
-			if (newValue.id !== oldValue.id) {
-				teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPageSelection.selectedOption.value }).$promise.then(function () {
-					vm.agentsPerPage = vm.agentsPerPageSelection.selectedOption.value;
-					vm.paginationOptions.pageSize = vm.agentsPerPage;
-					vm.loadSchedules(1);
-				});
-			}
-		}, true);
 
 		vm.paginationOptions = {
-			pageSize: vm.agentsPerPageSelection.selectedOption.value,
+			pageSize: vm.agentsPerPage,
 			pageNumber: 1,
 			totalPages: 0
 		};
@@ -480,8 +453,6 @@
 		function updateAgentPerPageSetting(result) {
 			if (result.Agents != 0) {
 				vm.agentsPerPage = result.Agents;
-				vm.agentsPerPageSelection.selectedOption.id = vm.getAgentsPerPageSelectionId(vm.agentsPerPage);
-				vm.agentsPerPageSelection.selectedOption.value = vm.agentsPerPage;
 				vm.paginationOptions.pageSize = vm.agentsPerPage;
 			}
 		};

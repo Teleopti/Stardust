@@ -20,7 +20,7 @@
 		</span>
 
 		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
-				ng-model="vm.agentsPerPageSelection.selectedOption" ng-options="option.value for option in vm.agentsPerPageSelection.availableOptions track by option.id"></select>
+				  ng-model="vm.agentsPerPage" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
 
 		<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
