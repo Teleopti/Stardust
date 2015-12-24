@@ -4,18 +4,15 @@
 
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'ScheduleLoader', 'GroupScheduleFactory',
-			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', 'teamScheduleNotificationService', TeamScheduleController]);
+			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, scheduleLoader, groupScheduleFactory,
-		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout, teamScheduleNotificationService) {
-
+		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
 		vm.isLoading = false;
 		vm.personIdSelectionDic = {};
 		vm.scheduleDate = new Date();
-		vm.selectedAbsenceEndDate = vm.scheduleDate;
-		vm.selectedAbsenceStartDate = vm.scheduleDate;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.agentsPerPage = 20;
 		vm.isSelectAgentsPerPageEnabled = false;
@@ -321,19 +318,6 @@
 			}
 		};
 
-		vm.absenceStartDatePickerOpened = false;
-
-		vm.toggleAbsenceStartCalendar = function () {
-			vm.absenceStartDatePickerOpened = !vm.absenceStartDatePickerOpened;
-		};
-
-		vm.absenceEndDatePickerOpened = false;
-
-		vm.toggleAbsenceEndCalendar = function () {
-			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
-		};
-
-
 		vm.getSelectedPersonIdList = function() {
 			var result = [];
 			for (var key in vm.personIdSelectionDic) {
@@ -352,7 +336,6 @@
 		};
 
 		vm.init = function () {
-			updateDateAndTimeFormat();
 			createDocumentListeners();
 			vm.isSearchScheduleEnabled = toggleSvc.WfmTeamSchedule_FindScheduleEasily_35611;
 			vm.loadScheduelWithReadModel = !toggleSvc.WfmTeamSchedule_NoReadModel_35609;
@@ -392,12 +375,6 @@
 
 		function updateAvailableAbsenceTypes(result) {
 			vm.AvailableAbsenceTypes = result;
-		};
-
-		function updateDateAndTimeFormat() {
-			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
-			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
-			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 		};
 
 		function createDocumentListeners() {

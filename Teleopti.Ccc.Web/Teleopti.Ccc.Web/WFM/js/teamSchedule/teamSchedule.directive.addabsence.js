@@ -16,11 +16,8 @@
 			bindToController: true,
 			link: function (scope, element, attr) {
 
-				//scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-				//scope.$on('$localeChangeSuccess', function () {
-				//	scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-				//});
-				//scope.vm.isMiniMode = 'mini' in attr;
+				scope.vm.init(scope, $locale);
+
 			}
 		};
 	};
@@ -29,7 +26,7 @@
 	function addAbsenceCtrl(teamScheduleSvc, teamScheduleNotificationService) {
 		var vm = this;
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
-		vm.selectedAbsenceEndDate = vm.defaultDateTime();
+		vm.selectedAbsenceEndDate = moment(vm.defaultDateTime()).add(1, 'hour').toDate();
 		vm.absencePermissions = {
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
 			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
@@ -98,6 +95,16 @@
 				});
 			}
 		};
-	};
 
+		vm.init = function ($scope, $locale) {
+			updateDateAndTimeFormat($scope, $locale);
+		};
+
+		function updateDateAndTimeFormat($scope, $locale) {
+			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
+			$scope.vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
+			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
+		}
+
+	};
 })();
