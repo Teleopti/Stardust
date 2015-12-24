@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-angular.module("teamScheduleService", ["ngResource"]).service("TeamSchedule", [
+angular.module("wfm.teamSchedule").service("TeamSchedule", [
 	"$resource", "Toggle","$q", function ($resource, toggleSvc, $q) {
 
 		var service = this;
