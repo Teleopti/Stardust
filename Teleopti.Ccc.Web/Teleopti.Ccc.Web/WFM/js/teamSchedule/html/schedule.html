@@ -60,73 +60,30 @@
 
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 
-	
-	<add-absence ng-if="vm.initialized" selected-date="vm.scheduleDate" permissions="vm.permissions"></add-absence>
+	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
+		<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"></add-absence>
+	</md-sidenav>
 
-	<!--<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
-		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
-		<md-content layout-padding style="height: 88%">
-			<select style="font-family: Calibri" ng-model="vm.selectedAbsenceId">
-				<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
-				<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
-			</select>
-			<div>{{'From'|translate}}: </div>
-			<div class="row">
-				<span class="col-sm-7" style="padding-right: 0; height: 48px;">
-					<team-schedule-datepicker selected-date="vm.selectedAbsenceStartDate" mini />
-				</span>
-				<span class="col-sm-5" style="padding-left: 0; margin-top: -4px">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
-				</span>
-			</div>
-
-			<div>{{'To'|translate}}: </div>
-			<div class="row">
-				<span class="col-sm-7" style="padding-right: 0; height: 48px;">
-					<team-schedule-datepicker selected-date="vm.selectedAbsenceEndDate" mini />
-				</span>
-				<span class="col-sm-5" style="padding-left: 0; margin-top:-4px">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
-				</span>
-			</div>
-
-			<div class="wfm-checkbox" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
-				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable" />
-				<label for="is-full-day">
-					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
-				</label>
-			</div>
-			<p class="text-danger" ng-if="!vm.isAbsenceTimeValid() && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
-		</md-content>
-		<div style="position: relative;float: right;">
-			<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.isDataChangeValid(), 'wfm-btn-primary-disabled': !vm.isDataChangeValid()}"
-					ng-disabled="!vm.isDataChangeValid()" ng-click="vm.applyAbsence()">
-				{{'Apply' | translate}}
-			</button>
-		</div>
-	</md-sidenav>-->
-
-	<div class="modal-box" ng-if="vm.showErrorDetails">
-		<div class="modalbg">
-			<div class="dialog">
-				<div class="modal-header">
-					Error details
-				</div>
-				<div class="modal-inner-content">
-					<ul class="wfm-simple-list" style="max-height: 430px">
-						<li ng-repeat="error in vm.errorDetails">
-							{{error.PersonName}}
-							<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
-						</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<aside>
-						<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
-					</aside>
+		<div class="modal-box" ng-if="vm.showErrorDetails">
+			<div class="modalbg">
+				<div class="dialog">
+					<div class="modal-header">
+						Error details
+					</div>
+					<div class="modal-inner-content">
+						<ul class="wfm-simple-list" style="max-height: 430px">
+							<li ng-repeat="error in vm.errorDetails">
+								{{error.PersonName}}
+								<div class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</div>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<aside>
+							<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+						</aside>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </div>

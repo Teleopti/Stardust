@@ -8,8 +8,8 @@
 		return {
 			templateUrl: 'js/teamSchedule/html/addabsencepanel.html',
 			scope: {
-				selectedDate: '&',
-				permissions: '&'
+				permissions: '&',
+				defaultDateTime: '&'
 			},
 			controller: ['TeamSchedule', 'teamScheduleNotificationService', addAbsenceCtrl],
 			controllerAs: 'vm',
@@ -28,8 +28,8 @@
 
 	function addAbsenceCtrl(teamScheduleSvc, teamScheduleNotificationService) {
 		var vm = this;
-		vm.selectedAbsenceStartDate = vm.selectedDate();
-		vm.selectedAbsenceEndDate = vm.selectedDate();
+		vm.selectedAbsenceStartDate = vm.defaultDateTime();
+		vm.selectedAbsenceEndDate = vm.defaultDateTime();
 		vm.absencePermissions = {
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
 			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
@@ -42,7 +42,7 @@
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) > moment(vm.selectedAbsenceStartDate));
+			return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) >= moment(vm.selectedAbsenceStartDate));
 		};
 
 		vm.isAbsenceDateValid = function () {
