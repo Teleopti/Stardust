@@ -2,17 +2,19 @@
 	Team schedule
 	<div ng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
 
-		<span ng-if="!vm.isSearchScheduleEnabled">
-			<select ng-model="vm.selectedTeamId" ng-change="vm.onSelectedTeamIdChanged()">
+		<span class="people-search-container" >
+			
+			
+			<select ng-model="vm.selectedTeamId" ng-change="vm.onSelectedTeamIdChanged()" ng-if="!vm.isSearchScheduleEnabled">
 				<option value="" disabled selected>Pick a team...</option>
 				<option value="{{team.Id}}" ng-repeat="team in vm.teams|orderBy: 'Name'">
 					{{team.Name}}
 				</option>
 			</select>
-		</span>
+			
+			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"
+								 ng-if="vm.isSearchScheduleEnabled" />
 
-		<span class="people-search-container" ng-if="vm.isSearchScheduleEnabled">
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"/>
 		</span>
 
 		<span class="datepicker-container">
