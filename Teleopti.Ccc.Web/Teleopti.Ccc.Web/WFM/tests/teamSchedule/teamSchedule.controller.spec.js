@@ -41,14 +41,6 @@ describe("TeamScheduleControllerTest", function() {
 		expect(selectedPersonList.length).toEqual(0);
 	}));
 
-	
-	it("should show meridian correctly", inject(function () {
-		rootScope.$digest();
-
-		expect(controller.showMeridian).toEqual(true);
-	}));
-
-
 	function setUpController($controller) {
 
 		return $controller("TeamScheduleCtrl", {

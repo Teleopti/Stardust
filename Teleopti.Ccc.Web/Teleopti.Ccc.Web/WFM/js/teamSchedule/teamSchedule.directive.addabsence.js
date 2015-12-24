@@ -1,7 +1,6 @@
 ﻿'use strict';
 
 (function () {
-
 	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', absencePanel]);
 
 	function absencePanel($locale) {
@@ -9,15 +8,15 @@
 			templateUrl: 'js/teamSchedule/html/addabsencepanel.html',
 			scope: {
 				permissions: '&',
-				defaultDateTime: '&'
+				defaultDateTime: '&',
+				agentIdList: '&',
+				actionsAfterAbsenceApply: '&'
 			},
 			controller: ['TeamSchedule', 'teamScheduleNotificationService', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
-
 				scope.vm.init(scope, $locale);
-
 			}
 		};
 	};
@@ -25,13 +24,13 @@
 
 	function addAbsenceCtrl(teamScheduleSvc, teamScheduleNotificationService) {
 		var vm = this;
+
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
 		vm.selectedAbsenceEndDate = moment(vm.defaultDateTime()).add(1, 'hour').toDate();
 		vm.absencePermissions = {
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
 			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
 		};
-
 		vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
 
 		vm.isDataChangeValid = function () {
@@ -46,9 +45,8 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		var handleAddAbsenceResult = function (result) {
-			var total = vm.getSelectedPersonIdList().length;
-
+		vm.handleAddAbsenceResult = function (result) {
+			var total = vm.agentIdList().length;
 			if (result.length > 0) {
 				var successCount = total - result.length;
 				teamScheduleNotificationService.notifAbsenceAddedFailed(total, successCount, result.length);
@@ -57,47 +55,42 @@
 				teamScheduleNotificationService.notifyAllAbsenceAddedSuccessed(total);
 			}
 
-			vm.loadSchedules(vm.paginationOptions.pageNumber);
-			vm.setCurrentCommand("");
-		}
-
-		function isFullDayAbsenceDefaultValue() {
-			return vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable;
-		};
-
-		vm.cleanUIHistoryAfterApply = function () {
-			vm.selectedAbsenceId = '';
-			vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
-			vm.selectedAbsenceStartDate = vm.scheduleDate;
-			vm.selectedAbsenceEndDate = vm.scheduleDate;
+			vm.actionsAfterAbsenceApply();
 		}
 
 		vm.applyAbsence = function () {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: vm.getSelectedPersonIdList(),
+					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
 				}).$promise.then(function (result) {
-					handleAddAbsenceResult(result);
-					vm.cleanUIHistoryAfterApply();
+					vm.handleAddAbsenceResult(result);
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
-					PersonIds: vm.getSelectedPersonIdList(),
+					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
 				}).$promise.then(function (result) {
-					handleAddAbsenceResult(result);
-					vm.cleanUIHistoryAfterApply();
+					vm.handleAddAbsenceResult(result);
 				});
 			}
 		};
 
 		vm.init = function ($scope, $locale) {
 			updateDateAndTimeFormat($scope, $locale);
+			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes);
+		};
+
+		function isFullDayAbsenceDefaultValue() {
+			return vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable;
+		};
+
+		function updateAvailableAbsenceTypes(result) {
+			vm.AvailableAbsenceTypes = result;
 		};
 
 		function updateDateAndTimeFormat($scope, $locale) {
@@ -105,6 +98,5 @@
 			$scope.vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 		}
-
 	};
 })();

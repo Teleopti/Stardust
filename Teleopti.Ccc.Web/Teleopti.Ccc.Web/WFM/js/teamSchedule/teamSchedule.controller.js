@@ -328,6 +328,12 @@
 			return result;
 		}
 
+		vm.applyAbsenceCallback = function () {
+			vm.personIdSelectionDic = {};
+			vm.loadSchedules(vm.paginationOptions.pageNumber);
+			vm.setCurrentCommand("");
+		}
+
 		function buildToggler(navId) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navId).toggle().then(function () { });
@@ -354,7 +360,6 @@
 		$q.all([
 			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
-			teamScheduleSvc.PromiseForloadedAvailableAbsenceTypes(updateAvailableAbsenceTypes),
 			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(updateAgentPerPageSetting)
 		]).then(vm.init);
 
@@ -371,10 +376,6 @@
 
 		function updatePermissions(result) {
 			vm.permissions = result;
-		};
-
-		function updateAvailableAbsenceTypes(result) {
-			vm.AvailableAbsenceTypes = result;
 		};
 
 		function createDocumentListeners() {
