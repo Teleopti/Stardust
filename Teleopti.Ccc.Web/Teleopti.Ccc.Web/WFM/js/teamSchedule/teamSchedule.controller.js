@@ -3,10 +3,10 @@
 (function () {
 
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'GroupScheduleFactory',
+		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'ScheduleLoader', 'GroupScheduleFactory',
 			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', '$timeout', 'teamScheduleNotificationService', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, groupScheduleFactory,
+	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, scheduleLoader, groupScheduleFactory,
 		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil, $timeout, teamScheduleNotificationService) {
 
 		var vm = this;
@@ -74,24 +74,6 @@
 			vm.loadSchedules();
 		};
 
-		vm.loadSchedules = function () {
-			if (vm.selectedTeamId == undefined && !vm.isSearchScheduleEnabled)
-				return;
-
-			var params = getParamsForLoadingSchedules();
-			vm.isLoading = true;
-
-			if (vm.isSearchScheduleEnabled) {
-				loadSchedulesFromSearchCondition(params);
-
-			} else if (vm.loadScheduelWithReadModel) {
-				loadSchedulesFromReadModelForGroup(params);
-
-			} else {
-				loadSchedulesNoReadModelForGroup(params);
-			}
-		};
-
 		function getParamsForLoadingSchedules(options) {
 			if (options == undefined) options = {};
 			var params = {
@@ -104,34 +86,43 @@
 			return params;
 		}
 
-		function loadSchedulesFromReadModelForGroup(params) {
-			teamScheduleSvc.loadSchedulesFromReadModelForGroup.query(params).$promise.then(afterSchedulesLoadedForGroup);
-		}
-
-		function loadSchedulesNoReadModelForGroup(params) {
-			teamScheduleSvc.loadSchedulesNoReadModel.query(params).$promise.then(afterSchedulesLoadedForGroup);
-		}
-
-		function loadSchedulesFromSearchCondition(params) {
-			teamScheduleSvc.searchSchedules.query(params).$promise.then(afterSchedulesLoadedForSearchCondition);
-		}
-
 		function afterSchedulesLoadedForGroup(result) {
-			vm.isLoading = false;
 			vm.paginationOptions.totalPages = result.TotalPages;
 			vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 		}
 
 		function afterSchedulesLoadedForSearchCondition(result) {
-			vm.total = result.Total;
-			vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 			vm.paginationOptions.totalPages = Math.ceil(result.Total / vm.paginationOptions.pageSize);
+			vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
+
+			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
-			vm.isLoading = false;
-			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
+		};
+
+		vm.loadSchedules = function () {
+			if (vm.selectedTeamId == undefined && !vm.isSearchScheduleEnabled)
+				return;
+
+			var loadOptions = {
+				selectedTeamId: vm.selectedTeamId,
+				isSearchScheduleEnabled: vm.isSearchScheduleEnabled,
+				loadScheduelWithReadModel: vm.loadScheduelWithReadModel,
+				params: getParamsForLoadingSchedules()
+			};
+
+			vm.isLoading = true;
+			scheduleLoader.loadSchedules(loadOptions, function (result) {
+				if (vm.isSearchScheduleEnabled) {
+					afterSchedulesLoadedForSearchCondition(result);
+				} else {
+					afterSchedulesLoadedForGroup(result);
+				}
+				vm.isLoading = false;
+			});
 		};
 
 		function setupPersonIdSelectionDic(schedules) {
@@ -451,7 +442,7 @@
 		]).then(vm.init);
 
 		function updateAgentPerPageSetting(result) {
-			if (result.Agents != 0) {
+			if (result.Agents !== 0) {
 				vm.agentsPerPage = result.Agents;
 				vm.paginationOptions.pageSize = vm.agentsPerPage;
 			}

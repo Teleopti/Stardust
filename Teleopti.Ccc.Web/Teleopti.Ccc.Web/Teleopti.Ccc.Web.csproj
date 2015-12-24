@@ -1265,6 +1265,7 @@
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.notification.service.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.datepicker.directive.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.scheduleLoader.service.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.scheduletable.directive.js" />
     <Content Include="WFM\tests\global\http.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
