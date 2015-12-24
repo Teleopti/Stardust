@@ -155,7 +155,7 @@
 			},
 			{
 				label: "SwapShift",
-				shortcut: "",
+				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
 				enabled: allowSwapShifts,
@@ -402,6 +402,12 @@
 					if (event.altKey) {
 						preventDefaultEvent(event);
 						$scope.$evalAsync(toggleAddAbsencePanel);
+					}
+					break;
+				case 83: // Alt+S
+					if (event.altKey) {
+						preventDefaultEvent(event);
+						$scope.$evalAsync(swapShifts);
 					}
 					break;
 
