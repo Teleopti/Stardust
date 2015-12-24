@@ -1261,11 +1261,13 @@
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />
+    <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.notification.service.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.datepicker.directive.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.scheduleLoader.service.js" />
+	<Content Include="WFM\js\teamSchedule\teamSchedule.scheduleLoader.service.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.scheduletable.directive.js" />
     <Content Include="WFM\tests\global\http.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />

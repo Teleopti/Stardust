@@ -60,8 +60,10 @@
 
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 
+	
+	<add-absence selected-date="vm.scheduleDate" permissions="vm.permissions"></add-absence>
 
-	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
+	<!--<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
 		<md-content layout-padding style="height: 88%">
 			<select style="font-family: Calibri" ng-model="vm.selectedAbsenceId">
@@ -103,7 +105,7 @@
 				{{'Apply' | translate}}
 			</button>
 		</div>
-	</md-sidenav>
+	</md-sidenav>-->
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
 		<div class="modalbg">
