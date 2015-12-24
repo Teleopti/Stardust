@@ -329,69 +329,69 @@
 		};
 
 		vm.absenceEndDatePickerOpened = false;
-		vm.isFullDayAbsence = false;
+		//vm.isFullDayAbsence = false;
 
 		vm.toggleAbsenceEndCalendar = function () {
 			vm.absenceEndDatePickerOpened = !vm.absenceEndDatePickerOpened;
 		};
 
-		vm.isDataChangeValid = function () {
-			return vm.isAnyAgentSelected() && vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
-		};
+		//vm.isDataChangeValid = function () {
+		//	return vm.isAnyAgentSelected() && vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
+		//};
 
-		vm.isAbsenceTimeValid = function () {
-			return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) > moment(vm.selectedAbsenceStartDate));
-		};
+		//vm.isAbsenceTimeValid = function () {
+		//	return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) > moment(vm.selectedAbsenceStartDate));
+		//};
 
-		vm.isAbsenceDateValid = function () {
-			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
-		}
+		//vm.isAbsenceDateValid = function () {
+		//	return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
+		//}
 
-		var handleAddAbsenceResult = function (result) {
-			var total = vm.getSelectedPersonIdList().length;
+		//var handleAddAbsenceResult = function (result) {
+		//	var total = vm.getSelectedPersonIdList().length;
 
-			if (result.length > 0) {
-				var successCount = total - result.length;
-				teamScheduleNotificationService.notifAbsenceAddedFailed(total, successCount, result.length);
-			}
-			else {
-				teamScheduleNotificationService.notifyAllAbsenceAddedSuccessed(total);
-			}
+		//	if (result.length > 0) {
+		//		var successCount = total - result.length;
+		//		teamScheduleNotificationService.notifAbsenceAddedFailed(total, successCount, result.length);
+		//	}
+		//	else {
+		//		teamScheduleNotificationService.notifyAllAbsenceAddedSuccessed(total);
+		//	}
 
-			vm.loadSchedules(vm.paginationOptions.pageNumber);
-			vm.setCurrentCommand("");
-		}
+		//	vm.loadSchedules(vm.paginationOptions.pageNumber);
+		//	vm.setCurrentCommand("");
+		//}
 
-		vm.cleanUIHistoryAfterApply = function() {
-			vm.selectedAbsenceId = '';
-			vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
-			vm.selectedAbsenceStartDate = vm.scheduleDate;
-			vm.selectedAbsenceEndDate = vm.scheduleDate;
-		}
+		//vm.cleanUIHistoryAfterApply = function() {
+		//	vm.selectedAbsenceId = '';
+		//	vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
+		//	vm.selectedAbsenceStartDate = vm.scheduleDate;
+		//	vm.selectedAbsenceEndDate = vm.scheduleDate;
+		//}
 
-		vm.applyAbsence = function () {
-			if (vm.isFullDayAbsence) {
-				teamScheduleSvc.applyFullDayAbsence.post({
-					PersonIds: vm.getSelectedPersonIdList(),
-					AbsenceId: vm.selectedAbsenceId,
-					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
-					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
-				}).$promise.then(function (result) {
-					handleAddAbsenceResult(result);
-					vm.cleanUIHistoryAfterApply();
-				});
-			} else {
-				teamScheduleSvc.applyIntradayAbsence.post({
-					PersonIds: vm.getSelectedPersonIdList(),
-					AbsenceId: vm.selectedAbsenceId,
-					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
-					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
-				}).$promise.then(function (result) {
-					handleAddAbsenceResult(result);
-					vm.cleanUIHistoryAfterApply();
-				});
-			}
-		};
+		//vm.applyAbsence = function () {
+		//	if (vm.isFullDayAbsence) {
+		//		teamScheduleSvc.applyFullDayAbsence.post({
+		//			PersonIds: vm.getSelectedPersonIdList(),
+		//			AbsenceId: vm.selectedAbsenceId,
+		//			StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
+		//			EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
+		//		}).$promise.then(function (result) {
+		//			handleAddAbsenceResult(result);
+		//			vm.cleanUIHistoryAfterApply();
+		//		});
+		//	} else {
+		//		teamScheduleSvc.applyIntradayAbsence.post({
+		//			PersonIds: vm.getSelectedPersonIdList(),
+		//			AbsenceId: vm.selectedAbsenceId,
+		//			StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
+		//			EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
+		//		}).$promise.then(function (result) {
+		//			handleAddAbsenceResult(result);
+		//			vm.cleanUIHistoryAfterApply();
+		//		});
+		//	}
+		//};
 
 		vm.getSelectedPersonIdList = function() {
 			var result = [];
@@ -424,7 +424,7 @@
 				vm.onKeyWordInSearchInputChanged();
 				vm.schedulePageReset();
 			}
-			vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
+			//vm.isFullDayAbsence = isFullDayAbsenceDefaultValue();
 			vm.initialized = true;
 		};
 
@@ -442,9 +442,9 @@
 			}
 		};
 
-		function isFullDayAbsenceDefaultValue() {
-			return vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable;
-		};
+		//function isFullDayAbsenceDefaultValue() {
+		//	return vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable;
+		//};
 		
 		function updateAllTeamsForTeamPicker(result) {
 			vm.teams = result;

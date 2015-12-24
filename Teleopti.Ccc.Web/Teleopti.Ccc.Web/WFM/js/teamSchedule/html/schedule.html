@@ -61,7 +61,7 @@
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 
 	
-	<add-absence selected-date="vm.scheduleDate" permissions="vm.permissions"></add-absence>
+	<add-absence ng-if="vm.initialized" selected-date="vm.scheduleDate" permissions="vm.permissions"></add-absence>
 
 	<!--<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<div class="sidenav-header">{{'AddAbsence'|translate}}</div>

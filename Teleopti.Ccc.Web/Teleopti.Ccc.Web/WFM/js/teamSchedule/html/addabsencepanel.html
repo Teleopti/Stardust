@@ -11,7 +11,7 @@
 				<team-schedule-datepicker selected-date="vm.selectedAbsenceStartDate" mini />
 			</span>
 			<span class="col-sm-5" style="padding-left: 0; margin-top: -4px">
-				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
+				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.absencePermissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceStartDate"></uib-timepicker>
 			</span>
 		</div>
 
@@ -21,12 +21,12 @@
 				<team-schedule-datepicker selected-date="vm.selectedAbsenceEndDate" mini />
 			</span>
 			<span class="col-sm-5" style="padding-left: 0; margin-top:-4px">
-				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.permissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
+				<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.absencePermissions.IsAddIntradayAbsenceAvailable" ng-model="vm.selectedAbsenceEndDate"></uib-timepicker>
 			</span>
 		</div>
 
-		<div class="wfm-checkbox" ng-if="vm.permissions.IsAddFullDayAbsenceAvailable">
-			<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.permissions.IsAddFullDayAbsenceAvailable && !vm.permissions.IsAddIntradayAbsenceAvailable" />
+		<div class="wfm-checkbox" ng-if="vm.absencePermissions.IsAddFullDayAbsenceAvailable">
+			<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.absencePermissions.IsAddFullDayAbsenceAvailable && !vm.absencePermissions.IsAddIntradayAbsenceAvailable" />
 			<label for="is-full-day">
 				<span class="wfm-checkbox-toggle"></span>
 				<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
