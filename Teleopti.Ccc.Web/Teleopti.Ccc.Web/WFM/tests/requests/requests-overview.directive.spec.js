@@ -143,36 +143,51 @@
 
 		var $compile, $rootScope, requestsDefinitions;
 
-		var targetElement, targetScope;
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
-		
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_) {
+
+		beforeEach(inject(function(_$compile_, _$rootScope_, _requestsDefinitions_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDefinitions = _requestsDefinitions_;
-			targetScope = $rootScope.$new();
-
-			targetScope.requests = [{ Id: 1 }, { Id: 2 }];
-			targetElement = $compile('<requests-table-container requests="requests"></requests-table-container>')(targetScope);
-			targetScope.$digest();
 		}));
 
 		it('should apply template', function() {
-			expect(targetElement.html()).not.toEqual('');
+			var test = setUpTarget();
+			expect(test.target.html()).not.toEqual('');
 		});
 
-		it('see UI Grid', function() {
-			var targets = Array.from(targetElement.children());
+		it('see UI Grid', function () {
+			var test = setUpTarget();
+			var targets = Array.from(test.target.children());
 			expect(targets.some(function (target) { return angular.element(target).hasClass('ui-grid'); })).toBeTruthy();
 
 		});
 
 		it("see table rows for each request", function () {
-			var targets = targetElement[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
+			var test = setUpTarget();
+			test.scope.requests = [{ Id: 1 }, { Id: 2 }];
+			test.scope.$digest();
+			var targets = test.target[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
 			expect(targets.length).toEqual(2);
 		});
+
+
+		function setUpTarget() {
+			var scope = $rootScope.$new();
+
+			var directiveElem = getCompiledElement();
+
+			function getCompiledElement() {
+				var element = angular.element('<requests-table-container requests="requests"></requests-table-container>');
+				var compiledElement = $compile(element)(scope);
+				scope.$digest();
+				return compiledElement;
+			};
+
+			return {  scope: scope, target: directiveElem };
+		}
 
 	});
 
