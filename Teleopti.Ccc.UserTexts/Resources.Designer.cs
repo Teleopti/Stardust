@@ -27680,15 +27680,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This search will return an excessive number of results. Please refine your search..
-        /// </summary>
-        public static string TeamScheduleSearchExcessiveResults {
-            get {
-                return ResourceManager.GetString("TeamScheduleSearchExcessiveResults", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Team Scheduling.
         /// </summary>
         public static string TeamScheduling {
@@ -28677,6 +28668,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TooManyAgentsIsUsedWarning {
             get {
                 return ResourceManager.GetString("TooManyAgentsIsUsedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search result of the keyword(s) will exceed 500, please refine your search..
+        /// </summary>
+        public static string TooManyResultsForSearchKeywords {
+            get {
+                return ResourceManager.GetString("TooManyResultsForSearchKeywords", resourceCulture);
             }
         }
         

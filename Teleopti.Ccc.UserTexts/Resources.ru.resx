@@ -12300,9 +12300,6 @@ Teleopti R&amp;D</value>
   <data name="UnselectedItems" xml:space="preserve">
     <value>Невыбранные объекты</value>
   </data>
-  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
-    <value>Этот поиск вернет слишком большое количество результатов. Уточните условия поиска.</value>
-  </data>
   <data name="ValidationforFilter" xml:space="preserve">
     <value>Добавьте фильтр</value>
   </data>

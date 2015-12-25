@@ -1,10 +1,7 @@
 ﻿<div class="team-schedule">
 	Team schedule
 	<div ng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
-
 		<span class="people-search-container" >
-			
-			
 			<select ng-model="vm.selectedTeamId" ng-change="vm.onSelectedTeamIdChanged()" ng-if="!vm.isSearchScheduleEnabled">
 				<option value="" disabled selected>Pick a team...</option>
 				<option value="{{team.Id}}" ng-repeat="team in vm.teams|orderBy: 'Name'">
@@ -14,7 +11,6 @@
 			
 			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"
 								 ng-if="vm.isSearchScheduleEnabled" />
-
 		</span>
 
 		<span class="datepicker-container">
@@ -26,7 +22,6 @@
 
 		<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
-
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 				<ul class="wfm-list">
 
@@ -49,13 +44,11 @@
 	</div>
 
 	<div class="big-table-wrapper material-depth-1">
-
-		<div class="alert-error notice-spacer" ng-if="vm.total > 500">
-			<i class='mdi mdi-alert-octagon'></i>{{'TeamScheduleSearchExcessiveResults'|translate}}
+		<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
+			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 		</div>
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled" />
-
 	</div>
 
 	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>

@@ -10645,9 +10645,6 @@ Ces options sont actives:
   <data name="UnselectedItems" xml:space="preserve">
     <value>Objets désélectionnés</value>
   </data>
-  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
-    <value>Cette recherche va retourner un nombre de résultats excessifs. Merci de raffiner votre recherche.</value>
-  </data>
   <data name="ValidationforFilter" xml:space="preserve">
     <value>Merci d'ajouter un filtre</value>
   </data>

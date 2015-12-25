@@ -12785,9 +12785,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Modify" xml:space="preserve">
     <value>Ändra</value>
   </data>
-  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
-    <value>Den här sökningen kommer att returnera ett alltför stort antal träffar. Var god och avgränsa din sökning.  </value>
-  </data>
   <data name="ValidationforFilter" xml:space="preserve">
     <value>Var god lägg till ett filter</value>
   </data>
