@@ -1341,9 +1341,9 @@
     <Content Include="WFM\tests\rta\rta.agentsforteams.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapeditor.controller.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.controller.spec.js" />
-    <Content Include="WFM\tests\teamSchedule\teamSchedule.personSchedule.factory.spec.js" />
-    <Content Include="WFM\tests\teamSchedule\teamSchedule.scheduletable.controller.spec.js" />
-    <Content Include="WFM\tests\teamSchedule\teamSchedule.timeline.factory.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.factory.spec.personSchedule.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.controller.spec.scheduletable.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.factory.spec.timeline.js" />
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
