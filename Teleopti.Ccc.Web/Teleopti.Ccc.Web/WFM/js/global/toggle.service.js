@@ -23,7 +23,7 @@ angular.module('toggleService', ['ngResource']).service('Toggle', [
 		that.togglesLoaded = $q.all([
 			that.loadAllToggles.query().$promise.then(function(result) {
 				for (var toggle in result) {
-					if (!toggle.startsWith('$') && result.hasOwnProperty(toggle) && typeof (result[toggle]) === 'boolean') {
+					if (toggle.indexOf('$') !== 0 && result.hasOwnProperty(toggle) && typeof (result[toggle]) === 'boolean') {
 						that[toggle] = result[toggle];
 					}
 				}
