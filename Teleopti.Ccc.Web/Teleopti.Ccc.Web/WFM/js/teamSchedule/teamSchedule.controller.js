@@ -43,10 +43,16 @@
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
+		vm.canActiveAddAbsence = function() {
+			return vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+		}
+
+		vm.canActiveSwapShifts = function() {
+			return vm.isSwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
+		}
+
 		vm.isMenuVisible = function () {
-			var canReportAbsence = vm.isAbsenceReportingEnabled && (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
-			var canSwapShift = vm.isSwapShiftEnabled; // TODO: Add swap shift permission check.
-			return canReportAbsence || canSwapShift;
+			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts();
 		};
 
 		vm.onSelectedTeamIdChanged = function () {
@@ -151,7 +157,7 @@
 				panelName: 'report-absence',
 				action: toggleAddAbsencePanel,
 				enabled: function() { return vm.isAnyAgentSelected(); },
-				active: function () { return vm.isAbsenceReportingEnabled; }
+				active: function () { return vm.canActiveAddAbsence(); }
 			},
 			{
 				label: "SwapShift",
@@ -159,14 +165,12 @@
 				panelName: "", // No panel needed,
 				action: swapShifts,
 				enabled: allowSwapShifts,
-				active: function () {
-					return vm.isSwapShiftEnabled;
-				}
+				active: function () { return vm.canActiveSwapShifts(); }
 			}
 		];
 
 		function toggleAddAbsencePanel() {
-			if (vm.isAnyAgentSelected() && vm.isMenuVisible()) {
+			if (vm.isAnyAgentSelected() && vm.canActiveAddAbsence()) {
 				vm.setEarliestStartOfSelectedSchedule();
 				vm.toggleMenuState();
 				vm.setCurrentCommand("addAbsence")();
@@ -203,9 +207,7 @@
 		}
 
 		function swapShifts() {
-			if (vm.getSelectedPersonIdList().length !== 2) {
-				return;
-			}
+			if (vm.getSelectedPersonIdList().length !== 2 || vm.canActiveSwapShifts()) return;
 
 			// TODO: Implement shift swap
 		}

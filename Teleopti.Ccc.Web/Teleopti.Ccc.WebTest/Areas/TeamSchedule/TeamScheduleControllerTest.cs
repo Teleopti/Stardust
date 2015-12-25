@@ -1306,6 +1306,19 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetSwapShiftsPermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts)).Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null);
+			var result = target.GetPermissions();
+
+			result.Content.IsSwapShiftsAvailable.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
 		public void ShouldAssignOperatePersonForAddFullDayAbsence()
 		{
 			var expectedPerson = new Person();

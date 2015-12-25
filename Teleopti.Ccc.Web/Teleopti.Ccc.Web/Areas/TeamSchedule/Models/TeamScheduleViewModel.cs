@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public bool IsAddFullDayAbsenceAvailable { get; set; }
 		public bool IsAddIntradayAbsenceAvailable { get; set; }
+		public bool IsSwapShiftsAvailable { get; set; }
 	}
 
 	public class PagingGroupScheduleShiftViewModel
