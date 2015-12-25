@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
 		}
 
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AllTeams")]
-		public virtual JsonResult<IEnumerable<GroupViewModel>> AllTeams(DateTime date)
+		public virtual JsonResult<IEnumerable<TeamScheduleGroupPageViewModel>> AllTeams(DateTime date)
 		{
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages();
 			var businessHierarchyPage = allGroupPages.Single(gp => gp.PageId == GroupPage.PageMainId);
 			var allTeams = _groupingReadOnlyRepository.AvailableGroups(businessHierarchyPage, new DateOnly(date));
 
-			var teams = allTeams.Select(g => new GroupViewModel
+			var teams = allTeams.Select(g => new TeamScheduleGroupPageViewModel
 				{
 					Name = g.GroupName,
 					Id = g.GroupId
@@ -34,11 +34,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
 
 			return Json(teams);
 		}
-	}
-
-	public class GroupViewModel
-	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
 	}
 }
