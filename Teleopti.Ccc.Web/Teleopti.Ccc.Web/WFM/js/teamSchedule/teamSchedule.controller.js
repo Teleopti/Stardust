@@ -154,7 +154,7 @@
 				active: function () { return vm.canActiveAddAbsence(); }
 			},
 			{
-				label: "SwapShift",
+				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // No panel needed,
 				action: swapShifts,
