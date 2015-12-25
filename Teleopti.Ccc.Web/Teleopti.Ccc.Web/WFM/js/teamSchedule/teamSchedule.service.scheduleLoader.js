@@ -1,19 +1,19 @@
 ﻿"use strict";
 
 angular.module("wfm.teamSchedule").service("ScheduleLoader", [
-	"$resource", "TeamSchedule", function($resource, teamScheduleSvc) {
+	"$resource", "Toggle", "TeamSchedule", function($resource, toggleSvc, teamScheduleSvc) {
 		var service = this;
 
-		service.loadSchedules = function(options, resultHandler) {
-			if (options.selectedTeamId == undefined && !options.isSearchScheduleEnabled)
-				return;
+		service.loadSchedules = function (params, resultHandler) {
+			var searchScheduleEnabled = toggleSvc.WfmTeamSchedule_FindScheduleEasily_35611;
+			var loadScheduleWithReadModel = !toggleSvc.WfmTeamSchedule_NoReadModel_35609;
 
-			if (options.isSearchScheduleEnabled) {
-				teamScheduleSvc.searchSchedules.query(options.params).$promise.then(resultHandler);
-			} else if (options.loadScheduelWithReadModel) {
-				teamScheduleSvc.loadSchedulesFromReadModelForGroup.query(options.params).$promise.then(resultHandler);
+			if (searchScheduleEnabled) {
+				teamScheduleSvc.searchSchedules.query(params).$promise.then(resultHandler);
+			} else if (loadScheduleWithReadModel) {
+				teamScheduleSvc.loadSchedulesFromReadModelForGroup.query(params).$promise.then(resultHandler);
 			} else {
-				teamScheduleSvc.loadSchedulesNoReadModel.query(options.params).$promise.then(resultHandler);
+				teamScheduleSvc.loadSchedulesNoReadModel.query(params).$promise.then(resultHandler);
 			}
 		};
 	}
