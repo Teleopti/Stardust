@@ -1,0 +1,64 @@
+﻿using System;
+using System.Globalization;
+using System.Reflection;
+using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
+{
+	[Binding]
+	public sealed class SeeWholeTeamSchedulesStepDefinitions
+	{
+		[Given(@"I have page size '(.*)' in personal setting")]
+		public void GivenIHavePageSizeInPersonalSetting(int pageSize)
+		{
+			var pageSizeSetting = new PageSizeConfigurable(pageSize);
+			DataMaker.Data().Apply(pageSizeSetting);
+		}
+
+		[Then(@"I can see page size picker")]
+		public void ThenICanSeePageSizePicker()
+		{
+			Browser.Interactions.AssertExists(".page-size-selector");
+		}
+
+		[Then(@"page size picker is filled with '(.*)'")]
+		public void ThenPageSizePickerIsFilledWith(int pageSize)
+		{
+			Browser.Interactions.AssertAnyContains(".page-size-selector option[selected]", pageSize.ToString());
+		}
+	}
+
+	public class PageSizeConfigurable : IUserDataSetup
+	{
+		private const string agentsPerPageSettingKey = "AgentsPerPage";
+		private readonly AgentsPerPageSetting pageSizeSetting;
+
+		public PageSizeConfigurable(int pageSize)
+		{
+			pageSizeSetting = new AgentsPerPageSetting { AgentsPerPage = pageSize };
+		}
+
+		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		{
+			setAgentsPerPageSettingOwner(pageSizeSetting, user);
+			new PersonalSettingDataRepository(currentUnitOfWork) .PersistSettingValue(pageSizeSetting);
+		}
+
+		private void setAgentsPerPageSettingOwner(AgentsPerPageSetting setting, IPerson user)
+		{
+			var personDataSetting = new PersonalSettingData(agentsPerPageSettingKey, user);
+			var setOwnerMethod = typeof (CalendarLinkSettings)
+				.GetMethod("SetOwner", BindingFlags.Instance | BindingFlags.NonPublic, Type.DefaultBinder, new[] {typeof (ISettingData)}, null);
+
+			setOwnerMethod.Invoke(setting, new object[] { personDataSetting });
+		}
+	}
+}

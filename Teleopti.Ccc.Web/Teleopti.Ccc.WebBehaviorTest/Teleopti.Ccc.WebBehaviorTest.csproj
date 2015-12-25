@@ -939,6 +939,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SeeWholeTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\TeamSchedule\SeeWholeTeamSchedulesStepDefinitions.cs" />
     <Compile Include="Wfm\TeamSchedule\SwapShiftsForTwoAgents.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
