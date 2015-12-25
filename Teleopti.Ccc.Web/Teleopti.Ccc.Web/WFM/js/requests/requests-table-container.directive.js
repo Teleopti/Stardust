@@ -16,7 +16,6 @@
 		vm.gridOptions = getGridOptions([]);
 		vm.getGridOptions = getGridOptions;
 		vm.prepareComputedColumns = prepareComputedColumns;
-
 		function getGridOptions(requests) {
 			return {
 				enableGridMenu: true,
@@ -40,6 +39,13 @@
 				onRegisterApi: function (gridApi) {
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
 						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
+					});
+					gridApi.selection.on.rowSelectionChanged($scope, function () {
+						vm.selectedRequestIds = [];
+						var selectedRows = gridApi.selection.getSelectedRows();
+						selectedRows.forEach(function (row) {
+							vm.selectedRequestIds.push(row.Id);
+						});
 					});
 				}
 			};
@@ -90,7 +96,8 @@
 			restrict: 'E',
 			scope: {
 				requests: '=',
-				sortingOrders: '='
+				sortingOrders: '=',
+				selectedRequestIds: '=?'
 			},
 			require: ['requestsTableContainer'],
 			templateUrl: 'js/requests/html/requests-table-container.tpl.html',		

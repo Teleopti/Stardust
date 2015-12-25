@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
@@ -31,7 +32,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		public virtual RequestListViewModel GetRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{			
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
-		}		
+		}
+
+		[HttpPost, Route("api/Requests/requests/approve"), UnitOfWork]
+		public virtual IHttpActionResult ApproveRequests(IEnumerable<Guid> ids)
+		{
+			//todo postData.Ids
+			return Ok();
+
+		}
 
 	}
 }

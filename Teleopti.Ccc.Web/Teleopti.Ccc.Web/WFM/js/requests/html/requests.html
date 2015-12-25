@@ -2,6 +2,9 @@
 	<div class="operation-container">
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
 		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="{{requests.templateType}}"></date-range-picker>
+
+		<button class="wfm-btn wfm-btn-invis-primary" ng-click="requests.approveRequests()"><i class="mdi mdi-thumb-up"></i></button>
+		<button class="wfm-btn wfm-btn-invis-primary" ng-click="requests.denyRequests()"><i class="mdi mdi-thumb-down"></i></button>
 	</div>
 
 	<div class="paging" ng-if="requests.isPaginationEnabled">

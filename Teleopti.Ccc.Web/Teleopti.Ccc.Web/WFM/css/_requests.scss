@@ -8,10 +8,6 @@
 		margin-bottom: 10px;
 	}
 
-	requests-overview {
-		position: relative;
-	}
-
 	.request-filter {
 		.input-prepend {
 			width: 365px;
@@ -21,12 +17,9 @@
 			}
 
 			.advanced-search-container {
-				position: absolute;
-				z-index: 15;
 				margin-top: 0;
 				margin-left: 18px;
 				padding: 5px 5px;
-				background-color: #fff;
 			}
 		}
 	}
@@ -49,6 +42,7 @@
 	}
 
 	.ui-grid {
+		height:auto !important;
 		.ui-grid-cell-contents {
 			width: 85%;
 			text-align: center;

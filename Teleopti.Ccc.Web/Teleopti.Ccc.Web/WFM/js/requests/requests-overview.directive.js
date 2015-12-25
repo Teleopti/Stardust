@@ -7,9 +7,9 @@
 		.directive('requestsOverview', requestsOverviewDirective);
 
 
-	requestsOverviewController.$inject = ['requestsDataService'];
+	requestsOverviewController.$inject = ['$scope','requestsDataService'];
 
-	function requestsOverviewController(requestsDataService) {
+	function requestsOverviewController($scope,requestsDataService) {
 		var vm = this;
 
 		vm.requests = [];
@@ -23,6 +23,14 @@
 
 		vm.reload = reload;
 		vm.sortingOrders = [];
+
+		$scope.$on('requests.operation', function(_s,operationIntention) {
+			if (operationIntention == 'approve') {
+				requestsDataService.approveRequests(vm.selectedRequestIds);
+			}
+			if (operationIntention == 'deny') {
+			}
+		});
 
 		function reload(requestsFilter, sortingOrders, paging) {
 			vm.loaded = false;

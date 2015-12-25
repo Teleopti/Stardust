@@ -170,7 +170,7 @@
 		});
 
 		it("see table rows for each request", function () {
-			var targets = targetElement[0].querySelectorAll('.ui-grid-row');
+			var targets = targetElement[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
 			expect(targets.length).toEqual(2);
 		});
 

@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["RequestsToggles"];
+	requestsController.$inject = ["$scope","RequestsToggles"];
 
-	function requestsController(requestsToggles) {
+	function requestsController($scope,requestsToggles) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
@@ -13,6 +13,14 @@
 		vm.pageSizeOptions = [10, 20, 50, 100, 200];
 
 		requestsToggles.togglePromise.then(init);
+
+		vm.approveRequests = function () {
+			$scope.$broadcast('requests.operation', 'approve');
+		};
+		vm.denyRequests = function () {
+			$scope.$broadcast('requests.operation', 'deny');
+		};
+		
 
 		function init(toggles) {
 			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
