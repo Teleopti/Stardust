@@ -1,38 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Interfaces.Domain;
-using GroupPage = Teleopti.Ccc.Domain.GroupPageCreator.Group;
 
-namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controller
+namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
 	public class GroupPageController : ApiController
 	{
-		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private readonly ITeamScheduleGroupPageViewModelFactory _groupPageViewModelFactory;
 
-		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository)
+		public GroupPageController(ITeamScheduleGroupPageViewModelFactory groupPageViewModelFactory)
 		{
-			_groupingReadOnlyRepository = groupingReadOnlyRepository;
+			_groupPageViewModelFactory = groupPageViewModelFactory;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AllTeams")]
-		public virtual JsonResult<IEnumerable<TeamScheduleGroupPageViewModel>> AllTeams(DateTime date)
+		public virtual JsonResult<TeamScheduleGroupPageViewModel[]> AllTeams(DateTime date)
 		{
-			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages();
-			var businessHierarchyPage = allGroupPages.Single(gp => gp.PageId == GroupPage.PageMainId);
-			var allTeams = _groupingReadOnlyRepository.AvailableGroups(businessHierarchyPage, new DateOnly(date));
-
-			var teams = allTeams.Select(g => new TeamScheduleGroupPageViewModel
-				{
-					Name = g.GroupName,
-					Id = g.GroupId
-				}).Distinct();
-
-			return Json(teams);
+			var viewModel = _groupPageViewModelFactory.GetBusinessHierarchyPageGroupViewModelsByDate(new DateOnly(date));
+			return Json(viewModel);
 		}
 	}
 }
