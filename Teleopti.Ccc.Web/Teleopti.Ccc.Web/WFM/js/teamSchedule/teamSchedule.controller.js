@@ -28,7 +28,7 @@
 		vm.selectorChanged = function() {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPage }).$promise.then(function () {
 				vm.paginationOptions.pageSize = vm.agentsPerPage;
-				vm.loadSchedules(1);
+				vm.loadSchedules();
 			});
 		};
 
@@ -167,7 +167,7 @@
 
 		function toggleAddAbsencePanel() {
 			if (vm.isAnyAgentSelected() && vm.isMenuVisible()) {
-				vm.getEarliestStartOfSelectedSchedule();
+				vm.setEarliestStartOfSelectedSchedule();
 				vm.toggleMenuState();
 				vm.setCurrentCommand("addAbsence")();
 			}
@@ -210,7 +210,7 @@
 			// TODO: Implement shift swap
 		}
 
-		vm.getEarliestStartOfSelectedSchedule = function () {
+		vm.setEarliestStartOfSelectedSchedule = function () {
 			var startUpdated = false;
 			var earlistStart = new Date("2099-12-31");
 			for (var i = 0; i < vm.groupScheduleVm.Schedules.length; i++) {
@@ -242,17 +242,6 @@
 
 			return scheduleStart;
 		}
-
-		vm.rightPanelOption = {
-			panelState: false,
-			panelTitle: "AddAbsence",
-			showCloseButton: true,
-			showBackdrop: false
-		};
-
-		vm.showAddAbsencePanel = function () {
-			vm.rightPanelOption.panelState = true;
-		};
 
 		vm.isAnyAgentSelected = function () {
 			var selectedPersonList = vm.getSelectedPersonIdList();
