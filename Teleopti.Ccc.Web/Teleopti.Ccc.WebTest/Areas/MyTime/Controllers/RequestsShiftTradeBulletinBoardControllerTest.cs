@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetAllBulletinSchedules()
 		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
+			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradeBulletinViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
 
 			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetAllBulletinSchedulesWithFilters()
 		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
+			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradeBulletinViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
 
 			modelFactory.Stub(

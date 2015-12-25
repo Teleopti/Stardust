@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[RequestPermission]
 	public class RequestsShiftTradeBulletinBoardController : Controller
 	{
-		private readonly IRequestsShiftTradebulletinViewModelFactory _requestsShiftTradebulletinViewModelFactory;
+		private readonly IRequestsShiftTradeBulletinViewModelFactory _requestsShiftTradeBulletinViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 
 		public RequestsShiftTradeBulletinBoardController(
-			IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory,
+			IRequestsShiftTradeBulletinViewModelFactory requestsShiftTradeBulletinViewModelFactory,
 			ITimeFilterHelper timeFilterHelper)
 		{
-			_requestsShiftTradebulletinViewModelFactory = requestsShiftTradebulletinViewModelFactory;
+			_requestsShiftTradeBulletinViewModelFactory = requestsShiftTradeBulletinViewModelFactory;
 			_timeFilterHelper = timeFilterHelper;
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TeamIdList = allTeamIds,
 				Paging = paging
 			};
-			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
+			return Json(_requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 
 		[UnitOfWork]
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Paging = paging,
 				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff, filter.IsEmptyDay),
 			};
-			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
+			return Json(_requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 	}
 }
