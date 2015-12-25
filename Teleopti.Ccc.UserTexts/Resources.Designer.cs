@@ -27383,6 +27383,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Swap Shifts.
+        /// </summary>
+        public static string SwapShifts {
+            get {
+                return ResourceManager.GetString("SwapShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Switch date selection view.
         /// </summary>
         public static string SwitchDateSelectionView {

@@ -115,6 +115,7 @@
 		public const string RemoveAbsence = "Raptor/Anywhere/Schedules/RemoveAbsence";
 		public const string AddActivity = "Raptor/Anywhere/Schedules/AddActivity";
 		public const string MoveActivity = "Raptor/Anywhere/Schedules/MoveActivity";
+		public const string SwapShifts = "Raptor/Anywhere/Schedules/SwapShifts";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 
 		// Angel

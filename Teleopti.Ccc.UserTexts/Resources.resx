@@ -13934,4 +13934,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Added absence for {0} selected agent(s), {1} successed, {2} failed!</value>
     <comment>use in WFM TeamSchedule, a notify message to user for telling the success and fail result.</comment>
   </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Swap Shifts</value>
+    <comment>permission name </comment>
+  </data>
 </root>
