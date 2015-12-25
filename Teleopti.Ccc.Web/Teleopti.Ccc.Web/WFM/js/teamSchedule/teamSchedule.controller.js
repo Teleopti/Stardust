@@ -84,13 +84,13 @@
 		}
 
 		function afterSchedulesLoadedForGroup(result) {
-			vm.paginationOptions.totalPages = result.TotalPages;
+			vm.paginationOptions.totalPages = result.GroupSchedule.length > 0 ? result.TotalPages : 0;
 			vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 		}
 
 		function afterSchedulesLoadedForSearchCondition(result) {
-			vm.paginationOptions.totalPages = Math.ceil(result.Total / vm.paginationOptions.pageSize);
+			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
 
