@@ -26,6 +26,7 @@
 			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
 			vm.isPeopleSearchEnabled = toggles.isPeopleSearchEnabled();
 			vm.isPaginationEnabled = toggles.isPaginationEnabled();
+			vm.isOperationEnabled = toggles.isOperationEnabled();
 			vm.period = { startDate: new Date(), endDate: new Date() };
 
 			vm.paging = {

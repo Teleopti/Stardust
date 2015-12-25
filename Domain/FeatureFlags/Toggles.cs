@@ -99,6 +99,7 @@
 		Wfm_Requests_Basic_35986,
 		Wfm_Requests_People_Search_36294,
 		Wfm_Requests_Performance_36295,
+		Wfm_Requests_Operation_36297,
 
 		Report_UseOpenXmlFormat_35797
 		// ReSharper restore InconsistentNaming
