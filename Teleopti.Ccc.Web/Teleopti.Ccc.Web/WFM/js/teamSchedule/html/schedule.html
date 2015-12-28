@@ -44,7 +44,7 @@
 	</div>
 
 	<div class="big-table-wrapper material-depth-1">
-		<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
+		<div class="alert-warning notice-spacer" ng-if="vm.total > 500" style="margin-bottom: 0">
 			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 		</div>
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
