@@ -28,7 +28,7 @@
 		vm.selectorChanged = function() {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPage }).$promise.then(function () {
 				vm.paginationOptions.pageSize = vm.agentsPerPage;
-				vm.loadSchedules();
+				vm.schedulePageReset();
 			});
 		};
 
