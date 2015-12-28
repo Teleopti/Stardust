@@ -26,17 +26,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamInfo : ITeamInfo
 	{
 		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
-		private readonly IList<IPerson> _groupMembers= new List<IPerson>();
+		private readonly List<IPerson> _groupMembers= new List<IPerson>();
 		private readonly IList<IPerson> _lockedMembers = new List<IPerson>();
 		private readonly string _name;
 			 
 		public TeamInfo(Group group, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
 			_name = group.Name;
-			foreach (var member in group.GroupMembers)
-			{
-				_groupMembers.Add(member);
-			}
+			_groupMembers.AddRange(group.GroupMembers);
 			_matrixesForMembers = matrixesForMembers;
 		}
 
@@ -75,16 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
 		{
-			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
-			foreach (var matrixesForMember in _matrixesForMembers)
-			{
-				foreach (var scheduleMatrixPro in matrixesForMember)
-				{
-					ret.Add(scheduleMatrixPro);
-				}
-			}
-
-			return ret;
+			return _matrixesForMembers.SelectMany(m => m).ToArray();
 		}
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index)
@@ -109,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in MatrixesForGroup())
 			{
-				if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
+				if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period).HasValue)
 					ret.Add(scheduleMatrixPro);
 			}
 

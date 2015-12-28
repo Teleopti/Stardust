@@ -49,9 +49,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			var allTeamBlocksInHashSet = new HashSet<ITeamBlockInfo>();
+			var daysInSelectedPeriod = selectedPeriod.DayCollection();
 			foreach (var teamInfo in allTeamInfoListOnStartDate)
 			{
-				foreach (var day in selectedPeriod.DayCollection())
+				foreach (var day in daysInSelectedPeriod)
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
 						schedulingOptions.BlockFinderTypeForAdvanceScheduling,
