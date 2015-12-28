@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 
         private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
-            var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { workingItem });
+            var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(workingItem);
 	        var matrix = tempWorkingList[0].Matrix;
 			var splitedWeeksFromSchedulePeriod = _splitSchedulePeriodToWeekPeriod.Split(matrix.SchedulePeriod.DateOnlyPeriod, matrix.Person.FirstDayOfWeek);
 			var alreadyAnalyzedDates = new List<DateOnly>();
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 					IScheduleDayData dayData;
 					tempWorkingList[0].TryGetValue(resultingDate.Value, out dayData);
 					dayData.IsDayOff = true;
-					tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList);
+					tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList.ToArray());
 				}    
             }
         }

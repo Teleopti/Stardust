@@ -20,10 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schedulingOption)
         {
-            var skillDays = _schedulingResultStateHolder().SkillDays;
-
 			if (schedulingOption.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
-            {
+			{
+				var skillDays = _schedulingResultStateHolder().SkillDays;
                 foreach (var skillPair in skillDays)
                 {
                     if (skillPair.Key.SkillType.ForecastSource != ForecastSource.MaxSeatSkill) continue;

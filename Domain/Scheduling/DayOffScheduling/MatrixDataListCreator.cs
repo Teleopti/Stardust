@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMatrixDataListCreator
 	{
-		IList<IMatrixData> Create(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
+		IMatrixData[] Create(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions);
 	}
 
 	public class MatrixDataListCreator : IMatrixDataListCreator
@@ -17,17 +18,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_scheduleDayDataMapper = scheduleDayDataMapper;
 		}
 
-		public IList<IMatrixData> Create(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
+		public IMatrixData[] Create(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
 		{
-			IList<IMatrixData> result = new List<IMatrixData>();
-			foreach (var scheduleMatrixPro in matrixList)
+			return matrixList.Select(m =>
 			{
 				IMatrixData dataHolder = new MatrixData(_scheduleDayDataMapper);
-				dataHolder.Store(scheduleMatrixPro, schedulingOptions);
-				result.Add(dataHolder);
-			}
-
-			return result;
+				dataHolder.Store(m, schedulingOptions);
+				return dataHolder;
+			}).ToArray();
 		}
 	}
 }

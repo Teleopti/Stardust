@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 			using (_mocks.Playback())
 			{
-				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> {_matrixData});
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(_matrixData);
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 			using (_mocks.Playback())
 			{
-				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(_matrixData);
 				Assert.AreEqual(0, result.Count);
 			}
 		}
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 			using (_mocks.Playback())
 			{
-				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(_matrixData);
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 			using (_mocks.Playback())
 			{
-				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(_matrixData);
 				Assert.AreEqual(0, result.Count);
 			}
 		}

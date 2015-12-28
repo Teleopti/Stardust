@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IList<IPerson> _selectedPersons;
 		private IPerson _person1;
 		private IMatrixData _matrixData1;
-		private IList<IMatrixData> _matrixDataList;
+		private IMatrixData[] _matrixDataList;
 		private IList<IScheduleMatrixPro> _matrixList;
 		private List<IScheduleDayPro> _scheduleDayProList;
 		private Group _group;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person1 = PersonFactory.CreatePerson();
 			_selectedPersons = new List<IPerson>{_person1};
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();
-			_matrixDataList = new List<IMatrixData> { _matrixData1 };
+			_matrixDataList = new [] { _matrixData1 };
 			_matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			_scheduleDayProList = new List<IScheduleDayPro> {_scheduleDayPro};
 			_group = new Group(_selectedPersons, "");

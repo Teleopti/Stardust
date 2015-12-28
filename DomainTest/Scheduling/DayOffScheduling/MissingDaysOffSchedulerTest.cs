@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private IScheduleMatrixPro _matrix1;
         private IList<IScheduleMatrixPro> _matrixList;
         private ISchedulingOptions _schedulingOptions;
-        private IList<IMatrixData> _matrixDataList;
+        private IMatrixData[] _matrixDataList;
         private IMatrixData _matrixData1;
         private IMatrixData _matrixData2;
         private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _schedulingOptions = new SchedulingOptions();
             _matrixData1 = _mocks.StrictMock<IMatrixData>();
             _matrixData2 = _mocks.StrictMock<IMatrixData>();
-            _matrixDataList = new List<IMatrixData> { _matrixData1, _matrixData2 };
+            _matrixDataList = new [] { _matrixData1, _matrixData2 };
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -276,8 +277,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 
-                Expect.Call(_matrixDataListCreator.Create(new List<IScheduleMatrixPro>(secondMatrixList), _schedulingOptions)).IgnoreArguments().Return(secondMatrixDataList);
-                Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(secondMatrixDataList)).Return(
+                Expect.Call(_matrixDataListCreator.Create(new List<IScheduleMatrixPro>(secondMatrixList), _schedulingOptions)).IgnoreArguments().Return(secondMatrixDataList.ToArray());
+                Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(secondMatrixDataList.ToArray())).Return(
                     new List<IMatrixData>());
 
                 Expect.Call(_matrix1.UnlockedDays).Return(
