@@ -21,11 +21,7 @@
 			this.publishPeriod = $resource('../api/resourceplanner/planningperiod/:id/publish', {id:"@id"},{
 				query: { method: 'POST', params: {}, isArray: false}
 			});
-			//toggle
-			this.isEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', { toggle: "@toggle" }, {
-				query: { method: 'GET', params: {}, isArray: false }
-			});
-
+			
 			this.status = $resource('../api/Status/Scheduling', {}, {
 			    get: { method: 'GET', params: {}, isArray: false }
 			});

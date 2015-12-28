@@ -1,11 +1,24 @@
 ﻿'use strict';
 describe('PlanningPeriodsCtrl', function () {
-	var $q,
-		$rootScope,
-		$httpBackend,
-		planningPeriodSvc;
+    var $q,
+        $rootScope,
+        $httpBackend,
+        planningPeriodSvc,
+        toggle;
 
-	beforeEach(module('wfm.resourceplanner'));
+    beforeEach(function () {
+        module('wfm.resourceplanner');
+        module(function ($provide) {
+            $provide.service('Toggle', function() {
+                var queryDeferred = $q.defer();
+                queryDeferred.resolve(true);
+                return {
+                    togglesLoaded: queryDeferred.promise,
+                    Wfm_ChangePlanningPeriod_33043: true
+                }
+            });
+        });
+    });
 
 	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
@@ -13,20 +26,12 @@ describe('PlanningPeriodsCtrl', function () {
 		$httpBackend = _$httpBackend_;
 
 		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
-		$httpBackend.whenGET('../ToggleHandler/IsEnabled?toggle=Wfm_ChangePlanningPeriod_33043').respond(200, {});
 		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
 		planningPeriodSvc = {
 			getPlanningPeriod: {
 				query: function () { }
 			},
 			getDayOffRules: function () { return { then: function () { } } },
-			isEnabled: {
-				query: function () {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve('true');
-					return { $promise: queryDeferred.promise };
-				}
-			},
 			status: {
 				get: function () {
 					var queryDeferred = $q.defer();
