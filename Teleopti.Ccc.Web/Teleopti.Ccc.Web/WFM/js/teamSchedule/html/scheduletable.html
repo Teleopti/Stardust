@@ -1,6 +1,4 @@
-﻿
-
-<table class="table table-hover" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule" ng-click="vm.test()">
+﻿<table class="table table-hover" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule" ng-click="vm.test()">
 	<thead>
 		<tr class="person">
 			<th class="person-name person-name-column" style="width: 15%">
@@ -19,11 +17,8 @@
 			<th style="width: 1%"></th>
 		</tr>
 	</thead>
-
-
 	<tbody>
 		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules">
-
 			<td class="person-name person-name-column">
 				<div class="wfm-checkbox" ng-show="vm.selectMode">
 					<label>
@@ -34,10 +29,7 @@
 				</div>
 				<div class="person-name nowrap" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
 			</td>
-
-
 			<td class="schedule schedule-column">
-
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
 						  ng-style="{left: dayOff.StartPosition() + '%', width: dayOff.Length() + '%'}">
@@ -52,7 +44,6 @@
 					</div>
 				</div>
 			</td>
-
 			<td></td>
 		</tr>
 	</tbody>
