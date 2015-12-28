@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -57,15 +56,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in group.GroupMembers)
 			{
-				IList<IScheduleMatrixPro> memberList = new List<IScheduleMatrixPro>();
-				foreach (var matrixPro in allMatrixesInScheduler)
-				{
-					if (matrixPro.Person.Equals(groupMember))
-					{
-						if(matrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
-							memberList.Add(matrixPro);	
-					}
-				}
+				IList<IScheduleMatrixPro> memberList =
+					allMatrixesInScheduler.Where(matrixPro => matrixPro.Person.Equals(groupMember) && matrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null).ToList();
 				matrixesForGroup.Add(memberList);
 			}
 
