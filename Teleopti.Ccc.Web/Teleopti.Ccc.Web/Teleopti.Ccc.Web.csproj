@@ -1341,6 +1341,7 @@
     <Content Include="WFM\tests\rta\rta.agentsforteams.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatmapeditor.controller.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.controller.spec.js" />
+    <Content Include="WFM\tests\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.factory.spec.personSchedule.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.controller.spec.scheduletable.js" />
     <Content Include="WFM\tests\teamSchedule\teamSchedule.factory.spec.timeline.js" />
