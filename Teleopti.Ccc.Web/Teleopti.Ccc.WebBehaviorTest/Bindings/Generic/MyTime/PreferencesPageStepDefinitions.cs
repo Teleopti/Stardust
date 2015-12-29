@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Browser.Interactions.Click(".submenu .Preference-add-extended-button");
+			Browser.Interactions.Click(".submenu .Preference-add-extended-button[data-menu-loaded=true]");
 		}
 
 		[When(@"I click the apply extended preferences button")]

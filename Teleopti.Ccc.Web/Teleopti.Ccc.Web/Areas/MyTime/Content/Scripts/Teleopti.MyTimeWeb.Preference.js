@@ -247,7 +247,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			e.preventDefault();
 		});
 
-		button.removeAttr('disabled');
+		button.attr('data-menu-loaded','true');
 	}
 
 	function _loadAvailableTemplates() {
