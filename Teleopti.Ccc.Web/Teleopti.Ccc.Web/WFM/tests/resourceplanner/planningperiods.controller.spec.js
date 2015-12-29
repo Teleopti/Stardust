@@ -3,8 +3,7 @@ describe('PlanningPeriodsCtrl', function () {
     var $q,
         $rootScope,
         $httpBackend,
-        planningPeriodSvc,
-        toggle;
+        planningPeriodSvc;
 
     beforeEach(function () {
         module('wfm.resourceplanner');
@@ -27,9 +26,14 @@ describe('PlanningPeriodsCtrl', function () {
 
 		$httpBackend.whenGET('../api/Status/Scheduling').respond(200, {});
 		$httpBackend.whenGET('../api/resourceplanner/planningperiod').respond(200, {});
-		planningPeriodSvc = {
+
+	    planningPeriodSvc = {
 			getPlanningPeriod: {
-				query: function () { }
+			    query: function () {
+			        var queryDeferred = $q.defer();
+			        queryDeferred.resolve({ });
+			        return { $promise: queryDeferred.promise };
+			    }
 			},
 			getDayOffRules: function () { return { then: function () { } } },
 			status: {
@@ -50,38 +54,43 @@ describe('PlanningPeriodsCtrl', function () {
 	}));
 
 	it('returns correct planning period', inject(function($controller) {
-		var scope = $rootScope.$new();
-		planningPeriodSvc.getPlanningPeriod = {
-				query: function() {
-					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
-				}
-			};
+	    var scope = $rootScope.$new();
 
-		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+	    var queryDeferred = $q.defer();
+	    queryDeferred.resolve({ StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' });
+	    planningPeriodSvc.getPlanningPeriod.query = function() {
+	        return { $promise: queryDeferred.promise };
+	    }
+
+	    $controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+	    $rootScope.$apply();
+
 		expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
-		expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
+	    expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
 		expect(scope.planningPeriod.Id).toEqual('someguid');
 	}));
 
 	it('returns missing skills with content', inject(function($controller) {
 		var scope = $rootScope.$new();
-		planningPeriodSvc.getPlanningPeriod = {
-			query: function() {
-				return {
-					Skills: [
-						{
-							SkillName: 'Phone',
-							MissingRanges: [
-								{ StartDate: new Date(20150502), EndDate: new Date(20150509) },
-								{ StartDate: new Date(20150515), EndDate: new Date(20150517) }
-							]
-						}
-					]
-				};
-			}
-		};
 
+		var queryDeferred = $q.defer();
+		queryDeferred.resolve({
+		    Skills: [
+                {
+                    SkillName: 'Phone',
+                    MissingRanges: [
+                        { StartDate: new Date(20150502), EndDate: new Date(20150509) },
+                        { StartDate: new Date(20150515), EndDate: new Date(20150517) }
+                    ]
+                }
+		    ]
+		});
+		planningPeriodSvc.getPlanningPeriod.query = function () {
+		    return { $promise: queryDeferred.promise };
+		}
+		
 		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+		$rootScope.$apply();
 
 		expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
 		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
@@ -113,7 +122,7 @@ describe('PlanningPeriodsCtrl', function () {
 		spyOn($state, 'go');
 		var stateParams = {id:2};
 
-		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state, $stateParams:stateParams });
+		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state, $stateParams: stateParams });
 		var filter = {id:1,default:false}
 		scope.editRuleset(filter.id,filter.default);
 
@@ -122,13 +131,14 @@ describe('PlanningPeriodsCtrl', function () {
 	}));
 	it('should be able to delete each ruleset', inject(function ($controller, $state) {
 		var scope = $rootScope.$new();
-		var result = [{Id:1},{Id:3}]
+	    var result = [{ Id: 1 }, { Id: 3 }];
+
 		$httpBackend.whenDELETE('../api/resourceplanner/dayoffrules/2').respond(200, {});
 		$httpBackend.whenGET('../api/resourceplanner/dayoffrules')
 			.respond(200, result);
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, $state: $state });
-		scope.dayoffRules = [{Id:1},{Id:2},{Id:3}];
+	    scope.dayoffRules = [{ Id: 1 }, { Id: 2 }, { Id: 3 }];
 		scope.destoryRuleset(scope.dayoffRules[1]);
 
 		$httpBackend.flush();
@@ -136,17 +146,42 @@ describe('PlanningPeriodsCtrl', function () {
 		expect(scope.dayoffRules[1].Id).toBe(3);
 
 	}));
-	it('should disable scheduling before planning period is loaded', inject(function($controller) {
-		var scope = $rootScope.$new();
-		$controller('PlanningPeriodsCtrl', { $scope: scope });
 
-		expect(scope.disableSchedule()).toBe(true);
+	it('should disable scheduling before planning period is loaded', inject(function ($controller) {
+	    var scope = $rootScope.$new();
+	    var loadedDayOffRules = [{ Id: 'something' }];
+
+	    $httpBackend.whenGET('../api/resourceplanner/dayoffrules')
+	        .respond(200, loadedDayOffRules);
+
+	    var queryDeferred = $q.defer();
+	    planningPeriodSvc.getPlanningPeriod.query = function () {
+	        return { $promise: queryDeferred.promise };
+	    }
+
+	    $controller('PlanningPeriodsCtrl', { $scope: scope });
+	    $rootScope.$apply();
+
+	    expect(scope.disableSchedule()).toBe(true);
+
+	    queryDeferred.resolve({ StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' });
 	}));
-	it('should enable scheduling before planning period is loaded', inject(function ($controller) {
-		var scope = $rootScope.$new();
-		$controller('PlanningPeriodsCtrl', { $scope: scope });
 
-		scope.planningPeriod = { StartDate: '2000-1-1', EndDate: '2000-2-1' };
+	it('should enable scheduling when planning period is loaded', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		var loadedDayOffRules = [{ Id: 'something' }];
+
+	    $httpBackend.whenGET('../api/resourceplanner/dayoffrules')
+	        .respond(200, loadedDayOffRules);
+
+	    var queryDeferred = $q.defer();
+	    planningPeriodSvc.getPlanningPeriod.query = function () {
+	        return { $promise: queryDeferred.promise };
+	    }
+	    queryDeferred.resolve({ StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' });
+	    $controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
+
+		$rootScope.$apply();
 
 		expect(scope.disableSchedule()).toBe(false);
 	}));
@@ -154,6 +189,7 @@ describe('PlanningPeriodsCtrl', function () {
 	it('should disable planningperiod select while servercall is made', inject(function($controller) {
 		var scope = $rootScope.$new();
 		var rangeDetails = {Number:10,}
+
 		$controller('PlanningPeriodsCtrl', { $scope: scope });
 		scope.rangeUpdated(10,rangeDetails);
 		expect(scope.rangeDisabled).toBe(true);
@@ -163,7 +199,7 @@ describe('PlanningPeriodsCtrl', function () {
 
 		var numberOfKeepAliveCalls = 0;
 
-		planningPeriodSvc.keepAlive = function() { numberOfKeepAliveCalls++; };
+		planningPeriodSvc.keepAlive = function () { numberOfKeepAliveCalls++; };
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: planningPeriodSvc });
 

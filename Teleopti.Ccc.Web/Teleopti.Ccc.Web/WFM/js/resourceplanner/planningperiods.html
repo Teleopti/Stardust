@@ -21,26 +21,26 @@
 			<!--dont remove update-planning-peroid - used to assert in test -->
 			<i ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)" class="mdi mdi-pencil searchbaricon update-planning-peroid"><md-tooltip>{{'ChangePlanningPeriod' | translate }}</md-tooltip></i>
 
-			<div ng-show="!planningPeriod.$resolved">
-				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-				<p>{{'CheckingForecastingRequirements' | translate}}</p>
-			</div>
+            <div ng-show="!initialized">
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                <p>{{'CheckingForecastingRequirements' | translate}}</p>
+            </div>
 
-			<div ng-show="planningPeriod.$resolved">
-				<div class="wfm-test-inputContainer" ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod" ng-disabled="rangeDisabled">
-					{{'ChangePlanningPeriodTo' | translate}}
-					<div ng-repeat="op in suggestedPlanningPeriods">
-						<!--dont remove new-planning-period - used to assert in test -->
-						<div class="wfm-radio new-planning-period">
-							<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
-							<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
-								<span class="wfm-radio-toggle"></span>
-								<span class="wfm-radio-label new-planning-period" > {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
+            <div ng-show="initialized">
+                <div class="wfm-test-inputContainer" ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod" ng-disabled="rangeDisabled">
+                    {{'ChangePlanningPeriodTo' | translate}}
+                    <div ng-repeat="op in suggestedPlanningPeriods">
+                        <!--dont remove new-planning-period - used to assert in test -->
+                        <div class="wfm-radio new-planning-period">
+                            <input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
+                            <label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
+                                <span class="wfm-radio-toggle"></span>
+                                <span class="wfm-radio-label new-planning-period"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
 		<div class="col-lg-1">
 			<button class="wfm-fab info schedule-button wfm-btn-primary-disabled" ng-class="{'wfm-btn-primary-disabled': disableSchedule(), 'wfm-btn-primary': !disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)"><i class="mdi mdi-arrow-right"></i>

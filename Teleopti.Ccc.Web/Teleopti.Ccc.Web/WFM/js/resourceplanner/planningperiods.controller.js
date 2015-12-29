@@ -10,12 +10,14 @@
 
 	            $scope.isScheduleRunning = false;
 	            $scope.scheduleClicked = false;
+	            $scope.initialized = false;
 	            $scope.isEnabled = false;
-	            $scope.planningPeriod = {};
-	            $scope.disableSchedule = function() {
-	                return $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
-	            };
 	            $scope.dayoffRules = [];
+	            $scope.planningPeriod = {};
+
+	            $scope.disableSchedule = function() {
+	                return !$scope.initialized || $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
+	            };
 
 	            PlanningPeriodSvrc.getDayOffRules().then(function(result) {
 	                $scope.dayoffRules = result.data;
@@ -79,13 +81,15 @@
 	                }, handleScheduleOrOptimizeError);
 	            };
 
-			    //toggle
 	            toggleService.togglesLoaded.then(function () {
-	                $scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043
+	                $scope.isEnabled = toggleService.Wfm_ChangePlanningPeriod_33043;
 	            });
 
-	            //planningperiod
-	            $scope.planningPeriod = PlanningPeriodSvrc.getPlanningPeriod.query({ id: $stateParams.id });
+	            PlanningPeriodSvrc.getPlanningPeriod.query({ id: $stateParams.id }).$promise.then(function(result) {
+	                $scope.planningPeriod = result;
+	                $scope.initialized = true;
+	            });
+
 	            $scope.suggestions = function(id) {
 	                $scope.suggestedPlanningPeriods = [];
 	                PlanningPeriodSvrc.getSuggestions.query({ id: id }).$promise.then(function(result) {
@@ -101,10 +105,10 @@
 	                });
 	            };
 	            $scope.editRuleset = function(filter) {
-	                $state.go('resourceplanner.filter', { filterId: filter.Id, periodId: $stateParams.id, isDefault: filter.Default })
+	                $state.go('resourceplanner.filter', { filterId: filter.Id, periodId: $stateParams.id, isDefault: filter.Default });
 	            };
 	            $scope.createRuleset = function() {
-	                $state.go('resourceplanner.filter', { periodId: $stateParams.id })
+	                $state.go('resourceplanner.filter', { periodId: $stateParams.id });
 	            };
 	            $scope.destoryRuleset = function(node) {
 	                PlanningPeriodSvrc.destroyDayOffRule.remove({ id: node.Id }).$promise.then(function() {
