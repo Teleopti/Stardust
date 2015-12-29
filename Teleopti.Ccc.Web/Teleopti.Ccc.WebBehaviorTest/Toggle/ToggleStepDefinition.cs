@@ -36,7 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 			theReply.Should().Be.EqualTo(reply);
 		}
 
-		private static readonly Lazy<ToggleQuerier> _toggleQueryInstance = new Lazy<ToggleQuerier>(() => new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString()));
+		private static readonly Lazy<ToggleQuerier> _toggleQueryInstance = new Lazy<ToggleQuerier>(() =>
+		{
+			var toggles = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
+			toggles.FillAllToggles();
+			return toggles;
+		});
 
 		public static void CheckIfRunTestDueToToggleFlags()
 		{
