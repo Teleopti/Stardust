@@ -294,6 +294,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Expect.Call(historicDayOne.TotalTasks).Return(0d).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.Tasks).Return(0d).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.OverrideTasks).Return(null).Repeat.AtLeastOnce();
+			Expect.Call(historicDayOne.OverrideAverageTaskTime).Return(null).Repeat.AtLeastOnce();
+			Expect.Call(historicDayOne.OverrideAverageAfterTaskTime).Return(null).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.AverageTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.AverageAfterTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.TotalAverageTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
