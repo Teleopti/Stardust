@@ -9,6 +9,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var schedule = result.Single();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
-			
+
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
@@ -204,7 +205,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
-			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(scheduleDate),
+				new DayOffTemplate(new Description("testDayoff")));
 			scheduleDay.Add(pa);
 			scheduleDay.Add(personAbsence);
 
@@ -280,10 +282,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.GroupScheduleNoReadModel(Guid.NewGuid(), scheduleDate, 20, 1).Content.GroupSchedule.ToList();
 			result.Count.Should().Be.EqualTo(1);
-			
+
 			var schedule = result.Single();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
-			
+
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(2);
 
@@ -456,21 +458,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					scenario);
 
 			scheduleDay1.Add(pa1);
-			
+
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
-				
+
 			scheduleDay2.Add(pa2);
-			
+
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
-			
+
 
 			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
@@ -484,7 +488,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			scheduleDay4.Add(pa4);
 			scheduleDay4.Add(personAbsenceForPerson4);
-			
+
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			ScheduleProvider.AddScheduleDay(scheduleDay4);
@@ -537,21 +541,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					scenario);
 
 			scheduleDay1.Add(pa1);
-			
+
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 4, 7, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
-				
+
 			scheduleDay2.Add(pa2);
-			
+
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
-			
+
 
 			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
@@ -560,7 +566,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay4.Add(pa4);
 
 			scheduleDay4.Add(personAbsenceForPerson4);
-			
+
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			ScheduleProvider.AddScheduleDay(scheduleDay4);
@@ -609,7 +615,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay1.Add(pa1);
 
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
@@ -617,7 +624,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay2.Add(pa2);
 
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
@@ -658,7 +666,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result[1].Name.Should().Be.EqualTo("c1@c1");
 			result[2].Name.Should().Be.EqualTo("d1@d1");
 		}
-		
+
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
@@ -768,7 +776,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var schedule = result.Single();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
-			
+
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
@@ -820,7 +828,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
-			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(scheduleDate),
+				new DayOffTemplate(new Description("testDayoff")));
 			scheduleDay.Add(pa);
 			scheduleDay.Add(personAbsence);
 
@@ -877,7 +886,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidentialForScheduleSearch()
+		public void
+			ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidentialForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("pNoConfidential", "pNoConfidential");
@@ -896,10 +906,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1).Content.Schedules.ToList();
 			result.Count.Should().Be.EqualTo(1);
-			
+
 			var schedule = result.Single();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
-			
+
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(2);
 
@@ -913,9 +923,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 10:00");
 			projectionVm[1].Minutes.Should().Be.EqualTo(300);
 		}
-		
+
 		[Test]
-		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidentialForScheduleSearch()
+		public void
+			ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidentialForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
@@ -1072,21 +1083,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					scenario);
 
 			scheduleDay1.Add(pa1);
-			
+
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
-				
+
 			scheduleDay2.Add(pa2);
-			
+
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
-			
+
 
 			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
@@ -1100,7 +1113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			scheduleDay4.Add(pa4);
 			scheduleDay4.Add(personAbsenceForPerson4);
-			
+
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			ScheduleProvider.AddScheduleDay(scheduleDay4);
@@ -1153,21 +1166,23 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					scenario);
 
 			scheduleDay1.Add(pa1);
-			
+
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 4, 7, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
-				
+
 			scheduleDay2.Add(pa2);
-			
+
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
-			
+
 
 			var scheduleDay4 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person4, scenario);
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
@@ -1176,7 +1191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay4.Add(pa4);
 
 			scheduleDay4.Add(personAbsenceForPerson4);
-			
+
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			ScheduleProvider.AddScheduleDay(scheduleDay4);
@@ -1225,7 +1240,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay1.Add(pa1);
 
 			var scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person2, scenario);
-			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person2, new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 
@@ -1233,7 +1249,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			scheduleDay2.Add(pa2);
 
 			var scheduleDay3 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person3, scenario);
-			var pa3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("activity1", new Color()),
 					person3, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"),
 					scenario);
 			scheduleDay3.Add(pa3);
@@ -1275,7 +1292,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result[2].Name.Should().Be.EqualTo("d1@d1");
 		}
 	}
-		
+
 	[TestFixture]
 	internal class TeamScheduleControllerTest
 	{
@@ -1284,22 +1301,26 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			const bool expectedResult = true;
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x=>x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(expectedResult);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence))
+				.Return(expectedResult);
 
-			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null);
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null, null,
+				null);
 			var result = target.GetPermissions();
 
 			result.Content.IsAddFullDayAbsenceAvailable.Should().Be.EqualTo(expectedResult);
-		}		
-		
+		}
+
 		[Test]
 		public void ShouldGetIntradayAbsencePermission()
 		{
 			const bool expectedResult = true;
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)).Return(expectedResult);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence))
+				.Return(expectedResult);
 
-			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null);
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null, null,
+				null);
 			var result = target.GetPermissions();
 
 			result.Content.IsAddIntradayAbsenceAvailable.Should().Be.EqualTo(expectedResult);
@@ -1310,9 +1331,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			const bool expectedResult = true;
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts)).Return(expectedResult);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts))
+				.Return(expectedResult);
 
-			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null);
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null, null,
+				null);
 			var result = target.GetPermissions();
 
 			result.Content.IsSwapShiftsAvailable.Should().Be.EqualTo(expectedResult);
@@ -1326,7 +1349,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
 
-			var target = new TeamScheduleController(null, null, loggonUser, null, null, null);
+			var target = new TeamScheduleController(null, null, loggonUser, null, null, null, null, null, null, null, null);
 
 			var form = new FullDayAbsenceForm {PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo()};
 			target.AddFullDayAbsence(form);
@@ -1338,38 +1361,43 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddFullDayAbsenceForMoreThanOneAgent()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var target = new TeamScheduleController(null, null, null, null, absencePersister, null);
+			var target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, null, null, null);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
 			var form = new FullDayAbsenceForm
 			{
-				PersonIds = new List<Guid>() { person1, person2 }
+				PersonIds = new List<Guid>() {person1, person2}
 			};
 			target.AddFullDayAbsence(form);
 
-			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
-			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+			absencePersister.AssertWasCalled(
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			absencePersister.AssertWasCalled(
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
 		}
 
 		[Test]
 		public void ShouldAddFullDayAbsenceThroughInputForm()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var target = new TeamScheduleController(null, null, null, null, absencePersister, null);
+			var target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, null, null, null);
 
 			var form = new FullDayAbsenceForm
 			{
-				PersonIds = new List<Guid>{ Guid.NewGuid() },
+				PersonIds = new List<Guid> {Guid.NewGuid()},
 				AbsenceId = Guid.NewGuid(),
 				StartDate = DateTime.MinValue,
 				EndDate = DateTime.MaxValue,
 			};
 			target.AddFullDayAbsence(form);
 
-			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
-			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
-			absencePersister.AssertWasCalled(x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.StartDate == form.StartDate)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistFullDayAbsence(Arg<AddFullDayAbsenceCommand>.Matches(s => s.EndDate == form.EndDate)));
 		}
 
 		[Test]
@@ -1380,9 +1408,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
 
-			var target = new TeamScheduleController(null, null, loggonUser, null, null, null);
+			var target = new TeamScheduleController(null, null, loggonUser, null, null, null, null, null, null, null, null);
 
-			var form = new IntradayAbsenceForm { PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo() };
+			var form = new IntradayAbsenceForm {PersonIds = new List<Guid>(), TrackedCommandInfo = new TrackedCommandInfo()};
 			target.AddIntradayAbsence(form);
 
 			form.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(expectedPerson.Id.Value);
@@ -1392,7 +1420,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddIntradayAbsenceForMoreThanOneAgent()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var target = new TeamScheduleController(null, null, null, null, absencePersister, null);
+			var target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, null, null, null);
 
 			var person1 = Guid.NewGuid();
 			var person2 = Guid.NewGuid();
@@ -1400,39 +1428,44 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			{
 				StartTime = DateTime.MinValue,
 				EndTime = DateTime.MaxValue,
-				PersonIds = new List<Guid>() { person1, person2 }
+				PersonIds = new List<Guid>() {person1, person2}
 			};
 			target.AddIntradayAbsence(form);
 
-			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
-			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
+			absencePersister.AssertWasCalled(
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[0])));
+			absencePersister.AssertWasCalled(
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.PersonId == form.PersonIds.ToList()[1])));
 		}
 
 		[Test]
 		public void ShouldAddIntradayAbsenceThroughInputForm()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var target = new TeamScheduleController(null, null, null, null, absencePersister, null);
+			var target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, null, null, null);
 
 			var form = new IntradayAbsenceForm
 			{
-				PersonIds = new List<Guid> { Guid.NewGuid() },
+				PersonIds = new List<Guid> {Guid.NewGuid()},
 				AbsenceId = Guid.NewGuid(),
 				StartTime = DateTime.MinValue,
 				EndTime = DateTime.MaxValue,
 			};
 			target.AddIntradayAbsence(form);
 
-			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
-			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
-			absencePersister.AssertWasCalled(x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.AbsenceId == form.AbsenceId)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.StartTime == form.StartTime)));
+			absencePersister.AssertWasCalled(
+				x => x.PersistIntradayAbsence(Arg<AddIntradayAbsenceCommand>.Matches(s => s.EndTime == form.EndTime)));
 		}
 
 		[Test]
 		public void ShouldReturnBadRequestWhenEndTimeEarlierThanStartTime()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var target = new TeamScheduleController(null, null, null, null, absencePersister, null);
+			var target = new TeamScheduleController(null, null, null, null, absencePersister, null, null, null, null, null, null);
 
 			var form = new IntradayAbsenceForm
 			{
@@ -1449,12 +1482,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldUpdateAgentsPerPage()
 		{
 			const int expectedAgents = 30;
-			var agentsPerPageSettingersisterAndProvider = MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
-			var target = new TeamScheduleController(null, null, null, null, null, agentsPerPageSettingersisterAndProvider);
+			var agentsPerPageSettingersisterAndProvider =
+				MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
+			var target = new TeamScheduleController(null, null, null, null, null, agentsPerPageSettingersisterAndProvider, null,
+				null, null, null, null);
 
 			target.UpdateAgentsPerPageSetting(expectedAgents);
 
-			agentsPerPageSettingersisterAndProvider.AssertWasCalled(x=>x.Persist(Arg<AgentsPerPageSetting>.Matches(s => s.AgentsPerPage == expectedAgents)));
+			agentsPerPageSettingersisterAndProvider.AssertWasCalled(
+				x => x.Persist(Arg<AgentsPerPageSetting>.Matches(s => s.AgentsPerPage == expectedAgents)));
 		}
 
 		[Test]
@@ -1462,9 +1498,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			const int expectedAgents = 30;
 			var loggonUser = new FakeLoggedOnUser();
-			var agentsPerPageSettingersisterAndProvider = MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
-			agentsPerPageSettingersisterAndProvider.Stub(x=>x.GetByOwner(loggonUser.CurrentUser())).Return(new AgentsPerPageSetting(){AgentsPerPage = expectedAgents});
-			var target = new TeamScheduleController(null, null, loggonUser, null, null, agentsPerPageSettingersisterAndProvider);
+			var agentsPerPageSettingersisterAndProvider =
+				MockRepository.GenerateMock<ISettingsPersisterAndProvider<AgentsPerPageSetting>>();
+			agentsPerPageSettingersisterAndProvider.Stub(x => x.GetByOwner(loggonUser.CurrentUser()))
+				.Return(new AgentsPerPageSetting {AgentsPerPage = expectedAgents});
+			var target = new TeamScheduleController(null, null, loggonUser, null, null, agentsPerPageSettingersisterAndProvider,
+				null, null, null, null, null);
 
 			var result = target.GetAgentsPerPageSetting();
 

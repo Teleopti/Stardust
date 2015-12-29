@@ -5,6 +5,12 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -28,10 +34,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
+		private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
+		private readonly IPersonRepository _personRepository;
+		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
+		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
 
 		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
 			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
-			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister, ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider)
+			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
+			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
+			ICommonNameDescriptionSetting commonNameDescriptionSetting,
+			IPersonRepository personRepository,
+			IScheduleRepository scheduleRepository,
+			IScenarioRepository scenarioRepository,
+			ISwapAndModifyServiceNew swapAndModifyServiceNew,
+			IScheduleDictionaryPersister scheduleDictionaryPersister)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -39,15 +58,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_principalAuthorization = principalAuthorization;
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
+			_commonNameDescriptionSetting = commonNameDescriptionSetting;
+			_personRepository = personRepository;
+			_scheduleRepository = scheduleRepository;
+			_scenarioRepository = scenarioRepository;
+			_swapAndModifyServiceNew = swapAndModifyServiceNew;
+			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
 		public virtual JsonResult<PermissionsViewModel> GetPermissions()
 		{
-			var permissions = new PermissionsViewModel()
+			var permissions = new PermissionsViewModel
 			{
-				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
-				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
+				IsAddFullDayAbsenceAvailable =
+					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable =
+					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
 				IsSwapShiftsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts)
 			};
 
@@ -80,14 +107,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize, int currentPageIndex)
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize,
+			int currentPageIndex)
 		{
 			var currentDate = new DateOnly(date);
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
-				return Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
+				return
+					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 
 			if (string.IsNullOrEmpty(keyword))
@@ -190,7 +219,66 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual JsonResult<AgentsPerPageSettingViewModel> GetAgentsPerPageSetting()
 		{
 			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
-			return Json(new AgentsPerPageSettingViewModel(){Agents = agentsPerPageSetting.AgentsPerPage});
+			return Json(new AgentsPerPageSettingViewModel {Agents = agentsPerPageSetting.AgentsPerPage});
+		}
+
+		[HttpPost, UnitOfWork, SwapShiftPermission, Route("api/TeamSchedule/SwapShifts")]
+		public virtual IHttpActionResult SwapShifts(SwapShiftForm form)
+		{
+			if (form.TrackedCommandInfo != null)
+			{
+				form.TrackedCommandInfo.OperatedPersonId = _loggonUser.CurrentUser().Id.Value;
+			}
+
+			var peoples = _personRepository.FindPeople(new[] {form.PersonIdFrom, form.PersonIdTo}).ToArray();
+			var scheduleDateOnly = new DateOnly(form.ScheduleDate);
+
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+
+			var period = new DateTimePeriod(form.ScheduleDate.ToUniversalTime(), form.ScheduleDate.AddDays(1).ToUniversalTime());
+
+			var dictionary =
+				_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), defaultScenario,
+					new PersonProvider(_personRepository), new ScheduleDictionaryLoadOptions(true, true), peoples);
+
+			var dates = new List<DateOnly> {scheduleDateOnly};
+			var lockDates = new List<DateOnly>();
+			var businessRules = NewBusinessRuleCollection.Minimum();
+			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
+
+			var errorResponses =
+				_swapAndModifyServiceNew.Swap(peoples[0], peoples[1], dates, lockDates, dictionary, businessRules, scheduleTagSetter)
+					.Where(r => r.Error).ToArray();
+
+			if (errorResponses.Length > 0)
+			{
+				return Json(errorResponses.Select(r => new AddAbsenceFailResult
+				{
+					PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(r.Person),
+					Message = new List<string> {r.Message}
+				}));
+			}
+
+			var failResults = new List<AddAbsenceFailResult>();
+			var conflicts = _scheduleDictionaryPersister.Persist(dictionary).ToArray();
+			if (conflicts.Length > 0)
+			{
+				foreach (var c in conflicts)
+				{
+					var peopleId = c.InvolvedId();
+					var people = peoples.SingleOrDefault(p => p.Id == peopleId);
+					if (people != null)
+					{
+						failResults.Add(new AddAbsenceFailResult
+						{
+							PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(people),
+							Message = new List<string> {Resources.ScheduleHasBeenChanged}
+						});
+					}
+				}
+			}
+
+			return Json(failResults);
 		}
 	}
 }

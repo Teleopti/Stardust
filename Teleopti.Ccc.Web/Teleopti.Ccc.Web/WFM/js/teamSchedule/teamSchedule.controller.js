@@ -201,9 +201,17 @@
 		}
 
 		function swapShifts() {
-			if (vm.getSelectedPersonIdList().length !== 2 || vm.canActiveSwapShifts()) return;
+			var selectedPersonIds = vm.getSelectedPersonIdList();
 
-			// TODO: Implement shift swap
+			if (selectedPersonIds.length !== 2 || !vm.canActiveSwapShifts()) return;
+
+			teamScheduleSvc.swapShifts.post({
+				PersonIdFrom: selectedPersonIds[0],
+				PersonIdTo: selectedPersonIds[1],
+				ScheduleDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD")
+			}).$promise.then(function (result) {
+				// TODO: Handle errors
+			});
 		}
 
 		vm.setEarliestStartOfSelectedSchedule = function () {
