@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -15,9 +16,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 		    DateOnlyPeriod? blockPeriod = null;
 
-		    var tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
+		    IEnumerable<IScheduleMatrixPro> tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
 		    if (!tempMatrixes.Any())
 			    return null;
+
+		    IScheduleMatrixPro roleModelMatrix = tempMatrixes.First();
 
 		    switch (blockType)
 		    {
@@ -42,21 +45,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    case BlockFinderType.SchedulePeriod:
 			    {
-					var roleModelMatrix = tempMatrixes[0];
 				    blockPeriod = roleModelMatrix.SchedulePeriod.DateOnlyPeriod;
 				    break;
 			    }
 
 			    case BlockFinderType.BetweenDayOff:
-				{
-					var roleModelMatrix = tempMatrixes[0];
+			    {
 				    var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
 					blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(roleModelMatrix, blockOnDate, singleAgentTeam);
 				    break;
 			    }
 		    }
 
-		    return !blockPeriod.HasValue ? null : new BlockInfo(blockPeriod.Value);
+		    if (!blockPeriod.HasValue)
+		    {
+			    return null;
+		    }
+
+		    return new BlockInfo(blockPeriod.Value);
 	    }
     }
 }
