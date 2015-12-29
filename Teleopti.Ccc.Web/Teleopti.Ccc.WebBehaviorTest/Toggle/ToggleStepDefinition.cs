@@ -7,7 +7,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 {
@@ -37,11 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 			theReply.Should().Be.EqualTo(reply);
 		}
 
+		private static readonly Lazy<ToggleQuerier> _toggleQueryInstance = new Lazy<ToggleQuerier>(() => new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString()));
+
 		public static void CheckIfRunTestDueToToggleFlags()
 		{
 			const string ignoreMessage = "Ignore toggle {0} because it is {1}.";
 
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
 			var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
 			var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
 
@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 			var allOnlyRunIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
 				.Select(onlyRunIfDisabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
 
-			foreach (var toggleOnlyRunIfDisabled in allOnlyRunIfDisabled.Where(toggleQuerier.IsEnabled))
+			foreach (var toggleOnlyRunIfDisabled in allOnlyRunIfDisabled.Where(_toggleQueryInstance.Value.IsEnabled))
 			{
 				Assert.Ignore(ignoreMessage, toggleOnlyRunIfDisabled, "enabled");
 			}
 
-			foreach (var toggleOnlyRunIfEnabled in allOnlyRunIfEnabled.Where(toggleOnlyRunIfEnabled => !toggleQuerier.IsEnabled(toggleOnlyRunIfEnabled)))
+			foreach (var toggleOnlyRunIfEnabled in allOnlyRunIfEnabled.Where(toggleOnlyRunIfEnabled => !_toggleQueryInstance.Value.IsEnabled(toggleOnlyRunIfEnabled)))
 			{
 				Assert.Ignore(ignoreMessage, toggleOnlyRunIfEnabled, "disabled");
 			}
@@ -63,9 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 
 		public static bool CheckToggleEnabled(Toggles toggle)
 		{
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			//toggleQuerier.FillAllToggles();
-			return toggleQuerier.IsEnabled(toggle);
+			return _toggleQueryInstance.Value.IsEnabled(toggle);
 		}
 	}
 }
