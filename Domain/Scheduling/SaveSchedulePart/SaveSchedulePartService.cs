@@ -30,9 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 				return checkResult;
 			}
 
-			var saveResult = performSave(dic, scheduleDay);
-			if (saveResult != null) return saveResult;
-
+			performSave(dic, scheduleDay);
 			return null;
 		}
 
@@ -56,12 +54,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			return null;
 		}
 
-		private IList<string> performSave (IScheduleDictionary dic, IScheduleDay scheduleDay)
+		private void performSave (IScheduleDictionary dic, IScheduleDay scheduleDay)
 		{
 			_scheduleDictionarySaver.SaveChanges (dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
-			if (dic.ModifiedPersonAccounts.Count == 0) return new List<string>(){"Nothing happens !"};
 			_personAbsenceAccountRepository.AddRange (dic.ModifiedPersonAccounts);
-			return null;
 		}
 	}
 }

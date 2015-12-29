@@ -93,7 +93,6 @@
 			vm.paginationOptions.totalPages = result.GroupSchedule.length > 0 ? result.TotalPages : 0;
 			vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
 		}
 
 		function afterSchedulesLoadedForSearchCondition(result) {
@@ -106,7 +105,6 @@
 			vm.searchOptions.keyword = result.Keyword;
 			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
 		};
-
 
 		vm.loadSchedules = function () {
 			if (vm.selectedTeamId == undefined && !vm.isSearchScheduleEnabled) {
