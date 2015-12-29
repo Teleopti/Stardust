@@ -442,6 +442,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						 (taskOwnerDays.Average(t => t.TotalAverageTaskTime.Ticks)));
 					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 						 (taskOwnerDays.Average(t => t.TotalAverageAfterTaskTime.Ticks)));
+
+					var overrideAttPeriodList = taskOwnerDays.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+					_overrideAverageTaskTime = overrideAttPeriodList.Any()
+						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAttPeriodList.Average(t => t.OverrideAverageTaskTime.Value.Ticks)))
+						: null;
+
+					var overrideAcwPeriodList = taskOwnerDays.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
+					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
+						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Average(t => t.OverrideAverageAfterTaskTime.Value.Ticks)))
+						: null;
 				}
 				else
 				{

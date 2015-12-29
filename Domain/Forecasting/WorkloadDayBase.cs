@@ -630,15 +630,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						_averageAfterTaskTime = TimeSpan.FromTicks((long)
 							(_taskPeriodList.Sum(t => t.AverageAfterTaskTime.Ticks*t.Tasks)/_tasks));
 
-	                var overrideAttPeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
-					_overrideAverageTaskTime = overrideAttPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAttPeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
-						: null;
+						var overrideAttPeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+						_overrideAverageTaskTime = overrideAttPeriodList.Any()
+							? (TimeSpan?)
+								TimeSpan.FromTicks(
+									(long) (overrideAttPeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks*t.TotalTasks)/_totalTasks))
+							: null;
 
-					var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
-					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Sum(t => t.OverrideAverageAfterTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
-						: null;
+						var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
+						_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
+							? (TimeSpan?)
+								TimeSpan.FromTicks(
+									(long) (overrideAcwPeriodList.Sum(t => t.OverrideAverageAfterTaskTime.Value.Ticks*t.TotalTasks)/_totalTasks))
+							: null;
 					}
 					else
 					{
@@ -649,7 +653,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 							(_taskPeriodList.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
 					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 						(_taskPeriodList.Sum(t => t.TotalAverageAfterTaskTime.Ticks * t.TotalTasks) / _totalTasks));
-					//_overrideTasks = _taskPeriodList.All(x => x.OverrideTasks.Equals(null)) ? null : _taskPeriodList.Sum(t => t.OverrideTasks);
 					
 				}
 				else
@@ -681,6 +684,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						(_taskPeriodList.Average(t => t.TotalAverageTaskTime.Ticks)));
 				_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 					(_taskPeriodList.Average(t => t.TotalAverageAfterTaskTime.Ticks)));
+				var overrideAttPeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+				_overrideAverageTaskTime = overrideAttPeriodList.Any()
+					? (TimeSpan?)
+						TimeSpan.FromTicks(
+							(long)(overrideAttPeriodList.Average(t => t.OverrideAverageTaskTime.Value.Ticks)))
+					: null;
+
+				var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
+				_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
+					? (TimeSpan?)
+						TimeSpan.FromTicks(
+							(long)(overrideAcwPeriodList.Average(t => t.OverrideAverageAfterTaskTime.Value.Ticks)))
+					: null;
 			}
 			else
 			{
@@ -697,6 +713,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						(_taskPeriodList.Average(t => t.AverageTaskTime.Ticks)));
 				_averageAfterTaskTime = TimeSpan.FromTicks((long)
 					(_taskPeriodList.Average(t => t.AverageAfterTaskTime.Ticks)));
+				var overrideAttPeriodList = _taskPeriodList.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
+				_overrideAverageTaskTime = overrideAttPeriodList.Any()
+					? (TimeSpan?)
+						TimeSpan.FromTicks(
+							(long)(overrideAttPeriodList.Average(t => t.OverrideAverageTaskTime.Value.Ticks)))
+					: null;
+
+				var overrideAcwPeriodList = _taskPeriodList.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
+				_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
+					? (TimeSpan?)
+						TimeSpan.FromTicks(
+							(long)(overrideAcwPeriodList.Average(t => t.OverrideAverageAfterTaskTime.Value.Ticks)))
+					: null;
 			}
 			else
 			{
