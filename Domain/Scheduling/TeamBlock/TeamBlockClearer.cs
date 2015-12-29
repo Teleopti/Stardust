@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void ClearTeamBlock(ISchedulingOptions schedulingOptions,
 		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                           ITeamBlockInfo teamBlock)
@@ -35,10 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 
 			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
+			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
 
 			foreach (var person in selectedTeamMembers)
 			{
-				addDaysToRemove(teamBlock, person, toRemove);
+				addDaysToRemove(teamBlock, unlockedDates, person, toRemove);
 			}
 
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
@@ -52,19 +52,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 
 			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
-
+			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
 			foreach (var person in selectedTeamMembers)
 			{
-				addDaysToRemove(teamBlock, person, toRemove);
+				addDaysToRemove(teamBlock, unlockedDates, person, toRemove);
 			}
 
 			_deleteAndResourceCalculateService.DeleteWithoutResourceCalculation(toRemove,
 				schedulePartModifyAndRollbackService);
 		}
 
-		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IPerson person, IList<IScheduleDay> toRemove)
+		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IList<DateOnly> unlockedDates , IPerson person, IList<IScheduleDay> toRemove)
 		{
-			foreach (var dateOnly in teamBlock.BlockInfo.UnLockedDates())
+			foreach (var dateOnly in unlockedDates)
 			{
 				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixForMemberAndDate(person, dateOnly);
 				if (matrix == null)
@@ -76,8 +76,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 				SchedulePartView significant = scheduleDay.SignificantPart();
-				//if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
-				//	significant != SchedulePartView.ContractDayOff)
 				if(significant == SchedulePartView.MainShift)
 					toRemove.Add(scheduleDay);
 			}

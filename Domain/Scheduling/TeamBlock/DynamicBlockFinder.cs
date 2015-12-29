@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (!tempMatrixes.Any())
 			    return null;
 
-		    IScheduleMatrixPro roleModelMatrix = tempMatrixes.First();
-
 		    switch (blockType)
 		    {
 			    case BlockFinderType.SingleDay:
@@ -45,12 +43,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    case BlockFinderType.SchedulePeriod:
 			    {
+					var roleModelMatrix = tempMatrixes.First();
 				    blockPeriod = roleModelMatrix.SchedulePeriod.DateOnlyPeriod;
 				    break;
 			    }
 
 			    case BlockFinderType.BetweenDayOff:
-			    {
+				{
+					var roleModelMatrix = tempMatrixes.First();
 				    var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
 					blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(roleModelMatrix, blockOnDate, singleAgentTeam);
 				    break;

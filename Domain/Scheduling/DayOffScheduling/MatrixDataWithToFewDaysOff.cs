@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IMatrixData> FindMatrixesWithToFewDaysOff(IList<IMatrixData> matrixDataList)
 		{
 			IList<IMatrixData> result = new List<IMatrixData>();
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			{
 				int targetDaysOff;
 				
-				IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
+				IList<IScheduleDay> dayOffDays;
 				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrixData.Matrix.SchedulePeriod, out targetDaysOff, out dayOffDays) && dayOffDays.Count < targetDaysOff)
 				{
 					result.Add(matrixData);
