@@ -3,9 +3,14 @@
 	angular.module('wfm.resourceplanner')
 		.controller('ResourcePlannerCtrl', [
 			'$scope', '$state', 'ResourcePlannerSvrc', 'PlanningPeriodNewSvrc', function($scope, $state, ResourcePlannerSvrc, PlanningPeriodNewSvrc) {
-				$scope.planningPeriods = ResourcePlannerSvrc.getPlanningPeriod.query();
-				$scope.isEnabled = false;
+	            $scope.planningPeriods = [];
+	            $scope.isEnabled = false;
 
+                ResourcePlannerSvrc.getPlanningPeriod.query().$promise.then(function (result) {
+                    $scope.planningPeriods = result;
+                    $scope.isEnabled = true;
+                });
+				
 				$scope.selectedPlanningPeriod = function(p) {
 					if ($scope.isValid === false) return;
 					$state.go('resourceplanner.planningperiod', { id: p.Id });
