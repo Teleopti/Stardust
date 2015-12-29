@@ -13938,8 +13938,4 @@ Reduce the complexity to use these shifts.</value>
     <value>Swap Shifts</value>
     <comment>permission name </comment>
   </data>
-  <data name="ScheduleHasBeenChanged" xml:space="preserve">
-    <value>Schedule has been changed by others, please reload schedule.</value>
-    <comment>Error message in WFM team schedule</comment>
-  </data>
 </root>

@@ -85,14 +85,6 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
-		service.swapShifts = $resource("../api/TeamSchedule/SwapShifts", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: true
-			}
-		});
-
 		service.getScheduleForPeople = $resource("../api/TeamSchedule/GetScheduleForPeople", {}, {
 			post: {
 				method: "POST",
