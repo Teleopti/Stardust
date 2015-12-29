@@ -206,6 +206,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			{
 				Select2Box.OpenWhenOptionsAreLoaded("Preference-Picker");
 				Select2Box.SelectItemByText("Preference-Picker", fields.Preference);
+
+				Browser.Interactions.Javascript(string.Format("$('#{0}').select2('close');", "Preference-Picker")); // for IE
 			}
 
 			if (fields.StartTimeMinimum != null)
@@ -229,6 +231,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			{
 				Select2Box.OpenWhenOptionsAreLoaded("Preference-extended-activity-Picker");
 				Select2Box.SelectItemByText("Preference-extended-activity-Picker", fields.Activity);
+
+				Browser.Interactions.Javascript(string.Format("$('#{0}').select2('close');", "Preference-extended-activity-Picker")); // for IE
 			}
 
 			if (fields.ActivityStartTimeMinimum != null)
