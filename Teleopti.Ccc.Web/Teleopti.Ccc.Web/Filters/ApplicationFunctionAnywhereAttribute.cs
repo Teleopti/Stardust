@@ -22,6 +22,15 @@ namespace Teleopti.Ccc.Web.Filters
 	}
 
 	[CLSCompliant(false)]
+	public sealed class SwapShiftPermissionAttribute : ApplicationFunctionApiAttribute
+	{
+		public SwapShiftPermissionAttribute()
+			: base(DefinedRaptorApplicationFunctionPaths.SwapShifts)
+		{
+		}
+	}
+
+	[CLSCompliant(false)]
 	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionApiAttribute
 	{
 		public RemoveAbsencePermissionAttribute()

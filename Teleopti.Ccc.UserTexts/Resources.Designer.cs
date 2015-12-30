@@ -23467,6 +23467,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schedule has been changed by others, please reload schedule..
+        /// </summary>
+        public static string ScheduleHasBeenChanged {
+            get {
+                return ResourceManager.GetString("ScheduleHasBeenChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedule Hourly Employees.
         /// </summary>
         public static string ScheduleHourlyEmployees {
