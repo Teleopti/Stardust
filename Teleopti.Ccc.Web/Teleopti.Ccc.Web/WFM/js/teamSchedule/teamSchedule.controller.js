@@ -59,9 +59,17 @@
 		};
 
 		vm.onScheduleDateChanged = function (date) {
-			var queryDate = moment(date).format("YYYY-MM-DD");
-			teamScheduleSvc.loadAllTeams.query({ date: queryDate }).$promise.then(updateAllTeamsForTeamPicker);
+			vm.updateTeamPickerIfEnable();
 			vm.schedulePageReset();
+		};
+
+		vm.updateTeamPickerIfEnable = function() {
+			if (!vm.isSearchScheduleEnabled) {
+				var queryDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
+				teamScheduleSvc
+					.loadAllTeams.query({ date: queryDate })
+					.$promise.then(function(result) { vm.teams = result; });
+			}
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
@@ -376,15 +384,13 @@
 			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
-	
-			if (vm.isSearchScheduleEnabled) {
-				vm.schedulePageReset();
-			}
+
+			vm.isSearchScheduleEnabled && vm.schedulePageReset();
+			vm.updateTeamPickerIfEnable();
 			vm.initialized = true;
 		};
 
 		$q.all([
-			teamScheduleSvc.PromiseForloadedAllTeamsForTeamPicker(vm.scheduleDate, updateAllTeamsForTeamPicker),
 			teamScheduleSvc.PromiseForloadedPermissions(updatePermissions),
 			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(updateAgentPerPageSetting)
 		]).then(vm.init);
@@ -393,10 +399,6 @@
 			if (result.Agents !== 0) {
 				vm.paginationOptions.pageSize = result.Agents;
 			}
-		};
-		
-		function updateAllTeamsForTeamPicker(result) {
-			vm.teams = result;
 		};
 
 		function updatePermissions(result) {
