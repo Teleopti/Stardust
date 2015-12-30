@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
 				//Don't change this foreach to linq, please!
-				foreach (var function in enabledLicenseOption.EnabledApplicationFunctions)
+				foreach (var function in enabledLicenseOption.EnabledApplicationFunctions.ToList())
 				{
 					licensedFunctions.Add(function);
 				}

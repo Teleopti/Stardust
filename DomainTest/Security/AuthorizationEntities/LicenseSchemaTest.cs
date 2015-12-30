@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 {
     [TestFixture]
     public class LicenseSchemaTest
     {
-        private ReadOnlyCollection<LicenseOption> _licenseList;
+        private IEnumerable<LicenseOption> _licenseList;
         private LicenseSchema _target;
 
         [SetUp]
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         {
             // by default
             int expected = 1;
-            int result = _target.EnabledLicenseOptions.Count;
+            int result = _target.EnabledLicenseOptions.Count();
 
             Assert.AreEqual(expected, result);
         }

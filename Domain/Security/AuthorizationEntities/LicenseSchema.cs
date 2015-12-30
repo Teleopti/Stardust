@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets the defined license options.
         /// </summary>
         /// <value>The defined license options.</value>
-        public ReadOnlyCollection<LicenseOption> LicenseOptions
+        public IEnumerable<LicenseOption> LicenseOptions
         {
             get
             {
@@ -60,12 +59,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </summary>
         /// <value>The enabled licence option paths.</value>
         /// <returns></returns>
-        public ReadOnlyCollection<LicenseOption> EnabledLicenseOptions
+        public IEnumerable<LicenseOption> EnabledLicenseOptions
         {
             get
             {
-                IList<LicenseOption> enabledLicenseOptions = _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToList();
-	            return new ReadOnlyCollection<LicenseOption>(enabledLicenseOptions);
+                return _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToList();
             }
         }
 
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
 	        if (licenseActivator == null)
 	        {
-		        throw new LicenseMissingException(string.Format("Cannot find a valid license for the given data source."));
+		        throw new LicenseMissingException("Cannot find a valid license for the given data source.");
 	        }
             EnabledLicenseSchema = licenseActivator.EnabledLicenseSchemaName;
 
