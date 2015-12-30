@@ -5544,6 +5544,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The requested operation has failed. {0} .
+        /// </summary>
+        public static string CommandFailed {
+            get {
+                return ResourceManager.GetString("CommandFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comma Separated Text File.
         /// </summary>
         public static string CommaSeparatedTextFile {
@@ -21897,6 +21906,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestScreen {
             get {
                 return ResourceManager.GetString("RequestScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have been approved..
+        /// </summary>
+        public static string RequestsHaveBeenApproved {
+            get {
+                return ResourceManager.GetString("RequestsHaveBeenApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have been denied..
+        /// </summary>
+        public static string RequestsHaveBeenDenied {
+            get {
+                return ResourceManager.GetString("RequestsHaveBeenDenied", resourceCulture);
             }
         }
         

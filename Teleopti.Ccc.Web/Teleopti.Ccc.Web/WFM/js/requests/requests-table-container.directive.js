@@ -48,6 +48,8 @@
 
 						if (vm.requests && (vm.requests.length === requestCommandParamsHolder.getSelectedRequestsIds().length)) {
 							vm.gridApi.grid.selection.selectAll = true;
+						} else {
+							vm.gridApi.grid.selection.selectAll = false;
 						}
 
 					});
@@ -92,7 +94,10 @@
 		}
 
 		function clearSelection() {
-			if (vm.gridApi.clearSelectedRows) vm.gridApi.clearSelectedRows();
+			if (vm.gridApi.clearSelectedRows) {
+				vm.gridApi.clearSelectedRows();								
+			}
+			vm.gridApi.grid.selection.selectAll = false;
 			requestCommandParamsHolder.resetSelectedRequestIds();
 		}
 	}
@@ -121,6 +126,10 @@
 			}, function (v) {
 				requestsTableContainerCtrl.clearSelection();
 				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
+			});
+
+			scope.$on('reload.requests.immediately', function () {
+				requestsTableContainerCtrl.clearSelection();
 			});
 		}
 	}	

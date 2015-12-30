@@ -13942,4 +13942,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Schedule has been changed by others, please reload schedule.</value>
     <comment>Error message in WFM team schedule</comment>
   </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>The requested operation has failed. {0} </value>
+    <comment>Notify command/operation failure with appending the error message.</comment>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>{0} request(s) have been approved.</value>
+    <comment>Multiple requests have been approved, with showing the count of the affected requests.</comment>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} request(s) have been denied.</value>
+    <comment>Multiple requests have been denied, with showing the count of the affected requests.</comment>
+  </data>
 </root>
