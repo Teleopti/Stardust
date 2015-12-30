@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
 	public interface ISwapShiftHandler
 	{
-		IEnumerable<AddAbsenceFailResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate);
+		IEnumerable<FailActionResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate);
 	}
 
 	public class SwapShiftHandler : ISwapShiftHandler
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}
 
-		public IEnumerable<AddAbsenceFailResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate)
+		public IEnumerable<FailActionResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate)
 		{
 			var personIds = new[] {personIdFrom, personIdTo};
 			var peoples = _personRepository.FindPeople(personIds).ToArray();
@@ -75,22 +75,22 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return parseConflicts(conflicts, peoples);
 		}
 
-		private IEnumerable<AddAbsenceFailResult> parseErrorResponses(IEnumerable<IBusinessRuleResponse> errorResponses)
+		private IEnumerable<FailActionResult> parseErrorResponses(IEnumerable<IBusinessRuleResponse> errorResponses)
 		{
-			return errorResponses.Select(r => new AddAbsenceFailResult
+			return errorResponses.Select(r => new FailActionResult
 			{
 				PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(r.Person),
 				Message = new List<string> {r.Message}
 			});
 		}
 
-		private IEnumerable<AddAbsenceFailResult> parseConflicts(IEnumerable<PersistConflict> conflicts,
+		private IEnumerable<FailActionResult> parseConflicts(IEnumerable<PersistConflict> conflicts,
 			IEnumerable<IPerson> peoples)
 		{
 			var conflictList = conflicts.ToList();
 			var peopleList = peoples.ToList();
 
-			var failResults = new List<AddAbsenceFailResult>();
+			var failResults = new List<FailActionResult>();
 			if (!conflictList.Any())
 			{
 				return failResults;
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var people = peopleList.SingleOrDefault(p => p.Id == peopleId);
 				if (people != null)
 				{
-					failResults.Add(new AddAbsenceFailResult
+					failResults.Add(new FailActionResult
 					{
 						PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(people),
 						Message = new List<string> {Resources.ScheduleHasBeenChanged}

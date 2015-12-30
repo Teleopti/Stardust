@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime ScheduleDate { get; set; }
 	}
 
-	public class AddAbsenceFailResult
+	public class FailActionResult
 	{
 		public string PersonName { get; set; }
 		public IList<string> Message { get; set; }

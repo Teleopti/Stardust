@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			_personAbsenceCreator = personAbsenceCreator;
 		}
 
-		public AddAbsenceFailResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
+		public FailActionResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
 			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, true);
 			if (createResult != null)
 			{
-				return new AddAbsenceFailResult()
+				return new FailActionResult()
 				{
 					PersonName = absenceCreatorInfo.Person.Name.ToString(),
 					Message = createResult
@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			return null;
 		}
 
-		public AddAbsenceFailResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
+		public FailActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
 			var createResult = _personAbsenceCreator.Create(absenceCreatorInfo, false);
 			if (createResult != null)
 			{
-				return  new AddAbsenceFailResult()
+				return  new FailActionResult()
 				{
 					PersonName = absenceCreatorInfo.Person.Name.ToString(),
 					Message = createResult

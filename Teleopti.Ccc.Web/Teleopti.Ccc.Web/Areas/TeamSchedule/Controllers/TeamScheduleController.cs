@@ -127,11 +127,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
-		public virtual JsonResult<List<AddAbsenceFailResult>> AddFullDayAbsence(FullDayAbsenceForm form)
+		public virtual JsonResult<List<FailActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
 			setTrackedCommandInfo(form.TrackedCommandInfo);
 
-			var failResults = new List<AddAbsenceFailResult>();
+			var failResults = new List<FailActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
 				var command = new AddFullDayAbsenceCommand
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				return BadRequest(Resources.EndTimeMustBeGreaterOrEqualToStartTime);
 			}
 
-			var failResults = new List<AddAbsenceFailResult>();
+			var failResults = new List<FailActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
 				var command = new AddIntradayAbsenceCommand
