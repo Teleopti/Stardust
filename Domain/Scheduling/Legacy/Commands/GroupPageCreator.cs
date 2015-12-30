@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
 			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
-			dic.AddOrUpdate(date,_=> groupPage, (k,v) => v);
+			dic.GetOrAdd(date, groupPage);
 		}
 
 		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
