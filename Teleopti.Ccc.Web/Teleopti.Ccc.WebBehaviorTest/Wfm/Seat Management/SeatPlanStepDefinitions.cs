@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -56,16 +57,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		public void ThenIShouldSeeAPlanningPeriodAvailableForSeatPlanning(DateTime fromDate, DateTime toDate)
 		{
 			Browser.Interactions.AssertExists(".wfm-card-title");
-			Browser.Interactions.AssertExists("#planning-period-header");
+			Browser.Interactions.AssertExists(".planning-period-header");
 
-			Browser.Interactions.AssertAnyContains("#planning-period-header", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains("#planning-period-header", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planning-period-header", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planning-period-header", toDate.ToString("yyyy-MM-dd"));
 		}
 
 		[When(@"I choose the planning period beginning on '(.*)' for seat planning"), SetCulture("sv-SE")]
 		public void WhenIChooseThePlanningPeriodBeginningOnForSeatPlanning(DateTime date)
 		{
-			Browser.Interactions.ClickContaining("#planning-period-header", date.ToString("yyyy-MM-dd"));
+			var headerSelector = string.Format(".planning-period-header[data-start-date=\"{0}\"]", date.ToString("yyyy-MM-dd"));
+			Browser.Interactions.Click(headerSelector);
 		}
 
 		[Then(@"I should be able to initiate seat planning for location ""(.*)""")]

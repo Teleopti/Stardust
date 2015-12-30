@@ -10,6 +10,14 @@
 
 		var vm = this;
 
+		vm.isLoadingCalendar = true;
+		vm.isLoadingPlanningPeriods = true;
+		vm.planningPeriods = [];
+
+	    vm.isLoadingStuff = function() {
+	        return vm.isLoadingCalendar || vm.isLoadingPlanningPeriods;
+	    };
+
 		vm.setupSeatPlanStatusStrings = function () {
 			vm.seatPlanStatus = {};
 			vm.seatPlanStatus[0] = 'SeatPlanStatusOK';
@@ -17,7 +25,6 @@
 			vm.seatPlanStatus[2] = 'SeatPlanStatusError';
 			vm.seatPlanStatus[3] = 'SeatPlanStatusNoSeatPlanned';
 		};
-
 
 		vm.setupToggles = function () {
 			toggleService.isFeatureEnabled.query({ toggle: 'Wfm_SeatPlan_SeatMapBookingView_32814' }).$promise.then(function (result) {
@@ -81,8 +88,8 @@
 			resourcePlannerService.getPlanningPeriodsForRange
 			   .query(planningPeriodParams)
 			   .$promise.then(function (data) {
-			   		vm.isLoadingPlanningPeriods = false;
-			   		vm.planningPeriods = data;
+			       vm.planningPeriods = data;
+			       vm.isLoadingPlanningPeriods = false;
 				});
 		};
 
