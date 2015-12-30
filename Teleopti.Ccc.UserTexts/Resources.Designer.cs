@@ -9823,6 +9823,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to swap shifts..
+        /// </summary>
+        public static string FailedToSwapShifts {
+            get {
+                return ResourceManager.GetString("FailedToSwapShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed!.
         /// </summary>
         public static string FailedWithExclamation {
@@ -10324,6 +10333,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FinishAmpersand {
             get {
                 return ResourceManager.GetString("FinishAmpersand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Swap shifts finished successfully..
+        /// </summary>
+        public static string FinishedSwapShifts {
+            get {
+                return ResourceManager.GetString("FinishedSwapShifts", resourceCulture);
             }
         }
         

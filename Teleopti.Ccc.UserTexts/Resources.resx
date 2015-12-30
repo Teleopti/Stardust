@@ -13954,4 +13954,12 @@ Reduce the complexity to use these shifts.</value>
     <value>{0} request(s) have been denied.</value>
     <comment>Multiple requests have been denied, with showing the count of the affected requests.</comment>
   </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Failed to swap shifts.</value>
+    <comment>Error message after swap shifts in WFM team schedule</comment>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Swap shifts finished successfully.</value>
+    <comment>Tips after swap shifts in WFM team schedule</comment>
+  </data>
 </root>

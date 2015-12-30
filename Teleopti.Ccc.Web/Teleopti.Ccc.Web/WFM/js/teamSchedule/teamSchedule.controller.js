@@ -212,7 +212,7 @@
 				PersonIdTo: selectedPersonIds[1],
 				ScheduleDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD")
 			}).$promise.then(function (result) {
-				// TODO: Handle errors
+				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
 			});
 		}
 
@@ -330,14 +330,26 @@
 			return text;
 		}
 
+		vm.toggleErrorDetails = function() {
+			vm.showErrorDetails = !vm.showErrorDetails;
+		}
+
 		var handleActionResult = function (result, successMessageTemplate, failMessageTemplate) {
 			var selectedPersonList = vm.getSelectedPersonIdList();
 			var total = selectedPersonList.length;
+
+			vm.errorTitle = "";
+			vm.errorDetails = [];
+			vm.showErrorDetails = true;
+
 			var message;
 			if (result.length > 0) {
 				var successCount = total - result.length;
 				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, result.length]);
 				notificationService.notifyFailure(message);
+				vm.errorTitle = message;
+				vm.errorDetails = result;
+				vm.showErrorDetails = true;
 			}
 			else {
 				message = replaceParameters($translate.instant(successMessageTemplate), [total]);
