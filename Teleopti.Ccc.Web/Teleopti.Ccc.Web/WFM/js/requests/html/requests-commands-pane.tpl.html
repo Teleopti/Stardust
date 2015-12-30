@@ -1,0 +1,15 @@
+﻿<button class="wfm-btn wfm-btn-invis-primary"
+		ng-click="requestsCommandsPane.approveRequests()"
+		ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+	<i class="mdi mdi-check"></i>
+	<md-tooltip><span translate>Approve</span></md-tooltip>
+</button>
+<button class="wfm-btn wfm-btn-invis-primary"
+		ng-click="requestsCommandsPane.denyRequests()"
+		ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+	<i class="mdi mdi-close"></i>
+	<md-tooltip><span translate>Deny</span></md-tooltip>
+</button>
+<button class="wfm-btn wfm-btn-invis-primary wfm-btn-primary-disabled">
+	<i class="mdi mdi-menu"></i>
+</button>

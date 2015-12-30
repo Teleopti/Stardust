@@ -6,6 +6,8 @@
 		'ui.grid',
 		'ui.grid.autoResize',	
 		'ui.grid.selection',
-		'pascalprecht.translate']);
+		'pascalprecht.translate',
+		'angular-growl'
+	]);
 
 })();

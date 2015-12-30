@@ -21,6 +21,11 @@
 			CreatedOnDesc: 5
 		};
 
+		this.REQUEST_COMMANDS = {
+			Approve: 'approve',
+			Deny: 'deny'
+		};
+
 		this.normalizeRequestsFilter = function(filter, sortingOrders, paging) {
 			var target = {
 				StartDate: filter.period.startDate,

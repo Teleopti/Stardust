@@ -7,17 +7,9 @@
 	function requestsDataService($http, requestsDefinitions) {
 		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
-		var approveRequestsUrl = '../api/Requests/requests/approve';
-
-		this.approveRequests = function (selectedRequestIds, successCb, errorCb) {
-			
-			return $http.post(approveRequestsUrl, selectedRequestIds).success(function () {
-				
-			}).error(function(e) {
-				
-			});
-		};
-
+		var approveRequestsUrl = '../api/Requests/approveRequests';
+		var denyRequestsUrl = '../api/Requests/denyRequests';
+	
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {			
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
 		};
@@ -28,5 +20,12 @@
 			);
 		};
 
+		this.approveRequestsPromise = function (selectedRequestIds) {
+			return $http.post(approveRequestsUrl, selectedRequestIds);
+		};
+
+		this.denyRequestsPromise = function(selectedRequestIds) {
+			return $http.post(denyRequestsUrl, selectedRequestIds);
+		}
 	}
 })();

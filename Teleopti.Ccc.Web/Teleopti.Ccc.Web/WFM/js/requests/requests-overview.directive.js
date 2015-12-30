@@ -12,8 +12,7 @@
 	function requestsOverviewController($scope,requestsDataService) {
 		var vm = this;
 
-		vm.requests = [];
-
+		vm.requests = [];	
 		vm.period = {
 			startDate: (vm.period && vm.period.startDate) ? vm.period.startDate : new Date(),
 			endDate: (vm.period && vm.period.endDate) ? vm.period.endDate : new Date()
@@ -24,14 +23,7 @@
 		vm.reload = reload;
 		vm.sortingOrders = [];
 
-		$scope.$on('requests.operation', function(_s,operationIntention) {
-			if (operationIntention == 'approve') {
-				requestsDataService.approveRequests(vm.selectedRequestIds);
-			}
-			if (operationIntention == 'deny') {
-			}
-		});
-
+	
 		function reload(requestsFilter, sortingOrders, paging) {
 			vm.loaded = false;
 
@@ -92,11 +84,17 @@
 			}, function (newValue) {
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
+				reload();
+			}, true);
+
+			scope.$on('reload.requests.immediately', reload);
+
+			function reload() {				
 				ctrl.reload({
 					period: scope.requestsOverview.period,
 					agentSearchTerm: scope.requestsOverview.agentSearchTerm,					
 				}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging);
-			}, true);
+			}
 		}
 	}
 })();

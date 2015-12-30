@@ -34,11 +34,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}
 
-		[HttpPost, Route("api/Requests/requests/approve"), UnitOfWork]
-		public virtual IHttpActionResult ApproveRequests(IEnumerable<Guid> ids)
-		{
-			//todo postData.Ids
-			return Ok();
+		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
+		public virtual IEnumerable<Guid> ApproveRequests(IEnumerable<Guid> ids)
+		{			
+			//todo process request command
+			return ids;
+		}
+
+		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
+		public virtual IEnumerable<Guid> DenyRequests(IEnumerable<Guid> ids)
+		{			
+			//todo process request command
+			return ids;
 
 		}
 

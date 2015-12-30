@@ -9,7 +9,7 @@
 			'Wfm_Requests_Basic_35986',
 			'Wfm_Requests_People_Search_36294',
 			'Wfm_Requests_Performance_36295',
-			'Wfm_Requests_Operation_36297'
+			'Wfm_Requests_ApproveDeny_36297'
 		];
 	
 		this.togglePromise = $q.all(self.toggleNames.map(function (t) {
@@ -35,8 +35,8 @@
 				return toggles['Wfm_Requests_Performance_36295'];
 			};
 
-			toggles.isOperationEnabled = function () {
-				return toggles['Wfm_Requests_Operation_36297'];
+			toggles.isRequestsCommandsEnabled = function () {
+				return toggles['Wfm_Requests_ApproveDeny_36297'];
 			};
 
 			return toggles;

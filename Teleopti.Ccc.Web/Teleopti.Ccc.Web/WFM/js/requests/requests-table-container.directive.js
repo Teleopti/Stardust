@@ -7,15 +7,17 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions', 'requestCommandParamsHolder'];
 
-	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions) {
+	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions, requestCommandParamsHolder) {
 
 		var vm = this;
 
 		vm.gridOptions = getGridOptions([]);
 		vm.getGridOptions = getGridOptions;
 		vm.prepareComputedColumns = prepareComputedColumns;
+		vm.clearSelection = clearSelection;
+
 		function getGridOptions(requests) {
 			return {
 				enableGridMenu: true,
@@ -37,15 +39,17 @@
 					{ displayName: 'UpdatedOn', field: 'UpdatedTime', headerCellFilter: 'translate', cellClass: 'request-updated-time', cellFilter: 'date : "short"', visible: false, headerCellClass: 'request-updated-time-header' }
 				],
 				onRegisterApi: function (gridApi) {
+					vm.gridApi = gridApi;
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
 						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
 					});
-					gridApi.selection.on.rowSelectionChanged($scope, function () {
-						vm.selectedRequestIds = [];
-						var selectedRows = gridApi.selection.getSelectedRows();
-						selectedRows.forEach(function (row) {
-							vm.selectedRequestIds.push(row.Id);
-						});
+					gridApi.selection.on.rowSelectionChanged($scope, function () {					
+						requestCommandParamsHolder.setSelectedRequestIds(gridApi.selection.getSelectedRows().map(function (row) { return row.Id; }));
+
+						if (vm.requests && (vm.requests.length === requestCommandParamsHolder.getSelectedRequestsIds().length)) {
+							vm.gridApi.grid.selection.selectAll = true;
+						}
+
 					});
 				}
 			};
@@ -86,6 +90,11 @@
 			});
 			return dataArray;
 		}
+
+		function clearSelection() {
+			if (vm.gridApi.clearSelectedRows) vm.gridApi.clearSelectedRows();
+			requestCommandParamsHolder.resetSelectedRequestIds();
+		}
 	}
 
 	function requestsTableContainerDirective() {
@@ -96,8 +105,7 @@
 			restrict: 'E',
 			scope: {
 				requests: '=',
-				sortingOrders: '=',
-				selectedRequestIds: '=?'
+				sortingOrders: '='				
 			},
 			require: ['requestsTableContainer'],
 			templateUrl: 'js/requests/html/requests-table-container.tpl.html',		
@@ -111,6 +119,7 @@
 			scope.$watchCollection(function() {
 				return scope.requestsTableContainer.requests;
 			}, function (v) {
+				requestsTableContainerCtrl.clearSelection();
 				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
 			});
 		}

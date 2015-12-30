@@ -101,7 +101,7 @@ WfmTeamSchedule_AbsenceReporting_35995 = RC
 WfmTeamSchedule_SetAgentsPerPage_36230 = RC
 
 Report_UseOpenXmlFormat_35797 = true
-Wfm_Requests_Basic_35986 = true
-Wfm_Requests_People_Search_36294 = true
-Wfm_Requests_Performance_36295 = true
-Wfm_Requests_Operation_36297 = false
+Wfm_Requests_Basic_35986 = RC
+Wfm_Requests_People_Search_36294 = RC
+Wfm_Requests_Performance_36295 = RC
+Wfm_Requests_ApproveDeny_36297 = DEV
