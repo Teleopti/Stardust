@@ -380,7 +380,6 @@
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
 	
 			if (vm.isSearchScheduleEnabled) {
-				vm.onKeyWordInSearchInputChanged();
 				vm.schedulePageReset();
 			}
 			vm.initialized = true;
