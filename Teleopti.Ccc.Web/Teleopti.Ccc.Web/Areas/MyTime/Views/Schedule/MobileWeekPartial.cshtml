@@ -41,38 +41,17 @@
 				<span class="date" data-bind="text: fixedDate"></span>
 			</div>
 
-			<!-- ko if: hasShift-->
-			<div id="mobileWeek-day-view-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime }">
+			<div id="mobileWeek-day-view-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime }">
 				<div>
 					<strong data-bind="text: summaryName"></strong>
 				</div>
 				<div data-bind="text: summaryTimeSpan"></div>
-				<!-- ko if: hasOvertime-->
+				<!-- ko if: hasOvertime -->
 				<div>
 					<strong>@Resources.Overtime</strong>
 				</div>
 				<!-- /ko -->
 			</div>
-			<!-- /ko -->
-			<!-- ko if: !hasShift -->
-			<div class="panel-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff() }">
-				<div>
-					<strong data-bind="text: summaryName"></strong>
-				</div>
-				<div data-bind="text: summaryTimeSpan"></div>
-				
-				<!-- ko if: hasOvertime && !isDayoff()-->
-				<div class="overtime">
-					<strong>@Resources.Overtime</strong>
-				</div>
-				<!-- /ko -->
-				<!-- ko if: hasOvertime && isDayoff() -->
-				<div>
-					<strong>@Resources.Overtime</strong>
-				</div>
-				<!-- /ko -->
-			</div>
-			<!-- /ko -->
 
 			<!-- ko if: isPermittedToReportAbsence() -->
 			<ul class="nav nav-pills navbar-weekview">

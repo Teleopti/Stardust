@@ -413,6 +413,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.summaryTitle = ko.observable(day.Summary.Title);
 		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
 		self.summary = ko.observable(day.Summary.Summary);
+		self.hasOvertime = day.HasOvertime && !day.IsFullDayAbsence;
+		self.hasShift = day.Summary.Color != null ? true : false;
 		self.noteMessage = ko.computed(function () {
 			//need to html encode due to not bound to "text" in ko
 			return $('<div/>').text(day.Note.Message).html();

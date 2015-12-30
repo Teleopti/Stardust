@@ -145,7 +145,8 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 		}
 		return false;
 	};
-	self.hasOvertime = scheduleDay.HasOvertime;
+	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;
+	if (self.summaryColor() == null && self.hasOvertime) self.summaryTimeSpan = scheduleDay.Periods[0].TimeSpan;
 	self.hasShift = self.summaryColor() != null ? true : false;
 
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;

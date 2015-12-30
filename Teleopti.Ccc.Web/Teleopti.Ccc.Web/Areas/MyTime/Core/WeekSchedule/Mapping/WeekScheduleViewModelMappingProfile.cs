@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.HasOvertime, c => c.ResolveUsing(
 					s => s.ScheduleDay != null && s.ScheduleDay.PersonAssignment() != null
                         && s.ScheduleDay.PersonAssignment().ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
+				.ForMember(d => d.IsFullDayAbsence, c=>c.ResolveUsing(s => s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence))
 				.ForMember(d => d.OvertimeAvailabililty, o => o.ResolveUsing(s =>
 					{
 						if (s.OvertimeAvailability != null)

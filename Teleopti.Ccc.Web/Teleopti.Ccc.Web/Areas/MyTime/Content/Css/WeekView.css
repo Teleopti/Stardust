@@ -49,8 +49,11 @@
 	margin-right: 2px;
 }
 .weekview-day-summary {
-	height: 60px;
+	height: 66px;
 	overflow: hidden;
+}
+.overtime {
+	padding-top: 30px;
 }
 .dayoff
 {
