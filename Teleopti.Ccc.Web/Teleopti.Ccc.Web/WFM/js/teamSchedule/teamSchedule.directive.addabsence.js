@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', absencePanel]);
+	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', absencePanel]);
 
 	function absencePanel($locale) {
 		return {
@@ -12,7 +12,7 @@
 				agentIdList: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['TeamSchedule', 'teamScheduleNotificationService', addAbsenceCtrl],
+			controller: ['$translate', 'TeamSchedule', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -22,7 +22,7 @@
 	};
 
 
-	function addAbsenceCtrl(teamScheduleSvc, teamScheduleNotificationService) {
+	function addAbsenceCtrl($translate, teamScheduleSvc) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -45,28 +45,19 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		vm.handleAddAbsenceResult = function (result) {
-			var total = vm.agentIdList().length;
-			if (result.length > 0) {
-				var successCount = total - result.length;
-				teamScheduleNotificationService.notifAbsenceAddedFailed(total, successCount, result.length);
-			}
-			else {
-				teamScheduleNotificationService.notifyAllAbsenceAddedSuccessed(total);
-			}
-
-			vm.actionsAfterAbsenceApply();
-		}
-
-		vm.applyAbsence = function () {
+		vm.applyAbsence = function() {
 			if (vm.isFullDayAbsence) {
 				teamScheduleSvc.applyFullDayAbsence.post({
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
-				}).$promise.then(function (result) {
-					vm.handleAddAbsenceResult(result);
+				}).$promise.then(function(result) {
+					vm.actionsAfterAbsenceApply({
+						result: result,
+						successMessageTemplate: 'AddAbsenceSuccessedResult',
+						failMessageTemplate: 'AddAbsenceTotalResult'
+					});
 				});
 			} else {
 				teamScheduleSvc.applyIntradayAbsence.post({
@@ -74,8 +65,12 @@
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
-				}).$promise.then(function (result) {
-					vm.handleAddAbsenceResult(result);
+				}).$promise.then(function(result) {
+					vm.actionsAfterAbsenceApply({
+						result: result,
+						successMessageTemplate: 'AddAbsenceSuccessedResult',
+						failMessageTemplate: 'AddAbsenceTotalResult'
+					});
 				});
 			}
 		};

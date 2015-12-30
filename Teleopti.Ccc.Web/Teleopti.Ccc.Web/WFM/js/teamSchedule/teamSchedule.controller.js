@@ -3,11 +3,12 @@
 (function () {
 
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', 'TeamSchedule', 'ScheduleLoader', 'GroupScheduleFactory',
-			'Toggle', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', TeamScheduleController]);
+		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'ScheduleLoader',
+			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', '$mdComponentRegistry', '$mdSidenav',
+			'$mdUtil', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $locale, teamScheduleSvc, scheduleLoader, groupScheduleFactory,
-		toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
+	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, scheduleLoader, groupScheduleFactory,
+		notificationService, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -322,7 +323,30 @@
 			return result;
 		}
 
-		vm.applyAbsenceCallback = function () {
+		function replaceParameters(text, params) {
+			params.forEach(function (element, index) {
+				text = text.replace('{' + index + '}', element);
+			});
+			return text;
+		}
+
+		var handleActionResult = function (result, successMessageTemplate, failMessageTemplate) {
+			var selectedPersonList = vm.getSelectedPersonIdList();
+			var total = selectedPersonList.length;
+			var message;
+			if (result.length > 0) {
+				var successCount = total - result.length;
+				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, result.length]);
+				notificationService.notifyFailure(message);
+			}
+			else {
+				message = replaceParameters($translate.instant(successMessageTemplate), [total]);
+				notificationService.notifySuccess(message);
+			}
+		}
+
+		vm.afterActionCallback = function (result, successMessage, failMessage) {
+			handleActionResult(result, successMessage, failMessage);
 			vm.personIdSelectionDic = {};
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 			vm.setCurrentCommand("");
