@@ -15,7 +15,6 @@
 		vm.personIdSelectionDic = {};
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
-		vm.agentsPerPage = 20;
 		vm.isSelectAgentsPerPageEnabled = false;
 
 		vm.searchOptions = {
@@ -27,14 +26,13 @@
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
 		vm.selectorChanged = function() {
-			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.agentsPerPage }).$promise.then(function () {
-				vm.paginationOptions.pageSize = vm.agentsPerPage;
+			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.schedulePageReset();
 			});
 		};
 
 		vm.paginationOptions = {
-			pageSize: vm.agentsPerPage,
+			pageSize: 20,
 			pageNumber: 1,
 			totalPages: 0
 		};
@@ -393,8 +391,7 @@
 
 		function updateAgentPerPageSetting(result) {
 			if (result.Agents !== 0) {
-				vm.agentsPerPage = result.Agents;
-				vm.paginationOptions.pageSize = vm.agentsPerPage;
+				vm.paginationOptions.pageSize = result.Agents;
 			}
 		};
 		
