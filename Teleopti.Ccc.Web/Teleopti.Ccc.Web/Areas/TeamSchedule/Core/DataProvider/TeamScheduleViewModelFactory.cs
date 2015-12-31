@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
 	{
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly ISchedulePersonProvider _schedulePersonProvider;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -23,13 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPeopleSearchProvider _searchProvider;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
-			ITeamScheduleProjectionProvider projectionProvider, ISchedulePersonProvider schedulePersonProvider,
-			ILoggedOnUser loggedOnUser, ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider)
+			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
-			_schedulePersonProvider = schedulePersonProvider;
 			_loggedOnUser = loggedOnUser;
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_searchProvider = searchProvider;
@@ -51,23 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				_searchProvider.GetPermittedPersonIdList(criteriaDictionary,9999,1,dateInUserTimeZone,null,DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
 
 			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor, pageSize, currentPageIndex);
-
-			return new GroupScheduleViewModel
-			{
-				Schedules = list,
-				Total = people.Count()
-			};
-		}
-
-		public GroupScheduleViewModel CreateViewModel(GroupScheduleInput input)
-		{
-			var people = _schedulePersonProvider.GetPermittedPeople(input, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToArray();
-			var peopleCanSeeConfidentialAbsencesFor =
-				_schedulePersonProvider.GetPermittedPeople(input,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
-
-			var list = constructGroupScheduleShiftViewModels(new DateOnly(input.ScheduleDate), people,
-				peopleCanSeeConfidentialAbsencesFor.Select(p => p.Id.GetValueOrDefault()), 0, 0);
 
 			return new GroupScheduleViewModel
 			{
