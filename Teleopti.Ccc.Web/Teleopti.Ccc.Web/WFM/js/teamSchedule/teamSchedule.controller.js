@@ -55,7 +55,6 @@
 		};
 
 		vm.onScheduleDateChanged = function (date) {
-			vm.updateTeamPickerIfEnable();
 			vm.schedulePageReset();
 		};
 

@@ -59,14 +59,6 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
-		service.getScheduleForPeople = $resource("../api/TeamSchedule/GetScheduleForPeople", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: false
-			}
-		});
-
 		service.PromiseForGetAgentsPerPageSetting = function(callback) {
 			return $q(function (resolve) {
 				service.getAgentsPerPageSetting.post().$promise.then(function (result) {

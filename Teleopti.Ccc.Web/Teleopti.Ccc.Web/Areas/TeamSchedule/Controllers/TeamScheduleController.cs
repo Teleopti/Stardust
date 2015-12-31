@@ -62,15 +62,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(permissions);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GroupNoReadModel")]
-		public virtual JsonResult<PagingGroupScheduleShiftViewModel> GroupScheduleNoReadModel(Guid groupId,
-			DateTime date, int pageSize, int currentPageIndex)
-		{
-			var result = _teamScheduleViewModelFactory.CreateViewModel(groupId, date, pageSize, currentPageIndex);
-
-			return Json(result);
-		}
-
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
 		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(string keyword, DateTime date, int pageSize,
 			int currentPageIndex)
@@ -101,13 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex);
 			result.Keyword = keyword;
 
-			return Json(result);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/GetScheduleForPeople")]
-		public virtual JsonResult<GroupScheduleViewModel> GetSchedulesForPeople(GroupScheduleInput input)
-		{
-			var result = _teamScheduleViewModelFactory.CreateViewModel(input);
 			return Json(result);
 		}
 
