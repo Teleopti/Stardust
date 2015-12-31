@@ -1331,7 +1331,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.spec.timeline.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleLoader.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />

@@ -3,11 +3,11 @@
 (function () {
 
 	angular.module('wfm.teamSchedule')
-		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'ScheduleLoader',
+		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule',
 			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', '$mdComponentRegistry', '$mdSidenav',
 			'$mdUtil', TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, scheduleLoader, groupScheduleFactory,
+	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
 		notificationService, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
@@ -93,7 +93,8 @@
 
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
-			scheduleLoader.loadSchedules(getParamsForLoadingSchedules(), function(result) {
+			var params = getParamsForLoadingSchedules();
+			teamScheduleSvc.searchSchedules.query(params).$promise.then(function(result) {
 				afterSchedulesLoadedForSearchCondition(result);
 				vm.isLoading = false;
 			});
