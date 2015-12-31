@@ -372,6 +372,7 @@
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPagePersisterAndProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProviderTests.cs" />
+    <Compile Include="Areas\TeamSchedule\PermissionCheckerTest.cs" />
     <Compile Include="Areas\TeamSchedule\SwapMainShiftForTwoPersonsHandlerTest.cs" />
     <Compile Include="Areas\TeamSchedule\TeamScheduleControllerIntegrationTest.cs" />
     <Compile Include="Areas\TeamSchedule\TeamScheduleGroupPageViewModelFactoryTests.cs" />

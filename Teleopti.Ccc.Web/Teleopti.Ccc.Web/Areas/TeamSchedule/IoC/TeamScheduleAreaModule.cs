@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>().SingleInstance();
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<AbsencePersister>().As<IAbsencePersister>().SingleInstance();
+			builder.RegisterType<PermissionChecker>().As<IPermissionChecker>().SingleInstance();
 			builder.RegisterType<TeamScheduleGroupPageViewModelFactory>().As<ITeamScheduleGroupPageViewModelFactory>().SingleInstance();
 			builder.RegisterType<AgentsPerPageSettingPersisterAndProvider>().As<ISettingsPersisterAndProvider<AgentsPerPageSetting>>().SingleInstance();
 

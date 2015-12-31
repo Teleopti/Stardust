@@ -819,11 +819,13 @@
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPageSettingPersisterAndProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleSortingUtil.cs" />
+    <Compile Include="Areas\TeamSchedule\IPermissionChecker.cs" />
     <Compile Include="Areas\TeamSchedule\Models\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\TeamSchedule\IoC\TeamScheduleAreaModule.cs" />
+    <Compile Include="Areas\TeamSchedule\PermissionChecker.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\Data\ActivityViewModel.cs" />

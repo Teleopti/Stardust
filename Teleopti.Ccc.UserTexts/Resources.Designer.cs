@@ -17155,6 +17155,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Has No permission to add intraday absence for {0}.
+        /// </summary>
+        public static string NoPermisionAddIntradayAbsenceForAgent {
+            get {
+                return ResourceManager.GetString("NoPermisionAddIntradayAbsenceForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has No permission to add full day absence for {0}.
+        /// </summary>
+        public static string NoPermissionAddFullDayAbsenceForAgent {
+            get {
+                return ResourceManager.GetString("NoPermissionAddFullDayAbsenceForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {

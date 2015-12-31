@@ -13962,4 +13962,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Swap shifts finished successfully.</value>
     <comment>Tips after swap shifts in WFM team schedule</comment>
   </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Has No permission to add intraday absence for {0}</value>
+    <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add intraday absence for this agent.</comment>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Has No permission to add full day absence for {0}</value>
+    <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
+  </data>
 </root>
