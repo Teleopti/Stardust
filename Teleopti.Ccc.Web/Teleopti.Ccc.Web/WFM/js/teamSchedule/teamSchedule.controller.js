@@ -346,7 +346,7 @@
 
 			vm.errorTitle = "";
 			vm.errorDetails = [];
-			vm.showErrorDetails = true;
+			vm.showErrorDetails = false;
 
 			var message;
 			if (result.length > 0) {
@@ -363,8 +363,8 @@
 			}
 		}
 
-		vm.afterActionCallback = function (result, successMessage, failMessage) {
-			handleActionResult(result, successMessage, failMessage);
+		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
+			handleActionResult(result, successMessageTemplate, failMessageTemplate);
 			vm.personIdSelectionDic = {};
 			vm.loadSchedules(vm.paginationOptions.pageNumber);
 			vm.setCurrentCommand("");
