@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -34,8 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private readonly Guid personIdTo = Guid.NewGuid();
 		private IPerson personTo;
 		private readonly DateTime scheduleDate = new DateTime(2016, 01, 01);
-		private readonly IScheduleDictionary schedules = new FakeScheduleDictionary();
-
+		
 		[SetUp]
 		public void SetUp()
 		{
@@ -45,34 +46,22 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			personTo = PersonFactory.CreatePerson();
 			personTo.SetId(personIdTo);
-			personTo.Name = new Name("Def", "456");
 
-			_commonNameDescriptionSetting = MockRepository.GenerateMock<ICommonNameDescriptionSetting>();
-			_commonNameDescriptionSetting.Stub(x => x.BuildCommonNameDescription(personFrom))
-				.Return(personFrom.Name.FirstName + "@" + personFrom.Name.LastName);
+			_commonNameDescriptionSetting = new CommonNameDescriptionSetting();
+			_personRepository = new FakePersonRepository(personFrom, personTo);
 
-			var peoples = new List<IPerson> {personFrom, personTo};
-			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_personRepository.Stub(x => x.FindPeople(new[] {personIdFrom, personIdTo}))
-				.Return(peoples);
+			_scenarioRepository = new FakeScenarioRepository(new Scenario("Test Scenario")
+			{
+				DefaultScenario = true
+			});
 
-			var defaultScenario = new Scenario("TestScenario");
-			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(defaultScenario);
-
-			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1));
-			var schedulePeriod = new ScheduleDateTimePeriod(period);
-			var personProvider = new PersonProvider(_personRepository);
-			var loadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			_scheduleRepository.Stub(
-				x => x.FindSchedulesForPersons(schedulePeriod, defaultScenario, personProvider, loadOptions, peoples))
-				.Return(schedules)
-				.IgnoreArguments();
-
+			_scheduleRepository = new FakeScheduleRepository();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
 			_scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionaryPersister>();
+			_scheduleDictionaryPersister.Stub(x => x.Persist(new FakeScheduleDictionary()))
+				.Return(new List<PersistConflict>())
+				.IgnoreArguments();
 		}
 
 		[Test]
@@ -80,9 +69,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			_swapAndModifyServiceNew.Stub(x => x.Swap(personFrom, personTo, null, null, null, null, null))
 				.Return(new List<BusinessRuleResponse>())
-				.IgnoreArguments();
-			_scheduleDictionaryPersister.Stub(x => x.Persist(schedules))
-				.Return(new List<PersistConflict>())
 				.IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
@@ -120,9 +106,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 					new BusinessRuleResponse(null, errorMessage, true, true, new DateTimePeriod(), personFrom,
 						new DateOnlyPeriod())
 				}).IgnoreArguments();
-			_scheduleDictionaryPersister.Stub(x => x.Persist(schedules))
-				.Return(new List<PersistConflict>())
-				.IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository, _scheduleRepository,
 				_scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
@@ -137,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Count.Should().Be.EqualTo(1);
 			var error = result[0];
 
-			error.PersonName.Should().Be.EqualTo("Abc@123");
+			error.PersonName.Should().Be.EqualTo("Abc 123");
 			error.Message.Count.Should().Be.EqualTo(1);
 			error.Message[0].Should().Be.EqualTo(errorMessage);
 		}
