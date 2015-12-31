@@ -5,40 +5,6 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 
 		var service = this;
 
-		service.loadAllTeams = $resource("../api/GroupPage/AllTeams", {
-			date: "@queryDate"
-		}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: true
-			}
-		});
-
-		service.loadSchedulesFromReadModelForGroup = $resource("../api/TeamSchedule/Group", {
-			groupId: "@groupId",
-			date: "@queryDate",
-			pageSize: "@pageSize",
-			currentPageIndex: "@currentPageIndex"
-		}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: false
-			}
-		});
-
-		service.loadSchedulesNoReadModel = $resource("../api/TeamSchedule/GroupNoReadModel", {
-			groupId: "@groupId",
-			date: "@queryDate"
-		}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: false
-			}
-		});
-
 		service.searchSchedules = $resource("../api/TeamSchedule/SearchSchedules", {
 			keyword: "@keyword",
 			date: "@queryDate",
@@ -140,18 +106,6 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 		service.PromiseForloadedPermissions = function (callback) {
 			return $q(function(resolve) {
 				service.getPermissions.query().$promise.then(function(result) {
-					callback(result);
-					resolve();
-				});
-			});
-		};
-
-		service.PromiseForloadedAllTeamsForTeamPicker = function (queryDate, callback) {
-
-			var dateString = moment(queryDate).format("YYYY-MM-DD");
-
-			return $q(function(resolve) {
-				service.loadAllTeams.query({ date: dateString }).$promise.then(function(result) {
 					callback(result);
 					resolve();
 				});

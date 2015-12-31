@@ -1,16 +1,8 @@
 ﻿<div class="team-schedule">
 	Team schedule
-	<div ng-style="!vm.isSearchScheduleEnabled && {'border': 'solid red 1px' }">
+	<div>
 		<span class="people-search-container" >
-			<select ng-model="vm.selectedTeamId" ng-change="vm.onSelectedTeamIdChanged()" ng-if="!vm.isSearchScheduleEnabled">
-				<option value="" disabled selected>Pick a team...</option>
-				<option value="{{team.Id}}" ng-repeat="team in vm.teams|orderBy: 'Name'">
-					{{team.Name}}
-				</option>
-			</select>
-
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"
-								 ng-if="vm.isSearchScheduleEnabled" />
+			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"/>
 		</span>
 
 		<span class="datepicker-container">
@@ -36,7 +28,6 @@
 			</div>
 		</button>
 
-		<span style="color: red" ng-show="!vm.isSearchScheduleEnabled">Only for test purpose, it will be removed later.</span>
 	</div>
 
 	<div class="row notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">

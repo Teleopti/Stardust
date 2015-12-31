@@ -54,22 +54,9 @@
 			return vm.canActiveAddAbsence() || vm.canActiveSwapShifts();
 		};
 
-		vm.onSelectedTeamIdChanged = function () {
-			vm.schedulePageReset();
-		};
-
 		vm.onScheduleDateChanged = function (date) {
 			vm.updateTeamPickerIfEnable();
 			vm.schedulePageReset();
-		};
-
-		vm.updateTeamPickerIfEnable = function() {
-			if (!vm.isSearchScheduleEnabled) {
-				var queryDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
-				teamScheduleSvc
-					.loadAllTeams.query({ date: queryDate })
-					.$promise.then(function(result) { vm.teams = result; });
-			}
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
@@ -88,7 +75,6 @@
 			if (options == undefined) options = {};
 			var params = {
 				keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
-				groupId: options.groupId != undefined ? options.groupId : vm.selectedTeamId,
 				date: options.date != undefined ? options.date : vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
 				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber
@@ -96,18 +82,10 @@
 			return params;
 		}
 
-		function afterSchedulesLoadedForGroup(result) {
-			vm.paginationOptions.totalPages = result.GroupSchedule.length > 0 ? result.TotalPages : 0;
-			vm.groupScheduleVm = groupScheduleFactory.Create(result.GroupSchedule, vm.scheduleDateMoment());
-			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-			setupPersonIdSelectionDic(vm.groupScheduleVm.Schedules);
-		}
-
 		function afterSchedulesLoadedForSearchCondition(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.groupScheduleVm = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 			vm.scheduleCount = vm.groupScheduleVm.Schedules.length;
-
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
@@ -115,7 +93,7 @@
 		};
 
 		vm.loadSchedules = function () {
-			if (vm.selectedTeamId == undefined && !vm.isSearchScheduleEnabled) {
+			if (!vm.isSearchScheduleEnabled) {
 				return;
 			}
 
@@ -123,8 +101,6 @@
 			scheduleLoader.loadSchedules(getParamsForLoadingSchedules(), function(result) {
 				if (vm.isSearchScheduleEnabled) {
 					afterSchedulesLoadedForSearchCondition(result);
-				} else {
-					afterSchedulesLoadedForGroup(result);
 				}
 				vm.isLoading = false;
 			});
@@ -386,7 +362,6 @@
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
 
 			vm.isSearchScheduleEnabled && vm.schedulePageReset();
-			vm.updateTeamPickerIfEnable();
 			vm.initialized = true;
 		};
 
