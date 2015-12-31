@@ -11480,6 +11480,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have Modify Person Absence permission !.
+        /// </summary>
+        public static string HasNoModifyPersonAbsencePermission {
+            get {
+                return ResourceManager.GetString("HasNoModifyPersonAbsencePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Person {0} has personal activity, overtime activity or meeting in the shift on date {1}..
         /// </summary>
         public static string HasNonMainShiftActivityErrorMessage {

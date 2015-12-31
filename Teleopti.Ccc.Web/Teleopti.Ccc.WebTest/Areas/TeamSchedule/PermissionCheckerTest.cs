@@ -74,5 +74,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			result.Should().Be.EqualTo(expectedError);
 		}
+
+		[Test]
+		public void ShouldReturnNullWhenHasModifyPersonAbsence()
+		{
+			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)).Return(true);
+
+			var target = new PermissionChecker(_permissionProvider);
+			var result = target.CheckModifyAbsencePermissionForAddAbsence();
+
+			result.Should().Be.Null();
+		}		
+		
+		[Test]
+		public void ShouldReturnErrorMessageWhenHasNoModifyPersonAbsence()
+		{
+			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)).Return(false);
+
+			var target = new PermissionChecker(_permissionProvider);
+			var result = target.CheckModifyAbsencePermissionForAddAbsence();
+
+			result.Should().Be.EqualTo(Resources.HasNoModifyPersonAbsencePermission);
+		}
 	}
 }

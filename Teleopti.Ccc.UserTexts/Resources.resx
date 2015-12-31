@@ -13970,4 +13970,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Has No permission to add full day absence for {0}</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
   </data>
+  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
+    <value>You don't have Modify Person Absence permission !</value>
+    <comment>use in WFM TeamSchedue, tell user he/she has no modify person permission when try to add absence.</comment>
+  </data>
 </root>

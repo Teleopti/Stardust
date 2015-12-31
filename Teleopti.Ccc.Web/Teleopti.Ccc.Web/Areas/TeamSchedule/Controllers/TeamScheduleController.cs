@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -30,13 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly IPersonRepository _personRepository;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			IPersonRepository personRepository)
+			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -44,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_personRepository = personRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -52,10 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var permissions = new PermissionsViewModel
 			{
-				IsAddFullDayAbsenceAvailable =
-					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
-				IsAddIntradayAbsenceAvailable =
-					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
+				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
 				IsSwapShiftsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts)
 			};
 
@@ -98,9 +91,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
 		public virtual JsonResult<List<FailActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
-			var checkResult = checkRelatedPermissionForAbsence(form.PersonIds);
-			if (checkResult != null) return Json(checkResult);
-
 			setTrackedCommandInfo(form.TrackedCommandInfo);
 			var failResults = new List<FailActionResult>();
 			foreach (var personId in form.PersonIds)
@@ -130,9 +120,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			{
 				return BadRequest(Resources.EndTimeMustBeGreaterOrEqualToStartTime);
 			}
-
-			var checkResult = checkRelatedPermissionForAbsence(form.PersonIds);
-			if (checkResult != null) return Json(checkResult);
 
 			setTrackedCommandInfo(form.TrackedCommandInfo);
 			var failResults = new List<FailActionResult>();
@@ -192,24 +179,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			{
 				commandInfo.OperatedPersonId = userId.Value;
 			}
-		}
-
-		private List<FailActionResult> checkRelatedPermissionForAbsence(IEnumerable<Guid> personIds)
-		{
-			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)) return null;
-
-			var failResults = new List<FailActionResult>();
-			foreach (var personId in personIds)
-			{
-				var person = _personRepository.Load(personId);
-				var result = new FailActionResult
-				{
-					PersonName = person.Name.ToString(),
-					Message = new List<string>() { "No Modify Person Absence permission !" }
-				};
-				failResults.Add(result);
-			}
-			return failResults;
 		}
 	}
 }

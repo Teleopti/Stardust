@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 	{
 		string CheckAddFullDayAbsenceForPerson(IPerson person, DateOnly date);
 		string CheckAddIntradayAbsenceForPerson(IPerson person, DateOnly date);
+		string CheckModifyAbsencePermissionForAddAbsence();
 	}
 }

@@ -23,6 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
 
+			var checkRelatedRequiredPermission = _permissionChecker.CheckModifyAbsencePermissionForAddAbsence();
+			if (checkRelatedRequiredPermission != null) return getFailActionResult(absenceCreatorInfo.Person.Name.ToString(), new List<string> { checkRelatedRequiredPermission });
+
 			var checkResult = _permissionChecker.CheckAddFullDayAbsenceForPerson(absenceCreatorInfo.Person, new DateOnly(command.StartDate));
 			if (checkResult != null) return getFailActionResult(absenceCreatorInfo.Person.Name.ToString(), new List<string>{checkResult});
 			
@@ -35,6 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 		public FailActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
+
+			var checkRelatedRequiredPermission = _permissionChecker.CheckModifyAbsencePermissionForAddAbsence();
+			if (checkRelatedRequiredPermission != null) return getFailActionResult(absenceCreatorInfo.Person.Name.ToString(), new List<string> { checkRelatedRequiredPermission });
 
 			var checkResult = _permissionChecker.CheckAddIntradayAbsenceForPerson(absenceCreatorInfo.Person, new DateOnly(command.StartTime));
 			if (checkResult != null) return getFailActionResult(absenceCreatorInfo.Person.Name.ToString(), new List<string> { checkResult });

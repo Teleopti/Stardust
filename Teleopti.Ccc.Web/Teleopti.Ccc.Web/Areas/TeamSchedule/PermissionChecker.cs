@@ -27,5 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 			var ret = string.Format(Resources.NoPermisionAddIntradayAbsenceForAgent, person.Name);
 			return ret;
 		}
+
+		public string CheckModifyAbsencePermissionForAddAbsence()
+		{
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)) return null;
+			return Resources.HasNoModifyPersonAbsencePermission;
+		}
 	}
 }
