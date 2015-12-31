@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -30,12 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapShiftHandler _swapShiftHandler;
+		private readonly IPersonRepository _personRepository;
 
 		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
 			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapShiftHandler swapShiftHandler)
+			ISwapShiftHandler swapShiftHandler, IPersonRepository personRepository)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapShiftHandler = swapShiftHandler;
+			_personRepository = personRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -129,8 +132,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
 		public virtual JsonResult<List<FailActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
-			setTrackedCommandInfo(form.TrackedCommandInfo);
+			var checkResult = checkRelatedPermissionForAbsence(form.PersonIds);
+			if (checkResult != null) return Json(checkResult);
 
+			setTrackedCommandInfo(form.TrackedCommandInfo);
 			var failResults = new List<FailActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
@@ -155,13 +160,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[HttpPost, UnitOfWork, AddIntradayAbsencePermission, Route("api/TeamSchedule/AddIntradayAbsence")]
 		public virtual IHttpActionResult AddIntradayAbsence(IntradayAbsenceForm form)
 		{
-			setTrackedCommandInfo(form.TrackedCommandInfo);
-
 			if (!form.IsValid())
 			{
 				return BadRequest(Resources.EndTimeMustBeGreaterOrEqualToStartTime);
 			}
 
+			var checkResult = checkRelatedPermissionForAbsence(form.PersonIds);
+			if (checkResult != null) return Json(checkResult);
+
+			setTrackedCommandInfo(form.TrackedCommandInfo);
 			var failResults = new List<FailActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
@@ -220,6 +227,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			{
 				commandInfo.OperatedPersonId = userId.Value;
 			}
+		}
+
+		private List<FailActionResult> checkRelatedPermissionForAbsence(IEnumerable<Guid> personIds)
+		{
+			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)) return null;
+
+			var failResults = new List<FailActionResult>();
+			foreach (var personId in personIds)
+			{
+				var person = _personRepository.Load(personId);
+				var result = new FailActionResult
+				{
+					PersonName = person.Name.ToString(),
+					Message = new List<string>() { "No Modify Person Absence permission !" }
+				};
+				failResults.Add(result);
+			}
+			return failResults;
 		}
 	}
 }
