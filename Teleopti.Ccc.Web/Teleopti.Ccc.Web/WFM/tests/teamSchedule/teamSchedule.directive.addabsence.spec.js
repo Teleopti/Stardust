@@ -85,7 +85,6 @@
 
 	function setupMockAllTrueToggleService() {
 		return {
-			WfmTeamSchedule_FindScheduleEasily_35611: true,
 			WfmTeamSchedule_NoReadModel_35609: true,
 			WfmTeamSchedule_SetAgentsPerPage_36230: true,
 			WfmTeamSchedule_AbsenceReporting_35995: true,

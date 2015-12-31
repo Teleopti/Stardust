@@ -93,15 +93,9 @@
 		};
 
 		vm.loadSchedules = function () {
-			if (!vm.isSearchScheduleEnabled) {
-				return;
-			}
-
 			vm.isLoading = true;
 			scheduleLoader.loadSchedules(getParamsForLoadingSchedules(), function(result) {
-				if (vm.isSearchScheduleEnabled) {
-					afterSchedulesLoadedForSearchCondition(result);
-				}
+				afterSchedulesLoadedForSearchCondition(result);
 				vm.isLoading = false;
 			});
 		};
@@ -355,13 +349,11 @@
 
 		vm.init = function () {
 			createDocumentListeners();
-			vm.isSearchScheduleEnabled = toggleSvc.WfmTeamSchedule_FindScheduleEasily_35611;
 			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
 			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
-
-			vm.isSearchScheduleEnabled && vm.schedulePageReset();
+			vm.schedulePageReset();
 			vm.initialized = true;
 		};
 

@@ -96,7 +96,6 @@ ResourcePlanner_WeeklyRestSolver_35043 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = RC
 WfmTeamSchedule_NoReadModel_35609 = RC
-WfmTeamSchedule_FindScheduleEasily_35611 = RC
 WfmTeamSchedule_AbsenceReporting_35995 = RC
 WfmTeamSchedule_SetAgentsPerPage_36230 = RC
 

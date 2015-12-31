@@ -88,7 +88,6 @@
 		Wfm_RTA_ProperAlarm_34975,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		WfmTeamSchedule_NoReadModel_35609,
-		WfmTeamSchedule_FindScheduleEasily_35611,
 		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SwapShifts_36231,
