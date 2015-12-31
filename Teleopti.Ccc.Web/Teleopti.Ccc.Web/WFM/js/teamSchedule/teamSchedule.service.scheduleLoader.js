@@ -5,7 +5,6 @@ angular.module("wfm.teamSchedule").service("ScheduleLoader", [
 		var service = this;
 
 		service.loadSchedules = function (params, resultHandler) {
-			var loadScheduleWithoutReadModel = toggleSvc.WfmTeamSchedule_NoReadModel_35609;
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(resultHandler);
 		};
 	}
