@@ -42,28 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor);
 		}
 
-		public IEnumerable<GroupScheduleShiftViewModel> LoadSchedulesWithPaging(Guid groupId, DateTime dateInUserTimeZone,
-			int pageSize, int currentPageIndex, out int totalPage)
-		{
-			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
-				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToList();
-
-			totalPage = (int)Math.Ceiling((double)people.Count/pageSize);
-
-			var skipCount = pageSize*(currentPageIndex - 1);
-			people = people
-				.OrderBy(x => _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(x))
-				.Skip(skipCount)
-				.Take(pageSize)
-				.ToList();
-
-			var peopleCanSeeConfidentialAbsencesFor =
-				_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
-
-			return getScheduleViewModel(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor);
-		}
-
 		private IEnumerable<GroupScheduleShiftViewModel> getScheduleViewModel(DateTime dateInUserTimeZone,
 			IEnumerable<IPerson> people, IEnumerable<IPerson> peopleCanSeeConfidentialAbsencesFor)
 		{

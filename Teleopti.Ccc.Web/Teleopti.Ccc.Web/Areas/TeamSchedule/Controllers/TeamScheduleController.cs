@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	public class TeamScheduleController : ApiController
 	{
 		private readonly IPrincipalAuthorization _principalAuthorization;
-		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IAbsencePersister _absencePersister;
@@ -33,14 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
 		private readonly IPersonRepository _personRepository;
 
-		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
-			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
+		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
 			IPersonRepository personRepository)
 		{
-			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
 			_principalAuthorization = principalAuthorization;
@@ -63,22 +60,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			};
 
 			return Json(permissions);
-		}
-
-		[UnitOfWork, HttpGet, Route("api/TeamSchedule/Group")]
-		public virtual JsonResult<PagingGroupScheduleShiftViewModel> GroupSchedule(Guid groupId, DateTime date,
-			int pageSize, int currentPageIndex)
-		{
-			int totalPage;
-			var schedules =
-				_groupScheduleViewModelFactory.LoadSchedulesWithPaging(groupId, date, pageSize, currentPageIndex, out totalPage)
-					.ToList();
-			var result = new PagingGroupScheduleShiftViewModel
-			{
-				GroupSchedule = schedules,
-				TotalPages = totalPage
-			};
-			return Json(result);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GroupNoReadModel")]
