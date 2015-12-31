@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			// these keep scope state and cant be single instance
 			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
+			builder.RegisterType<ReadOnlyUnitOfWorkAspect>().As<IReadOnlyUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>()
 				.As<IAllBusinessUnitsUnitOfWorkAspect>()
 				.InstancePerDependency();

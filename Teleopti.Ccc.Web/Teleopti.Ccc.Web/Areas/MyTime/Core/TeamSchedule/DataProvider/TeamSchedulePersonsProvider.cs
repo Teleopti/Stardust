@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		public IEnumerable<IPerson> RetrievePeople(TeamScheduleViewModelData data)
 		{
-			return _personRepository.FindPeople(RetrievePersonIds(data));
+			return _personRepository.FindPeopleSimplify(RetrievePersonIds(data));
 		}
 	}
 }

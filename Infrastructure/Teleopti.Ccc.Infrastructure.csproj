@@ -565,6 +565,7 @@
     <Compile Include="UnitOfWork\NoPersistCallbacks.cs" />
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
+    <Compile Include="UnitOfWork\ReadOnlyUnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />

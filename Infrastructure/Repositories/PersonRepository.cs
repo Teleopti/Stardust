@@ -361,6 +361,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 			return result;
 		}
+		
+		public ICollection<IPerson> FindPeopleSimplify(IEnumerable<Guid> peopleId)
+		{
+			var result = new List<IPerson>();
+			foreach (var peopleBatch in peopleId.Batch(400))
+			{
+				var currentBatchIds = peopleBatch.ToArray();
+
+				DetachedCriteria person = DetachedCriteria.For<Person>("person")
+					 .Add(Restrictions.InG("Id", currentBatchIds))
+					.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join);
+
+				IList queryResult = Session.CreateMultiCriteria().Add(person).List();
+
+				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
+				result.AddRange(foundPeople);
+			}
+			return result;
+		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<IPerson> people)
 		{

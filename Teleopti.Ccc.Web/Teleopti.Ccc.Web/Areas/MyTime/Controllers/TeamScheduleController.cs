@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork]
+		[ReadOnlyUnitOfWork]
 		[HttpPost]
 		public virtual JsonResult TeamSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{

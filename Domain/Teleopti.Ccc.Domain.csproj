@@ -154,10 +154,12 @@
     <Compile Include="Aop\ILogManagerWrapper.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="Aop\InfoLogAttribute.cs" />
+    <Compile Include="Aop\IReadOnlyUnitOfWorkAspect.cs" />
     <Compile Include="Aop\IUnitOfWorkAspect.cs" />
     <Compile Include="Aop\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\LogManagerWrapper.cs" />
     <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
+    <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />

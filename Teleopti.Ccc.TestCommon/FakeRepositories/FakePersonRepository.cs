@@ -184,6 +184,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public ICollection<IPerson> FindPeopleSimplify(IEnumerable<Guid> people)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerator<IPerson> GetEnumerator()
 		{
 			return _persons.GetEnumerator();
