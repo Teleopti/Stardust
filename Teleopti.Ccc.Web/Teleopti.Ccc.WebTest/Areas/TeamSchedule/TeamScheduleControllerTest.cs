@@ -264,21 +264,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var swapShiftHandler = MockRepository.GenerateMock<ISwapMainShiftForTwoPersonsCommandHandler>();
 			var target = new TeamScheduleController(null, loggedOnUser, null, null, null, swapShiftHandler, null);
 
-			var form = new SwapShiftForm
+			var command = new SwapMainShiftForTwoPersonsCommand
 			{
 				PersonIdFrom = Guid.NewGuid(),
 				PersonIdTo = Guid.NewGuid(),
 				ScheduleDate = new DateTime(2016, 01, 01)
 			};
 
-			target.SwapShifts(form);
+			target.SwapShifts(command);
 
-			swapShiftHandler.AssertWasCalled(x => x.SwapShifts(
-				Arg<SwapMainShiftForTwoPersonsCommand>.Matches(
-					a => a.PersonIdFrom == form.PersonIdFrom
-						 && a.PersonIdTo == form.PersonIdTo
-						 && a.ScheduleDate == form.ScheduleDate
-						 && a.TrackedCommandInfo != null)));
+			swapShiftHandler.AssertWasCalled(x => x.SwapShifts(Arg<SwapMainShiftForTwoPersonsCommand>.Matches(a => a == command)));
 		}
 	}
 }

@@ -51,7 +51,8 @@
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
-					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD")
+					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
+					TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
 				}).$promise.then(function(result) {
 					vm.actionsAfterAbsenceApply({
 						result: result,
@@ -64,7 +65,8 @@
 					PersonIds: vm.agentIdList(),
 					AbsenceId: vm.selectedAbsenceId,
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
-					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm")
+					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),
+					TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
 				}).$promise.then(function(result) {
 					vm.actionsAfterAbsenceApply({
 						result: result,

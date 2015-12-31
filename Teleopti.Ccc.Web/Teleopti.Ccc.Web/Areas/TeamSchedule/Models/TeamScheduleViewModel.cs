@@ -48,13 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		}
 	}
 
-	public class SwapShiftForm
-	{
-		public Guid PersonIdFrom { get; set; }
-		public Guid PersonIdTo { get; set; }
-		public DateTime ScheduleDate { get; set; }
-	}
-
 	public class GroupScheduleInput
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }

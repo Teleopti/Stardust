@@ -176,15 +176,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[HttpPost, UnitOfWork, SwapShiftPermission, Route("api/TeamSchedule/SwapShifts")]
-		public virtual IHttpActionResult SwapShifts(SwapShiftForm form)
+		public virtual IHttpActionResult SwapShifts(SwapMainShiftForTwoPersonsCommand command)
 		{
-			var command = new SwapMainShiftForTwoPersonsCommand
-			{
-				PersonIdFrom = form.PersonIdFrom,
-				PersonIdTo = form.PersonIdTo,
-				ScheduleDate = form.ScheduleDate,
-				TrackedCommandInfo = new TrackedCommandInfo()
-			};
 			setTrackedCommandInfo(command.TrackedCommandInfo);
 			var failResults = _swapMainShiftForTwoPersonsHandler.SwapShifts(command);
 			return Json(failResults);
