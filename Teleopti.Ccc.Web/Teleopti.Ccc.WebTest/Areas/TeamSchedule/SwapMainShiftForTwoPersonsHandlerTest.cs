@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -16,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture]
-	internal class SwapShiftsHandlerTest
+	internal class SwapMainShiftForTwoPersonsCommandHandlerTest
 	{
 		private ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private IPersonRepository _personRepository;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private IScheduleDictionaryPersister _scheduleDictionaryPersister;
 
-		private SwapShiftHandler _target;
+		private ISwapMainShiftForTwoPersonsCommandHandler _target;
 
 		private readonly Guid personIdFrom = Guid.NewGuid();
 		private IPerson personFrom;
@@ -84,10 +85,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.Return(new List<PersistConflict>())
 				.IgnoreArguments();
 
-			_target = new SwapShiftHandler(_commonNameDescriptionSetting, _personRepository, _scheduleRepository,
-				_scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
+			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
+				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
 
-			var result = _target.SwapShifts(personIdFrom, personIdTo, scheduleDate);
+			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdFrom = personIdFrom,
+				PersonIdTo = personIdTo,
+				ScheduleDate = scheduleDate
+			});
 
 			_swapAndModifyServiceNew.AssertWasCalled(x => x.Swap(
 				Arg<IPerson>.Matches(a => (a.Id == personIdFrom)),
@@ -118,10 +124,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.Return(new List<PersistConflict>())
 				.IgnoreArguments();
 
-			_target = new SwapShiftHandler(_commonNameDescriptionSetting, _personRepository, _scheduleRepository,
+			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository, _scheduleRepository,
 				_scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
 
-			var result = _target.SwapShifts(personIdFrom, personIdTo, scheduleDate).ToList();
+			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdFrom = personIdFrom,
+				PersonIdTo = personIdTo,
+				ScheduleDate = scheduleDate
+			}).ToList();
 
 			result.Count.Should().Be.EqualTo(1);
 			var error = result[0];

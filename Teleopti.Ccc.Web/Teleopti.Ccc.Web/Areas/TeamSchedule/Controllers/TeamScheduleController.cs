@@ -30,14 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
-		private readonly ISwapShiftHandler _swapShiftHandler;
+		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
 		private readonly IPersonRepository _personRepository;
 
 		public TeamScheduleController(IGroupScheduleViewModelFactory groupScheduleViewModelFactory,
 			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapShiftHandler swapShiftHandler, IPersonRepository personRepository)
+			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
+			IPersonRepository personRepository)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_principalAuthorization = principalAuthorization;
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
-			_swapShiftHandler = swapShiftHandler;
+			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
 			_personRepository = personRepository;
 		}
 
@@ -212,9 +213,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[HttpPost, UnitOfWork, SwapShiftPermission, Route("api/TeamSchedule/SwapShifts")]
 		public virtual IHttpActionResult SwapShifts(SwapShiftForm form)
 		{
-			setTrackedCommandInfo(form.TrackedCommandInfo);
-
-			var failResults = _swapShiftHandler.SwapShifts(form.PersonIdFrom, form.PersonIdTo, form.ScheduleDate);
+			var command = new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdFrom = form.PersonIdFrom,
+				PersonIdTo = form.PersonIdTo,
+				ScheduleDate = form.ScheduleDate,
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+			setTrackedCommandInfo(command.TrackedCommandInfo);
+			var failResults = _swapMainShiftForTwoPersonsHandler.SwapShifts(command);
 			return Json(failResults);
 		}
 

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,12 +13,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
-	public interface ISwapShiftHandler
+	public interface ISwapMainShiftForTwoPersonsCommandHandler
 	{
-		IEnumerable<FailActionResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate);
+		IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command);
 	}
 
-	public class SwapShiftHandler : ISwapShiftHandler
+	public class SwapMainShiftForTwoPersonsCommandHandler : ISwapMainShiftForTwoPersonsCommandHandler
 	{
 		private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private readonly IPersonRepository _personRepository;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
 
-		public SwapShiftHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
+		public SwapMainShiftForTwoPersonsCommandHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
 			IPersonRepository personRepository,
 			IScheduleRepository scheduleRepository,
 			IScenarioRepository scenarioRepository,
@@ -42,10 +42,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}
 
-		public IEnumerable<FailActionResult> SwapShifts(Guid personIdFrom, Guid personIdTo, DateTime scheduleDate)
+		public IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
 		{
-			var personIds = new[] {personIdFrom, personIdTo};
+			var personIds = new[] { command.PersonIdFrom, command.PersonIdTo };
 			var peoples = _personRepository.FindPeople(personIds).ToArray();
+
+			var scheduleDate = command.ScheduleDate;
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var period = new DateTimePeriod(scheduleDate.ToUniversalTime(), scheduleDate.AddDays(1).ToUniversalTime());

@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\SeatBookingReportCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\SwapMainShiftForTwoPersonsCommand.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
