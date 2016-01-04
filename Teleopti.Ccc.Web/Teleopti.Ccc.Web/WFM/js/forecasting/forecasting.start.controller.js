@@ -82,7 +82,7 @@
 				};
 
 				$scope.scenarios = [];
-				var scenariosPromise = forecasting.scenarioList.$promise;
+				var scenariosPromise = forecasting.scenarios.query().$promise;
 				scenariosPromise.then(function (result) {
 					$scope.scenarios = result;
 					$scope.modalForecastingInfo.selectedScenario = result[0];
