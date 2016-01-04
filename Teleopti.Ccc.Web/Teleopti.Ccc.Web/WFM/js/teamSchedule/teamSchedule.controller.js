@@ -185,7 +185,7 @@
 			teamScheduleSvc.swapShifts.post({
 				PersonIdFrom: selectedPersonIds[0],
 				PersonIdTo: selectedPersonIds[1],
-				ScheduleDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
+				ScheduleDate: vm.scheduleDateMoment().format("YYYY-MM-DD"),
 				TrackedCommandInfo: { TrackId: "" } // TODO: Generate unique track id
 			}).$promise.then(function (result) {
 				vm.afterActionCallback(result, "FinishedSwapShifts", "FailedToSwapShifts");
