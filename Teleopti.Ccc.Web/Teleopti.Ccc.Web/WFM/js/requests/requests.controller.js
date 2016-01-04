@@ -10,7 +10,7 @@
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
 		vm.onPageSizeChanges = onPageSizeChanges;
-		vm.pageSizeOptions = [10, 20, 50, 100, 200];
+		vm.pageSizeOptions = [20, 50, 100, 200];
 
 		requestsToggles.togglePromise.then(init);
 				
@@ -22,7 +22,7 @@
 
 			vm.period = { startDate: new Date(), endDate: new Date() };
 			vm.paging = {
-				pageSize: 10,
+				pageSize: 50,
 				pageNumber: 1,
 				totalPages: 1,
 				totalRequestsCount: 0
