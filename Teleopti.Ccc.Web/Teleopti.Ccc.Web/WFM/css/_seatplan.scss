@@ -1,6 +1,7 @@
 ﻿#seatplan{
 	height:100%;
 	position:relative;
+	background:$white;
 }
 
 #seatplan>.row{
@@ -78,10 +79,10 @@
 	height:100%;
 	z-index:0;
 	position:absolute;
-	top:-10px;
-	right:-10px;
-	bottom:-10px;
-	left:-10px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
 
 	.seatplan-report-header{
 		height: 40px;

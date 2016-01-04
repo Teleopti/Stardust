@@ -1,31 +1,29 @@
-﻿<div class="modal-box">
+﻿<div ng-cloak class="modal-box seatmap-load-image">
 	<div ng-cloak ng-show="vm.showFileDialog">
 		<div class="modalbg">
 			<div class="dialog">
-				<div class="modal-header">
-					Load Image
-				</div>
+				<h1 class="modal-title">
+					{{"LoadImage" | translate}}
+				</h1>
 				<div class="modal-inner-content">
-					<form name="myForm" style="max-height:600px; padding:10px;">
-						<input type="file" name="myImage" image-with-preview
-						       ng-model="image"
-						       accept="image/*"
-						       dimensions="height < 2000 && width < 4000">
-
+					<form name="myForm">
+						<a href="javascript:;" class="load-image-file">{{"ChooseImage" | translate}}
+						<input type="file" name="myImage" image-with-preview ng-model="image" accept="image/*"
+							   dimensions="height < 2000 && width < 4000">
+						</a>
 						<span class="error" ng-show="myForm.myImage.$error.image">
-							Not a JPEG, SVG or a PNG!
+							{{"NotAJPEGSVGOrAPNG" | translate}}
 						</span>
 						<span class="error" ng-show="myForm.myImage.$error.dimensions">
-							Invalid dimensions! Expecting a image smaller than 2000x4000.
+							{{"InvalidDimensionsExpectingAnImageSmallerThan2000x4000" | translate}}
 						</span>
-						<img id="image-preview" class="material-depth-1" style="max-width: 100%; max-height: 540px; padding:10px; margin-top: 10px; margin-bottom:10px; display: block; margin-left: auto;margin-right: auto;" ng-show="image.src" ng-src="{{image.src}}" />
-
+						<img id="image-preview" class="material-depth-1" ng-show="image.src" ng-src="{{image.src}}"/>
 					</form>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-actions">
 					<aside>
-						<a ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
-						<a class="wfm-btn wfm-btn-invis-primary" ng-click="vm.fileCallbackFunction(image)">CHOOSE</a>
+						<button ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-default">{{"Dismiss" | translate}}</button>
+						<button ng-click="vm.fileCallbackFunction(image)" class="wfm-btn wfm-btn-invis-primary">{{"Choose" | translate}}</button>
 					</aside>
 				</div>
 			</div>

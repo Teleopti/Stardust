@@ -16,6 +16,7 @@
 		vm.showLocationDialog = false;
 		vm.showFileDialog = false;
 		vm.fileCallbackFunction = null;
+		vm.hasCopiedObjectBool = false;
 		
 		vm.init = function () {
 			canvas().on('object:selected', function (e) {
@@ -83,6 +84,7 @@
 		};
 
 		vm.copy = function () {
+			vm.hasCopiedObjectBool = true;
 			editor.copy(canvas());
 		};
 
@@ -275,6 +277,7 @@
 		};
 
 		function saveData() {
+			if (!vm.hasChanges()) return;
 			vm.parentVm.isLoading = true;
 
 			var data = {

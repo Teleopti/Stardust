@@ -1,4 +1,4 @@
-﻿<div id="seatplan" ui-view>
+﻿<div id="seatplan" class="material-depth-1" ui-view>
 
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" selected-locations="seatplan.reportSelectedLocations"></seat-plan-report>
@@ -11,7 +11,7 @@
 
 			<datepicker ng-model="seatplan.selectedDate"
 						on-change-of-month="seatplan.onChangeOfMonth(date)"
-						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"			
+						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
 						custom-class="seatplan.getDayClass(date,mode)">
 			</datepicker>
 		</div>
@@ -22,7 +22,7 @@
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 			</button>
-			
+
 			<h3>{{seatplan.selectedDate | date : "fullDate"}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{ seatplan.getToDayInfo() | translate}}</p>
@@ -36,30 +36,30 @@
 		</div>
 
 		<div class="col-sm-12">
-			
+
 			<h3 class="planning-period-title">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.selectedDate | date : "MMMM" }}</h3>
 
 			<md-divider md-insert></md-divider>
 
-            <div class="planning-period-progress-bar" ng-show="seatplan.isLoadingStuff()">
-                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-            </div>
+			<div class="planning-period-progress-bar" ng-show="seatplan.isLoadingStuff()">
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
 
-            <wfm-card-list ng-hide="seatplan.isLoadingStuff()">
-                <wfm-card ng-repeat="period in seatplan.planningPeriods">
-                    <card-header>
+			<wfm-card-list ng-hide="seatplan.isLoadingStuff()">
+				<wfm-card ng-repeat="period in seatplan.planningPeriods">
+					<card-header>
 
-                        <span class="planning-period-header" data-start-date="{{period.StartDate | amDateFormat:'YYYY-MM-DD'}}">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
+						<span class="planning-period-header" data-start-date="{{period.StartDate | amDateFormat:'YYYY-MM-DD'}}">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
 
-                        <span class="pull-right"><i class="mdi mdi-chevron-down"></i></span>
+						<span class="pull-right"><i class="mdi mdi-chevron-down"></i></span>
 
-                    </card-header>
-                    <card-body>
-                        <seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()"
-                                        on-seat-plan-start="seatplan.onSeatPlanStart()" show-report="seatplan.showReport"></seat-plan-init>
-                    </card-body>
-                </wfm-card>
-            </wfm-card-list>
+					</card-header>
+					<card-body>
+						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()"
+										on-seat-plan-start="seatplan.onSeatPlanStart()" show-report="seatplan.showReport"></seat-plan-init>
+					</card-body>
+				</wfm-card>
+			</wfm-card-list>
 		</div>
 
 	</div>

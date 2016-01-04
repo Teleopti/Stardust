@@ -8,11 +8,13 @@
 
 <md-content layout-padding>
 	<div class="seat-roles">
-		<div class="input-prepend">
-			<i class="mdi mdi-filter-outline"></i>
-			<input class="text-filter" type="text" name="roleFilter" ng-model="roleFilter.Name"/>
-		</div>
-		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'" style="transition: none;">
+		<label for="inputId" class="input-prepend">
+			<i class="mdi mdi-filter-outline">
+				<md-tooltip>{{"FilterRoles" | translate}}</md-tooltip>
+			</i>
+			<input type="text" id="inputId" placeholder="{{'FilterRoles' | translate}}" name="roleFilter" ng-model="roleFilter.Name" />
+		</label>
+		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'">
 			<input type="checkbox" id="{{role.Id}}" ng-model="role.Selected" ng-change="vm.selectedStatusChanged(role)" seat-role-indeterminate="vm.rolesStatus(role)" />
 			<label for="{{role.Id}}">
 				<span class="wfm-checkbox-toggle"></span>
