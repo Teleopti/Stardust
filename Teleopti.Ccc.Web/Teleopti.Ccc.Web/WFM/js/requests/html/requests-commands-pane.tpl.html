@@ -7,9 +7,25 @@
 <button class="wfm-btn wfm-btn-invis-primary"
 		ng-click="requestsCommandsPane.denyRequests()"
 		ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
-	<i class="mdi mdi-close"></i>
+	<i class="mdi mdi-block-helper"></i>
 	<md-tooltip><span translate>Deny</span></md-tooltip>
 </button>
-<button class="wfm-btn wfm-btn-invis-primary wfm-btn-primary-disabled">
+<button class="wfm-btn wfm-btn-invis-primary context-menu card-context">
 	<i class="mdi mdi-menu"></i>
+	<span class="context-menu-left">
+		<ul class="wfm-list">
+			<li class="wfm-btn wfm-btn-invis-primary"
+					ng-click="requestsCommandsPane.approveRequests()"
+					ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+				<i class="mdi mdi-check"></i>
+				<label><span translate>Approve</span></label>
+			</li>
+			<li class="wfm-btn wfm-btn-invis-primary"
+					ng-click="requestsCommandsPane.denyRequests()"
+					ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+				<i class="mdi mdi-block-helper"></i>
+				<label><span translate>Deny</span></label>
+			</li>
+		</ul>
+	</span>
 </button>
