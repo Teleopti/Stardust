@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public class ModifyCalculator
     {
-        private IList<double> _modifyArray = new List<double>();
+        private IList<double> _modifyArray;
         private IList<double> _smoothenList = new List<double>();
         private readonly double _chosenAmount;
         private double _modifier;
-        private IList<double> _originalArray;
+        private readonly IList<double> _originalArray;
 
         public ModifyCalculator(IList<double> doubles)
         {
@@ -20,21 +20,21 @@ namespace Teleopti.Ccc.Domain.Common
 
             CalculateSum(_originalArray);//Calculates original sum
 
-            CalculateAverage();
+            calculateAverage();
 
-            CalculateStdevSum(_originalArray);
+            calculateStdevSum(_originalArray);
 
             _modifyArray = _originalArray;
 
             ModifiedSum = Sum;
         }
 
-        private void CalculateAverage()
+        private void calculateAverage()
         {
             Average = ModifiedSum / _chosenAmount;//Average of selected days
         }
 
-        private void CalculateStdevSum(IList<double> doubles)
+        private void calculateStdevSum(IList<double> doubles)
         {
             StandardDev = 0;
             foreach (var d in doubles)
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public void ModifyTotal(double newTotal)
         {
-            CalculateAverage();
+            calculateAverage();
             if (Sum != 0)
             {
                 _modifier = newTotal / Sum;
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.Domain.Common
             }
             _modifyArray = modifyUpdateList;
             ModifiedSum = _modifyArray.Sum();
-            CalculateAverage();
-            CalculateStdevSum(_modifyArray);
+            calculateAverage();
+            calculateStdevSum(_modifyArray);
         }
 
         public void CalculateSum(IList<double> doubles)
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Domain.Common
             }
 
             _smoothenList = modifiedSmoothenList;
-            CalculateStdevSum(_smoothenList);
+            calculateStdevSum(_smoothenList);
         }
     }
 }

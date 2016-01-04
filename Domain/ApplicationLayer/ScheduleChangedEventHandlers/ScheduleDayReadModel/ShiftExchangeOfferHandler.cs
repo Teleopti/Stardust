@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			{
 				if (!projectionChangedEventScheduleDay.NotScheduled)
 				{
-					var date = new DateOnly(projectionChangedEventScheduleDay.Date.Year, projectionChangedEventScheduleDay.Date.Month, projectionChangedEventScheduleDay.Date.Day);
+					var date = new DateOnly(projectionChangedEventScheduleDay.Date);
 					var offers = _personRequestRepository.FindOfferByStatus(person, date, ShiftExchangeOfferStatus.Pending);
 					foreach (var offer in offers)
 					{
