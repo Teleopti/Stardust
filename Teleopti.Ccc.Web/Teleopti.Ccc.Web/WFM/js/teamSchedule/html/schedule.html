@@ -9,9 +9,6 @@
 			<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged(date)" />
 		</span>
 
-		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
-				ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
-
 		<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
 			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
@@ -41,8 +38,13 @@
 		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled"/>
 	</div>
-
-	<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	
+	<div class="pull-right">
+		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
+				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	</div>
+	
 
 	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 		<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
