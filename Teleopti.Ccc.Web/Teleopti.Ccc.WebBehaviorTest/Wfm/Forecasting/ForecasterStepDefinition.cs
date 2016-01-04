@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -78,8 +80,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
 		{
 			Browser.Interactions.Click(".forecast-create-button");
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".do-forecast");
 		}
 
@@ -92,9 +94,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
 			Browser.Interactions.AssertExists("span.startDate");
 			if (!ScenarioContext.Current.ContainsKey("startdate"))
-				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
+				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
-				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".do-forecast");
 		}
 
@@ -109,8 +111,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()
 		{
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".next-step-advanced");
 		}
 
