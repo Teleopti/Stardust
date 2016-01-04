@@ -16,6 +16,7 @@ define([
 
 	var loadEtlHistory = function(showOnlyErrors) {
 		http.get('api/HealthCheck/LoadEtlJobHistory', { date: new Date().toISOString(), showOnlyErrors: showOnlyErrors }).done(function (data) {
+			vm.hasPermission = true;
 			vm.etlJobHistory(data);
 		});
 	};

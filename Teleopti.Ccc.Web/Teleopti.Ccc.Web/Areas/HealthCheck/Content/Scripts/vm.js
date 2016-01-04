@@ -9,6 +9,7 @@ define([
 		var startPromise;
 		var loadEtlHistory;
 
+		self.hasPermission = false;
 		self.hub = undefined;
 		self.configuredUrls = ko.observableArray();
 		self.services = ko.observableArray();

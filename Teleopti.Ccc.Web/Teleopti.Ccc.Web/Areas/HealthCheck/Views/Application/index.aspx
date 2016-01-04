@@ -39,61 +39,66 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h1>Health Check</h1>
-				<h3>Services</h3>
-				<ul class="list-group services" data-bind="foreach: services">
-					<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4,'list-group-item-danger': Status == 1 }">
-						<span data-bind="text: DisplayName"></span>
-						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
-					</li>
-				</ul>
-				<h3>ETL log objects</h3>
-				<ul class="list-group etl-log-objects" data-bind="foreach: logObjects">
-					<li class="list-group-item">
-						<h4 class="list-group-item-heading" data-bind="text: new Date(parseInt(last_update.substr(6))).toISOString() + ' (last updated interval)'"></h4>
-						<h4 class="list-group-item-heading" data-bind="text: log_object_id + ' - ' + log_object_desc + ' > ' + detail_desc"></h4>
-						<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name"></p>
-					</li>
-				</ul>
-				<h3>ETL history</h3>
-				<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">
-					<li class="list-group-item" data-bind="css: { 'list-group-item-danger': exception_msg }">
-						<h4 class="list-group-item-heading" data-bind="text: new Date(parseInt(job_start_time.substr(6))).toISOString()"></h4>
-						<h4 class="list-group-item-heading" data-bind="text: schedule_name + ' > ' + job_name + ' > ' + jobstep_name + ' [BU: ' + business_unit_name + ']'"></h4>
-						<p class="list-group-item-text" data-bind="text: 'Affected rows: ' + jobstep_affected_rows + ', Duration: ' + jobstep_duration_s"></p>
-						<!-- ko if: exception_msg -->
-						<p class="list-group-item-text"><b data-bind="text: exception_msg"></b></p>
-						<p class="list-group-item-text" data-bind="text: exception_trace"></p>
-						<p class="list-group-item-text"><b data-bind="text: inner_exception_msg"></b></p>
-						<p class="list-group-item-text" data-bind="text: inner_exception_trace"></p>
+				<div data-bind="if: !hasPermission">
+					No Permission!
+				</div>
+				<div data-bind="if: hasPermission">
+					<h3>Services</h3>
+					<ul class="list-group services" data-bind="foreach: services">
+						<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }">
+							<span data-bind="text: DisplayName"></span>
+							<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
+						</li>
+					</ul>
+					<h3>ETL log objects</h3>
+					<ul class="list-group etl-log-objects" data-bind="foreach: logObjects">
+						<li class="list-group-item">
+							<h4 class="list-group-item-heading" data-bind="text: new Date(parseInt(last_update.substr(6))).toISOString() + ' (last updated interval)'"></h4>
+							<h4 class="list-group-item-heading" data-bind="text: log_object_id + ' - ' + log_object_desc + ' > ' + detail_desc"></h4>
+							<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name"></p>
+						</li>
+					</ul>
+					<h3>ETL history</h3>
+					<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">
+						<li class="list-group-item" data-bind="css: { 'list-group-item-danger': exception_msg }">
+							<h4 class="list-group-item-heading" data-bind="text: new Date(parseInt(job_start_time.substr(6))).toISOString()"></h4>
+							<h4 class="list-group-item-heading" data-bind="text: schedule_name + ' > ' + job_name + ' > ' + jobstep_name + ' [BU: ' + business_unit_name + ']'"></h4>
+							<p class="list-group-item-text" data-bind="text: 'Affected rows: ' + jobstep_affected_rows + ', Duration: ' + jobstep_duration_s"></p>
+							<!-- ko if: exception_msg -->
+							<p class="list-group-item-text"><b data-bind="text: exception_msg"></b></p>
+							<p class="list-group-item-text" data-bind="text: exception_trace"></p>
+							<p class="list-group-item-text"><b data-bind="text: inner_exception_msg"></b></p>
+							<p class="list-group-item-text" data-bind="text: inner_exception_trace"></p>
+							<!-- /ko -->
+						</li>
+					</ul>
+					<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
+					<h3>Check bus</h3>
+					<button id="Start-Check" data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
+					<!-- ko with: busResults -->
+					<h3 id="Bus-Results">Bus results</h3>
+					<p><b data-bind="text: MachineName"></b> (<span data-bind="	text: OSFullName + ' ' + OSPlatform + ' ' + OSVersion"></span>)</p>
+					<ul class="list-group">
+						<li class="list-group-item">Delay (ms): <span data-bind="text: MillisecondsDifference"></span></li>
+						<!-- ko foreach: Services -->
+						<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }">
+							<span data-bind="text: Name"></span>
+							<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
+						</li>
 						<!-- /ko -->
-					</li>
-				</ul>
-				<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
-				<h3>Check bus</h3>
-				<button id="Start-Check" data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
-				<!-- ko with: busResults -->
-				<h3 id="Bus-Results">Bus results</h3>
-				<p><b data-bind="text: MachineName"></b> (<span data-bind="text: OSFullName + ' ' + OSPlatform + ' ' + OSVersion"></span>)</p>
-				<ul class="list-group">
-					<li class="list-group-item">Delay (ms): <span data-bind="text: MillisecondsDifference"></span></li>
-					<!-- ko foreach: Services -->
-					<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }">
-						<span data-bind="text: Name"></span>
-						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
-					</li>
+						<li class="list-group-item">Physical memory installed: <span data-bind="text: (TotalPhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
+						<li class="list-group-item">Physical memory consumed by bus: <span data-bind="text: (BusMemoryConsumption / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
+						<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
+					</ul>
 					<!-- /ko -->
-					<li class="list-group-item">Physical memory installed: <span data-bind="text: (TotalPhysicalMemory/(1024.0*1024*1024)).toFixed(2)"></span> GB</li>
-					<li class="list-group-item">Physical memory consumed by bus: <span data-bind="text: (BusMemoryConsumption / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
-					<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
-				</ul>
-				<!-- /ko -->
-				<h3>Configured URL:s</h3>
-				<ul class="list-group" data-bind="foreach: configuredUrls">
-					<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">
-						<span data-bind="text: Url + (Message ? ' (' + Message + ')' : '')"></span>
-						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Reachable"></i>
-					</li>
-				</ul>
+					<h3>Configured URL:s</h3>
+					<ul class="list-group" data-bind="foreach: configuredUrls">
+						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">
+							<span data-bind="text: Url + (Message ? ' (' + Message + ')' : '')"></span>
+							<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Reachable"></i>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
