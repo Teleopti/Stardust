@@ -44,47 +44,52 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             IList<IExternalLogOn> externalLogOnsToAdd = new List<IExternalLogOn>(matrixExternalLogOns);
             int updatedCount = 0;
 
-        	ClearInvalidMartDataOnRaptorLogOns(raptorExternalLogOns, matrixExternalLogOns);
+	        var matrixLogOnByMartId = matrixExternalLogOns.ToDictionary(k => k.AcdLogOnMartId);
+	        var matrixLogOnByAggId = matrixExternalLogOns.ToLookup(k => k.AcdLogOnAggId);
 
-            foreach (IExternalLogOn matrixLogin in matrixExternalLogOns)
-            {
-                foreach (IExternalLogOn raptorLogin in raptorExternalLogOns)
-                {
-                    if ((raptorLogin.AcdLogOnMartId == -1 && 
-                        raptorLogin.DataSourceId == -1 &&
-                        raptorLogin.AcdLogOnAggId > -1 &&
-                        raptorLogin.AcdLogOnOriginalId == raptorLogin.AcdLogOnAggId.ToString(CultureInfo.InvariantCulture) &&
-                        raptorLogin.AcdLogOnName == raptorLogin.AcdLogOnAggId.ToString(CultureInfo.InvariantCulture) &&
-                        raptorLogin.AcdLogOnAggId == matrixLogin.AcdLogOnAggId) 
-                        ||
-                        (raptorLogin.AcdLogOnMartId == matrixLogin.AcdLogOnMartId))
-                    {
-                        // Newly upgraded/converted database with unmapped agent logins with matching AcdLogOnAggId´s
-                        // Or
-                        // agent logins with matching AcdLogOnMartId´s. 
-                        raptorLogin.Active = matrixLogin.Active;
-                        raptorLogin.AcdLogOnMartId = matrixLogin.AcdLogOnMartId;
-                        raptorLogin.AcdLogOnAggId = matrixLogin.AcdLogOnAggId;
-                        raptorLogin.AcdLogOnOriginalId = matrixLogin.AcdLogOnOriginalId;
-                        raptorLogin.AcdLogOnName = matrixLogin.AcdLogOnName;
-                        raptorLogin.DataSourceId = matrixLogin.DataSourceId;
-                        externalLogOnsToAdd.Remove(matrixLogin);
-                        updatedCount += 1;
-                    }
-                }
-            }
-            _externalLogOnRepository.AddRange(externalLogOnsToAdd);
+			clearInvalidMartDataOnRaptorLogOns(raptorExternalLogOns, matrixLogOnByMartId);
+
+	        foreach (IExternalLogOn raptorLogin in raptorExternalLogOns)
+	        {
+		        IExternalLogOn matrixLogin;
+		        if (matrixLogOnByMartId.TryGetValue(raptorLogin.AcdLogOnMartId, out matrixLogin) || findByLookup(matrixLogOnByAggId, raptorLogin, out matrixLogin))
+		        {
+			        // Newly upgraded/converted database with unmapped agent logins with matching AcdLogOnAggId´s
+			        // Or
+			        // agent logins with matching AcdLogOnMartId´s. 
+			        raptorLogin.Active = matrixLogin.Active;
+			        raptorLogin.AcdLogOnMartId = matrixLogin.AcdLogOnMartId;
+			        raptorLogin.AcdLogOnAggId = matrixLogin.AcdLogOnAggId;
+			        raptorLogin.AcdLogOnOriginalId = matrixLogin.AcdLogOnOriginalId;
+			        raptorLogin.AcdLogOnName = matrixLogin.AcdLogOnName;
+			        raptorLogin.DataSourceId = matrixLogin.DataSourceId;
+			        externalLogOnsToAdd.Remove(matrixLogin);
+			        updatedCount += 1;
+		        }
+	        }
+	        _externalLogOnRepository.AddRange(externalLogOnsToAdd);
 
             return externalLogOnsToAdd.Count + updatedCount;
         }
 
-		private static void ClearInvalidMartDataOnRaptorLogOns(IList<IExternalLogOn> raptorLogOns, IList<IExternalLogOn> matrixLogOns)
+	    private bool findByLookup(ILookup<int, IExternalLogOn> matrixLogOnByAggId, IExternalLogOn raptorLogin, out IExternalLogOn matrixLogin)
+	    {
+		    var validToFind = (raptorLogin.AcdLogOnMartId == -1 &&
+							   raptorLogin.DataSourceId == -1 &&
+							   raptorLogin.AcdLogOnAggId > -1 &&
+							   raptorLogin.AcdLogOnOriginalId == raptorLogin.AcdLogOnAggId.ToString(CultureInfo.InvariantCulture) &&
+							   raptorLogin.AcdLogOnName == raptorLogin.AcdLogOnAggId.ToString(CultureInfo.InvariantCulture));
+					
+		    matrixLogin = matrixLogOnByAggId[raptorLogin.AcdLogOnAggId].FirstOrDefault();
+		    return validToFind && matrixLogin != null;
+	    }
+
+	    private static void clearInvalidMartDataOnRaptorLogOns(IList<IExternalLogOn> raptorLogOns, IDictionary<int, IExternalLogOn> matrixLogOns)
 		{
 			foreach (var raptorLogOn in raptorLogOns)
 			{
-				var hasInvalidData = matrixLogOns.All(matrixQueue => raptorLogOn.AcdLogOnMartId != matrixQueue.AcdLogOnMartId);
-
-				if (hasInvalidData)
+				IExternalLogOn matrixLogOn;
+				if (!matrixLogOns.TryGetValue(raptorLogOn.AcdLogOnMartId, out matrixLogOn))
 				{
 					raptorLogOn.AcdLogOnMartId = -1;
 					raptorLogOn.DataSourceId = -1;

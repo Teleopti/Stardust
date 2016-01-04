@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IList<IQueueSource> queuesToAdd = new List<IQueueSource>(matrixQueues);
 			int updatedCount = 0;
 
-			ClearInvalidMartDataOnRaptorQueues(raptorQueues, matrixQueues);
+			clearInvalidMartDataOnRaptorQueues(raptorQueues, matrixQueues);
 
 			foreach (IQueueSource matrixQueue in matrixQueues)
 			{
@@ -81,13 +81,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return queuesToAdd.Count + updatedCount;
 		}
 
-		private static void ClearInvalidMartDataOnRaptorQueues(IList<IQueueSource> raptorQueues, IList<IQueueSource> matrixQueues)
+		private static void clearInvalidMartDataOnRaptorQueues(IList<IQueueSource> raptorQueues, IList<IQueueSource> matrixQueues)
 		{
+			var keyedMatrixQueues = matrixQueues.ToDictionary(k => k.QueueMartId);
 			foreach (var raptorQueue in raptorQueues)
 			{
-				var hasInvalidData = matrixQueues.All(matrixQueue => raptorQueue.QueueMartId != matrixQueue.QueueMartId);
-
-				if (hasInvalidData)
+				IQueueSource matrixQueue;
+				if (!keyedMatrixQueues.TryGetValue(raptorQueue.QueueMartId, out matrixQueue))
 				{
 					raptorQueue.QueueMartId = 0;
 					raptorQueue.QueueOriginalId = 0;
