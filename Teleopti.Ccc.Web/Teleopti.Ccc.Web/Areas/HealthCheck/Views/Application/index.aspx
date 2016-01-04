@@ -39,7 +39,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h1>Health Check</h1>
-				<div data-bind="if: !hasPermission">
+				<div data-bind="ifnot: hasPermission">
 					No Permission!
 				</div>
 				<div data-bind="if: hasPermission">
