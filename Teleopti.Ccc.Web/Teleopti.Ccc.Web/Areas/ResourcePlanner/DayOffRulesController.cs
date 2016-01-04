@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {

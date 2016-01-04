@@ -12,7 +12,7 @@
 			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod/:id', {id:"@id"}, {
 				query: { method: 'GET', params: {}, isArray: false }
 			});
-			this.changeRange = $resource('../api/resourceplanner/changeplanningperiod/:id', { id: "@id" }, {
+			this.changeRange = $resource('../api/resourceplanner/planningperiod/:id', { id: "@id" }, {
 				update: { method: 'PUT', params: {} , isArray: false }
 			});
 			this.getSuggestions = $resource('../api/resourceplanner/planningperiod/:id/suggestions', { id: "@id" }, {

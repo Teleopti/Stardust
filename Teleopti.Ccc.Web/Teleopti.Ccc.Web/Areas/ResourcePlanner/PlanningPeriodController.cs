@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							}));
 		}
 
-		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}")]
+		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{id}")]
 		public virtual IHttpActionResult ChangeRange(Guid id, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
