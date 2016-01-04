@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private RelativeDailyStandardDeviationsByAllSkillsExtractor _target;
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
-        private IList<ISkill> _skillList;
+        private ISkill[] _skillList;
         private ISkill _skillA;
         private IScheduleDayPro _scheduleDayPro;
         private ISchedulingResultStateHolder _stateHolder;
@@ -28,9 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _skillList = new List<ISkill>();
             _skillA = SkillFactory.CreateSkill("skillA", SkillTypeFactory.CreateSkillType(), 15);
-            _skillList.Add(_skillA);
+            _skillList = new []{_skillA};
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();

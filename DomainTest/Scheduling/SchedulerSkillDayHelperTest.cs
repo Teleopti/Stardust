@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             
 			schedulerStateHolder.Stub(x => x.SchedulingResultState).Return(schedulingResultStateHolder);
 			schedulerStateHolder.Stub(x => x.RequestedScenario).Return(scenario);
-			schedulingResultStateHolder.Stub(x => x.Skills).Return(new List<ISkill> { skill });
+			schedulingResultStateHolder.Stub(x => x.Skills).Return(new [] { skill });
             skill.Stub(x => x.SkillType).Return(skillType);
             skillType.Stub(x => x.ForecastSource).Return(ForecastSource.NonBlendSkill);
             skillDayRepository.Stub(x => x.GetAllSkillDays(datePeriod, new List<ISkillDay>(), skill, scenario,_ => { })).Return(new List<ISkillDay>{skillDay}).IgnoreArguments();

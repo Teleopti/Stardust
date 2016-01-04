@@ -8,16 +8,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-    
-
     public class SkillStaffPeriodDictionary : ISkillStaffPeriodDictionary
     {
-        private IList<DateTimePeriod> _openHoursCollection;
+        private Lazy<IList<DateTimePeriod>> _openHoursCollection;
+	    private Lazy<ILookup<HourSlot, ISkillStaffPeriod>> _lookup;
         private readonly IDictionary<DateTimePeriod, ISkillStaffPeriod> _wrappedDictionary = new Dictionary<DateTimePeriod, ISkillStaffPeriod>();
-        private IAggregateSkill _skill;
-        private object _openHoursCollectionLock = new object();
+        private readonly IAggregateSkill _skill;
 
-        private SkillStaffPeriodDictionary(){}
+	    private SkillStaffPeriodDictionary()
+	    {
+		    _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
+			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
+	    }
 
         public SkillStaffPeriodDictionary(IAggregateSkill skill)
             : this()
@@ -67,8 +69,13 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public bool Remove(DateTimePeriod key)
         {
-            _openHoursCollection = null;
-            return _wrappedDictionary.Remove(key);
+			var remove = _wrappedDictionary.Remove(key);
+	        if (remove)
+	        {
+		        _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
+		        _lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
+	        }
+	        return remove;
         }
 
         /// <summary>
@@ -135,6 +142,15 @@ namespace Teleopti.Ccc.Domain.Collection
             }
         }
 
+	    private ILookup<HourSlot, ISkillStaffPeriod> createLookup()
+	    {
+			return _wrappedDictionary.Values.ToLookup(v => new HourSlot(v.Period.StartDateTime));
+	    }
+
+	    public ILookup<HourSlot, ISkillStaffPeriod> ForLookup()
+	    {
+		    return _lookup.Value;
+	    }
 
         /// <summary>
         ///                     Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
@@ -206,7 +222,8 @@ namespace Teleopti.Ccc.Domain.Collection
                 throw new InvalidConstraintException("item.key must equal item.value.period");
 
             _wrappedDictionary.Add(item);
-            _openHoursCollection = null;
+			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
+			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
         }
 
         public void Add(ISkillStaffPeriod skillStaffPeriod)
@@ -251,7 +268,8 @@ namespace Teleopti.Ccc.Domain.Collection
         public void Clear()
         {
             _wrappedDictionary.Clear();
-            _openHoursCollection = null;
+			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
+			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
         }
 
         /// <summary>
@@ -288,27 +306,17 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public ReadOnlyCollection<DateTimePeriod> SkillOpenHoursCollection
         {
-            get
-            {
-                lock(_openHoursCollectionLock)
-                {
-                    if (_openHoursCollection == null)
-                        createOpenHourCollection();
-
-                    return new ReadOnlyCollection<DateTimePeriod>(_openHoursCollection);
-                }
-            }
+	        get { return new ReadOnlyCollection<DateTimePeriod>(_openHoursCollection.Value); }
         }
 
         #endregion
 
-        private void createOpenHourCollection()
-        
+		private IList<DateTimePeriod> createOpenHourCollection()
         {
-            _openHoursCollection = new List<DateTimePeriod>();
+            var openHoursCollection = new List<DateTimePeriod>();
 
             if (_wrappedDictionary.Count == 0)
-                return;
+                return openHoursCollection;
 
             IList<DateTimePeriod> sortedList = _wrappedDictionary.Keys.OrderBy(s => s.StartDateTime).ToList();
             DateTimePeriod current = sortedList[0];
@@ -323,12 +331,14 @@ namespace Teleopti.Ccc.Domain.Collection
                 }
                 else
                 {
-                    _openHoursCollection.Add(new DateTimePeriod(currentStart, currentEnd));
+                    openHoursCollection.Add(new DateTimePeriod(currentStart, currentEnd));
                     currentStart = current.StartDateTime;
                     currentEnd = current.EndDateTime;
                 }
             }
-            _openHoursCollection.Add(new DateTimePeriod(currentStart, currentEnd));
+            openHoursCollection.Add(new DateTimePeriod(currentStart, currentEnd));
+
+			return openHoursCollection;
         }
 
         #region Implementation of IEnumerable

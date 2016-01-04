@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 
                var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 
-                deciderResult.FilterSkills(tempSkills);
+                deciderResult.FilterSkills(tempSkills.ToArray(),s => tempSkills.Remove(s),s => tempSkills.Add(s));
                 if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))
                 {
                     e.Cancel = true;

@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
-			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod);
+			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
+			_schedulingResultStateHolder.AddSkills(skills);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
 			result.FilterPeople(_schedulingResultStateHolder.PersonsInOrganization);
-			result.FilterSkills(skills);
+			result.FilterSkills(skills,_schedulingResultStateHolder.RemoveSkill,s => _schedulingResultStateHolder.AddSkills(s));
 
 			var personsToAdd = from p in requestedPersons
 							   where !_schedulingResultStateHolder.PersonsInOrganization.Contains(p)
@@ -73,11 +74,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
 
-			if (skills != null)
-			{
-			    skills.ForEach(_schedulingResultStateHolder.Skills.Add);
-			}
-			
 		    _schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
 		}

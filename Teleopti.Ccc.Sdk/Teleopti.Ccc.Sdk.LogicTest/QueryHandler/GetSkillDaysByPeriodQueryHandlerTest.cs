@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic;
@@ -126,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multi");
-			var skills = new List<ISkill> { skill, multisiteSkill };
+			var skills = new [] { skill, multisiteSkill };
 			var skillStaffPeriod = MockRepository.GenerateMock<ISkillStaffPeriod>();
 			var skillStaffPeriods = new[] { skillStaffPeriod };
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 2);
@@ -141,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			                .Return(new DateTimePeriod(2014, 4, 1, 2014, 4, 1).ChangeEndTime(TimeSpan.FromMinutes(15)));
 
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
-			skills.ForEach(schedulingResultStateHolder.Skills.Add);
+			schedulingResultStateHolder.AddSkills(skills);
 			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
 				{
 					{skill, new List<ISkillDay> { skillDay}},
@@ -168,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multi");
 			var childskill = SkillFactory.CreateChildSkill("S1", multisiteSkill);
-			var skills = new List<ISkill> { multisiteSkill, childskill };
+			var skills = new ISkill[] { multisiteSkill, childskill };
 			var skillStaffPeriod = MockRepository.GenerateMock<ISkillStaffPeriod>();
 			var skillStaffPeriods = new[] { skillStaffPeriod };
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 2);
@@ -183,7 +179,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 							.Return(new DateTimePeriod(2014, 4, 1, 2014, 4, 1).ChangeEndTime(TimeSpan.FromMinutes(15)));
 
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
-			skills.ForEach(schedulingResultStateHolder.Skills.Add);
+			schedulingResultStateHolder.AddSkills(skills);
 			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
 				{
 					{childskill, new List<ISkillDay> { skillDay}},

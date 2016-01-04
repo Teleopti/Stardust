@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -9,9 +10,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
         private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
-        private readonly IList<ISkill> _skills = new List<ISkill>();
-        private SkillStaffPeriodHolder _skillStaffPeriodHolder;
-        public ICollection<IPerson> PersonsInOrganization { get; set; }
+		private readonly HashSet<ISkill> _skills = new HashSet<ISkill>();
+
+		private Lazy<SkillStaffPeriodHolder> _skillStaffPeriodHolder =
+			new Lazy<SkillStaffPeriodHolder>(
+				() => new SkillStaffPeriodHolder(Enumerable.Empty<KeyValuePair<ISkill, IList<ISkillDay>>>()));
+		private Lazy<ISkill[]> _visibleSkills;
+
+		private ISkill[] visibleSkills()
+		{
+			return (from s in _skills
+				where
+					(s.WorkloadCollection.Any() ||
+					 s is IChildSkill || s.SkillType.ForecastSource == ForecastSource.MaxSeatSkill
+					 || s.SkillType.ForecastSource == ForecastSource.NonBlendSkill) &&
+					!(s is IMultisiteSkill)
+				select s).ToArray();
+		}
+
+		public ICollection<IPerson> PersonsInOrganization { get; set; }
         public IScheduleDictionary Schedules { get; set; }
         public bool SkipResourceCalculation { get; set; }
 		public bool UseValidation { get; set; }
@@ -23,6 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public SchedulingResultStateHolder()
         {
             PersonsInOrganization = new List<IPerson>();
+			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
         }
 
 		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IList<ISkillDay>> skillDays)
@@ -30,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			PersonsInOrganization = personsInOrganization;
 			Schedules = schedules;
-			_skillDays = skillDays;
+			SkillDays = skillDays;
 		}
 
         public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
@@ -39,12 +57,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public ISkillStaffPeriodHolder SkillStaffPeriodHolder
         {
-            get
-            {
-                if (_skillStaffPeriodHolder == null)
-                    _skillStaffPeriodHolder = new SkillStaffPeriodHolder(_skillDays);
-
-                return _skillStaffPeriodHolder;
+            get {
+	            return _skillStaffPeriodHolder.Value;
             }
         }
 
@@ -54,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set
             {
                 _skillDays = value;
-                _skillStaffPeriodHolder = null;
+				_skillStaffPeriodHolder = new Lazy<SkillStaffPeriodHolder>(() => new SkillStaffPeriodHolder(_skillDays));
             }
         }
 
@@ -66,12 +80,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: zoet
         /// Created date: 2008-01-10
         /// </remarks>
-        public IList<ISkill> Skills
+        public ISkill[] Skills
         {
-            get { return _skills; }
+            get { return _skills.ToArray(); }
         }
 
-        /// <summary>
+		public void AddSkills(params ISkill[] skills)
+		{
+			skills.ForEach(s => _skills.Add(s));
+			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
+		}
+
+		public void ClearSkills()
+		{
+			_skills.Clear();
+			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
+		}
+
+		public void RemoveSkill(ISkill skill)
+		{
+			if (_skills.Remove(skill))
+			{
+				_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
+			}
+		}
+
+		/// <summary>
         /// Gets the visible skills.
         /// </summary>
         /// <value>The visible skills.</value>
@@ -83,54 +117,33 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get
             {
-                return (from s in _skills
-                        where
-                        (s.WorkloadCollection.Any() ||
-                        s is IChildSkill || s.SkillType.ForecastSource == ForecastSource.MaxSeatSkill
-						|| s.SkillType.ForecastSource == ForecastSource.NonBlendSkill) &&
-                        !(s is IMultisiteSkill)
-                        select s).ToList();
+                return _visibleSkills.Value;
             }
         }
 
-		public IList<ISkill> NonVirtualSkills
-		{
-			get
-			{
-				IList<ISkill> ret = new List<ISkill>();
-				foreach (var visibleSkill in VisibleSkills)
-				{
-					if (visibleSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill &&
-					    visibleSkill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
-						ret.Add(visibleSkill);
-				}
-
-				return ret;
-			}
-		}
-
 		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
         {
-            IList<ISkillDay> ret = new List<ISkillDay>();
+            var ret = new List<ISkillDay>();
 			if (SkillDays == null) return ret;
 
-            foreach (KeyValuePair<ISkill, IList<ISkillDay>> pair in SkillDays)
-            {
-                foreach (ISkillDay skillDay in pair.Value)
-                {
-                    if (theDateList.Contains(skillDay.CurrentDate))
-                        ret.Add(skillDay);
-                }
-            }
+			var days = SkillDays.SelectMany(s => s.Value).ToLookup(k => k.CurrentDate);
+			foreach (var dateOnly in theDateList)
+			{
+				ret.AddRange(days[dateOnly]);
+			}
 
             return ret;
         }
 
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 		{
-			var allSkillDaysOnDate = SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
+			IList<ISkillDay> foundSkillDays;
+			if (SkillDays != null && SkillDays.TryGetValue(skill, out foundSkillDays))
+			{
+				return foundSkillDays.FirstOrDefault(s => s.CurrentDate == dateOnly);
+			}
 
-			return allSkillDaysOnDate.FirstOrDefault(skillday => skillday.Skill.Equals(skill));
+			return null;
 		}
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
@@ -178,6 +191,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _skillStaffPeriodHolder = null;
             _skillDays = null;
             _skills.Clear();
+	        _visibleSkills = null;
             PersonsInOrganization = new List<IPerson>();
             AllPersonAccounts = null;
             Schedules = null;

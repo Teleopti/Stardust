@@ -6,15 +6,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeSchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
-
-		public FakeSchedulingResultStateHolder()
-		{
-			Skills = new List<ISkill>();
-		}
+		private readonly List<ISkill> _skills = new List<ISkill>();
 
 		public void Dispose()
 		{
-
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
@@ -23,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDictionary<ISkill, IList<ISkillDay>> SkillDays { get; set; }
 
 		public IScheduleDictionary Schedules { get; set; }
-		public IList<ISkill> Skills { get; private set; }
+		public ISkill[] Skills { get { return _skills.ToArray(); } }
 		public IList<ISkill> VisibleSkills { get; private set; }
 		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
 		{
@@ -40,7 +35,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public IList<IOptionalColumn> OptionalColumns { get; set; }
-		public IList<ISkill> NonVirtualSkills { get; private set; }
 		public bool UseMinWeekWorkTime { get; set; }
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 		{
@@ -48,5 +42,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
+		public void AddSkills(params ISkill[] skills)
+		{
+			_skills.AddRange(skills);
+		}
+
+		public void ClearSkills()
+		{
+			_skills.Clear();
+		}
+
+		public void RemoveSkill(ISkill skill)
+		{
+			_skills.Remove(skill);
+		}
 	}
 }

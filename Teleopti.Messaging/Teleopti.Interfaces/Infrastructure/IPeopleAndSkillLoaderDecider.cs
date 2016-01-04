@@ -44,16 +44,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// </remarks>
 		int FilterPeople(ICollection<IPerson> people);
 
-		/// <summary>
-		/// Filters the skills.
-		/// Removing entries with Ids not in SkillGuidDependencies
-		/// </summary>
-		/// <param name="skills">The skills.</param>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2009-01-21
-		/// </remarks>
-		int FilterSkills(ICollection<ISkill> skills);
+		int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
 
 		///<summary>
 		/// Shows how many percent of all people injected into method FilterPeople that is filtered out. If FilterPeople is not executed then zero wil be returned.

@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			_personAbsenceAccountRepository.Stub(x => x.FindByUsers(null)).Return(accounts).IgnoreArguments();
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(null, period, people));
+			_skillRepository.Stub(x => x.FindAllWithSkillDays(new DateOnlyPeriod())).Return(new List<ISkill>()).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
 
 			_target.Execute(null, period, people);

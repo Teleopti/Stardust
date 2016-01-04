@@ -13,6 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		double PercentageOfPeopleFiltered { get; }
 		void Execute(IScenario scenario, DateTimePeriod period, ISkill skill);
 		int FilterPeople(ICollection<IPerson> people);
-		int FilterSkills(ICollection<ISkill> skills);
+		int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
 	}
 }

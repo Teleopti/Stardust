@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -53,11 +54,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
 			
-			var allSkills = _skillRepository.FindAllWithSkillDays(period);
+			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 
 			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.AllPeople);
-			deciderResult.FilterSkills(allSkills);
 			deciderResult.FilterPeople(people.AllPeople);
 
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
@@ -66,7 +66,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 			stateHolder.PersonsInOrganization = people.AllPeople;
 			stateHolder.SkillDays = forecast;
-			allSkills.ForEach(stateHolder.Skills.Add);
+			stateHolder.AddSkills(allSkills);
+			deciderResult.FilterSkills(allSkills,stateHolder.RemoveSkill, s => stateHolder.AddSkills(s));
+			
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);

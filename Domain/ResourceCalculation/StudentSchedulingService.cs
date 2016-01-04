@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
             var skills = _schedulingResultStateHolder.Skills;
-            if (skills.Count == 0) return false;
+            if (skills.Length == 0) return false;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 																		schedulingOptions.ConsiderShortBreaks);
 

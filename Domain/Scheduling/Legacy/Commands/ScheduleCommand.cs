@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
 				var minutesPerInterval = 15;
-				if (schedulerStateHolder.SchedulingResultState.Skills.Count > 0)
+				if (schedulerStateHolder.SchedulingResultState.Skills.Length > 0)
 				{
 					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 				}

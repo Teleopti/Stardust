@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             Expect.Call(_peopleAndSkillLoaderDecider.Execute(_scenario, _period, _persons)).Return(_loaderDeciderResult);
             Expect.Call(() => _schedulerStateLoader.EnsureSkillsLoaded(new DateOnlyPeriod())).IgnoreArguments();
-            Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
-            Expect.Call(_loaderDeciderResult.FilterSkills(new HashSet<ISkill>())).Return(0).IgnoreArguments();
+            Expect.Call(_schedulingResultStateHolder.Skills).Return(new ISkill[]{});
+            Expect.Call(_loaderDeciderResult.FilterSkills(new ISkill[]{},null,null)).Return(0).IgnoreArguments();
             Expect.Call(_schedulingResultStateHolder.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>>());
             Expect.Call(_schedulingResultStateHolder.PersonsInOrganization).Return(new List<IPerson>());
             Expect.Call(_loaderDeciderResult.FilterPeople(new List<IPerson>())).Return(0);

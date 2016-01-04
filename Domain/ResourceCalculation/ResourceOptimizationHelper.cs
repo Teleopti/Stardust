@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (stateHolder.SchedulingResultState.SkipResourceCalculation)
 				return;
 
-			if (stateHolder.SchedulingResultState.Skills.Count.Equals(0))
+			if (stateHolder.SchedulingResultState.Skills.Length == 0)
 				return;
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))

@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     var activity = (IActivity) layer.Payload;
                     if ((activity).RequiresSkill)
                     {
-                     IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period.StartDateTime, person,activity );
+                     IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period, dateOnly, person,activity );
 
                         bool found = openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period));
                         if (!found)
@@ -107,41 +107,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return null;
         }
 
-        private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTime startDateTime, IPerson person,IActivity activity )
+        private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTimePeriod period, DateOnly date, IPerson person,IActivity activity )
         {
-            IEnumerable<DateTimePeriod> ret = new List<DateTimePeriod>();
+            var ret = new List<DateTimePeriod>();
 
-            IList<ISkill> agentSkills = SkillsOnPerson(startDateTime, person);
+            IList<ISkill> agentSkills = SkillsOnPerson(date, person);
 
             if(agentSkills.Count == 0)
                 return ret;
             if(_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count == 0)
                 return ret;
 
-            ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-           
-            for (int index = 0; index < agentSkills.Count; index++)
+	        for (int index = 0; index < agentSkills.Count; index++)
             {
-                if (!(agentSkills[index].Activity.Equals( activity)))
+	            var agentSkill = agentSkills[index];
+	            if (!agentSkill.Activity.Equals( activity))
                 {
                     continue;
                 }
-                if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkills[index], out skillStaffPeriodDictionary))
-                {
-	                var oldPlusNew = ret.Union(skillStaffPeriodDictionary.SkillOpenHoursCollection);
-                    ret = DateTimePeriod.MergePeriods(oldPlusNew);
+	            ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
+	            if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkill, out skillStaffPeriodDictionary))
+	            {
+	                ret.AddRange(skillStaffPeriodDictionary.SkillOpenHoursCollection.Where(s => s.Intersect(period)));
                 }   
             }
-            return ret;
+            return DateTimePeriod.MergePeriods(ret);
         }
  
-        public static IList<ISkill> SkillsOnPerson(DateTime dateToCheckOn, IPerson person)
+        public static IList<ISkill> SkillsOnPerson(DateOnly dateToCheckOn, IPerson person)
         {
             var skills = new List<ISkill>();
-            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-            var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateToCheckOn, timeZoneInfo));
             
-			var period = person.Period(scheduleDateOnlyPerson);
+			var period = person.Period(dateToCheckOn);
 			if (period != null)
             {
             	skills.AddRange(from personSkill in period.PersonSkillCollection

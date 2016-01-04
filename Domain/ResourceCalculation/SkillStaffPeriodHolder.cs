@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
-using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -225,17 +222,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IList<ISkillStaffPeriod> SkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
         {
             var skillStaffPeriods = new List<ISkillStaffPeriod>();
+	        var intervals = utcPeriod.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
 	        skills.ForEach(skill =>
 	        {
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
 				{
-					foreach (var dictionary in content)
-					{
-						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+					var lookup = content.ForLookup();
 
-						skillStaffPeriods.Add(dictionary.Value);
+					foreach (var hourSlot in intervals)
+					{
+						skillStaffPeriods.AddRange(lookup[hourSlot].Where(s => utcPeriod.Intersect(s.Period)));
 					}
 				}
 	        });
@@ -245,18 +242,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
 			var skillStaffPeriods = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
+			var intervals = utcPeriod.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
 			foreach (ISkill skill in skills)
 			{
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
 				{
 					var newDictionary = new SkillStaffPeriodDictionary(skill);
-					foreach (var dictionary in content)
+					var lookup = content.ForLookup();
+
+					foreach (var hourSlot in intervals)
 					{
-						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
-						
-						newDictionary.Add(dictionary.Key, dictionary.Value);
+						lookup[hourSlot].Where(s => utcPeriod.Intersect(s.Period)).ForEach(newDictionary.Add);
 					}
 					if(newDictionary.Count > 0 )
 						skillStaffPeriods.Add(skill, newDictionary);

@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(
 				 new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2, skillStaffPeriod3 }));
 
-			_schedulerStateHolder.SchedulingResultState.Skills.Add(skill);
+			_schedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			_schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
 			_schedulerStateHolder.SchedulingResultState.SkillDays.Add(skill, new List<ISkillDay> { skillDay });
 
@@ -416,11 +416,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
 		}
 
-		private static void MyEventHandler(object sender, EventMessageArgs e)
-		{
-		}
-
-		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void VerifyOnLoadWithoutRtaEnabled()
 		{
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();

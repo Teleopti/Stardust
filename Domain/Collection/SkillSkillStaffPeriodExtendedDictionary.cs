@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security;
-using System.Security.Permissions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-
-
     [Serializable]
     public class SkillSkillStaffPeriodExtendedDictionary : Dictionary<ISkill, ISkillStaffPeriodDictionary>, ISkillSkillStaffPeriodExtendedDictionary
     {

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
    
             Assert.AreEqual(0f, result.PercentageOfPeopleFiltered);
             Assert.AreEqual(0, result.FilterPeople(new List<IPerson>()));
-            Assert.AreEqual(0, result.FilterSkills(new List<ISkill>()));
+            Assert.AreEqual(0, result.FilterSkills(new ISkill[]{},null,null));
         }
     }
 }

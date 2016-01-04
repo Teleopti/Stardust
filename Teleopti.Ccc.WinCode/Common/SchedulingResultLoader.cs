@@ -123,26 +123,26 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void filterSkills()
         {
-            _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills);
+            _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.RemoveSkill,s => SchedulerState.SchedulingResultState.AddSkills(s));
         }
 
-        private void initializeSkills(IUnitOfWork uow)
-        {
-            ICollection<ISkill> skills = _repositoryFactory
-                .CreateSkillRepository(uow)
-                .FindAllWithSkillDays(SchedulerState.RequestedPeriod.DateOnlyPeriod);
+	    private void initializeSkills(IUnitOfWork uow)
+	    {
+		    var skills = _repositoryFactory
+			    .CreateSkillRepository(uow)
+			    .FindAllWithSkillDays(SchedulerState.RequestedPeriod.DateOnlyPeriod)
+			    .ForEach(s =>
+			    {
+					_lazyManager.Initialize(s);
+					_lazyManager.Initialize(s.SkillType);
+			    })
+			    .ToArray();
 
-            SchedulerState.SchedulingResultState.Skills.Clear();
+		    SchedulerState.SchedulingResultState.ClearSkills();
+		    SchedulerState.SchedulingResultState.AddSkills(skills);
+	    }
 
-            foreach (ISkill skill in skills)
-            {
-                _lazyManager.Initialize(skill);
-                _lazyManager.Initialize(skill.SkillType);
-                SchedulerState.SchedulingResultState.Skills.Add(skill);
-            }
-        }
-
-        private void initializeSkillDays()
+	    private void initializeSkillDays()
         {
             SchedulerState.SchedulingResultState.SkillDays =
                 _skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.DateOnlyPeriod,

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
 
             SchedulingResultStateHolder result = Create(period);
-            result.Skills.Add(skill);
+            result.AddSkills(skill);
           
             return result;
         }

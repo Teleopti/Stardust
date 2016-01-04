@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,
 												  IScheduleDictionary dictionary, IScheduleExtractor extractor,
-												  DateTimePeriod period, IList<ISkill> skills,
+												  DateTimePeriod period, ISkill[] skills,
 												  IProjectionService service1,
 												  IVisualLayerCollection visualLayerCollection,
 												  IProjectionService service2, IProjectionService service3,
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(date, date.AddDays(1));
 
 			var skill1 = _mocks.StrictMock<ISkill>();
-			IList<ISkill> skills = new List<ISkill> { skill1 };
+			var skills = new [] { skill1 };
 
 			var service1 = _mocks.StrictMock<IProjectionService>();
 			var service2 = _mocks.StrictMock<IProjectionService>();
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_stateHolder).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
-				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>());
+				Expect.Call(_stateHolder.Skills).Return(new ISkill[]{});
 			}
 			using (_mocks.Playback())
 			{

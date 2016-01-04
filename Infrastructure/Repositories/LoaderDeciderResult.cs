@@ -84,26 +84,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return origCount - people.Count;
 		}
 
-		public int FilterSkills(ICollection<ISkill> skills)
+		public int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
 		{
 			if (SkillGuidDependencies == null)
 				throw new InvalidOperationException("Before filtering skills, run Execute method");
 
-			int orgCount = skills.Count;
+			int orgCount = skills.Length;
 			IEnumerable<ISkill> skillsToRemove = (from skill in skills
 				where !skill.Id.HasValue || !SkillGuidDependencies.Contains(skill.Id.Value)
 				select skill).ToList();
 			foreach (ISkill skillToRemove in skillsToRemove)
 			{
-				skills.Remove(skillToRemove);
+				removeSkill(skillToRemove);
 			}
-			foreach (IChildSkill child in skills.OfType<IChildSkill>().ToList())
+			foreach (var multisiteSkill in skills.OfType<IChildSkill>().Select(c => c.ParentSkill).Distinct().ToList())
 			{
-				if (!skills.Contains(child.ParentSkill))
-					skills.Add(child.ParentSkill);
+				addSkill(multisiteSkill);
 			}
 
-			return orgCount - skills.Count;
+			return orgCount - skills.Length;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -10,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					foreach (var skill in skills)
 					{
 						LazyLoadingManager.Initialize(skill.SkillType);
-						_schedulerState.SchedulingResultState.Skills.Add(skill);
+						_schedulerState.SchedulingResultState.AddSkills(skill);
 					}
 				}
 			}
@@ -196,14 +196,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			using (PerformanceOutput.ForOperation("Loading skills"))
 			{
 				ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-				ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
+				var skills =
+					service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod)
+						.ForEach(s => _lazyManager.Initialize(s.SkillType))
+						.ToArray();
 
-				_schedulerState.SchedulingResultState.Skills.Clear();
-				foreach (ISkill skill in skills)
-				{
-					_lazyManager.Initialize(skill.SkillType);
-					_schedulerState.SchedulingResultState.Skills.Add(skill);
-				}
+				_schedulerState.SchedulingResultState.ClearSkills();
+				_schedulerState.SchedulingResultState.AddSkills(skills);
 			}
 		}
 

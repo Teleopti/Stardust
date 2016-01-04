@@ -1,8 +1,5 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -18,7 +15,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, ISchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit)
 		{
 			var persons = stateHolder.FilteredPersonDictionary.Values;
-			var dates = stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection();
 			var uniqueRestrictions = new HashSet<IEffectiveRestriction>();
 			var uniqueBags = new HashSet<IRuleSetBag>();
 			var uniqueRuleSets = new HashSet<IWorkShiftRuleSet>();
@@ -27,12 +23,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			foreach (var person in persons)
 			{
 				var range = dic[person];
-				foreach (var date in dates)
+				var scheduleDays = range.ScheduledDayCollection(stateHolder.RequestedPeriod.DateOnlyPeriod);
+				foreach (var scheduleDay in scheduleDays)
 				{
-					var scheduleDay = range.ScheduledDay(date);
 					var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
 					uniqueRestrictions.Add(effectiveRestriction);
-					var personPeriod = person.Period(date);
+					var personPeriod = person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly);
 					if (personPeriod == null)
 						continue;
 					

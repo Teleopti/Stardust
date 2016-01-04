@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			    return 0;
 		    }
 
-		    public int FilterSkills(ICollection<ISkill> skills)
+			public int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
 		    {
 			    return 0;
 		    }

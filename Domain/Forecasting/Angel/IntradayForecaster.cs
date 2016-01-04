@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -30,13 +29,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public IDictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>> CalculatePattern(IWorkload workload, DateOnlyPeriod templatePeriod)
 		{
-			var workloadDays = _loadStatistics.LoadWorkloadDay(workload, templatePeriod).ToArray();
+			var workloadDays = _loadStatistics.LoadWorkloadDay(workload, templatePeriod).ToLookup(k => k.CurrentDate.DayOfWeek);
 
 			var sortedTemplateTaskPeriodsDic = new Dictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>>();
 			foreach (DayOfWeek day in Enum.GetValues(typeof (DayOfWeek)))
 			{
-				var workloadDaysForDay = workloadDays.Where(w => w.CurrentDate.DayOfWeek == day);
-				sortedTemplateTaskPeriodsDic.Add(day, calculateTemplateTaskPeriods(workloadDaysForDay, workload));
+				sortedTemplateTaskPeriodsDic.Add(day, calculateTemplateTaskPeriods(workloadDays[day], workload));
 			}
 			return sortedTemplateTaskPeriodsDic;
 		}
@@ -99,20 +97,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 							};
 
 			//Create the template from the extended list
-			IList<ITemplateTaskPeriod> templateTaskPeriods = new List<ITemplateTaskPeriod>();
+			var defaultResoulution = TimeSpan.FromMinutes(workload.Skill.DefaultResolution);
+			var oneTickTaskTime = new TimeSpan(1);
+			var templateTaskPeriods = new List<ITemplateTaskPeriod>();
+
 			foreach (var time in times)
 			{
 				var tasks = time.Task;
-				var task = new Task(tasks, new TimeSpan(1), new TimeSpan(1));
+				var task = new Task(tasks, oneTickTaskTime, oneTickTaskTime);
 
-				var defaultResoulution = workload.Skill.DefaultResolution;
-				var dateTimePeriod = new DateTimePeriod(startDateTime.Add(time.Period), startDateTime.Add(time.Period).Add(TimeSpan.FromMinutes(defaultResoulution)));
+				var dateTime = startDateTime.Add(time.Period);
+				var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.Add(defaultResoulution));
 				templateTaskPeriods.Add(new TemplateTaskPeriod(task, dateTimePeriod));
 			}
 
 			var list = templateTaskPeriods.OrderBy(tp => tp.Period.StartDateTime).ToList();
 			Smoothing(list);
-			return new ReadOnlyCollection<ITemplateTaskPeriod>(list);
+			return list;
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 				newSkill.SetTemplateAt(6, new SkillDayTemplate("fake", templateSkillDataPeriods));
 				newSkills.Add(newSkill);
 				site.MaxSeatSkill = newSkill;
-                _schedulingResultStateHolder.Skills.Add(newSkill);
+                _schedulingResultStateHolder.AddSkills(newSkill);
 			}
 	    }
 	}

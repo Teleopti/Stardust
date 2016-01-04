@@ -3691,9 +3691,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulingResultState.PersonsInOrganization = peopleInOrg;
 				Log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
-				ICollection<ISkill> skills = stateHolder.SchedulingResultState.Skills;
-				int orgSkills = skills.Count;
-				int removedSkills = result.FilterSkills(skills);
+				var skills = stateHolder.SchedulingResultState.Skills;
+				int orgSkills = skills.Length;
+				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));
 				Log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
@@ -3702,12 +3702,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Action<ILoaderDeciderResult> setDeciderResult, Func<ILoaderDeciderResult> getDeciderResult)
 		{
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
-			var toggleManager = _container.Resolve<IToggleManager>();
 			foreach (ISkill skill in skills)
 			{
 				if (skill.SkillType is SkillTypePhone)
 					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade();
-				stateHolder.SchedulingResultState.Skills.Add(skill);
+				stateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
 

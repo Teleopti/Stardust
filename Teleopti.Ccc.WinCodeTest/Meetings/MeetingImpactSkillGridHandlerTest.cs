@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IMeetingViewModel _meetingViewModel;
         private ISkill _skill;
-        private IList<ISkill> _skills;
+        private ISkill[] _skills;
         private ISkillTypePhone _skillTypePhone;
         private IScenario _scenario;
         private IPeopleAndSkillLoaderDecider _decider;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var startRequestedPeriod = new DateTime(2010, 11, 2, 23, 0, 0, DateTimeKind.Utc);
             _requestedPeriod = new DateTimePeriod(startRequestedPeriod, startRequestedPeriod.AddDays(20));
             _skill = _mocks.StrictMock<ISkill>();
-            _skills = new List<ISkill> { _skill };
+            _skills = new [] { _skill };
 
             _skillTypePhone = _mocks.StrictMock<ISkillTypePhone>();
             _scenario = new Scenario("scenario");
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(),false)}));
             
             Expect.Call(_decider.Execute(_scenario, _requestedPeriod, new List<IPerson>())).IgnoreArguments().Return(_deciderResult);
-            Expect.Call(_deciderResult.FilterSkills(_skills)).IgnoreArguments().Return(1);
+            Expect.Call(_deciderResult.FilterSkills(_skills,null,null)).IgnoreArguments().Return(1);
 
             Expect.Call(_meetingImpactView.ClearTabPages);
 

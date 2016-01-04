@@ -68,7 +68,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: zoet
         /// Created date: 2008-01-10
         /// </remarks>
-        IList<ISkill> Skills { get; }
+        ISkill[] Skills { get; }
 
         /// <summary>
         /// Gets the visible skills.
@@ -101,7 +101,6 @@ namespace Teleopti.Interfaces.Domain
 
         ///<summary>
         ///</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 
 		///<summary>
@@ -118,21 +117,13 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the rules to run.
 		/// </summary>
 		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		INewBusinessRuleCollection GetRulesToRun();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<IOptionalColumn> OptionalColumns { get; set; }
 		
-		/// <summary>
-		/// Gets the visible skills without max seat and non-blend skills
-		/// </summary>
-		/// <value>The visible skills.</value>
-	    IList<ISkill> NonVirtualSkills { get; }
-
         /// <summary>
         /// If rule for min week work time should be used
         /// </summary>
@@ -141,5 +132,8 @@ namespace Teleopti.Interfaces.Domain
 	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
 
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
+	    void AddSkills(params ISkill[] skills);
+	    void ClearSkills();
+	    void RemoveSkill(ISkill skill);
     }
 }

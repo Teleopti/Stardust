@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			{
 				if (skill.SkillType is SkillTypePhone)
 					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade();
-				stateHolder.SchedulingResultState.Skills.Add(skill);
+				stateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
 

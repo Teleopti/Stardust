@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			schedulePeriod.SetDaysOff(1);
 			agent.AddSchedulePeriod(schedulePeriod);
 
-			SchedulerStateHolder.SchedulingResultState.Skills.Add(skill);
+			SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, weekPeriod.StartDate, scenario);
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, weekPeriod);
 			SchedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             	var result = _decider.Execute(_schedulerStateHolder.RequestedScenario, _schedulerStateHolder.RequestedPeriod.Period(),
             	                 _meetingViewModel.Meeting.MeetingPersons.Select(p => p.Person).ToList());
 
-            	result.FilterSkills(_skills);
+            	result.FilterSkills(_skills.ToArray(),s => _skills.Remove(s),_skills.Add);
             }
 
             _meetingImpactView.ClearTabPages();

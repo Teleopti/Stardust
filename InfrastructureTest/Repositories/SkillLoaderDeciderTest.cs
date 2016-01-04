@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                         };
 
             Assert.AreEqual(3, listToFilter.Count);
-            int removed = target.FilterSkills(listToFilter);
+            int removed = target.FilterSkills(listToFilter.ToArray(),s => listToFilter.Remove(s),listToFilter.Add);
             Assert.AreEqual(1, listToFilter.Count);
             Assert.AreSame(validSkill, listToFilter[0]);
             Assert.AreEqual(2, removed);
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             parent.AddChildSkill(validSkill);
 
             IList<ISkill> list2Filter = new List<ISkill> { validSkill, parent };
-            int removed = target.FilterSkills(list2Filter);
+			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
             Assert.AreEqual(0, removed);
             Assert.AreEqual(2, list2Filter.Count);
         }
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             parent.AddChildSkill(validSkill);
 
             IList<ISkill> list2Filter = new List<ISkill> { validSkill };
-            int removed = target.FilterSkills(list2Filter);
+            int removed = target.FilterSkills(list2Filter.ToArray(),s => list2Filter.Remove(s),list2Filter.Add);
             Assert.AreEqual(-1, removed);
             Assert.AreEqual(2, list2Filter.Count);
         }
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			parent.AddChildSkill(validSkill2);
 
 			IList<ISkill> list2Filter = new List<ISkill> { validSkill1, validSkill2 };
-			int removed = target.FilterSkills(list2Filter);
+			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
 			Assert.AreEqual(-1, removed);
 			Assert.AreEqual(3, list2Filter.Count);
 		}
@@ -191,7 +192,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             parent.SetId(Guid.NewGuid());
 
             IList<ISkill> list2filter = new List<ISkill> { parent };
-            int removed = target.FilterSkills(list2filter);
+			int removed = target.FilterSkills(list2filter.ToArray(), s => list2filter.Remove(s), list2filter.Add);
             Assert.AreEqual(1, removed);
             Assert.AreEqual(0, list2filter.Count);
         }
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotCallFilterSkillBeforeExecute()
         {
-            target.FilterSkills(new List<ISkill>());
+            target.FilterSkills(new ISkill[]{},null,null);
         }
 
         [Test]

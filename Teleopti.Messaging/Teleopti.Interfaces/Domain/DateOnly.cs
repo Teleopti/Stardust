@@ -31,29 +31,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DateOnly"/> struct.
 		/// </summary>
-		/// <param name="year">The year.</param>
-		/// <param name="month">The month.</param>
-		/// <param name="day">The day.</param>
-		/// <param name="kind">The kind of datetime. For example Utc.</param>
-		/// <remarks>
-		/// Created by: mathiass
-		/// Created date: 2011-10-26
-		/// </remarks>
-		private DateOnly(int year, int month, int day, DateTimeKind kind)
-		{
-			_internalDateTime = new DateTime(year, month, day, 0, 0, 0, 0, kind);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DateOnly"/> struct.
-		/// </summary>
 		/// <param name="dateTime">The date time.</param>
 		/// <remarks>
 		/// Created by: micke
 		/// Created date: 2008-10-18
 		/// </remarks>
 		public DateOnly(DateTime dateTime)
-			: this(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Kind)
+			: this(dateTime.Year, dateTime.Month, dateTime.Day)
 		{
 
 		}

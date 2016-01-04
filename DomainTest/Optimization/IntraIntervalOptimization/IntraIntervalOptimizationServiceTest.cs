@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private IPerson _person;
 		private ISkill _skill;
-		private IList<ISkill> _skills;
+		private ISkill[] _skills;
 		private DateOnly _dateOnly;
 		private ISkillStaffPeriod _skillStaffPeriodAfter;
 		private IIntraIntervalIssues _issuesBefore;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_person = PersonFactory.CreatePerson("person");
 			_skill = SkillFactory.CreateSkill("skill");
-			_skills = new List<ISkill>{_skill};
+			_skills = new []{_skill};
 			_skillStaffPeriodAfter = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriodBefore = _mock.StrictMock<ISkillStaffPeriod>();
 			_issuesBefore = new IntraIntervalIssues();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var maxSeatSkill = SkillFactory.CreateSiteSkill("maxSeat");
 			var emailSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeEmail(), 15, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, TimeSpan.FromHours(1));
 			var backOfficeSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeBackoffice(), 15, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, TimeSpan.FromHours(1));
-			_skills = new List<ISkill> { maxSeatSkill, emailSkill, backOfficeSkill };
+			_skills = new [] { maxSeatSkill, emailSkill, backOfficeSkill };
 
 			using (_mock.Record())
 			{

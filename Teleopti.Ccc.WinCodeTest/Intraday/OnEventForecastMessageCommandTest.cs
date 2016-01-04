@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -6,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			_schedulerStateHolder.SchedulingResultState.Skills.Add(skill);
+			_schedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			_schedulerStateHolder.SchedulingResultState.Schedules = _scheduleDictionary;
 			target.Execute(new EventMessage());
 

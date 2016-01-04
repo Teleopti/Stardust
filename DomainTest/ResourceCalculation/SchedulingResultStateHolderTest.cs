@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			target.SeniorityWorkDayRanks = new SeniorityWorkDayRanks();
             IList<ISkill> list = target.VisibleSkills;
             Assert.IsNotNull(list);
-            Assert.AreEqual(1, target.Skills.Count);
+            Assert.AreEqual(1, target.Skills.Length);
             Assert.IsNotNull(target.PersonsInOrganization);
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);
@@ -85,32 +85,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreNotSame(previousHolder, target.SkillStaffPeriodHolder);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
 		public void VisibleSkillsShouldContainMaxSeatSkillsAndNonBlendSkills()
 		{
 			ISkill normal = SkillFactory.CreateSiteSkill("normal");
 			ISkill maxSeat = SkillFactory.CreateSiteSkill("maxseat");
 			ISkill nonBlend = SkillFactory.CreateNonBlendSkill("nonBlend");
 			SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period);
-			target.Skills.Add(normal);
-			target.Skills.Add(maxSeat);
-			target.Skills.Add(nonBlend);
+			target.AddSkills(normal,maxSeat,nonBlend);
 			IList<ISkill> result = target.VisibleSkills;
 			Assert.AreEqual(3, result.Count);
-		}
-
-		[Test]
-		public void ShouldGetSkillsWithoutMaxSeatSkill()
-		{
-			ISkill normal = SkillFactory.CreateSkillWithWorkloadAndSources();
-			ISkill maxSeat = SkillFactory.CreateSiteSkill("maxseat");
-			ISkill nonBlend = SkillFactory.CreateNonBlendSkill("nonBlend");
-			SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period);
-			target.Skills.Add(normal);
-			target.Skills.Add(maxSeat);
-			target.Skills.Add(nonBlend);
-			IList<ISkill> result = target.NonVirtualSkills;
-			Assert.AreEqual(1, result.Count);
 		}
 
         [Test]

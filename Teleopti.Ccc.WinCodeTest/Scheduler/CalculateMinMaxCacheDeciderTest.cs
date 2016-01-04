@@ -147,26 +147,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_personDic);
 			Expect.Call(_stateHolder.RequestedPeriod)
 				  .Return(new DateOnlyPeriodAsDateTimePeriod(
-							  new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), TimeZoneInfo.Utc));
+							  new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
 			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
 
 
 			//this should get us 3 unique restrictions
 			Expect.Call(_scheduleDictionary[_person1]).Return(_range);
-			Expect.Call(_range.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay);
+			Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(DateOnly.MinValue,DateOnly.MinValue.AddDays(1)))).Return(new []{_scheduleDay,_scheduleDay});
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
 				  .Return(restriction(new ShiftCategory("Hej")));
-			Expect.Call(_range.ScheduledDay(DateOnly.MinValue.AddDays(1))).Return(_scheduleDay);
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
 				  .Return(restriction(null));
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, TimeZoneInfo.Utc));
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue.AddDays(1), TimeZoneInfo.Utc));
 
 			Expect.Call(_scheduleDictionary[_person2]).Return(_range);
-			Expect.Call(_range.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay);
+			Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)))).Return(new[] { _scheduleDay, _scheduleDay });
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
 				  .Return(restriction(new ShiftCategory("Hopp")));
-			Expect.Call(_range.ScheduledDay(DateOnly.MinValue.AddDays(1))).Return(_scheduleDay);
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
 				  .Return(restriction(null));
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, TimeZoneInfo.Utc));
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue.AddDays(1), TimeZoneInfo.Utc));
 			// unique rulesets should be 3, so the total should en up to 3*3=9
 		}
 

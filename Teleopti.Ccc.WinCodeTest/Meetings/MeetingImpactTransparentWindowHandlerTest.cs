@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IMeetingViewModel _meetingViewModel;
         private ISkill _skill;
-        private IList<ISkill> _skills;
+        private ISkill[] _skills;
         private MeetingImpactTransparentWindowHandler _target;
         
         [SetUp]
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skill = _mocks.StrictMock<ISkill>();
-            _skills = new List<ISkill> { _skill };
+            _skills = new [] { _skill };
             _target = new MeetingImpactTransparentWindowHandler(_meetingImpactView,_meetingViewModel,_schedulingResultStateHolder);
         }
 
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new ISkill[]{});
 			}
 
 			using (_mocks.Playback())

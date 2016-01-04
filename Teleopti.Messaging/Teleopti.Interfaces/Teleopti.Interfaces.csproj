@@ -134,6 +134,7 @@
     <Compile Include="Domain\GamificationSettingRuleSet.cs" />
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />
+    <Compile Include="Domain\HourSlot.cs" />
     <Compile Include="Domain\IAgentBadgeInfo.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeRepository.cs" />
