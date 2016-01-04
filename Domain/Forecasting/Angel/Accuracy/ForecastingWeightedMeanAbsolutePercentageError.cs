@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
@@ -11,24 +12,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		{
 			var diffSum = 0d;
 			var tasksSum = 0d;
+
+			var forecastingForLastYearLookup = forecastingForLastYear.ToLookup(k => k.CurrentDate);
 			foreach (var day in historicalDataForLastYear)
 			{
 				var diff = 0d;
-				foreach (var forecastingDay in forecastingForLastYear)
+				foreach (var forecastingDay in forecastingForLastYearLookup[day.CurrentDate])
 				{
-					if (forecastingDay.CurrentDate == day.CurrentDate)
+					if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001 && Math.Abs(forecastingDay.Tasks) < 0.000001)
 					{
-						if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001 && Math.Abs(forecastingDay.Tasks) < 0.000001)
-						{
-							diff = 0d;
-						}
-						else
-						{
-							diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks);
-							tasksSum += day.TotalStatisticCalculatedTasks;
-						}
-						break;
+						diff = 0d;
 					}
+					else
+					{
+						diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks);
+						tasksSum += day.TotalStatisticCalculatedTasks;
+					}
+					break;
 				}
 
 				diffSum += diff;
