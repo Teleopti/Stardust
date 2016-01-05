@@ -1,1 +1,9 @@
-﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>
+﻿<div class="wfm-switch">
+	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingLogOnUserTimeZone" />
+	<label for="switch1">
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingLogOnUserTimeZone!=true" translate>userTimeZone</span>
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingLogOnUserTimeZone==true" translate>requesterTimeZone</span>
+		<span class="wfm-switch-toggle"></span>
+	</label>
+</div>
+<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>

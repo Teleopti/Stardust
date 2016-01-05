@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions', 'requestCommandParamsHolder'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions', 'requestCommandParamsHolder','CurrentUserInfo'];
 
-	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions, requestCommandParamsHolder) {
+	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
 
 		var vm = this;
 
@@ -66,20 +66,23 @@
 			else return totalHours + ":" + minutes;
 		}
 
-		function prepareComputedColumns(dataArray) {
-			angular.forEach(dataArray, function(row) {
+		function prepareComputedColumns(target) {
+			var userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			
+			angular.forEach(target.requests, function (row) {
 				var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
-				
-				var angularTimezone = moment.tz(row.TimeZone).format("Z");
+				var angularTimezone = moment.tz(target.isUsingLogOnUserTimeZone == true ? row.TimeZone : userTimeZone).format("Z");
 				row.GetDuration = function () {
 					return formatToTimespan(length, row.IsFullDay);
 				}
 				row.FormatedPeriodStartTime = function () {
-					if (row.IsFullDay) return $filter('date')(row.PeriodStartTime, "shortDate", angularTimezone);
-					else return $filter('date')(row.PeriodStartTime, 'short', angularTimezone);
+					var periodStartTime = moment.tz(row.PeriodStartTime, row.TimeZone).toDate();
+					if (row.IsFullDay) return $filter('date')(periodStartTime, "shortDate", angularTimezone);
+					else return $filter('date')(periodStartTime, 'short', angularTimezone);
 				}
-				row.FormatedPeriodEndTime = function () {			
-					if (row.IsFullDay) return $filter('date')(row.PeriodEndTime, "shortDate", angularTimezone);
+				row.FormatedPeriodEndTime = function () {
+					var periodEndTime = moment.tz(row.PeriodEndTime, row.TimeZone).toDate();
+					if (row.IsFullDay) return $filter('date')(periodEndTime, "shortDate", angularTimezone);
 					else return $filter('date')(row.PeriodEndTime, "short", angularTimezone);
 				}
 				row.GetType = function () {
@@ -90,7 +93,7 @@
 					return typeText;
 				}
 			});
-			return dataArray;
+			return target.requests;
 		}
 
 		function clearSelection() {
@@ -110,7 +113,7 @@
 			restrict: 'E',
 			scope: {
 				requests: '=',
-				sortingOrders: '='				
+				sortingOrders: '='
 			},
 			require: ['requestsTableContainer'],
 			templateUrl: 'js/requests/html/requests-table-container.tpl.html',		
@@ -120,13 +123,17 @@
 		function postlink(scope, elem, attrs, ctrls) {			
 			var requestsTableContainerCtrl = ctrls[0];			
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
-			
-			scope.$watchCollection(function() {
-				return scope.requestsTableContainer.requests;
+	
+			scope.$watch(function () {
+				var target= {
+					requests: scope.requestsTableContainer.requests,
+					isUsingLogOnUserTimeZone: scope.requestsTableContainer.isUsingLogOnUserTimeZone
+				}
+				return target;
 			}, function (v) {
 				requestsTableContainerCtrl.clearSelection();
 				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
-			});
+			},true);
 
 			scope.$on('reload.requests.immediately', function () {
 				requestsTableContainerCtrl.clearSelection();
