@@ -49,32 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return creatorInfo;
 		}
 
-		public AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddFullDayAbsenceCommand command)
-		{
-			var person = _personRepository.Load(command.PersonId);
-			var absence = _absenceRepository.Load(command.AbsenceId);
-			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
-
-			var scheduleRange = getScheduleRangeForPeriod(period, person);
-			var scheduleDays = scheduleRange.ScheduledDayCollection(period).ToList();
-			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(command.StartDate));
-
-			var previousDay = scheduleDays.First();
-			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] { previousDay }), previousDay);
-
-			var creatorInfo = new AbsenceCreatorInfo()
-			{
-				Absence = absence,
-				AbsenceTimePeriod = absenceTimePeriod,
-				Person = person,
-				ScheduleDay = scheduleDay,
-				ScheduleRange = scheduleRange,
-				TrackedCommandInfo = command.TrackedCommandInfo
-			};
-
-			return creatorInfo;
-		}
-
 		public AbsenceCreatorInfo GetCreatorInfoForIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var person = _personRepository.Load(command.PersonId);
@@ -127,17 +101,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment != null)
 			{
-				var personAssignmentStartDateTime = personAssignment.Period.StartDateTime;
-				var personAssignmentEndDateTime = personAssignment.Period.EndDateTime;
-
-				if (personAssignmentStartDateTime <= startTime)
+				DateTime personAssignmentStartTime;
+				DateTime personAssignmentEndTime;
+				if (!personAssignment.ShiftLayers.Any())
 				{
-					startTime = personAssignmentStartDateTime;
+					personAssignmentStartTime = new DateTime(scheduleDay.DateOnlyAsPeriod.DateOnly.Year, scheduleDay.DateOnlyAsPeriod.DateOnly.Month, scheduleDay.DateOnlyAsPeriod.DateOnly.Day);
+					personAssignmentStartTime = TimeZoneHelper.ConvertToUtc(personAssignmentStartTime, scheduleDay.TimeZone);
+					personAssignmentEndTime = new DateTime(scheduleDay.DateOnlyAsPeriod.DateOnly.Year, scheduleDay.DateOnlyAsPeriod.DateOnly.Month, scheduleDay.DateOnlyAsPeriod.DateOnly.Day, 23, 59, 0);
+					personAssignmentEndTime = TimeZoneHelper.ConvertToUtc(personAssignmentEndTime, scheduleDay.TimeZone);
+				}
+				else
+				{
+					personAssignmentStartTime = personAssignment.Period.StartDateTime;
+					personAssignmentEndTime = personAssignment.Period.EndDateTime;
 				}
 
-				if (personAssignmentEndDateTime >= endTime)
+
+				if (personAssignmentStartTime <= startTime)
 				{
-					endTime = personAssignmentEndDateTime;
+					startTime = personAssignmentStartTime;
+				}
+
+				if (personAssignmentEndTime >= endTime)
+				{
+					endTime = personAssignmentEndTime;
 				}
 			}
 			else
