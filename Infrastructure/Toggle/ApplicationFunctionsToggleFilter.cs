@@ -30,6 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			{
 				hideOutbound(functions);
 			}
+			if(!_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_SwapShifts_36231))
+			{
+				hideWfmTeamScheduleSwapShifts(functions);
+			}
 
 			return functions;
 		}
@@ -55,6 +59,15 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		private static void hideOutbound (AllFunctions functions)
 		{
 			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.Outbound);
+			if (foundFunction != null)
+			{
+				foundFunction.SetHidden();
+			}
+		}
+
+		private static void hideWfmTeamScheduleSwapShifts(AllFunctions functions)
+		{
+			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.SwapShifts);
 			if (foundFunction != null)
 			{
 				foundFunction.SetHidden();
