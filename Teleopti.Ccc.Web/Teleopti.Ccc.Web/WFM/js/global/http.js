@@ -19,18 +19,30 @@
 				}
 
 				function reject(rejection) {
-					if (rejection.status === 401) {
-						connected = false;
-						var CurrentUserInfo = $injector.get('CurrentUserInfo');
-						CurrentUserInfo.resetContext();
+					switch (true) {
+						case (rejection.status === 0):
+							//don't remove class test-alert - used in perf tests
+							growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('ConnectionErrorMessage'), {
+								ttl: 0,
+								disableCountDown: true
+							});
+							break;
+
+						case (rejection.status === 401):
+							connected = false;
+							var CurrentUserInfo = $injector.get('CurrentUserInfo');
+							CurrentUserInfo.resetContext();
+							break;
+
+						case (rejection.status > 401 && rejection.status < 600):
+							//don't remove class test-alert - used in perf tests
+							growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('InternalErrorMessage'), {
+								ttl: 0,
+								disableCountDown: true
+							});
+							break;
 					}
-					if (rejection.status > 401 && rejection.status < 600 || rejection.status === 0) {
-						//don't remove class test-alert - used in perf tests
-						growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('InternalErrorMessage'), {
-							ttl: 0,
-							disableCountDown: true
-						});
-					}
+					
 					return $q.reject(rejection);
 				}
 

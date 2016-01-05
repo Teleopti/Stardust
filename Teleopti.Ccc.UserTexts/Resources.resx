@@ -13974,4 +13974,14 @@ Reduce the complexity to use these shifts.</value>
     <value>You don't have Modify Person Absence permission !</value>
     <comment>use in WFM TeamSchedue, tell user he/she has no modify person permission when try to add absence.</comment>
   </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Server is unreachable! 
+Check your internet connection or contact your administrator.</value>
+    <comment>internet connection lost message on the web ui</comment>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>The application has encountered an unexpected error.
+Help us improve your experience by sending an error report</value>
+    <comment>unexpected error message on the web ui</comment>
+  </data>
 </root>
