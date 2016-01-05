@@ -3,11 +3,11 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'Forecasting', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
-			function ($scope, $state, forecasting, $http, $filter, $interval, toggleService, $stateParams, $translate) {
+			'$scope', '$state', 'forecastingService', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
+			function ($scope, $state, forecastingService, $http, $filter, $interval, toggleService, $stateParams, $translate) {
 				$scope.isForecastRunning = false;
 				function updateRunningStatus() {
-					forecasting.status.get().$promise.then(function (result) {
+					forecastingService.status.get().$promise.then(function (result) {
 						$scope.isForecastRunning = result.IsRunning;
 					});
 				};
@@ -50,7 +50,7 @@
 				};
 
 				var getSkills = function () {
-					var skillsPromise = forecasting.skills.query().$promise;
+					var skillsPromise = forecastingService.skills.query().$promise;
 					skillsPromise.then(function (result) {
 						$scope.isCreateSkillEnabled = $scope.createSkillToggle && result.IsPermittedToModifySkill;
 						var skills = result.Skills;
@@ -82,7 +82,7 @@
 				};
 
 				$scope.scenarios = [];
-				var scenariosPromise = forecasting.scenarios.query().$promise;
+				var scenariosPromise = forecastingService.scenarios.query().$promise;
 				scenariosPromise.then(function (result) {
 					$scope.scenarios = result;
 					$scope.modalForecastingInfo.selectedScenario = result[0];
@@ -235,28 +235,26 @@
 
 					var resultStartDate = moment().utc().add(1, 'days');
 					var resultEndDate = moment(resultStartDate).add(6, 'months');
-					$http.post("../api/Forecasting/ForecastResult", JSON.stringify(
-						{
-							ForecastStart: resultStartDate.toDate(),
-							ForecastEnd: resultEndDate.toDate(),
-							WorkloadId: workload.Id,
-							ScenarioId: workload.Scenario.Id
-						})).
-						success(function (data, status, headers, config) {
 
-							for (var i = 0; i < data.Days.length; i++) {
-								var day = data.Days[i];
-								day.date = new Date(Date.parse(day.date));
-							}
-							workload.Refresh(data.Days);
-							workload.forecastResultLoaded = true;
-						}).
-						error(function (data, status, headers, config) {
-							$scope.error = { message: "Failed to get forecast result." };
-							workload.forecastResultLoaded = true;
-						});
+					forecastingService.result(JSON.stringify(
+					{
+						ForecastStart: resultStartDate.toDate(),
+						ForecastEnd: resultEndDate.toDate(),
+						WorkloadId: workload.Id,
+						ScenarioId: workload.Scenario.Id
+					}), function(data, status, headers, config) {
+
+						for (var i = 0; i < data.Days.length; i++) {
+							var day = data.Days[i];
+							day.date = new Date(Date.parse(day.date));
+						}
+						workload.Refresh(data.Days);
+						workload.forecastResultLoaded = true;
+					}, function(data, status, headers, config) {
+						$scope.error = { message: "Failed to get forecast result." };
+						workload.forecastResultLoaded = true;
+					});
 				};
-
 
 				$scope.disableModify = function (workload) {
 					if ($scope.isForecastRunning) {
@@ -407,7 +405,7 @@
 					cancelPoll();
 				});
 
-				var forecastWorkload = function (workload, finallyCallback, blockToken, isLastWorkload) {
+				var forecastWorkload = function(workload, finallyCallback, blockToken, isLastWorkload) {
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
@@ -417,40 +415,37 @@
 					} else {
 						workloadToSend.ForecastMethodId = -1;
 					}
-					$http.post('../api/Forecasting/Forecast', JSON.stringify(
-						{
-							ForecastStart: $scope.period.startDate,
-							ForecastEnd: $scope.period.endDate,
-							Workloads: [workloadToSend],
-							ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
-							BlockToken: blockToken,
-							IsLastWorkload: isLastWorkload
-						})).
-						success(function (data, status, headers, config) {
-							if (data.Success) {
-								workload.IsSuccess = true;
-							} else {
-								workload.IsFailed = true;
-								workload.Message = data.Message;
-							}
-							blockToken = data.BlockToken;
-						})
-						.error(function (data, status, headers, config) {
+					forecastingService.forecast(JSON.stringify(
+					{
+						ForecastStart: $scope.period.startDate,
+						ForecastEnd: $scope.period.endDate,
+						Workloads: [workloadToSend],
+						ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
+						BlockToken: blockToken,
+						IsLastWorkload: isLastWorkload
+					}), function(data, status, headers, config) {
+						if (data.Success) {
+							workload.IsSuccess = true;
+						} else {
 							workload.IsFailed = true;
-							if (data)
-								workload.Message = data.Message;
-							else
-								workload.Message = "Failed";
-							blockToken = data.BlockToken;
-						})
-						.finally(function () {
-							workload.ShowProgress = false;
-							workload.Scenario = $scope.modalForecastingInfo.selectedScenario;
-							if (workload.forecastResultLoaded) {
-								$scope.getForecastResult(workload);
-							}
-							finallyCallback(blockToken);
-						});
+							workload.Message = data.Message;
+						}
+						blockToken = data.BlockToken;
+					}, function(data, status, headers, config) {
+						workload.IsFailed = true;
+						if (data)
+							workload.Message = data.Message;
+						else
+							workload.Message = "Failed";
+						blockToken = data.BlockToken;
+					}, function() {
+						workload.ShowProgress = false;
+						workload.Scenario = $scope.modalForecastingInfo.selectedScenario;
+						if (workload.forecastResultLoaded) {
+							$scope.getForecastResult(workload);
+						}
+						finallyCallback(blockToken);
+					});
 				}
 
 				var forecastAllStartFromIndex = function (index, blockToken) {

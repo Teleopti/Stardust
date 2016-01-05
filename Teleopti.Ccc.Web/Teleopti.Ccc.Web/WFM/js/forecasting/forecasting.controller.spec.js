@@ -16,8 +16,8 @@ describe('ForecastingStartCtrl', function() {
 		},
 	}
 
-	var mockForecastingService = {
-		scenarios: {
+	var mockForecastingService = function() {
+		this.scenarios = {
 			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
@@ -32,9 +32,9 @@ describe('ForecastingStartCtrl', function() {
 				]);
 				return { $promise: queryDeferred.promise };
 			}
-		},
-		skills: {
-			query: function () {
+		};
+		this.skills = {
+			query: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
 				{
@@ -50,14 +50,25 @@ describe('ForecastingStartCtrl', function() {
 				});
 				return { $promise: queryDeferred.promise };
 			}
-		},
-		status: {
+		};
+		this.status = {
 			get: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({});
 				return { $promise: queryDeferred.promise };
 			}
-		}
+		};
+		this.forecast = function(data, successCb, errorCb, finalCb) {
+			return data;
+		};
+		this.result = function(data, successCb, errorCb) {
+			successCb({
+				Days: [
+					{ date: "2016-02-01T00:00:00", vc: 332.2292728719883, vtc: 332.2292728719883, vtt: 186.3655753, vttt: 186.3655753 }
+				],
+				WorkloadId: data.WorkloadId
+			});
+		};
 	}
 
 	beforeEach(function() {
@@ -69,8 +80,6 @@ describe('ForecastingStartCtrl', function() {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 	it("forecasting period should default to next month", inject(function($controller) {
@@ -98,7 +107,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('Should list scenarios', inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, Forecasting: mockForecastingService, Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
 
 		scope.$digest();
 
@@ -110,7 +119,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('Should list workloads', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, Forecasting: mockForecastingService, Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
 
 		scope.$digest();
 
@@ -118,5 +127,19 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.workloads[0].Id).toBe("d80b16de-bc21-471f-98ed-9b5e015abf6c");
 		expect(scope.workloads[0].ChartId).toBe("chartd80b16de-bc21-471f-98ed-9b5e015abf6c");
 		expect(scope.workloads[0].Scenario.Name).toBe("Default");
+	}));
+
+	fit('Should get forecast result', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		
+		scope.$digest();
+		scope.workloads[0].Refresh = function (days) {
+			expect(days[0].vc).toBe(332.2292728719883);
+			expect(days[0].vtc).toBe(332.2292728719883);
+			expect(days[0].vtt).toBe(186.3655753);
+			expect(days[0].vttt).toBe(186.3655753);
+		};
+		scope.getForecastResult(scope.workloads[0]);
 	}));
 });
