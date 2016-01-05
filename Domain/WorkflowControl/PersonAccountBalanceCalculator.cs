@@ -18,6 +18,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             
             foreach (IAccount account in _accounts)
             {
+				var intersectionBetweenRequestedPeriodAndAccountPeriod = account.Period().Intersection(period);
+				if (!intersectionBetweenRequestedPeriodAndAccountPeriod.HasValue) continue;	
+
                 var intersectingPeriod = account.Period().Intersection(rangePeriod);
                 if (intersectingPeriod.HasValue)
                 {
@@ -25,9 +28,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                         new List<IScheduleDay>(scheduleRange.ScheduledDayCollection(intersectingPeriod.Value));
 
                     account.Owner.Absence.Tracker.Track(account, account.Owner.Absence, scheduleDays);
-                    bool check1 = account.IsExceeded;
-                    bool check2 = account.IsExceeded;
-                    if (check1 || check2) return false; //Micke kollar på varför vi måste göra så här...
+					return !account.IsExceeded;	               
                 }
             }
             return true;
