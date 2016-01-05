@@ -3,8 +3,8 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'forecastingService', '$http', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
-			function ($scope, $state, forecastingService, $http, $filter, $interval, toggleService, $stateParams, $translate) {
+			'$scope', '$state', 'forecastingService', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
+			function ($scope, $state, forecastingService, $filter, $interval, toggleService, $stateParams, $translate) {
 				$scope.isForecastRunning = false;
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
@@ -274,35 +274,35 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/Campaign", JSON.stringify(
+					forecastingService.applyCampaign(
+						JSON.stringify(
 						{
 							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
 							ScenarioId: workload.Scenario.Id,
 							CampaignTasksPercent: $scope.modalModifyInfo.campaignPercentage
-						}))
-						.success(function (data, status, headers, config) {
+						}), function(data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
 							} else {
 								workload.IsFailed = true;
 								workload.Message = data.Message;
 							}
-						})
-						.error(function (data, status, headers, config) {
+						}, function(data, status, headers, config) {
 							workload.IsFailed = true;
 							if (data)
 								workload.Message = data.Message;
 							else
 								workload.Message = "Failed";
-						})
-						.finally(function () {
+						}, function() {
 							workload.ShowProgress = false;
 							$scope.isForecastRunning = false;
 							if (workload.forecastResultLoaded) {
 								$scope.getForecastResult(workload);
 							}
-						});
+						}
+					);
+					
 				};
 
 				$scope.applyOverride = function (isFormValid) {
@@ -316,7 +316,7 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/Override", JSON.stringify(
+					forecastingService.override(JSON.stringify(
 						{
 							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
@@ -327,32 +327,32 @@
 							ShouldSetOverrideTasks: $scope.modalModifyInfo.shouldSetOverrideTasks,
 							ShouldSetOverrideTalkTime: $scope.modalModifyInfo.shouldSetOverrideTalkTime,
 							ShouldSetOverrideAfterCallWork: $scope.modalModifyInfo.shouldSetOverrideAfterCallWork
-						}))
-						.success(function (data, status, headers, config) {
+						}), function(data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
 							} else {
 								workload.IsFailed = true;
 								workload.Message = data.Message;
 							}
-						})
-						.error(function (data, status, headers, config) {
+						}, function(data, status, headers, config) {
 							workload.IsFailed = true;
 							if (data)
 								workload.Message = data.Message;
 							else
 								workload.Message = "Failed";
-						})
-						.finally(function () {
+						}, function() {
 							workload.ShowProgress = false;
 							$scope.isForecastRunning = false;
 							if (workload.forecastResultLoaded) {
 								$scope.getForecastResult(workload);
 							}
-						});
+						}
+					);
+
+					
 				};
 
-				$scope.clearOverride = function () {
+				$scope.clearOverride = function() {
 					if ($scope.disableClearOverride()) {
 						return;
 					}
@@ -362,7 +362,8 @@
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
-					$http.post("../api/Forecasting/Override", JSON.stringify(
+
+					forecastingService.override(JSON.stringify(
 						{
 							Days: $scope.modifyDays,
 							WorkloadId: workload.Id,
@@ -370,29 +371,27 @@
 							ShouldSetOverrideTasks: true,
 							ShouldSetOverrideTalkTime: true,
 							ShouldSetOverrideAfterCallWork: true
-						}))
-						.success(function (data, status, headers, config) {
+						}), function(data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
 							} else {
 								workload.IsFailed = true;
 								workload.Message = data.Message;
 							}
-						})
-						.error(function (data, status, headers, config) {
+						}, function(data, status, headers, config) {
 							workload.IsFailed = true;
 							if (data)
 								workload.Message = data.Message;
 							else
 								workload.Message = "Failed";
-						})
-						.finally(function () {
+						}, function() {
 							workload.ShowProgress = false;
 							$scope.isForecastRunning = false;
 							if (workload.forecastResultLoaded) {
 								$scope.getForecastResult(workload);
 							}
-						});
+						}
+					);
 				};
 
 				if (c3.applyFixForForecast) c3.applyFixForForecast(function () {

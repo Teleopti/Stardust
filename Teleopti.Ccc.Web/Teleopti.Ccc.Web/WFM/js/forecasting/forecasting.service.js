@@ -28,6 +28,20 @@
 						success(successCb).
 						error(errorCb);
 				};
+
+				this.applyCampaign = function(data, successCb, errorCb, finalCb) {
+					$http.post("../api/Forecasting/Campaign", data)
+						.success(successCb)
+						.error(errorCb)
+						.finally(finalCb);
+				};
+
+				this.override = function(data, successCb, errorCb, finalCb) {
+					$http.post("../api/Forecasting/Override", data)
+						.success(successCb)
+						.error(errorCb)
+						.finally(finalCb);
+				};
 			}
 		]);
 })();
