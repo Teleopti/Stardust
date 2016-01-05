@@ -1080,7 +1080,7 @@
     <value>Taito</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Työvuorotettu ylityö / agentti</value>
+    <value>Suunniteltu ylityö per agentti</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
     <value>Ylityö:</value>

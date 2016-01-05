@@ -12896,4 +12896,60 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="AllDaysAreClosed" xml:space="preserve">
     <value>Alla dagar är stängda</value>
   </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>Sökresultatet för dessa sökord överstiger 500, var god förfina din sökning. </value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Sidstorlek</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Totalt antal förfrågningar</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Rensa ersättningsvärde</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Lade till frånvaro för {0} valda agent(er)!</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>Lade till frånvaro för {0} valda agent(er), {1} gick bra, {2} misslyckades!</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Byta skift</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Schemat har ändrats av någon annan. Var god ladda om schemat.</value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>Den önskade åtgärden har misslyckats. {0}</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>{0} förfrågning(ar) har godkänts.</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} förfrågning(ar) har nekats.</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Skiftbyte misslyckades.</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Skiftbyte kunde genomföras. </value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Servern kan inte nås! 
+Kontrollera din internetuppkoppling eller kontakta din administratör. </value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Applikationen har stött på ett oväntat fel. 
+Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Du har inte rättigheter för att lägga till frånvaro inom dag för {0}</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Du har inte rättigheter för att lägga till heldagsfrånvaro för {0}</value>
+  </data>
+  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
+    <value>Du har inte rättigheter för att lägga på frånvaro!</value>
+  </data>
 </root>

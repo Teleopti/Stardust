@@ -3275,7 +3275,7 @@
     <comment>Function name Agent Portal</comment>
   </data>
   <data name="OpenASM" xml:space="preserve">
-    <value>座席班表信息工具栏</value>
+    <value>座席班表信使</value>
     <comment>Function name ASM</comment>
   </data>
   <data name="OpenForecaster" xml:space="preserve">
@@ -4027,7 +4027,7 @@ Periods</comment>
     <comment>Restore Agent Portal fromSystem Tray</comment>
   </data>
   <data name="RestoreASM" xml:space="preserve">
-    <value>还原座席班表信息栏</value>
+    <value>还原座席班表信使</value>
     <comment>Restore Agent Schedule Messenger from System tray.</comment>
   </data>
   <data name="Restrictions" xml:space="preserve">
@@ -6591,7 +6591,7 @@ Periods</comment>
     <value>正在修改班表为{0}，日期{1}</value>
   </data>
   <data name="ASM" xml:space="preserve">
-    <value>打开座席排班消息工具栏</value>
+    <value>打开座席班表信使</value>
   </data>
   <data name="AddNewGroupPage" xml:space="preserve">
     <value>添加新的分组页面</value>
@@ -11738,5 +11738,428 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ManuallyPlanned" xml:space="preserve">
     <value>手工安排</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>呼叫量 &lt; </value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>呼叫量/天</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>名称必须少于50个字符</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>请添加筛选器</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>活动已添加</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>计划周期</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>计划周期已排定</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>选择一个缺勤</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>选择一个班次包</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>活动阈值</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>请从已下载的excel表中查看详细错误信息。</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>无法被删除因为正被使用在RTA映射中。</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>放置到前面</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>override和活动已被添加</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>变更计划周期</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>请在图表中选择日期</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>变更班次包</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>变更针对预定义角色已被禁用。</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>查看报表</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>人力冗余</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>覆盖预测值</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>针对情景覆盖呼叫量或活动</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>处理失败！错误：</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>异常值</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>最佳算法</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>队列统计不含异常值</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>清除背景图片</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>清除图表选择</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>点击此处以选择每页上的所有人</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>关闭日期</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>已成功更新：</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>未选择项</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>无法应用。参见以上问题。</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>创建及管理不同计划周期</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>创建新班次</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>创建技能</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>取消分组项</value>
+  </data>
+  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
+    <value>撤销变更并恢复上次保存</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>每日总计</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>查看席位分配</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>通话时间总计 &gt;</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>呼叫量总计 &lt; </value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>为预期的增长或见底定义一个百分比</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{1} to {2}间已选择{0}天</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>删除筛选器</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>ACW总计 &gt;</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>windows用户过长</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>禁用</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>解除</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>尝试分配{0}席位。 {1}个已成功， {2}个失败。有{3}个为排定座席日期。</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>拖放.xls或.xlsx文件到此或点击上传</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>早</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>您确定想要删除这个活动吗？</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>编辑筛选器</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>阈值</value>
+  </data>
+  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
+    <value>本次搜索将返回数量过多的结果。请缩小搜索范围。</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>这是您现有的预测。在图表中选择部分日期以能够修改呼叫量。</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>移除活动: {0} 失败。</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>警告！无可用历史数据</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>警告！服务器正忙于排班，请稍后重试。</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>所选文件不被接受。请检查文件类型。</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>应用程序用户Id应为有效的email地址：</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>水平翻转选定项目</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>垂直翻转所选项目</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>预测</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>预测正在运行</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>预测算法id：</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>预测周期不能超过1年</value>
+  </data>
+  <data name="AmountOfFilters" xml:space="preserve">
+    <value>筛选器总数</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>水平分割所选项目</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>为{1}所分配席位{0}已被删除</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>覆盖预测值</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>活动呼叫量</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>未来周期</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>本页中所有人员已被选择</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>所有日期已关闭</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>将选定项目分组</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>顶端对齐</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>移除活动</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>右对齐</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>左对齐</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>底部对齐</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>通话时间 &lt; </value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>告警颜色</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>导入失败：</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>导入成功：</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>重置选择</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>统计</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>开始下一个</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>是警报</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>不允许！</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>开始日期必须早于或与结束日期相同</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>季节性</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>调整技能</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>人力水平</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>晚</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>未找到结果</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>最新取得时间</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>垂直分割所选项目</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>转动</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>无分配</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>发生一些内部错误：{0}：</value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>签入</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>签出</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>管理映射</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>管理人员</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>管理规则</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>映射</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>损耗应在1和99之间</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>算法</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>添加位置</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>栏位缺失：{0}.</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>您可能需要变更相应的班次包。</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>退后</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>设置背景图片</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>修改技能</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>您至少应选择一天！</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>访问所有功能；</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>前进</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>新技能</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>放置到后面</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>所选人员</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>所选筛选器；</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>所选日期为{0}</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>必须设置开始和结束日期</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt; </value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>秒/呼叫</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>修改前在图表中选择日期</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>准确性</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>秒数应在1和86400之间</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>席位</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>席位分配</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>需要名称</value>
   </data>
 </root>
