@@ -1319,7 +1319,7 @@
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.scheduletable.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.controller.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
@@ -1327,8 +1327,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.factory.spec.personSchedule.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.factory.spec.timeline.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
