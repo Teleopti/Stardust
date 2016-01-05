@@ -129,7 +129,7 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.workloads[0].Scenario.Name).toBe("Default");
 	}));
 
-	fit('Should get forecast result', inject(function ($controller) {
+	it('Should get forecast result', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
 		
@@ -141,5 +141,32 @@ describe('ForecastingStartCtrl', function() {
 			expect(days[0].vttt).toBe(186.3655753);
 		};
 		scope.getForecastResult(scope.workloads[0]);
+	}));
+
+	it('open modify dialog', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+
+		scope.$digest();
+		scope.workloads[0].selectedDays = function () {
+			return [
+				{
+					id: "vtc",
+					index: 17,
+					name: "Total calls < ",
+					value: 382.5876745833356,
+					x: new Date("Thu Feb 18 2016 01:00:00 GMT+0100 (W. Europe Standard Time)")
+				}
+			];
+		};
+
+		scope.displayModifyModal(scope.workloads[0]);
+
+		expect(scope.modalModifyLaunch).toBe(true);
+		expect(scope.sumOfCallsForSelectedDays).toBe('382.6');
+		expect(scope.modalModifyInfo.selectedScenario.Id).toBe('1');
+		expect(scope.modalModifyInfo.selectedDayCount).toBe(1);
+		expect(scope.modalModifyInfo.selectedDaySpan).toBe('2/18/16');
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('382.6');
 	}));
 });
