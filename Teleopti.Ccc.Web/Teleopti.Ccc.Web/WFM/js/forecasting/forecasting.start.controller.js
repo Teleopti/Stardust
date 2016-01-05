@@ -248,7 +248,8 @@
 							var day = data.Days[i];
 							day.date = new Date(Date.parse(day.date));
 						}
-						workload.Refresh(data.Days);
+						if (workload.Refresh)
+							workload.Refresh(data.Days);
 						workload.forecastResultLoaded = true;
 					}, function(data, status, headers, config) {
 						$scope.error = { message: "Failed to get forecast result." };

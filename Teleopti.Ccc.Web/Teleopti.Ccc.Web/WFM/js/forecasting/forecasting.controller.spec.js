@@ -44,6 +44,11 @@ describe('ForecastingStartCtrl', function() {
 							Id: "3d5dd51a-8713-42e9-9f33-9b5e015ab71b",
 							Name: "Channel sales",
 							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6c", Name: "Joint marketing", Accuracies: null }]
+						},
+						{
+							Id: "3d5dd51a-8713-42e9-9f33-9b5e015ab71c",
+							Name: "Channel sales2",
+							Workloads: [{ Id: "d80b16de-bc21-471f-98ed-9b5e015abf6d", Name: "Joint marketing2", Accuracies: null }]
 						}
 					],
 					IsPermittedToModifySkill: true
@@ -129,7 +134,7 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.workloads[0].Scenario.Name).toBe("Default");
 	}));
 
-	it('Should get forecast result', inject(function ($controller) {
+	it('Should display forecast result', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
 		
@@ -168,5 +173,71 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.modalModifyInfo.selectedDayCount).toBe(1);
 		expect(scope.modalModifyInfo.selectedDaySpan).toBe('2/18/16');
 		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('382.6');
+	}));
+
+	it('open forecast dialog for all', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+
+		scope.$digest();
+
+		scope.displayForecastingModal();
+
+		expect(scope.modalForecastingInfo.forecastForAll).toBe(true);
+		expect(scope.modalForecastingInfo.forecastForOneWorkload).toBe(false);
+	}));
+
+	it('open forecast dialog for one workload', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+
+		scope.$digest();
+
+		scope.displayForecastingModal(scope.workloads[0]);
+
+		expect(scope.modalForecastingInfo.forecastForAll).toBe(false);
+		expect(scope.modalForecastingInfo.forecastForOneWorkload).toBe(true);
+		expect(scope.modalForecastingInfo.selectedWorkload).toBe(scope.workloads[0]);
+		expect(scope.modalForecastingInfo.selectedScenario).toBe(scope.workloads[0].Scenario);
+	}));
+
+	it('change campaign percentage', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+
+		scope.$digest();
+		scope.workloads[0].selectedDays = function () {
+			return [
+				{
+					id: "vtc",
+					index: 17,
+					name: "Total calls < ",
+					value: 382.5876745833356,
+					x: new Date("Thu Feb 18 2016 01:00:00 GMT+0100 (W. Europe Standard Time)")
+				}
+			];
+		};
+		scope.displayModifyModal(scope.workloads[0]);
+
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('382.6');
+
+		scope.modalModifyInfo.campaignPercentage = 10;
+		scope.campaignPercentageChanged({
+			campaignPercentageInput: {$error: {} }
+		});
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('420.9');
+	}));
+
+
+	it('newly created workload should be on the top', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService, $stateParams: { workloadId: "d80b16de-bc21-471f-98ed-9b5e015abf6d" } });
+
+		scope.$digest();
+
+		expect(scope.workloads[0].Name).toBe("Channel sales2 - Joint marketing2");
+		expect(scope.workloads[0].Id).toBe("d80b16de-bc21-471f-98ed-9b5e015abf6d");
+		expect(scope.workloads[0].ChartId).toBe("chartd80b16de-bc21-471f-98ed-9b5e015abf6d");
+		expect(scope.workloads[0].Scenario.Name).toBe("Default");
 	}));
 });
