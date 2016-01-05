@@ -157,12 +157,12 @@
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js']
+					'dist/main.min.js': ['!js/**/*.spec.js', 'js/**/*.js']
 				}
 			},
 			dev: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js']
+					'dist/main.min.js': ['!js/**/*.spec.js', 'js/**/*.js']
 				},
 				options: {
 					sourceMap: true,
