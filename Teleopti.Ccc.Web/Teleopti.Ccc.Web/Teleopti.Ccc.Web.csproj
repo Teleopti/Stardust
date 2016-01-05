@@ -1234,7 +1234,8 @@
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
-    <Content Include="WFM\js\forecasting\forecasting.controller.spec.js" />
+    <Content Include="WFM\js\forecasting\forecasting.advanced.controller.spec.js" />
+    <Content Include="WFM\js\forecasting\forecasting.start.controller.spec.js" />
     <Content Include="WFM\js\forecasting\html\forecasting-result-chart.html" />
     <Content Include="WFM\js\forecasting\html\forecasting.html" />
     <Content Include="WFM\js\forecasting\html\skill-create.html" />

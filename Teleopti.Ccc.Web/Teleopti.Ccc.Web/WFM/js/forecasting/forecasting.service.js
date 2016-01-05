@@ -42,6 +42,18 @@
 						.error(errorCb)
 						.finally(finalCb);
 				};
+
+				this.evaluate = function(data, successCb, errorCb) {
+					$http.post("../api/Forecasting/Evaluate", data)
+						.success(successCb)
+						.error(errorCb);
+				};
+
+				this.queueStatistics = function(data, successCb, errorCb) {
+					$http.post("../api/Forecasting/QueueStatistics", data)
+						.success(successCb)
+						.error(errorCb);
+				};
 			}
 		]);
 })();

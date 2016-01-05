@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.forecasting')
-		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', '$translate',
-			function ($scope, $state, $stateParams, $http, toggleService, $translate) {
+		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', '$translate', 'forecastingService',
+			function ($scope, $state, $stateParams, $http, toggleService, $translate, forecastingService) {
 				$scope.workloadId = $stateParams.workloadId;
 				$scope.workloadName = $stateParams.workloadName;
 
@@ -28,17 +28,16 @@
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
 				});
 
-				var getQueueStatistics = function (workloadId, methodId) {
+				var getQueueStatistics = function(workloadId, methodId) {
 					$scope.queueStatisticsLoading = true;
-					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workloadId, MethodId: methodId })).
-						success(function (data, status, headers, config) {
+					forecastingService.queueStatistics(JSON.stringify({ WorkloadId: workloadId, MethodId: methodId }),
+						function(data, status, headers, config) {
 							$scope.queueStatisticsLoading = false;
-							angular.forEach(data.QueueStatisticsDays, function (day) {
+							angular.forEach(data.QueueStatisticsDays, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							$scope.queueStatisticsChartData = data.QueueStatisticsDays;
-						}).
-						error(function (data, status, headers, config) {
+						}, function(data, status, headers, config) {
 							$scope.error = { message: "Failed to get queue statisctics." };
 							$scope.queueStatisticsLoading = false;
 						});
@@ -52,10 +51,10 @@
 					$scope.evaluationChartData = [];
 					$scope.queueStatisticsChartData = [];
 
-					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: $scope.workloadId })).
-						success(function (data, status, headers, config) {
+					forecastingService.evaluate(JSON.stringify({ WorkloadId: $scope.workloadId }),
+						function(data, status, headers, config) {
 							$scope.evaluationLoading = false;
-							angular.forEach(data.Days, function (day) {
+							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							$scope.evaluationChartData = data.Days;
@@ -78,12 +77,12 @@
 							if ($scope.isQueueStatisticsEnabled) {
 								getQueueStatistics($scope.workloadId, selectedMethod);
 							}
-						}).
-						error(function (data, status, headers, config) {
+						}, function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };
 							$scope.evaluationLoading = false;
 							$scope.queueStatisticsLoading = false;
-						});
+						}
+					);
 				};
 			}
 		]);

@@ -63,9 +63,6 @@ describe('ForecastingStartCtrl', function() {
 				return { $promise: queryDeferred.promise };
 			}
 		};
-		this.forecast = function(data, successCb, errorCb, finalCb) {
-			return data;
-		};
 		this.result = function(data, successCb, errorCb) {
 			successCb({
 				Days: [
