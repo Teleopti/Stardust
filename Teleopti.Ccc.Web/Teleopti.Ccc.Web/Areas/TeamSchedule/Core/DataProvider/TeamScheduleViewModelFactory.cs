@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex)
 		{
-			var people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToArray();
+			var people = _searchProvider.SearchPermittedPeople(criteriaDictionary, dateInUserTimeZone, DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
 			if (people.Count() > 500)
 			{
 				return new GroupScheduleViewModel
