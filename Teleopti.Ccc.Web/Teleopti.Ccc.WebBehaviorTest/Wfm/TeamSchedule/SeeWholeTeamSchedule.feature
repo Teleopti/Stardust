@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmTeamSchedule_SetAgentsPerPage_36230')
+﻿@ignore
+@OnlyRunIfEnabled('WfmTeamSchedule_SetAgentsPerPage_36230')
 Feature: SeeWholeTeamSchedule
 	As a team leader works in a big team
 	I want to be able to see schedules of my whole team
