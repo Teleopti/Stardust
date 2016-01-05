@@ -108,7 +108,7 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.scenarios[1].Id).toBe("2");
 	}));
 
-	fit('Should list workloads', inject(function ($controller) {
+	it('Should list workloads', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ForecastingStartCtrl', { $scope: scope, Forecasting: mockForecastingService, Toggle: mockToggleService });
 
