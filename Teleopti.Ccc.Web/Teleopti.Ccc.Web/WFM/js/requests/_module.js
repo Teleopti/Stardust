@@ -7,7 +7,8 @@
 		'ui.grid.autoResize',	
 		'ui.grid.selection',
 		'pascalprecht.translate',
-		'angular-growl'
+		'angular-growl',
+		'currentUserInfoService'
 	]);
 
 })();
