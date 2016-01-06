@@ -21,7 +21,7 @@ declare @DESTPWD VARCHAR(100) = '$(DESTPWD)' -- < -- put your new debug SQL pass
 
 SET NOCOUNT ON
 print '---'
-declare @stmt nvarchar(max) = 'CREATE USER '+@DESTUSER+' WITH PASSWORD = '''+@DESTPWD+''''
+declare @stmt nvarchar(max) = 'CREATE USER ['+@DESTUSER+'] WITH PASSWORD = '''+@DESTPWD+''''
 
 declare @ApplicationConnectionString nVARCHAR(200)
 declare @AnalyticsConnectionString nVARCHAR(200)
@@ -51,7 +51,7 @@ DECLARE @dropUser nvarchar(max)
   WHILE @@fetch_status <> -1
    BEGIN
       PRINT 'Dropping ' + @username
-	  SELECT @dropUser = 'DROP USER '+@username
+	  SELECT @dropUser = 'DROP USER ['+@username+']'
 		exec sp_executesql @dropUser
      FETCH next FROM c1 INTO @username
    END
