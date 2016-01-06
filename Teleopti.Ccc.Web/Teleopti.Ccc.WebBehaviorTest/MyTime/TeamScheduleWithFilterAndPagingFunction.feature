@@ -30,8 +30,7 @@ Scenario: View team schedule
 	| Date  | 2014-05-02 |
 	And the time is '2014-05-02 08:00'
 	When I view team schedule
-	Then I should see my schedule
-	And I should see my colleague's schedule
+	Then I should see my colleague's schedule
 
 Scenario: View only my team's schedule
 	Given I am an agent in a team with access to the whole site
@@ -47,8 +46,7 @@ Scenario: View only my team's schedule
 	| Field | Value      |
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
-	Then I should see my schedule
-	And I should see my colleague's schedule
+	Then I should see my colleague's schedule
 	And I should not see the other colleague's schedule
 
  
@@ -89,8 +87,7 @@ Scenario: View team schedule, no shift
 	Given I am an agent in a team
 	And I have a colleague
 	When I view team schedule
-	Then I should see myself without schedule
-	And I should see my colleague without schedule
+	Then I should see my colleague without schedule
 
 Scenario: Can't see confidential absence
 	Given I am an agent in a team
