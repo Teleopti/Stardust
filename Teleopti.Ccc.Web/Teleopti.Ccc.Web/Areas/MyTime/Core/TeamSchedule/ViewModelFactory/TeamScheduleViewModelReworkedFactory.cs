@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				return new TeamScheduleViewModelReworked();
 			}
 			int pageCount;
-			var agentSchedules = constructAgentSchedulesFromReadModel(data, out pageCount).ToArray();
+			var agentSchedules = constructAgentSchedulesFromReadModel(data, true, out pageCount).ToArray();
 			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);
 		
 			return new TeamScheduleViewModelReworked
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			}
 			else
 			{
-				agentSchedules = constructAgentSchedulesFromReadModel(data, out pageCount);
+				agentSchedules = constructAgentSchedulesFromReadModel(data, false, out pageCount);
 				var mySchedule = agentSchedules.SingleOrDefault(x => x.PersonId == _logonUser.CurrentUser().Id.GetValueOrDefault());
 				agentSchedules.Remove(mySchedule);
 			}
@@ -102,9 +102,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			};
 		}
 
-		private List<AgentScheduleViewModelReworked> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, out int pageCount)
+		private List<AgentScheduleViewModelReworked> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded, out int pageCount)
 		{
 			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
+			if (!isMyScheduleIncluded && personIds.Contains(_logonUser.CurrentUser().Id.GetValueOrDefault()))
+			{
+				personIds.Remove(_logonUser.CurrentUser().Id.GetValueOrDefault());
+			}
 
 			var agentSchedules = new List<AgentScheduleViewModelReworked>();
 
