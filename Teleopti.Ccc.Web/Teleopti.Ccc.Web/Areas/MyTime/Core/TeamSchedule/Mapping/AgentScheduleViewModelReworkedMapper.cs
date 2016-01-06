@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			{
 				if ((teamScheduleReadModel.Shift != null) && (teamScheduleReadModel.Shift.Projection.Count > 0))
 				{
+					ret.IsFullDayAbsence = teamScheduleReadModel.Shift.IsFullDayAbsence;
 					if (personSchedule.Schedule.Start != null)
 						ret.StartTimeUtc = personSchedule.Schedule.Start.Value;
 					ret.MinStart = personSchedule.Schedule.MinStart;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 					ret.MinStart = personSchedule.Schedule.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
 					ret.IsDayOff = true;
+					ret.DayOffName = teamScheduleReadModel.DayOff.Title;
 				}
 			}
 			return ret;
