@@ -19,13 +19,14 @@
 	</requests-overview>
 
 	<div class="paging" ng-if="requests.isPaginationEnabled">
+		<div class="total-requests-count"><span>{{'TotalRequestsCount' | translate}}: </span>{{requests.paging.totalRequestsCount}}
+		</div>
 		<div class="paging-page-size">
-			<span>{{'PageSize' | translate}}: </span>			
+			<span>{{'PageSize' | translate}}: </span>
 			<md-select ng-model="requests.paging.pageSize" ng-change="requests.onPageSizeChanges()" aria-label="PageSize">
 				<md-option ng-value="pageSizeOption" ng-repeat="pageSizeOption in requests.pageSizeOptions track by $index">{{pageSizeOption}}</md-option>
-			</md-select>						
+			</md-select>
 		</div>
-		<div class="total-requests-count"><span>{{'TotalRequestsCount' | translate}}: </span>{{requests.paging.totalRequestsCount}}</div>
 		<wfm-pagination pagination-options="requests.paging"></wfm-pagination>
 	</div>
 

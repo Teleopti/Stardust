@@ -74,12 +74,13 @@
 		}
 
 		.paging-page-size {
+
 			span {
-				flex: 1;
+				flex: 2;
 			}
 
 			md-select {
-				flex: 2;
+				flex: 4;
 				margin-left:10px;
 				margin-bottom: 0;
 				display: inline-block;
@@ -87,7 +88,7 @@
 		}
 
 		wfm-pagination {
-			flex: 7;
+			flex: 1;
 			margin-top: 0;
 			margin-bottom:0;
 		}
