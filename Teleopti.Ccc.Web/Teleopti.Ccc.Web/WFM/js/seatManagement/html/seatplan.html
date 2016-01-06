@@ -1,10 +1,16 @@
 ﻿<div class="view-header seatplan-header">
 	<div class="view-title">
-		<h1>{{"SeatPlan" | translate}}</h1>
+		<h1 ng-if="seatplan.isReportOpened">
+			{{"SeatPlanReport" | translate}}
+		</h1>
+		<h1 ng-if="seatplan.isSeatMapBookingViewOpened">
+			{{"SeatBookings" | translate}}
+		</h1>
+		<h1 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+			{{"SeatPlan" | translate}}
+		</h1>
 	</div>
 </div>
-
-
 <div id="seatplan" class="material-depth-1" ui-view>
 
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"

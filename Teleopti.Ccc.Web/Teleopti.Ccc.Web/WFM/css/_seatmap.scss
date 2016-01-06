@@ -19,12 +19,21 @@ input[type=text],input[type=password],input[type=number]{
 	height:100%;
 	overflow:hidden;
 	background:$white;
+
 	.wfm-block{
 		width: 100%;
 		margin: 0;
 		padding:0;
-		position:relative;
+		position:absolute;
+		top:0;
+		right:0;
+		bottom:0;
+		left:0;
 	}
+
+	.wfm-block-edit-mode{
+		position:relative;
+	}	
 }
 
 .seatmap-view-header{
@@ -303,7 +312,7 @@ seatmap-editor{
 	margin-top: -62px;
 }
 
-.seatmap-canvas wfm-right-panel .resizable{
+.seatmap-canvas .right-panel-edit-mode .resizable{
 	top:-30px;
 	bottom:2px;
 }

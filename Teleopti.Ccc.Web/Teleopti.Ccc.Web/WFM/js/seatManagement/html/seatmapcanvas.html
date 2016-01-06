@@ -42,7 +42,7 @@
 			</span>
 		</div>
 
-		<div class="wfm-block">
+		<div class="wfm-block" ng-class="{'wfm-block-edit-mode':(vm.showEditor)} ">
 
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
 
@@ -50,7 +50,7 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
-			<wfm-right-panel panel-options="vm.rightPanelOption" on-open="vm.getRoles()">
+			<wfm-right-panel panel-options="vm.rightPanelOption" on-open="vm.getRoles()" ng-class="{'right-panel-edit-mode':(vm.showEditor)} ">
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 
