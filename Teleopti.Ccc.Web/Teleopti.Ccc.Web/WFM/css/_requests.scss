@@ -64,33 +64,14 @@
 	}
 
 	.paging {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-
 		.total-requests-count {
-			flex: 2;
-			margin-left: 20px;
+			margin-top: 20px; 
 		}
 
-		.paging-page-size {
-
-			span {
-				flex: 2;
-			}
-
-			md-select {
-				flex: 4;
-				margin-left:10px;
-				margin-bottom: 0;
-				display: inline-block;
-			}
-		}
-
-		wfm-pagination {
-			flex: 1;
-			margin-top: 0;
-			margin-bottom:0;
+		.page-size-selector{
+			width: 60px; 
+			margin-top: 20px; 
+			margin-right: 20px;	
 		}
 	}
 
