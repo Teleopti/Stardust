@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		
 			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_logonUser.CurrentUser(), myScheduleDay, true);
 
-
 			int pageCount;
 			List<AgentScheduleViewModelReworked> agentSchedules;
 			if (data.TimeFilter == null && data.TimeSortOrder.IsNullOrEmpty())
