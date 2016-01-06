@@ -4,6 +4,10 @@ input[type=text],input[type=password],input[type=number]{
 	line-height:1;
 }
 
+.seatmap-header{
+	height:5%;
+}
+
 .seatmap-container{
 	height: 95%;
 	position: relative;
@@ -80,9 +84,10 @@ input[type=text],input[type=password],input[type=number]{
 .location-breadcrumb{
 	position: absolute;
 	height:30px;
-	top:40px;
+	top:0;
 	left:0;
 	right:0;
+	padding-top:5px;
 	z-index:1;
 
 	.location-breadcrumb-clickable{
@@ -117,8 +122,7 @@ input[type=text],input[type=password],input[type=number]{
 }
 
 .location-breadcrumb-edit-mode{
-	position:relative;
-	top:0px;
+	position:static;
 
 	.breadcrumb-inverse{
 		font-size : 95%;
@@ -297,6 +301,10 @@ seatmap-editor{
 	top: 50%;
 	margin-left: -32px;
 	margin-top: -62px;
+}
+
+.seatmap-canvas .wfm-right-panel .resizable{
+	top:-30px;
 }
 
 seatmap-occupancy-detail{

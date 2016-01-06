@@ -1,5 +1,9 @@
-﻿#seatplan{
-	height:100%;
+﻿.seatplan-header{
+	height:5%;
+}
+
+#seatplan{
+	height:95%;
 	position:relative;
 	background:$white;
 }

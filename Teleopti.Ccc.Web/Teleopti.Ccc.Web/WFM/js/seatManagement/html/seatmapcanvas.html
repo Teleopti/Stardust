@@ -35,14 +35,11 @@
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
 		<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)} " ng-click="vm.isDatePickerOpened = false">
-			<div>
-				<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
-					<span ng-class="{'location-breadcrumb-clickable': !$last}"
-						  ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</span>
-					<span class="divider" ng-if="!$last">></span>
-				</span>
-			</div>
-
+			<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
+				<span ng-class="{'location-breadcrumb-clickable': !$last}"
+						ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</span>
+				<span class="divider" ng-if="!$last">></span>
+			</span>
 		</div>
 
 		<div class="wfm-block">
