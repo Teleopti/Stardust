@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleSimplify(IEnumerable<Guid> people)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(x => people.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
 		}
 
 		public IEnumerator<IPerson> GetEnumerator()
