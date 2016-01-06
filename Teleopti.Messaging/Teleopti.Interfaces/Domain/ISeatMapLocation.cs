@@ -13,10 +13,6 @@ namespace Teleopti.Interfaces.Domain
 		
 		IList<ISeat> Seats { get; }
 
-		ISeat GetNextUnallocatedSeat(ISeatBooking booking);
-		bool CanAllocateShifts (params ISeatBooking[] agentShifts);
-
-		
 		void ClearBookingInformation();
 
 	}

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatAllocator
 	{
-
+		private readonly Dictionary<Guid, List<ISeatOccupancyFrequency>> _seatFrequencies;
 		private readonly SeatMapLocation[] _seatMapLocations;
 
 		public SeatAllocator(params SeatMapLocation[] seatMapLocations)
@@ -15,88 +15,74 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatMapLocations = seatMapLocations;
 		}
 
+		public SeatAllocator(Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies, params SeatMapLocation[] seatMapLocations)
+		{
+			_seatFrequencies = seatFrequencies;
+			_seatMapLocations = seatMapLocations;
+		}
+
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests = SeatAllocatorHelper.SortSeatBookingRequests(seatBookingRequests);
+			var sortedSeatBookingRequests = seatBookingRequests.ToList();
+			sortedSeatBookingRequests.Sort();
 
-			bookSeatsByGroup(sortedSeatBookingRequests);
-			bookUnallocatedShifts(sortedSeatBookingRequests);
+			var allLocationsUnsorted = getAllLocationsUnsorted();
+
+			var seatScores = SeatScorer.GetSeatScores(sortedSeatBookingRequests, allLocationsUnsorted, _seatFrequencies);
+
+			bookSeatsByGroup(sortedSeatBookingRequests, allLocationsUnsorted, seatScores);
+			bookSeatsThatHaventBeenAllocatedByGroup(sortedSeatBookingRequests, allLocationsUnsorted, seatScores);
 		}
 
-		private void bookSeatsByGroup(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests)
+		private List<SeatMapLocation> getAllLocationsUnsorted()
 		{
-			foreach (var seatBookingRequest in sortedSeatBookingRequests)
-			{
-				bookSeats(seatBookingRequest.SeatBookings, true);
-			}
-		}
-
-		private void bookUnallocatedShifts(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests)
-		{
-			var unallocatedShifts = sortedSeatBookingRequests.SelectMany(s => s.SeatBookings);
-			if (unallocatedShifts.Any())
-			{
-				bookSeats(unallocatedShifts, false);
-			}
-		}
-
-		private void bookSeats(IEnumerable<ISeatBooking> seatBookings, Boolean bookGroupedRequestsTogether)
-		{
-			var unallocatedBookings = seatBookings.Where(s => s.Seat == null).OrderBy(s => s.StartDateTime).ToArray();
-			if (!unallocatedBookings.Any()) return;
-
 			var allLocationsUnsorted = new List<SeatMapLocation>();
-
 			foreach (var location in _seatMapLocations)
 			{
-				allLocationsUnsorted.AddRange(location.GetFullLocationHierachyAsList());
+				allLocationsUnsorted.AddRange(location.GetFullLocationHierarchyAsList());
 			}
-
-			if (bookGroupedRequestsTogether)
-			{
-				var allLocationsSortedByBookingOrder = SeatAllocatorHelper.GetLocationsInOrderOfBookingOrder(allLocationsUnsorted, unallocatedBookings).ToList();
-
-				foreach (var location in allLocationsSortedByBookingOrder.Where(location => location.CanAllocateShifts(unallocatedBookings)))
-				{
-					bookSeatsForLocation( unallocatedBookings, location);
-					break;
-				}
-			}
-			else
-			{
-				foreach (var booking in unallocatedBookings)
-				{
-					var allLocationsSortedByBookingOrder = SeatAllocatorHelper.GetLocationsInOrderOfBookingOrder(allLocationsUnsorted, booking).ToList();
-					foreach (var location in allLocationsSortedByBookingOrder.Where(location => location.CanAllocateShifts(booking)))
-					{
-						bookSeatForLocation( location, booking);
-						break;
-					}
-
-				}
-			}
+			return allLocationsUnsorted;
 		}
-		
-		private void bookSeatsForLocation(IEnumerable<ISeatBooking> unallocatedShifts, ISeatMapLocation targetSeatMapLocation)
+
+		private void bookSeatsByGroup(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests, List<SeatMapLocation> allLocationsUnsorted, List<SeatScore> seatScores)
 		{
-			foreach (var shift in unallocatedShifts)
+			var rankedScores = GroupSeatBookingRanker.GetRankedScoresForGroupsAndLocations(sortedSeatBookingRequests, allLocationsUnsorted, seatScores, _seatFrequencies).ToList();
+			RankedSeatBookingProcessor.ProcessBookings(rankedScores);
+		}
+
+		private void bookSeatsThatHaventBeenAllocatedByGroup(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests, List<SeatMapLocation> allLocationsUnsorted, List<SeatScore> seatScores)
+		{
+			var unallocatedBookings = sortedSeatBookingRequests
+				.SelectMany(s => s.SeatBookings)
+				.Where(s => s.Seat == null)
+				.OrderBy(s => s.StartDateTime).ToArray();
+
+			if (!unallocatedBookings.Any()) return;
+
+			foreach (var booking in unallocatedBookings)
 			{
-				bookSeatForLocation(targetSeatMapLocation, shift);
+				findAndBookSeatForLocation(allLocationsUnsorted, booking, seatScores);
 			}
 		}
 
-		private void bookSeatForLocation (ISeatMapLocation targetSeatMapLocation, ISeatBooking shift)
+		private void findAndBookSeatForLocation(IList<SeatMapLocation> allLocationsUnsorted, ISeatBooking seatBooking, List<SeatScore> seatScores)
 		{
-			var firstUnallocatedSeat = targetSeatMapLocation.GetNextUnallocatedSeat (shift);
-			if (foundUnallocatedSet (firstUnallocatedSeat))
+			var locationForBooking = SeatBookingLocationFinder.GetLocationForBooking(allLocationsUnsorted, seatBooking, seatScores);
+			if (locationForBooking != null)
 			{
-				shift.Book (firstUnallocatedSeat);
+				bookSeatForLocation(locationForBooking, seatBooking, seatScores);
 			}
 		}
 
-		private bool foundUnallocatedSet(ISeat firstUnallocatedSeat)
+		private void bookSeatForLocation(ISeatMapLocation targetSeatMapLocation, ISeatBooking booking, List<SeatScore> seatScores)
 		{
-			return firstUnallocatedSeat != null;
+			var firstUnallocatedSeat = SeatBookingSeatFinder.TryToFindASeatForBooking(booking, targetSeatMapLocation.Seats, seatScores);
+			if (firstUnallocatedSeat != null)
+			{
+				booking.Book(firstUnallocatedSeat);
+			}
 		}
+
+
 	}
 }

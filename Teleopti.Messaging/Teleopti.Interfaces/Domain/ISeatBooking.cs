@@ -13,5 +13,6 @@ namespace Teleopti.Interfaces.Domain
 		bool Intersects(ISeatBooking booking);
 		bool Intersects(DateTimePeriod period);
 		void Book(ISeat seat);
+		void RemoveBooking();
 	}
 }

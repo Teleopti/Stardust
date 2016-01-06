@@ -50,9 +50,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				var scheduleDays = getScheduleDaysToPlanSeats(schedulesForPeople[person].ScheduledDayCollection(period)).ToArray();
 				scheduleDays.ForEach (day => findOrCreateSeatBooking(day, person));
 				_numberOfUnscheduledAgentDays += period.DayCount() - scheduleDays.Count();
-
 			}
-			
 		}
 
 		private IEnumerable<IScheduleDay> getScheduleDaysToPlanSeats(IEnumerable<IScheduleDay> scheduleDays)
@@ -95,26 +93,5 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			return _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, currentScenario);
 		}
-		
-	}
-
-	public class TeamGroupedBooking : ITeamGroupedBooking
-	{
-		public ITeam Team { get; private set; }
-		public ISeatBooking SeatBooking { get; private set; }
-
-		public TeamGroupedBooking(ITeam team, ISeatBooking seatBooking)
-		{
-			Team = team;
-			SeatBooking = seatBooking;
-		}
-	}
-	
-	
-	public class SeatBookingRequestParameters : ISeatBookingRequestParameters
-	{
-		public IList<ITeamGroupedBooking> TeamGroupedBookings { get; set; }
-		public IList<ISeatBooking> ExistingSeatBookings { get; set; }
-		public int NumberOfUnscheduledAgentDays { get; set; }
 	}
 }

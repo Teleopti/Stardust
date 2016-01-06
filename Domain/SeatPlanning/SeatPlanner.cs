@@ -10,17 +10,19 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		private readonly ITeamRepository _teamRepository;
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
+		private readonly ISeatFrequencyCalculator _seatFrequencyCalculator;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISeatBookingRequestAssembler _seatBookingRequestAssembler;
 		private readonly ISeatPlanPersister _seatPlanPersister;
 
-		public SeatPlanner(IPersonRepository personRepository, ISeatBookingRequestAssembler seatBookingRequestAssembler, ISeatPlanPersister seatPlanPersister, ITeamRepository teamRepository, ISeatMapLocationRepository seatMapLocationRepository)
+		public SeatPlanner(IPersonRepository personRepository, ISeatBookingRequestAssembler seatBookingRequestAssembler, ISeatPlanPersister seatPlanPersister, ITeamRepository teamRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatFrequencyCalculator seatFrequencyCalculator)
 		{
 			_personRepository = personRepository;
 			_seatBookingRequestAssembler = seatBookingRequestAssembler;
 			_seatPlanPersister = seatPlanPersister;
 			_teamRepository = teamRepository;
 			_seatMapLocationRepository = seatMapLocationRepository;
+			_seatFrequencyCalculator = seatFrequencyCalculator;
 		}
 
 		public ISeatPlanningResult Plan(IList<Guid> locationIds, IList<Guid> teamIds, DateOnlyPeriod dateOnlyPeriod, List<Guid> seatIds, List<Guid> personIds)
@@ -28,7 +30,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return seatIds != null
 					? bookSeatsByManuallyChosenSeats(dateOnlyPeriod, locationIds, seatIds, personIds)
 					: bookSeatsByLocationAndTeam(dateOnlyPeriod, locationIds, teamIds);
-
 		}
 
 		private ISeatPlanningResult bookSeatsByManuallyChosenSeats(DateOnlyPeriod dateOnlyPeriod, IList<Guid> locationIds, List<Guid> seatIds, List<Guid> personIds)
@@ -43,13 +44,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return createSeatPlansForPeriod(seats, personIds, dateOnlyPeriod);
 		}
 
-		private IEnumerable<ISeat> getSeatsInCommand (IList<Guid> locationIds, List<Guid> seatIds)
+		private IEnumerable<ISeat> getSeatsInCommand (IList<Guid> locationIds, ICollection<Guid> seatIds)
 		{
 			var location = _seatMapLocationRepository.FindLocations(locationIds).Single();
 			return location.Seats.Where(seat => seatIds.Contains(seat.Id.Value));
 		}
 
-		private ISeatPlanningResult bookSeatsByLocationAndTeam(DateOnlyPeriod dateOnlyPeriod, IList<Guid> locationIds, IList<Guid> teamIds)
+		private ISeatPlanningResult bookSeatsByLocationAndTeam(DateOnlyPeriod dateOnlyPeriod, IEnumerable<Guid> locationIds, IEnumerable<Guid> teamIds)
 		{
 			var rootLocation = _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
 			if (rootLocation != null)
@@ -70,13 +71,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				}
 		}
 
-		private ISeatPlanningResult createSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
+		private ISeatPlanningResult createSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, IEnumerable<ITeam> teams, DateOnlyPeriod period)
 		{
 			var people = getPeople(teams, period);
 			var seatBookingInformation = _seatBookingRequestAssembler.CreateSeatBookingRequests(people, period);
+			var seatFrequency = _seatFrequencyCalculator.GetSeatPopulationFrequency (period, people);
 			
-			SeatPlannerHelper.AttachExistingSeatBookingsToSeats(rootSeatMapLocation, seatBookingInformation.ExistingSeatBookings);
-			SeatPlannerHelper.AllocateSeatsToRequests(rootSeatMapLocation, seatBookingInformation);
+			SeatBookingForSeatLoader.AttachExistingSeatBookingsToSeats(rootSeatMapLocation, seatBookingInformation.ExistingSeatBookings);
+			SeatAllocationManager.AllocateSeats(rootSeatMapLocation, seatBookingInformation, seatFrequency);
 
 			_seatPlanPersister.Persist(period, seatBookingInformation);
 
@@ -84,13 +86,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		}
 
-		private ISeatPlanningResult createSeatPlansForPeriod(IEnumerable<ISeat> seats, List<Guid> personIds, DateOnlyPeriod period)
+		private ISeatPlanningResult createSeatPlansForPeriod(IEnumerable<ISeat> seats, IEnumerable<Guid> personIds, DateOnlyPeriod period)
 		{
 			var people = _personRepository.FindPeople(personIds).ToList();
 			var seatBookingInformation = _seatBookingRequestAssembler.CreateSeatBookingRequests(people, period);
+			var seatFrequency = _seatFrequencyCalculator.GetSeatPopulationFrequency(period, people);
 
-			SeatPlannerHelper.AttachExistingSeatBookingsToSeats(seats, seatBookingInformation.ExistingSeatBookings);
-			SeatPlannerHelper.AllocateSeatsToRequests(seats, seatBookingInformation);
+			SeatBookingForSeatLoader.AttachExistingSeatBookingsToSeats(seats, seatBookingInformation.ExistingSeatBookings);
+			SeatAllocationManager.AllocateSeats(seats, seatBookingInformation, seatFrequency);
 
 			_seatPlanPersister.Persist(period, seatBookingInformation);
 

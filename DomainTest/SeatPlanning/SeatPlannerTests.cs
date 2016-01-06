@@ -43,8 +43,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequestAssembler = new SeatBookingRequestAssembler(
 				new FakeScheduleDataReadScheduleRepository(personAssignment), _seatBookingRepository, _currentScenario);
 
+			var seatFrequencyCalculator = new SeatFrequencyCalculator (_seatBookingRepository);
+
 			var seatPlanner = new SeatPlanner(new FakePersonRepository(people.ToArray()), seatBookingRequestAssembler,
-				new SeatPlanPersister(_seatBookingRepository, _seatPlanRepository), new FakeTeamRepository(teams), new FakeSeatMapRepository(seatMapLocations.ToArray()));
+				new SeatPlanPersister(_seatBookingRepository, _seatPlanRepository), new FakeTeamRepository(teams), new FakeSeatMapRepository(seatMapLocations.ToArray()), seatFrequencyCalculator);
 
 			return seatPlanner;
 		}
@@ -108,6 +110,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
 
+			
+			
+			
 			var seatPlanner = setupSeatPlanner(teams, new[] { person }, new[] { seatMapLocation }, personAssignment);
 
 			seatPlanner.Plan(
@@ -1068,8 +1073,40 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual(2, result.NumberOfUnscheduledAgentDays);
 		}
 
+		[Test]
+		public void ShouldPlanSeatsConsideringFrequency()
+		{
+			var date = new DateTime(2015, 01, 02, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
+			var team = addTeam("Team");
+			var teams = new[] { team };
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var assignment = addAssignment(person, date, date.AddHours(8));
 
-		
+			var seatMapLocation = addLocation("Location", null, new[]
+			{
+				new Seat("Seat One",1), 
+				new Seat("Seat Two",2)
+			});
+
+			var theDateBefore = date.AddDays (-1);
+			addSeatBooking(person, theDateBefore, theDateBefore, theDateBefore.AddHours(10), seatMapLocation.Seats[1]);
+
+			var locations = new[] { seatMapLocation };
+
+			var seatPlanner = setupSeatPlanner(teams, new[] { person }, locations, assignment);
+
+			seatPlanner.Plan(
+				getLocationGuids(locations),
+				getTeamGuids(teams),
+				dateOnlyPeriod,
+				null,
+				null);
+
+			_seatBookingRepository.CountAllEntities().Should().Be(2);
+			var booking = _seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			booking.Seat.Should().Be(seatMapLocation.Seats[1]);
+		}
 
 	}
 }

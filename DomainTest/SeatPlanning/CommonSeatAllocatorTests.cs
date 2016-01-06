@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		public static void ShouldAllocateAccordingToPriority(bool useSeatLevelAllocator)
 		{
-			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift1 = new SeatBooking(PersonFactory.CreatePerson("Agent1"), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(PersonFactory.CreatePerson("Agent2"), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var agentShift1 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 1, 0, 0), new DateTime(2014, 01, 01, 9, 30, 00));
 			var agentShift2 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 10, 0, 0), new DateTime(2014, 01, 01, 18, 30, 0));
 			var agentShift3 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 01, 19, 0, 0), new DateTime(2014, 01, 02, 1, 30, 0));
-			var agentShift4 = new SeatBooking(new Person(), new DateOnly(2014, 01, 01), new DateTime(2014, 01, 02, 1, 0, 0), new DateTime(2014, 01, 02, 9, 30, 0));
+			var agentShift4 = new SeatBooking(new Person(), new DateOnly(2014, 01, 02), new DateTime(2014, 01, 02, 1, 0, 0), new DateTime(2014, 01, 02, 9, 30, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift4);
@@ -423,6 +423,228 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			}
 			
 			Assert.AreEqual (location.Seats[2], outboundAgentShift.Seat);
+		}
+
+		public static void ShouldAllocateAgentToMostPreviouslyOccupiedSeat(bool useSeatLevelAllocator)
+		{
+			var dateOfBooking = new DateOnly (2014, 01, 01);
+			var agent = PersonFactory.CreatePersonWithId();
+			
+			var agentShift = new SeatBooking(agent, dateOfBooking, dateOfBooking.Date.AddHours(8), dateOfBooking.Date.AddHours(17));
+			var seatBookingRequest = new SeatBookingRequest(agentShift);
+
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 1);
+			location.AddSeat("Seat2", 2);
+			location.AddSeat("Seat3", 3);
+
+			var seatFrequencies = new Dictionary<Guid, List<ISeatOccupancyFrequency>>();
+
+			seatFrequencies.Add (agent.Id.GetValueOrDefault(),new List<ISeatOccupancyFrequency>()
+			{
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[1], Frequency = 2
+
+				},
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[2], Frequency = 1
+				}
+			});
+		
+			if (useSeatLevelAllocator)
+			{
+				new SeatLevelAllocator(location.Seats, seatFrequencies).AllocateSeats(seatBookingRequest);
+			}
+			else
+			{
+				new SeatAllocator(seatFrequencies, location).AllocateSeats(seatBookingRequest);
+			}
+
+			Assert.That(agentShift.Seat.Name == "Seat2");
+		}
+
+		public static void ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame(bool useSeatLevelAllocator)
+		{
+			var dateOfBooking = new DateOnly(2014, 01, 01);
+			var agent = PersonFactory.CreatePersonWithId();
+
+			var agentShift = new SeatBooking(agent, dateOfBooking, dateOfBooking.Date.AddHours(8), dateOfBooking.Date.AddHours(17));
+			var seatBookingRequest = new SeatBookingRequest(agentShift);
+
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 1);
+			location.AddSeat("Seat2", 2);
+			location.AddSeat("Seat3", 3);
+
+			var outboundRole = ApplicationRoleFactory.CreateRole ("Outbound", "xxx");
+			location.Seats[1].Roles.Add (outboundRole);
+			location.Seats[2].Roles.Add(outboundRole);
+			agent.PermissionInformation.AddApplicationRole (outboundRole);
+
+			var seatFrequencies = new Dictionary<Guid, List<ISeatOccupancyFrequency>>();
+
+			seatFrequencies.Add(agent.Id.GetValueOrDefault(), new List<ISeatOccupancyFrequency>()
+			{
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[2], Frequency = 1
+
+				},
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[1], Frequency = 2
+				}
+			});
+
+			if (useSeatLevelAllocator)
+			{
+				new SeatLevelAllocator(location.Seats, seatFrequencies).AllocateSeats(seatBookingRequest);
+			}
+			else
+			{
+				new SeatAllocator(seatFrequencies, location).AllocateSeats(seatBookingRequest);
+			}
+
+			Assert.That(agentShift.Seat.Name == "Seat2");
+		}
+
+
+
+		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountEvenWhenPriorityIsNotContiguous(bool useSeatLevelAllocator)
+		{
+
+			var dateOfBooking = new DateOnly(2014, 01, 01);
+			var team = TeamFactory.CreateSimpleTeam("outbound");
+			var agents = new[]
+			{
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team)
+			};
+
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 1);
+			location.AddSeat("Seat2", 2);
+			location.AddSeat("Seat3", 4);
+			location.AddSeat("Seat4", 6);
+			location.AddSeat("Seat5", 7);
+
+			var agentShifts = groupAgentAroundSeatBookingTestSetup(useSeatLevelAllocator, agents, dateOfBooking, location);
+
+			Assert.AreEqual ("Seat4", agentShifts[0].Seat.Name);
+			Assert.AreEqual("Seat2", agentShifts[1].Seat.Name); // close to team and using priority?
+			Assert.AreEqual ("Seat3", agentShifts[2].Seat.Name);
+
+		}
+
+
+
+		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCount(bool useSeatLevelAllocator)
+		{
+
+			var dateOfBooking = new DateOnly(2014, 01, 01);
+
+			var team = TeamFactory.CreateSimpleTeam("outbound");
+
+			var agents = new[]
+			{
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team)
+			};
+
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 1);
+			location.AddSeat("Seat2", 2);
+			location.AddSeat("Seat3", 3);
+			location.AddSeat("Seat4", 4);
+			location.AddSeat("Seat5", 5);
+
+			var agentShifts = groupAgentAroundSeatBookingTestSetup (useSeatLevelAllocator, agents, dateOfBooking, location);
+
+			Assert.That(agentShifts[0].Seat.Name == "Seat4");
+			Assert.That(agentShifts[1].Seat.Name == "Seat2"); // close to team and using priority?
+			Assert.That(agentShifts[2].Seat.Name == "Seat3");
+
+		}
+
+		public static void ShouldGroupAgentsAroundSeatBookingWithHighestRoleCountConsideringFrequency(bool useSeatLevelAllocator)
+		{
+
+			var dateOfBooking = new DateOnly(2014, 01, 01);
+
+			var team = TeamFactory.CreateSimpleTeam("outbound");
+
+			var agents = new[]
+			{
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam (dateOfBooking, team)
+			};
+
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 1);
+			location.AddSeat("Seat2", 2);
+			location.AddSeat("Seat3", 3);
+			location.AddSeat("Seat4", 4);
+			location.AddSeat("Seat5", 5);
+
+			var seatFrequencies = new Dictionary<Guid, List<ISeatOccupancyFrequency>>();
+			seatFrequencies.Add(agents[1].Id.GetValueOrDefault(), new List<ISeatOccupancyFrequency>()
+			{
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[4], Frequency = 1
+
+				}
+			});
+
+			seatFrequencies.Add(agents[2].Id.GetValueOrDefault(), new List<ISeatOccupancyFrequency>()
+			{
+				new SeatOccupancyFrequency()
+				{
+					Seat = location.Seats[2], Frequency = 1
+
+				}
+			});
+
+			var agentShifts = groupAgentAroundSeatBookingTestSetup (useSeatLevelAllocator, agents, dateOfBooking, location, seatFrequencies);
+
+			Assert.That(agentShifts[0].Seat.Name == "Seat4");
+			Assert.That(agentShifts[1].Seat.Name == "Seat5"); // close to team and using priority?
+			Assert.That(agentShifts[2].Seat.Name == "Seat3");
+		}
+
+		private static SeatBooking[] groupAgentAroundSeatBookingTestSetup(bool useSeatLevelAllocator, IPerson[] agents, DateOnly dateOfBooking, SeatMapLocation location, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies = null)
+		{
+
+			var agentShifts = new[]
+			{
+				new SeatBooking (agents[0], dateOfBooking, dateOfBooking.Date.AddHours (8), dateOfBooking.Date.AddHours (17)),
+				new SeatBooking (agents[1], dateOfBooking, dateOfBooking.Date.AddHours (9), dateOfBooking.Date.AddHours (17)),
+				new SeatBooking (agents[2], dateOfBooking, dateOfBooking.Date.AddHours (10), dateOfBooking.Date.AddHours (17)),
+			};
+
+			var seatBookingRequest = new SeatBookingRequest (agentShifts);
+
+			var teamLeaderRole = ApplicationRoleFactory.CreateRole ("Team Leader", "xxx");
+			location.Seats[3].Roles.Add (teamLeaderRole);
+
+			agents[0].PermissionInformation.AddApplicationRole (teamLeaderRole);
+
+
+			if (useSeatLevelAllocator)
+			{
+				new SeatLevelAllocator (location.Seats, seatFrequencies).AllocateSeats (seatBookingRequest);
+			}
+			else
+			{
+				new SeatAllocator (seatFrequencies, location).AllocateSeats (seatBookingRequest);
+			}
+
+			return agentShifts;
 		}
 	}
 }

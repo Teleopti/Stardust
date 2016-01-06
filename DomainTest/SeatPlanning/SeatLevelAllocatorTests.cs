@@ -97,6 +97,24 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateAnAgentToASeatWhereRolesMatchBySeatPriority (true);
 		}
 
-		
+		[Test]
+		public void ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame()
+		{
+			CommonSeatAllocatorTests.ShouldAllocateAgentToMostPreviouslyOccupiedSeatWhenRolesAreSame(true);
+		}
+
+		[Test]
+		public void ShouldGroupAgentsAroundSeatBookingWithHighestRoleMatchCount()
+		{
+			CommonSeatAllocatorTests.ShouldGroupAgentsAroundSeatBookingWithHighestRoleCount(true);
+		}
+
+		[Test]
+		public void ShouldAllocateAgentToPreviouslyOccupiedSeat()
+		{
+			CommonSeatAllocatorTests.ShouldAllocateAgentToMostPreviouslyOccupiedSeat(true);
+		}
+
 	}
+
 }
