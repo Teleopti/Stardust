@@ -5,18 +5,14 @@ input[type=text],input[type=password],input[type=number]{
 }
 
 .seatmap-container{
-	height: 100%;
+	height: 95%;
 	position: relative;
 }
 
 .seatmap{
 	padding: 0;
 	z-index: 0;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
+	height:100%;
 	overflow:hidden;
 	background:$white;
 	.wfm-block{
@@ -115,7 +111,7 @@ input[type=text],input[type=password],input[type=number]{
 
 	.breadcrumb-inverse span {
 		position:relative;
-		margin-left : 5px;
+		margin-left : 6px;
 	}
 
 }
@@ -131,7 +127,7 @@ input[type=text],input[type=password],input[type=number]{
 
 .seatmap-canvas {
 	position:absolute;
-	top:30px;
+	top:0px;
 	bottom:0px;
 	overflow:hidden;
 	width:100%;
@@ -171,12 +167,12 @@ seatmap-editor{
 	}
 
 	.md-menu-toolbar {
-		background-color: #f1f1f1 !important;
-		margin-top:2px;
+		border-bottom:1px solid $gray012;
+		padding:2px;
 	}
 
 	.layout-row{
-		padding: 0px 4px;
+		padding-left:2px;
 	
 		md-menu-bar {
 			padding: 0 !important;
@@ -210,6 +206,8 @@ seatmap-editor{
 	.layout-row>md-menu-bar>md-menu>button{
 		padding:0;
 		min-width:60px;
+		border:1px solid $gray012;
+		border-radius:2px;
 	}
 
 	.quick-access-toolbar{
@@ -319,7 +317,7 @@ seatmap-occupancy-detail{
 	.wfm-btn{
 		height: 100%;
 		padding: 5px 10px;
-		margin: 0;
+		margin: 0 5px;
 		background: $white;
 	}
 
