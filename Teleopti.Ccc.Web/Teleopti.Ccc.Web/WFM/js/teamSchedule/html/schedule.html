@@ -39,7 +39,7 @@
 		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled"/>
 	</div>
 	
-	<div class="pull-right" ng-if="vm.total > 500">
+	<div class="pull-right" ng-if="vm.total <= 500">
 		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
 				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
