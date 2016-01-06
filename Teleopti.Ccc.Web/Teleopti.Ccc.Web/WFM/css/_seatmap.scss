@@ -303,8 +303,9 @@ seatmap-editor{
 	margin-top: -62px;
 }
 
-.seatmap-canvas .wfm-right-panel .resizable{
+.seatmap-canvas wfm-right-panel .resizable{
 	top:-30px;
+	bottom:2px;
 }
 
 seatmap-occupancy-detail{
