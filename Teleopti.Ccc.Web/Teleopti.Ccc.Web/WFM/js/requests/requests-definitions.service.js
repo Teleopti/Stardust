@@ -26,10 +26,10 @@
 			Deny: 'deny'
 		};
 
-		this.normalizeRequestsFilter = function(filter, sortingOrders, paging) {
+		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		
 			var target = {
-				StartDate: filter.period.startDate,
-				EndDate: filter.period.endDate,
+				StartDate: filter.period.startDate.toLocaleString(),
+				EndDate: filter.period.endDate.toLocaleString(),
 				SortingOrders: sortingOrders.join(','),
 				AgentSearchTerm: filter.agentSearchTerm
 			};
