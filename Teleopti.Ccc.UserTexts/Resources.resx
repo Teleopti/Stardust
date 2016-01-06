@@ -13984,20 +13984,12 @@ Check your internet connection or contact your administrator.</value>
 Help us improve your experience by sending an error report</value>
     <comment>unexpected error message on the web ui</comment>
   </data>
-  <data name="FilterRoles" xml:space="preserve">
-    <value>Filter Roles</value>
-    <comment>Filter Roles tootip translation for right panel input prepend in seatmap</comment>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Current User Timezone</value>
+    <comment>Current user's timezone</comment>
   </data>
-  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
-    <value>Invalid dimensions! Expecting an image smaller than 2000x4000.</value>
-    <comment>Image size message of load image modal box in seatmap</comment>
-  </data>
-  <data name="LoadImage" xml:space="preserve">
-    <value>Load image</value>
-    <comment>Title of load image modal box in seatmap</comment>
-  </data>
-  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
-    <value>Not a JPEG, SVG or a PNG!</value>
-    <comment>Image format message of load image modal box in seatmap</comment>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Request Submitter Timezone</value>
+    <comment>Request submitter's timezone</comment>
   </data>
 </root>

@@ -1,8 +1,8 @@
 ﻿<div class="wfm-switch">
-	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingLogOnUserTimeZone" />
+	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone" />
 	<label for="switch1">
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingLogOnUserTimeZone!=true" translate>userTimeZone</span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingLogOnUserTimeZone==true" translate>requesterTimeZone</span>
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span><span> - {{requestsTableContainer.userTimeZone}} </span></span>
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>		
 		<span class="wfm-switch-toggle"></span>
 	</label>
 </div>

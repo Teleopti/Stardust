@@ -5823,6 +5823,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server is unreachable! 
+        ///Check your internet connection or contact your administrator..
+        /// </summary>
+        public static string ConnectionErrorMessage {
+            get {
+                return ResourceManager.GetString("ConnectionErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect Rate(%).
         /// </summary>
         public static string ConnectRate {
@@ -11489,7 +11499,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have Modify Person Absence permission !.
+        ///   Looks up a localized string similar to You don&apos;t have Modify Person Absence permission!.
         /// </summary>
         public static string HasNoModifyPersonAbsencePermission {
             get {
@@ -12377,6 +12387,16 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsufficientStaffingHours {
             get {
                 return ResourceManager.GetString("InsufficientStaffingHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application has encountered an unexpected error.
+        ///Help us improve your experience by sending an error report.
+        /// </summary>
+        public static string InternalErrorMessage {
+            get {
+                return ResourceManager.GetString("InternalErrorMessage", resourceCulture);
             }
         }
         
@@ -13700,6 +13720,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string LogOnFailedPasswordExpired {
             get {
                 return ResourceManager.GetString("LogOnFailedPasswordExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current User Timezone.
+        /// </summary>
+        public static string LogonUserTimeZone {
+            get {
+                return ResourceManager.GetString("LogonUserTimeZone", resourceCulture);
             }
         }
         
@@ -17191,7 +17220,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has No permission to add intraday absence for {0}.
+        ///   Looks up a localized string similar to You don&apos;t have permission to add intraday absences for {0}.
         /// </summary>
         public static string NoPermisionAddIntradayAbsenceForAgent {
             get {
@@ -17200,7 +17229,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has No permission to add full day absence for {0}.
+        ///   Looks up a localized string similar to You don&apos;t have permission to add full day absences for {0}.
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
@@ -22113,6 +22142,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestStatusPending {
             get {
                 return ResourceManager.GetString("RequestStatusPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request Submitter Timezone.
+        /// </summary>
+        public static string RequestSubmitterTimeZone {
+            get {
+                return ResourceManager.GetString("RequestSubmitterTimeZone", resourceCulture);
             }
         }
         
