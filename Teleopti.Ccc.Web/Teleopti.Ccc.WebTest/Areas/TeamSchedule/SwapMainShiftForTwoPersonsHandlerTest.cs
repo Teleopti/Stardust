@@ -5,12 +5,14 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private IScenarioRepository _scenarioRepository;
 		private ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private IScheduleDictionaryPersister _scheduleDictionaryPersister;
+		private IMessagePopulatingServiceBusSender _busSender;
 
 		private ISwapMainShiftForTwoPersonsCommandHandler _target;
 
@@ -50,10 +53,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_commonNameDescriptionSetting = new CommonNameDescriptionSetting();
 			_personRepository = new FakePersonRepository(personFrom, personTo);
 
-			_scenarioRepository = new FakeScenarioRepository(new Scenario("Test Scenario")
+			var defaultScenario = new Scenario("Test Scenario")
 			{
 				DefaultScenario = true
-			});
+			};
+			defaultScenario.SetId(Guid.NewGuid());
+			_scenarioRepository = new FakeScenarioRepository(defaultScenario);
 
 			_scheduleRepository = new FakeScheduleRepository();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
@@ -62,6 +67,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_scheduleDictionaryPersister.Stub(x => x.Persist(new FakeScheduleDictionary()))
 				.Return(new List<PersistConflict>())
 				.IgnoreArguments();
+
+			_busSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
+			_busSender.Stub(x => x.Send(null, false)).IgnoreArguments();
 		}
 
 		[Test]
@@ -72,7 +80,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
+				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister,
+				_busSender);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
@@ -93,6 +102,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_scheduleDictionaryPersister.AssertWasCalled(
 				x => x.Persist(Arg<IScheduleDictionary>.Matches(a => (a != null))));
 
+			_busSender.AssertWasCalled(
+				x => x.Send(Arg<ScheduleChangedEvent>.Matches(a => a.PersonId == personIdFrom), Arg<bool>.Matches(a => a == true)));
+			_busSender.AssertWasCalled(
+				x => x.Send(Arg<ScheduleChangedEvent>.Matches(a => a.PersonId == personIdTo), Arg<bool>.Matches(a => a == true)));
+
 			result.Count().Should().Be.EqualTo(0);
 		}
 
@@ -107,8 +121,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 						new DateOnlyPeriod())
 				}).IgnoreArguments();
 
-			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository, _scheduleRepository,
-				_scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister);
+			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
+				_scheduleRepository, _scenarioRepository, _swapAndModifyServiceNew, _scheduleDictionaryPersister,
+				_busSender);
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
