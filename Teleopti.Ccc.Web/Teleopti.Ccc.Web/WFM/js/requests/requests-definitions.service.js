@@ -28,8 +28,8 @@
 
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		
 			var target = {
-				StartDate: filter.period.startDate.toLocaleString(),
-				EndDate: filter.period.endDate.toLocaleString(),
+				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
+				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
 				SortingOrders: sortingOrders.join(','),
 				AgentSearchTerm: filter.agentSearchTerm
 			};
