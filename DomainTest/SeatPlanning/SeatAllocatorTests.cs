@@ -104,12 +104,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
-			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 00, 00));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
-			var agentShift3 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
-				new DateTime (2014, 01, 01, 17, 0, 0));
+
+			var startDateTime = new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc);
+
+			var agentShift1 = new SeatBooking(new Person(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours (8));
+			var agentShift2 = new SeatBooking (new Person(), new DateOnly (startDateTime), startDateTime, startDateTime.AddHours (8));
+			var agentShift3 = new SeatBooking (new Person(), new DateOnly (startDateTime), startDateTime, startDateTime.AddHours (8));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift2, agentShift3);
