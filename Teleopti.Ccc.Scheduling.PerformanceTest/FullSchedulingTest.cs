@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -22,7 +24,15 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 
 				using (new TimeoutScope(browserActivator, TimeSpan.FromDays(2)))
 				{
-					browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+					try
+					{
+						dumpInfo(browserInteractions, "before.txt");
+						browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
+					}
+					finally
+					{
+						dumpInfo(browserInteractions, "after.txt");
+					}
 				}
 				//no server error
 				browserInteractions.AssertNotExists("body", ".test-errorMessage");
@@ -32,10 +42,21 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				browserInteractions.AssertNotExists("body", ".server-busy");
 				//not redirected to logon page
 				browserInteractions.AssertNotExists("body", "#Login-container");
-
 				browserInteractions.AssertExists(".scheduling-result");
 			}
 		}
+
+		private static void dumpInfo(IBrowserInteractions browserInteractions, string fileName)
+		{
+			var path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\Logs\");
+			var output = new List<string>();
+			browserInteractions.DumpInfo(info =>
+			{
+				output.Add(info);
+			});
+			File.WriteAllLines(path + fileName, output);
+		}
+
 
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
