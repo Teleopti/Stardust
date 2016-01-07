@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var period = new DateTimePeriod(scheduleDate.ToUniversalTime(), scheduleDate.AddDays(1).ToUniversalTime());
 
 			var schedulePeriod = new ScheduleDateTimePeriod(period);
-			var personProvider = new PersonProvider(_personRepository);
+			var personProvider = new PersonProvider(peoples);
 			var options = new ScheduleDictionaryLoadOptions(true, true);
 
 			var scheduleDictionary =
