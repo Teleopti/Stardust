@@ -19,6 +19,27 @@
 	                return !$scope.initialized || $scope.isScheduleRunning || $scope.scheduleClicked || !$scope.planningPeriod.StartDate;
 	            };
 
+	            function updateRunningStatus() {
+	            	PlanningPeriodSvrc.status.get().$promise.then(function (result) {
+	            		$scope.isScheduleRunning = result.IsRunning;
+	            	});
+	            }
+
+	            var stopPolling;
+	            function startPoll() {
+	            	updateRunningStatus();
+	            	stopPolling = $interval(updateRunningStatus, 10 * 1000);
+	            }
+	            startPoll();
+
+	            function handleScheduleOrOptimizeError() {
+	            	$scope.errorMessage = "An error occurred. Please try again.";
+	            	$scope.schedulingPerformed = false;
+	            	$scope.status = '';
+	            	$scope.scheduleClicked = false;
+	            	startPoll();
+	            }
+
 	            PlanningPeriodSvrc.getDayOffRules().then(function(result) {
 	                $scope.dayoffRules = result.data;
 	            });
@@ -28,35 +49,12 @@
 	                PlanningPeriodSvrc.keepAlive();
 	            }, tenMinutes);
 
-	            function updateRunningStatus() {
-	                PlanningPeriodSvrc.status.get().$promise.then(function(result) {
-	                    $scope.isScheduleRunning = result.IsRunning;
-	                });
-	            }
-
-	            var stopPolling;
-
-	            function startPoll() {
-	                updateRunningStatus();
-	                stopPolling = $interval(updateRunningStatus, 10 * 1000);
-	            }
-
-	            startPoll();
-
 	            function cancelPoll() {
 	                $scope.isScheduleRunning = false;
 	                if (angular.isDefined(stopPolling)) {
 	                    $interval.cancel(stopPolling);
 	                    stopPolling = undefined;
 	                }
-	            }
-
-	            function handleScheduleOrOptimizeError() {
-	                $scope.errorMessage = "An error occurred. Please try again.";
-	                $scope.schedulingPerformed = false;
-	                $scope.status = '';
-	                $scope.scheduleClicked = false;
-	                startPoll();
 	            }
 
 	            $scope.launchSchedule = function(p) {
