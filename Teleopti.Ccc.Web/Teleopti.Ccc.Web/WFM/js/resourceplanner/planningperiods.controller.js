@@ -42,7 +42,7 @@
 
 	            PlanningPeriodSvrc.getDayOffRules().then(function(result) {
 	                $scope.dayoffRules = result.data;
-	            });
+	            }, handleScheduleOrOptimizeError);
 
 	            var tenMinutes = 1000 * 60 * 10;
 	            var keepAliveRef = $interval(function() {

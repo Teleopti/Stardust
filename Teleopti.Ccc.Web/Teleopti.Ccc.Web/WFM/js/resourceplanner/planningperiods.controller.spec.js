@@ -210,4 +210,14 @@ describe('PlanningPeriodsCtrl', function () {
 
 		expect(numberOfKeepAliveCalls).toBe(2);
 	}));
+	it('should output error if dayoffrules loading goes banana', inject(function ($controller) {
+		//mainly put here for build server reporting, not really needed
+		var scope = $rootScope.$new();
+		$controller('PlanningPeriodsCtrl', { $scope: scope  });
+
+		$httpBackend.whenGET("../api/resourceplanner/dayoffrules").respond(500, {});
+
+		$httpBackend.flush();
+		expect(scope.errorMessage).toBeTruthy();
+	}));
 });
