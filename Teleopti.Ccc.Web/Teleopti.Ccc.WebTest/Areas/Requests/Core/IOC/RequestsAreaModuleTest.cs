@@ -1,6 +1,8 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 
 
 		[Test]
-		public void ShouldResolveOutboundController()
+		public void ShouldResolveRequestsController()
 		{
 			using (var ioc = _containerBuilder.Build())
 			{
@@ -36,6 +38,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 				{
 					var controller = scope.Resolve<RequestsController>();
 					controller.Should().Not.Be.Null();
+				}
+			}
+		}
+
+		[Test]
+		public void ShouldResolveApproveRequestCommandHandler()
+		{			
+			using (var ioc = _containerBuilder.Build())
+			{
+				using (var scope = ioc.BeginLifetimeScope(_requestTag))
+				{
+					var handler = scope.Resolve<IHandleCommand<ApproveRequestCommand>>();
+					handler.Should().Not.Be.Null();
 				}
 			}
 		}

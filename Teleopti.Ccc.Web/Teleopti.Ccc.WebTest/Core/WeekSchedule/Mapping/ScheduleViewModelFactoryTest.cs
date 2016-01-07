@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 		public IPersonRequest Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _requestRepository.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IPersonRequest> LoadAll()

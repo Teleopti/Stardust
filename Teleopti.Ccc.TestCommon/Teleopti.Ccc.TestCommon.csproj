@@ -234,6 +234,7 @@
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffRulesRepository.cs" />
     <Compile Include="FakeRepositories\Rta\IProperAlarm.cs" />
+    <Compile Include="FakeRequestApprovalServiceFactory.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelReader.cs" />

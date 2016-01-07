@@ -5,6 +5,7 @@ using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
@@ -15,10 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 	public class RequestsController : ApiController
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
+		private readonly IRequestCommandHandlingProvider _commandHandlingProvider;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, IRequestCommandHandlingProvider commandHandlingProvider)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
+			_commandHandlingProvider = commandHandlingProvider;
 		}
 
 		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
@@ -36,17 +39,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
 		public virtual IEnumerable<Guid> ApproveRequests(IEnumerable<Guid> ids)
-		{			
-			//todo process request command
-			return ids;
+		{
+			return _commandHandlingProvider.ApproveRequests(ids);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
 		public virtual IEnumerable<Guid> DenyRequests(IEnumerable<Guid> ids)
-		{			
-			//todo process request command
-			return ids;
-
+		{
+			return _commandHandlingProvider.DenyRequests(ids);
 		}
 
 	}

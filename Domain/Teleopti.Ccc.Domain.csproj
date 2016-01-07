@@ -143,6 +143,8 @@
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="AgentInfo\Requests\IRequestApprovalServiceFactory.cs" />
+    <Compile Include="AgentInfo\Requests\RequestApprovalServiceFactory.cs" />
     <Compile Include="AgentInfo\Requests\ScheduleDayFilterCriteria.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeCriteria.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
@@ -171,6 +173,10 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\ApproveRequestCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\ApproveRequestCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\DenyRequestCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\DenyRequestCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IAbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceCreator.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceCreator.cs" />
