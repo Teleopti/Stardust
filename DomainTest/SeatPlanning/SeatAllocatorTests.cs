@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsSequentiallyToOneSeat (false);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldAllocateSeatsByEarliestFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst (false);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
 			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat (false);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldAllocateToGroupFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateToGroupFirst (false);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("L1 Seat1") && allocatedSeats.Contains ("L2 Seat1"));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
 			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldAllocateAgentGroupsTogetherForSecondLocation()
 		{
 			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
