@@ -1,16 +1,17 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.forecasting').directive('forecastResultChart', ['$translate', forecastResultChart]);
+	angular.module('wfm.forecasting').directive('forecastResultChart', ['$translate', '$filter', forecastResultChart]);
 
-	function forecastResultChart($translate) {
+	function forecastResultChart($translate, $filter) {
 		return {
 			controller: ['$scope', forecastResultChartCtrl],
 			templateUrl: "js/forecasting/html/forecasting-result-chart.html",
 			scope: {
 				'chartId': '=',
 				'refreshFn': '=',
-				'selectedFn': '='
+				'selectedFn': '=',
+				'selectedDayCount': '='
 			},
 			require: ['forecastResultChart'],
 			link: postlink
@@ -20,10 +21,12 @@
 			$scope.clearSelection = clearSelection;
 			$scope.refreshFn = generateChart;
 			$scope.selectedFn = selected;
+			$scope.selectedDayCount = 0;
 
 			function clearSelection() {
 				$scope.chart.unzoom();
 				$scope.chart.unselect(['vc']);
+				$scope.selectedDayCount = 0;
 			};
 
 			function selected() {
@@ -33,6 +36,12 @@
 			}
 
 			function generateChart(chartData) {
+
+				if (c3.applyFixForForecast) c3.applyFixForForecast(function () {
+					$scope.$evalAsync(function () {
+						$scope.selectedDayCount = $filter('filter')($scope.chart.selected(), { id: 'vtc' }).length;
+					});
+				});
 
 				$scope.chart = c3.generate({
 					bindto: "#" + $scope.chartId,
@@ -84,8 +93,11 @@
 						},
 						hide: ['vc', 'vtt', 'vacw'],
 						onclick: function (chartPoint) {
-							if (chartPoint.id === 'vtc' || chartPoint.id === 'vttt' || chartPoint.id === 'vtacw')
-								$scope.$apply();
+							if (chartPoint.id === 'vtc') {
+								$scope.$evalAsync(function() {
+									$scope.selectedDayCount = $filter('filter')($scope.chart.selected(), { id: 'vtc' }).length;
+								});
+							}
 						}
 					},
 					axis: {

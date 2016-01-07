@@ -48,7 +48,7 @@
 							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 						</div>
 						<div ng-show="workload.forecastResultLoaded" class="wfm-block forecast-result-chart-wrapper">
-							<forecast-result-chart chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays"></forecast-result-chart>
+							<forecast-result-chart chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
 						</div>
 
 						<div class="modal-footer">
@@ -59,8 +59,8 @@
 										{{ 'ViewChartTip' | translate }}
 									</md-tooltip>
 								</a>
-								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload), 'wfm-btn-invis-disabled': disableModify(workload)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload)">
-									{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDays().length)"></span>
+								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload.selectedDayCount), 'wfm-btn-invis-disabled': disableModify(workload.selectedDayCount)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload.selectedDayCount)">
+									{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
 									<md-tooltip>
 										{{ 'SelectToModify' | translate }}
 									</md-tooltip>

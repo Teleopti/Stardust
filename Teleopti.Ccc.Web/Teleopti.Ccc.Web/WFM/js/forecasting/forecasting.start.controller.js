@@ -132,7 +132,7 @@
 				var handleModifyDays = function (workload) {
 					var tempsum = 0;
 					$scope.modifyDays = [];
-					var isOnlyOneDaySelected = workload.selectedDays().length/3 == 1;
+					var isOnlyOneDaySelected = workload.selectedDayCount == 1;
 					angular.forEach(workload.selectedDays(), function (value) {
 						if (value.id == 'vtc') {
 							if (isOnlyOneDaySelected) {
@@ -157,7 +157,7 @@
 
 				$scope.modalModifyLaunch = false;
 				$scope.displayModifyModal = function (workload) {
-					if ($scope.disableModify(workload)) {
+					if ($scope.disableModify(workload.selectedDays().length)) {
 						return;
 					}
 					$scope.modalModifyLaunch = true;
@@ -217,7 +217,7 @@
 				};
 
 				$scope.formatSelectedDayCount = function(count) {
-					return $scope.formatDayCount(count / 3, true);
+					return $scope.formatDayCount(count, true);
 				};
 
 				$scope.formatDayCount = function (count, withParenthesis) {
@@ -257,11 +257,11 @@
 					});
 				};
 
-				$scope.disableModify = function (workload) {
+				$scope.disableModify = function (count) {
 					if ($scope.isForecastRunning) {
 						return true;
 					}
-					return workload.selectedDays().length == 0;
+					return count == 0;
 				};
 
 				$scope.applyCampaign = function () {
@@ -393,10 +393,6 @@
 						}
 					);
 				};
-
-				if (c3.applyFixForForecast) c3.applyFixForForecast(function () {
-					$scope.$apply();
-				});
 
 				$scope.$on('$destroy', function () {
 					if (c3.restoreFixForForecast)
