@@ -15,7 +15,7 @@
 						for (var property in item) {
 							if (includes !== undefined && includes.indexOf(property) === -1)
 								continue;
-							if (item[property] !== null)
+							if (item[property] !== null && item[property] !== undefined)
 								matched = matched || (item[property].toString().search(new RegExp(keyword, "i")) !== -1 ? true : false);
 						}
 						if (matched === false) {

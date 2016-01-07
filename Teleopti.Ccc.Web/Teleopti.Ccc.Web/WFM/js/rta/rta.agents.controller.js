@@ -89,9 +89,9 @@
 					return RtaService.getStatesForSites;
 				})();
 
-				var updateBreadCrumb = function(agents) {
-					$scope.siteName = agents[0].SiteName;
-					$scope.teamName = agents[0].TeamName;
+				var updateBreadCrumb = function(agentsInfo) {
+					$scope.siteName = agentsInfo[0].SiteName;
+					$scope.teamName = agentsInfo[0].TeamName;
 				};
 				if (siteIds.length > 1) {
 					$scope.multipleSitesName = "Multiple Sites";
@@ -105,9 +105,10 @@
 						siteIds: siteIds,
 						teamIds: teamIds,
 					})
-					.then(function(agents) {
-						$scope.agents = agents;
-						updateBreadCrumb(agents);
+					.then(function(agentsInfo) {
+						$scope.agentsInfo = agentsInfo;
+						$scope.agents = agentsInfo;
+						updateBreadCrumb(agentsInfo);
 					})
 					.then(updateStates);
 
@@ -142,24 +143,46 @@
 				}
 
 				function setStatesInAgents(states) {
-					$scope.agents.forEach(function(agent) {
-						var state = $filter('filter')(states, {
-							PersonId: agent.PersonId
+					$scope.agents = [];
+					fillAgentsWithState(states);
+					fillAgentsWithoutState();
+				}
+
+				function fillAgentsWithState(states) {
+					states.forEach(function(state) {
+						var agentInfo = $filter('filter')($scope.agentsInfo, {
+							PersonId: state.PersonId
 						});
-						if (state.length > 0) {
-							agent.State = state[0].State;
-							agent.StateStartTime = state[0].StateStartTime;
-							agent.Activity = state[0].Activity;
-							agent.NextActivity = state[0].NextActivity;
-							agent.NextActivityStartTime = state[0].NextActivityStartTime;
-							agent.Alarm = state[0].Alarm;
-							agent.AlarmStart = state[0].AlarmStart;
-							agent.AlarmColor = state[0].AlarmColor;
-							agent.TimeInState = state[0].TimeInState;
-							agent.TimeInAlarm = state[0].TimeInAlarm;
-						} else {
-							agent.TimeInAlarm = null;
+						if (agentInfo.length > 0) {
+							$scope.agents.push({
+								Name: agentInfo[0].Name,
+								TeamName: agentInfo[0].TeamName,
+								PersonId: state.PersonId,
+								State: state.State,
+								StateStartTime: state.StateStartTime,
+								Activity: state.Activity,
+								NextActivity: state.NextActivity,
+								NextActivityStartTime: state.NextActivityStartTime,
+								Alarm: state.Alarm,
+								AlarmStart: state.AlarmStart,
+								AlarmColor: state.AlarmColor,
+								TimeInState: state.TimeInState,
+								TimeInAlarm: state.TimeInAlarm
+							});
 						}
+					});
+				}
+
+				function fillAgentsWithoutState() {
+					$scope.agentsInfo.forEach(function(agentInfo) {
+						var agentFilled = $filter('filter')($scope.agents, {
+							PersonId: agentInfo.PersonId
+						});
+						if (agentFilled.length === 0)
+							$scope.agents.push({
+								Name: agentInfo.Name,
+								TeamName: agentInfo.TeamName,
+							});
 					});
 				}
 			}

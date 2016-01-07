@@ -225,9 +225,11 @@ describe('RtaAgentsCtrl for teams', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		agents = [{
 			Name: "Ashley Andeen",
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		}, {
 			Name: "Charley Caper",
+			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		}];
 		states[1].State = "In Call";

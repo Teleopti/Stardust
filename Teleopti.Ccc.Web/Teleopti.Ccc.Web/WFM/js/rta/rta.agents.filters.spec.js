@@ -164,7 +164,18 @@ describe('RtaAgentsFilters', function() {
 		}];
 		var filter = $filter('agentFilter');
 
-		var filteredData = filter(data, '123', ["name","state"]);
+		var filteredData = filter(data, '123', ["name", "state"]);
+
+		expect(filteredData.length).toEqual(0);
+	}));
+
+	it('should not filter on any undefined object', inject(function($filter) {
+		var data = [{
+			Name: undefined
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, '');
 
 		expect(filteredData.length).toEqual(0);
 	}));
