@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToPeople { get; set; }
 		public bool AccessToOutbound { get; set; }
 		public bool AccessToWfmRequests { get; set; }
-		public bool AccessToWfmTeamSchedule { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -113,7 +112,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			QuickForecaster = false;
 			AccessToOutbound = false;
 			AccessToWfmRequests = false;
-			AccessToWfmTeamSchedule = false;
 		}
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
@@ -328,11 +326,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebRequests
 									   select f;
-
-			if (!AccessToWfmTeamSchedule)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTeamSchedules
-											  select f;
 
 			return applicationFunctions;
 		}
