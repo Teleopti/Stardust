@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				personRequest.Deny(null, "RequestDenyReasonSupervisor", _authorization);
 				return true;
 			}
-			catch (InvalidRequestStateTransitionException e)
+			catch (InvalidRequestStateTransitionException)
 			{
 				return false;
 			}

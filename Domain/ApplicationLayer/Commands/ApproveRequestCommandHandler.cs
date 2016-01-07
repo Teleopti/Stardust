@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				personRequest.Approve(approvalService, _authorization);
 			}
-			catch (InvalidRequestStateTransitionException e)
+			catch (InvalidRequestStateTransitionException)
 			{
 				return false;
 			}
