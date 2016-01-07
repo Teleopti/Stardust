@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	public class SeatBookingRequest : IComparable
+	public class SeatBookingRequest : IComparable<SeatBookingRequest>
 	{
 		private readonly ISeatBooking[] _seatBookings;
 
@@ -19,10 +18,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public int MemberCount { get { return _seatBookings.Length; } }
 
-		public int CompareTo (object obj)
+		public int CompareTo (SeatBookingRequest other)
 		{
-			var seatBookingRequest = obj as SeatBookingRequest;
-			return seatBookingRequest == null ? 1 : new memberCountStartDateComparer().Compare (this, seatBookingRequest);
+			return  new memberCountStartDateComparer().Compare(this, other);
 		}
 
 		private class memberCountStartDateComparer : IComparer<SeatBookingRequest>
@@ -33,14 +31,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				{
 					return 1;
 				}
-				
+
 				if (seatBookingRequest1.MemberCount > seatBookingRequest2.MemberCount)
 				{
 					return -1;
 				}
 
-				var miniumBookingStartDateRequest1 = seatBookingRequest1.SeatBookings.Min (booking => booking.StartDateTime);
-				var miniumBookingStartDateRequest2 = seatBookingRequest2.SeatBookings.Min (booking => booking.StartDateTime);
+				var miniumBookingStartDateRequest1 = seatBookingRequest1.SeatBookings.Min(booking => booking.StartDateTime);
+				var miniumBookingStartDateRequest2 = seatBookingRequest2.SeatBookings.Min(booking => booking.StartDateTime);
 
 				if (miniumBookingStartDateRequest1 < miniumBookingStartDateRequest2)
 				{
@@ -51,9 +49,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				{
 					return 1;
 				}
-				
+
 				return 0;
 			}
 		}
+
+		
 	}
 }

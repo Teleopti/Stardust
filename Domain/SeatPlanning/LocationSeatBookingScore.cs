@@ -5,19 +5,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	public class LocationSeatBookingScore : IComparable
+	public class LocationSeatBookingScore : IComparable<LocationSeatBookingScore>
 	{
 		public ISeatMapLocation Location { get; set; }
 		public Guid GroupId { get; set; }
 		public List<SeatByIndexScore> ScoreList { get; set; }
-		public int CompareTo(object obj)
+		public int CompareTo(LocationSeatBookingScore other)
 		{
-
-			var locationSeatBookingScore = obj as LocationSeatBookingScore;
-			return locationSeatBookingScore == null ? 1 : new sortRoleFrequencyPriorityHelper().Compare(this, locationSeatBookingScore);
+			return new sortRoleFrequencyPriorityComparer().Compare(this, other);
 		}
-
-		private class sortRoleFrequencyPriorityHelper : IComparer <LocationSeatBookingScore>
+		
+		private class sortRoleFrequencyPriorityComparer : IComparer <LocationSeatBookingScore>
 		{
 			public int Compare(LocationSeatBookingScore locationScore1, LocationSeatBookingScore locationScore2)
 			{		
@@ -52,8 +50,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 				return 0;
 			}
-
 		}
-
 	}
 }
