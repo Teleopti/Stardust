@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
+			Assert.AreEqual("L1 Seat1", agentShift2.Seat.Name);
 			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
 
 		}
