@@ -126,6 +126,9 @@
 			requestsDataService.reset();
 
 			targetScope.paging.pageNumber = 2;
+
+			targetScope.$broadcast('reload.requests.with.selection');
+
 			targetScope.$digest();
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 			expect(requestsDataService.getLastRequestParameters()[2].pageNumber).toEqual(2);

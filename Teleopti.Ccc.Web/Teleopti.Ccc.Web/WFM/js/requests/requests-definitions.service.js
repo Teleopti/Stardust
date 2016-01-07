@@ -70,11 +70,11 @@
 			
 			var Orders = self.REQUEST_SORTING_ORDERS;
 
-			if (sortColumn.name === 'AgentName') {
+			if (sortColumn.displayName === 'AgentName') {
 				return sortColumn.sort.direction === 'asc' ? Orders.AgentNameAsc : Orders.AgentNameDesc;
-			} else if (sortColumn.name == 'UpdatedTime') {
+			} else if (sortColumn.displayName == 'UpdatedOn') {
 				return sortColumn.sort.direction === 'asc' ? Orders.UpdatedOnAsc : Orders.UpdatedOnDesc;
-			} else if (sortColumn.name == 'CreatedTime') {
+			} else if (sortColumn.displayName == 'CreatedOn') {
 				return sortColumn.sort.direction === 'asc' ? Orders.CreatedOnAsc : Orders.CreatedOnDesc;
 			} else {
 				return null;

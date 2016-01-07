@@ -10265,6 +10265,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter Roles.
+        /// </summary>
+        public static string FilterRoles {
+            get {
+                return ResourceManager.GetString("FilterRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string Filters {
@@ -12554,6 +12563,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid dimensions! Expecting an image smaller than 2000x4000..
+        /// </summary>
+        public static string InvalidDimensionsExpectingAnImageSmallerThan2000x4000 {
+            get {
+                return ResourceManager.GetString("InvalidDimensionsExpectingAnImageSmallerThan2000x4000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid end date.
         /// </summary>
         public static string InvalidEndDate {
@@ -13297,6 +13315,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string LoadForecastedHours {
             get {
                 return ResourceManager.GetString("LoadForecastedHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load image.
+        /// </summary>
+        public static string LoadImage {
+            get {
+                return ResourceManager.GetString("LoadImage", resourceCulture);
             }
         }
         
@@ -17459,6 +17486,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSuggestions {
             get {
                 return ResourceManager.GetString("NoSuggestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not a JPEG, SVG or a PNG!.
+        /// </summary>
+        public static string NotAJPEGSVGOrAPNG {
+            get {
+                return ResourceManager.GetString("NotAJPEGSVGOrAPNG", resourceCulture);
             }
         }
         
@@ -21998,6 +22034,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestsHaveBeenDenied {
             get {
                 return ResourceManager.GetString("RequestsHaveBeenDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have not been approved..
+        /// </summary>
+        public static string RequestsHaveNotBeenApproved {
+            get {
+                return ResourceManager.GetString("RequestsHaveNotBeenApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have not been denied..
+        /// </summary>
+        public static string RequestsHaveNotBeenDenied {
+            get {
+                return ResourceManager.GetString("RequestsHaveNotBeenDenied", resourceCulture);
             }
         }
         

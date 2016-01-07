@@ -13993,19 +13993,27 @@ Help us improve your experience by sending an error report</value>
     <comment>Request submitter's timezone</comment>
   </data>
   <data name="FilterRoles" xml:space="preserve">
-	  <value>Filter Roles</value>
-	  <comment>Filter Roles tootip translation for right panel input prepend in seatmap</comment>
-	</data>
-	<data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
-	  <value>Invalid dimensions! Expecting an image smaller than 2000x4000.</value>
-	  <comment>Image size message of load image modal box in seatmap</comment>
-	</data>
-	<data name="LoadImage" xml:space="preserve">
-	  <value>Load image</value>
-	  <comment>Title of load image modal box in seatmap</comment>
-	</data>
-	<data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
-	  <value>Not a JPEG, SVG or a PNG!</value>
-	  <comment>Image format message of load image modal box in seatmap</comment>
-	</data>
+    <value>Filter Roles</value>
+    <comment>Filter Roles tootip translation for right panel input prepend in seatmap</comment>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Invalid dimensions! Expecting an image smaller than 2000x4000.</value>
+    <comment>Image size message of load image modal box in seatmap</comment>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Load image</value>
+    <comment>Title of load image modal box in seatmap</comment>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>Not a JPEG, SVG or a PNG!</value>
+    <comment>Image format message of load image modal box in seatmap</comment>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} request(s) have not been approved.</value>
+    <comment>Multiple requests have not been approved, with showing the count of the not approved requests.</comment>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} request(s) have not been denied.</value>
+    <comment>Multiple requests have not been denied, with showing the count of the not denied requests.</comment>
+  </data>
 </root>

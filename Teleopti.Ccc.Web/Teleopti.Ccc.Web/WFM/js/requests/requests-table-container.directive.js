@@ -16,7 +16,8 @@
 		vm.gridOptions = getGridOptions([]);
 		vm.getGridOptions = getGridOptions;
 		vm.prepareComputedColumns = prepareComputedColumns;
-		vm.clearSelection = clearSelection;		
+		vm.clearSelection = clearSelection;
+		vm.reselectRequests = reselectRequests;
 
 		function getGridOptions(requests) {
 			return {
@@ -37,7 +38,8 @@
 					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', enableSorting: false, headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', enableSorting: false, headerCellClass: 'request-status-header' },
 					{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header'},
-					{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
+					{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' },
+					{ displayName: 'Id', field: 'Id', headerCellFilter: 'translate', cellClass: 'request-id', visible: false, headerCellClass: 'request-id-header' }
 
 				],
 				onRegisterApi: function (gridApi) {
@@ -45,18 +47,47 @@
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
 						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
 					});
-					gridApi.selection.on.rowSelectionChanged($scope, function () {					
-						requestCommandParamsHolder.setSelectedRequestIds(gridApi.selection.getSelectedRows().map(function (row) { return row.Id; }));
-
-						if (vm.requests && (vm.requests.length === requestCommandParamsHolder.getSelectedRequestsIds().length)) {
-							vm.gridApi.grid.selection.selectAll = true;
-						} else {
-							vm.gridApi.grid.selection.selectAll = false;
-						}
-
-					});
+					gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
+					gridApi.selection.on.rowSelectionChangedBatch($scope, onSelectionChanged);
 				}
 			};
+		}
+
+		function onSelectionChanged() {
+			var visibleRequestsIds = vm.gridOptions.data.map(function (row) { return row.Id; });		
+			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
+			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function(id) {
+				return visibleSelectedRequestsIds.indexOf(id) < 0;
+			});
+
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds();
+			var newAllSelectedRequestsId = [];
+
+			angular.forEach(allSelectedRequestsIds, function(id) {
+				if (visibleNotSelectedRequestsIds.indexOf(id) < 0)
+					newAllSelectedRequestsId.push(id);
+			});
+
+			angular.forEach(visibleSelectedRequestsIds, function(id) {
+				if (newAllSelectedRequestsId.indexOf(id) < 0)
+					newAllSelectedRequestsId.push(id);
+			});
+					
+			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId);
+			
+			if (vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length)) {
+				vm.gridApi.grid.selection.selectAll = true;
+			} else {
+				vm.gridApi.grid.selection.selectAll = false;
+			}
+		}
+
+		function getVisibleSelectedRequestsRows() {
+			if (!vm.gridOptions.data) return [];
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds();
+			return vm.gridOptions.data.filter(function(row) {
+				return allSelectedRequestsIds.indexOf(row.Id) > -1;
+			});			
 		}
 
 		function formatToTimespan(length, isFullDay) {
@@ -103,12 +134,30 @@
 			return requests;
 		}
 
-		function clearSelection() {
+		function clearSelection() {			
 			if (vm.gridApi.clearSelectedRows) {
 				vm.gridApi.clearSelectedRows();								
 			}
 			vm.gridApi.grid.selection.selectAll = false;
 			requestCommandParamsHolder.resetSelectedRequestIds();
+			vm.gridApi.selection.clearSelectedRows();
+
+		}
+
+		function reselectRequests() {
+			if (!vm.gridOptions.data) return;
+
+			var rows = getVisibleSelectedRequestsRows();
+			vm.gridApi.grid.modifyRows(vm.gridOptions.data);
+			angular.forEach(rows, function(row) {
+				vm.gridApi.selection.selectRow(row);
+			});
+
+			if (vm.requests && (vm.requests.length === rows.length)) {
+				vm.gridApi.grid.selection.selectAll = true;
+			} else {
+				vm.gridApi.grid.selection.selectAll = false;
+			}
 		}
 		
 	}
@@ -136,12 +185,16 @@
 			scope.$watch(function () {
 				return scope.requestsTableContainer.requests;
 			}, function (v) {
-				requestsTableContainerCtrl.clearSelection();
 				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
+				requestsTableContainerCtrl.reselectRequests();
 			},true);
 
-			scope.$on('reload.requests.immediately', function () {
+			scope.$on('reload.requests.without.seletion', function () {
 				requestsTableContainerCtrl.clearSelection();
+			});
+
+			scope.$on('reload.requests.with.seletion', function () {
+				requestsTableContainerCtrl.reselectRequests();
 			});
 		}
 	}	

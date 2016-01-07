@@ -69,31 +69,29 @@
 			scope.$watch(function () {				
 				var target = {
 					startDate: scope.requestsOverview.period.startDate,
-					endDate: scope.requestsOverview.period.endDate,
-					sortingOrders: scope.requestsOverview.sortingOrders,
+					endDate: scope.requestsOverview.period.endDate,			
 					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
-				}
-
-				if (scope.requestsOverview.togglePaginationEnabled) {
-					target.pageNumber = scope.requestsOverview.paging.pageNumber;
-					target.pageSize = scope.requestsOverview.paging.pageSize;
-				}
-
+				}				
 				return target;
-
 			}, function (newValue) {
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
 				reload();
+				scope.$broadcast('reload.requests.without.seletion');
 			}, true);
 
-			scope.$on('reload.requests.immediately', reload);
+			scope.$watch(function() {
+				return scope.requestsOverview.sortingOrders;
+			}, reload);
 
-			function reload() {				
+			scope.$on('reload.requests.with.selection', reload);
+			scope.$on('reload.requests.without.selection', reload);
+
+			function reload() {							
 				ctrl.reload({
 					period: scope.requestsOverview.period,
-					agentSearchTerm: scope.requestsOverview.agentSearchTerm,					
-				}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging);
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm,
+				}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging);								
 			}
 		}
 	}

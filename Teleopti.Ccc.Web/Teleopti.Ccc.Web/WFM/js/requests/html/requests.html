@@ -6,7 +6,7 @@
 	<requests-commands-pane style="position: absolute; right: 1em; top: 0;"
 							ng-if="requests.isRequestsCommandsEnabled"
 							before-command="requests.onBeforeCommand()"
-							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount)"
+							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount)"
 							after-command-error="requests.onCommandError(error)"
 							commands-disabled="requests.disableInteraction"></requests-commands-pane>
 
@@ -28,7 +28,7 @@
 		<div class="pull-right">
 			<select class="page-size-selector"
 					ng-model="requests.paging.pageSize" ng-options="option for option in requests.pageSizeOptions" ng-change="requests.onPageSizeChanges()"></select>
-			<wfm-pagination pagination-options="requests.paging"></wfm-pagination>
+			<wfm-pagination pagination-options="requests.paging" get-data-for-page-callback="requests.forceRequestsReloadWithSelection"></wfm-pagination>
 		</div>				
 	</div>
 

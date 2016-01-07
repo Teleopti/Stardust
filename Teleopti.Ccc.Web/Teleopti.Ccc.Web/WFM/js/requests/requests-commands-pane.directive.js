@@ -14,6 +14,11 @@
 		vm.approveRequests = approveRequests;
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
+		vm.selectedRequestsCount = getSelectedRequestsCount;
+
+		function getSelectedRequestsCount() {
+			return requestCommandParamsHolder.getSelectedRequestsIds().length;
+		}
 
 		function approveRequests() {
 			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
@@ -25,7 +30,8 @@
 				commandInProgress.success(function (changedRequestIds) {					
 					vm.afterCommandSuccess({
 						commandType: requestsDefinitions.REQUEST_COMMANDS.Approve, 
-						changedRequestsCount: changedRequestIds.length
+						changedRequestsCount: changedRequestIds.length,
+						requestsCount: selectedRequestIds.length
 					});
 				});
 			}
@@ -43,7 +49,8 @@
 				commandInProgress.success(function (changedRequestIds) {
 					vm.afterCommandSuccess({
 						commandType: requestsDefinitions.REQUEST_COMMANDS.Deny,
-						changedRequestsCount: changedRequestIds.length
+						changedRequestsCount: changedRequestIds.length,
+						requestsCount: selectedRequestIds.length
 					});
 				});
 			}
