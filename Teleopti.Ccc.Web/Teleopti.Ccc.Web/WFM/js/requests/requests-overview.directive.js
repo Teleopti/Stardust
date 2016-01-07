@@ -81,7 +81,8 @@
 
 				return target;
 
-			}, function (newValue) {
+			}, function(newValue) {
+				if(newValue.endDate === null || newValue.startDate === null) return;
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
 				reload();
