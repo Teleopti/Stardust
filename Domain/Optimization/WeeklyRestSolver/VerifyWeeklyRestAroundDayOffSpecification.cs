@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         {
             foreach (var dayOffDate in dayOffList)
             {
-                var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1));
-                var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1));
+                var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1)).SignificantPart();
+                var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1)).SignificantPart();
                 if (isMissingShiftOnNeighbouringDays(previousScheduleDay, nextScheduleDay) ||
                     isNeighbouringDaysOff(previousScheduleDay, nextScheduleDay))
                     return false;
@@ -23,18 +23,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             return true;
         }
 
-        private bool isMissingShiftOnNeighbouringDays(IScheduleDay previousScheduleDay, IScheduleDay nextScheduleDay)
+        private bool isMissingShiftOnNeighbouringDays(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay)
         {
-            if (previousScheduleDay.SignificantPart() == SchedulePartView.None || nextScheduleDay.SignificantPart() == SchedulePartView.None)
-                return true;
-            return false;
+	        return previousScheduleDay == SchedulePartView.None || nextScheduleDay == SchedulePartView.None;
         }
 
-        private bool isNeighbouringDaysOff(IScheduleDay previousScheduleDay, IScheduleDay nextScheduleDay)
-        {
-            if (previousScheduleDay.SignificantPart() == SchedulePartView.DayOff || nextScheduleDay.SignificantPart() == SchedulePartView.DayOff)
-                return true;
-            return false;
-        }
+	    private bool isNeighbouringDaysOff(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay)
+	    {
+		    return previousScheduleDay == SchedulePartView.DayOff || nextScheduleDay == SchedulePartView.DayOff;
+	    }
     }
 }

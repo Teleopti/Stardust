@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	                                            scheduleDay.Max(s => s.DateOnlyAsPeriod.DateOnly).AddDays(1));
 	            var schedules =
 		            rangeClones[scheduleDay.Key].ScheduledDayCollection(period)
-		                                        .ToDictionary(k => k.DateOnlyAsPeriod.DateOnly, v => v);
+			            .ToDictionary(k => k.DateOnlyAsPeriod.DateOnly, convert);
                 responsList.AddRange(checkDay(rangeClones[scheduleDay.Key], period, schedules));
             }
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             responseList.Add(response);
         }
 
-        private IEnumerable<IBusinessRuleResponse> checkDay(IScheduleRange range, DateOnlyPeriod period, IDictionary<DateOnly, IScheduleDay> scheduleDay)
+        private IEnumerable<IBusinessRuleResponse> checkDay(IScheduleRange range, DateOnlyPeriod period, IDictionary<DateOnly, scheduleDayForValidation> scheduleDay)
         {
             ICollection<IBusinessRuleResponse> responseList = new List<IBusinessRuleResponse>();
 	        var dayCollection = period.DayCollection();
@@ -80,41 +80,61 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		        if (personPeriod == null)
 			        return responseList;
 
-		        IScheduleDay yesterday = scheduleDay[dateToCheck.AddDays(-1)];
-				IScheduleDay today = scheduleDay[dateToCheck];
-				IScheduleDay tomorrow = scheduleDay[dateToCheck.AddDays(1)];
+		        var yesterday = scheduleDay[dateToCheck.AddDays(-1)];
+				var today = scheduleDay[dateToCheck];
+				var tomorrow = scheduleDay[dateToCheck.AddDays(1)];
 		        TimeSpan nightRest = personPeriod.PersonContract.Contract.WorkTimeDirective.NightlyRest;
 
 		        ClearMyResponses(range.BusinessRuleResponseInternalCollection, range.Person, dateToCheck);
 		        TimeSpan? currentRest = checkDays(yesterday, today, nightRest);
 		        if (currentRest != null)
 		        {
-			        responseList.Add(createResponse(range.Person, yesterday.DateOnlyAsPeriod.DateOnly,
-			                                        yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
+			        responseList.Add(createResponse(range.Person, yesterday.Date,
+													yesterday.Date, today.Date,
 			                                        nightRest, currentRest.Value, range, true));
-			        responseList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
-			                                        yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
+					responseList.Add(createResponse(range.Person, today.Date,
+													yesterday.Date, today.Date,
 			                                        nightRest, currentRest.Value, range, !_haltModify));
 		        }
 
 		        currentRest = checkDays(today, tomorrow, nightRest);
 		        if (currentRest != null)
 		        {
-			        responseList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
-			                                        today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
+					responseList.Add(createResponse(range.Person, today.Date,
+													today.Date, tomorrow.Date,
 			                                        nightRest, currentRest.Value, range, !_haltModify));
-			        responseList.Add(createResponse(range.Person, tomorrow.DateOnlyAsPeriod.DateOnly,
-			                                        today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
+					responseList.Add(createResponse(range.Person, tomorrow.Date,
+													today.Date, tomorrow.Date,
 			                                        nightRest, currentRest.Value, range, true));
 		        }
 	        }
 	        return responseList;
         }
 
-        private TimeSpan? checkDays(IScheduleDay firstDay, IScheduleDay secondDay, TimeSpan nightRest)
+	    private class scheduleDayForValidation
+	    {
+		    public SchedulePartView SignificantPart { get; set; }
+		    public DateOnly Date { get; set; }
+		    public DateTime? WorkTimeStart { get; set; }
+		    public DateTime? WorkTimeEnd { get; set; }
+	    }
+
+	    private scheduleDayForValidation convert(IScheduleDay scheduleDay)
+	    {
+		    var projection = scheduleDay.ProjectionService().CreateProjection();
+		    return new scheduleDayForValidation
+		    {
+			    Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
+			    SignificantPart = scheduleDay.SignificantPart(),
+			    WorkTimeStart = _workTimeStartEndExtractor.WorkTimeStart(projection),
+			    WorkTimeEnd = _workTimeStartEndExtractor.WorkTimeEnd(projection)
+		    };
+	    }
+
+	    private TimeSpan? checkDays(scheduleDayForValidation firstDay, scheduleDayForValidation secondDay, TimeSpan nightRest)
         {
-	        var firstSignificant = firstDay.SignificantPart();
-	        var secondSignificant = secondDay.SignificantPart();
+	        var firstSignificant = firstDay.SignificantPart;
+	        var secondSignificant = secondDay.SignificantPart;
 
 			bool checkFirstDay = firstSignificant == SchedulePartView.MainShift ||
 								 firstSignificant == SchedulePartView.Overtime;
@@ -124,11 +144,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if(!(checkFirstDay && checkSecondDay))
                 return null;
 
-        	var secondDayStart = _workTimeStartEndExtractor.WorkTimeStart(secondDay.ProjectionService().CreateProjection());
-        	var firstDayEnd = _workTimeStartEndExtractor.WorkTimeEnd(firstDay.ProjectionService().CreateProjection());
-			if(secondDayStart != null && firstDayEnd != null)
+        	if(secondDay.WorkTimeStart.HasValue && firstDay.WorkTimeEnd.HasValue)
 			{
-				var restTime = secondDayStart.Value.Subtract(firstDayEnd.Value);
+				var restTime = secondDay.WorkTimeStart.Value.Subtract(firstDay.WorkTimeEnd.Value);
 				if (restTime < nightRest)
 					return restTime;
 			}
