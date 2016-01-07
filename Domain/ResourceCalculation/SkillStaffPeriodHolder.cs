@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
     {
-        private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
+        private readonly Lazy<ISkillSkillStaffPeriodExtendedDictionary> _internalDictionary;
         private readonly object Locker = new object();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
         {
-            CreateInternalDictionary(skillDays);
+            _internalDictionary = new Lazy<ISkillSkillStaffPeriodExtendedDictionary>(() => CreateInternalDictionary(skillDays));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (ISkill skill in onSkills)
             {
                 ISkillStaffPeriodDictionary skillStaffPeriods;
-                if (_internalDictionary.TryGetValue(skill, out skillStaffPeriods))
+                if (_internalDictionary.Value.TryGetValue(skill, out skillStaffPeriods))
                 {
                     var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
 
@@ -181,12 +181,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public ISkillSkillStaffPeriodExtendedDictionary SkillSkillStaffPeriodDictionary
         {
-            get { return _internalDictionary; }
+            get { return _internalDictionary.Value; }
         }
 
-        private void CreateInternalDictionary(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
+        private ISkillSkillStaffPeriodExtendedDictionary CreateInternalDictionary(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
         {
-            _internalDictionary = new SkillSkillStaffPeriodExtendedDictionary();
+            var dictionary = new SkillSkillStaffPeriodExtendedDictionary();
 
             foreach (KeyValuePair<ISkill, IList<ISkillDay>> skillDay in skillDays)
             {
@@ -199,16 +199,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     }
                 }
                 if (skillStaffPeriods.Count>0)
-                    _internalDictionary.Add(skillDay.Key, skillStaffPeriods);
+                    dictionary.Add(skillDay.Key, skillStaffPeriods);
             }
+			return dictionary;
         }
+
 		public IList<ISkillStaffPeriod> IntersectingSkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
 			var skillStaffPeriods = new List<ISkillStaffPeriod>();
 			skills.ForEach(skill =>
 			{
 				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.Value.TryGetValue(skill, out content))
 				{
 					foreach (var dictionary in content)
 					{
@@ -226,7 +228,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        skills.ForEach(skill =>
 	        {
 				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.Value.TryGetValue(skill, out content))
 				{
 					var lookup = content.ForLookup();
 
@@ -246,7 +248,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (ISkill skill in skills)
 			{
 				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.Value.TryGetValue(skill, out content))
 				{
 					var newDictionary = new SkillStaffPeriodDictionary(skill);
 					var lookup = content.ForLookup();
@@ -272,7 +274,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (ISkill aggregateSkill in skill.AggregateSkills)
             {
                 ISkillStaffPeriodDictionary content;
-                if (!_internalDictionary.TryGetValue(aggregateSkill, out content)) continue;
+                if (!_internalDictionary.Value.TryGetValue(aggregateSkill, out content)) continue;
 
                 if (aggregateSkill.DefaultResolution>minimumResolution)
                 {

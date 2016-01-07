@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -110,35 +111,37 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (!relevantSkillStaffPeriods.TryGetValue(skill, out skillStaffPeriods))
                 return null;
 
+		    var hourSlots = periodToCalculate.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
             double totalTime = 0;
 
-            foreach (var skillStaffPeriod in skillStaffPeriods)
-            {
-                if (periodToCalculate.StartDateTime>skillStaffPeriod.Key.EndDateTime) continue;
-                if (periodToCalculate.EndDateTime<skillStaffPeriod.Key.StartDateTime) break;
+		    var lookup = skillStaffPeriods.ForLookup();
+		    foreach (var hourSlot in hourSlots)
+		    {
+			    foreach (var skillStaffPeriod in lookup[hourSlot])
+			    {
+				    var intersection = skillStaffPeriod.Period.Intersection(periodToCalculate);
+				    if (!intersection.HasValue) continue;
 
-                DateTimePeriod? intersection = periodToCalculate.Intersection(skillStaffPeriod.Key);
+				    if (!anythingOpen)
+				    {
+					    if (
+						    skillStaffPeriods.SkillOpenHoursCollection.Any(openHourPeriod => openHourPeriod.Intersect(periodToCalculate)))
+					    {
+						    anythingOpen = true;
+					    }
+				    }
 
-                if (intersection.HasValue)
-                {
-                    foreach (var openHourPeriod in skillStaffPeriods.SkillOpenHoursCollection)
-                    {
-                        if (openHourPeriod.Intersect(periodToCalculate))
-                            anythingOpen = true;
-                    }
+				    double skillStaffPeriodSeconds = skillStaffPeriod.Period.ElapsedTime().TotalSeconds;
+				    double intersectPercent =
+					    intersection.Value.ElapsedTime().TotalSeconds/
+						skillStaffPeriodSeconds;
+				    totalTime += skillStaffPeriod.ForecastedDistributedDemand*
+								 skillStaffPeriodSeconds*intersectPercent;
+			    }
+			}
+			retVal = totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
 
-                    double skillStaffPeriodSeconds = skillStaffPeriod.Key.ElapsedTime().TotalSeconds;
-                    double intersectPercent =
-                        intersection.Value.ElapsedTime().TotalSeconds/
-                        skillStaffPeriodSeconds;
-                    totalTime += skillStaffPeriod.Value.ForecastedDistributedDemand*
-                                 skillStaffPeriodSeconds*intersectPercent;
-                }
-
-
-                retVal = totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
-            }
-            if (!anythingOpen)
+		    if (!anythingOpen)
                 return null;
 
             return retVal;

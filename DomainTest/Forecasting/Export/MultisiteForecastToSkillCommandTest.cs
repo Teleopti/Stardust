@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 																		  new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 
 				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new ISkillStaffPeriod[] {  }));
+					new ReadOnlyCollection<ISkillStaffPeriod>(new ISkillStaffPeriod[] {  })).Repeat.Any();
 				Expect.Call(()=>jobResultFeedback.Warning("")).IgnoreArguments();
 			}
 			using (mocks.Playback())
