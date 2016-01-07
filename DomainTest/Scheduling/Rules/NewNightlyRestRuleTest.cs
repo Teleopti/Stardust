@@ -64,13 +64,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             {
                 //currentScheduleDay
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
-                Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any(); 
+				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.AtLeastOnce();
 				Expect.Call(_range.Person).Return(_person).Repeat.Any();
 				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
+				mockShift(_yesterday, new DateTimePeriod());
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
+				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
+				mockShift(_today, new DateTimePeriod());
 				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
+				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
+				mockShift(_tomorrow, new DateTimePeriod());
 			}
 
             using (_mocks.Playback())
@@ -98,14 +104,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
                 Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+				mockShift(_yesterday, new DateTimePeriod());
 
                 //today
                 Expect.Call(_today.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
+				mockShift(_today, new DateTimePeriod());
 
                 //tomorrow
                 Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
+				mockShift(_tomorrow, new DateTimePeriod());
 
                 Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
                    Repeat.Any();
@@ -139,19 +148,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
 
-                mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)),WorkTimeOptions.End);
+                mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
 
                 //today
                 Expect.Call(_today.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Both);
+				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
 				
                 //tomorrow
                 Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010,1,3), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Start);
+				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
 
             }
 
@@ -184,19 +193,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.End);
+				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
 
                 //today
                 Expect.Call(_today.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
                 
-				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Both);
+				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
 				
                 //tomorrow
                 Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
 				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
                 
-				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Start);
+				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 6, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
 
                 Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
                     Repeat.Any();
@@ -255,19 +264,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.End);
+				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)));
 
 				//today
 				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Both);
+				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)));
 
 				//tomorrow
 				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
 				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
 
-				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Start);
+				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)));
 
 			}
 
@@ -300,15 +309,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(_range.ScheduledDayCollection(new DateOnlyPeriod(2010, 1, 1, 2010, 1, 3))).Return(new[] { _yesterday, _today, _tomorrow });
 				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
 				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+				mockShift(_yesterday, new DateTimePeriod());
 
 				//today
 				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
 				Expect.Call(_today.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
+				mockShift(_today, new DateTimePeriod());
 
 				//tomorrow
 				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
 				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 3), TimeZoneInfo.Utc)).Repeat.Any();
-
+				mockShift(_tomorrow,new DateTimePeriod());
 			}
 
 			using (_mocks.Playback())
@@ -319,22 +330,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.AreEqual(0, _responsList.Count());
 		}
 
-		private enum WorkTimeOptions
-		{
-			Start,
-			End,
-			Both
-		}
-		private void mockShift(IScheduleDay scheduleDay, DateTimePeriod period, WorkTimeOptions workTimeOptions)
+		private void mockShift(IScheduleDay scheduleDay, DateTimePeriod period)
         {
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.Any();
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.Any();
-			if (workTimeOptions == WorkTimeOptions.Start || workTimeOptions == WorkTimeOptions.Both)
-				Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(visualLayerCollection)).Return(period.StartDateTime);
-			if (workTimeOptions == WorkTimeOptions.End || workTimeOptions == WorkTimeOptions.Both)
-				Expect.Call(_workTimeStartEndExtractor.WorkTimeEnd(visualLayerCollection)).Return(period.EndDateTime);
+			Expect.Call(_workTimeStartEndExtractor.WorkTimeStart(visualLayerCollection)).Return(period.StartDateTime);
+			Expect.Call(_workTimeStartEndExtractor.WorkTimeEnd(visualLayerCollection)).Return(period.EndDateTime);
         }
     }
 }

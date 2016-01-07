@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -38,11 +39,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				Expect.Call(() => _dic.PartModified += null).IgnoreArguments().Repeat.Twice();
 				Expect.Call(_dic[person1]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new []{scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod)
+					.Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate, TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
 				Expect.Call(_dic[person2]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new[] { scheduleDay });
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 			}
 			using (_mocks.Playback())
@@ -97,12 +100,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				Expect.Call(() => _dic.PartModified += null).IgnoreArguments().Repeat.Twice();
 				Expect.Call(_dic[person1]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new []{scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person2]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new[] { scheduleDay });
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod)
+	.Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate, TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{

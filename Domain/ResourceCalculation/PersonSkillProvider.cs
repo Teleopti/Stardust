@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
 		{
-			ConcurrentBag<SkillCombination> foundCombinations;
-			if (_personCombination.TryGetValue(person, out foundCombinations))
+			ConcurrentBag<SkillCombination> foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
+			if (!foundCombinations.IsEmpty)
 			{
 				foreach (var foundCombination in foundCombinations.ToArray())
 				{
@@ -28,12 +28,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPersonPeriod personPeriod = person.Period(date);
 			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
 
-			var personSkillCollection = new List<IPersonSkill>();
-			foreach (var personSkill in personPeriod.PersonSkillCollection)
-			{
-				if(!((IDeleteTag)personSkill.Skill).IsDeleted)
-					personSkillCollection.Add(personSkill);
-			}
+			var personSkillCollection =
+				personPeriod.PersonSkillCollection.Where(personSkill => !((IDeleteTag) personSkill.Skill).IsDeleted).ToArray();
 
 			var skills = personSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
@@ -47,18 +43,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					s => s.Active && s.SkillPercentage.Value > 0)
 					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
 
-			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
+			var key = SkillCombination.ToKey(skills.Select(s => s.Id.GetValueOrDefault()));
 
 			var combination = new SkillCombination(key, skills, personPeriod.Period, skillEfficiencies);
-			if (foundCombinations != null)
-			{
-				foundCombinations.Add(combination);
-			}
-			else
-			{
-				_personCombination.TryAdd(person, new ConcurrentBag<SkillCombination> { combination });
-			}
-
+			foundCombinations.Add(combination);
+			
 			return combination;
 		}
 	}

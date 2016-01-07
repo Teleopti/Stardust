@@ -55,14 +55,16 @@ namespace Teleopti.Ccc.Domain.Collection
 			IDictionary<IShiftCategory, int> value = new Dictionary<IShiftCategory, int>();
 			var range = _scheduleDictionary[person];
 
-			foreach (var dateOnly in _periodToMonitor.DayCollection())
+			var schedules = range.ScheduledDayCollection(_periodToMonitor);
+			foreach (var scheduleDay in schedules)
 			{
-			    if (dateOnly > person.TerminalDate) continue;
-                var scheduleDay = range.ScheduledDay(dateOnly);
+				if (scheduleDay.DateOnlyAsPeriod.DateOnly > person.TerminalDate) continue;
+
 				if (!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
-				var shiftCategory = scheduleDay.PersonAssignment(true).ShiftCategory;
-				if (shiftCategory == null)
-					continue;
+				var personAssignment = scheduleDay.PersonAssignment();
+				if (personAssignment== null) continue;
+				var shiftCategory = personAssignment.ShiftCategory;
+				if (shiftCategory == null) continue;
 
 				if(!value.ContainsKey(shiftCategory))
 					value.Add(shiftCategory, 0);

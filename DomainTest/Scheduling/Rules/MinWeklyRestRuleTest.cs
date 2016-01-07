@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -86,8 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(null);
-				Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(null);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new IPersonPeriod[] { });
 				Expect.Call(person.Name).Return(new Name("nn", "mm")).Repeat.Times(7);
 			}
 
@@ -124,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
@@ -164,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
@@ -213,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek.Week, weeklyRest)).Return(false).IgnoreArguments();
@@ -260,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23,2010,8,29))).Return(new []{_personPeriod});
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek.Week, weeklyRest)).Return(false).IgnoreArguments();
@@ -299,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
@@ -339,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
@@ -388,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek.Week, weeklyRest)).Return(false).IgnoreArguments();
@@ -437,7 +433,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
 				Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
-				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+				Expect.Call(person.PersonPeriods(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { _personPeriod });
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek.Week, weeklyRest)).Return(true).IgnoreArguments() ;

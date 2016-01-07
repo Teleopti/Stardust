@@ -101,13 +101,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var person = personWeek.Person;
 
-			var period = person.Period(personWeek.Week.StartDate) ?? person.Period(personWeek.Week.EndDate);
-			if (period == null)
+			var period = person.PersonPeriods(personWeek.Week);
+			if (period.Count == 0)
 			{
 				weeklyRest = TimeSpan.FromSeconds(0);
 				return false;
 			}
-			weeklyRest = period.PersonContract.Contract.WorkTimeDirective.WeeklyRest;
+			weeklyRest = period[0].PersonContract.Contract.WorkTimeDirective.WeeklyRest;
 
 			return true;
 		}

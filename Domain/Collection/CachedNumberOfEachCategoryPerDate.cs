@@ -71,9 +71,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			    if (dateOnly > filteredAgent.TerminalDate) continue;
                 var scheduleDay = _scheduleDictionary[filteredAgent].ScheduledDay(dateOnly);
 				if(!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
-				var shiftCategory = scheduleDay.PersonAssignment(true).ShiftCategory;
-				if (shiftCategory == null)
-					continue;
+				var personAssignment = scheduleDay.PersonAssignment(true);
+				if (personAssignment == null) continue;
+				
+				var shiftCategory = personAssignment.ShiftCategory;
+				if (shiftCategory == null) continue;
 
 				if (!value.ContainsKey(shiftCategory))
 					value.Add(shiftCategory, 0);

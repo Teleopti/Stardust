@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			_mocks = new MockRepository();
 			_dic = _mocks.StrictMock<IScheduleDictionary>();
-	        _person = _mocks.StrictMock<IPerson>();
+	        _person = PersonFactory.CreatePerson();
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("AM");
 	        _range = _mocks.StrictMock<IScheduleRange>();
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -44,20 +44,19 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person, new DateTimePeriod(),
 			                                                                shiftCategory);
-			var assEmpty = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
-
+			
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _dic.PartModified += null).IgnoreArguments();
 				//key was not found
 				Expect.Call(_dic[person]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new [] {scheduleDay,scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate,person.PermissionInformation.DefaultTimeZone()));
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//now the key have been added
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 13))).Return(scheduleDay);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate.AddDays(1), person.PermissionInformation.DefaultTimeZone()));
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
-				
 			}
 
 			using (_mocks.Playback())
@@ -84,26 +83,26 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(),
 																			shiftCategory);
-			var dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-
+			
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _dic.PartModified += null).IgnoreArguments();
 				eventRaiser = LastCall.GetEventRaiser();
 				//add values for one person
 				Expect.Call(_dic[person1]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new []{scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//add values for another person
 				Expect.Call(_dic[person2]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new []{scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//fire event that removes person1
 				Expect.Call(scheduleDay.Person).Return(person1);
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
-				Expect.Call(dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2013, 09, 12));
+				Expect.Call(scheduleDay.DateOnlyAsPeriod)
+					.Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate, person1.PermissionInformation.DefaultTimeZone()))
+					.Repeat.AtLeastOnce();
 
 			}
 
@@ -141,14 +140,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				eventRaiser = LastCall.GetEventRaiser();
 				//add values for one person
 				Expect.Call(_dic[person1]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new []{scheduleDay});
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//add values for another person
 				Expect.Call(_dic[person2]).Return(range);
-				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(range.ScheduledDayCollection(periodToMonitor)).Return(new[] { scheduleDay });
+				Expect.Call(scheduleDay.PersonAssignment()).Return(assWithShift);
 				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate, person1.PermissionInformation.DefaultTimeZone())).Repeat.AtLeastOnce();
 				//fire event that removes all
 
 			}
@@ -173,35 +173,33 @@ namespace Teleopti.Ccc.DomainTest.Collection
             var periodToMonitor = new DateOnlyPeriod(2013, 09, 12, 2013, 09, 13);
             var dateToMonitor = new DateOnly(2013, 09, 13);
             
+			_person.TerminatePerson(dateToMonitor.AddDays(-1),new PersonAccountUpdaterDummy());
             using (_mocks.Record())
             {
                 Expect.Call(() => _dic.PartModified += null).IgnoreArguments();
                 
                 Expect.Call(_dic[_person]).Return(_range);
 
-                Expect.Call(_person.TerminalDate).Return(dateToMonitor.AddDays(-1));
-                Expect.Call(_range.ScheduledDay(dateToMonitor.AddDays(-1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+            	Expect.Call(_range.ScheduledDayCollection(periodToMonitor)).Return(new[] { _scheduleDay, _scheduleDay });
+                Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 	            Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate.AddDays(-1), _person.PermissionInformation.DefaultTimeZone()));
                 Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
 
-                Expect.Call(_person.TerminalDate).Return(dateToMonitor);
-                Expect.Call(_range.ScheduledDay(dateToMonitor)).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+            	Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 	            Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(periodToMonitor.StartDate, _person.PermissionInformation.DefaultTimeZone()));
                 Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
             }
 
             using (_mocks.Playback())
             {
                 _target = new CachedNumberOfEachCategoryPerPerson( _dic, periodToMonitor);
-                //_target.get(personList);
                 var result = _target.GetValue(_person);
                 Assert.AreEqual(1, result.Count);
                 Assert.IsTrue(result.ContainsKey(_shiftCategory ) );
                 Assert.AreEqual(2,result[_shiftCategory ]);
             }
         }
-
 	}
 }

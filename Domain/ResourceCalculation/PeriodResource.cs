@@ -25,19 +25,31 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private static SkillEffiencyResource[] mergeEffiencyResources(IEnumerable<SkillEffiencyResource> effiencyResources1,
 			IEnumerable<SkillEffiencyResource> effiencyResources2)
 		{
-			var dic = new Dictionary<Guid, double>();
+			var dic = new ConcurrentDictionary<Guid, efficiencyValueWrapper>();
 			fillDictionaryWithSkillEffiency(dic, effiencyResources1);
 			fillDictionaryWithSkillEffiency(dic, effiencyResources2);
-			return dic.Select(keyValue => new SkillEffiencyResource(keyValue.Key, keyValue.Value)).ToArray();
+			return dic.Select(keyValue => new SkillEffiencyResource(keyValue.Key, keyValue.Value.Current)).ToArray();
 		}
-		private static void fillDictionaryWithSkillEffiency(IDictionary<Guid, double> dictionary, IEnumerable<SkillEffiencyResource> skillEffiencyResources)
+
+		private static void fillDictionaryWithSkillEffiency(ConcurrentDictionary<Guid, efficiencyValueWrapper> dictionary, IEnumerable<SkillEffiencyResource> skillEffiencyResources)
 		{
 			foreach (var effiencyResource in skillEffiencyResources)
 			{
-				double resource;
-				dictionary.TryGetValue(effiencyResource.Skill, out resource);
-				dictionary[effiencyResource.Skill] = resource + effiencyResource.Resource;
+				var item = dictionary.GetOrAdd(effiencyResource.Skill, _ => new efficiencyValueWrapper());
+				item.Modify(effiencyResource.Resource);
 			}
+		}
+
+		private class efficiencyValueWrapper
+		{
+			private double _innerValue;
+
+			public void Modify(double change)
+			{
+				_innerValue = _innerValue + change;
+			}
+
+			public double Current { get { return _innerValue; } }
 		}
 
 		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] baseCollection,

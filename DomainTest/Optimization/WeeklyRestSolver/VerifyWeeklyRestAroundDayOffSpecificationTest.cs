@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             {
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(-1))).Return(_previousScheduleDay);
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(1))).Return(_nextScheduleDay);
-                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(4);
-                Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(4);
+                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(2);
+                Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(2);
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.Last().AddDays(-1))).Return(_previousScheduleDay);
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.Last().AddDays(1))).Return(_nextScheduleDay);
             }
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             {
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(-1))).Return(_previousScheduleDay);
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(1))).Return(_nextScheduleDay);
-                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(2);
+                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(1);
                 Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(1);
             }
             using (_mock.Playback())

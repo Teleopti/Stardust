@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
 
                 IFurnessEvaluator furnessEvaluator = new FurnessEvaluator(furnessData);
-                furnessEvaluator.Evaluate(_quotient, _maximumIteration, Domain.Calculation.Variances.StandardDeviation);
+                furnessEvaluator.Evaluate(_quotient, _maximumIteration, Calculation.Variances.StandardDeviation);
                 IDividedActivityData optimizedActivityData = furnessDataConverter.ConvertFurnessDataBackToActivity();
 
                 setFurnessResultsToSkillStaffPeriods(completeIntervalPeriod, relevantSkillStaffPeriods, optimizedActivityData);
@@ -126,12 +126,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         private void clearSkillStaffPeriods()
         {
-            foreach (ISkillStaffPeriodDictionary skillStaffDic in _skillStaffPeriods.Values)
+            foreach (var skillStaffDic in _skillStaffPeriods)
             {
-                if (((ISkill)skillStaffDic.Skill).SkillType.ForecastSource == ForecastSource.InboundTelephony ||
-					((ISkill)skillStaffDic.Skill).SkillType.ForecastSource == ForecastSource.Retail)
+                if (skillStaffDic.Key.SkillType.ForecastSource == ForecastSource.InboundTelephony ||
+					skillStaffDic.Key.SkillType.ForecastSource == ForecastSource.Retail)
                 {
-                    foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffDic.Values)
+                    foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffDic.Value.Values)
                     {
                         skillStaffPeriod.Payload.CalculatedLoggedOn = 0;
                         skillStaffPeriod.SetCalculatedResource65(0);
@@ -162,9 +162,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return relevantSkillStaffPeriods;
         }
 
-        private IList<IActivity> getDistinctActivities()
+        private IActivity[] getDistinctActivities()
         {
-            return new List<IActivity>(_personSkillService.AffectedSkills.Select(s => s.Activity).Distinct());
+            return _personSkillService.AffectedSkills.Select(s => s.Activity).Distinct().ToArray();
         }
     }
 }
