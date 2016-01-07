@@ -527,9 +527,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedules[0].PersonId.Should().Be.EqualTo(person2.Id.GetValueOrDefault());
 			agentSchedules[1].PersonId.Should().Be.EqualTo(p3.Id.GetValueOrDefault());
 			agentSchedules[2].PersonId.Should().Be.EqualTo(person1.Id.GetValueOrDefault());
-			agentSchedules[3].PersonId.Should().Be.EqualTo(p5.Id.GetValueOrDefault());
-			agentSchedules[4].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
-			agentSchedules[5].PersonId.Should().Be.EqualTo(p6.Id.GetValueOrDefault());
+			agentSchedules[3].PersonId.Should().Be.EqualTo(p6.Id.GetValueOrDefault());
+			agentSchedules[4].PersonId.Should().Be.EqualTo(p5.Id.GetValueOrDefault());
+			agentSchedules[5].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
 			agentSchedules[6].PersonId.Should().Be.EqualTo(person3.Id.GetValueOrDefault());
 		}
 	

@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					var schedule = personScheduleDay.Item2;
 					var isPublished = _permissionProvider.IsPersonSchedulePublished(data.ScheduleDate,
 						person, ScheduleVisibleReasons.Any);
-					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished);
+					var sortValue = TeamScheduleSortingUtil.GetSortedValue(schedule, canSeeUnpublishedSchedules, isPublished, false);
 					return sortValue;
 				}).ThenBy(personScheduleDay => personScheduleDay.Item1.Name.LastName);
 

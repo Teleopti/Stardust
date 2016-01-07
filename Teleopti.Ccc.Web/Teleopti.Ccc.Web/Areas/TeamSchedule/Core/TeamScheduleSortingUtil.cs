@@ -5,8 +5,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
 	public static class TeamScheduleSortingUtil
 	{
-		public static int GetSortedValue(IScheduleDay schedule, bool hasPermissionForUnpublishedSchedule, bool isSchedulePublished)
+		public static int GetSortedValue(IScheduleDay schedule, bool hasPermissionForUnpublishedSchedule, bool isSchedulePublished, bool isFullAbsenceBeforeDayOff = true)
 		{
+			var fullAbsenceBase = isFullAbsenceBeforeDayOff ? 5000 : 10000;
+			var dayOffBase = isFullAbsenceBeforeDayOff ? 10000 : 5000;
 			if (schedule == null || !schedule.IsScheduled())
 			{
 				return 20000;
@@ -19,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff)
 			{
-				return 10000;
+				return dayOffBase;
 			}
 
 			if (!schedule.HasDayOff() && significantPart == SchedulePartView.FullDayAbsence)
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					? schedule.PersonAssignment().Period.StartDateTime
 					: schedule.PersonAbsenceCollection().Select(personAbsence => personAbsence.Period.StartDateTime).Min();
 
-				return 5000 + (int)mininumAbsenceStartTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
+				return fullAbsenceBase + (int)mininumAbsenceStartTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
 			}
 			if (schedule.PersonAssignment() != null)
 			{
