@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 {
+#pragma warning disable 0649
 	[TestFixture, RequestsTest]
 	class RequestCommandHandlingProviderTest
 	{
@@ -173,6 +174,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(2);
 		}
-		
+
 	}
+#pragma warning restore 0649
 }
