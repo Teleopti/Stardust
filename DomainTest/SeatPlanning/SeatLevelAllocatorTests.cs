@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldAllocateSeatsByEarliestFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst(true);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
 			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat(true);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldAllocateToGroupFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateToGroupFirst(true);
