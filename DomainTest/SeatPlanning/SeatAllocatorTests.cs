@@ -101,15 +101,15 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("L1 Seat1") && allocatedSeats.Contains ("L2 Seat1"));
 		}
 
-		[Test, Ignore ("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
 
 			var startDateTime = new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc);
 
-			var agentShift1 = new SeatBooking(new Person(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours (8));
-			var agentShift2 = new SeatBooking (new Person(), new DateOnly (startDateTime), startDateTime, startDateTime.AddHours (8));
-			var agentShift3 = new SeatBooking (new Person(), new DateOnly (startDateTime), startDateTime, startDateTime.AddHours (8));
+			var agentShift1 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours (8));
+			var agentShift2 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
+			var agentShift3 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift2, agentShift3);
@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
 			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
+
 		}
 
 		[Test, Ignore("Works locally but does not work currently on server")]
