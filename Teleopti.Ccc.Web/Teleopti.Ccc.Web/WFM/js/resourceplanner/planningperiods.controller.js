@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('PlanningPeriodsCtrl', [
-			'$scope', '$state', '$stateParams', '$interval', 'PlanningPeriodSvrc', 'Toggle', function($scope, $state, $stateParams, $interval, PlanningPeriodSvrc, toggleService) {
+			'$scope', '$state', '$stateParams', '$interval', 'PlanningPeriodSvrc', 'Toggle','$translate', function($scope, $state, $stateParams, $interval, PlanningPeriodSvrc, toggleService, $translate) {
 	            //schedulings
 	            $scope.status = '';
 	            $scope.scheduledDays = 0;
@@ -66,10 +66,10 @@
 
 	                var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
 	                cancelPoll();
-	                $scope.status = 'Scheduling';
+	                $scope.status = $translate.instant('Scheduling');
 	                PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
 	                    $scope.scheduledDays = scheduleResult.DaysScheduled;
-	                    $scope.status = 'Optimizing days off';
+	                    $scope.status = $translate.instant('OptimizingDaysOff');
 	                    //to make sure long optimization request doesn't create a new cookie based on current time
 	                    //we call keepAlive here again
 	                    PlanningPeriodSvrc.keepAlive().then(function() {

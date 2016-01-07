@@ -6,7 +6,7 @@
 	<!-- don't remove non css class test-schedule-is-running - used to assert in test -->
 	<div ng-show="scheduleClicked && !schedulingPerformed" class="test-schedule-is-running">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-		<p>{{status}} .. </p>
+		<p>{{status}}</p>
 		<p ng-if="errorMessage">{{errorMessage}}</p>
 	</div>
 
@@ -44,7 +44,7 @@
 		</div>
 		<div class="col-lg-1">
 			<button class="wfm-fab info schedule-button wfm-btn-primary-disabled" ng-class="{'wfm-btn-primary-disabled': disableSchedule(), 'wfm-btn-primary': !disableSchedule()}" ng-disabled="disableSchedule()" ng-click="launchSchedule(planningPeriod)"><i class="mdi mdi-arrow-right"></i>
-				<md-tooltip>{{'Schedule' | translate }}</md-tooltip>
+				<md-tooltip>{{'ScheduleVerb' | translate }}</md-tooltip>
 			</button>
 		</div>
 	</div>
