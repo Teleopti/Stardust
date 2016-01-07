@@ -23,8 +23,16 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests = seatBookingRequests.ToList();
-			sortedSeatBookingRequests.Sort();
+			//var sortedSeatBookingRequests =  seatBookingRequests.ToList();
+			//sortedSeatBookingRequests.Sort();
+
+			var sortedSeatBookingRequests = from seatBookingRequest in seatBookingRequests
+				orderby seatBookingRequest.MemberCount descending,
+					seatBookingRequest.SeatBookings.Min (booking => booking.StartDateTime)
+				select seatBookingRequest;
+
+
+
 
 			var allLocationsUnsorted = getAllLocationsUnsorted();
 

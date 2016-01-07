@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var location2 = new SeatMapLocation() {IncludeInSeatPlan = true};
 			location2.AddSeat ("L2 Seat1", 1);
 
-			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest2, seatBookingRequest1);
+			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
 			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
 		}
