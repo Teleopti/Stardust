@@ -237,4 +237,17 @@ describe('ForecastingStartCtrl', function() {
 		expect(scope.workloads[0].ChartId).toBe("chartd80b16de-bc21-471f-98ed-9b5e015abf6d");
 		expect(scope.workloads[0].Scenario.Name).toBe("Default");
 	}));
+
+	it('should limit forecast period to be less one year', inject(function ($controller) {
+		var scope = $rootScope.$new();
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
+		var endDate = moment().utc().add(13, 'months').startOf('month').toDate();
+		scope.period = { startDate: startDate, endDate: endDate };
+		expect(scope.moreThanOneYear()).toBe(true);
+
+		endDate = moment().utc().add(13, 'months').startOf('month').add(-1, 'days').toDate();
+		scope.period = { startDate: startDate, endDate: endDate };
+		expect(scope.moreThanOneYear()).toBe(false);
+	}));
 });
