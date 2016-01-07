@@ -1,6 +1,6 @@
 ﻿.tab-group .label{
-	  line-height: initial;
-		text-transform: capitalize;
+	line-height: initial;
+	text-transform: capitalize;
 }
 
 .permissions-tree {
@@ -115,8 +115,8 @@ p {
 	margin:0!important;
 }
  .toolbar > form > .wfm-radio {
-		width: initial;
-		display:block;
+	width: initial;
+	display:block;
 }
 
 
@@ -135,9 +135,12 @@ p {
 	padding:0;
 }
 
+.permission-radio-buttons .wfm-radio {
+	width: auto;
+}
+
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
-        display: inline-block;
 	    width: 90px;
 	    overflow: hidden;
 	    text-overflow: ellipsis;
