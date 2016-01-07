@@ -1,6 +1,6 @@
 /////////Sites & teams///////////////
-.rta-header {
-				margin-bottom: 10px;
+.rta-info-card{
+	width:48%;
 }
 
 .rta-config {
@@ -45,7 +45,7 @@
 }
 .rta-list {
 				display: inline-flex;
-				max-width: 47%;
+				max-width: 49%;
 				margin: 5px;
 }
 .rta-grid {
@@ -56,7 +56,6 @@
 }
 .site-name {
 				font-size: 20px;
-				margin-left: 30px;
 				font-weight: bolder;
 }
 .rta-stats {
@@ -68,6 +67,7 @@
 }
 .rta-trigger-area {
 				width: 100%;
+				height:100%;
 }
 .site-data {
 				margin-top: 10px;
@@ -127,19 +127,11 @@
 }
 ///////////End of rta-agent-details///////////
 ///////////////Media/////////////////////////
-@media only screen and (max-width: 700px),
-only screen and (max-device-width: 700px) {
-				.rta-list,
-				.rtaGrid {
-								max-width: 100%!important;
-				}
-}
-@media only screen and (min-width: 1620px),
-only screen and (min-device-width: 1620px) {
-				.rtaGrid {
-								display: inline-flex;
-								max-width: 225px!important;
-								margin: 5px;
+@media only screen and (max-width: 840px),
+only screen and (max-device-width: 840px) {
+				.rta-info-card {
+								max-width: 98%!important;
+								width:98%!important;
 				}
 }
 ///////////////End of Media/////////////////////////

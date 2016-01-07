@@ -1,26 +1,34 @@
-﻿<div class="row">
-        <div class="rta-header">
-            <h4>{{'Teams'|translate}}</h4>
-            <button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">{{'Open'|translate}}</button>
-            <a href="{{goBackWithUrl()}}" class="rta-nav-link">{{'RealTimeAdherence'|translate}}</a> / <span>{{siteName}}</span>
-        </div>
-        <div class="wfm-block material-depth-1 rta-list-item rta-list" ng-repeat="team in teams" ng-class="{'rta-grid': teams.length > 5, 'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}">
-            <div class="rta-stats team">
-                <div class="wfm-checkbox">
-                    <label style="width: 20px; height: 20px; display:block !important;"  ng-attr-name="{{team.Name}}">
-                        <input type="checkbox" name="checkbox" value="value" ng-model="selected" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)">
-                        <span class="wfm-checkbox-toggle"></span>
-                    </label>
-                </div>
-                <div class="rta-trigger-area" ng-click="onTeamSelect(team)">
-                <b class="site-name" ng-attr-data-value="{{team.OutOfAdherence}}" ng-attr-data-max="{{team.NumberOfAgents}}">{{team.Name}}</b>
-                <div class="site-data">
-                    <div>
-                        <span>{{siteName}}</span>
-                        <p>{{'OutOfAdherence'|translate}}: <b>{{team.OutOfAdherence}}</b></p>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
+<div class="panel material-depth-1">
+				<div class="sub-header">
+								<h4>{{'Teams'|translate}}</h4>
+								<button class="wfm-btn wfm-btn-primary open" ng-click="openSelectedTeams(selectedTeams)">{{'Open'|translate}}</button>
+								<a class="rta-nav-link" href="{{goBackWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
+								/
+								<span>{{siteName}}</span>
+				</div>
+				<div class="con-row demo-outline">
+								<div class="con-flex">
+												<div class="card-group">
+																<div class="wfm-card team rta-info-card" ng-class="{'rta-grid': teams.length > 5, 'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" ng-repeat="team in teams">
+																				<div class="wfm-checkbox">
+																								<label ng-attr-name="{{team.Name}}" style="width: 20px; height: 20px; display:block !important;">
+																												<input name="checkbox" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected" type="checkbox" value="value">
+																												<span class="wfm-checkbox-toggle"></span>
+																								</label>
+																				</div>
+																				<div class="rta-trigger-area" ng-click="onTeamSelect(team)">
+																								<b class="site-name" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">{{team.Name}}</b>
+																								<div class="site-data">
+																												<div>
+																																<span>{{siteName}}</span>
+																																<p>{{'OutOfAdherence'|translate}}:
+																																				<b>{{team.OutOfAdherence}}</b>
+																																</p>
+																												</div>
+																								</div>
+																				</div>
+																</div>
+												</div>
+								</div>
+				</div>
 </div>

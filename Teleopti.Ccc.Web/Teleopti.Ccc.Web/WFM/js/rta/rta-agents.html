@@ -1,5 +1,5 @@
-<div class="row">
-				<div class="col-lg-12">
+<div class="panel material-depth-1">
+				<div class="sub-header">
 								<h4>Agents</h4>
 								<div ng-if="siteName && teamName">
 												<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
@@ -24,6 +24,10 @@
 																<input ng-change="filterData()" ng-model="filterText" placeholder="{{'Search'|translate}}..." type="text">
 												</div>
 								</div>
-								<div class="grid" ng-if="allGrid" ui-grid-auto-resize ui-grid="allGrid"></div>
+				</div>
+				<div class="con-row demo-outline">
+								<div class="con-flex">
+												<div class="grid" ng-if="allGrid" ui-grid-auto-resize ui-grid="allGrid"></div>
+								</div>
 				</div>
 </div>
