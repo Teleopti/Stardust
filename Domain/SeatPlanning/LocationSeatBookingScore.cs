@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return locationSeatBookingScore == null ? 1 : new sortRoleFrequencyPriorityHelper().Compare(this, locationSeatBookingScore);
 		}
 
-		// add comparers to have different sort options
 		private class sortRoleFrequencyPriorityHelper : IComparer <LocationSeatBookingScore>
 		{
 			public int Compare(LocationSeatBookingScore locationScore1, LocationSeatBookingScore locationScore2)
