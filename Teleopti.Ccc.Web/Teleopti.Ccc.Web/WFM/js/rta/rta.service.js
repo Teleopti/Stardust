@@ -33,6 +33,7 @@
 						isArray: true
 					}
 				}).query({
+					alarmTimeDesc: data.alarmTimeDesc,
 					ids: data.siteIds,
 					inAlarmOnly: data.inAlarmOnly
 				}).$promise;
@@ -45,6 +46,7 @@
 						isArray: true
 					}
 				}).query({
+					alarmTimeDesc: data.alarmTimeDesc,
 					ids: data.teamIds,
 					inAlarmOnly: data.inAlarmOnly
 				}).$promise;

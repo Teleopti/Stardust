@@ -278,7 +278,7 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should poll states in alarm only for sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		$httpBackend.expectGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&inAlarmOnly=true")
+		$httpBackend.expectGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&inAlarmOnly=true")
 			.respond(function() {
 				return [200, states]
 			});

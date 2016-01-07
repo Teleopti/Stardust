@@ -135,7 +135,8 @@
 					getStates({
 							siteIds: siteIds,
 							teamIds: teamIds,
-							inAlarmOnly: $scope.agentsInAlarm === true ? true : null
+							inAlarmOnly: $scope.agentsInAlarm === true ? true : null,
+							alarmTimeDesc: $scope.agentsInAlarm === true ? true : null,
 						})
 						.then(setStatesInAgents);
 				}

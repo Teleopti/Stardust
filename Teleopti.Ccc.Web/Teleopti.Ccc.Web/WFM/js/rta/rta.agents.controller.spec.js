@@ -331,6 +331,18 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.showAdherenceUpdates()).toEqual(true);
 	});
 
+	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		createController();
+
+		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+			.respond(function() {
+				return [200, []]
+			});
+		scope.$apply('agentsInAlarm = true');
+		$httpBackend.flush();
+	});
+
 	it('should display states in alarm only', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		agents = [{
@@ -346,14 +358,14 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "In Call",
 			TimeInAlarm: null
-		},{
+		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "Break",
 			TimeInAlarm: 60
 		}];
 		createController();
 
-		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
 			.respond(function() {
 				return [200, [states[1]]]
 			});
@@ -379,7 +391,7 @@ describe('RtaAgentsCtrl', function() {
 		createController();
 
 		states = [];
-		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
 			.respond(function() {
 				return [200, states]
 			});
