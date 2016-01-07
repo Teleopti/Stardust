@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
 			Assert.That (agentShift1.Seat.Name == "L2 Seat1");
-
 		}
 
 		[Test]
@@ -578,10 +577,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var allocatedSeatsGroup2 = seatBookingRequest2.SeatBookings.Select (s => s.Seat.Name);
 			Assert.That (allocatedSeatsGroup2.Contains ("Room1 Seat0"));
-
-		}
-
-
+			}
+		
 		[Test]
 		public void ShouldConsiderOverlappingBookingsWhenDecidingHowManySeatsShouldBeAllocatedToTeam()
 		{
@@ -623,10 +620,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual(room1.Seats[1].Name, agentShift2.Seat.Name);
 
 			Assert.AreEqual(0, seatBookingRequest1.SeatBookings.Count (seatBooking => seatBooking.Seat == room1.Seats[0]));
-
 		}
-
-
 
 		[Test]
 		public void ShouldConsiderRolesAndThenNumberOfSeatsWhenChoosingLocationForTeam()
