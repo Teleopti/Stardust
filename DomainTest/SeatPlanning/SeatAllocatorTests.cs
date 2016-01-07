@@ -101,15 +101,15 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("L1 Seat1") && allocatedSeats.Contains ("L2 Seat1"));
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
 
 			var startDateTime = new DateTime (2014, 01, 01, 8, 0, 0, DateTimeKind.Utc);
 
-			var agentShift1 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours (8));
-			var agentShift2 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
-			var agentShift3 = new SeatBooking(PersonFactory.CreatePersonWithId(), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
+			var agentShift1 = new SeatBooking(PersonFactory.CreatePerson("Agent1"), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours (8));
+			var agentShift2 = new SeatBooking(PersonFactory.CreatePerson("Agent2"), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
+			var agentShift3 = new SeatBooking(PersonFactory.CreatePerson("Agent3"), new DateOnly(startDateTime), startDateTime, startDateTime.AddHours(8));
 
 			var seatBookingRequest1 = new SeatBookingRequest (agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift2, agentShift3);
@@ -121,10 +121,28 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var location2 = new SeatMapLocation() {IncludeInSeatPlan = true};
 			location2.AddSeat ("L2 Seat1", 1);
 
+			// Temporary diagnostics
+			var seatBookingRequests = new[] { seatBookingRequest1, seatBookingRequest2 };
+			var sortedSeatBookingRequests = seatBookingRequests.ToList();
+			sortedSeatBookingRequests.Sort();
+
+			var count = 0;
+			foreach (var seatBookingRequest in sortedSeatBookingRequests)
+			{
+				count ++;
+				Console.WriteLine("Group "+count+" - Number of bookings " +seatBookingRequest.SeatBookings.Count());
+				seatBookingRequest.SeatBookings.ForEach (seatBooking => Console.WriteLine (seatBooking.Person.Name));
+			}
+
+			Assert.AreEqual(2, sortedSeatBookingRequests.First().SeatBookings.Count());
+
 			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
+			Assert.AreEqual("L1 Seat2", agentShift3.Seat.Name);
 			Assert.AreEqual("L1 Seat1", agentShift2.Seat.Name);
 			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
+
+
 
 		}
 
