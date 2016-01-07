@@ -25,21 +25,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private static void processScore(SeatByIndexScore topScore, List<LocationSeatBookingScore> scoresRankedFromBestToWorst, LocationSeatBookingScore bestRankedGroupScoreForLocation)
 		{
-			var canAllocateAllBookings = false;
-			foreach (var transientSeatBookingInfo in topScore.TransientSeatBookingsForASeat)
-			{
-				var almostAllocatedBookings = transientSeatBookingInfo.AlmostAllocatedBookings;
-				if (almostAllocatedBookings != null && !almostAllocatedBookings.Any(booking => transientSeatBookingInfo.Seat.IsAllocated(booking)))
-				{
-					canAllocateAllBookings = true;
-				}
-				else
-				{
-					canAllocateAllBookings = false;
-					break;
-				}
-			}
-
+			var canAllocateAllBookings = !topScore.TransientSeatBookingsForASeat.Any(transientSeatBookingInfo => transientSeatBookingInfo.AlmostAllocatedBookings.Any (booking => transientSeatBookingInfo.Seat.IsAllocated (booking)));
 			if (canAllocateAllBookings)
 			{
 				foreach (var transientSeatBookingInfo in topScore.TransientSeatBookingsForASeat)
