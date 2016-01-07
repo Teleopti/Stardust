@@ -615,8 +615,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedules = result.AgentSchedules;
 			agentSchedules.Count().Should().Be.EqualTo(2);
-			agentSchedules[0].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
-			agentSchedules[1].PersonId.Should().Be.EqualTo(p6.Id.GetValueOrDefault());
+			agentSchedules[0].PersonId.Should().Be.EqualTo(p5.Id.GetValueOrDefault());
+			agentSchedules[1].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
 			result.PageCount.Should().Be.EqualTo(4);
 		}
 
