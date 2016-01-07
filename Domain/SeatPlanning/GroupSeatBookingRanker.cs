@@ -162,17 +162,17 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				select score;
 		}
 
-		private static int calculateGroupNeighbourCount(TransientSeatBooking[] transientSeatBookingSeatBookingBookingsInfoWithBookingsInfo)
+		private static int calculateGroupNeighbourCount(TransientSeatBooking[] transientSeatBookings)
 		{
-			if (!transientSeatBookingSeatBookingBookingsInfoWithBookingsInfo.Any())
+			if (!transientSeatBookings.Any())
 			{
 				return 0;
 			}
 
 			var totalGroupNeighbourCount = 0;
-			var location = transientSeatBookingSeatBookingBookingsInfoWithBookingsInfo[0].Seat.Parent as SeatMapLocation;
+			var location = transientSeatBookings[0].Seat.Parent as SeatMapLocation;
 
-			foreach (var transientSeatBooking in transientSeatBookingSeatBookingBookingsInfoWithBookingsInfo)
+			foreach (var transientSeatBooking in transientSeatBookings)
 			{
 				var numberOfBookingsOnThisSeat = transientSeatBooking.AlmostAllocatedBookings.Count;
 				totalGroupNeighbourCount += numberOfBookingsOnThisSeat;
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 						.FirstOrDefault();
 				if (nextHighestPrioritySeat != null)
 				{
-					totalGroupNeighbourCount += transientSeatBookingSeatBookingBookingsInfoWithBookingsInfo.Count(booking => booking.Seat.Priority == nextHighestPrioritySeat.Priority) * numberOfBookingsOnThisSeat;
+					totalGroupNeighbourCount += transientSeatBookings.Count(booking => booking.Seat.Priority == nextHighestPrioritySeat.Priority) * numberOfBookingsOnThisSeat;
 				}
 
 				

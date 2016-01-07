@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				foreach (var transientSeatBookingInfo in topScore.TransientSeatBookingsForASeat)
 				{
+					var seat = transientSeatBookingInfo.Seat;
 					var almostAllocatedBookings = transientSeatBookingInfo.AlmostAllocatedBookings;
-					almostAllocatedBookings.ForEach (booking => booking.Book (transientSeatBookingInfo.Seat));
+					almostAllocatedBookings.ForEach (booking => booking.Book (seat));
 				}
 
 				// remove all other potential bookings for this group....

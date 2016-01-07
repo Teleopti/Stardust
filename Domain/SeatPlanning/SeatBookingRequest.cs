@@ -25,13 +25,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return seatBookingRequest == null ? 1 : new memberCountStartDateComparer().Compare (this, seatBookingRequest);
 		}
 
-		private class memberCountStartDateComparer : IComparer
+		private class memberCountStartDateComparer : IComparer<SeatBookingRequest>
 		{
-			public int Compare (object a, object b)
+			public int Compare(SeatBookingRequest seatBookingRequest1, SeatBookingRequest seatBookingRequest2)
 			{
-				var seatBookingRequest1 = (SeatBookingRequest) a;
-				var seatBookingRequest2 = (SeatBookingRequest) b;
-				
 				if (seatBookingRequest1.MemberCount < seatBookingRequest2.MemberCount)
 				{
 					return 1;
@@ -58,7 +55,5 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				return 0;
 			}
 		}
-
-		
 	}
 }

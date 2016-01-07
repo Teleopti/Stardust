@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			sortedSeatBookingRequests.Sort();
 
 			var allLocationsUnsorted = getAllLocationsUnsorted();
-
+			
 			var seatScores = SeatScorer.GetSeatScores(sortedSeatBookingRequests, allLocationsUnsorted, _seatFrequencies);
 
 			bookSeatsByGroup(sortedSeatBookingRequests, allLocationsUnsorted, seatScores);

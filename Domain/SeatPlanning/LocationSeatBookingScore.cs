@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -19,13 +18,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 		// add comparers to have different sort options
-		private class sortRoleFrequencyPriorityHelper : IComparer
+		private class sortRoleFrequencyPriorityHelper : IComparer <LocationSeatBookingScore>
 		{
-			public int Compare(object a, object b)
-			{
-				var locationScore1 = (LocationSeatBookingScore)a;
-				var locationScore2 = (LocationSeatBookingScore)b;
-
+			public int Compare(LocationSeatBookingScore locationScore1, LocationSeatBookingScore locationScore2)
+			{		
 				var locationScore1MaxRoleMatches = locationScore1.ScoreList.Max(score => score.TotalRoleMatches);
 				var locationScore2MaxRoleMatches = locationScore2.ScoreList.Max(score => score.TotalRoleMatches);
 
@@ -57,6 +53,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 				return 0;
 			}
+
 		}
 
 	}

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			groupNewBookings(period, people);
 			
-			 return new SeatBookingRequestParameters()
+			 return new SeatBookingRequestParameters
 			 {
 				 ExistingSeatBookings =  _existingSeatBookings,
 				 TeamGroupedBookings = _bookingsWithDateAndTeam,

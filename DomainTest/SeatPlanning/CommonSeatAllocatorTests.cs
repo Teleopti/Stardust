@@ -151,9 +151,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			}
 			else
 			{
-				new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+				new SeatAllocator(location).AllocateSeats(seatBookingRequest2, seatBookingRequest1);
 			}
 
+			Assert.AreEqual (location.Seats[0].Name, agentShift1.Seat.Name );
 			Assert.That(agentShift2.Seat == null);
 		}
 
