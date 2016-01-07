@@ -104,7 +104,7 @@
 			
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			
-			function formateDateTime(dateTime, timezone, displayDateOnly) {
+			function formatedDateTime(dateTime, timezone, displayDateOnly) {
 				var angularTimezone = moment.tz(vm.isUsingRequestSubmitterTimeZone == true ? timezone : vm.userTimeZone).format("Z");
 				var _dateTime = moment.tz(dateTime, timezone).toDate();
 				if (displayDateOnly && vm.isUsingRequestSubmitterTimeZone) return $filter('date')(_dateTime, "shortDate", angularTimezone);
@@ -117,11 +117,11 @@
 					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 					return formatToTimespan(length, row.IsFullDay);
 				}
-				row.FormatedPeriodStartTime = function() { return formateDateTime(row.PeriodStartTime, row.TimeZone, row.IsFullDay); };
-				row.FormatedPeriodEndTime = function() { return formateDateTime(row.PeriodEndTime, row.TimeZone, row.IsFullDay); };
+				row.FormatedPeriodStartTime = function() { return formatedDateTime(row.PeriodStartTime, row.TimeZone, row.IsFullDay); };
+				row.FormatedPeriodEndTime = function() { return formatedDateTime(row.PeriodEndTime, row.TimeZone, row.IsFullDay); };
 
-				row.FormatedCreatedTime = function() { return formateDateTime(row.CraetedTime, row.TimeZone, false); };
-				row.FormatedUpdatedTime = function() { return formateDateTime(row.UpdatedTime, row.TimeZone, false); };
+				row.FormatedCreatedTime = function() { return formatedDateTime(row.CreatedTime, row.TimeZone, false); };
+				row.FormatedUpdatedTime = function() { return formatedDateTime(row.UpdatedTime, row.TimeZone, false); };
 
 				row.GetType = function () {
 					var typeText = row.TypeText;					

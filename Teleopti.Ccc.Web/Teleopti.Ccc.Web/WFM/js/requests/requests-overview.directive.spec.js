@@ -144,16 +144,17 @@
 
 	describe('requests table container directive', function() {
 
-		var $compile, $rootScope, requestsDefinitions;
+		var $compile, $rootScope, requestsDefinitions,$filter;
 
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
 
-		beforeEach(inject(function(_$compile_, _$rootScope_, _requestsDefinitions_) {
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_, _$filter_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDefinitions = _requestsDefinitions_;
+			$filter = _$filter_;
 		}));
 
 		it('should apply template', function() {
@@ -176,6 +177,45 @@
 			expect(targets.length).toEqual(2);
 		});
 
+		it("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function() {
+			var test = setUpTarget();
+			
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-05T00:00:00', PeriodEndTime: '2016-01-07T23:59:00', CreatedTime: '2016-01-05T03:29:37', TimeZone: 'Europe/Berlin', UpdatedTime: '2016-01-05T03:29:37' }];
+			test.scope.$digest();
+
+			var startTime = test.scope.requests[0].FormatedPeriodStartTime();
+			var endTime = test.scope.requests[0].FormatedPeriodEndTime();
+			var createdTime = test.scope.requests[0].FormatedCreatedTime();
+			var updatededTime = test.scope.requests[0].FormatedUpdatedTime();
+
+			expect(startTime).toEqual(toDateString('2016-01-05T00:00:00'));
+			expect(endTime).toEqual(toDateString('2016-01-07T23:59:00'));
+			expect(createdTime).toEqual(toDateString('2016-01-05T03:29:37'));
+			expect(updatededTime).toEqual(toDateString('2016-01-05T03:29:37'));
+		});
+
+		it("should be able to switch between user timezone and request submitter timezone", function () {
+			var test = setUpTarget();
+
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false }];
+			test.scope.$digest();
+			var isolatedScope = test.target.isolateScope();
+			isolatedScope.requestsTableContainer.userTimeZone = 'Europe/Berlin';
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = false;
+			test.scope.$digest();
+
+			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00'));
+			
+			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
+			test.scope.$digest();
+
+			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T14:00:00'));
+		});
+
+		function toDateString(date) {
+			var _dateTime = moment(date).toDate();
+			return $filter('date')(_dateTime, "short");
+		};
 
 		function setUpTarget() {
 			var scope = $rootScope.$new();
