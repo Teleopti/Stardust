@@ -49,19 +49,33 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		}
 
-		[UnitOfWork]
 		[LogTime]
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = SetupAndOptimize(planningPeriodId);
 
-			_persister.Persist(_schedulerStateHolder().Schedules);
+			Persist();
 
+			return CreateResult(planningPeriod);
+		}
+
+		[UnitOfWork]
+		[LogTime]
+		protected virtual void Persist()
+		{
+			_persister.Persist(_schedulerStateHolder().Schedules);
+		}
+
+		[LogTime]
+		protected virtual OptimizationResultModel CreateResult(IPlanningPeriod planningPeriod)
+		{
 			var result = new OptimizationResultModel();
 			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, planningPeriod.Range);
 			return result;
 		}
 
+		[UnitOfWork]
+		[LogTime]
 		protected virtual IPlanningPeriod SetupAndOptimize(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
