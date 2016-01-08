@@ -1,9 +1,9 @@
 ﻿<div class="modal-box">
 	<div class="modalbg import-people">
 		<div class="dialog">
-			<div class="modal-header">
+			<h1 class="modal-title">
 				{{'ImportUsers'|translate}}
-			</div>
+			</h1>
 			<div class="modal-inner-content">
 				<div class="wfm-block">
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
@@ -51,9 +51,9 @@
 					<div ng-show="vm.isFailed" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{'ImportError'|translate}}! {{vm.errorMsg}}</div>
 				</div>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-actions">
 				<aside>
-					<a ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+					<button ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis-default">{{'Back'|translate}}</button>
 				</aside>
 			</div>
 		</div>
