@@ -40,7 +40,7 @@ Scenario: See statupdates after changing business unit
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field         | Value    |
 	| Name          | Positive |
 	| Business Unit | France   |

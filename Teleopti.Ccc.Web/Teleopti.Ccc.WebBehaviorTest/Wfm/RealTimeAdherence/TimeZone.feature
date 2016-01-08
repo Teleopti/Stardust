@@ -24,14 +24,14 @@ Scenario: See adherence percentage when call center is in Hawaii
 	| Start time | 2014-10-06 11:00 |
 	| End time   | 2014-10-06 19:00 |
 	| Activity   | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
@@ -64,14 +64,14 @@ Scenario: See adherence details when call center is in Hawaii
 	| Start time               | 2014-10-07 11:00 |
 	| End time                 | 2014-10-07 19:00 |
 	| Activity                 | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |

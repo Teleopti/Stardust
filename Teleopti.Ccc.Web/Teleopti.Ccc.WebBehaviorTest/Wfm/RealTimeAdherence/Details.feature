@@ -21,14 +21,14 @@ Scenario: See adherence details for one agent within working hour
 	| Start time               | 2014-10-06 08:00 |
 	| End time                 | 2014-10-06 10:00 |
 	| Activity                 | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
@@ -59,14 +59,14 @@ Scenario: See adherence details for one agent outside of working hour
 	| Start time               | 2014-10-06 08:00 |
 	| End time                 | 2014-10-06 10:00 |
 	| Activity                 | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |

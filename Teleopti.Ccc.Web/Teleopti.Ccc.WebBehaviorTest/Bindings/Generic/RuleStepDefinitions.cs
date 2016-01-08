@@ -6,12 +6,12 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class AlarmStepDefinitions
+	public class RuleStepDefinitions
 	{
-		[Given(@"there is an alarm with")]
-		public void GivenThereIsAnAlarmWith(Table table)
+		[Given(@"there is a rule with")]
+		public void GivenThereIsARuleWith(Table table)
 		{
-			DataMaker.Data().Apply(table.CreateInstance<AlarmConfigurable>());
+			DataMaker.Data().Apply(table.CreateInstance<RtaRuleConfigurable>());
 		}
 	}
 }

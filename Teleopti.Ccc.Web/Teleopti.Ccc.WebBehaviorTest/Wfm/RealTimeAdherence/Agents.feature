@@ -34,14 +34,14 @@ Background:
 	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
 	| Next activity end time   | 2014-01-21 13:30 |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |

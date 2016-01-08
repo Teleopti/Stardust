@@ -31,13 +31,13 @@ Scenario: See updates of sum of employees not adhering to schedule for each site
 	| Start time | 2014-01-21 12:00 |
 	| End time   | 2014-01-21 19:00 |
 	| Activity   | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
@@ -74,13 +74,13 @@ Scenario: See updates of sum of employees not adhering to schedule for each team
 	| Start time | 2014-01-21 12:00 |
 	| End time   | 2014-01-21 19:00 |
 	| Activity   | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
@@ -118,13 +118,13 @@ Scenario: See current state of sum of employees not adhering to schedule for eac
 	| Start time | 2014-01-21 12:00 |
 	| End time   | 2014-01-21 19:00 |
 	| Activity   | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
@@ -161,13 +161,13 @@ Scenario: See current state of sum of employees not adhering to schedule for eac
 	| Start time | 2014-01-21 12:00 |
 	| End time   | 2014-01-21 19:00 |
 	| Activity   | Phone            |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |

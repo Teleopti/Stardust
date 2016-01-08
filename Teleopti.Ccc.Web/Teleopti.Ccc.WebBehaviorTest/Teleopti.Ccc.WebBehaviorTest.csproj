@@ -177,7 +177,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\EmptyDayStepDefinitions.cs" />

@@ -9,21 +9,24 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class AlarmConfigurable : IDataSetup
+	public class RtaRuleConfigurable : IDataSetup
 	{
 		public string Activity { get; set; }
 		public string PhoneState { get; set; }
 		public string Name { get; set; }
 		public int StaffingEffect { get; set; }
 		public string AlarmColor { get; set; }
+		public string DisplayColor { get; set; }
 		public string BusinessUnit { get; set; }
 		public string Adherence { get; set; }
+		public string Alarm { get; set; }
+		public string AlarmThreshold { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
-			var rule = new RtaRule(new Description(Name), color, TimeSpan.Zero, StaffingEffect);
-
+			var alarmColor = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
+			var displayColor = string.IsNullOrEmpty(DisplayColor) ? alarmColor : Color.FromName(DisplayColor);
+			var rule = new RtaRule(new Description(Name), displayColor, TimeSpan.Zero, StaffingEffect) {AlarmColor = alarmColor};
 			var activityRepository = new ActivityRepository(currentUnitOfWork);
 
 			IRtaStateGroup stateGroup = null;
@@ -62,6 +65,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if(Enum.TryParse(Adherence, true, out adherence))
 				rule.Adherence = adherence;
 			}
+
+			if (!string.IsNullOrWhiteSpace(Alarm))
+				rule.IsAlarm = bool.Parse(Alarm);
+
+			if (!string.IsNullOrWhiteSpace(AlarmThreshold))
+				rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
 			
 			var ruleRepository = new RtaRuleRepository(currentUnitOfWork);
 			ruleRepository.Add(rule);

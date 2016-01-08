@@ -25,14 +25,14 @@ Scenario: See adherence percentage with neutral adherence
 	| Next activity            | Administration   |
 	| Next activity start time | 2015-03-02 09:00 |
 	| Next activity end time   | 2015-03-02 10:00 |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Adherence       | In       |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value          |
 	| Activity        | Administration |
 	| Phone state     | SomeCode       |
@@ -67,14 +67,14 @@ Scenario: See adherence details with neutral adherence
 	| Next activity            | Administration   |
 	| Next activity start time | 2015-03-02 09:00 |
 	| Next activity end time   | 2015-03-02 10:00 |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Adherence       | In       |
 	| Staffing effect | 0        |
-	And there is an alarm with 
+	And there is a rule with 
 	| Field           | Value          |
 	| Activity        | Administration |
 	| Phone state     | SomeCode       |
