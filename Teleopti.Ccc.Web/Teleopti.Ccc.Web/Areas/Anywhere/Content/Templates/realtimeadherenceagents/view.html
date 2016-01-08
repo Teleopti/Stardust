@@ -43,7 +43,7 @@
 				</tr>
 			</thead>
 			<tbody data-bind="foreach: Agents">
-				<tr class="agent-state" data-bind="style:  { backgroundColor: AlarmColor, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight, fontColor: TextColor}, click: $root.SelectAgent">
+				<tr class="agent-state" data-bind="style:  { backgroundColor: Color, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight, fontColor: TextColor}, click: $root.SelectAgent">
 					<td class="selectable-agent" data-bind="if: $parent.notifyViaSMSEnabled"><input type="checkbox" data-bind="checked: SelectedToSendMessage, stopBubble: true"></td>
 					<td class="agent-name" data-bind="text: Name"></td>
 					<td data-bind="text: TeamName"></td>

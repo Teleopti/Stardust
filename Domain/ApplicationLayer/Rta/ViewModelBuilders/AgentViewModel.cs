@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
 		public DateTime? AlarmStart { get; set; }
-		public string AlarmColor { get; set; }
+		public string Color { get; set; }
 		public int TimeInState { get; set; }
 		public int? TimeInAlarm { get; set; }
 	}

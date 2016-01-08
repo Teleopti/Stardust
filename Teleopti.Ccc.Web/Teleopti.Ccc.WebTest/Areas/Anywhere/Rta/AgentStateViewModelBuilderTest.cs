@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			states.Single().NextActivity.Should().Be("lunch");
 			states.Single().NextActivityStartTime.Should().Be("09:00");
 			states.Single().Alarm.Should().Be("in adherence");
-			states.Single().AlarmColor.Should().Be("#000000");
+			states.Single().Color.Should().Be("#000000");
 			states.Single().TimeInState.Should().Be(30 * 60);
 		}
 		
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			var states = Target.Build(agentStates);
 
-			states.Single().AlarmColor.Should().Be("#FFFFFF");
+			states.Single().Color.Should().Be("#FFFFFF");
 		}
 
 		[Test]
