@@ -134,22 +134,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
 		{
-			var hourIntervals = keyPeriod.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
 			var result = new SkillSkillStaffPeriodExtendedDictionary();
 			foreach (var skillPair in skillStaffPeriodDictionary)
 			{
 				if (!skills.Contains(skillPair.Key))
 					continue;
-				var skillStaffDictionary = skillPair.Value.ForLookup();
+				ISkillStaffPeriodDictionary skillStaffDictionary = skillPair.Value;
 
 				var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skillPair.Key);
-				foreach (var hourInterval in hourIntervals)
+				foreach (var skillStaffPeriod in skillStaffDictionary)
 				{
-					foreach (var skillStaffPeriod in skillStaffDictionary[hourInterval])
-					{
-						if (!skillStaffPeriod.Period.Intersect(keyPeriod)) continue;
-						skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod);
-					}
+					if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
+					skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
 				}
 				result.Add(skillPair.Key, skillStaffPeriodDictionaryToReturn);
 			}
