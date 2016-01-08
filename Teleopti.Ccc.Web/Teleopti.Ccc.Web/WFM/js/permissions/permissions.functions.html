@@ -63,7 +63,7 @@
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-class="{hideChevron: childNodes().length < 1}" class="mdi mdi-chevron-right"></i></div>
 		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected, locked: node.IsDisabled}" ng-click="toggleFunctionForRole(this)">
 			{{node.LocalizedFunctionDescription}}
-			<span><i class="mdi mdi-check"></i></span>
+			<span class="tree-line-right"><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
 
