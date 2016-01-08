@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .Add(childGroupPages)
                     .Add(persons)
                     .List();
-				var retList = (IGroupPage[])CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
+				var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]).ToArray();
 
                 var multiCriteria = Session.CreateMultiCriteria();
                 bool hasQuery = false;
