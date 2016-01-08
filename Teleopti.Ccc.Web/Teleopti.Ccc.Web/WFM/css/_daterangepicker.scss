@@ -65,12 +65,6 @@
 			text-align:center;
 		}
 	}
-	.dropdown-menu{
-		display: block;
-		top: 18px!important;
-		left: 0px;
-		width: 100%;
-	}
 	.pin-down{
 		box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
 		background-color: #ececec;
@@ -98,12 +92,6 @@
     }
 	.mdi-calendar{
 		color:#F44336;
-	}
-	.start-date-input{
-		 border-bottom-color:#F44336;
-	}
-	.end-date-input{
-		 border-bottom-color:#F44336;
 	}
   }
   .picker-template-inline {
