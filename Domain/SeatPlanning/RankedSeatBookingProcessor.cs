@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 				// remove all other potential bookings for this group....
 				scoresRankedFromBestToWorst.RemoveAll (groupScore => groupScore.GroupId == bestRankedGroupScoreForLocation.GroupId);
+				
 			}
 			else
 			{

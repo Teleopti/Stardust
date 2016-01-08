@@ -15,39 +15,33 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return new sortRoleFrequencyPriorityComparer().Compare(this, other);
 		}
 		
-		private class sortRoleFrequencyPriorityComparer : IComparer <LocationSeatBookingScore>
+		private class sortRoleFrequencyPriorityComparer : Comparer <LocationSeatBookingScore>
 		{
-			public int Compare(LocationSeatBookingScore locationScore1, LocationSeatBookingScore locationScore2)
+			public override int Compare(LocationSeatBookingScore locationScore1, LocationSeatBookingScore locationScore2)
 			{		
 				var locationScore1MaxRoleMatches = locationScore1.ScoreList.Max(score => score.TotalRoleMatches);
 				var locationScore2MaxRoleMatches = locationScore2.ScoreList.Max(score => score.TotalRoleMatches);
 
-				if (locationScore1MaxRoleMatches > locationScore2MaxRoleMatches)
-					return -1;
-				if (locationScore1MaxRoleMatches < locationScore2MaxRoleMatches)
-					return 1;
-
+				var comparisonOfTotalRoleMatches = locationScore1MaxRoleMatches.CompareTo (locationScore2MaxRoleMatches);
+				if (comparisonOfTotalRoleMatches != 0)
+					return -comparisonOfTotalRoleMatches;
+				
 				var locationScore1MaxFrequency = locationScore1.ScoreList.Max(score => score.TotalFrequency);
 				var locationScore2MaxFrequency = locationScore2.ScoreList.Max(score => score.TotalFrequency);
+				var comparisonOfMaxFrequency = locationScore1MaxFrequency.CompareTo (locationScore2MaxFrequency);
+				if (comparisonOfMaxFrequency != 0)
+					return -comparisonOfMaxFrequency;
 
-				if (locationScore1MaxFrequency > locationScore2MaxFrequency)
-					return -1;
-				if (locationScore1MaxFrequency < locationScore2MaxFrequency)
-					return 1;
-
-				if (locationScore1.Location.SeatCount > locationScore2.Location.SeatCount)
-					return -1;
-				if (locationScore1.Location.SeatCount < locationScore2.Location.SeatCount)
-					return 1;
+				var comparisonSeatCount = locationScore1.Location.SeatCount.CompareTo (locationScore2.Location.SeatCount);
+				if (comparisonSeatCount != 0)
+					return -comparisonSeatCount;
 
 				var locationScore1HighestPriority = locationScore1.ScoreList.Min(score => score.HighestPriority);
 				var locationScore2HighestPriority = locationScore2.ScoreList.Min(score => score.HighestPriority);
-
-				if (locationScore1HighestPriority > locationScore2HighestPriority)
-					return 1;
-				if (locationScore1HighestPriority < locationScore2HighestPriority)
-					return -1;
-
+				var comparisonPriority = locationScore1HighestPriority.CompareTo (locationScore2HighestPriority);
+				if (comparisonPriority != 0)
+					return comparisonPriority;
+				
 				return 0;
 			}
 		}

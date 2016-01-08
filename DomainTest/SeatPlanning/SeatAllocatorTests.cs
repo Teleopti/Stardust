@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("L1 Seat1") && allocatedSeats.Contains ("L2 Seat1"));
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
 
@@ -115,10 +115,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatBookingRequest2 = new SeatBookingRequest (agentShift2, agentShift3);
 
 			var location1 = new SeatMapLocation() {IncludeInSeatPlan = true};
+			location1.Name = "Location1";
 			location1.AddSeat ("L1 Seat1", 1);
 			location1.AddSeat ("L1 Seat2", 2);
 
 			var location2 = new SeatMapLocation() {IncludeInSeatPlan = true};
+			location2.Name = "Location2";
 			location2.AddSeat ("L2 Seat1", 1);
 
 			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
