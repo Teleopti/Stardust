@@ -11,14 +11,12 @@ namespace Teleopti.Ccc.Domain.Collection
     public class SkillStaffPeriodDictionary : ISkillStaffPeriodDictionary
     {
         private Lazy<IList<DateTimePeriod>> _openHoursCollection;
-	    private Lazy<ILookup<HourSlot, ISkillStaffPeriod>> _lookup;
         private readonly IDictionary<DateTimePeriod, ISkillStaffPeriod> _wrappedDictionary = new Dictionary<DateTimePeriod, ISkillStaffPeriod>();
         private readonly IAggregateSkill _skill;
 
 	    private SkillStaffPeriodDictionary()
 	    {
 		    _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
-			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
 	    }
 
         public SkillStaffPeriodDictionary(IAggregateSkill skill)
@@ -73,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Collection
 	        if (remove)
 	        {
 		        _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
-		        _lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
 	        }
 	        return remove;
         }
@@ -141,16 +138,6 @@ namespace Teleopti.Ccc.Domain.Collection
                 return _wrappedDictionary.Values;
             }
         }
-
-	    private ILookup<HourSlot, ISkillStaffPeriod> createLookup()
-	    {
-			return _wrappedDictionary.Values.ToLookup(v => new HourSlot(v.Period.StartDateTime));
-	    }
-
-	    public ILookup<HourSlot, ISkillStaffPeriod> ForLookup()
-	    {
-		    return _lookup.Value;
-	    }
 
         /// <summary>
         ///                     Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
@@ -223,7 +210,6 @@ namespace Teleopti.Ccc.Domain.Collection
 
             _wrappedDictionary.Add(item);
 			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
-			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
         }
 
         public void Add(ISkillStaffPeriod skillStaffPeriod)
@@ -269,7 +255,6 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             _wrappedDictionary.Clear();
 			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
-			_lookup = new Lazy<ILookup<HourSlot, ISkillStaffPeriod>>(createLookup);
         }
 
         /// <summary>

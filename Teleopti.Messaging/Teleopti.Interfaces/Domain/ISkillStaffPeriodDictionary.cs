@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -53,7 +49,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-05-13
         /// </remarks>
         bool TryGetResolutionAdjustedValue(DateTimePeriod key, out ISkillStaffPeriod value);
-
-	    ILookup<HourSlot, ISkillStaffPeriod> ForLookup();
     }
 }

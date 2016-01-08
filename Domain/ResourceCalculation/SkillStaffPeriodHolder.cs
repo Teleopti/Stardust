@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
+using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -12,13 +13,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
         private readonly object Locker = new object();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
         {
             CreateInternalDictionary(skillDays);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills)
         {
             var personSkillSkillStaff = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
@@ -222,17 +221,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IList<ISkillStaffPeriod> SkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
         {
             var skillStaffPeriods = new List<ISkillStaffPeriod>();
-	        var intervals = utcPeriod.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
 	        skills.ForEach(skill =>
 	        {
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
 				{
-					var lookup = content.ForLookup();
-
-					foreach (var hourSlot in intervals)
+					foreach (var dictionary in content)
 					{
-						skillStaffPeriods.AddRange(lookup[hourSlot].Where(s => utcPeriod.Intersect(s.Period)));
+						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+
+						skillStaffPeriods.Add(dictionary.Value);
 					}
 				}
 	        });
@@ -242,18 +241,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
 			var skillStaffPeriods = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
-			var intervals = utcPeriod.AffectedHourCollection().Select(h => new HourSlot(h.StartDateTime)).ToArray();
 			foreach (ISkill skill in skills)
 			{
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
 				{
 					var newDictionary = new SkillStaffPeriodDictionary(skill);
-					var lookup = content.ForLookup();
-
-					foreach (var hourSlot in intervals)
+					foreach (var dictionary in content)
 					{
-						lookup[hourSlot].Where(s => utcPeriod.Intersect(s.Period)).ForEach(newDictionary.Add);
+						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+						
+						newDictionary.Add(dictionary.Key, dictionary.Value);
 					}
 					if(newDictionary.Count > 0 )
 						skillStaffPeriods.Add(skill, newDictionary);

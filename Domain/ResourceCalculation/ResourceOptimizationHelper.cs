@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
-
 		public ResourceOptimizationHelper(Func<ISchedulerStateHolder> stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
-		public void ResourceCalculateDate(DateOnly localDate,  bool considerShortBreaks)
+		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks)
 		{
 			resourceCalculateDate(localDate, considerShortBreaks);
 		}
@@ -54,31 +53,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
-			    IResourceCalculationDataContainerWithSingleOperation relevantProjections;
-			    IDisposable context = null;
-			    if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
-			    {
-			        relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
-			    }
-			    else
-			    {
-			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			        relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
-			                                                                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-			                                                                         localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
-			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
-			    }
+				IResourceCalculationDataContainerWithSingleOperation relevantProjections;
+				IDisposable context = null;
+				if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+				{
+					relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
+				}
+				else
+				{
+					var extractor = new ScheduleProjectionExtractor(_personSkillProvider(),
+						stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+					relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
+						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
+					context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
+				}
 
-				
 				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
 
 				_intraIntervalFinderService.Execute(stateHolder.SchedulingResultState, localDate, relevantProjections);
-				
 
-                if (context != null)
-                {
-                    context.Dispose();
-                }
+				if (context != null)
+				{
+					context.Dispose();
+				}
 			}
 		}
 
@@ -89,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
-		                                   DateOnly localDate, bool considerShortBreaks)
+			DateOnly localDate, bool considerShortBreaks)
 		{
 
 			var timePeriod = getPeriod(localDate);
@@ -98,16 +96,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (var skill in schedulerStateHolder.SchedulingResultState.Skills)
 			{
 				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill &&
-				    skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+					skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 					ordinarySkills.Add(skill);
 			}
 
 			var relevantSkillStaffPeriods =
-				CreateSkillSkillStaffDictionaryOnSkills(schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
-				                                        ordinarySkills, timePeriod);
+				CreateSkillSkillStaffDictionaryOnSkills(
+					schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+					ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, schedulerStateHolder.SchedulingResultState.Skills,
-			                                                          relevantProjections, _personSkillProvider());
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods,
+				schedulerStateHolder.SchedulingResultState.Skills,
+				relevantProjections, _personSkillProvider());
 
 			schedulingResultService.SchedulingResult(timePeriod);
 
@@ -119,37 +119,45 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			calculateMaxSeatsAndNonBlend(relevantProjections, localDate, timePeriod);
 		}
 
-		private void calculateMaxSeatsAndNonBlend(IResourceCalculationDataContainer relevantProjections, DateOnly localDate, DateTimePeriod timePeriod)
+		private void calculateMaxSeatsAndNonBlend(IResourceCalculationDataContainer relevantProjections, DateOnly localDate,
+			DateTimePeriod timePeriod)
 		{
 			var schedulingResultStateHolder = _stateHolder().SchedulingResultState;
-			var maxSeatSkills = schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill).ToList();
-			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
-			                                                                                                             maxSeatSkills, timePeriod);
+			var maxSeatSkills =
+				schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
+					.ToList();
+			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods =
+				CreateSkillSkillStaffDictionaryOnSkills(
+					schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+					maxSeatSkills, timePeriod);
 			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
-			
-			var nonBlendSkills = schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill).ToList();
-			relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, nonBlendSkills, timePeriod);
+
+			var nonBlendSkills =
+				schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
+					.ToList();
+			relevantSkillStaffPeriods =
+				CreateSkillSkillStaffDictionaryOnSkills(
+					schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, nonBlendSkills, timePeriod);
 			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
 		}
 
-		public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
+		public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(
+			ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
 		{
 			var result = new SkillSkillStaffPeriodExtendedDictionary();
-			foreach (var skillPair in skillStaffPeriodDictionary)
+			foreach (var skill in skills)
 			{
-				if (!skills.Contains(skillPair.Key))
-					continue;
-				ISkillStaffPeriodDictionary skillStaffDictionary = skillPair.Value;
+				ISkillStaffPeriodDictionary skillStaffDictionary;
+				if (!skillStaffPeriodDictionary.TryGetValue(skill, out skillStaffDictionary)) continue;
 
-				var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skillPair.Key);
+				var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skill);
 				foreach (var skillStaffPeriod in skillStaffDictionary)
 				{
 					if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
 					skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
 				}
-				result.Add(skillPair.Key, skillStaffPeriodDictionaryToReturn);
+				result.Add(skill, skillStaffPeriodDictionaryToReturn);
 			}
-
 			return result;
 		}
 	}

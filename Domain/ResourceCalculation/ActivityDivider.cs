@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -23,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class ActivityDivider : IActivityDivider
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public IDividedActivityData DivideActivity(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    private static double? skillDayDemand(ISkill skill, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
-            double retVal = 0;
             ISkillStaffPeriodDictionary skillStaffPeriods;
             bool anythingOpen = false;
             if (!relevantSkillStaffPeriods.TryGetValue(skill, out skillStaffPeriods))
@@ -121,10 +120,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                 if (intersection.HasValue)
                 {
-                    foreach (var openHourPeriod in skillStaffPeriods.SkillOpenHoursCollection)
+                    if (!anythingOpen && skillStaffPeriods.SkillOpenHoursCollection.Any(openHourPeriod => openHourPeriod.Intersect(periodToCalculate)))
                     {
-                        if (openHourPeriod.Intersect(periodToCalculate))
-                            anythingOpen = true;
+	                    anythingOpen = true;
                     }
 
                     double skillStaffPeriodSeconds = skillStaffPeriod.Key.ElapsedTime().TotalSeconds;
@@ -134,14 +132,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     totalTime += skillStaffPeriod.Value.ForecastedDistributedDemand*
                                  skillStaffPeriodSeconds*intersectPercent;
                 }
-
-
-                retVal = totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
             }
             if (!anythingOpen)
                 return null;
 
-            return retVal;
+			return totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
         }
 
         private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
