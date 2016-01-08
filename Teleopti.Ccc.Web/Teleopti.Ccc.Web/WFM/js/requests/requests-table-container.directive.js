@@ -75,7 +75,7 @@
 					
 			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId);
 			
-			if (vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length)) {
+			if (vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0) {
 				vm.gridApi.grid.selection.selectAll = true;
 			} else {
 				vm.gridApi.grid.selection.selectAll = false;
@@ -153,7 +153,7 @@
 				vm.gridApi.selection.selectRow(row);
 			});
 
-			if (vm.requests && (vm.requests.length === rows.length)) {
+			if (vm.requests && (vm.requests.length === rows.length) && vm.requests.length > 0) {
 				vm.gridApi.grid.selection.selectAll = true;
 			} else {
 				vm.gridApi.grid.selection.selectAll = false;

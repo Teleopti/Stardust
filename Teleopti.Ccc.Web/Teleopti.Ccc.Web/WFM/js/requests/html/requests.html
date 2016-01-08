@@ -26,14 +26,11 @@
 			</div>
 		</div>
 		<div class="pull-right">
-			<select class="page-size-selector"
+			<select ng-if="requests.paging.totalRequestsCount > 0"
+					class="page-size-selector"
 					ng-model="requests.paging.pageSize" ng-options="option for option in requests.pageSizeOptions" ng-change="requests.onPageSizeChanges()"></select>
 			<wfm-pagination pagination-options="requests.paging" get-data-for-page-callback="requests.forceRequestsReloadWithSelection"></wfm-pagination>
 		</div>				
 	</div>
-
-	
-
-	
 
 </div>
