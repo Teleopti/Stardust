@@ -18,8 +18,8 @@
               column="WorkloadDate"
 		  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 		  not-null="false"/>
-    
-		<bag name="OpenHourList">
+
+    <set name="OpenHourList">
 			<key column ="Parent" foreign-key="FK_OpenHourList_WorkloadDayBase">
 				<column name="Parent" unique-key="openHourListUnique"/>
 			</key>
@@ -36,16 +36,16 @@
 							type="TimeSpan"/>
 				</nested-composite-element>
 			</composite-element>
-		</bag>
+		</set>
 
 
-		<bag name="TaskPeriodList" 
+    <set name="TaskPeriodList" 
 		    cascade="all-delete-orphan"
 		    inverse="true"
          lazy="false">
 			<key column ="Parent" />
             <one-to-many class="Teleopti.Ccc.Domain.Forecasting.Template.TemplateTaskPeriod" />
-		</bag>
+		</set>
 		
 		<many-to-one name="Workload"
 		 class="Workload"

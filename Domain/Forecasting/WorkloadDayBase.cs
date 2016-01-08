@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -33,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private Percent _campaignTasks;
         private Percent _campaignTaskTime;
         private Percent _campaignAfterTaskTime;
-        private IList<TimePeriod> _openHourList = new List<TimePeriod>();
-        private IList<ITemplateTaskPeriod> _taskPeriodList = new List<ITemplateTaskPeriod>();
+		private ISet<TimePeriod> _openHourList = new HashSet<TimePeriod>();
+		private ISet<ITemplateTaskPeriod> _taskPeriodList = new HashSet<ITemplateTaskPeriod>();
         private bool _turnOffInternalRecalc;
         private bool _initialized;
         private bool _isDirty;
@@ -85,14 +84,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         protected void EntityCloneTaskPeriodList(WorkloadDayBase targetClone)
         {
-            targetClone._taskPeriodList = new List<ITemplateTaskPeriod>();
+            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>();
             foreach (ITemplateTaskPeriod templateTaskPeriod in _taskPeriodList)
             {
                 ITemplateTaskPeriod clonedTaskPeriod = templateTaskPeriod.EntityClone();
                 clonedTaskPeriod.SetParent(targetClone);
                 targetClone._taskPeriodList.Add(clonedTaskPeriod);
             }
-            targetClone._openHourList = new List<TimePeriod>();
+			targetClone._openHourList = new HashSet<TimePeriod>();
             foreach (TimePeriod timePeriod in _openHourList)
             {
                 targetClone._openHourList.Add(timePeriod);
@@ -123,14 +122,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         protected void NoneEntityCloneTaskPeriodList(WorkloadDayBase targetClone)
         {
-            targetClone._taskPeriodList = new List<ITemplateTaskPeriod>();
+            targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>();
             foreach (ITemplateTaskPeriod templateTaskPeriod in _taskPeriodList)
             {
                 ITemplateTaskPeriod clonedTaskPeriod = templateTaskPeriod.NoneEntityClone();
                 clonedTaskPeriod.SetParent(targetClone);
                 targetClone._taskPeriodList.Add(clonedTaskPeriod);
             }
-            targetClone._openHourList = new List<TimePeriod>();
+			targetClone._openHourList = new HashSet<TimePeriod>();
             foreach (TimePeriod timePeriod in _openHourList)
             {
                 targetClone._openHourList.Add(timePeriod);
@@ -159,7 +158,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
 	            var isOpen =
 		            !(_openHourList.Count == 0 ||
-		              (_openHourList.Count == 1 && _openHourList[0].SpanningTime() == TimeSpan.Zero));
+		              (_openHourList.Count == 1 && _openHourList.First().SpanningTime() == TimeSpan.Zero));
 
 				return new OpenForWork(isOpen,isOpen || IsEmailWorkload);
             }
@@ -244,7 +243,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _taskPeriodList.Clear();
             _openHourList.Clear();
             //Set new open hours and create list of task periods (merged) for day
-            openHourList.ForEach(_openHourList.Add);
+            openHourList.ForEach(o => _openHourList.Add(o));
 
             DateTime localDate = CurrentDate.Date;
             foreach (TimePeriod openHour in IncomingOpenHoursList)
@@ -437,7 +436,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                return new ReadOnlyCollection<TimePeriod>(_openHourList);
+                return new ReadOnlyCollection<TimePeriod>(_openHourList.ToArray());
             }
         }
 
@@ -460,7 +459,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     TimePeriod timePeriod = new TimePeriod(startSpan, endSpan);
                     return new List<TimePeriod> { timePeriod };
                 }
-                return _openHourList;
+                return _openHourList.ToArray();
             }
         }
 
@@ -474,7 +473,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ReadOnlyCollection<ITemplateTaskPeriod> TaskPeriodList
         {
-            get { return new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList); }
+            get { return new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList.ToList()); }
         }
 
         /// <summary>
@@ -1327,7 +1326,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    {
 		    if (_useSkewedDistribution)
 		    {
-				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList, _workload.Skill.TimeZone);
+				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList.ToArray(), _workload.Skill.TimeZone);
 		    }
 		    else
 		    {

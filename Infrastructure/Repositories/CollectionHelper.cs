@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if(castedQueryResult==null)
                 throw new ArgumentException("queryResult must be an IList");
 
-            return castedQueryResult.OfType<T>().Distinct().ToArray();
+            return castedQueryResult.OfType<T>().Distinct().ToList();
         }
     }
 }

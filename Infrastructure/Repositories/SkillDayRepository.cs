@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             InParameter.NotNull("scenario", scenario);
 
             var skillDays = new List<ISkillDay>();
-            foreach (var skillBatch in skills.Batch(20))
+            foreach (var skillBatch in skills.Batch(200))
             {
                 var restriction = Restrictions.Conjunction()
                 .Add(Restrictions.Eq("skillDay.Scenario", scenario))
@@ -137,6 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	        return DetachedCriteria.For<WorkloadDay>()
 	            .SetFetchMode("OpenHourList", FetchMode.Join)
+				.SetFetchMode("TaskPeriodList", FetchMode.Join)
 				.CreateAlias("Parent", "skillDay", JoinType.InnerJoin)
 				.Add(skilldaySubquery);
 	    }
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction)
 		{
 		    var uniqueDays = period.DayCollection();
-			var datesToProcess = uniqueDays.Except(skillDays.Select(s => s.CurrentDate));
+			var datesToProcess = uniqueDays.Except(skillDays.Select(s => s.CurrentDate)).ToArray();
 
 			if (datesToProcess.Any())
 			{
@@ -203,13 +204,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var ret = skillDays.OrderBy(wd => wd.CurrentDate).ToList();
 			return ret;
 		}
-
-		private static ICriterion skillCriterion(ISkill skill)
-		{
-			return Restrictions.Eq("skillDay.Skill", skill);
-		}
-
-        
 
 		/// <summary>
 		/// Finds the last skill day date.
