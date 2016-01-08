@@ -1,6 +1,40 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	height: 100%;
+	position:relative;
+	width:100%;
+
+	.view-header{
+		.fab-wrapper .wfm-fab{
+			margin-top:5px;
+		}
+	}
+
+	.outbound-summary{
+		background:$white;
+		padding:10px;
+	}
+	
+	.operation-container>div{
+		display:inline-block;
+	}
+
+	.operation-container{
+
+		.threshold-slider>div{
+			position: absolute; 
+			top: 0; 
+			left: 3px;
+		}
+		.threshold-slider>md-slider{
+			position:absolute;
+			left:0;
+			right:0;
+			z-index:100;
+		}
+	}
+	
 	campaign-commands-pane input.ng-invalid.ng-dirty {
         border-bottom:2px solid #F44336;
 	}
@@ -92,6 +126,8 @@
 	    cursor:pointer;
 	}
 	.outbound-gantt-chart {
+		border:1px solid $gray012;
+
 		.gantt-alert-message{
 		    position: absolute;
 			bottom: -30px;
@@ -738,6 +774,29 @@
 	}
 
 	.campaign-edit {
+		background:$white;
+		padding:10px 5px;
+
+		.panel{
+			box-shadow:0 0 1px rgba(0,0,0,.1);
+			.sub-header {
+				cursor:pointer;
+
+				h2{
+					display:inline-block;
+				}
+			}
+
+			.con-flex{
+				padding:0 5px;
+				outline: 1px dashed rgba(0, 0, 0, 0.06);
+			
+				.activity-picker{
+					height:30px;
+				}
+			}
+		}
+
 		input:not(.ng-dirty), .custom-input:not(.ng-dirty) {
 			& + .input-validation-sign {
 				.right-sign, .wrong-sign, .error-msg-container {
@@ -751,14 +810,38 @@
 				display: none !important;
 			}
 		}
+	
+		input[type="text"] {
+			height: 23px;
+		}
 	}
 }
-.campaign-create, .campaign-edit {
 
-	input[type="text"] {
-		height: 23px;
+.campaign-create{
+	background:$white;
+	padding:10px 5px;
+	
+	.panel{
+		box-shadow:0 0 1px rgba(0,0,0,.1);
+		.sub-header {
+			cursor:pointer;
+
+			h2{
+				display:inline-block;
+			}
+		}
+
+		.con-flex{
+			padding:0 5px;
+			outline: 1px dashed rgba(0, 0, 0, 0.06);
+			
+			.activity-picker{
+				height:30px;
+			}
+		}
 	}
 }
+
 .nowrap{
 	white-space:nowrap;
 }
@@ -814,7 +897,8 @@ activity-picker {
 	flex-direction: row;
 
 	.polymorphic-input-body {
-		width: 40%;
+		flex-basis: 60%;
+		max-width:300px;
 		input, md-select, md-select-label {
 			width: 100% !important;
 		}
@@ -823,12 +907,15 @@ activity-picker {
 			border-radius: 8px;
 			border-bottom: none !important;
 		}
+		input, select{
+			height:25px;
+		}
 	}
 	.divider {
-		width: 10%;
+		flex-basis: 1%;
 	}
 	.morph-switch {
-		width: 20%;
+		flex-basis: 39%;
 		label {
 			font-style: italic;
 			font-weight: 300;
@@ -856,10 +943,8 @@ activity-picker {
 		top: 4px;
 	}
 }
+
 .outbound {
-	position:relative;
-	height: 100%;
-	width:100%;
 	input {
 		padding-left: 10px;
 		margin-top: 1px;

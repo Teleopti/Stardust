@@ -1,4 +1,16 @@
-﻿<div class="outbound-summary" ng-if="isInitFinished">
+﻿<div class="view-header">
+	<div class="view-title">
+		<h1 translate>OutboundCampaigns</h1>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1" ui-sref="outbound.create">
+			<i class="mdi mdi-plus"></i>
+			<md-tooltip>{{"CreateCampaign" | translate}}</md-tooltip>
+		</button>
+	</div>
+</div>
+
+<div class="outbound-summary material-depth-1" ng-if="isInitFinished">
 	<div class="loading-gantt-section" ng-show="!isLoadFinished">
 		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
@@ -23,7 +35,7 @@
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-right middle"></i></button>
 		</div>
 	</div>
-	<div class="spacer material-depth-1 outbound-gantt-chart relative"
+	<div class="spacer outbound-gantt-chart relative"
 		  gantt
 		  data="ganttData"
 		  options="ganttOptions"

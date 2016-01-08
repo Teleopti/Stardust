@@ -1,212 +1,221 @@
-﻿<div ng-if="isCampaignLoaded()">
-    <div class="material-block-header">
-        <div layout="row">
-			<div class="text-left navigate-to"  flex>
-				<div class="pull-left">
-					<md-button class="wfm-btn outbound-back-btn m-l-10" ng-click="backToList()" tabindex="0" aria-label="back">
-						<i class="mdi mdi-reply"></i>
-					</md-button>
-				</div>
+﻿<div class="view-header" ng-if="isCampaignLoaded()">
+	<div class="view-title">
+		<h1 translate>EditCampaign</h1>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1" ng-class="{'shrink-in':animateIn === 'trigger1'}" ng-click="backToList()">
+			<i class="mdi mdi-close"></i>
+			<md-tooltip>{{"Cancel" | translate}}</md-tooltip>
+		</button>
+	</div>
+</div>
+
+<div class="campaign-edit" ng-if="isCampaignLoaded()">
+
+	<div class="panel">
+		<div class="sub-header" ng-click="acToggle0 = !acToggle0">
+			<h2 translate>Campaign</h2>
+			<span><strong>{{campaign.Name}}</strong></span>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<form name="campaignGeneralForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle0">
+					<div layout="row">
+						<div class="w-150"><span translate>Name</span></div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="name" type="text" ng-model="campaign.Name" placeholder="{{ NewCampaignName | translate }}" ng-minlength="1" ng-maxlength="50" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<div layout="row">
+						<div class="w-150"><span translate>Activity</span></div>
+						<div flex class="icon-set-fix m-r-10p">
+							<activity-picker ng-model="campaign.Activity" disable-create="true" class="custom-input"></activity-picker>
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
-            <div class="text-center" flex>
-                <span translate>EditCampaign</span>
-            </div>
-            <div flex></div>
-        </div>
-    </div>
+		</div>
+	</div>
 
-
-    <div class="material-block-content campaign-edit">
-        <div class=" wfm-accordion">
-            <div class="wfm-block">
-                <div class="sub-header accordion-head" ng-click="acToggle0 = !acToggle0">
-                    <span translate>Campaign</span>
-                    <strong>{{campaign.Name}}</strong>
-                </div>
-                <div ng-show="acToggle0">
-                    <form name="campaignGeneralForm" class="form-horizontal wfm-block input-group" form-locator>
-                        <div layout="row">
-                            <div class="w-150"><span translate>Name</span></div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="name" type="text" ng-model="campaign.Name" placeholder="{{ NewCampaignName | translate }}" ng-minlength="1" ng-maxlength="50" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150"><span translate>Activity</span></div>
-                            <div flex class="icon-set-fix m-r-10p">
-								<activity-picker ng-model="campaign.Activity" disable-create="true" class="custom-input"></activity-picker>
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="wfm-block">
-                <div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-                    <span translate>Workload</span>
-                </div>
-                <div ng-show="acToggle1">
-                    <form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>CallListLength</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>TargetRate</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>ConnectRate</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>RPCR</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>ConnectAHT</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>RPCAHT</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="w-150">
-                                <span translate>UnproductiveTime</span>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
-                                <div class="icon-set  input-validation-sign" expandable>
-                                    <i class="mdi mdi-check right-sign"></i>
-                                    <i class="mdi mdi-close wrong-sign"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <div layout="row">
-                            <div class="w-150">
-                                <strong translate>NeededPersonHours</strong>
-                            </div>
-                            <div flex class="icon-set-fix m-r-10p">
-                                <strong>{{estimatedWorkload | showTimespan }}</strong>
-                            </div>
-
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-            <div class="wfm-block">
-                <div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
-                    <span translate>Duration</span>
-                    <span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate | amDateFormat: 'LL' }}</strong></span>
-                </div>
-                <div ng-show="acToggle2">
-                    <form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator>        
-						<date-range-picker start-date="campaign.StartDate" end-date="campaign.EndDate" errors="campaign.spanningPeriodErrors"></date-range-picker>						
-                    </form>
-                </div>
-            </div>
-            <div class="wfm-block" ng-if="true">
-                <div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
-                    <span translate>OpenHours</span>
-                </div>
-                <div ng-show="acToggle3">
-                    <div class="in-place-container">
-                        <div class="in-place-element">
-                            <input type="text" ng-class="[validWorkingHours()?'custom-valid':'custom-invalid', dirtyWorkingHours?'ng-dirty':'ng-pristine' ]" ng-show="false" />
-                            <div class="icon-set  input-validation-sign" expandable>
-                                <i class="mdi mdi-check right-sign"></i>
-                                <i class="mdi mdi-close wrong-sign"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <working-hours-picker working-hours="campaign.WorkingHours"></working-hours-picker>
-                </div>
-            </div>
-            <div layout="row" layout-align="center">
-	            <button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()"><span translate>Reset</span></button>
-	            <button class="wfm-btn material-depth-1 form-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
-	            <button class="wfm-btn material-depth-1 wfm-btn-primary trigger-campaign-delete" ng-click="removeCampaign()"><span translate>Remove</span></button>
-
-            </div>
-        </div>
-    </div>
-    <div ng-cloak class="modal-box">
-		<div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
-			<div class="modalbg">
-				<div class="dialog">
-					<div class="modal-header">
-						<span translate>RemoveCampaign</span>
+	<div class="panel">
+		<div class="sub-header" ng-click="acToggle1 = !acToggle1">
+			<h2 translate>Workload</h2>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle1">
+					<div layout="row">
+						<div class="w-150">
+							<span translate>CallListLength</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
 					</div>
-					<div class="modal-inner-content">
-						<div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>TargetRate</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
 					</div>
-					<div class="modal-footer">
-						<aside>
-							<a ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default"><span translate>Cancel</span></a>
-							<a ng-click="remove()" class="wfm-btn wfm-btn-invis-primary confirm-delete" ><span translate>Ok</span></a>
-						</aside>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>ConnectRate</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
 					</div>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>RPCR</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>ConnectAHT</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>RPCAHT</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<div layout="row">
+						<div class="w-150">
+							<span translate>UnproductiveTime</span>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div layout="row">
+						<div class="w-150">
+							<strong translate>NeededPersonHours</strong>
+						</div>
+						<div flex class="icon-set-fix m-r-10p">
+							<strong>{{estimatedWorkload | showTimespan }}</strong>
+						</div>
+
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel">
+		<div class="sub-header" ng-click="acToggle2 = !acToggle2">
+			<h2 translate>Duration</h2>
+			<span ng-show="!acToggle2">
+				<span translate>DateFrom </span><strong>{{campaign.StartDate | amDateFormat: 'LL' }}</strong>
+				<span translate>DateTo</span> <strong>{{campaign.EndDate | amDateFormat: 'LL' }}</strong>
+			</span>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle2">
+					<date-range-picker start-date="campaign.StartDate" end-date="campaign.EndDate" errors="campaign.spanningPeriodErrors"></date-range-picker>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel">
+		<div class="sub-header" ng-click="acToggle3 = !acToggle3">
+			<h2 translate>OpenHours</h2>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<div ng-show="acToggle3">
+					<div class="in-place-container">
+						<div class="in-place-element">
+							<input type="text" ng-class="[validWorkingHours()?'custom-valid':'custom-invalid', dirtyWorkingHours?'ng-dirty':'ng-pristine' ]" ng-show="false" />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check right-sign"></i>
+								<i class="mdi mdi-close wrong-sign"></i>
+							</div>
+						</div>
+					</div>
+					<working-hours-picker working-hours="campaign.WorkingHours"></working-hours-picker>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<div layout="row" layout-align="center">
+		<button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()"><span translate>Reset</span></button>
+		<button class="wfm-btn material-depth-1 form-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
+		<button class="wfm-btn material-depth-1 wfm-btn-primary trigger-campaign-delete" ng-click="removeCampaign()"><span translate>Remove</span></button>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
+		<div class="modalbg">
+			<div class="dialog">
+				<h1 class="modal-title" translate>
+					RemoveCampaign
+				</h1>
+				<div class="modal-inner-content">
+					<div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
+						<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary" translate>Ok</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
