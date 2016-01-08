@@ -189,6 +189,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							ScheduledNext = reader.String("ScheduledNext"),
 							ReceivedTime = reader.DateTime("ReceivedTime"),
 							Color = reader.NullableInt("Color"),
+							AlarmColor = reader.NullableInt("AlarmColor"),
 							AlarmId = reader.NullableGuid("AlarmId"),
 							AlarmName = reader.String("AlarmName"),
 							StateStartTime = reader.NullableDateTime("StateStartTime"),

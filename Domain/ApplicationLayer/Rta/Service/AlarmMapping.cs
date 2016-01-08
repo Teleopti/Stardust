@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Adherence? Adherence { get; set; }
 		public int? StaffingEffect { get; set; }
 		public int DisplayColor { get; set; }
+		public int AlarmColor { get; set; }
 		public long ThresholdTime { get; set; }
 		public bool IsAlarm { get; set; }
 	}

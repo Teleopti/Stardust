@@ -64,9 +64,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _alarmMapping.ThresholdTime;
 		}
 
-		public int? AlarmDisplayColor()
+		public int? RuleDisplayColor()
 		{
 			return _alarmMapping.DisplayColor;
+		}
+
+		public int? AlarmColor()
+		{
+			return _alarmMapping.AlarmColor;
 		}
 
 		public bool IsInAlarm()

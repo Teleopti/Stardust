@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -123,6 +124,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			Reader.GetCurrentActualAgentState(state.PersonId)
 				.IsRuleAlarm.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldPersistAlarmColor()
+		{
+			var state = new AgentStateReadModelForTest {AlarmColor = Color.Red.ToArgb()};
+
+			Target.PersistActualAgentReadModel(state);
+
+			Reader.GetCurrentActualAgentState(state.PersonId)
+				.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 	}
 }

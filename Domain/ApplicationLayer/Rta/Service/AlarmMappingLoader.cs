@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -51,6 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Adherence = _appliedAdherence.ForAlarm(m.RtaRule),
 					StaffingEffect = (int) rule.StaffingEffect,
 					DisplayColor = rule.DisplayColor.ToArgb(),
+					AlarmColor = rule.AlarmColor.ToArgb(),
 					ThresholdTime = rule.ThresholdTime.Ticks
 				}
 				).ToArray();

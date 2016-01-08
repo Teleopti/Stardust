@@ -165,7 +165,7 @@
 								NextActivityStartTime: state.NextActivityStartTime,
 								Alarm: state.Alarm,
 								AlarmStart: state.AlarmStart,
-								AlarmColor: state.AlarmColor,
+								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm
 							});

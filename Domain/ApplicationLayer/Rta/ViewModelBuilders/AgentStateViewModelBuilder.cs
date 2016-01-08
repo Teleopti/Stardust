@@ -26,20 +26,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 
 		public IEnumerable<AgentStatusViewModel> Build(IEnumerable<AgentStateReadModel> states)
 		{
-			return states.Select(x => new AgentStatusViewModel
+			return states.Select(x =>
 			{
-				PersonId = x.PersonId,
-				State = x.State,
-				StateStartTime = x.StateStartTime,
-				Activity = x.Scheduled,
-				NextActivity = x.ScheduledNext,
-				NextActivityStartTime = formatTime(x.NextStart),
-				Alarm = x.AlarmName,
-				AlarmStart = x.AlarmStartTime,
-				Color = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb())),
-				TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
-				TimeInAlarm = calculateTimeInAlarm(x)
+				var timeInAlarm = calculateTimeInAlarm(x);
+				return new AgentStatusViewModel
+				{
+					PersonId = x.PersonId,
+					State = x.State,
+					StateStartTime = x.StateStartTime,
+					Activity = x.Scheduled,
+					NextActivity = x.ScheduledNext,
+					NextActivityStartTime = formatTime(x.NextStart),
+					Alarm = x.AlarmName,
+					AlarmStart = x.AlarmStartTime,
+					Color = colorTransition(x, timeInAlarm),
+					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
+					TimeInAlarm = timeInAlarm
+				};
 			});
+		}
+
+		private static string colorTransition(AgentStateReadModel x, int? timeInAlarm)
+		{
+			return timeInAlarm.HasValue
+				? ColorTranslator.ToHtml(Color.FromArgb(x.AlarmColor ?? Color.White.ToArgb()))
+				: ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? Color.White.ToArgb()));
 		}
 
 		private int? calculateTimeInAlarm(AgentStateReadModel x)

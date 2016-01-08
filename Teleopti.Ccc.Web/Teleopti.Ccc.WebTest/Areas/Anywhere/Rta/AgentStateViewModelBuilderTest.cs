@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -199,6 +200,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var states = Target.Build(agentStates);
 
 			states.Single().TimeInAlarm.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldBeAlarmColorWhenAlarmHasStarted()
+		{
+			var agentStates = new[]
+			{
+				new AgentStateReadModel
+				{
+					AlarmStartTime = "2015-12-22 08:00".Utc(),
+					Color = Color.Orange.ToArgb(),
+					AlarmColor = Color.Red.ToArgb()
+				}
+			};
+			Now.Is("2015-12-22 08:30".Utc());
+			var states = Target.Build(agentStates);
+
+			states.Single().Color.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Red.ToArgb())));
 		}
 	}
 }
