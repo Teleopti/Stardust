@@ -122,19 +122,18 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			location2.AddSeat ("L2 Seat1", 1);
 
 			// Temporary diagnostics
-			var seatBookingRequests = new List<SeatBookingRequest> { seatBookingRequest1, seatBookingRequest2 };
-			//var sortedSeatBookingRequests = seatBookingRequests.ToList();
-			//sortedSeatBookingRequests.Sort();
+			var sortedSeatBookingRequests = new List<SeatBookingRequest> { seatBookingRequest1, seatBookingRequest2 };
+			sortedSeatBookingRequests.Sort();
 
 			var count = 0;
-			foreach (var seatBookingRequest in seatBookingRequests.OrderByDescending (request => request.SeatBookings.Count()))
+			foreach (var seatBookingRequest in sortedSeatBookingRequests)
 			{
 				count ++;
 				Console.WriteLine("Group "+count+" - Number of bookings " +seatBookingRequest.SeatBookings.Count());
 				seatBookingRequest.SeatBookings.ForEach (seatBooking => Console.WriteLine (seatBooking.Person.Name));
 			}
 
-			Assert.AreEqual(2, seatBookingRequests.First().SeatBookings.Count());
+			Assert.AreEqual(2, sortedSeatBookingRequests.First().SeatBookings.Count());
 
 			//new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 

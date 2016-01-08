@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public IEnumerable<ISeatBooking> SeatBookings { get { return _seatBookings; } }
 
-		//public int MemberCount { get { return _seatBookings.Length; } }
-
 		public int CompareTo (SeatBookingRequest other)
 		{
 			return  new memberCountStartDateComparer().Compare(this, other);
@@ -28,34 +26,34 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			public int Compare(SeatBookingRequest seatBookingRequest1, SeatBookingRequest seatBookingRequest2)
 			{
 
-				if (seatBookingRequest1._seatBookings.Count < seatBookingRequest2._seatBookings.Count)
+				if (seatBookingRequest1 == seatBookingRequest2)
+				{
+					return 0;
+				}
+
+				var request1SeatBookingCount = seatBookingRequest1._seatBookings.Count;
+				var request2SeatBookingCount = seatBookingRequest2._seatBookings.Count;
+
+				if (request1SeatBookingCount < request2SeatBookingCount)
 					return 1;
 
-				if (seatBookingRequest1._seatBookings.Count > seatBookingRequest2._seatBookings.Count)
+				if (request1SeatBookingCount > request2SeatBookingCount)
 					return -1;
 				
-				//if (seatBookingRequest1.MemberCount < seatBookingRequest2.MemberCount)
-				//{
-				//	return 1;
-				//}
 
-				//if (seatBookingRequest1.MemberCount > seatBookingRequest2.MemberCount)
+				//temporary remove for diagnostics
+				//var miniumBookingStartDateRequest1 = seatBookingRequest1.SeatBookings.Min(booking => booking.StartDateTime);
+				//var miniumBookingStartDateRequest2 = seatBookingRequest2.SeatBookings.Min(booking => booking.StartDateTime);
+
+				//if (miniumBookingStartDateRequest1 < miniumBookingStartDateRequest2)
 				//{
 				//	return -1;
 				//}
 
-				var miniumBookingStartDateRequest1 = seatBookingRequest1.SeatBookings.Min(booking => booking.StartDateTime);
-				var miniumBookingStartDateRequest2 = seatBookingRequest2.SeatBookings.Min(booking => booking.StartDateTime);
-
-				if (miniumBookingStartDateRequest1 < miniumBookingStartDateRequest2)
-				{
-					return -1;
-				}
-
-				if (miniumBookingStartDateRequest1 > miniumBookingStartDateRequest2)
-				{
-					return 1;
-				}
+				//if (miniumBookingStartDateRequest1 > miniumBookingStartDateRequest2)
+				//{
+				//	return 1;
+				//}
 
 				return 0;
 			}
