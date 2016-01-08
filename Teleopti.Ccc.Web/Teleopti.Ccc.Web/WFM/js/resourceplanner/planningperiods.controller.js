@@ -64,7 +64,7 @@
 
 	                var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
 	                cancelPoll();
-	                $scope.status = $translate.instant('Scheduling');
+	                $scope.status = $translate.instant('PresentTenseSchedule');
 	                PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(scheduleResult) {
 	                    $scope.scheduledDays = scheduleResult.DaysScheduled;
 	                    $scope.status = $translate.instant('OptimizingDaysOff');

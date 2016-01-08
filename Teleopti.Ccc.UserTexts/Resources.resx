@@ -14016,4 +14016,8 @@ Help us improve your experience by sending an error report</value>
     <value>{0} request(s) have not been denied.</value>
     <comment>Multiple requests have not been denied, with showing the count of the not denied requests.</comment>
   </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+	<value>Scheduling</value>
+	<comment>Message describing an ongoing scheduling process</comment>
+  </data>
 </root>
