@@ -1,60 +1,66 @@
-﻿<div class="team-schedule">
-	Team schedule
-	<div>
-		<span class="people-search-container" >
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"/>
-		</span>
-
-		<span class="datepicker-container">
-			<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged(date)" />
-		</span>
-
-		<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
-			<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
-			<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
-				<ul class="wfm-list">
-
-					<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.enabled())"
-						ng-click="cmd.action()">
-						<div>
-							<span class="pull-left">{{cmd.label|translate}}</span>
-							<span class="pull-right">{{cmd.shortcut}}</span>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</button>
-
+﻿<div class="view-header">
+	<div class="view-title">
+		<h1 translate>TeamSchedule</h1>
 	</div>
+</div>
 
-	<div class="row notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-		<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
-	</div>
+<div class="team-schedule material-depth-1">
 
-	<div class="big-table-wrapper material-depth-1">
-		<div class="alert-warning notice-spacer" ng-if="vm.total > 500" style="margin-bottom: 0">
-			<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+
+		<div>
+			<span class="people-search-container">
+				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" />
+			</span>
+
+			<span class="datepicker-container">
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged(date)" />
+			</span>
+			<button class="context-menu wfm-fab mini team-schedule-menu-btn" ng-if="vm.isMenuVisible()">
+				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
+				<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
+					<ul class="wfm-list">
+
+						<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.enabled())"
+							 ng-click="cmd.action()">
+							<div>
+								<span class="pull-left">{{cmd.label|translate}}</span>
+								<span class="pull-right">{{cmd.shortcut}}</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</button>
+
 		</div>
-		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-		<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled"/>
-	</div>
-	
-	<div class="pull-right" ng-if="vm.paginationOptions.totalPages > 0">
-		<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
-				  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
-		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
-	</div>
-	
 
-	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
-		<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
-					 agent-id-list="vm.getSelectedPersonIdList()" actions-after-absence-apply="vm.afterActionCallback(result,successMessageTemplate,failMessageTemplate)"></add-absence>
-	</md-sidenav>
+		<div class="row notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
+		</div>
+
+		<div class="big-table-wrapper">
+			<div class="alert-warning notice-spacer" ng-if="vm.total > 500" style="margin-bottom: 0">
+				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+			</div>
+			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<schedule-table schedule-vm="vm.groupScheduleVm" person-selection="vm.personIdSelectionDic" select-mode="vm.isAbsenceReportingEnabled" />
+		</div>
+
+		<div class="pull-right" ng-if="vm.paginationOptions.totalPages > 0">
+			<select class="page-size-selector" ng-if="vm.isSelectAgentsPerPageEnabled"
+					  ng-model="vm.paginationOptions.pageSize" ng-options="option for option in vm.agentsPerPageSelection" ng-change="vm.selectorChanged()"></select>
+			<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+		</div>
+
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
+			<add-absence ng-if="vm.isOpen()" default-date-time="vm.earliestStartTime" permissions="vm.permissions"
+							 agent-id-list="vm.getSelectedPersonIdList()" actions-after-absence-apply="vm.afterActionCallback(result,successMessageTemplate,failMessageTemplate)"></add-absence>
+		</md-sidenav>
 
 	<div class="modal-box" ng-if="vm.showErrorDetails">
 		<div class="modalbg">
 			<div class="dialog">
-				<div class="modal-header text-danger">
+				<div class="modal-title text-danger">
 					{{vm.errorTitle}}
 				</div>
 				<div class="modal-inner-content">
@@ -65,12 +71,13 @@
 						</li>
 					</ul>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-actions">
 					<aside>
-						<a ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis">{{'Back'|translate}}</a>
+						<button ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis-default">{{'Back'|translate}}</button>
 					</aside>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 </div>
