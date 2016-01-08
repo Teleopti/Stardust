@@ -453,10 +453,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             foreach (IPersonAssignment personAssignment in personAssignments)
             {
                 IPerson per = personAssignment.Person;
-                if (!dic.ContainsKey(per))
-                    dic[per] = new List<IPersonAssignment>();
+	            IList<IPersonAssignment> list;
+	            if (!dic.TryGetValue(per, out list))
+                    dic[per] = list = new List<IPersonAssignment>();
 	            if (loadDaysAfterLeft || !checkIfPersonLeft(per, personAssignment.Period))
-		            dic[per].Add(personAssignment);
+		            list.Add(personAssignment);
             }
             foreach (IPerson person in dic.Keys)
             {
