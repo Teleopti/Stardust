@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -9,13 +8,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: Dinesh Ranasinghe
-    /// Created date: 2008-06-23
-    /// </remarks>
     [TestFixture]
     [Category("LongRunning")]
     public class GroupPageRepositoryTest : RepositoryTest<IGroupPage>

@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .Add(childGroupPages)
                                         .Add(childPersonColection)
                                         .List();
-            ICollection<IGroupPage> retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
+            var retList = (IGroupPage[])CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
             
-            return (List<IGroupPage>) retList;
+            return retList;
 
         }
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .Add(childGroupPages)
                     .Add(persons)
                     .List();
-                ICollection<IGroupPage> retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
+				var retList = (IGroupPage[])CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
 
                 var multiCriteria = Session.CreateMultiCriteria();
                 bool hasQuery = false;
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 }
                 if(hasQuery) multiCriteria.List();
                 
-                return (List<IGroupPage>)retList;
+                return retList;
             }
             catch (SqlException sqlException)
             {
