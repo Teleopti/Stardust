@@ -9,12 +9,10 @@ using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -117,9 +115,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			IContract contract = contractCreator.Create("Fixed Staff", new Description("Fixed Staff"),
 				EmploymentType.FixedStaffNormalWorkTime, new WorkTime(new TimeSpan(8, 0, 0)),
 				new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(40, 0, 0), new TimeSpan(12, 0, 0), new TimeSpan(50, 0, 0)));
-			//Create standard scenario
-			var scenarioCreator = new ScenarioCreator();
-			IScenario scenario = scenarioCreator.Create("Default", new Description("Default"), true, true, false);
 
 			//This path ends up on the root where the dll's are stored /Peter /David
 			var rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
@@ -131,7 +126,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new AbsenceRepository(uow).Add(defaultAbsence);
 				new ActivityRepository(uow).Add(defaultActivity);
 				new ContractRepository(uow).Add(contract);
-				new ScenarioRepository(uow).Add(scenario);
 				new RtaStateGroupRepository(uow).AddRange(rtaStateGroupCreator.RtaGroupCollection);
 				uow.PersistAll();
 			}
