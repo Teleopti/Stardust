@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				if (seatBookingRequest1._seatBookings.Count < seatBookingRequest2._seatBookings.Count)
 					return 1;
 
-				if (seatBookingRequest1._seatBookings.Count < seatBookingRequest2._seatBookings.Count)
+				if (seatBookingRequest1._seatBookings.Count > seatBookingRequest2._seatBookings.Count)
 					return -1;
 				
 				//if (seatBookingRequest1.MemberCount < seatBookingRequest2.MemberCount)
