@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -151,7 +151,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -220,7 +220,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				)
 			{
 				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -322,7 +322,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			user.Stub(x => x.PermissionInformation).Return(permission);
 			permission.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			var dataSource = SetupFixtureForAssembly.DataSource;
-			var jobHelper = new JobHelper(null, null, null,
+			var jobHelper = new JobHelper(null, null,
 				new LogOnHelperFake(dataSource, user));
 			//var jobHelper = new JobHelper(null, null, null,new LogOnHelper(""));
 			jobHelper.LogOffTeleoptiCccDomain();

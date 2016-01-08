@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
 			var scenario = _mock.DynamicMock<IScenario>();
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			Expect.Call(scenario.DefaultScenario).Return(true);

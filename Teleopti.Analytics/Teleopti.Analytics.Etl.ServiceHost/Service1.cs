@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.ServiceHost
 
 		protected override void OnStart(string[] args)
 		{
-			_serviceLogic = new EtlJobStarter(new EtlConfigReader());
+			_serviceLogic = new EtlJobStarter();
 			_serviceLogic.NeedToStopService += _serviceLogic_NeedToStopService;
 			_serviceLogic.Start();
 		}

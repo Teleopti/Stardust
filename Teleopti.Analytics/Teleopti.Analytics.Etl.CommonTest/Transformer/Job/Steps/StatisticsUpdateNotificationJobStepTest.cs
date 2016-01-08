@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			var messageSender = MockRepository.GenerateMock<IMessageSender>();
 
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), messageClient, messageSender, null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), messageSender, null);
 			
 			messageClient.Stub(x => x.IsAlive).Return(true);
 

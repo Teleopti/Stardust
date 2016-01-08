@@ -17,34 +17,40 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 	public class JobHelper : IJobHelper
 	{
 		private IRaptorRepository _repository;
-		private ILogOnHelper _logHelp;
+		private ILogOnHelper _logOnHelper;
 		private IMessageSender _messageSender;
 
-		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, bool usedInService = false)
+		public JobHelper(
+			ILoadAllTenants loadAllTenants, 
+			ITenantUnitOfWork tenantUnitOfWork,
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, 
+			bool usedInService = false)
 		{
 			UsedInService = usedInService;
-			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, usedInService);
-			var url = new MutableUrl ();
+			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, usedInService);
+			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
 			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));
 		}
 
-		public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)
+		public JobHelper(
+			IRaptorRepository repository, 
+			IMessageSender messageSender, 
+			ILogOnHelper logOnHelper)
 		{
 			_repository = repository;
-			_logHelp = logOnHelper;
+			_logOnHelper = logOnHelper;
 			_messageSender = messageSender;
 		}
 
 		public IList<IBusinessUnit> BusinessUnitCollection
 		{
-			get { return _logHelp.GetBusinessUnitCollection(); }
+			get { return _logOnHelper.GetBusinessUnitCollection(); }
 		}
 
 		public List<ITenantName> TenantCollection
 		{
-			get { return _logHelp.TenantCollection; }
+			get { return _logOnHelper.TenantCollection; }
 		}
 
 		public IRaptorRepository Repository
@@ -59,27 +65,29 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
-			return _logHelp.SelectDataSourceContainer(dataSourceName);
+			return _logOnHelper.SelectDataSourceContainer(dataSourceName);
 		}
 
-		public IDataSource SelectedDataSource { get { return _logHelp.SelectedDataSourceContainer.DataSource; } }
+		public IDataSource SelectedDataSource { get { return _logOnHelper.SelectedDataSourceContainer.DataSource; } }
 		public bool UsedInService { get; set; }
 
 		public void RefreshTenantList()
 		{
-			_logHelp.RefreshTenantList(UsedInService);
+			_logOnHelper.RefreshTenantList(UsedInService);
 		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
-			if (!_logHelp.SetBusinessUnit(businessUnit))
+			if (!_logOnHelper.SetBusinessUnit(businessUnit))
 			{
 				return false;
 			}
 
 			//Create repository when logged in to raptor domain
-			_repository = new RaptorRepository(_logHelp.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString,
-														  ConfigurationManager.AppSettings["isolationLevel"]);
+			_repository = new RaptorRepository(
+				_logOnHelper.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString,
+				ConfigurationManager.AppSettings["isolationLevel"]);
+
 			return true;
 		}
 
@@ -110,9 +118,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		protected virtual void ReleaseManagedResources()
 		{
 			_repository = null;
-			if (_logHelp != null)
-				_logHelp.Dispose();
-			_logHelp = null;
+			if (_logOnHelper != null)
+				_logOnHelper.Dispose();
+			_logOnHelper = null;
 			_messageSender = null;
 		}
 

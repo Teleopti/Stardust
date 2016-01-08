@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
             var scheduleProjections1 = new List<ScheduleProjection> { scheduleProjectionServiceList[0] };
             var scheduleProjections2 = new List<ScheduleProjection> { scheduleProjectionServiceList[8] };
 
-            jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
+            jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
 
             _threadObj1 = new ThreadObj(scheduleProjections1, new DateTime(), jobParameters);
             _threadObj2 = new ThreadObj(scheduleProjections2, new DateTime(), jobParameters);

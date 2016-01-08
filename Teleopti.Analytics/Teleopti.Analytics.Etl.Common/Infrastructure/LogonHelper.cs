@@ -35,9 +35,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILogOnOff _logOnOff;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(ILoadAllTenants loadAllTenants, 
-									ITenantUnitOfWork tenantUnitOfWork,
-									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, bool usedInService)
+		public LogOnHelper(
+			ILoadAllTenants loadAllTenants,
+			ITenantUnitOfWork tenantUnitOfWork,
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
+			bool usedInService)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;

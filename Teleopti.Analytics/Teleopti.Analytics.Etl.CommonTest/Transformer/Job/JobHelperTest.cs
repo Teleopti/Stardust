@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		public void Setup()
 		{
 			_logOnHelper = MockRepository.GenerateMock<ILogOnHelper>();
-			_target = new JobHelper(null, null, null, _logOnHelper);
+			_target = new JobHelper(null, null, _logOnHelper);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 
 		protected virtual void ReleaseManagedResources()
 		{
-			_target = new JobHelper(null, null, null, _logOnHelper);
+			_target = new JobHelper(null, null, _logOnHelper);
 			_target.Dispose();
 		}
 	}

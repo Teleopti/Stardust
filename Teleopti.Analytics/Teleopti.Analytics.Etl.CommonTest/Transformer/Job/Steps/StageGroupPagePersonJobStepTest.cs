@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			_repository = _mocks.StrictMock<IRaptorRepository>();
 
 			IJobParameters jobParameters = JobParametersFactory.SimpleParameters(false);
-			jobParameters.Helper = new JobHelper(_repository, null, null, null);
+			jobParameters.Helper = new JobHelper(_repository, null, null);
 			_target = new StageGroupPagePersonJobStep(jobParameters);
 			_target.Transformer = _transformer;
 		}

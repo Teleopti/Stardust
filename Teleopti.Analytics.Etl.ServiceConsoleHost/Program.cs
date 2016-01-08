@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.ServiceConsoleHost
 	{
 		static void Main(string[] args)
 		{
-			var host = new EtlJobStarter(new EtlConfigReader());
+			var host = new EtlJobStarter();
 			host.Start();
 
 			Console.WriteLine("ETL Service is now running, press Enter to stop...");
