@@ -95,10 +95,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
 	        var testSkillDays = _skillDayRepository.FindRange(periodToLoad, skillsToLoad, scenario);
 
+			periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
 	        foreach (var skill in skillsToLoad)
 	        {
-	            periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
-
 	            var skillDays =
 	                testSkillDays.Where(testSkillDay => testSkillDay.Skill.Equals(skill)).OrderBy(s => s.CurrentDate).ToList();
 
