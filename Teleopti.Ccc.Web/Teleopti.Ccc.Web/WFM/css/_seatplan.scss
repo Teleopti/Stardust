@@ -3,18 +3,15 @@
 }
 
 #seatplan{
+	background:$white;	
 	height:95%;
+	padding-top:10px;
 	position:relative;
-	background:$white;
-}
-
-#seatplan>.row{
-	margin-top:10px;
 }
 
 .seatplan-calendar{
 	margin: 0;
-	padding: 5px 0px 5px 5px;
+	padding: 0px 0px 5px 5px;
 	height: 240px;
 	width: 290px;
 	clear: both;

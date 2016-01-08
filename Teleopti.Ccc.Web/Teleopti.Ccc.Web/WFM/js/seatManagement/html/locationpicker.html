@@ -1,8 +1,10 @@
 ﻿<div>
-	<div class="input-prepend">
-		<i class="mdi mdi-filter-outline"></i>
-		<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}" />
-	</div>
+	<label for="locationFilter" class="input-prepend">
+		<i class="mdi mdi-filter-outline">
+			<md-tooltip>{{ 'FilterLocations' | translate }}</md-tooltip>
+		</i>
+		<input type="text" id="locationFilter" name="filterLocations" placeholder="{{ 'FilterLocations' | translate }}" ng-model="searchLocations" />
+	</label>
 
 	<div class="tree">
 		<div ui-tree data-drag-enabled="false">
