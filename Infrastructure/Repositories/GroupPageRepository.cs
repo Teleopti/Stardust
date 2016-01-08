@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .Add(childGroupPages)
                                         .Add(childPersonColection)
                                         .List();
-            var retList = (IGroupPage[])CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]);
+            var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]).ToArray();
             
             return retList;
 

@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    public static void DistributeToFirstOpenPeriod(double newTotal, IEnumerable<ITemplateTaskPeriod> targets, IList<TimePeriod> openHourList, TimeZoneInfo targetTimeZoneInfo)
+	    public static void DistributeToFirstOpenPeriod(double newTotal, IEnumerable<ITemplateTaskPeriod> targets, ICollection<TimePeriod> openHourList, TimeZoneInfo targetTimeZoneInfo)
 	    {
 		    var targetList = targets.ToList();
 			targetList.ForEach(t => t.Tasks = 0);

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -44,40 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.IsFalse(LazyLoadingManager.IsInitialized(person));
             LazyLoadingManager.Initialize(person);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(person));
-        }
-
-        [Test]
-        public void VerifyInitializeWorksWithWorkloadTemplateWeekCollection()
-        {
-            ISkill skill = SkillFactory.CreateSkill("testSkill");
-
-			skill.Activity.SetId(null);
-            PersistAndRemoveFromUnitOfWork(skill.Activity);
-
-            PersistAndRemoveFromUnitOfWork(skill.SkillType);
-            PersistAndRemoveFromUnitOfWork(skill);
-
-            IWorkload w = WorkloadFactory.CreateWorkload(skill);
-
-            WorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
-
-            IList<TimePeriod> openHours = new List<TimePeriod>();
-            TimePeriod timePeriod = new TimePeriod(new TimeSpan(1,0,0), new TimeSpan(2,0,0));
-            openHours.Add(timePeriod);
-
-            workloadDayTemplate.Create("<JULAFTON>",DateTime.UtcNow, w, openHours);
-
-            w.SetTemplateAt((int)DayOfWeek.Monday,workloadDayTemplate);
-
-            PersistAndRemoveFromUnitOfWork(w);
-
-            w = Session.Load<Workload>(w.Id.Value);
-
-            IWorkloadDayTemplate template =
-                ((IWorkloadDayTemplate) w.GetTemplate(TemplateTarget.Workload, DayOfWeek.Monday));
-            Assert.IsFalse(LazyLoadingManager.IsInitialized(template.OpenHourList));
-            LazyLoadingManager.Initialize(template.OpenHourList);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(template.OpenHourList));
         }
 
         [Test]

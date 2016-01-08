@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-08-28
         /// </remarks>
-        protected virtual IList<TimePeriod> IncomingOpenHoursList
+        protected virtual ICollection<TimePeriod> IncomingOpenHoursList
         {
             get
             {
@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     TimePeriod timePeriod = new TimePeriod(startSpan, endSpan);
                     return new List<TimePeriod> { timePeriod };
                 }
-                return _openHourList.ToArray();
+                return _openHourList;
             }
         }
 
@@ -1326,7 +1326,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    {
 		    if (_useSkewedDistribution)
 		    {
-				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList.ToArray(), _workload.Skill.TimeZone);
+				ValueDistributor.DistributeToFirstOpenPeriod(value, _taskPeriodList, _openHourList, _workload.Skill.TimeZone);
 		    }
 		    else
 		    {

@@ -645,9 +645,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-                Expect.Call(provider.GetStatisticsForPeriod(workloadDay.TaskPeriodList[4].Period)).Return(new StatisticTask
+                Expect.Call(provider.GetStatisticsForPeriod(workloadDay.SortedTaskPeriodList[4].Period)).Return(new StatisticTask
                 {
-                    Interval = workloadDay.TaskPeriodList[4].Period.StartDateTime,
+                    Interval = workloadDay.SortedTaskPeriodList[4].Period.StartDateTime,
                     StatCalculatedTasks = 200
                 }).Repeat.AtLeastOnce();
                 Expect.Call(provider.GetStatisticsForPeriod(new DateTimePeriod())).IgnoreArguments().Return(new StatisticTask()).Repeat.AtLeastOnce();
