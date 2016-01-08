@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				{
 					try
 					{
-						dumpInfo(browserInteractions, "before.txt");
+						dumpInfo(browserInteractions, "Waiting.txt");
 						browserInteractions.AssertExists(".scheduling-result, .test-errorMessage, .server-busy, #Login-container, .test-alert");
 					}
 					finally
 					{
-						dumpInfo(browserInteractions, "after.txt");
+						dumpInfo(browserInteractions, "finally.txt");
 					}
 				}
 				//no server error
@@ -61,7 +61,11 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId));
+			//put here to dump better info
+			browserInteractions.AssertExists(".schedule-button:enabled");
+			dumpInfo(browserInteractions, "BeforeButtonClick.txt");
 			browserInteractions.Click(".schedule-button:enabled");
+			dumpInfo(browserInteractions, "AfterButtonClick.txt");
 			browserInteractions.AssertExists(".test-schedule-is-running");
 		}
 
