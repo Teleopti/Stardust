@@ -97,6 +97,7 @@ MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = RC
 WfmTeamSchedule_AbsenceReporting_35995 = RC
 WfmTeamSchedule_SetAgentsPerPage_36230 = RC
+WfmTeamSchedule_SwapShifts_36231 = RC
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = RC
