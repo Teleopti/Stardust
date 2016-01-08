@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 							? RequestStatus.Denied
 							: RequestStatus.New,
 				Payload = request.Request.RequestPayloadDescription,
-				Team = team == null? null:team.Description.Name,
+				Team = team == null? null:team.SiteAndTeam, 				
 				IsFullDay = isFullDay(request)
 			};
 		}
