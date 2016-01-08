@@ -11868,7 +11868,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Filtrera på öppettider</value>
   </data>
   <data name="Planned" xml:space="preserve">
-    <value>Planned</value>
+    <value>Planerat</value>
   </data>
   <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Lägg på produktaktiveringsnyckel</value>
@@ -12397,7 +12397,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Pågående</value>
   </data>
   <data name="ManualPlan" xml:space="preserve">
-    <value>manuell planering</value>
+    <value>Manuell planering</value>
   </data>
   <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
     <value>Klicka och dra .csv-filer hit eller klicka för att ladda upp filer</value>
@@ -12951,5 +12951,29 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
     <value>Du har inte rättigheter för att lägga på frånvaro!</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Aktuell användares tidszon</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Tidszon för den som skickat förfrågan:</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrera roller</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Ogiltig storlek! Bilden måste vara mindre än 2000x4000.</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Ladda bild</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>Ej JPEG, SVG eller PNG!</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} förfrågning(ar) har inte godkänts.</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} förfrågning(ar) har inte avslagits.</value>
   </data>
 </root>
