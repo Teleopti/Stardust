@@ -178,6 +178,30 @@
 		font-weight: bold;
 	}
 
+		.selection-cart-indicator-for-menu {
+		position: absolute;
+		top: -0.4rem;
+		right: 0rem;
+		z-index: 100;
+		background-color: $red-600;
+		color: #FFF;
+		display: block;
+		padding: 4px 0;
+		border-radius: 50%;
+		width: 13px;
+		height: 13px;
+		box-sizing: border-box;
+		line-height: 0.5;
+		text-align: center;
+		font-size: 12px;
+		box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
+		animation: bullet 500ms;
+		animation-fill-mode: both;
+		animation-delay: 1.5s;
+		animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+		font-weight: bold;
+	}
+
 	.wfm-panel-delete {
 		position: absolute;
 		top: 1.5rem;
