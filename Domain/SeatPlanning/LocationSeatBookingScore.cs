@@ -46,7 +46,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				var comparisonPriority = locationScore1HighestPriority.CompareTo (locationScore2HighestPriority);
 				if (comparisonPriority != 0)
 					return comparisonPriority;
-				
+
+				var locationScore1EarliestStartTime = locationScore1.ScoreList.Min(score => score.EarliestStartTime);
+				var locationScore2EarliestStartTime = locationScore2.ScoreList.Min(score => score.EarliestStartTime);
+				var comparisonStartTime = locationScore1EarliestStartTime.CompareTo(locationScore2EarliestStartTime);
+				if (comparisonStartTime != 0)
+					return comparisonStartTime;
+
+
 				return 0;
 			}
 		}

@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateSeatsByEarliestFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst(true);
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
 			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat(true);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateToGroupFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateToGroupFirst(true);

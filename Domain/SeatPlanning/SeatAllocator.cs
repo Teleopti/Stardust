@@ -24,23 +24,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests =  seatBookingRequests.ToList();
-			sortedSeatBookingRequests.Sort();
-
-			//ROBTODO: remove debug code
-			var count = 0;
-			foreach (var seatBookingRequest in sortedSeatBookingRequests)
-			{
-				count++;
-				Console.WriteLine("Group " + count + " - Number of bookings " + seatBookingRequest.SeatBookings.Count());
-				seatBookingRequest.SeatBookings.ForEach(seatBooking => Console.WriteLine(seatBooking.Person.Name));
-			}
-
+			var seatBookingRequestList =  seatBookingRequests.ToList();
+			
 			var allLocationsUnsorted = getAllLocationsUnsorted();
-			var seatScores = SeatScorer.GetSeatScores(sortedSeatBookingRequests, allLocationsUnsorted, _seatFrequencies);
+			var seatScores = SeatScorer.GetSeatScores(seatBookingRequestList, allLocationsUnsorted, _seatFrequencies);
 
-			bookSeatsByGroup(sortedSeatBookingRequests, allLocationsUnsorted, seatScores);
-			bookSeatsThatHaventBeenAllocatedByGroup(sortedSeatBookingRequests, allLocationsUnsorted, seatScores);
+			bookSeatsByGroup(seatBookingRequestList, allLocationsUnsorted, seatScores);
+			bookSeatsThatHaventBeenAllocatedByGroup(seatBookingRequestList, allLocationsUnsorted, seatScores);
 		}
 
 		private List<SeatMapLocation> getAllLocationsUnsorted()
@@ -56,19 +46,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private void bookSeatsByGroup(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests, List<SeatMapLocation> allLocationsUnsorted, List<SeatScore> seatScores)
 		{
 			var rankedScores = GroupSeatBookingRanker.GetRankedScoresForGroupsAndLocations(sortedSeatBookingRequests, allLocationsUnsorted, seatScores, _seatFrequencies).ToList();
-
-			//ROBTODO: remove debug code
-			Console.WriteLine ("Ranked Scores for Groups and Locations");
-			foreach (var rankedScore in rankedScores)
-			{
-			
-					Console.WriteLine(" -> " + rankedScore.Location.Name );
-				foreach (var transientSeatBooking in rankedScore.ScoreList.First().TransientSeatBookingsForASeat)
-				{
-					Console.WriteLine(" ->   " + transientSeatBooking.AlmostAllocatedBookings.First().Person.Name);
-				}
-			}
-			
 			RankedSeatBookingProcessor.ProcessBookings(rankedScores);
 		}
 
@@ -81,8 +58,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			if (!unallocatedBookings.Any()) return;
 
-			Console.WriteLine("There were " + unallocatedBookings.Count() + " Unallocated Bookings after booking groups");
-			
 			foreach (var booking in unallocatedBookings)
 			{
 				findAndBookSeatForLocation(allLocationsUnsorted, booking, seatScores);

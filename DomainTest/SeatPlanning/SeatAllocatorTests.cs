@@ -32,19 +32,19 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority (false);
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateTwoAgentsSequentiallyToOneSeat()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsSequentiallyToOneSeat (false);
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateSeatsByEarliestFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateSeatsByEarliestFirst (false);
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
 			CommonSeatAllocatorTests.ShouldNotAllocateTwoAgentsSequentiallyToOneSeat (false);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateToGroupFirst()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateToGroupFirst (false);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.AreEqual("L1 Seat2", agentShift3.Seat.Name);
 		}
 
-		[Test, Ignore("Works locally but does not work currently on server")]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogetherForSecondLocation()
 		{
 			var startDateTime = new DateTime(2014, 01, 01, 8, 0, 0, DateTimeKind.Utc);

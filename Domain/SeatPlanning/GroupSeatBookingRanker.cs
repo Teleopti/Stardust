@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					seatScoresByIndex.Add(getSeatBatchScore(seatScoresForCurrentLocation, seats, startIdx));
 				}
 			}
-			//ROBTODO: can this not just be all done in the sortRoleFrequencePriorityComparer? Then just filter here by allocated seats?
+			
             var seatScoresInOrder = from score in seatScoresByIndex
 				orderby score.TotalRoleMatches descending,
 					score.TotalFrequency descending,
@@ -83,9 +83,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				select score;
 
 			return seatScoresInOrder.ToList();
-
 		}
-
 
 		private static IEnumerable<LocationSeatBookingScore> getScoresForGroupByLocation(IEnumerable<ISeatMapLocation> locations, IEnumerable<ISeatBooking> groupSeatBookings, List<SeatScore> seatScores)
 		{
@@ -106,8 +104,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return locationSeatBookingScores;
 		}
-
-
 
 		private static LocationSeatBookingScore getScoreListByIndex(IEnumerable<ISeatBooking> groupSeatBookings, ISeatMapLocation location, List<SeatScore> seatScoresForCurrentLocation, Guid groupId, IEnumerable<ISeat> seats)
 		{
@@ -149,7 +145,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			seatByIndexScore.FilledSeatCount = transientSeatBookingsWithBookings.Count();
 			seatByIndexScore.TotalGroupNeighbourCount = calculateGroupNeighbourCount(transientSeatBookingsWithBookings);
-
+			if (transientSeatBookingsWithBookings.Any())
+			{
+				seatByIndexScore.EarliestStartTime = 
+					transientSeatBookingsWithBookings.Min(transientBooking => 
+						transientBooking.AlmostAllocatedBookings.Min(booking => booking.StartDateTime));
+			}
+		
 			return seatByIndexScore;
 		}
 

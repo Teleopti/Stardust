@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -11,5 +12,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public int FilledSeatCount { get; set; }
 		public int TotalGroupNeighbourCount { get; set; }
 		public int HighestPriority { get; set; }
+		public DateTime EarliestStartTime { get; set; }
+		
 	}
 }

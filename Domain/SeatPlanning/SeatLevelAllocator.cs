@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
 			var sortedSeatBookingRequests = seatBookingRequests.ToList(); 
-			sortedSeatBookingRequests.Sort();
-
 			var seatScores = SeatScorer.GetSeatScores(sortedSeatBookingRequests, _seats, _seatFrequencies);
 
 			bookSeatsByGroup(sortedSeatBookingRequests, seatScores);
