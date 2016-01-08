@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -25,6 +26,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			var sortedSeatBookingRequests =  seatBookingRequests.ToList();
 			sortedSeatBookingRequests.Sort();
+
+			var count = 0;
+			foreach (var seatBookingRequest in sortedSeatBookingRequests)
+			{
+				count++;
+				Console.WriteLine("Group " + count + " - Number of bookings " + seatBookingRequest.SeatBookings.Count());
+				seatBookingRequest.SeatBookings.ForEach(seatBooking => Console.WriteLine(seatBooking.Person.Name));
+			}
 
 			var allLocationsUnsorted = getAllLocationsUnsorted();
 

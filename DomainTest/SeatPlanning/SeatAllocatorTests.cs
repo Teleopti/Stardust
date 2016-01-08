@@ -121,30 +121,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var location2 = new SeatMapLocation() {IncludeInSeatPlan = true};
 			location2.AddSeat ("L2 Seat1", 1);
 
-			// Temporary diagnostics
-			var seatBookingRequests = new []{ seatBookingRequest1, seatBookingRequest2 };
-			var sortedSeatBookingRequests = seatBookingRequests.ToList();
+			new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
 
-			sortedSeatBookingRequests.Sort();
-
-			var count = 0;
-			foreach (var seatBookingRequest in sortedSeatBookingRequests)
-			{
-				count ++;
-				Console.WriteLine("Group "+count+" - Number of bookings " +seatBookingRequest.SeatBookings.Count());
-				seatBookingRequest.SeatBookings.ForEach (seatBooking => Console.WriteLine (seatBooking.Person.Name));
-			}
-
-			Assert.AreEqual(2, sortedSeatBookingRequests.First().SeatBookings.Count());
-
-			//new SeatAllocator (location1, location2).AllocateSeats (seatBookingRequest1, seatBookingRequest2);
-
-			//Assert.AreEqual("L1 Seat2", agentShift3.Seat.Name);
-			//Assert.AreEqual("L1 Seat1", agentShift2.Seat.Name);
-			//Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
-
-
-
+			Assert.AreEqual ("L2 Seat1", agentShift1.Seat.Name);
+			Assert.AreEqual("L1 Seat1", agentShift2.Seat.Name);
+			Assert.AreEqual("L1 Seat2", agentShift3.Seat.Name);
 		}
 
 		[Test, Ignore("Works locally but does not work currently on server")]
