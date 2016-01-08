@@ -32,6 +32,7 @@ Background:
 	| Activity      | Phone    |
 	| Phone state   | Ready    |
 	| Name          | Adhering |
+	| Is alarm      | False    |
 	| Display Color | Green    |
 	And there is a rule with 
 	| Field           | Value        |
@@ -39,11 +40,11 @@ Background:
 	| Phone state     | Pause        |
 	| Display Color   | Orange       |
 	| Name            | Not adhering |
-	| Alarm           | True         |
+	| Is alarm        | True         |
 	| Alarm threshold | 00:01:00     |
 	| Alarm color     | Red          |
 
-@ignore
+@OnlyRunIfEnabled('Wfm_RTA_ProperAlarm_34975')
 Scenario: See agents with the highest alarm time first
 	Given the time is '2015-11-23 08:00:00'
 	And I am viewing real time adherence for agents on team 'Red'
@@ -59,7 +60,7 @@ Scenario: See agents with the highest alarm time first
 		| Name       | Pierre Baldi |
 		| Color      | Red          |
 		| Alarm Time | 0:04:00      |
-	Then I should see agent status
+	And I should see agent status
 		| Name       |           |
 		| Name       | John King |
 		| Color      | Red       |

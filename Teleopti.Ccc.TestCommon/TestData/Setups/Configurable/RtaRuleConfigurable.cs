@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string DisplayColor { get; set; }
 		public string BusinessUnit { get; set; }
 		public string Adherence { get; set; }
-		public string Alarm { get; set; }
+		public string IsAlarm { get; set; }
 		public string AlarmThreshold { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				rule.Adherence = adherence;
 			}
 
-			if (!string.IsNullOrWhiteSpace(Alarm))
-				rule.IsAlarm = bool.Parse(Alarm);
+			if (!string.IsNullOrWhiteSpace(IsAlarm))
+				rule.IsAlarm = bool.Parse(IsAlarm);
 
 			if (!string.IsNullOrWhiteSpace(AlarmThreshold))
 				rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);

@@ -124,6 +124,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			assert(_browser.FindCss(selector, options()).Exists(options()), Is.True, "Could not find element matching selector " + selector);
 		}
 
+		public void AssertXPathExists(string xpath)
+		{
+			assert(_browser.FindXPath(xpath, options()).Exists(options()), Is.True, "Could not find element matching xpath " + xpath);
+		}
+
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);

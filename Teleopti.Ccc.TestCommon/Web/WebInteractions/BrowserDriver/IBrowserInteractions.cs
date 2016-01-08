@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
 
+		void AssertXPathExists(string xpath);
+
 		void AssertAnyContains(string selector, string text);
 		void AssertNoContains(string existsSelector, string notExistsSelector, string text);
 		void AssertFirstContains(string selector, string text);

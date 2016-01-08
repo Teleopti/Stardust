@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			throw new NotSupportedException(notAllowedAction);
 		}
 
+		public void AssertXPathExists(string xpath)
+		{
+			throw new NotSupportedException(notAllowedAction);
+		}
+
 		public void AssertEventualExists(string selector)
 		{
 			throw new NotSupportedException(notAllowedAction);

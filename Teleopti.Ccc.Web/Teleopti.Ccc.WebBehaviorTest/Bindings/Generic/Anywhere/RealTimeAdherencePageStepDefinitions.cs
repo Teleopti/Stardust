@@ -62,6 +62,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			assertAgentStatus(status);
 		}
 
+		[Then(@"I should see agent '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeAgentBefore(string firstPerson, string secondPerson)
+		{
+			var firstPersonId = DataMaker.Person(firstPerson).Person.Id.Value;
+			var secondPersonId = DataMaker.Person(secondPerson).Person.Id.Value;
+			Browser.Interactions.AssertXPathExists(string.Format(@"//*[@agentid='{0}']/following::*[@agentid='{1}']",
+				firstPersonId, secondPersonId));
+		}
+
 		[Then(@"I should see agent status for '(.*)'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
@@ -219,6 +228,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				var colorSelector = selector + "[style*='background-color: " + toRGBA(status.AlarmColor, "0.6") +"']";
 				Browser.Interactions.AssertExists(colorSelector);
 			}
+			if (status.Color != null)
+			{
+				var colorSelector = selector + "[style*='background-color: " + toRGBA(status.Color, "0.6") +"']";
+				Browser.Interactions.AssertExists(colorSelector);
+			}
 		}
 		
 		private static String toRGBA(string colorName, string transparency)
@@ -237,6 +251,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string NextActivityStartTime	{ get; set; }
 		public string Alarm	{ get; set; }
 		public string AlarmColor { get; set; }
+		public string Color { get; set; }
 		public string AlarmTime	{ get; set; }
 		public string TimeInState	 { get; set; }
 
