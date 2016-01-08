@@ -621,7 +621,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 		}
 
-		public void RefreshTenantList(bool usedInService)
+		public void RefreshTenantList()
 		{
 			throw new NotImplementedException();
 		}

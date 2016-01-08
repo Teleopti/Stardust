@@ -54,8 +54,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				_jobHelper = new JobHelper(
 					_container.Resolve<ILoadAllTenants>(),
 					_container.Resolve<ITenantUnitOfWork>(),
-					_container.Resolve<IAvailableBusinessUnitsProvider>(),
-					true);
+					_container.Resolve<IAvailableBusinessUnitsProvider>());
 				_timer = new Timer(10000);
 				_timer.Elapsed += tick;
 			}
@@ -83,54 +82,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
                 _timer.Stop();
                 log.Debug("Timer stopped");
 
-                log.Debug("Checking configuration");
-                var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
-				if (!configHandler.IsConfigurationValid)
-				{
-                    log.Debug("Configuration not valid");
-					logInvalidConfiguration(configHandler);
-					NeedToStopService(this, null);
-					isStopping = true;
-					return;
-				}
-                log.Debug("Configuration OK");
-
-                log.Debug("Getting scheduled schedule");
-                var rep = new Repository(_connectionString);
-				IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(rep);
-				IEtlJobScheduleCollection etlJobScheduleCollection = new EtlJobScheduleCollection(rep, etlJobLogCollection, _serviceStartTime);
-
-                log.Debug("Getting due schedule");
-                var schedulePriority = new SchedulePriority();
-                var scheduleToRun = schedulePriority.GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
-			    if (scheduleToRun == null)
-			    {
-                    log.Debug("No due schedule");
-                    return;
-			    }
-
-                log.DebugFormat("Schedule to run {0}, Job: {1}", scheduleToRun.ScheduleName, scheduleToRun.JobName);
-
-                var culture = CultureInfo.CurrentCulture;
-				if (configHandler.BaseConfiguration.CultureId.HasValue)
-					culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
-				Thread.CurrentThread.CurrentCulture = culture;
-
-                log.Debug("Extracting job to run from schedule");
-				var jobToRun = JobExtractor.ExtractJobFromSchedule(
-					scheduleToRun,
-					_jobHelper,
-					configHandler.BaseConfiguration.TimeZoneCode,
-					configHandler.BaseConfiguration.IntervalLength.Value,
-					_cube,
-					_pmInstallation,
-					_container,
-					configHandler.BaseConfiguration.RunIndexMaintenance,
-					culture
-					);
-
-                log.DebugFormat("Running job {0}", jobToRun.Name);
-				var success = runJob(jobToRun, scheduleToRun.ScheduleId, rep);
+				var success = checkForEtlJob();
 
 				isStopping = !success;
 			}
@@ -142,7 +94,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			{
 			    try
 			    {
-                    log.DebugFormat("Stopping = {0}", isStopping);
+                    log.DebugFormat("Stopping: {0}", isStopping);
 			        if (!isStopping)
 			        {
                         log.Debug("Starting timer");
@@ -158,12 +110,68 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 		}
 
-		private bool runJob(IJob jobToRun, int scheduleId, IJobLogRepository repository)
+		private bool checkForEtlJob()
 		{
-			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
-			IRunController runController = new RunController((IRunControllerRepository)repository);
-			IEtlRunningInformation etlRunningInformation;
+			log.Debug("Checking configuration");
+			var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
+			if (!configHandler.IsConfigurationValid)
+			{
+				log.Debug("Configuration not valid");
+				logInvalidConfiguration(configHandler);
+				NeedToStopService(this, null);
+				return false;
+			}
+
+			log.Debug("Configuration OK");
+
+			log.Debug("Getting scheduled schedule");
+			var repository = new Repository(_connectionString);
+			var etlJobScheduleCollection =
+				new EtlJobScheduleCollection(
+					repository,
+					new EtlJobLogCollection(repository),
+					_serviceStartTime);
+
+			log.Debug("Getting due schedule");
+			var scheduleToRun = new SchedulePriority().GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
+			if (scheduleToRun == null)
+			{
+				log.Debug("No due schedule");
+				return true;
+			}
+
+			log.DebugFormat("Schedule to run {0}, Job: {1}", scheduleToRun.ScheduleName, scheduleToRun.JobName);
+
+			var culture = CultureInfo.CurrentCulture;
+			if (configHandler.BaseConfiguration.CultureId.HasValue)
+				culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+			Thread.CurrentThread.CurrentCulture = culture;
+
+			log.Debug("Extracting job to run from schedule");
+			var jobToRun = JobExtractor.ExtractJobFromSchedule(
+				scheduleToRun,
+				_jobHelper,
+				configHandler.BaseConfiguration.TimeZoneCode,
+				configHandler.BaseConfiguration.IntervalLength.Value,
+				_cube,
+				_pmInstallation,
+				_container,
+				configHandler.BaseConfiguration.RunIndexMaintenance,
+				culture
+				);
+
+			log.DebugFormat("Running job {0}", jobToRun.Name);
+			var success = runEtlJob(jobToRun, scheduleToRun.ScheduleId, repository);
+			return success;
+		}
+
+		private bool runEtlJob(IJob jobToRun, int scheduleId, IJobLogRepository repository)
+		{
+			var jobStepsNotToRun = new List<IJobStep>();
+			var runController = new RunController((IRunControllerRepository)repository);
+
             log.Debug("Checking if permitted to run");
+			IEtlRunningInformation etlRunningInformation;
 			if (runController.CanIRunAJob(out etlRunningInformation))
 			{
                 log.Debug("Trying to aquire lock");
@@ -171,9 +179,11 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				{
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
+
 					var jobHelper = jobToRun.JobParameters.Helper;
 					jobHelper.RefreshTenantList();
 					var tenantNames = jobHelper.TenantCollection;
+
 					foreach (var tenantName in tenantNames)
 					{
 						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
@@ -181,11 +191,11 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 							return false;
 						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
 
-
-						IList<IJobResult> jobResultCollection = new List<IJobResult>();
+						var jobResultCollection = new List<IJobResult>();
 						jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
-						IJobRunner jobRunner = new JobRunner();
-						IList<IJobResult> jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
+
+						var jobRunner = new JobRunner();
+						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
 						if (jobResults == null)
 						{
 							// No license applied - stop service
@@ -249,6 +259,10 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			builder.RegisterModule(new EtlModule(configuration));
 			return builder.Build();
 		}
+
+
+
+
 
 		public void Dispose()
 		{

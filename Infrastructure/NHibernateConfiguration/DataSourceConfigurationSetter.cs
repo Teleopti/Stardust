@@ -20,14 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Etl.Tool", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Etl", new ConfigReader());
 		}
-
-		public static IDataSourceConfigurationSetter ForEtlService()
-		{
-			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.Wfm.Etl.Service", new ConfigReader());
-		}
-
+		
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
 			return new DataSourceConfigurationSetter(false, "thread_static", "Teleopti.ApplicationConfiguration", new ConfigReader());
@@ -51,15 +46,16 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public const string NoDataSourceName = "[not set]";
 
-		protected DataSourceConfigurationSetter(bool useSecondLevelCache,
-															string sessionContext,
-															string applicationName,
-															IConfigReader configReader)
+		protected DataSourceConfigurationSetter(
+			bool useSecondLevelCache,
+			string sessionContext,
+			string applicationName,
+			IConfigReader configReader)
 		{
 			UseSecondLevelCache = useSecondLevelCache;
 			SessionContext = sessionContext;
 			ApplicationName = applicationName ?? string.Empty;
-			if (!string.IsNullOrEmpty(configReader.AppSettings_DontUse["latency"]))
+			if (!string.IsNullOrEmpty(configReader.AppConfig("latency")))
 				UseLatency = true;
 		}
 

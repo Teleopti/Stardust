@@ -35,17 +35,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILogOnOff _logOnOff;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(
-			ILoadAllTenants loadAllTenants,
-			ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
-			bool usedInService)
+		public LogOnHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			initializeStateHolder();
-			RefreshTenantList(usedInService);
+			RefreshTenantList();
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -116,42 +112,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return _choosenDb != null;
 		}
 
-		public void Dispose()
+		public void RefreshTenantList()
 		{
-			dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ReleaseManagedResources();
-			}
-			ReleaseUnmanagedResources();
-		}
-
-		protected virtual void ReleaseUnmanagedResources()
-		{
-
-		}
-
-		protected virtual void ReleaseManagedResources()
-		{
-			_logonService = null;
-			if (_buList != null)
-			{
-				_buList.Clear();
-				_buList = null;
-			}
-		}
-
-		public void RefreshTenantList(bool usedInService)
-		{
-			var dataSourceConfigSetter = usedInService ? DataSourceConfigurationSetter.ForEtlService() : DataSourceConfigurationSetter.ForEtl();
-
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoPersistCallbacks(),
-				dataSourceConfigSetter,
+				DataSourceConfigurationSetter.ForEtl(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
@@ -191,5 +155,39 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
             }
 			}
 		}
+
+
+
+
+		public void Dispose()
+		{
+			dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				ReleaseManagedResources();
+			}
+			ReleaseUnmanagedResources();
+		}
+
+		protected virtual void ReleaseUnmanagedResources()
+		{
+
+		}
+
+		protected virtual void ReleaseManagedResources()
+		{
+			_logonService = null;
+			if (_buList != null)
+			{
+				_buList.Clear();
+				_buList = null;
+			}
+		}
+
 	}
 }

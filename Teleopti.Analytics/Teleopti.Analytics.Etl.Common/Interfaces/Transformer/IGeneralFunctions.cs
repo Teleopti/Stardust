@@ -10,12 +10,10 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IList<IDataSourceEtl> DataSourceInvalidList { get; }
 		IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll { get; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		EtlToolStateType GetInitialLoadState();
 
 		void LoadNewDataSources();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IList<ITimeZoneDim> GetTimeZoneList();
 
 		void SaveDataSource(int dataSourceId, int timeZoneId);

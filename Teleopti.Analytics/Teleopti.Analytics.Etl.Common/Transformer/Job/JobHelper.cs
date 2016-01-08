@@ -20,14 +20,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ILogOnHelper _logOnHelper;
 		private IMessageSender _messageSender;
 
-		public JobHelper(
-			ILoadAllTenants loadAllTenants, 
-			ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, 
-			bool usedInService = false)
+		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
-			UsedInService = usedInService;
-			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, usedInService);
+			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider);
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
 			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));
@@ -68,12 +63,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			return _logOnHelper.SelectDataSourceContainer(dataSourceName);
 		}
 
-		public IDataSource SelectedDataSource { get { return _logOnHelper.SelectedDataSourceContainer.DataSource; } }
-		public bool UsedInService { get; set; }
+		public IDataSource SelectedDataSource
+		{
+			get { return _logOnHelper.SelectedDataSourceContainer.DataSource; }
+		}
 
 		public void RefreshTenantList()
 		{
-			_logOnHelper.RefreshTenantList(UsedInService);
+			_logOnHelper.RefreshTenantList();
 		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
