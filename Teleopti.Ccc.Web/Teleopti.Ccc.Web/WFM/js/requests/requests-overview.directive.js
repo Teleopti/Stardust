@@ -78,7 +78,7 @@
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.requestsOverview.requestsFilter = newValue;
 				reload();
-				scope.$broadcast('reload.requests.without.seletion');
+				scope.$broadcast('reload.requests.without.selection');
 			}, true);
 
 			scope.$watch(function() {

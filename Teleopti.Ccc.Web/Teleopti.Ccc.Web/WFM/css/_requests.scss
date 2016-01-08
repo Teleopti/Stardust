@@ -42,15 +42,10 @@
 	}
 
 	.ui-grid {
-		height:auto !important;
+		min-height: 700px;
 		.ui-grid-cell-contents {
 			width: 85%;
 			text-align: center;
-		}
-
-		.ui-grid-viewport {
-			overflow: hidden !important;
-			height: auto !important;
 		}
 
 		.ui-grid-column-menu-button-last-col {

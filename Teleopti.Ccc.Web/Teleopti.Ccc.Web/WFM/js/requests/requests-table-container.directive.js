@@ -22,6 +22,7 @@
 		function getGridOptions(requests) {
 			return {
 				enableGridMenu: true,
+				enableHorizontalScrollbar: 2,
 				useExternalSorting: true,
 				data: requests,
 				gridMenuTitleFilter: $translate,
