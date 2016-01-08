@@ -40,9 +40,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("persons", persons);
 
+			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
+
 			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-							.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period)
-							.Add(Restrictions.In("Person", new List<IPerson>(persons)))))
+							.Add(restrictions)
+							.Add(Restrictions.InG("Person", new List<IPerson>(persons)))
 							.SetResultTransformer(Transformers.DistinctRootEntity)
 							.List<IPersonAbsence>();
 			initializeAbsences(retList);
@@ -70,12 +73,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			InParameter.NotNull("scenario", scenario);
 			var retList = new List<IPersonAbsence>();
 
+			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
+
+			if (scenario != null)
+				restrictions.Add(Restrictions.Eq("Scenario", scenario));
+
 			foreach (var personList in persons.Batch(400))
 			{
-
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
-				    .Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period, scenario)
-							       .Add(Restrictions.InG("Person", personList.ToArray()))))
+				    .Add(restrictions)
+					.Add(Restrictions.InG("Person", personList.ToArray()))
 				    .SetResultTransformer(Transformers.DistinctRootEntity)
 				    .List<IPersonAbsence>());
 			}
@@ -113,8 +121,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)
 		{
+			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+			    .Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
+
+			if (scenario != null)
+				restrictions.Add(Restrictions.Eq("Scenario", scenario));
+
 			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-						.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period, scenario)))
+						.Add(restrictions)
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsence>();
 			initializeAbsences(retList);
@@ -128,24 +142,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
 					LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
 			}
-		}
-
-		private static DetachedCriteria GetAgentAbsencesInPeriod(DateTimePeriod period)
-		{
-			return GetAgentAbsencesInPeriod(period, null);
-		}
-
-		private static DetachedCriteria GetAgentAbsencesInPeriod(DateTimePeriod period, IScenario scenario)
-		{
-			DetachedCriteria dCrit = DetachedCriteria.For<PersonAbsence>()
-			    .SetProjection(Projections.Property("Id"))
-			    .Add(Property.ForName("Id").EqProperty("abs.Id"))
-			    .Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
-			    .Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
-
-			if (scenario != null)
-				dCrit.Add(Restrictions.Eq("Scenario", scenario));
-			return dCrit;
 		}
 
 		public IPersonAbsence LoadAggregate(Guid id)

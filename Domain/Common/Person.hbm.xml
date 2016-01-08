@@ -171,12 +171,7 @@
                         and (per.TerminalDate is null or per.TerminalDate >= :StartDateTime)
                         and s.BusinessUnit = :bu
                         and pp.StartDate < :EndDateTime
-                        and pp.StartDate >=
-                            coalesce(
-                                (select max(pp2.StartDate) from PersonPeriod pp2
-                                    where pp.Parent=pp2.Parent
-                                        and pp2.StartDate <:StartDateTime),
-                                :StartDateTime)
+                        and pp.internalEndDate >= :StartDateTime
     ]]>
 	</query>
   <query name="AgentSiteMatrix">
@@ -190,12 +185,7 @@
                         and s.MaxSeats is not null
                         and s.BusinessUnit = :bu
                         and pp.StartDate < :EndDateTime
-                        and pp.StartDate >=
-                            coalesce(
-                                (select max(pp2.StartDate) from PersonPeriod pp2
-                                    where pp.Parent=pp2.Parent
-                                        and pp2.StartDate <:StartDateTime),
-                                :StartDateTime)
+                        and pp.internalEndDate >= :StartDateTime
     ]]>
   </query>
 </hibernate-mapping>
