@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					seatScoresByIndex.Add(getSeatBatchScore(seatScoresForCurrentLocation, seats, startIdx));
 				}
 			}
-
+			//ROBTODO: can this not just be all done in the sortRoleFrequencePriorityComparer? Then just filter here by allocated seats?
             var seatScoresInOrder = from score in seatScoresByIndex
 				orderby score.TotalRoleMatches descending,
 					score.TotalFrequency descending,
@@ -118,7 +118,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				{
 					Location = location,
 					ScoreList = scoreListByIndexForThisLocation,
-					GroupId = groupId
+					GroupId = groupId,
+					GroupSize = groupSeatBookings.Count()
 				};
 			}
 

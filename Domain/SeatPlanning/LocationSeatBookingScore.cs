@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		public ISeatMapLocation Location { get; set; }
 		public Guid GroupId { get; set; }
+		public int GroupSize { get; set; }
 		public List<SeatByIndexScore> ScoreList { get; set; }
 		public int CompareTo(LocationSeatBookingScore other)
 		{
@@ -36,6 +37,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				if (comparisonSeatCount != 0)
 					return -comparisonSeatCount;
 
+				var comparisonGroupSize = locationScore1.GroupSize.CompareTo (locationScore2.GroupSize);
+				if (comparisonGroupSize != 0)
+					return -comparisonGroupSize;
+				
 				var locationScore1HighestPriority = locationScore1.ScoreList.Min(score => score.HighestPriority);
 				var locationScore2HighestPriority = locationScore2.ScoreList.Min(score => score.HighestPriority);
 				var comparisonPriority = locationScore1HighestPriority.CompareTo (locationScore2HighestPriority);

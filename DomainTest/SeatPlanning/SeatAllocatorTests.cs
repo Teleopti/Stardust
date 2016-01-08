@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("L1 Seat1") && allocatedSeats.Contains ("L2 Seat1"));
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
 
