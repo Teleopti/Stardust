@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;

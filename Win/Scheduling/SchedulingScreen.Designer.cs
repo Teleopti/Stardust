@@ -333,6 +333,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
 			this.flowLayoutExportToScenario = new Syncfusion.Windows.Forms.Tools.FlowLayout(this.components);
+			this.agentSkillAnalyzerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -1336,9 +1337,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.ToolStripMenuItemDay,
             this.ToolStripMenuItemIntraday,
             this.toolStripMenuItem4,
-            this.ToolStripMenuItemOccupancyAdjustment});
+            this.ToolStripMenuItemOccupancyAdjustment,
+            this.agentSkillAnalyzerToolStripMenuItem});
 			this.contextMenuStripResultView.Name = "contextMenuStripResultView";
-			this.contextMenuStripResultView.Size = new System.Drawing.Size(207, 76);
+			this.contextMenuStripResultView.Size = new System.Drawing.Size(207, 120);
 			// 
 			// ToolStripMenuItemDay
 			// 
@@ -1480,11 +1482,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageTabExportTo.BackColor = System.Drawing.Color.White;
 			this.backStageTabExportTo.Image = null;
 			this.backStageTabExportTo.ImageSize = new System.Drawing.Size(16, 16);
-			this.backStageTabExportTo.Location = new System.Drawing.Point(177, 0);
+			this.backStageTabExportTo.Location = new System.Drawing.Point(137, 0);
 			this.backStageTabExportTo.Name = "backStageTabExportTo";
 			this.backStageTabExportTo.Position = new System.Drawing.Point(0, 0);
 			this.backStageTabExportTo.ShowCloseButton = true;
-			this.backStageTabExportTo.Size = new System.Drawing.Size(1053, 643);
+			this.backStageTabExportTo.Size = new System.Drawing.Size(1093, 643);
 			this.backStageTabExportTo.TabIndex = 9;
 			this.backStageTabExportTo.Text = "xxExportTo";
 			this.backStageTabExportTo.ThemesEnabled = false;
@@ -3483,6 +3485,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.flowLayoutExportToScenario.HorzNearMargin = 5;
 			this.flowLayoutExportToScenario.LayoutMode = Syncfusion.Windows.Forms.Tools.FlowLayoutMode.Vertical;
 			// 
+			// agentSkillAnalyzerToolStripMenuItem
+			// 
+			this.agentSkillAnalyzerToolStripMenuItem.Name = "agentSkillAnalyzerToolStripMenuItem";
+			this.SetShortcut(this.agentSkillAnalyzerToolStripMenuItem, System.Windows.Forms.Keys.None);
+			this.agentSkillAnalyzerToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.agentSkillAnalyzerToolStripMenuItem.Text = "AgentSkillAnalyzer...";
+			// 
 			// SchedulingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3836,6 +3845,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItemSave;
 		private ToolStripButton toolStripButtonSaveLarge;
 		private ToolStripButton toolStripButtonRefreshLarge;
+		private ToolStripMenuItem agentSkillAnalyzerToolStripMenuItem;
         
         
     }

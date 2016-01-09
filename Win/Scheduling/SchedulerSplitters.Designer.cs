@@ -44,19 +44,19 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Chart.ChartSeries chartSeries1 = new Syncfusion.Windows.Forms.Chart.ChartSeries();
-			Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo chartCustomShapeInfo1 = new Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo();
-			Syncfusion.Windows.Forms.Chart.ChartLineInfo chartLineInfo1 = new Syncfusion.Windows.Forms.Chart.ChartLineInfo();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Chart.ChartSeries chartSeries2 = new Syncfusion.Windows.Forms.Chart.ChartSeries();
+			Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo chartCustomShapeInfo2 = new Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo();
+			Syncfusion.Windows.Forms.Chart.ChartLineInfo chartLineInfo2 = new Syncfusion.Windows.Forms.Chart.ChartLineInfo();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle13 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle14 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle15 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle16 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle4 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle9 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle10 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle11 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle12 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle3 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
@@ -198,32 +198,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chartControlSkillData.PrimaryXAxis.Margin = true;
 			this.chartControlSkillData.PrimaryYAxis.Crossing = double.NaN;
 			this.chartControlSkillData.PrimaryYAxis.Margin = true;
-			chartSeries1.FancyToolTip.ResizeInsideSymbol = true;
-			chartSeries1.Name = "Default";
-			chartSeries1.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
-			chartSeries1.Points.Add(1D, ((double)(68D)), ((double)(305D)), ((double)(159D)), ((double)(222D)));
-			chartSeries1.Points.Add(2D, ((double)(94D)), ((double)(194D)), ((double)(138D)), ((double)(128D)));
-			chartSeries1.Points.Add(3D, ((double)(60D)), ((double)(113D)), ((double)(82D)), ((double)(110D)));
-			chartSeries1.Points.Add(4D, ((double)(85D)), ((double)(94D)), ((double)(86D)), ((double)(88D)));
-			chartSeries1.Resolution = 0D;
-			chartSeries1.StackingGroup = "Default Group";
-			chartSeries1.Style.AltTagFormat = "";
-			chartSeries1.Style.Border.Width = 2F;
-			chartSeries1.Style.DisplayShadow = true;
-			chartSeries1.Style.DrawTextShape = false;
-			chartSeries1.Style.Font.Facename = "Microsoft Sans Serif";
-			chartLineInfo1.Alignment = System.Drawing.Drawing2D.PenAlignment.Center;
-			chartLineInfo1.Color = System.Drawing.SystemColors.ControlText;
-			chartLineInfo1.DashPattern = null;
-			chartLineInfo1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-			chartLineInfo1.Width = 1F;
-			chartCustomShapeInfo1.Border = chartLineInfo1;
-			chartCustomShapeInfo1.Color = System.Drawing.SystemColors.HighlightText;
-			chartCustomShapeInfo1.Type = Syncfusion.Windows.Forms.Chart.ChartCustomShape.Square;
-			chartSeries1.Style.TextShape = chartCustomShapeInfo1;
-			chartSeries1.Text = "Default";
-			chartSeries1.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
-			this.chartControlSkillData.Series.Add(chartSeries1);
+			chartSeries2.FancyToolTip.ResizeInsideSymbol = true;
+			chartSeries2.Name = "Default";
+			chartSeries2.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
+			chartSeries2.Points.Add(1D, ((double)(68D)), ((double)(305D)), ((double)(159D)), ((double)(222D)));
+			chartSeries2.Points.Add(2D, ((double)(94D)), ((double)(194D)), ((double)(138D)), ((double)(128D)));
+			chartSeries2.Points.Add(3D, ((double)(60D)), ((double)(113D)), ((double)(82D)), ((double)(110D)));
+			chartSeries2.Points.Add(4D, ((double)(85D)), ((double)(94D)), ((double)(86D)), ((double)(88D)));
+			chartSeries2.Resolution = 0D;
+			chartSeries2.StackingGroup = "Default Group";
+			chartSeries2.Style.AltTagFormat = "";
+			chartSeries2.Style.Border.Width = 2F;
+			chartSeries2.Style.DisplayShadow = true;
+			chartSeries2.Style.DrawTextShape = false;
+			chartSeries2.Style.Font.Facename = "Microsoft Sans Serif";
+			chartLineInfo2.Alignment = System.Drawing.Drawing2D.PenAlignment.Center;
+			chartLineInfo2.Color = System.Drawing.SystemColors.ControlText;
+			chartLineInfo2.DashPattern = null;
+			chartLineInfo2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+			chartLineInfo2.Width = 1F;
+			chartCustomShapeInfo2.Border = chartLineInfo2;
+			chartCustomShapeInfo2.Color = System.Drawing.SystemColors.HighlightText;
+			chartCustomShapeInfo2.Type = Syncfusion.Windows.Forms.Chart.ChartCustomShape.Square;
+			chartSeries2.Style.TextShape = chartCustomShapeInfo2;
+			chartSeries2.Text = "Default";
+			chartSeries2.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
+			this.chartControlSkillData.Series.Add(chartSeries2);
 			this.chartControlSkillData.Size = new System.Drawing.Size(330, 127);
 			this.chartControlSkillData.Skins = Syncfusion.Windows.Forms.Chart.Skins.Metro;
 			this.chartControlSkillData.TabIndex = 1;
@@ -258,13 +258,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PinnedToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(171, 26);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(171, 48);
 			// 
 			// PinnedToolStripMenuItem
 			// 
 			this.PinnedToolStripMenuItem.Image = global::Teleopti.Ccc.Win.Properties.Resources.pinned;
 			this.PinnedToolStripMenuItem.Name = "PinnedToolStripMenuItem";
-			this.PinnedToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.PinnedToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
 			this.PinnedToolStripMenuItem.Text = "xxTogglePinStatus";
 			this.PinnedToolStripMenuItem.Click += new System.EventHandler(this.PinnedToolStripMenuItemClick);
 			// 
@@ -468,42 +468,42 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.agentRestrictionGrid1.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.DblClickOnCell;
 			this.agentRestrictionGrid1.AllowSelection = Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Cell;
-			gridBaseStyle1.Name = "Header";
-			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.CellType = "Header";
-			gridBaseStyle1.StyleInfo.Font.Bold = true;
-			gridBaseStyle1.StyleInfo.Font.Facename = "Segoe UI";
-			gridBaseStyle1.StyleInfo.Font.Italic = false;
-			gridBaseStyle1.StyleInfo.Font.Size = 8F;
-			gridBaseStyle1.StyleInfo.Font.Strikeout = false;
-			gridBaseStyle1.StyleInfo.Font.Underline = false;
-			gridBaseStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle2.Name = "Standard";
-			gridBaseStyle2.StyleInfo.Font.Bold = false;
-			gridBaseStyle2.StyleInfo.Font.Facename = "Segoe UI";
-			gridBaseStyle2.StyleInfo.Font.Italic = false;
-			gridBaseStyle2.StyleInfo.Font.Size = 8F;
-			gridBaseStyle2.StyleInfo.Font.Strikeout = false;
-			gridBaseStyle2.StyleInfo.Font.Underline = false;
-			gridBaseStyle2.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle3.Name = "Column Header";
-			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle4.Name = "Row Header";
-			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle13.Name = "Header";
+			gridBaseStyle13.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle13.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle13.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle13.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle13.StyleInfo.CellType = "Header";
+			gridBaseStyle13.StyleInfo.Font.Bold = true;
+			gridBaseStyle13.StyleInfo.Font.Facename = "Segoe UI";
+			gridBaseStyle13.StyleInfo.Font.Italic = false;
+			gridBaseStyle13.StyleInfo.Font.Size = 8F;
+			gridBaseStyle13.StyleInfo.Font.Strikeout = false;
+			gridBaseStyle13.StyleInfo.Font.Underline = false;
+			gridBaseStyle13.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridBaseStyle13.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle13.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle14.Name = "Standard";
+			gridBaseStyle14.StyleInfo.Font.Bold = false;
+			gridBaseStyle14.StyleInfo.Font.Facename = "Segoe UI";
+			gridBaseStyle14.StyleInfo.Font.Italic = false;
+			gridBaseStyle14.StyleInfo.Font.Size = 8F;
+			gridBaseStyle14.StyleInfo.Font.Strikeout = false;
+			gridBaseStyle14.StyleInfo.Font.Underline = false;
+			gridBaseStyle14.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridBaseStyle14.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle15.Name = "Column Header";
+			gridBaseStyle15.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle15.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle16.Name = "Row Header";
+			gridBaseStyle16.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle16.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle16.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.agentRestrictionGrid1.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
+            gridBaseStyle13,
+            gridBaseStyle14,
+            gridBaseStyle15,
+            gridBaseStyle16});
 			this.agentRestrictionGrid1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.agentRestrictionGrid1.ColCount = 12;
 			this.agentRestrictionGrid1.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
@@ -523,16 +523,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.agentRestrictionGrid1.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
 			this.agentRestrictionGrid1.Properties.MarkColHeader = false;
 			this.agentRestrictionGrid1.Properties.MarkRowHeader = false;
-			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
-			gridRangeStyle1.StyleInfo.Font.Bold = false;
-			gridRangeStyle1.StyleInfo.Font.Facename = "Segoe UI";
-			gridRangeStyle1.StyleInfo.Font.Italic = false;
-			gridRangeStyle1.StyleInfo.Font.Size = 8.25F;
-			gridRangeStyle1.StyleInfo.Font.Strikeout = false;
-			gridRangeStyle1.StyleInfo.Font.Underline = false;
-			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle4.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle4.StyleInfo.Font.Bold = false;
+			gridRangeStyle4.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle4.StyleInfo.Font.Italic = false;
+			gridRangeStyle4.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle4.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle4.StyleInfo.Font.Underline = false;
+			gridRangeStyle4.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.agentRestrictionGrid1.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle1});
+            gridRangeStyle4});
 			this.agentRestrictionGrid1.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.agentRestrictionGrid1.RowCount = 1;
 			this.agentRestrictionGrid1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
@@ -549,32 +549,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// grid
 			// 
-			gridBaseStyle5.Name = "Header";
-			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.CellType = "Header";
-			gridBaseStyle5.StyleInfo.Font.Bold = true;
-			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle6.Name = "Standard";
-			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle6.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
-			gridBaseStyle7.Name = "Column Header";
-			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle7.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle8.Name = "Row Header";
-			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle9.Name = "Header";
+			gridBaseStyle9.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.CellType = "Header";
+			gridBaseStyle9.StyleInfo.Font.Bold = true;
+			gridBaseStyle9.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle9.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle10.Name = "Standard";
+			gridBaseStyle10.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle10.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle10.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
+			gridBaseStyle11.Name = "Column Header";
+			gridBaseStyle11.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle11.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle11.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle12.Name = "Row Header";
+			gridBaseStyle12.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle12.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle12.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle5,
-            gridBaseStyle6,
-            gridBaseStyle7,
-            gridBaseStyle8});
+            gridBaseStyle9,
+            gridBaseStyle10,
+            gridBaseStyle11,
+            gridBaseStyle12});
 			this.grid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -587,10 +587,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.grid.Name = "grid";
 			this.grid.NumberedColHeaders = false;
 			this.grid.NumberedRowHeaders = false;
-			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
-			gridRangeStyle2.StyleInfo.BaseStyle = "Standard";
+			gridRangeStyle3.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
+			gridRangeStyle3.StyleInfo.BaseStyle = "Standard";
 			this.grid.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle2});
+            gridRangeStyle3});
 			this.grid.ReadOnly = true;
 			this.grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.grid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvShiftCategoryDistribution.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvShiftCategoryDistribution.Name = "tabPageAdvShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ShowCloseButton = true;
-			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(427, 648);
+			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(434, 651);
 			this.tabPageAdvShiftCategoryDistribution.TabIndex = 12;
 			this.tabPageAdvShiftCategoryDistribution.Text = "xxShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ThemesEnabled = false;
@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.shiftCategoryDistributionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftCategoryDistributionControl1.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryDistributionControl1.Name = "shiftCategoryDistributionControl1";
-			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(427, 648);
+			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(434, 651);
 			this.shiftCategoryDistributionControl1.TabIndex = 0;
 			// 
 			// lessIntellegentSplitContainerAdvMainContainer

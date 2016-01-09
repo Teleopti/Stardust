@@ -816,6 +816,18 @@
     <Compile Include="Scheduling\PublishScheduleDateView.Designer.cs">
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.Designer.cs">
+      <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\SkillGroupReducerSuggestions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingScreenInternals\SkillGroupReducerSuggestions.Designer.cs">
+      <DependentUpon>SkillGroupReducerSuggestions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sikuli\Helpers\SchedulerTestData.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DailyStandardDeviationValidator.cs" />
@@ -3076,6 +3088,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PublishScheduleDateView.resx">
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.resx">
+      <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingScreenInternals\SkillGroupReducerSuggestions.resx">
+      <DependentUpon>SkillGroupReducerSuggestions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sikuli\Views\SikuliEnterValidatorDialog.resx">
       <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>

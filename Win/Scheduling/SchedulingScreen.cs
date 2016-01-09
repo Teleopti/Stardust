@@ -4233,11 +4233,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+
+			if (
+				DefinedLicenseDataFactory.GetLicenseActivator(
+					((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName).CustomerName ==
+				"Teleopti_RD")
+			{
+				skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
+				skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
+				_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+			}
+
 			_skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillMonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillFullPeriodGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+		}
+
+		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)
+		{
+			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.PersonsInOrganization,
+				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays, SchedulerState.RequestedPeriod.DateOnlyPeriod))
+			{
+				analyzer.LoadData();
+				analyzer.ShowDialog(this);
+			}
 		}
 
 		private void setUpZomMenu()
