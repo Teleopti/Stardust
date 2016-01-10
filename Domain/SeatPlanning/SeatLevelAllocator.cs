@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests = seatBookingRequests.ToList(); 
-			var seatScores = SeatScorer.GetSeatScores(sortedSeatBookingRequests, _seats, _seatFrequencies);
+			var seatBookingRequestList = seatBookingRequests.ToList(); 
+			var seatScores = SeatScorer.GetSeatScores(seatBookingRequestList, _seats, _seatFrequencies);
 
-			bookSeatsByGroup(sortedSeatBookingRequests, seatScores);
-			bookSeatsThatHaventBeenAllocatedByGroup(sortedSeatBookingRequests, seatScores);
+			bookSeatsByGroup(seatBookingRequestList, seatScores);
+			bookSeatsThatHaventBeenAllocatedByGroup(seatBookingRequestList, seatScores);
 		}
 
 		private void bookSeatsByGroup(IList<SeatBookingRequest> sortedSeatBookingRequests, List<SeatScore> seatScores)
