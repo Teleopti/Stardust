@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot
 		{
-			throw new NotImplementedException();
 		}
 
 		public void Refresh(IAggregateRoot root)
