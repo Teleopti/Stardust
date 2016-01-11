@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -175,5 +176,7 @@ namespace Teleopti.Interfaces.Domain
 	    void ForceRecalculationOfContractTimeAndDaysOff();
 
 	    bool IsEmpty();
+
+	    void Reassociate(IUnitOfWork unitOfWork);
     }
 }

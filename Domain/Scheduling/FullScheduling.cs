@@ -75,8 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people, int daysScheduled, IEnumerable<PersistConflict> conflicts)
 		{
 			//some hack to get rid of lazy load ex
-			_currentUnitOfWork.Current().Reassociate(people.FixedStaffPeople);
-			_prerequisites.MakeSureLoaded();
+			var uow = _currentUnitOfWork.Current();
+			uow.Reassociate(people.FixedStaffPeople);
+			_schedulerStateHolder().Schedules.ForEach(range => range.Value.Reassociate(uow));
 			//
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();

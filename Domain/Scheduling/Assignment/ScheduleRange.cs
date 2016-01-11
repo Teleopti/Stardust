@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -462,7 +463,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return !PersistableScheduleDataInternalCollection().Any();
 			}
 
-        protected override void CloneDerived(Schedule clone)
+	    public void Reassociate(IUnitOfWork unitOfWork)
+	    {
+		    unitOfWork.Reassociate(PersistableScheduleDataInternalCollection());
+	    }
+
+	    protected override void CloneDerived(Schedule clone)
         {
             var typedClone = (ScheduleRange)clone;
             typedClone._snapshot = null;

@@ -231,6 +231,7 @@
     <Compile Include="Persisters\Schedules\FakePersistCallback.cs" />
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
+    <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonDataTest.cs" />
