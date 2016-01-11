@@ -6,7 +6,7 @@ namespace Teleopti.Analytics.Etl.ServiceHost
 {
 	public partial class Service1 : ServiceBase
 	{
-		private EtlService _service;
+		private EtlServiceHost _host;
 
 		public Service1()
 		{
@@ -15,13 +15,13 @@ namespace Teleopti.Analytics.Etl.ServiceHost
 
 		protected override void OnStart(string[] args)
 		{
-			_service = new EtlService();
-			_service.Start(Stop);
+			_host = new EtlServiceHost();
+			_host.Start(Stop);
 		}
 
 		protected override void OnStop()
 		{
-			_service.Dispose();
+			_host.Dispose();
 		}
 	}
 }

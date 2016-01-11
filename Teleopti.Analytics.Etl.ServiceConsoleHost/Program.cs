@@ -8,13 +8,13 @@ namespace Teleopti.Analytics.Etl.ServiceConsoleHost
 	{
 		static void Main(string[] args)
 		{
-			var service = new EtlService();
-			service.Start(() => {});
+			var host = new EtlServiceHost();
+			host.Start(() => {});
 
 			Console.WriteLine("ETL Service is now running, press Enter to stop...");
 			Console.ReadLine();
 
-			service.Dispose();
+			host.Dispose();
 
 			Console.WriteLine("ETL Service is stopped, press Enter to close...");
 			Console.ReadLine();

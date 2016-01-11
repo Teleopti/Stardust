@@ -17,8 +17,8 @@ namespace Teleopti.Analytics.Etl.ServiceHost
             {
                 if (components != null)
                 components.Dispose();
-                if (_service!=null)
-                    _service.Dispose();
+                if (_host!=null)
+                    _host.Dispose();
             }
             base.Dispose(disposing);
         }

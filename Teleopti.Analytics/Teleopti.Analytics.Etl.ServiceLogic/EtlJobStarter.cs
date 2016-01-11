@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
 		}
 
-		public void Init(IContainer container, DateTime serviceStartTime, Action stopService)
+		public void Initialize(IContainer container, DateTime serviceStartTime, Action stopService)
 		{
 			_container = container;
 			_serviceStartTime = serviceStartTime;
