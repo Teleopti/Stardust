@@ -704,6 +704,7 @@
     <Compile Include="Scheduling\WebLegacy\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />
     <Compile Include="SeatPlanning\LocationSeatBookingScore.cs" />
+    <Compile Include="SeatPlanning\LocationSeatBookingScoreComparer.cs" />
     <Compile Include="SeatPlanning\RankedSeatBookingProcessor.cs" />
     <Compile Include="SeatPlanning\SeatAllocationManager.cs" />
     <Compile Include="SeatPlanning\SeatBookingLocationFinder.cs" />

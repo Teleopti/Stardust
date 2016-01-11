@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public static void ProcessBookings(List<LocationSeatBookingScore> rankedScores)
 		{
 			var bestRankedGroupScore = rankedScores.FirstOrDefault();
-
+			
 			while (bestRankedGroupScore != null)
 			{
 				var topScore = bestRankedGroupScore.ScoreList.FirstOrDefault();
@@ -37,7 +38,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 				// remove all other potential bookings for this group....
 				scoresRankedFromBestToWorst.RemoveAll (groupScore => groupScore.GroupId == bestRankedGroupScoreForLocation.GroupId);
-				
 			}
 			else
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		private static void removeUnsuccessfulScore (SeatByIndexScore topScore, List<LocationSeatBookingScore> scoresRankedFromBestToWorst,LocationSeatBookingScore bestRankedGroupScoreForLocation)
+		private static void removeUnsuccessfulScore (SeatByIndexScore topScore, List<LocationSeatBookingScore> scoresRankedFromBestToWorst, LocationSeatBookingScore bestRankedGroupScoreForLocation)
 		{
 			bestRankedGroupScoreForLocation.ScoreList.Remove (topScore);
 

@@ -8,16 +8,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	class SeatScorer
 	{
 
-		public static List<SeatScore> GetSeatScores(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests, List<SeatMapLocation> allLocationsUnsorted, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies)
+		public static List<SeatScore> GetSeatScores(IEnumerable<SeatBookingRequest> seatBookingRequests, List<SeatMapLocation> allLocationsUnsorted, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies)
 		{
 			var seatScores = new List<SeatScore>();
 
-			var scoresForGroupSeatBookings = from seatBookingRequest in sortedSeatBookingRequests
+			var scoresForGroupSeatBookings = from seatBookingRequest in seatBookingRequests
 											 from seatMapLocation in allLocationsUnsorted
 											 where seatMapLocation.IncludeInSeatPlan
-											 let seatArray = seatMapLocation.Seats.OrderBy(seat => seat.Priority).ToList()
-											 let groupSeatBookings = seatBookingRequest.SeatBookings.OrderBy(booking => booking.StartDateTime)
-											 select groupSeatBookings.SelectMany(seatBooking => getSeatScores(seatBooking, seatArray, seatFrequencies)).ToList();
+											 select seatBookingRequest.SeatBookings.SelectMany(seatBooking => getSeatScores(seatBooking, seatMapLocation.Seats, seatFrequencies)).ToList();
 
 			foreach (var scoresForGroup in scoresForGroupSeatBookings)
 			{
@@ -27,14 +25,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return seatScores;
 		}
 		
-		public static List<SeatScore> GetSeatScores(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests, IList<ISeat> seats, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies)
+		public static List<SeatScore> GetSeatScores(IEnumerable<SeatBookingRequest> seatBookingRequests, IList<ISeat> seats, Dictionary<Guid, List<ISeatOccupancyFrequency>> seatFrequencies)
 		{
 			var seatScores = new List<SeatScore>();
 
-			var scoresForGroupSeatBookings = from seatBookingRequest in sortedSeatBookingRequests
-											 let seatArray = seats.OrderBy(seat => seat.Priority).ToList()
-											 let groupSeatBookings = seatBookingRequest.SeatBookings.OrderBy(booking => booking.StartDateTime)
-											 select groupSeatBookings.SelectMany(seatBooking => getSeatScores(seatBooking, seatArray, seatFrequencies)).ToList();
+			var scoresForGroupSeatBookings = from seatBookingRequest in seatBookingRequests
+											 select seatBookingRequest.SeatBookings.SelectMany(seatBooking => getSeatScores(seatBooking, seats, seatFrequencies)).ToList();
 
 			foreach (var scoresForGroup in scoresForGroupSeatBookings)
 			{

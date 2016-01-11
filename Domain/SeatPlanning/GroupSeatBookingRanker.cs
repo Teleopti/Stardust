@@ -56,6 +56,26 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 
+		private static IEnumerable<LocationSeatBookingScore> getScoresForGroupByLocation(IEnumerable<ISeatMapLocation> locations, IEnumerable<ISeatBooking> groupSeatBookings, List<SeatScore> seatScores, int orderSeatBookingRequestWasAdded)
+		{
+			var locationSeatBookingScores = new List<LocationSeatBookingScore>();
+			var groupId = Guid.NewGuid();
+
+			foreach (var location in locations.Where(location => location.IncludeInSeatPlan))
+			{
+				var seatScoresForCurrentLocation = seatScores.Where(seatScore => seatScore.Location == location).ToList();
+				var scoreListByIndexForThisLocation = getScoreListByIndex(groupSeatBookings, location, seatScoresForCurrentLocation, groupId, location.Seats, orderSeatBookingRequestWasAdded);
+
+				if (scoreListByIndexForThisLocation != null)
+				{
+					locationSeatBookingScores.Add(scoreListByIndexForThisLocation);
+				}
+
+			}
+
+			return locationSeatBookingScores;
+		}
+
 		public static List<SeatByIndexScore> TryToFindBestSeatsForGroup(IEnumerable<ISeatBooking> groupSeatBookings, IEnumerable<ISeat> possibleSeats, List<SeatScore> seatScoresForCurrentLocation)
 		{
 			// we have a teams worth of bookings.  We are trying to find the best seats in this location for the team.
@@ -63,7 +83,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			// the best seats for them.
 
 			var groupSeatBookingsInOrder = groupSeatBookings.OrderBy(booking => booking.StartDateTime).ToList();
-
 			var seatArray = possibleSeats.OrderBy(seat => seat.Priority).ToList();
 			var seatScoresByIndex = new List<SeatByIndexScore>();
 
@@ -88,26 +107,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				select score;
 
 			return seatScoresInOrder.ToList();
-		}
-
-		private static IEnumerable<LocationSeatBookingScore> getScoresForGroupByLocation(IEnumerable<ISeatMapLocation> locations, IEnumerable<ISeatBooking> groupSeatBookings, List<SeatScore> seatScores, int orderSeatBookingRequestWasAdded)
-		{
-			var locationSeatBookingScores = new List<LocationSeatBookingScore>();
-			var groupId = Guid.NewGuid();
-
-			foreach (var location in locations.Where(location => location.IncludeInSeatPlan))
-			{
-				var seatScoresForCurrentLocation = seatScores.Where(seatScore => seatScore.Location == location).ToList();
-				var scoreListByIndexForThisLocation = getScoreListByIndex(groupSeatBookings, location, seatScoresForCurrentLocation, groupId, location.Seats, orderSeatBookingRequestWasAdded);
-
-				if (scoreListByIndexForThisLocation != null)
-				{
-					locationSeatBookingScores.Add(scoreListByIndexForThisLocation);
-				}
-
-			}
-
-			return locationSeatBookingScores;
 		}
 
 		private static LocationSeatBookingScore getScoreListByIndex(IEnumerable<ISeatBooking> groupSeatBookings, ISeatMapLocation location, List<SeatScore> seatScoresForCurrentLocation, Guid groupId, IEnumerable<ISeat> seats, int orderSeatBookingRequestWasAdded)
@@ -194,9 +193,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				{
 					totalGroupNeighbourCount += transientSeatBookings.Count(booking => booking.Seat.Priority == nextHighestPrioritySeat.Priority) * numberOfBookingsOnThisSeat;
 				}
-
-				
 			}
+
 			return totalGroupNeighbourCount;
 		}
 
