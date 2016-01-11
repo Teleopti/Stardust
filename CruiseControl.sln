@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -111,8 +111,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.Security", "Teleopti.Support.Security\Teleopti.Support.Security.csproj", "{6030CF98-1346-43DD-A9B6-01CDBEB5A832}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.TestCommon", "Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj", "{68A028B6-864C-4969-8830-9C3C6BD56A98}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ServiceLogic", "Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceLogic\Teleopti.Analytics.Etl.ServiceLogic.csproj", "{05CD04D6-F77B-4965-84E5-4860318CF602}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickOnceSign", "WISE\tools\ClickOnceSign\ClickOnceSign\ClickOnceSign.csproj", "{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}"
 EndProject
@@ -705,18 +703,6 @@ Global
 		{68A028B6-864C-4969-8830-9C3C6BD56A98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{68A028B6-864C-4969-8830-9C3C6BD56A98}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{68A028B6-864C-4969-8830-9C3C6BD56A98}.Release|x86.ActiveCfg = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|.NET.ActiveCfg = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|x86.ActiveCfg = Release|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU

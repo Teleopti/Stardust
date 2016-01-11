@@ -236,6 +236,7 @@
     <Compile Include="Interfaces\Transformer\ITaskParameter.cs" />
     <Compile Include="Interfaces\Transformer\ITenantLogonInfoLoader.cs" />
     <Compile Include="Interfaces\Transformer\JobCategoryType.cs" />
+    <Compile Include="Service\EtlServiceHost.cs" />
     <Compile Include="Service\JobExtractor.cs" />
     <Compile Include="JobLog\EtlJobLog.cs" />
     <Compile Include="JobLog\EtlJobLogCollection.cs" />

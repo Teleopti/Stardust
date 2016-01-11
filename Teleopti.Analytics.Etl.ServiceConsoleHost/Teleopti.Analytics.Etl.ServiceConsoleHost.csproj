@@ -48,9 +48,9 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceLogic\Teleopti.Analytics.Etl.ServiceLogic.csproj">
-      <Project>{05cd04d6-f77b-4965-84e5-4860318cf602}</Project>
-      <Name>Teleopti.Analytics.Etl.ServiceLogic</Name>
+    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

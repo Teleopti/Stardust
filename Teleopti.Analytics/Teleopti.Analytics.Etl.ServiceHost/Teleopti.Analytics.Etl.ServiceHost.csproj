@@ -151,9 +151,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.ServiceLogic\Teleopti.Analytics.Etl.ServiceLogic.csproj">
-      <Project>{05CD04D6-F77B-4965-84E5-4860318CF602}</Project>
-      <Name>Teleopti.Analytics.Etl.ServiceLogic</Name>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

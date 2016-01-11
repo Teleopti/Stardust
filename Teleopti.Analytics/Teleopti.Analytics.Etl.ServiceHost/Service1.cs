@@ -1,6 +1,5 @@
-using System.Configuration;
 using System.ServiceProcess;
-using Teleopti.Analytics.Etl.ServiceLogic;
+using Teleopti.Analytics.Etl.Common.Service;
 
 namespace Teleopti.Analytics.Etl.ServiceHost
 {

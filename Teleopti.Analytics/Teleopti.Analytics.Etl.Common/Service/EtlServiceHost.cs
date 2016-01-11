@@ -2,12 +2,10 @@ using System;
 using Autofac;
 using log4net;
 using log4net.Config;
-using Teleopti.Analytics.Etl.Common;
-using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 
-namespace Teleopti.Analytics.Etl.ServiceLogic
+namespace Teleopti.Analytics.Etl.Common.Service
 {
 	public class EtlServiceHost : IDisposable
 	{
