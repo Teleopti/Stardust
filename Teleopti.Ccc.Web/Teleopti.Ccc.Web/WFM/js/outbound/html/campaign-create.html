@@ -22,8 +22,8 @@
 				<div class="con-flex">
 					<form name="campaignGeneralForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle0">
 						<div layout="row">
-							<div class="w-150"><span translate>Name</span></div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div class="row-title"><span translate>Name</span></div>
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="name" type="text" ng-model="campaign.Name" placeholder="{{ 'NewCampaignName' | translate }}" ng-minlength="1" ng-maxlength="50" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -32,8 +32,8 @@
 							</div>
 						</div>
 						<div layout="row" class="activity-picker">
-							<div class="w-150"><span translate>Activity</span></div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div class="row-title"><span translate>Activity</span></div>
+							<div flex class="icon-set-fix">
 								<activity-picker ng-model="campaign.Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
 								<div class="icon-set  input-validation-sign" expandable>
 									<span></span>
@@ -55,10 +55,10 @@
 				<div class="con-flex">
 					<form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator ng-show="acToggle1">
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>CallListLength</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix ">
 								<input class="w-100p" id="callList" type="text" ng-model="campaign.CallListLen" placeholder="{{ 'LargeValueRange' | translate }}" numeric-value min="0" max="1000000" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -67,10 +67,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>TargetRate</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="callList" type="text" ng-model="campaign.TargetRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -79,10 +79,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>ConnectRate</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -91,10 +91,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>RPCR</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="{{ 'RateRange' | translate }}" numeric-value max="100" min="1" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -103,10 +103,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>ConnectAHT</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -115,10 +115,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>RPCAHT</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -127,10 +127,10 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<span translate>UnproductiveTime</span>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<input class="w-100p" id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="{{ 'ValueRange' | translate }}" numeric-value min="0" max="9999" required ng-disabled="isCreating" />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check right-sign"></i>
@@ -140,10 +140,10 @@
 						</div>
 						<br />
 						<div layout="row">
-							<div class="w-150">
+							<div class="row-title">
 								<strong translate>NeededPersonHours</strong>
 							</div>
-							<div flex class="icon-set-fix m-r-10p">
+							<div flex class="icon-set-fix">
 								<strong>{{estimatedWorkload | showTimespan }}</strong>
 							</div>
 

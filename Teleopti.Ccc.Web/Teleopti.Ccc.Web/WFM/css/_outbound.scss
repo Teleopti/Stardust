@@ -315,34 +315,22 @@
 		background-color:rgba(0,0,0,0.1);
 		z-index:1000;
 	}
+
 	.replan-loader{
 	    position:absolute;
 		top:42%;
 		left:48%;
 	}
-	.p-5-10{
-	    padding:5px 10px;
-	}
-	.m-r-0{
-	    margin-right:0;
-	}
-	.m-l-0{
-	    margin-left:0;
-	}
+
 	::-ms-clear{display: none;}
 
-    .m-t-20{
-	    margin-top:20px;
-	}
 	.wfm-btn-invis-disabled{
 	    color:rgba(0,0,0,.26) !important;
 	}
 	.pink{
 	    color: $pink-500;
 	}
-    .p-l-65{
-	    padding-left:65px;
-	}
+   
     .selected-ope-btn{
 	    box-shadow:inset 0 2px 5px 0 rgba(0,0,0,.26);
 		background-color:#ececec;
@@ -473,30 +461,11 @@
 	.wfm-list li:hover .wfm-checkbox-toggle:after {
 		background-color: $white;
 	}
+
 	.middle{
 	    vertical-align:middle;
 	}
-	.m-t-10{
-		margin-top: 10px;
-	}
-	.m-r-10{
-	    margin-right:10px !important;
-	}
-	.m-l-15{
-	    margin-left:15px !important;
-	}
-	.m-t-15{
-		margin-top: 15px !important;
-	}
-	.m-b-10{
-	    margin-bottom:10px !important;
-	}
-	.m-b-5{
-	    margin-bottom:5px !important;
-	}
-	.m-t-0{
-	    margin-top:0 !important;
-	}
+	
 	.move-down-5{
 		position:relative;
 		bottom:-5px;
@@ -633,18 +602,7 @@
 		color:#fff;
 		width:82px;
 	}
-	.m-r-5{
-		margin-right:5px;
-	}
-	.p-l-5{
-	    padding-left:5px;
-	}
-	.p-r-5{
-	    padding-right:5px;
-	}
-	.m-l-10{
-		margin-left:10px;
-	}
+	
 	.campaign-message{
 		background-color:#F44336;
 		padding:5px 10px;
@@ -698,10 +656,7 @@
 	.inline-block{
 	    display:inline-block;
 	}
-	.m-l-40{
-		margin-left:40px;
-	}
-
+	
 	.right-sign {
 		color: $green-100 ;
 	}
@@ -794,6 +749,19 @@
 				.activity-picker{
 					height:30px;
 				}
+
+				.row-title{
+					margin-right:10px;
+					min-width:150px;
+					text-align:right;
+				}
+
+				.icon-set-fix{
+					padding-right:20px;
+					input{
+						width:100%;
+					}
+				}
 			}
 		}
 
@@ -866,6 +834,19 @@
 			.activity-picker{
 				height:30px;
 			}
+
+			.row-title{
+				margin-right:10px;
+				min-width:150px;
+				text-align:right;
+			}
+
+			.icon-set-fix{
+				padding-right:20px;
+				input{
+					width:100%;
+				}
+			}
 		}
 	}
 
@@ -907,25 +888,10 @@
 	.icon-set{
 		position:absolute;
 		top:2px;
-		right:-20px;
+		right:0px;
 	}
 }
-.w-150{
-	width:150px;
-}
-.w-100p{
-	width:100%;
-}
-.no-boxshadow{
-	box-shadow:none;
-}
-.m-r-10p{
-	margin-right:10%;
-}
 
-.w-200{
-	width:200px;
-}
 .labelfix label{
 	display:inline-block !important;
 	height:20px;
