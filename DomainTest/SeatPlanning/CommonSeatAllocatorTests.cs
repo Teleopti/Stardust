@@ -78,7 +78,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			{
 				new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 			}
-			
+
+			//ROBTODO: remove diagnostics
+			Console.WriteLine(agentShift2.Seat.Name);
+			Console.WriteLine(agentShift1.Seat.Name);
+
+
 			Assert.That(agentShift2.Seat.Name == "Seat1");
 			Assert.That(agentShift1.Seat.Name == "Seat2");
 		}

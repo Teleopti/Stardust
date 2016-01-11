@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsToOneSeatEach (false);
 		}
 
-		[Test, Ignore("Test is failing on server")]
+		[Test]
 		public void ShouldAllocateAccordingToPriority()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority (false);

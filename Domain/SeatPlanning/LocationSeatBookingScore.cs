@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	public class LocationSeatBookingScore : IComparable<LocationSeatBookingScore>
 	{
 		public ISeatMapLocation Location { get; set; }
+		public int RequestOrder { get; set; }
 		public Guid GroupId { get; set; }
 		public int GroupSize { get; set; }
 		public List<SeatByIndexScore> ScoreList { get; set; }
@@ -52,6 +54,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				var comparisonStartTime = locationScore1EarliestStartTime.CompareTo(locationScore2EarliestStartTime);
 				if (comparisonStartTime != 0)
 					return comparisonStartTime;
+
+
+				var comparisonAddedRequestOrder = locationScore1.RequestOrder.CompareTo (locationScore2.RequestOrder);
+				if (comparisonAddedRequestOrder != 0)
+					return comparisonAddedRequestOrder;
 
 
 				return 0;
