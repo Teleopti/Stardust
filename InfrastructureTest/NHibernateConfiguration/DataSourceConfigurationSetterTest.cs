@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
@@ -78,8 +79,8 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void ShouldUseLatency()
 		{
 			var cfg = new Configuration();
-			var configReader = MockRepository.GenerateMock<IConfigReader>();
-			configReader.Expect(cr => cr.AppSettings_DontUse).Return(new NameValueCollection { { "latency", "3" } });
+			var configReader = new FakeConfigReader();
+			configReader.FakeSetting("latency", "3");
 
 			var target = new dataSourceConfigurationSetterForTest(false, null, null, configReader);
 
@@ -176,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForEtl();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Etl.Tool");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Etl");
 		}
 
 		[Test]
