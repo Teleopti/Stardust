@@ -105,3 +105,4 @@ Wfm_Requests_People_Search_36294 = RC
 Wfm_Requests_Performance_36295 = RC
 Wfm_Requests_ApproveDeny_36297 = DEV
 MyTimeWeb_TeamScheduleNoReadModel_36210 = RC
+WfmIntraday_MonitorActualvsForecasted_35176 = RC
