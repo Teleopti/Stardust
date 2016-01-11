@@ -48,7 +48,7 @@ Scenario: See statupdates after changing business unit
 	And the time is '2014-01-21 12:30:00'
 	When I view Real time adherence sites
 	And I change to business unit 'France'
-	And I view real time adherence for agents on team 'Red'
+	And I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	Then I should see agent status
 		| Name  |              |

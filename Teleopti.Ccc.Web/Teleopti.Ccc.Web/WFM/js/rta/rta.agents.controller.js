@@ -22,7 +22,7 @@
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
 				$scope.filteredData = [];
-				$scope.agentsInAlarm = toggleService.Wfm_RTA_ProperAlarm_34975;
+				$scope.agentsInAlarm = $stateParams.showAllAgents ? false : toggleService.Wfm_RTA_ProperAlarm_34975;
 				var options = RtaGridService.makeAllGrid();
 				options.data = 'filteredData';
 				$scope.allGrid = options;

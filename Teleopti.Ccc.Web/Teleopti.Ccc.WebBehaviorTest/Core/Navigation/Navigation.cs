@@ -482,7 +482,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId);
 		}
 
-
+		public static void GotoRealTimeAdherenceAllAgentsOnTeam(Guid businessUnitId, Guid siteId, Guid teamId)
+		{
+			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?showAllAgents=true");
+		}
+		
 		public static void GoToAgentDetails(Guid personId)
 		{
 			GoToPage("wfm/#/rta/agent-details/" + personId);

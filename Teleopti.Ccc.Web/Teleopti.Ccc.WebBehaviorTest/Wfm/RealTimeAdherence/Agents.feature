@@ -53,7 +53,7 @@ Scenario: See current states
 	Given the time is '2014-01-21 12:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
-	When I view real time adherence for agents on team 'Red'
+	When I view real time adherence for all agents on team 'Red'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status
 		| Field                    | Value        |
@@ -78,7 +78,7 @@ Scenario: See current states
 
 Scenario: See state updates
 	Given the time is '2014-01-21 12:30:00'
-	When I view real time adherence for agents on team 'Red'
+	When I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2014-01-21 12:45:00'
@@ -105,7 +105,7 @@ Scenario: See state updates
 
 Scenario: See all agents of the team even without state updates
 	Given the time is '2014-01-21 12:30:00'
-	When I view real time adherence for agents on team 'Red'
+	When I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the time is '2014-01-21 12:45:00'
 	Then I should see agent status for 'Pierre Baldi'
@@ -125,7 +125,7 @@ Scenario: See agent status when call center is in Istanbul
 	When the utc time is '2015-03-24 06:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2015-03-24 07:00:00'
-	And I view real time adherence for agents on team 'Red'
+	And I view real time adherence for all agents on team 'Red'
 	Then I should see agent status
 		| Field                    | Value        |
 		| Name                     | Pierre Baldi |

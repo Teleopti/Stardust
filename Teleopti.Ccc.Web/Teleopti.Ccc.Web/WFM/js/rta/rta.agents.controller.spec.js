@@ -428,4 +428,12 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.filteredData.length).toEqual(0);
 	});
+
+	it('should show all agents if it is specified by url', function() {
+		stateParams.showAllAgents = true;
+
+		createController();
+
+		expect(scope.agentsInAlarm).toEqual(false);
+	});
 });
