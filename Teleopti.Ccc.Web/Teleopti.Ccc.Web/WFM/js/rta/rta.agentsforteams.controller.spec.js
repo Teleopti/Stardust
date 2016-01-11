@@ -43,7 +43,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#00FF00",
+			Color: "#00FF00",
 			TimeInState: 15473
 		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
@@ -54,7 +54,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "Out of Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#FF0000",
+			Color: "#FF0000",
 			TimeInState: 15473
 		}];
 
@@ -183,7 +183,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#00FF00",
+			Color: "#00FF00",
 			TimeInState: 15473
 		}, {
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
@@ -194,7 +194,7 @@ describe('RtaAgentsCtrl for teams', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "Out of Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#FF0000",
+			Color: "#FF0000",
 			TimeInState: 15473
 		}];
 
@@ -207,7 +207,7 @@ describe('RtaAgentsCtrl for teams', function() {
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
 		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
-		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
+		expect(scope.agents[0].Color).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 
 		expect(scope.agents[1].State).toEqual("In Call");
@@ -217,7 +217,7 @@ describe('RtaAgentsCtrl for teams', function() {
 		expect(scope.agents[1].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[1].Alarm).toEqual("Out of Adherence");
 		expect(scope.agents[1].AlarmStart).toEqual("\/Date(1432105910000)\/");
-		expect(scope.agents[1].AlarmColor).toEqual("#FF0000");
+		expect(scope.agents[1].Color).toEqual("#FF0000");
 		expect(scope.agents[1].TimeInState).toEqual(15473);
 	});
 

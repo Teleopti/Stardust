@@ -36,7 +36,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#00FF00",
+			Color: "#00FF00",
 			TimeInState: 15473
 		}];
 
@@ -139,7 +139,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#00FF00",
+			Color: "#00FF00",
 			TimeInState: 15473
 		}];
 
@@ -152,7 +152,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
 		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
-		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
+		expect(scope.agents[0].Color).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});
 
@@ -183,7 +183,7 @@ describe('RtaAgentsCtrl', function() {
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
 			AlarmStart: "\/Date(1432105910000)\/",
-			AlarmColor: "#00FF00",
+			Color: "#00FF00",
 			TimeInState: 15473
 		}];
 
@@ -196,7 +196,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
 		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
-		expect(scope.agents[0].AlarmColor).toEqual("#00FF00");
+		expect(scope.agents[0].Color).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});
 
