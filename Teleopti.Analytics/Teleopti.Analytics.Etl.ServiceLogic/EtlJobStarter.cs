@@ -4,10 +4,8 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Timers;
 using Autofac;
 using log4net;
-using log4net.Config;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -16,14 +14,10 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
-using Timer = System.Timers.Timer;
+using PersianCultureHelper = Teleopti.Interfaces.Domain.PersianCultureHelper;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic
 {
@@ -34,80 +28,32 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private readonly string _connectionString;
 		private readonly string _cube;
 		private readonly string _pmInstallation;
-		private readonly IContainer _container;
 		private JobHelper _jobHelper;
-		private readonly Timer _timer;
+		private IContainer _container;
 		private DateTime _serviceStartTime;
+		private Action _stopService;
 
-		public event EventHandler NeedToStopService;
-		
 		public EtlJobStarter()
 		{
-			XmlConfigurator.Configure();
-
-			try
-			{
-				_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-				_cube = ConfigurationManager.AppSettings["cube"];
-				_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
-				_container = configureContainer();
-				_jobHelper = new JobHelper(
-					_container.Resolve<ILoadAllTenants>(),
-					_container.Resolve<ITenantUnitOfWork>(),
-					_container.Resolve<IAvailableBusinessUnitsProvider>());
-				_timer = new Timer(10000);
-				_timer.Elapsed += tick;
-			}
-			catch (Exception ex)
-			{
-				log.Error("The service could not be started", ex);
-				throw;
-			}
+			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+			_cube = ConfigurationManager.AppSettings["cube"];
+			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
 		}
 
-		public void Start()
+		public void Init(IContainer container, DateTime serviceStartTime, Action stopService)
 		{
-			log.Info("The service is starting.");
-			_timer.Start();
-			_serviceStartTime = DateTime.Now;
-			log.Info("The service started at " + _serviceStartTime);
+			_container = container;
+			_serviceStartTime = serviceStartTime;
+			_stopService = stopService;
+			_jobHelper = new JobHelper(
+				_container.Resolve<ILoadAllTenants>(),
+				_container.Resolve<ITenantUnitOfWork>(),
+				_container.Resolve<IAvailableBusinessUnitsProvider>());
 		}
 
-		void tick(object sender, ElapsedEventArgs e)
+		public bool Tick()
 		{
-			var isStopping = false;
-			try
-			{
-                log.Debug("Tick");
-                _timer.Stop();
-                log.Debug("Timer stopped");
-
-				var success = checkForEtlJob();
-
-				isStopping = !success;
-			}
-			catch (Exception ex)
-			{
-				log.Error("Exception occurred in tick", ex);
-			}
-			finally
-			{
-			    try
-			    {
-                    log.DebugFormat("Stopping: {0}", isStopping);
-			        if (!isStopping)
-			        {
-                        log.Debug("Starting timer");
-			            _timer.Start();
-                        log.Debug("Timer started");
-                    }
-			    }
-			    catch (Exception ex)
-			    {
-			        log.Error(ex);
-			        throw;
-			    }
-			}
+			return checkForEtlJob();
 		}
 
 		private bool checkForEtlJob()
@@ -118,7 +64,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			{
 				log.Debug("Configuration not valid");
 				logInvalidConfiguration(configHandler);
-				NeedToStopService(this, null);
+				_stopService();
 				return false;
 			}
 
@@ -144,7 +90,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 
 			var culture = CultureInfo.CurrentCulture;
 			if (configHandler.BaseConfiguration.CultureId.HasValue)
-				culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+				culture = PersianCultureHelper.FixPersianCulture(CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value));
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			log.Debug("Extracting job to run from schedule");
@@ -170,11 +116,11 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			var jobStepsNotToRun = new List<IJobStep>();
 			var runController = new RunController((IRunControllerRepository)repository);
 
-            log.Debug("Checking if permitted to run");
+			log.Debug("Checking if permitted to run");
 			IEtlRunningInformation etlRunningInformation;
 			if (runController.CanIRunAJob(out etlRunningInformation))
 			{
-                log.Debug("Trying to aquire lock");
+				log.Debug("Trying to aquire lock");
 				using (var etlJobLock = new EtlJobLock(_connectionString))
 				{
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
@@ -230,7 +176,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 
 		private static void logInvalidLicense(string tenant)
 		{
-			log.WarnFormat("ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",tenant);
+			log.WarnFormat("ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.", tenant);
 		}
 
 		private static void logInvalidConfiguration(ConfigurationHandler configHandler)
@@ -247,22 +193,6 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				culture, intervalLength, timeZone);
 		}
 
-		private static IContainer configureContainer()
-		{
-			var builder = new ContainerBuilder();
-			var iocArgs = new IocArgs(new ConfigReader());
-			var configuration = new IocConfiguration(
-						  iocArgs,
-						  CommonModule.ToggleManagerForIoc(iocArgs));
-
-			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule(new EtlModule(configuration));
-			return builder.Build();
-		}
-
-
-
-
 
 		public void Dispose()
 		{
@@ -274,12 +204,6 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		{
 			if (disposing)
 			{
-				log.Info("The service is stopping.");
-				if (_timer != null)
-				{
-					_timer.Stop();
-					_timer.Dispose();
-				}
 				if (_jobHelper != null)
 				{
 					_jobHelper.Dispose();
@@ -287,7 +211,5 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				}
 			}
 		}
-
 	}
-
 }

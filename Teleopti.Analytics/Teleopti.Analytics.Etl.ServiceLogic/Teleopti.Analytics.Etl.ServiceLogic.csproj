@@ -87,9 +87,10 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="EtlJobStarter.cs" />
     <Compile Include="JobExtractor.cs" />
     <Compile Include="SchedulePriority.cs" />
-    <Compile Include="EtlJobStarter.cs" />
+    <Compile Include="EtlService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

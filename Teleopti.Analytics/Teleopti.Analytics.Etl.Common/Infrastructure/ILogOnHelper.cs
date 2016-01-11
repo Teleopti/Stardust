@@ -8,7 +8,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public interface ILogOnHelper : IDisposable
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IList<IBusinessUnit> GetBusinessUnitCollection();
 		List<ITenantName> TenantCollection { get; }
 		IDataSourceContainer SelectedDataSourceContainer { get; }

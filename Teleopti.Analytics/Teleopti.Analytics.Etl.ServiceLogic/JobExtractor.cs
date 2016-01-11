@@ -13,12 +13,16 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 {
 	internal static class JobExtractor
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public static IJob ExtractJobFromSchedule(
-			IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, 
-			string timeZoneId, int intervalLengthMinutes, string cube,
-			string pmInstallation, IContainer container, 
-			bool runIndexMaintenance, CultureInfo culture)
+			IEtlJobSchedule etlJobScheduleToRun, 
+			JobHelper jobHelper, 
+			string timeZoneId, 
+			int intervalLengthMinutes, 
+			string cube,
+			string pmInstallation, 
+			IContainer container, 
+			bool runIndexMaintenance, 
+			CultureInfo culture)
 		{
 			var log = LogManager.GetLogger(typeof(JobExtractor));
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);

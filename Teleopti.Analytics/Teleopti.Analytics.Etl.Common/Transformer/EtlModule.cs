@@ -1,21 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Reflection;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Interfaces.Infrastructure;
-using Module = Autofac.Module;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
