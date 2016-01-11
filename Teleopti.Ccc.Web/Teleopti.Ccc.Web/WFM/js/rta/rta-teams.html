@@ -9,7 +9,7 @@
 				<div class="con-row demo-outline">
 								<div class="con-flex">
 												<div class="card-group">
-																<div class="wfm-card team rta-info-card" ng-class="{'rta-grid': teams.length > 5, 'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" ng-repeat="team in teams">
+																<div class="wfm-card team rta-info-card" ng-class="{'no-agents': team.NumberOfAgents < 1, good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" ng-repeat="team in teams">
 																				<div class="wfm-checkbox">
 																								<label ng-attr-name="{{team.Name}}" style="width: 20px; height: 20px; display:block !important;">
 																												<input name="checkbox" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected" type="checkbox" value="value">
@@ -17,14 +17,11 @@
 																								</label>
 																				</div>
 																				<div class="rta-trigger-area" ng-click="onTeamSelect(team)">
-																								<b class="site-name" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">{{team.Name}}</b>
+																								<p class="site-name" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">{{team.Name}}</p>
 																								<div class="site-data">
-																												<div>
-																																<span>{{siteName}}</span>
-																																<p>{{'OutOfAdherence'|translate}}:
-																																				<b>{{team.OutOfAdherence}}</b>
-																																</p>
-																												</div>
+																												<p>{{'OutOfAdherence'|translate}}:&nbsp;
+																																<p class="rta-adherence">{{team.OutOfAdherence}}</p>
+																												</p>
 																								</div>
 																				</div>
 																</div>

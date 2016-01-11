@@ -1,10 +1,6 @@
 /////////Sites & teams///////////////
-.rta-info-card{
-	width:48%;
-}
-
-.rta-config {
-				display: inline-flex;
+.rta-info-card {
+				width: 48%;
 }
 .rta-list-item {
 				padding: 1%;
@@ -15,77 +11,61 @@
 								background-color: $green-100!important;
 				}
 }
-
-.good{
-			background-color: $green-100!important;
-			&:hover {
-							transition: background 0.5s linear 0s;
-							background-color: $green-400 !important;
-			}
+.good {
+				background-color: $green-100!important;
+				&:hover {
+								transition: background 0.5s linear 0s;
+								background-color: $green-400 !important;
+				}
 }
-.warning{
-	background-color: $orange-400  !important;
-	&:hover {
-					transition: background 0.5s linear 0s;
-					background-color: $orange-600!important;
-	}
+.warning {
+				background-color: $orange-400 !important;
+				&:hover {
+								transition: background 0.5s linear 0s;
+								background-color: $orange-600!important;
+				}
 }
-.danger{
-	background-color: $red-600 !important;
-	&:hover {
-					transition: background 0.5s linear 0s;
-					background-color: #e55539!important;
-	}
+.danger {
+				background-color: $red-600 !important;
+				&:hover {
+								transition: background 0.5s linear 0s;
+								background-color: #e55539!important;
+				}
 }
-.rta-stats {
-				justify-content: space-between;
+.rta-checkbox {
+				width: 10%;
 }
 .rta-nav-link {
 				cursor: pointer;
-}
-.rta-list {
-				display: inline-flex;
-				max-width: 49%;
-				margin: 5px;
-}
-.rta-grid {
-				display: inline-flex;
-				max-width: 30%;
-				margin: 5px;
-				min-height: 110px;
 }
 .site-name {
 				font-size: 20px;
 				font-weight: bolder;
 }
-.rta-stats {
-				display: inline-flex;
-				width: 100%;
-}
-.rta-stats .wfm-checkbox {
-				width: auto!important;
+.rta-adherence {
+					font-weight: bolder;
 }
 .rta-trigger-area {
 				width: 100%;
-				height:100%;
+				height: 95px;
 }
 .site-data {
 				margin-top: 10px;
-				width: 100%;
+				display: inline-flex;
 }
 .no-agents {
-	cursor: not-allowed;
-	&:hover {
-					transition: background 0.5s linear 0s;
-					background-color: $gray-300  !important;
-	}
+				cursor: not-allowed;
+				&:hover {
+								transition: background 0.5s linear 0s;
+								background-color: $gray-300 !important;
+				}
 }
-/////////End of Sites & teams///////////////
 
+/////////End of Sites & teams///////////////
 ///////////rta-agents///////////////////////
-.rta-agents-input{
-			  display: inline-flex;
-			  width:100%;
+.rta-agents-input {
+				display: inline-flex;
+				width: 100%;
 }
 .rta-search {
 				padding: 10px 0;
@@ -112,7 +92,6 @@
 }
 
 ///////////End of rta-agents////////////////
-
 ///////////rta-agent-details///////////////
 .rta-agent-details {
 				height: 100%;
@@ -125,13 +104,15 @@
 .rta-agent-details-total {
 				margin-left: 78%;
 }
+
 ///////////End of rta-agent-details///////////
 ///////////////Media/////////////////////////
 @media only screen and (max-width: 840px),
 only screen and (max-device-width: 840px) {
 				.rta-info-card {
 								max-width: 98%!important;
-								width:98%!important;
+								width: 98%!important;
 				}
 }
+
 ///////////////End of Media/////////////////////////

@@ -6,18 +6,18 @@
 				<div class="con-row demo-outline">
 								<div class="con-flex">
 												<div class="card-group">
-																<div class="wfm-card site rta-info-card" ng-class="{'rta-grid': sites.length > 5, 'no-agents': site.NumberOfAgents < 1, good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" ng-repeat="site in sites" tabindex="0">
-																				<div class="wfm-checkbox">
+																<div class="wfm-card site rta-info-card" ng-class="{'no-agents': site.NumberOfAgents < 1, good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" ng-repeat="site in sites" tabindex="0">
+																				<div class="wfm-checkbox rta-checkbox">
 																								<label ng-attr-name="{{site.Name}}" style="width: 20px; height: 20px; display:block !important;">
 																												<input ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected" type="checkbox" value="value">
 																												<span class="wfm-checkbox-toggle"></span>
 																								</label>
 																				</div>
 																				<div class="rta-trigger-area" ng-click="onSiteSelect(site)">
-																								<b class="site-name" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">{{site.Name}}</b>
+																								<p class="site-name" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">{{site.Name}}</p>
 																								<div class="site-data">
-																												<p>{{'OutOfAdherence'|translate}}:
-																																<b>{{site.OutOfAdherence}}</b>
+																												<p>{{'OutOfAdherence'|translate}}:&nbsp;
+																													<p class="rta-adherence">{{site.OutOfAdherence}}</p>
 																												</p>
 																								</div>
 																				</div>
