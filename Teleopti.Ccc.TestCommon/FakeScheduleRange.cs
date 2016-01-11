@@ -144,7 +144,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Reassociate(IUnitOfWork unitOfWork)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }
