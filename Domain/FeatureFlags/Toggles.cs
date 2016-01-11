@@ -56,7 +56,6 @@
 		MyTimeWeb_KeepUrlAfterLogon_34762,
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 
-
 		Backlog_Module_23980,
 
 		ETL_SpeedUpETL_30791,
@@ -90,10 +89,11 @@
 		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SwapShifts_36231,
+		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 		ResourcePlanner_WeeklyRestSolver_35043,
-		
+
 		Wfm_Requests_Basic_35986,
 		Wfm_Requests_People_Search_36294,
 		Wfm_Requests_Performance_36295,
