@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Aop.Core
 			AspectType = aspectType;
 		}
 
-		public Type AspectType { get; set; }
+		public Type AspectType { get; private set; }
 	}
 }
