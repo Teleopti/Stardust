@@ -196,26 +196,25 @@
 		<button class="wfm-btn material-depth-1 form-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
 		<button class="wfm-btn material-depth-1 wfm-btn-primary trigger-campaign-delete" ng-click="removeCampaign()"><span translate>Remove</span></button>
 	</div>
-</div>
 
-<div ng-cloak class="modal-box">
-	<div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
-		<div class="modalbg">
-			<div class="dialog">
-				<h1 class="modal-title" translate>
-					RemoveCampaign
-				</h1>
-				<div class="modal-inner-content">
-					<div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
-				</div>
-				<div class="modal-actions">
-					<aside>
-						<button ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
-						<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary" translate>Ok</button>
-					</aside>
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
+			<div class="modalbg">
+				<div class="dialog">
+					<h1 class="modal-title" translate>
+						RemoveCampaign
+					</h1>
+					<div class="modal-inner-content">
+						<div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
+							<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary" translate>Ok</button>
+						</aside>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </div>
