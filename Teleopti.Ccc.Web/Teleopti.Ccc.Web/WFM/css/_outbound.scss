@@ -361,13 +361,14 @@
 		display: inline-block;
 		padding-left: 10px;
 		height:40px;
-		width:35%;
+		width:40%;
 		position:relative;
 		bottom:-2px;
 		float:left;
 		min-width:290px;
 		max-width:400px;
 		white-space:nowrap;
+		
 		input{
 			margin-top:10px;
 			width:190px;
@@ -378,7 +379,11 @@
 			position: absolute;
 			top: 0;
 			right: 0;
-			margin-top: 2px;
+			height:100%;
+
+			button{
+				line-height:1;					
+			}
 		}
 	}
 	.multi-inputfix input{

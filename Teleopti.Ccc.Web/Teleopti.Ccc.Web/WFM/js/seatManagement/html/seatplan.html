@@ -1,12 +1,15 @@
 ﻿<div class="view-header seatplan-header">
 	<div class="view-title">
 		<h1 ng-if="seatplan.isReportOpened">
+			<i class="mdi mdi-tab-unselected"></i>
 			{{"SeatPlanReport" | translate}}
 		</h1>
 		<h1 ng-if="seatplan.isSeatMapBookingViewOpened">
+			<i class="mdi mdi-tab-unselected"></i>
 			{{"SeatBookings" | translate}}
 		</h1>
 		<h1 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
+			<i class="mdi mdi-tab-unselected"></i>
 			{{"SeatPlan" | translate}}
 		</h1>
 	</div>
