@@ -116,7 +116,6 @@
 				'node_modules/filesaver.js/FileSaver.min.js',
 				'node_modules/jquery/dist/jquery.min.js',
 				'node_modules/ms-signalr-client/jquery.signalr-2.2.0.min.js',
-				'node_modules/angular-signalr-hub/signalr-hub.min.js',
 				'vendor/hammerjs/hammer.min.js',
 				'node_modules/angular-material/angular-material.min.js',
 				'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',

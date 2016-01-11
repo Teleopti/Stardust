@@ -18,7 +18,6 @@
     "angular-route": "1.4.5",
     "jquery": "2.1.4",
     "ms-signalr-client": "2.2.0",
-    "angular-signalr-hub": "1.5.0",
     "angular-translate": "2.7.2",
     "angular-dynamic-locale": "0.1.28",
     "angular-i18n": "1.4.5",
