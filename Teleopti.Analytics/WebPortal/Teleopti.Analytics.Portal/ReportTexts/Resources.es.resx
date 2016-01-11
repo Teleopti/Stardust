@@ -1095,4 +1095,10 @@
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Incumplido</value>
   </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value>Inicio de Sesión Exitoso</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
 </root>

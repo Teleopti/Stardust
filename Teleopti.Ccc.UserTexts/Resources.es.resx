@@ -244,7 +244,7 @@
     <value>Llamadas contestadas</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Aplicar Nombre de Inicio de Sesión</value>
+    <value>Nombre de usuario de la apl.</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
@@ -5753,7 +5753,7 @@ Teleopti R&amp;D</value>
     <value>Alertas</value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
-    <value>Este es el último asistente a esta reunión. Le gustaría borrar la reunión {0}?</value>
+    <value>Este es el último asistente a esta reunión. Le gustaría borrar la reunión "{0}"?</value>
   </data>
   <data name="OriginalOfferedCalls" xml:space="preserve">
     <value>Llam. Ofrecidas Originales</value>
@@ -8444,7 +8444,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>El destino de fichero seleccionado no existe, por favor introduzca un destino válido</value>
   </data>
   <data name="CouldNotExportForecastToFile" xml:space="preserve">
-    <value>Error inesperado en la exportación de fichero, por fvor intente con otro destino</value>
+    <value>Error inesperado en la exportación de fichero, por favor intente con otro destino</value>
   </data>
   <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
     <value>El destino de fichero es demasiado largo, por favor introduzca un destino válido</value>
@@ -8625,7 +8625,7 @@ La longitud actual de la asignación es {1} hrs.</value>
   </data>
   <data name="ShiftGenerationStop" xml:space="preserve">
     <value>Atención! Estas reglas son extremadamente complejas y los turnos no han podido ser generados dentro del tiempo habilitado.
-Los turnos generados por está regla no estarán disponibles para planificación u optimización.</value>
+Los turnos generados por esta regla no estarán disponibles para planificación u optimización.</value>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
     <value>Atención! Generar turnos con estas reglas se tarda demasiado. Esto influirá negativamente en el rendimiento a a la hora de planificar u optimizar!</value>
@@ -9376,5 +9376,1047 @@ Los turnos generados por está regla no estarán disponibles para planificación
   </data>
   <data name="ShowDuplicateRecipient" xml:space="preserve">
     <value>Mostrar Recipiente duplicado</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>Umbral de campaña</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Debes elegir al menos un día!</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Mapa de Puestos</value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Umbral para plata (%):</value>
+  </data>
+  <data name="Teleopti" xml:space="preserve">
+    <value>Teleopti</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Umbral para oro (%):</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rango</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>Quitar Campaña</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Día Cerrado</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Umbral para oro:</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de bronce por Llamadas Contestadas debe ser menor que el umbral para una medalla de plata.</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de plata por Llamadas Contestadas debe ser menor que el umbral para una medalla de oro.</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Usar actividad existente</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>La campaña {0} ha sido creada.</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>Editar Campaña</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Crear Campaña</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publicar...</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>Tiempo Improductivo</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Horario de Trabajo</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPCR(%)</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RPC AHT(s)</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progreso</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>Borrar Campaña</value>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>Conectar AHT(s)</value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>Campañas</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>Nombre de la Campaña</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>Campaña</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>Está seguro que quiere borrar esta campaña?</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Umbral para plata:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Umbral para bronce:</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>Teleopti WFM MyTime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Schedule Messenger</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Borrar Imprescindible</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>El umbral para una medalla de plata por Llamadas Contestadas debe ser mayor que el umbral para una medalla de bronce.</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>El umbral para una medalla de oro por Llamadas Contestadas debe ser mayor que el resto.</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Agregar Imprescindible</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Día Vacío</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Día Libre o Día Vacío</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Día Libre</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Caducado</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completado</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Quiero un turno que cumpla las siguientes condiciones:</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Está seguro que desea borrar esta petición?</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Notificar Agente</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Usar medallas para Llamadas Contestadas</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Usar medalla para AHT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Usar medalla para Adherencia</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Umbral para bronce (%):</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Nueva propiedad de jueguificación</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Introducir detalles de configuración de jueguificación</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Configuración de Jueguificación:</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Regla:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Administrar Propiedades de Jueguificación</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Establecer Objetivos de Jueguificación</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Seleccionar propiedades para los equipos</value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>En adherencia</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>El valor del umbral oro para adherencia debe ser mayor que el resto.</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>El valor del umbral plata para adherencia debe ser mayor que el umbral bronce para adherencia.</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>El valor del umbral oro para AHT debe ser menor que el resto.</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>El valor del umbral plata para AHT debe ser menor que el umbral bronce para AHT.</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Crear un nuevo rol</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Filtro de datos...</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicar</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Administrar permisos</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Aquí puedes definir quiénes tienen acceso a partes específicas de la aplicación</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtro de permisos...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtro de roles...</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>Adherencia no puede estar vacía</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Error al actualizar la campaña: {0}</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>La campaña {0} ha sido actualizada.</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>Nombre de la nueva actividad</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>Nombre de la nueva Campaña</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>nombre y apellido están vacíos;</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>El nombre de la campaña es inválido. El nombre puede contener un máximo de 255 caracteres.</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>Contraseña vacía;</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>En curso</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>el rol {0} no existe;</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>Nombre demasiado largo;</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>el nombre de usuario de Windows es inválido</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>Temprano</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>Tarde</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Importar usuarios</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Todas las personas en esta página están seleccionadas.</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Haz click aquí para seleccionar todas las personas en cada página.</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Ver Reporte</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>Está seguro que quiere borrar esta campaña?</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Aplicar Clave de Activación de Producto</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>No se pudo acceder a la Clave de Activación de Producto "{0}"  
+Detalles del error:
+{1}</value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Su clave de activación de producto ha expirado. Por favor aplique una nueva.</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>La clave de activación de producto "{0}" que está intentando aplicar es vieja y ya ha expirado.</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>La clave de activación de producto "{0}" es inválida, puede ser falsificada</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>La clave de activación de producto "{0}" no está en un formato (xml) válido
+Detalles del error:
+{1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Todavía no ha aplicado la clave de activación de producto, por favor hagalo. </value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>La aplicación de clave de activación de producto ha fallado</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Eliga el archivo de la clave de activación de producto</value>
+  </data>
+  <data name="WorkflowControlSet" xml:space="preserve">
+    <value>Workflow control set</value>
+  </data>
+  <data name="WorkflowControlSetColon" xml:space="preserve">
+    <value>Workflow Control Set:</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Inválido</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Esta clave de activación de producto sólo cubre {0} puestos. Debe obtener una clave de activación de producto que cubra más puestos.</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Está a punto de alcanzar el límite de su licencia de {0} puestos. Por favor actualice su clave de activación de producto. </value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Está usando demasiados puestos, su licencia es de {0} puestos. Debe actualizar su clave de activación de producto para poder continuar. </value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Workflow Control Set</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Calcular medalla con rango</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Umbral para bronce (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Umbral para plata (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Umbral para oro (HH:mm:ss):</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de bronce por AHT debe ser mayor que el umbral para una medalla de plata.</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de plata por AHT debe ser mayor que el umbral para una medalla de oro.</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de bronce por Adherencia debe ser menor que el umbral para una medalla de plata.</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>El umbral para una medalla de plata por Adherencia debe ser menor que el umbral para una medalla de oro.</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Ver Medalla</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Ver Tabla de Posiciones</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Nombre] [Apellido]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Descripción del Agente</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Múltiples</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Restablecer Medellas</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Esto quitará todas las medallas para todos los agentes! Si hace click en OK, las medallas serán borradas y no podrán recuperarse. Desea continuar?</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Ajustar los turnos para que coincidan con la bolsa de turnos</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>No se encontraron turnos válidos en la bolsa de turnos</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Error al intentar restablecer medallas, por favor intente más tarde!</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} no puede ser más temprano que {1}</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Propiedades de E-mail</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Enviar e-mail desde:</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Tabla de Posiciones</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Por favor, habilitar al menos un tipo de medalla.</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>No se puede obtener la propiedad de preferencias.</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Reporte de Ausencias</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Ausencias permitidas en el reporte de ausencias</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Ausencia no puede ser reportada</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Está seguro que desea eliminar {0} de las propiedades de jueguificación?</value>
+  </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Eliminar propiedad de jueguificación</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Jueguificación</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Nueva propiedad de medallas</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Usar diferentes umbrales</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Usar ratio de conversión</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Elija la propiedad de jueguificación a editar</value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Planificador de Puestos</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>Una ubicación debe ser seleccionada</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>El día {0} has sido asignado al puesto {1}.</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>No tienes un asiento asignado en el día {0}.</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Buscar nombre</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>Tablón de Anuncios por orden de llegada</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Ordenar categoría de turno de mejor a peor</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Ordenar días de trabajo de mejor a peor</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>Ningúna configuración de jueguificación.</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Plan de Puestos</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Outbound</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>Longitud de la Lista de Llamadas</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>Campañas Outbound</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>No se ha podido asignar un puesto a algunos agentes en esta fecha</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>El plan de puestos está en progreso para esta fecha</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>No hay puestos planeados en esta fecha</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>Todos los agentes seleccionados tienen un puesto asignado</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>agentes</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filtrar ubicaciones</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>Cargar Status del Plan de Puestos</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>No hay ubicaciones disponibles</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>Planeando Puestos para</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>Planear Puestos</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>puestos</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>El plan de puestos ha sido enviado con éxito</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>equipos o ubicaciones sin seleccionar</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Error al crear campaña: {0}</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Error al cargar campaña: {0}</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>No hay Reporte para las Condiciones Actuales</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Reporte de Plan de Puestos</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Ver reservas de puestos</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Puede que necesite cambiar la bolsa de turnos en consecuencia.</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Cambiar bolsa de turnos</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Escoge una bolsa de turnos</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>El puesto seleccionado no tiene ninguna reserva para esta fecha</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Error al remover la campaña: {0}</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Personas Seleccionadas</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Restablecer selección</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Reservas de puestos</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>ApplicationUserId debe ser una dirección de e-mail válida;</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>La reserva del puesto {0} para {1} ha sido eliminada</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Día de Trabajo</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>El inicio de sesión falló! Ninguna cuenta conectada a {0}.</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Su clave de activación de producto es válida hasta el {0}, no se olvide de renovarla a tiempo</value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>La fecha de inicio debe ser posterior a hoy</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Un equipo debe ser seleccionado</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>La fecha de inicio ser la fecha de fin o anterior</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>La fecha de inicio debe ser hoy o posterior</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Mostrar el reporte en PDF</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Apellido] [Nombre]</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>Horas Necesarias</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Debe establecer la fecha de inicio y de fiin.</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>La fecha de inicio debe ser igual o anterior a la de fin</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>usuario de windows duplicado;</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>La identidad ({0}) ya existe, por favor seleccione otra.</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>apellido demasiado largo;</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>archivos rechazados;</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Administrar People</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>People</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>contraseña inválida;</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Columna faltante: {0}.</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planeada</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Aplicar a</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>El proceso falló! Error:</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Entre días libres</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Generar Reporte</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Planeado Manualmente</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Ajustes de Notificación</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Tipo de Notificación</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Hora de fin</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Hora de comienzo</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>El objetivo de {0} días libres no se cumplió</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Todos los miembros del equipo deben estar cargados</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Problema de equilibrio intra intervalo</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtro sobre intra intervalos</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>días fueron planificados</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>La preferencia no pudo ser añadida porque el objeto seleccionado ya no está disponible.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Equilibrio intra intervalo</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Equiilibrio intra intervalo más bajo</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Tablón de Cambios de Turno</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publicar planificaciones para:</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Periodo de Planificación</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publicar planificaciones hasta:</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>nombre de usuario de windows demasiado largo;</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Este turno ha sido tomado por otra persona, por favor elige otro turno en el tablón de cambios de turno.</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publicar Planificación</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Hora de comienzo debe ser más temprano que la hora de fin</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>No hay turnos disponibles para cambio que coincidan con tu turno</value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>No hay Previsiones para este skill</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Debes fjar la hora de comienzo y de fin</value>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>Ratio Objetivo(%)</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Publicar Turno para Cambio</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Por favor seleccione fechas en el gráfico.</value>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>Ratio de Conexión(%)</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Oferta de cambio de turno válida hasta</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>La fecha del anuncio de cambio de turno tiene que ser dentro del periodo  abierto para cambios de turno</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>La fecha de validez debe ser entre hoy y el día antes de la fecha de la oferta de cambio de turno!</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>Pronosticar todo</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>No se puede publicar un turno para cambio en un día de ausencia!</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>Selección de periodo</value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>Generar previsión</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Anuncio de Cambio de Turno Inválido</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Tu anuncio de cambio de turno {0} es inválido porque tu turno ha sido cambiado.</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Anuncio de Cambio de Turno</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Anuncio de Cambio de Turno</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>Backlog Manual</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Tablón de Anuncios Anónimo</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Otros</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>Panificación Manual</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Está seguro que quiere hacer este cambio de turno?</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Filtro sobre horarios de apertura</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>id usuario de aplicación demasiado largo;</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>Planif. MyTeam</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>No se pudo obtener mensajes del message broker</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Horas por semanas es inválido. Posible razón: Máximo horas por semanas es menor que mínimo horas por semana.</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>Diculpe, el sistema está ocupado en este momento. Intente con una selección de datos más acotada o inténtelo más tarde.</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Los pasos de optimización {0} no se ejecutan cuando se planifica en bloque o por equipos.</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Arriba</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Seleccione de qué columna se tomará el nr. tel. para SMS:</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>Número de Empleado</value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>teniendo un rango de</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>Cambiar periodo de planificación a</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>Elija el periodo futuro a pronosticar.</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>Ver el gráfico de método</value>
+  </data>
+  <data name="ForecastChartIntro" xml:space="preserve">
+    <value>Basándose en los volúmenes anteriores a los datos históricos, los métodos de predicción se han creado y aplicado en el año anterior. El método más exacto está se muestra actualmente en el gráfico y se utilizará para su próxima previsión.</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Añada una autorización específica a la siguiente lista:</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Elija un nivel global de autorización:</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Envío de prueba a:</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>El nombre de usuario ({0}) ya existe, por favor elija otro.</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Próximo Periodo de Planificación</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>no hay cuenta de usuario de la aplicación;</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>Más encabezados</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Faltan los siguientes requerimientos para poder planificar el próximo periodo:</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Instrucciones:
+* Compre una licencia (información de contacto en www.teleopti.com)
+* Recibirá un archivo con la clave de activación de producto (e.g. via e-mail)
+* Guarde la clave de activación de producto en el disco
+* Si tiene trabajo sin guardar en la aplicación, guárdelo antes de aplicar la clave de activación de producto
+* Busque la clave de activación de producto usando el botón abajo de este mensaje
+* Aplique la clave de activación de producto
+* La aplicación se cerrará
+* Reinicie MyTime para obtener las opciones recién activadas.</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>El próximo periodo de planificación comienza:</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Falta previsión desde</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>problemas</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Controlando los requerimientos </value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Objetos habilitados</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Introduzca un nombre de archivo válido, incluyendo destino</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>La aplicación de su clave de activación de producto fue exitosa.
+Felicitaciones! Ahora tienes licencia para usar esta galardonada solución para workforce management.
+La aplicación se cerrará ahora.
+
+Importante:
+Para lograr el pleno funcionamiento de todos los servicios y aplicaciones web y tener acceso a las opciones recién activadas, solicite a su IT que ejecute "Restart Teleopti WFM" en la carpeta Teleopti en el menú Inicio en el servidor.</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Reportar ausencia para</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>id de usuario de aplicación duplicada;</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Exitosa importación cuenta:</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Su clave de activación de producto es inválida, posiblemente fue modificada. Por favor aplique una nueva.</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Hubo un problema al intentar guardar la clave de activación de producto en la base de datos.
+Detalles del error:
+{0}</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Administrar Ajustes de Notificación</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Vuelta al Trabajo</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Objetos deshabilitados</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Por favor encuentre la hoja de excel descargada para revisar el error detallado.</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Exitosa actualización de cuenta de personal:</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Sobredimens.</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Clave de Activación de Producto Teleopti - Excepción</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>Acote las normas para poder ver todos los datos</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>un error interno ha ocurrido:{0};</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Se alcanzó el número máximo de filas</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Falló importación cuenta:</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>El archivo seleccionado no puede ser aceptado. Por favor controle el tipo de archivo.</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>no hay cuenta de usuario;</value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Valor Categoría de Turno:</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Valor Día Libre:</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Mostrar Reporte en Word</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Mostrar Reporte en Excel</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>No hay ausencia para eliminar en el turno actual.</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>El paso de optimización "Tiempo entre días" no se ejecuta cuando la planificación se hace en blocke usando el mismo turno.</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Ajustes Ausencia Día Completo</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Planificación de equipo</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Administrar Ajustes de Antigüedad</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Abajo</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Arrastre y suelte archivos .xls o .xls aquí o haga click en upload</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>El sistema tiene licencia hasta el "{0}" de acuerdo a los términos y condiciones del acuerdo de licencia, y su clave de activación de producto expirará {1}.
+
+La clave de activación de producto cubre un máximo de {2} agentes activos.
+
+La clave de activación de producto es {3}.
+Estas opciones están activadas:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>Tienes {0} agentes activos pero tienes licencia para tener sólo {1}. Por favor, actualice su clave de activación de producto en breve.</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Por favor consulte la plantilla para el archivo</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Ajuste</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>Tienes {0} agentes activos pero tienes licencia para tener sólo {1}. Debes actualizar tu clave de activación de producto para poder continuar.</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Ajustar skill</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Esta clave de activación de producto cubre sólo {0} agentes activos, pero usted tiene {1}. Debe obtener una clave de activación de producto que cubra la suficiente cantidad de agentes activos.</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>regreso de ausencia temprano :</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>El sistema tiene licencia hasta el "{0}" de acuerdo a los términos y condiciones del acuerdo de licencia, y su clave de activación de producto expirará {1}.
+
+La clave de activación de producto cubre un máximo de {2} asientos.
+
+La clave de activación de producto es {3}.
+Estas opciones están activadas:
+{4}</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>No se puede encontrar fuente de datos con nombre: {0}</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>{0} tiene una actividad personal, horas extra o una reunión en el turno con fecha {1}.</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>La vuelta al trabajo no puede ser mayor que el final de la ausencia</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Actualizando ausencia para</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>A tiempo</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Está usando {0} agentes activos y su licencia habilita {1}. Tienes {2} días para reducir el número de agentes o aplicar una clave de activación de producto que cubra ese número de agentes.</value>
   </data>
 </root>
