@@ -152,6 +152,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.IntegrationTest", "Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\Teleopti.Analytics.Etl.IntegrationTest.csproj", "{1CD76BD0-DBBB-42E8-9BD6-D5FE4F0AA2C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ServiceConsoleHost", "Teleopti.Analytics.Etl.ServiceConsoleHost\Teleopti.Analytics.Etl.ServiceConsoleHost.csproj", "{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E0F90B7B-64BC-497B-AA23-C335338808CB} = {E0F90B7B-64BC-497B-AA23-C335338808CB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.AuthenticationBridge", "Teleopti.Ccc.Web.AuthenticationBridge\Teleopti.Ccc.Web.AuthenticationBridge.csproj", "{2034A371-8FC3-4B50-847E-9835E68EB3AE}"
 EndProject
