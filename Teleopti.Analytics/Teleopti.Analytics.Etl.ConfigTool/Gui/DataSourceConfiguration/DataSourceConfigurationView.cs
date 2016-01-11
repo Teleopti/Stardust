@@ -228,14 +228,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
             }
         }
 
-        public void SetToolStripState(bool showSpinningProgress, string message)
-        {
-            toolStripSpinningProgressControl1.Visible = showSpinningProgress;
-            toolStripStatusLabel1.Text = message;
+	    public void SetToolStripState(bool showSpinningProgress, string message)
+	    {
+		    if (toolStripSpinningProgressControl1.SpinningProgressControl != null)
+		    {
+				toolStripSpinningProgressControl1.Visible = showSpinningProgress;
+				toolStripStatusLabel1.Text = message;
+		    }
+	    }
 
-        }
-
-        public void RunInitialJob()
+	    public void RunInitialJob()
         {
             TimeToStartInitialLoad(new object(), new AlarmEventArgs(_initialJob));
         }
