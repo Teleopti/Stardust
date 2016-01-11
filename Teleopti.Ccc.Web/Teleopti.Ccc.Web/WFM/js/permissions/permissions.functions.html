@@ -1,76 +1,79 @@
-﻿<div class="toolbar">
-
-		<div class="input-prepend">
+<div class="con-row">
+	<div class="con-flex">
+		<label for="permFuncFilrer" class="input-prepend">
 			<i class="mdi mdi-filter-outline"></i>
-			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
-		</div>
+			<input type="text" id="permFuncFilrer" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
+		</label>
+	</div>
+</div>
 
-	<form class="permission-radio-buttons">
-		<div class="wfm-radio">
-			<label>
-				<span class="wfm-radio-label permission-filter-label" translate>Show</span>
-			</label>
-		</div>
-		<div class="wfm-radio">
-			<label ng-click="unselectedFunctionsToggle = false; selectedFunctionsToggle = false">
-				<input type="radio" checked name="tree-toggle">
-				<span class="wfm-radio-toggle"></span>
-				<span class="wfm-radio-label" translate>All</span>
-			</label>
-		</div>
-		<div class="wfm-radio">
-			<label ng-click="unselectedFunctionsToggle = false">
-				<input type="radio" name="tree-toggle" ng-model="selectedFunctionsToggle" value="true">
-				<span class="wfm-radio-toggle"></span>
-				<span class="wfm-radio-label" translate>SelectedItems</span>
-			</label>
-		</div>
-		<div class="wfm-radio">
-			<label ng-click="selectedFunctionsToggle = false">
-				<input type="radio" name="tree-toggle" ng-model="unselectedFunctionsToggle" value="true">
-				<span class="wfm-radio-toggle"></span>
-				<span class="wfm-radio-label" translate>UnselectedItems</span>
-			</label>
-		</div>
-	</form>
-
+<div class="con-row">
+	<div class="con-flex split-3-1">
+		<form class="permission-radio-buttons">
+			<div class="wfm-radio">
+				<label>
+					<span class="wfm-radio-label permission-filter-label" translate>Show</span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="unselectedDataToggle = false; selectedDataToggle = false">
+					<input type="radio" checked name="tree-toggle">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label" translate>All</span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="unselectedDataToggle = false">
+					<input type="radio" name="tree-toggle" ng-model="selectedDataToggle" value="true">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label" translate>SelectedItems</span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="selectedDataToggle = false">
+					<input type="radio" name="tree-toggle" ng-model="unselectedDataToggle" value="true">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label" translate>UnselectedItems</span>
+				</label>
+			</div>
+		</form>
+	</div>
+	<div class="con-flex">
 		<div class="wfm-switch">
 			<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" ng-click="toggleAllNode(allToggleElement)" id="switchAll" />
 			<label for="switchAll">
-
 				<span class="wfm-switch-label" translate>AccessAllFunctions</span>
 				<span class="wfm-switch-toggle"></span>
 			</label>
-
 		</div>
-
+	</div>
 </div>
 
 <div class="tree permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-		    <li ng-repeat="node in functionsDisplayed | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
-		        ng-if="!isAllNode(node)"
-                ui-tree-node ng-include="'nodes_renderer.html'">
-			</li>
-		</ol>
-	</div>
+			<li ng-repeat="node in functionsDisplayed | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
+			ng-if="!isAllNode(node)"
+			ui-tree-node ng-include="'nodes_renderer.html'">
+		</li>
+	</ol>
+</div>
 </div>
 
 <!-- Nested node template for functions -->
 <script type="text/ng-template" id="nodes_renderer.html">
-	<div class="tree-toggle-group">
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-class="{hideChevron: childNodes().length < 1}" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected, locked: node.IsDisabled}" ng-click="toggleFunctionForRole(this)">
-			{{node.LocalizedFunctionDescription}}
-			<span class="tree-line-right"><i class="mdi mdi-check"></i></span>
-		</div>
-	</div>
+<div class="tree-toggle-group">
+<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-class="{hideChevron: childNodes().length < 1}" class="mdi mdi-chevron-right"></i></div>
+<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected, locked: node.IsDisabled}" ng-click="toggleFunctionForRole(this)">
+{{node.LocalizedFunctionDescription}}
+<span class="tree-line-right"><i class="mdi mdi-check"></i></span>
+</div>
+</div>
 
-	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
-		{{$node}}
-		<li ng-repeat="node in node.ChildFunctions | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
-				ui-tree-node ng-include="'nodes_renderer.html'">
-		</li>
-	</ol>
+<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
+{{$node}}
+<li ng-repeat="node in node.ChildFunctions | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
+ui-tree-node ng-include="'nodes_renderer.html'">
+</li>
+</ol>
 </script>

@@ -1,87 +1,107 @@
-﻿<div class="permissions">
-	<div class="row">
-		<div class="col-lg-12">
-			<h4 translate>ManagePermissions</h4>
+<div class="permissions">
+	<div class="view-header">
+		<div class="view-title">
+			<h1 translate><i class="mdi mdi-account-key"></i>ManagePermissions</h1>
 			<p translate>ManagePermissionsIntro</p>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-lg-4">
-			<div class="role-nav material-depth-1 container-block">
-				<div class="wfm-block sub-header" translate>Roles</div>
-				<div class="wfm-block">
-					<form ng-submit="createRole(); reset()">
-						<div class="input-prepend">
-							<i class="mdi mdi-plus"></i>
-							<input type="text" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role" />
-						</div>
-					</form>
-				</div>
-				<div class="wfm-block">
-					<div class="input-prepend">
-						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
-					</div>
-				</div>
 
-				<div id="searchRoleResults">
-					<ul class="wfm-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id === selectedRole}" selection-model>
-							<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
-							<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
-								<form ng-submit="submitRole(role, tempName)" name="editRoleForm" required>
-									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}"  />
-									
-								</form>
-							</span>
-							
-							<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
-								<span>
-									
-								    <i ng-click="copyRole(role);" class="mdi mdi-content-copy">
-										<md-tooltip>
-											{{'Copy' | translate}}
-										</md-tooltip>
-									</i>
-									<i ng-click="doubleClickEdit(editing, role)" class="mdi mdi-pencil">
-										<md-tooltip>
-											{{'Edit' | translate}}
-										</md-tooltip>
-									</i>
-									<i ng-click="removeRole(role)" class="mdi mdi-delete">
-										<md-tooltip>
-											{{'Delete' | translate}}
-										</md-tooltip>
-									</i>
-								</span>
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="sub-header">
+					<h2 translate>Roles</h2>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<div class="role-nav">
+							<div class="con-row">
+								<div class="con-flex">
+									<form ng-submit="createRole(); reset()">
+										<label for="addRole" class="input-prepend">
+											<i class="mdi mdi-plus">
+												<md-tooltip>{{'AddRole'|translate}}</md-tooltip>
+											</i>
+											<input type="text" id="addRole" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role" />
+										</label>
+									</form>
+								</div>
 							</div>
-						</li>
-					</ul>
+
+							<div class="con-row">
+								<div class="con-flex">
+									<label for="filterRoles" class="input-prepend">
+										<i class="mdi mdi-filter-outline">
+											<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
+										</i>
+										<input type="text" id="filterRoles" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
+									</label>
+								</div>
+							</div>
+
+							<div id="searchRoleResults">
+								<ul class="wfm-list">
+									<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" selection-model>
+										<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
+										<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
+											<form ng-submit="submitRole(role, tempName)" name="editRoleForm" required>
+												<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="tempName" placeholder="{{'Name' | translate}}"  />
+											</form>
+										</span>
+										<span ng-cloak ng-show="role.Id === selectedRole" ng-if="!role.editing" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+										<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
+											<span>
+												<i ng-click="copyRole(role);" class="mdi mdi-content-copy">
+													<md-tooltip>
+														{{'Copy' | translate}}
+													</md-tooltip>
+												</i>
+												<i ng-click="doubleClickEdit(editing, role)" class="mdi mdi-pencil">
+													<md-tooltip>
+														{{'Edit' | translate}}
+													</md-tooltip>
+												</i>
+												<i ng-click="removeRole(role)" class="mdi mdi-delete">
+													<md-tooltip>
+														{{'Delete' | translate}}
+													</md-tooltip>
+												</i>
+											</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-
-
-		<div class="col-lg-8">
-			<div class="wfm-slide-tabs ">
-				<md-content class="material-depth-1" style="padding:0!important;">
-					<md-tabs md-dynamic-height md-border-bottom>
-						<md-tab label="{{'Functions' | translate}}" ng-show="roleDetails=='functionsAvailable'">
-							<md-content class="md-padding">
-
-								<div class="functions-container" ng-include="'js/permissions/permissions.functions.html'" ng-controller="RoleFunctionsController"></div>
-
-							</md-content>
-						</md-tab>
-						<md-tab label="{{'Data' | translate}}" ng-show="roleDetails=='dataAvailable'">
-							<md-content class="md-padding">
-
-								<div class="data-container" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>
-
-							</md-content>
-						</md-tab>
-					</md-tabs>
-				</md-content>
+		<div class="con-flex split-3-1">
+			<div class="panel material-depth-1">
+				<div class="wfm-slide-tabs tabbed-panel">
+					<md-content class="md-padding">
+						<md-tabs md-dynamic-height md-border-bottom >
+							<md-tab label="{{'Functions' | translate}}" ng-show="roleDetails=='functionsAvailable'">
+								<md-content class="md-padding">
+									<div class="con-row demo-outline">
+										<div class="con-flex">
+											<div class="functions-container" ng-include="'js/permissions/permissions.functions.html'" ng-controller="RoleFunctionsController"></div>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+							<md-tab label="{{'Data' | translate}}" ng-show="roleDetails=='dataAvailable'">
+								<md-content class="md-padding">
+									<div class="con-row demo-outline">
+										<div class="con-flex">
+											<div class="data-container" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+						</md-tabs>
+					</md-content>
+				</div>
 			</div>
 		</div>
 	</div>
