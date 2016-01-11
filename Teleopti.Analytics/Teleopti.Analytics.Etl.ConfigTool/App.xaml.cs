@@ -8,6 +8,7 @@ using Autofac;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using log4net.Config;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Domain;

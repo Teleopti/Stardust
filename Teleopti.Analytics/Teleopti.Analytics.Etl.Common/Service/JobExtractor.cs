@@ -9,7 +9,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 
-namespace Teleopti.Analytics.Etl.ServiceLogic
+namespace Teleopti.Analytics.Etl.Common.Service
 {
 	internal static class JobExtractor
 	{
@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					pmInstallation,
 					culture,
 					new IocContainerHolder(container), 
-                    runIndexMaintenance)
+					runIndexMaintenance)
 					{
 						Helper = jobHelper
 					};

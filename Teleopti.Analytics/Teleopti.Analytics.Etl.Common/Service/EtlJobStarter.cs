@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using Autofac;
 using log4net;
-using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -19,7 +18,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using PersianCultureHelper = Teleopti.Interfaces.Domain.PersianCultureHelper;
 
-namespace Teleopti.Analytics.Etl.ServiceLogic
+namespace Teleopti.Analytics.Etl.Common.Service
 {
 	public class EtlJobStarter : IDisposable
 	{

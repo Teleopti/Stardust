@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -11,7 +12,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
 
-namespace Teleopti.Analytics.Etl.Common.Transformer
+namespace Teleopti.Analytics.Etl.Common
 {
 	public class EtlModule : Module
 	{
@@ -24,6 +25,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<EtlService>().SingleInstance();
+
+
 			//TODO: tenant - use tenantmodule instead (with some override for special cases?)?
 			builder.Register(c =>
 			{

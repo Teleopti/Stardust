@@ -127,6 +127,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
+    <Compile Include="Service\EtlJobStarter.cs" />
+    <Compile Include="Service\EtlService.cs" />
     <Compile Include="Infrastructure\BulkWriter.cs" />
     <Compile Include="Infrastructure\CubeRepository.cs" />
     <Compile Include="Infrastructure\DatabaseCommand.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Interfaces\Transformer\ITaskParameter.cs" />
     <Compile Include="Interfaces\Transformer\ITenantLogonInfoLoader.cs" />
     <Compile Include="Interfaces\Transformer\JobCategoryType.cs" />
+    <Compile Include="Service\JobExtractor.cs" />
     <Compile Include="JobLog\EtlJobLog.cs" />
     <Compile Include="JobLog\EtlJobLogCollection.cs" />
     <Compile Include="Entity\EtlJobRelativePeriod.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="Entity\EtlRunningInformation.cs" />
     <Compile Include="JobRunner.cs" />
     <Compile Include="RunController.cs" />
+    <Compile Include="Service\SchedulePriority.cs" />
     <Compile Include="Transformer\AbsenceTransformer.cs" />
     <Compile Include="Transformer\ActivityTransformer.cs" />
     <Compile Include="Transformer\AgentSkillTransform.cs" />
@@ -250,7 +254,7 @@
     <Compile Include="Transformer\ConfigurationHandler.cs" />
     <Compile Include="Transformer\DateTransformer.cs" />
     <Compile Include="Transformer\DayDate.cs" />
-    <Compile Include="Transformer\EtlModule.cs" />
+    <Compile Include="EtlModule.cs" />
     <Compile Include="Transformer\ForecastWorkloadTransformer.cs" />
     <Compile Include="Transformer\GeneralFunctions.cs" />
     <Compile Include="Transformer\GroupPagePersonTransformer.cs" />

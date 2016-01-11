@@ -87,10 +87,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EtlJobStarter.cs" />
-    <Compile Include="EtlService.cs" />
-    <Compile Include="JobExtractor.cs" />
-    <Compile Include="SchedulePriority.cs" />
     <Compile Include="EtlServiceHost.cs" />
   </ItemGroup>
   <ItemGroup>

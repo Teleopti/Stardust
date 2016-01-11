@@ -2,7 +2,8 @@ using System;
 using Autofac;
 using log4net;
 using log4net.Config;
-using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 
@@ -12,7 +13,6 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlServiceHost));
 
-		private EtlService _service;
 		private IContainer _container;
 		
 		public void Start(Action stopService)
@@ -31,8 +31,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				builder.RegisterModule(new EtlModule(configuration));
 				_container = builder.Build();
 
-				_service = new EtlService();
-				_service.Start(_container, serviceStartTime, stopService);
+				var service = _container.Resolve<EtlService>();
+				service.Start(_container, serviceStartTime, stopService);
 			}
 			catch (Exception ex)
 			{
@@ -53,11 +53,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		{
 			if (disposing)
 			{
-				if (_service != null)
-				{
-					_service.Dispose();
-					_service = null;
-				}
+				if (_container != null)
+					_container.Dispose();
 			}
 		}
 

@@ -3,7 +3,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.ServiceLogic
+namespace Teleopti.Analytics.Etl.Common.Service
 {
     internal class SchedulePriority
     {

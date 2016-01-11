@@ -3,7 +3,7 @@ using System.Timers;
 using Autofac;
 using log4net;
 
-namespace Teleopti.Analytics.Etl.ServiceLogic
+namespace Teleopti.Analytics.Etl.Common.Service
 {
 	public class EtlService : IDisposable
 	{
