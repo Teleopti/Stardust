@@ -1,14 +1,19 @@
-﻿
-<div class="people-cart">
+﻿<div class="view-header">
+	<div class="view-title">
+		<h1>
+			<i class="mdi mdi-account-check"></i>
+			{{'SelectedPeople' | translate}}
+		</h1>	
+	</div>
+</div>
+
+<div class="people-cart panel material-depth-1">
 	<div class="row" style="position: relative">
-		<h4>{{'SelectedPeople' | translate}}</h4>
 		<div class="pull-left" style="padding-left:0; padding-right: 0; width: 60px">
-			<p>
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.back()">
 					<i class="mdi mdi-reply" style="color: #9C27B0"></i>
 				</button>
 				<md-tooltip>{{ 'Back' | translate }}</md-tooltip>
-			</p>
 		</div>
 		<div class="col-sm-5 col-md-4 col-lg-4">
 			<input type="text" style="text-align: center;" datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
@@ -37,7 +42,7 @@
 			</button>
 		</div>
 	</div>
-	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-auto-resize ui-grid-exporter ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
