@@ -5,7 +5,8 @@ Feature: Requests Basic Operations
 	I need to have a good overview of all the requests within a certain period
 
 Background: 
-	Given there is a team with
+	Given I am englishspeaking swede
+	And there is a team with
 	| Field | Value    |
 	| Name  | Red Team |
 	And there is a team with
@@ -193,22 +194,23 @@ Scenario: Can view different page
 	And I select to view the last page
 	Then I see the request from 'John' in the list	
 
-@ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
+
+
+@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley' has an existing text request with
 	| Field       | Value            |
-	| StartTime   | 2015-10-03 10:00 |
-	| End Time    | 2015-10-03 14:00 |
-	| Update Time | 2015-09-05 1:00  |
+	| StartTime   | 2016-01-03 10:00 |
+	| End Time    | 2016-01-03 14:00 |
+	| Update Time | 2016-01-01 1:00  |
 	| Status      | Pending          |
 	When I view wfm requests
-	And I select to load requests from '2015-10-01' to '2015-10-10'
-	And I approve requests from 'Ashley'
-	Then I should see the request from 'Ashley' with status 'Approved'
+	And I select to load requests from '2016-01-01' to '2016-01-07'
+	And I approve all requests that I see
+	Then I should see request from 'Ashley' approved
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
+@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny requests
 	Given 'Ashley' has an existing text request with
 	| Field       | Value            |

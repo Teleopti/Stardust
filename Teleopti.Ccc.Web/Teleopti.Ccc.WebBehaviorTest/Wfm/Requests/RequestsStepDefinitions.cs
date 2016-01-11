@@ -62,6 +62,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.AssertExistsUsingJQuery(".ui-grid-row:contains('{0}') + .ui-grid-row:contains('{1}')", agentName1, agentName2);
 		}
 
+		[When(@"I approve all requests that I see")]
+		public void WhenIApproveAllRequestsThatISee()
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", Is.EqualTo("true"));
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
+			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .approve-requests");
+		}
+
+		[Then(@"I should see request from '(.*)' approved")]
+		public void ThenIShouldSeeRequestFromApproved(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Approved"));
+		}
+
 
 	}
 }
