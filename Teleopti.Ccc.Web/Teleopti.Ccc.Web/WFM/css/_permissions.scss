@@ -32,14 +32,6 @@
   padding-left: 30px;
 }
 
-.list-mark{
-	padding:3px;
-	background:$green-100;
-	border-radius:50%;
-	text-align:center;
-	font-size:15px!important;
-}
-
 #tree-root > li > div > div > div > div > ul > li > div{
 	padding-left:50px;
 }
@@ -58,8 +50,6 @@
 
 .dataHeader{
 	margin-top:15px;
-	background-color:$white!important;
-	font-size: 18px;
 	border: none!important;
 }
 
@@ -114,11 +104,6 @@ p {
 .permission-filter-label{
 	margin:0!important;
 }
- .toolbar > form > .wfm-radio {
-	width: initial;
-	display:block;
-}
-
 
 .permission-radio-buttons {
 	display: inline-flex;

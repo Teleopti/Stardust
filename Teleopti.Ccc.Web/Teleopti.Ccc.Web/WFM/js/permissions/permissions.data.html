@@ -7,8 +7,8 @@
   </div>
 </div>
 
-  <div class="con-row">
-    <div class="con-flex split-3-1">
+<div class="con-row">
+  <div class="con-flex split-3-1">
     <form class="permission-radio-buttons">
       <div class="wfm-radio">
         <label>
@@ -36,19 +36,18 @@
           <span class="wfm-radio-label" translate>UnselectedItems</span>
         </label>
       </div>
-      </form>
-    </div>
-    <div class="con-flex">
-      <div class="data-auth">
-        <label translate>AddGlobalAuthorizationLabel</label>
-        <md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
-          <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
-        </md-select>
-      </div>
+    </form>
+  </div>
+  <div class="con-flex">
+    <div class="data-auth">
+      <label translate>AddGlobalAuthorizationLabel</label>
+      <md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
+        <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+      </md-select>
     </div>
   </div>
+</div>
 
-<div class="permissions-tree">
   <div ui-tree data-drag-enabled="false">
     <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
       <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
@@ -58,11 +57,13 @@
   <!-- Nested node template for data -->
   <script type="text/ng-template" id="nodes_bu_renderer.html">
 
-  <ul class="wfm-list apply-list" >
-  <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0}" ng-click="toggleOrganizationSelection(this)">
-  <span ng-if="node.selected"><b class="mdi mdi-check list-mark"></b></span>
-  <div class="apply-list-text">{{node.Name}}</div>
-  </li>
+  <ul class="wfm-list">
+    <li ng-click="toggleOrganizationSelection(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
+      <span class="list-item-container">
+        {{node.Name}}
+      </span>
+      <span ng-cloak ng-show="node.selected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
+    </li>
   </ul>
 
   <div ui-tree-nodes="" ng-model="node.ChildNodes" class="padding-reset">

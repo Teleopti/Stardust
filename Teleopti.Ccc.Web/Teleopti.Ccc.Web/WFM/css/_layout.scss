@@ -303,3 +303,11 @@ position: fixed;
 md-progress-circular .md-inner .md-half-circle {
 	border-top-color: #E91E63!important;
 }
+
+.list-mark{
+	padding:3px;
+	background:$green-100;
+	border-radius:50%;
+	text-align:center;
+	font-size:15px!important;
+}
