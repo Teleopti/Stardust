@@ -69,6 +69,9 @@
 		},
 
 		sass: {
+			options: {
+				includePaths: ['node_modules/teleopti-styleguide/css']
+			},
 			dist: {
 				files: {
 					'css/style.css': ['css/style.scss']

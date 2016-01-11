@@ -3,35 +3,9 @@
 // @import 'file';
 // Then run grunt
 
-/*Variables for colors from the styleguide */
-$blue-500: #0099FF;
-$blue-300: #66c2ff;
-$blue-100: #99d6ff;
-
-$orange-400: #ffc285;
-$orange-600: #FB8C00;
 $green-400: #9CCC65;
-$green-100: #c2e085;
-$red-600: #ee8f7d;
 
-$pink-500: #ec38a3;
-$pink-100: #f488c8;
-
-$gray-500: #9E9E9E;
-$gray-300: #E0E0E0;
-$gray-100: #F5F5F5;
-$gray012: rgba(0,0,0,0.06);
-$gray026: rgba(0,0,0,0.26);
-$gray054: rgba(0,0,0,0.54);
-$gray087: rgba(0,0,0,0.87);
-$gray100: rgba(0,0,0,1);
-$white: #ffffff;
-
-$full-padding: 5px; /*sets wfm-block*/
-$half-padding: 3px;
-$transition-timing: all 0.5s ease-in-out;
-
-
+@import 'variables';
 @import 'cardlist';
 @import 'daterangepicker';
 @import 'layout';
