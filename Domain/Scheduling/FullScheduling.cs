@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people, int daysScheduled, IEnumerable<PersistConflict> conflicts)
 		{
+			//some hack to get rid of lazy load ex
 			_currentUnitOfWork.Current().Reassociate(people.FixedStaffPeople);
+			_prerequisites.MakeSureLoaded();
+			//
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 
@@ -91,7 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 		}
 
-		[UnitOfWork]
 		[LogTime]
 		protected virtual IEnumerable<PersistConflict> Persist()
 		{

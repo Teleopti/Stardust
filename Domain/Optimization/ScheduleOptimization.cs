@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return CreateResult(planningPeriod);
 		}
 
-		[UnitOfWork]
 		[LogTime]
 		protected virtual void Persist()
 		{

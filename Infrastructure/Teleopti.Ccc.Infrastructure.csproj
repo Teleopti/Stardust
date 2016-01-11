@@ -380,7 +380,6 @@
     <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
     <Compile Include="NHibernateConfiguration\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
-    <Compile Include="Persisters\Schedules\CurrentUnitOfWorkScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
