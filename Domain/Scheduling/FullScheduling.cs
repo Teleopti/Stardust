@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullScheduling(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 			IFixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			Func<IScheduleTagSetter> scheduleTagSetter,
 			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister,
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
-			DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -53,33 +56,50 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_persister = persister;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		[UnitOfWork]
+		[LogTime]
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
 			int daysScheduled;
 			var people = SetupAndSchedule(period, out daysScheduled);
 
-			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
+			var conflicts = Persist();
 
+			return CreateResult(period, people, daysScheduled, conflicts);
+		}
+
+		[LogTime]
+		[UnitOfWork]
+		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period, PeopleSelection people, int daysScheduled, IEnumerable<PersistConflict> conflicts)
+		{
+			_currentUnitOfWork.Current().Reassociate(people.FixedStaffPeople);
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 
 			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.FixedStaffPeople, period).ToList();
-			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
-				schedulePeriodNotInRange, period);
+			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople, schedulePeriodNotInRange, period);
 			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
 			return new SchedulingResultModel
-				{
-					DaysScheduled = daysScheduled,
-					ConflictCount = conflicts.Count(),
-					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
-					BusinessRulesValidationResults = voilatedBusinessRules
-				};
+			{
+				DaysScheduled = daysScheduled,
+				ConflictCount = conflicts.Count(),
+				ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
+				BusinessRulesValidationResults = voilatedBusinessRules
+			};
 		}
 
+		[UnitOfWork]
+		[LogTime]
+		protected virtual IEnumerable<PersistConflict> Persist()
+		{
+			return _persister.Persist(_schedulerStateHolder().Schedules);
+		}
+
+		[LogTime]
+		[UnitOfWork]
 		protected virtual PeopleSelection SetupAndSchedule(DateOnlyPeriod period, out int daysScheduled)
 		{
 			_prerequisites.MakeSureLoaded();
