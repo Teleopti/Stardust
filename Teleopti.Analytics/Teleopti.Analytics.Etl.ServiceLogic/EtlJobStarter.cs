@@ -134,7 +134,11 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					{
 						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
 						if (tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
-							return false;
+						{
+							//we can't stop service now beacuse one tenant isnt configured correctly, just try next
+							//return false;
+							continue;
+						}
 						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
 
 						var jobResultCollection = new List<IJobResult>();
