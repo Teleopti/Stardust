@@ -1,10 +1,13 @@
-﻿<div>
-	<div class="row" style="position:relative">
-		<h4 ng-hide="isSelectionMode">{{'ManagePeople' | translate}}</h4>
+﻿<div class="view-header">
+	<h4 ng-hide="isSelectionMode">{{'ManagePeople' | translate}}</h4>
+</div>
+
+<div class="panel material-depth-1">
+	<div class="row" style="position: relative">
 		<div class="col-md-4">
 			<people-search-input search-options="searchOptions" search-callback="searchKeyword"></people-search-input>
 		</div>
-		
+
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled) && !isSelectionMode">
 			<button class="context-menu wfm-fab mini pull-right">
 				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
@@ -23,19 +26,19 @@
 					</ul>
 				</div>
 				<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator-for-menu">
-					{{selectedCount()}}
-				</span>
+						{{selectedCount()}}
+					</span>
 			</button>
 		</div>
 	</div>
-	
+
 	<div class="row select-all-dialog" ng-show="selectAllVisible">
 		<span class="notice-spacer" ng-click="selectAllMatch()">
-			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
-		</span>
+				<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
+			</span>
 	</div>
-	
-	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+
+	<div ui-i18n="{{lang}}" ng-if="dataInitialized" class="big-table-wrapper" style="position: relative">
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<wfm-pagination pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
 	</div>
