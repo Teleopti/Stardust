@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class RuleStepDefinitions
 	{
 		[Given(@"there is a rule with")]
+		[Given(@"there is an alarm with")]
 		public void GivenThereIsARuleWith(Table table)
 		{
 			DataMaker.Data().Apply(table.CreateInstance<RtaRuleConfigurable>());
