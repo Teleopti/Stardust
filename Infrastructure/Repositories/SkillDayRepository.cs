@@ -136,10 +136,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    private static DetachedCriteria getWorkloadDayOpenHour(Junction skilldaySubquery)
 	    {
 	        return DetachedCriteria.For<WorkloadDay>()
+				.Add(Subqueries.PropertyIn("Parent", DetachedCriteria.For<SkillDay>("skillDay").Add(skilldaySubquery).SetProjection(Projections.Id())))
 	            .SetFetchMode("OpenHourList", FetchMode.Join)
-				.SetFetchMode("TaskPeriodList", FetchMode.Join)
-				.CreateAlias("Parent", "skillDay", JoinType.InnerJoin)
-				.Add(skilldaySubquery);
+				.SetFetchMode("TaskPeriodList", FetchMode.Join);
 	    }
 
 	    private static DetachedCriteria getSkilldayScenario(Junction skilldaySubquery)
