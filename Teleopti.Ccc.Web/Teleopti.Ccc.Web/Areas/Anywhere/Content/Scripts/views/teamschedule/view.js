@@ -39,9 +39,8 @@ define([
 
 	var loadGroupPages = function (buid, date, callback) {
 		ajax.ajax({
-			url: 'GroupPage/AvailableGroupPages',
+			url: 'api/GroupPage/AvailableGroupPages?date=' + date,
 			headers: { 'X-Business-Unit-Filter': buid},
-			data: { date: date },
 			success: callback
 		});
 	}

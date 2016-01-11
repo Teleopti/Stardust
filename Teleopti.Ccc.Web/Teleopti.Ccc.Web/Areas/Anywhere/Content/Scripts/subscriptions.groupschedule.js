@@ -1,11 +1,11 @@
 define([
-				'jquery',
 				'messagebroker',
-				'helpers'
+				'helpers',
+				'ajax'
 ], function (
-			$,
 			messagebroker,
-			helpers
+			helpers,
+			ajax
 	) {
 	
 	var groupScheduleSubscription = null;
@@ -18,8 +18,8 @@ define([
 	};
 
 	var loadGroupSchedules = function (buid, date, groupId, callback) {
-		$.ajax({
-			url: 'GroupSchedule/Get',
+		ajax.ajax({
+			url: 'api/GroupSchedule/Get',
 			headers: { 'X-Business-Unit-Filter': buid },
 			cache: false,
 			dataType: 'json',

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class GroupPageController : Controller
+	public class GroupPageController : ApiController
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_userTextTranslator = userTextTranslator;
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult AvailableGroupPages(DateTime date)
+		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
+		public virtual IHttpActionResult AvailableGroupPages(DateTime date)
 		{
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
 
@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
 			var defaultGroupId = team != null ? team.Id : null;
 
-			return Json(new {GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId}, JsonRequestBehavior.AllowGet);
+			return Ok(new {GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId});
 		}
 	}
+	
 }

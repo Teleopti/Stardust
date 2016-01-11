@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 				new GroupPageController(new FakeGroupingReadOnlyRepository(new[] {groupPage}, new List<ReadOnlyGroupDetail>()),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)(target).AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result.GroupPages[0];
 			((object) gp.Name).Should().Be.EqualTo(groupPage.PageName);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 					new FakeGroupingReadOnlyRepository(new[] {new ReadOnlyGroupPage {PageName = ""}}, new[] {firstGroup, secondGroup}),
 					loggedOnUser, new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result;
 			((object) gp.DefaultGroupId).Should().Be.EqualTo(secondGroup.GroupId);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 					new FakeGroupingReadOnlyRepository(new[] {new ReadOnlyGroupPage {PageName = ""}}, new[] {new ReadOnlyGroupDetail()}),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result;
 			((object) gp.DefaultGroupId).Should().Be.Null();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 				new GroupPageController(new FakeGroupingReadOnlyRepository(new[] {groupPage}, new List<ReadOnlyGroupDetail>()),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result.GroupPages[0];
 			((object) gp.Name).Should().Be.EqualTo(Resources.ResourceManager.GetString(pageName.Substring(2)));
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] {groupPage}, new[] {firstGroup}),
 				new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result.GroupPages[0];
 			((object) gp.Groups[0].Name).Should().Be.EqualTo(groupPage.PageName + "/" + firstGroup.GroupName);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] {groupPage}, new[] {firstGroup}),
 				new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
 			dynamic gp = result.GroupPages[0];
 			((object) gp.Groups[0].Name).Should().Be.EqualTo(firstGroup.GroupName);
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 					new FakeGroupingReadOnlyRepository(new[] {groupPage1, groupPage2}, new List<ReadOnlyGroupDetail>()),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			var result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should()
 				.Be.EqualTo(Resources.ResourceManager.GetString(pageName2.Substring(2)));
 			(result.GroupPages[1].Name as string).Should()
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 					new FakeGroupingReadOnlyRepository(new[] {groupPage1, groupPage2}, new List<ReadOnlyGroupDetail>()),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should().Be.EqualTo(groupPage2.PageName);
 			(result.GroupPages[1].Name as string).Should().Be.EqualTo(groupPage1.PageName);
 		}
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 					new FakeGroupingReadOnlyRepository(new[] {groupPage1, groupPage2}, new List<ReadOnlyGroupDetail>()),
 					new FakeLoggedOnUser(), new UserTextTranslator());
 
-			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should()
 				.Be.EqualTo(Resources.ResourceManager.GetString(pageName2.Substring(2)));
 			(result.GroupPages[1].Name as string).Should().Be.EqualTo(groupPage1.PageName);

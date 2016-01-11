@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class GroupScheduleController : Controller
+	public class GroupScheduleController : ApiController
 	{
 		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
 		private readonly ILoggedOnUser _user;
@@ -18,19 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_user = user;
 		}
 
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult Get(Guid groupId, DateTime date)
+		[UnitOfWork, HttpGet, Route("api/GroupSchedule/Get")]
+		public virtual IHttpActionResult Get(Guid groupId, DateTime date)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(date, userTimeZone, TimeZoneInfo.Utc);
 			
 			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, date).ToArray();
-			return Json(new
-			{
-				BaseDate = dateTimeInUtc,
+			return Ok(new {BaseDate = dateTimeInUtc,
 				Schedules = schedules.ToArray(),
-				TotalCount = schedules.Count()
-			}, JsonRequestBehavior.AllowGet);
+				TotalCount = schedules.Count()});
 		}
 	}
 }
