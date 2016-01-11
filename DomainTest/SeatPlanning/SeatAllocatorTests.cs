@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			CommonSeatAllocatorTests.ShouldAllocateTwoAgentsToOneSeatEach (false);
 		}
 
-		[Test, Ignore("Test is failing on server")]
+		[Test]
 		public void ShouldAllocateAccordingToPriority()
 		{
 			CommonSeatAllocatorTests.ShouldAllocateAccordingToPriority (false);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 		}
 
-		[Test, Ignore("Test is failing on server")]
+		[Test]
 		public void ShouldAllocateAgentGroupsTogetherAcrossLocationsEvenIfFirstLocationHasMostSeats()
 		{
 			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Assert.That (allocatedSeats.Contains ("Building Seat2"));
 		}
 
-		[Test, Ignore("Test is failing on server")]
+		[Test]
 		public void ShouldAllocateGroupToParentAndChildLocationWithEnoughSeats()
 		{
 			var agentShift1 = new SeatBooking (new Person(), new DateOnly (2014, 01, 01), new DateTime (2014, 01, 01, 8, 0, 0),
