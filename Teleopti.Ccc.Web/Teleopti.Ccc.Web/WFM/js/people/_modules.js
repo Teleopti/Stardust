@@ -5,7 +5,6 @@
 		'ui.grid.resizeColumns',
 		'ui.grid.importer',
 		'ngAnimate',
-		'ng-mfb',
 		'ngMaterial',
 		'ngFileUpload',
 		'ui.indeterminate',
