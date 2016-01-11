@@ -1,83 +1,88 @@
-﻿<div>
-	<form name="form" class="wfm-form forecasting-skill-form" novalidate ng-submit="createSkill(form.$valid)">
-		<h4 class="create-skill-header">{{'CreateSkill'|translate}}</h4>
-		<dl>
-			<h5 class="skill-section-header">{{'GeneralGrid'|translate}}</h5>
-			<dd>
-				<div class="form-input-wrap skill-name">
-					<label for="nameId">{{'Name'|translate}}</label>
-					<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
-					</div>
-				</div>
-				<div class="form-input-wrap skill-activity">
-					<label for="activityId">{{'SkillActivity'|translate}}</label>
-					<select id="activityId" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities" name="Activity" required></select>
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">{{ 'Required' | translate }}</div>
-					</div>
-				</div>
-				<div class="form-input-wrap skill-timezone">
-					<label for="timezoneId">{{'TimeZone'|translate}}</label>
-					<select id="timezoneId" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones" name="Timezone" required></select>
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.Timezone.$error.required}">{{ 'Required' | translate }}</div>
-					</div>
-				</div>
-			</dd>
-			<h5 class="skill-section-header">{{'StaffingLevels'|translate}}</h5>
-			<dd>
-				<div class="form-input-wrap skill-service-level-percent">
-					<label for="serviceLevelPercentId">{{'ServiceLevelParenthesisPercentSign'|translate}} <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{'PercentageError'|translate}}</div>
-					</div>
-				</div>
-				<div class="form-input-wrap skill-service-level-seconds">
-					<label for="skillServiceLevelSecondsId">{{'ServiceLevelSeconds'|translate}}<input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">{{'SecondsSpan'|translate}}</div>
-					</div>
-				</div>
-				<div class="form-input-wrap skill-shrinkage">
-					<label for="shrinkageId">{{'ShrinkageParenthesisPercentSign'|translate}} <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
-					<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
-						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">{{ 'Required' | translate }}</div>
-						<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">{{'ShrinkageSpan'|translate}}</div>
-					</div>
-				</div>
-			</dd>
-
-			<h5 class="skill-section-header">{{'Queues'|translate}}</h5>
-			<dd>
-				<div class="skill-queues">
-					<div class="big-table-wrapper material-depth-1 queue-list">
-						<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
-					</div>
-					<div ng-cloak class="animate-input-message" ng-show="!queueSelected">
-						<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
-					</div>
-				</div>
-			</dd>
-
-			<h5 class="skill-section-header">{{'OpenHours'|translate}}</h5>
-			<dd>
-				<div>
-					<working-hours-picker class="skill-create-form-picker working-hours-picker" working-hours="model.workingHours"></working-hours-picker>
-					<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
-						<div class="form-input-message formWarningInput">{{'AllDaysAreClosed'|translate}}</div>
-					</div>
-				</div>
-			</dd>
-			<dd>
-				<div>
-					<button type="submit" class="wfm-btn wfm-btn-primary pull-right skill-save">{{'Save'|translate}}</button>
-				</div>
-			</dd>
-		</dl>
-	</form>
-</div>
+<div class="panel material-depth-1">
+	<div class="sub-header">
+		<!-- possibly remove create-skill-header -->
+		<h2 class="create-skill-header">{{'CreateSkill'|translate}}</h2>
+	</div>
+	<form class="wfm-form forecasting-skill-form" form name="form" novalidate ng-submit="createSkill(form.$valid)" >
+		<div class="con-row">
+			<div class="con-flex">
+				<dl>
+					<dd>
+						<div class="form-input-wrap skill-name">
+							<label for="nameId">{{'Name'|translate}}</label>
+							<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
+							</div>
+						</div>
+						<div class="form-input-wrap skill-activity">
+							<label for="activityId">{{'SkillActivity'|translate}}</label>
+							<select id="activityId" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities" name="Activity" required></select>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">{{ 'Required' | translate }}</div>
+							</div>
+						</div>
+						<div class="form-input-wrap skill-timezone">
+							<label for="timezoneId">{{'TimeZone'|translate}}</label>
+							<select id="timezoneId" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones" name="Timezone" required></select>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.Timezone.$error.required}">{{ 'Required' | translate }}</div>
+							</div>
+						</div>
+					</dd>
+					<dd>
+						<div class="form-input-wrap skill-service-level-percent">
+							<label for="serviceLevelPercentId">{{'ServiceLevelParenthesisPercentSign'|translate}} <input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" /></label>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{'PercentageError'|translate}}</div>
+							</div>
+						</div>
+						<div class="form-input-wrap skill-service-level-seconds">
+							<label for="skillServiceLevelSecondsId">{{'ServiceLevelSeconds'|translate}}<input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" /></label>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">{{'SecondsSpan'|translate}}</div>
+							</div>
+						</div>
+						<div class="form-input-wrap skill-shrinkage">
+							<label for="shrinkageId">{{'ShrinkageParenthesisPercentSign'|translate}} <input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" /></label>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
+								<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">{{'ShrinkageSpan'|translate}}</div>
+							</div>
+						</div>
+					</dd>
+				</dl>
+			</div>
+			<div class="con-flex split-3-1">
+				<dl>
+					<dd>
+						<div class="form-input-wrap">
+							<label>{{'OpenHours'|translate}}</label>
+							<working-hours-picker class="skill-create-form-picker" working-hours="model.workingHours"></working-hours-picker>
+							<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
+								<div class="form-input-message formWarningInput">{{'AllDaysAreClosed'|translate}}</div>
+							</div>
+						</div>
+					</dd>
+					<dd>
+						<div class="skill-queues">
+							<label>{{'Queues'|translate}}</label>
+							<div class="big-table-wrapper material-depth-1 queue-list">
+								<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
+							</div>
+							<div ng-cloak class="animate-input-message" ng-show="!queueSelected">
+								<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
+							</div>
+						</div>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="con-footer">
+			<button type="submit" class="wfm-btn wfm-btn-invis-primary pull-right skill-save">{{'Save'|translate}}</button>
+		</div>
+	</div>
+</form>

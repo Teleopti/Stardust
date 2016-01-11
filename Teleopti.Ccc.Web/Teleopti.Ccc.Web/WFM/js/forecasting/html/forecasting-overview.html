@@ -1,112 +1,121 @@
-<div>
-	<div class="alert-info notice-spacer" ng-if="isForecastRunning" translate><i class='mdi mdi-information'></i> {{'RunningForecast'|translate}}.</div>
-	<div class="row">
-		<div class="col-lg-12">
-			<h4>{{'OverView' | translate}}</h4>
-			<div class="forecast-create-fad">
-				<button class="wfm-fab info forecast-create-button" ng-click="displayForecastingModal()" ng-disabled="isForecastRunning" ng-class="{'wfm-btn-invis-disabled': isForecastRunning}">
-					<i class="mdi mdi-pencil"></i>
-					<md-tooltip>
-						{{'ForecastAll' | translate}}
-					</md-tooltip>
-				</button>
-
-				<button class="wfm-fab info skill-create-button" ng-click="createSkill()" ng-if="isCreateSkillEnabled">
-					<i class="mdi mdi-plus"></i>
-					<md-tooltip>
-						{{'NewSkill' | translate}}
-					</md-tooltip>
-				</button>
-			</div>
-		</div>
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-chart-line"></i> {{'OverView' | translate}}</h1>
 	</div>
-	<div class="material-block-content">
-		<wfm-card-list>
-			<div ng-repeat="workload in workloads">
-				<wfm-card preselected="workload.preselected">
-					<card-header ng-click="getForecastResult(workload)">
-						<div>
-							<span><b>{{workload.Name}}</b></span>
-							<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
-							<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
-							<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
-							<span class="chevron pull-right"><i class="mdi mdi-chevron-right"></i></span>
-						</div>
-					</card-header>
-					<card-body>
-						<span>
-							{{'ForecastWorkloadIntro' | translate}}
-							<span class="row">
-								<div class=" forecast-campaign">
-									<label style="margin:0;">	{{'Scenario' | translate}}:</label>
-									<select class="col-xs-6 col-md-2 scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
-								</div>
-							</span>
-						</span>
 
-						<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
-							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-						</div>
-						<div ng-show="workload.forecastResultLoaded" class="wfm-block forecast-result-chart-wrapper">
-							<forecast-result-chart chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
-						</div>
-
-						<div class="modal-footer">
-							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
-									{{ 'Statistics' | translate }}
-									<md-tooltip>
-										{{ 'ViewChartTip' | translate }}
-									</md-tooltip>
-								</a>
-								<a class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload.selectedDayCount), 'wfm-btn-invis-disabled': disableModify(workload.selectedDayCount)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload.selectedDayCount)">
-									{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
-									<md-tooltip>
-										{{ 'SelectToModify' | translate }}
-									</md-tooltip>
-								</a>
-								<a class="wfm-btn wfm-btn-invis-default forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
-									{{ 'ForecastDo' | translate }}
-									<md-tooltip>
-										{{ 'GenerateForecastTip' | translate }}
-									</md-tooltip>
-								</a>
-							</aside>
-						</div>
-					</card-body>
-				</wfm-card>
-			</div>
-		</wfm-card-list>
+	<div class="fab-wrapper forecast-create-fad">
+		<button class="wfm-fab grow-out forecast-create-button" ng-click="displayForecastingModal()" ng-class="{'shrink-in':isForecastRunning}" ng-disabled="isForecastRunning" ng-class="{'wfm-btn-invis-disabled': isForecastRunning}">
+			<i class="mdi mdi-pencil"></i>
+			<md-tooltip>
+				{{'ForecastAll' | translate}}
+			</md-tooltip>
+		</button>
 	</div>
-	<div class="clearfix"></div>
 </div>
+
+<div class="con-row">
+	<div class="con-flex">
+		<button class="wfm-btn wfm-btn-default skill-create-button" ng-click="createSkill()" ng-if="isCreateSkillEnabled">
+			{{'NewSkill' | translate}}
+			<md-tooltip>
+				{{'NewSkill' | translate}}
+			</md-tooltip>
+		</button>
+	</div>
+	<div class="con-flex">
+		<div class="panel wfm-block material-depth-1" ng-if="isForecastRunning" translate><i class='mdi mdi-information'></i> {{'RunningForecast'|translate}}.</div>
+	</div>
+	<div class="con-flex"></div>
+</div>
+
+<wfm-card-list >
+	<wfm-card ng-repeat="workload in workloads" preselected="workload.preselected">
+		<card-header ng-click="getForecastResult(workload)">
+			<div>
+				<span><b>{{workload.Name}}</b></span>
+				<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
+				<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
+				<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
+				<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+			</div>
+		</card-header>
+		<card-body class="panel">
+			<div class="con-row">
+				<div class="con-flex">
+					{{'ForecastWorkloadIntro' | translate}}
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<div class=" forecast-campaign">
+						<label style="margin:0;">	{{'Scenario' | translate}}:</label>
+						<select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
+					</div>
+				</div>
+				<div class="con-flex split-3-1"></div>
+				<div class="con-flex"></div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<div ng-if="!workload.forecastResultLoaded">
+						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+					</div>
+					<div ng-show="workload.forecastResultLoaded" class="forecast-result-chart-wrapper">
+						<forecast-result-chart chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
+					</div>
+				</div>
+			</div>
+			<div class="con-footer">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
+					{{ 'Statistics' | translate }}
+					<md-tooltip>
+						{{ 'ViewChartTip' | translate }}
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-default': !disableModify(workload.selectedDayCount), 'wfm-btn-invis-disabled': disableModify(workload.selectedDayCount)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload.selectedDayCount)">
+					{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
+					<md-tooltip>
+						{{ 'SelectToModify' | translate }}
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-invis-default forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
+					{{ 'ForecastDo' | translate }}
+					<md-tooltip>
+						{{ 'GenerateForecastTip' | translate }}
+					</md-tooltip>
+				</button>
+			</div>
+		</card-body>
+	</wfm-card>
+</wfm-card-list>
 
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-if="modalForecastingLaunch">
 		<div class="modalbg">
 			<div class="dialog">
-				<div class="modal-header" ng-if="modalForecastingInfo.forecastForAll">
+				<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForAll">
 					{{ 'ForecastAll' | translate }}
-				</div>
-				<div class="modal-header" ng-if="modalForecastingInfo.forecastForOneWorkload">
+				</h1>
+				<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForOneWorkload">
 					{{ 'ForecastDo' | translate }} <b>{{modalForecastingInfo.selectedWorkload.Name}}</b>
-				</div>
+				</h1>
 				<div class="modal-inner-content">
-					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForAll">
-						<label class="col-md-2">{{ 'Scenario' | translate }}:</label>
-						<span class="col-md-2">
+					<div class="con-row">
+						<div class="con-flex"  ng-if="modalForecastingInfo.forecastForAll">
+							<label>{{ 'Scenario' | translate }}:</label>
 							<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
-						</span>
-					</div>
-					<div class="wfm-block row" ng-if="modalForecastingInfo.forecastForOneWorkload">
-						<label class="col-md-2">{{ 'Scenario' | translate }}:</label>
-						<span class="col-md-2">
-							<b>{{modalForecastingInfo.selectedScenario.Name}}</b>
-						</span>
-					</div>
-					<div class="wfm-block row">
-						<label class="col-md-2" style="margin:0;">{{'ForecastPeriod' | translate}}:</label>
-						<div class="col-md-10">
+						</div>
+						<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
+
+						<div ng-if="modalForecastingInfo.forecastForOneWorkload">
+							<div class="con-flex">
+								<label>{{ 'Scenario' | translate }}:</label>
+								<b> {{modalForecastingInfo.selectedScenario.Name}}</b>
+							</div>
+						</div>
+						<div class="con-flex"  ng-if="modalForecastingInfo.forecastForOneWorkload"></div>
+						<div class="con-flex split-3-1">
+							<label>{{'ForecastPeriod' | translate}}:</label><br/>
 							<div class="wfm-datepicker-wrap">
 								<div class="sub-header">
 									{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
@@ -119,175 +128,94 @@
 								</div>
 								<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
 							</div>
-							<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
 						</div>
 					</div>
+
 				</div>
-				<div class="modal-footer">
+				<div class="modal-actions">
 					<aside>
-						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</a>
-						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</a>
+						<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
+						<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</button>
 					</aside>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-if="modalModifyLaunch">
 		<div class="modalbg">
 			<div class="dialog">
-				<div class="modal-header">
-					{{ 'Modify' | translate }}
-				</div>
+				<h1 class="modal-title">{{ 'Modify' | translate }}</h1>
 				<div class="modal-inner-content">
+
 					<div ng-hide="addCampaign || overrideTasks">
-						<p>
-							{{'OverrideCallsForCampaign'|translate}} <b>{{modalModifyInfo.selectedScenario.Name}}</b>.
-							<span>{{modalModifyInfo.selectedDaysText}}</span>
-						</p>
-						<br />
-						<label class="forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
-							<input type="checkbox" ng-model="addCampaign" id="addCampaignToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">{{ 'Campaign' | translate }}</span>
-						</label>
+						{{'OverrideCallsForCampaign'|translate}}
+						<b>{{modalModifyInfo.selectedScenario.Name}}</b>.
+						<span>{{modalModifyInfo.selectedDaysText}}</span>
+						<div class="con-row">
+							<div class="con-flex">
+								<label class="wfm-btn wfm-btn-invis-default forecast-add-campaign-button" for="addCampaignToggle" style="font-weight: normal;">
+									<input type="checkbox" class="forecast-add-campaign-button" ng-model="addCampaign" id="addCampaignToggle" style="display: none;" />
+									<span>{{ 'Campaign' | translate }}</span>
+								</label>
 
-						<label class="forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
-							<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default">{{ 'AbsenceOverride' | translate }}</span>
-						</label>
+								<label class="wfm-btn wfm-btn-invis-default forecast-override-tasks-button" for="overrideTasksToggle" style="font-weight: normal;">
+									<input type="checkbox" ng-model="overrideTasks" id="overrideTasksToggle" style="display: none;" />
+									<span>{{ 'AbsenceOverride' | translate }}</span>
+								</label>
 
-						<label class="forecast-clear-override-button" style="font-weight: normal;">
-							<input type="checkbox" style="display: none;" />
-							<span class="wfm-btn wfm-btn-invis-default" ng-click="clearOverride()">{{ 'ClearOverride' | translate }}</span>
-						</label>
-						<br />
-						<br />
-						<br />
-						<div class="modal-footer">
+								<label class="wfm-btn wfm-btn-invis-default forecast-clear-override-button" style="font-weight: normal;">
+									<input type="checkbox" style="display: none;" />
+									<span ng-click="clearOverride()">{{ 'ClearOverride' | translate }}</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="modal-actions modify-modal-footer">
 							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
+								<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</button>
 							</aside>
 						</div>
 					</div>
-					<div ng-show="overrideTasks && !addCampaign">
-						<form name="form" class="wfm-form" novalidate ng-submit="applyOverride(form.$valid);">
-							<h4>{{ 'AbsenceOverride' | translate }}</h4>
-							<dl>
-								<p>
-									{{ 'ForecastOverrideMsg' | translate }}
-									{{ modalModifyInfo.selectedDaysText }}
-								</p>
-								<dd>
-									<ul class="wfm-accordion">
-										<li>
-											<div class="wfm-checkbox">
-												<input type="checkbox" id="tasksCheckId" ng-model="modalModifyInfo.shouldSetOverrideTasks" />
-												<label class="override-tasks-checkbox" for="tasksCheckId" ng-click="activeTaskInput = !activeTaskInput">
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">{{'Calls'|translate}}</span>
-												</label>
-											</div>
-											<div class="wfm-accordion-content" ng-cloak ng-show="activeTaskInput">
-												<div class="form-input-wrap skill-service-level-seconds">
-													<label for="overrideTasksInputId">
-														{{ 'CallsSlashDay' | translate }}
-														<input type="number" ng-model="modalModifyInfo.overrideTasks" ng-required="modalModifyInfo.shouldSetOverrideTasks" name="overrideTasksInput" id="overrideTasksInputId" min="0" />
-													</label>
-													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">{{ 'Required' | translate }}</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
-													</div>
-												</div>
-											</div>
-										</li>
-
-										<li>
-											<div class="wfm-checkbox">
-												<input type="checkbox" id="talkTimeCheckId" ng-model="modalModifyInfo.shouldSetOverrideTalkTime" />
-												<label class="override-talktime-checkbox" for="talkTimeCheckId" ng-click="activeTalkInput = !activeTalkInput">
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">{{'TalkTime'|translate}}</span>
-												</label>
-											</div>
-											<div class="wfm-accordion-content" ng-cloak ng-show="activeTalkInput">
-												<div class="form-input-wrap skill-service-level-seconds">
-													<label for="overrideTalkTimeInputId">
-														{{'SecondsSlashCalls'|translate}}
-														<input type="number" ng-model="modalModifyInfo.overrideTalkTime" ng-required="modalModifyInfo.shouldSetOverrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
-													</label>
-													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.required}">{{ 'Required' | translate }}</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
-													</div>
-												</div>
-											</div>
-										</li>
-
-										<li>
-											<div class="wfm-checkbox">
-												<input type="checkbox" id="AcwCheckId" ng-model="modalModifyInfo.shouldSetOverrideAfterCallWork" />
-												<label class="override-acw-checkbox" for="AcwCheckId" ng-click="activeAcwInput = !activeAcwInput">
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label">{{'AfterCallWorkTime'|translate}}</span>
-												</label>
-											</div>
-											<div class="wfm-accordion-content" ng-cloak ng-show="activeAcwInput">
-												<div class="form-input-wrap skill-service-level-seconds">
-													<label for="overrideAcwInputId">
-														{{'SecondsSlashCalls'|translate}}
-														<input type="number" ng-model="modalModifyInfo.overrideAcw" ng-required="modalModifyInfo.shouldSetOverrideAfterCallWork" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
-													</label>
-													<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">{{ 'Required' | translate }}</div>
-														<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
-													</div>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</dd>
-							</dl>
-							<br />
-							<div class="modal-footer">
-								<aside>
-									<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-									<button type="submit" class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyOverride()" ng-class="{'wfm-btn-invis-disabled': disableApplyOverride()}">{{ 'Apply' | translate }}</button>
-								</aside>
-							</div>
-						</form>
-					</div>
 
 					<div ng-show="!overrideTasks && addCampaign">
-						<div class="wfm-block">
-							<h4>{{ 'Campaign' | translate }}</h4>
-							<p>
-								{{ 'AddCampaignIntro' | translate }}.
-								{{modalModifyInfo.selectedDaysText}}
-							</p>
+						<div class="con-row">
+							<div class="con-flex">
+								<h2>{{ 'Campaign' | translate }}</h2>
+								<p>
+									{{ 'AddCampaignIntro' | translate }}.
+									{{modalModifyInfo.selectedDaysText}}
+								</p>
+							</div>
 						</div>
-						<div class="wfm-block campaign-position">
-							<table class="wfm-table wfm-table-multi forecast-period">
-								<thead>
-									<tr>
-										<th></th>
-										<th>{{ 'Forecasted' | translate }}</th>
-										<th>{{ 'Calls' | translate }}</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>{{ 'Calls' | translate }}</td>
-										<td class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}</td>
-										<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</td>
-									</tr>
-								</tbody>
-							</table>
+
+						<div class="con-row">
+							<div class="con-flex"></div>
+							<div class="con-flex split-3-1">
+								<table class="wfm-table wfm-table-multi forecast-period">
+									<thead>
+										<tr>
+											<th></th>
+											<th>{{ 'Forecasted' | translate }}</th>
+											<th>{{ 'Calls' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{ 'Calls' | translate }}</td>
+											<td class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}</td>
+											<td class="forecast-campaign-totalcalls-count">{{sumOfCallsForSelectedDaysWithCampaign}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="con-flex"></div>
 						</div>
 						<span>
 							<div class="wfm-block campaign-position">
 								<label>{{ 'CampaignCallsPercentSign' | translate }}:</label>
-
 								<form name="campaignForm">
 									<div class="row forecast-campaign">
 										<input class="forecast-campaign-input forecast-campaign" name="campaignPercentageInput" type="number" ng-model-options="{ debounce: 500 }" max="{{campaignPercentageConst.max}}" min="{{campaignPercentageConst.min}}" ng-model="modalModifyInfo.campaignPercentage" ng-change="campaignPercentageChanged(campaignForm)" />
@@ -296,16 +224,113 @@
 								</form>
 							</div>
 						</span>
-
-						<div class="modal-footer">
+						<div class="modal-actions">
 							<aside>
-								<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</a>
-								<a class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="applyCampaign(); addCampaign=false">{{ 'Apply' | translate }}</a>
+								<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</button>
+								<button class="wfm-btn wfm-btn-invis-primary forecast-apply-campaign-button" ng-disabled="disableApplyCampaign()" ng-class="{'wfm-btn-invis-disabled': disableApplyCampaign()}" ng-click="applyCampaign(); addCampaign=false">{{ 'Apply' | translate }}</button>
 							</aside>
 						</div>
+					</div>
+
+					<div ng-show="overrideTasks && !addCampaign">
+						<div class="con-row">
+							<div class="con-flex">
+								<h2>{{ 'AbsenceOverride' | translate }}</h2>
+								<p>
+									{{ 'ForecastOverrideMsg' | translate }}
+									{{ modalModifyInfo.selectedDaysText }}
+								</p>
+							</div>
+						</div>
+						<form name="form" class="wfm-form" novalidate ng-submit="applyOverride(form.$valid);">
+							<div class="con-row">
+								<div class="con-flex">
+									<dl>
+										<dd>
+											<ul class="wfm-accordion">
+												<li>
+													<div class="wfm-checkbox">
+														<input type="checkbox" id="tasksCheckId" ng-model="modalModifyInfo.shouldSetOverrideTasks" />
+														<label class="override-tasks-checkbox" for="tasksCheckId" ng-click="activeTaskInput = !activeTaskInput">
+															<span class="wfm-checkbox-toggle"></span>
+															<span class="wfm-checkbox-label">{{'Calls'|translate}}</span>
+														</label>
+													</div>
+													<div class="wfm-accordion-content" ng-cloak ng-show="activeTaskInput">
+														<div class="form-input-wrap skill-service-level-seconds">
+															<label for="overrideTasksInputId">
+																{{ 'CallsSlashDay' | translate }}
+																<input type="number" ng-model="modalModifyInfo.overrideTasks" ng-required="modalModifyInfo.shouldSetOverrideTasks" name="overrideTasksInput" id="overrideTasksInputId" min="0" />
+															</label>
+															<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.required}">{{ 'Required' | translate }}</div>
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTasksInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
+															</div>
+														</div>
+													</div>
+												</li>
+
+												<li>
+													<div class="wfm-checkbox">
+														<input type="checkbox" id="talkTimeCheckId" ng-model="modalModifyInfo.shouldSetOverrideTalkTime" />
+														<label class="override-talktime-checkbox" for="talkTimeCheckId" ng-click="activeTalkInput = !activeTalkInput">
+															<span class="wfm-checkbox-toggle"></span>
+															<span class="wfm-checkbox-label">{{'TalkTime'|translate}}</span>
+														</label>
+													</div>
+													<div class="wfm-accordion-content" ng-cloak ng-show="activeTalkInput">
+														<div class="form-input-wrap skill-service-level-seconds">
+															<label for="overrideTalkTimeInputId">
+																{{'SecondsSlashCalls'|translate}}
+																<input type="number" ng-model="modalModifyInfo.overrideTalkTime" ng-required="modalModifyInfo.shouldSetOverrideTalkTime" name="overrideTalkTimeInput" id="overrideTalkTimeInputId" min="0" />
+															</label>
+															<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.required}">{{ 'Required' | translate }}</div>
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideTalkTimeInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
+															</div>
+														</div>
+													</div>
+												</li>
+
+												<li>
+													<div class="wfm-checkbox">
+														<input type="checkbox" id="AcwCheckId" ng-model="modalModifyInfo.shouldSetOverrideAfterCallWork" />
+														<label class="override-acw-checkbox" for="AcwCheckId" ng-click="activeAcwInput = !activeAcwInput">
+															<span class="wfm-checkbox-toggle"></span>
+															<span class="wfm-checkbox-label">{{'AfterCallWorkTime'|translate}}</span>
+														</label>
+													</div>
+													<div class="wfm-accordion-content" ng-cloak ng-show="activeAcwInput">
+														<div class="form-input-wrap skill-service-level-seconds">
+															<label for="overrideAcwInputId">
+																{{'SecondsSlashCalls'|translate}}
+																<input type="number" ng-model="modalModifyInfo.overrideAcw" ng-required="modalModifyInfo.shouldSetOverrideAfterCallWork" name="overrideAcwInput" id="overrideAcwInputId" min="0" />
+															</label>
+															<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.overrideTasksInput.$touched">
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.required}">{{ 'Required' | translate }}</div>
+																<div class="form-input-message" ng-class="{formInvalidInput:form.overrideAcwInput.$error.min}">{{ 'IllegalInput' | translate }}</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</dd>
+									</dl>
+								</div>
+							</div>
+
+							<br />
+							<div class="modal-actions">
+								<aside>
+									<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelModifyModal()">{{ 'Close' | translate }}</button>
+									<button type="submit" class="wfm-btn wfm-btn-invis-primary forecast-apply-override-tasks-button" ng-disabled="disableApplyOverride()" ng-class="{'wfm-btn-invis-disabled': disableApplyOverride()}">{{ 'Apply' | translate }}</button>
+								</aside>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 </div>

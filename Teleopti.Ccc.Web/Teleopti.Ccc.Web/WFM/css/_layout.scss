@@ -296,6 +296,9 @@ position: fixed;
 	box-shadow: none!important;
 }
 
+.wfm-card-unselected, .wfm-card-unselected:hover{
+	background-color: $white!important;
+}
 
 md-progress-circular .md-inner .md-half-circle {
 	border-top-color: #E91E63!important;

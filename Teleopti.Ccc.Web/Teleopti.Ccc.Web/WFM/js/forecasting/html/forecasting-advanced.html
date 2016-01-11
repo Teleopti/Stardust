@@ -1,29 +1,33 @@
-<div>
-	<div class="row">
-		<div class="col-lg-12">
-			<button class="wfm-btn wfm-btn-default back" ng-click="back()">{{ 'Back' | translate }}</button>
-		</div>
-	</div>
-	<div class="row">
-		<div class="wfm-slide-tabs">
-			<md-content class="md-padding">
-				<md-tabs md-dynamic-height md-border-bottom>
-					<md-tab label="{{ 'ForecastMethod' | translate }}">
-						<md-content class="md-padding">
-							<div ng-include="'first-forecast-tab.html'" ng-init="init()"></div>
-						</md-content>
-					</md-tab>
-					<md-tab label="{{'Outliers'|translate}}" ng-if="isQueueStatisticsEnabled">
-						<md-content class="md-padding">
-							<div ng-include="'second-forecast-tab.html'"></div>
-						</md-content>
-					</md-tab>
-				</md-tabs>
-			</md-content>
-		</div>
+<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-chart-line"></i> {{ 'Statistics' | translate }}</h1>
 	</div>
 </div>
 
+<div class="con-row">
+	<div class="con-flex">
+		<button class="wfm-btn wfm-btn-default back" ng-click="back()">{{ 'Back' | translate }}</button>
+	</div>
+</div>
+
+<div class="panel material-depth-1">
+	<div class="wfm-slide-tabs tabbed-panel">
+		<md-content class="md-padding">
+			<md-tabs md-dynamic-height md-border-bottom >
+				<md-tab label="{{ 'ForecastMethod' | translate }}">
+					<md-content class="md-padding">
+						<div ng-include="'first-forecast-tab.html'" ng-init="init()"></div>
+					</md-content>
+				</md-tab>
+				<md-tab label="{{'Outliers'|translate}}" ng-if="isQueueStatisticsEnabled">
+					<md-content class="md-padding">
+						<div ng-include="'second-forecast-tab.html'"></div>
+					</md-content>
+				</md-tab>
+			</md-tabs>
+		</md-content>
+	</div>
+</div>
 
 <script type="text/ng-template" id="first-forecast-tab.html">
 	<div ng-if="evaluationLoading" class="wfm-block">
@@ -31,23 +35,16 @@
 	</div>
 	<div class="alert-warning notice-spacer" ng-show="noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
 	<div ng-if="!evaluationLoading && !noHistoricalDataForForecasting">
-		<div class="wfm-block">
-			<div class="row">
-				<div class="col-lg-12">
-					<p>
-						This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <b>{{workloadName}}</b>. Out of several tested forecast methods
-						this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
-						forecast for workload <b>{{workloadName}}</b>.
-					</p>
-					<div class="row">
-						<p>
-							We use historical data from <b>{{ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
-						</p>
-					</div>
-				</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<p>
+					This chart shows how well a <i>Forecast Method</i> matches last years <i>Queue Statistics</i> for workload <b>{{workloadName}}</b>. Out of several tested forecast methods
+					this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
+					forecast for workload <b>{{workloadName}}</b>.
+					Historical data from <b>{{ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>is used to evaluate forecast methods on the period from <b>{{ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
+				</p>
 			</div>
 		</div>
-
 		<c3chart bindto-id="evaluationChart" chart-data="evaluationChartData" chart-columns="chartInfo.evaluationChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
@@ -70,12 +67,10 @@
 		<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
-					<chart-axis-x-tick tick-format="%Y-%m-%d" />
-				</chart-axis-x>
-			</chart-axis>
+					<chart-axis-x-tick tick-format="%Y-%m-%d" /></chart-axis-x>
+				</chart-axis>
 			<chart-axis>
-				<chart-axis-y axis-id="y" axis-position="outer-middle" />
-			</chart-axis>
+			<chart-axis-y axis-id="y" axis-position="outer-middle" /></chart-axis>
 		</c3chart>
 	</div>
 </script>
