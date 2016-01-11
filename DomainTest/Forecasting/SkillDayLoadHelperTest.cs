@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                              new MultisiteDay(_dtp.StartDate.AddDays(2),multisiteSkill,_scenario)
                                                                          };
 
-            Expect.Call(_skillDayRep.FindRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(allSkillDays).Repeat.Once();
+            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(allSkillDays).Repeat.Once();
             
             Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp),multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                  SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(2))
                                                              };
 
-            Expect.Call(_skillDayRep.FindRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(skillDays).Repeat.Once();
+            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(skillDays).Repeat.Once();
             
             _mocks.ReplayAll();
             var result = _target.LoadSchedulerSkillDays(_dtp, _skills, _scenario);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                              {
                                                  new MultisiteDay(_dtp.StartDate, multisiteSkill, _scenario)
                                              };
-            Expect.Call(_skillDayRep.FindRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)),
+            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)),
                                                skillToBeLoad, _scenario)).Return(skillDays).Repeat.Any();
             Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp), multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
 

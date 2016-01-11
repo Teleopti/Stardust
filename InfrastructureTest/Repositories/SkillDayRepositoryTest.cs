@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						PersistAndRemoveFromUnitOfWork(skillDay);
 						SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
 						ICollection<ISkillDay> orgSkillDays =
-								skillDayRepository.FindRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill>{_skill}, _scenario);
+								skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill>{_skill}, _scenario);
 						IList<ISkillDay> skillDays = new List<ISkillDay>(orgSkillDays);
 
 						WorkloadDay workloadDay = (WorkloadDay)skillDays[0].WorkloadDayCollection[0];

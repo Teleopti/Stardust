@@ -90,13 +90,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return skillDays;
 		}
 
-        public ICollection<ISkillDay> FindRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+        public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
         {
             InParameter.NotNull("period", period);
             InParameter.NotNull("skillCollection", skills);
             InParameter.NotNull("scenario", scenario);
 
             var skillDays = new List<ISkillDay>();
+	        var defaultReadOnly = Session.DefaultReadOnly;
+	        Session.DefaultReadOnly = true;
             foreach (var skillBatch in skills.Batch(200))
             {
                 var restriction = Restrictions.Conjunction()
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 				skillDays.AddRange(days);
             }
-            
+	        Session.DefaultReadOnly = defaultReadOnly;
 
             return skillDays;
         }
@@ -304,8 +306,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		 public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		 {
-			 IList<SkillTaskDetailsModel> taskDetails = new List<SkillTaskDetailsModel>();
-			 taskDetails = Session.GetNamedQuery("SkillTaskDetails")
+			 var taskDetails = Session.GetNamedQuery("SkillTaskDetails")
 				 .SetEntity("scenario", scenario)
 				 .SetDateTime("startDate", period.StartDateTime.Date)
 				 .SetDateTime("endDate", period.EndDateTime)

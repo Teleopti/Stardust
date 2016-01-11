@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
         ISkillDay FindLatestUpdated(ISkill skill, IScenario scenario, bool withLongterm);
 
-        ICollection<ISkillDay> FindRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario);
+        ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario);
 
 	    IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
     }

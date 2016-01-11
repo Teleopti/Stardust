@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
 	        // now we don't know the timezone stretch the period one day more in start and end
 	        var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
-	        var testSkillDays = _skillDayRepository.FindRange(periodToLoad, skillsToLoad, scenario);
+	        var testSkillDays = _skillDayRepository.FindReadOnlyRange(periodToLoad, skillsToLoad, scenario);
 
 			periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
 	        foreach (var skill in skillsToLoad)
