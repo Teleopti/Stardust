@@ -119,7 +119,6 @@
 				'node_modules/angular-signalr-hub/signalr-hub.min.js',
 				'vendor/hammerjs/hammer.min.js',
 				'node_modules/angular-material/angular-material.min.js',
-				'js/ABmetrics.min.js',
 				'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
 				'vendor/angular-growl.js',
 				'vendor/fabricjs/fabric.min.js',
