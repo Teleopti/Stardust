@@ -12,13 +12,13 @@
 
 		this.notifyCampaignCreationSuccess = function(campaign) {
 			notifySuccess('CampaignCreated', [
-				'<strong>' + campaign.Name + '</strong>'
+				'<strong>' + (campaign.CampaignSummary?campaign.CampaignSummary.Name:campaign.Name) + '</strong>'
 			]);
 		}
 
-		this.notifyCampaignUpdateSuccess = function(campaign) {
+		this.notifyCampaignUpdateSuccess = function (campaign) {
 			notifySuccess('CampaignUpdated', [
-				'<strong>' + campaign.Name + '</strong>'
+				'<strong>' + (campaign.CampaignSummary?campaign.CampaignSummary.Name:campaign.Name) + '</strong>'
 			]);
 		}
 
