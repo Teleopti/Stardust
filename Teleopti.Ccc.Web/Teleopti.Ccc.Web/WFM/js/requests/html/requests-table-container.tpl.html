@@ -1,9 +1,10 @@
-﻿<div class="wfm-switch">
+﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>
+<div class="wfm-switch time-zone-switch">
 	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone" />
 	<label for="switch1">
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span><span> - {{requestsTableContainer.userTimeZone}} </span></span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>		
 		<span class="wfm-switch-toggle"></span>
+		<span style="width: 55px; display: inline-block;"></span>
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span></span>
+		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>
 	</label>
 </div>
-<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>

@@ -13985,11 +13985,11 @@ Help us improve your experience by sending an error report</value>
     <comment>unexpected error message on the web ui</comment>
   </data>
   <data name="LogonUserTimeZone" xml:space="preserve">
-    <value>Current User Timezone</value>
+    <value>Your Time zone</value>
     <comment>Current user's timezone</comment>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
-    <value>Request Submitter Timezone</value>
+    <value>Request time zone</value>
     <comment>Request submitter's timezone</comment>
   </data>
   <data name="FilterRoles" xml:space="preserve">
@@ -14017,7 +14017,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Multiple requests have not been denied, with showing the count of the not denied requests.</comment>
   </data>
   <data name="PresentTenseSchedule" xml:space="preserve">
-	<value>Scheduling</value>
-	<comment>Message describing an ongoing scheduling process</comment>
+    <value>Scheduling</value>
+    <comment>Message describing an ongoing scheduling process</comment>
   </data>
 </root>

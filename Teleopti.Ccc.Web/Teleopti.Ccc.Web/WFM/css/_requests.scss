@@ -1,4 +1,12 @@
 ﻿.wfm-requests {
+	.advanced-search-container tr td:nth-child(2) div{
+		margin-right:0 !important;
+	}
+	.time-zone-switch{
+		top: 25px;
+		display: inline-block;
+		z-index:100;
+	}
 	.inline-block {
 		display: inline-block;
 	}
@@ -10,8 +18,7 @@
 
 	.request-filter {
 		.input-prepend {
-			width: 365px;
-
+			width:300px;
 			#simple-search {
 				height: auto !important;
 			}
@@ -28,21 +35,19 @@
 		.relative {
 			position: relative;
 		}
-
+		.picker-template-dropdown input{
+			width:180px;
+		}
 		.picker-template-dropdown {
 			.picker-wrapper {
 				top: 20px;
 				margin-left: -108px;
 			}
-
-			input {
-				width: 216px;
-			}
 		}
 	}
 
 	.ui-grid {
-		min-height: 700px;
+		height:70vh;
 		.ui-grid-cell-contents {
 			width: 85%;
 			text-align: center;
@@ -59,8 +64,11 @@
 	}
 
 	.paging {
+		position:relative;
+		top:-20px;
 		.total-requests-count {
-			margin-top: 20px; 
+			margin-top: 25px;
+			margin-left: 225px;
 		}
 
 		.page-size-selector{

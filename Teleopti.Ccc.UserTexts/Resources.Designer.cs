@@ -13724,7 +13724,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current User Timezone.
+        ///   Looks up a localized string similar to Your Time zone.
         /// </summary>
         public static string LogonUserTimeZone {
             get {
@@ -20492,6 +20492,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduling.
+        /// </summary>
+        public static string PresentTenseSchedule {
+            get {
+                return ResourceManager.GetString("PresentTenseSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {
@@ -22164,7 +22173,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request Submitter Timezone.
+        ///   Looks up a localized string similar to Request time zone.
         /// </summary>
         public static string RequestSubmitterTimeZone {
             get {
