@@ -92,6 +92,13 @@
 			}, function(newValue) {
 				ctrl.checkValidity();
 				ctrl.refreshDatepickers();
+
+				if (scope.dropDownState) {
+					if (!scope.dropDownState.showAllDatePickers) {
+						scope.dropDownState.showStartDatePicker = false;
+						scope.dropDownState.showEndDatePicker = false;
+					}
+				}
 			}, true);
 
 			scope.showMessage = !angular.isDefined(attrs.hideMessage);

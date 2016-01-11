@@ -75,8 +75,7 @@
 				return target;
 			}, function (newValue) {
 				if (newValue.endDate === null || newValue.startDate === null) return;
-				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
-				scope.requestsOverview.requestsFilter = newValue;
+				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;				
 				reload();
 				scope.$broadcast('reload.requests.without.selection');
 			}, true);
