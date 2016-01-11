@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using log4net;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		{
 			LogTimeTester.TestMethod();
 			var logMessage = LogSpy.DebugMessages[0];
-			logMessage.Should().Not.Match(new Regex("exception", RegexOptions.IgnoreCase));
+			logMessage.ToLower().Should().Not.Contain("exception");
 		}
 
 		[Test]
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		{
 			Assert.Throws<NotImplementedException>(() => LogTimeTester.TestMethodThatThrows());
 			var logMessage = LogSpy.DebugMessages[0];
-			logMessage.Should().Match(new Regex("(exception)", RegexOptions.IgnoreCase));
+			logMessage.ToLower().Should().Contain("exception");
 		}
 
 		[Test]
