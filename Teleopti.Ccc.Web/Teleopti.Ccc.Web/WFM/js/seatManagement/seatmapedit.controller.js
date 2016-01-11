@@ -166,7 +166,8 @@
 
 		vm.hasChanges = function () {
 			var seatPropertiesChanged = vm.parentVm.loadedSeatsData != JSON.stringify(vm.parentVm.seats);
-			return (vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged);
+			return (vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged)
+				&& (vm.parentVm.loadedJsonData == undefined ? canvas()._objects.length != 0 : true);
 		};
 
 		vm.refreshSeatMap = function () {

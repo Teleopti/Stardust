@@ -465,9 +465,10 @@ people-selection-list>div{
 
 .seatmap-bottom-bar{
 	position: absolute;
-	bottom: 0;
+	bottom: 1px;
 	left: 0;
 	right: 0;
+	height:48px;
 
 	md-slider{
 		width: 200px;
