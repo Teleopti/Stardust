@@ -2,9 +2,11 @@
 <div class="people-cart">
 	<div class="row" style="position: relative">
 		<h4>{{'SelectedPeople' | translate}}</h4>
-		<div class="col-sm-1" style="padding-left:0; padding-right: 0; width: 60px">
+		<div class="pull-left" style="padding-left:0; padding-right: 0; width: 60px">
 			<p>
-				<button class="wfm-fab info mini" ng-click="vm.back()"><i class="mdi mdi-reply"></i></button>
+				<button class="context-menu wfm-fab mini" ng-click="vm.back()">
+					<i class="mdi mdi-reply" style="color: #9C27B0"></i>
+				</button>
 				<md-tooltip>{{ 'Back' | translate }}</md-tooltip>
 			</p>
 		</div>
@@ -12,21 +14,26 @@
 			<input type="text" style="text-align: center;" datepicker-popup="{{vm.dateFormat}}" ng-model="vm.selectedDate" ng-change="vm.selectedDateChanged()" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 			<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()"><i class="mdi mdi-calendar"></i></button>
 		</div>
-		<div>
-			<button class="wfm-fab wfm-panel-delete material-depth-1" ng-click="vm.clearCart()">
+		<div class="pull-right">
+			<button class="context-menu wfm-fab mini" ng-click="vm.clearCart()">
 				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
-				<i class="mdi mdi-account-remove"></i>
+				<i class="mdi mdi-account-remove" style="color: #09F"></i>
 			</button>
-			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
-				 active-icon="mdi-pencil" resting-icon="mdi-plus"
-				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-				 toggling-method="click" menu-state="vm.menuState" callback="vm.toggleMenuState()">
-				<button class="{{cmd.label|lowercase}}" ng-if="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
-						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
-				<span class="wfm-panel selection-cart-indicator">
+			<button class="context-menu wfm-fab mini">
+				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
+				<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
+					<ul class="wfm-list">
+						<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-click="cmd.action()">
+							<div>
+								<span class="pull-left">{{cmd.label|translate}}</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<span ng-show="vm.selectedPeopleIds.length > 0" class="wfm-panel selection-cart-indicator">
 					{{vm.selectedPeopleIds.length}}
 				</span>
-			</nav>
+			</button>
 		</div>
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
