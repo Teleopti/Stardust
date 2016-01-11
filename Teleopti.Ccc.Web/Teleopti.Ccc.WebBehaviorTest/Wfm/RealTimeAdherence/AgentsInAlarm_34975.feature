@@ -50,11 +50,11 @@ Scenario: See agents with the highest alarm time first
 	And I am viewing real time adherence for agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And 'John King' sets his phone state to 'Ready'
-	When the time is '2015-11-23 09:00:00'
+	When the time is '2015-11-23 08:10:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	When the time is '2015-11-23 09:01:00'
+	When the time is '2015-11-23 08:11:00'
 	And 'John King' sets his phone state to 'Pause'
-	When the time is '2015-11-23 09:05:00'
+	When the time is '2015-11-23 08:15:00'
 	Then I should see agent status
 		| Name       |              |
 		| Name       | Pierre Baldi |
