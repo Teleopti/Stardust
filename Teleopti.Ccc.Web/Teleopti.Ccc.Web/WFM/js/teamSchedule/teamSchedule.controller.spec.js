@@ -49,15 +49,6 @@ describe("TeamScheduleControllerTest", function() {
 	};
 
 	function setupMockTeamScheduleService(teamScheduleService) {
-		teamScheduleService.loadAllTeams = {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({});
-				return {
-					$promise: queryDeferred.promise
-				};
-			}
-		};
 		teamScheduleService.loadAbsences = {
 			query: function () {
 				var queryDeferred = $q.defer();
