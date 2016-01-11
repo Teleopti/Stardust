@@ -4,7 +4,7 @@
 		<h4>{{'SelectedPeople' | translate}}</h4>
 		<div class="pull-left" style="padding-left:0; padding-right: 0; width: 60px">
 			<p>
-				<button class="context-menu wfm-fab mini" ng-click="vm.back()">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.back()">
 					<i class="mdi mdi-reply" style="color: #9C27B0"></i>
 				</button>
 				<md-tooltip>{{ 'Back' | translate }}</md-tooltip>
@@ -15,14 +15,15 @@
 			<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()"><i class="mdi mdi-calendar"></i></button>
 		</div>
 		<div class="pull-right">
-			<button class="context-menu wfm-fab mini" ng-click="vm.clearCart()">
-				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
-				<i class="mdi mdi-account-remove" style="color: #09F"></i>
-			</button>
 			<button class="context-menu wfm-fab mini">
 				<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
 				<div class="context-menu-left" style="z-index: 1000; text-transform: none;">
 					<ul class="wfm-list">
+						<li class="item" ng-click="vm.clearCart()">
+							<div>
+								<span class="pull-left">{{"ResetSelection" | translate}}</span>
+							</div>
+						</li>
 						<li class="item" ng-if="cmd.active()" ng-repeat="cmd in vm.commands" ng-click="cmd.action()">
 							<div>
 								<span class="pull-left">{{cmd.label|translate}}</span>
