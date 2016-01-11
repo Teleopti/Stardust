@@ -8,5 +8,11 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public virtual void TestMethod()
 		{
 		}
+
+		[LogTime]
+		public virtual void TestMethodThatThrows()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

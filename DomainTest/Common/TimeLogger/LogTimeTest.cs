@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using System;
+using System.Text.RegularExpressions;
+using log4net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
@@ -36,6 +38,31 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		{
 			LogTimeTester.TestMethod();
 			LogSpy.LastLoggerName.Should().Be.EqualTo("Teleopti.LogTime");
+		}
+
+		[Test]
+		public void ShouldNotLogExceptionTextIfNoException()
+		{
+			LogTimeTester.TestMethod();
+			var logMessage = LogSpy.DebugMessages[0];
+			logMessage.Should().Not.Match(new Regex("exception", RegexOptions.IgnoreCase));
+		}
+
+		[Test]
+		public void ShouldLogExceptionTextIfException()
+		{
+			Assert.Throws<NotImplementedException>(() => LogTimeTester.TestMethodThatThrows());
+			var logMessage = LogSpy.DebugMessages[0];
+			logMessage.Should().Match(new Regex("(exception)", RegexOptions.IgnoreCase));
+		}
+
+		[Test]
+		public void ShouldLogMethodNameIfException()
+		{
+			Assert.Throws<NotImplementedException>(() => LogTimeTester.TestMethodThatThrows());
+			var logMessage = LogSpy.DebugMessages[0];
+			logMessage.Should().Contain("LogTimeTester");
+			logMessage.Should().Contain("TestMethod");
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

@@ -25,8 +25,13 @@ namespace Teleopti.Ccc.Domain.Common.TimeLogger
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
+			var message = output;
+			if (exception != null)
+			{
+				message += " (exception occured during execution)";
+			}
 			_logger.GetLogger(loggerName)
-				.DebugFormat(output, invocation.Method.Name, invocation.Method.DeclaringType, _stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
+				.DebugFormat(message, invocation.Method.Name, invocation.Method.DeclaringType, _stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
 		}
 	}
 }
