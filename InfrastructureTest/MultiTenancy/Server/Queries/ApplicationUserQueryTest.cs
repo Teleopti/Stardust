@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void Setup()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests);
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[TearDown]
 		public void Clean()
 		{
+			_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
 			_tenantUnitOfWorkManager.Dispose();
 		}
 	}

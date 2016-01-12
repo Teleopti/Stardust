@@ -28,12 +28,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotExists()
 		{
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				UserID = "appuser",
-				Password = "password",
-				IntegratedSecurity = false
-			};
+			var connStringBuilder =
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				{
+					UserID = "appuser",
+					Password = "password",
+					IntegratedSecurity = false
+				};
 
 			var importModel = new ImportDatabaseModel
 			{
@@ -50,13 +51,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfAppDatabaseNotExists()
 		{
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				InitialCatalog = Guid.NewGuid().ToString(),
-				UserID = "appuser",
-				Password = "password",
-				IntegratedSecurity = false
-			};
+			var connStringBuilder =
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				{
+					InitialCatalog = Guid.NewGuid().ToString(),
+					UserID = "appuser",
+					Password = "password",
+					IntegratedSecurity = false
+				};
 
 			var importModel = new ImportDatabaseModel
 			{
@@ -82,20 +84,21 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var sqlVersion = new SqlVersion(12, false);
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
-			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7,"appuser",sqlVersion, "NewFineTenant", 1);
-			
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", sqlVersion,
+				"NewFineTenant", 1);
+
 			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "password";
 
-			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics,  "appuser", sqlVersion, "NewFineTenant", 1);
+			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "appuser", sqlVersion, "NewFineTenant", 1);
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-         var importModel = new ImportDatabaseModel
+			var importModel = new ImportDatabaseModel
 			{
 				Server = connStringBuilder.DataSource,
 				AdminUser = tempModel.CreateDbUser,
@@ -103,7 +106,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				UserName = "appuser",
 				Password = "password",
 				AppDatabase = TestPollutionCleaner.TestTenantConnection().InitialCatalog,
-				AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog, 
+				AnalyticsDatabase = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
 				Tenant = "NewFineTenant"
 			};
 

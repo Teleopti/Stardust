@@ -11,6 +11,8 @@ namespace Teleopti.Wfm.AdministrationTest
 {
 	public class TenantTestAttribute : IoCTestAttribute
 	{
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
@@ -18,12 +20,19 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddModule(new WfmAdminModule());
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 
-			var service = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			system.AddService(service);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			system.AddService(_tenantUnitOfWorkManager);
 
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
 			system.AddService<TestPollutionCleaner>();
+		}
+
+		protected override void AfterTest()
+		{
+			base.AfterTest();
+
+			_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
 		}
 	}
 }

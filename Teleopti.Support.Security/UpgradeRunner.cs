@@ -36,26 +36,8 @@ namespace Teleopti.Support.Security
 
 			try
 			{
-				
-				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(databaseArguments.ApplicationDbConnectionString);
-				var updateTenantData = new UpdateTenantData(tenantUnitOfWorkManager);
-				updateTenantData.UpdateTenantConnectionStrings(databaseArguments.ApplicationDbConnectionStringToStore, databaseArguments.AnalyticsDbConnectionStringToStore);
-				updateTenantData.RegenerateTenantPasswords();
-				if (!string.IsNullOrEmpty(databaseArguments.AggDatabase))
-				{
-					//this if needs to be here to be able to run this from freemium (no anal db)
-					reportTextCommand.Execute(databaseArguments);
-					CrossDatabaseViewUpdate.Execute(databaseArguments);
-					DelayedDataConvert.Execute(databaseArguments);
-				}
-				setPersonAssignmentDate(databaseArguments);
-				removeDuplicateAssignments(databaseArguments);
-				ForecasterDateAdjustment.Execute(databaseArguments);
-				PersonFirstDayOfWeekSetter.Execute(databaseArguments);
-				PasswordEncryption.Execute(databaseArguments);
-				LicenseStatusChecker.Execute(databaseArguments);
-				convertDayOffToNewStructure(databaseArguments);
-				initAuditData(databaseArguments);
+				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(databaseArguments.ApplicationDbConnectionString);
+				UpgradeProcess(tenantUnitOfWorkManager, tenantUnitOfWorkManager, databaseArguments);
 			}
 			catch (Exception e)
 			{
@@ -65,6 +47,31 @@ namespace Teleopti.Support.Security
 			Thread.Sleep(TimeSpan.FromSeconds(3));
 			logToLog("Teleopti.Support.Security successful", Level.Debug);
 			Environment.ExitCode = 0;
+		}
+
+		public void UpgradeProcess(
+			ITenantUnitOfWork tenantUnitOfWork,
+			ICurrentTenantSession currentTenantSession, 
+			IDatabaseArguments databaseArguments)
+		{
+			var updateTenantData = new UpdateTenantData(tenantUnitOfWork, currentTenantSession);
+			updateTenantData.UpdateTenantConnectionStrings(databaseArguments.ApplicationDbConnectionStringToStore, databaseArguments.AnalyticsDbConnectionStringToStore);
+			updateTenantData.RegenerateTenantPasswords();
+			if (!string.IsNullOrEmpty(databaseArguments.AggDatabase))
+			{
+				//this if needs to be here to be able to run this from freemium (no anal db)
+				reportTextCommand.Execute(databaseArguments);
+				CrossDatabaseViewUpdate.Execute(databaseArguments);
+				DelayedDataConvert.Execute(databaseArguments);
+			}
+			setPersonAssignmentDate(databaseArguments);
+			removeDuplicateAssignments(databaseArguments);
+			ForecasterDateAdjustment.Execute(databaseArguments);
+			PersonFirstDayOfWeekSetter.Execute(databaseArguments);
+			PasswordEncryption.Execute(databaseArguments);
+			LicenseStatusChecker.Execute(databaseArguments);
+			convertDayOffToNewStructure(databaseArguments);
+			initAuditData(databaseArguments);
 		}
 
 		private void initAuditData(IDatabaseArguments commandLineArgument)

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				var configReader = c.Resolve<IConfigReader>();
 				var connstringAsString = configReader.ConnectionString(tenancyConnectionStringKey);
-				return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
+				return TenantUnitOfWorkManager.Create(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()

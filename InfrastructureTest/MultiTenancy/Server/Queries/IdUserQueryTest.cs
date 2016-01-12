@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConnectionStringHelper.ConnectionStringUsedInTests);
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 
 			var tenant = new Tenant(RandomName.Make());

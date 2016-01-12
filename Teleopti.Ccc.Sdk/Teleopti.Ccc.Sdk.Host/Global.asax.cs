@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			//////TODO: Remove this when payroll stuff are fixed! Only here because of payrolls...//////
 			// webconfig key "Tenancy" can also be removed. And registration of LoadAllTenants in SDK... Should only go to tenant server/web when logging in
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
 				var loadAllTenants = new LoadAllTenants(tenantUnitOfWorkManager);

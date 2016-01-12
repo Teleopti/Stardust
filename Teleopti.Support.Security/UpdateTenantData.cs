@@ -8,12 +8,16 @@ namespace Teleopti.Support.Security
 	//todo: tenant what should we do when/if multiple tenants?
 	public class UpdateTenantData
 	{
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
+		private readonly ICurrentTenantSession _currentTenantSession;
 		private static readonly ILog log = LogManager.GetLogger(typeof(UpdateTenantData));
-		private readonly TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
-		public UpdateTenantData(TenantUnitOfWorkManager tenantUnitOfWorkManager)
+		public UpdateTenantData(
+			ITenantUnitOfWork tenantUnitOfWork,
+			ICurrentTenantSession currentTenantSession)
 		{
-			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
+			_tenantUnitOfWork = tenantUnitOfWork;
+			_currentTenantSession = currentTenantSession;
 		}
 
 		public void RegenerateTenantPasswords()
@@ -24,9 +28,9 @@ namespace Teleopti.Support.Security
 		public void UpdateTenantConnectionStrings(string appDbConnectionString, string analyticsDbConnectionString)
 		{
 			log.Debug("Updating tenant connection strings...");
-			using (_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
+			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var allTenants = new LoadAllTenants(_tenantUnitOfWorkManager).Tenants();
+				var allTenants = new LoadAllTenants(_currentTenantSession).Tenants();
 				var numberOfTenants = allTenants.Count();
 				if (numberOfTenants != 1)
 				{

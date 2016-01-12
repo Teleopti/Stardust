@@ -124,14 +124,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[SetUp]
 		public void CreateTarget()
 		{
-			target = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
+			target = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 		}
 
 		[TearDown]
 		public void VerifySessionIsClosed()
 		{
-			if(target.HasCurrentSession())
-				target.CurrentSession().Dispose();
+			target.CancelAndDisposeCurrent();
 		}
 	}
 }

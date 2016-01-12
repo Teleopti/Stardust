@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldLogWhenPersonIdExists()
 		{
-			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString))
+			using (var tenantUowManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString))
 			{
 				tenantUowManager.EnsureUnitOfWorkIsStarted();
 				var target = new PersistLogonAttempt(tenantUowManager);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldLogWhenPersonIdNotExists()
 		{
-			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString))
+			using (var tenantUowManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString))
 			{
 				tenantUowManager.EnsureUnitOfWorkIsStarted();
 				var target = new PersistLogonAttempt(tenantUowManager);

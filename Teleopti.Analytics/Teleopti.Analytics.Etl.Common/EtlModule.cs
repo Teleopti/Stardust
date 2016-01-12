@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Common
 			{
 				var configReader = c.Resolve<IConfigReader>();
 				var connstringAsString = configReader.ConnectionString("Tenancy");
-				return TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
+				return TenantUnitOfWorkManager.Create(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()

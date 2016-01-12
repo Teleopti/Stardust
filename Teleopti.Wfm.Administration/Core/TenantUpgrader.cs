@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Support.Security;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -11,11 +12,19 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly DatabaseUpgrader _databaseUpgrader;
 		private readonly UpgradeRunner _upgradeRunner;
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
+		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public TenantUpgrader(DatabaseUpgrader databaseUpgrader, UpgradeRunner upgradeRunner)
+		public TenantUpgrader(
+			DatabaseUpgrader databaseUpgrader, 
+			UpgradeRunner upgradeRunner, 
+			ITenantUnitOfWork tenantUnitOfWork, 
+			ICurrentTenantSession currentTenantSession)
 		{
 			_databaseUpgrader = databaseUpgrader;
 			_upgradeRunner = upgradeRunner;
+			_tenantUnitOfWork = tenantUnitOfWork;
+			_currentTenantSession = currentTenantSession;
 		}
 
 		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
@@ -60,8 +69,8 @@ namespace Teleopti.Wfm.Administration.Core
 				AggDatabase = builder.ConnectionString,
 			};
 			_upgradeRunner.Logger = new TenantLogger(tenant.Name, tenant.Id);
-			_upgradeRunner.Upgrade(dbArgs);
 
+			_upgradeRunner.UpgradeProcess(_tenantUnitOfWork, _currentTenantSession, dbArgs);
 		}
 
 		private bool isAzure()

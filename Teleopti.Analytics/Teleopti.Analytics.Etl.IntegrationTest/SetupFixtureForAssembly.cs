@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			TestState.BusinessUnit.Name = "BusinessUnit";
 
 			StateHolderProxyHelper.SetupFakeState(DataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
@@ -73,7 +73,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		
 		public static void BeginTest()
 		{
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 
 			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction,
 					tenantAction =>

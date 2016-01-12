@@ -120,7 +120,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var helper = new DatabaseHandler(new Ccc.ApplicationConfig.Common.CommandLineArgument(new string[0]));
 			var defaultDataCreator = new DefaultDataCreator(name, CultureInfo.CurrentCulture, TimeZoneInfo.Local, "", "",
 				helper.GetSessionFactory(connectionToNewDb),
-				TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connectionToNewDb));
+				TenantUnitOfWorkManager.Create(connectionToNewDb));
 			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
 			defaultDataCreator.Save(defaultAggregateRoot);
 		}

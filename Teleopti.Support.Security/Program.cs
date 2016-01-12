@@ -37,7 +37,7 @@ namespace Teleopti.Support.Security
 				var upgrade = new UpgradeRunner();
 				upgrade.Upgrade(commandLineArgument.GetDatabaseArguments());
 
-				//var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(commandLineArgument.ApplicationDbConnectionString());
+				//var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(commandLineArgument.ApplicationDbConnectionString());
 				//var updateTenantData = new UpdateTenantData(tenantUnitOfWorkManager);
 				//updateTenantData.UpdateTenantConnectionStrings(commandLineArgument.ApplicationDbConnectionStringToStore(), commandLineArgument.AnalyticsDbConnectionStringToStore());
 				//updateTenantData.RegenerateTenantPasswords();

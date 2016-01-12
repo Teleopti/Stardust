@@ -32,10 +32,15 @@ namespace Teleopti.Wfm.Administration.Core
 				.GetNamedQuery("loadAll")
 				.List<PersonInfo>();
 
-			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(importConnectionString);
-			tenantUowManager.EnsureUnitOfWorkIsStarted();
-			var importUsers = new LoadAllPersonInfos(tenantUowManager).PersonInfos().ToList();
-			tenantUowManager.CancelAndDisposeCurrent();
+			IList<PersonInfo> importUsers = null;
+			using (var tenantUowManager = TenantUnitOfWorkManager.Create(importConnectionString))
+			{
+				using (tenantUowManager.EnsureUnitOfWorkIsStarted())
+				{
+					importUsers = new LoadAllPersonInfos(tenantUowManager).PersonInfos().ToList();
+				}
+			}
+
 			var conflicting = new HashSet<ImportUserModel>();
 			var notConflicting = new HashSet<ImportUserModel>();
 			foreach (var importUser in importUsers)

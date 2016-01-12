@@ -4,6 +4,7 @@ using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
@@ -16,23 +17,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		{
 			_sessionFactory = sessionFactory;
 		}
-
-		public static TenantUnitOfWorkManager CreateInstanceForHostsWithOneUser(string connectionString)
-		{
-			return createInstance(connectionString, "call");
-		}
-
-		public static TenantUnitOfWorkManager CreateInstanceForWeb(string connectionString)
-		{
-			return createInstance(connectionString, "web");
-		}
-
-		public static TenantUnitOfWorkManager CreateInstanceForThread(string connectionString)
-		{
-			return createInstance(connectionString, "thread_static");
-		}
-
-		private static TenantUnitOfWorkManager createInstance(string connectionString, string sessionContext)
+		
+		public static TenantUnitOfWorkManager Create(string connectionString)
 		{
 			if(connectionString==null)
 				return new TenantUnitOfWorkManager(null);
@@ -44,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 					db.Dialect<MsSql2008Dialect>();
 					db.ExceptionConverter<TenantNhibernateExceptionConverter>();
 				});
-			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
+			cfg.SetProperty(Environment.CurrentSessionContextClass, typeof(TeleoptiSessionContext).AssemblyQualifiedName);
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
 			cfg.AddResources(new[]
 			{
@@ -112,5 +98,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			CancelAndDisposeCurrent();
 			_sessionFactory.Dispose();
 		}
+		
 	}
 }
