@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -11,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 {
 	[TestFixture]
-	public class JobHelperTest : IDisposable
+	public class JobHelperTest
 	{
 		private ILogOnHelper _logOnHelper;
 		private JobHelper _target;
@@ -56,40 +55,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 			Assert.IsFalse(_target.SetBusinessUnit(null));
 			Assert.IsNull(_target.Repository);
 		}
-
-		[Test]
-		public void VerifyLogOffRaptorAndDispose()
-		{
-			_logOnHelper.Stub(x => x.Dispose());
-			
-			_target.LogOffTeleoptiCccDomain();
-			_target.Dispose();
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ReleaseManagedResources();
-			}
-			ReleaseUnmanagedResources();
-		}
-
-		protected virtual void ReleaseUnmanagedResources()
-		{
-
-		}
-
-		protected virtual void ReleaseManagedResources()
-		{
-			_target = new JobHelper(null, null, _logOnHelper);
-			_target.Dispose();
-		}
+		
 	}
 }

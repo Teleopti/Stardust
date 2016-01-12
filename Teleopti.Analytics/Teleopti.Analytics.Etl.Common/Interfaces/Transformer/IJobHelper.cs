@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {
-	public interface IJobHelper : IDisposable
+	public interface IJobHelper
 	{
 		IList<IBusinessUnit> BusinessUnitCollection { get; }
 		List<ITenantName> TenantCollection { get; }

@@ -18,7 +18,7 @@ using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResu
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
-	public class EtlJobStarter : IDisposable
+	public class EtlJobStarter
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 
@@ -189,25 +189,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			log.WarnFormat(CultureInfo.InvariantCulture,
 				"ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
 				culture, intervalLength, timeZone);
-		}
-
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (_jobHelper != null)
-				{
-					_jobHelper.Dispose();
-					_jobHelper = null;
-				}
-			}
 		}
 	}
 }

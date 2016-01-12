@@ -35,7 +35,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILogOnOff _logOnOff;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+		public LogOnHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
@@ -48,7 +49,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			if (_buList == null)
 			{
-				_buList = new List<IBusinessUnit>(_availableBusinessUnitsProvider.AvailableBusinessUnits(_choosenDb.User, _choosenDb.DataSource));
+				_buList =
+					new List<IBusinessUnit>(_availableBusinessUnitsProvider.AvailableBusinessUnits(_choosenDb.User,
+						_choosenDb.DataSource));
 			}
 
 			if (_buList == null || _buList.Count == 0)
@@ -72,7 +75,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 		}
 
-		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; } }
+		public IDataSourceContainer SelectedDataSourceContainer
+		{
+			get { return _choosenDb; }
+		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
@@ -101,7 +107,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			_buList = null;
 			var dataSource = TenantHolder.Instance.TenantDataSource(dataSourceName);
-			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
+			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application,
+				SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
 			if (_choosenDb.User == null)
 			{
@@ -120,7 +127,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 
-			if (TenantHolder.Instance.TenantBaseConfigs == null) 
+			if (TenantHolder.Instance.TenantBaseConfigs == null)
 				TenantHolder.Instance.SetTenantBaseConfigs(new List<TenantBaseConfig>());
 
 			_tenantNames = new List<ITenantName>();
@@ -133,59 +140,37 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					var temp = TenantHolder.Instance.TenantDataSource(tenant.Name);
 					if (temp == null)
 					{
-						var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
+						var config =
+							new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
 						IBaseConfiguration baseconfig = null;
 						if (config.IsConfigurationValid)
 							baseconfig = config.BaseConfiguration;
 						var applicationNhibConfiguration = new Dictionary<string, string>();
 						applicationNhibConfiguration[Environment.SessionFactoryName] = tenant.Name;
-						applicationNhibConfiguration[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+						applicationNhibConfiguration[Environment.ConnectionString] =
+							tenant.DataSourceConfiguration.ApplicationConnectionString;
 
-						var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
+						var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration,
+							tenant.DataSourceConfiguration.AnalyticsConnectionString);
 
-						TenantHolder.Instance.TenantBaseConfigs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+						TenantHolder.Instance.TenantBaseConfigs.Add(new TenantBaseConfig
+						{
+							Tenant = tenant,
+							BaseConfiguration = baseconfig,
+							TenantDataSource = newDataSource
+						});
 					}
-					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
+					_tenantNames.Add(new TenantName {DataSourceName = tenant.Name});
 				}
 
-				var toRemove = (from baseConfig in TenantHolder.Instance.TenantBaseConfigs let name = baseConfig.Tenant.Name where tenants.FirstOrDefault(x => x.Name.Equals(name)) == null select baseConfig).ToList();
+				var toRemove = (from baseConfig in TenantHolder.Instance.TenantBaseConfigs
+					let name = baseConfig.Tenant.Name
+					where tenants.FirstOrDefault(x => x.Name.Equals(name)) == null
+					select baseConfig).ToList();
 				foreach (var tenantBaseConfig in toRemove)
 				{
 					TenantHolder.Instance.TenantBaseConfigs.Remove(tenantBaseConfig);
-            }
-			}
-		}
-
-
-
-
-		public void Dispose()
-		{
-			dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ReleaseManagedResources();
-			}
-			ReleaseUnmanagedResources();
-		}
-
-		protected virtual void ReleaseUnmanagedResources()
-		{
-
-		}
-
-		protected virtual void ReleaseManagedResources()
-		{
-			_logonService = null;
-			if (_buList != null)
-			{
-				_buList.Clear();
-				_buList = null;
+				}
 			}
 		}
 

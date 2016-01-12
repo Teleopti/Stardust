@@ -92,34 +92,5 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			_repository = null;
 		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ReleaseManagedResources();
-			}
-			ReleaseUnmanagedResources();
-		}
-
-		protected virtual void ReleaseUnmanagedResources()
-		{
-		}
-
-		protected virtual void ReleaseManagedResources()
-		{
-			_repository = null;
-			if (_logOnHelper != null)
-				_logOnHelper.Dispose();
-			_logOnHelper = null;
-			_messageSender = null;
-		}
-
 	}
 }

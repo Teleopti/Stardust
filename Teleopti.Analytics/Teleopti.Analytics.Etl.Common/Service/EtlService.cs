@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlService));
 
 		private Timer _timer;
-		private EtlJobStarter _etlJobStarter;
+		private readonly EtlJobStarter _etlJobStarter;
 
 		public EtlService(EtlJobStarter etlJobStarter)
 		{
@@ -62,30 +62,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 		}
 
-
-
-
 		public void Dispose()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
+			log.Info("The service is stopping.");
+			if (_timer != null)
 			{
-				log.Info("The service is stopping.");
-				if (_timer != null)
-				{
-					_timer.Stop();
-					_timer.Dispose();
-				}
-				if (_etlJobStarter != null)
-				{
-					_etlJobStarter.Dispose();
-					_etlJobStarter = null;
-				}
+				_timer.Stop();
+				_timer.Dispose();
 			}
 		}
 	}

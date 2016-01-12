@@ -2,8 +2,6 @@ using System;
 using Autofac;
 using log4net;
 using log4net.Config;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -40,17 +38,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		public void Dispose()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (_container != null)
-					_container.Dispose();
-			}
+			if (_container != null)
+				_container.Dispose();
 		}
 
 	}
