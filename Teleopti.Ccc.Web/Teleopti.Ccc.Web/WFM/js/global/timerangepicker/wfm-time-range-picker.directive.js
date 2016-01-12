@@ -149,7 +149,7 @@
 			var binding = tAttributes.ngModel;
 			tElement.addClass('wfm-timepicker-wrap');
 
-			var cellElement = tElement.find('timepicker');
+			var cellElement = tElement.find('uib-timepicker');
 			cellElement.attr('ng-model', binding);
 			cellElement.attr('show-meridian', 'showMeridian');
 			cellElement.attr('minute-step', 'minuteStep');
