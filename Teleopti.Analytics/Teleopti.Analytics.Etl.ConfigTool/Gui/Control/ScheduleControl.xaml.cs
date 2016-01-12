@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -64,7 +65,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void MenuItemEdit(object sender, RoutedEventArgs e)
 		{
 			var etlSchedule = (IEtlJobSchedule)lv.SelectedItem;
-			using (var jobSchedule = new JobSchedule(etlSchedule, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count == 1, _container))
+			using (var jobSchedule = new JobSchedule(etlSchedule, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1, _container))
 			{
 				if (jobSchedule.ShowDialog() == DialogResult.OK)
 				{
@@ -96,7 +97,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void MenuItemNew(object sender, RoutedEventArgs e)
 		{
-			using (var jobSchedule = new JobSchedule(null, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count == 1, _container))
+			using (var jobSchedule = new JobSchedule(null, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1, _container))
 			{
 				if (jobSchedule.ShowDialog() == DialogResult.OK)
 				{

@@ -17,6 +17,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -339,7 +340,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
-			jobHelper.SelectDataSourceContainer(jobHelper.TenantCollection[0].DataSourceName);
+			jobHelper.SelectDataSourceContainer(jobHelper.TenantCollection.First().Name);
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
 			var jobResultCollection = new List<IJobResult>();
@@ -566,14 +567,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	{
 		private readonly DataSourceContainer _choosenDb;
 		private IList<IBusinessUnit> _buList;
-		private readonly List<ITenantName> _tenantNames;
+		private readonly List<TenantInfo> _tenantNames;
 		private IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 	
 
 		public LogOnHelperFake(IDataSource dataSource, IPerson person)
 		{
 			_choosenDb = new DataSourceContainer(dataSource, person);
-			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
+			_tenantNames = new List<TenantInfo> {new TenantInfo {Tenant = new Tenant(dataSource.DataSourceName)}};
 			_availableBusinessUnitsProvider = new AvailableBusinessUnitsProvider(new RepositoryFactory());
 		}
 
@@ -594,7 +595,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			return _buList;
 		}
 
-		public List<ITenantName> TenantCollection
+		public IEnumerable<TenantInfo> TenantCollection
 		{
 			get
 			{

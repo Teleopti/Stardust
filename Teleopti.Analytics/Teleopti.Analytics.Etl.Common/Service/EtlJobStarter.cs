@@ -125,24 +125,23 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 					foreach (var tenantName in _tenants.CurrentTenants())
 					{
-						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
-						if (tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
+						if (tenantName.BaseConfiguration == null)
 						{
 							//we can't stop service now beacuse one tenant isnt configured correctly, just try next
 							//return false;
 							continue;
 						}
-						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
+						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantName.BaseConfiguration);
 
 						var jobResultCollection = new List<IJobResult>();
-						_jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
+						_jobHelper.SelectDataSourceContainer(tenantName.Name);
 
 						var jobRunner = new JobRunner();
 						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
 						if (jobResults == null)
 						{
 							// No license applied - stop service
-							logInvalidLicense(tenantName.DataSourceName);
+							logInvalidLicense(tenantName.Name);
 							//we can't stop service now beacuse one tenant don't have a License, just try next
 							//NeedToStopService(this, null);
 							//return false;

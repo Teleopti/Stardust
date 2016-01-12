@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 	public interface IJobHelper
 	{
 		IList<IBusinessUnit> BusinessUnitCollection { get; }
-		List<ITenantName> TenantCollection { get; }
+		IEnumerable<TenantInfo> TenantCollection { get; }
 		IRaptorRepository Repository { get; }
 		IMessageSender MessageSender { get; }
 		bool SelectDataSourceContainer(string dataSourceName);
@@ -15,10 +15,5 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		void LogOffTeleoptiCccDomain();
 		IDataSource SelectedDataSource { get; }
 		void RefreshTenantList();
-	}
-
-	public interface ITenantName
-	{
-		string DataSourceName { get; set; }
 	}
 }

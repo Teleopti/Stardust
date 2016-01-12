@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -56,11 +57,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
-			var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(myControl.TenantName));
-			if(tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
+			var tenant = TenantHolder.Instance.Tenant(myControl.TenantName);
+			if (tenant == null || tenant.BaseConfiguration == null)
 				return;
-			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
-         e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
+			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.BaseConfiguration);
+			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
 			_baseConfiguration.JobHelper.SelectDataSourceContainer(myControl.TenantName);
 			//Clear job periods before adding them again
 			e.Job.StepList[0].JobParameters.JobCategoryDates.Clear();
@@ -68,7 +69,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			foreach (JobCategoryType jobCategoryType in myControl.JobMultipleDatePeriods.JobCategoryCollection)
 			{
 				e.Job.StepList[0].JobParameters.JobCategoryDates.Add(
-					 myControl.JobMultipleDatePeriods.GetJobMultipleDateItem(jobCategoryType), jobCategoryType);
+					myControl.JobMultipleDatePeriods.GetJobMultipleDateItem(jobCategoryType), jobCategoryType);
 			}
 
 			if (isDatesValid(e.Job.StepList[0].JobParameters.JobCategoryDates))

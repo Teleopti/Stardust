@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -40,7 +41,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			GroupBoxSchedule.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 		}
 
-		public void SetTenantDataSource(IList<ITenantName> source)
+		public void SetTenantDataSource(IEnumerable<TenantInfo> source)
 		{
 			ComboBoxDataSource.DataContext = source;
 		}
@@ -222,7 +223,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		internal void ReloadDataSourceComboBox()
 		{
 
-			var dataSource = TenantHolder.Instance.TenantDataSource(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
+			var dataSource = TenantHolder.Instance.DataSourceForTenant(((TenantInfo)ComboBoxDataSource.SelectedItem).Name);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 

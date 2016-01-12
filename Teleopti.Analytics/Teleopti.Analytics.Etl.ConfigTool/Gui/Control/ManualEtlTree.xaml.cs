@@ -7,11 +7,11 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Interfaces.Domain;
+using IContainer = Autofac.IContainer;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
 		private JobCollectionFactory _jobCollectionFactory;
 		private ObservableCollection<IJob> _jobCollection;
-		private IList<ITenantName> _tenantCollection = new List<ITenantName>();
+		private IEnumerable<TenantInfo> _tenantCollection = new List<TenantInfo>();
 
 		public event EventHandler<AlarmEventArgs> JobRun;
 		public event EventHandler<AlarmEventArgs> JobSelectionChanged;
@@ -123,7 +123,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			menuItemExecute.IsEnabled = isEnabled;
 		}
 
-		public IList<ITenantName> TenantCollection
+		public IEnumerable<TenantInfo> TenantCollection
 		{
 			get { return _tenantCollection; }
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			_logonWorker.Dispose();
 		}
 
-		public void LoadJobTree(IBaseConfiguration baseConfiguration, Autofac.IContainer container)
+		public void LoadJobTree(IBaseConfiguration baseConfiguration, IContainer container)
 		{
 			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration, container);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);

@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			get { return _logOnHelper.GetBusinessUnitCollection(); }
 		}
 
-		public List<ITenantName> TenantCollection
+		public IEnumerable<TenantInfo> TenantCollection
 		{
 			get { return _logOnHelper.TenantCollection; }
 		}
