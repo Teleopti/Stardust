@@ -11,11 +11,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	}
 	public class IocContainerHolder : IContainerHolder
 	{
-		//private readonly IContainer _container;
-
-		public IocContainerHolder(IContainer container)
+		public IocContainerHolder(IComponentContext container)
 		{
-			//_container = container;
 			ToggleManager = container.Resolve<IToggleManager>();
 			TenantLogonInfoLoader = container.Resolve<ITenantLogonInfoLoader>();
 		}

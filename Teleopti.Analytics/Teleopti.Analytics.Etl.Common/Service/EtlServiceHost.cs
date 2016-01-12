@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				_container = builder.Build();
 
 				var service = _container.Resolve<EtlService>();
-				service.Start(_container, serviceStartTime, stopService);
+				service.Start(serviceStartTime, stopService);
 			}
 			catch (Exception ex)
 			{

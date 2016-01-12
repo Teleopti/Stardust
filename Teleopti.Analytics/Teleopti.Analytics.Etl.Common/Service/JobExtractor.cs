@@ -11,20 +11,26 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
-	internal static class JobExtractor
+	public class JobExtractor
 	{
-		public static IJob ExtractJobFromSchedule(
+		private readonly IComponentContext _componentContext;
+		private static readonly ILog log = LogManager.GetLogger(typeof(JobExtractor));
+
+		public JobExtractor(IComponentContext componentContext)
+		{
+			_componentContext = componentContext;
+		}
+
+		public IJob ExtractJobFromSchedule(
 			IEtlJobSchedule etlJobScheduleToRun, 
 			JobHelper jobHelper, 
 			string timeZoneId, 
 			int intervalLengthMinutes, 
 			string cube,
 			string pmInstallation, 
-			IContainer container, 
 			bool runIndexMaintenance, 
 			CultureInfo culture)
 		{
-			var log = LogManager.GetLogger(typeof(JobExtractor));
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
 
 			var jobParameters =
@@ -35,7 +41,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					cube,
 					pmInstallation,
 					culture,
-					new IocContainerHolder(container), 
+					new IocContainerHolder(_componentContext), 
 					runIndexMaintenance)
 					{
 						Helper = jobHelper

@@ -1,6 +1,5 @@
 using System;
 using System.Timers;
-using Autofac;
 using log4net;
 
 namespace Teleopti.Analytics.Etl.Common.Service
@@ -17,9 +16,9 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_etlJobStarter = etlJobStarter;
 		}
 
-		public void Start(IContainer container, DateTime serviceStartTime, Action stopService)
+		public void Start(DateTime serviceStartTime, Action stopService)
 		{
-			_etlJobStarter.Initialize(container, serviceStartTime, stopService);
+			_etlJobStarter.Initialize(serviceStartTime, stopService);
 			_timer = new Timer(10000);
 			_timer.Elapsed += tick;
 			_timer.Start();

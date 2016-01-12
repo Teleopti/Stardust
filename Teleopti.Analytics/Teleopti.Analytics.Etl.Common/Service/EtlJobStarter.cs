@@ -25,22 +25,22 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly string _connectionString;
 		private readonly string _cube;
 		private readonly string _pmInstallation;
-		private JobHelper _jobHelper;
-		private IContainer _container;
+		private readonly JobHelper _jobHelper;
+		private readonly JobExtractor _jobExtractor;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
-		public EtlJobStarter(JobHelper jobHelper)
+		public EtlJobStarter(JobHelper jobHelper, JobExtractor jobExtractor)
 		{
 			_jobHelper = jobHelper;
+			_jobExtractor = jobExtractor;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
 		}
 
-		public void Initialize(IContainer container, DateTime serviceStartTime, Action stopService)
+		public void Initialize(DateTime serviceStartTime, Action stopService)
 		{
-			_container = container;
 			_serviceStartTime = serviceStartTime;
 			_stopService = stopService;
 		}
@@ -88,14 +88,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			log.Debug("Extracting job to run from schedule");
-			var jobToRun = JobExtractor.ExtractJobFromSchedule(
+			var jobToRun = _jobExtractor.ExtractJobFromSchedule(
 				scheduleToRun,
 				_jobHelper,
 				configHandler.BaseConfiguration.TimeZoneCode,
 				configHandler.BaseConfiguration.IntervalLength.Value,
 				_cube,
 				_pmInstallation,
-				_container,
 				configHandler.BaseConfiguration.RunIndexMaintenance,
 				culture
 				);

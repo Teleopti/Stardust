@@ -6,8 +6,6 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -29,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<EtlService>().SingleInstance();
 			builder.RegisterType<EtlJobStarter>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
+			builder.RegisterType<JobExtractor>().SingleInstance();
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
