@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "RequestsToggles", "requestsDefinitions", "requestsNotificationService"];
+	requestsController.$inject = ["$scope", "RequestsToggles", "requestsDefinitions", "requestsNotificationService", "requestCommandParamsHolder", "$translate"];
 
-	function requestsController($scope, requestsToggles, requestsDefinitions, requestsNotificationService) {
+	function requestsController($scope, requestsToggles, requestsDefinitions, requestsNotificationService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
@@ -21,6 +21,9 @@
 			vm.isRequestsCommandsEnabled = toggles.isRequestsCommandsEnabled();
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
+			getSelectedRequestsInfoText();
+			vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
+			
 
 			vm.period = { startDate: new Date(), endDate: new Date() };
 			vm.paging = {
@@ -44,6 +47,23 @@
 
 		}
 
+		function getSelectedRequestsInfoText() {
+			$translate("SelectedRequestsInfo").then(function (text) {
+				vm.selectedRequestsInfoText = text;
+			});
+		}
+
+		function showSelectedRequestsInfo() {
+			vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds().length;
+			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
+				return vm.selectedRequestsInfoText.replace(/\{0\}|\{1\}/gi, function(target) {
+					if (target == '{0}') return vm.selectedRequestsCount;
+					if (target == '{1}') return vm.paging.totalRequestsCount;
+				});
+			} else {
+				return '';
+			}
+		}
 
 		function onAgentSearchTermChanged(agentSearchTerm) {
 			vm.agentSearchTerm = agentSearchTerm;

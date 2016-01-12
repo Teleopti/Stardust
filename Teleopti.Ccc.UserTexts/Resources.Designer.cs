@@ -24601,6 +24601,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected {0} of {1} requests.
+        /// </summary>
+        public static string SelectedRequestsInfo {
+            get {
+                return ResourceManager.GetString("SelectedRequestsInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Employment type.
         /// </summary>
         public static string SelectEmploymentType {

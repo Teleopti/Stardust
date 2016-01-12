@@ -19,18 +19,13 @@
 	</requests-overview>
 
 	<div class="paging" ng-if="requests.isPaginationEnabled">
-		
-		<div class="pull-left">
-			<div class="total-requests-count">
-				<span>{{'TotalRequestsCount' | translate}}: </span>{{requests.paging.totalRequestsCount}}
-			</div>
+		<wfm-pagination pagination-options="requests.paging" get-data-for-page-callback="requests.forceRequestsReloadWithSelection"></wfm-pagination>
+		<select ng-if="requests.paging.totalRequestsCount > 0"
+				class="page-size-selector pull-right"
+				ng-model="requests.paging.pageSize" ng-options="option for option in requests.pageSizeOptions" ng-change="requests.onPageSizeChanges()"></select>
+		<div class="total-requests-count pull-right">
+			<span>{{requests.showSelectedRequestsInfo()}}</span>
 		</div>
-		<div class="pull-right">
-			<select ng-if="requests.paging.totalRequestsCount > 0"
-					class="page-size-selector"
-					ng-model="requests.paging.pageSize" ng-options="option for option in requests.pageSizeOptions" ng-change="requests.onPageSizeChanges()"></select>
-			<wfm-pagination pagination-options="requests.paging" get-data-for-page-callback="requests.forceRequestsReloadWithSelection"></wfm-pagination>
-		</div>				
 	</div>
 
 </div>

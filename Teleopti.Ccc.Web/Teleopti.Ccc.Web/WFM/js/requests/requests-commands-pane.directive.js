@@ -14,11 +14,6 @@
 		vm.approveRequests = approveRequests;
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
-		vm.selectedRequestsCount = getSelectedRequestsCount;
-
-		function getSelectedRequestsCount() {
-			return requestCommandParamsHolder.getSelectedRequestsIds().length;
-		}
 
 		function approveRequests() {
 			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();

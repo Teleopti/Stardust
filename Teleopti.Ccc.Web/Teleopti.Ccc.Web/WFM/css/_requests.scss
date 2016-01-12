@@ -15,7 +15,12 @@
 		margin-top: 5px;
 		margin-bottom: 10px;
 	}
-
+	.m-r-5{
+		margin-right:5px;
+	}
+	.m-l-5{
+		margin-left:5px;
+	}
 	.request-filter {
 		.input-prepend {
 			width:300px;
@@ -68,7 +73,7 @@
 		top:-20px;
 		.total-requests-count {
 			margin-top: 25px;
-			margin-left: 225px;
+			margin-right: 20px;
 		}
 
 		.page-size-selector{

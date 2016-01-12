@@ -14020,4 +14020,8 @@ Help us improve your experience by sending an error report</value>
     <value>Scheduling</value>
     <comment>Message describing an ongoing scheduling process</comment>
   </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Selected {0} of {1} requests</value>
+    <comment>A info shows selected x requests out of n requests</comment>
+  </data>
 </root>
