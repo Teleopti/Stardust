@@ -161,12 +161,6 @@
 				return agentState[0];
 			};
 
-			that.refreshAlarmTime = function () {
-				that.agents().forEach(function (item) {
-					item.increaseAlarmTime();
-				});
-			};
-
 			that.updateFromNotification = function (notification) {
 				var data = JSON.parse(notification.BinaryData);
 				data.Id = notification.DomainId;

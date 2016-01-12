@@ -31,9 +31,9 @@
 
             that.HaveNewAlarm = false;
             that.NextAlarm = '';
-            that.NextAlarmColor = '';
+            that.NextColor = '';
             that.Alarm = ko.observable();
-            that.AlarmColor = ko.observable();
+            that.Color = ko.observable();
             that.AlarmStart = ko.observable();
 
             that.TextWeight = ko.observable();
@@ -71,11 +71,11 @@
 				if (that.shouldWaitWithUpdatingAlarm(data.AlarmStart)) {
                     that.HaveNewAlarm = true;
                     that.NextAlarm = data.Alarm;
-                    that.NextAlarmColor = data.AlarmColor;
+                    that.NextColor = data.Color;
                     return;
                 }
                 that.Alarm(data.Alarm);
-                that.refreshColor(data.AlarmColor);
+                that.refreshColor(data.Color);
 
                 that.AdherenceDetailsUrl = navigation.UrlForAdherenceDetails(that.BusinessUnitId, that.PersonId);
 	        };
@@ -83,25 +83,16 @@
 	        that.updateAlarmTime = function() {
 		        that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId));
 		        if (!that.TimeInState()) return;
-		        if (that.Alarm() === '') that.AlarmTime('');
-		        else {
-			        var duration = moment.duration(that.TimeInState(), 'seconds');
-			        that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
-		        }
-
-		        if (!that.HaveNewAlarm
+	            if (that.Alarm() === '') that.AlarmTime('');
+	            else {
+	                var duration = moment.duration(that.TimeInState(), 'seconds');
+	                that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+	            }
+	            if (!that.HaveNewAlarm
 			        || that.shouldWaitWithUpdatingAlarm()) return;
 		        that.Alarm(that.NextAlarm);
-		        that.refreshColor(that.NextAlarmColor);
+		        that.refreshColor(that.NextColor);
 		        that.HaveNewAlarm = false;
-	        };
-
-	        that.increaseAlarmTime = function() {
-		        if (!that.TimeInState()) return;
-
-		        var duration = moment.duration(that.TimeInState(), 'seconds');
-		        that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
-		        that.TimeInState(that.TimeInState() + 1);
 	        };
 
 	        that.shouldWaitWithUpdatingAlarm = function (alarmStartUtc) {
@@ -112,7 +103,7 @@
             	if (newColor === "#000000") newColor = "#FFFFFF";
             	if (newColor !== undefined && that.color !== newColor) {
                     var rgb = that.hexToRgb(newColor);
-                    that.AlarmColor('rgba(' + rgb + ', 0.6)');
+                    that.Color('rgba(' + rgb + ', 0.6)');
                     that.TextColor(helpers.TextColor.BasedOnBackgroundColor('(' + rgb + ')'));
                     that.TextWeight(700);
                     setTimeout(function () {

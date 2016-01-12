@@ -5,7 +5,7 @@
     'window',
     'resources',
     'lazy'
-], function(
+], function (
     buster,
     viewModel,
     moment,
@@ -15,23 +15,23 @@
 
     return function () {
 
-        var agentById = function(vm, id) {
+        var agentById = function (vm, id) {
             return lazy(vm.Agents())
-                .find(function(a) { return a.PersonId === id; });
+                .find(function (a) { return a.PersonId === id; });
         }
 
-        var now = function(time) {
+        var now = function (time) {
             return moment(time).toDate().getTime();
         }
 
         buster.testCase("real time adherence agents viewmodel", {
-            "should have no agents if none filled": function() {
+            "should have no agents if none filled": function () {
                 var vm = viewModel();
 
                 assert.equals(vm.Agents(), []);
             },
 
-            "should update root uri": function() {
+            "should update root uri": function () {
                 var vm = viewModel();
 
                 vm.SetViewOptions({
@@ -41,7 +41,7 @@
                 assert.equals(vm.rootURI(), '#realtimeadherencesites/guid');
             },
 
-            "should fill agents info": function() {
+            "should fill agents info": function () {
                 var vm = viewModel();
 
                 vm.fillAgents([
@@ -63,7 +63,7 @@
                 assert.equals(vm.Agents()[0].TeamName, "team");
             },
 
-            "should fill agent state data": function() {
+            "should fill agent state data": function () {
                 resources.TimeZoneOffsetMinutes = -600;
                 var vm = viewModel();
 
@@ -90,12 +90,12 @@
                         PersonId: 'guid1',
                         State: 'Ready',
                         StateStartTime: moment('2014-01-21 12:00').format(),
-						TimeInState: 10,
+                        TimeInState: 10,
                         Activity: 'Phone',
                         NextActivity: 'Lunch',
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
                         Alarm: 'Adhering',
-                        AlarmColor: '#000001',
+                        Color: '#000001',
                         AlarmStart: moment('2014-01-21 12:15').format()
                     },
                     {
@@ -107,7 +107,7 @@
                         NextActivity: 'Phone',
                         NextActivityStartTime: moment('2014-01-21 13:00').format(),
                         Alarm: 'Not Adhering',
-                        AlarmColor: '#ffffff',
+                        Color: '#ffffff',
                         AlarmStart: moment('2014-01-21 12:15').format()
                     }
                 ]);
@@ -120,7 +120,7 @@
                 assert.equals(agent.NextActivity(), "Lunch");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Adhering");
-                assert.equals(agent.AlarmColor(), 'rgba(0,0,1, 0.6)');
+                assert.equals(agent.Color(), 'rgba(0,0,1, 0.6)');
 
                 agent = agentById(vm, "guid2");
                 assert.equals(agent.PersonId, "guid2");
@@ -130,11 +130,11 @@
                 assert.equals(agent.NextActivity(), "Phone");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Not Adhering");
-                assert.equals(agent.AlarmColor(), 'rgba(255,255,255, 0.6)');
+                assert.equals(agent.Color(), 'rgba(255,255,255, 0.6)');
 
             },
 
-            "should not fill state for unknown agents": function() {
+            "should not fill state for unknown agents": function () {
                 var vm = viewModel();
 
                 vm.fillAgentsStates([
@@ -142,11 +142,11 @@
                         PersonId: 'guid1'
                     }
                 ]);
-                
+
                 assert.equals(vm.Agents().length, 0);
             },
 
-            "should fill next activity start for last activity": function() {
+            "should fill next activity start for last activity": function () {
                 resources.TimeZoneOffsetMinutes = -600;
                 var vm = viewModel();
 
@@ -167,7 +167,7 @@
                 assert.equals(agent.NextActivityStartTime(), actual);
             },
 
-            "should update existing state data when filling state": function() {
+            "should update existing state data when filling state": function () {
                 var vm = viewModel();
 
                 vm.fillAgents([{ PersonId: "guid1" }]);
@@ -176,7 +176,7 @@
                 assert.equals(vm.Agents().length, 1);
             },
 
-            "should order by agent name": function() {
+            "should order by agent name": function () {
                 var vm = viewModel();
 
                 vm.fillAgents([
@@ -193,7 +193,7 @@
                 assert.equals(vm.Agents()[1].Name, "John");
             },
 
-            "should display alarmtime based on when agent entered current alarm": function() {
+            "should display alarmtime based on when agent entered current alarm": function () {
                 var vm = viewModel();
 
                 vm.fillAgents([
@@ -211,7 +211,7 @@
                 assert.equals(vm.Agents()[0].AlarmTime(), "0:00:10");
             },
 
-            "should not display alarm until alarm start": function() {
+            "should not display alarm until alarm start": function () {
                 resources.TimeZoneOffsetMinutes = 0;
                 var vm = viewModel();
 
@@ -233,7 +233,7 @@
                 assert.equals(vm.Agents()[0].Alarm(), undefined);
             },
 
-            "should select an agent": function() {
+            "should select an agent": function () {
                 var vm = viewModel();
 
                 vm.fillAgents([{ PersonId: "guid1" }]);
@@ -243,7 +243,7 @@
                 assert.equals(agent.Selected(), true);
             },
 
-            "should generate change schedule url for an agent": function() {
+            "should generate change schedule url for an agent": function () {
                 var vm = viewModel();
 
                 vm.SetViewOptions({
@@ -297,7 +297,6 @@
                 ]);
 
                 this.clock.tick(24 * 60 * 60 * 1000);
-                vm.refreshAlarmTime();
 
                 var expectedUrl = "#teamschedule/buId/teamId/personId";
                 assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
@@ -307,7 +306,7 @@
             },
 
             "filtering:": {
-                " should only display matching name": function() {
+                " should only display matching name": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -325,7 +324,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt");
                 },
 
-                "should only display matching activity": function() {
+                "should only display matching activity": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -352,7 +351,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt");
                 },
 
-                "should only display matching alarm": function() {
+                "should only display matching alarm": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -380,7 +379,7 @@
                 },
 
 
-                "should only display agents matching next activity start time": function() {
+                "should only display agents matching next activity start time": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -407,7 +406,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt");
                 },
 
-                "should only display agent matching multi filter criteria": function() {
+                "should only display agent matching multi filter criteria": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -428,7 +427,7 @@
                     assert.equals(vm.Agents()[0].TeamName, "BTeam");
                 },
 
-                "should only display agent matching single quote filter criteria": function() {
+                "should only display agent matching single quote filter criteria": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -446,7 +445,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
                 },
 
-                "should only display agent matching double quote filter criteria": function() {
+                "should only display agent matching double quote filter criteria": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -464,7 +463,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
                 },
 
-                "should only display agent exactly matching quote filter criteria": function() {
+                "should only display agent exactly matching quote filter criteria": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -482,7 +481,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
                 },
 
-                "should only display agent not matching when negating filter word with multiple words": function() {
+                "should only display agent not matching when negating filter word with multiple words": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -506,7 +505,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
                 },
 
-                "should only display agents thats not matching negating quoted searchwords": function() {
+                "should only display agents thats not matching negating quoted searchwords": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -524,7 +523,7 @@
                     assert.equals(vm.Agents()[0].Name, "Kurt A Karlsson");
                 },
 
-                "should display all matching agents when using OR between searchwords": function() {
+                "should display all matching agents when using OR between searchwords": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -546,7 +545,7 @@
                     assert.equals(vm.Agents()[1].Name, "Glen");
                 },
 
-                "should display all matching agents when using OR and match other words normally": function() {
+                "should display all matching agents when using OR and match other words normally": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -570,7 +569,7 @@
                     assert.equals(vm.Agents()[0].Name, "Glen");
                 },
 
-                "should display all agents not matching negated OR": function() {
+                "should display all agents not matching negated OR": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -592,7 +591,7 @@
                     assert.equals(vm.Agents()[1].Name, "Kurt");
                 },
 
-                "should display all agents not matching negated with dash negation": function() {
+                "should display all agents not matching negated with dash negation": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -614,7 +613,7 @@
                     assert.equals(vm.Agents()[1].Name, "Kurt");
                 },
 
-                "should display agents matching more than two OR searchwords": function() {
+                "should display agents matching more than two OR searchwords": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -640,7 +639,7 @@
                     assert.equals(vm.Agents()[2].Name, "Kurt");
                 },
 
-                "should display agents matching symbols": function() {
+                "should display agents matching symbols": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -668,7 +667,7 @@
                     assert.equals(vm.Agents()[0].PersonId, "guid1");
                 },
 
-                "should display agents matching arabic name like 'اختبار' searchwords": function() {
+                "should display agents matching arabic name like 'اختبار' searchwords": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -686,7 +685,7 @@
                     assert.equals(vm.Agents()[0].Name, "اختبار");
                 },
 
-                "should matching multiple search words, #30352": function() {
+                "should matching multiple search words, #30352": function () {
                     var vm = viewModel();
                     vm.fillAgents([
                         {
@@ -705,8 +704,8 @@
             },
 
             "historical adherence: ": {
-                "should fetch the historical adherence for selected person": function() {
-                    var vm = viewModel(function(callback, personId) {
+                "should fetch the historical adherence for selected person": function () {
+                    var vm = viewModel(function (callback, personId) {
                         callback({
                             AdherencePercent: personId === "guid1" ? 12 : 0
                         });
@@ -720,9 +719,9 @@
                     assert.equals(vm.Agents()[0].HistoricalAdherence(), '12%');
                 },
 
-                "should only fetch historical data if agentAdherence is enabled": function() {
+                "should only fetch historical data if agentAdherence is enabled": function () {
                     var hasFetchedHistoricalAdherence = false;
-                    var vm = viewModel(function() {
+                    var vm = viewModel(function () {
                         hasFetchedHistoricalAdherence = true;
                     });
                     vm.agentAdherenceEnabled(false);
@@ -733,8 +732,8 @@
                     assert.isFalse(hasFetchedHistoricalAdherence);
                 },
 
-                "should update time since last update": function() {
-                    var vm = viewModel(function(callback) {
+                "should update time since last update": function () {
+                    var vm = viewModel(function (callback) {
                         callback({
                             LastTimestamp: "0:10:00"
                         });
@@ -747,8 +746,8 @@
                     assert.equals(vm.Agents()[0].LastAdherenceUpdate(), "0:10:00");
                 },
 
-                "should hide adherence percentage if no data": function() {
-                    var vm = viewModel(function(callback) {
+                "should hide adherence percentage if no data": function () {
+                    var vm = viewModel(function (callback) {
                         callback({});
                     });
                     vm.agentAdherenceEnabled(true);
@@ -759,8 +758,8 @@
                     refute(vm.Agents()[0].DisplayAdherencePercentage());
                 },
 
-                "should display adherence percentage if data": function() {
-                    var vm = viewModel(function(callback) {
+                "should display adherence percentage if data": function () {
+                    var vm = viewModel(function (callback) {
                         callback({
                             AdherencePercent: 12
                         });
@@ -773,8 +772,8 @@
                     assert(vm.Agents()[0].DisplayAdherencePercentage());
                 },
 
-                "should keep the historical adherence when new state is pushed": function() {
-                    var vm = viewModel(function(callback) {
+                "should keep the historical adherence when new state is pushed": function () {
+                    var vm = viewModel(function (callback) {
                         callback({
                             AdherencePercent: 21
                         });

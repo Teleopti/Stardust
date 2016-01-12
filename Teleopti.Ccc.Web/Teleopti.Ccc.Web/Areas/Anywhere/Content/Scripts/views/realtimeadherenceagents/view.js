@@ -36,9 +36,6 @@
 			viewModel.SetViewOptions(options);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
-			setInterval(function () {
-				viewModel.refreshAlarmTime();
-			}, 1000);
 
 			var loadStates = function(url) {
 				ajax.ajax({

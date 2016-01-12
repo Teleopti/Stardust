@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				NextActivityStartTime = "2001-01-01 12:30".Utc(),
 				Alarm = "Alarma!",
 				AlarmStart = "2001-01-01 12:00".Utc(),
-				AlarmColor = "#FF0000"
+				Color = "#FF0000"
 			};
 
 			var target = new AgentsController(null, null, null, new Now(), null, new FakeAgentStateReadModelReader(new[] { data }), null,null);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
 			Assert.That(result.First().Alarm, Is.EqualTo(expected.Alarm));
 			Assert.That(result.First().AlarmStart, Is.EqualTo(expected.AlarmStart));
-			Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
+			Assert.That(result.First().Color, Is.EqualTo(expected.Color));
 		}
 
 		[Test]

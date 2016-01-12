@@ -53,7 +53,7 @@ define([
 	var loadForSites = function(callback, businessUnitId, siteIds) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "api/Agents/GetStatesForSites?" + idsToUrl("siteIds", siteIds),
+			url: "api/Agents/GetStatesForSites?" + idsToUrl("ids", siteIds),
 			success: function(data) {
 				callback(mapAsNotification(data));
 			}
@@ -63,7 +63,7 @@ define([
 	var loadForTeams = function(callback, businessUnitId, teamIds) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "api/Agents/GetStatesForTeams?" + idsToUrl("teamIds", teamIds),
+			url: "api/Agents/GetStatesForTeams?" + idsToUrl("ids", teamIds),
 			success: function(data) {
 				callback(mapAsNotification(data));
 			}
