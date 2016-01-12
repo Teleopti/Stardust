@@ -10,9 +10,8 @@
 		.filter('monthview', ['$locale', '$filter', monthview]);
 
 
-	function monthview($locale, $filter) {
-		var format = $locale.DATETIME_FORMATS['mediumDate'].replace('d', '').trim();
-
+	function monthview($locale, $filter) {		
+		var format = $locale.DATETIME_FORMATS['mediumDate'].replace(/d/g, '').trim();
 		return function(date) {
 			return $filter('date')(date, format);
 		}
@@ -32,7 +31,6 @@
 
 	function showWeekdays($translate) {	    
 	    return function (input) {
-
 	        var localeData = moment.localeData($translate.use());	     
 	        var weekdays = localeData._weekdaysShort;
 
