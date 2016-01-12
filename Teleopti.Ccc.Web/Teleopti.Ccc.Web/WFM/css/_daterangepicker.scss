@@ -1,5 +1,10 @@
 ﻿.wfm-date-range-picker-wrap {
 	position:relative;
+
+	.no-boxshadow{
+		box-shadow:none;	
+	}
+
 	.picker-template-dropdown{
 		display:inline-block;
 		button{
