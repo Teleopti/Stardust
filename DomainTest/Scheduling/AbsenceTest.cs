@@ -1,7 +1,11 @@
 using System;
 using System.Drawing;
+using System.IdentityModel.Claims;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
@@ -162,5 +166,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.Tracker, absenceClone.Tracker);
 
         }
+
+		[Test]
+		public void ShouldShowRealDisplayValuesToAllowedOnBusinessUnitWhenAgentIsTerminatedAndAbsenceIsConfidential()
+		{
+			var personAccountUpdater = new PersonAccountUpdaterDummy();
+			var queryingPerson = PersonFactory.CreatePerson();
+			var site = SiteFactory.CreateSimpleSite();
+			var team = TeamFactory.CreateSimpleTeam();
+			site.AddTeam(team);
+
+			var targetPerson = PersonFactory.CreatePersonWithId();
+			queryingPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
+			targetPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
+			targetPerson.TerminatePerson(DateOnly.Today.AddDays(-5), personAccountUpdater);
+
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), queryingPerson);
+			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
+			var claimSet = new DefaultClaimSet(new[]
+                                        {
+                                            new Claim(claimType, null, Rights.PossessProperty),
+                                            new Claim(dataClaimType, new AuthorizeMyBusinessUnit(), Rights.PossessProperty)
+                                        });
+
+			principal.AddClaimSet(claimSet);
+
+			target.Confidential = true;
+			using (new CustomAuthorizationContext(new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal))))
+			{
+				Assert.AreEqual(target.Description, target.ConfidentialDescription(targetPerson));
+				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(targetPerson));
+			}		
+		}
     }
 }
