@@ -77,21 +77,21 @@
 	.scrollfix{
 	    .gantt-scrollable-header{
 			position:fixed;
-			top:62px;
-			z-index:1000;
+			top:52px;
+			z-index:900;
 			display:inline-block;
 			background-color:#fff;
 		}
 		.gantt-table-header{
 		    position:fixed;
-			top:62px;
-			z-index:1000;
+			top:52px;
+			z-index:900;
 			display:inline-block;
 			width:96px;
 		}
 		.gantt-side-background-header{
 		    position:fixed;
-			top:62px;
+			top:52px;
 			z-index:900;
 			display:inline-block;
 			background-color:#fff;
@@ -749,7 +749,6 @@
 
 			.con-flex{
 				padding:0 5px;
-				outline: 1px dashed rgba(0, 0, 0, 0.06);
 			
 				.activity-picker{
 					height:30px;
@@ -806,8 +805,6 @@
 
 		.con-flex{
 			padding:0 5px;
-			outline: 1px dashed rgba(0, 0, 0, 0.06);
-			
 			.activity-picker{
 				height:30px;
 			}
