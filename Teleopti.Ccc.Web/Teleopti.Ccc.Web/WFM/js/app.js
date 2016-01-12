@@ -67,6 +67,7 @@ wfm.config([
 				workloadId: {},
 				workloadName: {}
 			},
+			url: '/advanced',
 			templateUrl: 'js/forecasting/html/forecasting-advanced.html',
 			controller: 'ForecastingAdvancedCtrl'
 		}).state('forecasting.skillcreate', {
