@@ -4,11 +4,11 @@
 
 	angular.module('wfm.teamSchedule')
 		.controller('TeamScheduleCtrl', ['$scope', '$q', '$locale', '$translate', 'TeamSchedule',
-			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', '$mdComponentRegistry', '$mdSidenav',
+			'GroupScheduleFactory', 'teamScheduleNotificationService', 'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav',
 			'$mdUtil', TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, toggleSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
+		notificationService, toggleSvc, signalRSvc, $mdComponentRegistry, $mdSidenav, $mdUtil) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -337,7 +337,7 @@
 		vm.afterActionCallback = function (result, successMessageTemplate, failMessageTemplate) {
 			handleActionResult(result, successMessageTemplate, failMessageTemplate);
 			vm.personIdSelectionDic = {};
-			vm.loadSchedules(vm.paginationOptions.pageNumber);
+			vm.loadSchedules();
 			vm.setCurrentCommand("");
 		}
 
@@ -348,7 +348,31 @@
 			return debounceFn;
 		};
 
+		function isMessageNeedToBeHandled(message) {
+			var personIdList = vm.groupScheduleVm.Schedules.map(function(item) {
+				return item.PersonId;
+			});
+
+			var isMessageInsidePeopleList = personIdList.indexOf(message.DomainReferenceId) > -1;
+
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
+			var scheduleDate = vm.scheduleDateMoment();
+			var scheduleDateInMessageRange = scheduleDate.isSame(startDate) || scheduleDate.isSame(endDate)
+				|| (scheduleDate.isAfter(startDate) && scheduleDate.isBefore(endDate));
+
+			return isMessageInsidePeopleList && scheduleDateInMessageRange;
+		}
+
 		vm.init = function () {
+			signalRSvc.subscribe({
+				DomainType: 'IScheduleChangedInDefaultScenario'
+			}, function (message) {
+				if (isMessageNeedToBeHandled(message)) {
+					vm.loadSchedules();
+				}
+			}, function(message) {});
+
 			createDocumentListeners();
 			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
 			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;

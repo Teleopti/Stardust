@@ -1377,6 +1377,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.js" />
     <Content Include="WFM\js\teamSchedule\html\schedule.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\global\wfmpagination\wfmpagination.directive.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
