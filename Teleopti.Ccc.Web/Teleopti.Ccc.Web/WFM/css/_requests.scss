@@ -1,20 +1,37 @@
 ﻿.wfm-requests {
-	.advanced-search-container tr td:nth-child(2) div{
-		margin-right:0 !important;
+	background-color: white;
+	height: 732px;
+
+	.advanced-search-container tr td:nth-child(2) div {
+		margin-right: 0 !important;
 	}
-	.time-zone-switch{
+
+	.time-zone-switch {
 		top: 25px;
 		display: inline-block;
-		z-index:100;
+		z-index: 100;
 	}
+
 	.inline-block {
 		display: inline-block;
 	}
 
 	.operation-container {
-		margin-top: 5px;
-		margin-bottom: 10px;
+		padding-left: 12px;
+		padding-top: 12px;
+		padding-bottom: 12px;
 	}
+
+	md-progress-linear {
+		width: 100%;
+	}
+
+	requests-commands-pane {
+		position: absolute;
+		right: 1em;
+		top: 10px;
+	}
+
 	.m-r-5{
 		margin-right:5px;
 	}
@@ -23,7 +40,8 @@
 	}
 	.request-filter {
 		.input-prepend {
-			width:300px;
+			width: 300px;
+
 			#simple-search {
 				height: auto !important;
 			}
@@ -40,19 +58,26 @@
 		.relative {
 			position: relative;
 		}
-		.picker-template-dropdown input{
-			width:180px;
+
+		.picker-template-dropdown input {
+			width: 180px;
 		}
+
 		.picker-template-dropdown {
 			.picker-wrapper {
 				top: 20px;
 				margin-left: -108px;
 			}
 		}
+
+		.dropdown-menu {
+			top: 18px!important;
+		}
 	}
 
 	.ui-grid {
-		height:70vh;
+		height: 70vh;
+
 		.ui-grid-cell-contents {
 			width: 85%;
 			text-align: center;
@@ -70,16 +95,18 @@
 
 	.paging {
 		position:relative;
-		top:-20px;
 		.total-requests-count {
-			margin-top: 25px;
 			margin-right: 20px;
 		}
 
 		.page-size-selector{
 			width: 60px; 
-			margin-top: 20px; 
-			margin-right: 20px;	
+		}
+
+		.pagination {
+			margin-left: 20px;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 	}
 

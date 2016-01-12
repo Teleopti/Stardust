@@ -1,10 +1,9 @@
-﻿<div class="wfm-requests" ng-if="requests.isRequestsEnabled">
+﻿<div class="wfm-requests material-depth-1" ng-if="requests.isRequestsEnabled">
 	<div class="operation-container">
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
 		<date-range-picker start-date="requests.period.startDate" end-date="requests.period.endDate" template-type="dropdown"></date-range-picker>		
 	</div>
-	<requests-commands-pane style="position: absolute; right: 1em; top: 0;"
-							ng-if="requests.isRequestsCommandsEnabled"
+	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled"
 							before-command="requests.onBeforeCommand()"
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount)"
 							after-command-error="requests.onCommandError(error)"
