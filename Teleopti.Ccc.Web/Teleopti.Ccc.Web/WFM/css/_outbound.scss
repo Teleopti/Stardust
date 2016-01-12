@@ -787,34 +787,6 @@
 		input[type="text"] {
 			height: 23px;
 		}
-
-		.wfm-list>li>span{
-			padding:0;
-			margin:0;
-		}
-
-		.wfm-list>li>span.list-item-container.list-header{
-			width:14%;
-			float:left;
-			display:inline-block;
-		}
-	
-		.wfm-list>li>span.list-item-container{
-			width:84%;
-			float:left;
-			display:inline-block;
-		}
-
-		.list-item-container>div{
-			width:12%;
-			max-width:120px;
-			float:left;
-			display:inline-block;	
-		}
-
-		.list-item-container .wfm-checkbox{
-			padding:0;
-		}
 	}
 }
 
@@ -853,34 +825,6 @@
 				}
 			}
 		}
-	}
-
-	.wfm-list>li>span{
-		padding:0;
-		margin:0;
-	}
-
-	.wfm-list>li>span.list-item-container.list-header{
-		width:14%;
-		float:left;
-		display:inline-block;
-	}
-	
-	.wfm-list>li>span.list-item-container{
-		width:84%;
-		float:left;
-		display:inline-block;
-	}
-
-	.list-item-container>div{
-		width:12%;
-		max-width:120px;
-		float:left;
-		display:inline-block;	
-	}
-
-	.list-item-container .wfm-checkbox{
-		padding:0;
 	}
 }
 
@@ -1039,5 +983,36 @@ activity-picker {
 		top:40%;
 		left:48%;
 		}
+	}
+}
+
+
+.working-hours-picker{
+	.wfm-list>li>span{
+		padding:0;
+		margin:0;
+	}
+
+	.wfm-list>li>span.list-item-container.list-header{
+		width:14%;
+		float:left;
+		display:inline-block;
+	}
+	
+	.wfm-list>li>span.list-item-container{
+		width:84%;
+		float:left;
+		display:inline-block;
+	}
+
+	.list-item-container>div{
+		width:12%;
+		max-width:120px;
+		float:left;
+		display:inline-block;	
+	}
+
+	.list-item-container .wfm-checkbox{
+		padding:0;
 	}
 }

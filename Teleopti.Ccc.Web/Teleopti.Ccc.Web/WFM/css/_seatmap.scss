@@ -351,10 +351,14 @@ people-selection-list{
 	right: 0;
 	left: 0;
 }
-	
-people-selection-list>div{
+
+people-selection-list>div.view-header{
+	display:none;
+}	
+
+people-selection-list .panel{
 	top: 0;
-	bottom: 120px;
+	bottom: 90px;
 	position: absolute;
 	right: 0;
 	left: 0;
