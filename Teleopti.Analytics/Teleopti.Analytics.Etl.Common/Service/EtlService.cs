@@ -12,9 +12,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Timer _timer;
 		private EtlJobStarter _etlJobStarter;
 
+		public EtlService(EtlJobStarter etlJobStarter)
+		{
+			_etlJobStarter = etlJobStarter;
+		}
+
 		public void Start(IContainer container, DateTime serviceStartTime, Action stopService)
 		{
-			_etlJobStarter = new EtlJobStarter();
 			_etlJobStarter.Initialize(container, serviceStartTime, stopService);
 			_timer = new Timer(10000);
 			_timer.Elapsed += tick;

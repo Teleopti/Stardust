@@ -13,10 +13,8 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using PersianCultureHelper = Teleopti.Interfaces.Domain.PersianCultureHelper;
+using Teleopti.Interfaces.Domain;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -32,8 +30,9 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
-		public EtlJobStarter()
+		public EtlJobStarter(JobHelper jobHelper)
 		{
+			_jobHelper = jobHelper;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
@@ -44,10 +43,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_container = container;
 			_serviceStartTime = serviceStartTime;
 			_stopService = stopService;
-			_jobHelper = new JobHelper(
-				_container.Resolve<ILoadAllTenants>(),
-				_container.Resolve<ITenantUnitOfWork>(),
-				_container.Resolve<IAvailableBusinessUnitsProvider>());
 		}
 
 		public bool Tick()

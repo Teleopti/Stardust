@@ -127,6 +127,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
+    <Compile Include="EtlAppModule.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
     <Compile Include="Service\EtlService.cs" />
     <Compile Include="Infrastructure\BulkWriter.cs" />

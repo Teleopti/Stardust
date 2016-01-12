@@ -4,6 +4,7 @@ using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -26,21 +27,11 @@ namespace Teleopti.Analytics.Etl.Common
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<EtlService>().SingleInstance();
+			builder.RegisterType<EtlJobStarter>().SingleInstance();
+			builder.RegisterType<JobHelper>().SingleInstance();
 
-
-			//TODO: tenant - use tenantmodule instead (with some override for special cases?)?
-			builder.Register(c =>
-			{
-				var configReader = c.Resolve<IConfigReader>();
-				var connstringAsString = configReader.ConnectionString("Tenancy");
-				return TenantUnitOfWorkManager.Create(connstringAsString);
-			})
-				.As<ITenantUnitOfWork>()
-				.As<ICurrentTenantSession>()
-				.SingleInstance();
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
-			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

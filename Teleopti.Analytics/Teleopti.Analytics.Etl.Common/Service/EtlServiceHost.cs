@@ -23,10 +23,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			try
 			{
 				var builder = new ContainerBuilder();
-				var iocArgs = new IocArgs(new ConfigReader());
-				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
-				builder.RegisterModule(new CommonModule(configuration));
-				builder.RegisterModule(new EtlModule(configuration));
+				builder.RegisterModule(new EtlAppModule());
 				_container = builder.Build();
 
 				var service = _container.Resolve<EtlService>();
