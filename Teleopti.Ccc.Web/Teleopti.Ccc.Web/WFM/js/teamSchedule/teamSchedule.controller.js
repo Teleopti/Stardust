@@ -365,19 +365,22 @@
 		}
 
 		vm.init = function () {
-			signalRSvc.subscribe({
-				DomainType: 'IScheduleChangedInDefaultScenario'
-			}, function (message) {
-				if (isMessageNeedToBeHandled(message)) {
-					vm.loadSchedules();
-				}
-			}, function(message) {});
-
 			createDocumentListeners();
 			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
 			vm.isAbsenceReportingEnabled = toggleSvc.WfmTeamSchedule_AbsenceReporting_35995;
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
+
+			if (toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303) {
+				signalRSvc.subscribe({
+					DomainType: 'IScheduleChangedInDefaultScenario'
+				}, function(message) {
+					if (isMessageNeedToBeHandled(message)) {
+						vm.loadSchedules();
+					}
+				}, function(message) {});
+			}
+
 			vm.schedulePageReset();
 			vm.initialized = true;
 		};
