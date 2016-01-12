@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 					personPreferenceDayOccupation.HasPreference = true;
 
-					if (preference.Restriction.StartTimeLimitation == new StartTimeLimitation(null, null) &&
+					if (preference.Restriction.StartTimeLimitation == new StartTimeLimitation(null, null) && minMax != null &&
 					    minMax.WorkTimeMinMax != null)
 					{
 						personPreferenceDayOccupation.StartTimeLimitation = minMax.WorkTimeMinMax.StartTimeLimitation;
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 						personPreferenceDayOccupation.StartTimeLimitation = preference.Restriction.StartTimeLimitation;
 					}
 
-					if (preference.Restriction.EndTimeLimitation == new EndTimeLimitation(null, null) &&
+					if (preference.Restriction.EndTimeLimitation == new EndTimeLimitation(null, null) && minMax != null &&
 						minMax.WorkTimeMinMax != null)
 					{
 						personPreferenceDayOccupation.EndTimeLimitation = minMax.WorkTimeMinMax.EndTimeLimitation;
