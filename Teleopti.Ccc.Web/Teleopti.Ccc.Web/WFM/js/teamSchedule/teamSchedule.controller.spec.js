@@ -3,9 +3,9 @@
 describe("TeamScheduleControllerTest", function() {
 	var $q,
 		rootScope,
-		controller;
-	var mockSignalRServer = {};
-	var searchScheduleCount = 0;
+		controller,
+		searchScheduleCalledTimes,
+		mockSignalRBackendServer = {};
 
 	beforeEach(function() {
 		module('wfm.teamSchedule');
@@ -27,36 +27,67 @@ describe("TeamScheduleControllerTest", function() {
 		controller = setUpController(_$controller_);
 	}));
 
-	it("can select and deselect one person", inject(function () {
+	it("can select one person", inject(function () {
 		rootScope.$digest();
 		
 		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
 		controller.personIdSelectionDic[personSchedule1.PersonId].isSelected = true;
-
 		var selectedPersonList = controller.getSelectedPersonIdList();
 
 		expect(selectedPersonList.length).toEqual(1);
 		expect(selectedPersonList[0]).toEqual("221B-Baker-SomeoneElse");
+	}));
 
+	it("can deselect one person", inject(function () {
+		rootScope.$digest();
+
+		var personSchedule1 = controller.groupScheduleVm.Schedules[0];
 		controller.personIdSelectionDic[personSchedule1.PersonId].isSelected = false;
-		selectedPersonList = controller.getSelectedPersonIdList();
+		var selectedPersonList = controller.getSelectedPersonIdList();
 
 		expect(selectedPersonList.length).toEqual(0);
 	}));
 
 	it("should reload schedule when schedule changed by others", inject(function () {
 		rootScope.$digest();
+		searchScheduleCalledTimes = 0;
 
 		controller.scheduleDate = new Date("2015-10-26");
-
-		var previousCount = searchScheduleCount;
-		mockSignalRServer.notifyClients({
+		mockSignalRBackendServer.notifyClients({
 			"DomainReferenceId": "221B-Baker-SomeoneElse",
 			"StartDate": "D2015-10-25T00:00:00",
 			"EndDate": "D2015-10-27T00:00:00"
 		});
 
-		expect(searchScheduleCount).toEqual(previousCount + 1);
+		expect(searchScheduleCalledTimes).toEqual(1);
+	}));
+
+	it("should not reload schedule when other people schedule changed", inject(function () {
+		rootScope.$digest();
+		searchScheduleCalledTimes = 0;
+
+		controller.scheduleDate = new Date("2015-10-26");
+		mockSignalRBackendServer.notifyClients({
+			"DomainReferenceId": "221B-Baker-otherPeople",
+			"StartDate": "D2015-10-25T00:00:00",
+			"EndDate": "D2015-10-27T00:00:00"
+		});
+
+		expect(searchScheduleCalledTimes).toEqual(0);
+	}));
+
+	it("should not reload schedule when schedule changed beyond the date", inject(function () {
+		rootScope.$digest();
+		searchScheduleCalledTimes = 0;
+
+		controller.scheduleDate = new Date("2015-10-26");
+		mockSignalRBackendServer.notifyClients({
+			"DomainReferenceId": "221B-Baker-SomeoneElse",
+			"StartDate": "D2015-10-27T00:00:00",
+			"EndDate": "D2015-10-28T00:00:00"
+		});
+
+		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
 
 	function setUpController($controller) {
@@ -66,6 +97,7 @@ describe("TeamScheduleControllerTest", function() {
 	};
 
 	function setupMockTeamScheduleService(teamScheduleService) {
+
 		teamScheduleService.loadAbsences = {
 			query: function () {
 				var queryDeferred = $q.defer();
@@ -88,7 +120,7 @@ describe("TeamScheduleControllerTest", function() {
 		};
 		teamScheduleService.searchSchedules = {
 			query: function () {
-				searchScheduleCount = searchScheduleCount + 1;
+				searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -143,7 +175,6 @@ describe("TeamScheduleControllerTest", function() {
 		};
 	};
 
-
 	function setupMockLocale() {
 		return {
 			DATETIME_FORMATS: {
@@ -170,11 +201,12 @@ describe("TeamScheduleControllerTest", function() {
 	}
 
 	function setupMockSignalRService() {
+		mockSignalRBackendServer.subscriptions = [];
+
 		return {
-			subscribe: function(options, eventHandler, errorHandler) {
-				mockSignalRServer.notifyClients = function (message) {
-					eventHandler(message);
-				}
+			subscribe: function (options, eventHandler, errorHandler) {
+				mockSignalRBackendServer.subscriptions.push(options);
+				mockSignalRBackendServer.notifyClients = eventHandler;
 			}
 		};
 	}
