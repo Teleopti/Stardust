@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -18,8 +16,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class LogOnHelper : ILogOnHelper
 	{
-		private readonly ILoadAllTenants _loadAllTenants;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly TenantHolder _tenantHolder;
 		private DataSourceContainer _choosenDb;
@@ -27,14 +23,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 
-		public LogOnHelper(
-			ILoadAllTenants loadAllTenants, 
-			ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
-			TenantHolder tenantHolder)
+		public LogOnHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, TenantHolder tenantHolder)
 		{
-			_loadAllTenants = loadAllTenants;
-			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenantHolder = tenantHolder;
 			initializeStateHolder();
@@ -114,7 +104,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void RefreshTenantList()
 		{
-			_tenantHolder.Refresh(_tenantUnitOfWork, _loadAllTenants);
+			_tenantHolder.Refresh();
 		}
 
 	}

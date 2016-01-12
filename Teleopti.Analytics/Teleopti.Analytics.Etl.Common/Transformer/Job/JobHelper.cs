@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
@@ -20,19 +16,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ILogOnHelper _logOnHelper;
 		private IMessageSender _messageSender;
 
-		public JobHelper(
-			ILoadAllTenants loadAllTenants, 
-			ITenantUnitOfWork tenantUnitOfWork, 
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
-			TenantHolder tenantHolder)
+		public JobHelper(LogOnHelper logOnHelper)
 		{
-			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, tenantHolder);
+			_logOnHelper = logOnHelper;
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
 			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));
 		}
 
-		public JobHelper(
+		protected JobHelper(
 			IRaptorRepository repository, 
 			IMessageSender messageSender, 
 			ILogOnHelper logOnHelper)

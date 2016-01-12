@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +39,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var scheduleTransformer = _mock.DynamicMock<IScheduleTransformer>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelperForTest(raptorRepository, null, null);
 			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, scheduleTransformer);
 
 	        Expect.Call(raptorRepository.TruncateSchedule);

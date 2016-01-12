@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -33,7 +34,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             _raptorRepository = _mocks.StrictMock<IRaptorRepository>();
             
         	_jobParameters = JobParametersFactory.SimpleParameters(false);
-			_jobParameters.Helper = new JobHelper(_raptorRepository, null, null);
+			_jobParameters.Helper = new JobHelperForTest(_raptorRepository, null, null);
 			
             _target = new CommonStateHolder(_jobParameters);
         }

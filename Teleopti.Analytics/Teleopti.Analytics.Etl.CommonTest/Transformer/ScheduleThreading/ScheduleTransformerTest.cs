@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
@@ -32,7 +33,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
 				new JobParametersFactory.FakeContainerHolder(), 
 				false);
 
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null, null);
 			
 			var transformer = new ScheduleTransformer();   
 

@@ -4,6 +4,7 @@ using System.Globalization;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -24,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 				false
 			);
 
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null, null);
 
 			return jobParameters;
 		}

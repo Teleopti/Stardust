@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -39,11 +40,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					);
 
 				_baseConfiguration.JobHelper = new JobHelper(
-					App.Container.Resolve<ILoadAllTenants>(),
-					App.Container.Resolve<ITenantUnitOfWork>(),
-					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
-					App.Container.Resolve<TenantHolder>()
-					);
+					new LogOnHelper(
+						App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
+						App.Container.Resolve<TenantHolder>()));
 
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 

@@ -40,8 +40,16 @@ namespace Teleopti.Analytics.Etl.Common
 	
 	public class TenantHolder
 	{
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
+		private readonly ILoadAllTenants _loadAllTenants;
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
-		
+
+		public TenantHolder(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
+		{
+			_tenantUnitOfWork = tenantUnitOfWork;
+			_loadAllTenants = loadAllTenants;
+		}
+
 		public IEnumerable<TenantInfo> LoadedTenants()
 		{
 			return _tenants;
@@ -58,7 +66,7 @@ namespace Teleopti.Analytics.Etl.Common
 			return tenant == null ? null : tenant.DataSource;
 		}
 
-		public void Refresh(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
+		public void Refresh()
 		{
 			var dataSourcesFactory = new DataSourcesFactory(
 				new EnversConfiguration(),
@@ -70,9 +78,9 @@ namespace Teleopti.Analytics.Etl.Common
 
 			var refreshed = _tenants.ToList();
 
-			using (tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var loaded = loadAllTenants.Tenants().ToList();
+				var loaded = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in loaded)
 				{
 					var existing = LoadedTenants().FirstOrDefault(x => x.Name.Equals(tenant.Name));

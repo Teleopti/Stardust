@@ -2,24 +2,34 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 {
+	public class JobHelperForTest : JobHelper
+	{
+		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper) 
+			: base(repository, messageSender, logOnHelper)
+		{
+		}
+	}
+
 	[TestFixture]
 	public class JobHelperTest
 	{
 		private ILogOnHelper _logOnHelper;
-		private JobHelper _target;
+		private JobHelperForTest _target;
 
 		[SetUp]
 		public void Setup()
 		{
 			_logOnHelper = MockRepository.GenerateMock<ILogOnHelper>();
-			_target = new JobHelper(null, null, _logOnHelper);
+			_target = new JobHelperForTest(null, null, _logOnHelper);
 		}
 
 		[Test]

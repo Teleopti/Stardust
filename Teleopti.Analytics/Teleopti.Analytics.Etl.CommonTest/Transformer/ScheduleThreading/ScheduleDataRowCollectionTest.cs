@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -37,7 +38,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
 
 			var scheduleProjections = new List<ScheduleProjection> { scheduleProjectionServiceList[0] };
 
-			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
+			_jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null, null);
 
 			IVisualLayerCollection layerCollection = VisualLayerCollectionFactory.CreateForWorkShift(new Person(),
 																									 new TimeSpan(9, 0, 0),
