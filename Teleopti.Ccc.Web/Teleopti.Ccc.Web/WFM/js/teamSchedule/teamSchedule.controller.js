@@ -364,6 +364,18 @@
 			return isMessageInsidePeopleList && scheduleDateInMessageRange;
 		}
 
+		function monitorScheduleChanged() {
+			if (toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303) {
+				signalRSvc.subscribe({
+					DomainType: 'IScheduleChangedInDefaultScenario'
+				}, function (message) {
+					if (isMessageNeedToBeHandled(message)) {
+						vm.loadSchedules();
+					}
+				}, function (message) { });
+			}
+		}
+
 		vm.init = function () {
 			createDocumentListeners();
 			vm.isSelectAgentsPerPageEnabled = toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230;
@@ -371,15 +383,7 @@
 			vm.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 			vm.isSwapShiftEnabled = toggleSvc.WfmTeamSchedule_SwapShifts_36231;
 
-			if (toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303) {
-				signalRSvc.subscribe({
-					DomainType: 'IScheduleChangedInDefaultScenario'
-				}, function(message) {
-					if (isMessageNeedToBeHandled(message)) {
-						vm.loadSchedules();
-					}
-				}, function(message) {});
-			}
+			monitorScheduleChanged();
 
 			vm.schedulePageReset();
 			vm.initialized = true;

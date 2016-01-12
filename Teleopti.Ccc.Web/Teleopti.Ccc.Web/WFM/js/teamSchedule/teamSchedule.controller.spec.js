@@ -4,6 +4,8 @@ describe("TeamScheduleControllerTest", function() {
 	var $q,
 		rootScope,
 		controller;
+	var mockSignalRServer = {};
+	var searchScheduleCount = 0;
 
 	beforeEach(function() {
 		module('wfm.teamSchedule');
@@ -14,6 +16,7 @@ describe("TeamScheduleControllerTest", function() {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale',setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
+			$provide.service('SignalR', setupMockSignalRService);
 		});
 	});
 
@@ -41,8 +44,22 @@ describe("TeamScheduleControllerTest", function() {
 		expect(selectedPersonList.length).toEqual(0);
 	}));
 
-	function setUpController($controller) {
+	it("should reload schedule when schedule changed by others", inject(function () {
+		rootScope.$digest();
 
+		controller.scheduleDate = new Date("2015-10-26");
+
+		var previousCount = searchScheduleCount;
+		mockSignalRServer.notifyClients({
+			"DomainReferenceId": "221B-Baker-SomeoneElse",
+			"StartDate": "D2015-10-25T00:00:00",
+			"EndDate": "D2015-10-27T00:00:00"
+		});
+
+		expect(searchScheduleCount).toEqual(previousCount + 1);
+	}));
+
+	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
 			$scope: rootScope
 		});
@@ -71,6 +88,7 @@ describe("TeamScheduleControllerTest", function() {
 		};
 		teamScheduleService.searchSchedules = {
 			query: function () {
+				searchScheduleCount = searchScheduleCount + 1;
 				var today = "2015-10-26";
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -136,17 +154,11 @@ describe("TeamScheduleControllerTest", function() {
 
 	function setupMockAllTrueToggleService() {
 		return {
-			isFeatureEnabled: {
-				query: function (param) {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve({ IsEnabled: true });
-					return { $promise: queryDeferred.promise }
-				}
-			},
 			WfmTeamSchedule_SetAgentsPerPage_36230: true,
 			WfmTeamSchedule_AbsenceReporting_35995: true,
 			WfmPeople_AdvancedSearch_32973: true,
-			WfmTeamSchedule_SwapShifts_36231: true
+			WfmTeamSchedule_SwapShifts_36231: true,
+			WfmTeamSchedule_SeeScheduleChangesByOthers_36303: true
 		};
 	}
 
@@ -157,4 +169,13 @@ describe("TeamScheduleControllerTest", function() {
 		};
 	}
 
+	function setupMockSignalRService() {
+		return {
+			subscribe: function(options, eventHandler, errorHandler) {
+				mockSignalRServer.notifyClients = function (message) {
+					eventHandler(message);
+				}
+			}
+		};
+	}
 });
