@@ -162,9 +162,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			_logonWorker.Dispose();
 		}
 
-		public void LoadJobTree(IBaseConfiguration baseConfiguration, IContainer container)
+		public void LoadJobTree(IBaseConfiguration baseConfiguration)
 		{
-			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration, container);
+			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
 		}
 	}

@@ -10,19 +10,16 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {
 	public class JobCollectionFactory
 	{
 		private readonly IBaseConfiguration _baseConfiguration;
-		private readonly IContainer _container;
 
-		public JobCollectionFactory(IBaseConfiguration baseConfiguration, IContainer container)
+		public JobCollectionFactory(IBaseConfiguration baseConfiguration)
 		{
 			_baseConfiguration = baseConfiguration;
-			_container = container;
 		}
 
 		public ObservableCollection<IJob> JobCollection
@@ -36,11 +33,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					ConfigurationManager.AppSettings["cube"],
 					ConfigurationManager.AppSettings["pmInstallation"],
 					CultureInfo.CurrentCulture,
-					new IocContainerHolder(_container), 
+					new IocContainerHolder(App.Container), 
 					_baseConfiguration.RunIndexMaintenance
 					);
-				_baseConfiguration.JobHelper = new JobHelper(_container.Resolve<ILoadAllTenants>(),
-					_container.Resolve<ITenantUnitOfWork>(), _container.Resolve<IAvailableBusinessUnitsProvider>());
+
+				_baseConfiguration.JobHelper = new JobHelper(
+					App.Container.Resolve<ILoadAllTenants>(),
+					App.Container.Resolve<ITenantUnitOfWork>(),
+					App.Container.Resolve<IAvailableBusinessUnitsProvider>()
+					);
+
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 
 				var jobCollection = new JobCollection(jobParameters);

@@ -24,7 +24,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private readonly Repository _repository;
 		private IBaseConfiguration _baseConfiguration;
 		private EtlControlTree _treeControl;
-		private IContainer _container;
 
 		public ScheduleControl()
 		{
@@ -44,10 +43,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			}
 		}
 
-		public void SetTreeControl(EtlControlTree treeControl, IContainer container)
+		public void SetTreeControl(EtlControlTree treeControl)
 		{
 			_treeControl = treeControl;
-			_container = container;
 		}
 
 		private static bool isInDesignMode
@@ -65,7 +63,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void MenuItemEdit(object sender, RoutedEventArgs e)
 		{
 			var etlSchedule = (IEtlJobSchedule)lv.SelectedItem;
-			using (var jobSchedule = new JobSchedule(etlSchedule, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1, _container))
+			using (var jobSchedule = new JobSchedule(etlSchedule, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1))
 			{
 				if (jobSchedule.ShowDialog() == DialogResult.OK)
 				{
@@ -97,7 +95,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void MenuItemNew(object sender, RoutedEventArgs e)
 		{
-			using (var jobSchedule = new JobSchedule(null, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1, _container))
+			using (var jobSchedule = new JobSchedule(null, _observableCollection, _baseConfiguration, _treeControl.TenantCollection.Count() == 1))
 			{
 				if (jobSchedule.ShowDialog() == DialogResult.OK)
 				{

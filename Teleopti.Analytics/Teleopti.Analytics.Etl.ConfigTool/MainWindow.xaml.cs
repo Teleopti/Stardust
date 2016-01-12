@@ -21,12 +21,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 		private bool _isEtlToolLoading;
 		private IJob _initialJob;
 		private readonly IBaseConfiguration _baseConfiguration;
-		private readonly IContainer _container;
 
-		public MainWindow(IBaseConfiguration baseConfiguration, IContainer container)
+		public MainWindow(IBaseConfiguration baseConfiguration)
 		{
 			_baseConfiguration = baseConfiguration;
-			_container = container;
 			InitializeComponent();
 			_isEtlToolLoading = true;
 			_generalFunctions = new GeneralFunctions(startConnectionString);
@@ -36,7 +34,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			manualEtl.JobStoppedRunning += manualEtl_JobStoppedRunning;
 
 			scheduleControl.SetBaseConfiguration(baseConfiguration);
-			manualEtl.SetBaseConfiguration(baseConfiguration, _container);
+			manualEtl.SetBaseConfiguration(baseConfiguration);
 			jobHistory.SetBaseConfiguration(baseConfiguration);
 
 			DataContext = this;
@@ -102,7 +100,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			//	_dataSourceConfigurationDialog = null;
 			//}
 
-			scheduleControl.SetTreeControl(manualEtl.myTree, _container);
+			scheduleControl.SetTreeControl(manualEtl.myTree);
 		}
 
 		private bool initializeDataSourceDialog(string connectionString)

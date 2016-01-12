@@ -8,6 +8,7 @@ using Autofac;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Interfaces.Domain;
 using Application = System.Windows.Application;
@@ -16,15 +17,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 {
 	public partial class App : Application
 	{
+		public static IContainer Container;
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			XmlConfigurator.Configure();
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new EtlAppModule());
-			var container = builder.Build();
+			Container = builder.Build();
 
-			var configurationHandler =
-				new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"]));
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"]));
 
 			if (!configurationHandler.IsConfigurationValid)
 			{
@@ -37,15 +39,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			}
 
 			if (configurationHandler.BaseConfiguration.CultureId != null)
-				Thread.CurrentThread.CurrentCulture =
-					CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
 
 			// WPF should use CurrentCulture
 			FrameworkElement.LanguageProperty.OverrideMetadata(
 				typeof (FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-			var startWindow = new MainWindow(configurationHandler.BaseConfiguration, container);
+			var startWindow = new MainWindow(configurationHandler.BaseConfiguration);
 			startWindow.Show();
 		}
 	}

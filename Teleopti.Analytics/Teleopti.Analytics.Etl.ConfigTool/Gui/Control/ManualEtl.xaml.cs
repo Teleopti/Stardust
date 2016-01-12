@@ -115,11 +115,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			Dispose();
 		}
 
-		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration, IContainer container)
+		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)
 		{
 			_baseConfiguration = baseConfiguration;
 			myControl.SetBaseConfiguration(baseConfiguration);
-			myTree.LoadJobTree(baseConfiguration, container);
+			myTree.LoadJobTree(baseConfiguration);
 		}
 
 		public ManualControl ManualControl

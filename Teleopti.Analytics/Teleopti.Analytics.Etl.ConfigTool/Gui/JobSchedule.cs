@@ -31,10 +31,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
 		private readonly IBaseConfiguration _baseConfiguration;
 		private readonly bool _selectDataSourceIsPossible;
-		private readonly IContainer _container;
 
-		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
-			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible, IContainer container)
+		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
 			InitializeComponent();
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
@@ -42,7 +40,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			_observableCollection = observableCollection;
 			_baseConfiguration = baseConfiguration;
 			_selectDataSourceIsPossible = selectDataSourceIsPossible;
-			_container = container;
 
 			if (etlJobSchedule == null)
 			{
@@ -73,7 +70,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						ConfigurationManager.AppSettings["cube"],
 						ConfigurationManager.AppSettings["pmInstallation"],
 						CultureInfo.CurrentCulture,
-						new IocContainerHolder(_container), 
+						new IocContainerHolder(App.Container), 
 						_baseConfiguration.RunIndexMaintenance
 						)
 					);
