@@ -136,13 +136,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		private void classicDaysOffOptimization(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
+		private void classicDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
 		{
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var dayOffOptimzePreferences = _container.Resolve<IDaysOffPreferences>();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffOptimzePreferences);
 			var classicDaysOffOptimizationCommand = _container.Resolve<IClassicDaysOffOptimizationCommand>();
-			classicDaysOffOptimizationCommand.Execute(scheduleDays, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper, dayOffOptimizationPreferenceProvider);
+			classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper, dayOffOptimizationPreferenceProvider);
 		}
 	
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
@@ -658,7 +658,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
-			classicDaysOffOptimization(selectedDays, selectedPeriod, _backgroundWorker);
+			classicDaysOffOptimization(validMatrixContainerList, selectedPeriod, _backgroundWorker);
 
 			// we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
 			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));

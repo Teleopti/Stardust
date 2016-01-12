@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -27,6 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly OptimizationPreferencesFactory _optimizationPreferencesFactory;
+		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 
 		public ScheduleOptimization(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 	Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository,
 	WeeklyRestSolverExecuter weeklyRestSolverExecuter, OptimizationPreferencesFactory optimizationPreferencesFactory,
+			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 	DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
@@ -46,6 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningPeriodRepository = planningPeriodRepository;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_optimizationPreferencesFactory = optimizationPreferencesFactory;
+			_matrixListFactory = matrixListFactory;
+			_scheduleDayEquator = scheduleDayEquator;
 			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		}
 
@@ -92,7 +98,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesFactory.Create();
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 
-			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(),
+			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixList(allSchedules, period);
+			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
+				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
+					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+
+			_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period, optimizationPreferences, _schedulerStateHolder(),
 				new NoBackgroundWorker(), dayOffOptimizationPreferenceProvider);
 
 			_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, allSchedules, people.AllPeople,

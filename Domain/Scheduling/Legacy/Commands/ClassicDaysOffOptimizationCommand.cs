@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IClassicDaysOffOptimizationCommand
 	{
-		void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
+		void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
 					ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
 					IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
-		public ClassicDaysOffOptimizationCommand(IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
-			IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider,
+		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, Func<IPersonSkillProvider> personSkillProvider,
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
 			IWorkShiftBackToLegalStateServiceFactory workShiftBackToLegalStateServiceFactory, IScheduleService scheduleService,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -55,8 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptionsCreator schedulingOptionsCreator, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
-			_matrixListFactory = matrixListFactory;
-			_scheduleDayEquator = scheduleDayEquator;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_personSkillProvider = personSkillProvider;
 			_bitArrayConverter = bitArrayConverter;
@@ -75,17 +72,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
-		public void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
+		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, 
 							ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, 
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			
-			
-			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixList(scheduleDays, selectedPeriod);
-			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
-				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
-
 			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 
 			ISchedulePartModifyAndRollbackService rollbackService =

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeClassicDaysOffOptimizationCommand : IClassicDaysOffOptimizationCommand
 	{
-		public void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
+		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
 			ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			OptimizationExecute = true;
