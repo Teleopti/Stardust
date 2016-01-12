@@ -157,7 +157,8 @@
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
 								TeamName: agentInfo[0].TeamName,
-								PersonId: state.PersonId,
+								PersonId: agentInfo[0].PersonId,
+								TeamId: agentInfo[0].TeamId,
 								State: state.State,
 								StateStartTime: state.StateStartTime,
 								Activity: state.Activity,
@@ -181,7 +182,9 @@
 						if (agentFilled.length === 0)
 							$scope.agents.push({
 								Name: agentInfo.Name,
+								PersonId: agentInfo.PersonId,
 								TeamName: agentInfo.TeamName,
+								TeamId: agentInfo.TeamId,
 							});
 					});
 				}

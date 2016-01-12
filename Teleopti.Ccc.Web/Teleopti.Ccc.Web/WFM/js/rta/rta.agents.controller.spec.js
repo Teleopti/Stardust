@@ -221,7 +221,27 @@ describe('RtaAgentsCtrl', function() {
 		createController();
 
 		expect(scope.agents[0].Name).toEqual("Charley Caper");
+		expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+		expect(scope.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
 		expect(scope.agents[1].Name).toEqual("Ashley Andeen");
+		expect(scope.agents[1].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(scope.agents[1].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
+	});
+
+	it('should display agent without state received', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		agents = [{
+			Name: "Ashley Andeen",
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		}];
+		states = [];
+
+		createController();
+
+		expect(scope.agents[0].Name).toEqual("Ashley Andeen");
+		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(scope.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
 	});
 
 	it('should filter agent name with agentFilter', function() {
