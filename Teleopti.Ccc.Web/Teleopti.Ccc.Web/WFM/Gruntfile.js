@@ -115,7 +115,6 @@
 				'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
 				'node_modules/filesaver.js/FileSaver.min.js',
 				'node_modules/jquery/dist/jquery.min.js',
-				'node_modules/ms-signalr-client/jquery.signalr-2.2.0.min.js',
 				'vendor/hammerjs/hammer.min.js',
 				'node_modules/angular-material/angular-material.min.js',
 				'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
@@ -129,7 +128,9 @@
 				'vendor/c3/c3-angular.min.js',
 				'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 				'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
-				'vendor/uigrid.directive.ext.js'
+				'vendor/uigrid.directive.ext.js',
+				'../Content/signalr/jquery.signalR-2.1.2.js',
+				'../Content/signalr/broker-hubs.js'
 				],
 				dest: 'dist/modules.js',
 		    },
