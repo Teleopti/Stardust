@@ -14,7 +14,8 @@
 
 			<li ng-repeat="WorkingPeriod in workingHours"
 				ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)">
-				<span class="list-item-container list-header" title="{{getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime)}}">
+				<span class="list-item-container list-header">
+					<md-tooltip>{{getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime)}}</md-tooltip>
 					{{ getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime)}}
 				</span>
 
