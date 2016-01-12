@@ -826,6 +826,15 @@
 
 			.icon-set-fix{
 				padding-right:20px;
+				
+				position:relative;
+				min-width:46px;
+				.icon-set{
+					position:absolute;
+					top:2px;
+					right:0px;
+				}
+				
 				input{
 					width:100%;
 				}

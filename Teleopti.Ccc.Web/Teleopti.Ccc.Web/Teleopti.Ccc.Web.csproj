@@ -1511,7 +1511,6 @@
     <Content Include="WFM\css\_daterangepicker.scss" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
-    <Content Include="WFM\css\workinghourspicker.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />
@@ -2219,6 +2218,7 @@
     <Content Include="WFM\css\_teamschedule.scss" />
     <Content Include="WFM\css\_wfmrightpanel.scss" />
     <Content Include="WFM\css\_requests.scss" />
+    <Content Include="WFM\css\_workinghourspicker.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
