@@ -60,11 +60,13 @@
 				<dl>
 					<dd>
 						<div class="form-input-wrap">
-							<label>{{'OpenHours'|translate}}</label>
-							<working-hours-picker class="skill-create-form-picker" working-hours="model.workingHours"></working-hours-picker>
-							<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
-								<div class="form-input-message formWarningInput">{{'AllDaysAreClosed'|translate}}</div>
-							</div>
+							<div>
+								<label>{{'OpenHours'|translate}}</label>
+								<working-hours-picker class="skill-create-form-picker working-hours-picker" working-hours="model.workingHours"></working-hours-picker>
+									<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
+										<div class="form-input-message formWarningInput">{{'AllDaysAreClosed'|translate}}</div>
+									</div>
+								</div>
 						</div>
 					</dd>
 					<dd>
