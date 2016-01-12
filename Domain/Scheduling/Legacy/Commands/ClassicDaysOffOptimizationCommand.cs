@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 	public class ClassicDaysOffOptimizationCommand : IClassicDaysOffOptimizationCommand
 	{
-		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
