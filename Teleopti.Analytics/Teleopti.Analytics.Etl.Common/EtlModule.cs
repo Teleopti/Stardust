@@ -28,6 +28,7 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<EtlJobStarter>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
 			builder.RegisterType<JobExtractor>().SingleInstance();
+			builder.RegisterType<Tenants>().SingleInstance();
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();

@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Autofac;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -27,13 +26,18 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly string _pmInstallation;
 		private readonly JobHelper _jobHelper;
 		private readonly JobExtractor _jobExtractor;
+		private readonly Tenants _tenants;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
-		public EtlJobStarter(JobHelper jobHelper, JobExtractor jobExtractor)
+		public EtlJobStarter(
+			JobHelper jobHelper, 
+			JobExtractor jobExtractor,
+			Tenants tenants)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
+			_tenants = tenants;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
@@ -119,11 +123,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
 
-					var jobHelper = jobToRun.JobParameters.Helper;
-					jobHelper.RefreshTenantList();
-					var tenantNames = jobHelper.TenantCollection;
-
-					foreach (var tenantName in tenantNames)
+					foreach (var tenantName in _tenants.CurrentTenants())
 					{
 						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
 						if (tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
@@ -135,7 +135,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
 
 						var jobResultCollection = new List<IJobResult>();
-						jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
+						_jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
 
 						var jobRunner = new JobRunner();
 						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
