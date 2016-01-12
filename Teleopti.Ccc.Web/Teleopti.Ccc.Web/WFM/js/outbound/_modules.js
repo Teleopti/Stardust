@@ -1,5 +1,8 @@
 ﻿(function() {
 	'use strict';
+	
+	angular.module('outboundServiceModule', [ 'ngResource', 'pascalprecht.translate']);
+
 	var outbound = angular.module('wfm.outbound', [
 			'ui.router',
 			'outboundServiceModule',
@@ -13,10 +16,11 @@
 			'gantt',
 			'gantt.table',
 			'gantt.tooltips',
-			'wfm.numericValue'
+			'angular-growl',
+			'wfm.numericValue',
+			'ngStorage'
 		]
 	);
-	angular.module('outboundServiceModule', [ 'ngResource', 'pascalprecht.translate']);
 
 	outbound.run([
 		'$rootScope', '$state', '$location', function($rootScope, $state, $location) {

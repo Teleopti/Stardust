@@ -10,9 +10,7 @@ describe('OutboundCreateCtrl', function() {
 
 	beforeEach(function () {
 		module('wfm.outbound');
-		module('externalModules');
-		module('wfm.notice');
-
+		
 		outboundService = new fakeOutboundService();
 		stateService = new fakeStateService();
 
@@ -27,11 +25,10 @@ describe('OutboundCreateCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _outboundNotificationService_) {
+	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _outboundNotificationService_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
-		var $httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		outboundNotificationService = _outboundNotificationService_;
 	}));

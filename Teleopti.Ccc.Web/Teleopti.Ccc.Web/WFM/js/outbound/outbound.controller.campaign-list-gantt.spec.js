@@ -11,7 +11,7 @@ describe('OutboundSummaryCtrl', function() {
 		miscService;
 
 	beforeEach(function() {
-		module('wfm');
+		module('wfm.outbound');
 
 		outboundService = new fakeOutboundService();
 
@@ -44,16 +44,11 @@ describe('OutboundSummaryCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_, _$timeout_) {
-
+	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _$timeout_) {
 		$q = _$q_;
-		$rootScope = _$rootScope_;
-		var $httpBackend = _$httpBackend_;
+		$rootScope = _$rootScope_;	
 		$controller = _$controller_;
-		$timeout = _$timeout_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
-
+		$timeout = _$timeout_;	
 	}));
 
 	it('should draw gantt chart at the beginning', function() {
