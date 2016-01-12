@@ -34,24 +34,25 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			_messageSender = messageSender;
 		}
 
-		public IList<IBusinessUnit> BusinessUnitCollection
-		{
-			get { return _logOnHelper.GetBusinessUnitCollection(); }
-		}
-
-		public IEnumerable<TenantInfo> TenantCollection
-		{
-			get { return _logOnHelper.TenantCollection; }
-		}
 
 		public IRaptorRepository Repository
 		{
 			get { return _repository; }
 		}
-		
+
 		public IMessageSender MessageSender
 		{
 			get { return _messageSender; }
+		}
+
+		public void LogOffTeleoptiCccDomain()
+		{
+			_repository = null;
+		}
+
+		public IList<IBusinessUnit> BusinessUnitCollection
+		{
+			get { return _logOnHelper.GetBusinessUnitCollection(); }
 		}
 
 		public bool SelectDataSourceContainer(string dataSourceName)
@@ -62,11 +63,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		public IDataSource SelectedDataSource
 		{
 			get { return _logOnHelper.SelectedDataSourceContainer.DataSource; }
-		}
-
-		public void RefreshTenantList()
-		{
-			_logOnHelper.RefreshTenantList();
 		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
@@ -84,9 +80,5 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			return true;
 		}
 
-		public void LogOffTeleoptiCccDomain()
-		{
-			_repository = null;
-		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common
 
 		public IEnumerable<TenantInfo> LoadedTenants()
 		{
-			return _tenants;
+			return _tenants.ToList();
 		}
 
 		public IEnumerable<TenantInfo> CurrentTenants()

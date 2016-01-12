@@ -80,26 +80,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 		private void Window_ContentRendered(object sender, EventArgs e)
 		{
-			//initializeDataSourceDialog(startConnectionString);
 			manualEtl.ManualControl.RegisterInitialConfigSetup(initializeDataSourceDialog);
-			// why not use:
-			//_generalFunctions.DataSourceInvalidList
-			//var dataSourceInvalidCollection = new DataSourceInvalidCollection(startConnectionString);
-			//var dataSourceValidCollection = new DataSourceValidCollection(false, startConnectionString);
-			
-			//if (dataSourceInvalidCollection.Count > 0 || (dataSourceValidCollection.Count + dataSourceInvalidCollection.Count == 0))
-			//{
-			//	 Show config GUI if not ds at all or at least one invalid ds.
-			//	CanRun = false;
-			//	showDataSourceDialog();
-			//	CanRun = true;
-			//}
-			//else
-			//{
-			//	_dataSourceConfigurationDialog.DetachEvent();
-			//	_dataSourceConfigurationDialog = null;
-			//}
-
 			scheduleControl.SetTreeControl(manualEtl.myTree);
 		}
 

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Security.Authentication;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -27,8 +26,18 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
+			_tenants.Refresh();
 			initializeStateHolder();
-			RefreshTenantList();
+		}
+
+		private void initializeStateHolder()
+		{
+			var application = new InitializeApplication(null);
+			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
+
+			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			_logonService =
+				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -48,21 +57,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return _buList;
 		}
 
-		public IEnumerable<TenantInfo> TenantCollection
-		{
-			get
-			{
-				if (_tenants.LoadedTenants().IsEmpty())
-					throw new DataSourceException("No Tenants found");
-				return _tenants.LoadedTenants();
-			}
-		}
-
-		public IDataSourceContainer SelectedDataSourceContainer
-		{
-			get { return _choosenDb; }
-		}
-
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
 			if (_choosenDb != null)
@@ -76,16 +70,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return false;
 		}
 
-		private void initializeStateHolder()
+		public IDataSourceContainer SelectedDataSourceContainer
 		{
-			var application = new InitializeApplication(null);
-			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
-
-			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			_logonService =
-				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
+			get { return _choosenDb; }
 		}
 
+		
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
@@ -101,11 +91,5 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			return _choosenDb != null;
 		}
-
-		public void RefreshTenantList()
-		{
-			_tenants.Refresh();
-		}
-
 	}
 }

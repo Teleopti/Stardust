@@ -340,7 +340,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
-			jobHelper.SelectDataSourceContainer(jobHelper.TenantCollection.First().Name);
+			jobHelper.SelectDataSourceContainer(dataSource.DataSourceName);
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
 			var jobResultCollection = new List<IJobResult>();
@@ -595,14 +595,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			return _buList;
 		}
 
-		public IEnumerable<TenantInfo> TenantCollection
-		{
-			get
-			{
-				return _tenantNames;
-			}
-		}
-
 		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; } }
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
@@ -620,16 +612,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public void LogOff()
 		{
-		}
-
-		public void RefreshTenantList()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Dispose()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

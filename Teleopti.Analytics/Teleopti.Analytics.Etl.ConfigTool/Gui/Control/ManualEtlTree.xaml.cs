@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Autofac;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -53,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_tenantCollection = _jobCollection[0].JobParameters.Helper.TenantCollection;
+			_tenantCollection = App.Container.Resolve<Tenants>().LoadedTenants();
 			
 			InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
 			SetEnableStateForJobCollection();
