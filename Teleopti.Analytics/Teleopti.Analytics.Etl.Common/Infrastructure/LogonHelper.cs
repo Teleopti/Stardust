@@ -17,16 +17,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	public class LogOnHelper : ILogOnHelper
 	{
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private readonly TenantHolder _tenantHolder;
+		private readonly Tenants _tenants;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 
-		public LogOnHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, TenantHolder tenantHolder)
+		public LogOnHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants)
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
-			_tenantHolder = tenantHolder;
+			_tenants = tenants;
 			initializeStateHolder();
 			RefreshTenantList();
 		}
@@ -52,9 +52,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			get
 			{
-				if (_tenantHolder.LoadedTenants().IsEmpty())
+				if (_tenants.LoadedTenants().IsEmpty())
 					throw new DataSourceException("No Tenants found");
-				return _tenantHolder.LoadedTenants();
+				return _tenants.LoadedTenants();
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			var dataSource = _tenantHolder.DataSourceForTenant(dataSourceName);
+			var dataSource = _tenants.DataSourceForTenant(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application,
 				SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void RefreshTenantList()
 		{
-			_tenantHolder.Refresh();
+			_tenants.Refresh();
 		}
 
 	}

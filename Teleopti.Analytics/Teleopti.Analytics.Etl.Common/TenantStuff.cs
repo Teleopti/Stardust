@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -13,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common
 {
-	
 	public class TenantInfo
 	{
 		public string Name { get { return Tenant.Name; } }
@@ -21,30 +19,14 @@ namespace Teleopti.Analytics.Etl.Common
 		public IDataSource DataSource { get; set; }
 		public IBaseConfiguration BaseConfiguration { get; set; }
 	}
-
-	public class Tenants
-	{
-		private readonly JobHelper _jobHelper;
-
-		public Tenants(JobHelper jobHelper)
-		{
-			_jobHelper = jobHelper;
-		}
-
-		public IEnumerable<TenantInfo> CurrentTenants()
-		{
-			_jobHelper.RefreshTenantList();
-			return _jobHelper.TenantCollection;
-		}
-	}
 	
-	public class TenantHolder
+	public class Tenants
 	{
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
 
-		public TenantHolder(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
+		public Tenants(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
 		{
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_loadAllTenants = loadAllTenants;
@@ -53,6 +35,12 @@ namespace Teleopti.Analytics.Etl.Common
 		public IEnumerable<TenantInfo> LoadedTenants()
 		{
 			return _tenants;
+		}
+
+		public IEnumerable<TenantInfo> CurrentTenants()
+		{
+			Refresh();
+			return LoadedTenants();
 		}
 
 		public TenantInfo Tenant(string name)

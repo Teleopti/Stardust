@@ -220,7 +220,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		internal void ReloadDataSourceComboBox()
 		{
 
-			var dataSource = App.Container.Resolve<TenantHolder>().DataSourceForTenant(((TenantInfo) ComboBoxDataSource.SelectedItem).Name);
+			var dataSource = App.Container.Resolve<Tenants>().DataSourceForTenant(((TenantInfo) ComboBoxDataSource.SelectedItem).Name);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 

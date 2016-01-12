@@ -57,7 +57,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
-			var tenant = App.Container.Resolve<TenantHolder>().Tenant(myControl.TenantName);
+			var tenant = App.Container.Resolve<Tenants>().Tenant(myControl.TenantName);
 			if (tenant == null || tenant.BaseConfiguration == null)
 				return;
 			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.BaseConfiguration);
