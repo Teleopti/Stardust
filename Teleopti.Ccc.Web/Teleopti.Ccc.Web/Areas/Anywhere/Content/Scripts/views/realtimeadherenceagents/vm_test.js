@@ -93,7 +93,7 @@
                         TimeInState: 10,
                         Activity: 'Phone',
                         NextActivity: 'Lunch',
-                        NextActivityStartTime: moment('2014-01-21 13:00').format(),
+                        NextActivityStartTime: '13:00',
                         Alarm: 'Adhering',
                         Color: '#000001',
                         AlarmStart: moment('2014-01-21 12:15').format()
@@ -105,7 +105,7 @@
                         StateStartTime: moment('2014-01-21 12:00').format(),
                         Activity: 'Lunch',
                         NextActivity: 'Phone',
-                        NextActivityStartTime: moment('2014-01-21 13:00').format(),
+                        NextActivityStartTime: '2014-01-22 13:00',
                         Alarm: 'Not Adhering',
                         Color: '#ffffff',
                         AlarmStart: moment('2014-01-21 12:15').format()
@@ -118,6 +118,7 @@
                 assert.equals(agent.TimeInState(), 10);
                 assert.equals(agent.Activity(), "Phone");
                 assert.equals(agent.NextActivity(), "Lunch");
+                assert.equals(agent.NextActivityStartTime(), "13:00");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Adhering");
                 assert.equals(agent.Color(), 'rgba(0,0,1, 0.6)');
@@ -128,6 +129,7 @@
                 assert.equals(agent.TimeInState(), 20);
                 assert.equals(agent.Activity(), "Lunch");
                 assert.equals(agent.NextActivity(), "Phone");
+                assert.equals(agent.NextActivityStartTime(), "2014-01-22 13:00");
                 assert.equals(agent.AlarmStart(), moment.utc(moment('2014-01-21 12:15').format()).add(-600, 'minutes').format());
                 assert.equals(agent.Alarm(), "Not Adhering");
                 assert.equals(agent.Color(), 'rgba(255,255,255, 0.6)');
@@ -145,28 +147,7 @@
 
                 assert.equals(vm.Agents().length, 0);
             },
-
-            "should fill next activity start for last activity": function () {
-                resources.TimeZoneOffsetMinutes = -600;
-                var vm = viewModel();
-
-                vm.fillAgents([
-                    {
-                        PersonId: "guid1"
-                    }
-                ]);
-                vm.fillAgentsStates([
-                    {
-                        PersonId: 'guid1',
-                        NextActivityStartTime: moment('2014-01-21 13:00').format(),
-                    }
-                ]);
-
-                var agent = agentById(vm, "guid1");
-                var actual = moment.utc(moment('2014-01-21 13:00').format()).add(-600, 'minutes').format(resources.TimeFormatForMoment);
-                assert.equals(agent.NextActivityStartTime(), actual);
-            },
-
+            
             "should update existing state data when filling state": function () {
                 var vm = viewModel();
 

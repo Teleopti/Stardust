@@ -59,7 +59,7 @@
 	            that.TimeInState(data.TimeInState);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
-                that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(resources.TimeZoneOffsetMinutes, 'minutes')) : '');
+                that.NextActivityStartTime(data.NextActivityStartTime);
 				that.updateAlarmTime();
 
 				that.AlarmStart(data.AlarmStart
@@ -122,13 +122,6 @@
                 var b = bigint & 255;
 
                 return r + "," + g + "," + b;
-            }
-
-            that.getDateTimeFormat = function(time) {
-            	if (time.format("YYYYMMDD") > moment().format("YYYYMMDD")) {
-            		return time.format(resources.DateTimeFormatForMoment);
-                }
-                return time.format(resources.TimeFormatForMoment);
             }
 
             return that;

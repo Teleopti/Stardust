@@ -12,21 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string SiteName { get; set; }
 	}
 
-	public class AgentStateViewModel
-	{
-		public Guid PersonId { get; set; }
-		public string State { get; set; }
-		public DateTime? StateStartTime { get; set; }
-		public string Activity { get; set; }
-		public string NextActivity { get; set; }
-		public DateTime? NextActivityStartTime { get; set; }
-		public string Alarm { get; set; }
-		public DateTime? AlarmStart { get; set; }
-		public string Color { get; set; }
-		public int TimeInState { get; set; }
-		public int? TimeInAlarm { get; set; }
-	}
-
 	public class AgentStatusViewModel
 	{
 		public Guid PersonId { get; set; }

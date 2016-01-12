@@ -46,47 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_getAgentsStates = getAgentsStates;
 		}
 
-		[HttpGet, Route("api/Agents/GetStates")]
-		public IHttpActionResult GetStates(Guid teamId)
-		{
-			var states = _agentStateReadModelReader.LoadForTeam(teamId).Select(x => new AgentStateViewModel
-			{
-				PersonId = x.PersonId,
-				State = x.State,
-				StateStartTime = getNullableUtcDatetime(x.StateStartTime),
-				Activity = x.Scheduled,
-				NextActivity = x.ScheduledNext,
-				NextActivityStartTime = getNullableUtcDatetime(x.NextStart),
-				Alarm = x.AlarmName,
-				AlarmStart = getNullableUtcDatetime(x.RuleStartTime),
-				Color = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0)),
-				TimeInState = calculateTimeInState(x.StateStartTime),
-				TimeInAlarm = calculateTimeInAlarm(x)
-			}).ToArray();
-
-			return Ok(states);
-		}
-
-		private int? calculateTimeInAlarm(AgentStateReadModel x)
-		{
-			if (x.AlarmStartTime.HasValue)
-			{
-				return _date.UtcDateTime() >= x.AlarmStartTime.Value ? (int?)(_date.UtcDateTime() - x.AlarmStartTime.Value).TotalSeconds : null;
-			}
-			return null;
-		}
-		
-		private int calculateTimeInState(DateTime? dateTime)
-		{
-			var stateStartTime = getNullableUtcDatetime(dateTime);
-			return stateStartTime.HasValue ? (int)(_date.UtcDateTime() - stateStartTime.Value).TotalSeconds : 0;
-		}
-
-		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
-		{
-			return dateTime == null ? (DateTime?)null : DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-		}
-
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeam")]
 		public virtual IHttpActionResult ForTeam(Guid teamId)
 		{
@@ -139,6 +98,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult ForTeams([FromUri]Guid[] teamIds)
 		{
 			return Ok(_getAgents.ForTeams(teamIds).ToArray());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
+		public virtual IHttpActionResult GetStates(Guid teamId)
+		{
+			return Ok(_getAgentsStates.ForTeams(new[] { teamId }, null, null).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]

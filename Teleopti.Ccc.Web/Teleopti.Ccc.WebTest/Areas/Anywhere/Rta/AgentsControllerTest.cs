@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -9,13 +8,11 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
@@ -24,53 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	[TestFixture]
 	public class AgentsControllerTest
 	{
-		[Test]
-		public void GetStates_ShouldGetAllTheStatesForTeamFromReader()
-		{
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-
-			var data = new AgentStateReadModel
-			{
-				PersonId = personId,
-				TeamId = teamId,
-				State = "out of adherence",
-				StateStartTime = "2001-01-01 11:00".Utc(),
-				Scheduled = "Phone",
-				ScheduledNext = "Lunch",
-				NextStart = "2001-01-01 12:30".Utc(),
-				AlarmName = "Alarma!",
-				RuleStartTime = "2001-01-01 12:00".Utc(),
-				Color = Color.Red.ToArgb()
-			};
-			var expected = new AgentStateViewModel
-			{
-				PersonId = personId,
-				State = "out of adherence",
-				StateStartTime = "2001-01-01 11:00".Utc(),
-				Activity = "Phone",
-				NextActivity = "Lunch",
-				NextActivityStartTime = "2001-01-01 12:30".Utc(),
-				Alarm = "Alarma!",
-				AlarmStart = "2001-01-01 12:00".Utc(),
-				Color = "#FF0000"
-			};
-
-			var target = new AgentsController(null, null, null, new Now(), null, new FakeAgentStateReadModelReader(new[] { data }), null,null);
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-
-			result.Length.Should().Be(1);
-			Assert.That(result.First().PersonId, Is.EqualTo(expected.PersonId));
-			Assert.That(result.First().State, Is.EqualTo(expected.State));
-			Assert.That(result.First().StateStartTime, Is.EqualTo(expected.StateStartTime));
-			Assert.That(result.First().Activity, Is.EqualTo(expected.Activity));
-			Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
-			Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
-			Assert.That(result.First().Alarm, Is.EqualTo(expected.Alarm));
-			Assert.That(result.First().AlarmStart, Is.EqualTo(expected.AlarmStart));
-			Assert.That(result.First().Color, Is.EqualTo(expected.Color));
-		}
-
 		[Test]
 		public void GetAgents_ShouldGetAllAgentsForOneTeam()
 		{
@@ -152,85 +102,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			
 			var result = target.PersonDetails(person.Id.GetValueOrDefault()).Result<PersonDetailModel>();
 			result.Name.Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
-		}
-
-		[Test]
-		public void ShouldReturnTimeInStateWhenNoStateStartTime()
-		{
-			var teamId = Guid.NewGuid();
-			var data = new AgentStateReadModel
-			{
-				TeamId = teamId
-			};
-			var target = new AgentsController(null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-			result.Single().TimeInState.Should().Be(0);
-		}
-
-		[Test]
-		public void ShouldCalculateTimeInState()
-		{
-			var teamId = Guid.NewGuid();
-			var data = new AgentStateReadModel
-			{
-				TeamId = teamId,
-				StateStartTime = "2015-10-02 09:00".Utc(),
-			};
-			var now = new MutableNow("2015-10-02 09:05");
-
-			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-			result.Single().TimeInState.Should().Be((int)"5".Minutes().TotalSeconds);
-		}
-
-		[Test]
-		public void ShouldReturnTimeInAlarmWhenNoAlarmStartTime()
-		{
-			var teamId = Guid.NewGuid();
-			var data = new AgentStateReadModel
-			{
-				TeamId = teamId
-			};
-			var target = new AgentsController(null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-			result.Single().TimeInAlarm.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldCalculateTimeInAlarm()
-		{
-			var teamId = Guid.NewGuid();
-			var data = new AgentStateReadModel
-			{
-				TeamId = teamId,
-				AlarmStartTime = "2015-10-02 09:00".Utc(),
-			};
-			var now = new MutableNow("2015-10-02 09:05");
-
-			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-			result.Single().TimeInAlarm.Should().Be((int?)"5".Minutes().TotalSeconds);
-		}
-
-		[Test]
-		public void ShouldBeNullWhenAlarmHasNotStartedYet()
-		{
-			var teamId = Guid.NewGuid();
-			var data = new AgentStateReadModel
-			{
-				TeamId = teamId,
-				AlarmStartTime = "2015-10-02 09:05".Utc(),
-			};
-			var now = new MutableNow("2015-10-02 09:00");
-
-			var target = new AgentsController(null, null, null, now, null, new FakeAgentStateReadModelReader(new[] { data }), null, null);
-			
-			var result = target.GetStates(teamId).Result<AgentStateViewModel[]>();
-			result.Single().TimeInAlarm.Should().Be(null);
 		}
 	}
 }
