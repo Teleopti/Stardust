@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.Common.TimeLogger
 	{
 		public LogTimeAttribute() : base(typeof(LogTimeAspect))
 		{
-			
-		} 
+		}
+
+		public override int Order { get { return -1000; } }
 	}
 }

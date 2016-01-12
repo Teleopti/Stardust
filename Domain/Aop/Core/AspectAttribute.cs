@@ -10,5 +10,10 @@ namespace Teleopti.Ccc.Domain.Aop.Core
 		}
 
 		public Type AspectType { get; private set; }
+
+		public virtual int Order
+		{
+			get { return 0; }
+		}
 	}
 }

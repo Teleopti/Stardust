@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
@@ -17,12 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 		public void Intercept(IInvocation invocation)
 		{
-			var aspects = (
-				from IAttributeForAspect attribute in invocation.Method.GetCustomAttributes(typeof (IAttributeForAspect), false) 
-				select (IAspect) _resolver.Resolve(attribute.AspectType)
-				)
-				.ToList();
-
+			var orderedAspectAttributes = invocation.Method.GetCustomAttributes(typeof (IAttributeForAspect), false)
+				.Cast<IAttributeForAspect>()
+				.OrderBy(x => x.Order);
+			var aspects = orderedAspectAttributes.Select(attribute => (IAspect) _resolver.Resolve(attribute.AspectType)).ToList();
 
 			if (aspects.Any())
 			{
@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 				}
 				finally
 				{
+					aspects.Reverse();
 					aspects.ForEach(a => a.OnAfterInvocation(exception, invocationInfo));
 				}
 			}
