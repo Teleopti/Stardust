@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Autofac;
 using Teleopti.Analytics.Etl.Common;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Color = System.Drawing.Color;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
-	/// <summary>
-	/// Interaction logic for ManualControl.xaml
-	/// </summary>
 	public partial class ManualControl
 	{
 		private DataSourceValidCollection _dataSourceCollection;
@@ -28,7 +26,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private IBaseConfiguration _baseConfiguration;
 		private Func<string, bool> _callBackWithConnectionString;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public ManualControl()
 		{
 			InitializeComponent();
@@ -55,16 +52,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			if (boxPanel == null) return;
 
 			var color = box.IsEnabled
-										? System.Drawing.Color.Black
-										: System.Drawing.Color.Gray;
-			var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.R, color.B));
+										? Color.Black
+										: Color.Gray;
+			var brush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.R, color.B));
 
 			foreach (var datePicker in (from StackPanel pickerPanel in boxPanel.Children
 												 select pickerPanel.Children[1]).OfType<System.Windows.Controls.Control>())
 				datePicker.Foreground = brush;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private static void showErrorMessage(string message)
 		{
 			MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -223,7 +220,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		internal void ReloadDataSourceComboBox()
 		{
 
-			var dataSource = TenantHolder.Instance.DataSourceForTenant(((TenantInfo)ComboBoxDataSource.SelectedItem).Name);
+			var dataSource = App.Container.Resolve<TenantHolder>().DataSourceForTenant(((TenantInfo) ComboBoxDataSource.SelectedItem).Name);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 

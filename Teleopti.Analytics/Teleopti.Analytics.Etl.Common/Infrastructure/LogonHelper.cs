@@ -21,6 +21,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
+		private readonly TenantHolder _tenantHolder;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
@@ -29,11 +30,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public LogOnHelper(
 			ILoadAllTenants loadAllTenants, 
 			ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
+			TenantHolder tenantHolder)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
+			_tenantHolder = tenantHolder;
 			initializeStateHolder();
 			RefreshTenantList();
 		}
@@ -59,9 +62,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			get
 			{
-				if (TenantHolder.Instance.LoadedTenants().IsEmpty())
+				if (_tenantHolder.LoadedTenants().IsEmpty())
 					throw new DataSourceException("No Tenants found");
-				return TenantHolder.Instance.LoadedTenants();
+				return _tenantHolder.LoadedTenants();
 			}
 		}
 
@@ -96,7 +99,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			var dataSource = TenantHolder.Instance.DataSourceForTenant(dataSourceName);
+			var dataSource = _tenantHolder.DataSourceForTenant(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application,
 				SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
@@ -111,7 +114,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void RefreshTenantList()
 		{
-			TenantHolder.Instance.Refresh(_tenantUnitOfWork, _loadAllTenants);
+			_tenantHolder.Refresh(_tenantUnitOfWork, _loadAllTenants);
 		}
 
 	}

@@ -20,9 +20,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ILogOnHelper _logOnHelper;
 		private IMessageSender _messageSender;
 
-		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+		public JobHelper(
+			ILoadAllTenants loadAllTenants, 
+			ITenantUnitOfWork tenantUnitOfWork, 
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
+			TenantHolder tenantHolder)
 		{
-			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider);
+			_logOnHelper = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, tenantHolder);
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
 			_messageSender = new HttpSender(new HttpClientM(new HttpServer(), url, new NewtonsoftJsonSerializer()));

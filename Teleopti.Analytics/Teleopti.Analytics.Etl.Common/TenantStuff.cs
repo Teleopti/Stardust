@@ -38,9 +38,8 @@ namespace Teleopti.Analytics.Etl.Common
 		}
 	}
 	
-	public sealed class TenantHolder
+	public class TenantHolder
 	{
-		public static TenantHolder Instance = new TenantHolder();
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
 		
 		public IEnumerable<TenantInfo> LoadedTenants()
