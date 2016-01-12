@@ -134,16 +134,16 @@
 					$scope.modifyDays = [];
 					var isOnlyOneDaySelected = workload.selectedDayCount == 1;
 					angular.forEach(workload.selectedDays(), function (value) {
-						if (value.id == 'vtc') {
-							if (isOnlyOneDaySelected) {
-								$scope.modalModifyInfo.overrideTasks = Math.round(value.value * 10) / 10;
-							}
+						if (value.id == 'vc') {
 							$scope.modifyDays.push({
 								date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
 							});
 							tempsum += value.value;
 						}
 						if (isOnlyOneDaySelected) {
+							if (value.id == 'vtc') {
+								$scope.modalModifyInfo.overrideTasks = Math.round(value.value * 10) / 10;
+							}
 							if (value.id == 'vttt') {
 								$scope.modalModifyInfo.overrideTalkTime = Math.round(value.value * 10) / 10;
 							}

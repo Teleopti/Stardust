@@ -153,6 +153,12 @@ describe('ForecastingStartCtrl', function() {
 		scope.workloads[0].selectedDays = function () {
 			return [
 				{
+					id: "vc",
+					index: 17,
+					value: 301,
+					x: new Date("Thu Feb 18 2016 01:00:00 GMT+0100 (W. Europe Standard Time)")
+				},
+				{
 					id: "vtc",
 					index: 17,
 					name: "Total calls < ",
@@ -165,11 +171,11 @@ describe('ForecastingStartCtrl', function() {
 		scope.displayModifyModal(scope.workloads[0]);
 
 		expect(scope.modalModifyLaunch).toBe(true);
-		expect(scope.sumOfCallsForSelectedDays).toBe('382.6');
+		expect(scope.sumOfCallsForSelectedDays).toBe('301.0');
 		expect(scope.modalModifyInfo.selectedScenario.Id).toBe('1');
 		expect(scope.modalModifyInfo.selectedDayCount).toBe(1);
 		expect(scope.modalModifyInfo.selectedDaySpan).toBe('2/18/16');
-		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('382.6');
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('301.0');
 	}));
 
 	it('open forecast dialog for all', inject(function ($controller) {
@@ -206,6 +212,12 @@ describe('ForecastingStartCtrl', function() {
 		scope.workloads[0].selectedDays = function () {
 			return [
 				{
+					id: "vc",
+					index: 17,
+					value: 301,
+					x: new Date("Thu Feb 18 2016 01:00:00 GMT+0100 (W. Europe Standard Time)")
+				},
+				{
 					id: "vtc",
 					index: 17,
 					name: "Total calls < ",
@@ -216,13 +228,13 @@ describe('ForecastingStartCtrl', function() {
 		};
 		scope.displayModifyModal(scope.workloads[0]);
 
-		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('382.6');
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('301.0');
 
 		scope.modalModifyInfo.campaignPercentage = 10;
 		scope.campaignPercentageChanged({
 			campaignPercentageInput: {$error: {} }
 		});
-		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('420.9');
+		expect(scope.sumOfCallsForSelectedDaysWithCampaign).toBe('331.1');
 	}));
 
 
