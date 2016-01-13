@@ -3,8 +3,8 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'forecastingService', '$filter', '$interval', 'Toggle', '$stateParams', '$translate',
-			function ($scope, $state, forecastingService, $filter, $interval, toggleService, $stateParams, $translate) {
+			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate',
+			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate) {
 				$scope.isForecastRunning = false;
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
@@ -26,7 +26,6 @@
 					}
 				}
 
-				$scope.createSkillToggle = toggleService.WfmForecast_CreateSkill_34591;
 				$scope.isCreateSkillEnabled = false;
 
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
@@ -38,7 +37,7 @@
 				var getSkills = function () {
 					var skillsPromise = forecastingService.skills.query().$promise;
 					skillsPromise.then(function (result) {
-						$scope.isCreateSkillEnabled = $scope.createSkillToggle && result.IsPermittedToModifySkill;
+						$scope.isCreateSkillEnabled = result.IsPermittedToModifySkill;
 						var skills = result.Skills;
 						var workloads = [];
 						var addedWorkload = null;

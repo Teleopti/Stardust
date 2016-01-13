@@ -76,7 +76,6 @@ Scenario: Save forecast to scenario
 	| Workload | TheWorkload2 |
 	| Scenario | Scenario 1   |
 
-@OnlyRunIfEnabled('WfmForecast_CreateSkill_34591')
 Scenario: Create new skill
 	Given I am viewing forecast page
 	When I choose to add a new skill

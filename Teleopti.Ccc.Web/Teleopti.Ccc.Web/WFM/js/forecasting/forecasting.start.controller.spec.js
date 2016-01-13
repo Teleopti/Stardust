@@ -4,10 +4,6 @@ describe('ForecastingStartCtrl', function() {
 		$rootScope,
 		$httpBackend;
 
-	var mockToggleService = {
-		WfmForecast_CreateSkill_34591:true
-	}
-
 	var mockForecastingService = function() {
 		this.scenarios = {
 			query: function() {
@@ -99,7 +95,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('Should list scenarios', inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 
@@ -111,7 +107,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('Should list workloads', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 
@@ -123,7 +119,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('Should display forecast result', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 		
 		scope.$digest();
 		scope.workloads[0].Refresh = function (days) {
@@ -137,7 +133,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('open modify dialog', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 		scope.workloads[0].selectedDays = function () {
@@ -170,7 +166,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('open forecast dialog for all', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 
@@ -182,7 +178,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('open forecast dialog for one workload', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 
@@ -196,7 +192,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('change campaign percentage', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 
 		scope.$digest();
 		scope.workloads[0].selectedDays = function () {
@@ -230,7 +226,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('newly created workload should be on the top', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService, $stateParams: { workloadId: "d80b16de-bc21-471f-98ed-9b5e015abf6d" } });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), $stateParams: { workloadId: "d80b16de-bc21-471f-98ed-9b5e015abf6d" } });
 
 		scope.$digest();
 
@@ -242,7 +238,7 @@ describe('ForecastingStartCtrl', function() {
 
 	it('should limit forecast period to be less one year', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService(), Toggle: mockToggleService });
+		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 		var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 		var endDate = moment().utc().add(13, 'months').startOf('month').toDate();
 		scope.period = { startDate: startDate, endDate: endDate };

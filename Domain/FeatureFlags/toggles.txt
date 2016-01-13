@@ -79,7 +79,6 @@ Wfm_SeatPlan_SeatMapBookingView_32814 = true
 MyTimeWeb_ShowSeatBooking_34799 = true
 MyTimeWeb_PreferenceShowNightViolation_33152 = true
 Scheduler_OptimizeFlexibleDayOffs_22409 = true
-WfmForecast_CreateSkill_34591 = true
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = RC
