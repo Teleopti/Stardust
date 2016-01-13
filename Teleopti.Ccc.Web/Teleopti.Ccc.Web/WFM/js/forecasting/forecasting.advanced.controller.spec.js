@@ -4,10 +4,6 @@ describe('ForecastingAdvancedCtrl', function () {
 		$rootScope,
 		$httpBackend;
 
-	var mockToggleService = {
-		WfmForecast_QueueStatistics_32572 : true
-	}
-
 	var mockForecastingService = function () {
 		this.evaluate = function (data, successCb, errorCb) {
 			successCb({
@@ -44,7 +40,7 @@ describe('ForecastingAdvancedCtrl', function () {
 	it("should display evaluation result", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('ForecastingAdvancedCtrl', { $scope: scope, Toggle: mockToggleService, forecastingService: new mockForecastingService(), $stateParams: { workloadId: 3, workloadName: "test workload Name" } });
+		$controller('ForecastingAdvancedCtrl', { $scope: scope, forecastingService: new mockForecastingService(), $stateParams: { workloadId: 3, workloadName: "test workload Name" } });
 
 		expect(scope.evaluationChartData).toBe(undefined);
 		scope.$digest();
@@ -56,7 +52,7 @@ describe('ForecastingAdvancedCtrl', function () {
 	it("should display queue statistics", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('ForecastingAdvancedCtrl', { $scope: scope, Toggle: mockToggleService, forecastingService: new mockForecastingService(), $stateParams: { workloadId: 3, workloadName: "test workload Name" } });
+		$controller('ForecastingAdvancedCtrl', { $scope: scope, forecastingService: new mockForecastingService(), $stateParams: { workloadId: 3, workloadName: "test workload Name" } });
 
 		expect(scope.queueStatisticsChartData).toBe(undefined);
 		scope.$digest();

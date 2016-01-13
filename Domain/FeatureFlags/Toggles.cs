@@ -78,7 +78,6 @@
 		WfmPeople_AdjustSkill_34138,
 		Wfm_Outbound_Campaign_32696,
 		Wfm_Outbound_Campaign_GanttChart_Navigation_34924,
-		WfmForecast_QueueStatistics_32572,
 		WfmForecast_CreateSkill_34591,
 		WfmPermission_ReplaceOldPermission_34671,
 		Wfm_RTA_34621,

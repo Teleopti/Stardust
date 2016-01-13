@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.forecasting')
-		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', '$translate', 'forecastingService',
-			function ($scope, $state, $stateParams, $http, toggleService, $translate, forecastingService) {
+		.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', '$translate', 'forecastingService',
+			function ($scope, $state, $stateParams, $http, $translate, forecastingService) {
 				$scope.chartInfo = {
 					evaluationChartDataColumns: [
 						{ id: "vh", type: "line", name: $translate.instant('ResReportQueueStatistics') },
@@ -19,8 +19,6 @@
 				$scope.back = function () {
 					$state.go("forecasting.start");
 				};
-
-				$scope.isQueueStatisticsEnabled = toggleService.WfmForecast_QueueStatistics_32572;
 
 				var getQueueStatistics = function(workloadId, methodId) {
 					$scope.queueStatisticsLoading = true;
@@ -69,9 +67,7 @@
 							$scope.selectedMethod = selectedMethod;
 							$scope.ForecastMethodRecommended = data.ForecastMethodRecommended;
 
-							if ($scope.isQueueStatisticsEnabled) {
-								getQueueStatistics($stateParams.workloadId, selectedMethod);
-							}
+							getQueueStatistics($stateParams.workloadId, selectedMethod);
 						}, function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };
 							$scope.evaluationLoading = false;
