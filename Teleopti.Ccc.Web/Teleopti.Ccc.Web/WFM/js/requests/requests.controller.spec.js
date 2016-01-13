@@ -2,18 +2,24 @@
 describe('RequestsControllerTests', function () {
 	var $rootScope,
 		$controller,
-		requestsToggles,
 		requestCommandParamsHolder;
 
 	beforeEach(function () {
 		module('wfm.requests');
 
-		requestsToggles = new fakeRequestsToggles();
 		requestCommandParamsHolder = new fackRequestCommandParamsHolder();
 
 		module(function ($provide) {
-			$provide.service('RequestsToggles', function () {
-				return requestsToggles;
+			$provide.service('Toggle', function() {
+				return {
+					Wfm_Requests_Basic_35986: true,
+					Wfm_Requests_People_Search_36294: true,
+					Wfm_Requests_Performance_36295: true,
+					Wfm_Requests_ApproveDeny_36297: true,
+					togglesLoaded: {
+						then: function(cb) { cb(); }
+					}
+				}
 			});
 			$provide.service('requestCommandParamsHolder', function () {
 				return requestCommandParamsHolder;
@@ -61,32 +67,5 @@ describe('RequestsControllerTests', function () {
 		this.getSelectedRequestsIds = function () {
 			return requestIds;
 		}
-	}
-
-	function fakeRequestsToggles() {
-
-		this.togglePromise = function() {
-			var queryDeferred = $q.defer();
-			queryDeferred.resolve({});
-			return { $promise: queryDeferred.promise };
-		}
-		var toggles = {
-			isRequestsEnabled: function() {
-				return true;
-			},
-			isPeopleSearchEnabled: function() {
-				return true;
-			},
-			isPaginationEnabled: function() {
-				return true;
-			},
-			isRequestsCommandsEnabled: function() {
-				return true;
-			}
-		}
-		this.togglePromise.then = function(cb) {
-			if (cb) cb(toggles);
-		}
-
 	}
 });

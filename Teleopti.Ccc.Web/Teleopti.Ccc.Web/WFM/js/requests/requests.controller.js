@@ -3,22 +3,22 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "RequestsToggles", "requestsDefinitions", "requestsNotificationService", "requestCommandParamsHolder", "$translate"];
+	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestCommandParamsHolder", "$translate"];
 
-	function requestsController($scope, requestsToggles, requestsDefinitions, requestsNotificationService, requestCommandParamsHolder, $translate) {
+	function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.pageSizeOptions = [20, 50, 100, 200];
 
-		requestsToggles.togglePromise.then(init);
+		toggleService.togglesLoaded.then(init);
 				
-		function init(toggles) {
-			vm.isRequestsEnabled = toggles.isRequestsEnabled();			
-			vm.isPeopleSearchEnabled = toggles.isPeopleSearchEnabled();
-			vm.isPaginationEnabled = toggles.isPaginationEnabled();
-			vm.isRequestsCommandsEnabled = toggles.isRequestsCommandsEnabled();
+		function init() {
+			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
+			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
+			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
+			vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 			getSelectedRequestsInfoText();
