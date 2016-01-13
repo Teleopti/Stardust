@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/GetSchedules")]
-		public GroupScheduleViewModel GetSchedulesForPeople(Guid[] personIds, DateTime date)
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetSchedules")]
+		public virtual GroupScheduleViewModel GetSchedulesForPeople([FromUri] Guid[] personIds, DateTime date)
 		{
 			var scheduleDateOnly = new DateOnly(date);
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);

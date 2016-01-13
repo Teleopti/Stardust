@@ -20,7 +20,7 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 
 		service.getSchedules = $resource("../api/TeamSchedule/GetSchedules", {}, {
 			query: {
-				method: "POST",
+				method: "GET",
 				params: {},
 				isArray: false
 			}

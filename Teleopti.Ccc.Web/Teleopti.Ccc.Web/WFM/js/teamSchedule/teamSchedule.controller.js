@@ -101,7 +101,7 @@
 		};
 
 		vm.updateSchedules = function (message) {
-			var params = { personIds: [message.DomainReferenceId], date: vm.scheduleDate };
+			var params = { personIds: [message.DomainReferenceId], date: vm.scheduleDateMoment().format('YYYY-MM-DD') };
 			vm.isLoading = true;
 			teamScheduleSvc.getSchedules.query(params).$promise.then(function(result) {
 				updateGroupScheduleVm(result);
