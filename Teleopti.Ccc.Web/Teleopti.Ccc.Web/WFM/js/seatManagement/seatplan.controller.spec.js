@@ -40,14 +40,7 @@ describe('SeatPlanCtrl', function () {
 	};
 
 	var mockAllTrueToggleService = {
-		isFeatureEnabled: {
-			query: function(param) {
-				var queryDeferred = $q.defer();
-				var result = { IsEnable: true };
-				queryDeferred.resolve(result);
-				return { $promise: queryDeferred.promise }
-			}
-		}
+		Wfm_SeatPlan_SeatMapBookingView_32814: true
 	};
 
 	it('returns the correct class for a seatplan status', inject(function ($controller) {

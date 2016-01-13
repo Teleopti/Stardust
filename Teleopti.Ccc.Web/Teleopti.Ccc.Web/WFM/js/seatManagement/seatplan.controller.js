@@ -27,9 +27,7 @@
 		};
 
 		vm.setupToggles = function () {
-			toggleService.isFeatureEnabled.query({ toggle: 'Wfm_SeatPlan_SeatMapBookingView_32814' }).$promise.then(function (result) {
-				vm.showOccupancyView = result.IsEnabled;
-			});
+			vm.showOccupancyView = toggleService.Wfm_SeatPlan_SeatMapBookingView_32814;
 		};
 
 		var getServiceSafeDate = function(dateMoment) {
