@@ -112,8 +112,8 @@
 		transform: rotateZ(90deg);
 	}
 	.threshold-slider{
-		    width:250px;
-		}
+		width:250px;
+	}
 	.gantt-datepicker{
 	    position:absolute;
 		top:30px;
@@ -288,8 +288,6 @@
 			justify-content: space-between;
 		}
 	}
-
-
 
 	.chart {
 		-webkit-touch-callout: none;
@@ -796,111 +794,109 @@
 			height: 23px;
 		}
 	}
-}
 
-.campaign-create{
-	background:$white;
-	padding:10px 5px;
+	.campaign-create{
+		background:$white;
+		padding:10px 5px;
 	
-	.panel{
-		box-shadow:0 0 1px rgba(0,0,0,.1);
-		.sub-header {
-			cursor:pointer;
+		.panel{
+			box-shadow:0 0 1px rgba(0,0,0,.1);
+			.sub-header {
+				cursor:pointer;
 
-			h2{
-				display:inline-block;
-			}
-		}
-
-		.con-flex{
-			padding:0 5px;
-			.activity-picker{
-				height:30px;
-			}
-
-			.row-title{
-				margin-right:10px;
-				min-width:150px;
-				text-align:right;
-			}
-
-			.icon-set-fix{
-				padding-right:20px;
-				
-				position:relative;
-				min-width:46px;
-				.icon-set{
-					position:absolute;
-					top:2px;
-					right:0px;
-				}
-				
-				input{
-					width:100%;
+				h2{
+					display:inline-block;
 				}
 			}
+
+			.con-flex{
+				padding:0 5px;
+				.activity-picker{
+					height:30px;
+				}
+
+				.row-title{
+					margin-right:10px;
+					min-width:150px;
+					text-align:right;
+				}
+
+				.icon-set-fix{
+					padding-right:20px;
+				
+					position:relative;
+					min-width:46px;
+					.icon-set{
+						position:absolute;
+						top:2px;
+						right:0px;
+					}
+				
+					input{
+						width:100%;
+					}
+				}
+			}
 		}
 	}
-}
 
-.campaign-cammands {
-	position:relative;
-	white-space:nowrap;
-}
-
-activity-picker {
-	display: flex;
-	flex-direction: row;
-
-	.polymorphic-input-body {
-		flex-basis: 60%;
-		max-width:300px;
-		input, md-select, md-select-label {
-			width: 100% !important;
-		}
-		input[readonly] {
-			background-color:$gray-300;
-			border-radius: 8px;
-			border-bottom: none !important;
-		}
-		input, select{
-			height:25px;
-		}
-	}
-	.divider {
-		flex-basis: 1%;
-	}
-	.morph-switch {
-		flex-basis: 39%;
-		label {
-			font-style: italic;
-			font-weight: 300;
-		}
-		&.wfm-checkbox {
-			padding: 3px;
-		}
-	}
-	md-select {
-		padding: 0 10px !important;
+	.campaign-cammands {
+		position:relative;
+		white-space:nowrap;
 	}
 
-}
-.sub-header span.pull-right.sub-header-message {
-	margin-right: 20%;
-}
-.in-place-container {
-	position: relative;
-	width: 100%;
-	height: 0;
+	activity-picker {
+		display: flex;
+		flex-direction: row;
 
-	.in-place-element {
-		position: absolute;
-		right: 5%;
-		top: 12px;
+		.polymorphic-input-body {
+			flex-basis: 60%;
+			max-width:300px;
+			input, md-select, md-select-label {
+				width: 100% !important;
+			}
+			input[readonly] {
+				background-color:$gray-300;
+				border-radius: 8px;
+				border-bottom: none !important;
+			}
+			input, select{
+				height:25px;
+			}
+		}
+		.divider {
+			flex-basis: 1%;
+		}
+		.morph-switch {
+			flex-basis: 39%;
+			label {
+				font-style: italic;
+				font-weight: 300;
+			}
+			&.wfm-checkbox {
+				padding: 3px;
+			}
+		}
+		md-select {
+			padding: 0 10px !important;
+		}
+
 	}
-}
+	.sub-header span.pull-right.sub-header-message {
+		margin-right: 20%;
+	}
+	.in-place-container {
+		position: relative;
+		width: 100%;
+		height: 0;
 
-.outbound {
+		.in-place-element {
+			position: absolute;
+			right: 5%;
+			top: 12px;
+		}
+	}
+
 	input {
 		padding-left: 10px;
 		margin-top: 1px;
@@ -924,13 +920,12 @@ activity-picker {
 		}
 	}
 
-	.loading-whole-section
-	{
+	.loading-whole-section{
 		position:relative;
 		height:100%;
 		width:100%;
 
-		md-progress-circular {
+		md-progress-circular{
 			position:absolute;
 			top:48%;
 			left:48%;
