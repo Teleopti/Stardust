@@ -7,7 +7,7 @@ describe('OutboundSummaryCtrl', function() {
 		outboundService,
 		outboundChartService,
 		stateService,
-		outboundToggles,
+		toggleSvc,
 		miscService;
 
 	beforeEach(function() {
@@ -17,7 +17,12 @@ describe('OutboundSummaryCtrl', function() {
 
 		outboundChartService = new fakeOutboundChartService();
 
-		outboundToggles = new fakeOutboundToggles();
+		toggleSvc = {
+			Wfm_Outbound_Campaign_GanttChart_Navigation_34924: true,
+			togglesLoaded: {
+				then: function (cb) { cb(); }
+			}
+		}
 
 		miscService = new fakeMiscService();
 
@@ -38,8 +43,8 @@ describe('OutboundSummaryCtrl', function() {
 				return stateService;
 			});
 
-			$provide.service('OutboundToggles', function() {
-				return outboundToggles;
+			$provide.service('Toggle', function () {				
+				return toggleSvc;
 			});
 		});
 	});
@@ -63,6 +68,7 @@ describe('OutboundSummaryCtrl', function() {
 
 	it('should update all campaign statistics in gantt chart', function () {
 		var test = setUpTarget();
+
 		outboundService.setGanttVisualization({ Id: 1, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
 		outboundService.setGanttVisualization({ Id: 2, StartDate: { Date: '2015-09-23' }, EndDate: { Date: '2015-09-24' } });
 
@@ -138,9 +144,9 @@ describe('OutboundSummaryCtrl', function() {
 			$state: stateService,
 			outboundService: outboundService,
 			outboundChartService: outboundChartService,
-			OutboundToggles: outboundToggles
-
+			Toggle: toggleSvc
 		});
+
 		return { target: target, scope: scope };
 	}
 
@@ -164,7 +170,19 @@ describe('OutboundSummaryCtrl', function() {
 
 		var listCampaign = [];
 
-		var visualizationPeriod = {}
+		var visualizationPeriod = {
+			PeriodStart: new Date(),
+			PeriodEnd: new Date()
+		}
+
+		this.checkPermission = function() {
+			return {
+				then: function (cb) {
+					//todo: need prepare init !
+					// cb();
+				}
+			}
+		};
 
 		this.loadCampaignSchedules=function(period, cb) {
 			if (cb) cb();
@@ -277,9 +295,5 @@ describe('OutboundSummaryCtrl', function() {
 				cb(campaignViss[campaign.campaignId]);
 			}
 		};
-	}
-
-	function fakeOutboundToggles() {
-		this.ready = true;
 	}
 });

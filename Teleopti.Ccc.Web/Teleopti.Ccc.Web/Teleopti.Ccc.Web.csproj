@@ -1257,7 +1257,6 @@
     <Content Include="WFM\js\requests\request-command-params-holder.service.js" />
     <Content Include="WFM\js\requests\requests-notification.service.js" />
     <Content Include="WFM\js\outbound\outbound.campaign.chart.service.spec.js" />
-    <Content Include="WFM\js\outbound\outbound.campaignSummary.controller.spec.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.spec.js" />
     <Content Include="WFM\js\outbound\outbound.controller.spec.js" />
     <Content Include="WFM\js\outbound\outbound.filter.spec.js" />
@@ -1272,7 +1271,6 @@
     <Content Include="WFM\js\permissions\permissions.rolefunctions.service.spec.js" />
     <Content Include="WFM\js\permissions\roles.service.spec.js" />
     <Content Include="WFM\js\requests\requests-overview.directive.spec.js" />
-    <Content Include="WFM\js\requests\requests-toggles.service.js" />
     <Content Include="WFM\js\requests\html\requests-overview.tpl.html" />
     <Content Include="WFM\js\requests\html\requests-table-container.tpl.html" />
     <Content Include="WFM\js\requests\html\requests.html" />
@@ -1400,7 +1398,6 @@
     <Content Include="WFM\js\rta\rta.teams.controller.js" />
     <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
-    <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />

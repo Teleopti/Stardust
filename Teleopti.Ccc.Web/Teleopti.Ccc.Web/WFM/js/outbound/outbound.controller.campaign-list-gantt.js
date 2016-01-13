@@ -7,7 +7,7 @@
 			'$scope',
 			'$filter',
 			'$q',
-			'OutboundToggles',
+			'Toggle',
 			'outboundService',
 			'miscService',
 			'outboundTranslationService',
@@ -16,7 +16,7 @@
 			'$sessionStorage',
 			campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, $filter, $q, OutboundToggles, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService, $sessionStorage) {
+	function campaignListGanttCtrl($scope, $filter, $q, toggleSvc, outboundService, miscService, outboundTranslationService, outboundChartService, outboundNotificationService, $sessionStorage) {
 
 		$scope.isInitFinished = false;
 		$scope.isLoadFinished = false;
@@ -24,17 +24,9 @@
 		$scope.month = "month";
 		$scope.$storage = $sessionStorage;
 
-		$scope.$watch(function() {
-			return OutboundToggles.ready;
-		}, function(value) {
-			if (value) {
-				outboundService.checkPermission($scope).then(init);
-				if (OutboundToggles.isNavigationEnabled()) $scope.isNavigationEnabled = true;
-			}
-		});		
-
-		$scope.settings = { threshold: null, periodStart: new Date() };
-
+		outboundService.checkPermission($scope).then(function() {
+			toggleSvc.togglesLoaded.then(init);
+		});
 
 		$scope.viewOneMonthBefore = function() {
 			$scope.settings.periodStart = moment($scope.settings.periodStart).add(-1, 'month').toDate();
@@ -45,6 +37,8 @@
 		};
 
 		function init() {
+			$scope.settings = { threshold: null, periodStart: new Date() };
+			$scope.isNavigationEnabled = toggleSvc.Wfm_Outbound_Campaign_GanttChart_Navigation_34924;
 			if ($scope.$storage.visualizationPeriodStart) $scope.settings.periodStart = $scope.$storage.visualizationPeriodStart;
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
