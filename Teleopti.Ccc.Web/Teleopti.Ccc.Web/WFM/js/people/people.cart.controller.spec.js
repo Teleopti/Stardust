@@ -27,17 +27,7 @@ describe("PeopleCartCtrl", function() {
 	}));
 
 	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function() {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return {
-					$promise: queryDeferred.promise
-				};
-			}
-		},
+		WfmPeople_AdjustSkill_34138:true
 	}
 
 	var mockPeopleService = {

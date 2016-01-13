@@ -238,12 +238,9 @@
 			loadShiftBagPromise.then(function (result) {
 				vm.availableShiftBags = result;
 			});
-			var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
-			promiseForAdjustSkillToggle.then(function (result) {
-				vm.isAdjustSkillEnabled = result.IsEnabled;
-			});
+			vm.isAdjustSkillEnabled = toggleSvc.WfmPeople_AdjustSkill_34138;
 
-			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
+			$q.all([loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
 				updateSkillStatus();
 				updatePersonInfo();
 

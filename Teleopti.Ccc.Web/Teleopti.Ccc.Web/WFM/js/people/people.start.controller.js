@@ -363,28 +363,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		return $scope.searchOptions.keyword;
 	};
 
-	var promisesForDataInitialization = [];
-	var promiseForAdvancedSearchToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
-	promiseForAdvancedSearchToggle.then(function (result) {
-		$scope.searchOptions.isAdvancedSearchEnabled = result.IsEnabled;
-	});
-	promisesForDataInitialization.push(promiseForAdvancedSearchToggle);
+	$scope.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
+	$scope.isImportUsersEnabled = toggleSvc.WfmPeople_ImportUsers_33665;
+	$scope.isAdjustSkillEnabled = toggleSvc.WfmPeople_AdjustSkill_34138;
 
-	var promiseForImportUsersToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
-	promiseForImportUsersToggle.then(function (result) {
-		$scope.isImportUsersEnabled = result.IsEnabled;
-	});
-	promisesForDataInitialization.push(promiseForImportUsersToggle);
-
-	var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
-	promiseForAdjustSkillToggle.then(function (result) {
-		$scope.isAdjustSkillEnabled = result.IsEnabled;
-	});
-	promisesForDataInitialization.push(promiseForAdjustSkillToggle);
-
-	$q.all(promisesForDataInitialization).then(function () {
-		$scope.toggleRowSelectable();
-		$scope.dataInitialized = true;
-		$scope.searchKeyword();
-	});
+	$scope.toggleRowSelectable();
+	$scope.dataInitialized = true;
+	$scope.searchKeyword();
 }

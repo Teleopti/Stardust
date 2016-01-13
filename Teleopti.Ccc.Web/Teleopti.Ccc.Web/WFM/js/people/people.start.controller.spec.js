@@ -16,18 +16,10 @@ describe("PeopleStartCtrl", function() {
 		$httpBackend = _$httpBackend_;
 	}));
 
-	var mockUpload = {};
-
 	var mockToggleService = {
-		isFeatureEnabled: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					IsEnabled: true
-				});
-				return { $promise: queryDeferred.promise };
-			}
-		},
+		WfmPeople_AdvancedSearch_32973: true,
+		WfmPeople_ImportUsers_33665: true,
+		WfmPeople_AdjustSkill_34138: true
 	}
 
 	var mockPeopleService = {
