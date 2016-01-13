@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
 			{
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
 			{

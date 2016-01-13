@@ -1,11 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
 
@@ -31,16 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShiftTradeRequestSetChecksum>().As<IShiftTradeRequestSetChecksum>().SingleInstance();
 			builder.RegisterType<ShiftTradeRequestStatusChecker>().As<IShiftTradeRequestStatusChecker>().SingleInstance();
-			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
-			builder.RegisterType<PeriodExctractorFromScheduleParts>().As<PeriodExctractorFromScheduleParts>().SingleInstance();
-			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<MatrixUserLockLocker>().As<IMatrixUserLockLocker>().InstancePerLifetimeScope();
-			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().InstancePerLifetimeScope();
-			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
-			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
-			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>();
-			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>();
-			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 		}
 	}
 }

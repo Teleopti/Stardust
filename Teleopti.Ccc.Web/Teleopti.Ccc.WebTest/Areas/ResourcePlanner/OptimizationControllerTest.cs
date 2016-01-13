@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeClassicDaysOffOptimizationCommand OptimizationCommand;
 
-		[Test, Explicit("Micke fixar")]
+		[Test]
 		public void ShouldOptimizeFixedStaff()
 		{
 			var id = Guid.NewGuid();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			OptimizationCommand.OptimizationExecute.Should().Be.True();
 		}
 
-		[Test, Explicit("Micke fixar")]
+		[Test]
 		public void ShouldUpdatePlanningPeriodState()
 		{
 			var id = Guid.NewGuid();

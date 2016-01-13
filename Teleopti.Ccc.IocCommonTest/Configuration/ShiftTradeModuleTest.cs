@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.IocCommon;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ShiftTradeModule>();
+			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 			
 		}
 
