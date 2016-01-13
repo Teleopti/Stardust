@@ -58,9 +58,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
 			var tenant = App.Container.Resolve<Tenants>().Tenant(myControl.TenantName);
-			if (tenant == null || tenant.BaseConfiguration == null)
+			if (tenant == null || tenant.EtlConfiguration == null)
 				return;
-			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.BaseConfiguration);
+			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
 			_baseConfiguration.JobHelper.SelectDataSourceContainer(myControl.TenantName);
 			//Clear job periods before adding them again

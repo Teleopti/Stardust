@@ -123,25 +123,19 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
 
-					foreach (var tenantName in _tenants.CurrentTenants())
+					foreach (var tenant in _tenants.EtlTenants())
 					{
-						if (tenantName.BaseConfiguration == null)
-						{
-							//we can't stop service now beacuse one tenant isnt configured correctly, just try next
-							//return false;
-							continue;
-						}
-						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantName.BaseConfiguration);
+						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 
 						var jobResultCollection = new List<IJobResult>();
-						_jobHelper.SelectDataSourceContainer(tenantName.Name);
+						_jobHelper.SelectDataSourceContainer(tenant.Name);
 
 						var jobRunner = new JobRunner();
 						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
 						if (jobResults == null)
 						{
 							// No license applied - stop service
-							logInvalidLicense(tenantName.Name);
+							logInvalidLicense(tenant.Name);
 							//we can't stop service now beacuse one tenant don't have a License, just try next
 							//NeedToStopService(this, null);
 							//return false;

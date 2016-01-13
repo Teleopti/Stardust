@@ -24,7 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly Tenants _tenants;
 
-		private LogOnService _logonService;
+		private readonly LogOnService _logonService;
 		private List<IBusinessUnit> _buList;
 		private DataSourceContainer _choosenDb;
 
@@ -32,7 +32,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
-			_tenants.Refresh();
 
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);

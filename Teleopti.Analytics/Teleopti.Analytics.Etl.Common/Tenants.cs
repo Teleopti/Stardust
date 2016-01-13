@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.Common
 		public string Name { get { return Tenant.Name; } }
 		public Tenant Tenant { get; set; }
 		public IDataSource DataSource { get; set; }
-		public IBaseConfiguration BaseConfiguration { get; set; }
+		public IBaseConfiguration EtlConfiguration { get; set; }
 	}
 	
 	public class Tenants
@@ -25,6 +25,7 @@ namespace Teleopti.Analytics.Etl.Common
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
+		private bool _tenantsLoaded = false;
 
 		public Tenants(ITenantUnitOfWork tenantUnitOfWork, ILoadAllTenants loadAllTenants)
 		{
@@ -34,13 +35,21 @@ namespace Teleopti.Analytics.Etl.Common
 
 		public IEnumerable<TenantInfo> LoadedTenants()
 		{
+			ensureTenantsLoaded();
 			return _tenants.ToList();
 		}
 
 		public IEnumerable<TenantInfo> CurrentTenants()
 		{
-			Refresh();
+			refresh();
 			return LoadedTenants();
+		}
+
+		public IEnumerable<TenantInfo> EtlTenants()
+		{
+			return LoadedTenants()
+				.Where(t => t.EtlConfiguration != null)
+				.ToList();
 		}
 
 		public TenantInfo Tenant(string name)
@@ -54,7 +63,14 @@ namespace Teleopti.Analytics.Etl.Common
 			return tenant == null ? null : tenant.DataSource;
 		}
 
-		public void Refresh()
+		private void ensureTenantsLoaded()
+		{
+			if (_tenantsLoaded) return;
+			_tenantsLoaded = true;
+			refresh();
+		}
+
+		private void refresh()
 		{
 			var dataSourcesFactory = new DataSourcesFactory(
 				new EnversConfiguration(),
@@ -87,7 +103,7 @@ namespace Teleopti.Analytics.Etl.Common
 					refreshed.Add(new TenantInfo
 					{
 						Tenant = tenant,
-						BaseConfiguration = baseConfiguration,
+						EtlConfiguration = baseConfiguration,
 						DataSource = dataSource
 					});
 				}
