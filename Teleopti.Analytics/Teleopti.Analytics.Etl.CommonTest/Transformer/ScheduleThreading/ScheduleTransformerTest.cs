@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
 				new JobParametersFactory.FakeContainerHolder(), 
 				false);
 
-			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null);
 			
 			var transformer = new ScheduleTransformer();   
 

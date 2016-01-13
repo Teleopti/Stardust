@@ -171,10 +171,8 @@
     <Compile Include="Infrastructure\GeneralInfrastructure.cs" />
     <Compile Include="Infrastructure\HelperFunctions.cs" />
     <Compile Include="Infrastructure\IGeneralInfrastructure.cs" />
-    <Compile Include="Infrastructure\ILogOnHelper.cs" />
     <Compile Include="Infrastructure\IThreadPool.cs" />
     <Compile Include="Infrastructure\LicenseActivator.cs" />
-    <Compile Include="Infrastructure\LogonHelper.cs" />
     <Compile Include="Infrastructure\LogonService.cs" />
     <Compile Include="Infrastructure\RaptorRepository.cs" />
     <Compile Include="Infrastructure\Repository.cs" />

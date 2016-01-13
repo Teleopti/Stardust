@@ -86,6 +86,7 @@
     <Compile Include="FactScheduleTest.cs" />
     <Compile Include="FakeContainerHolder.cs" />
     <Compile Include="IntervalLengthFetcherTest.cs" />
+    <Compile Include="JobHelperForTest.cs" />
     <Compile Include="SqlCommands.cs" />
     <Compile Include="TestData\AnalyticsRunner.cs" />
     <Compile Include="TestData\BasicShiftSetup.cs" />

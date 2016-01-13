@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 				false
 			);
 
-			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null);
 
 			return jobParameters;
 		}

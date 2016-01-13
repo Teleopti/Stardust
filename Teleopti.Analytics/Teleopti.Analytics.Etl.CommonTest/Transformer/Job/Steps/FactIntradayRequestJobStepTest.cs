@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			var raptorRepository = _mocks.StrictMock<IRaptorRepository>();
 
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			jobParameters.Helper = new JobHelperForTest(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelperForTest(raptorRepository, null);
 		
 			_target = new FactRequestJobStep(jobParameters, true);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelperForTest(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelperForTest(raptorRepository, null);
 
 			
 			var target = new FactRequestedDaysJobStep(jobParameters, true);

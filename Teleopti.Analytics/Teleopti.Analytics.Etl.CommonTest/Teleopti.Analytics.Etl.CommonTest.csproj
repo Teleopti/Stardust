@@ -145,7 +145,7 @@
     <Compile Include="Transformer\IntradayAvailabilityTransformerTest.cs" />
     <Compile Include="Transformer\IntradaySchedulePreferenceTransformerTest.cs" />
     <Compile Include="Transformer\Job\JobBaseTest.cs" />
-    <Compile Include="Transformer\Job\JobHelperTest.cs" />
+    <Compile Include="Transformer\Job\JobHelperForTest.cs" />
     <Compile Include="Transformer\Job\JobParametersTest.cs" />
     <Compile Include="Transformer\Job\JobResultTest.cs" />
     <Compile Include="Transformer\Job\JobStepResultTest.cs" />

@@ -15,18 +15,9 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
-	public class JobHelperForTest : JobHelper
-	{
-		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper)
-			: base(repository, messageSender, logOnHelper)
-		{
-		}
-	}
-
 	[TestFixture]
 	public class Bug25126
 	{
@@ -98,7 +89,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false)
 				{
 					Helper =
-						new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null)
+						new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 				};
 
 			//transfer site, team contract etc from app to analytics
@@ -191,7 +182,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false)
 			{
 				Helper =
-					new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null)
+					new JobHelperForTest(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null)
 			};
 
 			//transfer site, team contract etc from app to analytics
