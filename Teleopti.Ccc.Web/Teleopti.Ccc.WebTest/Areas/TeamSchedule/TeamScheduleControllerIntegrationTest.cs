@@ -6,10 +6,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.WebTest.Areas.Search;
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public FakeScheduleProvider ScheduleProvider;
 		public FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
+		public FakePersonRepository PersonRepository;
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -656,6 +659,41 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result[0].Name.Should().Be.EqualTo("c1@c1");
 			result[1].Name.Should().Be.EqualTo("c1@c1");
 			result[2].Name.Should().Be.EqualTo("d1@d1");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectProjectionForPeople()
+		{
+			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+
+			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
+			var person2 = PersonFactory.CreatePersonWithGuid("person", "2");
+			PersonRepository.Add(person1);
+			PersonRepository.Add(person2);
+			
+			var personAssignment1 = new PersonAssignment(person1, scenario, scheduleDateOnly);
+			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
+			var scheduleDay1 = ScheduleDayFactory.Create(scheduleDateOnly, person1, scenario);
+			scheduleDay1.Add(personAssignment1);
+
+			
+			var personAssignment2 = new PersonAssignment(person2, scenario, scheduleDateOnly);
+			personAssignment2.AddActivity(new Activity("activity2"), new DateTimePeriod(scheduleDate.AddHours(8), scheduleDate.AddHours(18)));
+			var scheduleDay2 = ScheduleDayFactory.Create(scheduleDateOnly, person2, scenario);
+			scheduleDay2.Add(personAssignment2);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay1);
+			ScheduleProvider.AddScheduleDay(scheduleDay2);
+
+			var result = Target.GetSchedulesForPeople(new[] { person1.Id.Value, person2.Id.Value }, scheduleDate);
+
+			result.Schedules.Count().Should().Be(2);
+			result.Schedules.First().PersonId.Should().Be(person1.Id.Value.ToString());
+			result.Schedules.Second().PersonId.Should().Be(person2.Id.Value.ToString());
+			result.Schedules.First().Projection.First().Description.Should().Be("activity1");
+			result.Schedules.Second().Projection.First().Description.Should().Be("activity2");
 		}
 	}
 }

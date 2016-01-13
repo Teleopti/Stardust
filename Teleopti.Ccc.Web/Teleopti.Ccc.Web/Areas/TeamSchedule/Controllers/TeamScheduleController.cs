@@ -90,6 +90,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetSchedules")]
+		public GroupScheduleViewModel GetSchedulesForPeople(Guid[] personIds, DateTime scheduleDate)
+		{
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);
+		}
+
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
 		public virtual JsonResult<List<FailActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
