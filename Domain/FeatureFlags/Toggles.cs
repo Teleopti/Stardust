@@ -55,6 +55,7 @@
 		MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281,
 		MyTimeWeb_KeepUrlAfterLogon_34762,
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
+		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 
 		Backlog_Module_23980,
 
