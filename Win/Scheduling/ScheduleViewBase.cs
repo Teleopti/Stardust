@@ -211,13 +211,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// Resize the scheduler view grid columns so that the contains fit.
 		/// </summary>
 	    public void ResizeGridColumnsToFit()
-	    {
-			GridRangeInfo nameColumnRangeInfo = GridRangeInfo.Col((int)ColumnType.RowHeaderColumn);
-			_grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
+		{
+			try
+			{
+				var nameColumnRangeInfo = GridRangeInfo.Col((int)ColumnType.RowHeaderColumn);
+				_grid.Model.ColWidths.ResizeToFit(nameColumnRangeInfo, GridResizeToFitOptions.IncludeCellsWithinCoveredRange);
+			}
+			catch (ArgumentException)
+			{
+				_grid.Model.ColWidths[(int)ColumnType.RowHeaderColumn] = 150;
+			}
 
-		    if (!IsOverviewColumnsHidden)
-				setOverviewColumnsWidth();
-	    }
+			if (!IsOverviewColumnsHidden)
+				setOverviewColumnsWidth();		
+		}
 
 	    private void setOverviewColumnsWidth()
 	    {
