@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -20,11 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		protected override ISession Session
 		{
-			get { return getSessions()[_factory] as ISession; }
-			set { getSessions()[_factory] = value; }
+			get { return sessions()[_factory] as ISession; }
+			set { sessions()[_factory] = value; }
 		}
 
-		private Hashtable getSessions()
+		private static Hashtable sessions()
 		{
 			var httpContext = ReflectiveHttpContext.HttpContextCurrentGetter();
 			return httpContext != null ? getWebSessions(httpContext) : getThreadSessions();
@@ -46,51 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private static Hashtable getThreadSessions()
 		{
 			return _threadSessions ?? (_threadSessions = new Hashtable());
-		}
-	}
-
-	[IsNotDeadCode("Used from NH file in web app.")]
-	public class HybridWebSessionContext : CurrentSessionContext
-	{
-		private const string _itemsKey = "HybridWebSessionContext";
-		[ThreadStatic]
-		private static ISession _threadSession;
-
-		// This constructor should be kept, otherwise NHibernate will fail to create an instance of this class.
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "factory")]
-		public HybridWebSessionContext(ISessionFactoryImplementor factory)
-		{
-		}
-
-		protected override ISession Session
-		{
-			get
-			{
-				var currentContext = ReflectiveHttpContext.HttpContextCurrentGetter();
-				if (currentContext != null)
-				{
-					var items = ReflectiveHttpContext.HttpContextItemsGetter(currentContext);
-					var session = items[_itemsKey] as ISession;
-					if (session != null)
-					{
-						return session;
-					}
-				}
-
-				return _threadSession;
-			}
-			set
-			{
-				var currentContext = ReflectiveHttpContext.HttpContextCurrentGetter();
-				if (currentContext != null)
-				{
-					var items = ReflectiveHttpContext.HttpContextItemsGetter(currentContext);
-					items[_itemsKey] = value;
-					return;
-				}
-
-				_threadSession = value;
-			}
 		}
 	}
 }

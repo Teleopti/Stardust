@@ -1,9 +1,7 @@
-﻿using System.Collections.Specialized;
-using NHibernate.Cfg;
+﻿using NHibernate.Cfg;
 using NHibernate.Dialect;
 using NHibernate.SqlAzure;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -212,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForWeb();
 			target.UseSecondLevelCache.Should().Be.True();
-			target.SessionContext.Should().Be.EqualTo("Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
+			target.SessionContext.Should().Be.EqualTo(typeof(TeleoptiSessionContext).AssemblyQualifiedName);
 			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Web");
 		}
 
